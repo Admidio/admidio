@@ -947,7 +947,7 @@
     <text id="SYS_CREATED_BY" development="new" translation="todo">Angelegt von %VAR1% am %VAR2%</text>
     <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="todo">Sie haben keine gültige E-Mailadresse hinterlegt!\n\nTragen Sie bitte in Ihrem %VAR1%Profil%VAR1% eine E-Mailadresse ein.</text>
     <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
-    <text id="SYS_DATABASE_ERROR" development="new" translation="todo">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
+    <text id="SYS_DATABASE_ERROR" development="new" translation="todo">Datenbankfehler</text>
     <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="todo">Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.\n\nWenden Sie sich bitte an den %VAR3%Webmaster%VAR4% dieser Webseite.</text>
     <text id="SYS_DATE" development="new" translation="todo">Datum</text>
     <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="todo">Das eingegebene Enddatum liegt vor dem Anfangsdatum.</text>
@@ -974,8 +974,9 @@
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="todo">Eintrag für mehrere Organisationen sichtbar</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>
-    <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
+    <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="todo">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
     <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="todo">Es ist ein Fehler aufgetreten!\n\nDer Eintrag konnte nicht gelöscht werden.</text>
+    <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="todo">ERROR 404 - Seite nicht gefunden!</text>
     <text id="SYS_EXAMPLE" development="new" translation="todo">Beispiel</text>
     <text id="SYS_EXAMPLES" development="new" translation="todo">Beispiele</text>
     <text id="SYS_FADE_IN" development="new" translation="todo">Einblenden</text>

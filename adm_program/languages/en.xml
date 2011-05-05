@@ -948,12 +948,12 @@
     <text id="SYS_CREATE" development="new" translation="edited">Create</text>
     <text id="SYS_CREATE_VAR" development="new" translation="edited">Create %VAR1%</text>
 	<text id="SYS_CREATE_NEW_USER" development="new" translation="edited">Add new user</text>
-    <text id="SYS_CREATE_NOT_FOUND_USER" development="new" translation="edited">You will be able to create the new user If user is not listed among found users.</text>
+    <text id="SYS_CREATE_NOT_FOUND_USER" development="new" translation="edited">You will be able to create the new user, if user is not listed among found users.</text>
 	<text id="SYS_CREATE_ROLE" development="new" translation="edited">Create role</text>
     <text id="SYS_CREATED_BY" development="new" translation="edited">Created by %VAR1% on %VAR2%</text>
-    <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">No valid e-mail address has been provided!\n\nPlease provide an e-mail address  in your %VAR1%profile%VAR1%.</text>
+    <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your %VAR1%profile%VAR1%.</text>
     <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
-    <text id="SYS_DATABASE_ERROR" development="new" translation="edited">An error occurred while accessing the database:\n\n%VAR1%</text>
+    <text id="SYS_DATABASE_ERROR" development="new" translation="todo">Database error</text>
     <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="edited">Database version %VAR1% does not comply with Admidio scripts %VAR2%.\n\nPlease contact the %VAR3%webmaster%VAR4% of the site.</text>
     <text id="SYS_DATE" development="new" translation="edited">Date</text>
     <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="edited">End date is before start date.</text>
@@ -980,8 +980,9 @@
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Entry visible for multiple organizations</text>
     <text id="SYS_END" development="new" translation="edited" description="End of a date">End</text>
     <text id="SYS_ERROR" development="new" translation="edited">Error</text>
-    <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERROR 404 - PAGE NOT FOUND!</text>
+    <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="todo">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
     <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="edited">An error occurred!\n\nEntry could not be deleted.</text>
+    <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERROR 404 - PAGE NOT FOUND!</text>
     <text id="SYS_EXAMPLE" development="new" translation="edited">Example</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Examples</text>
     <text id="SYS_FADE_IN" development="new" translation="edited">Fade in</text>

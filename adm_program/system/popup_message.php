@@ -76,7 +76,7 @@ switch ($req_type)
         $url = 'announcements_function.php?mode=2&ann_id='.$req_database_id;
         break;
     case 'bac':
-        $url = 'backup_file_function.php?job=delete&file_id='.$req_database_id;
+        $url = 'backup_file_function.php?job=delete&filename='.$req_database_id;
         break;
     case 'dat':
         $url = 'dates_function.php?mode=2&dat_id='.$req_database_id;
