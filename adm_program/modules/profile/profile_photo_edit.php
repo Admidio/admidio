@@ -220,7 +220,7 @@ if($job==NULL)
             <p>'.$g_l10n->get('PRO_CURRENT_PICTURE').':</p>
             <img class="imageFrame" src="profile_photo_show.php?usr_id='.$req_usr_id.'" alt="'.$g_l10n->get('PRO_CURRENT_PICTURE').'" />
             <p>'.$g_l10n->get('PRO_SELECT_NEW_PIC_HERE').':</p>
-            <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="'.$g_l10n->get('SYS_SEARCH_AFTER').'" /></p>
+            <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="'.$g_l10n->get('SYS_BROWSE').'" /></p>
 
             <hr />
 

@@ -29,7 +29,7 @@ $g_adm_db  = 'Databasename';              	// Database
 $g_root_path = 'http://www.your-website.de/admidio';
 
 // Short description of the organization that is running Admidio
-// This short description must correspond to your input in the installtion wizard !!!
+// This short description must correspond to your input in the installation wizard !!!
 // Example: 'ADMIDIO'
 // Maximun of 10 characters !!!
 $g_organization = 'Shortcut'; 

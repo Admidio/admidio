@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="dk">
+	<version id="1.1.0">
+		<text id="PLG_DOWNLAODS_NO_DOWNLOADS_AVAILABLE" development="new" translation="todo">Der var ikke uploaded nogen filer til download.</text>
+	</version>
+</language>

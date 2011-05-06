@@ -192,10 +192,10 @@
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="todo">Empfänger Email</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="todo">Empfänger Name</text>
     <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
-    <text id="ECA_SCALING_PREVIEW" development="new" translation="todo">Skalierung Vorschaubild (Breite x Höhe)</text>
-    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel²)</text>
     <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe)</text>
-    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel²) </text>
+    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel) </text>
+    <text id="ECA_SCALING_PREVIEW" development="new" translation="todo">Skalierung Vorschaubild (Breite x Höhe)</text>
+    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel)</text>
     <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="todo">Deine Grußkarte wird an die Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nUnter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde erfolgreich versendet.</text>
@@ -694,8 +694,8 @@
 	<text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="todo">Fotoalben</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="todo">dieses Foto löschen</text>
-    <text id="PHO_PHOTO_DESTINATION" development="new" translation="todo">Die Fotos werden zu dem Album <strong>%VAR1%</strong> hinzugefügt.</text>
-    <text id="PHO_PHOTO_FILES_TO_LARGE" development="new" translation="todo">Eine der Dateien oder alle gemeinsam übersteigen die vom Server zugelassenen Uploadgröße von %VAR1% MB.</text>
+    <text id="PHO_PHOTO_DESTINATION" development="new" translation="todo">Die Fotos werden zu dem Album %VAR1_BOLD% hinzugefügt.</text>
+    <text id="PHO_PHOTO_FILES_TO_LARGE" development="new" translation="todo">Die Dateigröße eines oder aller Fotos übersteigt die vom Server zugelassene Uploadgröße von %VAR1% MB.</text>
     <text id="PHO_PHOTO_FORMAT_INVALID" development="new" translation="todo">Es können nur Fotos im JPG und PNG-Format hochgeladen und angezeigt werden.</text>
     <text id="PHO_PHOTO_PROCESSING_ERROR" development="new" translation="todo">Fehler bei der Bildverarbeitung</text>
     <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="todo">Foto gegen den Uhrzeigersinn drehen</text>
@@ -1150,7 +1150,6 @@
     <text id="SYS_SEND" development="new" translation="todo">Abschicken</text>
     <text id="SYS_SEND_EMAIL_TO" development="new" translation="todo">Sende eine E-Mail an %VAR1%</text>
 	<text id="SYS_SEARCH" development="new" translation="todo">Suche</text>
-	<text id="SYS_SEARCH_AFTER" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_SEND_NEW_PW" development="new" translation="todo">Neues Passwort zusenden</text>
     <text id="SYS_SENDER" development="new" translation="todo">Absender</text>
     <text id="SYS_SERVER" development="new" translation="todo">Server</text>

@@ -97,8 +97,6 @@ else
 $g_layout['title']  = 'Fotos hochladen';
 $g_layout['header'] = '
 <script type="text/javascript"><!--
-	flash_installed = '.$flash.';
-
 	function flashInstalled()
 	{
 		if(navigator.mimeTypes.length) 
@@ -126,6 +124,8 @@ $g_layout['header'] = '
 
 	$(document).ready(function() 
 	{
+		flash_installed = '.$flash.';
+
 		if(flash_installed == true)
 		{
 			$("#photo_upload_flash").show();
@@ -147,30 +147,30 @@ echo '
 	    <div class="formHead">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</div>
 	    <div class="formBody">
 	        <p>
-	            '.$g_l10n->get('PHO_PHOTO_DESTIMATION', $photo_album->getValue('pho_name')).'<br />
-	            ('.$g_l10n->get('SYS_DATE').': '. $photo_album->getValue("pho_begin", $g_preferences['system_date']). ')
+	            '.$g_l10n->get('PHO_PHOTO_DESTINATION', $photo_album->getValue('pho_name')).'<br />
+	            ('.$g_l10n->get('SYS_DATE').': '. $photo_album->getValue('pho_begin', $g_preferences['system_date']). ')
 	        </p>
 	
 	        <ul class="formFieldList">
 	            <li><dl>
-	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 1:</label></dt>
-	                <dd><input type="file" id="bilddatei1" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
+	                <dt><label for="admPhotoFile1">'.$g_l10n->get('PHO_PHOTO').' 1:</label></dt>
+	                <dd><input type="file" id="admPhotoFile1" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
-	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 2:</label></dt>
-	                <dd><input type="file" id="bilddatei2" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
+	                <dt><label for="admPhotoFile2">'.$g_l10n->get('PHO_PHOTO').' 2:</label></dt>
+	                <dd><input type="file" id="admPhotoFile2" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
-	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 3:</label></dt>
-	                <dd><input type="file" id="bilddatei3" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
+	                <dt><label for="admPhotoFile3">'.$g_l10n->get('PHO_PHOTO').' 3:</label></dt>
+	                <dd><input type="file" id="admPhotoFile3" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
-	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 4:</label></dt>
-	                <dd><input type="file" id="bilddatei4" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
+	                <dt><label for="admPhotoFile4">'.$g_l10n->get('PHO_PHOTO').' 4:</label></dt>
+	                <dd><input type="file" id="admPhotoFile4" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
-	                <dt><label for="bilddatei1">'.$g_l10n->get('PHO_PHOTO').' 5:</label></dt>
-	                <dd><input type="file" id="bilddatei5" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
+	                <dt><label for="admPhotoFile5">'.$g_l10n->get('PHO_PHOTO').' 5:</label></dt>
+	                <dd><input type="file" id="admPhotoFile5" name="Filedata[]" value="'.$g_l10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	        </ul>
 	        <hr />
@@ -184,8 +184,8 @@ echo '
 <div id="photo_upload_flash" style="visibility: hide; display: none;">
 	<h2>'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</h2>
 	<p>
-       '.$g_l10n->get('PHO_PHOTO_DESTIMATION', $photo_album->getValue('pho_name')).'<br />
-       ('.$g_l10n->get('SYS_DATE').': '. $photo_album->getValue("pho_begin", $g_preferences['system_date']). ')
+       '.$g_l10n->get('PHO_PHOTO_DESTINATION', $photo_album->getValue('pho_name')).'<br />
+       ('.$g_l10n->get('SYS_DATE').': '. $photo_album->getValue('pho_begin', $g_preferences['system_date']). ')
     </p>';
 
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll

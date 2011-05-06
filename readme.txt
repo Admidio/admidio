@@ -108,9 +108,12 @@ Für weitere Informationen sollten Sie die gpl-de.html durchlesen.
 
  7. Credits
 -------------------------------------------------------------------------
-Wir möchten uns an dieser Stelle bei Personen und Projekten bedanken, die 
-an Admidio mitgearbeitet haben, oder deren Arbeit in Admidio eingeflossen 
-ist.
+Wir möchten uns an dieser Stelle bei Personen und Projekten bedanken, 
+von denen Scripte und Icons in Admidio übernommen wurden.
+
+Admidio Team
+	http://www.admidio.org/index.php?page=team
+	Admidio
 
 Mark James
 	http://www.famfamfam.com
@@ -124,6 +127,10 @@ Tango Desktop Project
 jQuery
     http://www.jquery.com
 	JavaScript-Library
+	
+James Heinrich
+	http://www.silisoftware.com
+	backupDB
 
 Jack Moore
     http://colorpowered.com/colorbox
