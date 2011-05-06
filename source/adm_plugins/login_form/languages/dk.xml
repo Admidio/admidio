@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="dk">
+	<version id="1.4.0">
+	    <text id="PLG_LOGIN_ACTIVE_SINCE" development="new" translation="edited">Aktiv siden</text>
+		<text id="PLG_LOGIN_NEW_ONLINE_MEMBER" development="new" translation="todo">Nyt online medlem</text>
+		<text id="PLG_LOGIN_NUMBER_OF_LOGINS" development="new" translation="edited">Antal logins</text>
+		<text id="PLG_LOGIN_ONLINE_MEMBER" development="new" translation="todo">Online medlem</text>
+		<text id="PLG_LOGIN_SENIOR_ONLINE_MEMBER" development="new" translation="todo">Senior online medlem</text>
+		<text id="PLG_LOGIN_HONORARY_MEMBER" development="new" translation="todo">Æresmedlem</text>
+	</version>
+</language>

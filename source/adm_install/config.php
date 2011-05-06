@@ -23,7 +23,7 @@ $g_adm_db  = '%DATABASE%';    // Database
 $g_root_path = '%ROOT_PATH%';
 
 // Short description of the organization that is running Admidio
-// This short description must correspond to your input in the installtion wizard !!!
+// This short description must correspond to your input in the installation wizard !!!
 // Example: 'ADMIDIO'
 // Maximun of 10 characters !!!
 $g_organization = '%ORGANIZATION%'; 

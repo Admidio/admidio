@@ -253,15 +253,29 @@ $g_layout['header'] = '
         $("#"+id).hide("slow");
         $("#"+id).remove();
     }
+	
+	function setLocationCountry()
+	{
+		if($("#dat_location").val().length > 0)
+		{
+			$("#admDateCountry").show("slow");
+		}
+		else
+		{
+			$("#admDateCountry").hide();
+		}
+	}
 
     $(document).ready(function() 
     {
         setAllDay();
 		setDateParticipation();
+		setLocationCountry();
         $("#dat_headline").focus();
 		
-		$("#date_login").bind("click", function() {setDateParticipation();});
-		$("#dat_all_day").bind("click", function() {setAllDay();});';
+		$("#date_login").click(function() {setDateParticipation();});
+		$("#dat_all_day").click(function() {setAllDay();});
+		$("#dat_location").change(function() {setLocationCountry();});';
 
         // alle Rollen anzeigen, die diesen Termin sehen duerfen
         foreach($date->getVisibleRoles() as $key => $roleID)
@@ -334,7 +348,7 @@ echo '
 						<dl>
 							<dt><label for="dat_location">'.$g_l10n->get('DAT_LOCATION').':</label></dt>
 							<dd>
-								<input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
+								<input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location').$date->getValue('dat_country'). '" />';
 								if($g_preferences['dates_show_map_link'])
 								{
 									echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK&amp;inline=true"><img 
@@ -351,9 +365,9 @@ echo '
 						{
 							$date->setValue('dat_country', $g_preferences['default_country']);
 						}
-						echo '<li>
+						echo '<li id="admDateCountry">
 							<dl>
-								<dt>&nbsp;</dt>
+								<dt><label for="dat_location">'.$g_l10n->get('SYS_COUNTRY').':</label></dt>
 								<dd>
 									<select size="1" id="dat_country" name="dat_country">
 										<option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
@@ -374,12 +388,11 @@ echo '
 
 					if($g_preferences['dates_show_rooms']==1) //nur wenn Raumauswahl aktiviert ist
 					{
-						echo'
-							<li id="room">
+						echo'<li>
 								<dl>
-									<dt>'.$g_l10n->get('SYS_ROOM').':</dt>
+									<dt><label for="dat_room_id">'.$g_l10n->get('SYS_ROOM').':</label></dt>
 									<dd>
-										<select id="dat_room_id" name="dat_room_id" size="1" onchange="toggleRolId()">
+										<select id="dat_room_id" name="dat_room_id" size="1">
 											<option value="0"';
 											if($date->getValue('dat_room_id') == 0)
 											{
@@ -490,7 +503,7 @@ echo '
 					<li id="liRoles"></li>
 					<li>
 						<dl>
-							<dt></dt>
+							<dt>&nbsp;</dt>
 							<dd><span id="add_attachment" class="iconTextLink">
 									<a href="javascript:addRoleSelection(0)"><img
 									src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('DAT_ADD_ROLE').'" /></a>
@@ -560,7 +573,7 @@ echo '
 					</li>
 					<li id="admMaxMembers">
 						<dl>
-							<dt>'.$g_l10n->get('DAT_PARTICIPANTS_LIMIT').':</dt>
+							<dt><label for="dat_max_members">'.$g_l10n->get('DAT_PARTICIPANTS_LIMIT').':</label></dt>
 							<dd>
 								<input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members') ? $date->getValue('dat_max_members') : '').'" />
 								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_MAX_MEMBERS&amp;inline=true"><img 

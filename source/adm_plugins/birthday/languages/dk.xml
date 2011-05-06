@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="dk">
+	<version id="1.6.0">
+		<text id="PLG_BIRTHDAY_FUTURE" development="new" translation="todo">%VAR1% bliver om %VAR2% dage %VAR3% år, den %VAR4%</text>
+		<text id="PLG_BIRTHDAY_MAN_VAR" development="new" translation="todo">Hr %VAR1%</text>
+		<text id="PLG_BIRTHDAY_MORE_USERS" development="new" translation="todo">Idag har %VAR1% brugere fødselsdag!</text>
+		<text id="PLG_BIRTHDAY_NO_USER" development="new" translation="todo">Idag har ingen brugere fødselsdag.</text>
+		<text id="PLG_BIRTHDAY_ONE_USER" development="new" translation="todo">Idag har én bruger fødselsdag!</text>
+		<text id="PLG_BIRTHDAY_PAST" development="new" translation="todo">%VAR1% blev for %VAR2% dage siden %VAR3% år, den %VAR4%</text>
+		<text id="PLG_BIRTHDAY_TODAY" development="new" translation="todo">%VAR1% bliver idag %VAR2%</text>
+		<text id="PLG_BIRTHDAY_TOMORROW" development="new" translation="todo">%VAR1% bliver imorgen %VAR3% år, den %VAR4%</text>
+		<text id="PLG_BIRTHDAY_WOMAN_VAR" development="new" translation="todo">Fru %VAR1%</text>
+		<text id="PLG_BIRTHDAY_YESTERDAY" development="new" translation="todo">%VAR1% blev igår %VAR3% år, den %VAR4%</text>
+	</version>
+</language>

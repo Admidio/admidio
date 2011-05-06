@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="de">
+<language id="en">
 <version id="2.2.0">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Announcement</text>
@@ -7,8 +7,8 @@
 	<text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="edited">Display or edit announcements, news and other information.</text>
 	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new announcement was created</text>
 	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">A new announcement at %VAR1% was created\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
-	
-	<!-- Phrases only in Backupmodule -->
+
+    <!-- Phrases only in Backupmodule -->	
     <text id="BAC_BACK_TO_BACKUP_PAGE" development="new" translation="edited">Back to main page</text>
     <text id="BAC_BACKUP_COMPLETED" development="new" translation="edited">Backup created in %VAR1%</text>
     <text id="BAC_BACKUP_FILE" development="new" translation="edited">Backup file</text>
@@ -186,14 +186,15 @@
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">E-mail recipient</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Name of recipient</text>    
     <text id="ECA_SCALING_GREETING_CARD" development="new" translation="edited">Greeting card image size preference (width x height)</text>
+    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="edited">This can be set to the value of the width and height of the greeting card image to be scaled. (default: 400 x 250 pixels)</text>
     <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Image preview preference (width x height)</text>
-    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">Set size of preview picture. (default: 250 x 250 Pixel²)</text>
+    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">This can be set to the value of the width and height of the preview image to be scaled. (default: 250 x 250 pixels)</text>
     <text id="ECA_SEND_ERROR" development="new" translation="edited">An error occurred while sending the greeting card. Please try again later.</text>    
     <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Your greeting card will be sent to members of the selected role if members provided e-mail address.\n\nSelect a member of a role or entire role.</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% characters left</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card was send.</text>
-    <text id="ECA_TEMPLATE" development="new" translation="edited">Standard template. (default: standard letter) </text>
-    <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Define standard template. (pred.: standard letter) </text>
+    <text id="ECA_TEMPLATE" development="new" translation="edited">Template</text>
+    <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Define standard template. (default.: standard letter) </text>
     <text id="ECA_THE_MESSAGE" development="new" translation="edited">One message</text>
     <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="edited">To all role members</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Show full size picture</text>
@@ -324,7 +325,7 @@
     <text id="INS_UPDATE_VERSION" development="new" translation="edited">Update to version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="edited">Update process successful</text>
     <text id="INS_WARNING_BETA_VERSION" development="new" translation="edited">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</text>
-    <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Save mode on server is active. This can cause later problems when using certain functions.</text>
+    <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Save Mode on server is active. This can cause later problems when using certain functions.</text>
     <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="edited">Welcome! Create your new organization here!</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="edited">Welcome to the installation of Admidio</text>
     <text id="INS_WELCOME_TEXT" development="new" translation="edited">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</text>
@@ -544,7 +545,7 @@
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="edited">Advanced registration</text>
     <text id="ORG_ALLOW_BBCODE" development="new" translation="edited">Allow BBCode</text>
-    <text id="ORG_ALLOW_BBCODE_DESC" development="new" translation="edited">Users can use %VAR1% in text fields (e.g. appointment description, guestbook entry) in oder to allow prettier text formating. (default: yes)</text>
+    <text id="ORG_ALLOW_BBCODE_DESC" development="new" translation="edited">Users can use %VAR1% in text fields (e.g. appointment description, guestbook entry) in order to allow prettier text formating. (default: yes)</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="edited">Auto log off after</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="edited">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected %VAR1_BOLD%. (default: 20 minutes)</text>    
 	<text id="ORG_CAPTCHA" development="new" translation="edited">Use this preferences for the captcha.</text>
@@ -684,15 +685,15 @@
 	<text id="PHO_NEXT_PHOTO" development="new" translation="edited">next picture</text>
     <text id="PHO_NEWEST_ALBUMS" development="new" translation="edited">10 latest photo albums</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="edited">Album contains no photos.</text>
-    <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Illegal page view or file could not be uploaded.\nFile size possibly exceeded allowed sever defined upload size of  %VAR1%B!</text>
+    <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Illegal page view or file could not be uploaded.\nFile size possibly exceeded allowed server defined upload size of %VAR1%B!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="edited">No photos to add have been selected.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="edited">You have no permissions to perform this action.\n\nOnly logged in users with photo management permissions are enabled to manage photos.</text>
     <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="edited">Number of photos</text>
 	<text id="PHO_PARENT_ALBUM" development="new" translation="edited">Parent album</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="edited">Photo albums</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="edited">delete photo</text>
-    <text id="PHO_PHOTO_DESTINATION" development="new" translation="edited">Photos will be added to album <strong>%VAR1%</strong>.</text>
-    <text id="PHO_PHOTO_FILES_TO_LARGE" development="new" translation="edited">Total file size of one ore photos possibly exceed allowed sever defined upload size of %VAR1% MB.</text>
+    <text id="PHO_PHOTO_DESTINATION" development="new" translation="edited">Photos will be added to album %VAR1_BOLD%.</text>
+    <text id="PHO_PHOTO_FILES_TO_LARGE" development="new" translation="edited">Total file size of one or more photos possibly exceed allowed server defined upload size of %VAR1% MB.</text>
     <text id="PHO_PHOTO_FORMAT_INVALID" development="new" translation="edited">Only JPG and PNG photos are allowed.</text>
     <text id="PHO_PHOTO_PROCESSING_ERROR" development="new" translation="edited">Photo processing error</text>
     <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="edited">Rotate photo left</text>
@@ -714,7 +715,7 @@
     <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="edited">File upload can take a long time with fast internet connection, too. Before upload it is recommended to copy all files into a folder, and to resize them to %VAR1% pixels (long edge). JPG quality should be at least at 90% (low compression) for good result.</text>
     <text id="PHO_SAME_WINDOW" development="new" translation="edited">Same window</text>
     <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="edited">Upload scaling</text>
-    <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Photos well be resized during upload. Pixel value defines long edge of portrays and landscape format photos. Other side remains proportional to long edge. (default: 640 pixels)</text>
+    <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Photos will be resized during upload. Pixel value defines long edge of portrait and landscape format photos. Other side remains proportional to long edge. (default: 640 pixels)</text>
     <text id="PHO_SCALE_THUMBNAILS" development="new" translation="edited">Thumbnail scaling</text>
     <text id="PHO_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Set long edge of thumbnails. Attention: do not scale width too large in order to avoid conflict with thumbnail row and column preference. Otherwise try adjustment of thumbnail row and column preferences. (default: 160 pixels)</text>
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Show watermark</text>
@@ -1014,9 +1015,9 @@
     <text id="SYS_FORUM_DESC" development="new" translation="edited">A virtual place to exchange ideas and experiences.</text>
     <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="edited">Fields with access information of the forum have either not been filled in or have not been filled in correctly!</text>
     <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="edited">Connection error to forum database! Check please access information!</text>
-    <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="edited">Your administrator login information of forum %VAR2% has been synchronised with Admidio user account.\nPlease use at next login your Admidio user name and passwort.\n\nYou successfully singed in to the forum %VAR2% as user %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_NEW" development="new" translation="edited">Your Admidio user login information has been transfered to forum %VAR2%.\nPlease use at next login your Admidio user name and passwort.\n\nYou successfully signed in to Admidio and to forum %VAR2% as user %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_PASSWORD" development="new" translation="edited">Your password in the forum system %VAR2% have been reset to Admidio's password.\nPlease use at next login your Admidio user name and passwort.\n\nYou successfully signed in to Admidio and to forum %VAR2% as user %VAR1%.</text>
+    <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="edited">Your administrator login information of forum %VAR2% has been synchronised with Admidio user account.\nPlease use at next login your Admidio user name and password.\n\nYou successfully singed in to the forum %VAR2% as user %VAR1%.</text>
+    <text id="SYS_FORUM_LOGIN_NEW" development="new" translation="edited">Your Admidio user login information has been transfered to forum %VAR2%.\nPlease use at next login your Admidio user name and password.\n\nYou successfully signed in to Admidio and to forum %VAR2% as user %VAR1%.</text>
+    <text id="SYS_FORUM_LOGIN_PASSWORD" development="new" translation="edited">Your password in the forum system %VAR2% have been reset to Admidio's password.\nPlease use at next login your Admidio user name and password.\n\nYou successfully signed in to Admidio and to forum %VAR2% as user %VAR1%.</text>
     <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="new" translation="edited">You successfully signed in to Admidio and to forum %VAR2% as user %VAR1_BOLD%.</text>
     <text id="SYS_FORUM_LOGOUT" development="new" translation="edited">You successfully signed out from Admidio and the forum system..</text>
     <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Selected user name has been deleted in the forum and Admidio.</text>
@@ -1149,7 +1150,6 @@
     <text id="SYS_SEND" development="new" translation="edited">Send</text>
     <text id="SYS_SEND_EMAIL_TO" development="new" translation="edited">Send e-mail to %VAR1%</text>
 	<text id="SYS_SEARCH" development="new" translation="edited">Search</text>
-	<text id="SYS_SEARCH_AFTER" development="new" translation="edited">Browes</text>
     <text id="SYS_SEND_NEW_PW" development="new" translation="edited">Send new password</text>
     <text id="SYS_SENDER" development="new" translation="edited">Sender</text>
     <text id="SYS_SERVER" development="new" translation="edited">Server</text>
@@ -1186,7 +1186,7 @@
     <text id="SYS_TIME_FROM" development="new" translation="edited">Time from</text>
     <text id="SYS_TIME_INVALID" development="new" translation="edited">Time error in field %VAR1_BOLD%.\n\nFormat time value according to this: %VAR2_BOLD%.</text>
     <text id="SYS_TIME_TO" development="new" translation="edited">Time to</text>
-    <text id="SYS_TITLE" development="new" translation="edited">Titel</text>
+    <text id="SYS_TITLE" development="new" translation="edited">Title</text>
     <text id="SYS_TO" development="new" translation="edited">To</text>
     <text id="SYS_TO_MANY_FILES" development="new" translation="edited">Maximum number of file attachments: %0.</text>
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="edited">File %0 of %1 transfered</text>
