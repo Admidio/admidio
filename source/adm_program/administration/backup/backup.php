@@ -71,9 +71,9 @@ echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup_function.php"><img
+            <a href="'.$g_root_path.'/adm_program/administration/backup/backup_script.php"><img
             src="'. THEME_PATH. '/icons/database_save.png" alt="'.$g_l10n->get('BAC_START_BACKUP').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup_function.php">'.$g_l10n->get('BAC_START_BACKUP').'</a>
+            <a href="'.$g_root_path.'/adm_program/administration/backup/backup_script.php">'.$g_l10n->get('BAC_START_BACKUP').'</a>
         </span>
     </li>
 </ul>';
