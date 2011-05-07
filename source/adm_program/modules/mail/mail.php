@@ -78,63 +78,54 @@ if (isset($_GET['usr_id']))
         $g_message->show($g_l10n->get('SYS_USER_ID_NOT_FOUND'));
     }
 
-    // besitzt der User eine E-Mail-Adresse
-    if(strlen($user->getValue('EMAIL')) == 0)
+    // besitzt der User eine gueltige E-Mail-Adresse
+    if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
     {
         $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 
     $userEmail = $user->getValue('EMAIL');
 }
-elseif (isset($_GET['rol_id']))
+elseif (isset($_GET['rol_id']) || (isset($_GET['rolle']) && isset($_GET['cat'])))
 {
-    // Falls eine rol_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
-    // auf diese zugreifen darf
-    if (is_numeric($_GET['rol_id']) == false || ($g_valid_login && !$g_current_user->mailRole($_GET['rol_id'])))
+    // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
+
+    if(isset($_GET['rol_id']))
     {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        // Falls eine rol_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt auf diese zugreifen darf
+        if (is_numeric($_GET['rol_id']) == false)
+        {
+            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        }
+        $sqlConditions = ' AND rol_id = '.$_GET['rol_id'];
+    }
+    else
+    {
+        $sqlConditions = ' AND UPPER(rol_name) = UPPER("'.$_GET['rolle'].'")
+                           AND UPPER(cat_name) = UPPER("'.$_GET['cat'].'")';
     }
 
-    $sql    = 'SELECT rol_mail_this_role, rol_name, rol_id 
-                 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                WHERE rol_id = '. $_GET['rol_id']. '
-                  AND rol_cat_id = cat_id
-                  AND cat_org_id = '. $g_current_organization->getValue('org_id');
+    $sql = 'SELECT rol_mail_this_role, rol_name, rol_id 
+              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE rol_cat_id    = cat_id
+               AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+                   OR cat_org_id IS NULL)'.
+                   $sqlConditions;
     $result = $g_db->query($sql);
-    $row = $g_db->fetch_array($result);
+    $row    = $g_db->fetch_array($result);
 
+    // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
+    // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
+    // Rollen muessen zur aktuellen Organisation gehoeren
     if(($g_valid_login == false && $row['rol_mail_this_role'] != 3)
-    || ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false))
+    || ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false)
+    || $row['rol_id']  == null)
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $rollenName = $row['rol_name'];
     $rollenID   = $_GET['rol_id'];
-}
-elseif (isset($_GET['rolle']) && isset($_GET['cat']))
-{
-    // Falls eine rolle und eine category uebergeben wurde, muss geprueft werden ob der User ueberhaupt
-    // auf diese zugreifen darf
-    $sql = 'SELECT rol_mail_this_role, rol_id
-              FROM '. TBL_ROLES. ' ,'. TBL_CATEGORIES. '
-             WHERE UPPER(rol_name) = UPPER("'. $_GET['rolle']. '")
-               AND rol_cat_id        = cat_id
-               AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
-               AND UPPER(cat_name)   = UPPER("'. $_GET['cat']. '")';
-    $result = $g_db->query($sql);
-    $row = $g_db->fetch_array($result);
-
-    // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
-    // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
-    if(($g_valid_login == false && $row['rol_mail_this_role'] != 3)
-    || ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false))
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    $rollenName = $_GET['rolle'];
-    $rollenID   = $row['rol_id'];
 }
 
 if (array_key_exists('subject', $_GET) == false)
@@ -171,8 +162,6 @@ else
     $form_values['body']         = '';
     $form_values['rol_id']       = '';
 }
-
-
 
 // Seiten fuer Zuruecknavigation merken
 if(isset($_GET['usr_id']) == false && isset($_GET['rol_id']) == false)
@@ -237,7 +226,7 @@ echo '
     // da keine E-Mail-Adresse von mail_send angenommen werden soll
     if (array_key_exists("usr_id", $_GET))
     {
-        echo "usr_id=". $_GET['usr_id']. "&";
+        echo 'usr_id='. $_GET['usr_id']. '&';
     }
     echo '" method="post" enctype="multipart/form-data">
 
@@ -255,7 +244,7 @@ echo '
                                 echo '<input type="text" readonly="readonly" id="mailto" name="mailto" style="width: 345px;" maxlength="50" value="'.$userEmail.'" />
                                 <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
-                            elseif ( array_key_exists("rol_id", $_GET) || (array_key_exists("rolle", $_GET) && array_key_exists("cat", $_GET)) )
+                            elseif ( array_key_exists('rol_id', $_GET) || (array_key_exists('rolle', $_GET) && array_key_exists('cat', $_GET)) )
                             {
                                 // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
                                 echo '<select size="1" id="rol_id" name="rol_id"><option value="'.$rollenID.'" selected="selected">'.$rollenName.'</option></select>
