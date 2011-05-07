@@ -546,7 +546,7 @@ $starttime = getmicrotime();
 
 echo '<p>'.$g_l10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</p>
 
-<p>'.$g_l10n->get('BAC_BACKUP_FILE').': <a href="'.$g_root_path.'/adm_program/administration/backup/get_backup_file.php?filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+<p>'.$g_l10n->get('BAC_BACKUP_FILE').': <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</p>
 
 <ul class="iconTextLinkList">
