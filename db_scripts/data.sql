@@ -49,7 +49,7 @@ INSERT INTO `%PREFIX%_preferences` VALUES
  (4400,1,'dates_per_page','10'),
  (4500,1,'dates_show_calendar_select','1'),
  (4600,1,'dates_show_map_link','1'),
- (4700,1,'db_version','2.2.1'),
+ (4700,1,'db_version','2.2.5'),
  (4800,1,'db_version_beta','0'),
  (4900,1,'default_country','DEU'),
  (5000,1,'flooding_protection_time','60'),
@@ -149,7 +149,7 @@ INSERT INTO `%PREFIX%_preferences` VALUES
  (44001,2,'dates_per_page','10'),
  (45001,2,'dates_show_calendar_select','1'),
  (46001,2,'dates_show_map_link','1'),
- (47001,2,'db_version','2.2.1'),
+ (47001,2,'db_version','2.2.5'),
  (48001,2,'db_version_beta','0'),
  (49001,2,'default_country','DEU'),
  (50001,2,'flooding_protection_time','60'),
@@ -2487,10 +2487,10 @@ UNLOCK TABLES;
 
 /*!40000 ALTER TABLE `%PREFIX%_dates` DISABLE KEYS */;
 LOCK TABLES `%PREFIX%_dates` WRITE;
-INSERT INTO `%PREFIX%_dates` VALUES  (3,12,0,concat(date_add(date(sysdate()), interval 14 day),' 16:00:00'),concat(date_add(date(sysdate()), interval 14 day),' 18:00:00'),0,'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!','Sportplatz Solingen',NULL,'Training Jugend 1',1,'2008-07-06 17:38:26',NULL,NULL,NULL,NULL,0),
+INSERT INTO `%PREFIX%_dates` VALUES  (3,12,0,concat(date_add(date(sysdate()), interval 14 day),' 16:00:00'),concat(date_add(date(sysdate()), interval 14 day),' 18:00:00'),0,'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!','Sportplatz Solingen','DEU','Training Jugend 1',1,'2008-07-06 17:38:26',NULL,NULL,NULL,NULL,0),
  (4,10,0,concat(date_add(date(sysdate()), interval 4 day),' 19:00:00'),concat(date_add(date(sysdate()), interval 4 day),' 23:30:00'),0,'Heute findet unser Grillfest statt. Neben knackigen Würstchen gibt es auch noch Kottelets und ein bischen Bauchspeck.',NULL,NULL,'Grillfest',1,'2008-07-06 17:41:18',NULL,NULL,NULL,NULL,0),
- (5,10,0,concat(date_add(date(sysdate()), interval 30 day),' 00:00:00'),concat(date_add(date(sysdate()), interval 35 day),' 00:00:00'),1,'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)','Jugendherberge Esens',NULL,'Trainerlehrgang',1,'2008-07-06 17:49:13',NULL,NULL,NULL,NULL,0),
- (6,21,1,concat(date_add(date(sysdate()), interval 10 day),' 15:00:00'),concat(date_add(date(sysdate()), interval 10 day),' 19:00:00'),0,'Der Schwerpunkt liegt dieses Mal bei Office-Produkten.','München Marienplatz',NULL,'EDV-Kurs',1,'2010-01-06 11:25:13',NULL,NULL,NULL,NULL,0);
+ (5,10,0,concat(date_add(date(sysdate()), interval 30 day),' 00:00:00'),concat(date_add(date(sysdate()), interval 35 day),' 00:00:00'),1,'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)','Jugendherberge Esens','DEU','Trainerlehrgang',1,'2008-07-06 17:49:13',NULL,NULL,NULL,NULL,0),
+ (6,21,1,concat(date_add(date(sysdate()), interval 10 day),' 15:00:00'),concat(date_add(date(sysdate()), interval 10 day),' 19:00:00'),0,'Der Schwerpunkt liegt dieses Mal bei Office-Produkten.','München Marienplatz','DEU','EDV-Kurs',1,'2010-01-06 11:25:13',NULL,NULL,NULL,NULL,0);
 UNLOCK TABLES;
 /*!40000 ALTER TABLE `%PREFIX%_dates` ENABLE KEYS */;
 
