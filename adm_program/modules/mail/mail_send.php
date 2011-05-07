@@ -25,41 +25,28 @@ if ($g_preferences['enable_mail_module'] != 1)
 // Der Inhalt des Formulars wird nun in der Session gespeichert...
 $_SESSION['mail_request'] = $_REQUEST;
 
-// Uebergabevariablen pruefen
-
-if (isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if (isset($_POST['rol_id']) && is_numeric($_POST['rol_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
-// in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-if (array_key_exists('usr_id', $_GET) && !$g_valid_login)
+if (isset($_GET['usr_id']))
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
+    // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
+    // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
+    if (!$g_valid_login)
+    {
+        //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
 
-// aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
-// Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+    if (is_numeric($_GET['usr_id']) == false)
+    {
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
 
-// Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
-// auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
-if (array_key_exists('usr_id', $_GET))
-{
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($g_db, $_GET['usr_id']);
 
     // darf auf die User-Id zugegriffen werden    
-    if((  $g_current_user->editUsers() == false
-       && isMember($user->getValue('usr_id')) == false)
+    if((  $g_current_user->editUsers() == false && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0 )
     {
         $g_message->show($g_l10n->get('SYS_USER_ID_NOT_FOUND'));
@@ -71,6 +58,39 @@ if (array_key_exists('usr_id', $_GET))
         $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 }
+elseif (isset($_POST['rol_id']))
+{
+    // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
+
+    // Falls eine rol_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt auf diese zugreifen darf
+    if (is_numeric($_POST['rol_id']) == false)
+    {
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
+
+    $sql = 'SELECT rol_mail_this_role, rol_name, rol_id 
+              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE rol_cat_id    = cat_id
+               AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+                   OR cat_org_id IS NULL)
+               AND rol_id = '.$_POST['rol_id'];
+    $result = $g_db->query($sql);
+    $row    = $g_db->fetch_array($result);
+
+    // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
+    // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
+    // Rollen muessen zur aktuellen Organisation gehoeren
+    if(($g_valid_login == false && $row['rol_mail_this_role'] != 3)
+    || ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false)
+    || $row['rol_id']  == null)
+    {
+        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
+}
+
+// aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
+// Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Falls Attachmentgroesse die max_post_size aus der php.ini uebertrifft, ist $_POST komplett leer.
 // Deswegen muss dies ueberprueft werden...
@@ -214,7 +234,8 @@ else
                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
                WHERE rol_id      = '. $_POST['rol_id']. '
                  AND rol_cat_id  = cat_id
-                 AND cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                 AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                     OR cat_org_id IS NULL )
                  AND mem_rol_id  = rol_id
                  AND mem_begin  <= "'.DATE_NOW.'"
                  AND mem_end     > "'.DATE_NOW.'"

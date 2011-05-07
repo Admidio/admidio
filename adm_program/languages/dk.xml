@@ -185,7 +185,7 @@
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">E-mail modtager</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Navn på modtager</text>    
     <text id="ECA_SCALING_GREETING_CARD" development="new" translation="edited">Postkort billede størrelse (bredde x højde)</text>
-    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">This can be set to the value of the width and height of the greeting card image to be scaled. (Standard: 400 x 250 Pixel) </text>
+    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Dette kan sættes til bredden og højden af det postkort billede der skal skaleres. (Standard: 400 x 250 Pixel) </text>
     <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Billede visning (Bredde x højde)</text>
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">Sæt størrelse på visning af billede. (Standard: 250 x 250 Pixel)</text>
     <text id="ECA_SEND_ERROR" development="new" translation="edited">Der opstod en fejl ved afsendelse af postkort. Venligst prøv igen senere.</text>    
