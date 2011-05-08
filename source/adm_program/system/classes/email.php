@@ -348,9 +348,9 @@ private function prepareBody()
             }
 
             // File oeffnen und base64 konvertieren
-            $return = "";
-            $data    = "";
-            $thePart = "";
+            $return  = '';
+            $data    = '';
+            $thePart = '';
             if ($fp = fopen($this->attachments[$i]['tmp_filename'], 'rb'))
             {
                 while (!feof($fp))
@@ -391,7 +391,7 @@ private function prepareBody()
 // Funktion um die Email endgueltig zu versenden...
 public function sendEmail()
 {
-    global $g_preferences;
+    global $g_preferences, $g_l10n;
     
 	// Wenn keine Absenderadresse gesetzt wurde, ist hier Ende im Gelaende...
     if (!isset($this->headerOptions['From']))
@@ -435,7 +435,7 @@ public function sendEmail()
             }
             else
             {
-            $this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ", ". $value;
+            $this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ', '. $value;
             }
 
             $bccCounter++;
@@ -489,14 +489,14 @@ public function sendEmail()
     if ($this->copyToSender)
     {
         $this->text = "*******************************************************************\n\n". $this->text;
-        $this->text = "Hier ist Deine angeforderte Kopie der Nachricht:\n". $this->text;
+        $this->text = $g_l10n->get('MAI_COPY_OF_YOUR_EMAIL').":\n". $this->text;
 
          //Falls das listRecipientsFlag gesetzt ist werden in der Kopie
          //die einzelnen Empfaenger aufgelistet:
          if ($this->listRecipients)
          {
              $this->text = $this->addresses. "\n". $this->text;
-             $this->text = "Diese Nachricht ging an:\n\n". $this->text;
+             $this->text = $g_l10n->get('MAI_MESSAGE_WENT_TO').":\n\n". $this->text;
          }
 
          unset($this->headerOptions['To']);
@@ -510,7 +510,7 @@ public function sendEmail()
         $this->prepareBody();
 
         //Das Subject modifizieren
-        $subject = "Kopie: ". $subject;
+        $subject = $g_l10n->get('MAI_CARBON_COPY').': '. $subject;
 
         //Empfänger
         $mailto = $this->headerOptions['From'];
