@@ -10,6 +10,11 @@
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
+ * Uebergaben:
+ *
+ * headline  - Ueberschrift fuer den RSS-Feed
+ *             (Default) Weblinks
+ *
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -28,6 +33,15 @@ if ($g_preferences['enable_weblinks_module'] != 1)
 {
     // das Modul ist deaktiviert
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+}
+
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_headline = $g_l10n->get('LNK_WEBLINKS');
+
+// Uebergabevariablen pruefen
+if(isset($_GET['headline']))
+{
+    $req_headline = strStripTags($_GET['headline']);
 }
 
 // alle Links aus der DB fischen...
@@ -57,7 +71,8 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('LNK_LINKS'), $g_l10n->get('LNK_LINKS_FROM', $g_current_organization->getValue('org_longname')));
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$req_headline, 
+		$g_l10n->get('LNK_LINKS_FROM', $g_current_organization->getValue('org_longname')));
 $weblink = new TableWeblink($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen

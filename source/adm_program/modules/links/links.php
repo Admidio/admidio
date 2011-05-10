@@ -87,8 +87,8 @@ $g_layout['header'] = '
 
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] = $g_layout['header']. '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - '.$g_layout['title'].'"
-        href="'. $g_root_path. '/adm_program/modules/links/rss_links.php" />';
+    $g_layout['header'] = $g_layout['header']. '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname'). ' - '.$_GET['headline']).'"
+        href="'. $g_root_path. '/adm_program/modules/links/rss_links.php?headline='.$_GET['headline'].'" />';
 };
 
 require(THEME_SERVER_PATH. "/overall_header.php");

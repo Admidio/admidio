@@ -36,10 +36,10 @@ class RSSfeed
 //Konstruktor
 public function __construct($homepage, $title, $description)
 {
-    $this->channel=array();
-    $this->channel['title']=$title;
-    $this->channel['link']=$homepage;
-    $this->channel['description']=$description;
+    $this->channel = array();
+    $this->channel['title'] = $title;
+    $this->channel['link']  = $homepage;
+    $this->channel['description'] = $description;
     $this->items=array();
     $this->feed='http://'. $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
@@ -74,6 +74,8 @@ public function openChannel()
 
 public function addChannelInfos()
 {
+	global $g_preferences;
+
     foreach (array('title', 'link', 'description') as $field)
     {
         if (isset($this->channel[$field]))
@@ -81,7 +83,7 @@ public function addChannelInfos()
             echo "<${field}>". htmlspecialchars($this->channel[$field], ENT_QUOTES). "</${field}>\n";
         }
     }
-    echo "<language>de</language>\n";
+    echo "<language>".$g_preferences['system_language']."</language>\n";
     echo "<generator>Admidio RSS-Class</generator>\n\n";
     echo "<pubDate>". date('r'). "</pubDate>\n\n";
 }
@@ -99,8 +101,8 @@ public function buildItems()
                 echo "<${field}>". htmlspecialchars($item[$field], ENT_QUOTES). "</${field}>\n";
             }
         }
-        echo "<guid>". $item['link']. "</guid>\n";
-        echo "<source url=\"$this->feed\">". htmlspecialchars($this->channel['title'], ENT_QUOTES). "</source>";
+        echo "<guid>". str_replace('&', '&amp;', $item['link']). "</guid>\n";
+        echo '<source url="'.$this->feed.'">'. htmlspecialchars($this->channel['title'], ENT_QUOTES). "</source>\n";
         echo "</item>\n\n";
     }
 }

@@ -10,6 +10,11 @@
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
+ * Uebergaben:
+ *
+ * headline  - Ueberschrift fuer den RSS-Feed
+ *             (Default) Termine
+ *
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -28,6 +33,15 @@ if ($g_preferences['enable_dates_module'] != 1)
 {
     // das Modul ist deaktiviert
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+}
+
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_headline = $g_l10n->get('DAT_DATES');
+
+// Uebergabevariablen pruefen
+if(isset($_GET['headline']))
+{
+    $req_headline = strStripTags($_GET['headline']);
 }
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
@@ -78,7 +92,8 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss  = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('DAT_DATES'), 'Die 10 naechsten Termine');
+$rss  = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '. $req_headline,
+		$g_l10n->get('DAT_CURRENT_DATES_OF_ORGA', $g_current_organization->getValue('org_longname')));
 $date = new TableDate($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
