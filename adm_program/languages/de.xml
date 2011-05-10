@@ -11,9 +11,16 @@
     <text id="SYS_REGISTRATION" development="new" translation="todo">Anmeldung</text>
 </version>
 <version id="2.2.6">
+    <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="todo">Neueste Ankündigungen der Organisation %VAR1%</text>
+    <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="todo">Aktuelle Termine der Organisation %VAR1%</text>
+    <text id="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA" development="new" translation="todo">Neueste Gästebucheinträge der Organisation %VAR1%</text>
     <text id="MAI_CARBON_COPY" development="new" translation="todo">Kopie</text>
     <text id="MAI_COPY_OF_YOUR_EMAIL" development="new" translation="todo">Hier ist Deine angeforderte Kopie der Nachricht</text>
     <text id="MAI_MESSAGE_WENT_TO" development="new" translation="todo">Diese Nachricht ging an</text>
+    <text id="PHO_NEWEST_ALBUMS" development="deleted" translation="todo">Die 10 neuesten Fotoalben</text>
+    <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="todo">Neuesten Fotoalben der Organisation %VAR1%</text>
+    <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="todo">Das Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</text>
+    <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="todo">RSS-Feed für %VAR1%</text>
 </version>
 <version id="2.2.0">
     <!-- Phrases only in Announcementmodule -->
@@ -690,7 +697,6 @@
     <text id="PHO_MULTIUPLOAD" development="new" translation="todo">Multiupload</text>
     <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="todo">Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen. Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash (Version 9+) installiert oder diese Option nicht aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt. (Standard: ja)</text>
 	<text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>
-    <text id="PHO_NEWEST_ALBUMS" development="new" translation="todo">Die 10 neuesten Fotoalben</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="todo">Dieses Album enthält leider noch keine Fotos.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="todo">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
@@ -995,7 +1001,6 @@
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
     <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
     <text id="SYS_FIELD_EMPTY" development="new" translation="todo">Das Feld %VAR1_BOLD% ist nicht gefüllt.</text>
-    <text id="SYS_FIELD_INVALID_CHAR" development="new" translation="todo">Das Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</text>
     <text id="SYS_FIELDS_EMPTY" development="new" translation="todo">Es sind nicht alle Felder gefüllt worden.</text>
     <text id="SYS_FILE" development="new" translation="todo">Datei</text>
     <text id="SYS_FILE_NOT_EXIST" development="new" translation="todo">Die ausgewählte Datei existiert nicht auf dem Server.</text>

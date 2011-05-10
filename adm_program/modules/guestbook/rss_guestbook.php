@@ -10,6 +10,11 @@
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
+ * Uebergaben:
+ *
+ * headline  - Ueberschrift fuer den RSS-Feed
+ *             (Default) Gaestebuch
+ *
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -30,6 +35,15 @@ if ($g_preferences['enable_guestbook_module'] != 1)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_headline = $g_l10n->get('DAT_DATES');
+
+// Uebergabevariablen pruefen
+if(isset($_GET['headline']))
+{
+    $req_headline = strStripTags($_GET['headline']);
+}
+
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
         WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
@@ -37,11 +51,11 @@ $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
         LIMIT 10 ';
 $result = $g_db->query($sql);
 
-
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('GBO_GUESTBOOK'), 'Die 10 neuesten Gaestebucheintraege');
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('GBO_GUESTBOOK'),
+		$g_l10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', $g_current_organization->getValue('org_longname')));
 $guestbook = new TableGuestbook($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen

@@ -139,8 +139,8 @@ if($req_mode == 'old')
 
 if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] == 1)
 {
-    $g_layout['header'] =  '<link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - Termine"
-        href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php" />';
+    $g_layout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname'). ' - '.$req_headline).'"
+        href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$req_headline.'" />';
 };
 
 require(THEME_SERVER_PATH. '/overall_header.php');

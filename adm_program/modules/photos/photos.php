@@ -152,7 +152,7 @@ if($locked=='1' || $locked=='0')
 
 if($pho_id > 0)
 {
-    $g_layout['title'] = $photo_album->getValue("pho_name");
+    $g_layout['title'] = $photo_album->getValue('pho_name');
 }
 else
 {
@@ -162,9 +162,8 @@ $g_layout['header'] = '';
 
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] =  $g_layout['header']. '
-        <link type="application/rss+xml" rel="alternate" title="'. $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('SYS_PHOTOS').'"
-            href="'.$g_root_path.'/adm_program/modules/photos/rss_photos.php" />';
+    $g_layout['header'] .=  '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname'). ' - '.$req_headline).'"
+		href="'.$g_root_path.'/adm_program/modules/photos/rss_photos.php?headline='.$req_headline.'" />';
 };
 
 if($g_current_user->editPhotoRight())

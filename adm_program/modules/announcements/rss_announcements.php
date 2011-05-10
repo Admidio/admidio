@@ -10,6 +10,11 @@
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
+ * Uebergaben:
+ *
+ * headline  - Ueberschrift fuer den RSS-Feed
+ *             (Default) Ankuendigungen
+ *
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -30,6 +35,15 @@ if ($g_preferences['enable_announcements_module'] != 1)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_headline = $g_l10n->get('ANN_ANNOUNCEMENTS');
+
+// Uebergabevariablen pruefen
+if(isset($_GET['headline']))
+{
+    $req_headline = strStripTags($_GET['headline']);
+}
+
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
 $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
@@ -40,7 +54,7 @@ foreach($arr_ref_orgas as $key => $value)
 }
 $organizations = $organizations. '"'. $g_current_organization->getValue("org_shortname"). '"';
 
-// die neuesten 10 Annkuedigungen aus der DB fischen...
+// die neuesten 10 Ankuendigungen aus der DB fischen...
 $sql = 'SELECT ann.*, 
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
@@ -66,7 +80,8 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - Ankuendigungen', 'Die 10 neuesten Ankuendigungen');
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '. $req_headline, 
+		$g_l10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $g_current_organization->getValue('org_longname')));
 $announcement = new TableAnnouncement($g_db);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -78,21 +93,19 @@ while ($row = $g_db->fetch_object($result))
 
     // Die Attribute fuer das Item zusammenstellen
     $title = $announcement->getValue('ann_headline');
-    $link  = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='. $announcement->getValue('ann_id');
+    $link  = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$req_headline;
     $description = '<b>'.$announcement->getValue('ann_headline').'</b>';
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $announcement->getDescription('HTML').
-                   '<br /><br /><a href="'.$link.'">Link auf '. $g_current_organization->getValue('org_homepage'). '</a>';
+                   '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>Angelegt von '. $row->create_firstname. ' '. $row->create_surname;
-    $description = $description. ' am '. $announcement->getValue('ann_timestamp_create', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $announcement->getValue('ann_timestamp_create')). '</i>';
 
     if($row->ann_usr_id_change > 0)
     {
-        $description = $description. '<br /><i>Zuletzt bearbeitet von '. $row->change_firstname. ' '. $row->change_surname;
-        $description = $description. ' am '. $announcement->getValue('ann_timestamp_change', $g_preferences['system_date'].' '.$g_preferences['system_time']). '</i>';
+		$description = $description. '<br /><i>'.$g_l10n->get('SYS_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $announcement->getValue('ann_timestamp_change')). '</i>';
     }
                 
     $pubDate = date('r',strtotime($announcement->getValue('ann_timestamp_create')));

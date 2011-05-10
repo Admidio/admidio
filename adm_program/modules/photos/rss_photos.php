@@ -8,8 +8,12 @@
  *
  * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer die 10 neuesten Fotoalben
  *
- *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
+ *
+ * Uebergaben:
+ *
+ * headline  - Ueberschrift fuer den RSS-Feed
+ *             (Default) Fotoalben
  *
  *****************************************************************************/
 
@@ -34,6 +38,15 @@ elseif($g_preferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
+}
+
+// lokale Variablen der Uebergabevariablen initialisieren
+$req_headline = $g_l10n->get('PHO_PHOTO_ALBUMS');
+
+// Uebergabevariablen pruefen
+if(isset($_GET['headline']))
+{
+    $req_headline = strStripTags($_GET['headline']);
 }
 
 // die neuesten 10 Fotoalben aus der DB fischen...
@@ -64,7 +77,8 @@ $photo_album = new TablePhotos($g_db);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('SYS_PHOTOS'), $g_l10n->get('PHO_NEWEST_ALBUMS'));
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$req_headline, 
+		$g_l10n->get('PHO_RECENT_ALBUMS_OF_ORGA', $g_current_organization->getValue('org_longname')));
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $g_db->fetch_array($result))
