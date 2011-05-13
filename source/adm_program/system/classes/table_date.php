@@ -129,7 +129,7 @@ class TableDate extends TableAccess
                 "UID:". $uid. "\n".
                 "SUMMARY:". $this->getValue('dat_headline'). "\n".
                 "DESCRIPTION:". str_replace("\r\n", '\n', $this->getDescription('PLAIN')). "\n".
-                "DTSTAMP:". $this->getValue('dat_timestamp_create', 'ymdThisZ'). "\n".
+                "DTSTAMP:". $this->getValue('dat_timestamp_create', 'Ymd')."T".$this->getValue('dat_timestamp_create', 'His')."\n".
                 "LOCATION:". $this->getValue('dat_location'). "\n";
         if($this->getValue('dat_all_day') == 1)
         {
@@ -140,8 +140,8 @@ class TableDate extends TableAccess
         }
         else
         {
-            $ical .= "DTSTART:". $this->getValue('dat_begin', 'ymdThis'). "\n".
-                     "DTEND:". $this->getValue('dat_end', 'ymdThis'). "\n";
+            $ical .= "DTSTART:". $this->getValue('dat_begin', 'Ymd')."T".$this->getValue('dat_begin', 'His')."\n".
+                     "DTEND:". $this->getValue('dat_end', 'Ymd')."T".$this->getValue('dat_end', 'His')."\n";
         }
         $ical .= "END:VEVENT\n".
                  "END:VCALENDAR";
