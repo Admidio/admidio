@@ -10,13 +10,13 @@
  
 class DB
 {
+    public $user;
+    public $password;
+    public $dbname;
+    public $server;
+
     protected $layer;
-    protected $user;
-    protected $password;
-    protected $dbname;
-    protected $server;
-    protected $version;
-    
+    protected $version;    
     protected $connect_id;    
     protected $query_result;
     protected $sql;
