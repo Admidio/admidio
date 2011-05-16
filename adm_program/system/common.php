@@ -37,14 +37,8 @@ if(strlen($g_tbl_praefix) == 0)
     $g_tbl_praefix = 'adm';
 }
 
-// Default-DB-Type ist immer MySql
-if(!isset($g_db_type))
-{
-    $g_db_type = 'mysql';
-}
-
 // includes OHNE Datenbankverbindung
-require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
+require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
@@ -75,8 +69,12 @@ if(get_magic_quotes_gpc() == false)
 $g_valid_login = false;
 $g_layout      = array();
 
- // Verbindung zu Datenbank herstellen
-$g_db = new MySqlDB();
+ // Datenbankobjekt anlegen und Verbindung zu Datenbank herstellen
+if(!isset($g_db_type))
+{
+    $g_db_type = 'mysql';
+}
+$g_db = Database::createDatabaseObject($g_db_type);
 $g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 // Script fuer das Forum ermitteln und includen, bevor die Session erstellt wird
