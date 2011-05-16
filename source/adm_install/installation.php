@@ -65,13 +65,13 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
+require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 
 // Default-DB-Type ist immer MySql
 if(!isset($g_db_type))
 {
     $g_db_type = 'mysql';
 }
-require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
 
 // Sprachdateien einlesen
 if(isset($_SESSION['language']))
@@ -241,7 +241,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         }
 
         // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
-        $db = new MySqlDB();
+        $db = $g_db = Database::createDatabaseObject($g_db_type);
         if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
         {
             showPage($g_l10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
@@ -471,7 +471,7 @@ elseif($req_mode == 8)
     {
         showPage($g_l10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
     }
-    $db = new MySqlDB();
+    $db = $g_db = Database::createDatabaseObject($g_db_type);
     $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
     $filename = 'db_scripts/db.sql';

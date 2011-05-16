@@ -8,18 +8,19 @@
  *
  *****************************************************************************/
  
-require_once(SERVER_PATH. '/adm_program/system/db/db.php');
+require_once(SERVER_PATH. '/adm_program/system/db/db_common.php');
  
-class MySqlDB extends DB
+class DBMySql extends DBCommon
 {
     // Verbindung zur Datenbank aufbauen    
     public function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_connection = false)
     {
-        $this->layer    = 'mysql';
-        $this->server   = $sql_server;
-        $this->user     = $sql_user;
-        $this->password = $sql_password;
-        $this->dbname   = $sql_dbname;
+        $this->layer     = 'mysql';
+        $this->server    = $sql_server;
+        $this->user      = $sql_user;
+        $this->password  = $sql_password;
+        $this->dbname    = $sql_dbname;
+		$this->insert_id = 0;
         
         $this->connect_id = @mysql_connect($this->server, $this->user, $this->password, $new_connection);
         
@@ -122,7 +123,8 @@ class MySqlDB extends DB
     // Liefert die ID einer vorherigen INSERT-Operation
     public function insert_id()
     {
-        return mysql_insert_id($this->connect_id);
+		$this->insert_id = mysql_insert_id($this->connect_id);
+        return $this->insert_id;
     }
     
     // Liefert die Anzahl der Felder in einem Ergebnis
@@ -150,19 +152,26 @@ class MySqlDB extends DB
     public function query($sql)
     {
         global $g_debug;
+		$this->insert_id = 0;
         
         // im Debug-Modus werden alle SQL-Statements mitgeloggt
         if($g_debug == 1)
         {
             error_log($sql);
         }
-        
+
         $this->query_result = mysql_query($sql, $this->connect_id);
 
         if(!$this->query_result)
         {
             return $this->db_error();
         }
+
+		// bei einem Insert-Statement noch die ID des eingefuegten DS ermitteln
+		if(strpos(trim($sql), 'INSERT INTO') == 0)
+		{
+			$this->insert_id = mysql_insert_id($this->connect_id);
+		}
 
         return $this->query_result;
     }
