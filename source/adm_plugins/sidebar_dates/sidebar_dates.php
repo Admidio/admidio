@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.3.0
+ * Version 1.3.1
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -66,6 +66,11 @@ else
     $plg_link_target = '_self';
 }
 
+if(isset($plg_kal_cat) == false)
+{
+    $plg_kal_cat = array('all');
+}
+
 // Prüfen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
 if(isset($plg_link_url) == false || ($plg_link_url) =="")
@@ -93,15 +98,31 @@ if ($g_valid_login == false)
 	$hidden = ' AND cat_hidden = 0 ';
 }
 
+// Ermitteln, welche Kalender angezeigt werden sollen
+if(in_array('all',$plg_kal_cat))
+{
+	// alle Kalender anzeigen
+    $sql_syntax = ' AND (cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                     OR (   dat_global  = 1
+                        AND cat_org_id IN ('.$plg_organizations.') ) ) ';
+}
+else
+{
+    // nur bestimmte Kalender anzeigen
+    $sql_syntax = ' AND cat_type = "DAT" AND ( ';
+    for($i=0;$i<count($plg_kal_cat);$i++)
+    {
+        $sql_syntax = $sql_syntax. 'cat_name = "'.$plg_kal_cat[$i].'" OR ';
+    }
+    $sql_syntax = substr($sql_syntax,0,-4). ') ';
+}
+
 // nun alle relevanten Termine finden
 $sql    = 'SELECT * FROM '. TBL_DATES. ', '. TBL_CATEGORIES. '
             WHERE dat_cat_id = cat_id
-              AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                  OR (   dat_global  = 1
-                     AND cat_org_id IN ('.$plg_organizations.') ) )
-			  AND (  dat_begin >= "'.DATE_NOW.'"
-                  OR dat_end   >  "'.DATE_NOW.' 00:00:00" )
-                  '.$hidden.'
+              AND (  dat_begin >= "'.DATE_NOW.'"
+                  OR dat_end   >  "'.DATE_NOW.' 00:00:00" ) '.
+                  $sql_syntax. $hidden.'
 			ORDER BY dat_begin ASC
 			LIMIT '.$plg_dates_count;
 $plg_result = $g_db->query($sql);
