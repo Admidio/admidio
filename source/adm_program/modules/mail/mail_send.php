@@ -216,7 +216,26 @@ if (array_key_exists('usr_id', $_GET))
 }
 else
 {
-    // Rolle wurde uebergeben, dann an alle Mitglieder aus der DB fischen (ausser dem Sender selber)
+    // Rolle wurde uebergeben, dann alle Mitglieder auslesen (ausser dem Sender selber)
+    // je nach Einstellung mit oder nur Ehemalige
+    
+    if(isset($_POST['show_members']) && $_POST['show_members'] == 1)
+    {
+        // Ehemalige
+        $sqlConditions = ' AND mem_end < "'.DATE_NOW.'" ';
+    }
+    if(isset($_POST['show_members']) && $_POST['show_members'] == 2)
+    {
+        // Ehemalige und Aktive
+        $sqlConditions = ' AND mem_begin > "'.DATE_NOW.'" ';
+    }
+    else
+    {
+        // Aktive
+        $sqlConditions = ' AND mem_begin  <= "'.DATE_NOW.'"
+                           AND mem_end     > "'.DATE_NOW.'" ';
+    }
+    
     $sql   = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, 
                      email.usd_value as email, rol_name
                 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
@@ -237,10 +256,10 @@ else
                  AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                      OR cat_org_id IS NULL )
                  AND mem_rol_id  = rol_id
-                 AND mem_begin  <= "'.DATE_NOW.'"
-                 AND mem_end     > "'.DATE_NOW.'"
                  AND mem_usr_id  = usr_id
-                 AND usr_valid   = 1 ';
+                 AND usr_valid   = 1 '.
+                     $sqlConditions;
+
 	// Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 
 	//damit er die Mail nicht an sich selber schickt.
 	if ($g_valid_login)
@@ -267,7 +286,7 @@ else
 }
 
 // Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
-if (isset($_POST['kopie']) && $_POST['kopie'] == true)
+if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
 {
     $email->setCopyToSenderFlag();
 

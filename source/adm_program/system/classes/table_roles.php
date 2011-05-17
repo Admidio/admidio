@@ -16,6 +16,7 @@
  *
  * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
  *                    dies ist interessant, wenn rol_max_members gesetzt wurde
+ * hasFormerMembers() - Methode gibt true zurueck, wenn die Rolle ehemalige Mitglieder besitzt
  * setInactive()    - setzt die Rolle auf inaktiv
  * setActive()      - setzt die Rolle wieder auf aktiv
  * viewRole()       - diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter 
@@ -169,9 +170,27 @@ class TableRoles extends TableAccess
             return '--';
         }
     }
+    
+    // Methode gibt true zurueck, wenn die Rolle ehemalige Mitglieder besitzt
+    public function hasFormerMembers()
+    {
+        $sql = 'SELECT COUNT(1) AS count
+                  FROM '.TBL_MEMBERS.'
+                 WHERE mem_rol_id = '.$this->getValue('rol_id').'
+                   AND (  mem_begin > "'.DATE_NOW.'"
+                       OR mem_end   < "'.DATE_NOW.'")';
+        $result = $this->db->query($sql);
+        $row    = $this->db->fetch_array($result);
+
+        if($row['count'] > 0)
+        {
+            return true;
+        }
+        return false;
+    }
  
     // Rolle mit der uebergebenen ID oder dem Rollennamen aus der Datenbank auslesen
-    function readData($role, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readData($role, $sql_where_condition = '', $sql_additional_tables = '')
     {
         global $g_current_organization;
 
