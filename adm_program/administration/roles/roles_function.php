@@ -17,6 +17,7 @@
  *         6 - Frage, ob inaktive Rolle geloescht werden soll
  *         7 - Rolle verstecken 
  *         8 - Rolle zeigen 
+ *         9 - Besitzt die Rolle ehemalige Mitglieder ? Rueckgabe: 1 und 0
  *          
  *****************************************************************************/
 
@@ -38,7 +39,7 @@ $req_rol_id = 0;
 
 if(isset($_GET['mode']) == false
 || is_numeric($_GET['mode']) == false
-|| $_GET['mode'] < 1 || $_GET['mode'] > 8)
+|| $_GET['mode'] < 1 || $_GET['mode'] > 9)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -408,5 +409,17 @@ elseif($_GET['mode'] == 8)
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
     $g_message->show($g_l10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $g_l10n->get('SYS_VISIBLE')));
+}
+elseif($_GET['mode'] == 9)
+{
+    if($role->hasFormerMembers() == true)
+    {
+        echo '1';
+    }
+    else
+    {
+        echo '0';
+    }
+    exit();
 }
 ?>

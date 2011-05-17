@@ -14,13 +14,15 @@
  * rol_id  - Statt einem Rollennamen/Kategorienamen kann auch eine RollenId uebergeben werden
  * subject - Betreff der E-Mail
  * body    - Inhalt der E-Mail
- * kopie   - 1 (Default) Checkbox "Kopie an mich senden" ist gesetzt
- *         - 0 Checkbox "Kopie an mich senden" ist NICHT gesetzt
+ * carbon_copy - 1 (Default) Checkbox "Kopie an mich senden" ist gesetzt
+ *             - 0 Checkbox "Kopie an mich senden" ist NICHT gesetzt
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/classes/email.php');
+
+$formerMembers = 0;
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
 // Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
@@ -105,7 +107,12 @@ elseif (isset($_GET['rol_id']) || (isset($_GET['rolle']) && isset($_GET['cat']))
                            AND UPPER(cat_name) = UPPER("'.$_GET['cat'].'")';
     }
 
-    $sql = 'SELECT rol_mail_this_role, rol_name, rol_id 
+    $sql = 'SELECT rol_mail_this_role, rol_name, rol_id, 
+                   (SELECT COUNT(1)
+                      FROM '.TBL_MEMBERS.'
+                     WHERE mem_rol_id = rol_id
+                       AND (  mem_begin > "'.DATE_NOW.'"
+                           OR mem_end   < "'.DATE_NOW.'")) as former
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_cat_id    = cat_id
                AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
@@ -126,6 +133,7 @@ elseif (isset($_GET['rol_id']) || (isset($_GET['rolle']) && isset($_GET['cat']))
 
     $rollenName = $row['rol_name'];
     $rollenID   = $_GET['rol_id'];
+    $formerMembers = $row['former'];
 }
 
 if (array_key_exists('subject', $_GET) == false)
@@ -138,9 +146,9 @@ if (array_key_exists('body', $_GET) == false)
     $_GET['body']  = '';
 }
 
-if (!array_key_exists('kopie', $_GET) || !is_numeric($_GET['kopie']))
+if (!array_key_exists('carbon_copy', $_GET) || !is_numeric($_GET['carbon_copy']))
 {
-    $_GET['kopie'] = '1';
+    $_GET['carbon_copy'] = '1';
 }
 
 // Wenn die letzte URL in der Zuruecknavigation die des Scriptes mail_send.php ist,
@@ -212,11 +220,43 @@ $g_layout['header'] =  '
         $("#add_attachment").before(new_attachment);
         $(new_attachment).show("slow");
     }
+    
+    function showMembers(initialize)
+    {
+        fadeIn = "";
+        if(initialize == false)
+        {
+            fadeIn = "slow";
+        }
+ 	    rolId = $("#rol_id").val();
+ 	    
+ 	    if(rolId > 0)
+ 	    {
+            // Schauen, ob die Rolle ehemalige Mitglieder besitzt
+            $.get("'.$g_root_path.'/adm_program/administration/roles/roles_function.php?mode=9&rol_id="+ rolId, function(data) {
+                if(data == "1")
+                {
+                    $("#admShowMembers").show(fadeIn);
+                }
+                else
+                {
+                    $("#admShowMembers").hide(fadeIn);
+                }
+            });
+        }
+        else
+        {
+            $("#admShowMembers").hide(fadeIn);
+        }
+    }
 
     $(document).ready(function() 
 	{
         $("#'.$focusField.'").focus();
- 	});
+    
+       	$("#rol_id").change(function() {showMembers(false)});    
+        showMembers(true);
+ 	}); 	
 </script>';
 
 require(THEME_SERVER_PATH. '/overall_header.php');
@@ -318,8 +358,27 @@ echo '
                         echo'
                         </dd>
                     </dl>
-                </li>
-                <li>
+                </li>';
+                
+                if ((array_key_exists('usr_id', $_GET) == false && $g_valid_login == true && array_key_exists('rol_id', $_GET) == false)
+                || (array_key_exists('rol_id', $_GET) == true && $formerMembers > 0))
+                {
+                    echo '
+                    <li>
+                        <dl id="admShowMembers">
+                            <dt>&nbsp;</dt>
+                            <dd>
+                                <select size="1" id="show_members" name="show_members">
+                                    <option selected="selected" value="0">'.$g_l10n->get('LST_ACTIVE_MEMBERS').'</option>
+                                    <option value="1">'.$g_l10n->get('LST_FORMER_MEMBERS').'</option>
+                                    <option value="2">'.$g_l10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
+                                </select>
+                            </dd>
+                        </dl>
+                    </li>';
+                }
+                
+                echo '<li>
                     <hr />
                 </li>
                 <li>
@@ -417,12 +476,12 @@ echo '
                     <dl>
                         <dt>&nbsp;</dt>
                         <dd>
-                            <input type="checkbox" id="kopie" name="kopie" value="1" ';
-                            if ($_GET['kopie'] == 1)
+                            <input type="checkbox" id="carbon_copy" name="carbon_copy" value="1" ';
+                            if ($_GET['carbon_copy'] == 1)
                             {
                                 echo ' checked="checked" ';
                             }
-                            echo ' /> <label for="kopie">'.$g_l10n->get('MAI_SEND_COPY').'</label>
+                            echo ' /> <label for="carbon_copy">'.$g_l10n->get('MAI_SEND_COPY').'</label>
                         </dd>
                     </dl>
                 </li>';
