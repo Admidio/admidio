@@ -32,5 +32,8 @@ $plg_max_char_per_word = 0;
 // wenn keine Angabe erfolgt dann wird die Standard-URL von Admidio verwendet
 $plg_link_url = $g_root_path. '/adm_program/modules/dates/dates.php';
 
+// Welche Kalender sollen ausgegeben werden: Alle (all), Kalender xyz (xyz)
+// Mehrere Einträge: $plg_kal_cat = array('abc','cdf')
+$plg_kal_cat =  array('all');
 
 ?>
