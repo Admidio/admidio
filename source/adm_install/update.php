@@ -50,7 +50,7 @@ if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
 		the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or more highly.</div>');
 }
 
-require_once(SERVER_PATH. '/adm_program/system/db/'. $g_db_type. '.php');
+require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
@@ -58,7 +58,7 @@ require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 
 // Verbindung zu Datenbank herstellen
-$g_db = new MySqlDB();
+$g_db = Database::createDatabaseObject($g_db_type);
 $g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 // Daten der aktuellen Organisation einlesen

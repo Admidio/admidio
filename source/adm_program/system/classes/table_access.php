@@ -149,6 +149,7 @@ class TableAccess
         // Datum in dem uebergebenen Format bzw. Systemformat zurueckgeben
         elseif(isset($this->columnsInfos[$field_name]['type'])
         &&  (  strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false
+            || strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false
             || strpos($this->columnsInfos[$field_name]['type'], 'date') !== false
             || strpos($this->columnsInfos[$field_name]['type'], 'time') !== false))
         {
@@ -156,7 +157,8 @@ class TableAccess
             {
                 if(strlen($format) == 0 && isset($g_preferences))
                 {
-                    if(strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false)
+                    if(strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false
+                    || strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false)
                     {
                         $format = $g_preferences['system_date'].' '.$g_preferences['system_time'];
                     }
@@ -373,15 +375,15 @@ class TableAccess
     }
 
     // Methode setzt den Wert eines Feldes neu, 
-    // dabei koennen noch noetige Plausibilitaetspruefungen gemacht werden
-    public function setValue($field_name, $field_value)
+    // dabei koennen optional noch noetige Plausibilitaetspruefungen gemacht werden
+    public function setValue($field_name, $field_value, $check_value = true)
     {
         $return_code = false;
 
         if(array_key_exists($field_name, $this->dbColumns))
         {
             // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
-            if(strlen($field_value) > 0)
+            if(strlen($field_value) > 0 && $check_value == true)
             {
                 // Numerische Felder
                 if(strpos($this->columnsInfos[$field_name]['type'], 'int') !== false)
