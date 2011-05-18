@@ -41,97 +41,81 @@ drop table if exists %PREFIX%_users;
 /*==============================================================*/
 create table %PREFIX%_announcements
 (
-   ann_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   ann_org_shortname              varchar(10)                    not null,
-   ann_global                     tinyint(1) unsigned            not null default 0,
-   ann_headline                   varchar(100)                   not null,
+   ann_id                         integer       unsigned not null AUTO_INCREMENT,
+   ann_org_shortname              varchar(10)   not null,
+   ann_global                     boolean       not null default 0,
+   ann_headline                   varchar(100)  not null,
    ann_description                text,
-   ann_usr_id_create              int(11) unsigned,
-   ann_timestamp_create           datetime                       not null,
-   ann_usr_id_change              int(11) unsigned,
-   ann_timestamp_change           datetime,
-   primary key (ann_id)
+   ann_usr_id_create              integer       unsigned,
+   ann_timestamp_create           timestamp     not null,
+   ann_usr_id_change              integer       unsigned,
+   ann_timestamp_change           timestamp,
+   primary key (ann_id),
+   constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_shortname)
+      references %PREFIX%_organizations (org_shortname)  on delete restrict on update restrict,
+   constraint %PREFIX%_FK_ANN_USR_CREATE foreign key (ann_usr_id_create)
+      references %PREFIX%_users (usr_id)  on delete set null on update restrict,
+   constraint %PREFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
+      references %PREFIX%_users (usr_id)  on delete set null on update restrict
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_announcements add index ANN_ORG_FK (ann_org_shortname);
-alter table %PREFIX%_announcements add index ANN_USR_FK(ann_usr_id_create);
-alter table %PREFIX%_announcements add index ANN_USR_CHANGE_FK (ann_usr_id_change);
-
--- Constraints
-alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
-alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CREATE foreign key (ann_usr_id_create)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_auto_login                                        */
 /*==============================================================*/
 create table %PREFIX%_auto_login
 (
-   atl_session_id                 varchar(35)                    not null,
-   atl_org_id                     tinyint(4)                     not null,
-   atl_usr_id                     int(11) unsigned               not null,
-   atl_last_login                 datetime                       not null,
-   atl_ip_address                 varchar(15)                    not null,
-   primary key (atl_session_id)
+   atl_session_id                 varchar(35)   not null,
+   atl_org_id                     integer       unsigned not null,
+   atl_usr_id                     integer       unsigned not null,
+   atl_last_login                 timestamp     not null,
+   atl_ip_address                 varchar(15)   not null,
+   primary key (atl_session_id),
+   constraint %PREFIX%_FK_ATL_USR foreign key (atl_usr_id)
+      references %PREFIX%_users (usr_id)  on delete restrict on update restrict,
+   constraint %PREFIX%_FK_ATL_ORG foreign key (atl_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict
 )
 engine = InnoDB
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_auto_login add index ATL_USR_FK (atl_usr_id);
-alter table %PREFIX%_auto_login add index ATL_ORG_FK (atl_org_id);
-
--- Constraints
-alter table %PREFIX%_auto_login add constraint %PREFIX%_FK_ATL_USR foreign key (atl_usr_id)
-      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
-
-alter table %PREFIX%_auto_login add constraint %PREFIX%_FK_ATL_ORG foreign key (atl_org_id)
-      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_categories                                        */
 /*==============================================================*/
 create table %PREFIX%_categories
 (
-   cat_id                         int (11) unsigned              not null AUTO_INCREMENT,
-   cat_org_id                     tinyint(4),
-   cat_type                       varchar(10)                    not null,
-   cat_name_intern                varchar(110)                   not null,
-   cat_name                       varchar(100)                   not null,
-   cat_hidden                     tinyint(1) unsigned            not null default 0,
-   cat_system                     tinyint(1) unsigned            not null default 0,
-   cat_default                    tinyint(1) unsigned            not null default 0,
-   cat_sequence                   smallint                       not null,
-   cat_usr_id_create              int(11) unsigned,
-   cat_timestamp_create           datetime                       not null,
-   cat_usr_id_change              int(11) unsigned,
-   cat_timestamp_change           datetime,
+   cat_id                         integer       unsigned not null AUTO_INCREMENT,
+   cat_org_id                     integer       unsigned,
+   cat_type                       varchar(10)   not null,
+   cat_name_intern                varchar(110)  not null,
+   cat_name                       varchar(100)  not null,
+   cat_hidden                     boolean       not null default 0,
+   cat_system                     boolean       not null default 0,
+   cat_default                    boolean       not null default 0,
+   cat_sequence                   smallint      not null,
+   cat_usr_id_create              integer       unsigned,
+   cat_timestamp_create           timestamp     not null,
+   cat_usr_id_change              integer       unsigned,
+   cat_timestamp_change           timestamp,
    primary key (cat_id)
+   constraint %PREFIX%_FK_CAT_ORG foreign key (cat_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict,
+   constraint %PREFIX%_FK_CAT_USR_CREATE foreign key (cat_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict
+   constraint %PREFIX%_FK_CAT_USR_CHANGE foreign key (cat_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_categories add index CAT_ORG_FK (cat_org_id);
-
--- Constraints
-alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_ORG foreign key (cat_org_id)
-      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
-alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CREATE foreign key (cat_usr_id_create)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CHANGE foreign key (cat_usr_id_change)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_date_role                                         */
@@ -166,10 +150,10 @@ create table %PREFIX%_dates
 (
    dat_id                         int(11) unsigned               not null AUTO_INCREMENT,
    dat_cat_id                     int(11) unsigned               not null,
-   dat_global                     tinyint(1) unsigned            not null default 0,
+   dat_global                     boolean            not null default 0,
    dat_begin                      datetime                       not null,
    dat_end                        datetime                       not null,
-   dat_all_day                    tinyint(1) unsigned            not null default 0,
+   dat_all_day                    boolean            not null default 0,
    dat_description                text,
    dat_location                   varchar(100),
    dat_country                    varchar(100),
@@ -211,7 +195,7 @@ create table %PREFIX%_files
    fil_fol_id                     int(11) unsigned               not null,
    fil_name                       varchar(255)                   not null,
    fil_description                text,
-   fil_locked                     tinyint(1) unsigned            not null default 0,
+   fil_locked                     boolean            not null default 0,
    fil_counter                    int,
    fil_usr_id                     int(11) unsigned,
    fil_timestamp                  datetime                       not null,
@@ -262,14 +246,14 @@ alter table %PREFIX%_folder_roles add constraint %PREFIX%_FK_FLR_ROL foreign key
 create table %PREFIX%_folders
 (
    fol_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   fol_org_id                     tinyint(4)                     not null,
+   fol_org_id                     integer       unsigned not null,
    fol_fol_id_parent              int(11) unsigned,
    fol_type                       varchar(10)                    not null,
    fol_name                       varchar(255)                   not null,
    fol_description                text,
    fol_path                       varchar(255)                   not null,
-   fol_locked                     tinyint (1) unsigned           not null default 0,
-   fol_public                     tinyint (1) unsigned           not null default 0,
+   fol_locked                     boolean           not null default 0,
+   fol_public                     boolean           not null default 0,
    fol_usr_id                     int(11) unsigned,
    fol_timestamp                  datetime                       not null,
    primary key (fol_id)
@@ -298,13 +282,13 @@ alter table %PREFIX%_folders add constraint %PREFIX%_FK_FOL_USR foreign key (fol
 create table %PREFIX%_guestbook
 (
    gbo_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   gbo_org_id                     tinyint(4)                     not null,
+   gbo_org_id                     integer       unsigned not null,
    gbo_name                       varchar(60)                    not null,
    gbo_text                       text                           not null,
    gbo_email                      varchar(50),
    gbo_homepage                   varchar(50),
    gbo_ip_address                 varchar(15)                    not null,
-   gbo_locked                     tinyint (1) unsigned           not null default 0,
+   gbo_locked                     boolean           not null default 0,
    gbo_usr_id_create              int(11) unsigned,
    gbo_timestamp_create           datetime                       not null,
    gbo_usr_id_change              int(11) unsigned,
@@ -340,7 +324,7 @@ create table %PREFIX%_guestbook_comments
    gbc_text                       text                           not null,
    gbc_email                      varchar(50),
    gbc_ip_address                 varchar(15)                    not null,
-   gbc_locked                     tinyint (1) unsigned           not null default 0,
+   gbc_locked                     boolean           not null default 0,
    gbc_usr_id_create              int(11) unsigned,
    gbc_timestamp_create           datetime                       not null,
    gbc_usr_id_change              int(11) unsigned,
@@ -375,7 +359,7 @@ create table %PREFIX%_links
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
    lnk_url                        varchar(255)                   not null,
-   lnk_counter                    tinyint(1) unsigned            not null default 0,
+   lnk_counter                    boolean            not null default 0,
    lnk_usr_id_create              int(11) unsigned,
    lnk_timestamp_create           datetime                       not null,
    lnk_usr_id_change              int(11) unsigned,
@@ -406,12 +390,12 @@ alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_USR_CHANGE foreign key
 create table %PREFIX%_lists
 (
    lst_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   lst_org_id                     tinyint(4)                     not null,
+   lst_org_id                     integer       unsigned not null,
    lst_usr_id                     int(11) unsigned               not null,
    lst_name                       varchar(255),
    lst_timestamp                  datetime                       not null,
-   lst_global                     tinyint(1) unsigned            not null default 0,
-   lst_default                    tinyint(1) unsigned            not null default 0,
+   lst_global                     boolean            not null default 0,
+   lst_default                    boolean            not null default 0,
    primary key (lst_id)
 )
 engine = InnoDB
@@ -469,7 +453,7 @@ create table %PREFIX%_members
    mem_usr_id                     int(11) unsigned               not null,
    mem_begin                      date                           not null,
    mem_end                        date                           not null default '9999-12-31',
-   mem_leader                     tinyint(1) unsigned            not null default 0,
+   mem_leader                     boolean            not null default 0,
    primary key (mem_id),
    unique ak_rol_usr_id (mem_rol_id, mem_usr_id)
 )
@@ -493,10 +477,10 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR foreign key (mem
 /*==============================================================*/
 create table %PREFIX%_organizations
 (
-   org_id                         tinyint(4)                     not null AUTO_INCREMENT,
+   org_id                         integer       unsigned not null AUTO_INCREMENT,
    org_longname                   varchar(60)                    not null,
    org_shortname                  varchar(10)                    not null,
-   org_org_id_parent              tinyint(4),
+   org_org_id_parent              integer       unsigned,
    org_homepage                   varchar(60)                    not null,
    primary key (org_id),
    unique ak_shortname (org_shortname)
@@ -525,7 +509,7 @@ create table %PREFIX%_photos
    pho_begin                      date                           not null,
    pho_end                        date                           not null,
    pho_photographers              varchar(100),
-   pho_locked                     tinyint(1) unsigned            not null default 0,
+   pho_locked                     boolean            not null default 0,
    pho_pho_id_parent              int(11) unsigned,
    pho_usr_id_create              int(11) unsigned,
    pho_timestamp_create           datetime                       not null,
@@ -560,7 +544,7 @@ alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CHANGE foreign ke
 create table %PREFIX%_preferences
 (
    prf_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   prf_org_id                     tinyint(4)                     not null,
+   prf_org_id                     integer       unsigned not null,
    prf_name                       varchar(30)                    not null,
    prf_value                      varchar(255),
    primary key (prf_id),
@@ -616,27 +600,27 @@ create table %PREFIX%_roles
    rol_cat_id                     int(11) unsigned               not null,
    rol_name                       varchar(30)                    not null,
    rol_description                varchar(255),
-   rol_assign_roles               tinyint(1) unsigned            not null default 0,
-   rol_approve_users              tinyint(1) unsigned            not null default 0,
-   rol_announcements              tinyint(1) unsigned            not null default 0,
-   rol_dates                      tinyint(1) unsigned            not null default 0,
-   rol_download                   tinyint(1) unsigned            not null default 0,
-   rol_edit_user                  tinyint(1) unsigned            not null default 0,
-   rol_guestbook                  tinyint(1) unsigned            not null default 0,
-   rol_guestbook_comments         tinyint(1) unsigned            not null default 0,
-   rol_inventory				  tinyint(1) unsigned            not null default 0,
-   rol_mail_to_all                tinyint(1) unsigned            not null default 0,
-   rol_mail_this_role             tinyint(1) unsigned            not null default 0,
-   rol_photo                      tinyint(1) unsigned            not null default 0,
-   rol_profile                    tinyint(1) unsigned            not null default 0,
-   rol_weblinks                   tinyint(1) unsigned            not null default 0,
-   rol_this_list_view             tinyint(1) unsigned            not null default 0,
-   rol_all_lists_view             tinyint(1) unsigned            not null default 0,
+   rol_assign_roles               boolean            not null default 0,
+   rol_approve_users              boolean            not null default 0,
+   rol_announcements              boolean            not null default 0,
+   rol_dates                      boolean            not null default 0,
+   rol_download                   boolean            not null default 0,
+   rol_edit_user                  boolean            not null default 0,
+   rol_guestbook                  boolean            not null default 0,
+   rol_guestbook_comments         boolean            not null default 0,
+   rol_inventory				  boolean            not null default 0,
+   rol_mail_to_all                boolean            not null default 0,
+   rol_mail_this_role             boolean            not null default 0,
+   rol_photo                      boolean            not null default 0,
+   rol_profile                    boolean            not null default 0,
+   rol_weblinks                   boolean            not null default 0,
+   rol_this_list_view             boolean            not null default 0,
+   rol_all_lists_view             boolean            not null default 0,
    rol_start_date                 date,
    rol_start_time                 time,
    rol_end_date                   date,
    rol_end_time                   time,
-   rol_weekday                    tinyint(1),
+   rol_weekday                    boolean,
    rol_location                   varchar(30),
    rol_max_members                smallint(3) unsigned,
    rol_cost                       float unsigned,
@@ -645,9 +629,9 @@ create table %PREFIX%_roles
    rol_timestamp_create           datetime                       not null,
    rol_usr_id_change              int(11) unsigned,
    rol_timestamp_change           datetime,
-   rol_valid                      tinyint(1) unsigned            not null default 1,
-   rol_system                     tinyint(1) unsigned            not null default 0,
-   rol_visible                    tinyint(1) unsigned            not null default 1,
+   rol_valid                      boolean            not null default 1,
+   rol_system                     boolean            not null default 0,
+   rol_visible                    boolean            not null default 1,
    primary key (rol_id)
 )
 engine = InnoDB
@@ -705,13 +689,13 @@ create table %PREFIX%_sessions
 (
    ses_id                         int(11) unsigned               not null AUTO_INCREMENT,
    ses_usr_id                     int(11) unsigned               default NULL,
-   ses_org_id                     tinyint(4)                     not null,
+   ses_org_id                     integer       unsigned not null,
    ses_session_id                 varchar(35)                    not null,
    ses_begin                      datetime                       not null,
    ses_timestamp                  datetime                       not null,
    ses_ip_address                 varchar(15)                    not null,
    ses_blob                       blob,
-   ses_renew                      tinyint(1) unsigned            not null default 0,
+   ses_renew                      boolean            not null default 0,
    primary key (ses_id),
    key ak_session (ses_session_id)
 )
@@ -736,7 +720,7 @@ alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_USR foreign key (se
 create table %PREFIX%_texts
 (
    txt_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   txt_org_id                     tinyint(4)                     not null,
+   txt_org_id                     integer       unsigned not null,
    txt_name                       varchar(30)                    not null,
    txt_text                       text,
    primary key (txt_id)
@@ -764,10 +748,10 @@ create table %PREFIX%_user_fields
    usf_name_intern                varchar(110)                   not null,
    usf_name                       varchar(100)                   not null,
    usf_description                text,
-   usf_system                     tinyint(1) unsigned            not null default 0,
-   usf_disabled                   tinyint(1) unsigned            not null default 0,
-   usf_hidden                     tinyint(1) unsigned            not null default 0,
-   usf_mandatory                  tinyint(1) unsigned            not null default 0,
+   usf_system                     boolean            not null default 0,
+   usf_disabled                   boolean            not null default 0,
+   usf_hidden                     boolean            not null default 0,
+   usf_mandatory                  boolean            not null default 0,
    usf_sequence                   smallint                       not null,
    usf_usr_id_create              int(11) unsigned,
    usf_timestamp_create           datetime                       not null,
@@ -840,7 +824,7 @@ create table %PREFIX%_users
    usr_timestamp_create           datetime                       not null,
    usr_usr_id_change              int(11) unsigned,
    usr_timestamp_change           datetime,
-   usr_valid                      tinyint(1) unsigned            not null default 0,
+   usr_valid                      boolean            not null default 0,
    usr_reg_org_shortname          varchar(10),
    primary key (usr_id),
    unique ak_usr_login_name (usr_login_name)
