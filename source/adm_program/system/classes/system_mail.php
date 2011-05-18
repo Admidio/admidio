@@ -82,7 +82,7 @@ class SystemMail extends Email
         
         if(strpos($mailSrcText, '#content#') !== false)
         {
-            $this->mailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 8));
+            $this->mailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
         }
         else
         {
