@@ -721,9 +721,13 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
 if($req_mode == 'csv')
 {
     // nun die erstellte CSV-Datei an den User schicken
-    $filename = $g_organization. '-'. str_replace(' ', '_', str_replace('.', '', $role->getValue('rol_name'))). '.csv';
+    $filename = $g_organization. '-'. str_replace('.', '', $role->getValue('rol_name')). '.csv';
     header('Content-Type: text/comma-separated-values; charset='.$charset);
-    header('Content-Disposition: attachment; filename="'.$filename.'"');
+    header('Content-Disposition: attachment; filename="'.urlencode($filename).'"');
+	// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
+	header('Cache-Control: private');
+	header('Pragma: public');
+
 	if($charset == 'iso-8859-1')
 	{
 		echo utf8_decode($str_csv);

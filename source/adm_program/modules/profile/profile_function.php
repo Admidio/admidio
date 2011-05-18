@@ -44,7 +44,10 @@ if($_REQUEST['mode'] == 1)
     $user = new User($g_db, $_REQUEST['user_id']);
 
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
-    header('Content-Disposition: attachment; filename="'. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'). '.vcf"');
+    header('Content-Disposition: attachment; filename="'. urlencode($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')). '.vcf"');
+	// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
+	header('Cache-Control: private');
+	header('Pragma: public');
 
     echo $user->getVCard();
 }
