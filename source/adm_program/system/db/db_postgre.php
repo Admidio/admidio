@@ -152,13 +152,30 @@ class DBPostgre extends DBCommon
     public function query($sql)
     {
         global $g_debug;
+
+		if(strpos(trim(strtolower($sql)), 'create table') !== false)
+		{
+			// bei einem Create-Table-Statement ggf. vorhandene Tabellenoptionen von MySQL abgeschnitten werden
+			$sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
+
+			// Postgre kennt unsigned nicht
+			$sql = str_replace('unsigned', '', $sql);
+			
+			// Auto_Increment muss durch Serial ersetzt werden
+			$posAutoIncrement = strpos($sql, 'auto_increment');
+			if($posAutoIncrement > 0)
+			{
+				$posInteger = strrpos(substr($sql, 0, $posAutoIncrement), 'integer');
+				$sql = substr($sql, 0, $posInteger).' serial '.substr($sql, $posAutoIncrement + 14);
+			}
+		}
         
         // im Debug-Modus werden alle SQL-Statements mitgeloggt
         if($g_debug == 1)
         {
             error_log($sql);
         }
-
+		
         $this->query_result = pg_query($this->connect_id, $sql);
 
         if(!$this->query_result)
@@ -167,8 +184,9 @@ class DBPostgre extends DBCommon
         }
 
 		// bei einem Insert-Statement noch die ID des eingefuegten DS ermitteln
-		if(strpos(trim($sql), 'INSERT INTO') !== false)
+		if(strpos(trim(strtolower($sql)), 'insert into') !== false)
 		{
+			// bei einem Insert-Statement noch die ID des eingefuegten DS ermitteln
 			$insert_query = pg_query('SELECT lastval()');
 			$insert_row = pg_fetch_row($insert_query);
 			$this->insert_id = $insert_row[0];
