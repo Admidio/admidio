@@ -50,7 +50,7 @@ function ajax_loadContent(evt,inputObj,divId,url)
 
 	
 	var ajaxIndex = dynamicContent_ajaxObjects.length;
-	document.getElementById(divId).innerHTML = 'Inhalt wird geladen - Bitte warten!';
+	document.getElementById(divId).innerHTML = gTranslations[8];
 	dynamicContent_ajaxObjects[ajaxIndex] = new sack();
 	
 	if(url.indexOf('?')>=0){
