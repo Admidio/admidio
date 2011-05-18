@@ -451,6 +451,9 @@ elseif($_GET['mode'] == 6)  // Termin im iCal-Format exportieren
 {
     header('Content-Type: text/calendar');
     header('Content-Disposition: attachment; filename='. urlencode($date->getValue('dat_headline')). '.ics');
+	// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
+	header('Cache-Control: private');
+	header('Pragma: public');
 
     echo $date->getIcal($_SERVER['HTTP_HOST']);
     exit();

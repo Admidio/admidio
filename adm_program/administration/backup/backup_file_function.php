@@ -73,7 +73,7 @@ switch($_GET['job'])
 		header('Content-Type: application/octet-stream');
 		header('Content-Length: '.$fileSize);
 		header('Content-Disposition: attachment; filename="'.urlencode($_GET['filename']).'"');
-		// noetig fuer IE6, da sonst pdf und doc nicht direkt geoeffnet werden kann
+		// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
 		header('Cache-Control: private');
 		header('Pragma: public');
 
