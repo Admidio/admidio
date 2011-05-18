@@ -336,7 +336,7 @@ if($new_user == 2)
 
     // nach Registrierungmeldung auf die Startseite verweisen
     $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
+    $g_message->show($g_l10n->get('SYS_REGISTRATION_SAVED'));
 }
 elseif($new_user == 3 || $usr_id == 0)
 {
