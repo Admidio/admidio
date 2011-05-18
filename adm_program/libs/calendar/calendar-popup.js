@@ -112,8 +112,7 @@ function AnchorPosition_getWindowOffsetTop (el) {
 	return AnchorPosition_getPageOffsetTop(el)-document.body.scrollTop;
 	}
 
-var MONTH_NAMES=new Array('Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember','Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez');
-var DAY_NAMES=new Array('Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag','Sonntag','Mo','Di','Mi','Do','Fr','Sa','So');
+//var gMonthNames=new Array('Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember','Jan','Feb','Mär','Apr','Mai','Jun','Jul','Aug','Sep','Okt','Nov','Dez');
 function LZ(x) {return(x<0||x>9?"":"0")+x}
 
 // ------------------------------------------------------------------
@@ -487,9 +486,9 @@ function CalendarPopup() {
 	c.offsetY = -60;
 	c.autoHide();
 	// Calendar-specific properties
-	c.monthNames = new Array("Januar","Februar","M&auml;rz","April","Mai","Juni","Juli","August","September","Oktober","November","Dezember");
-	c.monthAbbreviations = new Array("Jan","Feb","M&auml;r","Apr","Mai","Jun","Jui","Aug","Sep","Okt","Nov","Dez");
-	c.dayHeaders = new Array("So","Mo","Di","Mi","Do","Fr","Sa");
+	c.monthNames = new Array(gMonthNames[0],gMonthNames[1],gMonthNames[2],gMonthNames[3],gMonthNames[4],gMonthNames[5],gMonthNames[6],gMonthNames[7],gMonthNames[8],gMonthNames[9],gMonthNames[10],gMonthNames[11]);
+	c.monthAbbreviations = new Array(gMonthNames[12],gMonthNames[13],gMonthNames[14],gMonthNames[15],gMonthNames[16],gMonthNames[17],gMonthNames[18],gMonthNames[19],gMonthNames[20],gMonthNames[21],gMonthNames[22],gMonthNames[23]);
+	c.dayHeaders = new Array(gTranslations[6],gTranslations[0],gTranslations[1],gTranslations[2],gTranslations[3],gTranslations[4],gTranslations[5]);
 	c.returnFunction = "CP_tmpReturnFunction";
 	c.returnMonthFunction = "CP_tmpReturnMonthFunction";
 	c.returnQuarterFunction = "CP_tmpReturnQuarterFunction";
@@ -502,7 +501,7 @@ function CalendarPopup() {
 	c.yearSelectStartOffset = 30;
     c.yearSelectEndOffset = 10;
 	c.currentDate = null;
-	c.todayText="Heute";
+	c.todayText=gTranslations[7];
 	c.cssPrefix="";
 	c.isShowNavigationDropdowns=false;
 	c.isShowYearNavigationInput=false;
@@ -545,13 +544,13 @@ function CalendarPopup() {
 	}
 function CP_copyMonthNamesToWindow() {
 	// Copy these values over to the date.js
-	if (typeof(window.MONTH_NAMES)!="undefined" && window.MONTH_NAMES!=null) {
-		window.MONTH_NAMES = new Array();
+	if (typeof(window.gMonthNames)!="undefined" && window.gMonthNames!=null) {
+		window.gMonthNames = new Array();
 		for (var i=0; i<this.monthNames.length; i++) {
-			window.MONTH_NAMES[window.MONTH_NAMES.length] = this.monthNames[i];
+			window.gMonthNames[window.gMonthNames.length] = this.monthNames[i];
 		}
 		for (var i=0; i<this.monthAbbreviations.length; i++) {
-			window.MONTH_NAMES[window.MONTH_NAMES.length] = this.monthAbbreviations[i];
+			window.gMonthNames[window.gMonthNames.length] = this.monthAbbreviations[i];
 		}
 	}
 }

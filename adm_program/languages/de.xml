@@ -20,7 +20,40 @@
     <text id="PHO_NEWEST_ALBUMS" development="deleted" translation="todo">Die 10 neuesten Fotoalben</text>
     <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="todo">Neuesten Fotoalben der Organisation %VAR1%</text>
     <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="todo">Das Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</text>
+    <text id="SYS_LOADING_CONTENT" development="new" translation="todo">Inhalt wird geladen ...</text>
     <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="todo">RSS-Feed für %VAR1%</text>
+    <text id="SYS_JANUARY" development="new" translation="todo">Januar</text>
+    <text id="SYS_FEBRUARY" development="new" translation="todo">Februar</text>
+    <text id="SYS_MARCH" development="new" translation="todo">März</text>
+    <text id="SYS_APRIL" development="new" translation="todo">April</text>
+    <text id="SYS_MAY" development="new" translation="todo">Mai</text>
+    <text id="SYS_JUNE" development="new" translation="todo">Juni</text>
+    <text id="SYS_JULY" development="new" translation="todo">Juli</text>
+    <text id="SYS_AUGUST" development="new" translation="todo">August</text>
+    <text id="SYS_SEPTEMBER" development="new" translation="todo">September</text>
+    <text id="SYS_OCTOBER" development="new" translation="todo">Oktober</text>
+    <text id="SYS_NOVEMBER" development="new" translation="todo">November</text>
+    <text id="SYS_DECEMBER" development="new" translation="todo">Dezember</text>
+    <text id="SYS_JAN" development="new" translation="todo" description="Abbr. for January">Jan</text>
+    <text id="SYS_FEB" development="new" translation="todo" description="Abbr. for February">Feb</text>
+    <text id="SYS_MAR" development="new" translation="todo" description="Abbr. for March">Mar</text>
+    <text id="SYS_APR" development="new" translation="todo" description="Abbr. for April">Apr</text>
+    <text id="SYS_MAY" development="new" translation="todo" description="Abbr. for May">Mai</text>
+    <text id="SYS_JUN" development="new" translation="todo" description="Abbr. for June">Jun</text>
+    <text id="SYS_JUL" development="new" translation="todo" description="Abbr. for July">Jul</text>
+    <text id="SYS_AUG" development="new" translation="todo" description="Abbr. for August">Aug</text>
+    <text id="SYS_SEP" development="new" translation="todo" description="Abbr. for September">Sep</text>
+    <text id="SYS_OCT" development="new" translation="todo" description="Abbr. for October">Okt</text>
+    <text id="SYS_NOV" development="new" translation="todo" description="Abbr. for November">Nov</text>
+    <text id="SYS_DEC" development="new" translation="todo" description="Abbr. for December">Dez</text>
+    <text id="SYS_MON" development="new" translation="todo" description="Abbr. for Monday">Mo</text>
+    <text id="SYS_TUE" development="new" translation="todo" description="Abbr. for Tuesday">Di</text>
+    <text id="SYS_WED" development="new" translation="todo" description="Abbr. for Wednesday">Mi</text>
+    <text id="SYS_THU" development="new" translation="todo" description="Abbr. for Thursday">Do</text>
+    <text id="SYS_FRI" development="new" translation="todo" description="Abbr. for Friday">Fr</text>
+    <text id="SYS_SAT" development="new" translation="todo" description="Abbr. for Saturday">Sa</text>
+    <text id="SYS_SUN" development="new" translation="todo" description="Abbr. for Monday">So</text>
+    <text id="SYS_TODAY" development="new" translation="todo">Heute</text>
 </version>
 <version id="2.2.0">
     <!-- Phrases only in Announcementmodule -->

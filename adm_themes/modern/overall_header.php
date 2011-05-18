@@ -69,6 +69,8 @@ echo '
     <script type="text/javascript"><!-- 
 		var gRootPath  = "'. $g_root_path. '"; 
 		var gThemePath = "'. THEME_PATH. '";
+		var gMonthNames = new Array("'.$g_l10n->get('SYS_JANUARY').'","'.$g_l10n->get('SYS_FEBRUARY').'","'.$g_l10n->get('SYS_MARCH').'","'.$g_l10n->get('SYS_APRIL').'","'.$g_l10n->get('SYS_MAY').'","'.$g_l10n->get('SYS_JUNE').'","'.$g_l10n->get('SYS_JULY').'","'.$g_l10n->get('SYS_AUGUST').'","'.$g_l10n->get('SYS_SEPTEMBER').'","'.$g_l10n->get('SYS_OCTOBER').'","'.$g_l10n->get('SYS_NOVEMBER').'","'.$g_l10n->get('SYS_DECEMBER').'","'.$g_l10n->get('SYS_JAN').'","'.$g_l10n->get('SYS_FEB').'","'.$g_l10n->get('SYS_MAR').'","'.$g_l10n->get('SYS_APR').'","'.$g_l10n->get('SYS_MAY').'","'.$g_l10n->get('SYS_JUN').'","'.$g_l10n->get('SYS_JUL').'","'.$g_l10n->get('SYS_AUG').'","'.$g_l10n->get('SYS_SEP').'","'.$g_l10n->get('SYS_OCT').'","'.$g_l10n->get('SYS_NOV').'","'.$g_l10n->get('SYS_DEC').'");
+        var gTranslations = new Array("'.$g_l10n->get('SYS_MON').'","'.$g_l10n->get('SYS_TUE').'","'.$g_l10n->get('SYS_WED').'","'.$g_l10n->get('SYS_THU').'","'.$g_l10n->get('SYS_FRI').'","'.$g_l10n->get('SYS_SAT').'","'.$g_l10n->get('SYS_SUN').'","'.$g_l10n->get('SYS_TODAY').'","'.$g_l10n->get('SYS_LOADING_CONTENT').'");
 		$(document).ready(function(){
 			$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'});
 		});
