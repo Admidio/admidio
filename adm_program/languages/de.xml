@@ -21,6 +21,7 @@
     <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="todo">Neuesten Fotoalben der Organisation %VAR1%</text>
     <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="todo">Das Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</text>
     <text id="SYS_LOADING_CONTENT" development="new" translation="todo">Inhalt wird geladen ...</text>
+    <text id="SYS_REGISTRATION_SAVED" development="new" translation="todo">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss noch von einem Moderator freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</text>
     <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="todo">RSS-Feed für %VAR1%</text>
     <text id="SYS_JANUARY" development="new" translation="todo">Januar</text>
     <text id="SYS_FEBRUARY" development="new" translation="todo">Februar</text>
