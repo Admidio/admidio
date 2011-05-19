@@ -84,9 +84,12 @@ class TableUserData extends TableAccess
             if($this->dbColumns['usf_type'] == 'DATE' && strlen($format) > 0 && strlen($value) > 0)
             {
                 // ist das Feld ein Datumsfeld, dann das Datum formatieren
-                $dateArray = preg_split('/[- :]/', $value);
-                $timestamp = @mktime(0, 0, 0, $dateArray[1], $dateArray[2], $dateArray[0]);
-                $value = date($format, $timestamp);
+                $date = new DateTimeExtended($value, 'Y-m-d', 'date');
+                if($date->valid() == false)
+                {
+                    return $value;
+                }
+                $value = $date->format($format);
             }
             elseif($this->dbColumns['usf_name_intern'] == 'COUNTRY' && strlen($value) > 0)
             {
@@ -109,12 +112,12 @@ class TableUserData extends TableAccess
     {
         global $g_preferences;
 
-        if($field_name == 'usd_value' && strlen($field_value) > 0 && $this->noValueCheck != true)
+        if($field_name == 'usd_value' && strlen($field_value) > 0)
         {
             if($this->dbColumns['usf_type'] == 'CHECKBOX')
             {
                 // Checkbox darf nur 1 oder 0 haben
-                if($field_value != 0 && $field_value != 1)
+                if($field_value != 0 && $field_value != 1 && $this->noValueCheck != true)
                 {
                     return false;
                 }
@@ -125,15 +128,21 @@ class TableUserData extends TableAccess
                 $date = new DateTimeExtended($field_value, $g_preferences['system_date'], 'date');
                 if($date->valid() == false)
                 {
-                    return false;
+                    if($this->noValueCheck != true)
+                    {                        
+                        return false;
+                    }
                 }
-                $field_value = $date->format('Y-m-d');
+                else
+                {
+                    $field_value = $date->format('Y-m-d');
+                }
             }
             elseif($this->dbColumns['usf_type'] == 'EMAIL')
             {
                 // Email darf nur gueltige Zeichen enthalten und muss einem festen Schema entsprechen
                 $field_value = admStrToLower($field_value);
-                if (!strValidCharacters($field_value, 'email'))
+                if (!strValidCharacters($field_value, 'email') && $this->noValueCheck != true)
                 {
                     return false;
                 }
@@ -141,7 +150,7 @@ class TableUserData extends TableAccess
             elseif($this->dbColumns['usf_type'] == 'NUMERIC')
             {
                 // Zahl muss numerisch sein
-                if(is_numeric(strtr($field_value, ',.', '00')) == false)
+                if(is_numeric(strtr($field_value, ',.', '00')) == false && $this->noValueCheck != true)
                 {
                     return false;
                 }
@@ -149,7 +158,7 @@ class TableUserData extends TableAccess
             elseif($this->dbColumns['usf_type'] == 'URL')
             {
                 // Homepage darf nur gueltige Zeichen enthalten
-                if (!strValidCharacters($field_value, 'url'))
+                if (!strValidCharacters($field_value, 'url') && $this->noValueCheck != true)
                 {
                     return false;
                 }
