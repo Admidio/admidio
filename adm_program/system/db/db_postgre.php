@@ -160,6 +160,9 @@ class DBPostgre extends DBCommon
 
 			// Postgre kennt unsigned nicht
 			$sql = str_replace('unsigned', '', $sql);
+
+			// Blobs sind in Postgre bytea Datentypen
+			$sql = str_replace('blob', 'bytea', $sql);
 			
 			// Auto_Increment muss durch Serial ersetzt werden
 			$posAutoIncrement = strpos($sql, 'auto_increment');

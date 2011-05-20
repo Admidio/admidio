@@ -8,7 +8,6 @@
  *
  *****************************************************************************/
 
-require_once('systemmails_texts.php'); 
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 

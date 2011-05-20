@@ -118,19 +118,6 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-/*==============================================================*/
-/* Constraints                                                  */
-/*==============================================================*/
-alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_ORG foreign key (cat_org_id)
-      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
-
-alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
-
-alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
-      references %PREFIX%_organizations (org_id) on delete set null on update restrict;
-
-set foreign_key_checks = 1;
 
 /*==============================================================*/
 /* Table: adm_date_role                                         */
@@ -290,16 +277,16 @@ collate = utf8_unicode_ci;
 /*==============================================================*/
 create table %PREFIX%_links
 (
-   lnk_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   lnk_cat_id                     int(11) unsigned               not null,
-   lnk_name                       varchar(255)                   not null,
+   lnk_id                         integer       unsigned not null AUTO_INCREMENT,
+   lnk_cat_id                     integer       unsigned not null,
+   lnk_name                       varchar(255)  not null,
    lnk_description                text,
-   lnk_url                        varchar(255)                   not null,
-   lnk_counter                    boolean            not null default '0',
-   lnk_usr_id_create              int(11) unsigned,
-   lnk_timestamp_create           datetime                       not null,
-   lnk_usr_id_change              int(11) unsigned,
-   lnk_timestamp_change           datetime,
+   lnk_url                        varchar(255)  not null,
+   lnk_counter                    boolean       not null default '0',
+   lnk_usr_id_create              integer       unsigned,
+   lnk_timestamp_create           timestamp     not null,
+   lnk_usr_id_change              integer       unsigned,
+   lnk_timestamp_change           timestamp,
    primary key (lnk_id)
 )
 engine = InnoDB
@@ -307,31 +294,19 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_links add index LNK_CAT_FK (lnk_cat_id);
-alter table %PREFIX%_links add index LNK_USR_FK (lnk_usr_id_create);
-alter table %PREFIX%_links add index LNK_USR_CHANGE_FK (lnk_usr_id_change);
-
--- Constraints
-alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
-      references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
-alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_USR_CREATE foreign key (lnk_usr_id_create)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_USR_CHANGE foreign key (lnk_usr_id_change)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_lists                                             */
 /*==============================================================*/
 create table %PREFIX%_lists
 (
-   lst_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   lst_id                         integer       unsigned not null AUTO_INCREMENT,
    lst_org_id                     integer       unsigned not null,
-   lst_usr_id                     int(11) unsigned               not null,
+   lst_usr_id                     integer       unsigned not null,
    lst_name                       varchar(255),
-   lst_timestamp                  datetime                       not null,
-   lst_global                     boolean            not null default '0',
-   lst_default                    boolean            not null default '0',
+   lst_timestamp                  timestamp     not null,
+   lst_global                     boolean       not null default '0',
+   lst_default                    boolean       not null default '0',
    primary key (lst_id)
 )
 engine = InnoDB
@@ -339,25 +314,16 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_lists add index LST_USR_FK (lst_usr_id);
-alter table %PREFIX%_lists add index LST_ORG_FK (lst_org_id);
-
--- Constraints
-alter table %PREFIX%_lists add constraint %PREFIX%_FK_LST_USR foreign key (lst_usr_id)
-      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
-alter table %PREFIX%_lists add constraint %PREFIX%_FK_LST_ORG foreign key (lst_org_id)
-      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 
 /*==============================================================*/
-/* Table: adm_list_columns                                       */
+/* Table: adm_list_columns                                      */
 /*==============================================================*/
 create table %PREFIX%_list_columns
 (
-   lsc_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   lsc_lst_id                     int(11) unsigned               not null,
-   lsc_number                     smallint                       not null,
-   lsc_usf_id                     int(11) unsigned,
+   lsc_id                         integer       unsigned not null AUTO_INCREMENT,
+   lsc_lst_id                     integer       unsigned not null,
+   lsc_number                     smallint      not null,
+   lsc_usf_id                     integer       unsigned,
    lsc_special_field              varchar(255),
    lsc_sort                       varchar(5),
    lsc_filter                     varchar(255),
@@ -368,45 +334,25 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_list_columns add index LSC_LST_FK (lsc_lst_id);
-alter table %PREFIX%_list_columns add index LSC_USF_FK (lsc_usf_id);
-
--- Constraints
-alter table %PREFIX%_list_columns add constraint %PREFIX%_FK_LSC_LST foreign key (lsc_lst_id)
-      references %PREFIX%_lists (lst_id) on delete restrict on update restrict;
-
-alter table %PREFIX%_list_columns add constraint %PREFIX%_FK_LSC_USF foreign key (lsc_usf_id)
-      references %PREFIX%_user_fields (usf_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_members                                           */
 /*==============================================================*/
 create table %PREFIX%_members
 (
-   mem_id                         int(11)                        not null AUTO_INCREMENT,
-   mem_rol_id                     int(11) unsigned               not null,
-   mem_usr_id                     int(11) unsigned               not null,
-   mem_begin                      date                           not null,
-   mem_end                        date                           not null default '9999-12-31',
-   mem_leader                     boolean            not null default '0',
+   mem_id                         integer       unsigned not null AUTO_INCREMENT,
+   mem_rol_id                     integer       unsigned not null,
+   mem_usr_id                     integer       unsigned not null,
+   mem_begin                      date          not null,
+   mem_end                        date          not null default '9999-12-31',
+   mem_leader                     boolean       not null default '0',
    primary key (mem_id),
-   unique ak_rol_usr_id (mem_rol_id, mem_usr_id)
+   unique (mem_rol_id, mem_usr_id)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
-
--- Index
-alter table %PREFIX%_members add index MEM_ROL_FK (mem_rol_id);
-alter table %PREFIX%_members add index MEM_USR_FK (mem_usr_id);
-
--- Constraints
-alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_ROL foreign key (mem_rol_id)
-      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
-alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR foreign key (mem_usr_id)
-      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 
 	  
 /*==============================================================*/
@@ -414,19 +360,19 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR foreign key (mem
 /*==============================================================*/
 create table %PREFIX%_photos
 (
-   pho_id                         int(11) unsigned               not null auto_increment,
-   pho_org_shortname              varchar(10)                    not null,
-   pho_quantity                   int(11) unsigned               not null default 0,
-   pho_name                       varchar(50)                    not null,
-   pho_begin                      date                           not null,
-   pho_end                        date                           not null,
+   pho_id                         integer       unsigned not null AUTO_INCREMENT,
+   pho_org_shortname              varchar(10)   not null,
+   pho_quantity                   integer		unsigned not null default 0,
+   pho_name                       varchar(50)   not null,
+   pho_begin                      date          not null,
+   pho_end                        date          not null,
    pho_photographers              varchar(100),
-   pho_locked                     boolean            not null default '0',
-   pho_pho_id_parent              int(11) unsigned,
-   pho_usr_id_create              int(11) unsigned,
-   pho_timestamp_create           datetime                       not null,
-   pho_usr_id_change              int(11) unsigned,
-   pho_timestamp_change           datetime,
+   pho_locked                     boolean       not null default '0',
+   pho_pho_id_parent              integer       unsigned,
+   pho_usr_id_create              integer       unsigned,
+   pho_timestamp_create           timestamp     not null,
+   pho_usr_id_change              integer       unsigned,
+   pho_timestamp_change           timestamp,
    primary key (pho_id)
 )
 engine = InnoDB
@@ -434,116 +380,83 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_photos add index PHO_ORG_FK (pho_org_shortname);
-alter table %PREFIX%_photos add index PHO_USR_FK (pho_usr_id_create);
-alter table %PREFIX%_photos add index PHO_USR_CHANGE_FK (pho_usr_id_change);
-alter table %PREFIX%_photos add index FK_PHO_PHO_PARENT_FK (pho_pho_id_parent);
-
--- Constraints
-alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_PHO_PARENT foreign key (pho_pho_id_parent)
-      references %PREFIX%_photos (pho_id) on delete set null on update restrict;
-alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_ORG foreign key (pho_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
-alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CREATE foreign key (pho_usr_id_create)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_preferences                                       */
 /*==============================================================*/
 create table %PREFIX%_preferences
 (
-   prf_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   prf_id                         integer       unsigned not null AUTO_INCREMENT,
    prf_org_id                     integer       unsigned not null,
-   prf_name                       varchar(30)                    not null,
+   prf_name                       varchar(30)   not null,
    prf_value                      varchar(255),
    primary key (prf_id),
-   unique ak_org_id_name (prf_org_id, prf_name)
+   unique (prf_org_id, prf_name)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_preferences add index PRF_ORG_FK (prf_org_id);
-
--- Constraints
-alter table %PREFIX%_preferences add constraint %PREFIX%_FK_PRF_ORG foreign key (prf_org_id)
-      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_role_dependencies                                 */
 /*==============================================================*/
 create table %PREFIX%_role_dependencies
 (
-   rld_rol_id_parent              int(11) unsigned               not null,
-   rld_rol_id_child               int(11) unsigned               not null,
+   rld_rol_id_parent              integer       unsigned not null,
+   rld_rol_id_child               integer       unsigned not null,
    rld_comment                    text,
-   rld_usr_id                     int(11) unsigned,
-   rld_timestamp                  datetime                       not null,
+   rld_usr_id                     integer       unsigned,
+   rld_timestamp                  timestamp     not null,
    primary key (rld_rol_id_parent, rld_rol_id_child)
 )
 engine = InnoDB
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_role_dependencies add index RLD_USR_FK (rld_usr_id);
-alter table %PREFIX%_role_dependencies add index RLD_ROL_PARENT_FK (rld_rol_id_parent);
-alter table %PREFIX%_role_dependencies add index RLD_ROL_CHILD_FK (rld_rol_id_child);
-
--- Constraints
-alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_ROL_CHILD foreign key (rld_rol_id_child)
-      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
-alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_ROL_PARENT foreign key (rld_rol_id_parent)
-      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
-alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_USR foreign key (rld_usr_id)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_roles                                             */
 /*==============================================================*/
 create table %PREFIX%_roles
 (
-   rol_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   rol_cat_id                     int(11) unsigned               not null,
-   rol_name                       varchar(30)                    not null,
+   rol_id                         integer       unsigned not null AUTO_INCREMENT,
+   rol_cat_id                     integer       unsigned not null,
+   rol_name                       varchar(30)   not null,
    rol_description                varchar(255),
-   rol_assign_roles               boolean            not null default '0',
-   rol_approve_users              boolean            not null default '0',
-   rol_announcements              boolean            not null default '0',
-   rol_dates                      boolean            not null default '0',
-   rol_download                   boolean            not null default '0',
-   rol_edit_user                  boolean            not null default '0',
-   rol_guestbook                  boolean            not null default '0',
-   rol_guestbook_comments         boolean            not null default '0',
-   rol_inventory				  boolean            not null default '0',
-   rol_mail_to_all                boolean            not null default '0',
-   rol_mail_this_role             boolean            not null default '0',
-   rol_photo                      boolean            not null default '0',
-   rol_profile                    boolean            not null default '0',
-   rol_weblinks                   boolean            not null default '0',
-   rol_this_list_view             boolean            not null default '0',
-   rol_all_lists_view             boolean            not null default '0',
+   rol_assign_roles               boolean       not null default '0',
+   rol_approve_users              boolean       not null default '0',
+   rol_announcements              boolean       not null default '0',
+   rol_dates                      boolean       not null default '0',
+   rol_download                   boolean       not null default '0',
+   rol_edit_user                  boolean       not null default '0',
+   rol_guestbook                  boolean       not null default '0',
+   rol_guestbook_comments         boolean       not null default '0',
+   rol_inventory				  boolean       not null default '0',
+   rol_mail_to_all                boolean       not null default '0',
+   rol_mail_this_role             boolean       not null default '0',
+   rol_photo                      boolean       not null default '0',
+   rol_profile                    boolean       not null default '0',
+   rol_weblinks                   boolean       not null default '0',
+   rol_this_list_view             boolean       not null default '0',
+   rol_all_lists_view             boolean       not null default '0',
    rol_start_date                 date,
    rol_start_time                 time,
    rol_end_date                   date,
    rol_end_time                   time,
    rol_weekday                    boolean,
    rol_location                   varchar(30),
-   rol_max_members                smallint(3) unsigned,
-   rol_cost                       float unsigned,
-   rol_cost_period				  smallint(3) unsigned,
-   rol_usr_id_create              int(11) unsigned,
-   rol_timestamp_create           datetime                       not null,
-   rol_usr_id_change              int(11) unsigned,
-   rol_timestamp_change           datetime,
-   rol_valid                      boolean            not null default '1',
-   rol_system                     boolean            not null default '0',
-   rol_visible                    boolean            not null default '1',
+   rol_max_members                integer,
+   rol_cost                       float         unsigned,
+   rol_cost_period				  smallint,
+   rol_usr_id_create              integer       unsigned,
+   rol_timestamp_create           timestamp     not null,
+   rol_usr_id_change              integer       unsigned,
+   rol_timestamp_change           timestamp,
+   rol_valid                      boolean       not null default '1',
+   rol_system                     boolean       not null default '0',
+   rol_visible                    boolean       not null default '1',
    primary key (rol_id)
 )
 engine = InnoDB
@@ -551,18 +464,6 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_roles add index ROL_CAT_FK (rol_cat_id);
-alter table %PREFIX%_roles add index ROL_USR_CREATE_FK (rol_usr_id_create);
-alter table %PREFIX%_roles add index ROL_USR_CHANGE_FK (rol_usr_id_change);
-
--- Constraints
-alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_CAT foreign key (rol_cat_id)
-      references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
-alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CREATE foreign key (rol_usr_id_create)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CHANGE foreign key (rol_usr_id_change)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_rooms                                             */
@@ -570,15 +471,15 @@ alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CHANGE foreign key
 
 create table %PREFIX%_rooms
 (
-    room_id                         int(11) unsigned                not null auto_increment,
-    room_name                       varchar(50)                     not null,
-    room_description                varchar(255),
-    room_capacity                   int(11) unsigned                not null,
-    room_overhang                   int(11) unsigned,
-    room_usr_id_create              int(11) unsigned,
-    room_timestamp_create           datetime                        not null,
-    room_usr_id_change              int(11) unsigned,
-    room_timestamp_change           datetime,
+    room_id                       integer       unsigned not null AUTO_INCREMENT,
+    room_name                     varchar(50)   not null,
+    room_description              varchar(255),
+    room_capacity                 integer       not null,
+    room_overhang                 integer,
+    room_usr_id_create            integer       unsigned,
+    room_timestamp_create         timestamp     not null,
+    room_usr_id_change            integer       unsigned,
+    room_timestamp_change         timestamp,
     primary key (room_id)                                                                       
 )
 engine = InnoDB
@@ -586,54 +487,39 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-alter table %PREFIX%_rooms add index ROOM_USR_CREATE_FK (room_usr_id_create);
-alter table %PREFIX%_rooms add index ROOM_USR_CHANGE_FK (room_usr_id_change);
-
-alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CREATE foreign key (room_usr_id_create)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CHANGE foreign key (room_usr_id_change)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_sessions                                          */
 /*==============================================================*/
 create table %PREFIX%_sessions
 (
-   ses_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   ses_usr_id                     int(11) unsigned               default NULL,
+   ses_id                         integer       unsigned not null AUTO_INCREMENT,
+   ses_usr_id                     integer       unsigned default NULL,
    ses_org_id                     integer       unsigned not null,
-   ses_session_id                 varchar(35)                    not null,
-   ses_begin                      datetime                       not null,
-   ses_timestamp                  datetime                       not null,
-   ses_ip_address                 varchar(15)                    not null,
+   ses_session_id                 varchar(35)   not null,
+   ses_begin                      timestamp     not null,
+   ses_timestamp                  timestamp     not null,
+   ses_ip_address                 varchar(15)   not null,
    ses_blob                       blob,
-   ses_renew                      boolean            not null default '0',
-   primary key (ses_id),
-   key ak_session (ses_session_id)
+   ses_renew                      boolean       not null default '0',
+   primary key (ses_id)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_sessions add index SES_USR_FK (ses_usr_id);
-alter table %PREFIX%_sessions add index SES_ORG_FK (ses_org_id);
+create index IDX_SESSION_ID on %PREFIX%_sessions (ses_session_id);
 
--- Constraints
-alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_ORG foreign key (ses_org_id)
-      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
-alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_USR foreign key (ses_usr_id)
-      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_texts                                             */
 /*==============================================================*/
 create table %PREFIX%_texts
 (
-   txt_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   txt_id                         integer       unsigned not null AUTO_INCREMENT,
    txt_org_id                     integer       unsigned not null,
-   txt_name                       varchar(30)                    not null,
+   txt_name                       varchar(30)   not null,
    txt_text                       text,
    primary key (txt_id)
 )
@@ -642,127 +528,91 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_texts add index TXT_ORG_FK (txt_org_id);
-
--- Constraints
-alter table %PREFIX%_texts add constraint %PREFIX%_FK_TXT_ORG foreign key (txt_org_id)
-      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_user_fields                                       */
 /*==============================================================*/
 create table %PREFIX%_user_fields
 (
-   usf_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   usf_cat_id                     int(11) unsigned               not null,
-   usf_type                       varchar(10)                    not null,
-   usf_name_intern                varchar(110)                   not null,
-   usf_name                       varchar(100)                   not null,
+   usf_id                         integer       unsigned not null AUTO_INCREMENT,
+   usf_cat_id                     integer       unsigned not null,
+   usf_type                       varchar(10)   not null,
+   usf_name_intern                varchar(110)  not null,
+   usf_name                       varchar(100)  not null,
    usf_description                text,
-   usf_system                     boolean            not null default '0',
-   usf_disabled                   boolean            not null default '0',
-   usf_hidden                     boolean            not null default '0',
-   usf_mandatory                  boolean            not null default '0',
-   usf_sequence                   smallint                       not null,
-   usf_usr_id_create              int(11) unsigned,
-   usf_timestamp_create           datetime                       not null,
-   usf_usr_id_change              int(11) unsigned,
-   usf_timestamp_change           datetime,
+   usf_system                     boolean       not null default '0',
+   usf_disabled                   boolean       not null default '0',
+   usf_hidden                     boolean       not null default '0',
+   usf_mandatory                  boolean       not null default '0',
+   usf_sequence                   smallint      not null,
+   usf_usr_id_create              integer       unsigned,
+   usf_timestamp_create           timestamp     not null,
+   usf_usr_id_change              integer       unsigned,
+   usf_timestamp_change           timestamp,
    primary key (usf_id),
-   unique ak_name_intern (usf_name_intern)
+   unique (usf_name_intern)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_user_fields add index USF_CAT_FK (usf_cat_id);
-
--- Constraints
-alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_CAT foreign key (usf_cat_id)
-      references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
-alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CREATE foreign key (usf_usr_id_create)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CHANGE foreign key (usf_usr_id_change)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 /*==============================================================*/
 /* Table: adm_user_data                                         */
 /*==============================================================*/
 create table %PREFIX%_user_data
 (
-   usd_id                         int(11) unsigned               not null AUTO_INCREMENT,
-   usd_usr_id                     int(11) unsigned               not null,
-   usd_usf_id                     int(11) unsigned               not null,
+   usd_id                         integer       unsigned not null AUTO_INCREMENT,
+   usd_usr_id                     integer       unsigned not null,
+   usd_usf_id                     integer       unsigned not null,
    usd_value                      varchar(255),
    primary key (usd_id),
-   unique ak_usr_usf_id (usd_usr_id, usd_usf_id)
+   unique (usd_usr_id, usd_usf_id)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_user_data add index USD_USF_FK (usd_usf_id);
-alter table %PREFIX%_user_data add index USD_USR_FK (usd_usr_id);
-
--- Constraints
-alter table %PREFIX%_user_data add constraint %PREFIX%_FK_USD_USF foreign key (usd_usf_id)
-      references %PREFIX%_user_fields (usf_id) on delete restrict on update restrict;
-alter table %PREFIX%_user_data add constraint %PREFIX%_FK_USD_USR foreign key (usd_usr_id)
-      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 
 /*==============================================================*/
 /* Table: adm_users                                             */
 /*==============================================================*/
 create table %PREFIX%_users
 (
-   usr_id                         int(11) unsigned               not null AUTO_INCREMENT,
+   usr_id                         integer       unsigned not null AUTO_INCREMENT,
    usr_login_name                 varchar(35),
    usr_password                   varchar(35),
    usr_new_password               varchar(35),
    usr_photo                      blob,
    usr_text                       text,
-   usr_activation_code              varchar(10),
-   usr_last_login                 datetime,
-   usr_actual_login               datetime,
-   usr_number_login               smallint(5) unsigned           not null default 0,
-   usr_date_invalid               datetime,
-   usr_number_invalid             tinyint(3) unsigned            not null default 0,
-   usr_usr_id_create              int(11) unsigned,
-   usr_timestamp_create           datetime                       not null,
-   usr_usr_id_change              int(11) unsigned,
-   usr_timestamp_change           datetime,
-   usr_valid                      boolean            not null default '0',
+   usr_activation_code            varchar(10),
+   usr_last_login                 timestamp,
+   usr_actual_login               timestamp,
+   usr_number_login               integer       not null default 0,
+   usr_date_invalid               timestamp,
+   usr_number_invalid             smallint      not null default 0,
+   usr_usr_id_create              integer       unsigned,
+   usr_timestamp_create           timestamp     not null,
+   usr_usr_id_change              integer       unsigned,
+   usr_timestamp_change           timestamp,
+   usr_valid                      boolean       not null default '0',
    usr_reg_org_shortname          varchar(10),
    primary key (usr_id),
-   unique ak_usr_login_name (usr_login_name)
+   unique (usr_login_name)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
--- Index
-alter table %PREFIX%_users add index USR_USR_CREATE_FK (usr_usr_id_create);
-alter table %PREFIX%_users add index USR_USR_CHANGE_FK (usr_usr_id_change);
-alter table %PREFIX%_users add index USR_ORG_REG_FK (usr_reg_org_shortname);
-
--- Constraints
-alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_ORG_REG foreign key (usr_reg_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
-alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CREATE foreign key (usr_usr_id_create)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
-      references %PREFIX%_users (usr_id) on delete set null on update restrict;
-
 
 /*==============================================================*/
 /* Constraints                                                  */
 /*==============================================================*/
+alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_ORG foreign key (ann_org_shortname)
+      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CREATE foreign key (ann_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_announcements add constraint %PREFIX%_FK_ANN_USR_CHANGE foreign key (ann_usr_id_change)
@@ -773,6 +623,8 @@ alter table %PREFIX%_auto_login add constraint %PREFIX%_FK_ATL_USR foreign key (
 alter table %PREFIX%_auto_login add constraint %PREFIX%_FK_ATL_ORG foreign key (atl_org_id)
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 
+alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_ORG foreign key (cat_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CREATE foreign key (cat_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_categories add constraint %PREFIX%_FK_CAT_USR_CHANGE foreign key (cat_usr_id_change)
@@ -825,4 +677,85 @@ alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CREAT
 alter table %PREFIX%_guestbook_comments add constraint %PREFIX%_FK_GBC_USR_CHANGE foreign key (gbc_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
-set foreign_key_checks = 1;
+	  alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_CAT foreign key (lnk_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
+alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_USR_CREATE foreign key (lnk_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_links add constraint %PREFIX%_FK_LNK_USR_CHANGE foreign key (lnk_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_lists add constraint %PREFIX%_FK_LST_USR foreign key (lst_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PREFIX%_lists add constraint %PREFIX%_FK_LST_ORG foreign key (lst_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
+
+alter table %PREFIX%_list_columns add constraint %PREFIX%_FK_LSC_LST foreign key (lsc_lst_id)
+      references %PREFIX%_lists (lst_id) on delete restrict on update restrict;
+alter table %PREFIX%_list_columns add constraint %PREFIX%_FK_LSC_USF foreign key (lsc_usf_id)
+      references %PREFIX%_user_fields (usf_id) on delete restrict on update restrict;
+
+alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_ROL foreign key (mem_rol_id)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
+alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR foreign key (mem_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
+
+alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
+      references %PREFIX%_organizations (org_id) on delete set null on update restrict;
+
+alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_PHO_PARENT foreign key (pho_pho_id_parent)
+      references %PREFIX%_photos (pho_id) on delete set null on update restrict;
+alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_ORG foreign key (pho_org_shortname)
+      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CREATE foreign key (pho_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CHANGE foreign key (pho_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_preferences add constraint %PREFIX%_FK_PRF_ORG foreign key (prf_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
+	  
+alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_ROL_CHILD foreign key (rld_rol_id_child)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
+alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_ROL_PARENT foreign key (rld_rol_id_parent)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
+alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_USR foreign key (rld_usr_id)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_CAT foreign key (rol_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
+alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CREATE foreign key (rol_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CHANGE foreign key (rol_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CREATE foreign key (room_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_rooms add constraint %PREFIX%_FK_ROOM_USR_CHANGE foreign key (room_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+	  
+alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_ORG foreign key (ses_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
+alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_USR foreign key (ses_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
+	  
+alter table %PREFIX%_texts add constraint %PREFIX%_FK_TXT_ORG foreign key (txt_org_id)
+      references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
+
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_CAT foreign key (usf_cat_id)
+      references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CREATE foreign key (usf_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_user_fields add constraint %PREFIX%_FK_USF_USR_CHANGE foreign key (usf_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+	  
+alter table %PREFIX%_user_data add constraint %PREFIX%_FK_USD_USF foreign key (usd_usf_id)
+      references %PREFIX%_user_fields (usf_id) on delete restrict on update restrict;
+alter table %PREFIX%_user_data add constraint %PREFIX%_FK_USD_USR foreign key (usd_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
+	  
+alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_ORG_REG foreign key (usr_reg_org_shortname)
+      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CREATE foreign key (usr_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
