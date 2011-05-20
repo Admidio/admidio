@@ -104,7 +104,7 @@ if ($g_preferences['weblinks_redirect_seconds'] > 0)
 	// Html-Kopf ausgeben
 	$g_layout['title'] = $_GET['headline'];
 
-	require(THEME_SERVER_PATH. '/overall_header.php');
+	require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 	// Html des Modules ausgeben
 	echo '<h1 class="moduleHeadline">'. $_GET['headline']. '</h1>
@@ -117,7 +117,7 @@ if ($g_preferences['weblinks_redirect_seconds'] > 0)
 			</div>
 	</div>';
 
-	require(THEME_SERVER_PATH. '/overall_footer.php');
+	require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }
 else
 {

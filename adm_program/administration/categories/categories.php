@@ -127,7 +127,7 @@ $g_layout['header'] = '
         }
     //--></script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 $icon_login_user = '';
 if($_GET['type'] != 'USF')
@@ -260,6 +260,6 @@ echo '
     </li>
 </ul>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

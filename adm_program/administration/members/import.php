@@ -33,7 +33,7 @@ $g_layout['header'] = '
             $("#userfile").focus();
         }); 
     //--></script>';
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
@@ -105,6 +105,6 @@ echo '
 </div>
 </form>';
     
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

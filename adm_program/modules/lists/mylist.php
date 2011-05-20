@@ -403,7 +403,7 @@ $g_layout['header'] = '
         }
     </script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <form id="form_mylist" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
@@ -660,6 +660,6 @@ if($_SESSION['navigation']->count() > 1)
     </ul>';
 }
     
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

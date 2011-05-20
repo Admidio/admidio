@@ -185,7 +185,7 @@ $g_layout['header'] = '
         }
     //--></script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '<div id="lists_overview">
@@ -580,6 +580,6 @@ echo generatePagination($base_url, $num_roles, $roles_per_page, $_GET['start'], 
 
 echo '</div>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

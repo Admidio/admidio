@@ -99,7 +99,7 @@ else
     // Html-Kopf ausgeben
     $g_layout['title'] = $g_organization.' - '.$g_l10n->get('SYS_PASSWORD_FORGOTTEN').'?';
 
-    require(THEME_SERVER_PATH. '/overall_header.php');
+    require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
     echo'
     <div class="formLayout" id="profile_form">
@@ -180,7 +180,7 @@ else
         </li>
     </ul>';
 
-    require(THEME_SERVER_PATH. '/overall_footer.php');
+    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }
 
 //************************* Funktionen/Unterprogramme ***********/

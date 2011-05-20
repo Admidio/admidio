@@ -84,7 +84,7 @@ $g_layout['header'] = '
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
@@ -343,6 +343,6 @@ if ($g_current_user->editDownloadRight())
     }
 }
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

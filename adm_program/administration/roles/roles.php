@@ -50,7 +50,7 @@ unset($_SESSION['roles_request']);
 // Html-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('ROL_ROLE_ADMINISTRATION');
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
@@ -319,6 +319,6 @@ echo '
 echo '</tbody>
 </table>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

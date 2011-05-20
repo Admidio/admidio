@@ -378,7 +378,7 @@ if($new_user == 1 || $new_user == 2)
 }
 $g_layout['header'] .= '}); 
         //--></script>';
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <form action="'.$g_root_path.'/adm_program/modules/profile/profile_save.php?user_id='.$usr_id.'&amp;new_user='.$new_user.'" method="post">
@@ -612,6 +612,6 @@ echo '
     </li>
 </ul>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

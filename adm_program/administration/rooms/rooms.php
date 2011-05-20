@@ -33,7 +33,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 $req_headline = $g_l10n->get('SYS_ROOM');
 $req_id       = 0;
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
  // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$g_l10n->get('ROO_ROOM_MANAGEMENT').'</h1>
 <span class="iconTextLink">
@@ -154,5 +154,5 @@ echo '
 </ul>';
 
  
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

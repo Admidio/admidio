@@ -65,7 +65,7 @@ $g_layout['header'] = '
         }); 
     //--></script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
 
 <ul class="iconTextLinkList">
@@ -124,5 +124,5 @@ echo '
 	</tr>
 </table>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

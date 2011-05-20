@@ -89,7 +89,7 @@ class DBCommon
         {
             // Html-Kopf ausgeben
             $g_layout['title']  = $g_l10n->get('SYS_DATABASE_ERROR');
-            require(THEME_SERVER_PATH. '/overall_header.php');       
+            require(SERVER_PATH. '/adm_program/system/overall_header.php');       
         }
         
         // Ausgabe des Fehlers an Browser
@@ -110,7 +110,7 @@ class DBCommon
         
         if(headers_sent() == false && isset($g_preferences) && defined('THEME_SERVER_PATH'))
         {
-            require(THEME_SERVER_PATH. '/overall_footer.php');       
+            require(SERVER_PATH. '/adm_program/system/overall_footer.php');       
         }
         
         exit();

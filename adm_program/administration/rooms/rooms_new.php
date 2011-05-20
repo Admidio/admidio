@@ -72,7 +72,7 @@ if ($g_preferences['enable_bbcode'] == 1)
 }
 
 $g_layout['header'] = $javascript;
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/administration/rooms/rooms_function.php?room_id='.$req_room_id.'&amp;mode=1">
@@ -169,5 +169,5 @@ echo '
 </ul>';  
 
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

@@ -139,7 +139,7 @@ $g_layout['header'] = '
 		}
  	});
 --></script>';
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <div class="formLayout" id="photo_upload_form" style="visibility: hide; display: none;">
@@ -217,6 +217,6 @@ echo '</div>
     </li>
 </ul>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

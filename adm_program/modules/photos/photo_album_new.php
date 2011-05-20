@@ -141,7 +141,7 @@ $g_layout['header'] = '
             $("#pho_name").focus();
 	 	}); 
     //--></script>';
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 
 /****************************Formular***********************************************/
@@ -276,6 +276,6 @@ echo '
 </ul>';
 
 /***********************************Ende********************************************/
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

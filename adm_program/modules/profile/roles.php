@@ -98,7 +98,7 @@ $g_layout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_
 </script>';
 if($req_inlineView == 0)
 {
-    require(THEME_SERVER_PATH. '/overall_header.php');
+    require(SERVER_PATH. '/adm_program/system/overall_header.php');
 }
 
 echo '
@@ -261,6 +261,6 @@ echo '
 echo '</form>';
 if($req_inlineView == 0)
 {
-    require(THEME_SERVER_PATH. '/overall_footer.php');
+    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }
 ?>

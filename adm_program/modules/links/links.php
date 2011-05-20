@@ -91,7 +91,7 @@ if($g_preferences['enable_rss'] == 1)
         href="'. $g_root_path. '/adm_program/modules/links/rss_links.php?headline='.$_GET['headline'].'" />';
 };
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
@@ -285,6 +285,6 @@ echo '</div>';
 $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $_GET['headline'];
 echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET['start'], TRUE);
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

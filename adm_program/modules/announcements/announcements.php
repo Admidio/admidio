@@ -96,7 +96,7 @@ if($g_preferences['enable_rss'] == 1)
         href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$req_headline.'" />';
 };
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$req_headline.'</h1>';
@@ -270,6 +270,6 @@ else
 $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$req_headline;
 echo generatePagination($base_url, $num_announcements, $announcements_per_page, $req_start, TRUE);
         
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

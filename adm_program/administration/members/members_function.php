@@ -75,7 +75,7 @@ if($_GET['mode'] == 1)
 {
     // Html-Kopf ausgeben
     $g_layout['title'] = $g_l10n->get('SYS_NOTE');
-    require(THEME_SERVER_PATH. '/overall_header.php');
+    require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
     // Html des Modules ausgeben
     echo '<br /><br /><br />
@@ -100,7 +100,7 @@ if($_GET['mode'] == 1)
         </div>
     </div>';
 
-    require(THEME_SERVER_PATH. "/overall_footer.php");
+    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
     exit();
 }
 elseif($_GET["mode"] == 2)
