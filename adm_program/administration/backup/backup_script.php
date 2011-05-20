@@ -140,11 +140,11 @@ $starttime = getmicrotime();
 				$CanContinue = true;
 				foreach ($selectedtablesarray as $selectedtablename) {
 					OutputInformation('statusinfo', 'Checking table <b>'.htmlentities($dbname.'.'.$selectedtablename).'</b>');
-					set_time_limit(60);
+					@set_time_limit(60);
 					$SQLquery = 'CHECK TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR;
 					$result = $g_db->query($SQLquery);
 					while ($row = $g_db->fetch_assoc($result)) {
-						set_time_limit(60);
+						@set_time_limit(60);
 						if ($row['Msg_text'] == 'OK') {
 
 							$SQLquery = 'OPTIMIZE TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR;
@@ -217,7 +217,7 @@ $starttime = getmicrotime();
 			foreach ($SelectedTables as $dbname => $value) {
 				$g_db->select_db($dbname);
 				for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
-					set_time_limit(60);
+					@set_time_limit(60);
 					OutputInformation('statusinfo', 'Creating structure for <b>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</b>');
 
 					$fieldnames = array();
@@ -367,7 +367,7 @@ $starttime = getmicrotime();
 			if ($_REQUEST['StartBackup'] != 'structure') {
 				$processedrows    = 0;
 				foreach ($SelectedTables as $dbname => $value) {
-					set_time_limit(60);
+					@set_time_limit(60);
 					$g_db->select_db($dbname);
 					for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
 						$SQLquery  = 'SELECT *';
@@ -469,7 +469,7 @@ $starttime = getmicrotime();
 								$thistableinserts = '';
 							}
 							if ((++$currentrow % STATS_INTERVAL) == 0) {
-								set_time_limit(60);
+								@set_time_limit(60);
 								if ($DHTMLenabled) {
 									OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], '<b>'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, ['.number_format(($currentrow / $rows[$t])*100).'%])</b>');
 									$elapsedtime = getmicrotime() - $datastarttime;
