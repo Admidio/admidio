@@ -210,7 +210,7 @@ if($job==NULL)
             $("#foto_upload_file").focus();
         }); 
     //--></script>';
-    require(THEME_SERVER_PATH. '/overall_header.php');
+    require(SERVER_PATH. '/adm_program/system/overall_header.php');
     
     echo '
     <form method="post" action="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id='.$req_usr_id.'" enctype="multipart/form-data">
@@ -287,7 +287,7 @@ elseif($job=='upload')
     }
     
     $g_layout['title'] = $headline;
-    require(THEME_SERVER_PATH. '/overall_header.php');    
+    require(SERVER_PATH. '/adm_program/system/overall_header.php');    
     
     echo '
     <div class="formLayout" id="profile_photo_after_upload_form">
@@ -320,6 +320,6 @@ elseif($job=='upload')
     </div>';
 }
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

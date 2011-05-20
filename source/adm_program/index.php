@@ -34,7 +34,7 @@ $_SESSION['navigation']->clear();
 $g_layout['title']  = 'Admidio '.$g_l10n->get('SYS_OVERVIEW');
 $g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
@@ -369,6 +369,6 @@ if($g_current_user->isWebmaster() || $g_current_user->assignRoles() || $g_curren
     </div>';
 }
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

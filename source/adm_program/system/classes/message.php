@@ -121,7 +121,7 @@ class Message
                     //--></script>';
             }
     
-            require(THEME_SERVER_PATH. '/overall_header.php');       
+            require(SERVER_PATH. '/adm_program/system/overall_header.php');       
         }
         
         echo '
@@ -185,7 +185,7 @@ class Message
         
         if($this->inline == false)
         {
-            require(THEME_SERVER_PATH. '/overall_footer.php');
+            require(SERVER_PATH. '/adm_program/system/overall_footer.php');
             exit();
         }
     }

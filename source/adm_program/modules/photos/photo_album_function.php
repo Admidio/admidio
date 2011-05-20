@@ -208,7 +208,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     
     // HTML-Kopf
     $g_layout['title'] = $g_l10n->get('SYS_END');
-    require(THEME_SERVER_PATH. '/overall_header.php');
+    require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
     echo'
     <div class="formLayout" id="photo_report_form">
@@ -303,5 +303,5 @@ if(isset($_GET['job']) && $_GET['job']=='delete')
     exit();
 }
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

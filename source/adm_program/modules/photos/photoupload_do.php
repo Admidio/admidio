@@ -95,7 +95,7 @@ if($_GET['uploadmethod'] == 1)
 
 	// Html-Kopf ausgeben
 	$g_layout['title'] = $g_l10n->get('PHO_UPLOAD_PHOTOS');
-	require(THEME_SERVER_PATH. '/overall_header.php');
+	require(SERVER_PATH. '/adm_program/system/overall_header.php');
 	
 	echo '
 	<h1 class="moduleHeadline">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</h1>
@@ -281,6 +281,6 @@ if($_GET['uploadmethod'] == 1)
    	<br /><br />';
     
     //Seitenende
-	require(THEME_SERVER_PATH. '/overall_footer.php');
+	require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }      
 ?>

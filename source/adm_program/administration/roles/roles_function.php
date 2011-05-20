@@ -74,7 +74,7 @@ if($_GET['mode'] == 1)
 {
     // Html-Kopf ausgeben
     $g_layout['title'] = 'Messagebox';
-    require(THEME_SERVER_PATH. '/overall_header.php');
+    require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
     // Html des Modules ausgeben
     echo '
@@ -109,7 +109,7 @@ if($_GET['mode'] == 1)
         </div>
     </div>';
 
-    require(THEME_SERVER_PATH. '/overall_footer.php');
+    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
     exit();
 }
 elseif($_GET['mode'] == 2)

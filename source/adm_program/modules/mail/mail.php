@@ -259,7 +259,7 @@ $g_layout['header'] =  '
  	}); 	
 </script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '
 <form action="'.$g_root_path.'/adm_program/modules/mail/mail_send.php?';
     // usr_id wird mit GET uebergeben,
@@ -550,6 +550,6 @@ if(isset($_GET['usr_id']) || isset($_GET['rol_id']))
     </ul>';
 }
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

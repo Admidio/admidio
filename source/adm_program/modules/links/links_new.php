@@ -99,7 +99,7 @@ $g_layout['header'] = $javascript. '
 	 	}); 
 	//--></script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 if($_GET['lnk_id'] > 0)
@@ -198,6 +198,6 @@ echo '
     </li>
 </ul>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

@@ -224,7 +224,7 @@ if($req_mode != 'csv')
                     }
                 }
             //--></script>';
-        require(THEME_SERVER_PATH. "/overall_header.php");
+        require(SERVER_PATH. '/adm_program/system/overall_header.php');
     }
 
     if($show_members == 0)
@@ -879,7 +879,7 @@ else
             </li>
         </ul>';
     
-        require(THEME_SERVER_PATH. '/overall_footer.php');
+        require(SERVER_PATH. '/adm_program/system/overall_footer.php');
     }
 }
 

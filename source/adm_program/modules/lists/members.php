@@ -208,7 +208,7 @@ $g_layout['header'] ='
      });            
 </script>';
         
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '<h1>'. $g_layout['title']. '</h1>';
 
 //Suchleiste
@@ -248,6 +248,6 @@ if($_SESSION['navigation']->count() > 1)
 }
 
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

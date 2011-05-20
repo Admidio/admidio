@@ -17,7 +17,7 @@ $_SESSION['navigation']->clear();
 $g_layout['title']  = "Admidio Forum";
 $g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 ?>
@@ -48,5 +48,5 @@ require(THEME_SERVER_PATH. "/overall_header.php");
 <iframe id="sizeframe" name="sizeframe" style="padding:0px; margin:0px; width:<?php if ($g_preferences['forum_width']){echo $g_preferences['forum_width'];}else{echo "570";}?>px ;height:100px;" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" marginheight="0" marginwidth="0"  src="<?php echo $g_forum->url_intern; ?>" onload="resizeIframe(this, 'sizeframe');"></iframe>
 <br />
 <?
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

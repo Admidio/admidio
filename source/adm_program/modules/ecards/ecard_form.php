@@ -185,7 +185,7 @@ if ($g_preferences['enable_bbcode'] == 1)
 $g_layout['title'] = $g_l10n->get("ECA_GREETING_CARD_EDIT");
 $g_layout['header'] = $javascript;
 
-require(THEME_SERVER_PATH. "/overall_header.php");
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <div class="formLayout">
@@ -437,5 +437,5 @@ if($photo_album->getValue('pho_id') > 0)
 }
 
 /***************************Seitenende***************************/
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

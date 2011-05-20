@@ -143,7 +143,7 @@ if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] ==
         href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$req_headline.'" />';
 };
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo ' 
@@ -683,6 +683,6 @@ else
 $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$req_mode.'&headline='.$req_headline.'&calendar='.$req_calendar;
 echo generatePagination($base_url, $num_dates, $dates_per_page, $req_start, TRUE);
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

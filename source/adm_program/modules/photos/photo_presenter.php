@@ -98,7 +98,7 @@ else
 		$g_layout['includes'] = false;
 	}
 	
-	require(THEME_SERVER_PATH. '/overall_header.php');
+	require(SERVER_PATH. '/adm_program/system/overall_header.php');
 	
 	//Ausgabe der Kopfzelle mit Ueberschrift, Photographen und Datum
 	//untere Zelle mit Buttons Bild und Fenster Schließen Button
@@ -185,7 +185,7 @@ else
 	}
 	
 	echo'</div></div>';
-	require(THEME_SERVER_PATH. '/overall_footer.php');
+	require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }
 
 ?>

@@ -62,7 +62,7 @@ $g_layout['header'] = '
         }); 
     //--></script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
@@ -108,6 +108,6 @@ echo '
 
 echo '</table>';
 
-require(THEME_SERVER_PATH. "/overall_footer.php");
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

@@ -191,7 +191,7 @@ $g_layout['header'] = $javascript. '
 	 	}); 
 	//--></script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <form action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='. $_GET['headline']. '&amp;mode='.$mode.'" method="post">
@@ -321,6 +321,6 @@ echo '
     </li>
 </ul>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

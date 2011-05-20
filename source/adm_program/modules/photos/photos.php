@@ -211,7 +211,7 @@ $g_layout['header'] = $g_layout['header']. '
 		<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
 
 // Html-Kopf ausgeben
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 
 //Ueberschift
@@ -708,6 +708,6 @@ if($photo_album->getValue('pho_id') > 0)
 
 /***************************Seitenende***************************/
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

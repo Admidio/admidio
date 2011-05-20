@@ -100,7 +100,7 @@ $g_layout['header'] = '
     //--></script>';
 
 // Html-Kopf ausgeben
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <form id="edit_field" action="'.$g_root_path.'/adm_program/administration/organization/fields_function.php?usf_id='.$req_usf_id.'&amp;mode=1" method="post">
@@ -285,6 +285,6 @@ echo '
     </li>
 </ul>';
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

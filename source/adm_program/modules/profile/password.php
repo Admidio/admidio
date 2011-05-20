@@ -121,7 +121,7 @@ else
     $g_layout['includes'] = false;
     if ($inlineView == 0)
 	{
-		require(THEME_SERVER_PATH. '/overall_header.php');
+		require(SERVER_PATH. '/adm_program/system/overall_header.php');
 	}
 
     // Html des Modules ausgeben
@@ -172,7 +172,7 @@ else
     </form>';
     if ($inlineView == 0)
 	{  
-		require(THEME_SERVER_PATH. '/overall_footer.php');
+		require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 	}
 }
 

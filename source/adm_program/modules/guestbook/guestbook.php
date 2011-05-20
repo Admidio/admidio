@@ -159,7 +159,7 @@ $g_layout['header'] = $g_layout['header']. '
 
     </script>';
 
-require(THEME_SERVER_PATH. '/overall_header.php');
+require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
@@ -479,6 +479,6 @@ else
 $base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline'].'&amp;moderation='.$_GET['moderation'];
 echo generatePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $_GET['start'], TRUE);
 
-require(THEME_SERVER_PATH. '/overall_footer.php');
+require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>
