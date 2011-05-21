@@ -119,22 +119,22 @@ ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_timestamp` `ses_timestamp` time
 ALTER TABLE %PREFIX%_texts CHANGE COLUMN `txt_id` `txt_id` integer unsigned not null AUTO_INCREMENT;
 
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_id` `usf_id` integer unsigned not null AUTO_INCREMENT;
-ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_cat_id` usf_cat_id` integer unsigned not null;
+ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_cat_id` `usf_cat_id` integer unsigned not null;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_usr_id_create` `usf_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_timestamp_create` `usf_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_usr_id_change` `usf_usr_id_change` integer unsigned;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_timestamp_change` `usf_timestamp_change` timestamp;
 
 ALTER TABLE %PREFIX%_user_data CHANGE COLUMN `usd_id` `usd_id` integer unsigned not null AUTO_INCREMENT;
-ALTER TABLE %PREFIX%_user_data CHANGE COLUMN `usd_usr_id` usd_usr_id` integer unsigned not null;
-ALTER TABLE %PREFIX%_user_data CHANGE COLUMN `usd_usf_id` usd_usf_id` integer unsigned not null;
+ALTER TABLE %PREFIX%_user_data CHANGE COLUMN `usd_usr_id` `usd_usr_id` integer unsigned not null;
+ALTER TABLE %PREFIX%_user_data CHANGE COLUMN `usd_usf_id` `usd_usf_id` integer unsigned not null;
 
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_id` `usr_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_last_login` `usr_last_login` timestamp;
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_actual_login` `usr_actual_login` timestamp;
-ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_number_login` usr_number_login` integer not null default 0;
+ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_number_login` `usr_number_login` integer not null default 0;
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_date_invalid` `usr_date_invalid` timestamp;
-ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_number_invalid` usr_number_invalid` smallint not null default 0;
+ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_number_invalid` `usr_number_invalid` smallint not null default 0;
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_usr_id_create` `usr_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_timestamp_create` `usr_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_usr_id_change` `usr_usr_id_change` integer unsigned;
@@ -152,7 +152,7 @@ ALTER TABLE %PREFIX%_sessions DROP FOREIGN KEY %PREFIX%_FK_SES_ORG;
 ALTER TABLE %PREFIX%_texts DROP FOREIGN KEY %PREFIX%_FK_TXT_ORG;
 
 ALTER TABLE %PREFIX%_auto_login CHANGE COLUMN `atl_org_id` `atl_org_id` integer unsigned not null;
-ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_org_id` `cat_org_id` integer unsigned not null;
+ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_org_id` `cat_org_id` integer unsigned;
 ALTER TABLE %PREFIX%_folders CHANGE COLUMN `fol_org_id` `fol_org_id` integer unsigned not null;
 ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_org_id` `gbo_org_id` integer unsigned not null;
 ALTER TABLE %PREFIX%_lists CHANGE COLUMN `lst_org_id` `lst_org_id` integer unsigned not null;
