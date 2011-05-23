@@ -1,5 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="dk">
+<version id="2.2.6">
+    <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Sidste nye meddelelse fra organisationen %VAR1%</text>
+    <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="edited">Nuværende møder i organisation %VAR1%</text>
+    <text id="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA" development="new" translation="edited">Sidste gæstebogs indlæg for organisation %VAR1%</text>
+    <text id="MAI_CARBON_COPY" development="new" translation="edited">Karbon Kopi(CC)</text>
+    <text id="MAI_COPY_OF_YOUR_EMAIL" development="new" translation="edited">Din ønskede kopi af beskeden</text>
+    <text id="MAI_MESSAGE_WENT_TO" development="new" translation="edited">Beskeden blev sendt til</text>
+    <text id="PHO_NEWEST_ALBUMS" development="deleted" translation="edited">De 10 seneste foto albums</text>
+    <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="edited">Seneste fotoalbum for organisationen %VAR1%</text>
+    <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="edited">Feltet %VAR1_BOLD% indeholder ulovlige karakterer.\n\nTilladte karakterer er bogstaver fra 'a' til 'z' og 'A' til 'Z', cifre fra 0 til 9 og specielle karakterer som .-_+@ .</text>
+    <text id="SYS_LOADING_CONTENT" development="new" translation="edited">Henter indhold...</text>
+    <text id="SYS_REGISTRATION_SAVED" development="new" translation="edited">Dine data er blevet gemt.\n\nDu kan logge ind efter de er godkendt. Du vil blive informeret via e-mail når dine data er godkendt.</text>
+    <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="edited">RSS-Feed for %VAR1%</text>
+    <text id="SYS_JANUARY" development="new" translation="edited">Januar</text>
+    <text id="SYS_FEBRUARY" development="new" translation="edited">Februar</text>
+    <text id="SYS_MARCH" development="new" translation="edited">Marts</text>
+    <text id="SYS_APRIL" development="new" translation="edited">April</text>
+    <text id="SYS_MAY" development="new" translation="edited">Maj</text>
+    <text id="SYS_JUNE" development="new" translation="edited">Juni</text>
+    <text id="SYS_JULY" development="new" translation="edited">Juli</text>
+    <text id="SYS_AUGUST" development="new" translation="edited">August</text>
+    <text id="SYS_SEPTEMBER" development="new" translation="edited">September</text>
+    <text id="SYS_OCTOBER" development="new" translation="edited">Oktober</text>
+    <text id="SYS_NOVEMBER" development="new" translation="edited">November</text>
+    <text id="SYS_DECEMBER" development="new" translation="edited">December</text>
+    <text id="SYS_JAN" development="new" translation="edited" description="Abbr. for January">Jan.</text>
+    <text id="SYS_FEB" development="new" translation="edited" description="Abbr. for February">Feb.</text>
+    <text id="SYS_MAR" development="new" translation="edited" description="Abbr. for March">Mar.</text>
+    <text id="SYS_APR" development="new" translation="edited" description="Abbr. for April">Apr.</text>
+    <text id="SYS_MAY" development="new" translation="edited" description="Abbr. for May">Maj.</text>
+    <text id="SYS_JUN" development="new" translation="edited" description="Abbr. for June">Jun.</text>
+    <text id="SYS_JUL" development="new" translation="edited" description="Abbr. for July">Jul.</text>
+    <text id="SYS_AUG" development="new" translation="edited" description="Abbr. for August">Aug.</text>
+    <text id="SYS_SEP" development="new" translation="edited" description="Abbr. for September">Sep.</text>
+    <text id="SYS_OCT" development="new" translation="edited" description="Abbr. for October">Okt.</text>
+    <text id="SYS_NOV" development="new" translation="edited" description="Abbr. for November">Nov.</text>
+    <text id="SYS_DEC" development="new" translation="edited" description="Abbr. for December">Dec.</text>
+    <text id="SYS_MON" development="new" translation="edited" description="Abbr. for Monday">Man.</text>
+    <text id="SYS_TUE" development="new" translation="edited" description="Abbr. for Tuesday">Tir.</text>
+    <text id="SYS_WED" development="new" translation="edited" description="Abbr. for Wednesday">Ons.</text>
+    <text id="SYS_THU" development="new" translation="edited" description="Abbr. for Thursday">Tor.</text>
+    <text id="SYS_FRI" development="new" translation="edited" description="Abbr. for Friday">Fre.</text>
+    <text id="SYS_SAT" development="new" translation="edited" description="Abbr. for Saturday">Lør.</text>
+    <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Søn.</text>
+    <text id="SYS_TODAY" development="new" translation="edited">Idag</text>
+</version>
 <version id="2.2.0">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Meddelelse</text>
@@ -28,7 +74,7 @@
     <text id="BAC_SUM" development="new" translation="edited">Total</text>
     <text id="BAC_SECONDS_VAR" development="new" translation="edited">%VAR1% sekunder</text>
 
-    <!-- Phrases only in Category-Administration -->
+    <!-- Phrases only in Category-Administration 6 items-->
     <text id="CAT_CATEGORY_EXIST" development="new" translation="edited">Kategori navn eksisterer allerede i den valgte organisation.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="edited">Hvis aktiveret, profil felter af kategorier vil blive vist og kan redigeres i profil visningen af følgende organisationer:\n\n%VAR1_BOLD%\n\n Venligst deaktiver hvis felterne kun skal vises i din organisation.</text>
     <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="edited">Du kan ikke slette alle kategorier for et modul.\nOpret første nye kategori for det valgte modul.</text>
@@ -1191,8 +1237,8 @@
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="edited">Fil %0 af %1 overført</text>
     <text id="SYS_TUESDAY" development="new" translation="todo">Tirsdag</text>
     <text id="SYS_TYPE" development="new" translation="edited">Type</text>
-    <text id="SYS_UNDERLINE" development="new" translation="edited">Underline</text>
-    <text id="SYS_UNDERLINE_TEXT" development="new" translation="edited">%VAR1%underline%VAR2% text</text>
+    <text id="SYS_UNDERLINE" development="new" translation="edited">Understreg</text>
+    <text id="SYS_UNDERLINE_TEXT" development="new" translation="edited">%VAR1%understreg%VAR2% tekst</text>
     <text id="SYS_UNKNOWN" development="new" translation="edited">Uidentificeret</text>
     <text id="SYS_UNLIMITED" development="new" translation="edited">Ubegrænset</text>
     <text id="SYS_UNLOCK" development="new" translation="edited">Lås op</text>
