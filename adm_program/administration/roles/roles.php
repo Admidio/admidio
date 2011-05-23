@@ -132,7 +132,7 @@ echo '
                   AND cat_type   = "ROL"
                   AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                       OR cat_org_id IS NULL )
-                ORDER BY cat_id ASC, rol_name ASC ';
+                ORDER BY cat_sequence ASC, rol_name ASC ';
     $rol_result = $g_db->query($sql);
 
     // Rollenobjekt anlegen

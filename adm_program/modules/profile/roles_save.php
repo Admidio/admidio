@@ -67,13 +67,17 @@ if(isset($_GET['new_user']))
     $req_new_user = $_GET['new_user'];
 }
 
+// detect number of selected roles
 $roleCount = 0;
 foreach($_POST as $key=>$value)
 {
-	if(preg_match('/^(role-)[0-9]{0,1}$/i',$key))
+	if(preg_match('/^(role-)[0-9]$/i',$key))
+	{
 		$roleCount++;
+    }
 }
 
+// if no role is selected than show notice
 if($roleCount == 0)
 {
 	if($req_inlineView == 0)
@@ -134,13 +138,13 @@ while($row = $g_db->fetch_array($result_rol))
     if($row['rol_max_members'] > 0)
     {
         // erst einmal schauen, ob der Benutzer dieser Rolle bereits zugeordnet ist
-        $sql    =   "SELECT COUNT(*)
-                       FROM ". TBL_MEMBERS. "
-                      WHERE mem_rol_id = ".$row['rol_id']."
-                        AND mem_usr_id = $req_usr_id
-                        AND mem_leader = 0
-                        AND mem_begin <= '".DATE_NOW."'
-                        AND mem_end    > '".DATE_NOW."'";
+        $sql = 'SELECT COUNT(*)
+                  FROM '. TBL_MEMBERS.'
+                 WHERE mem_rol_id = '.$row['rol_id'].'
+                   AND mem_usr_id = '.$req_usr_id.'
+                   AND mem_leader = 0
+                   AND mem_begin <= "'.DATE_NOW.'"
+                   AND mem_end    > "'.DATE_NOW.'"';
         $g_db->query($sql);
 
         $row_usr = $g_db->fetch_array();
@@ -148,12 +152,12 @@ while($row = $g_db->fetch_array($result_rol))
         if($row_usr[0] == 0)
         {
             // Benutzer ist der Rolle noch nicht zugeordnet, dann schauen, ob die Anzahl ueberschritten wird
-            $sql    =   "SELECT COUNT(*)
-                           FROM ". TBL_MEMBERS. "
-                          WHERE mem_rol_id = ".$row['rol_id']."
-                            AND mem_leader = 0
-                            AND mem_begin <= '".DATE_NOW."'
-                            AND mem_end    > '".DATE_NOW."'";
+            $sql = 'SELECT COUNT(*)
+                      FROM '. TBL_MEMBERS.'
+                     WHERE mem_rol_id = '.$row['rol_id'].'
+                       AND mem_leader = 0
+                       AND mem_begin <= "'.DATE_NOW.'"
+                       AND mem_end    > "'.DATE_NOW.'"';
             $g_db->query($sql);
 
             $row_members = $g_db->fetch_array();
