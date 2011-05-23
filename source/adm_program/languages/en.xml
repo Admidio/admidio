@@ -1,5 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+<version id="2.2.6">
+    <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Latest announcements of organisation %VAR1%</text>
+    <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="edited">Current appointments of organisations %VAR1%</text>
+    <text id="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA" development="new" translation="edited">Latest guestbook entries of organisation %VAR1%</text>
+    <text id="MAI_CARBON_COPY" development="new" translation="edited">Carbon copy (CC)</text>
+    <text id="MAI_COPY_OF_YOUR_EMAIL" development="new" translation="edited">Your requested copy of the message</text>
+    <text id="MAI_MESSAGE_WENT_TO" development="new" translation="edited">Message was sent to</text>
+    <text id="PHO_NEWEST_ALBUMS" development="deleted" translation="edited">10 latest photo albums</text>
+    <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="edited">Latest photo album of organisation %VAR1%</text>
+    <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="edited">Field %VAR1_BOLD% contains illegal characters.\n\nAllowed characters are letters from 'a' to 'z' and 'A' to 'Z', numbers from 0 to 9 and special characters like .-_+@ .</text>
+    <text id="SYS_LOADING_CONTENT" development="new" translation="edited">Loading content ...</text>
+    <text id="SYS_REGISTRATION_SAVED" development="new" translation="edited">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</text>
+    <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="edited">RSS-Feed for %VAR1%</text>
+    <text id="SYS_JANUARY" development="new" translation="edited">January</text>
+    <text id="SYS_FEBRUARY" development="new" translation="edited">February</text>
+    <text id="SYS_MARCH" development="new" translation="edited">March</text>
+    <text id="SYS_APRIL" development="new" translation="edited">April</text>
+    <text id="SYS_MAY" development="new" translation="edited">May</text>
+    <text id="SYS_JUNE" development="new" translation="edited">June</text>
+    <text id="SYS_JULY" development="new" translation="edited">July</text>
+    <text id="SYS_AUGUST" development="new" translation="edited">August</text>
+    <text id="SYS_SEPTEMBER" development="new" translation="edited">September</text>
+    <text id="SYS_OCTOBER" development="new" translation="edited">October</text>
+    <text id="SYS_NOVEMBER" development="new" translation="edited">November</text>
+    <text id="SYS_DECEMBER" development="new" translation="edited">December</text>
+    <text id="SYS_JAN" development="new" translation="edited" description="Abbr. for January">Jan.</text>
+    <text id="SYS_FEB" development="new" translation="edited" description="Abbr. for February">Feb.</text>
+    <text id="SYS_MAR" development="new" translation="edited" description="Abbr. for March">Mar.</text>
+    <text id="SYS_APR" development="new" translation="edited" description="Abbr. for April">Apr.</text>
+    <text id="SYS_MAY" development="new" translation="edited" description="Abbr. for May">May.</text>
+    <text id="SYS_JUN" development="new" translation="edited" description="Abbr. for June">Jun.</text>
+    <text id="SYS_JUL" development="new" translation="edited" description="Abbr. for July">Jul.</text>
+    <text id="SYS_AUG" development="new" translation="edited" description="Abbr. for August">Aug.</text>
+    <text id="SYS_SEP" development="new" translation="edited" description="Abbr. for September">Sep.</text>
+    <text id="SYS_OCT" development="new" translation="edited" description="Abbr. for October">Oct.</text>
+    <text id="SYS_NOV" development="new" translation="edited" description="Abbr. for November">Nov.</text>
+    <text id="SYS_DEC" development="new" translation="edited" description="Abbr. for December">Dec.</text>
+    <text id="SYS_MON" development="new" translation="edited" description="Abbr. for Monday">Mon.</text>
+    <text id="SYS_TUE" development="new" translation="edited" description="Abbr. for Tuesday">Tue.</text>
+    <text id="SYS_WED" development="new" translation="edited" description="Abbr. for Wednesday">Wed.</text>
+    <text id="SYS_THU" development="new" translation="edited" description="Abbr. for Thursday">Thu.</text>
+    <text id="SYS_FRI" development="new" translation="edited" description="Abbr. for Friday">Fri.</text>
+    <text id="SYS_SAT" development="new" translation="edited" description="Abbr. for Saturday">Sat.</text>
+    <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Sun.</text>
+    <text id="SYS_TODAY" development="new" translation="edited">Today</text>
+</version>
 <version id="2.2.0">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Announcement</text>
@@ -16,7 +62,7 @@
     <text id="BAC_COMPLETED_VAR" development="new" translation="edited">%VAR1% created</text>
     <text id="BAC_CREATION_DATE" development="new" translation="edited">Created on</text>
     <text id="BAC_DATABASE_BACKUP" development="new" translation="edited">Database-Backup</text>
-    <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="todo">Create and download database backups of Admidio tables.</text>
+    <text id="BAC_DATABASE_BACKUP_DESC" development="new" translation="edited">Create and download database backups of Admidio tables.</text>
     <text id="BAC_DAYS_VAR" development="new" translation="edited">%VAR1% Days</text>
     <text id="BAC_FILE_NAME_INVALID" development="new" translation="edited">Filename includes invalid character!</text>
     <text id="BAC_HOURS_VAR" development="new" translation="edited">%VAR1% hours</text>
@@ -41,7 +87,7 @@
     <text id="DAT_ADD_DATE_TO_CALENDAR" development="new" translation="edited">Add event to calendar</text>
     <text id="DAT_ADD_ROLE" development="new" translation="edited">Add role</text>
     <text id="DAT_ALL_DAY" development="new" translation="edited">Full time</text>
-    <text id="DAT_ASSIGN_PARTICIPANTS" development="new" translation="todo">Teilnehmer zuordnen</text>
+    <text id="DAT_ASSIGN_PARTICIPANTS" development="new" translation="edited">Add participants</text>
     <text id="DAT_ATTEND" development="new" translation="edited">Participate</text>
     <text id="DAT_ATTEND_DATE" development="new" translation="edited">You confirmed your participation at %VAR1_BOLD% on %VAR2%.</text>
     <text id="DAT_CALENDAR" development="new" translation="edited">Calendar</text>
@@ -87,7 +133,7 @@
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="edited">Display link to map</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="edited">When location is set, Google Maps is used to display location and route from own location. (default: yes)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="edited">Show on map</text>
-    <text id="DAT_SHOW_PARTICIPANTS" development="new" translation="todo">Show participants</text>
+    <text id="DAT_SHOW_PARTICIPANTS" development="new" translation="edited">Show participants</text>
     <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="edited">Open room administration</text>
     <text id="DAT_VISIBLE_TO" development="new" translation="edited">Visible for</text>
 
@@ -335,7 +381,7 @@
 	<text id="LNK_COUNTER" development="new" translation="edited">Hits</text>
     <text id="LNK_CREATE_LINK" development="new" translation="edited">Create new link</text>
     <text id="LNK_DISPLAY_REDIRECT" development="new" translation="edited">Show redirect</text>
-    <text id="LNK_DISPLAY_REDIRECT_DESC" development="new" translation="todo">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</text>
+    <text id="LNK_DISPLAY_REDIRECT_DESC" development="new" translation="edited">Activate auto forwarding for links. User will be notified by a warning message about leaving the pages of Admidio when clicking a hyperlink in link module. Clicked hyperlink will be opened after predefined time. Is redirection set to 0, hyperlink will be opened without showing the warning message (default: 10 seconds).</text>
 	<text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new weblink was created</text>
 	<text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">A new weblink at %VAR1% was created.\n\nLinkadress: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
     <text id="LNK_GO_TO" development="new" translation="edited">Go to %VAR1%</text>
@@ -360,7 +406,7 @@
     <text id="LST_CATEGORY_NO_LISTS" development="new" translation="edited">No enabled lists available.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="edited">Would you like to load and change default configuration or to create new configuration?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Choose role for selected list.</text>
-    <text id="LST_COLUMN" development="new" translation="todo">Column</text>    
+    <text id="LST_COLUMN" development="new" translation="edited">Column</text>    
     <text id="LST_CONFIGURATION" development="new" translation="edited">Configuration</text>
     <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="edited">Permission to use configuration for all members</text>
     <text id="LST_CONFIGURATION_DEFAULT" development="new" translation="edited">Would you like to mark selected configuration as default configuration for this organization?</text>
@@ -440,7 +486,7 @@
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">Activating e-mail module</text>
     <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">E-mail module can be deactivated by unchecking the check box. After deactivation, the module will be unavailable in the module overview panel as well. When server does not support sending e-mails, please deactivate the module. (default: active)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Attach file</text>
-    <text id="MAI_ATTACHEMENT" development="new" translation="todo">Attachment:</text>
+    <text id="MAI_ATTACHEMENT" development="new" translation="edited">Attachment:</text>
 	<text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum size of e-mail attachments</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Users are able to attach files of smaller size than the value defined here. When value is 0, attachments can not be sent. (default: 1024KB)</text>
     <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">E-mail attachment upload error.\nFile size is most likely to large!</text>
@@ -797,13 +843,13 @@
     <text id="PRO_UPLOAD_PHOTO" development="new" translation="edited">Upload photo</text>
     <text id="PRO_USERNAME_DESCRIPTION" development="new" translation="edited">You will be able to login with this user name.\n\nThis name must be well-defined. If selected name is not available anymore, please try to use combinations like Andi78 or SteveT.</text>
 	<text id="PRO_WANT_DELETE_PHOTO" development="new" translation="edited">Would you like to delete the selected photo?</text>
-	<text id="PRO_YEARS" development="new" translation="todo">Years</text>
+	<text id="PRO_YEARS" development="new" translation="edited">Years</text>
 
     <!-- Phrases only in Rolesmodule -->
     <text id="ROL_ACTIV_ROLES" development="new" translation="edited">Active roles</text>
     <text id="ROL_ALL_GUESTS" development="new" translation="edited">All guests of the site</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="edited">All logged in users</text>
-    <text id="ROL_ANNUALLY" development="new" translation="todo">Annually</text>
+    <text id="ROL_ANNUALLY" development="new" translation="edited">Annually</text>
     <text id="ROL_CANT_SHOW_FORMER_ROLES" development="new" translation="edited">Former role memberships cannot be displayed.</text>
     <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">An error occurred!\n\nChange of date could not be saved.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="edited">By selecting %VAR1_BOLD% all roles and all member assignments will be deleted. Deleted information cannot be opened or recovered again.</text>
@@ -817,14 +863,14 @@
     <text id="ROL_INDEPENDENT" development="new" translation="edited">Independent</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="edited">Invisible roles</text>
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="edited">Would you like to move back role %VAR1_BOLD% to current roles?</text>
-    <text id="ROL_MEETINGS" development="new" translation="todo">Meetings</text>
+    <text id="ROL_MEETINGS" development="new" translation="edited">Meetings</text>
     <text id="ROL_MEMBERSHIP_DEL" development="new" translation="edited">Would you like to end membership in role %VAR1_BOLD%?</text>
-    <text id="ROL_MONTHLY" development="new" translation="todo">Monthly</text>
+    <text id="ROL_MONTHLY" development="new" translation="edited">Monthly</text>
     <text id="ROL_NEW_ROLE" development="new" translation="edited">New role</text>
     <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="edited">This person is not a member of organization %VAR1_BOLD% or nor roles are visible.</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="edited">Role members only</text>
     <text id="ROL_PREF" development="new" translation="edited" description="Abbreviation for Preferences">Pref.</text>
-    <text id="ROL_QUARTERLY" development="new" translation="todo">Quarterly</text>
+    <text id="ROL_QUARTERLY" development="new" translation="edited">Quarterly</text>
     <text id="ROL_RIGHT_ALL_LISTS_VIEW" development="new" translation="edited">Display all membership lists of all roles</text>
     <text id="ROL_RIGHT_ANNOUNCEMENTS" development="new" translation="edited">Create and edit announcements</text>
     <text id="ROL_RIGHT_APPROVE_USERS" development="new" translation="edited">Organize and assign registrations</text>
@@ -855,7 +901,7 @@
     <text id="ROL_ROLE_SET_MODE" development="new" translation="edited">Role %VAR1_BOLD% has been changed to %VAR2_BOLD%.</text>
     <text id="ROL_SAVE_ROLES" development="new" translation="edited">Saving this settings might cause lose of role configured dependencies.</text>
     <text id="ROL_SEE_ROLE_MEMBERSHIP" development="new" translation="edited">Display role memberships</text>
-    <text id="ROL_SEMIYEARLY" development="new" translation="todo">Semiyearly</text>
+    <text id="ROL_SEMIYEARLY" development="new" translation="edited">Twice a year</text>
     <text id="ROL_SEND_MAIL_GUESTS" development="new" translation="edited">All guests are allowed to send e-mails to current role.</text>
     <text id="ROL_SEND_MAIL_MEMBERS" development="new" translation="edited">Logged in users are allowed to send e-mails to current role.</text>
     <text id="ROL_SEND_MAIL_ROLE" development="new" translation="edited">Role members of this role only are allowed to send e-mails to current role.</text>
@@ -863,7 +909,7 @@
     <text id="ROL_SET_ROLE_INVISIBLE" development="new" translation="edited">Make role invisible</text>
     <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="edited">Make role visible</text>
     <text id="ROL_SHOW_MEMBERS" development="new" translation="edited">Show members</text>
-    <text id="ROL_UNIQUELY" development="new" translation="todo">Uniquely</text>
+    <text id="ROL_UNIQUELY" development="new" translation="edited">Uniquely</text>
     <text id="ROL_VALID_FROM" development="new" translation="edited" description="Date valid from">Valid starting from</text>
     <text id="ROL_VALID_TO" development="new" translation="edited" description="Date valid to">Valid until</text>
     <text id="ROL_VIEW_LIST_MEMBERS" development="new" translation="edited">Logged in users are able to display membership lists of the current role.</text>
@@ -892,7 +938,7 @@
 	<text id="SYS_ADDRESS" development="new" translation="edited">Address</text>
 	<text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="edited">The Online Management System for Associations, Groups and Organizations</text>
 	<text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Admidio Team</text>
-	<text id="SYS_ADMIDIO_VERSION" development="new" translation="todo">Admidio version</text>
+	<text id="SYS_ADMIDIO_VERSION" development="new" translation="edited">Admidio version</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administration</text>
     <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">%VAR1% administration</text>
     <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax request error.\nError Details: %VAR1%</text>
@@ -929,7 +975,7 @@
     <text id="SYS_CENTERED" development="new" translation="edited">Centered</text>
     <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="edited">Display text centered</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Change password</text>
-	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">check for update</text>
+	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="edited">Check for update</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox status is saved automatically after marking.</text>
     <text id="SYS_CLOCK" development="new" translation="edited">o'clock</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Close</text>
@@ -954,7 +1000,7 @@
     <text id="SYS_CREATED_BY" development="new" translation="edited">Created by %VAR1% on %VAR2%</text>
     <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="edited">No valid e-mail address has been provided!\n\nPlease provide an e-mail address in your %VAR1%profile%VAR1%.</text>
     <text id="SYS_DATABASE" development="new" translation="edited">Database</text>
-    <text id="SYS_DATABASE_ERROR" development="new" translation="todo">Database error</text>
+    <text id="SYS_DATABASE_ERROR" development="new" translation="edited">Database error</text>
     <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="edited">Database version %VAR1% does not comply with Admidio scripts %VAR2%.\n\nPlease contact the %VAR3%webmaster%VAR4% of the site.</text>
     <text id="SYS_DATE" development="new" translation="edited">Date</text>
     <text id="SYS_DATE_END_BEFORE_BEGIN" development="new" translation="edited">End date is before start date.</text>
@@ -964,7 +1010,7 @@
 	<text id="SYS_DATE_MODIFIED" development="new" translation="edited">Date of modification</text>
     <text id="SYS_DATE_TO" development="new" translation="edited">to</text>
     <text id="SYS_DEACTIVATED" development="new" translation="edited">Inactive</text>
-    <text id="SYS_DEBUG_MODUS" development="new" translation="todo">debug modus</text>
+    <text id="SYS_DEBUG_MODUS" development="new" translation="edited">Debug modus</text>
     <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="edited">Reduce font size</text>
     <text id="SYS_DELETE" development="new" translation="edited">Delete</text>
     <text id="SYS_DELETE_DATA" development="new" translation="edited">Data has been deleted.</text>
@@ -981,7 +1027,7 @@
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Entry visible for multiple organizations</text>
     <text id="SYS_END" development="new" translation="edited" description="End of a date">End</text>
     <text id="SYS_ERROR" development="new" translation="edited">Error</text>
-    <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="todo">Folgender Fehler trat beim Zugriff auf die Datenbank auf:\n\n%VAR1%</text>
+    <text id="SYS_ERROR_DATABASE_ACCESS" development="new" translation="edited">Error occured during database access:\n\n%VAR1%</text>
     <text id="SYS_ERROR_ENTRY_NOT_DELETED" development="new" translation="edited">An error occurred!\n\nEntry could not be deleted.</text>
     <text id="SYS_ERROR_PAGE_NOT_FOUND" development="new" translation="edited">ERROR 404 - PAGE NOT FOUND!</text>
     <text id="SYS_EXAMPLE" development="new" translation="edited">Example</text>
@@ -997,7 +1043,7 @@
     <text id="SYS_FILE_PROGRESS" development="new" translation="edited">%0 of %1 transferred</text>
     <text id="SYS_FILE_TO_LARGE" development="new" translation="edited">File size is to large.</text>
     <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Size of uploaded file exceeds server defined maximum file size of %VAR1%.</text>
-    <text id="SYS_FILE_UPLOADS" development="new" translation="todo">file uploads</text>
+    <text id="SYS_FILE_UPLOADS" development="new" translation="edited">File uploads</text>
 	<text id="SYS_FIRSTNAME" development="new" translation="edited">First name</text>
 	<text id="SYS_FROM_TO" development="new" translation="edited">from %VAR1% to %VAR2%</text>
 	<text id="SYS_FOLDER" development="new" translation="edited">Folder</text>
@@ -1022,7 +1068,7 @@
     <text id="SYS_FORUM_LOGOUT" development="new" translation="edited">You successfully signed out from Admidio and the forum system..</text>
     <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Selected user name has been deleted in the forum and Admidio.</text>
     <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Selected user name already exists in the forum.\n\nPlease select another name.</text>  
-    <text id="SYS_FRIDAY" development="new" translation="todo">Friday</text>
+    <text id="SYS_FRIDAY" development="new" translation="edited">Friday</text>
     <text id="SYS_GENDER" development="new" translation="edited">Gender</text>
 	<text id="SYS_HEADLINE" development="new" translation="edited">Headline</text>
     <text id="SYS_HELP" development="new" translation="edited">Help</text>
@@ -1036,7 +1082,7 @@
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Invalid page view</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Invisible</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O error</text>
-    <text id="SYS_ISO_8859_1" development="new" translation="todo">ISO-8859-1</text>
+    <text id="SYS_ISO_8859_1" development="new" translation="edited">ISO-8859-1</text>
     <text id="SYS_ITALIC" development="new" translation="edited">Italic</text>
     <text id="SYS_LANGUAGE" development="new" translation="edited">Language</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="edited">Last edited by %VAR1% on %VAR2%</text>
@@ -1066,19 +1112,19 @@
     <text id="SYS_MANDATORY_FIELD" development="new" translation="edited">Mandatory field</text>
     <text id="SYS_MASTER_DATA" development="new" translation="edited">Basic information</text>
     <text id="SYS_MAX_PARTICIPANTS" development="new" translation="edited">Max. participants</text>
-    <text id="SYS_MAX_PROCESSABLE_IMAGE_SIZE" development="new" translation="todo">max. processable image size</text>
+    <text id="SYS_MAX_PROCESSABLE_IMAGE_SIZE" development="new" translation="edited">max. processable image size</text>
     <text id="SYS_MEGA_PIXEL" development="new" translation="edited">Megapixels</text>
     <text id="SYS_MEMBER" development="new" translation="edited">Member</text>
     <text id="SYS_MEMBER_OF_ORGANIZATION" development="new" translation="edited">Member of organisation %VAR1%</text>
  	<text id="SYS_MEMBERS" development="new" translation="edited">Members</text>
- 	<text id="SYS_MEMORY_LIMIT" development="new" translation="todo">memory limit</text>
+ 	<text id="SYS_MEMORY_LIMIT" development="new" translation="edited">Memory limit</text>
     <text id="SYS_MESSAGE" development="new" translation="edited">Message</text>
     <text id="SYS_MINUTES" development="new" translation="edited">Minutes</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">This module is disabled.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Modules</text>
-    <text id="SYS_MONDAY" development="new" translation="todo">Monday</text>
-    <text id="SYS_MYSQL_VERSION" development="new" translation="todo">MySQL version</text>
-    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="todo">Admidio requires 4.1 or higher</text>
+    <text id="SYS_MONDAY" development="new" translation="edited">Monday</text>
+    <text id="SYS_MYSQL_VERSION" development="new" translation="edited">MySQL version</text>
+    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="edited">Admidio requires 4.1 or higher</text>
     <text id="SYS_NAME" development="new" translation="edited">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Short name</text>
     <text id="SYS_NEXT" development="new" translation="edited">Next</text>
@@ -1092,12 +1138,12 @@
     <text id="SYS_NONE" development="new" translation="edited">None</text>
     <text id="SYS_NOTE" development="new" translation="edited">Note</text>
 	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="edited">You are not a member of organisation %VAR1%</text>
-	<text id="SYS_NOT_REGISTERED" development="new" translation="edited">not registered</text>
-	<text id="SYS_NOT_SET" development="new" translation="todo">not set</text>
+	<text id="SYS_NOT_REGISTERED" development="new" translation="edited">Not registered</text>
+	<text id="SYS_NOT_SET" development="new" translation="edited">Not set</text>
     <text id="SYS_NUMBER" development="new" translation="edited">Number</text>
-    <text id="SYS_OFF" development="new" translation="todo">off</text>
-    <text id="SYS_OK" development="new" translation="todo">OK</text>
-    <text id="SYS_ON" development="new" translation="todo">on</text>
+    <text id="SYS_OFF" development="new" translation="edited">Off</text>
+    <text id="SYS_OK" development="new" translation="edited">OK</text>
+    <text id="SYS_ON" development="new" translation="edited">On</text>
     <text id="SYS_OPTIONAL" development="new" translation="edited">Optional</text>
     <text id="SYS_ORDER" development="new" translation="edited">Order</text>
     <text id="SYS_OVERVIEW" development="new" translation="edited">Overview</text>
@@ -1112,12 +1158,12 @@
     <text id="SYS_PHONE" development="new" translation="edited">Phone</text>    
     <text id="SYS_PHOTO" development="new" translation="edited">Photo</text>
 	<text id="SYS_PHOTOS" development="new" translation="edited">Photos</text>
-	<text id="SYS_PHP_INFO" development="new" translation="todo">all PHP settings</text>
-	<text id="SYS_PHP_VERSION" development="new" translation="todo">PHP version</text>
-	<text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="todo">Admidio requires 5.2 or higher</text>   	
-    <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">select option</text>
+	<text id="SYS_PHP_INFO" development="new" translation="edited">All PHP settings</text>
+	<text id="SYS_PHP_VERSION" development="new" translation="edited">PHP version</text>
+	<text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="edited">Admidio requires 5.2 or higher</text>   	
+    <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">Select option</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Please wait</text>
-    <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST size</text>
+    <text id="SYS_POST_MAX_SIZE" development="new" translation="edited">Max. POST size</text>
     <text id="SYS_PREVIEW" development="new" translation="edited">Preview</text>
     <text id="SYS_PREVIOUS" development="new" translation="edited">Previous</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Process canceled.</text>
@@ -1140,9 +1186,9 @@
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Saving not possible. Maximum number of role members in role %VAR1_BOLD% would exceed predefined limit.</text>
     <text id="SYS_ROOM" development="new" translation="edited">Room</text>
     <text id="SYS_RSS_DISABLED" development="new" translation="edited">RSS feature disabled by the system administrator.</text>
-    <text id="SYS_SAFE_MODE" development="new" translation="todo">Safe Mode</text>
-    <text id="SYS_SAFE_MODE_PROBLEM" development="new" translation="todo">problematic at file uploads</text>
-    <text id="SYS_SATURDAY" development="new" translation="todo">Saturday</text>
+    <text id="SYS_SAFE_MODE" development="new" translation="edited">Safe Mode</text>
+    <text id="SYS_SAFE_MODE_PROBLEM" development="new" translation="edited">Might cause problems with file uploads</text>
+    <text id="SYS_SATURDAY" development="new" translation="edited">Saturday</text>
     <text id="SYS_SAVE" development="new" translation="edited">Save</text>
     <text id="SYS_SAVE_DATA" development="new" translation="edited">Data has been saved.</text>
     <text id="SYS_SECONDS" development="new" translation="edited">Seconds</text>
@@ -1160,7 +1206,7 @@
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Display calendar</text>
     <text id="SYS_SHOW_HELP" development="new" translation="edited">Display help</text>
     <text id="SYS_SHOW_IMAGE" development="new" translation="edited">Display picture %VAR1%</text>
-	<text id="SYS_SHOW_PROFILE" development="new" translation="todo">Show profile</text>
+	<text id="SYS_SHOW_PROFILE" development="new" translation="edited">Show profile</text>
 	<text id="SYS_SHOW_ROUTE" development="new" translation="edited">Show route</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">At least one user with similar name (%VAR1_BOLD% ) was found in the database.</text>
     <text id="SYS_SINCE" development="new" translation="edited">since %VAR1%</text>
@@ -1173,15 +1219,15 @@
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
-    <text id="SYS_SUNDAY" development="new" translation="todo">Sunday</text>
-    <text id="SYS_SYSMAIL_ACTIVATION_LINK" development="new" translation="todo">#subject# Your requested password for %organization_short_name% website\n#content# Hello %user_first_name%,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: %user_login_name%\nPassword: %variable1%\n\nTo activate your password, please follow this link:\n\n%variable2%\n\nThe password was generated automatically,\ntherefore you should log in on %organization_homepage% to change it under "My profile".\n\nGreetings,\nWebmaster</text>
-    <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="todo">#subject# Login details for %organization_short_name% website\n#content# Hello %user_first_name%,\n\nyour new login details for the %organization_long_name% website:\nUsername: %user_login_name%\nPassword: %variable1%\n\nThe password was generated automatically,\ntherefore you should log in on %organization_homepage% to change it under "My profile".\n\nCheers,\nWebmaster</text>
-    <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="todo">#subject# Registration on %organization_short_name% website approved\n#content# Hello %user_first_name%,\n\nyour registration on %organization_homepage% is approved.\n\nNow you may log in with your username: %user_login_name%\nand your password.\n\nIf you have any questions, please don't hesitate to contact the webmaster via email to %webmaster_email% .\n\nCheers,\nWebmaster</text>
-    <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# New registration on %organization_short_name% website\n#content# A new user registered himself on %organization_homepage%.\n\nSurname: %user_last_name%\nFirst Name:  %user_first_name%\nE-Mail:   %user_email%\n\n\nThis mail was generated automatically.</text>
+    <text id="SYS_SUNDAY" development="new" translation="edited">Sunday</text>
+    <text id="SYS_SYSMAIL_ACTIVATION_LINK" development="new" translation="edited">#subject# Your requested password for %organization_short_name% website\n#content# Hello %user_first_name%,\n\nyou requested a new password!\n\nYour log in details are:\nUsername: %user_login_name%\nPassword: %variable1%\n\nTo activate your password, please follow this link:\n\n%variable2%\n\nThe password was generated automatically,\ntherefore you should log in at %organization_homepage% to change it under "My profile".\n\nGreetings,\nWebmaster</text>
+    <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="edited">#subject# Login details for %organization_short_name% website\n#content# Hello %user_first_name%,\n\nyour new login details for the %organization_long_name% website:\nUsername: %user_login_name%\nPassword: %variable1%\n\nThe password was generated automatically,\ntherefore you should log in at %organization_homepage% to change it under "My profile".\n\nCheers,\nWebmaster</text>
+    <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="edited">#subject# Registration on %organization_short_name% website approved\n#content# Hello %user_first_name%,\n\nyour registration on %organization_homepage% is approved.\n\nNow you may log in with your username: %user_login_name%\nand your password.\n\nIn case of any questions, please don't hesitate to contact the webmaster via email to %webmaster_email% .\n\nCheers,\nWebmaster</text>
+    <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="edited">#subject# New registration at %organization_short_name% website\n#content# A new user registered himself on %organization_homepage%.\n\nSurname: %user_last_name%\nFirst Name:  %user_first_name%\nE-Mail:   %user_email%\n\n\nThis message was generated automatically.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System message</text>
     <text id="SYS_TEXT" development="new" translation="edited">Text</text>
     <text id="SYS_TEXT_ITALIC" development="new" translation="edited">Display text in %VAR1%italic%VAR2%</text>
-    <text id="SYS_THURSDAY" development="new" translation="todo">Thursday</text>
+    <text id="SYS_THURSDAY" development="new" translation="edited">Thursday</text>
     <text id="SYS_TIME" development="new" translation="edited">Time</text>
     <text id="SYS_TIME_FROM" development="new" translation="edited">Time from</text>
     <text id="SYS_TIME_INVALID" development="new" translation="edited">Time error in field %VAR1_BOLD%.\n\nFormat time value according to this: %VAR2_BOLD%.</text>
@@ -1190,7 +1236,7 @@
     <text id="SYS_TO" development="new" translation="edited">To</text>
     <text id="SYS_TO_MANY_FILES" development="new" translation="edited">Maximum number of file attachments: %0.</text>
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="edited">File %0 of %1 transfered</text>
-    <text id="SYS_TUESDAY" development="new" translation="todo">Tuesday</text>
+    <text id="SYS_TUESDAY" development="new" translation="edited">Tuesday</text>
     <text id="SYS_TYPE" development="new" translation="edited">Type</text>
     <text id="SYS_UNDERLINE" development="new" translation="edited">Underline</text>
     <text id="SYS_UNDERLINE_TEXT" development="new" translation="edited">%VAR1%underline%VAR2% text</text>
@@ -1200,13 +1246,13 @@
 	<text id="SYS_UPDATE" development="new" translation="edited">Update</text>
     <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">File(s) couldn't be uploaded.</text>
-    <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. upload filesize</text>
+    <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="edited">Max. file upload size</text>
     <text id="SYS_USER" development="new" translation="edited">User</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">No user could be found with this ID!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="edited">User %VAR1_BOLD% has no valid e-mail address in personal information!</text>
     <text id="SYS_USERNAME" development="new" translation="edited">User name</text>
     <text id="SYS_USERS_FOUND" development="new" translation="edited">User found</text>
-    <text id="SYS_UTF8" development="new" translation="todo">UTF-8</text>
+    <text id="SYS_UTF8" development="new" translation=file >UTF-8</text>
     <text id="SYS_VISIBLE" development="new" translation="edited">Visible</text>
     <text id="SYS_VISIBLE_TO_USERS" development="new" translation="edited">%VAR1% only visible for logged in users.</text>
     <text id="SYS_VISITORS" development="new" translation="edited">Guests</text>
@@ -1214,7 +1260,7 @@
     <text id="SYS_WARNING" development="new" translation="edited">Warning</text>
     <text id="SYS_WEBMASTER" development="new" translation="edited">Webmaster</text>
     <text id="SYS_WEBSITE" development="new" translation="edited">Website</text>
-    <text id="SYS_WEDNESDAY" development="new" translation="todo">Wednesday</text>
+    <text id="SYS_WEDNESDAY" development="new" translation="edited">Wednesday</text>
     <text id="SYS_WHAT_TO_DO" development="new" translation="edited">What to do?</text>
     <text id="SYS_YES" development="new" translation="edited">Yes</text>
     </version>
