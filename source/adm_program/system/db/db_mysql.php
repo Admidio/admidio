@@ -197,6 +197,57 @@ class DBMySql extends DBCommon
     {
         return $this->select_db($this->dbname);
     }  
+
+	// This method delivers the columns and their properties of the passed variable as an array
+	// The array has the following format:
+	// array('Fieldname1' => array('serial' => '1', 'null' => '0', 'key' => '0', 'type' => 'integer'), 
+	//       'Fieldname2' => ...)
+    public function showColumns($table)
+    {
+		$columnProperties = array();
+
+		$sql = 'SHOW COLUMNS FROM '.$table;
+		$this->query($sql);
+		
+		while ($row = $this->fetch_array())
+		{
+			$columnProperties[$row['Field']]['serial'] = 0;
+			$columnProperties[$row['Field']]['null']   = 0;
+			$columnProperties[$row['Field']]['key']    = 0;
+			
+			if($row['Extra'] == 'auto_increment')
+			{
+				$columnProperties[$row['Field']]['serial'] = 1;
+			}
+			if($row['Null'] == 'YES')
+			{
+				$columnProperties[$row['Field']]['null']   = 1;
+			}
+			if($row['Key'] == 'PRI' || $row['Key'] == 'MUL')
+			{
+				$columnProperties[$row['Field']]['key'] = 1;
+			}
+
+			if(strpos($row['Type'], 'tinyint(1)') !== false)
+			{
+				$columnProperties[$row['Field']]['type'] = 'boolean';
+			}
+			elseif(strpos($row['Type'], 'smallint') !== false)
+			{
+				$columnProperties[$row['Field']]['type'] = 'smallint';
+			}
+			elseif(strpos($row['Type'], 'int') !== false)
+			{
+				$columnProperties[$row['Field']]['type'] = 'integer';
+			}
+			else
+			{
+				$columnProperties[$row['Field']]['type'] = $row['Type'];
+			}
+		}
+		
+		return $columnProperties;
+    }  
 }
  
 ?>
