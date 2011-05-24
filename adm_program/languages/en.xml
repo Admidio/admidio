@@ -1252,7 +1252,7 @@
     <text id="SYS_USER_NO_EMAIL" development="new" translation="edited">User %VAR1_BOLD% has no valid e-mail address in personal information!</text>
     <text id="SYS_USERNAME" development="new" translation="edited">User name</text>
     <text id="SYS_USERS_FOUND" development="new" translation="edited">User found</text>
-    <text id="SYS_UTF8" development="new" translation=file >UTF-8</text>
+    <text id="SYS_UTF8" development="new" translation="edited">UTF-8</text>
     <text id="SYS_VISIBLE" development="new" translation="edited">Visible</text>
     <text id="SYS_VISIBLE_TO_USERS" development="new" translation="edited">%VAR1% only visible for logged in users.</text>
     <text id="SYS_VISITORS" development="new" translation="edited">Guests</text>

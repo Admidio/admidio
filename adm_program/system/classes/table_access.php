@@ -61,8 +61,9 @@ class TableAccess
     }
     
     // alle Klassenvariablen wieder zuruecksetzen
-   public function clear()
-   {
+    public function clear()
+    {
+		$columnProperties = array();
         $this->columnsValueChanged = false;
         $this->new_record   = true;
         $this->record_count = -1;
@@ -80,9 +81,23 @@ class TableAccess
         else
         {
             // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
-            $sql = 'SHOW COLUMNS FROM '.$this->table_name;
-            $this->db->query($sql);
-
+			$columnProperties = $this->db->showColumns($this->table_name);
+			
+			foreach($columnProperties as $key => $value)
+			{
+                $this->dbColumns[$key] = '';
+                $this->columnsInfos[$key]['changed'] = false;
+                $this->columnsInfos[$key]['type']    = $value['type'];
+                $this->columnsInfos[$key]['null']    = $value['null'];
+                $this->columnsInfos[$key]['key']     = $value['key'];
+                $this->columnsInfos[$key]['serial']  = $value['serial'];
+                
+                if($value['serial'] == 1)
+                {
+                    $this->key_name = $key;
+                }				
+			}
+/*
             while ($row = $this->db->fetch_array())
             {
                 $this->dbColumns[$row['Field']] = '';
@@ -95,7 +110,7 @@ class TableAccess
                 {
                     $this->key_name = $row['Field'];
                 }
-            }
+            }*/
         }
     }
     
@@ -148,8 +163,7 @@ class TableAccess
         }
         // Datum in dem uebergebenen Format bzw. Systemformat zurueckgeben
         elseif(isset($this->columnsInfos[$field_name]['type'])
-        &&  (  strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false
-            || strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false
+        &&  (  strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false
             || strpos($this->columnsInfos[$field_name]['type'], 'date') !== false
             || strpos($this->columnsInfos[$field_name]['type'], 'time') !== false))
         {
@@ -157,8 +171,7 @@ class TableAccess
             {
                 if(strlen($format) == 0 && isset($g_preferences))
                 {
-                    if(strpos($this->columnsInfos[$field_name]['type'], 'datetime') !== false
-                    || strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false)
+                    if(strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false)
                     {
                         $format = $g_preferences['system_date'].' '.$g_preferences['system_time'];
                     }
@@ -287,7 +300,7 @@ class TableAccess
                 // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
                 // Felder anderer Tabellen auch nicht
                 if(strpos($key, $this->column_praefix. '_') === 0
-                && $this->columnsInfos[$key]['extra'] != 'auto_increment') 
+                && $this->columnsInfos[$key]['serial'] == 0) 
                 {
                     if($this->columnsInfos[$key]['changed'] == true)
                     {
@@ -298,7 +311,8 @@ class TableAccess
                                 // Daten fuer ein Insert aufbereiten
                                 $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' ';
                                 // unterscheiden zwischen Numerisch und Text
-                                if(strpos($this->columnsInfos[$key]['type'], 'int') !== false)
+                                if(strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
+								|| strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
                                 {
                                     $sql_value_list = $sql_value_list. ' '.$item_connection.' '.$value.' ';
                                 }
@@ -319,7 +333,8 @@ class TableAccess
                             {
                                 $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = NULL ';
                             }
-                            elseif(strpos($this->columnsInfos[$key]['type'], 'int') !== false)
+                            elseif(strpos($this->columnsInfos[$key]['type'], 'integer')  !== false
+							    || strpos($this->columnsInfos[$key]['type'], 'smallint') !== false)
                             {
                                 // numerisch
                                 $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = '.$value.' ';
@@ -386,7 +401,8 @@ class TableAccess
             if(strlen($field_value) > 0 && $check_value == true)
             {
                 // Numerische Felder
-                if(strpos($this->columnsInfos[$field_name]['type'], 'int') !== false)
+                if(strpos($this->columnsInfos[$field_name]['type'], 'integer')  !== false
+				|| strpos($this->columnsInfos[$field_name]['type'], 'smallint') !== false)
                 {
                     if(is_numeric($field_value) == false)
                     {
@@ -394,9 +410,7 @@ class TableAccess
                     }
 
                     // Schluesselfelder duerfen keine 0 enthalten
-                    if((  $this->columnsInfos[$field_name]['key'] == 'PRI'
-                       || $this->columnsInfos[$field_name]['key'] == 'MUL')
-                    && $field_value == 0)
+                    if($this->columnsInfos[$field_name]['key'] == 1 && $field_value == 0)
                     {
                         $field_value = '';
                     }

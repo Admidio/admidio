@@ -24,6 +24,7 @@ class TableAutoLogin extends TableAccess
     // Konstruktor
     public function __construct(&$db, $session = 0)
     {
+		$this->key_name = 'atl_session_id';
         parent::__construct($db, TBL_AUTO_LOGIN, 'atl', $session);
     }    
 

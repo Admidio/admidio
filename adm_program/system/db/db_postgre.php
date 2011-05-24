@@ -88,14 +88,14 @@ class DBPostgre extends DBCommon
     // result : Ergebniskennung
     // result_type : MYSQL_ASSOC fuer assoziatives Array, MYSQL_NUM fuer numerisches
     //               oder MYSQL_BOTH fuer beides
-    public function fetch_array($result = false, $result_type = MYSQL_BOTH)
+    public function fetch_array($result = false, $result_type = PGSQL_BOTH)
     {
         if($result === false)
         {
             $result = $this->query_result;
         }
         
-        return mysql_fetch_array($result, $result_type);
+        return pg_fetch_array($result, null, $result_type);
     }
 
     public function fetch_object($result = false)
@@ -105,7 +105,7 @@ class DBPostgre extends DBCommon
             $result = $this->query_result;
         }
         
-        return mysql_fetch_object($result);
+        return pg_fetch_object($result);
     }
 
     // Liefert den Namen eines Feldes in einem Ergebnis
@@ -146,7 +146,7 @@ class DBPostgre extends DBCommon
             $result = $this->query_result;
         }
         
-        return mysql_num_rows($result);
+        return pg_num_rows($result);
     }    
     
     public function query($sql)
@@ -172,6 +172,8 @@ class DBPostgre extends DBCommon
 				$sql = substr($sql, 0, $posInteger).' serial '.substr($sql, $posAutoIncrement + 14);
 			}
 		}
+		
+		$sql = str_replace('"', '\'', $sql);
         
         // im Debug-Modus werden alle SQL-Statements mitgeloggt
         if($g_debug == 1)
@@ -218,6 +220,54 @@ class DBPostgre extends DBCommon
     public function setCurrentDB()
     {
         return $this->select_db($this->dbname);
+    }
+	
+	// This method delivers the columns and their properties of the passed variable as an array
+	// The array has the following format:
+	// array('Fieldname1' => array('serial' => '1', 'null' => '0', 'key' => '0', 'type' => 'integer'), 
+	//       'Fieldname2' => ...)
+    public function showColumns($table)
+    {
+		$columnProperties = array();
+
+		$sql = 'SELECT column_name, column_default, is_nullable, data_type
+				  FROM information_schema.columns WHERE table_name = "'.$table.'"';
+		$this->query($sql);
+		
+		while ($row = $this->fetch_array())
+		{
+			$columnProperties[$row['column_name']]['serial'] = 0;
+			$columnProperties[$row['column_name']]['null']   = 0;
+			$columnProperties[$row['column_name']]['key']    = 0;
+			
+			if(strpos($row['column_default'], 'nextval') !== false)
+			{
+				$columnProperties[$row['column_name']]['serial'] = 1;
+			}
+			if($row['is_nullable'] == 'YES')
+			{
+				$columnProperties[$row['column_name']]['null']   = 1;
+			}
+			/*if($row['Key'] == 'PRI' || $row['Key'] == 'MUL')
+			{
+				$columnProperties[$row['column_name']]['key'] = 1;
+			}*/
+
+			if(strpos($row['data_type'], 'timestamp') !== false)
+			{
+				$columnProperties[$row['column_name']]['type'] = 'timestamp';
+			}
+			elseif(strpos($row['data_type'], 'time') !== false)
+			{
+				$columnProperties[$row['column_name']]['type'] = 'time';
+			}
+			else
+			{
+				$columnProperties[$row['column_name']]['type'] = $row['data_type'];
+			}
+		}
+		
+		return $columnProperties;
     }  
 }
  
