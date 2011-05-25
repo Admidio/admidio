@@ -103,10 +103,10 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 					   AND rol_cat_id       = cat_id
 					   AND cat_org_id       = '. $g_current_organization->getValue('org_id'). '
 					   AND mem_rol_id       = rol_id
-					   AND mem_begin       <= "'.DATE_NOW.'"
-					   AND mem_end          > "'.DATE_NOW.'"
+					   AND mem_begin       <= \''.DATE_NOW.'\'
+					   AND mem_end          > \''.DATE_NOW.'\'
 					   AND mem_usr_id       = usr_id
-					   AND usr_valid        = 1
+					   AND usr_valid        = \'1\'
 					   AND email.usd_usr_id = email.usd_usr_id
 					 ORDER BY last_name, first_name';
 

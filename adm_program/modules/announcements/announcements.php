@@ -107,9 +107,9 @@ $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $key => $value)
 {
-	$organizations = $organizations. '"'.$value.'",';
+	$organizations = $organizations. '\''.$value.'\',';
 }
-$organizations = $organizations. '"'. $g_current_organization->getValue("org_shortname"). '"';
+$organizations = $organizations. '\''. $g_current_organization->getValue('org_shortname'). '\'';
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
 if($req_id > 0)
@@ -122,7 +122,7 @@ else
     // Ankuendigungen an einem Tag suchen
     if(strlen($sql_datum) > 0)
     {
-        $conditions = ' AND DATE_FORMAT(ann_timestamp_create, "%Y-%m-%d") = "'.$sql_datum.'"';        
+        $conditions = ' AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$sql_datum.'\'';        
     }
     //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
     else
@@ -136,8 +136,8 @@ if($req_id == 0)
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
     $sql = 'SELECT COUNT(1) as count 
               FROM '. TBL_ANNOUNCEMENTS. '
-             WHERE (  ann_org_shortname = "'. $g_current_organization->getValue('org_shortname'). '"
-                OR (   ann_global   = 1
+             WHERE (  ann_org_shortname = \''. $g_current_organization->getValue('org_shortname'). '\'
+                OR (   ann_global   = \'1\'
                AND ann_org_shortname IN ('.$organizations.') ))
                    '.$conditions.'';
     $result = $g_db->query($sql);
@@ -176,8 +176,8 @@ $sql = 'SELECT ann.*,
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = ann_usr_id_change
            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
-         WHERE (  ann_org_shortname = "'. $g_current_organization->getValue('org_shortname'). '"
-            OR (   ann_global   = 1
+         WHERE (  ann_org_shortname = \''. $g_current_organization->getValue('org_shortname'). '\'
+            OR (   ann_global   = \'1\'
            AND ann_org_shortname IN ('.$organizations.') ))
                '.$conditions.' 
          ORDER BY ann_timestamp_create DESC

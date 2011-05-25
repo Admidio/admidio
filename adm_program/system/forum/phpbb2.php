@@ -142,7 +142,7 @@ class PhpBB2
         if($session_id != $this->session_id)
         {
             // pruefen, ob das Praefix richtig gesetzt wurde und die Config-Tabelle gefunden werden kann
-            $sql = 'SHOW TABLE STATUS LIKE "'. $table_praefix. '_config" ';
+            $sql = 'SHOW TABLE STATUS LIKE \''. $table_praefix. '_config\' ';
             $this->forum_db->query($sql);
             
             if($this->forum_db->num_rows() == 1)
@@ -156,8 +156,8 @@ class PhpBB2
                 // wichtige Einstellungen des Forums werden eingelesen
                 $sql    = 'SELECT config_name, config_value 
                              FROM '. $this->praefix. '_config 
-                            WHERE config_name IN ("sitename","cookie_name","cookie_path","cookie_domain",
-                                                  "cookie_secure","server_name","script_path") ';
+                            WHERE config_name IN (\'sitename\',\'cookie_name\',\'cookie_path\',\'cookie_domain\',
+                                                  \'cookie_secure\',\'server_name\',\'script_path\') ';
                 $result = $this->forum_db->query($sql);
                 
                 while($row = $this->forum_db->fetch_array($result))
@@ -229,7 +229,7 @@ class PhpBB2
     {
         // User im Forum suchen
         $sql    = 'SELECT user_id FROM '. $this->praefix. '_users 
-                    WHERE username LIKE "'.$username.'" ';
+                    WHERE username LIKE \''.$username.'\' ';
         $result = $this->forum_db->query($sql);
 
         // Wenn ein Ergebis groesser 0 vorliegt, existiert der User bereits.
@@ -326,7 +326,7 @@ class PhpBB2
     // Funktion holt die Userdaten
     function userDaten($forum_user)
     {
-        $sql    = 'SELECT user_id, username, user_password FROM '. $this->praefix. '_users WHERE username LIKE "'.$forum_user.'" ';
+        $sql    = 'SELECT user_id, username, user_password FROM '. $this->praefix. '_users WHERE username LIKE \''.$forum_user.'\' ';
         $result = $this->forum_db->query($sql);
         $row    = $this->forum_db->fetch_array($result);
 
@@ -339,7 +339,7 @@ class PhpBB2
     // Funktion prueft auf neue PM
     function getUserPM($forum_user)
     {
-        $sql    = 'SELECT user_new_privmsg FROM '. $this->praefix. '_users WHERE username LIKE "'.$forum_user.'" ';
+        $sql    = 'SELECT user_new_privmsg FROM '. $this->praefix. '_users WHERE username LIKE \''.$forum_user.'\' ';
         $result = $this->forum_db->query($sql);
         $row    = $this->forum_db->fetch_array($result);
 
@@ -355,7 +355,7 @@ class PhpBB2
         // Administrator nun in Foren-Tabelle suchen und dort das Password, Username & UserID auslesen
         $sql    = 'SELECT user_id 
                      FROM '. $this->praefix. '_users 
-                    WHERE username   = "'. $username. '"
+                    WHERE username   = \''. $username. '\'
                       AND user_level = 1';
         $this->forum_db->query($sql);
         
@@ -370,7 +370,7 @@ class PhpBB2
             
             $sql    = 'UPDATE '. $this->praefix. '_users 
                           SET user_level = '. $user_level. '
-                        WHERE username = "'. $username. '"';
+                        WHERE username = \''. $username. '\'';
             $this->forum_db->query($sql);
 
             return true;
@@ -395,7 +395,7 @@ class PhpBB2
         {
             // Password in Foren-Tabelle auf das Password in Admidio setzen
             $sql    = 'UPDATE '. $this->praefix. '_users 
-                          SET user_password = "'. $password_admidio .'"
+                          SET user_password = \''. $password_admidio .'\'
                         WHERE user_id = '.$forum_userid;
             $this->forum_db->query($sql);
 
@@ -427,11 +427,11 @@ class PhpBB2
         {
             // User im Forum updaten
             $sql    = 'UPDATE '. $this->praefix. '_users
-                          SET username      = "'.$username.'"
-                            , user_password = "'.$password.'"
+                          SET username      = \''.$username.'\'
+                            , user_password = \''.$password.'\'
                             , user_active   = '.$user_aktiv.'
-                            , user_email    = "'.$email.'"
-                        WHERE username LIKE "'.$old_username.'" ';
+                            , user_email    = \''.$email.'\'
+                        WHERE username LIKE \''.$old_username.'\' ';
             $this->forum_db->query($sql);
         }
         else
@@ -473,8 +473,8 @@ class PhpBB2
                   user_style, user_lang, user_viewemail, user_attachsig, user_allowhtml,
                   user_dateformat, user_email, user_notify, user_notify_pm, user_popup_pm, user_avatar)
                   VALUES 
-                  ('.$new_user_id.', '.$forum_useraktiv.', "'.$forum_username.'", "'.$forum_password.'", '. time(). ', 1.00,
-                  2, "german", 0, 1, 0, "d.m.Y, H:i", "'.$forum_email.'", 0, 1, 1, "") ';
+                  ('.$new_user_id.', '.$forum_useraktiv.', \''.$forum_username.'\', \''.$forum_password.'\', '. time(). ', 1.00,
+                  2, \'german\', 0, 1, 0, \'d.m.Y, H:i\', \''.$forum_email.'\', 0, 1, 1, \'\') ';
         $result = $this->forum_db->query($sql);
 
         // Jetzt noch eine neue private Group anlegen
@@ -487,7 +487,7 @@ class PhpBB2
         $sql    = 'INSERT INTO '. $this->praefix. '_groups
                   (group_id, group_type, group_name, group_description, group_moderator, group_single_user)
                   VALUES 
-                  ('.$new_group_id.', 1, "", "Personal User", 0, 1) ';
+                  ('.$new_group_id.', 1, \'\', \'Personal User\', 0, 1) ';
         $result = $this->forum_db->query($sql);
 
         // und den neuen User dieser Gruppe zuordenen
@@ -505,7 +505,7 @@ class PhpBB2
         if(strlen($forum_username) > 0)
         {
             // User_ID des Users holen
-            $sql    = 'SELECT user_id FROM '. $this->praefix. '_users WHERE username LIKE "'.$forum_username.'" ';
+            $sql    = 'SELECT user_id FROM '. $this->praefix. '_users WHERE username LIKE \''.$forum_username.'\' ';
             $result = $this->forum_db->query($sql);
             $row    = $this->forum_db->fetch_array($result);
             $forum_userid = $row[0];
@@ -524,7 +524,7 @@ class PhpBB2
     
                 // Alle Post des Users mit Gast Username versehen
                 $sql = 'UPDATE '. $this->praefix. '_posts
-                        SET poster_id = -1, post_username = "'.$forum_username.'" 
+                        SET poster_id = -1, post_username = \''.$forum_username.'\' 
                         WHERE poster_id = '.$forum_userid;
                 $result = $this->forum_db->query($sql);
     
@@ -661,13 +661,13 @@ class PhpBB2
 
         if($this->forum_db->num_rows($result) > 1)
         {
-            $sql    = 'DELETE FROM '. $this->praefix. '_sessions WHERE session_user_id = '.$forum_userid.' AND session_id NOT LIKE "'.$this->session_id.'" ';
+            $sql    = 'DELETE FROM '. $this->praefix. '_sessions WHERE session_user_id = '.$forum_userid.' AND session_id NOT LIKE \''.$this->session_id.'\' ';
             $result = $this->forum_db->query($sql);
         }
 
         // Pruefen, ob sich die aktuelle Session noch im Session Table des Forums befindet
         $sql    = 'SELECT session_id, session_start, session_time FROM '. $this->praefix. '_sessions
-                   WHERE session_id = "'.$this->session_id.'" ';
+                   WHERE session_id = \''.$this->session_id.'\' ';
         $result = $this->forum_db->query($sql);
 
         if($this->forum_db->num_rows($result))
@@ -676,17 +676,17 @@ class PhpBB2
             {
                 $sql    = 'UPDATE '. $this->praefix. '_sessions 
                               SET session_time    = '. $current_time .'
-                                , session_ip      = "'. $user_ip .'"
+                                , session_ip      = \''. $user_ip .'\'
                                 , session_user_id = '. $forum_userid .',  session_logged_in = 0
-                            WHERE session_id      = "'. $this->session_id. '"';
+                            WHERE session_id      = \''. $this->session_id. '\'';
                 $this->forum_db->query($sql);
             }
             elseif($aktion == 'update')
             {
                 $sql    = 'UPDATE '. $this->praefix. '_sessions
                               SET session_time = '. $current_time .'
-                                , session_ip   = "'. $user_ip .'" 
-                            WHERE session_id   = "'. $this->session_id. '"';
+                                , session_ip   = \''. $user_ip .'\' 
+                            WHERE session_id   = \''. $this->session_id. '\'';
                 $this->forum_db->query($sql);
             }
             elseif($aktion == 'insert')
@@ -694,9 +694,9 @@ class PhpBB2
                 $sql    = 'UPDATE '. $this->praefix. '_sessions 
                               SET session_time    = '. $current_time .'
                                 , session_start   = '. $current_time .'
-                                , session_ip      = "'. $user_ip .'"
+                                , session_ip      = \''. $user_ip .'\'
                                 , session_user_id = '. $forum_userid .',  session_logged_in = 1
-                            WHERE session_id      = "'. $this->session_id. '"';
+                            WHERE session_id      = \''. $this->session_id. '\'';
                 $this->forum_db->query($sql);
             }
         }
@@ -705,7 +705,7 @@ class PhpBB2
             // Session auf jeden Fall in die Forum DB schreiben, damit der User angemeldet ist
             $sql    = 'INSERT INTO ' .$this->praefix. '_sessions
                       (session_id, session_user_id, session_start, session_time, session_ip, session_page, session_logged_in, session_admin)
-                      VALUES ("'.$this->session_id.'", '.$forum_userid.', '.$current_time.', '.$current_time.', "'.$user_ip.'", 0, 1, 0)';
+                      VALUES (\''.$this->session_id.'\', '.$forum_userid.', '.$current_time.', '.$current_time.', \''.$user_ip.'\', 0, 1, 0)';
             $this->forum_db->query($sql);
         }   
 

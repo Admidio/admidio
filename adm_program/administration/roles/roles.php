@@ -126,10 +126,10 @@ echo '
 
     // alle Rollen gruppiert nach Kategorie auflisten
     $sql    = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                WHERE rol_valid  = '.$req_valid.'
-                  AND rol_visible = '.$req_visible.'
-                  AND rol_cat_id = cat_id
-                  AND cat_type   = "ROL"
+                WHERE rol_valid   = \''.$req_valid.'\'
+                  AND rol_visible = \''.$req_visible.'\'
+                  AND rol_cat_id  = cat_id
+                  AND cat_type    = \'ROL\'
                   AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                       OR cat_org_id IS NULL )
                 ORDER BY cat_sequence ASC, rol_name ASC ';

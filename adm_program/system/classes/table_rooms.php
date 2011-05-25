@@ -66,7 +66,7 @@ class TableRooms extends TableAccess
         else
         {
             $room = addslashes($room);
-            $sql_where_condition .= ' room_name LIKE "'.$room.'" ';
+            $sql_where_condition .= ' room_name LIKE \''.$room.'\' ';
         }
         return parent::readData($room, $sql_where_condition, $sql_additional_tables);
     }

@@ -64,7 +64,7 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
           LEFT JOIN '. TBL_USER_DATA. ' as email
             ON email.usd_usr_id = usr_id
            AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
-         WHERE usr_valid = 1 
+         WHERE usr_valid = \'1\' 
            AND '.$sql_similar_name;
 $result_usr   = $g_db->query($sql);
 $member_found = $g_db->num_rows($result_usr);

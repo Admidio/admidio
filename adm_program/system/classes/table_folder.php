@@ -505,7 +505,7 @@ class TableFolder extends TableAccess
 
         //Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
         $sql_update = 'UPDATE '. TBL_FOLDERS. '
-                          SET fol_public = '.$public_flag.'
+                          SET fol_public = \''.$public_flag.'\'
                         WHERE fol_id = '.$folder_id;
         $this->db->query($sql_update);
 
@@ -575,13 +575,13 @@ class TableFolder extends TableAccess
 
         //Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
         $sql_update = 'UPDATE '. TBL_FOLDERS. '
-                          SET fol_locked = '.$locked_flag.'
+                          SET fol_locked = \''.$locked_flag.'\'
                         WHERE fol_id = '.$folder_id;
         $this->db->query($sql_update);
 
         //...und natuerlich auch fuer alle Files die in diesem Ordner sind
         $sql_update = 'UPDATE '. TBL_FILES. '
-                          SET fil_locked = '.$locked_flag.'
+                          SET fil_locked = \''.$locked_flag.'\'
                         WHERE fil_fol_id = '.$folder_id;
         $this->db->query($sql_update);
     }

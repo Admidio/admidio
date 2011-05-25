@@ -95,7 +95,7 @@ $plg_organizations = $plg_organizations. $g_current_organization->getValue('org_
 $hidden = '';
 if ($g_valid_login == false)
 {
-	$hidden = ' AND cat_hidden = 0 ';
+	$hidden = ' AND cat_hidden = \'0\' ';
 }
 
 // Ermitteln, welche Kalender angezeigt werden sollen
@@ -103,16 +103,16 @@ if(in_array('all',$plg_kal_cat))
 {
 	// alle Kalender anzeigen
     $sql_syntax = ' AND (cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                     OR (   dat_global  = 1
+                     OR (   dat_global  = \'1\'
                         AND cat_org_id IN ('.$plg_organizations.') ) ) ';
 }
 else
 {
     // nur bestimmte Kalender anzeigen
-    $sql_syntax = ' AND cat_type = "DAT" AND ( ';
+    $sql_syntax = ' AND cat_type = \'DAT\' AND ( ';
     for($i=0;$i<count($plg_kal_cat);$i++)
     {
-        $sql_syntax = $sql_syntax. 'cat_name = "'.$plg_kal_cat[$i].'" OR ';
+        $sql_syntax = $sql_syntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
     }
     $sql_syntax = substr($sql_syntax,0,-4). ') ';
 }
@@ -120,8 +120,8 @@ else
 // nun alle relevanten Termine finden
 $sql    = 'SELECT * FROM '. TBL_DATES. ', '. TBL_CATEGORIES. '
             WHERE dat_cat_id = cat_id
-              AND (  dat_begin >= "'.DATE_NOW.'"
-                  OR dat_end   >  "'.DATE_NOW.' 00:00:00" ) '.
+              AND (  dat_begin >= \''.DATE_NOW.'\'
+                  OR dat_end   >  \''.DATE_NOW.' 00:00:00\' ) '.
                   $sql_syntax. $hidden.'
 			ORDER BY dat_begin ASC
 			LIMIT '.$plg_dates_count;

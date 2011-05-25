@@ -96,11 +96,11 @@ if($g_current_user->assignRoles())
     $sql    = 'SELECT rol_id, rol_name, rol_max_members
                  FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. '
-                   ON rol_id     = mem_rol_id
-                  AND mem_usr_id = '.$req_usr_id.'
-                WHERE rol_valid   = 1
-                  AND rol_visible = 1
-                  AND rol_cat_id = cat_id
+                   ON rol_id      = mem_rol_id
+                  AND mem_usr_id  = '.$req_usr_id.'
+                WHERE rol_valid   = \'1\'
+                  AND rol_visible = \'1\'
+                  AND rol_cat_id  = cat_id
                   AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                       OR cat_org_id IS NULL )
                 ORDER BY cat_sequence, rol_name';
@@ -113,15 +113,15 @@ else
                  LEFT JOIN '. TBL_MEMBERS. ' mgl
                    ON rol_id         = mgl.mem_rol_id
                   AND mgl.mem_usr_id = '.$req_usr_id.'
-                  AND mgl.mem_begin <= "'.DATE_NOW.'"
-                  AND mgl.mem_end    > "'.DATE_NOW.'"
+                  AND mgl.mem_begin <= \''.DATE_NOW.'\'
+                  AND mgl.mem_end    > \''.DATE_NOW.'\'
                 WHERE bm.mem_usr_id  = '. $g_current_user->getValue('usr_id'). '
-                  AND bm.mem_begin  <= "'.DATE_NOW.'"
-                  AND bm.mem_end     > "'.DATE_NOW.'"
-                  AND bm.mem_leader  = 1
+                  AND bm.mem_begin  <= \''.DATE_NOW.'\'
+                  AND bm.mem_end     > \''.DATE_NOW.'\'
+                  AND bm.mem_leader  = \'1\'
                   AND rol_id         = bm.mem_rol_id
-                  AND rol_valid      = 1
-                  AND rol_visible    = 1
+                  AND rol_valid      = \'1\'
+                  AND rol_visible    = \'1\'
                   AND rol_cat_id     = cat_id
                   AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                       OR cat_org_id IS NULL )

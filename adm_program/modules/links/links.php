@@ -110,13 +110,13 @@ if ($_GET['id'] > 0)
 else if (strlen($_GET['category']) > 0)
 {
     // alle Links zu einer Kategorie anzeigen
-    $condition = ' AND cat_name   = "'. $_GET['category']. '"';
+    $condition = ' AND cat_name   = \''. $_GET['category']. '\'';
 }
 
 if ($g_valid_login == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $hidden = ' AND cat_hidden = 0 ';
+    $hidden = ' AND cat_hidden = \'0\' ';
 }
 
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
@@ -125,7 +125,7 @@ if ($g_valid_login == false)
 $sql = 'SELECT COUNT(*) FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
         WHERE lnk_cat_id = cat_id
         AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
-        AND cat_type = "LNK"
+        AND cat_type = \'LNK\'
         '.$condition.'
         '.$hidden.'
         ORDER BY cat_sequence, lnk_name DESC';

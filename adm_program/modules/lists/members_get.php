@@ -69,9 +69,9 @@ if($restrict == 'm')
            FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
           WHERE mem_usr_id = usr_id
             AND mem_rol_id = rol_id
-            AND mem_begin <= "'.DATE_NOW.'"
-            AND mem_end    > "'.DATE_NOW.'"
-            AND rol_valid  = 1
+            AND mem_begin <= \''.DATE_NOW.'\'
+            AND mem_end    > \''.DATE_NOW.'\'
+            AND rol_valid  = \'1\'
             AND rol_cat_id = cat_id
             AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                 OR cat_org_id IS NULL )) ';
@@ -79,7 +79,7 @@ if($restrict == 'm')
 elseif($restrict == 'u')
 {
     //Falls gefordert, aufrufen alle Leute aus der Datenbank
-    $member_condition = ' usr_valid = 1 ';
+    $member_condition = ' usr_valid = \'1\' ';
 }
 
 //Suchstring zerlegen
@@ -107,13 +107,13 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
                mem_usr_id as member_this_role, mem_leader as leader_this_role,
                   (SELECT count(*)
                      FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
-                    WHERE rol2.rol_valid   = 1
+                    WHERE rol2.rol_valid   = \'1\'
                       AND rol2.rol_cat_id  = cat2.cat_id
                       AND (  cat2.cat_org_id = '. $g_current_organization->getValue('org_id'). '
                           OR cat2.cat_org_id IS NULL )
                       AND mem2.mem_rol_id  = rol2.rol_id
-                      AND mem2.mem_begin  <= "'.DATE_NOW.'"
-                      AND mem2.mem_end     > "'.DATE_NOW.'"
+                      AND mem2.mem_begin  <= \''.DATE_NOW.'\'
+                      AND mem2.mem_end     > \''.DATE_NOW.'\'
                       AND mem2.mem_usr_id  = usr_id) as member_this_orga
         FROM '. TBL_USERS. '
         LEFT JOIN '. TBL_USER_DATA. ' as last_name
@@ -138,12 +138,12 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
           ON country.usd_usr_id = usr_id
          AND country.usd_usf_id = '. $g_current_user->getProperty('COUNTRY', 'usf_id'). '
         LEFT JOIN '. TBL_ROLES. ' rol
-          ON rol.rol_valid   = 1
+          ON rol.rol_valid   = \'1\'
          AND rol.rol_id      = '.$role_id.'
         LEFT JOIN '. TBL_MEMBERS. ' mem
           ON mem.mem_rol_id  = rol.rol_id
-         AND mem.mem_begin  <= "'.DATE_NOW.'"
-         AND mem.mem_end     > "'.DATE_NOW.'"
+         AND mem.mem_begin  <= \''.DATE_NOW.'\'
+         AND mem.mem_end     > \''.DATE_NOW.'\'
          AND mem.mem_usr_id  = usr_id
         WHERE '. $member_condition. '
         ORDER BY last_name, first_name '.$limit;
@@ -166,11 +166,11 @@ if($g_db->num_rows($result_user)>0)
                 // dieses SQL muss fuer jeden Buchstaben ausgefuehrt werden, ansonsten werden Sonderzeichen nicht immer richtig eingeordnet
                 $sql = 'SELECT COUNT(1) as count
                           FROM '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
-                         WHERE usr_valid  = 1
-                           AND usf_name_intern = "LAST_NAME"
+                         WHERE usr_valid  = \'1\'
+                           AND usf_name_intern = \'LAST_NAME\'
                            AND usd_usf_id = usf_id
                            AND usd_usr_id = usr_id
-                           AND usd_value LIKE "'.$letter_menu.'%"
+                           AND usd_value LIKE \''.$letter_menu.'%\'
                            AND '.$member_condition.'
                          GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
                          ORDER BY usd_value ';

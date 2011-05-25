@@ -49,7 +49,7 @@ else
 	// Default-Konfiguration laden
 	$sql = 'SELECT lst_id FROM '. TBL_LISTS. '
 	         WHERE lst_org_id  = '. $g_current_organization->getValue('org_id'). '
-	           AND lst_default = 1 ';
+	           AND lst_default = \'1\' ';
 	$g_db->query($sql);
 	$row = $g_db->fetch_array();
 	$req_lst_id = $row[0];

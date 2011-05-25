@@ -95,9 +95,9 @@ echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
 // Bedingungen: freigegeben,Anzahllimit, Bilder enthalten 
 $sql='      SELECT *
             FROM '. TBL_PHOTOS. '
-            WHERE pho_org_shortname ="'.$g_organization.'" 
-            AND pho_locked = 0
-            AND pho_quantity>0
+            WHERE pho_org_shortname = \''.$g_organization.'\' 
+            AND pho_locked = \'0\'
+            AND pho_quantity > 0
             ORDER BY pho_begin DESC';
 
 //Limit setzen falls gefordert

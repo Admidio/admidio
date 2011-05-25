@@ -127,7 +127,7 @@ class TableAccess
     public function delete()
     {
         $sql    = 'DELETE FROM '.$this->table_name.' 
-                    WHERE '.$this->key_name.' = "'. $this->dbColumns[$this->key_name]. '"';
+                    WHERE '.$this->key_name.' = \''. $this->dbColumns[$this->key_name]. '\'';
         $this->db->query($sql);
 
         $this->clear();
@@ -220,7 +220,7 @@ class TableAccess
         // falls diese sinnvoll gefuellt ist
         if(strlen($sql_where_condition) == 0 && strlen($id) > 0 && $id != '0')
         {
-            $sql_where_condition = ' '.$this->key_name.' = "'.$id.'" ';
+            $sql_where_condition = ' '.$this->key_name.' = \''.$id.'\' ';
         }
         if(strlen($sql_additional_tables) > 0)
         {
@@ -322,7 +322,7 @@ class TableAccess
                                     // damit sie auf jeden Fall da sind
                                     $value = stripslashes($value);
                                     $value = addslashes($value);
-                                    $sql_value_list = $sql_value_list. ' '.$item_connection.' "'.$value.'" ';
+                                    $sql_value_list = $sql_value_list. ' '.$item_connection.' \''.$value.'\' ';
                                 }
                             }
                         }
@@ -345,7 +345,7 @@ class TableAccess
                                 // damit sie auf jeden Fall da sind
                                 $value = stripslashes($value);
                                 $value = addslashes($value);
-                                $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = "'.$value.'" ';
+                                $sql_field_list = $sql_field_list. ' '.$item_connection.' '.$key.' = \''.$value.'\' ';
                             }
                         }
                         if(strlen($item_connection) == 0 && strlen($sql_field_list) > 0)
@@ -367,7 +367,7 @@ class TableAccess
             else
             {
                 $sql = 'UPDATE '.$this->table_name.' SET '.$sql_field_list.' 
-                         WHERE '.$this->key_name.' = "'. $this->dbColumns[$this->key_name]. '"';
+                         WHERE '.$this->key_name.' = \''. $this->dbColumns[$this->key_name]. '\'';
                 $this->db->query($sql);
             }
         }

@@ -24,9 +24,21 @@ class TableAutoLogin extends TableAccess
     // Konstruktor
     public function __construct(&$db, $session = 0)
     {
-		$this->key_name = 'atl_session_id';
         parent::__construct($db, TBL_AUTO_LOGIN, 'atl', $session);
-    }    
+    }
+
+    // Auto-Login mit der uebergebenen Session-ID aufrufen
+    public function readData($session, $sql_where_condition = '', $sql_additional_tables = '')
+    {
+        // wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
+        if(is_numeric($session) == false)
+        {
+            $session = addslashes($session);
+            $sql_where_condition .= ' atl_session_id LIKE \''.$session.'\' ';
+        }
+        
+        return parent::readData($session, $sql_where_condition, $sql_additional_tables);
+    }
 
     // interne Methode, die Defaultdaten fur Insert und Update vorbelegt
     public function save($updateFingerPrint = true)
@@ -58,7 +70,7 @@ class TableAutoLogin extends TableAccess
         $date_session_delete = time() - 60*60*24*365;
             
         $sql    = 'DELETE FROM '. TBL_AUTO_LOGIN. ' 
-                    WHERE atl_last_login < "'. date('Y.m.d H:i:s', $date_session_delete). '"';
+                    WHERE atl_last_login < \''. date('Y.m.d H:i:s', $date_session_delete). '\'';
         $this->db->query($sql);
     }    
 }

@@ -62,12 +62,13 @@ collate = utf8_unicode_ci;
 /*==============================================================*/
 create table %PREFIX%_auto_login
 (
+   atl_id                         integer       unsigned not null AUTO_INCREMENT,
    atl_session_id                 varchar(35)   not null,
    atl_org_id                     integer       unsigned not null,
    atl_usr_id                     integer       unsigned not null,
    atl_last_login                 timestamp     not null,
    atl_ip_address                 varchar(15)   not null,
-   primary key (atl_session_id)
+   primary key (atl_id)
 )
 engine = InnoDB
 default character set = utf8
@@ -282,7 +283,7 @@ create table %PREFIX%_links
    lnk_name                       varchar(255)  not null,
    lnk_description                text,
    lnk_url                        varchar(255)  not null,
-   lnk_counter                    boolean       not null default '0',
+   lnk_counter                    integer       not null default 0,
    lnk_usr_id_create              integer       unsigned,
    lnk_timestamp_create           timestamp     not null,
    lnk_usr_id_change              integer       unsigned,
@@ -435,17 +436,17 @@ create table %PREFIX%_roles
    rol_guestbook_comments         boolean       not null default '0',
    rol_inventory				  boolean       not null default '0',
    rol_mail_to_all                boolean       not null default '0',
-   rol_mail_this_role             boolean       not null default '0',
+   rol_mail_this_role             smallint      not null default 0,
    rol_photo                      boolean       not null default '0',
    rol_profile                    boolean       not null default '0',
    rol_weblinks                   boolean       not null default '0',
-   rol_this_list_view             boolean       not null default '0',
+   rol_this_list_view             smallint      not null default 0,
    rol_all_lists_view             boolean       not null default '0',
    rol_start_date                 date,
    rol_start_time                 time,
    rol_end_date                   date,
    rol_end_time                   time,
-   rol_weekday                    boolean,
+   rol_weekday                    smallint,
    rol_location                   varchar(30),
    rol_max_members                integer,
    rol_cost                       float         unsigned,
@@ -501,7 +502,7 @@ create table %PREFIX%_sessions
    ses_timestamp                  timestamp     not null,
    ses_ip_address                 varchar(15)   not null,
    ses_blob                       blob,
-   ses_renew                      boolean       not null default '0',
+   ses_renew                      smallint      not null default 0,
    primary key (ses_id)
 )
 engine = InnoDB

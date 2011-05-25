@@ -80,9 +80,9 @@ class Organization extends TableOrganizations
                 && $value  != $db_preferences[$key])
                 {
                     // Pref existiert in DB, aber Wert hat sich geaendert
-                    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'.$value.'"
+                    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$value.'\'
                              WHERE prf_org_id = '. $this->getValue('org_id'). '
-                               AND prf_name   = "'.$key.'" ';
+                               AND prf_name   = \''.$key.'\' ';
                     $this->db->query($sql);
                 }
             }
@@ -90,7 +90,7 @@ class Organization extends TableOrganizations
             {
                 // Parameter existiert noch nicht in DB
                 $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
-                        VALUES   ('. $this->getValue('org_id'). ', "'.$key.'", "'.$value.'") ';
+                        VALUES   ('. $this->getValue('org_id'). ', \''.$key.'\', \''.$value.'\') ';
                 $this->db->query($sql);
             }
         }
