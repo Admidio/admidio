@@ -78,9 +78,9 @@ class User extends TableUsers
                           LEFT JOIN '. TBL_MEMBERS. '
                             ON mem_usr_id  = '. $this->getValue('usr_id'). '
                            AND mem_rol_id  = rol_id
-                           AND mem_begin  <= "'.DATE_NOW.'"
-                           AND mem_end     > "'.DATE_NOW.'"
-                         WHERE rol_valid   = 1
+                           AND mem_begin  <= \''.DATE_NOW.'\'
+                           AND mem_end     > \''.DATE_NOW.'\'
+                         WHERE rol_valid   = \'1\'
                            AND rol_cat_id  = cat_id
                            AND (  cat_org_id = '. $g_current_organization->getValue('org_id').' 
                                OR cat_org_id IS NULL ) ';
@@ -260,7 +260,7 @@ class User extends TableUsers
     {
         global $g_current_user, $g_preferences;
 
-        $editAllUsers = $g_current_user->editProfile($this->getValue("usr_id"));
+        $editAllUsers = $g_current_user->editProfile($this->getValue('usr_id'));
 
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
@@ -613,10 +613,10 @@ class User extends TableUsers
                 $sql    = 'SELECT rol_id, rol_this_list_view
                              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                             WHERE mem_usr_id = '.$usr_id. '
-                              AND mem_begin <= "'.DATE_NOW.'"
-                              AND mem_end    > "'.DATE_NOW.'"
+                              AND mem_begin <= \''.DATE_NOW.'\'
+                              AND mem_end    > \''.DATE_NOW.'\'
                               AND mem_rol_id = rol_id
-                              AND rol_valid  = 1
+                              AND rol_valid  = \'1\'
                               AND rol_cat_id = cat_id
                               AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
                                   OR cat_org_id IS NULL ) ';

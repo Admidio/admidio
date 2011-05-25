@@ -38,7 +38,7 @@ class TableSession extends TableAccess
         // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($session) == false)
         {
-            $sql_where_condition .= ' ses_session_id = "'.$session.'" ';
+            $sql_where_condition .= ' ses_session_id = \''.$session.'\' ';
         }       
         
         return parent::readData($session, $sql_where_condition, $sql_additional_tables);
@@ -100,7 +100,7 @@ class TableSession extends TableAccess
         }
             
         $sql    = 'DELETE FROM '. TBL_SESSIONS. ' 
-                    WHERE ses_timestamp < "'. date('Y.m.d H:i:s', $date_session_delete). '"';
+                    WHERE ses_timestamp < \''. date('Y.m.d H:i:s', $date_session_delete). '\'';
         $this->db->query($sql);
     }
 }

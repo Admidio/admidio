@@ -75,7 +75,7 @@ class TableUserField extends TableAccess
         {
             $newNameIntern = $newNameIntern.'_'.$index;
         }
-        $sql = 'SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = "'.$newNameIntern.'"';
+        $sql = 'SELECT usf_id FROM '.TBL_USER_FIELDS.' WHERE usf_name_intern = \''.$newNameIntern.'\'';
         $this->db->query($sql);
         
         if($this->db->num_rows() > 0)

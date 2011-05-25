@@ -157,11 +157,11 @@ $sql    = "SELECT DISTINCT usr_id, usr_login_name,
               AND mem_end    > '".DATE_NOW."'
              JOIN ". TBL_ROLES. "
                ON mem_rol_id = rol_id
-              AND rol_valid  = 1
+              AND rol_valid  = '1'
              JOIN ". TBL_CATEGORIES. "
                ON rol_cat_id = cat_id
               AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            WHERE usr_valid = 1
+            WHERE usr_valid = '1'
               AND mem_rol_id ".$rol_sql."
             ORDER BY days_to_bdate ".$sort_sql.", last_name, first_name ";
 //echo $sql; exit();

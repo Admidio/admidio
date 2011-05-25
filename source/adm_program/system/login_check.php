@@ -61,13 +61,13 @@ $password = md5($password);
 
 $sql    = 'SELECT usr_id
              FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-            WHERE usr_login_name LIKE "'. $loginname. '"
-              AND usr_valid      = 1
+            WHERE usr_login_name LIKE \''. $loginname. '\'
+              AND usr_valid      = \'1\'
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
-              AND mem_begin     <= "'.DATE_NOW.'"
-              AND mem_end        > "'.DATE_NOW.'"
-              AND rol_valid      = 1 
+              AND mem_begin     <= \''.DATE_NOW.'\'
+              AND mem_end        > \''.DATE_NOW.'\'
+              AND rol_valid      = \'1\'
               AND rol_cat_id     = cat_id
               AND cat_org_id     = '. $g_current_organization->getValue('org_id');
 $result = $g_db->query($sql);
@@ -192,8 +192,8 @@ else
     // nun noch pruefen ob Login ggf. noch nicht freigeschaltet wurde
     $sql    = 'SELECT usr_id
                  FROM '. TBL_USERS. '
-                WHERE usr_login_name LIKE "'. $loginname. '"
-                  AND usr_valid      = 0
+                WHERE usr_login_name LIKE \''. $loginname. '\'
+                  AND usr_valid      = \'0\'
                   AND usr_reg_org_shortname LIKE "'.$g_current_organization->getValue('org_shortname').'" ';
     $result = $g_db->query($sql);
 

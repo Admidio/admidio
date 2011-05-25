@@ -32,7 +32,7 @@ class DBMySql extends DBCommon
                 $this->version = mysql_get_server_info($this->connect_id);
 
 				// Verbindung zur DB in UTF8 aufbauen
-				@mysql_query('SET NAMES "utf8"', $this->connect_id);
+				@mysql_query('SET NAMES \'utf8\'', $this->connect_id);
                 
                 // falls der Server die Joins begrenzt hat, kann dies mit diesem Statement aufgehoben werden
                 @mysql_query('SET SQL_BIG_SELECTS=1', $this->connect_id);

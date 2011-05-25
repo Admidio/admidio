@@ -37,12 +37,12 @@ class FormElements
 		if($show_mode == 1 && $g_current_user->assignRoles() == false)
 		{
 			// keine Rollen mit Rollenzuordnungsrecht anzeigen
-			$condition .= ' AND rol_assign_roles = 0 ';
+			$condition .= ' AND rol_assign_roles = \'0\' ';
 		}
 		elseif($show_mode == 1 && $g_current_user->isWebmaster() == false)
 		{
 			// Webmasterrolle nicht anzeigen
-			$condition .= ' AND rol_name <> "'.$g_l10n->get('SYS_WEBMASTER').'" ';
+			$condition .= ' AND rol_name <> \''.$g_l10n->get('SYS_WEBMASTER').'\' ';
 		}
 		elseif($show_mode == 2)
 		{
@@ -50,8 +50,8 @@ class FormElements
 		}
 		
 		$sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-				 WHERE rol_valid   = '.$active_roles.'
-				   AND rol_visible = 1
+				 WHERE rol_valid   = \''.$active_roles.'\'
+				   AND rol_visible = \'1\'
 				   AND rol_cat_id  = cat_id
 				   AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )
@@ -126,7 +126,7 @@ class FormElements
 		          FROM '. TBL_CATEGORIES. '
 				 WHERE (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )
-				   AND cat_type   = "'.$category_type.'"
+				   AND cat_type   = \''.$category_type.'\'
 				 ORDER BY cat_sequence ASC ';
 		$result = $g_db->query($sql);
 

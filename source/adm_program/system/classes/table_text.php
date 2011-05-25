@@ -44,7 +44,7 @@ class TableText extends TableAccess
         // wurde txt_name uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($name) == false)
         {
-            $sql_where_condition .= '    txt_name   = "'.$name.'" 
+            $sql_where_condition .= '    txt_name   = \''.$name.'\' 
                                      AND txt_org_id = '. $g_current_organization->getValue('org_id');
         }
         

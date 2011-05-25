@@ -39,7 +39,7 @@ class ConditionParser
             $now_day = date('d');
             $now_month = date('m');
             $ret = date('Y-m-d', mktime(0,0,0, $now_month, $now_day, $now_year - $age));
-            return '"'. $ret. '"';
+            return '\''. $ret. '\'';
         }
         
         // Datum validieren und im MySQL-Format ausgeben
@@ -51,7 +51,7 @@ class ConditionParser
                 $format_date = $date->format('Y-m-d');
             }
         }
-        return '"'. $format_date. '"';
+        return '\''. $format_date. '\'';
     }
 
     // Ersetzt alle Bedingungen der User-Eingabe durch eine Standardbedingung
@@ -119,7 +119,7 @@ class ConditionParser
             // Bedingungen fuer das Feld immer mit UND starten
             if($field_type == 'string')
             {
-                $this->m_dest = ' AND ( UPPER('.$field_name.') LIKE "';
+                $this->m_dest = ' AND ( UPPER('.$field_name.') LIKE \'';
             }
             elseif($field_type == 'checkbox')
             {
@@ -127,11 +127,11 @@ class ConditionParser
                 // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
                 if($str_src == 1)
                 {
-                    $this->m_dest = ' AND '.$field_name.' = "1" ';
+                    $this->m_dest = ' AND '.$field_name.' = \'1\' ';
                 }
                 else
                 {
-                    $this->m_dest = ' AND ('.$field_name.' IS NULL OR '.$field_name.' = "0") ';
+                    $this->m_dest = ' AND ('.$field_name.' IS NULL OR '.$field_name.' = \'0\') ';
                 }
                 return $this->m_dest;
             }
@@ -161,7 +161,7 @@ class ConditionParser
                         // Feldname noch dahinter
                         if($field_type == 'string')
                         {
-                            $this->m_dest = $this->m_dest. ' UPPER('.$field_name.') LIKE "';
+                            $this->m_dest = $this->m_dest. ' UPPER('.$field_name.') LIKE \'';
                         }
                         else
                         {
@@ -254,7 +254,7 @@ class ConditionParser
                         {
                             if($field_type == 'string')
                             {
-                                $this->m_dest = $this->m_dest. '" ';
+                                $this->m_dest = $this->m_dest. '\' ';
                             }
                             elseif($field_type == 'date')
                             {
@@ -277,7 +277,7 @@ class ConditionParser
                             {
                                 if($field_type == 'string')
                                 {
-                                    $this->m_dest = $this->m_dest. ' AND UPPER('.$field_name.') LIKE "';
+                                    $this->m_dest = $this->m_dest. ' AND UPPER('.$field_name.') LIKE \'';
                                 }
                                 else
                                 {
@@ -324,7 +324,7 @@ class ConditionParser
     
             if($field_type == 'string')
             {
-                $this->m_dest = $this->m_dest. '" ';
+                $this->m_dest = $this->m_dest. '\' ';
             }
     
             // Anfangsklammer wieder schliessen

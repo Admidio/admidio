@@ -32,28 +32,28 @@ if ($g_valid_login && isset($_GET['base']) =="1")
     if ($g_valid_login)
     {
         // im eingeloggten Zustand nur an Rollen schreiben, die die Einstellung besitzen
-       $sql    = "SELECT rol_name, rol_id, cat_name 
-               FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-               WHERE rol_mail_this_role > 0
-               AND rol_valid        = 1
-               AND rol_cat_id       = cat_id
-               AND cat_org_id       = ". $g_current_organization->getValue("org_id"). "
-               ORDER BY cat_sequence, rol_name ";
+       $sql = 'SELECT rol_name, rol_id, cat_name 
+                 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                WHERE rol_mail_this_role > 0
+                  AND rol_valid  = \'1\'
+                  AND rol_cat_id = cat_id
+                  AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                ORDER BY cat_sequence, rol_name ';
     }
     else
     {
         // alle Rollen auflisten,
         // an die im nicht eingeloggten Zustand Mails versendet werden duerfen
-        $sql    = "SELECT rol_name, rol_id, cat_name 
-                   FROM ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-                   WHERE rol_mail_this_role = 3
-                   AND rol_valid  = 1
+        $sql = 'SELECT rol_name, rol_id, cat_name 
+                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                 WHERE rol_mail_this_role = 3
+                   AND rol_valid  = \'1\'
                    AND rol_cat_id = cat_id
-                   AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-                   ORDER BY cat_sequence, rol_name ";
+                   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                 ORDER BY cat_sequence, rol_name ';
     }
     $result = $g_db->query($sql);
-    $act_category = "";
+    $act_category = '';
     
     while ($row = $g_db->fetch_object($result))
     {
@@ -107,7 +107,7 @@ else if ($g_valid_login && isset($_GET['rol_id']) && !isset($_GET['base']) && !i
                 AND mem_rol_id = ".$_GET['rol_id']."
                 AND mem_begin <= '".DATE_NOW."'
                 AND mem_end    > '".DATE_NOW."'
-                AND usr_valid  = 1
+                AND usr_valid  = '1'
                 AND email.usd_usr_id = email.usd_usr_id
                 ORDER BY last_name,first_name ASC";
         
@@ -157,7 +157,7 @@ else if($g_valid_login && isset($_GET['usrid']) && $_GET['usrid']!="extern")
                     WHERE usr_id   = ".$_GET['usrid']."
                     AND mem_begin <= '".DATE_NOW."'
                     AND mem_end    > '".DATE_NOW."'
-                    AND usr_valid  = 1
+                    AND usr_valid  = '1'
                     ORDER BY last_name, first_name";
         
         $result = $g_db->query($sql);

@@ -78,8 +78,8 @@ if ($parentRoleSet == null)
 	//alle aus der DB aus lesen
 	$sql_roles = 'SELECT *
 					 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-					WHERE rol_valid = 1
-					  AND rol_system = 0
+					WHERE rol_valid  = \'1\'
+					  AND rol_system = \'0\'
 					  AND rol_cat_id = cat_id
 					  AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
 					ORDER BY rol_name';

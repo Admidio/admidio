@@ -200,13 +200,15 @@ class DBPostgre extends DBCommon
         return $this->query_result;
     }
 
+	// Postgre baut eine Verbdingung immer direkt zu einer einzelnen Datenbank auf
+	// aus diesem Grund hat select_db keine Auswirkung
     public function select_db($database = '')
     {
         if(strlen($database) == 0)
         {
             $database = $this->dbname;
         }
-        return mysql_select_db($database, $this->connect_id);
+        return $this->connect_id;
     }
 
     // Gibt die MYSQL Version der Datenbank zurück
@@ -231,7 +233,7 @@ class DBPostgre extends DBCommon
 		$columnProperties = array();
 
 		$sql = 'SELECT column_name, column_default, is_nullable, data_type
-				  FROM information_schema.columns WHERE table_name = "'.$table.'"';
+				  FROM information_schema.columns WHERE table_name = \''.$table.'\'';
 		$this->query($sql);
 		
 		while ($row = $this->fetch_array())

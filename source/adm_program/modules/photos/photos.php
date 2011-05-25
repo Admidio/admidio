@@ -482,7 +482,7 @@ echo '<div class="photoModuleContainer">';
     //erfassen der Alben die in der Albentabelle ausgegeben werden sollen
     $sql='      SELECT *
                 FROM '. TBL_PHOTOS. '
-                WHERE pho_org_shortname = "'.$g_organization.'"';
+                WHERE pho_org_shortname = \''.$g_organization.'\'';
     if($pho_id==NULL)
     {
         $sql=$sql.' AND (pho_pho_id_parent IS NULL) ';
@@ -493,7 +493,7 @@ echo '<div class="photoModuleContainer">';
     }
     if (!$g_current_user->editPhotoRight())
     {
-        $sql=$sql.' AND pho_locked = 0 ';
+        $sql=$sql.' AND pho_locked = \'0\' ';
     }
 
     $sql = $sql.' ORDER BY pho_begin DESC ';

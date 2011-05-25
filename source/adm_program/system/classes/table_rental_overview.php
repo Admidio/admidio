@@ -11,7 +11,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. "/adm_program/system/classes/table_access.php");
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableRentalOverview extends TableAccess
 {
@@ -37,17 +37,17 @@ class TableRentalOverview extends TableAccess
 
         if($this->new_record)
         {
-            $this->setValue("rnt_timestamp_create", DATETIME_NOW);
-            $this->setValue("rnt_usr_id_create", $g_current_user->getValue("usr_id"));
+            $this->setValue('rnt_timestamp_create', DATETIME_NOW);
+            $this->setValue('rnt_usr_id_create', $g_current_user->getValue('usr_id'));
         }
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-            if(time() > (strtotime($this->getValue("rnt_timestamp_create")) + 900)
-            || $g_current_user->getValue("usr_id") != $this->getValue("rnt_usr_id_create") )
+            if(time() > (strtotime($this->getValue('rnt_timestamp_create')) + 900)
+            || $g_current_user->getValue('usr_id') != $this->getValue('rnt_usr_id_create') )
             {
-                $this->setValue("rnt_timestamp_change", DATETIME_NOW);
-                $this->setValue("rnt_usr_id_change", $g_current_user->getValue("usr_id"));
+                $this->setValue('rnt_timestamp_change', DATETIME_NOW);
+                $this->setValue('rnt_usr_id_change', $g_current_user->getValue('usr_id'));
             }
         }
         parent::save($updateFingerPrint);

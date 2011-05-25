@@ -88,10 +88,10 @@ class RoleDependency
     {
         if(!isEmpty() && $login_user_id > 0 && is_numeric($login_user_id))
         {
-            $sql = 'UPDATE '. TBL_ROLE_DEPENDENCIES. ' SET rld_rol_id_parent = "'.$this->role_id_parent.'"
-                                                         , rld_rol_id_child  = "'.$this->role_id_child.'"
-                                                         , rld_comment       = "'.$this->comment.'"
-                                                         , rld_timestamp     = "'.DATETIME_NOW.'"
+            $sql = 'UPDATE '. TBL_ROLE_DEPENDENCIES. ' SET rld_rol_id_parent = \''.$this->role_id_parent.'\'
+                                                         , rld_rol_id_child  = \''.$this->role_id_child.'\'
+                                                         , rld_comment       = \''.$this->comment.'\'
+                                                         , rld_timestamp     = \''.DATETIME_NOW.'\'
                                                          , rld_usr_id        = '.$login_user_id.'
                      WHERE rld_rol_id_parent = '.$this->role_id_parent_orig.'
                        AND rld_rol_id_child  = '.$this->role_id_child_orig;
@@ -108,7 +108,7 @@ class RoleDependency
         {
             $sql = 'INSERT INTO '. TBL_ROLE_DEPENDENCIES. ' 
                                 (rld_rol_id_parent,rld_rol_id_child,rld_comment,rld_usr_id,rld_timestamp)
-                         VALUES ('.$this->role_id_parent.', '.$this->role_id_child.', "'.$this->comment.'", '.$login_user_id.', "'.DATETIME_NOW.'") ';
+                         VALUES ('.$this->role_id_parent.', '.$this->role_id_child.', \''.$this->comment.'\', '.$login_user_id.', \''.DATETIME_NOW.'\') ';
             $this->db->query($sql);
             $persisted = true;
             return 0;
@@ -211,8 +211,8 @@ class RoleDependency
         {
             $sql = 'SELECT mem_usr_id FROM '. TBL_MEMBERS.
                    ' WHERE mem_rol_id = '.$this->role_id_child.'
-                       AND mem_begin <= "'.DATE_NOW.'"
-                       AND mem_end    > "'.DATE_NOW.'"';
+                       AND mem_begin <= \''.DATE_NOW.'\'
+                       AND mem_end    > \''.DATE_NOW.'\'';
             $result = $this->db->query($sql);
 
             $num_rows = $this->db->num_rows($result);
@@ -222,7 +222,7 @@ class RoleDependency
 
                 while ($row = $this->db->fetch_object($result))
                 {
-                    $sql .= '('.$this->role_id_parent.', '.$row->mem_usr_id.', "'.DATE_NOW.'", "9999-12-31", 0),';
+                    $sql .= '('.$this->role_id_parent.', '.$row->mem_usr_id.', \''.DATE_NOW.'\', \'9999-12-31\', \'0\'),';
                 }
                 //Das letzte Komma wieder wegschneiden
                 $sql = substr($sql,0,-1);

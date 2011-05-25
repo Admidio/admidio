@@ -28,7 +28,7 @@ class TableOrganizations extends TableAccess
         if(is_numeric($organization) == false)
         {
             $organization = addslashes($organization);
-            $sql_where_condition .= ' org_shortname LIKE "'.$organization.'" ';
+            $sql_where_condition .= ' org_shortname LIKE \''.$organization.'\' ';
         }
         
         return parent::readData($organization, $sql_where_condition, $sql_additional_tables);

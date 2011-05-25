@@ -2,15 +2,43 @@
 -- Tabelle Categories erweitern
 ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_default` tinyint (1) unsigned not null default 0 AFTER cat_system;
 
+
+-- Autoincrement-Spalte fuer adm_auto_login anlegen
+ALTER TABLE %PREFIX%_auto_login DROP FOREIGN KEY %PREFIX%_FK_ATL_USR;
+ALTER TABLE %PREFIX%_auto_login DROP FOREIGN KEY %PREFIX%_FK_ATL_ORG ;
+
+drop table if exists %PREFIX%_auto_login_old;
+RENAME TABLE %PREFIX%_auto_login TO %PREFIX%_auto_login_old;
+
+create table %PREFIX%_auto_login
+(
+   atl_id                         integer       unsigned not null AUTO_INCREMENT,
+   atl_session_id                 varchar(35)   not null,
+   atl_org_id                     integer       unsigned not null,
+   atl_usr_id                     integer       unsigned not null,
+   atl_last_login                 timestamp     not null,
+   atl_ip_address                 varchar(15)   not null,
+   primary key (atl_id)
+)
+engine = InnoDB
+default character set = utf8
+collate = utf8_unicode_ci;
+
+alter table %PREFIX%_auto_login add constraint %PREFIX%_FK_ATL_USR foreign key (atl_usr_id)
+      references %PREFIX%_users (usr_id) on delete restrict on update restrict;
+
+INSERT INTO %PREFIX%_auto_login (atl_session_id, atl_org_id, atl_usr_id, atl_last_login, atl_ip_address)
+SELECT atl_session_id, atl_org_id, atl_usr_id, atl_last_login, atl_ip_address
+  FROM %PREFIX%_auto_login_old;
+
+DROP TABLE %PREFIX%_auto_login_old;
+
 -- Datentypen von einigen Spalten aendern
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_id` `ann_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_usr_id_create` `ann_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_timestamp_create` `ann_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_usr_id_change` `ann_usr_id_change` integer unsigned;
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_timestamp_change` `ann_timestamp_change` timestamp;
-
-ALTER TABLE %PREFIX%_auto_login CHANGE COLUMN `atl_usr_id` `atl_usr_id` integer unsigned not null;
-ALTER TABLE %PREFIX%_auto_login CHANGE COLUMN `atl_last_login` `atl_last_login` timestamp not null;
 
 ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_id` `cat_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_usr_id_create` `cat_usr_id_create` integer unsigned;
@@ -96,7 +124,10 @@ ALTER TABLE %PREFIX%_role_dependencies CHANGE COLUMN `rld_timestamp` `rld_timest
 
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_id` `rol_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_cat_id` `rol_cat_id` integer unsigned;
+ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_mail_this_role` `rol_mail_this_role` smallint not null default 0;
+ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_this_list_view` `rol_this_list_view` smallint not null default 0;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_max_members` `rol_max_members` integer;
+ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_weekday` `rol_weekday` smallint;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_cost_period` `rol_cost_period` smallint;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_usr_id_create` `rol_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_timestamp_create` `rol_timestamp_create` timestamp not null;
@@ -115,6 +146,7 @@ ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_id` `ses_id` integer unsigned n
 ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_usr_id` `ses_usr_id` integer unsigned default null;
 ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_begin` `ses_begin` timestamp;
 ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_timestamp` `ses_timestamp` timestamp;
+ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_renew` `ses_renew` smallint not null default 0;
 
 ALTER TABLE %PREFIX%_texts CHANGE COLUMN `txt_id` `txt_id` integer unsigned not null AUTO_INCREMENT;
 
@@ -141,7 +173,6 @@ ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_usr_id_change` `usr_usr_id_change`
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_timestamp_change` `usr_timestamp_change` timestamp;
 
 -- Org_Id wird nun auch ein Index vom Typ INTEGER
-ALTER TABLE %PREFIX%_auto_login DROP FOREIGN KEY %PREFIX%_FK_ATL_ORG;
 ALTER TABLE %PREFIX%_categories DROP FOREIGN KEY %PREFIX%_FK_CAT_ORG;
 ALTER TABLE %PREFIX%_folders DROP FOREIGN KEY %PREFIX%_FK_FOL_ORG;
 ALTER TABLE %PREFIX%_guestbook DROP FOREIGN KEY %PREFIX%_FK_GBO_ORG;

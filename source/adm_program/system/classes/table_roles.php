@@ -48,11 +48,11 @@ class TableRoles extends TableAccess
         {
             $sql    = 'SELECT mem_usr_id FROM '. TBL_MEMBERS. '
                         WHERE mem_rol_id = '. $this->getValue('rol_id'). '
-                          AND mem_begin <= "'.DATE_NOW.'"
-                          AND mem_end    > "'.DATE_NOW.'"';
+                          AND mem_begin <= \''.DATE_NOW.'\'
+                          AND mem_end    > \''.DATE_NOW.'\'';
             if($count_leaders == false)
             {
-                $sql = $sql. ' AND mem_leader = 0 ';
+                $sql = $sql. ' AND mem_leader = \'0\' ';
             }
             $this->db->query($sql);
 
@@ -177,8 +177,8 @@ class TableRoles extends TableAccess
         $sql = 'SELECT COUNT(1) AS count
                   FROM '.TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$this->getValue('rol_id').'
-                   AND (  mem_begin > "'.DATE_NOW.'"
-                       OR mem_end   < "'.DATE_NOW.'")';
+                   AND (  mem_begin > \''.DATE_NOW.'\'
+                       OR mem_end   < \''.DATE_NOW.'\')';
         $result = $this->db->query($sql);
         $row    = $this->db->fetch_array($result);
 
@@ -201,7 +201,7 @@ class TableRoles extends TableAccess
         else
         {
             $role = addslashes($role);
-            $sql_where_condition .= ' rol_name LIKE "'.$role.'" ';
+            $sql_where_condition .= ' rol_name LIKE \''.$role.'\' ';
         }
 
         $sql_additional_tables .= TBL_CATEGORIES;
@@ -237,7 +237,7 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
         {
-            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 1
+            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = \'1\'
                         WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
@@ -258,7 +258,7 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
         {
-            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 0
+            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = \'0\'
                         WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
