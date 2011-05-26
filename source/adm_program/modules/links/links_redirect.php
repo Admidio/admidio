@@ -52,7 +52,7 @@ $hidden    = '';
 if ($g_valid_login == false)
 {
 	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-	$hidden = ' AND cat_hidden = \'0\' ';
+	$hidden = ' AND cat_hidden = 0 ';
 }
 
 // Link aus Datenbank auslesen

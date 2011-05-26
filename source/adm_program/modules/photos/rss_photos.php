@@ -67,7 +67,7 @@ $sql = 'SELECT pho.*,
             ON cha_firstname.usd_usr_id = pho_usr_id_change
            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
          WHERE (   pho_org_shortname = \''. $g_current_organization->getValue('org_shortname'). '\'
-               AND pho_locked = \'0\')
+               AND pho_locked = 0)
          ORDER BY pho_timestamp_create DESC
          LIMIT 10';
 $result = $g_db->query($sql);

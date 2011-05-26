@@ -204,49 +204,55 @@ class DBMySql extends DBCommon
 	//       'Fieldname2' => ...)
     public function showColumns($table)
     {
-		$columnProperties = array();
-
-		$sql = 'SHOW COLUMNS FROM '.$table;
-		$this->query($sql);
-		
-		while ($row = $this->fetch_array())
+		if(isset($this->db_structure[$table]) == false)
 		{
-			$columnProperties[$row['Field']]['serial'] = 0;
-			$columnProperties[$row['Field']]['null']   = 0;
-			$columnProperties[$row['Field']]['key']    = 0;
-			
-			if($row['Extra'] == 'auto_increment')
-			{
-				$columnProperties[$row['Field']]['serial'] = 1;
-			}
-			if($row['Null'] == 'YES')
-			{
-				$columnProperties[$row['Field']]['null']   = 1;
-			}
-			if($row['Key'] == 'PRI' || $row['Key'] == 'MUL')
-			{
-				$columnProperties[$row['Field']]['key'] = 1;
-			}
+			$columnProperties = array();
 
-			if(strpos($row['Type'], 'tinyint(1)') !== false)
+			$sql = 'SHOW COLUMNS FROM '.$table;
+			$this->query($sql);
+			
+			while ($row = $this->fetch_array())
 			{
-				$columnProperties[$row['Field']]['type'] = 'boolean';
+				$columnProperties[$row['Field']]['serial'] = 0;
+				$columnProperties[$row['Field']]['null']   = 0;
+				$columnProperties[$row['Field']]['key']    = 0;
+				
+				if($row['Extra'] == 'auto_increment')
+				{
+					$columnProperties[$row['Field']]['serial'] = 1;
+				}
+				if($row['Null'] == 'YES')
+				{
+					$columnProperties[$row['Field']]['null']   = 1;
+				}
+				if($row['Key'] == 'PRI' || $row['Key'] == 'MUL')
+				{
+					$columnProperties[$row['Field']]['key'] = 1;
+				}
+
+				if(strpos($row['Type'], 'tinyint(1)') !== false)
+				{
+					$columnProperties[$row['Field']]['type'] = 'boolean';
+				}
+				elseif(strpos($row['Type'], 'smallint') !== false)
+				{
+					$columnProperties[$row['Field']]['type'] = 'smallint';
+				}
+				elseif(strpos($row['Type'], 'int') !== false)
+				{
+					$columnProperties[$row['Field']]['type'] = 'integer';
+				}
+				else
+				{
+					$columnProperties[$row['Field']]['type'] = $row['Type'];
+				}
 			}
-			elseif(strpos($row['Type'], 'smallint') !== false)
-			{
-				$columnProperties[$row['Field']]['type'] = 'smallint';
-			}
-			elseif(strpos($row['Type'], 'int') !== false)
-			{
-				$columnProperties[$row['Field']]['type'] = 'integer';
-			}
-			else
-			{
-				$columnProperties[$row['Field']]['type'] = $row['Type'];
-			}
+			
+			// safe array with table structure in class array
+			$this->db_structure[$table] = $columnProperties;
 		}
 		
-		return $columnProperties;
+		return $this->db_structure[$table];
     }  
 }
  

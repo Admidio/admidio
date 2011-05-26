@@ -98,7 +98,7 @@ class PhpBB2
     // Konstruktor
     function PhpBB2()
     {
-        $this->forum_db    = new MySqlDB();
+        $this->forum_db = Database::createDatabaseObject('mysql');
     }
     
     function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $admidio_db = NULL)

@@ -116,7 +116,7 @@ else if (strlen($_GET['category']) > 0)
 if ($g_valid_login == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $hidden = ' AND cat_hidden = \'0\' ';
+    $hidden = ' AND cat_hidden = 0 ';
 }
 
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...

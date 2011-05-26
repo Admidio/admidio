@@ -68,7 +68,7 @@ if($role->getValue('rol_max_members') > 0)
             FROM '. TBL_MEMBERS. '
             WHERE mem_rol_id = '. $role->getValue('rol_id'). '
             AND mem_usr_id != '.$uid.'
-            AND mem_leader = \'0\' 
+            AND mem_leader = 0 
             AND mem_begin <= \''.DATE_NOW.'\'
             AND mem_end    > \''.DATE_NOW.'\'';
     $result_mem_count = $g_db->query($sql);

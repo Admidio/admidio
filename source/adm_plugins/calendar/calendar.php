@@ -182,7 +182,7 @@ if($plg_ter_aktiv == 1)
     {
 		// alle Kalender anzeigen
         $sql_syntax = ' AND (cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                         OR (   dat_global  = \'1\'
+                         OR (   dat_global  = 1
                             AND cat_org_id IN ('.$plg_organizations.') ) ) ';
     }
     else
@@ -258,7 +258,7 @@ if($plg_geb_aktiv == 1)
                AND mem_usr_id = usr_id
                AND mem_begin <= \''.DATE_NOW.'\'
                AND mem_end    > \''.DATE_NOW.'\'
-               AND usr_valid  = \'1\'
+               AND usr_valid  = 1
              ORDER BY Month(birthday.usd_value) ASC, DayOfMonth(birthday.usd_value) ASC, last_name, first_name';
     
     $result = $g_db->query($sql);

@@ -52,7 +52,7 @@ class TableRoles extends TableAccess
                           AND mem_end    > \''.DATE_NOW.'\'';
             if($count_leaders == false)
             {
-                $sql = $sql. ' AND mem_leader = \'0\' ';
+                $sql = $sql. ' AND mem_leader = 0 ';
             }
             $this->db->query($sql);
 
@@ -237,7 +237,7 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
         {
-            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = \'1\'
+            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 1
                         WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
@@ -258,7 +258,7 @@ class TableRoles extends TableAccess
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
         {
-            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = \'0\'
+            $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_valid = 0
                         WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 

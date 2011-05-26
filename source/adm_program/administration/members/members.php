@@ -108,7 +108,7 @@ if($req_members)
             AND mem_rol_id = rol_id
             AND mem_begin <= \''.DATE_NOW.'\'
             AND mem_end    > \''.DATE_NOW.'\'
-            AND rol_valid  = \'1\'
+            AND rol_valid  = 1
             AND rol_cat_id = cat_id
             AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                 OR cat_org_id IS NULL )) ';
@@ -121,7 +121,7 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
                   usr_login_name, IFNULL(usr_timestamp_change, usr_timestamp_create) as timestamp,
                   (SELECT count(*)
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
-                    WHERE rol_valid   = \'1\'
+                    WHERE rol_valid   = 1
                       AND rol_cat_id  = cat_id
                       AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                           OR cat_org_id IS NULL )
@@ -131,7 +131,7 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
                       AND mem_usr_id  = usr_id) as member_this_orga,
                   (SELECT count(*)
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
-                    WHERE rol_valid   = \'1\'
+                    WHERE rol_valid   = 1
                       AND rol_cat_id  = cat_id
                       AND cat_org_id <> '. $g_current_organization->getValue('org_id'). '
                       AND mem_rol_id  = rol_id
@@ -151,7 +151,7 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
              LEFT JOIN '. TBL_USER_DATA. ' as website
                ON website.usd_usr_id = usr_id
               AND website.usd_usf_id = '. $g_current_user->getProperty('WEBSITE', 'usf_id'). '
-            WHERE usr_valid = \'1\'
+            WHERE usr_valid = 1
                   '.$member_condition.
                     $search_condition.'
             GROUP BY usr_id
@@ -266,7 +266,7 @@ echo '
         // dieses SQL muss fuer jeden Buchstaben ausgefuehrt werden, ansonsten werden Sonderzeichen nicht immer richtig eingeordnet
         $sql = 'SELECT COUNT(1) as count
                   FROM '. TBL_USERS. ', '. TBL_USER_FIELDS. ', '. TBL_USER_DATA. '
-                 WHERE usr_valid = \'1\'
+                 WHERE usr_valid = 1
                    AND usf_name_intern = \'LAST_NAME\'
                    AND usd_usf_id = usf_id
                    AND usd_usr_id = usr_id

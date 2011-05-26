@@ -305,7 +305,7 @@ class ListConfiguration extends TableLists
                    AND mem_rol_id = rol_id
                        '.$sql_member_status.'
                    AND mem_usr_id = usr_id
-                   AND usr_valid  = \'1\'
+                   AND usr_valid  = 1
                        '.$sql_where.' 
                  ORDER BY mem_leader DESC ';
         if(strlen($sql_orderby) > 0)

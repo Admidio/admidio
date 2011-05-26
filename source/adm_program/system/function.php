@@ -32,7 +32,7 @@ function hasRole($role_name, $user_id = 0)
                   AND mem_end    > \''.DATE_NOW.'\'
                   AND mem_rol_id = rol_id
                   AND rol_name   = \''.$role_name.'"
-                  AND rol_valid  = \'1\' 
+                  AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
                   AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                       OR cat_org_id IS NULL ) ';
@@ -64,7 +64,7 @@ function isMember($user_id)
                       AND mem_begin <= \''.DATE_NOW.'\'
                       AND mem_end    > \''.DATE_NOW.'\'
                       AND mem_rol_id = rol_id
-                      AND rol_valid  = \'1\' 
+                      AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
                       AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                           OR cat_org_id IS NULL ) ';
@@ -96,9 +96,9 @@ function isGroupLeader($user_id, $role_id = 0)
                     WHERE mem_usr_id = '.$user_id.'
                       AND mem_begin <= \''.DATE_NOW.'\'
                       AND mem_end    > \''.DATE_NOW.'\'
-                      AND mem_leader = \'1\'
+                      AND mem_leader = 1
                       AND mem_rol_id = rol_id
-                      AND rol_valid  = \'1\' 
+                      AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
                       AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
                           OR cat_org_id IS NULL ) ';

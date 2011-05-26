@@ -493,7 +493,7 @@ echo '<div class="photoModuleContainer">';
     }
     if (!$g_current_user->editPhotoRight())
     {
-        $sql=$sql.' AND pho_locked = \'0\' ';
+        $sql=$sql.' AND pho_locked = 0 ';
     }
 
     $sql = $sql.' ORDER BY pho_begin DESC ';

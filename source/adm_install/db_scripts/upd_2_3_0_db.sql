@@ -35,6 +35,7 @@ DROP TABLE %PREFIX%_auto_login_old;
 
 -- Datentypen von einigen Spalten aendern
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_id` `ann_id` integer unsigned not null AUTO_INCREMENT;
+ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_global` `ann_global` char(1) not null default '0';
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_usr_id_create` `ann_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_timestamp_create` `ann_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_usr_id_change` `ann_usr_id_change` integer unsigned;

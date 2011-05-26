@@ -127,11 +127,11 @@ class ConditionParser
                 // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
                 if($str_src == 1)
                 {
-                    $this->m_dest = ' AND '.$field_name.' = \'1\' ';
+                    $this->m_dest = ' AND '.$field_name.' = 1 ';
                 }
                 else
                 {
-                    $this->m_dest = ' AND ('.$field_name.' IS NULL OR '.$field_name.' = \'0\') ';
+                    $this->m_dest = ' AND ('.$field_name.' IS NULL OR '.$field_name.' = 0) ';
                 }
                 return $this->m_dest;
             }

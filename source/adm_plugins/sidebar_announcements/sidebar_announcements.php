@@ -82,7 +82,7 @@ $plg_organizations = $plg_organizations. '\''. $g_current_organization->getValue
 // nun alle relevanten Ankuendigungen finden
 $sql    = 'SELECT * FROM '. TBL_ANNOUNCEMENTS. '
 			WHERE (  ann_org_shortname = \''. $g_current_organization->getValue('org_shortname').'\'
-				  OR (   ann_global   = \'1\'
+				  OR (   ann_global   = 1
 					 AND ann_org_shortname IN ('.$plg_organizations.') ))
 			ORDER BY ann_timestamp_create DESC
 			LIMIT '.$plg_announcements_count;

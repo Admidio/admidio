@@ -98,8 +98,8 @@ if($g_current_user->assignRoles())
                  LEFT JOIN '. TBL_MEMBERS. '
                    ON rol_id      = mem_rol_id
                   AND mem_usr_id  = '.$req_usr_id.'
-                WHERE rol_valid   = \'1\'
-                  AND rol_visible = \'1\'
+                WHERE rol_valid   = 1
+                  AND rol_visible = 1
                   AND rol_cat_id  = cat_id
                   AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                       OR cat_org_id IS NULL )
@@ -118,10 +118,10 @@ else
                 WHERE bm.mem_usr_id  = '. $g_current_user->getValue('usr_id'). '
                   AND bm.mem_begin  <= \''.DATE_NOW.'\'
                   AND bm.mem_end     > \''.DATE_NOW.'\'
-                  AND bm.mem_leader  = \'1\'
+                  AND bm.mem_leader  = 1
                   AND rol_id         = bm.mem_rol_id
-                  AND rol_valid      = \'1\'
-                  AND rol_visible    = \'1\'
+                  AND rol_valid      = 1
+                  AND rol_visible    = 1
                   AND rol_cat_id     = cat_id
                   AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                       OR cat_org_id IS NULL )

@@ -106,7 +106,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 					   AND mem_begin       <= \''.DATE_NOW.'\'
 					   AND mem_end          > \''.DATE_NOW.'\'
 					   AND mem_usr_id       = usr_id
-					   AND usr_valid        = \'1\'
+					   AND usr_valid        = 1
 					   AND email.usd_usr_id = email.usd_usr_id
 					 ORDER BY last_name, first_name';
 

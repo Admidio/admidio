@@ -22,6 +22,7 @@ class DBCommon
     protected $query_result;
     protected $sql;
     protected $transactions = 0;
+	protected $db_structure;	// array with arrays of every table with their structure
     
     // Modus der Transaktoin setzen (Inspiriert von phpBB)
     public function startTransaction()

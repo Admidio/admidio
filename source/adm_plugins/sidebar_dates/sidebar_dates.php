@@ -95,7 +95,7 @@ $plg_organizations = $plg_organizations. $g_current_organization->getValue('org_
 $hidden = '';
 if ($g_valid_login == false)
 {
-	$hidden = ' AND cat_hidden = \'0\' ';
+	$hidden = ' AND cat_hidden = 0 ';
 }
 
 // Ermitteln, welche Kalender angezeigt werden sollen
@@ -103,7 +103,7 @@ if(in_array('all',$plg_kal_cat))
 {
 	// alle Kalender anzeigen
     $sql_syntax = ' AND (cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                     OR (   dat_global  = \'1\'
+                     OR (   dat_global  = 1
                         AND cat_org_id IN ('.$plg_organizations.') ) ) ';
 }
 else

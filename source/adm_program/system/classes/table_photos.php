@@ -52,7 +52,7 @@ class TablePhotos extends TableAccess
         $sql = 'SELECT pho_id, pho_quantity
                   FROM '. TBL_PHOTOS. '
                  WHERE pho_pho_id_parent = '.$pho_id.'
-                   AND pho_locked = \'0\'';
+                   AND pho_locked = 0';
         $pho_result = $this->db->query($sql);
 
         while($pho_row = $this->db->fetch_array($pho_result))
@@ -183,7 +183,7 @@ class TablePhotos extends TableAccess
             $sql = 'SELECT *
                       FROM '. TBL_PHOTOS. '
                      WHERE pho_pho_id_parent = '.$pho_id.'
-                       AND pho_locked = \'0\'
+                       AND pho_locked = 0
                      ORDER BY pho_quantity DESC';
             $result_child = $this->db->query($sql);
             

@@ -68,13 +68,13 @@ class TableLists extends TableAccess
         global $g_current_organization;
         
         // erst die bisherige Default-Liste zuruecksetzen
-        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = \'0\'
+        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 0
                  WHERE lst_org_id  = '. $g_current_organization->getValue('org_id'). '
-                   AND lst_default = \'1\' ';
+                   AND lst_default = 1 ';
         $this->db->query($sql);
 
         // jetzt die aktuelle Liste zur Default-Liste machen
-        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = \'1\'
+        $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 1
                  WHERE lst_id = '. $this->getValue('lst_id');
         $this->db->query($sql);
     }
