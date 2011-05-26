@@ -97,20 +97,6 @@ class TableAccess
                     $this->key_name = $key;
                 }				
 			}
-/*
-            while ($row = $this->db->fetch_array())
-            {
-                $this->dbColumns[$row['Field']] = '';
-                $this->columnsInfos[$row['Field']]['changed'] = false;
-                $this->columnsInfos[$row['Field']]['type']    = $row['Type'];
-                $this->columnsInfos[$row['Field']]['key']     = $row['Key'];
-                $this->columnsInfos[$row['Field']]['extra']   = $row['Extra'];
-                
-                if($row['Key'] == 'PRI')
-                {
-                    $this->key_name = $row['Field'];
-                }
-            }*/
         }
     }
     
@@ -126,9 +112,12 @@ class TableAccess
     // aktuelle Datensatz loeschen und ggf. noch die Referenzen
     public function delete()
     {
-        $sql    = 'DELETE FROM '.$this->table_name.' 
-                    WHERE '.$this->key_name.' = \''. $this->dbColumns[$this->key_name]. '\'';
-        $this->db->query($sql);
+		if(strlen($this->dbColumns[$this->key_name]) > 0)
+		{
+			$sql    = 'DELETE FROM '.$this->table_name.' 
+						WHERE '.$this->key_name.' = \''. $this->dbColumns[$this->key_name]. '\'';
+			$this->db->query($sql);
+		}
 
         $this->clear();
         return true;

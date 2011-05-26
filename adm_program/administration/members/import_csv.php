@@ -173,7 +173,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     ON first_name.usd_usr_id = usr_id
                    AND first_name.usd_usf_id = '.  $user->getProperty('FIRST_NAME', 'usf_id'). '
                    AND first_name.usd_value  = \''. $user->getValue('FIRST_NAME'). '\'
-                 WHERE usr_valid = \'1\' ';
+                 WHERE usr_valid = 1 ';
         $result = $g_db->query($sql);
         $row_duplicate_user = $g_db->fetch_array($result);
         if($row_duplicate_user['usr_id'] > 0)

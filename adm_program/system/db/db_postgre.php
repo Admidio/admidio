@@ -161,6 +161,9 @@ class DBPostgre extends DBCommon
 			// Postgre kennt unsigned nicht
 			$sql = str_replace('unsigned', '', $sql);
 
+			// Boolean macht Probleme, da Postgre es als String behandelt
+			$sql = str_replace('boolean', 'smallint', $sql);
+
 			// Blobs sind in Postgre bytea Datentypen
 			$sql = str_replace('blob', 'bytea', $sql);
 			
@@ -230,46 +233,52 @@ class DBPostgre extends DBCommon
 	//       'Fieldname2' => ...)
     public function showColumns($table)
     {
-		$columnProperties = array();
-
-		$sql = 'SELECT column_name, column_default, is_nullable, data_type
-				  FROM information_schema.columns WHERE table_name = \''.$table.'\'';
-		$this->query($sql);
-		
-		while ($row = $this->fetch_array())
+		if(isset($this->db_structure[$table]) == false)
 		{
-			$columnProperties[$row['column_name']]['serial'] = 0;
-			$columnProperties[$row['column_name']]['null']   = 0;
-			$columnProperties[$row['column_name']]['key']    = 0;
-			
-			if(strpos($row['column_default'], 'nextval') !== false)
-			{
-				$columnProperties[$row['column_name']]['serial'] = 1;
-			}
-			if($row['is_nullable'] == 'YES')
-			{
-				$columnProperties[$row['column_name']]['null']   = 1;
-			}
-			/*if($row['Key'] == 'PRI' || $row['Key'] == 'MUL')
-			{
-				$columnProperties[$row['column_name']]['key'] = 1;
-			}*/
+			$columnProperties = array();
 
-			if(strpos($row['data_type'], 'timestamp') !== false)
+			$sql = 'SELECT column_name, column_default, is_nullable, data_type
+					  FROM information_schema.columns WHERE table_name = \''.$table.'\'';
+			$this->query($sql);
+			
+			while ($row = $this->fetch_array())
 			{
-				$columnProperties[$row['column_name']]['type'] = 'timestamp';
+				$columnProperties[$row['column_name']]['serial'] = 0;
+				$columnProperties[$row['column_name']]['null']   = 0;
+				$columnProperties[$row['column_name']]['key']    = 0;
+				
+				if(strpos($row['column_default'], 'nextval') !== false)
+				{
+					$columnProperties[$row['column_name']]['serial'] = 1;
+				}
+				if($row['is_nullable'] == 'YES')
+				{
+					$columnProperties[$row['column_name']]['null']   = 1;
+				}
+				/*if($row['Key'] == 'PRI' || $row['Key'] == 'MUL')
+				{
+					$columnProperties[$row['column_name']]['key'] = 1;
+				}*/
+
+				if(strpos($row['data_type'], 'timestamp') !== false)
+				{
+					$columnProperties[$row['column_name']]['type'] = 'timestamp';
+				}
+				elseif(strpos($row['data_type'], 'time') !== false)
+				{
+					$columnProperties[$row['column_name']]['type'] = 'time';
+				}
+				else
+				{
+					$columnProperties[$row['column_name']]['type'] = $row['data_type'];
+				}
 			}
-			elseif(strpos($row['data_type'], 'time') !== false)
-			{
-				$columnProperties[$row['column_name']]['type'] = 'time';
-			}
-			else
-			{
-				$columnProperties[$row['column_name']]['type'] = $row['data_type'];
-			}
+			
+			// safe array with table structure in class array
+			$this->db_structure[$table] = $columnProperties;
 		}
 		
-		return $columnProperties;
+		return $this->db_structure[$table];
     }  
 }
  

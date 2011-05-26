@@ -257,7 +257,7 @@ else
                      OR cat_org_id IS NULL )
                  AND mem_rol_id  = rol_id
                  AND mem_usr_id  = usr_id
-                 AND usr_valid   = \'1\' '.
+                 AND usr_valid   = 1 '.
                      $sqlConditions;
 
 	// Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 

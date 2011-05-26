@@ -181,7 +181,7 @@ $organizations = $organizations. $g_current_organization->getValue('org_id');
 if ($g_valid_login == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $conditions .= ' AND cat_hidden = \'0\' ';
+    $conditions .= ' AND cat_hidden = 0 ';
 }
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
@@ -245,7 +245,7 @@ if($req_id == 0)
               FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
              WHERE dat_cat_id = cat_id
                AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                   OR (   dat_global   = \'1\'
+                   OR (   dat_global   = 1
                       AND cat_org_id IN (\''.$organizations.'\') 
                       )
                    )
@@ -295,7 +295,7 @@ $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.me
            AND mem_end    > \''.DATE_NOW.'\'
          WHERE dat_cat_id = cat_id
            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-               OR (   dat_global   = \'1\'
+               OR (   dat_global   = 1
                   AND cat_org_id IN ('.$organizations.') ))
            AND dat_id = dtr_dat_id
                '.$login_sql.'
@@ -329,14 +329,14 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
                 WHERE cat_type   = \'DAT\'
                     AND dat_cat_id = cat_id 
                     AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-                        OR (   dat_global   = \'1\'
+                        OR (   dat_global   = 1
                             AND cat_org_id IN ('.$organizations.')
                         )
                     )
                     '.$conditions;
         if($g_valid_login == false)
         {
-          $sql .= ' AND cat_hidden = \'0\' ';
+          $sql .= ' AND cat_hidden = 0 ';
         }
         $sql .= ' ORDER BY cat_sequence ASC ';
         $result = $g_db->query($sql);
@@ -616,7 +616,7 @@ else
                                 // Teilnehmerbegrenzung allgemein
                                 $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
                                          WHERE mem_rol_id = \''.$date->getValue('dat_rol_id').'\' 
-										   AND mem_leader = \'0\'';
+										   AND mem_leader = 0';
                                 $res_num = $g_db->query($sql);
                                 $row_num = $g_db->num_rows($res_num);
                                 if($row_num >= $date->getValue('dat_max_members'))

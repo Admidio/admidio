@@ -72,7 +72,7 @@ $sql = 'SELECT ann.*,
             ON cha_firstname.usd_usr_id = ann_usr_id_change
            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
          WHERE (  ann_org_shortname = \''. $g_current_organization->getValue('org_shortname').'\'
-               OR ( ann_global = \'1\' AND ann_org_shortname IN ('.$organizations.') ))
+               OR ( ann_global = 1 AND ann_org_shortname IN ('.$organizations.') ))
          ORDER BY ann_timestamp_create DESC
          LIMIT 10 ';
 $result = $g_db->query($sql);

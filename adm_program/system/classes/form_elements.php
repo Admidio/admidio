@@ -37,7 +37,7 @@ class FormElements
 		if($show_mode == 1 && $g_current_user->assignRoles() == false)
 		{
 			// keine Rollen mit Rollenzuordnungsrecht anzeigen
-			$condition .= ' AND rol_assign_roles = \'0\' ';
+			$condition .= ' AND rol_assign_roles = 0 ';
 		}
 		elseif($show_mode == 1 && $g_current_user->isWebmaster() == false)
 		{
@@ -51,7 +51,7 @@ class FormElements
 		
 		$sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
 				 WHERE rol_valid   = \''.$active_roles.'\'
-				   AND rol_visible = \'1\'
+				   AND rol_visible = 1
 				   AND rol_cat_id  = cat_id
 				   AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )

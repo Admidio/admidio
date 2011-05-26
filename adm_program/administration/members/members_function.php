@@ -57,7 +57,7 @@ if($_GET['mode'] != 1)
     // pruefen, ob der User noch in anderen Organisationen aktiv ist
     $sql    = 'SELECT rol_id
                  FROM '. TBL_ROLES. ', '. TBL_MEMBERS. ', '. TBL_CATEGORIES. '
-                WHERE rol_valid   = \'1\'
+                WHERE rol_valid   = 1
                   AND rol_cat_id  = cat_id
                   AND cat_org_id <> '. $g_current_organization->getValue('org_id'). '
                   AND mem_rol_id  = rol_id
@@ -126,7 +126,7 @@ elseif($_GET["mode"] == 2)
 
     $sql = 'SELECT mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
-             WHERE rol_valid  = \'1\'
+             WHERE rol_valid  = 1
                AND rol_cat_id = cat_id
                AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                    OR cat_org_id IS NULL )

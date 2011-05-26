@@ -137,7 +137,7 @@ if($req_id == 0)
     $sql = 'SELECT COUNT(1) as count 
               FROM '. TBL_ANNOUNCEMENTS. '
              WHERE (  ann_org_shortname = \''. $g_current_organization->getValue('org_shortname'). '\'
-                OR (   ann_global   = \'1\'
+                OR (   ann_global   = 1
                AND ann_org_shortname IN ('.$organizations.') ))
                    '.$conditions.'';
     $result = $g_db->query($sql);
@@ -177,7 +177,7 @@ $sql = 'SELECT ann.*,
             ON cha_firstname.usd_usr_id = ann_usr_id_change
            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
          WHERE (  ann_org_shortname = \''. $g_current_organization->getValue('org_shortname'). '\'
-            OR (   ann_global   = \'1\'
+            OR (   ann_global   = 1
            AND ann_org_shortname IN ('.$organizations.') ))
                '.$conditions.' 
          ORDER BY ann_timestamp_create DESC

@@ -32,11 +32,11 @@ if ($cid > 0)
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
     if($g_preferences['enable_guestbook_moderation'] > 0 && $_GET['moderation'] == 1)
     {
-        $conditions .= ' AND gbc_locked = \'1\' ';
+        $conditions .= ' AND gbc_locked = 1 ';
     }
     else
     {
-        $conditions .= ' AND gbc_locked = \'0\' ';
+        $conditions .= ' AND gbc_locked = 0 ';
     }
 
     $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. ', '. TBL_GUESTBOOK. '

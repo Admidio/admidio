@@ -96,7 +96,7 @@ echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
 $sql='      SELECT *
             FROM '. TBL_PHOTOS. '
             WHERE pho_org_shortname = \''.$g_organization.'\' 
-            AND pho_locked = \'0\'
+            AND pho_locked = 0
             AND pho_quantity > 0
             ORDER BY pho_begin DESC';
 

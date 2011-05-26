@@ -428,7 +428,7 @@ echo '
             $sql = 'SELECT * FROM '. TBL_LISTS. '
                      WHERE lst_org_id = '. $g_current_organization->getValue('org_id') .'
                        AND (  lst_usr_id = '. $g_current_user->getValue('usr_id'). '
-                           OR lst_global = \'1\')
+                           OR lst_global = 1)
                      ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ';
             $lst_result = $g_db->query($sql);
             

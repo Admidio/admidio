@@ -104,7 +104,7 @@ class TableUsers extends TableAccess
         $this->db->query($sql);
 
         $sql    = 'UPDATE '. TBL_LISTS. ' SET lst_usr_id = NULL
-                    WHERE lst_global = \'1\'
+                    WHERE lst_global = 1
                       AND lst_usr_id = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
@@ -145,10 +145,10 @@ class TableUsers extends TableAccess
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_LIST_COLUMNS. '
-                    WHERE lsc_lst_id IN (SELECT lst_id FROM '. TBL_LISTS. ' WHERE lst_usr_id = '.$this->getValue('usr_id').' AND lst_global = \'0\')';
+                    WHERE lsc_lst_id IN (SELECT lst_id FROM '. TBL_LISTS. ' WHERE lst_usr_id = '.$this->getValue('usr_id').' AND lst_global = 0)';
         $this->db->query($sql);
 
-        $sql    = 'DELETE FROM '. TBL_LISTS. ' WHERE lst_global = \'0\' AND lst_usr_id = '. $this->getValue('usr_id');
+        $sql    = 'DELETE FROM '. TBL_LISTS. ' WHERE lst_global = 0 AND lst_usr_id = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_usr_id_create = '. $this->getValue('usr_id');

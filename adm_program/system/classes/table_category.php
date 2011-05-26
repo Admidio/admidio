@@ -251,7 +251,7 @@ class TableCategory extends TableAccess
 		elseif($field_name == 'cat_default' && $field_value == '1')
 		{
 			// es darf immer nur eine Default-Kategorie je Bereich geben
-			$sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_default = \'0\'
+			$sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_default = 0
 					 WHERE cat_type = \''. $this->getValue('cat_type'). '\'
 					   AND (  cat_org_id IS NOT NULL 
 					       OR cat_org_id = '.$g_current_organization->getValue('org_id').')';

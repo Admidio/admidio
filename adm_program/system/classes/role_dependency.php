@@ -222,7 +222,7 @@ class RoleDependency
 
                 while ($row = $this->db->fetch_object($result))
                 {
-                    $sql .= '('.$this->role_id_parent.', '.$row->mem_usr_id.', \''.DATE_NOW.'\', \'9999-12-31\', \'0\'),';
+                    $sql .= '('.$this->role_id_parent.', '.$row->mem_usr_id.', \''.DATE_NOW.'\', \'9999-12-31\', 0),';
                 }
                 //Das letzte Komma wieder wegschneiden
                 $sql = substr($sql,0,-1);

@@ -58,7 +58,7 @@ $hidden = '';
 if ($g_valid_login == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $hidden = ' AND cat_hidden = \'0\' ';
+    $hidden = ' AND cat_hidden = 0 ';
 }
 
 // aktuelle Termine aus DB holen die zur Orga passen
@@ -80,7 +80,7 @@ $sql = 'SELECT cat.*, dat.*,
            AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
          WHERE dat_cat_id = cat_id
            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
-               OR (   dat_global  = \'1\'
+               OR (   dat_global  = 1
                   AND cat_org_id IN ('.$organizations.') ))
            AND (  dat_begin >= \''.date('Y-m-d h:i:s', time()).'\' 
                OR dat_end   >= \''.date('Y-m-d h:i:s', time()).'\' )

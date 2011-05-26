@@ -107,19 +107,19 @@ else
 }
 
 $sql = 'SELECT rol.*, cat.*, 
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id '.$sql_member_status.' AND mem_leader = \'0\') as num_members,
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id '.$sql_member_status.' AND mem_leader = \'1\') as num_leader,
+               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id '.$sql_member_status.' AND mem_leader = 0) as num_members,
+               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id '.$sql_member_status.' AND mem_leader = 1) as num_leader,
                (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id AND mem_end < \''. DATE_NOW.'\') as num_former
           FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
          WHERE rol_valid   = \''.$active_role.'\'
-           AND rol_visible = \'1\'
+           AND rol_visible = 1
                '.$rol_id_list.'
            AND rol_cat_id = cat_id 
            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                OR cat_org_id IS NULL ) ';
 if($g_valid_login == false)
 {
-    $sql .= ' AND cat_hidden = \'0\' ';
+    $sql .= ' AND cat_hidden = 0 ';
 }
 if(strlen($_GET['category']) > 0 && $_GET['category'] != 'Alle')
 {
@@ -217,11 +217,11 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
                        OR cat_org_id IS NULL )
                    AND cat_type    = \'ROL\' 
                    AND rol_cat_id  = cat_id
-                   AND rol_visible = \'1\'
+                   AND rol_visible = 1
                        '.$rol_id_list;
         if($g_valid_login == false)
         {
-            $sql .= ' AND cat_hidden = \'0\' ';
+            $sql .= ' AND cat_hidden = 0 ';
         }
         $sql .= ' ORDER BY cat_sequence ASC ';
         $result = $g_db->query($sql);
@@ -279,7 +279,7 @@ if(!$g_db->data_seek($result_lst, $_GET['start']))
 $sql = 'SELECT lst_id, lst_name, lst_global FROM '. TBL_LISTS. '
      WHERE lst_org_id = '. $g_current_organization->getValue('org_id'). '
        AND (  lst_usr_id = '. $g_current_user->getValue('usr_id'). '
-           OR lst_global = \'1\')
+           OR lst_global = 1)
        AND lst_name IS NOT NULL
      ORDER BY lst_global ASC, lst_name ASC';
 $result_config = $g_db->query($sql);

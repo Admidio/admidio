@@ -42,7 +42,7 @@ class User extends TableUsers
     protected $webmaster;
 
     public $userFieldData       = array(); // Array ueber alle Userdatenobjekte mit den entsprechenden Feldeigenschaften
-    protected $roles_rights     = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
+    public $roles_rights     = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
     protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $role_mail_rights = array(); // Array ueber Mailrechte einzelner Rollen
 
@@ -80,7 +80,7 @@ class User extends TableUsers
                            AND mem_rol_id  = rol_id
                            AND mem_begin  <= \''.DATE_NOW.'\'
                            AND mem_end     > \''.DATE_NOW.'\'
-                         WHERE rol_valid   = \'1\'
+                         WHERE rol_valid   = 1
                            AND rol_cat_id  = cat_id
                            AND (  cat_org_id = '. $g_current_organization->getValue('org_id').' 
                                OR cat_org_id IS NULL ) ';
@@ -616,7 +616,7 @@ class User extends TableUsers
                               AND mem_begin <= \''.DATE_NOW.'\'
                               AND mem_end    > \''.DATE_NOW.'\'
                               AND mem_rol_id = rol_id
-                              AND rol_valid  = \'1\'
+                              AND rol_valid  = 1
                               AND rol_cat_id = cat_id
                               AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
                                   OR cat_org_id IS NULL ) ';
