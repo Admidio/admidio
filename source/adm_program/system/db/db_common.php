@@ -10,12 +10,12 @@
  
 class DBCommon
 {
+    public $db_type;
     public $user;
     public $password;
     public $dbname;
     public $server;
 
-    protected $layer;
     protected $version;    
     protected $connect_id;    
     protected $insert_id;  // ID aus dem letzten Insert-Statement

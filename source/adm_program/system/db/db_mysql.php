@@ -15,7 +15,7 @@ class DBMySql extends DBCommon
     // Verbindung zur Datenbank aufbauen    
     public function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_connection = false)
     {
-        $this->layer     = 'mysql';
+        $this->db_type   = 'mysql';
         $this->server    = $sql_server;
         $this->user      = $sql_user;
         $this->password  = $sql_password;

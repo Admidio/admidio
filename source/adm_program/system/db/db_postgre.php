@@ -15,7 +15,7 @@ class DBPostgre extends DBCommon
     // Verbindung zur Datenbank aufbauen    
     public function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_connection = false)
     {
-        $this->layer      = 'postgre';
+        $this->db_type    = 'postgre';
         $this->server     = $sql_server;
         $this->user       = $sql_user;
         $this->password   = $sql_password;
@@ -217,7 +217,7 @@ class DBPostgre extends DBCommon
     // Gibt die MYSQL Version der Datenbank zurück
     public function server_info()
     {
-        return mysql_get_server_info();
+        return null;
     }
 
     // setzt die urspruengliche DB wieder auf aktiv
