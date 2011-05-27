@@ -7,7 +7,6 @@
     <text id="MAI_CARBON_COPY" development="new" translation="todo">Kopie</text>
     <text id="MAI_COPY_OF_YOUR_EMAIL" development="new" translation="todo">Hier ist Ihre angeforderte Kopie der Nachricht</text>
     <text id="MAI_MESSAGE_WENT_TO" development="new" translation="todo">Diese Nachricht ging an</text>
-    <text id="PHO_NEWEST_ALBUMS" development="deleted" translation="todo">Die 10 neuesten Fotoalben</text>
     <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="todo">Neuesten Fotoalben der Organisation %VAR1%</text>
     <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="todo">Das Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</text>
     <text id="SYS_LOADING_CONTENT" development="new" translation="todo">Inhalt wird geladen ...</text>
@@ -334,7 +333,6 @@
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
     <text id="INS_MOBILE" development="new" translation="todo">Handy</text>
     <text id="INS_MSN_MESSENGER" development="new" translation="todo">MSN Messenger</text>
-    <text id="INS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="todo">Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, für die Sie Admidio nutzen möchten.</text>
@@ -344,8 +342,8 @@
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
-    <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu Ihrer Datenbank ist.</text>
-    <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Sie sollten versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
+    <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu Ihrer Datenbank ist.</text>
+    <text id="INS_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Sie sollten versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
     <text id="INS_POSTCODE" development="new" translation="todo">PLZ</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
@@ -725,7 +723,6 @@
     <text id="PHO_MULTIUPLOAD" development="new" translation="todo">Multiupload</text>
     <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="todo">Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen. Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash (Version 9+) installiert oder diese Option nicht aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt. (Standard: ja)</text>
 	<text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>
-    <text id="PHO_NEWEST_ALBUMS" development="new" translation="todo">Die 10 neuesten Fotoalben</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="todo">Dieses Album enthält leider noch keine Fotos.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="todo">Sie haben keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>

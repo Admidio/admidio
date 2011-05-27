@@ -7,7 +7,6 @@
     <text id="MAI_CARBON_COPY" development="new" translation="edited">Karbon Kopi(CC)</text>
     <text id="MAI_COPY_OF_YOUR_EMAIL" development="new" translation="edited">Din ønskede kopi af beskeden</text>
     <text id="MAI_MESSAGE_WENT_TO" development="new" translation="edited">Beskeden blev sendt til</text>
-    <text id="PHO_NEWEST_ALBUMS" development="deleted" translation="edited">De 10 seneste foto albums</text>
     <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="edited">Seneste fotoalbum for organisationen %VAR1%</text>
     <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="edited">Feltet %VAR1_BOLD% indeholder ulovlige karakterer.\n\nTilladte karakterer er bogstaver fra 'a' til 'z' og 'A' til 'Z', cifre fra 0 til 9 og specielle karakterer som .-_+@ .</text>
     <text id="SYS_LOADING_CONTENT" development="new" translation="edited">Henter indhold...</text>
@@ -337,7 +336,6 @@
     <text id="INS_MOBILE" development="new" translation="edited">Mobil</text>
     <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Ikke alle MySQL database adgangs informationer er blevet oplyst!</text>
-    <text id="INS_MYSQL_VERSION" development="new" translation="edited">MySQL version</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organisations navn</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Skriv officiel forkortelse af organisationens navn her, til brug i Admidio.</text>
     <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="edited">Skriv officiele forkortelser af organisations navnene her, til brug i Admidio.</text>
@@ -347,8 +345,8 @@
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">De oplyste kodeord er ikke ens.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Telefonliste</text>
     <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
-    <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst MySQL version %VAR2%. Venligst opdater din MySQL database eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>
-    <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst PHP version %VAR2%. Venligst opdater din PHP version eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>    
+    <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst MySQL version %VAR2%. Venligst opdater din MySQL database eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>
+    <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst PHP version %VAR2%. Venligst opdater din PHP version eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>    
     <text id="INS_POSTCODE" development="new" translation="edited">Postnummer</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Tidligere Admidio version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Sæt administrator</text>
@@ -728,7 +726,6 @@
     <text id="PHO_MULTIUPLOAD" development="new" translation="edited">Masseupload</text>
     <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="edited">Masseupload gør det muligt at uploade adskillige billeder på en gang. For at masseupload skal fungere så skal Adobe Flash (mindst version 9+) være installeret. Uden flash eller med masseupload deaktiveret, så vil en-til-en HTML upload blive benyttet automatisk. (Standard: Ja)</text>
 	<text id="PHO_NEXT_PHOTO" development="new" translation="edited">Næste billede</text>
-    <text id="PHO_NEWEST_ALBUMS" development="new" translation="edited">De 10 seneste billede album</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="edited">Albummet indeholder ingen billeder.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke uploades.\nFormodentlig på grund af at størrelsen overstiger det definere maximum på %VAR1%B!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="edited">Der er ikke valgt nogen billeder som skal tilføjes.</text>

@@ -5,6 +5,7 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
+    <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
     <text id="LST_PERIOD" development="deleted" translation="todo">Zeitraum</text>
     <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
@@ -17,7 +18,6 @@
     <text id="MAI_CARBON_COPY" development="new" translation="todo">Kopie</text>
     <text id="MAI_COPY_OF_YOUR_EMAIL" development="new" translation="todo">Hier ist Deine angeforderte Kopie der Nachricht</text>
     <text id="MAI_MESSAGE_WENT_TO" development="new" translation="todo">Diese Nachricht ging an</text>
-    <text id="PHO_NEWEST_ALBUMS" development="deleted" translation="todo">Die 10 neuesten Fotoalben</text>
     <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="todo">Neuesten Fotoalben der Organisation %VAR1%</text>
     <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="todo">Das Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben a-z und A-Z, Zahlen 0-9 und die Sonderzeichen .-_+@ .</text>
     <text id="SYS_LOADING_CONTENT" development="new" translation="todo">Inhalt wird geladen ...</text>
@@ -342,7 +342,6 @@
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
     <text id="INS_MOBILE" development="new" translation="todo">Handy</text>
     <text id="INS_MSN_MESSENGER" development="new" translation="todo">MSN Messenger</text>
-    <text id="INS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="todo">Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, für die du Admidio nutzen möchtest.</text>
@@ -352,8 +351,8 @@
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
-    <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu deiner Datenbank ist.</text>
-    <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Du solltest versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
+    <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu deiner Datenbank ist.</text>
+    <text id="INS_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Du solltest versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
     <text id="INS_POSTCODE" development="new" translation="todo">PLZ</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>

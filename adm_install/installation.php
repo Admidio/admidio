@@ -166,6 +166,17 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                         <ul class="formFieldList">
                             <li>
                                 <dl>
+                                    <dt><label for="db_type">'.$g_l10n->get('INS_DATABASE_SYSTEM').':</label></dt>
+                                    <dd>
+                                        <select size="1" id="db_type" name="db_type">
+                                            <option selected="selected" value="mysql">MySQL</option>
+											<option value="postgre">Postgre</option>
+										</select>
+                                    </dd>
+                                </dl>
+                            </li>
+                            <li>
+                                <dl>
                                     <dt><label for="server">'.$g_l10n->get('SYS_SERVER').':</label></dt>
                                     <dd><input type="text" name="server" id="server" style="width: 250px;" maxlength="50" value="'. $server. '" /></dd>
                                 </dl>
@@ -227,13 +238,15 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         }
 
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
+        $_SESSION['db_type']  = strStripTags($_POST['db_type']);
         $_SESSION['server']   = strStripTags($_POST['server']);
         $_SESSION['user']     = strStripTags($_POST['user']);
         $_SESSION['password'] = strStripTags($_POST['password']);
         $_SESSION['database'] = strStripTags($_POST['database']);
         $_SESSION['prefix']   = strStripTags($_POST['prefix']);
 
-        if(strlen($_SESSION['server'])   == 0
+        if(strlen($_SESSION['db_type'])  == 0
+		|| strlen($_SESSION['server'])   == 0
         || strlen($_SESSION['user'])     == 0
         || strlen($_SESSION['database']) == 0 )
         {
@@ -241,7 +254,8 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         }
 
         // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
-        $db = $g_db = Database::createDatabaseObject($g_db_type);
+		error_log('db::'.$_SESSION['db_type']);
+        $db = $g_db = Database::createDatabaseObject($_SESSION['db_type']);
         if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
         {
             showPage($g_l10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
@@ -429,12 +443,13 @@ elseif($req_mode == 7)
         $root_path = 'http://'. $root_path;
     }
 
-    $file_content = str_replace('%PREFIX%', $_SESSION['prefix'], $file_content);
+    $file_content = str_replace('%PREFIX%',  $_SESSION['prefix'],  $file_content);
+    $file_content = str_replace('%DB_TYPE%', $_SESSION['db_type'], $file_content);
     $file_content = str_replace('%SERVER%',  $_SESSION['server'],  $file_content);
     $file_content = str_replace('%USER%',    $_SESSION['user'],    $file_content);
-    $file_content = str_replace('%PASSWORD%',  $_SESSION['password'], $file_content);
-    $file_content = str_replace('%DATABASE%',  $_SESSION['database'], $file_content);
-    $file_content = str_replace('%ROOT_PATH%', $root_path,            $file_content);
+    $file_content = str_replace('%PASSWORD%',$_SESSION['password'],$file_content);
+    $file_content = str_replace('%DATABASE%',$_SESSION['database'],$file_content);
+    $file_content = str_replace('%ROOT_PATH%', $root_path, $file_content);
     $file_content = str_replace('%ORGANIZATION%', $_SESSION['orga_name_short'], $file_content);
 
     // die erstellte Config-Datei an den User schicken
@@ -463,6 +478,7 @@ elseif($req_mode == 8)
     // Verbindung zu Datenbank herstellen
     require_once(SERVER_PATH. '/config.php');
     if($g_tbl_praefix != $_SESSION['prefix']
+    || $g_db_type     != $_SESSION['db_type']
     || $g_adm_srv     != $_SESSION['server']
     || $g_adm_usr     != $_SESSION['user']
     || $g_adm_pw      != $_SESSION['password']

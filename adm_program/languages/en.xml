@@ -7,7 +7,6 @@
     <text id="MAI_CARBON_COPY" development="new" translation="edited">Carbon copy (CC)</text>
     <text id="MAI_COPY_OF_YOUR_EMAIL" development="new" translation="edited">Your requested copy of the message</text>
     <text id="MAI_MESSAGE_WENT_TO" development="new" translation="edited">Message was sent to</text>
-    <text id="PHO_NEWEST_ALBUMS" development="deleted" translation="edited">10 latest photo albums</text>
     <text id="PHO_RECENT_ALBUMS_OF_ORGA" development="new" translation="edited">Latest photo album of organisation %VAR1%</text>
     <text id="SYS_FIELD_INVALID_CHAR" development="changed" translation="edited">Field %VAR1_BOLD% contains illegal characters.\n\nAllowed characters are letters from 'a' to 'z' and 'A' to 'Z', numbers from 0 to 9 and special characters like .-_+@ .</text>
     <text id="SYS_LOADING_CONTENT" development="new" translation="edited">Loading content ...</text>
@@ -338,7 +337,6 @@
     <text id="INS_MOBILE" development="new" translation="edited">Mobile</text>
     <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Not all MySQL database access information has been provided!</text>
-    <text id="INS_MYSQL_VERSION" development="new" translation="edited">MySQL version</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organization name</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Please provide official abbreviation of the organization's name here for use in Admidio.</text>
     <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="edited">Please provide official abbreviations of the organizations' name here for use in Admidio.</text>
@@ -348,8 +346,8 @@
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Provided passwords do not match.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Phone list</text>
     <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
-    <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
-    <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
+    <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
+    <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
     <text id="INS_POSTCODE" development="new" translation="edited">Postal code</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Previous Admidio version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Set administrator</text>
@@ -729,7 +727,6 @@
     <text id="PHO_MULTIUPLOAD" development="new" translation="edited">Multiupload</text>
     <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="edited">Multiupload enables an easy way of upload of several photos simultaneously. For use Flash plugin (version 9+) has to be enabled. Without installed plugin or deactivated multiupload, one-on-one HTML upload is being loaded automatically. (default: yes)</text>
 	<text id="PHO_NEXT_PHOTO" development="new" translation="edited">next picture</text>
-    <text id="PHO_NEWEST_ALBUMS" development="new" translation="edited">10 latest photo albums</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="edited">Album contains no photos.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Illegal page view or file could not be uploaded.\nFile size possibly exceeded allowed server defined upload size of %VAR1%B!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="edited">No photos to add have been selected.</text>
