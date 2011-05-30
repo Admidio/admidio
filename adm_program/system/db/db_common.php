@@ -17,8 +17,7 @@ class DBCommon
     public $server;
 
     protected $version;    
-    protected $connect_id;    
-    protected $insert_id;  // ID aus dem letzten Insert-Statement
+    protected $connect_id;
     protected $query_result;
     protected $sql;
     protected $transactions = 0;

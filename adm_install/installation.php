@@ -170,7 +170,7 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                                     <dd>
                                         <select size="1" id="db_type" name="db_type">
                                             <option selected="selected" value="mysql">MySQL</option>
-											<option value="postgre">Postgre</option>
+											<option value="postgresql">PostgreSQL</option>
 										</select>
                                     </dd>
                                 </dl>

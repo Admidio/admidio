@@ -18,11 +18,11 @@ class Database
         {
 			case 'mysql':
 				require_once(SERVER_PATH. '/adm_program/system/db/db_mysql.php');
-				return new DBMySql();
+				return new DBMySQL();
 				
-			case 'postgre':
-				require_once(SERVER_PATH. '/adm_program/system/db/db_postgre.php');
-				return new DBPostgre();
+			case 'postgresql':
+				require_once(SERVER_PATH. '/adm_program/system/db/db_postgresql.php');
+				return new DBPostgreSQL();
                 
             default:
                 return false;

@@ -127,8 +127,7 @@ $sql = 'SELECT COUNT(*) FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
         AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
         AND cat_type = \'LNK\'
         '.$condition.'
-        '.$hidden.'
-        ORDER BY cat_sequence, lnk_name DESC';
+        '.$hidden;
 $cat_result = $g_db->query($sql);
 $row = $g_db->fetch_array($cat_result);
 $numLinks = $row[0];
@@ -148,11 +147,11 @@ $sql = 'SELECT cat.*, lnk.*
           FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
          WHERE lnk_cat_id = cat_id
            AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
-           AND cat_type = "LNK"
+           AND cat_type = \'LNK\'
            '.$condition.'
            '.$hidden.'
          ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
-         LIMIT '. $_GET["start"]. ', '. $weblinks_per_page;
+         LIMIT '.$weblinks_per_page.' OFFSET '.$_GET['start'];
 $links_result = $g_db->query($sql);
 
 // Icon-Links und Navigation anzeigen

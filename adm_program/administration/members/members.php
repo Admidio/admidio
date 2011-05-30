@@ -26,9 +26,6 @@ if (!$g_current_user->editUsers())
 }
 
 // lokale Variablen initialisieren
-$restrict = '';
-$listname = '';
-$i = 0;
 $members_per_page = 25; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
 
 // lokale Variablen der Uebergabevariablen initialisieren
@@ -77,7 +74,7 @@ if (isset($_REQUEST['queryForm']) && strlen($_REQUEST['queryForm']) > 0)
 
 // Die zum Caching in der Session zwischengespeicherten Namen werden beim
 // neu laden der Seite immer abgeraeumt...
-unset ($_SESSION['QuerySuggestions']);
+unset($_SESSION['QuerySuggestions']);
 
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
@@ -89,12 +86,12 @@ if ($req_queryForm)
 {
     // Bedingung fuer die Suchanfrage
     $search_string = str_replace(',', '', $req_queryForm). '%';
-    $search_condition = ' AND (  CONCAT_WS(" ", last_name.usd_value, first_name.usd_value) LIKE "'.$search_string.'"
-                              OR CONCAT_WS(" ", last_name.usd_value, first_name.usd_value) LIKE "'.$search_string.'" ) ';
+    $search_condition = ' AND (  CONCAT_WS(\' \', last_name.usd_value, first_name.usd_value) LIKE \''.$search_string.'\'
+                              OR CONCAT_WS(\' \', last_name.usd_value, first_name.usd_value) LIKE \''.$search_string.'\' ) ';
 }
 else
 {
-    $search_condition = ' AND last_name.usd_value LIKE "'.$req_letter.'%" ';
+    $search_condition = ' AND last_name.usd_value LIKE \''.$req_letter.'%\' ';
 }
 
 $member_condition = '';
@@ -114,11 +111,27 @@ if($req_members)
                 OR cat_org_id IS NULL )) ';
 }
 
+// Anzahl relevanter Datensaetze ermitteln
+$sql = 'SELECT COUNT(1) as count
+		  FROM '. TBL_USERS. '
+          JOIN '. TBL_USER_DATA. ' as last_name
+            ON last_name.usd_usr_id = usr_id
+           AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+          JOIN '. TBL_USER_DATA. ' as first_name
+            ON first_name.usd_usr_id = usr_id
+           AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+         WHERE usr_valid = 1
+               '.$member_condition.
+                 $search_condition;
+$result = $g_db->query($sql);
+$row    = $g_db->fetch_array($result);
+$num_members = $row['count'];
+
 // alle Mitglieder zur Auswahl selektieren
 // unbestaetigte User werden dabei nicht angezeigt
 $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
                   email.usd_value as email, website.usd_value as website,
-                  usr_login_name, IFNULL(usr_timestamp_change, usr_timestamp_create) as timestamp,
+                  usr_login_name, COALESCE(usr_timestamp_change, usr_timestamp_create) as timestamp,
                   (SELECT count(*)
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
                     WHERE rol_valid   = 1
@@ -154,15 +167,9 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
             WHERE usr_valid = 1
                   '.$member_condition.
                     $search_condition.'
-            GROUP BY usr_id
-            ORDER BY last_name.usd_value, first_name.usd_value ';
+            ORDER BY last_name.usd_value, first_name.usd_value 
+			LIMIT '.$members_per_page.' OFFSET '.$req_start;
 $result_mgl  = $g_db->query($sql);
-$num_members = $g_db->num_rows($result_mgl);
-
-if($num_members < $req_start)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
 
 // Html-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('MEM_USER_MANAGEMENT');
@@ -271,9 +278,7 @@ echo '
                    AND usd_usf_id = usf_id
                    AND usd_usr_id = usr_id
                    AND usd_value LIKE \''.$letter_menu.'%\'
-                       '.$member_condition.'
-                 GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
-                 ORDER BY usd_value ';
+                       '.$member_condition;
         $result      = $g_db->query($sql);
         $letter_row  = $g_db->fetch_array($result);
 
@@ -313,114 +318,107 @@ if($num_members > 0)
             <th>'.$g_l10n->get('MEM_UPDATED_ON').'</th>
             <th style="text-align: center;">'.$g_l10n->get('SYS_FEATURES').'</th>
         </tr>';
-        $i = 0;
 
-        // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-        if(!$g_db->data_seek($result_mgl, $req_start))
-        {
-            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-        }
+		$irow = $req_start + 1;  // Zahler fuer die jeweilige Zeile
 
-        for($i = 0; $i < $members_per_page && $i + $req_start < $num_members; $i++)
-        {
-            if($row = $g_db->fetch_array($result_mgl))
-            {
-                $timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
+		while($row = $g_db->fetch_array($result_mgl))
+		{
+			$timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
 
-                // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
-                if($row['member_this_orga'] > 0)
-                {
-                    $icon = 'profile.png';
-                    $iconText = $g_l10n->get('SYS_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname'));
-                }
-                else
-                {
-                    $icon = 'no_profile.png';
-                    $iconText = $g_l10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname'));
-                }
+			// Icon fuer Orgamitglied und Nichtmitglied auswaehlen
+			if($row['member_this_orga'] > 0)
+			{
+				$icon = 'profile.png';
+				$iconText = $g_l10n->get('SYS_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname'));
+			}
+			else
+			{
+				$icon = 'no_profile.png';
+				$iconText = $g_l10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $g_current_organization->getValue('org_longname'));
+			}
 
-                echo '
-                <tr class="tableMouseOver">
-                    <td>'. ($req_start + $i + 1). '</td>
-                    <td><a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
-                                src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>
-                    </td>
-                    <td><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a></td>
-                    <td>';
-                        if(strlen($row['email']) > 0)
-                        {
-                            if($g_preferences['enable_mail_module'] != 1)
-                            {
-                                $mail_link = 'mailto:'. $row['email'];
-                            }
-                            else
-                            {
-                                $mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id'];
-                            }
-                            echo '
-                            <a class="iconLink" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
-                                alt="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
-                        }
-                    echo '</td>
-                    <td>';
-                        if(strlen($row['website']) > 0)
-                        {
-                            echo '
-                            <a class="iconLink" href="'. $row['website']. '" target="_blank"><img
-                                src="'. THEME_PATH. '/icons/weblinks.png" alt="'. $row['website']. '" title="'. $row['website']. '" /></a>';
-                        }
-                    echo '</td>
-                    <td>'. $row['usr_login_name']. '</td>
-                    <td>'. $timestampChange->format($g_preferences['system_date'].' '.$g_preferences['system_time']). '</td>
-                    <td style="text-align: center;">';
-                        // Link um E-Mail mit neuem Passwort zu zuschicken
-                        // nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-                        if($row['member_this_orga'] > 0
-                        && $g_current_user->isWebmaster()
-                        && strlen($row['usr_login_name']) > 0
-                        && strlen($row['email']) > 0
-                        && $g_preferences['enable_system_mails'] == 1
-                        && $row['usr_id'] != $g_current_user->getValue('usr_id'))
-                        {
-                            echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
-                                src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
-                        }
-                        else
-                        {
-                            echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-                        }
+			echo '
+			<tr class="tableMouseOver">
+				<td>'. $irow. '</td>
+				<td><a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
+							src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>
+				</td>
+				<td><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a></td>
+				<td>';
+					if(strlen($row['email']) > 0)
+					{
+						if($g_preferences['enable_mail_module'] != 1)
+						{
+							$mail_link = 'mailto:'. $row['email'];
+						}
+						else
+						{
+							$mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id'];
+						}
+						echo '
+						<a class="iconLink" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
+							alt="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$g_l10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
+					}
+				echo '</td>
+				<td>';
+					if(strlen($row['website']) > 0)
+					{
+						echo '
+						<a class="iconLink" href="'. $row['website']. '" target="_blank"><img
+							src="'. THEME_PATH. '/icons/weblinks.png" alt="'. $row['website']. '" title="'. $row['website']. '" /></a>';
+					}
+				echo '</td>
+				<td>'. $row['usr_login_name']. '</td>
+				<td>'. $timestampChange->format($g_preferences['system_date'].' '.$g_preferences['system_time']). '</td>
+				<td style="text-align: center;">';
+					// Link um E-Mail mit neuem Passwort zu zuschicken
+					// nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+					if($row['member_this_orga'] > 0
+					&& $g_current_user->isWebmaster()
+					&& strlen($row['usr_login_name']) > 0
+					&& strlen($row['email']) > 0
+					&& $g_preferences['enable_system_mails'] == 1
+					&& $row['usr_id'] != $g_current_user->getValue('usr_id'))
+					{
+						echo '
+						<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
+							src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$g_l10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
+					}
+					else
+					{
+						echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+					}
 
-                        // Link um User zu editieren
-                        // es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
-                        if($row['member_this_orga'] > 0 || $row['member_other_orga'] == 0)
-                        {
-                            echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('MEM_EDIT_USER').'" title="'.$g_l10n->get('MEM_EDIT_USER').'" /></a>';
-                        }
-                        else
-                        {
-                            echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-                        }
+					// Link um User zu editieren
+					// es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
+					if($row['member_this_orga'] > 0 || $row['member_other_orga'] == 0)
+					{
+						echo '
+						<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
+							src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('MEM_EDIT_USER').'" title="'.$g_l10n->get('MEM_EDIT_USER').'" /></a>';
+					}
+					else
+					{
+						echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+					}
 
-                        // Mitglieder entfernen
-                        if( (($row['member_other_orga'] == 0 && $g_current_user->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
-                          || $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
-                        && $row['usr_id'] != $g_current_user->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
-                        {
-                            echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('MEM_REMOVE_USER').'" title="'.$g_l10n->get('MEM_REMOVE_USER').'" /></a>';
-                        }
-                        else
-                        {
-                            echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-                        }
-                    echo '</td>
-                </tr>';
-            }
-        }
+					// Mitglieder entfernen
+					if( (($row['member_other_orga'] == 0 && $g_current_user->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
+					  || $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
+					&& $row['usr_id'] != $g_current_user->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
+					{
+						echo '
+						<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
+							src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('MEM_REMOVE_USER').'" title="'.$g_l10n->get('MEM_REMOVE_USER').'" /></a>';
+					}
+					else
+					{
+						echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+					}
+				echo '</td>
+			</tr>';
+			$irow++;
+		}
     echo '</table>';
 
     // Navigation mit Vor- und Zurueck-Buttons

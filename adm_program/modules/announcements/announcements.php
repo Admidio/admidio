@@ -181,7 +181,7 @@ $sql = 'SELECT ann.*,
            AND ann_org_shortname IN ('.$organizations.') ))
                '.$conditions.' 
          ORDER BY ann_timestamp_create DESC
-         LIMIT '.$req_start.', '.$announcements_per_page.'';
+         LIMIT '.$announcements_per_page.' OFFSET '.$req_start;
 $announcements_result = $g_db->query($sql);
 
 // Neue Ankuendigung anlegen
