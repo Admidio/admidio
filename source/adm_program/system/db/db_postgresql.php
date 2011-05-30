@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Datenbankschnittstelle zu einer Postgre-Datenbank
+ * Datenbankschnittstelle zu einer PostgreSQL-Datenbank
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -10,17 +10,16 @@
  
 require_once(SERVER_PATH. '/adm_program/system/db/db_common.php');
  
-class DBPostgre extends DBCommon
+class DBPostgreSQL extends DBCommon
 {
     // Verbindung zur Datenbank aufbauen    
     public function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_connection = false)
     {
-        $this->db_type    = 'postgre';
+        $this->db_type    = 'postgresql';
         $this->server     = $sql_server;
         $this->user       = $sql_user;
         $this->password   = $sql_password;
-        $this->dbname     = $sql_dbname;
-		$this->insert_id  = 0;		
+        $this->dbname     = $sql_dbname;	
 		$connectionString = 'host='.$this->server.' port=5432 dbname='.$this->dbname.' user='.$this->user.' password='.$this->password;
 		
 		if($new_connection == true)
@@ -34,7 +33,7 @@ class DBPostgre extends DBCommon
         
         if($this->connect_id)
         {
-            // Postgre-Server-Version ermitteln
+            // PostgreSQL-Server-Version ermitteln
 			$versionArray = pg_version($this->connect_id);
 			$this->version = $versionArray['client'];
 
@@ -46,7 +45,7 @@ class DBPostgre extends DBCommon
     // Bewegt den internen Ergebnis-Zeiger
     public function data_seek($result, $row_number)
     {
-        return mysql_data_seek($result, $row_number);
+        return pg_result_seek($result, $row_number);
     }   
     
     // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
@@ -72,7 +71,7 @@ class DBPostgre extends DBCommon
     // Escaped den mysql String
     public function escape_string($string)
     {
-        return mysql_real_escape_string($string);
+        return pg_escape_string($string);
     }
 
     // Gibt den Speicher für den Result wieder frei
@@ -82,7 +81,7 @@ class DBPostgre extends DBCommon
         {
             $result = $this->query_result;
         }
-        return mysql_fetch_assoc($result);
+        return pg_fetch_assoc($result);
     }
 
     // result : Ergebniskennung
@@ -111,20 +110,21 @@ class DBPostgre extends DBCommon
     // Liefert den Namen eines Feldes in einem Ergebnis
     public function field_name($result, $index)
     {
-        return mysql_field_name($result, $index);
+        return pg_field_name($result, $index);
     }
 
     // Gibt den Speicher für den Result wieder frei
     public function free_result($result)
     {
-        return mysql_free_result($result);
+        return pg_free_result($result);
     }
 
     // Liefert die ID einer vorherigen INSERT-Operation
     public function insert_id()
     {
-		// insert_id wurde in query() entsprechend gesetzt
-        return $this->insert_id;
+		$insert_query = pg_query('SELECT lastval()');
+		$insert_row = pg_fetch_row($insert_query);
+		return $insert_row[0];
     }
     
     // Liefert die Anzahl der Felder in einem Ergebnis
@@ -135,7 +135,7 @@ class DBPostgre extends DBCommon
             $result = $this->query_result;
         }
         
-        return mysql_num_fields($result);
+        return pg_num_fields($result);
     }
     
     // Liefert die Anzahl der Datensaetze im Ergebnis
@@ -158,13 +158,13 @@ class DBPostgre extends DBCommon
 			// bei einem Create-Table-Statement ggf. vorhandene Tabellenoptionen von MySQL abgeschnitten werden
 			$sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
 
-			// Postgre kennt unsigned nicht
+			// PostgreSQL kennt unsigned nicht
 			$sql = str_replace('unsigned', '', $sql);
 
-			// Boolean macht Probleme, da Postgre es als String behandelt
+			// Boolean macht Probleme, da PostgreSQL es als String behandelt
 			$sql = str_replace('boolean', 'smallint', $sql);
 
-			// Blobs sind in Postgre bytea Datentypen
+			// Blobs sind in PostgreSQL bytea Datentypen
 			$sql = str_replace('blob', 'bytea', $sql);
 			
 			// Auto_Increment muss durch Serial ersetzt werden
@@ -176,8 +176,6 @@ class DBPostgre extends DBCommon
 			}
 		}
 		
-		$sql = str_replace('"', '\'', $sql);
-        
         // im Debug-Modus werden alle SQL-Statements mitgeloggt
         if($g_debug == 1)
         {
@@ -191,19 +189,10 @@ class DBPostgre extends DBCommon
             return $this->db_error();
         }
 
-		// bei einem Insert-Statement noch die ID des eingefuegten DS ermitteln
-		if(strpos(trim(strtolower($sql)), 'insert into') !== false)
-		{
-			// bei einem Insert-Statement noch die ID des eingefuegten DS ermitteln
-			$insert_query = pg_query('SELECT lastval()');
-			$insert_row = pg_fetch_row($insert_query);
-			$this->insert_id = $insert_row[0];
-		}
-
         return $this->query_result;
     }
 
-	// Postgre baut eine Verbdingung immer direkt zu einer einzelnen Datenbank auf
+	// PostgreSQL baut eine Verbdingung immer direkt zu einer einzelnen Datenbank auf
 	// aus diesem Grund hat select_db keine Auswirkung
     public function select_db($database = '')
     {

@@ -215,7 +215,7 @@ $sql = 'SELECT *
          WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
                '.$conditions.'
          ORDER BY gbo_timestamp_create DESC
-         LIMIT '. $_GET['start']. ', '. $guestbook_entries_per_page;
+         LIMIT '. $guestbook_entries_per_page.' OFFSET '.$_GET['start'];
 $guestbook_result = $g_db->query($sql);
 
 // Icon-Links und Navigation anzeigen

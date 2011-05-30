@@ -300,7 +300,7 @@ $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.me
            AND dat_id = dtr_dat_id
                '.$login_sql.'
                '.$conditions. $condition_calendar. $order_by. '
-         LIMIT '.$req_start.', '.$dates_per_page;
+         LIMIT '.$dates_per_page.' OFFSET '.$req_start;
 $dates_result = $g_db->query($sql);
 
 

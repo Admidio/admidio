@@ -103,7 +103,7 @@ $sql='      SELECT *
 //Limit setzen falls gefordert
 if($plg_photos_albums != 0)
 {
-    $sql = $sql.' LIMIT 0, '.$plg_photos_albums;
+    $sql = $sql.' LIMIT '.$plg_photos_albums;
 }
 
 $result = $g_db->query($sql);

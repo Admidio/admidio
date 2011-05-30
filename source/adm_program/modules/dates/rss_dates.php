@@ -82,8 +82,8 @@ $sql = 'SELECT cat.*, dat.*,
            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                OR (   dat_global  = 1
                   AND cat_org_id IN ('.$organizations.') ))
-           AND (  dat_begin >= \''.date('Y-m-d h:i:s', time()).'\' 
-               OR dat_end   >= \''.date('Y-m-d h:i:s', time()).'\' )
+           AND (  dat_begin >= \''.DATETIME_NOW.'\' 
+               OR dat_end   >= \''.DATETIME_NOW.'\' )
                '.$hidden.'
          ORDER BY dat_begin ASC
          LIMIT 10 ';
@@ -140,7 +140,7 @@ while ($row = $g_db->fetch_array($result))
                    '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
 
     //i-cal downloadlink
-    $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=4">'.$g_l10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
+    $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=6">'.$g_l10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
     $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create')). '</i>';
