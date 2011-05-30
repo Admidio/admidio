@@ -103,16 +103,16 @@ elseif (isset($_GET['rol_id']) || (isset($_GET['rolle']) && isset($_GET['cat']))
     }
     else
     {
-        $sqlConditions = ' AND UPPER(rol_name) = UPPER("'.$_GET['rolle'].'")
-                           AND UPPER(cat_name) = UPPER("'.$_GET['cat'].'")';
+        $sqlConditions = ' AND UPPER(rol_name) = UPPER(\''.$_GET['rolle'].'\')
+                           AND UPPER(cat_name) = UPPER(\''.$_GET['cat'].'\')';
     }
 
     $sql = 'SELECT rol_mail_this_role, rol_name, rol_id, 
                    (SELECT COUNT(1)
                       FROM '.TBL_MEMBERS.'
                      WHERE mem_rol_id = rol_id
-                       AND (  mem_begin > "'.DATE_NOW.'"
-                           OR mem_end   < "'.DATE_NOW.'")) as former
+                       AND (  mem_begin > \''.DATE_NOW.'\'
+                           OR mem_end   < \''.DATE_NOW.'\')) as former
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_cat_id    = cat_id
                AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'

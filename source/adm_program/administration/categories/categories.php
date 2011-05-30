@@ -163,7 +163,7 @@ echo '
     $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
              WHERE (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-               AND cat_type   = "'.$req_type.'"
+               AND cat_type   = \''.$req_type.'\'
              ORDER BY cat_sequence ASC ';
     $cat_result = $g_db->query($sql);
     $write_tbody = false;

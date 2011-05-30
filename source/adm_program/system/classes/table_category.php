@@ -33,7 +33,7 @@ class TableCategory extends TableAccess
         $sql = 'SELECT count(1) AS anzahl FROM '. TBL_CATEGORIES. '
                  WHERE (  cat_org_id = '. $g_current_session->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )
-                   AND cat_type     = "'. $this->getValue('cat_type'). '"';
+                   AND cat_type     = \''. $this->getValue('cat_type'). '\'';
         $result = $this->db->query($sql);
         
         $row = $this->db->fetch_array($result);
@@ -45,7 +45,7 @@ class TableCategory extends TableAccess
                      WHERE (  cat_org_id = '. $g_current_session->getValue('ses_org_id'). '
                            OR cat_org_id IS NULL )
                        AND cat_sequence > '. $this->getValue('cat_sequence'). '
-                       AND cat_type     = "'. $this->getValue('cat_type'). '"';
+                       AND cat_type     = \''. $this->getValue('cat_type'). '\'';
             $this->db->query($sql);
     
             // Abhaenigigkeiten loeschen
@@ -127,7 +127,7 @@ class TableCategory extends TableAccess
         {
             $newNameIntern = $newNameIntern.'_'.$index;
         }
-        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_name_intern = "'.$newNameIntern.'"';
+        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_name_intern = \''.$newNameIntern.'\'';
         $this->db->query($sql);
         
         if($this->db->num_rows() > 0)
@@ -145,7 +145,7 @@ class TableCategory extends TableAccess
 
         // Anzahl orgaunabhaengige ermitteln, da diese nicht mit den abhaengigen vermischt werden duerfen
         $sql = 'SELECT COUNT(1) as count FROM '. TBL_CATEGORIES. '
-                 WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                 WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                    AND cat_org_id IS NULL ';
         $this->db->query($sql);
         $row = $this->db->fetch_array();
@@ -157,7 +157,7 @@ class TableCategory extends TableAccess
             || $this->getValue('cat_sequence') > $row['count']+1)
             {
                 $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
-                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                         WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                                           OR cat_org_id IS NULL )
                            AND cat_sequence = '.$this->getValue('cat_sequence').' - 1 ';
@@ -173,7 +173,7 @@ class TableCategory extends TableAccess
             || $this->getValue('cat_sequence') < $row['count'])
             {
                 $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
-                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                         WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                                           OR cat_org_id IS NULL )
                            AND cat_sequence = '.$this->getValue('cat_sequence').' + 1 ';
