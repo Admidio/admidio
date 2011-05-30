@@ -393,7 +393,7 @@ else
 
                 // Alle Kommentare zu diesem Eintrag werden nun aus der DB geholt...
                 $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. '
-                           WHERE gbc_gbo_id = "'.$guestbook->getValue('gbo_id').'"
+                           WHERE gbc_gbo_id = '.$guestbook->getValue('gbo_id').'
                                  '.$conditions.'
                            ORDER by gbc_timestamp_create asc';
                 $comment_result = $g_db->query($sql);

@@ -352,7 +352,6 @@ class TableAccess
                 $sql = 'INSERT INTO '.$this->table_name.' ('.$sql_field_list.') VALUES ('.$sql_value_list.') ';
                 $this->db->query($sql);
                 $this->new_record = false;
-				error_log($this->key_name);
 				if(strlen($this->key_name) > 0)
 				{
 					$this->dbColumns[$this->key_name] = $this->db->insert_id();

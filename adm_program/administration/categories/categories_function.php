@@ -133,9 +133,9 @@ if($_GET['mode'] == 1)
         // Schauen, ob die Kategorie bereits existiert
         $sql    = 'SELECT COUNT(*) as count
                      FROM '. TBL_CATEGORIES. '
-                    WHERE cat_type = "'. $_GET['type']. '"
-                      AND cat_name LIKE "'. $_POST['cat_name']. '"
-                      AND cat_id   <> '. $_GET['cat_id']. 
+                    WHERE cat_type    = \''. $_GET['type']. '\'
+                      AND cat_name LIKE \''. $_POST['cat_name']. '\'
+                      AND cat_id     <> '. $_GET['cat_id']. 
                           $search_orga;
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);

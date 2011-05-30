@@ -98,12 +98,12 @@ if($active_role)
 // Listen-SQL-Statement zusammensetzen
 if($active_role == 1)
 {
-    $sql_member_status = ' AND mem_begin <= "'.DATE_NOW.'"
-                           AND mem_end   >= "'.DATE_NOW.'" ';
+    $sql_member_status = ' AND mem_begin <= \''.DATE_NOW.'\'
+                           AND mem_end   >= \''.DATE_NOW.'\' ';
 }
 else
 {
-    $sql_member_status = ' AND mem_end < "'.DATE_NOW.'" ';
+    $sql_member_status = ' AND mem_end < \''.DATE_NOW.'\' ';
 }
 
 $sql = 'SELECT rol.*, cat.*, 
@@ -211,7 +211,7 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
     if($show_ctg_sel == 1)
     {
         // Combobox mit allen Kategorien anzeigen, denen auch Rollen zugeordnet sind
-        $sql = 'SELECT DISTINCT cat_name 
+        $sql = 'SELECT DISTINCT cat_name, cat_sequence 
                   FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  WHERE (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
@@ -237,14 +237,14 @@ if($show_ctg_sel == 1 || $g_current_user->assignRoles())
                 }
                 echo '>'.$g_l10n->get('SYS_ALL').'</option>';
 
-                while($row = $g_db->fetch_object($result))
+                while($row = $g_db->fetch_array($result))
                 {
-                    echo '<option value="'. urlencode($row->cat_name). '"';
-                    if($_GET['category'] == $row->cat_name)
+                    echo '<option value="'. urlencode($row['cat_name']). '"';
+                    if($_GET['category'] == $row['cat_name'])
                     {
                         echo ' selected="selected" ';
                     }
-                    echo '>'.$row->cat_name.'</option>';
+                    echo '>'.$row['cat_name'].'</option>';
                 }
             echo '</select>';
             if($g_current_user->assignRoles())
