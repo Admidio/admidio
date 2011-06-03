@@ -3,10 +3,16 @@
 // Demo-DB neu erstellen
 
 include('../config.php');
-include('mysql.php');
-include('folder.php');
+include('../adm_program/system/db/database.php');
+include('../adm_program/system/classes/folder.php');
 
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'db_scripts')-1));
+
+// Default-DB-Type ist immer MySql
+if(!isset($g_db_type))
+{
+    $g_db_type = 'mysql';
+}
 
 // Teile dieser Funktion sind von get_backtrace aus phpBB3
 // Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
@@ -94,7 +100,7 @@ if($b_return == false)
 echo 'Der Ordner <strong>adm_my_files</strong> wurde kopiert<br />';
 
  // Verbindung zu Datenbank herstellen
-$db = new MySqlDB();
+$db = Database::createDatabaseObject($g_db_type);
 $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 $filename = 'db.sql';

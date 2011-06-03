@@ -2,12 +2,12 @@
 /******************************************************************************
  * Birthday
  *
- * Version 1.6.1
+ * Version 1.7.0
  *
  * Das Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben.
  * Auf Wunsch koennen auch Geburtstagskinder vor X Tagen angezeigt werden.
  *
- * Kompatible ab Admidio-Versions 2.2.0
+ * Kompatible ab Admidio-Versions 2.3.0
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -106,64 +106,60 @@ if($plg_show_names_extern == 0 && $g_valid_login == 0)
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
 
-$sql    = "SELECT DISTINCT usr_id, usr_login_name, 
+$sql    = 'SELECT DISTINCT usr_id, usr_login_name, 
                            last_name.usd_value as last_name, first_name.usd_value as first_name, 
                            birthday.bday as birthday, birthday.bdate,
-                           DATEDIFF(birthday.bdate, '".DATETIME_NOW."') AS days_to_bdate,
+                           DATEDIFF(birthday.bdate, \''.DATETIME_NOW.'\') AS days_to_bdate,
                            YEAR(bdate) - YEAR(bday) AS age,
                            email.usd_value as email, gender.usd_value as gender
-             FROM ". TBL_USERS. " users
-             JOIN (
-            (SELECT 
-                usd_usr_id,
-                usd_value AS bday,
-                CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)) AS bdate
-                FROM ". TBL_USER_DATA. " bd1
-                WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."'), '-', month(usd_value),'-', dayofmonth(bd1.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-                        AND usd_usf_id = ". $g_current_user->getProperty('BIRTHDAY', "usf_id"). ")
-        UNION
-            (SELECT 
-                usd_usr_id,
-                usd_value AS bday,
-                CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)) AS bdate
-                FROM ". TBL_USER_DATA. " bd2
-                WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')-1, '-', month(usd_value),'-', dayofmonth(bd2.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-                        AND usd_usf_id = ". $g_current_user->getProperty('BIRTHDAY', "usf_id"). ")
-        UNION
-            (SELECT 
-                usd_usr_id,
-                usd_value AS bday,
-                CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)) AS bdate
-                FROM ". TBL_USER_DATA. " bd3
-                WHERE DATEDIFF(CONCAT(year('".DATETIME_NOW."')+1, '-', month(usd_value),'-', dayofmonth(bd3.usd_value)), '".DATETIME_NOW."') BETWEEN -$plg_show_zeitraum AND $plg_show_future
-                        AND usd_usf_id = ". $g_current_user->getProperty('BIRTHDAY', "usf_id"). ")
-         ) AS birthday
+             FROM '. TBL_USERS. ' users
+             JOIN ( (SELECT usd_usr_id, usd_value AS bday,
+							year(\''.DATETIME_NOW.'\') || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd1.usd_value) AS bdate
+					   FROM '. TBL_USER_DATA. ' bd1
+					  WHERE DATEDIFF(year(\''.DATETIME_NOW.'\') || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd1.usd_value), \''.DATETIME_NOW.'\') 
+							BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
+						AND usd_usf_id = '. $g_current_user->getProperty('BIRTHDAY', 'usf_id'). ')
+				  UNION
+					(SELECT usd_usr_id, usd_value AS bday,
+							year(\''.DATETIME_NOW.'\')-1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd2.usd_value) AS bdate
+					   FROM '. TBL_USER_DATA. ' bd2
+					  WHERE DATEDIFF(year(\''.DATETIME_NOW.'\')-1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd2.usd_value), \''.DATETIME_NOW.'\') 
+							BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
+						AND usd_usf_id = '. $g_current_user->getProperty('BIRTHDAY', 'usf_id'). ')
+				  UNION
+					(SELECT usd_usr_id, usd_value AS bday,
+							year(\''.DATETIME_NOW.'\')+1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd3.usd_value) AS bdate
+					   FROM '. TBL_USER_DATA. ' bd3
+					  WHERE DATEDIFF(year(\''.DATETIME_NOW.'\')+1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd3.usd_value), \''.DATETIME_NOW.'\') 
+							BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
+						AND usd_usf_id = '. $g_current_user->getProperty('BIRTHDAY', 'usf_id'). ')
+				  ) birthday
                ON birthday.usd_usr_id = usr_id
-             LEFT JOIN ". TBL_USER_DATA. " as last_name
+             LEFT JOIN '. TBL_USER_DATA. ' as last_name
                ON last_name.usd_usr_id = usr_id
-              AND last_name.usd_usf_id = ". $g_current_user->getProperty('LAST_NAME', "usf_id"). "
-             LEFT JOIN ". TBL_USER_DATA. " as first_name
+              AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+             LEFT JOIN '. TBL_USER_DATA. ' as first_name
                ON first_name.usd_usr_id = usr_id
-              AND first_name.usd_usf_id = ". $g_current_user->getProperty('FIRST_NAME', "usf_id"). "
-             LEFT JOIN ". TBL_USER_DATA. " as email
+              AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+             LEFT JOIN '. TBL_USER_DATA. ' as email
                ON email.usd_usr_id = usr_id
-              AND email.usd_usf_id = ". $g_current_user->getProperty('EMAIL', "usf_id"). "
-             LEFT JOIN ". TBL_USER_DATA. " as gender
+              AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
+             LEFT JOIN '. TBL_USER_DATA. ' as gender
                ON gender.usd_usr_id = usr_id
-              AND gender.usd_usf_id = ". $g_current_user->getProperty('GENDER', "usf_id"). "
-             LEFT JOIN ". TBL_MEMBERS. "
+              AND gender.usd_usf_id = '. $g_current_user->getProperty('GENDER', 'usf_id'). '
+             LEFT JOIN '. TBL_MEMBERS. '
                ON mem_usr_id = usr_id
-              AND mem_begin <= '".DATE_NOW."'
-              AND mem_end    > '".DATE_NOW."'
-             JOIN ". TBL_ROLES. "
+              AND mem_begin <= \''.DATE_NOW.'\'
+              AND mem_end    > \''.DATE_NOW.'\'
+             JOIN '. TBL_ROLES. '
                ON mem_rol_id = rol_id
-              AND rol_valid  = '1'
-             JOIN ". TBL_CATEGORIES. "
+              AND rol_valid  = 1
+             JOIN '. TBL_CATEGORIES. '
                ON rol_cat_id = cat_id
-              AND cat_org_id = ". $g_current_organization->getValue("org_id"). "
-            WHERE usr_valid = '1'
-              AND mem_rol_id ".$rol_sql."
-            ORDER BY days_to_bdate ".$sort_sql.", last_name, first_name ";
+              AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+            WHERE usr_valid = 1
+              AND mem_rol_id '.$rol_sql.'
+            ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name ';
 //echo $sql; exit();
 $result = $g_db->query($sql);
 

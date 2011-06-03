@@ -31,25 +31,16 @@ if(!$g_current_user->editAnnouncements())
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET['ann_id']) && is_numeric($_GET['ann_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(is_numeric($_GET['mode']) == false
-|| $_GET['mode'] < 1 || $_GET['mode'] > 3)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_ann_id = funcVariableIsValid($_GET, 'ann_id', 'numeric', 0);
+$get_mode   = funcVariableIsValid($_GET, 'mode', 'numeric', null, true);
 
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($g_db);
 
-if($_GET['ann_id'] > 0)
+if($get_ann_id > 0)
 {
-    $announcement->readData($_GET['ann_id']);
+    $announcement->readData($get_ann_id);
     
     // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
@@ -60,7 +51,7 @@ if($_GET['ann_id'] > 0)
 
 $_SESSION['announcements_request'] = $_REQUEST;
 
-if($_GET['mode'] == 1)
+if($get_mode == 1)
 {
     if(strlen($_POST['ann_headline']) == 0)
     {
@@ -95,7 +86,7 @@ if($_GET['mode'] == 1)
 	else
 	{
 		// Benachrichtigungs-Email für neue Einträge
-		if($g_preferences['enable_email_notification'] == 1 && $_GET['ann_id'] == 0)
+		if($g_preferences['enable_email_notification'] == 1 && $get_ann_id == 0)
 		{
 			$message = str_replace("<br />","\n", $g_l10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['ann_headline'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time())));
 			$sender_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
@@ -114,7 +105,7 @@ if($_GET['mode'] == 1)
     header('Location: '. $_SESSION['navigation']->getUrl());
     exit();
 }
-elseif($_GET['mode'] == 2)
+elseif($get_mode == 2)
 {
     // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
     if($announcement->getValue('ann_org_shortname') == $g_current_organization->getValue('org_shortname'))

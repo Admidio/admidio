@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databases>
+<database id="mysql">
+    <identifier>mysql</identifier>
+    <name>MySQL</name>
+	<minversion>4.1.1</minversion>
+</database>
+<database id="postgresql">
+    <identifier>postgresql</identifier>
+    <name>PostgreSQL</name>
+	<minversion>9.0.0</minversion>
+</database>
+</databases>

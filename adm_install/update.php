@@ -151,8 +151,8 @@ elseif($req_mode == 2)
 
     // vor dem Update die Versionsnummer umsetzen, damit keiner mehr was machen kann
     $temp_version = substr(ADMIDIO_VERSION, 0, 4). 'u';
-    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'. $temp_version. '"
-             WHERE prf_name    = "db_version" ';
+    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. $temp_version. '\'
+             WHERE prf_name    = \'db_version\' ';
     $g_db->query($sql);                
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
@@ -211,6 +211,9 @@ elseif($req_mode == 2)
                 
                 $flag_next_version = true;
             }
+			
+			// now set db specific admidio preferences
+			$g_db->setDBSpecificAdmidioProperties($main_version. '.'. $sub_version. '.'. $micro_version);
     
             if(file_exists($conv_file))
             {
@@ -249,12 +252,12 @@ elseif($req_mode == 2)
     $g_db->query($sql);
     
     // nach einem erfolgreichen Update noch die neue Versionsnummer in DB schreiben
-    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'. ADMIDIO_VERSION. '"
-             WHERE prf_name    = "db_version" ';
+    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. ADMIDIO_VERSION. '\'
+             WHERE prf_name    = \'db_version\' ';
     $g_db->query($sql);                
 
-    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = "'. BETA_VERSION. '"
-             WHERE prf_name    = "db_version_beta" ';
+    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. BETA_VERSION. '\'
+             WHERE prf_name    = \'db_version_beta\' ';
     $g_db->query($sql);                
     
     // globale Objekte aus einer evtl. vorhandenen Session entfernen, 

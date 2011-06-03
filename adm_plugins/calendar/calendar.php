@@ -159,7 +159,7 @@ else
     $jahr = date('Y');
     $heute = date('d');
 }
-$sql_dat = $jahr. "-". $monat;
+$sql_dat = $jahr. '-'. $monat;
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
 $g_db->setCurrentDB();
@@ -214,7 +214,7 @@ if($plg_ter_aktiv == 1)
             FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
             WHERE dat_id = dtr_dat_id
                 '.$login_sql.'
-                AND DATE_FORMAT(dat_begin, "%Y-%m") = "'.$sql_dat.'"
+                AND DATE_FORMAT(dat_begin, \'%Y-%m\') = \''.$sql_dat.'\'
                 '.$sql_syntax.'
             ORDER BY dat_begin ASC';
     $result = $g_db->query($sql);

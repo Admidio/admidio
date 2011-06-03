@@ -39,7 +39,7 @@ class TableFile extends TableAccess
         $sql_additional_tables .= TBL_FOLDERS;
         $sql_where_condition   .= '    fil_id     = '.$file_id.'
                                    AND fil_fol_id = fol_id
-                                   AND fol_type   = "DOWNLOAD"
+                                   AND fol_type   = \'DOWNLOAD\'
                                    AND fol_org_id = '. $g_current_organization->getValue('org_id');
         return parent::readData($file_id, $sql_where_condition, $sql_additional_tables);
     }
@@ -76,8 +76,8 @@ class TableFile extends TableAccess
                         WHERE flr_fol_id = '. $this->getValue('fol_id'). '
                           AND flr_rol_id = mem_rol_id
                           AND mem_usr_id = '. $g_current_user->getValue('usr_id'). '
-                          AND mem_begin <= "'.DATE_NOW.'"
-                          AND mem_end    > "'.DATE_NOW.'"';
+                          AND mem_begin <= \''.DATE_NOW.'\'
+                          AND mem_end    > \''.DATE_NOW.'\'';
                 $result_rights = $this->db->query($sql_rights);
                 $row_rights = $this->db->fetch_array($result_rights);
                 $row_count  = $row_rights[0];

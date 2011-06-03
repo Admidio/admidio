@@ -19,6 +19,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_announcement.php');
+unset($_SESSION['announcements_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
@@ -32,56 +33,23 @@ elseif($g_preferences['enable_announcements_module'] == 2)
     require('../../system/login_valid.php');
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_start    = 0;
-$req_headline = $g_l10n->get('ANN_ANNOUNCEMENTS');
-$req_id       = 0;
-$sql_datum    = '';
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_start    = funcVariableIsValid($_GET, 'start', 'numeric', 0);
+$get_headline = funcVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
+$get_ann_id   = funcVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_date     = funcVariableIsValid($_GET, 'date', 'numeric');
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET['start']))
+if(strlen($get_date) > 0)
 {
-    if(is_numeric($_GET['start']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_start = $_GET['start'];
+	$get_date = substr($get_date,0,4). '-'. substr($get_date,4,2). '-'. substr($get_date,6,2);
 }
 
-if(isset($_GET['headline']))
-{
-    $req_headline = strStripTags($_GET['headline']);
-}
-
-if(isset($_GET['id']))
-{
-    if(is_numeric($_GET['id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_id = $_GET['id'];
-}
-
-if(array_key_exists('date', $_GET))
-{
-    if(is_numeric($_GET['date']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    else
-    {
-        $sql_datum = substr($_GET['date'],0,4). '-'. substr($_GET['date'],4,2). '-'. substr($_GET['date'],6,2);
-    }
-}
-
-unset($_SESSION['announcements_request']);
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $req_headline;
+$g_layout['title']  = $get_headline;
 $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -92,14 +60,14 @@ $g_layout['header'] = '
 
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] .= '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname').' - '.$req_headline).'"
-        href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$req_headline.'" />';
+    $g_layout['header'] .= '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname').' - '.$get_headline).'"
+        href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$get_headline.'" />';
 };
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">'.$req_headline.'</h1>';
+echo '<h1 class="moduleHeadline">'.$get_headline.'</h1>';
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
@@ -112,17 +80,17 @@ foreach($arr_ref_orgas as $key => $value)
 $organizations = $organizations. '\''. $g_current_organization->getValue('org_shortname'). '\'';
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
-if($req_id > 0)
+if($get_ann_id > 0)
 {
-    $conditions = 'AND ann_id ='. $req_id;
+    $conditions = 'AND ann_id ='. $get_ann_id;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
     // Ankuendigungen an einem Tag suchen
-    if(strlen($sql_datum) > 0)
+    if(strlen($get_date) > 0)
     {
-        $conditions = ' AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$sql_datum.'\'';        
+        $conditions = ' AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$get_date.'\'';        
     }
     //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
     else
@@ -131,7 +99,7 @@ else
     }
 }
 
-if($req_id == 0)
+if($get_ann_id == 0)
 {
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
     $sql = 'SELECT COUNT(1) as count 
@@ -181,7 +149,7 @@ $sql = 'SELECT ann.*,
            AND ann_org_shortname IN ('.$organizations.') ))
                '.$conditions.' 
          ORDER BY ann_timestamp_create DESC
-         LIMIT '.$announcements_per_page.' OFFSET '.$req_start;
+         LIMIT '.$announcements_per_page.' OFFSET '.$get_start;
 $announcements_result = $g_db->query($sql);
 
 // Neue Ankuendigung anlegen
@@ -191,9 +159,9 @@ if($g_current_user->editAnnouncements())
     <ul class="iconTextLinkList">
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$get_headline.'"><img
                 src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_CREATE').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$get_headline.'">'.$g_l10n->get('SYS_CREATE').'</a>
             </span>
         </li>
     </ul>';        
@@ -202,7 +170,7 @@ if($g_current_user->editAnnouncements())
 if ($g_db->num_rows($announcements_result) == 0)
 {
     // Keine Ankuendigungen gefunden
-    if($req_id > 0)
+    if($get_ann_id > 0)
     {
         echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
@@ -235,7 +203,7 @@ else
                         if($announcement->editRight() == true)
                         {
                             echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$req_headline.'"><img 
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$get_headline.'"><img 
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
                         }
 
@@ -267,8 +235,8 @@ else
 }
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$req_headline;
-echo generatePagination($base_url, $num_announcements, $announcements_per_page, $req_start, TRUE);
+$base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$get_headline;
+echo generatePagination($base_url, $num_announcements, $announcements_per_page, $get_start, TRUE);
         
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

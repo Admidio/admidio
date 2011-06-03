@@ -93,7 +93,8 @@ if($search != '')
     	//in Condition einbinden
 	    foreach($search_therms as $search_therm)
 	    {
-	    	$member_condition .= ' AND ((UPPER(last_name.usd_value) LIKE \''.$search_therm.'%\') OR (UPPER(first_name.usd_value) LIKE \''.$search_therm.'%\')) ';
+	    	$member_condition .= ' AND (  (UPPER(last_name.usd_value)  LIKE UPPER(\''.$search_therm.'%\')) 
+									   OR (UPPER(first_name.usd_value) LIKE UPPER(\''.$search_therm.'%\'))) ';
 	    }
     }
     //Ergebnissmenge Limitieren

@@ -35,14 +35,8 @@ if ($g_preferences['enable_announcements_module'] != 1)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_headline = $g_l10n->get('ANN_ANNOUNCEMENTS');
-
-// Uebergabevariablen pruefen
-if(isset($_GET['headline']))
-{
-    $req_headline = strStripTags($_GET['headline']);
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_headline = funcVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
@@ -80,7 +74,7 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '. $req_headline, 
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '. $get_headline, 
 		$g_l10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $g_current_organization->getValue('org_longname')));
 $announcement = new TableAnnouncement($g_db);
 
@@ -93,7 +87,7 @@ while ($row = $g_db->fetch_object($result))
 
     // Die Attribute fuer das Item zusammenstellen
     $title = $announcement->getValue('ann_headline');
-    $link  = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$req_headline;
+    $link  = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$get_headline;
     $description = '<b>'.$announcement->getValue('ann_headline').'</b>';
 
     // Beschreibung und Link zur Homepage ausgeben

@@ -114,14 +114,14 @@ function checkVersions(&$db, &$message)
     $message = '';
 
     // Datenbank pruefen
-    if($db->db_type == 'mysql' && version_compare($db->server_info(), MIN_MYSQL_VERSION) == -1)
+    if(version_compare($db->getVersion(), $db->getMinVersion()) == -1)
     {
         $message = $message. ' 
         <li>
             <dl>
                 <dt>'.$g_l10n->get('INS_MYSQL_VERSION').':</dt>
-                <dd><strong>'.$db->server_info().'</strong><br />'.
-                    $g_l10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, MIN_MYSQL_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
+                <dd><strong>'.$db->getVersion().'</strong><br />'.
+                    $g_l10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, $db->getMinVersion(), '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
                 '</dd>
             </dl>
         </li>';

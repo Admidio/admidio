@@ -58,6 +58,7 @@ require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/form_elements.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
@@ -97,15 +98,7 @@ if($req_mode == 1)  // (Default) Sprache auswaehlen
                             <li>
                                 <dl>
                                     <dt><label for="system_language">'.$g_l10n->get('SYS_LANGUAGE').':</label></dt>
-                                    <dd>
-                                        <select size="1" id="system_language" name="system_language">
-                                            <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-                                            foreach($g_l10n->getLanguages() as $key => $value)
-                                            {
-                                                $message .= '<option value="'.$key.'">'.$value.'</option>';
-                                            }
-                                        $message .= '</select>
-                                    </dd>
+                                    <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language').'</dd>
                                 </dl>
                             </li>
                         </ul>
@@ -167,12 +160,7 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                             <li>
                                 <dl>
                                     <dt><label for="db_type">'.$g_l10n->get('INS_DATABASE_SYSTEM').':</label></dt>
-                                    <dd>
-                                        <select size="1" id="db_type" name="db_type">
-                                            <option selected="selected" value="mysql">MySQL</option>
-											<option value="postgresql">PostgreSQL</option>
-										</select>
-                                    </dd>
+                                    <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/db/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', 'mysql').'</dd>
                                 </dl>
                             </li>
                             <li>
@@ -254,8 +242,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         }
 
         // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
-		error_log('db::'.$_SESSION['db_type']);
-        $db = $g_db = Database::createDatabaseObject($_SESSION['db_type']);
+        $db = Database::createDatabaseObject($_SESSION['db_type']);
         if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
         {
             showPage($g_l10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
@@ -487,7 +474,7 @@ elseif($req_mode == 8)
     {
         showPage($g_l10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
     }
-    $db = $g_db = Database::createDatabaseObject($g_db_type);
+    $db = Database::createDatabaseObject($g_db_type);
     $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
     $filename = 'db_scripts/db.sql';
@@ -572,6 +559,9 @@ elseif($req_mode == 8)
     $orga_preferences['email_administrator'] = $_SESSION['user_email'];
 
     $g_current_organization->setPreferences($orga_preferences, false);
+	
+	// now set db specific admidio preferences
+	$db->setDBSpecificAdmidioProperties();
 
     // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
     $systemmails_texts = array('SYSMAIL_REGISTRATION_USER' => $g_l10n->get('SYS_SYSMAIL_REGISTRATION_USER'),

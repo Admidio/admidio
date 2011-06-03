@@ -157,7 +157,7 @@ create table %PREFIX%_dates
    dat_timestamp_change           timestamp,
    dat_rol_id                     integer       unsigned,
    dat_room_id                    integer       unsigned,
-   dat_max_members                integer       not null,                      
+   dat_max_members                integer       not null default 0,                      
    primary key (dat_id)
 )
 engine = InnoDB
@@ -501,7 +501,7 @@ create table %PREFIX%_sessions
    ses_begin                      timestamp     not null,
    ses_timestamp                  timestamp     not null,
    ses_ip_address                 varchar(15)   not null,
-   ses_blob                       blob,
+   ses_binary                     blob,
    ses_renew                      smallint      not null default 0,
    primary key (ses_id)
 )

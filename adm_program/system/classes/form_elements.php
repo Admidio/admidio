@@ -152,5 +152,40 @@ class FormElements
 		$selectBoxHtml .= '</select>';
 		return $selectBoxHtml;
 	}
+	
+	// Diese Funktion erzeugt eine Combobox mit allen Eintraegen aus einer XML-Datei
+	//
+	// Uebergaben:
+	// xmlFile      : Serverpfad zur XML-Datei
+	// xmlValueTag  : Name des XML-Tags der den jeweiligen Wert des Comboboxeintrags beinhaltet
+	// xmlViewTag   : Name des XML-Tags der den jeweiligen angezeigten Wert des Comboboxeintrags beinhaltet
+	// htmlFieldId  : (optional) Html-Id der select-Box
+	// defaultValue : (optional) Eintrag des xmlValueTag der vorausgewaehlt sein soll
+	 public static function generateXMLSelectBox($xmlFile, $xmlValueTag, $xmlViewTag, $htmlFieldId = '', $defaultValue = '')
+	{
+		global $g_l10n;
+
+		// Inhalt der XML-Datei in Arrays schreiben
+		$data = implode('', file($xmlFile));
+		$p = xml_parser_create();
+		xml_parse_into_struct($p, $data, $vals, $index);
+		xml_parser_free($p);
+		
+		// SelectBox ausgeben
+		$selectBoxHtml = '<select size="1" id="'.$htmlFieldId.'" name="'.$htmlFieldId.'">
+			<option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+
+			for($i = 0; $i < count($index[$xmlValueTag]); $i++)
+			{
+				$selected = '';
+				if($vals[$index[$xmlValueTag][$i]]['value'] == $defaultValue)
+				{
+					$selected = ' selected="selected" ';
+				}
+				$selectBoxHtml .= '<option '.$selected.' value="'.$vals[$index[$xmlValueTag][$i]]['value'].'">'.$vals[$index[$xmlViewTag][$i]]['value'].'</option>';
+			}
+		$selectBoxHtml .= '</select>';
+		return $selectBoxHtml;
+	}
 }
 ?>

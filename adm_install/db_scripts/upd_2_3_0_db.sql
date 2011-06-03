@@ -61,7 +61,7 @@ ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_usr_id_change` `dat_usr_id_change`
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_timestamp_change` `dat_timestamp_change` timestamp;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_rol_id` `dat_rol_id` integer unsigned;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_room_id` `dat_room_id` integer unsigned;
-ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_max_members` `dat_max_members` integer not null;
+ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_max_members` `dat_max_members` integer not null default 0;
 
 ALTER TABLE %PREFIX%_files CHANGE COLUMN `fil_id` `fil_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_files CHANGE COLUMN `fil_fol_id` `fil_fol_id` integer unsigned not null;
@@ -147,6 +147,7 @@ ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_id` `ses_id` integer unsigned n
 ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_usr_id` `ses_usr_id` integer unsigned default null;
 ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_begin` `ses_begin` timestamp;
 ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_timestamp` `ses_timestamp` timestamp;
+ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_blob` `ses_binary` blob;
 ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_renew` `ses_renew` smallint not null default 0;
 
 ALTER TABLE %PREFIX%_texts CHANGE COLUMN `txt_id` `txt_id` integer unsigned not null AUTO_INCREMENT;

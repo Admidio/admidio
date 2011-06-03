@@ -1,17 +1,13 @@
 
 set foreign_key_checks = 0;
 
-/*!40000 ALTER TABLE `%PREFIX%_organizations` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_organizations` WRITE;
 INSERT INTO `%PREFIX%_organizations` VALUES  (1,'Demo-Organisation','DEMO',NULL,'demo.admidio.org');
 INSERT INTO `%PREFIX%_organizations` VALUES  (2,'Test-Organisation','TEST',1,'demo.admidio.org');
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_organizations` ENABLE KEYS */;
 
 
-/*!40000 ALTER TABLE `%PREFIX%_preferences` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_preferences` WRITE;
 INSERT INTO `%PREFIX%_preferences` VALUES 
+ (4700,1,'db_version','2.2.5'),
+ (47001,2,'db_version','2.2.5'),
  (1000,1,'announcements_per_page','10'),
  (1100,1,'ecard_view_width','250'),
  (1200,1,'ecard_view_height','250'),
@@ -49,7 +45,6 @@ INSERT INTO `%PREFIX%_preferences` VALUES
  (4400,1,'dates_per_page','10'),
  (4500,1,'dates_show_calendar_select','1'),
  (4600,1,'dates_show_map_link','1'),
- (4700,1,'db_version','2.2.5'),
  (4800,1,'db_version_beta','0'),
  (4900,1,'default_country','DEU'),
  (5000,1,'flooding_protection_time','60'),
@@ -149,7 +144,6 @@ INSERT INTO `%PREFIX%_preferences` VALUES
  (44001,2,'dates_per_page','10'),
  (45001,2,'dates_show_calendar_select','1'),
  (46001,2,'dates_show_map_link','1'),
- (47001,2,'db_version','2.2.5'),
  (48001,2,'db_version_beta','0'),
  (49001,2,'default_country','DEU'),
  (50001,2,'flooding_protection_time','60'),
@@ -213,13 +207,8 @@ INSERT INTO `%PREFIX%_preferences` VALUES
  (92161,2,'captcha_signature_font_size','9'),
  (92171,2,'captcha_type','pic');
 
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_preferences` ENABLE KEYS */;
-
-
-/*!40000 ALTER TABLE `%PREFIX%_categories` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_categories` WRITE;
-INSERT INTO `%PREFIX%_categories` VALUES  
+ 
+ INSERT INTO `%PREFIX%_categories` VALUES  
  (1,NULL,'USF','MASTER_DATA','Stammdaten',0,1,1,1,'2011-04-06 22:05:20',NULL,NULL),
  (2,NULL,'USF','MESSENGER','Messenger',0,0,2,1,'2011-04-06 22:05:20',NULL,NULL),
  (3,1,'ROL','ALLGEMEIN','Allgemein',0,0,1,1,'2011-04-06 22:05:20',NULL,NULL),
@@ -242,13 +231,9 @@ INSERT INTO `%PREFIX%_categories` VALUES
  (21,2,'DAT','KURSE','Kurse',0,0,1,1,'2011-04-06 22:05:20',NULL,NULL),
  (22,2,'DAT','TRAINING','Training',0,0,1,1,'2011-04-06 22:05:20',NULL,NULL),
  (23,NULL,'ROL','CONFIRMATION_OF_PARTICIPATION','Teilnahmebestätigung',1,1,4,1,'2011-04-06 22:05:20',NULL,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_categories` ENABLE KEYS */;
 
-
-/*!40000 ALTER TABLE `%PREFIX%_users` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_users` WRITE;
-INSERT INTO `%PREFIX%_users` VALUES  (1,'admin','50a9c7dbf0fa09e8969978317dca12e8',NULL,NULL,NULL,NULL,'2009-02-27 21:52:41','2009-02-27 22:31:17',26,NULL,0,1,'2008-05-03 09:43:02',1,'2008-05-03 09:43:02',1,NULL),
+ 
+ INSERT INTO `%PREFIX%_users` VALUES  (1,'admin','50a9c7dbf0fa09e8969978317dca12e8',NULL,NULL,NULL,NULL,'2009-02-27 21:52:41','2009-02-27 22:31:17',26,NULL,0,1,'2008-05-03 09:43:02',1,'2008-05-03 09:43:02',1,NULL),
  (202,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,1,'2008-04-26 20:44:59',1,'2009-02-14 15:24:39',1,NULL),
  (203,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,1,'2008-04-26 20:44:59',1,'2009-02-14 15:24:39',1,NULL),
  (204,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,1,'2008-04-26 20:45:00',1,'2009-02-14 20:45:00',1,NULL),
@@ -403,13 +388,9 @@ INSERT INTO `%PREFIX%_users` VALUES  (1,'admin','50a9c7dbf0fa09e8969978317dca12e
  (353,'Dina','c33367701511b4f6020ec61ded352059',NULL,NULL,NULL,NULL,NULL,NULL,0,NULL,0,353,'2008-05-28 23:33:38',NULL,NULL,0,'DEMO'),
  (354,'Vorstand','1c528426b3fd0be73592ebba16e77cee',NULL,NULL,NULL,NULL,'2009-04-22 20:30:15','2009-02-27 02:04:16',2,NULL,0,1,'2009-06-12 20:29:33',354,'2010-05-12 20:29:33',1,NULL),
  (355,'Mitglied','7c1878b1fc9d7bb0b9462238bb7d78da',NULL,NULL,NULL,NULL,'2010-01-12 18:29:15','2010-02-27 12:34:09',2,NULL,0,1,'2009-07-12 20:29:33',355,'2010-05-12 20:29:33',1,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_users` ENABLE KEYS */;
 
-
-/*!40000 ALTER TABLE `%PREFIX%_user_fields` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_user_fields` WRITE;
-INSERT INTO `%PREFIX%_user_fields` VALUES  (1,1,'TEXT','LAST_NAME','Nachname',NULL,1,1,0,1,1,1,'2011-04-06 22:05:20',NULL,NULL),
+ 
+ INSERT INTO `%PREFIX%_user_fields` VALUES  (1,1,'TEXT','LAST_NAME','Nachname',NULL,1,1,0,1,1,1,'2011-04-06 22:05:20',NULL,NULL),
  (2,1,'TEXT','FIRST_NAME','Vorname',NULL,1,1,0,1,2,1,'2011-04-06 22:05:20',NULL,NULL),
  (3,1,'TEXT','ADDRESS','Adresse',NULL,1,0,0,0,3,1,'2011-04-06 22:05:20',NULL,NULL),
  (4,1,'TEXT','POSTCODE','PLZ',NULL,1,0,0,0,4,1,'2011-04-06 22:05:20',NULL,NULL),
@@ -430,13 +411,9 @@ INSERT INTO `%PREFIX%_user_fields` VALUES  (1,1,'TEXT','LAST_NAME','Nachname',NU
  (19,2,'TEXT','YAHOO_MESSENGER','Yahoo','Yahoo! Messenger',0,0,0,0,6,1,'2011-04-06 22:05:20',NULL,NULL),
  (20,8,'NUMERIC','MITGLIEDSNUMMER','Mitgliedsnummer',NULL,0,1,0,0,1,1,'2011-04-06 22:05:20',NULL,NULL),
  (21,8,'TEXT','LIEBLINGSFARBE','Lieblingsfarbe','Hier kann jedes Mitglied seine Lieblingsfarbe eintragen',0,0,0,0,2,1,'2011-04-06 22:05:20',NULL,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_user_fields` ENABLE KEYS */;
 
-
-/*!40000 ALTER TABLE `%PREFIX%_user_data` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_user_data` WRITE;
-INSERT INTO `%PREFIX%_user_data` VALUES  (1,1,1,'Webmaster'),
+ 
+ INSERT INTO `%PREFIX%_user_data` VALUES  (1,1,1,'Webmaster'),
  (2,1,2,'Heinz'),
  (3,1,3,'Königsallee 13'),
  (4,1,4,'40212'),
@@ -457,7 +434,7 @@ INSERT INTO `%PREFIX%_user_data` VALUES  (1,1,1,'Webmaster'),
  (19,202,6,'DEU'),
  (20,202,7,'0875-2255773'),
  (21,202,8,'0170-457412'),
- (22,202,10,'1988-01-01'),
+ (22,202,10,date_add(CURRENT_DATE, interval -25 year)),
  (23,202,11,'1'),
  (24,202,12,'ahrends.dagmar@example.com'),
  (25,202,14,'55-66-852-12'),
@@ -2254,26 +2231,20 @@ INSERT INTO `%PREFIX%_user_data` VALUES  (1,1,1,'Webmaster'),
  (1816,355,6,'DEU'),
  (1817,355,11,'2'),
  (1818,355,12,'mitglied@example.com');
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_user_data` ENABLE KEYS */;
 
-
-/*!40000 ALTER TABLE `%PREFIX%_roles` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_roles` WRITE;
+ 
 INSERT INTO `%PREFIX%_roles` VALUES (1,3,'Webmaster','Gruppe der Administratoren des Systems',1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2008-04-20 22:35:08',1,'2008-04-20 22:35:08',1,0,1),
  (2,3,'Mitglied','Alle Mitglieder der Organisation',0,0,0,0,0,0,0,1,0,0,2,0,1,0,2,0,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,1,'2008-05-03 16:26:36',1,'2008-05-03 16:26:36',1,0,1),
  (3,3,'Vorstand','Vorstand des Vereins',0,0,1,1,0,1,0,0,0,0,3,0,1,1,2,1,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,1,'2008-05-03 16:26:12',1,'2008-05-03 16:26:12',1,0,1),
  (4,6,'1. Jugendmannschaft','Jugendliche zwischen 12 und 15 Jahren',0,0,0,0,0,0,0,1,0,0,2,0,1,0,1,0,NULL,'15:00:00',NULL,'16:00:00',3,'Sportplatz',NULL,NULL,NULL,1,'2008-05-03 16:24:41',1,'2008-05-03 16:24:41',1,0,1),
  (5,6,'2. Jugendmannschaft','Jugendliche zwischen 16 und 18 Jahren',0,0,0,0,0,0,0,1,0,0,2,0,1,0,1,0,NULL,'16:00:00',NULL,'17:00:00',5,'Sportplatz',NULL,NULL,NULL,1,'2008-05-03 16:25:58',1,'2008-05-03 16:25:58',1,0,1),
  (6,13,'Webmaster','Gruppe der Administratoren des Systems',1,1,1,1,1,1,1,1,1,1,3,1,1,1,1,1,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,'2009-05-20 22:35:08',1,'2010-01-21 20:35:08',1,0,1),
- (7,13,'Mitglied','Alle Mitglieder der Organisation',0,0,0,0,0,0,0,1,0,0,2,0,1,0,2,0,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,1,'2009-05-20 16:26:36',1,'2010-12-22 06:34:06',1,0,1);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_roles` ENABLE KEYS */;
+ (7,13,'Mitglied','Alle Mitglieder der Organisation',0,0,0,0,0,0,0,1,0,0,2,0,1,0,2,0,NULL,NULL,NULL,NULL,0,NULL,NULL,NULL,NULL,1,'2009-05-20 16:26:36',1,'2010-12-22 06:34:06',1,0,1),
+ (8,23,'Termin ' || date_add(CURRENT_DATE, interval 4 day) || ' 19:00 - 4', 'Grillfest', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0);
 
 
-/*!40000 ALTER TABLE `%PREFIX%_members` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_members` WRITE;
-INSERT INTO `%PREFIX%_members` VALUES  (1,1,1,'2008-04-20','9999-12-31',0),
+ 
+ INSERT INTO `%PREFIX%_members` VALUES  (1,1,1,'2008-04-20','9999-12-31',0),
  (2,4,1,'2008-04-20','2009-10-31',0),
  (3,6,1,'2009-04-20','9999-12-31',0),
  (201,2,202,'2008-04-26','9999-12-31',0),
@@ -2461,96 +2432,62 @@ INSERT INTO `%PREFIX%_members` VALUES  (1,1,1,'2008-04-20','9999-12-31',0),
  (404,7,292,'2010-04-26','9999-12-31',0),
  (405,7,293,'2010-04-26','9999-12-31',0),
  (406,7,345,'2010-04-26','9999-12-31',0),
- (407,7,346,'2010-04-26','9999-12-31',0);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_members` ENABLE KEYS */;
+ (407,7,346,'2010-04-26','9999-12-31',0),
+ (500,8,1,date_add(CURRENT_DATE, interval -4 day),'9999-12-31',1),
+ (501,8,223,date_add(CURRENT_DATE, interval -2 day),'9999-12-31',0),
+ (502,8,255,date_add(CURRENT_DATE, interval -2 day),'9999-12-31',0),
+ (503,8,302,date_add(CURRENT_DATE, interval -2 day),'9999-12-31',0),
+ (504,8,328,date_add(CURRENT_DATE, interval -1 day),'9999-12-31',0);
 
-
-/*!40000 ALTER TABLE `%PREFIX%_texts` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_texts` WRITE;
-INSERT INTO `%PREFIX%_texts` VALUES  (1,1,'SYSMAIL_REGISTRATION_USER','#subject# Anmeldung bei %organization_long_name%\r\n#content# Hallo %user_first_name%,\r\n\r\ndeine Anmeldung auf %organization_homepage% wurde bestätigt.\r\n\r\nNun kannst du dich mit deinem Benutzernamen : %user_login_name%\r\nund dem Passwort auf der Homepage einloggen.\r\n\r\nSollten noch Fragen bestehen, schreib eine E-Mail an %webmaster_email% .\r\n\r\nViele Grüße\r\nDie Webmaster'),
+ 
+ INSERT INTO `%PREFIX%_texts` VALUES  (1,1,'SYSMAIL_REGISTRATION_USER','#subject# Anmeldung bei %organization_long_name%\r\n#content# Hallo %user_first_name%,\r\n\r\ndeine Anmeldung auf %organization_homepage% wurde bestätigt.\r\n\r\nNun kannst du dich mit deinem Benutzernamen : %user_login_name%\r\nund dem Passwort auf der Homepage einloggen.\r\n\r\nSollten noch Fragen bestehen, schreib eine E-Mail an %webmaster_email% .\r\n\r\nViele Grüße\r\nDie Webmaster'),
  (2,1,'SYSMAIL_REGISTRATION_WEBMASTER','#subject# Neue Registrierung bei %organization_long_name%\r\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\r\n\r\nNachname: %user_last_name%\r\nVorname:  %user_first_name%\r\nE-Mail:   %user_email%\r\n\r\n\r\nDiese Nachricht wurde automatisch erzeugt.'),
  (3,1,'SYSMAIL_NEW_PASSWORD','#subject# Logindaten für %organization_homepage%\r\n#content# Hallo %user_first_name%,\r\n\r\ndu erhälst deine Logindaten für %organization_homepage% .\r\nBenutzername: %user_login_name%\r\nPasswort: %variable1%\r\n\r\nDas Passwort wurde automatisch generiert.\r\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\r\n\r\nViele Grüße\r\nDie Webmaster'),
  (4,1,'SYSMAIL_ACTIVATION_LINK','#subject# Dein angefordertes Passwort\r\n#content# Hallo %user_first_name%,\r\n\r\ndu hast ein neues Passwort angefordert!\r\n\r\nHier sind deine Daten:\r\nBenutzername: %user_login_name%\r\nPasswort: %variable1%\r\n\r\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\r\n\r\n%variable2%\r\n\r\nDas Passwort wurde automatisch generiert.\r\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\r\n\r\nViele Grüße\r\nDie Webmaster');
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_texts` ENABLE KEYS */;
 
+ 
+ INSERT INTO `%PREFIX%_announcements` VALUES  (1,'DEMO',0,'Neue Trikots','Ab der kommenden Saison gibt es neue Trikots für alle aktiven Spieler. Diese können vor dem ersten Training beim Trainer abgeholt werden.',1,date_add(CURRENT_DATE, interval -7 day) || ' 00:00:00',NULL,NULL),
+ (2,'DEMO',0,'Aerobik-Kurs','Während der Schulferien bieten wir einen [i]Aerobic-Kurs[/i] für alle interessierten Mitglieder an.\r\n\r\nAnmeldungen werden auf der [b]Homepage[/b] oder in der [b]Geschäftsstelle[/b] entgegen genommen.',1,date_add(CURRENT_DATE, interval -3 day) || ' 00:00:00',1,date_add(CURRENT_DATE, interval -2 day) || ' 17:33:53');
 
-/*!40000 ALTER TABLE `%PREFIX%_announcements` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_announcements` WRITE;
-INSERT INTO `%PREFIX%_announcements` VALUES  (1,'DEMO',0,'Neue Trikots','Ab der kommenden Saison gibt es neue Trikots für alle aktiven Spieler. Diese können vor dem ersten Training beim Trainer abgeholt werden.',1,concat(date_add(date(sysdate()), interval -7 day),' 00:00:00'),NULL,NULL),
- (2,'DEMO',0,'Aerobik-Kurs','Während der Schulferien bieten wir einen [i]Aerobic-Kurs[/i] für alle interessierten Mitglieder an.\r\n\r\nAnmeldungen werden auf der [b]Homepage[/b] oder in der [b]Geschäftsstelle[/b] entgegen genommen.',1,concat(date_add(date(sysdate()), interval -3 day),' 00:00:00'),1,concat(date_add(date(sysdate()), interval -2 day),' 17:33:53'));
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_announcements` ENABLE KEYS */;
+ 
+ INSERT INTO `%PREFIX%_dates` VALUES  (3,12,0,date_add(CURRENT_DATE, interval 14 day) || ' 16:00:00',date_add(CURRENT_DATE, interval 14 day) || ' 18:00:00',0,'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!','Sportplatz Solingen','DEU','Training Jugend 1',1,'2008-07-06 17:38:26',NULL,NULL,NULL,NULL,0),
+ (4,10,0,date_add(CURRENT_DATE, interval 4 day) || ' 19:00:00',date_add(CURRENT_DATE, interval 4 day) || ' 23:30:00',0,'Heute findet unser Grillfest statt. Neben knackigen Würstchen gibt es auch noch Kottelets und ein bischen Bauchspeck.',NULL,NULL,'Grillfest',1,'2008-07-06 17:41:18',NULL,NULL,8,NULL,0),
+ (5,10,0,date_add(CURRENT_DATE, interval 30 day) || ' 00:00:00',date_add(CURRENT_DATE, interval 35 day) || ' 00:00:00',1,'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)','Jugendherberge Esens','DEU','Trainerlehrgang',1,'2008-07-06 17:49:13',NULL,NULL,NULL,NULL,0),
+ (6,21,1,date_add(CURRENT_DATE, interval 10 day) || ' 15:00:00',date_add(CURRENT_DATE, interval 10 day) || ' 19:00:00',0,'Der Schwerpunkt liegt dieses Mal bei Office-Produkten.','München Marienplatz','DEU','EDV-Kurs',1,'2010-01-06 11:25:13',NULL,NULL,NULL,NULL,0),
+ (7,10,1,date_add(CURRENT_DATE, interval -1 day) || ' 00:00:00',date_add(CURRENT_DATE, interval 0 day) || ' 00:00:00',1,'An diesem sonnigen Tag geht es nach Amsterdam.\r\n\r\nEine Grachtenfahrt, sowie ein Einkaufsbummel sind mit eingeplant.','Amsterdam Gracht','NLD','Ausflug nach Amsterdam',1,'2010-01-06 11:25:13',NULL,NULL,NULL,NULL,0);
 
-
-
-/*!40000 ALTER TABLE `%PREFIX%_dates` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_dates` WRITE;
-INSERT INTO `%PREFIX%_dates` VALUES  (3,12,0,concat(date_add(date(sysdate()), interval 14 day),' 16:00:00'),concat(date_add(date(sysdate()), interval 14 day),' 18:00:00'),0,'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!','Sportplatz Solingen','DEU','Training Jugend 1',1,'2008-07-06 17:38:26',NULL,NULL,NULL,NULL,0),
- (4,10,0,concat(date_add(date(sysdate()), interval 4 day),' 19:00:00'),concat(date_add(date(sysdate()), interval 4 day),' 23:30:00'),0,'Heute findet unser Grillfest statt. Neben knackigen Würstchen gibt es auch noch Kottelets und ein bischen Bauchspeck.',NULL,NULL,'Grillfest',1,'2008-07-06 17:41:18',NULL,NULL,NULL,NULL,0),
- (5,10,0,concat(date_add(date(sysdate()), interval 30 day),' 00:00:00'),concat(date_add(date(sysdate()), interval 35 day),' 00:00:00'),1,'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)','Jugendherberge Esens','DEU','Trainerlehrgang',1,'2008-07-06 17:49:13',NULL,NULL,NULL,NULL,0),
- (6,21,1,concat(date_add(date(sysdate()), interval 10 day),' 15:00:00'),concat(date_add(date(sysdate()), interval 10 day),' 19:00:00'),0,'Der Schwerpunkt liegt dieses Mal bei Office-Produkten.','München Marienplatz','DEU','EDV-Kurs',1,'2010-01-06 11:25:13',NULL,NULL,NULL,NULL,0);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_dates` ENABLE KEYS */;
-
-/*!40000 ALTER TABLE `%PREFIX%_date_role` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_date_role` WRITE;
-INSERT INTO `%PREFIX%_date_role` VALUES  (1,3,NULL),
+ 
+ INSERT INTO `%PREFIX%_date_role` VALUES  (1,3,NULL),
  (2,4,NULL),
  (3,5,NULL),
- (4,6,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_dates` ENABLE KEYS */;
+ (4,6,NULL),
+ (5,7,NULL);
 
-/*!40000 ALTER TABLE `%PREFIX%_photos` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_photos` WRITE;
-INSERT INTO `%PREFIX%_photos` VALUES  (1,'DEMO',0,'Kroatien','2009-10-05','2009-10-11','Karl Müller und andere',0,NULL,1,'2009-10-23 18:15:37',NULL,NULL),
+ 
+ INSERT INTO `%PREFIX%_photos` VALUES  (1,'DEMO',0,'Kroatien','2009-10-05','2009-10-11','Karl Müller und andere',0,NULL,1,'2009-10-23 18:15:37',NULL,NULL),
  (2,'DEMO',3,'Plitwitzer Seen','2009-10-05','2009-10-07','Karl Müller und andere',0,1,1,'2009-10-23 18:17:44',NULL,NULL),
  (3,'DEMO',3,'Krka','2009-10-08','2009-10-11','Karl Müller und andere',0,1,1,'2009-10-23 18:18:44',NULL,NULL),
  (4,'DEMO',5,'Machu Picchu','2009-09-14','2009-09-17','Admin',0,NULL,1,'2009-10-23 18:20:50',NULL,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_photos` ENABLE KEYS */;
+
+ 
+ INSERT INTO `%PREFIX%_folders` VALUES  (1,1,NULL,'DOWNLOAD','download',NULL,'/adm_my_files',0,1,NULL,date_add(CURRENT_DATE, interval -7 day) || ' 22:35:07');
 
 
-/*!40000 ALTER TABLE `%PREFIX%_folders` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_folders` WRITE;
-INSERT INTO `%PREFIX%_folders` VALUES  (1,1,NULL,'DOWNLOAD','download',NULL,'/adm_my_files',0,1,NULL,concat(date_add(date(sysdate()), interval -7 day),' 22:35:07'));
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_folders` ENABLE KEYS */;
+INSERT INTO `%PREFIX%_guestbook` VALUES  (1,1,'Heinz Webmaster','Willkommen im Gästebuch des Demo-Bereichs. \r\n\r\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\r\n\r\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.','webmaster@admidio.org','http://www.admidio.org','84.63.38.55',0,1,date_add(CURRENT_DATE, interval -14 day) || ' 12:14:42',NULL,NULL),
+ (2,1,'Sepp Mayerchen','Dann werde ich mir das Programm mal anschauen.',NULL,NULL,'84.63.38.55',0,NULL,date_add(CURRENT_DATE, interval -5 day) || ' 20:16:42',NULL,NULL);
+
+ 
+INSERT INTO `%PREFIX%_guestbook_comments` VALUES  (1,2,'Heinz Webmaster','Weitere Infos zu dem Programm gibt es in der Dokumentation [url=http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index]Dokumentation[/url].\r\n\r\nBei Fragen und Anregungen einfach mal ins [url=http://forum.admidio.org]Forum[/url] schauen.','webmaster@admidio.org','84.63.38.55',0,1,date_add(CURRENT_DATE, interval -4 day) || ' 16:23:12',NULL,NULL);
 
 
-/*!40000 ALTER TABLE `%PREFIX%_guestbook` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_guestbook` WRITE;
-INSERT INTO `%PREFIX%_guestbook` VALUES  (1,1,'Heinz Webmaster','Willkommen im Gästebuch des Demo-Bereichs. \r\n\r\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\r\n\r\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.','webmaster@admidio.org','http://www.admidio.org','84.63.38.55',0,1,concat(date_add(date(sysdate()), interval -14 day),' 12:14:42'),NULL,NULL),
- (2,1,'Sepp Mayerchen','Dann werde ich mir das Programm mal anschauen.',NULL,NULL,'84.63.38.55',0,NULL,concat(date_add(date(sysdate()), interval -5 day),' 20:16:42'),NULL,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_guestbook` ENABLE KEYS */;
+INSERT INTO `%PREFIX%_links` VALUES  (1,7,'Beispielseite','Auf dieser Seite gibt es nicht viele Neuigkeiten :(','http://www.example.com',6,1,date_add(CURRENT_DATE, interval -4 day) || ' 22:13:26',1,date_add(CURRENT_DATE, interval -3 day) || ' 21:16:32'),
+ (2,9,'Admidio','Die Homepage der [b]besten[/b] Open Source Mitgliederverwaltung im Netz.','http://www.admidio.org',157,1,date_add(CURRENT_DATE, interval -4 day) || ' 21:13:32',NULL,NULL),
+ (3,9,'Admidio-Forum','Das Forum zur Online-Mitgliederverwaltung. Hier wird jedem geholfen, der auf ein Problem bei der Installation oder Einrichtung von Admidio gestoßen ist. Aber auch Verbesserungen können hier gepostet werden.','http://forum.admidio.org',46,1,date_add(CURRENT_DATE, interval -4 day) || ' 21:15:44',NULL,NULL);
 
-
-/*!40000 ALTER TABLE `%PREFIX%_guestbook_comments` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_guestbook_comments` WRITE;
-INSERT INTO `%PREFIX%_guestbook_comments` VALUES  (1,2,'Heinz Webmaster','Weitere Infos zu dem Programm gibt es in der Dokumentation [url=http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index]Dokumentation[/url].\r\n\r\nBei Fragen und Anregungen einfach mal ins [url=http://forum.admidio.org]Forum[/url] schauen.','webmaster@admidio.org','84.63.38.55',0,1,concat(date_add(date(sysdate()), interval -4 day),' 16:23:12'),NULL,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_guestbook_comments` ENABLE KEYS */;
-
-
-/*!40000 ALTER TABLE `%PREFIX%_links` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_links` WRITE;
-INSERT INTO `%PREFIX%_links` VALUES  (1,7,'Beispielseite','Auf dieser Seite gibt es nicht viele Neuigkeiten :(','http://www.example.com',6,1,concat(date_add(date(sysdate()), interval -4 day),' 22:13:26'),1,concat(date_add(date(sysdate()), interval -3 day),' 21:16:32')),
- (2,9,'Admidio','Die Homepage der [b]besten[/b] Open Source Mitgliederverwaltung im Netz.','http://www.admidio.org',157,1,concat(date_add(date(sysdate()), interval -4 day),' 21:13:32'),NULL,NULL),
- (3,9,'Admidio-Forum','Das Forum zur Online-Mitgliederverwaltung. Hier wird jedem geholfen, der auf ein Problem bei der Installation oder Einrichtung von Admidio gestoßen ist. Aber auch Verbesserungen können hier gepostet werden.','http://forum.admidio.org',46,1,concat(date_add(date(sysdate()), interval -4 day),' 21:15:44'),NULL,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_links` ENABLE KEYS */;
-
-/*!40000 ALTER TABLE `%PREFIX%_rooms` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_rooms` WRITE;
+ 
 INSERT INTO `%PREFIX%_rooms` VALUES  ('1', 'Besprechnungsraum', 'Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Ein Beamer steht zur Verfügung.', '15', NULL, '1', '2011-04-07 19:15:08', NULL, NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_guestbook_comments` ENABLE KEYS */;
 
-/*!40000 ALTER TABLE `%PREFIX%_lists` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_lists` WRITE;
+
 INSERT INTO `%PREFIX%_lists` VALUES  (1,1,1,'Adressliste','2009-02-27 21:50:57',1,1),
  (2,1,1,'Telefonliste','2009-02-27 21:50:57',1,0),
  (3,1,1,'Kontaktdaten','2009-02-27 21:50:57',1,0),
@@ -2559,13 +2496,9 @@ INSERT INTO `%PREFIX%_lists` VALUES  (1,1,1,'Adressliste','2009-02-27 21:50:57',
  (6,1,1,'Geburtstag','2009-02-27 21:57:38',0,0),
  (7,1,351,'Homepage','2009-02-27 22:34:28',0,0),
  (8,1,351,NULL,'2009-02-27 22:34:47',0,0);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_lists` ENABLE KEYS */;
 
-
-/*!40000 ALTER TABLE `%PREFIX%_list_columns` DISABLE KEYS */;
-LOCK TABLES `%PREFIX%_list_columns` WRITE;
-INSERT INTO `%PREFIX%_list_columns` VALUES  (1,1,1,1,NULL,'ASC',NULL),
+ 
+ INSERT INTO `%PREFIX%_list_columns` VALUES  (1,1,1,1,NULL,'ASC',NULL),
  (2,1,2,2,NULL,'ASC',NULL),
  (3,1,3,10,NULL,NULL,NULL),
  (4,1,4,3,NULL,NULL,NULL),
@@ -2610,7 +2543,5 @@ INSERT INTO `%PREFIX%_list_columns` VALUES  (1,1,1,1,NULL,'ASC',NULL),
  (43,8,2,2,NULL,'ASC',NULL),
  (44,8,3,13,NULL,NULL,NULL),
  (45,8,4,11,NULL,NULL,NULL);
-UNLOCK TABLES;
-/*!40000 ALTER TABLE `%PREFIX%_list_columns` ENABLE KEYS */;
 
 set foreign_key_checks = 1;

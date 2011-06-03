@@ -9,7 +9,12 @@
     <text id="LST_PERIOD" development="deleted" translation="todo">Zeitraum</text>
     <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
-    <text id="SYS_REGISTRATION" development="new" translation="todo">Anmeldung</text>
+    <text id="SYS_DATABASE_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt %VAR1% oder höher</text>
+    <text id="SYS_MYSQL_VERSION" development="deleted" translation="todo">MySQL-Version</text>
+    <text id="SYS_MYSQL_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt 4.1 oder höher</text>
+	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>    	
+    <text id="SYS_VERSION" development="new" translation="todo">Version</text>
+
 </version>
 <version id="2.2.6">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="todo">Neueste Ankündigungen der Organisation %VAR1%</text>
@@ -1120,8 +1125,6 @@
     <text id="SYS_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_MODULES" development="new" translation="todo">Module</text>
     <text id="SYS_MONDAY" development="new" translation="todo">Montag</text>
-    <text id="SYS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
-    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt 4.1 oder höher</text>
     <text id="SYS_NAME" development="new" translation="todo">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
@@ -1157,7 +1160,6 @@
 	<text id="SYS_PHOTOS" development="new" translation="todo">Fotos</text>
 	<text id="SYS_PHP_INFO" development="new" translation="todo">alle PHP-Einstellungen</text>
 	<text id="SYS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
-	<text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt 5.2 oder höher</text>    	
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="todo">Bitte warten</text>
     <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST-Größe</text>

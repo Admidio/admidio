@@ -25,6 +25,7 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
+unset($_SESSION['dates_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if($g_preferences['enable_dates_module'] == 0)
@@ -38,109 +39,42 @@ elseif($g_preferences['enable_dates_module'] == 2)
     require('../../system/login_valid.php');
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_mode      = 'actual';
-$req_start     = 0;
-$req_headline  = $g_l10n->get('DAT_DATES');
-$req_id        = 0;
-$sql_datum     = '';
-$req_calendar  = '';
-$topNavigation = '';
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_mode      = funcVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old'));
+$get_start     = funcVariableIsValid($_GET, 'start', 'numeric', 0);
+$get_headline  = funcVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
+$get_dat_id    = funcVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_date      = funcVariableIsValid($_GET, 'date', 'numeric');
+$get_calendar  = funcVariableIsValid($_GET, 'calendar', 'string');
+$get_calendar_selection = funcVariableIsValid($_GET, 'calendar-selection', 'boolean', $g_preferences['dates_show_calendar_select']);
 
-// Uebergabevariablen pruefen
-
-//Kontrolle ob nur ein Kalender angezeigt werden soll
-if(isset($_GET['calendar']))
+if(strlen($get_date) > 0)
 {
-    $req_calendar = $_GET['calendar'];
+	$get_date = substr($get_date,0,4). '-'. substr($get_date,4,2). '-'. substr($get_date,6,2);
 }
 
-if(isset($_GET['mode']))
-{
-    if($_GET['mode'] != 'actual' && $_GET['mode'] != 'old')
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_mode = $_GET['mode'];
-}
-
-if(isset($_GET['start']))
-{
-    if(is_numeric($_GET['start']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_start = $_GET['start'];
-}
-
-if(isset($_GET['headline']))
-{
-    $req_headline = strStripTags($_GET['headline']);
-}
-
-if(isset($_GET['id']))
-{
-    if(is_numeric($_GET['id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_id = $_GET['id'];
-}
-
-if(array_key_exists('date', $_GET))
-{
-    if(is_numeric($_GET['date']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    else
-    {
-        $sql_datum = substr($_GET['date'],0,4). '-'. substr($_GET['date'],4,2). '-'. substr($_GET['date'],6,2);
-    }
-}
-
-// Prüfen ob Box angezeigt werden soll und setzten des Flags
-if ($g_preferences['dates_show_calendar_select'] == 1) {
-   $dates_show_calendar_select = 1;
-} else {
-   $dates_show_calendar_select = 0;
-}
-if(isset($_GET['calendar-selection']) != false)
-{
-    if($_GET['calendar-selection'] == 1)
-    {
-        $dates_show_calendar_select = 1;
-    }
-    else if ($_GET['calendar-selection'] == 0)
-    {
-        $dates_show_calendar_select = 0;
-    }
-}
-
-unset($_SESSION['dates_request']);
-$act_date = date('Y-m-d', time());
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-if(strlen($req_calendar) > 0)
+if(strlen($get_calendar) > 0)
 {
-    $g_layout['title'] = $req_headline. ' - '. $req_calendar;
+    $g_layout['title'] = $get_headline. ' - '. $get_calendar;
 }
 else
 {
-    $g_layout['title'] = $req_headline;
+    $g_layout['title'] = $get_headline;
 }
-if($req_mode == 'old')
+if($get_mode == 'old')
 {
     $g_layout['title'] = $g_l10n->get('DAT_PREVIOUS_DATES', ' '.$g_layout['title']);
 }
 
 if($g_preferences['enable_rss'] == 1 && $g_preferences['enable_dates_module'] == 1)
 {
-    $g_layout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname'). ' - '.$req_headline).'"
-        href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$req_headline.'" />';
+    $g_layout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname'). ' - '.$get_headline).'"
+        href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$get_headline.'" />';
 };
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -160,16 +94,18 @@ echo '
         {
             var calendar = document.getElementById("calendar").value;
         } 
-        self.location.href = "dates.php?mode='.$req_mode.'&headline='.$req_headline.'&calendar=" + calendar;
+        self.location.href = "dates.php?mode='.$get_mode.'&headline='.$get_headline.'&calendar=" + calendar;
     }
 //--></script>
 <h1 class="moduleHeadline">'. $g_layout['title']. '</h1>';
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
+$topNavigation = '';
 $organizations = '';
-$conditions = '';
-$condition_calendar = '';
-$order_by = '';
+$sqlConditions = '';
+$sqlConditionCalendar = '';
+$sqlConditionLogin = '';
+$sqlOrderBy = '';
 $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $org_id => $value)
@@ -181,53 +117,52 @@ $organizations = $organizations. $g_current_organization->getValue('org_id');
 if ($g_valid_login == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $conditions .= ' AND cat_hidden = 0 ';
+    $sqlConditions .= ' AND cat_hidden = 0 ';
 }
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
-if($req_id > 0)
+if($get_dat_id > 0)
 {
-    $conditions .= ' AND dat_id = '.$req_id;
+    $sqlConditions .= ' AND dat_id = '.$get_dat_id;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
-    if (strlen($req_calendar) > 0)
+    if (strlen($get_calendar) > 0)
     {
         // alle Termine zu einer Kategorie anzeigen
-        $condition_calendar .= ' AND cat_name   = "'. $req_calendar. '" ';
+        $sqlConditionCalendar .= ' AND cat_name   = \''. $get_calendar. '\' ';
     }
-
+	
     // Termine an einem Tag suchen
-    if(strlen($sql_datum) > 0)
+    if(strlen($get_date) > 0)
     {
-        $conditions .= ' AND DATE_FORMAT(dat_begin, "%Y-%m-%d")       <= "'.$sql_datum.'"
-                         AND DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$sql_datum.' 00:00:00"';;
-        $order_by .= ' ORDER BY dat_begin ASC ';
+        $sqlConditions .= ' AND dat_begin <= \''.$get_date.'\'
+                            AND dat_end   >  \''.$get_date.' 00:00:00\'';;
+        $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
     }
     //fuer alte Termine...
-    elseif($req_mode == 'old')
+    elseif($get_mode == 'old')
     {
-        $conditions .= ' AND DATE_FORMAT(dat_begin, "%Y-%m-%d") < "'.$act_date.'"
-                         AND DATE_FORMAT(dat_end, "%Y-%m-%d")   < "'.$act_date.'"';
-        $order_by .= ' ORDER BY dat_begin DESC ';
+        $sqlConditions .= ' AND dat_begin <  \''.DATE_NOW.'\'
+                            AND dat_end   <= \''.DATE_NOW.' 00:00:00\'';
+        $sqlOrderBy .= ' ORDER BY dat_begin DESC ';
     }
     //... ansonsten fuer kommende Termine
     else
     {
-        $conditions .= ' AND (  DATE_FORMAT(dat_begin, "%Y-%m-%d")       >= "'.$act_date.'"
-                             OR DATE_FORMAT(dat_end, "%Y-%m-%d %H:%i:%s") > "'.$act_date.' 00:00:00" )';
-        $order_by .= ' ORDER BY dat_begin ASC ';
+        $sqlConditions .= ' AND (  dat_begin >= \''.DATE_NOW.'\'
+                                OR dat_end   >  \''.DATE_NOW.' 00:00:00\' )';
+        $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
     }
-
 }
 
-if($req_id == 0)
+if($get_dat_id == 0)
 {
     // Bedingungen fuer die Rollenfreigabe hinzufuegen
     if($g_current_user->getValue('usr_id') > 0)
     {
-        $login_sql = '
+        $sqlConditionLogin = '
         AND (  dtr_rol_id IS NULL 
             OR dtr_rol_id IN (SELECT mem_rol_id 
                                 FROM '.TBL_MEMBERS.' mem2
@@ -237,7 +172,7 @@ if($req_id == 0)
     }
     else
     {
-        $login_sql = ' AND dtr_rol_id IS NULL ';
+        $sqlConditionLogin = ' AND dtr_rol_id IS NULL ';
     }
     
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
@@ -250,7 +185,7 @@ if($req_id == 0)
                       )
                    )
                AND dat_id = dtr_dat_id
-                   '.$login_sql. $conditions. $condition_calendar;
+                   '.$sqlConditionLogin. $sqlConditions. $sqlConditionCalendar;
 
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
@@ -298,14 +233,14 @@ $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.me
                OR (   dat_global   = 1
                   AND cat_org_id IN ('.$organizations.') ))
            AND dat_id = dtr_dat_id
-               '.$login_sql.'
-               '.$conditions. $condition_calendar. $order_by. '
-         LIMIT '.$dates_per_page.' OFFSET '.$req_start;
+               '.$sqlConditionLogin.'
+               '.$sqlConditions. $sqlConditionCalendar. $sqlOrderBy. '
+         LIMIT '.$dates_per_page.' OFFSET '.$get_start;
 $dates_result = $g_db->query($sql);
 
 
 //Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
-if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->editDates())
+if((($get_calendar_selection == 1) && ($get_dat_id == 0)) || $g_current_user->editDates())
 {
     $topNavigation = '';
 
@@ -315,16 +250,16 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
         $topNavigation .= '
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $req_headline).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$req_headline.'&amp;calendar='.$req_calendar.'">'.$g_l10n->get('SYS_CREATE_VAR', $req_headline).'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$get_headline.'&amp;calendar='.$get_calendar.'"><img
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $get_headline).'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$get_headline.'&amp;calendar='.$get_calendar.'">'.$g_l10n->get('SYS_CREATE_VAR', $get_headline).'</a>
             </span>
         </li>';
     }
-    if(($dates_show_calendar_select == 1) && ($req_id == 0))   
+    if(($get_calendar_selection == 1) && ($get_dat_id == 0))   
     {
         // Combobox mit allen Kalendern anzeigen, denen auch Termine zugeordnet sind
-        $sql = 'SELECT DISTINCT cat_name
+        $sql = 'SELECT DISTINCT cat_name, cat_sequence
                 FROM '. TBL_CATEGORIES. ', '. TBL_DATES. ' dat
                 WHERE cat_type   = \'DAT\'
                     AND dat_cat_id = cat_id 
@@ -333,7 +268,7 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
                             AND cat_org_id IN ('.$organizations.')
                         )
                     )
-                    '.$conditions;
+                    '.$sqlConditions;
         if($g_valid_login == false)
         {
           $sql .= ' AND cat_hidden = 0 ';
@@ -346,7 +281,7 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
             $topNavigation .= '<li>'.$g_l10n->get('DAT_CALENDAR').':&nbsp;&nbsp;
             <select size="1" id="calendar" onchange="showCalendar()">
                 <option value="0" ';
-                if(strlen($req_calendar) == 0)
+                if(strlen($get_calendar) == 0)
                 {
                     $topNavigation .= ' selected="selected" ';
                 }
@@ -355,7 +290,7 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
                 while($row = $g_db->fetch_object($result))
                 {
                     $topNavigation .= '<option value="'. urlencode($row->cat_name). '"';
-                    if($req_calendar == $row->cat_name)
+                    if($get_calendar == $row->cat_name)
                     {
                         $topNavigation .= ' selected="selected" ';
                     }
@@ -391,7 +326,7 @@ if((($dates_show_calendar_select == 1) && ($req_id == 0)) || $g_current_user->ed
 if($g_db->num_rows($dates_result) == 0)
 {
     // Keine Termine gefunden
-    if($req_id > 0)
+    if($get_dat_id > 0)
     {
         echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
@@ -434,9 +369,9 @@ else
                         if($date->editRight() == true)
                         {
                             echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$req_headline.'"><img
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$get_headline.'"><img
                                 src="'. THEME_PATH. '/icons/application_double.png" alt="'.$g_l10n->get('SYS_COPY').'" title="'.$g_l10n->get('SYS_COPY').'" /></a>
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$req_headline.'"><img
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$get_headline.'"><img
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
                         }
 
@@ -681,8 +616,8 @@ else
 }
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$req_mode.'&headline='.$req_headline.'&calendar='.$req_calendar;
-echo generatePagination($base_url, $num_dates, $dates_per_page, $req_start, TRUE);
+$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$get_mode.'&headline='.$get_headline.'&calendar='.$get_calendar;
+echo generatePagination($base_url, $num_dates, $dates_per_page, $get_start, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

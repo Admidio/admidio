@@ -82,7 +82,7 @@ if($_GET['mode'] == 1)
 //Löschen des Raums
 else if($_GET['mode'] == 2) 
 {
-    $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = "'.$_GET['room_id'].'"';
+    $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = '.$_GET['room_id'];
     $result = $g_db->query($sql);
     $row = $g_db->num_rows($result);
     if($row == 0)
