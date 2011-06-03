@@ -194,7 +194,7 @@ else
                  FROM '. TBL_USERS. '
                 WHERE usr_login_name LIKE \''. $loginname. '\'
                   AND usr_valid      = 0
-                  AND usr_reg_org_shortname LIKE "'.$g_current_organization->getValue('org_shortname').'" ';
+                  AND usr_reg_org_shortname LIKE \''.$g_current_organization->getValue('org_shortname').'\' ';
     $result = $g_db->query($sql);
 
     if($g_db->num_rows($result) == 1)

@@ -344,7 +344,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     {
         // Kategorie fuer Terminbestaetigungen einlesen
         $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' 
-                 WHERE cat_name_intern LIKE "CONFIRMATION_OF_PARTICIPATION"';
+                 WHERE cat_name_intern LIKE \'CONFIRMATION_OF_PARTICIPATION\'';
         $g_db->query($sql);
         $row = $g_db->fetch_array();
 
@@ -420,8 +420,8 @@ elseif($_GET['mode'] == 3)  // Benutzer zum Termin anmelden
 elseif($_GET['mode'] == 4)  // Benutzer vom Termin abmelden
 {
     $sql = 'DELETE FROM '.TBL_MEMBERS.' 
-             WHERE mem_rol_id = "'.$date->getValue('dat_rol_id').'" 
-               AND mem_usr_id = "'.$g_current_user->getValue('usr_id').'"';
+             WHERE mem_rol_id = \''.$date->getValue('dat_rol_id').'\'
+               AND mem_usr_id = \''.$g_current_user->getValue('usr_id').'\'';
     $g_db->query($sql);
 
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());

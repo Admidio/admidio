@@ -227,20 +227,7 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="system_language">'.$g_l10n->get('SYS_LANGUAGE').':</label></dt>
-                            <dd>
-                                <select size="1" id="system_language" name="system_language">
-                                    <option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-                                    foreach($g_l10n->getLanguages() as $key => $value)
-                                    {
-                                        echo '<option value="'.$key.'" ';
-                                        if($key == $form_values['system_language'])
-                                        {
-                                            echo ' selected="selected" ';
-                                        }
-                                        echo '>'.$value.'</option>';
-                                    }
-                                echo '</select>
-                            </dd>
+                            <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language', $form_values['system_language']).'</dd>
                         </dl>
                     </li>
                     <li>

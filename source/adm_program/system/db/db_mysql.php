@@ -27,11 +27,11 @@ class DBMySQL extends DBCommon
         {
             if (@mysql_select_db($this->dbname, $this->connect_id))
             {
-                // MySql-Server-Version ermitteln und schauen, ob es UNICODE unterstuetzt
-                $this->version = mysql_get_server_info($this->connect_id);
-
 				// Verbindung zur DB in UTF8 aufbauen
 				@mysql_query('SET NAMES \'utf8\'', $this->connect_id);
+
+                // ANSI Modus setzen, damit SQL kompatibler zu anderen DBs werden kann
+                @mysql_query('SET GLOBAL sql_mode=\'ANSI\'', $this->connect_id);
                 
                 // falls der Server die Joins begrenzt hat, kann dies mit diesem Statement aufgehoben werden
                 @mysql_query('SET SQL_BIG_SELECTS=1', $this->connect_id);
@@ -167,6 +167,8 @@ class DBMySQL extends DBCommon
         return $this->query_result;
     }
 
+    // setzt die urspruengliche DB wieder auf aktiv
+    // alternativ kann auch eine andere DB uebergeben werden
     public function select_db($database = '')
     {
         if(strlen($database) == 0)
@@ -176,18 +178,24 @@ class DBMySQL extends DBCommon
         return mysql_select_db($database, $this->connect_id);
     }
 
-    // Gibt die MYSQL Version der Datenbank zurück
+    // returns the MySQL version of the database
     public function server_info()
     {
-        return mysql_get_server_info();
+		return mysql_get_server_info();
     }
 
     // setzt die urspruengliche DB wieder auf aktiv
-    // alternativ kann auch eine andere DB uebergeben werden
     public function setCurrentDB()
     {
         return $this->select_db($this->dbname);
     }  
+
+	// this method sets db specific properties of admidio
+	// this settings are necessary because the database won't work with the default settings of admidio
+	public function setDBSpecificAdmidioProperties($version = '')
+	{
+		// nothing todo
+	}
 
 	// This method delivers the columns and their properties of the passed variable as an array
 	// The array has the following format:

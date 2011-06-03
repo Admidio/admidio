@@ -47,7 +47,7 @@ class TableFolder extends TableAccess
         if(strlen($sql_where_condition) == 0)
         {
             $sql_where_condition = '    fol_id     = '.$folder_id.'
-                                    AND fol_type   = "DOWNLOAD"
+                                    AND fol_type   = \'DOWNLOAD\'
                                     AND fol_org_id = '. $g_current_organization->getValue('org_id');
         }
         return parent::readData($folder_id, $sql_where_condition, $sql_additional_tables);
@@ -65,15 +65,15 @@ class TableFolder extends TableAccess
         if ($folder_id > 0) 
         {
             $condition = '     fol_id     = '.$folder_id.'
-                           AND fol_type   = "DOWNLOAD"
+                           AND fol_type   = \'DOWNLOAD\'
                            AND fol_org_id = '. $g_current_organization->getValue('org_id');
             parent::readData($folder_id, $condition);
         }
         else 
         {
-            $condition = '     fol_name   = "download"
-                           AND fol_type   = "DOWNLOAD"
-                           AND fol_path   = "/adm_my_files"
+            $condition = '     fol_name   = \'download\'
+                           AND fol_type   = \'DOWNLOAD\'
+                           AND fol_path   = \'/adm_my_files\'
                            AND fol_org_id = '. $g_current_organization->getValue('org_id');
             parent::readData($folder_id, $condition);
         }
@@ -103,8 +103,8 @@ class TableFolder extends TableAccess
                         WHERE flr_fol_id = '. $this->getValue('fol_id'). '
                           AND flr_rol_id = mem_rol_id
                           AND mem_usr_id = '. $g_current_user->getValue('usr_id'). '
-                          AND mem_begin <= "'.DATE_NOW.'"
-                          AND mem_end    > "'.DATE_NOW.'"';
+                          AND mem_begin <= \''.DATE_NOW.'\'
+                          AND mem_end    > \''.DATE_NOW.'\'';
                 $result_rights = $this->db->query($sql_rights);
                 $row_rights = $this->db->fetch_array($result_rights);
                 $row_count  = $row_rights[0];
@@ -139,7 +139,7 @@ class TableFolder extends TableAccess
         //Erst einmal alle Unterordner auslesen, die in diesem Verzeichnis enthalten sind
         $sql_folders = 'SELECT *
                          FROM '. TBL_FOLDERS. '
-                        WHERE fol_type          = "DOWNLOAD"
+                        WHERE fol_type          = \'DOWNLOAD\'
                           AND fol_fol_id_parent = '. $this->getValue('fol_id'). '
                           AND fol_org_id        = '. $g_current_organization->getValue('org_id'). '
                         ORDER BY fol_name';
@@ -177,8 +177,8 @@ class TableFolder extends TableAccess
                                 WHERE flr_fol_id = '. $row_folders->fol_id. '
                                   AND flr_rol_id = mem_rol_id
                                   AND mem_usr_id = '. $g_current_user->getValue('usr_id'). '
-                                  AND mem_begin <= "'.DATE_NOW.'"
-                                  AND mem_end    > "'.DATE_NOW.'"';
+                                  AND mem_begin <= \''.DATE_NOW.'\'
+                                  AND mem_end    > \''.DATE_NOW.'\'';
                 $result_rights = $this->db->query($sql_rights);
                 $row_rights = $this->db->fetch_array($result_rights);
                 $row_count  = $row_rights[0];
@@ -389,10 +389,10 @@ class TableFolder extends TableAccess
 
                 //wenn der Ordner einen Mutterordner hat muss der Rootordner ermittelt werden
                 $sql_rootFolder = 'SELECT * FROM '. TBL_FOLDERS. '
-                                        WHERE fol_name   = "download"
-                                       AND fol_type   = "DOWNLOAD"
-                                       AND fol_path   = "/adm_my_files"
-                                       AND fol_org_id = '. $g_current_organization->getValue('org_id');
+                                        WHERE fol_name = \'download\'
+                                       AND fol_type    = \'DOWNLOAD\'
+                                       AND fol_path    = \'/adm_my_files\'
+                                       AND fol_org_id  = '. $g_current_organization->getValue('org_id');
 
                 $result_rootFolder = $this->db->query($sql_rootFolder);
                 $rootFolderRow = $this->db->fetch_object($result_rootFolder);
@@ -418,7 +418,7 @@ class TableFolder extends TableAccess
         {
             //Informationen zur uebergebenen OrdnerId aus der DB holen
             $sql_currentFolder = 'SELECT * FROM '. TBL_FOLDERS. '
-                                        WHERE fol_id   = '.$folderId;
+                                   WHERE fol_id   = '.$folderId;
 
             $result_currentFolder = $this->db->query($sql_currentFolder);
             $currentFolderRow = $this->db->fetch_object($result_currentFolder);
@@ -616,7 +616,7 @@ class TableFolder extends TableAccess
 
         //Den neuen Pfad in der DB setzen fuer die aktuelle folder_id...
         $sql_update = 'UPDATE '. TBL_FOLDERS. '
-                          SET fol_path = "'.$newPath.'"
+                          SET fol_path = \''.$newPath.'\'
                         WHERE fol_id = '.$folder_id;
         $this->db->query($sql_update);
 

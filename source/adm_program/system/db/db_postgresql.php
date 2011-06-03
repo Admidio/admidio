@@ -33,9 +33,8 @@ class DBPostgreSQL extends DBCommon
         
         if($this->connect_id)
         {
-            // PostgreSQL-Server-Version ermitteln
-			$versionArray = pg_version($this->connect_id);
-			$this->version = $versionArray['client'];
+			// Verbindung zur DB in UTF8 aufbauen
+			@mysql_query('SET bytea_output = \'escape\'', $this->connect_id);
 
             return $this->connect_id;
         }
@@ -203,19 +202,42 @@ class DBPostgreSQL extends DBCommon
         return $this->connect_id;
     }
 
-    // Gibt die MYSQL Version der Datenbank zurück
+    // returns the PostgreSQL version of the database
     public function server_info()
     {
-        return null;
+		$version_query = pg_query('SELECT VERSION()');
+		$row = pg_fetch_row($version_query);
+
+		// the string (PostgreSQL 9.0.4, compiled by Visual C++ build 1500, 64-bit) must be separated
+		$version_array  = explode(',', $row[0]);
+		$version_array2 = explode(' ', $version_array[0]);
+		return $version_array2[1];
     }
 
     // setzt die urspruengliche DB wieder auf aktiv
-    // alternativ kann auch eine andere DB uebergeben werden
     public function setCurrentDB()
     {
         return $this->select_db($this->dbname);
     }
 	
+	// this method sets db specific properties of admidio
+	// this settings are necessary because the database won't work with the default settings of admidio
+	public function setDBSpecificAdmidioProperties($version = '')
+	{
+	    if(version_compare('2.3.0', $version) == 0 || strlen($version) == 0)
+		{
+			// soundex is not a default function in PostgreSQL
+			$sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
+					 WHERE prf_name LIKE \'system_search_similar\'';
+			$this->query($sql, $this->connect_id);
+
+			// there are problems to store images in bytea fields
+			$sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'1\'
+					 WHERE prf_name LIKE \'profile_photo_storage\'';
+			$this->query($sql, $this->connect_id);
+		}
+	}
+
 	// This method delivers the columns and their properties of the passed variable as an array
 	// The array has the following format:
 	// array('Fieldname1' => array('serial' => '1', 'null' => '0', 'key' => '0', 'type' => 'integer'), 
@@ -268,7 +290,7 @@ class DBPostgreSQL extends DBCommon
 		}
 		
 		return $this->db_structure[$table];
-    }  
+    }
 }
  
 ?>

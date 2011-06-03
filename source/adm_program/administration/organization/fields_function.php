@@ -99,7 +99,7 @@ if($_GET['mode'] == 1)
         // Schauen, ob das Feld bereits existiert
         $sql    = 'SELECT COUNT(*) as count 
                      FROM '. TBL_USER_FIELDS. '
-                    WHERE usf_name LIKE "'.$_POST['usf_name'].'"
+                    WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
                       AND usf_cat_id  = '.$_POST['usf_cat_id'].'
                       AND usf_id     <> '.$_GET['usf_id'];
         $result = $g_db->query($sql);

@@ -20,20 +20,7 @@ if($g_current_user->isWebmaster() == false)
 }
 
 // Uebergabevariablen pruefen
-if (isset($_GET['mode']))
-{
-    if (is_numeric($_GET['mode']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    $req_mode = $_GET['mode'];
-
-}
-else
-{
-    $req_mode = 1;
-}
+$req_mode = funcVariableIsValid($_GET, 'mode', 'numeric', 0, 1);
 
 /************Systeminformationen********/
 if($req_mode == 1)
@@ -54,9 +41,9 @@ if($req_mode == 1)
         <li>
             <dl>
                 <dt>'.$g_l10n->get('SYS_PHP_VERSION').':</dt><dd><span class="';
-                if(substr(phpversion(), 0, 3)< 5.2)
+				if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
                 {
-                    echo 'systeminfoBad">'.phpversion().'</span> &rarr; '.$g_l10n->get('SYS_PHP_VERSION_REQUIRED');
+                    echo 'systeminfoBad">'.phpversion().'</span> &rarr; '.$g_l10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
                 }
                 else
                 {
@@ -71,14 +58,14 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_MYSQL_VERSION').':</dt><dd><span class="';
-                if(substr($g_db->server_info(), 0, 3)< 4.1)
+                <dt>'.$g_db->getName().'-'.$g_l10n->get('SYS_VERSION').':</dt><dd><span class="';
+				if(version_compare($g_db->getVersion(), $g_db->getMinVersion()) == -1)
                 {
-                    echo 'systeminfoBad">'.$g_db->server_info().'</span> &rarr; '.$g_l10n->get('SYS_MYSQL_VERSION_REQUIRED');
+                    echo 'systeminfoBad">'.$g_db->getVersion().'</span> &rarr; '.$g_l10n->get('SYS_DATABASE_VERSION_REQUIRED', $g_db->getMinVersion());
                 }
                 else
                 {
-                    echo 'systeminfoGood">'.$g_db->server_info().'</span>';
+                    echo 'systeminfoGood">'.$g_db->getVersion().'</span>';
                 }
                 echo'
                 </dd>
@@ -196,11 +183,11 @@ if($req_mode == 1)
                     echo' <dt>'.$g_l10n->get('SYS_DEBUG_MODUS').':</dt><dd>';
                     if($g_debug == 1)
                     {
-                        echo $g_l10n->get('SYS_ON');
+                        echo '<span class="systeminfoBad">'.$g_l10n->get('SYS_ON').'</span>';
                     }
                     else
                     {
-                        echo $g_l10n->get('SYS_OFF');
+                        echo '<span class="systeminfoGood">'.$g_l10n->get('SYS_OFF').'</span>';
                     }
                     echo'</dd>                
                 </dl>

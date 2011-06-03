@@ -78,7 +78,8 @@ elseif($g_preferences['profile_photo_storage'] == 1 && $req_new_photo == 1)
 elseif($g_preferences['profile_photo_storage'] == 0 && $req_new_photo == 1)
 {
    	$image = new Image();
-    $image->setImageFromData(addslashes($g_current_session->getValue('ses_blob')));   
+    //$image->setImageFromData(addslashes(pack('H*', $g_current_session->getValue('ses_binary'))));
+    $image->setImageFromData(addslashes($g_current_session->getValue('ses_binary')));   
 }
 
 header('Content-Type: '. $image->getMimeType());

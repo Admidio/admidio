@@ -26,18 +26,18 @@ if (!$g_current_user->editUsers())
 if($g_preferences['system_search_similar'] == 1)
 {
     $sql_similar_name = 
-    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $_GET['lastname'].'"), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $_GET['firstname'].'"), 1, 4) )
-     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX("'. $_GET['firstname'].'"), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX("'. $_GET['lastname'].'"), 1, 4) ) )';
+    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $_GET['lastname'].'\'), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $_GET['firstname'].'\'), 1, 4) )
+     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $_GET['firstname'].'\'), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $_GET['lastname'].'\'), 1, 4) ) )';
 }
 else
 {
     $sql_similar_name = 
-    '(  (   last_name.usd_value  LIKE "'. $_GET['lastname'].'"
-        AND first_name.usd_value LIKE "'. $_GET['firstname'].'")
-     OR (   last_name.usd_value  LIKE "'. $_GET['firstname'].'"
-        AND first_name.usd_value LIKE "'. $_GET['lastname'].'") )';
+    '(  (   last_name.usd_value  LIKE \''. $_GET['lastname'].'\'
+        AND first_name.usd_value LIKE \''. $_GET['firstname'].'\')
+     OR (   last_name.usd_value  LIKE \''. $_GET['firstname'].'\'
+        AND first_name.usd_value LIKE \''. $_GET['lastname'].'\') )';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben

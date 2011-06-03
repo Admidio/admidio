@@ -403,7 +403,8 @@ class TableAccess
                     }
 
                     // Schluesselfelder duerfen keine 0 enthalten
-                    if($this->columnsInfos[$field_name]['key'] == 1 && $field_value == 0)
+                    if(($this->columnsInfos[$field_name]['key'] == 1 || $this->columnsInfos[$field_name]['null'] == 1)
+					&& $field_value == 0)
                     {
                         $field_value = '';
                     }
@@ -417,7 +418,8 @@ class TableAccess
                 }
 
                 // Daten
-                elseif(strpos($this->columnsInfos[$field_name]['type'], 'blob') !== false)
+                elseif(strpos($this->columnsInfos[$field_name]['type'], 'blob') !== false
+				||     strpos($this->columnsInfos[$field_name]['type'], 'bytea') !== false)
                 {
                     $field_value = addslashes($field_value);
                 }

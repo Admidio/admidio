@@ -368,4 +368,54 @@ function EmailNotification($receiptian, $reference, $message, $sender_name, $sen
 	mail($empfaenger, $betreff, $nachricht, "From: $absender <$absendermail>");
 	//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
 }
+
+// prueft ob der Array-Eintrag existiert und dem Datentyp entspricht, andernfalls wird ein Hinweis ausgegeben
+// type        : 'string', 'numeric'
+// validValues : array mit allen gueltigen Werten, die die Variable haben darf
+function funcVariableIsValid($array, $variableName, $type, $defaultValue = null, $requireValue = false, $validValues = null)
+{
+	global $g_l10n, $g_message;
+	
+	$type = admStrToLower($type);
+
+	if(isset($array[$variableName]))
+	{
+		if($type == 'boolean')
+		{
+			// Boolean darf nur 2 Werte haben
+			$validValues = array(0, 1);
+		}
+		
+		if($validValues != null)
+		{
+			// Variable muss einen gueltigen Wert haben
+			if(in_array($array[$variableName], $validValues) == false)
+			{
+				$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+			}
+		}
+
+		if($type == 'numeric')
+		{
+			// Numerische Datentypen duerfen nur Zahlen beinhalten
+			if (is_numeric($array[$variableName]) == false)
+			{
+				$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+			}
+			return $array[$variableName];
+		}
+		elseif($type == 'string')
+		{
+			return strStripTags($array[$variableName]);
+		}
+
+		return $array[$variableName];
+	}
+	elseif($requireValue == true)
+	{
+		// Array-Eintrag existiert nicht, soll aber Pflicht sein
+		$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	}
+	return $defaultValue;
+}
 ?>

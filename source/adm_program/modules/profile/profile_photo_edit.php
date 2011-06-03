@@ -97,14 +97,14 @@ if($job=='save')
         // Foto in der Datenbank speichern
 
         //Nachsehen ob fuer den User ein Photo gespeichert war
-        if(strlen($g_current_session->getValue('ses_blob')) > 0)
+        if(strlen($g_current_session->getValue('ses_binary')) > 0)
         {
             //Fotodaten in User-Tabelle schreiben
-            $user->setValue('usr_photo', $g_current_session->getValue('ses_blob'));
+            $user->setValue('usr_photo', $g_current_session->getValue('ses_binary'));
             $user->save();
 
             // Foto aus Session entfernen und neues Einlesen des Users veranlassen
-            $g_current_session->setValue('ses_blob', '');
+            $g_current_session->setValue('ses_binary', '');
             $g_current_session->save();
             $g_current_session->renewUserObject($req_usr_id);
         }
@@ -129,7 +129,7 @@ elseif($job=='dont_save')
     //Datenbankspeicherung
     else
     {
-        $g_current_session->setValue('ses_blob', '');
+        $g_current_session->setValue('ses_binary', '');
         $g_current_session->save();
     }
     // zur Ausgangsseite zurueck
@@ -270,7 +270,8 @@ elseif($job=='upload')
         $user_image_data = fread(fopen($_FILES['foto_upload_file']['tmp_name'], 'r'), $_FILES['foto_upload_file']['size']);
         
         // Zwischenspeichern des neuen Fotos in der Session
-        $g_current_session->setValue('ses_blob', $user_image_data);
+        //$g_current_session->setValue('ses_binary', bin2hex($user_image_data));
+        $g_current_session->setValue('ses_binary', $user_image_data);
         $g_current_session->save();
     }
     
