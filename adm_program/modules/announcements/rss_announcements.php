@@ -36,7 +36,7 @@ if ($g_preferences['enable_announcements_module'] != 1)
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_headline = funcVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';

@@ -32,8 +32,8 @@ if(!$g_current_user->editAnnouncements())
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_ann_id = funcVariableIsValid($_GET, 'ann_id', 'numeric', 0);
-$get_mode   = funcVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$get_ann_id = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
+$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
 
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($g_db);

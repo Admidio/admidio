@@ -8,15 +8,15 @@
  *
  * Uebergaben:
  *
- * dat_id: ID des Termins, der angezeigt werden soll
- * mode:   1 - Neuen Termin anlegen/aendern
- *         2 - Termin loeschen
- *         3 - zum Termin anmelden
- *         4 - vom Termin abmelden
- *         5 - Eintrag fuer Sichtbarkeit erzeugen
- *         6 - Termin im iCal-Format exportieren
- * count:  Nummer dere Rollenauswahlbox, die angezeigt werden soll
- * rol_id: vorselektierte Rolle der Rollenauswahlbox
+ * dat_id : ID des Termins, der angezeigt werden soll
+ * mode   : 1 - Neuen Termin anlegen/aendern
+ *          2 - Termin loeschen
+ *          3 - zum Termin anmelden
+ *          4 - vom Termin abmelden
+ *          5 - Eintrag fuer Sichtbarkeit erzeugen
+ *          6 - Termin im iCal-Format exportieren
+ * rol_id : vorselektierte Rolle der Rollenauswahlbox
+ * number_rol_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
  *
  *****************************************************************************/
 
@@ -34,58 +34,31 @@ if ($g_preferences['enable_dates_module'] == 0)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-if($_GET['mode'] != 6 || $g_preferences['enable_dates_module'] == 2)
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_dat_id = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', 0);
+$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$get_rol_id = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
+$get_number_rol_select = admFuncVariableIsValid($_GET, 'number_rol_select', 'numeric');
+
+
+if($get_mode != 6 || $g_preferences['enable_dates_module'] == 2)
 {
     // Alle Funktionen, ausser Exportieren und anmelden, duerfen nur eingeloggte User
     require_once('../../system/login_valid.php');
 }
 
 // erst prüfen, ob der User auch die entsprechenden Rechte hat
-if(!$g_current_user->editDates() && $_GET['mode'] != 3 && $_GET['mode'] != 4 && $_GET['mode'] != 6)
+if(!$g_current_user->editDates() && $get_mode != 3 && $get_mode != 4 && $get_mode != 6)
 {
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-}
-
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_dat_id = 0;
-$req_rol_id = 0;
-
-// Uebergabevariablen pruefen
-
-if(isset($_GET['dat_id']))
-{
-    if(is_numeric($_GET['dat_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_dat_id = $_GET['dat_id'];
-}
-
-if(is_numeric($_GET['mode']) == false
-    || $_GET['mode'] < 1 || $_GET['mode'] > 6)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_GET['count']) && is_numeric($_GET['count']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-if(isset($_GET['rol_id']))
-{
-    if(is_numeric($_GET['rol_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_rol_id = $_GET['rol_id'];
 }
 
 // Terminobjekt anlegen
 $date = new TableDate($g_db);
 
-if($req_dat_id > 0)
+if($get_dat_id > 0)
 {
-    $date->readData($req_dat_id);
+    $date->readData($get_dat_id);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false )
@@ -94,7 +67,7 @@ if($req_dat_id > 0)
     }
 }
 
-if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
+if($get_mode == 1)  // Neuen Termin anlegen/aendern
 {
     $_SESSION['dates_request'] = $_REQUEST;
     
@@ -232,7 +205,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
                      WHERE dat_begin <= "'.$endDateTime->getDateTimeEnglish().'"
                        AND dat_end   >= "'.$startDateTime->getDateTimeEnglish().'"
                        AND dat_room_id = '.$_POST['dat_room_id'].' 
-                       AND dat_id     <> '.$req_dat_id;
+                       AND dat_id     <> '.$get_dat_id;
             $result = $g_db->query($sql);
             $row = $g_db->fetch_object($result);
             if($row->is_reserved) 
@@ -397,7 +370,7 @@ if($_GET['mode'] == 1)  // Neuen Termin anlegen/aendern
     header('Location: '. $_SESSION['navigation']->getUrl());
     exit();
 }
-elseif($_GET['mode'] == 2)  // Termin loeschen
+elseif($get_mode == 2)  // Termin loeschen
 {
     // Termin loeschen, wenn dieser zur aktuellen Orga gehoert
     if($date->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
@@ -409,7 +382,7 @@ elseif($_GET['mode'] == 2)  // Termin loeschen
         echo 'done';
     }
 }
-elseif($_GET['mode'] == 3)  // Benutzer zum Termin anmelden
+elseif($get_mode == 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($g_db);
     $member->startMembership($date->getValue('dat_rol_id'),$g_current_user->getValue('usr_id'));
@@ -417,7 +390,7 @@ elseif($_GET['mode'] == 3)  // Benutzer zum Termin anmelden
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show($g_l10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $g_l10n->get('DAT_ATTEND'));
 }
-elseif($_GET['mode'] == 4)  // Benutzer vom Termin abmelden
+elseif($get_mode == 4)  // Benutzer vom Termin abmelden
 {
     $sql = 'DELETE FROM '.TBL_MEMBERS.' 
              WHERE mem_rol_id = \''.$date->getValue('dat_rol_id').'\'
@@ -427,27 +400,27 @@ elseif($_GET['mode'] == 4)  // Benutzer vom Termin abmelden
     $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
     $g_message->show($g_l10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $g_l10n->get('DAT_ATTEND'));
 }
-elseif($_GET['mode'] == 5)  // Eintrag fuer Sichtbarkeit erzeugen
+elseif($get_mode == 5)  // Eintrag fuer Sichtbarkeit erzeugen
 {
     $label = '';
 
-    if($_GET['count'] == 1)
+    if($get_number_rol_select == 1)
     {
         $label = $g_l10n->get('DAT_VISIBLE_TO').':';
     }
-    echo '<dl id="roleID_'.$_GET['count'].'">
+    echo '<dl id="roleID_'.$get_number_rol_select.'">
         <dt>'.$label.'</dt>
-        <dd>'.FormElements::generateRoleSelectBox($req_rol_id, 'role_'.$_GET['count'], 0, 1);
-            if($_GET['count'] > 1)
+        <dd>'.FormElements::generateRoleSelectBox($get_rol_id, 'role_'.$get_number_rol_select, 0, 1);
+            if($get_number_rol_select > 1)
             {
-                echo '<a href="javascript:removeRoleSelection(\'roleID_'.$_GET['count'].'\')"><img 
+                echo '<a href="javascript:removeRoleSelection(\'roleID_'.$get_number_rol_select.'\')"><img 
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('DAT_ADD_ROLE').'" /></a>';
             }
         echo '</dd>
     </dl>';
     exit();
 }
-elseif($_GET['mode'] == 6)  // Termin im iCal-Format exportieren
+elseif($get_mode == 6)  // Termin im iCal-Format exportieren
 {
     header('Content-Type: text/calendar');
     header('Content-Disposition: attachment; filename='. urlencode($date->getValue('dat_headline')). '.ics');
