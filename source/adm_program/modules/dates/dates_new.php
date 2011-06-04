@@ -11,7 +11,6 @@
  * dat_id   - ID des Termins, der bearbeitet werden soll
  * headline - Ueberschrift, die ueber den Terminen steht
  *            (Default) Termine
- * calendar - der Kalender wird vorbelegt
  * copy : true - der uebergebene ID-Termin wird kopiert und kann neu gespeichert werden
  *
  *****************************************************************************/
@@ -40,52 +39,28 @@ if(!$g_current_user->editDates())
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_dat_id   = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', 0);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
+$get_copy     = admFuncVariableIsValid($_GET, 'copy', 'boolean', 0);
+
 // lokale Variablen der Uebergabevariablen initialisieren
-$req_dat_id   = 0;
-$req_calendar = '';
-$req_copy     = false;
 $date_login   = 0;
 $date_assign_yourself = 0;
-
-// Uebergabevariablen pruefen
-
-if(isset($_GET['dat_id']))
-{
-    if(is_numeric($_GET['dat_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_dat_id = $_GET['dat_id'];
-}
-
-if(!isset($_GET['headline']))
-{
-    $_GET['headline'] = $g_l10n->get('DAT_DATES');
-}
-
-if(isset($_GET['calendar']))
-{
-    $req_calendar = $_GET['calendar'];
-}
-if(isset($_GET['copy']) && $_GET['copy'] == 1)
-{
-    $req_copy = true;
-}
-
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Terminobjekt anlegen
 $date = new TableDate($g_db);
 
-if($req_dat_id > 0)
+if($get_dat_id > 0)
 {
-    $date->readData($req_dat_id);
+    $date->readData($get_dat_id);
     
-    if($req_copy)
+    if($get_copy)
     {
         $date->setValue('dat_id', 0);
-        $req_dat_id = 0;
+        $get_dat_id = 0;
     }
     
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
@@ -101,9 +76,9 @@ else
     $date->setValue('dat_end', date('Y-m-d H:00:00', time()+3600));
     
     // wurde ein Kalender uebergeben, dann diesen vorbelegen
-    if(strlen($req_calendar) > 0)
+    if(strlen($get_headline) > 0)
     {
-        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_name = "'.$req_calendar.'"';
+        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_name = \''.$get_headline.'\'';
         $g_db->query($sql);
         $row = $g_db->fetch_array();
         $date->setValue('dat_cat_id', $row['cat_id']);
@@ -117,12 +92,12 @@ if(isset($_SESSION['dates_request']))
 	$date->setArray($_SESSION['dates_request']);
 
     // ausgewaehlte Rollen vorbelegen
-    $count = 1;
+    $numberRoleSelect = 1;
     $arrRoles = array();
-    while(isset($_SESSION['dates_request']['role_'.$count]))
+    while(isset($_SESSION['dates_request']['role_'.$numberRoleSelect]))
     {
-        $arrRoles[] = $_SESSION['dates_request']['role_'.$count];
-        $count++;
+        $arrRoles[] = $_SESSION['dates_request']['role_'.$numberRoleSelect];
+        $numberRoleSelect++;
     }
     $date->setVisibleRoles($arrRoles);
     
@@ -159,7 +134,7 @@ else
     $date_to = $date->getValue('dat_end', $g_preferences['system_date']);
     $time_to = $date->getValue('dat_end', $g_preferences['system_time']);
     
-    if($req_dat_id == 0)
+    if($get_dat_id == 0)
     {
         // Sichtbar fuer alle wird per Default vorbelegt
         $date->setVisibleRoles(array('-1'));
@@ -171,13 +146,13 @@ else
 }
 
 // Html-Kopf ausgeben
-if($req_dat_id > 0)
+if($get_dat_id > 0)
 {
-    $g_layout['title'] = $g_l10n->get('SYS_EDIT_VAR', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('SYS_EDIT_VAR', $get_headline);
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('SYS_CREATE_VAR', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('SYS_CREATE_VAR', $get_headline);
 }
 
 $g_layout['header'] = '
@@ -229,23 +204,23 @@ $g_layout['header'] = '
 
     var calPopup = new CalendarPopup("calendardiv");
     calPopup.setCssPrefix("calendar");
-    var count = 1;
+    var numberRoleSelect = 1;
 
     function addRoleSelection(roleID)
     {
-        $.ajax({url: "dates_function.php?mode=5&count="+count+"&rol_id="+roleID, type: "GET", async: false, 
+        $.ajax({url: "dates_function.php?mode=5&number_rol_select=" + numberRoleSelect + "&rol_id=" + roleID, type: "GET", async: false, 
             success: function(data){
-                if(count == 1)
+                if(numberRoleSelect == 1)
                 {
                     $("#liRoles").html($("#liRoles").html() + data);
                 }
                 else
                 {
-                    number = count-1;
+                    number = numberRoleSelect - 1;
                     $("#roleID_"+number).after(data);
                 }
             }});
-        count++;
+        numberRoleSelect++;
     }
     
     function removeRoleSelection(id)
@@ -323,7 +298,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
  
 // Html des Modules ausgeben
 echo '
-<form method="post" id="formDate" action="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$req_dat_id.'&amp;mode=1">
+<form method="post" id="formDate" action="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$get_dat_id.'&amp;mode=1">
 <div class="formLayout" id="edit_dates_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">
@@ -361,7 +336,7 @@ echo '
 
 					if($g_preferences['dates_show_map_link'])
 					{
-						if(strlen($date->getValue('dat_country')) == 0 && $req_dat_id == 0)
+						if(strlen($date->getValue('dat_country')) == 0 && $get_dat_id == 0)
 						{
 							$date->setValue('dat_country', $g_preferences['default_country']);
 						}

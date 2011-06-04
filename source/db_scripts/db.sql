@@ -196,6 +196,10 @@ alter table %PREFIX%_dates add index DAT_USR_CHANGE_FK (dat_usr_id_change);
 -- Constraints
 alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_CAT foreign key (dat_cat_id)
       references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
+alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_ROL foreign key (dat_rol_id)
+      references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
+alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_ROOM foreign key (dat_room_id)
+      references %PREFIX%_rooms (room_id) on delete set null on update restrict;
 alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_USR_CREATE foreign key (dat_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_dates add constraint %PREFIX%_FK_DAT_USR_CHANGE foreign key (dat_usr_id_change)
@@ -375,7 +379,7 @@ create table %PREFIX%_links
    lnk_name                       varchar(255)                   not null,
    lnk_description                text,
    lnk_url                        varchar(255)                   not null,
-   lnk_counter                    tinyint(1) unsigned            not null default 0,
+   lnk_counter                    integer                        not null default 0,
    lnk_usr_id_create              int(11) unsigned,
    lnk_timestamp_create           datetime                       not null,
    lnk_usr_id_change              int(11) unsigned,

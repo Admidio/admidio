@@ -6,8 +6,8 @@ INSERT INTO `%PREFIX%_organizations` VALUES  (2,'Test-Organisation','TEST',1,'de
 
 
 INSERT INTO `%PREFIX%_preferences` VALUES 
- (4700,1,'db_version','2.2.5'),
- (47001,2,'db_version','2.2.5'),
+ (4700,1,'db_version','2.2.6'),
+ (47001,2,'db_version','2.2.6'),
  (1000,1,'announcements_per_page','10'),
  (1100,1,'ecard_view_width','250'),
  (1200,1,'ecard_view_height','250'),

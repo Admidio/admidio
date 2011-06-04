@@ -40,13 +40,13 @@ elseif($g_preferences['enable_dates_module'] == 2)
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_mode      = funcVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old'));
-$get_start     = funcVariableIsValid($_GET, 'start', 'numeric', 0);
-$get_headline  = funcVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
-$get_dat_id    = funcVariableIsValid($_GET, 'id', 'numeric', 0);
-$get_date      = funcVariableIsValid($_GET, 'date', 'numeric');
-$get_calendar  = funcVariableIsValid($_GET, 'calendar', 'string');
-$get_calendar_selection = funcVariableIsValid($_GET, 'calendar-selection', 'boolean', $g_preferences['dates_show_calendar_select']);
+$get_mode      = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old'));
+$get_start     = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$get_headline  = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
+$get_dat_id    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_date      = admFuncVariableIsValid($_GET, 'date', 'numeric');
+$get_calendar  = admFuncVariableIsValid($_GET, 'calendar', 'string');
+$get_calendar_selection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $g_preferences['dates_show_calendar_select']);
 
 if(strlen($get_date) > 0)
 {
@@ -250,9 +250,9 @@ if((($get_calendar_selection == 1) && ($get_dat_id == 0)) || $g_current_user->ed
         $topNavigation .= '
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$get_headline.'&amp;calendar='.$get_calendar.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$get_headline.'"><img
                 src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $get_headline).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$get_headline.'&amp;calendar='.$get_calendar.'">'.$g_l10n->get('SYS_CREATE_VAR', $get_headline).'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$get_headline.'">'.$g_l10n->get('SYS_CREATE_VAR', $get_headline).'</a>
             </span>
         </li>';
     }

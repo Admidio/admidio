@@ -31,10 +31,10 @@ class DBMySQL extends DBCommon
 				@mysql_query('SET NAMES \'utf8\'', $this->connect_id);
 
                 // ANSI Modus setzen, damit SQL kompatibler zu anderen DBs werden kann
-                @mysql_query('SET GLOBAL sql_mode=\'ANSI\'', $this->connect_id);
+                @mysql_query('SET SQL_MODE = \'ANSI\'', $this->connect_id);
                 
                 // falls der Server die Joins begrenzt hat, kann dies mit diesem Statement aufgehoben werden
-                @mysql_query('SET SQL_BIG_SELECTS=1', $this->connect_id);
+                @mysql_query('SET SQL_BIG_SELECTS = 1', $this->connect_id);
 
                 return $this->connect_id;
             }

@@ -372,7 +372,7 @@ function EmailNotification($receiptian, $reference, $message, $sender_name, $sen
 // prueft ob der Array-Eintrag existiert und dem Datentyp entspricht, andernfalls wird ein Hinweis ausgegeben
 // type        : 'string', 'numeric'
 // validValues : array mit allen gueltigen Werten, die die Variable haben darf
-function funcVariableIsValid($array, $variableName, $type, $defaultValue = null, $requireValue = false, $validValues = null)
+function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = null, $requireValue = false, $validValues = null)
 {
 	global $g_l10n, $g_message;
 	

@@ -20,7 +20,7 @@ if($g_current_user->isWebmaster() == false)
 }
 
 // Uebergabevariablen pruefen
-$req_mode = funcVariableIsValid($_GET, 'mode', 'numeric', 0, 1);
+$req_mode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
 
 /************Systeminformationen********/
 if($req_mode == 1)
