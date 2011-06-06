@@ -62,7 +62,7 @@ if(  (!$g_current_user->assignRoles()
 $g_layout['title']  = $g_l10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
 $g_layout['header'] ='
-<script type="text/javascript">
+<script type="text/javascript"><!--
     //Erstmal warten bis Dokument fertig geladen ist
     $(document).ready(function(){       
         //Bei Seitenaufruf Daten laden
@@ -166,7 +166,7 @@ $g_layout['header'] ='
             
             $g_layout['header'] .='                     
             //Ladebalken an checkbox
-            $("#loadindicator_" + checkbox_id).append("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' alt=\'loadindicator\'  \' />").show();
+            $("#loadindicator_" + checkbox_id).append("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' alt=\'loadindicator\' />").show();
                                  
             //Datenbank schreiben
             $.ajax({
@@ -206,7 +206,7 @@ $g_layout['header'] ='
 
         $("a[rel=\'lnkNewUser\']").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
      });            
-</script>';
+//--></script>';
         
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '<h1>'. $g_layout['title']. '</h1>';
@@ -216,7 +216,7 @@ echo '
 <form id="memsearch_form">
     <ul class="iconTextLinkList">
         <li>'.$g_l10n->get('SYS_SEARCH').': <input type="text" name="mem_search" id="mem_search" /></li>
-        <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /><label for="mem_show_all">'.$g_l10n->get('MEM_SHOW_ALL_USERS').'</lable></li>
+        <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /><label for="mem_show_all">'.$g_l10n->get('MEM_SHOW_ALL_USERS').'</label></li>
         <li>
 	        <span class="iconTextLink" id="add_user_link" style="display: none;">
 		        <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
