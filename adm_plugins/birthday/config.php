@@ -15,6 +15,13 @@
 // 2 = (Default) Name ohne Alter wird für Besucher angezeigt
 $plg_show_names_extern = 2;
 
+// Wie soll der Name des Geburtstagskindes angezeigt werden ?
+// 1 = (Default) Vorname Nachname  (Hans Mustermann)
+// 2 = Nachname, Vorname (Mustermann, Hans)
+// 3 = Vorname (Hans)
+// 4 = Loginname (Hansi)
+$plg_show_names = 1;
+
 // Ab welchem Alter soll bei Geburtstagskindern für Besucher der Vorname durch
 // die Anrede ersetzt werden?
 // Falls nicht festgelegt, wird im PlugIn 18 als Default gesetzt.
@@ -40,24 +47,17 @@ $plg_show_nachtraeglich = 0;
 // 2 = keine Verlinkung fuer Besucher und registrierte Benutzer
 $plg_show_email_extern = 0;
 
-// Wie soll der Name des Geburtstagskindes angezeigt werden ?
-// 1 = (Default) Vorname Nachname  (Hans Mustermann)
-// 2 = Nachname, Vorname (Mustermann, Hans)
-// 3 = Vorname (Hans)
-// 4 = Loginname (Hansi)
-$plg_show_names = 1;
-
 // Angabe des Ziels (target) in dem die Inhalte der Links geöffnet werden sollen
 // Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
 $plg_link_target = '_self';
 
 // Angabe welche Rollen selektiert werden sollen
 // Aufzählung mit Komma vornehmen "(4,5)"
-$plg_rolle_sql = "";
+$plg_rolle_sql = '';
 
 // Angabe in welcher Sortierfolge die Geburtstage dargestellt werden sollen
 // Aufsteigend bzw. absteigend "asc bzw. desc"
-$plg_sort_sql = "desc";
+$plg_sort_sql = 'desc';
 
 
 ?>

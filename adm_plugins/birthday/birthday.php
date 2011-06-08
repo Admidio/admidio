@@ -195,40 +195,39 @@ if($anz_geb > 0)
                     $plg_show_name = $row['first_name']. ' '. $row['last_name'];
                 }
 
+				// ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
+				if($g_valid_login == false
+				&& $plg_show_alter_anrede <= $row['age'])
+				{
+					if (($row->gender) > 1)
+					{
+						$plg_show_name = $g_l10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row->last_name);
+					}
+					else
+					{
+						$plg_show_name = $g_l10n->get('PLG_BIRTHDAY_MAN_VAR', $row->last_name);
+					}
+				}
+
                 // Namen mit Alter und Mail-Link anzeigen
-                if(strlen($row['email']) > 0
-                && ($g_valid_login || $plg_show_email_extern == 1))
-                {
-                    if($g_valid_login)
-                    {
-                        $plg_show_name = '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '" 
-                            target="'. $plg_link_target. '" title="'.$g_l10n->get('SYS_SHOW_PROFILE').'">'. $plg_show_name. '</a>
-                            <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
-                            src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
-                    }
-                    else
-                    {
-                        $plg_show_name = $plg_show_name. 
-                            '<a class="iconLink" href="mailto:'. $row['email']. '"><img 
-                            src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
-                    }
-                }
-                else
-                {
-                    // Soll der Name auch für nicht angemeldete Benutzer angezeigt werden, dann ab festgelegtem Alter statt Vorname die Anrede verwenden.
-                    if($g_valid_login == false
-                    && $plg_show_alter_anrede <= $row['age'])
-                    {
-                        if (($row->gender) > 1)
-                        {
-                            $plg_show_name = $g_l10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row->last_name);
-                        }
-                        else
-                        {
-                            $plg_show_name = $g_l10n->get('PLG_BIRTHDAY_MAN_VAR', $row->last_name);
-                        }
-                    }
-                }
+				if($g_valid_login)
+				{
+					$plg_show_name = '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '" 
+						target="'. $plg_link_target. '" title="'.$g_l10n->get('SYS_SHOW_PROFILE').'">'. $plg_show_name. '</a>';
+					
+					// E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
+					if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
+					{
+						echo '<a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
+							src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
+					}
+				}
+				elseif($plg_show_email_extern == 1 && strlen($row['email']) > 0)
+				{
+					$plg_show_name = $plg_show_name. 
+						'<a class="iconLink" href="mailto:'. $row['email']. '"><img 
+						src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
+				}
 
                 // Soll das Alter auch für nicht angemeldete Benutzer angezeigt werden?
                 if($plg_show_names_extern < 2 || $g_valid_login == true)
