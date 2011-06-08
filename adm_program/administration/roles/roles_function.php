@@ -257,14 +257,13 @@ elseif($_GET['mode'] == 2)
     }
 
     // Kontrollieren ob bei nachtraeglicher Senkung der maximalen Mitgliederzahl diese nicht bereits ueberschritten wurde
-
-    if($req_rol_id > 0
-    && $_POST['rol_max_members'] < $role->getValue('rol_max_members'))
+    if($req_rol_id > 0 && $_POST['rol_max_members'] != $role->getValue('rol_max_members'))
     {
         // Zaehlen wieviele Leute die Rolle bereits haben, ohne Leiter
+		$role->setValue('rol_max_members', $_POST['rol_max_members']);
         $num_free_places = $role->countVacancies();
 
-        if($num_free_places == 0)
+        if($num_free_places < 0)
         {
             $g_message->show($g_l10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
         }

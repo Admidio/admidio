@@ -357,12 +357,7 @@ echo '
                         <dl>
                             <dt><label for="rol_max_members">'.$g_l10n->get('SYS_MAX_PARTICIPANTS').':</label></dt>
                             <dd>
-                                <input type="text" id="rol_max_members" name="rol_max_members" size="3" maxlength="3" onchange="checkMaxMemberCount(this.value)" value="';
-                                if($role->getValue('rol_max_members') > 0)
-                                {
-                                    echo $role->getValue('rol_max_members');
-                                }
-                                echo '" />&nbsp;('.$g_l10n->get('ROL_WITHOUT_LEADER').')
+                                <input type="text" id="rol_max_members" name="rol_max_members" size="3" maxlength="3" onchange="checkMaxMemberCount(this.value)" value="'.$role->getValue('rol_max_members').'" />&nbsp;('.$g_l10n->get('ROL_WITHOUT_LEADER').')
                             </dd>
                         </dl>
                     </li>';
