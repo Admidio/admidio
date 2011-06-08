@@ -48,8 +48,12 @@ class TableDate extends TableAccess
     // Methode, die den Termin in der DB loescht
     public function delete()
     {
+		$g_db->startTransaction();
+
         $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
         $result = $this->db->query($sql);
+
+        parent::delete();
 
         // haben diesem Termin Mitglieder zugesagt, so muessen diese Zusagen noch geloescht werden
         if($this->getValue('dat_rol_id') > 0)
@@ -60,9 +64,9 @@ class TableDate extends TableAccess
             $sql = 'DELETE FROM '.TBL_ROLES.' WHERE rol_id = '.$this->getValue('dat_rol_id');
             $this->db->query($sql);
         }
-        
-        parent::delete();
-    }    
+
+		$g_db->endTransaction();
+	}    
     
     // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
     public function editRight()

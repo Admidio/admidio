@@ -44,7 +44,7 @@ class TableRoles extends TableAccess
     // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
     public function countVacancies($count_leaders = false)
     {
-        if($this->getValue('rol_max_members') > 0)
+        if(strlen($this->getValue('rol_max_members')) > 0)
         {
             $sql    = 'SELECT mem_usr_id FROM '. TBL_MEMBERS. '
                         WHERE mem_rol_id = '. $this->getValue('rol_id'). '
