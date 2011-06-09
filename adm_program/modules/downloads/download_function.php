@@ -118,8 +118,6 @@ if ($req_mode == 1)
         $g_message->show($g_l10n->get('DOW_UPLOAD_POST_EMPTY',ini_get('upload_max_filesize')));
     }
 
-    $local_file = $_FILES['userfile']['name'];
-
     //Dateigroesse ueberpruefen Servereinstellungen
     if ($_FILES['userfile']['error']==1)
     {
@@ -133,7 +131,7 @@ if ($req_mode == 1)
     }
 
     // Dateinamen ermitteln
-    $file_name = $local_file;
+    $file_name = $_FILES['userfile']['name'];
 
     // wenn neuer Name uebergeben wurde, dann diesen nehmen
     if(strlen($_POST['new_name']) > 0)
@@ -162,7 +160,7 @@ if ($req_mode == 1)
 
     if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$file_name))
     {
-        $g_message->show($g_l10n->get('DOW_FILE_EXIST', $newFile));
+        $g_message->show($g_l10n->get('DOW_FILE_EXIST', $file_name));
     }
 
     $file_description = $_POST['new_description'];
