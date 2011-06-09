@@ -30,19 +30,20 @@ class FunctionClass
 		$this->sendToString					= $g_l10n->get("SYS_TO");	
 		$this->emailString					= $g_l10n->get("SYS_EMAIL");	
 	}
+
 	// gibt ein Menue fuer die Einstellungen des Template aus
 	// Uebergabe: 
 	//          $data_array         .. Daten fuer die Einstellungen in einem Array
 	//          $name_ecard_input   .. Name des Ecards inputs
 	//          $width              .. die Groeße des Menues
 	//          $first_value        .. der Standart Wert oder eingestellte Wert vom Benutzer
-	//          $schowfont          .. wenn gesetzt bekommen die Menue Eintraege einen universellen font-style
-	function getMenueSettings($data_array,$name_ecard_input,$first_value,$width,$schowfont)
+	//          $show_font          .. wenn gesetzt bekommen die Menue Eintraege einen universellen font-style
+	function getMenueSettings($data_array,$name_ecard_input,$first_value,$width,$show_font)
 	{
-		echo  '<select size="1" onchange="ecardJS.getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
+        $htmlOutput = '<select id="'.$name_ecard_input.'" size="1" onchange="ecardJS.getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
 		for($i=0; $i<count($data_array);$i++)
 		{
-			$name = "";
+			$name = '';
 			if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
 			{
 				$name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
@@ -55,54 +56,59 @@ class FunctionClass
 			{
 				$name = $data_array[$i];
 			}
-			if($name != "")
+			if($name != '')
 			{
-				if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true")
+				if (strcmp($data_array[$i],$first_value) == 0 && $show_font != "true")
 				{
-					echo '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
+					$htmlOutput .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
 				}
-				else if($schowfont != "true")
+				else if($show_font != 'true')
 				{
-					echo '<option value="'.$data_array[$i].'">'.$name.'</option>';
+					$htmlOutput .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
 				}
 				else if (strcmp($data_array[$i],$first_value) == 0)
 				{
-					echo '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
+					$htmlOutput .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
 				}
 				else
 				{
-					echo '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
+					$htmlOutput .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
 				}
 			}
 			
 		}
-		echo  '</select>';
-		return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
+		$htmlOutput .= '</select>
+            <input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
+        return $htmlOutput;
 	}
+
 	// gibt ein Menue fuer die Einstellungen des Template aus
 	// Uebergabe: 
 	//          $data_array         .. Daten fuer die Einstellungen in einem Array
 	//          $name_ecard_input   .. Name des Ecards inputs
 	function getColorSettings($data_array,$name_ecard_input,$anz,$first_value)
 	{
-		echo  '<table border="0" cellpadding="1" cellspacing="1" summary="colorTable"><tr>';
+		$htmlOutput =  '<table border="0" cellpadding="1" cellspacing="1" summary="colorTable"><tr>';
 		for($i=0; $i<count($data_array);$i++)
 		{   
 			if (!is_integer(($i+1)/$anz))
 			{
-				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
+				$htmlOutput .= '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" 
+				    onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
 			}
 			else
 			{
-				echo '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
+				$htmlOutput .= '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" 
+				    onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
 				if($i<count($data_array)-1)
 				{
-					echo '</tr><tr>';
+					$htmlOutput .= '</tr><tr>';
 				}
 			}       
 		}
-		echo  '</tr></table>';
-		return '<input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
+		$htmlOutput .=  '</tr></table>
+            <input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
+        return $htmlOutput;
 	}
 	// gibt die ersten Einstellungen des Template aus
 	// Uebergabe: 
@@ -121,6 +127,7 @@ class FunctionClass
 			}
 		}
 	}
+
 	function getCCRecipients($ecard,$max_cc_recipients)
 	{
 		$Versandliste = array();
