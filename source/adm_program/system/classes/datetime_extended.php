@@ -95,7 +95,7 @@ class DateTimeExtended extends DateTime
     // gibt den Unix-Timestamp zurueck
     public function getTimestamp()
     {
-        return mktime($this->hour, $this->minute, $this->second, $this->month, $this->day, $this->year);
+        return $this->format('U');
     }
 
     // setzt das Datum und die Uhrzeit fuer das aktuelle Objekt
