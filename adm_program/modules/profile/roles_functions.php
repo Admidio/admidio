@@ -135,17 +135,17 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
             <li id="mem_rol_'.$row['rol_id'].'" style="text-align: right; visibility: hidden; display: none;">
                 <form action="'.$g_root_path.'/adm_program/modules/profile/roles_date.php?usr_id='.$user->getValue('usr_id').'&amp;mode=1&amp;rol_id='.$row['rol_id'].'" method="post">
                     <div>
-                        <label for="begin'.$row['rol_name'].'">'.$g_l10n->get('SYS_START').':</label>
-                        <input type="text" id="begin'.$row['rol_name'].'" name="rol_begin" size="10" maxlength="20" value="'.$member->getValue('mem_begin', $g_preferences['system_date']).'"/>
-                        <a class="iconLink" id="anchor_begin'.$row['rol_name'].'" href="javascript:calPopup.select(document.getElementById(\'begin'.$row['rol_name'].'\'),\'anchor_begin'.$row['rol_name'].'\',\''.$g_preferences['system_date'].'\',\'begin'.$row['rol_name'].'\',\'end'.$row['rol_name'].'\');"><img 
+                        <label for="admRoleStart'.$row['rol_id'].'">'.$g_l10n->get('SYS_START').':</label>
+                        <input type="text" id="admRoleStart'.$row['rol_id'].'" name="rol_begin" size="10" maxlength="20" value="'.$member->getValue('mem_begin', $g_preferences['system_date']).'"/>
+                        <a class="iconLink" id="admRoleAnchorStart'.$row['rol_id'].'" href="javascript:calPopup.select(document.getElementById(\'admRoleStart'.$row['rol_id'].'\'),\'admRoleAnchorStart'.$row['rol_id'].'\',\''.$g_preferences['system_date'].'\',\'admRoleStart'.$row['rol_id'].'\',\'admRoleEnd'.$row['rol_id'].'\');"><img 
                         src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;
 
-                        <label for="end'.$row['rol_name'].'">'.$g_l10n->get('SYS_END').':</label>
-                        <input type="text" id="end'.$row['rol_name'].'" name="rol_end" size="10" maxlength="20" value="'.$member->getValue('mem_end', $g_preferences['system_date']).'"/>
-                        <a class="iconLink" id="anchor_end'.$row['rol_name'].'" href="javascript:calPopup.select(document.getElementById(\'end'.$row['rol_name'].'\'),\'anchor_end'.$row['rol_name'].'\',\''.$g_preferences['system_date'].'\',\'begin'.$row['rol_name'].'\',\'end'.$row['rol_name'].'\');"><img 
+                        <label for="admRoleEnd'.$row['rol_id'].'">'.$g_l10n->get('SYS_END').':</label>
+                        <input type="text" id="admRoleEnd'.$row['rol_id'].'" name="rol_end" size="10" maxlength="20" value="'.$member->getValue('mem_end', $g_preferences['system_date']).'"/>
+                        <a class="iconLink" id="admRoleAnchorEnd'.$row['rol_id'].'" href="javascript:calPopup.select(document.getElementById(\'admRoleEnd'.$row['rol_id'].'\'),\'admRoleAnchorEnd'.$row['rol_id'].'\',\''.$g_preferences['system_date'].'\',\'admRoleStart'.$row['rol_id'].'\',\'admRoleEnd'.$row['rol_id'].'\');"><img 
                         src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
 
-                        <a class="iconLink" href="javascript:profileJS.changeRoleDates(\''.$row['rol_name'].'\',\''.$row['rol_id'].'\')" id="enter'.$row['rol_name'].'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" title="'.$g_l10n->get('SYS_SAVE').'"/></a>
+                        <a class="iconLink" href="javascript:profileJS.changeRoleDates('.$row['rol_id'].')" id="admSaveMembership'.$row['rol_id'].'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" title="'.$g_l10n->get('SYS_SAVE').'"/></a>
                         <a class="iconLink" href="javascript:profileJS.toggleDetailsOff('.$row['rol_id'].')"><img src="'.THEME_PATH.'/icons/delete.png" alt="'.$g_l10n->get('SYS_ABORT').'" title="'.$g_l10n->get('SYS_ABORT').'"/></a>
                     </div>
                 </form>
@@ -153,13 +153,13 @@ function getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role
             $count_show_roles++;
         }
     }
-    $roleMemHTML .= '<span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
     if($count_show_roles == 0)
     {
         $roleMemHTML .= $g_l10n->get('ROL_NO_MEMBER_RESP_ROLE_VISIBLE',$g_current_organization->getValue('org_longname'));
     }
             
-    $roleMemHTML .= '</ul>';
+    $roleMemHTML .= '</ul>
+    <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
 
     if($directOutput)
     {

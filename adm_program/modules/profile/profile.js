@@ -88,11 +88,11 @@ function profileJSClass()
 	{
 		$("#mem_rol_" + role_id).css({"visibility":"hidden","display":"none"});
 	}
-	this.changeRoleDates = function(role,role_id)
+	this.changeRoleDates = function(role_id)
 	{
 		$.ajax({
 				type: "GET",
-				url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=2&usr_id="+this.usr_id+"&mode=1&rol_id="+role_id+"&rol_begin="+document.getElementById("begin"+role).value+"&rol_end="+document.getElementById("end"+role).value,
+				url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=2&usr_id="+this.usr_id+"&mode=1&rol_id="+role_id+"&rol_begin="+document.getElementById("admRoleStart"+role_id).value+"&rol_end="+document.getElementById("admRoleEnd"+role_id).value,
 				dataType: "html",
 				success: function(responseText, statusText){
 					if(responseText.match(/<SAVED\/>/gi))

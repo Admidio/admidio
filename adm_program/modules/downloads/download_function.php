@@ -282,7 +282,7 @@ elseif ($req_mode == 3)
     //Test ob der Ordner schon existiert im Filesystem
     if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$newFolderName)) 
     {
-        $g_message->show($g_l10n->get('DOW_FOLDER_EXISTS', $newFolder));
+        $g_message->show($g_l10n->get('DOW_FOLDER_EXISTS', $newFolderName));
     }
     else
     {

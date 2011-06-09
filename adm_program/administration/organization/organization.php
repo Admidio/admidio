@@ -1422,7 +1422,7 @@ echo '
                 {
                     if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
                     {
-                        $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
+                        $temp_data .= '<option value="'.$data_array[$i].'" selected="selected">'.$name.'</option>';
                     }
                     else if($schowfont != "true" && $showcolor != "true")
                     {
@@ -1430,7 +1430,7 @@ echo '
                     }
                     else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
                     {
-                        $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
+                        $temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="font-family:'.$name.';">'.$name.'</option>';
                     }
                     else if($showcolor != "true")
                     {
@@ -1438,7 +1438,7 @@ echo '
                     }
                     else if (strcmp($data_array[$i],$first_value) == 0)
                     {
-                        $temp_data .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="background-color:'.$name.';">'.$name.'</option>';
+                        $temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="background-color:'.$name.';">'.$name.'</option>';
                     }
                     else
                     {
@@ -1825,17 +1825,21 @@ echo '
 		{
 			echo '	<li>
                         <dl>
-                            <dt><label for="captcha_font">'.$g_l10n->get("SYS_FONT").':</label></dt>
+                            <dt><label for="captcha_fonts">'.$g_l10n->get("SYS_FONT").':</label></dt>
                             <dd>
 								<select size="1" id="captcha_fonts" name="captcha_fonts" style="width:120px;">
 								';
 								$fonts = getfilenames('../../system/fonts/');
-								array_push($fonts,"Theme");
+								array_push($fonts,'Theme');
 								asort($fonts);
 								foreach($fonts as $myfonts)
 								{
-									if($myfonts == $form_values["captcha_fonts"]){$select = ' selected';}
-									else {$select = '';}
+									if($myfonts == $form_values['captcha_fonts']){
+									   $select = ' selected="selected"';
+								    }
+									else {
+									   $select = '';
+								    }
 									echo '<option value="'.$myfonts.'"'.$select.'>'.$myfonts.'</option>
 									';
 								}
@@ -1850,7 +1854,7 @@ echo '
                         <dl>
                             <dt><label for="captcha_font_size">'.$g_l10n->get("SYS_FONT_SIZE").':</label></dt>
                             <dd>';
-                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'captcha_text_size',$form_values["captcha_text_size"],'120','false','false');
+                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'captcha_font_size',$form_values['captcha_font_size'],'120','false','false');
                              echo '</dd>
                         </dl>
                     </li>
@@ -1918,7 +1922,7 @@ echo '
 					
 		if($g_preferences['captcha_type']=='pic')
 		{
-			$captcha_parameter = '&type=pic';
+			$captcha_parameter = '&amp;type=pic';
 		}
 		else
 		{
@@ -1928,7 +1932,7 @@ echo '
 					echo '
 					<li>
                         <dl>
-                            <dt><label for="captcha_prewiew"><a rel="colorboxHelp" href="captcha_preview.php?inline=true'.$captcha_parameter.'">'.$g_l10n->get("ORG_CAPTCHA_PREVIEW").'</a></label></dt>
+                            <dt><label><a rel="colorboxHelp" href="captcha_preview.php?inline=true'.$captcha_parameter.'">'.$g_l10n->get("ORG_CAPTCHA_PREVIEW").'</a></label></dt>
                             <dd>&nbsp;</dd>
                         </dl>
                     </li>
