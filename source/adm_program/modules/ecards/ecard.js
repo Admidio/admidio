@@ -181,9 +181,9 @@ function ecardJSClass()
 		$.fn.colorbox.init();
 		$("#" + this.ecardformid + " input[name=submit_action]").attr("value","preview");
 		$("#" + this.ecardformid).attr("action","ecard_preview.php");
-		$.fn.colorbox({href:"ecard_preview.php",width:"70%",height:"70%",iframe:true,onComplete:function(){
+		$.fn.colorbox({href:"ecard_preview.php",width:"70%",height:"70%",iframe:true,fastIframe:false,onComplete:function(){
 								$("#" + ecardJS.ecardformid).attr("target",$("#cboxLoadedContent iframe").attr("name"));
-								$("#" + ecardJS.ecardformid).submit();}});
+								$("#" + ecardJS.ecardformid).submit();}});		
 	}
 	this.sendEcard = function()
 	{
