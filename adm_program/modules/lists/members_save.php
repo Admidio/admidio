@@ -17,20 +17,15 @@ require_once('../../system/classes/role_dependency.php');
 require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/table_roles.php');
 
-// Uebergabevariablen pruefen
-if(!isset($_GET['rol_id']) || !is_numeric($_GET['rol_id']) || !isset($_GET['uid']))
-{
-    echo 'SYS_INVALID_PAGE_VIEW';exit();
-}
-
-//UID
-$uid = $_GET['uid'];
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_rol_id = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true, null, true);
+$get_usr_id = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true, null, true);
 
 //Member
 $member = new TableMembers($g_db);
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new TableRoles($g_db, $_GET['rol_id']);
+$role = new TableRoles($g_db, $get_rol_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
@@ -47,11 +42,11 @@ if( (!$g_current_user->assignRoles()
 //POST Daten übernehmen
 $membership = 0;
 $leadership = 0;
-if(isset($_POST['member_'.$uid]) && $_POST['member_'.$uid]=='true')
+if(isset($_POST['member_'.$get_usr_id]) && $_POST['member_'.$get_usr_id]=='true')
 {
     $membership = 1;
 }
-if(isset($_POST['leader_'.$uid]) && $_POST['leader_'.$uid]=='true')
+if(isset($_POST['leader_'.$get_usr_id]) && $_POST['leader_'.$get_usr_id]=='true')
 {
     $membership = 1;    
     $leadership = 1;
@@ -67,7 +62,7 @@ if($role->getValue('rol_max_members') > 0)
     $sql = 'SELECT COUNT(*) as mem_count
             FROM '. TBL_MEMBERS. '
             WHERE mem_rol_id = '. $role->getValue('rol_id'). '
-            AND mem_usr_id != '.$uid.'
+            AND mem_usr_id != '.$get_usr_id.'
             AND mem_leader = 0 
             AND mem_begin <= \''.DATE_NOW.'\'
             AND mem_end    > \''.DATE_NOW.'\'';
@@ -78,12 +73,12 @@ if($role->getValue('rol_max_members') > 0)
 //Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
 if($leadership==1 || ($leadership==0 && $membership==1 && ($role->getValue('rol_max_members') > $mem_count['mem_count'] || $role->getValue('rol_max_members')==0)))
 {
-    $member->startMembership($role->getValue('rol_id'), $uid, $leadership);
+    $member->startMembership($role->getValue('rol_id'), $get_usr_id, $leadership);
     echo 'success';
 }
 elseif($leadership==0 && $membership==0)
 {
-    $member->stopMembership($role->getValue('rol_id'), $uid);
+    $member->stopMembership($role->getValue('rol_id'), $get_usr_id);
     echo 'success';
 }
 else

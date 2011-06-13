@@ -9,9 +9,6 @@
  * Uebergaben:
  *
  * rol_id   : Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
- * restrict : Begrenzte Userzahl:
- *            m - (Default) nur Mitglieder
- *            u - alle in der Datenbank gespeicherten user
  *
  *****************************************************************************/
 
@@ -19,38 +16,22 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_roles.php');
 
-// Uebergabevariablen pruefen
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_rol_id = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true);
 
-if(isset($_GET['rol_id']) && is_numeric($_GET['rol_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-else
-{
-    $role_id = $_GET['rol_id'];
-}
-$_SESSION['set_rol_id'] = $role_id;
+$_SESSION['set_rol_id'] = $get_rol_id;
 
 //URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
-if(!isset($_GET['restrict']))
-{
-    $_SESSION['navigation']->addUrl(CURRENT_URL);
-}
-
-$restrict = 'm';
-if(isset($_GET['restrict']) && $_GET['restrict'] == 'u')
-{
-    $restrict = 'u';
-}
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new TableRoles($g_db, $role_id);
+$role = new TableRoles($g_db, $get_rol_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen Mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$g_current_user->assignRoles()
-   && !isGroupLeader($g_current_user->getValue('usr_id'), $role_id))
+   && !isGroupLeader($g_current_user->getValue('usr_id'), $get_rol_id))
 || (  !$g_current_user->isWebmaster()
    && $role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
 || ($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id') && $role->getValue('cat_org_id') > 0 ))
@@ -66,7 +47,7 @@ $g_layout['header'] ='
     //Erstmal warten bis Dokument fertig geladen ist
     $(document).ready(function(){       
         //Bei Seitenaufruf Daten laden
-        $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memserach_form").serialize(), function(result){
+        $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$get_rol_id.'", $("#memserach_form").serialize(), function(result){
             $("form#memlist_form").append(result).show();
             $("#list_load_animation").hide();
             return false;
@@ -76,7 +57,7 @@ $g_layout['header'] ='
         $("input[type=checkbox]#mem_show_all").live("click", function(){
             $("#list_load_animation").show();
             $("form#memlist_form").hide().empty();
-            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(result){
+            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$get_rol_id.'", $("#memsearch_form").serialize(), function(result){
                 $("form#memlist_form").append(result).show();               
                 $("#list_load_animation").hide();
                 return false;
@@ -94,7 +75,7 @@ $g_layout['header'] ='
         $("input[type=text]#mem_search").keyup(function(){
             $("#list_load_animation").show();
             $("form#memlist_form").hide().empty();
-            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$role_id.'", $("#memsearch_form").serialize(), function(result){
+            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$get_rol_id.'", $("#memsearch_form").serialize(), function(result){
                 $("form#memlist_form").append(result).show();
                 $("#list_load_animation").hide();               
                 return false;
@@ -170,7 +151,7 @@ $g_layout['header'] ='
                                  
             //Datenbank schreiben
             $.ajax({
-                    url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$role_id.'&uid="+userid,
+                    url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$get_rol_id.'&ur_id="+userid,
                     type: "POST",
                     data: "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
                     async: false,
@@ -189,16 +170,12 @@ $g_layout['header'] ='
                             }                           
 						   jQueryAlert("SYS_ROLE_MAX_MEMBERS", "'.$role->getValue('rol_name').'");
                        }
-                       if(result=="SYS_NO_RIGHTS")
-                       {
-						   jQueryAlert("SYS_NO_RIGHTS");
-                       }
-                       if(result=="SYS_INVALID_PAGE_VIEW")
+                       else if(result=="success")
+                       {}                    
+                       else
                        {
 						   jQueryAlert("SYS_INVALID_PAGE_VIEW");
                        }
-                       if(result=="success")
-                       {}                    
                        return false;
                     }
             });

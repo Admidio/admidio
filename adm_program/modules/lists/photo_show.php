@@ -14,41 +14,36 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-if(isset($_GET['usr_id']) && is_numeric($_GET['usr_id']))
-{
-    // pruefen, ob Profilfoto aus DB oder Filesystem kommt
-    if($g_preferences['profile_photo_storage'] == 0)
-    {
-        // Profilbild aus DB einlesen
-        $sql = 'SELECT usr_photo FROM '.TBL_USERS.' WHERE usr_id = '.$_GET['usr_id'];
-        $g_db->query($sql);
-        $row = $g_db->fetch_array();
+$get_usr_id = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true, null, true);
 
-        if(strlen($row['usr_photo']) > 0)
-        {
-            header('Content-Type: image/jpeg');
-            echo $row['usr_photo'];
-        }
-        else
-        {
-            // der Benutzer besitzt kein Bild => Default-Bild anzeigen
-            header('Content-Type: image/png');
-            readfile(THEME_SERVER_PATH. '/images/no_profile_pic.png');
-        }
-    }
-    else
+// pruefen, ob Profilfoto aus DB oder Filesystem kommt
+if($g_preferences['profile_photo_storage'] == 0)
+{
+    // Profilbild aus DB einlesen
+    $sql = 'SELECT usr_photo FROM '.TBL_USERS.' WHERE usr_id = '.$get_usr_id;
+    $g_db->query($sql);
+    $row = $g_db->fetch_array();
+
+    if(strlen($row['usr_photo']) > 0)
     {
-        // Profilbild aus dem Filesystem einlesen bzw. Default-Bild anzeigen
-        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$_GET['usr_id'].'.jpg'))
-        {
-            header('Content-Type: image/jpeg');
-            readfile(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$_GET['usr_id'].'.jpg');
-        }
-        else
-        {
-            header('Content-Type: image/png');
-            readfile(THEME_SERVER_PATH. '/images/no_profile_pic.png');
-        }
+        header('Content-Type: image/jpeg');
+        echo $row['usr_photo'];
+        exit();
     }
 }
+else
+{
+    // Profilbild aus dem Filesystem einlesen bzw. Default-Bild anzeigen
+    if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg'))
+    {
+        header('Content-Type: image/jpeg');
+        readfile(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg');
+        exit();
+    }
+}
+
+// wurde kein Userbild gefunden, dann immer das Default-Bild ausgeben
+header('Content-Type: image/png');
+readfile(THEME_SERVER_PATH. '/images/no_profile_pic.png');
+
 ?>
