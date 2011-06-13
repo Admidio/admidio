@@ -218,14 +218,15 @@ if($anz_geb > 0)
 					// E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
 					if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
 					{
-						echo '<a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
+						$plg_show_name = $plg_show_name.' 
+						    <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
 							src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
 					}
 				}
 				elseif($plg_show_email_extern == 1 && strlen($row['email']) > 0)
 				{
-					$plg_show_name = $plg_show_name. 
-						'<a class="iconLink" href="mailto:'. $row['email']. '"><img 
+					$plg_show_name = $plg_show_name.' 
+						<a class="iconLink" href="mailto:'. $row['email']. '"><img 
 						src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
 				}
 
