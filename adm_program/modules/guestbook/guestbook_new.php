@@ -41,50 +41,26 @@ elseif($g_preferences['enable_guestbook_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-
-// Uebergabevariablen pruefen
-
-if (array_key_exists('id', $_GET))
-{
-    if (is_numeric($_GET['id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $_GET['id'] = 0;
-}
-
-if (array_key_exists('headline', $_GET))
-{
-    $_GET['headline'] = strStripTags($_GET['headline']);
-}
-else
-{
-    $_GET['headline'] = $g_l10n->get('GBO_GUESTBOOK');
-}
-
-
-// Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...
-if ($_GET['id'] != 0)
-{
-    require('../../system/login_valid.php');
-
-    if (!$g_current_user->editGuestbookRight())
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_gbo_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('GBO_GUESTBOOK'));
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Gaestebuchobjekt anlegen
 $guestbook = new TableGuestbook($g_db);
 
-if($_GET['id'] > 0)
+if($get_gbo_id > 0)
 {
-    $guestbook->readData($_GET['id']);
+	// Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...
+    require('../../system/login_valid.php');
+
+    if (!$g_current_user->editGuestbookRight())
+    {
+        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    }
+
+    $guestbook->readData($get_gbo_id);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
@@ -95,7 +71,7 @@ if($_GET['id'] > 0)
 
 // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
 // Name, Emailadresse und Homepage vorbelegt werden...
-if ($_GET['id'] == 0 && $g_valid_login)
+if ($get_gbo_id == 0 && $g_valid_login)
 {
     $guestbook->setValue('gbo_name', $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $g_current_user->getValue('EMAIL'));
@@ -131,13 +107,13 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 }
 
 // Html-Kopf ausgeben
-if ($_GET['id'] > 0)
+if ($get_gbo_id > 0)
 {
-    $g_layout['title'] = $g_l10n->get('GBO_EDIT_ENTRY', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('GBO_EDIT_ENTRY', $get_headline);
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('GBO_CREATE_VAR_ENTRY', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('GBO_CREATE_VAR_ENTRY', $get_headline);
 }
 
 //Script für BBCode laden
@@ -167,7 +143,7 @@ $g_layout['header'] = $javascript. '
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
-if ($_GET['id'] > 0)
+if ($get_gbo_id > 0)
 {
     $mode = '3';
 }
@@ -177,7 +153,7 @@ else
 }
 
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $_GET['id']. '&amp;headline='. $_GET['headline']. '&amp;mode='.$mode.'" >
+<form method="post" action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $get_gbo_id. '&amp;headline='. $get_headline. '&amp;mode='.$mode.'" >
 <div class="formLayout" id="edit_guestbook_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">

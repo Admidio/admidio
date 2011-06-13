@@ -17,6 +17,7 @@
  *           7 - Berechtigungen ffür Ordner speichern
  * folder_id :  OrdnerId in der DB
  * file_id   :  FileId in der DB
+ * name      : Name des Ordners/Datei die zur DB hinzugefuegt werden soll
  *
  *****************************************************************************/
 
@@ -39,50 +40,11 @@ if (!$g_current_user->editDownloadRight())
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-if (isset($_GET['mode']))
-{
-    if (is_numeric($_GET['mode']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    $req_mode = $_GET['mode'];
-
-}
-else
-{
-    //ohne mode geht es nicht weiter
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if (isset($_GET['folder_id']))
-{
-    if (is_numeric($_GET['mode']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    $folder_id = $_GET['folder_id'];
-}
-else
-{
-    $folder_id = 0;
-}
-
-if (isset($_GET['file_id']))
-{
-    if (is_numeric($_GET['mode']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    $file_id = $_GET['file_id'];
-}
-else
-{
-    $file_id = 0;
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_mode      = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$get_folder_id = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', 0);
+$get_file_id   = admFuncVariableIsValid($_GET, 'file_id', 'numeric', 0);
+$get_name      = admFuncVariableIsValid($_GET, 'name', 'string');
 
 $_SESSION['download_request'] = $_REQUEST;
 
@@ -94,9 +56,9 @@ if($myFilesDownload->checkSettings() == false)
 }
 
 // Dateien hochladen
-if ($req_mode == 1)
+if ($get_mode == 1)
 {
-    if ($folder_id == 0) 
+    if ($get_folder_id == 0) 
     {
         //FolderId ist zum hochladen erforderlich
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -104,7 +66,7 @@ if ($req_mode == 1)
 
     //Informationen zum Zielordner aus der DB holen
     $targetFolder = new TableFolder($g_db);
-    $targetFolder->getFolderForDownload($folder_id);
+    $targetFolder->getFolderForDownload($get_folder_id);
 
     //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
     if (!$targetFolder->getValue('fol_id'))
@@ -200,19 +162,19 @@ if ($req_mode == 1)
 
 
 //Datei loeschen
-elseif ($req_mode == 2)
+elseif ($get_mode == 2)
 {
-    if (!$file_id)
+    if (!$get_file_id)
     {
         //Es muss eine FileID uebergeben werden
         //beides ist auch nicht erlaubt
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    if($file_id > 0)
+    if($get_file_id > 0)
     {
         $file = new TableFile($g_db);
-        $file->getFileForDownload($file_id);
+        $file->getFileForDownload($get_file_id);
 
         //Pruefen ob Datensatz gefunden
         if ($file->getValue('fil_id'))
@@ -230,17 +192,17 @@ elseif ($req_mode == 2)
 
 
 // Ordner erstellen
-elseif ($req_mode == 3)
+elseif ($get_mode == 3)
 {
 
-    if ($folder_id == 0) {
+    if ($get_folder_id == 0) {
         //FolderId ist zum Anlegen eines Unterordners erforderlich
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //Informationen zum Zielordner aus der DB holen
     $targetFolder = new TableFolder($g_db);
-    $targetFolder->getFolderForDownload($folder_id);
+    $targetFolder->getFolderForDownload($get_folder_id);
 
     //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
     if (!$targetFolder->getValue('fol_id'))
@@ -320,19 +282,19 @@ elseif ($req_mode == 3)
 
 
 //Datei / Ordner umbenennen
-elseif ($req_mode == 4)
+elseif ($get_mode == 4)
 {
-    if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
+    if ( (!$get_file_id && !$get_folder_id) OR ($get_file_id && $get_folder_id) )
     {
         //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
         //beides ist auch nicht erlaubt
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    if($file_id > 0)
+    if($get_file_id > 0)
     {
         $file = new TableFile($g_db);
-        $file->getFileForDownload($file_id);
+        $file->getFileForDownload($get_file_id);
 
         //Pruefen ob Datensatz gefunden
         if ($file->getValue('fil_id')) {
@@ -401,10 +363,10 @@ elseif ($req_mode == 4)
         }
 
     }
-    else if ($folder_id > 0)
+    else if ($get_folder_id > 0)
     {
         $folder = new TableFolder($g_db);
-        $folder->getFolderForDownload($folder_id);
+        $folder->getFolderForDownload($get_folder_id);
 
         //Pruefen ob Datensatz gefunden
         if ($folder->getValue('fol_id')) {
@@ -473,17 +435,17 @@ elseif ($req_mode == 4)
 
 
 //Folder loeschen
-elseif ($req_mode == 5)
+elseif ($get_mode == 5)
 {
-    if (!$folder_id)
+    if (!$get_folder_id)
     {
         //Es muss eine FolderId uebergeben werden
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
-    else if ($folder_id > 0)
+    else if ($get_folder_id > 0)
     {
         $folder = new TableFolder($g_db);
-        $folder->getFolderForDownload($folder_id);
+        $folder->getFolderForDownload($get_folder_id);
 
         //Pruefen ob Datensatz gefunden
         if ($folder->getValue('fol_id'))
@@ -501,19 +463,20 @@ elseif ($req_mode == 5)
 
 
 //Datei / Ordner zur DB hinzufeuegen
-elseif ($req_mode == 6)
+elseif ($get_mode == 6)
 {
-    if ($folder_id == 0) {
+    if ($get_folder_id == 0) 
+	{
         //FolderId ist zum hinzufuegen erforderlich
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    if (isset($_GET['name']))
+    if(strlen($get_name) > 0)
     {
-        $ret_code = isValidFileName(urldecode($_GET['name']), true);
+        $ret_code = isValidFileName(urldecode($get_name), true);
         if($ret_code == 0)
         {
-            $name = urldecode($_GET['name']);
+            $get_name = urldecode($get_name);
         }
         else
         {
@@ -535,7 +498,7 @@ elseif ($req_mode == 6)
 
     //Informationen zum Zielordner aus der DB holen
     $targetFolder = new TableFolder($g_db);
-    $targetFolder->getFolderForDownload($folder_id);
+    $targetFolder->getFolderForDownload($get_folder_id);
 
     //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
     if (!$targetFolder->getValue('fol_id'))
@@ -545,11 +508,11 @@ elseif ($req_mode == 6)
     }
 
     //Pruefen ob das neue Element eine Datei order ein Ordner ist.
-    if (is_file($targetFolder->getCompletePathOfFolder(). '/'. $name)) {
+    if (is_file($targetFolder->getCompletePathOfFolder(). '/'. $get_name)) {
         //Datei hinzufuegen
         $newFile = new TableFile($g_db);
         $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
-        $newFile->setValue('fil_name',$name);
+        $newFile->setValue('fil_name',$get_name);
         $newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
         $newFile->setValue('fil_counter','0');
         $newFile->save();
@@ -560,13 +523,13 @@ elseif ($req_mode == 6)
         header($location);
         exit();
     }
-    else if (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $name)) {
+    else if (is_dir($targetFolder->getCompletePathOfFolder(). '/'. $get_name)) {
 
         //Ordner der DB hinzufuegen
         $newFolder = new TableFolder($g_db);
         $newFolder->setValue('fol_fol_id_parent', $targetFolder->getValue('fol_id'));
         $newFolder->setValue('fol_type', 'DOWNLOAD');
-        $newFolder->setValue('fol_name', $name);
+        $newFolder->setValue('fol_name', $get_name);
         $newFolder->setValue('fol_path', $targetFolder->getValue('fol_path'). '/'.$targetFolder->getValue('fol_name'));
         $newFolder->setValue('fol_locked', $targetFolder->getValue('fol_locked'));
         $newFolder->setValue('fol_public', $targetFolder->getValue('fol_public'));
@@ -585,16 +548,16 @@ elseif ($req_mode == 6)
 }
 
 //Berechtigungen fuer einen Ordner speichern
-elseif ($req_mode == 7)
+elseif ($get_mode == 7)
 {
-    if ($folder_id == 0) {
+    if ($get_folder_id == 0) {
         //FolderId ist zum hinzufuegen erforderlich
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //Informationen zum Zielordner aus der DB holen
     $targetFolder = new TableFolder($g_db);
-    $targetFolder->getFolderForDownload($folder_id);
+    $targetFolder->getFolderForDownload($get_folder_id);
 
     //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
     if (!$targetFolder->getValue('fol_id'))

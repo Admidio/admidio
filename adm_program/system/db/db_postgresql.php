@@ -34,7 +34,7 @@ class DBPostgreSQL extends DBCommon
         if($this->connect_id)
         {
 			// Verbindung zur DB in UTF8 aufbauen
-			@mysql_query('SET bytea_output = \'escape\'', $this->connect_id);
+			@pg_query('SET bytea_output = \'escape\'', $this->connect_id);
 
             return $this->connect_id;
         }
@@ -54,11 +54,11 @@ class DBPostgreSQL extends DBCommon
         {
             if (!$this->connect_id)
             {
-                parent::db_error(@mysql_errno(), @mysql_error());
+                parent::db_error(0, @pg_last_error());
             }
             else
             {
-                parent::db_error(@mysql_errno($this->connect_id), @mysql_error($this->connect_id));
+                parent::db_error(0, @pg_result_error($this->connect_id));
             }
         }
         else

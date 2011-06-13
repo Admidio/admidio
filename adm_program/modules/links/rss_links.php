@@ -35,14 +35,8 @@ if ($g_preferences['enable_weblinks_module'] != 1)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_headline = $g_l10n->get('LNK_WEBLINKS');
-
-// Uebergabevariablen pruefen
-if(isset($_GET['headline']))
-{
-    $req_headline = strStripTags($_GET['headline']);
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('LNK_WEBLINKS'));
 
 // alle Links aus der DB fischen...
 $sql = 'SELECT cat.*, lnk.*,
@@ -71,7 +65,7 @@ $result = $g_db->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$req_headline, 
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$get_headline, 
 		$g_l10n->get('LNK_LINKS_FROM', $g_current_organization->getValue('org_longname')));
 $weblink = new TableWeblink($g_db);
 

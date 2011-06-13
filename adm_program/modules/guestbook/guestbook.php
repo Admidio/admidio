@@ -19,6 +19,8 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_guestbook.php');
+unset($_SESSION['guestbook_entry_request']);
+unset($_SESSION['guestbook_comment_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_guestbook_module'] == 0)
@@ -32,82 +34,38 @@ elseif($g_preferences['enable_guestbook_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-// Uebergabevariablen pruefen
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_start      = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$get_headline   = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('GBO_GUESTBOOK'));
+$get_gbo_id     = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_moderation = admFuncVariableIsValid($_GET, 'moderation', 'boolean', 0);
 
-if (array_key_exists('start', $_GET))
+if($get_moderation == 1 && $g_current_user->editGuestbookRight() == false)
 {
-    if (is_numeric($_GET['start']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
+	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
-else
-{
-    $_GET['start'] = 0;
-}
-
-if (array_key_exists('headline', $_GET))
-{
-    $_GET['headline'] = strStripTags($_GET['headline']);
-}
-else
-{
-    $_GET['headline'] = $g_l10n->get('GBO_GUESTBOOK');
-}
-
-if (array_key_exists('id', $_GET))
-{
-    if (is_numeric($_GET['id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $_GET['id'] = 0;
-}
-
-if (array_key_exists('moderation', $_GET))
-{
-    if (is_numeric($_GET['moderation']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    
-    if($_GET['moderation'] == 1 && $g_current_user->editGuestbookRight() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $_GET['moderation'] = 0;
-}
-
-unset($_SESSION['guestbook_entry_request']);
-unset($_SESSION['guestbook_comment_request']);
 
 // Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird
-if($_GET['id'] == 0)
+if($get_gbo_id == 0)
 {
     $_SESSION['navigation']->clear();
 }
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-if($_GET['moderation'] == 1)
+if($get_moderation == 1)
 {
-    $g_layout['title'] = $g_l10n->get('GBO_MODERATE_VAR', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('GBO_MODERATE_VAR', $get_headline);
 }
 else
 {
-    $g_layout['title'] = $_GET['headline'];
+    $g_layout['title'] = $get_headline;
 }
 $g_layout['header'] = '';
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname').' - '.$_GET['headline']).'"
-        href="'.$g_root_path.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$_GET['headline'].'" />';
+    $g_layout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname').' - '.$get_headline).'"
+        href="'.$g_root_path.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$get_headline.'" />';
 };
 
 $g_layout['header'] = $g_layout['header']. '
@@ -120,7 +78,7 @@ $g_layout['header'] = $g_layout['header']. '
         function getComments(commentId)
         {
             // RequestObjekt abschicken und Kommentar laden
-            $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.$_GET['moderation'].', 
+            $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.$get_moderation.', 
             function(data) {
                 var objectId = "admCommentSection_" + commentId;
                 document.getElementById(objectId).innerHTML = data;
@@ -170,14 +128,14 @@ echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
 $conditions = '';
 
 // falls eine id fuer einen bestimmten Gaestebucheintrag uebergeben worden ist...
-if ($_GET['id'] > 0)
+if ($get_gbo_id > 0)
 {
-    $conditions .= ' AND gbo_id = '. $_GET['id']. ' ';
+    $conditions .= ' AND gbo_id = '. $get_gbo_id;
 }
 // pruefen ob das Modul Moderation aktiviert ist
 if ($g_preferences['enable_guestbook_moderation'] > 0)
 {
-    if($_GET['moderation'] == 1)
+    if($get_moderation == 1)
     {
         $conditions .= ' AND (  gbo_locked = 1 
                              OR EXISTS (SELECT 1 FROM '.TBL_GUESTBOOK_COMMENTS.'
@@ -215,40 +173,40 @@ $sql = 'SELECT *
          WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
                '.$conditions.'
          ORDER BY gbo_timestamp_create DESC
-         LIMIT '. $guestbook_entries_per_page.' OFFSET '.$_GET['start'];
+         LIMIT '. $guestbook_entries_per_page.' OFFSET '.$get_start;
 $guestbook_result = $g_db->query($sql);
 
 // Icon-Links und Navigation anzeigen
 echo '<ul class="iconTextLinkList">';
 
 // Neuen Gaestebucheintrag anlegen
-if ($_GET['id'] == 0 && $_GET['moderation'] == 0)
+if ($get_gbo_id == 0 && $get_moderation == 0)
 {
     echo '
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $_GET['headline']. '"><img
+            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $get_headline. '"><img
             src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('GBO_CREATE_ENTRY').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $_GET['headline']. '">'.$g_l10n->get('GBO_CREATE_ENTRY').'</a>
+            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $get_headline. '">'.$g_l10n->get('GBO_CREATE_ENTRY').'</a>
         </span>
     </li>';
 }
 
 // Link zurueck zum Gaestebuch
-if($_GET['id'] > 0 || $_GET['moderation'] == 1)
+if($get_gbo_id > 0 || $get_moderation == 1)
 {
     echo '
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline']. '"><img
+            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $get_headline. '"><img
             src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('GBO_BACK_TO_GUESTBOOK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline']. '">'.$g_l10n->get('GBO_BACK_TO_GUESTBOOK').'</a>
+            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $get_headline. '">'.$g_l10n->get('GBO_BACK_TO_GUESTBOOK').'</a>
         </span>
     </li>';
 }
 
 // Link mit Anzahl der zu moderierenden Eintraege
-if($_GET['moderation'] == 0 && $g_current_user->editGuestbookRight() && $g_preferences['enable_guestbook_moderation'] > 0)
+if($get_moderation == 0 && $g_current_user->editGuestbookRight() && $g_preferences['enable_guestbook_moderation'] > 0)
 {
     $sql = 'SELECT (SELECT count(1) FROM '. TBL_GUESTBOOK. '
                      WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
@@ -268,9 +226,9 @@ if($_GET['moderation'] == 0 && $g_current_user->editGuestbookRight() && $g_prefe
         echo '
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $_GET['headline']. '"><img
+                <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $get_headline. '"><img
                 src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('GBO_MODERATE_ENTRIES', $countLockedEntries).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $_GET['headline']. '">'.$g_l10n->get('GBO_MODERATE_ENTRIES', $countLockedEntries).'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $get_headline. '">'.$g_l10n->get('GBO_MODERATE_ENTRIES', $countLockedEntries).'</a>
             </span>
         </li>';    
     }
@@ -281,7 +239,7 @@ echo '</ul>';
 if ($g_db->num_rows($guestbook_result) == 0)
 {
     // Keine Gaestebucheintraege gefunden
-    if ($_GET['id'] > 0)
+    if ($get_gbo_id > 0)
     {
         echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
@@ -330,7 +288,7 @@ else
                     if ($g_current_user->editGuestbookRight())
                     {
                             echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $_GET['headline']. '"><img
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $get_headline. '"><img
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
                             <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
                                 $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
@@ -344,7 +302,7 @@ else
                 $guestbook->getText('HTML');
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
-                if($_GET['moderation'] == 1 && $guestbook->getValue('gbo_locked') == 1)
+                if($get_moderation == 1 && $guestbook->getValue('gbo_locked') == 1)
                 {
                     echo '
                     <ul class="iconTextLinkList">
@@ -382,7 +340,7 @@ else
                 $conditions = '';
 
                 // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-                if ($g_preferences['enable_guestbook_moderation'] > 0 && $_GET['moderation'] == 1)
+                if ($g_preferences['enable_guestbook_moderation'] > 0 && $get_moderation == 1)
                 {
                     $conditions .= ' AND gbc_locked = 1 ';
                 }
@@ -400,9 +358,9 @@ else
 
 
                 // Falls Kommentare vorhanden sind und diese noch nicht geladen werden sollen...
-                if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) > 0)
+                if ($get_gbo_id == 0 && $g_db->num_rows($comment_result) > 0)
                 {
-                    if($g_preferences['enable_intial_comments_loading'] == 1 || $_GET['moderation'] == 1)
+                    if($g_preferences['enable_intial_comments_loading'] == 1 || $get_moderation == 1)
                     {
                         $visibility_show_comments = 'hidden';
                         $display_show_comments    = 'none';
@@ -439,16 +397,16 @@ else
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
                     echo '<div id="admCommentSection_'. $guestbook->getValue('gbo_id'). '" class="commentBox" style="display: '. $display_others. ';">';
-                        if($g_preferences['enable_intial_comments_loading'] == 1 || $_GET['moderation'] == 1)
+                        if($g_preferences['enable_intial_comments_loading'] == 1 || $get_moderation == 1)
                         {
                             include('get_comments.php');
                         }
                     echo '</div>';
                 }
 
-                if ($_GET['id'] == 0 && $g_db->num_rows($comment_result) == 0 
+                if ($get_gbo_id == 0 && $g_db->num_rows($comment_result) == 0 
                 && ($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1) 
-                && $_GET['moderation'] == 0)
+                && $get_moderation == 0)
                 {
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                     $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');
@@ -465,7 +423,7 @@ else
 
                 // Falls eine ID uebergeben wurde und der dazugehoerige Eintrag existiert,
                 // werden unter dem Eintrag die dazugehoerigen Kommentare (falls welche da sind) angezeigt.
-                if ($g_db->num_rows($guestbook_result) > 0 && $_GET['id'] > 0)
+                if ($g_db->num_rows($guestbook_result) > 0 && $get_gbo_id > 0)
                 {
                     include('get_comments.php');
                 }
@@ -476,8 +434,8 @@ else
 
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline'].'&amp;moderation='.$_GET['moderation'];
-echo generatePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $_GET['start'], TRUE);
+$base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $get_headline.'&amp;moderation='.$get_moderation;
+echo generatePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $get_start, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

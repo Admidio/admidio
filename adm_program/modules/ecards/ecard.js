@@ -283,7 +283,7 @@ function ecardJSClass()
 	}
 	this.getMenu = function()
 	{
-		this.makeAjaxRequest(gRootPath + "/adm_program/modules/ecards/ecard_drawdropmenue.php?base=1" ,this.baseDropDiv_id,function(){$("a[rel='colorboxHelp']").colorbox({preloading:false,photo:false,speed:300,rel:'nofollow'});});
+		this.makeAjaxRequest(gRootPath + "/adm_program/modules/ecards/ecard_drawdropmenue.php?mode=1" ,this.baseDropDiv_id,function(){$("a[rel='colorboxHelp']").colorbox({preloading:false,photo:false,speed:300,rel:'nofollow'});});
 	}
 	this.getMenuRecepientName = function()
 	{
@@ -300,7 +300,7 @@ function ecardJSClass()
 	{
 		if(usr_id != "bw")
 		{
-			this.makeAjaxRequest(gRootPath + '/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid='+ usr_id + '&rol_id='+ $("#" + this.ecardformid + " #rol_id").val(), this.externDiv_id );
+			this.makeAjaxRequest(gRootPath + '/adm_program/modules/ecards/ecard_drawdropmenue.php?usr_id='+ usr_id + '&rol_id='+ $("#" + this.ecardformid + " #rol_id").val(), this.externDiv_id );
 		}
 		else
 		{
@@ -440,7 +440,7 @@ function ecardJSClass()
 			$("#" + this.dropDiv_id).css("display","none");
 			$("#" + this.externDiv_id).css("display","block");
 			$("#" + this.switchDiv_id).append('<a href="javascript:ecardJS.getExtern();">'+ this.internalRecipient_Text +'<\/a>');
-			this.makeAjaxRequest(gRootPath + '/adm_program/modules/ecards/ecard_drawdropmenue.php?usrid=extern', this.externDiv_id );
+			this.makeAjaxRequest(gRootPath + '/adm_program/modules/ecards/ecard_drawdropmenue.php?extern=1', this.externDiv_id );
 		}
 	
 		$("#" + this.wrongDiv_id).css("display","none");

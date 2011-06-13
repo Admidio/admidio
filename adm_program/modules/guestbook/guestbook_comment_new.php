@@ -37,15 +37,20 @@ if ($g_preferences['enable_guestbook_module'] == 0)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_gbo_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_gbc_id   = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('GBO_GUESTBOOK'));
+
 // Es muss ein (nicht zwei) Parameter uebergeben werden: Entweder id oder cid...
-if (isset($_GET['id']) && isset($_GET['cid']))
+if($get_gbo_id > 0 && $get_gbc_id > 0)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Erst einmal die Rechte abklopfen...
 if(($g_preferences['enable_guestbook_module'] == 2 || $g_preferences['enable_gbook_comments4all'] == 0)
-&& isset($_GET['id']))
+&& $get_gbo_id > 0)
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
     require_once('../../system/login_valid.php');
@@ -57,7 +62,7 @@ if(($g_preferences['enable_guestbook_module'] == 2 || $g_preferences['enable_gbo
     }
 }
 
-if (isset($_GET['cid']))
+if($get_gbc_id > 0)
 {
     // Zum editieren von Kommentaren muss der User auch eingeloggt sein
     require_once('../../system/login_valid.php');
@@ -70,45 +75,14 @@ if (isset($_GET['cid']))
 
 }
 
-
-// Uebergabevariablen pruefen
-if (array_key_exists('id', $_GET))
-{
-    if (is_numeric($_GET['id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-elseif (array_key_exists('cid', $_GET))
-{
-    if (is_numeric($_GET['cid']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-
-if (array_key_exists('headline', $_GET))
-{
-    $_GET['headline'] = strStripTags($_GET['headline']);
-}
-else
-{
-    $_GET['headline'] = $g_l10n->get('GBO_GUESTBOOK');
-}
-
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Gaestebuchkommentarobjekt anlegen
 $guestbook_comment = new TableGuestbookComment($g_db);
 
-if(isset($_GET['cid']) && $_GET['cid'] > 0)
+if($get_gbc_id > 0)
 {
-    $guestbook_comment->readData($_GET['cid']);
+    $guestbook_comment->readData($get_gbc_id);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook_comment->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
@@ -127,7 +101,7 @@ if(isset($_SESSION['guestbook_comment_request']))
 
 // Wenn der User eingeloggt ist und keine cid uebergeben wurde
 // koennen zumindest Name und Emailadresse vorbelegt werden...
-if (isset($_GET['cid']) == false && $g_valid_login)
+if($get_gbc_id == 0 && $g_valid_login)
 {
     $guestbook_comment->setValue('gbc_name', $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'));
     $guestbook_comment->setValue('gbc_email', $g_current_user->getValue('EMAIL'));
@@ -154,15 +128,15 @@ if (!$g_valid_login && $g_preferences['flooding_protection_time'] != 0)
 }
 
 // Html-Kopf ausgeben
-if (isset($_GET['id']))
+if($get_gbo_id > 0)
 {
-    $id   = $_GET['id'];
+    $id   = $get_gbo_id;
     $mode = '4';
     $g_layout['title'] = $g_l10n->get('GBO_CREATE_COMMENT');
 }
 else
 {
-    $id   = $_GET['cid'];
+    $id   = $get_gbc_id;
     $mode = '8';
     $g_layout['title'] = $g_l10n->get('GBO_EDIT_COMMENT');
 }
@@ -194,7 +168,7 @@ $g_layout['header'] = $javascript. '
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
-<form action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='. $_GET['headline']. '&amp;mode='.$mode.'" method="post">
+<form action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='.$get_headline.'&amp;mode='.$mode.'" method="post">
 <div class="formLayout" id="edit_guestbook_comment_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">

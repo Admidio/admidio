@@ -17,20 +17,16 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_guestbook_comment.php');
 
-$cid = 0;
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_gbc_id     = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
+$get_moderation = admFuncVariableIsValid($_GET, 'moderation', 'boolean', 0);
 
-if (isset($_GET['cid']) && is_numeric($_GET['cid']))
-{
-    // Script wurde ueber Ajax aufgerufen
-    $cid = $_GET['cid'];
-}
-
-if ($cid > 0)
+if ($get_gbc_id > 0)
 {
     $conditions = '';
 
     // falls Eintraege freigeschaltet werden muessen, dann diese nur anzeigen, wenn Rechte vorhanden
-    if($g_preferences['enable_guestbook_moderation'] > 0 && $_GET['moderation'] == 1)
+    if($g_preferences['enable_guestbook_moderation'] > 0 && $get_moderation == 1)
     {
         $conditions .= ' AND gbc_locked = 1 ';
     }
@@ -40,7 +36,7 @@ if ($cid > 0)
     }
 
     $sql    = 'SELECT * FROM '. TBL_GUESTBOOK_COMMENTS. ', '. TBL_GUESTBOOK. '
-                WHERE gbo_id     = '.$cid.'
+                WHERE gbo_id     = '.$get_gbc_id.'
                   AND gbc_gbo_id = gbo_id
                   AND gbo_org_id = '. $g_current_organization->getValue('org_id').
                       $conditions.'
@@ -50,7 +46,7 @@ if ($cid > 0)
 
 if (isset($comment_result))
 {
-    echo '<div id="comments_'.$cid.'" style="visibility: visible; display: block; text-align: left;">';
+    echo '<div id="comments_'.$get_gbc_id.'" style="visibility: visible; display: block; text-align: left;">';
 
     $gbComment = new TableGuestbookComment($g_db);
 
@@ -61,7 +57,7 @@ if (isset($comment_result))
         $gbComment->clear();
         $gbComment->setArray($row);
     
-        $cid = $gbComment->getValue('gbc_gbo_id');
+        $get_gbc_id = $gbComment->getValue('gbc_gbo_id');
 
         echo '
         <div class="groupBox" id="gbc_'.$gbComment->getValue('gbc_id').'" style="overflow: hidden; margin-left: 20px; margin-right: 20px;">
@@ -99,7 +95,7 @@ if (isset($comment_result))
                 $gbComment->getText('HTML');
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
-                if($_GET['moderation'] == 1)
+                if($get_moderation == 1)
                 {
                     echo '
                     <ul class="iconTextLinkList">
@@ -141,10 +137,10 @@ if (isset($comment_result))
     }
 
     if (($g_current_user->commentGuestbookRight() || $g_preferences['enable_gbook_comments4all'] == 1)
-    && $_GET['moderation'] == 0)
+    && $get_moderation == 0)
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
-        $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$cid.'';
+        $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$get_gbc_id;
 
         echo '
         <div class="commentLink">
