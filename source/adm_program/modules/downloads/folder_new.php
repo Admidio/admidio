@@ -29,21 +29,8 @@ if (!$g_current_user->editDownloadRight())
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-if (array_key_exists('folder_id', $_GET))
-{
-    if (is_numeric($_GET['folder_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $folder_id = $_GET['folder_id'];
-}
-else
-{
-    // ohne FolderId gehts auch nicht weiter
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_folder_id = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', null, true);
 
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -61,7 +48,7 @@ else
 
 //Folderobject erstellen
 $folder = new TableFolder($g_db);
-$folder->getFolderForDownload($folder_id);
+$folder->getFolderForDownload($get_folder_id);
 
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
 if (!$folder->getValue('fol_id'))
@@ -86,7 +73,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$folder_id.'">
+<form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$get_folder_id.'">
 <div class="formLayout" id="edit_download_folder_form">
     <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">

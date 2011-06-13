@@ -22,27 +22,14 @@ if ($g_preferences['enable_download_module'] != 1)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-//pruefen ob eine brauchbare File_ID uebergeben wurde
-if (array_key_exists('file_id', $_GET))
-{
-    if (is_numeric($_GET['file_id']) == false)
-    {
-        //FileId ist nicht numerisch
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    // ohne FileId gehts auch nicht weiter
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_file_id = admFuncVariableIsValid($_GET, 'file_id', 'numeric', null, true);
 
 //Fileobject erstellen
 $file = new TableFile($g_db);
 
 //Fileproperties aus DB lesen fuer den Download
-$file->getFileForDownload($_GET['file_id']);
+$file->getFileForDownload($get_file_id);
 
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
 if (!$file->getValue('fil_id'))

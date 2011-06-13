@@ -15,7 +15,7 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_folder.php');
 require_once('../../system/file_extension_icons.php');
-
+unset($_SESSION['download_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_download_module'] != 1)
@@ -24,30 +24,16 @@ if ($g_preferences['enable_download_module'] != 1)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-// Uebergabevariablen pruefen
-if (array_key_exists('folder_id', $_GET))
-{
-    if (is_numeric($_GET['folder_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $folderId = $_GET['folder_id'];
-}
-else
-{
-    // FolderId auf 0 setzen
-    $folderId = 0;
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_folder_id    = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', 0);
 
 //Verwaltung der Session
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
-unset($_SESSION['download_request']);
-
 
 //Informationen zum aktuellen Ordner aus der DB holen
 $currentFolder = new TableFolder($g_db);
-$returnValue   = $currentFolder->getFolderForDownload($folderId);
+$returnValue   = $currentFolder->getFolderForDownload($get_folder_id);
 
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
 if ($returnValue < 0)
@@ -64,7 +50,7 @@ if ($returnValue < 0)
 	}
 }
 
-$folderId = $currentFolder->getValue('fol_id');
+$get_folder_id = $currentFolder->getValue('fol_id');
 
 //Ordnerinhalt zur Darstellung auslesen
 $folderContent = $currentFolder->getFolderContentsForDownload();
@@ -99,23 +85,23 @@ if ($g_current_user->editDownloadRight())
     <ul class="iconTextLinkList">
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$folderId.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$get_folder_id.'"><img
                 src="'. THEME_PATH. '/icons/folder_create.png" alt="'.$g_l10n->get('DOW_CREATE_FOLDER').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$folderId.'">'.$g_l10n->get('DOW_CREATE_FOLDER').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$get_folder_id.'">'.$g_l10n->get('DOW_CREATE_FOLDER').'</a>
             </span>
         </li>
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$folderId.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$get_folder_id.'"><img
                 src="'. THEME_PATH. '/icons/page_white_upload.png" alt="'.$g_l10n->get('DOW_UPLOAD_FILE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$folderId.'">'.$g_l10n->get('DOW_UPLOAD_FILE').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$get_folder_id.'">'.$g_l10n->get('DOW_UPLOAD_FILE').'</a>
             </span>
         </li>
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$folderId.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$get_folder_id.'"><img
                 src="'. THEME_PATH. '/icons/options.png" alt="'.$g_l10n->get('DOW_SET_PERMISSIONS').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$folderId.'">'.$g_l10n->get('DOW_SET_PERMISSIONS').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$get_folder_id.'">'.$g_l10n->get('DOW_SET_PERMISSIONS').'</a>
             </span>
         </li>
     </ul>';
@@ -303,7 +289,7 @@ if ($g_current_user->editDownloadRight())
                     <td><img src="'. THEME_PATH. '/icons/download.png" alt="'.$g_l10n->get('SYS_FOLDER').'" title="'.$g_l10n->get('SYS_FOLDER').'" /></td>
                     <td>'. $nextFolder['fol_name']. '</td>
                     <td style="text-align: right;">
-                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$folderId.'&amp;name='. urlencode($nextFolder['fol_name']). '">
+                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$get_folder_id.'&amp;name='. urlencode($nextFolder['fol_name']). '">
                         <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('DOW_ADD_TO_DATABASE').'" title="'.$g_l10n->get('DOW_ADD_TO_DATABASE').'" /></a>
                     </td>
                 </tr>';
@@ -333,7 +319,7 @@ if ($g_current_user->editDownloadRight())
                     <td><img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$g_l10n->get('SYS_FILE').'" title="'.$g_l10n->get('SYS_FILE').'" /></a></td>
                     <td>'. $nextFile['fil_name']. '</td>
                     <td style="text-align: right;">
-                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$folderId.'&amp;name='. urlencode($nextFile['fil_name']). '">
+                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$get_folder_id.'&amp;name='. urlencode($nextFile['fil_name']). '">
                         <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('DOW_ADD_TO_DATABASE').'" title="'.$g_l10n->get('DOW_ADD_TO_DATABASE').'" /></a>
                     </td>
                 </tr>';

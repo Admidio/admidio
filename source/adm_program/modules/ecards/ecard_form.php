@@ -19,15 +19,20 @@ require_once('../../system/common.php');
 require_once('ecard_function.php');
 if ($g_preferences['enable_bbcode'] == 1)
 {
-    require('../../system/bbcode.php');
+    require_once('../../system/bbcode.php');
 }
 
-$funcClass 					= new FunctionClass($g_l10n);
-$font_sizes                 = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
-$font_colors                = $funcClass->getElementsFromFile('../../system/schriftfarben.txt');
-$fonts                      = $funcClass->getElementsFromFile('../../system/schriftarten.txt');
-$templates                  = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
-$template                   = THEME_SERVER_PATH. '/ecard_templates/';
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_pho_id = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$get_photo  = admFuncVariableIsValid($_GET, 'photo', 'numeric', null, true);
+
+// Initialisierung lokaler Variablen
+$funcClass 	 = new FunctionClass($g_l10n);
+$font_sizes  = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
+$font_colors = $funcClass->getElementsFromFile('../../system/schriftfarben.txt');
+$fonts       = $funcClass->getElementsFromFile('../../system/schriftarten.txt');
+$templates   = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
+$template    = THEME_SERVER_PATH. '/ecard_templates/';
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_ecard_module'] != 1)
@@ -40,36 +45,12 @@ if(!$g_valid_login)
 {
  $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
-// Uebergaben pruefen
-if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']))
-{
-    $pho_id = $_GET['pho_id'];
-}
-else
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_GET['photo']) && is_numeric($_GET['photo']))
-{
-    $photo_nr = $_GET['photo'];
-}
-else
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-//Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
-if ($pho_id == NULL)
-{
-    $_SESSION['navigation']->clear();
-}
 
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue("pho_id") == $pho_id)
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $get_pho_id)
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $g_db;
@@ -78,16 +59,16 @@ else
 {
     // einlesen des Albums falls noch nicht in Session gespeichert
     $photo_album = new TablePhotos($g_db);
-    if($pho_id > 0)
+    if($get_pho_id > 0)
     {
-        $photo_album->readData($pho_id);
+        $photo_album->readData($get_pho_id);
     }
 
     $_SESSION['photo_album'] =& $photo_album;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization)
+if($get_pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }  
@@ -206,13 +187,13 @@ echo '
             </div>
         </noscript>
 
-      <a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'"><img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
+      <a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$get_pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'"><img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$get_pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
          class="imageFrame" alt="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
       </a>
 
       <form id="ecard_form" action="javascript:ecardJS.makePreview();" method="post">
-        <input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" />
-        <input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$photo_nr.'.jpg" />
+        <input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$get_pho_id.'&amp;pic_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" />
+        <input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$get_photo.'.jpg" />
         <input type="hidden" name="submit_action" value="" />
         <ul class="formFieldList">
         <li>

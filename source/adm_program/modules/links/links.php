@@ -6,16 +6,17 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * start     - Angabe, ab welchem Datensatz Links angezeigt werden sollen
- * category  - Angabe der Kategorie damit auch nur eine angezeigt werden kann.
- * headline  - Ueberschrift, die ueber den Links steht
+ * start     : Angabe, ab welchem Datensatz Links angezeigt werden sollen
+ * headline  : Ueberschrift, die ueber den Links steht
  *             (Default) Links
- * id        - Nur einen einzigen Link anzeigen lassen.
+ * category  : Angabe der Kategorie damit auch nur eine angezeigt werden kann.
+ * id        : Nur einen einzigen Link anzeigen lassen.
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_weblink.php');
+unset($_SESSION['links_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_weblinks_module'] == 0)
@@ -28,55 +29,19 @@ elseif($g_preferences['enable_weblinks_module'] == 2)
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
 }
-//Kontrolle ob nur Kategorien angezeigt werden
-if(isset($_GET['category']) == false)
-{
-    $_GET['category'] = '';
-}
 
-// Uebergabevariablen pruefen
-
-if (array_key_exists('start', $_GET))
-{
-    if (is_numeric($_GET['start']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $_GET['start'] = 0;
-}
-
-if (array_key_exists('id', $_GET))
-{
-    if (is_numeric($_GET['id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $_GET['id'] = 0;
-}
-
-if (array_key_exists('headline', $_GET))
-{
-    $_GET['headline'] = strStripTags($_GET['headline']);
-}
-else
-{
-    $_GET['headline'] = $g_l10n->get('LNK_WEBLINKS');
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_start    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('LNK_WEBLINKS'));
+$get_category = admFuncVariableIsValid($_GET, 'category', 'string', '');
+$get_lnk_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 
 // Navigation initialisieren - Modul faengt hier an.
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-unset($_SESSION['links_request']);
-
 // Html-Kopf ausgeben
-$g_layout['title']  = $_GET['headline'];
+$g_layout['title']  = $get_headline;
 $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -87,8 +52,8 @@ $g_layout['header'] = '
 
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] = $g_layout['header']. '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname'). ' - '.$_GET['headline']).'"
-        href="'. $g_root_path. '/adm_program/modules/links/rss_links.php?headline='.$_GET['headline'].'" />';
+    $g_layout['header'] = $g_layout['header']. '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname'). ' - '.$get_headline).'"
+        href="'. $g_root_path. '/adm_program/modules/links/rss_links.php?headline='.$get_headline.'" />';
 };
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -102,15 +67,15 @@ echo '<h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
 $condition = '';
 $hidden    = '';
 
-if ($_GET['id'] > 0)
+if ($get_lnk_id > 0)
 {
     // falls eine id fuer einen bestimmten Link uebergeben worden ist...
-    $condition = ' AND lnk_id = '. $_GET['id'];
+    $condition = ' AND lnk_id = '. $get_lnk_id;
 }
-else if (strlen($_GET['category']) > 0)
+else if (strlen($get_category) > 0)
 {
     // alle Links zu einer Kategorie anzeigen
-    $condition = ' AND cat_name   = \''. $_GET['category']. '\'';
+    $condition = ' AND cat_name   = \''. $get_category. '\'';
 }
 
 if ($g_valid_login == false)
@@ -151,12 +116,12 @@ $sql = 'SELECT cat.*, lnk.*
            '.$condition.'
            '.$hidden.'
          ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
-         LIMIT '.$weblinks_per_page.' OFFSET '.$_GET['start'];
+         LIMIT '.$weblinks_per_page.' OFFSET '.$get_start;
 $links_result = $g_db->query($sql);
 
 // Icon-Links und Navigation anzeigen
 
-if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences['enable_rss'] == true))
+if ($get_lnk_id == 0 && ($g_current_user->editWeblinksRight() || $g_preferences['enable_rss'] == true))
 {
     if ($g_current_user->editWeblinksRight())
     {
@@ -165,9 +130,9 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
         <ul class="iconTextLinkList">
             <li>
                 <span class="iconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $_GET['headline']. '">
+                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $get_headline. '">
                         <img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('LNK_CREATE_LINK').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $_GET['headline']. '">'.$g_l10n->get('LNK_CREATE_LINK').'</a>
+                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $get_headline. '">'.$g_l10n->get('LNK_CREATE_LINK').'</a>
                 </span>
             </li>';
        //Kategorie pflegen
@@ -183,14 +148,14 @@ if ($_GET['id'] == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
     }
 
     // Navigation mit Vor- und Zurueck-Buttons
-    $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $_GET['headline'];
-    echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET['start'], TRUE);
+    $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $get_headline;
+    echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $get_start, TRUE);
 }
 
 if ($g_db->num_rows($links_result) == 0)
 {
     // Keine Links gefunden
-    if ($_GET['id'] > 0)
+    if ($get_lnk_id > 0)
     {
         echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
@@ -244,7 +209,7 @@ else
 		if ($g_current_user->editWeblinksRight())
 		{
 			echo '
-			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $_GET['headline']. '"><img
+			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $get_headline. '"><img
 				src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>
             <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=lnk&amp;element_id=lnk_'.
                 $weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'&amp;database_id='.$weblink->getValue('lnk_id').'"><img 
@@ -281,8 +246,8 @@ else
 echo '</div>';
 
 // Navigation mit Vor- und Zurueck-Buttons
-$baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $_GET['headline'];
-echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $_GET['start'], TRUE);
+$baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $get_headline;
+echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $get_start, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

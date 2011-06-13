@@ -12,7 +12,6 @@
  * mode:     1 - Neuen Link anlegen
  *           2 - Link loeschen
  *           3 - Link editieren
- * url:      kann beim Loeschen mit uebergeben werden
  *
  *****************************************************************************/
 
@@ -33,33 +32,16 @@ if (!$g_current_user->editWeblinksRight())
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-if (array_key_exists('lnk_id', $_GET))
-{
-    if (is_numeric($_GET['lnk_id']) == false)
-    {
-         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $_GET['lnk_id'] = 0;
-}
-
-if (array_key_exists('mode', $_GET))
-{
-    if (is_numeric($_GET['mode']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_lnk_id = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
+$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
 
 // Linkobjekt anlegen
-$link = new TableWeblink($g_db, $_GET['lnk_id']);
+$link = new TableWeblink($g_db, $get_lnk_id);
 
 $_SESSION['links_request'] = $_REQUEST;
 
-if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
+if ($get_mode == 1 || ($get_mode == 3 && $get_lnk_id > 0) )
 {
     if(strlen(strStripTags($_POST['lnk_name'])) == 0)
     {
@@ -91,7 +73,7 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
     }
 	
 	// Link-Counter auf 0 setzen
-	if ($_GET['mode'] == 1)
+	if ($get_mode == 1)
 	{
 		$link->setValue('lnk_counter', '0');
 	}
@@ -104,7 +86,7 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
         $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
     }
 	
-	if($return_code == 0 && $_GET['mode'] == 1)
+	if($return_code == 0 && $get_mode == 1)
 	{
 		// Benachrichtigungs-Email für neue Einträge
 		if($g_preferences['enable_email_notification'] == 1)
@@ -115,7 +97,10 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
 				$sender_email = $g_preferences['email_administrator'];
 				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
 			}
-			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $sender_name, $sender_email);
+			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ': '.$g_l10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), 
+				str_replace('<br />',"\n",$g_l10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), 
+				$_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), 
+				date('d.m.Y H:m', time()))), $sender_name, $sender_email);
 		}	
 	}
 
@@ -126,7 +111,7 @@ if ($_GET['mode'] == 1 || ($_GET['mode'] == 3 && $_GET['lnk_id'] > 0) )
     exit();
 }
 
-elseif ($_GET['mode'] == 2 && $_GET['lnk_id'] > 0)
+elseif ($get_mode == 2 && $get_lnk_id > 0)
 {
     // Loeschen von Weblinks...
     $link->delete();

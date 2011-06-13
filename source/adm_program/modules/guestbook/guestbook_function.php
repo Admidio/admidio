@@ -8,7 +8,7 @@
  *
  * Uebergaben:
  *
- * id:    ID die bearbeitet werden soll
+ * id:      ID die bearbeitet werden soll
  * mode:     1 - Neue Gaestebucheintrag anlegen
  *           2 - Gaestebucheintrag loeschen
  *           3 - Gaestebucheintrag editieren
@@ -17,7 +17,6 @@
  *           8 - Kommentar eines Gaestebucheintrages editieren
  *           9 - Gaestebucheintrag moderieren
  *           10 - Gaestebuchkommentar moderieren
- * url:      kann beim Loeschen mit uebergeben werden
  * headline: Ueberschrift, die ueber den Gaestebuch steht
  *           (Default) Gaestebuch
  *
@@ -39,46 +38,16 @@ elseif($g_preferences['enable_guestbook_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-
-// Uebergabevariablen pruefen
-
-if (array_key_exists('id', $_GET))
-{
-    if (is_numeric($_GET['id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $_GET['id'] = 0;
-}
-
-
-if (array_key_exists('mode', $_GET))
-{
-    if (is_numeric($_GET['mode']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-
-
-if (array_key_exists('headline', $_GET))
-{
-    $_GET['headline'] = strStripTags($_GET['headline']);
-}
-else
-{
-    $_GET['headline'] = $g_l10n->get('GBO_GUESTBOOK');
-}
-
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_gbo_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_mode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('GBO_GUESTBOOK'));
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
-if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mode'] == 5 || $_GET['mode'] == 8 )
+if ($get_mode == 2 || $get_mode == 3 || $get_mode == 4 || $get_mode == 5 || $get_mode == 8 )
 {
 
-    if ($_GET['mode'] == 4)
+    if ($get_mode == 4)
     {
         // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
         if ($g_preferences['enable_gbook_comments4all'] == 0)
@@ -101,7 +70,7 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
 
 
 
-    if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 5 || $_GET['mode'] == 8)
+    if ($get_mode == 2 || $get_mode == 3 || $get_mode == 5 || $get_mode == 8)
     {
         // Fuer die modes 2,3,5,6,7 und 8 werden editGuestbook-Rechte benoetigt
         if(!$g_current_user->editGuestbookRight())
@@ -111,14 +80,14 @@ if ($_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 4 || $_GET['mod
     }
 }
 
-if ($_GET['mode'] == 1 || $_GET['mode'] == 2 || $_GET['mode'] == 3 || $_GET['mode'] == 9)
+if ($get_mode == 1 || $get_mode == 2 || $get_mode == 3 || $get_mode == 9)
 {
     // Gaestebuchobjekt anlegen
     $guestbook = new TableGuestbook($g_db);
     
-    if($_GET['id'] > 0)
+    if($get_gbo_id > 0)
     {
-        $guestbook->readData($_GET['id']);
+        $guestbook->readData($get_gbo_id);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
@@ -132,9 +101,9 @@ else
     // Gaestebuchobjekt anlegen
     $guestbook_comment = new TableGuestbookComment($g_db);
     
-    if($_GET['id'] > 0 && $_GET['mode'] != 4)
+    if($get_gbo_id > 0 && $get_mode != 4)
     {
-        $guestbook_comment->readData($_GET['id']);
+        $guestbook_comment->readData($get_gbo_id);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook_comment->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
@@ -145,7 +114,7 @@ else
 }
 
 
-if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
+if ($get_mode == 1 || $get_mode == 3)
 {
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_entry_request'] = $_REQUEST;
@@ -153,7 +122,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($_GET['mode'] == 1 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
+    if ($get_mode == 1 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
         {
@@ -268,7 +237,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
             unset($_SESSION['captchacode']);
         }
         
-        $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $_GET['headline'];
+        $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $get_headline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
         if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
@@ -294,7 +263,7 @@ if ($_GET['mode'] == 1 || $_GET['mode'] == 3)
     }
 }
 
-elseif($_GET['mode'] == 2)
+elseif($get_mode == 2)
 {
     // den Gaestebucheintrag loeschen...
     $guestbook->delete();
@@ -302,7 +271,7 @@ elseif($_GET['mode'] == 2)
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-elseif ($_GET['mode'] == 5)
+elseif ($get_mode == 5)
 {
     //Gaestebuchkommentar loeschen...
     $guestbook_comment->delete();
@@ -311,21 +280,21 @@ elseif ($_GET['mode'] == 5)
     echo 'done';
 }
 // Moderationsfunktion
-elseif ($_GET['mode'] == 9)
+elseif ($get_mode == 9)
 {
     // den Gaestebucheintrag freischalten...
     $guestbook->moderate();
     // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-elseif ($_GET['mode'] == 10)
+elseif ($get_mode == 10)
 {
     // den Gaestebucheintrag freischalten...
     $guestbook_comment->moderate();
     // Freischalten erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
+elseif($get_mode == 4 || $get_mode == 8)
 {
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_comment_request'] = $_REQUEST;
@@ -333,7 +302,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($_GET['mode'] == 4 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
+    if ($get_mode == 4 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
         {
@@ -358,9 +327,9 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
         }
     }
     
-    if($_GET['mode'] == 4)
+    if($get_mode == 4)
     {
-        $guestbook_comment->setValue('gbc_gbo_id', $_GET['id']);
+        $guestbook_comment->setValue('gbc_gbo_id', $get_gbo_id);
     }
 
     if (strlen($guestbook_comment->getValue('gbc_name')) > 0 && strlen($guestbook_comment->getValue('gbc_text'))  > 0)
@@ -447,7 +416,7 @@ elseif($_GET['mode'] == 4 || $_GET['mode'] == 8)
             unset($_SESSION['captchacode']);
         }
 
-        $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $_GET['headline'];
+        $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $get_headline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
         if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)

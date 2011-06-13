@@ -24,7 +24,6 @@ if ($g_preferences['enable_bbcode'] == 1)
     require_once('../../system/bbcode.php');
 }
 
-
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_weblinks_module'] == 0)
 {
@@ -32,39 +31,20 @@ if ($g_preferences['enable_weblinks_module'] == 0)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-
 // Ist ueberhaupt das Recht vorhanden?
 if (!$g_current_user->editWeblinksRight())
 {
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-if (array_key_exists('lnk_id', $_GET))
-{
-    if (is_numeric($_GET['lnk_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-else
-{
-    $_GET['lnk_id'] = 0;
-}
-
-if (array_key_exists('headline', $_GET))
-{
-    $_GET['headline'] = strStripTags($_GET['headline']);
-}
-else
-{
-    $_GET['headline'] = $g_l10n->get('LNK_WEBLINKS');
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_lnk_id   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('LNK_WEBLINKS'));
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Weblinkobjekt anlegen
-$link = new TableWeblink($g_db, $_GET['lnk_id']);
+$link = new TableWeblink($g_db, $get_lnk_id);
 
 if(isset($_SESSION['links_request']))
 {
@@ -75,13 +55,13 @@ if(isset($_SESSION['links_request']))
 }
 
 // Html-Kopf ausgeben
-if($_GET['lnk_id'] > 0)
+if($get_lnk_id > 0)
 {
-    $g_layout['title'] = $g_l10n->get('SYS_EDIT_VAR', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('SYS_EDIT_VAR', $get_headline);
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('SYS_CREATE_VAR', $_GET['headline']);
+    $g_layout['title'] = $g_l10n->get('SYS_CREATE_VAR', $get_headline);
 }
 
 //Script für BBCode laden
@@ -102,7 +82,7 @@ $g_layout['header'] = $javascript. '
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
-if($_GET['lnk_id'] > 0)
+if($get_lnk_id > 0)
 {
     $new_mode = '3';
 }
@@ -112,7 +92,7 @@ else
 }
 
 echo '
-<form action="'.$g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $_GET['lnk_id']. '&amp;headline='. $_GET['headline']. '&amp;mode='.$new_mode.'" method="post">
+<form action="'.$g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $get_lnk_id. '&amp;headline='. $get_headline. '&amp;mode='.$new_mode.'" method="post">
 <div class="formLayout" id="edit_links_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">

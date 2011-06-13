@@ -32,34 +32,12 @@ if (!$g_current_user->editDownloadRight())
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-if (array_key_exists('folder_id', $_GET))
-{
-    if (is_numeric($_GET['folder_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $folder_id = $_GET['folder_id'];
-}
-else
-{
-    $folder_id = 0;
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_folder_id = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', 0);
+$get_file_id   = admFuncVariableIsValid($_GET, 'file_id', 'numeric', 0);
 
-if (array_key_exists('file_id', $_GET))
-{
-    if (is_numeric($_GET['file_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $file_id = $_GET['file_id'];
-}
-else
-{
-    $file_id = 0;
-}
 
-if ( (!$file_id && !$folder_id) OR ($file_id && $folder_id) )
+if ( (!$get_file_id && !$get_folder_id) OR ($get_file_id && $get_folder_id) )
 {
     //Es muss entweder eine FileID ODER eine FolderId uebergeben werden
     //beides ist auch nicht erlaubt
@@ -82,13 +60,13 @@ else
 
 //Informationen zur Datei/Ordner aus der DB holen,
 //falls keine Daten gefunden wurden gibt es die Standardfehlermeldung (invalid)
-if ($file_id) {
+if ($get_file_id) {
     $class = new TableFile($g_db);
-    $class->getFileForDownload($file_id);
+    $class->getFileForDownload($get_file_id);
 }
 else {
     $class = new TableFolder($g_db);
-    $class->getFolderForDownload($folder_id);
+    $class->getFolderForDownload($get_folder_id);
 }
 
 if (is_a($class,'TableFile')) {
@@ -131,7 +109,7 @@ else {
 
 
 // Html-Kopf ausgeben
-if($file_id > 0)
+if($get_file_id > 0)
 {
     $g_layout['title']  = $g_l10n->get('DOW_EDIT_FILE');
 }
@@ -150,7 +128,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$folder_id.'&amp;file_id='.$file_id.'">
+<form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$get_folder_id.'&amp;file_id='.$get_file_id.'">
 <div class="formLayout" id="edit_download_form">
     <div class="formHead">'.$g_layout['title'].'</div>
     <div class="formBody">

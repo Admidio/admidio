@@ -35,26 +35,20 @@ if ($g_preferences['enable_guestbook_module'] != 1)
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_headline = $g_l10n->get('DAT_DATES');
-
-// Uebergabevariablen pruefen
-if(isset($_GET['headline']))
-{
-    $req_headline = strStripTags($_GET['headline']);
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('GBO_GUESTBOOK'));
 
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
-        WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
-        ORDER BY gbo_timestamp_create DESC
-        LIMIT 10 ';
+         WHERE gbo_org_id = '. $g_current_organization->getValue('org_id'). '
+         ORDER BY gbo_timestamp_create DESC
+         LIMIT 10 ';
 $result = $g_db->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$g_l10n->get('GBO_GUESTBOOK'),
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$get_headline,
 		$g_l10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', $g_current_organization->getValue('org_longname')));
 $guestbook = new TableGuestbook($g_db);
 

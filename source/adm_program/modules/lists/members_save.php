@@ -58,7 +58,7 @@ if(isset($_POST['leader_'.$uid]) && $_POST['leader_'.$uid]=='true')
 }
 
 //Datensatzupdate
-$mem_count = array('mem_count'=>99999999);
+$mem_count = array('mem_count' => 99999999);
 
 //wenn Mitgliederzahl begrenzt aktuelle Mitgliederzahl ermitteln
 if($role->getValue('rol_max_members') > 0)
@@ -72,7 +72,7 @@ if($role->getValue('rol_max_members') > 0)
             AND mem_begin <= \''.DATE_NOW.'\'
             AND mem_end    > \''.DATE_NOW.'\'';
     $result_mem_count = $g_db->query($sql);
-    $mem_count = mysql_fetch_array($result_mem_count);
+    $mem_count = $g_db->fetch_array($result_mem_count);
 }
 //echo $membership.' - '.$leadership.' - '.$mem_count['mem_count'].' - '.$role->getValue('rol_max_members');exit();
 //Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
