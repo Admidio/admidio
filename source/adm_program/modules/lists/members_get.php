@@ -9,9 +9,8 @@
  * Uebergaben:
  *
  * rol_id       : Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
- * mem_show_all : Begrenzte Userzahl:
- *            m - (Default) nur Mitglieder
- *            u - alle in der Datenbank gespeicherten user
+ * mem_show_all : 0 - (Default) nur Mitglieder der Organisation anzeigen
+ *                1 - alle Benutzer aus der Datenbank anzeigen
  * mem_search   : Suchstring nach dem Mitglieder angezeigt werden sollen
  *
  *****************************************************************************/
@@ -19,39 +18,20 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_roles.php');
 
-//Uebergabevariablen pruefen
-//Role ID
-if(isset($_GET['rol_id']) && is_numeric($_GET['rol_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-else
-{
-    $role_id = $_GET['rol_id'];
-}
 
-//Einschränkung nur Member oder alle User
-$restrict = 'm';
-if(isset($_POST['mem_show_all']) && $_POST['mem_show_all'] == 'on')
-{
-    $restrict = 'u';
-}
-
-//Suche
-$search = '';
-if(isset($_POST['mem_search']) && $_POST['mem_search']!='')
-{
-    $search = strStripTags($_POST['mem_search']);
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_rol_id        = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true);
+$post_mem_show_all = admFuncVariableIsValid($_POST, 'mem_show_all', 'string', 'off');
+$post_mem_search   = admFuncVariableIsValid($_POST, 'mem_search', 'string');
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new TableRoles($g_db, $role_id);
+$role = new TableRoles($g_db, $get_rol_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen Mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$g_current_user->assignRoles()
-   && !isGroupLeader($g_current_user->getValue('usr_id'), $role_id))
+   && !isGroupLeader($g_current_user->getValue('usr_id'), $get_rol_id))
 || (  !$g_current_user->isWebmaster()
    && $role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
 || ($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id') && $role->getValue('cat_org_id') > 0 ))
@@ -61,9 +41,15 @@ if(  (!$g_current_user->assignRoles()
 
 $condition = '';
 $limit = '';
-if($restrict == 'm')
+
+if($post_mem_show_all == 'on')
 {
-    //Falls gefordert, nur Aufruf von Inhabern der Rolle Mitglied
+    // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
+    $member_condition = ' usr_valid = 1 ';
+}
+else
+{
+    // Falls gefordert, nur Aufruf von aktiven Mitgliedern der Organisation
     $member_condition = ' EXISTS 
         (SELECT 1
            FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
@@ -76,17 +62,12 @@ if($restrict == 'm')
             AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
                 OR cat_org_id IS NULL )) ';
 }
-elseif($restrict == 'u')
-{
-    //Falls gefordert, aufrufen alle Leute aus der Datenbank
-    $member_condition = ' usr_valid = 1 ';
-}
 
 //Suchstring zerlegen
-if($search != '')
+if(strlen($post_mem_search) > 0)
 {
-    $search = str_replace('%', ' ', $search);
-    $search_therms = explode(' ', $search);
+    $post_mem_search = str_replace('%', ' ', $post_mem_search);
+    $search_therms = explode(' ', $post_mem_search);
     
     if(count($search_therms)>0)
     {
@@ -140,7 +121,7 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
          AND country.usd_usf_id = '. $g_current_user->getProperty('COUNTRY', 'usf_id'). '
         LEFT JOIN '. TBL_ROLES. ' rol
           ON rol.rol_valid   = 1
-         AND rol.rol_id      = '.$role_id.'
+         AND rol.rol_id      = '.$get_rol_id.'
         LEFT JOIN '. TBL_MEMBERS. ' mem
           ON mem.mem_rol_id  = rol.rol_id
          AND mem.mem_begin  <= \''.DATE_NOW.'\'

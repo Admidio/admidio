@@ -23,81 +23,44 @@ require_once('../../system/common.php');
 require_once('../../system/classes/list_configuration.php');
 require_once('../../system/classes/table_roles.php');
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$arr_mode   = array('csv-ms', 'csv-oo', 'html', 'print');
-$req_rol_id = 0;
-$req_lst_id = 0;
-$req_start  = 0;
-$show_members = 0;
-$charset    = '';
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_mode         = admFuncVariableIsValid($_GET, 'mode', 'string', null, true, array('csv-ms', 'csv-oo', 'html', 'print'));
+$get_lst_id       = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
+$get_rol_id       = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
+$get_start        = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$get_show_members = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
 
-// Uebergabevariablen pruefen
-
-$req_mode   = strStripTags($_GET['mode']);
-
-if(in_array($req_mode, $arr_mode) == false)
+if($get_lst_id == 0)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_GET['lst_id']) && is_numeric($_GET['lst_id']))
-{
-    $req_lst_id = $_GET['lst_id'];
-}
-else
-{
-	// Default-Konfiguration laden
+	// wurde keine Liste uebergeben dann Default-Konfiguration laden
 	$sql = 'SELECT lst_id FROM '. TBL_LISTS. '
 	         WHERE lst_org_id  = '. $g_current_organization->getValue('org_id'). '
 	           AND lst_default = 1 ';
 	$g_db->query($sql);
 	$row = $g_db->fetch_array();
-	$req_lst_id = $row[0];
+	$get_lst_id = $row[0];
 
-	if(is_numeric($req_lst_id) == false || $req_lst_id == 0)
+	if(is_numeric($get_lst_id) == false || $get_lst_id == 0)
 	{
 	   $g_message->show($g_l10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
 	}
 }
 
-if(isset($_GET['rol_id']))
-{
-    if(is_numeric($_GET['rol_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_rol_id = $_GET['rol_id'];
-}
-
-if(isset($_GET['start']))
-{
-    if(is_numeric($_GET['start']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_start = $_GET['start'];
-}
-
-if(isset($_GET['show_members']) && is_numeric($_GET['show_members']))
-{
-    $show_members = $_GET['show_members'];
-}
-
 // Inhalt der Variablen explizit zuruecksetzen (einige Server behalten ansonsten alte Befüllungen vor)
 unset($role_ids);
 
-if($req_rol_id > 0)
+if($get_rol_id > 0)
 {
-    $role_ids[] = $req_rol_id;
+    $role_ids[] = $get_rol_id;
 }
 else
 {
     $role_ids = $_SESSION['role_ids'];
-    $req_rol_id = $role_ids[0];
+    $get_rol_id = $role_ids[0];
 }
 
 // Rollenobjekt erzeugen
-$role = new TableRoles($g_db, $req_rol_id);
+$role = new TableRoles($g_db, $get_rol_id);
 
 //Testen ob Recht zur Listeneinsicht besteht
 if($role->viewRole() == false)
@@ -105,18 +68,20 @@ if($role->viewRole() == false)
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-if($req_mode == 'csv-ms')
+$charset    = '';
+
+if($get_mode == 'csv-ms')
 {
     $separator    = ';'; // Microsoft Excel 2007 und neuer braucht ein Semicolon
     $value_quotes = '"';
-    $req_mode     = 'csv';
+    $get_mode     = 'csv';
 	$charset      = 'iso-8859-1';
 }
-else if($req_mode == 'csv-oo')
+else if($get_mode == 'csv-oo')
 {
     $separator    = ',';   // fuer CSV-Dateien
     $value_quotes = '"';   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
-    $req_mode     = 'csv';
+    $get_mode     = 'csv';
 	$charset      = 'utf-8';
 }
 else
@@ -133,13 +98,13 @@ $arr_col_name = array('usr_login_name' => $g_l10n->get('SYS_USERNAME'),
                       'mem_leader'     => $g_l10n->get('SYS_LEADER')
                       );
 
-if($req_mode == 'html')
+if($get_mode == 'html')
 {
     $class_table           = 'tableList';
     $class_sub_header      = 'tableSubHeader';
     $class_sub_header_font = 'tableSubHeaderFont';
 }
-else if($req_mode == 'print')
+else if($get_mode == 'print')
 {
     $class_table           = 'tableListPrint';
     $class_sub_header      = 'tableSubHeaderPrint';
@@ -151,8 +116,8 @@ $str_csv   = '';   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
 // Listenkonfigurationsobjekt erzeugen und entsprechendes SQL-Statement erstellen
-$list = new ListConfiguration($g_db, $req_lst_id);
-$main_sql = $list->getSQL($role_ids, $show_members);
+$list = new ListConfiguration($g_db, $get_lst_id);
+$main_sql = $list->getSQL($role_ids, $get_show_members);
 //echo $main_sql; exit();
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
@@ -166,21 +131,21 @@ if($num_members == 0)
     $g_message->show($g_l10n->get('LST_NO_USER_FOUND'));
 }
 
-if($num_members < $req_start)
+if($num_members < $get_start)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if($req_mode == 'html' && $req_start == 0)
+if($get_mode == 'html' && $get_start == 0)
 {
     // Url fuer die Zuruecknavigation merken, aber nur in der Html-Ansicht
     $_SESSION['navigation']->addUrl(CURRENT_URL);
 }
 
-if($req_mode != 'csv')
+if($get_mode != 'csv')
 {
     // Html-Kopf wird geschrieben
-    if($req_mode == 'print')
+    if($get_mode == 'print')
     {
     	header('Content-type: text/html; charset=utf-8');
         echo '
@@ -220,22 +185,22 @@ if($req_mode != 'csv')
                     if(sel_list.length > 1)
                     {
                         self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-                            "lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&mode=" + sel_list + "&show_members='.$show_members.'";
+                            "lst_id='. $get_lst_id. '&rol_id='. $get_rol_id. '&mode=" + sel_list + "&show_members='.$get_show_members.'";
                     }
                 }
             //--></script>';
         require(SERVER_PATH. '/adm_program/system/overall_header.php');
     }
 
-    if($show_members == 0)
+    if($get_show_members == 0)
     {
     	$member_status = $g_l10n->get('LST_ACTIVE_MEMBERS');
     }
-    elseif($show_members == 1)
+    elseif($get_show_members == 1)
     {
     	$member_status = $g_l10n->get('LST_FORMER_MEMBERS');
     }
-    elseif($show_members == 2)
+    elseif($get_show_members == 2)
     {
     	$member_status = $g_l10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
@@ -251,7 +216,7 @@ if($req_mode != 'csv')
     
     echo $member_status.'</h3>';
 
-    if($req_mode == 'html')
+    if($get_mode == 'html')
     {
         echo '<ul class="iconTextLinkList">
             <li>
@@ -276,9 +241,9 @@ if($req_mode != 'csv')
                 else
                 {
                     echo '
-                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'"><img
+                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $get_lst_id. '&rol_id='. $get_rol_id. '&show_members='.$get_show_members.'"><img
                     src="'. THEME_PATH. '/icons/application_form.png" alt="'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'" title="'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $req_lst_id. '&rol_id='. $req_rol_id. '&show_members='.$show_members.'">'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'</a>';
+                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $get_lst_id. '&rol_id='. $get_rol_id. '&show_members='.$get_show_members.'">'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'</a>';
                 }
             echo '</span>
             </li>';
@@ -288,9 +253,9 @@ if($req_mode != 'csv')
             {
                 echo '<li>
                     <span class="iconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$req_rol_id.'"><img
+                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$get_rol_id.'"><img
                         src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'"  title="'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$req_rol_id.'">'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'</a>
+                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$get_rol_id.'">'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'</a>
                     </span>
                 </li>';
             }
@@ -317,9 +282,9 @@ if($req_mode != 'csv')
 
             echo '<li>
                 <span class="iconTextLink">
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&amp;mode=print&amp;rol_id='.$req_rol_id.'\', \'_blank\')"><img
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'\', \'_blank\')"><img
                     src="'. THEME_PATH. '/icons/print.png" alt="'.$g_l10n->get('LST_PRINT_PREVIEW').'" title="'.$g_l10n->get('LST_PRINT_PREVIEW').'" /></a>
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&amp;mode=print&amp;rol_id='.$req_rol_id.'\', \'_blank\')">'.$g_l10n->get('LST_PRINT_PREVIEW').'</a>
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'\', \'_blank\')">'.$g_l10n->get('LST_PRINT_PREVIEW').'</a>
                 </span>
             </li>
             <li>
@@ -336,7 +301,7 @@ if($req_mode != 'csv')
     }
 }
 
-if($req_mode != 'csv')
+if($get_mode != 'csv')
 {
     // Tabellenkopf schreiben
     echo '<table class="'.$class_table.'" style="width: 95%;" cellspacing="0">
@@ -377,7 +342,7 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
     || $g_current_user->editUsers()
     || $g_current_user->getPropertyById($usf_id, 'usf_hidden') == 0)
     {
-        if($req_mode == 'csv')
+        if($get_mode == 'csv')
         {
             if($column_number == 1)
             {
@@ -398,7 +363,7 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
     }
 }  // End-For
 
-if($req_mode == 'csv')
+if($get_mode == 'csv')
 {
     $str_csv = $str_csv. "\n";
 }
@@ -407,9 +372,9 @@ else
     echo '</tr></thead><tbody>';
 }
 
-$irow        = $req_start + 1;  // Zahler fuer die jeweilige Zeile
+$irow        = $get_start + 1;  // Zahler fuer die jeweilige Zeile
 $leader_head = -1;              // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
-if($req_mode == 'html' && $g_preferences['lists_members_per_page'] > 0)
+if($get_mode == 'html' && $g_preferences['lists_members_per_page'] > 0)
 {
     $members_per_page = $g_preferences['lists_members_per_page'];     // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
 }
@@ -419,16 +384,16 @@ else
 }
 
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-if(!$g_db->data_seek($result_list, $req_start))
+if(!$g_db->data_seek($result_list, $get_start))
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
+for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
 {
     if($row = $g_db->fetch_array($result_list))
     {
-        if($req_mode != 'csv')
+        if($get_mode != 'csv')
         {
             // erst einmal pruefen, ob es ein Leiter ist, falls es Leiter in der Gruppe gibt, 
             // dann muss noch jeweils ein Gruppenkopf eingefuegt werden
@@ -452,12 +417,12 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
             }
         }
 
-        if($req_mode == 'html')
+        if($get_mode == 'html')
         {
             echo '<tr class="tableMouseOver" style="cursor: pointer"
             onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'">';
         }
-        else if($req_mode == 'print')
+        else if($get_mode == 'print')
         {
             echo '<tr>';
         }
@@ -488,7 +453,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
             || $g_current_user->editUsers()
             || $g_current_user->getPropertyById($usf_id, 'usf_hidden') == 0)
             {
-                if($req_mode != 'csv')
+                if($get_mode != 'csv')
                 {
                     $align = 'left';
                     if($b_user_field == true)
@@ -544,7 +509,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     // Geschlecht anzeigen
                     if($row[$sql_column_number] == 1)
                     {
-                        if($req_mode == 'csv' || $req_mode == 'print')
+                        if($get_mode == 'csv' || $get_mode == 'print')
                         {
                             $content = $g_l10n->get('SYS_MALE');
                         }
@@ -556,7 +521,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     }
                     elseif($row[$sql_column_number] == 2)
                     {
-                        if($req_mode == 'csv' || $req_mode == 'print')
+                        if($get_mode == 'csv' || $get_mode == 'print')
                         {
                             $content = $g_l10n->get('SYS_FEMALE');
                         }
@@ -568,7 +533,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     }
                     else
                     {
-                        if($req_mode != 'csv')
+                        if($get_mode != 'csv')
                         {
                             $content = '&nbsp;';
                         }
@@ -581,7 +546,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                 elseif($column->getValue('lsc_special_field') == 'usr_photo')
                 {
                     // Benutzerfoto anzeigen
-                    if($req_mode == 'html' || $req_mode == 'print')
+                    if($get_mode == 'html' || $get_mode == 'print')
                     {
                         $imgSource = 'photo_show.php?usr_id='.$row['usr_id'];
                         if($g_preferences['profile_photo_storage'] == 0)
@@ -594,9 +559,9 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                         else
                         {
                             // Profilbild aus dem Filesystem einlesen bzw. Default-Bild anzeigen
-                            if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$_GET['usr_id'].'.jpg'))
+                            if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$row['usr_id'].'.jpg'))
                             {
-                                $imgSource = $g_root_path.'/adm_my_files/user_profile_photos/'.$_GET['usr_id'].'.jpg';
+                                $imgSource = $g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$row['usr_id'];
                             }
                             else
                             {
@@ -605,7 +570,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                         }
                         $content = '<img src="'.$imgSource.'" style="vertical-align: middle;" alt="'.$g_l10n->get('LST_USER_PHOTO').'" />';
                     }
-                    if ($req_mode == 'csv' && $row[$sql_column_number] != NULL)
+                    if ($get_mode == 'csv' && $row[$sql_column_number] != NULL)
                     {
                         $content = $g_l10n->get('LST_USER_PHOTO');
                     }
@@ -618,7 +583,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             // Checkboxen werden durch ein Bildchen dargestellt
                             if($row[$sql_column_number] == 1)
                             {
-                                if($req_mode == 'csv')
+                                if($get_mode == 'csv')
                                 {
                                     $content = $g_l10n->get('SYS_YES');
                                 }
@@ -629,7 +594,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             }
                             else
                             {
-                                if($req_mode == 'csv')
+                                if($get_mode == 'csv')
                                 {
                                     $content = $g_l10n->get('SYS_NO');
                                 }
@@ -653,7 +618,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             // E-Mail als Link darstellen
                             if(strlen($row[$sql_column_number]) > 0)
                             {
-                                if($req_mode == 'html')
+                                if($get_mode == 'html')
                                 {
                                     if($g_preferences['enable_mail_module'] == 1 
                                     && $g_current_user->getPropertyById($usf_id, 'usf_name_intern') == 'EMAIL')
@@ -676,7 +641,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                             // Homepage als Link darstellen
                             if(strlen($row[$sql_column_number]) > 0)
                             {
-                                if($req_mode == 'html')
+                                if($get_mode == 'html')
                                 {
                                     $content = '<a href="'.$row[$sql_column_number].'" target="_blank">'.$row[$sql_column_number].'</a>';
                                 }
@@ -693,7 +658,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
                     }
                 }
 
-                if($req_mode == 'csv')
+                if($get_mode == 'csv')
                 {
                     $str_csv = $str_csv. $separator. $value_quotes. $content. $value_quotes;
                 }
@@ -705,7 +670,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
             }
         }
 
-        if($req_mode == 'csv')
+        if($get_mode == 'csv')
         {
             $str_csv = $str_csv. "\n";
         }
@@ -718,7 +683,7 @@ for($j = 0; $j < $members_per_page && $j + $req_start < $num_members; $j++)
     }
 }  // End-While (jeder gefundene User)
 
-if($req_mode == 'csv')
+if($get_mode == 'csv')
 {
     // nun die erstellte CSV-Datei an den User schicken
     $filename = $g_organization. '-'. str_replace('.', '', $role->getValue('rol_name')). '.csv';
@@ -741,11 +706,11 @@ else
 {
     echo '</tbody></table>';
 
-    if($req_mode != 'print')
+    if($get_mode != 'print')
     {
         // Navigation mit Vor- und Zurueck-Buttons
-        $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$req_lst_id.'&mode='.$req_mode.'&rol_id='.$req_rol_id.'&show_members='.$show_members;
-        echo generatePagination($base_url, $num_members, $members_per_page, $req_start, TRUE);
+        $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&mode='.$get_mode.'&rol_id='.$get_rol_id.'&show_members='.$get_show_members;
+        echo generatePagination($base_url, $num_members, $members_per_page, $get_start, TRUE);
     }
 
     //INFOBOX zur Gruppe
@@ -862,7 +827,7 @@ else
         </div>';
     } // Ende Infobox
     
-    if($req_mode == 'print')
+    if($get_mode == 'print')
     {
         echo '</body></html>';
     }
