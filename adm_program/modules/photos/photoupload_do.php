@@ -119,7 +119,7 @@ if(isset($_POST['upload']) && $_GET['uploadmethod'] == 1)
             //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
             if($_FILES['Filedata']['error'][$x]==1)
             {
-                $g_message->show($g_l10n->get('PHO_PHOTO_FILES_TO_LARGE', maxUploadSize()));
+                $g_message->show($g_l10n->get('PHO_PHOTO_FILES_TO_LARGE', admFuncMaxUploadSize()));
                 $x = 5;
             }
         }
@@ -172,9 +172,9 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	
     	//Auflösungskontrolle
     	$image_dimensions = $image_properties[0]*$image_properties[1];
-    	if($image_dimensions > processableImageSize())
+    	if($image_dimensions > admFuncProcessableImageSize())
     	{
-        	echo $g_l10n->get('PHP_RESOLUTION_MORE_THAN').' '.round(processableImageSize()/1000000, 2).' '.$g_l10n->get('MEGA_PIXEL');
+        	echo $g_l10n->get('PHP_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$g_l10n->get('MEGA_PIXEL');
     	}
     	
     	//Typkontrolle
@@ -231,7 +231,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
                 {
                 	 echo '
                 	  <img class="photoOutput" 
-                	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&pic_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin').'&max_width=300&max_height=200" 
+                	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&photo_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin').'&max_width=300&max_height=200" 
                 	  alt="'.$g_l10n->get('PHO_PHOTO').' '.$new_quantity.'" title="'.$g_l10n->get('PHO_PHOTO').' '.$new_quantity.'">
                 	  <br />';
                 }

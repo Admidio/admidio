@@ -11,13 +11,16 @@
  * job:    - new    (neue eingaben speichern)
  *         - change (Aenderungen ausfuehren)
  *         - delete (Loeschen eines Albums)
- *		   - set_rights
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
+
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_pho_id = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
+$get_job    = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change', 'delete'));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -32,30 +35,15 @@ if(!$g_current_user->editPhotoRight())
     $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false && $_GET['pho_id']!=NULL)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_GET['job']) && $_GET['job'] != 'new' && $_GET['job'] != 'delete' && $_GET['job'] != 'change')
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
 //Gepostete Variablen in Session speichern
 $_SESSION['photo_album_request'] = $_REQUEST;
-
-//Uebernahme Variablen
-$pho_id  = $_GET['pho_id'];
 
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($g_db);
 
-if($_GET['job'] != 'new')
+if($get_job != 'new')
 {
-    $photo_album->readData($pho_id);
+    $photo_album->readData($get_pho_id);
     
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $g_organization)
@@ -68,7 +56,7 @@ if($_GET['job'] != 'new')
 $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
-if(isset($_POST['submit']) && $_POST['submit'])
+if($get_job == 'new' || $get_job == 'change')
 {
     //Gesendete Variablen Uebernehmen und kontollieren
 
@@ -143,7 +131,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
     }
     
     /********************neuen Datensatz anlegen***********************************/
-    if ($_GET['job']=='new')
+    if ($get_job=='new')
     {
         // Album in Datenbank schreiben
         $photo_album->save();
@@ -164,19 +152,19 @@ if(isset($_POST['submit']) && $_POST['submit'])
 			// Benachrichtigungs-Email für neue Einträge
 			if($g_preferences['enable_email_notification'] == 1)
 			{
-				EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['pho_name'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));
+				admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['pho_name'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));
 			}	
 		}
         
-        $pho_id = $photo_album->getValue('pho_id');
+        $get_pho_id = $photo_album->getValue('pho_id');
 
         // Anlegen des Albums war erfolgreich -> album_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();
     }//if
 
     /********************Aenderung des Ordners***********************************/
-    // Bearbeiten Anfangsdatum und Ordner geaendert
-    elseif ($_GET['job']=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$pho_id)
+    // Wurde das Anfangsdatum bearbeitet, muss sich der Ordner aendern
+    elseif ($get_job=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$get_pho_id)
     {
         $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
         
@@ -197,7 +185,7 @@ if(isset($_POST['submit']) && $_POST['submit'])
 
     /********************Aenderung der Datenbankeinträge***********************************/
 
-    if($_GET['job']=='change')
+    if($get_job == 'change')
     {
         // geaenderte Daten in der Datenbank akutalisieren
         $photo_album->save();
@@ -284,18 +272,18 @@ if(isset($_POST['submit']) && $_POST['submit'])
     <ul class="iconTextLinkList">
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'">'.$g_l10n->get('SYS_NEXT').'&nbsp;</a>
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$get_pho_id.'">'.$g_l10n->get('SYS_NEXT').'&nbsp;</a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$get_pho_id.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></a>
             </span>
         </li>
     </ul>';
-}//submit
+}
 
+/**************************************************************************/
 
-/***********************Album Loeschen*******************************************/
-
-if(isset($_GET['job']) && $_GET['job']=='delete')
+elseif($get_job == 'delete')
 {
+	// Album loeschen
     if($photo_album->delete())
     {
         echo 'done'; 

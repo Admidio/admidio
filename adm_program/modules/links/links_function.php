@@ -97,7 +97,7 @@ if ($get_mode == 1 || ($get_mode == 3 && $get_lnk_id > 0) )
 				$sender_email = $g_preferences['email_administrator'];
 				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
 			}
-			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ': '.$g_l10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), 
+			admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ': '.$g_l10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), 
 				str_replace('<br />',"\n",$g_l10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), 
 				$_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), 
 				date('d.m.Y H:m', time()))), $sender_name, $sender_email);

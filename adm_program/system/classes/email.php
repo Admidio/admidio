@@ -271,9 +271,9 @@ public function getMaxAttachementSize($size_unit = 'kb')
 {
     global $g_preferences;
     
-    if(round(maxUploadSize()/pow(1024, 1), 1) < $g_preferences['max_email_attachment_size'])
+    if(round(admFuncMaxUploadSize()/pow(1024, 1), 1) < $g_preferences['max_email_attachment_size'])
     {
-        $attachment_size = round(maxUploadSize()/pow(1024, 1), 2);
+        $attachment_size = round(admFuncMaxUploadSize()/pow(1024, 1), 2);
     }
     else
     {

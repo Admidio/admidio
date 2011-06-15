@@ -17,6 +17,10 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
 
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_pho_id = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
+$get_job    = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change'));
+
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
@@ -30,30 +34,15 @@ if(!$g_current_user->editPhotoRight())
     $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-//Albumsuebergabe Numerisch und != Null?
-if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false && $_GET['pho_id']!=NULL)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-// Aufgabe gesetzt, welche Aufgabe
-if(isset($_GET['job']) && $_GET['job'] != 'new' && $_GET['job'] != 'change')
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-//Variablen initialisieren
-$pho_id = $_GET['pho_id'];
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($g_db);
 
 // nur Daten holen, wenn Album editiert werden soll
-if ($_GET['job'] == 'change')
+if ($get_job == 'change')
 {
-    $photo_album->readData($pho_id);
+    $photo_album->readData($get_pho_id);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $g_organization)
@@ -69,7 +58,6 @@ if(isset($_SESSION['photo_album_request']))
 	$photo_album->setArray($_SESSION['photo_album_request']);
     unset($_SESSION['photo_album_request']);
 }
-
 
 // die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorauswählen
 function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
@@ -120,11 +108,11 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 
 /******************************HTML-Kopf******************************************/
 
-if($_GET['job']=='new')
+if($get_job=='new')
 {
     $g_layout['title'] = $g_l10n->get('PHO_CREATE_ALBUM');
 }
-elseif($_GET['job']=='change')
+elseif($get_job=='change')
 {
     $g_layout['title'] = $g_l10n->get('PHO_EDIT_ALBUM');
 }
@@ -147,7 +135,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 /****************************Formular***********************************************/
 
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='. $_GET['pho_id']. '&amp;job='. $_GET['job']. '">
+<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='. $get_pho_id. '&amp;job='. $get_job. '">
 <div class="formLayout" id="photo_album_new_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">';
@@ -173,7 +161,7 @@ echo '
                         <select size="1" id="pho_pho_id_parent" name="pho_pho_id_parent" style="max-width: 95%;">
                             <option value="0">'.$g_l10n->get('PHO_PHOTO_ALBUMS').'</option>';
                                 // die Albenstruktur darstellen und das aktuelle Album vorauswählen
-                                subfolder($adm_photo_list['pho_id'], '', $photo_album, $pho_id);
+                                subfolder($adm_photo_list['pho_id'], '', $photo_album, $get_pho_id);
                         echo '</select>
                     </dd>
                 </dl>

@@ -223,8 +223,8 @@ switch ($req_message_id)
             <h3>'.$g_l10n->get('SYS_RESTRICTIONS').':</h3>
             <ul>
                 <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_1').'</li>
-                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_2', round(processableImageSize()/1000000, 2)).'</li>
-                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_3', round(maxUploadSize()/pow(1024, 2), 2)).'</li>
+                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_2', round(admFuncProcessableImageSize()/1000000, 2)).'</li>
+                <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_3', round(admFuncMaxUploadSize()/pow(1024, 2), 2)).'</li>
                 <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_4', $g_preferences['photo_save_scale']).'</li>
                 <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_5').'</li>
                 <li>'.$g_l10n->get('PHO_RESTRICTIONS_HELP_6', $g_preferences['photo_save_scale']).'</li>
@@ -243,8 +243,8 @@ switch ($req_message_id)
             <ul>
                 <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_1').'</li>
                 <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_2').'</li>
-                <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_3', round(processableImageSize()/1000000, 2)).'</li>
-                <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_4', round(maxUploadSize()/pow(1024, 2), 2)).'</li>
+                <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_3', round(admFuncProcessableImageSize()/1000000, 2)).'</li>
+                <li>'.$g_l10n->get('PRO_RESTRICTIONS_HELP_4', round(admFuncMaxUploadSize()/pow(1024, 2), 2)).'</li>
             </ul>
             ';
         break;

@@ -30,7 +30,7 @@ class DBCommon
     {
         global $g_root_path, $g_message, $g_preferences, $g_current_organization, $g_debug, $g_l10n;
 
-        $backtrace = getBacktrace();
+        $backtrace = $this->getBacktrace();
 
         // Rollback bei einer offenen Transaktion
         if($this->transactions > 0)
@@ -95,6 +95,64 @@ class DBCommon
         $this->transactions = 0;
         return $result;
     }
+	
+	// Teile dieser Funktion sind von get_backtrace aus phpBB3
+	// Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
+	protected function getBacktrace()
+	{
+		$output = '<div style="font-family: monospace;">';
+		$backtrace = debug_backtrace();
+		$path = SERVER_PATH;
+
+		foreach ($backtrace as $number => $trace)
+		{
+			// We skip the first one, because it only shows this file/function
+			if ($number == 0)
+			{
+				continue;
+			}
+
+			// Strip the current directory from path
+			if (empty($trace['file']))
+			{
+				$trace['file'] = '';
+			}
+			else
+			{
+				$trace['file'] = str_replace(array($path, '\\'), array('', '/'), $trace['file']);
+				$trace['file'] = substr($trace['file'], 1);
+			}
+			$args = array();
+
+			// If include/require/include_once is not called, do not show arguments - they may contain sensible information
+			if (!in_array($trace['function'], array('include', 'require', 'include_once')))
+			{
+				unset($trace['args']);
+			}
+			else
+			{
+				// Path...
+				if (!empty($trace['args'][0]))
+				{
+					$argument = htmlentities($trace['args'][0]);
+					$argument = str_replace(array($path, '\\'), array('', '/'), $argument);
+					$argument = substr($argument, 1);
+					$args[] = "'{$argument}'";
+				}
+			}
+
+			$trace['class'] = (!isset($trace['class'])) ? '' : $trace['class'];
+			$trace['type'] = (!isset($trace['type'])) ? '' : $trace['type'];
+
+			$output .= '<br />';
+			$output .= '<b>FILE:</b> ' . htmlentities($trace['file']) . '<br />';
+			$output .= '<b>LINE:</b> ' . ((!empty($trace['line'])) ? $trace['line'] : '') . '<br />';
+
+			$output .= '<b>CALL:</b> ' . htmlentities($trace['class'] . $trace['type'] . $trace['function']) . '(' . ((sizeof($args)) ? implode(', ', $args) : '') . ')<br />';
+		}
+		$output .= '</div>';
+		return $output;
+	}
 	
 	// returns the minimum required version of the database
 	public function getName()

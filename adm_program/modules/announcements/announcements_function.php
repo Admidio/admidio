@@ -95,7 +95,7 @@ if($get_mode == 1)
 				$sender_email = $g_preferences['email_administrator'];
 				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
 			}
-			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $sender_name, $sender_email);
+			admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $sender_name, $sender_email);
 		}
 	}
     

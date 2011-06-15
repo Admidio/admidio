@@ -10,7 +10,7 @@
  *
  * pho_id    : Id des Albums, aus dem das Bild kommen soll
  * pho_begin : Datum des Albums
- * pic_nr    : Nummer des Bildes, das angezeigt werden soll
+ * photo_nr  : Nummer des Bildes, das angezeigt werden soll
  * max_width : maximale Breite auf die das Bild skaliert werden kann
  * max_height: maximale Hoehe auf die das Bild skaliert werden kann
  * thumb	 : ist thumb == true wird ein Thumnail in der Größe der
@@ -20,6 +20,14 @@
 require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 require_once('../../system/classes/image.php');
+
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_pho_id     = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$get_pho_begin  = admFuncVariableIsValid($_GET, 'pho_begin', 'string', null, true);
+$get_photo_nr   = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', 0);
+$get_max_width  = admFuncVariableIsValid($_GET, 'max_width', 'numeric', 0);
+$get_max_height = admFuncVariableIsValid($_GET, 'max_height', 'numeric', 0);
+$get_thumb      = admFuncVariableIsValid($_GET, 'thumb', 'boolean', 0);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -33,58 +41,19 @@ elseif($g_preferences['enable_photo_module'] == 2)
     require('../../system/login_valid.php');
 }
 
-//Uebergaben pruefen
-$pho_id     = NULL;
-$pho_begin  = 0;
-$pic_nr     = NULL;
-$max_width  = 0;
-$max_height = 0;
-$thumb      = false;
+// lokale Variablen initialisieren
 $image      = NULL;
 
-// Album-ID
-if(isset($_GET['pho_id']))
+// Pruefen, ob pho_begin ein gueltiges Datum besitzt
+$albumStartDate = new DateTimeExtended($get_pho_begin, 'Y-m-d', 'date');
+if($albumStartDate->valid() == false)
 {
-    $pho_id = $_GET['pho_id'];
-}
-
-//pho_begin
-if(isset($_GET['pho_begin']))
-{
-    $albumStartDate = new DateTimeExtended($_GET['pho_begin'], 'Y-m-d', 'date');
-    if($albumStartDate->valid())
-    {
-        $pho_begin = $albumStartDate->format('Y-m-d');
-    }
-}
-
-//Bildnr.
-if(isset($_GET['pic_nr']))
-{
-    $pic_nr = $_GET['pic_nr'];
-} 
-
-// max. Breite fuer Skalierung
-if(isset($_GET['max_width']) && is_numeric($_GET['max_width']))
-{
-    $max_width = $_GET['max_width'];
-}
-
-// max. Hoehe fuer Skalierung
-if(isset($_GET['max_height']) && is_numeric($_GET['max_height']))
-{
-    $max_height = $_GET['max_height'];
-}
-
-//Thumbnail
-if(isset($_GET['thumb']))
-{
-    $thumb = $_GET['thumb'];
+	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Bildpfad zusammensetzten
-$ordner  = SERVER_PATH. '/adm_my_files/photos/'.$pho_begin.'_'.$pho_id;
-$picpath = $ordner.'/'.$pic_nr.'.jpg';
+$ordner  = SERVER_PATH. '/adm_my_files/photos/'.$get_pho_begin.'_'.$get_pho_id;
+$picpath = $ordner.'/'.$get_photo_nr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
 if($g_debug == 1)
@@ -93,15 +62,15 @@ if($g_debug == 1)
 }
 
 //Wenn Thumbnail existiert laengere Seite ermitteln
-if($thumb)
+if($get_thumb)
 {
-    if($pic_nr > 0)
+    if($get_photo_nr > 0)
     {
         $thumb_length=1;
-        if(file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg'))
+        if(file_exists($ordner.'/thumbnails/'.$get_photo_nr.'.jpg'))
         {
             //Ermittlung der Original Bildgroesse
-            $bildgroesse = getimagesize($ordner.'/thumbnails/'.$pic_nr.'.jpg');
+            $bildgroesse = getimagesize($ordner.'/thumbnails/'.$get_photo_nr.'.jpg');
             
             $thumb_length = $bildgroesse[1];
             if($bildgroesse[0]>$bildgroesse[1])
@@ -112,7 +81,7 @@ if($thumb)
         
         //Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         //Wenn nicht anlegen
-        if(!file_exists($ordner.'/thumbnails/'.$pic_nr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
+        if(!file_exists($ordner.'/thumbnails/'.$get_photo_nr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
         {
             //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if(file_exists($ordner.'/thumbnails') == false)
@@ -125,11 +94,11 @@ if($thumb)
             // nun das Thumbnail anlegen
             $image = new Image($picpath);
             $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
-            $image->copyToFile(null, $ordner.'/thumbnails/'.$pic_nr.'.jpg');
+            $image->copyToFile(null, $ordner.'/thumbnails/'.$get_photo_nr.'.jpg');
         }
         else
         {
-            readfile($ordner.'/thumbnails/'.$pic_nr.'.jpg');
+            readfile($ordner.'/thumbnails/'.$get_photo_nr.'.jpg');
         }
     }
     else
@@ -147,17 +116,17 @@ else
     }
     // Bild einlesen und scalieren
     $image = new Image($picpath);
-    $image->scale($max_width, $max_height);
+    $image->scale($get_max_width, $get_max_height);
 }
 
 if($image != NULL)
 {
     // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-    if (($max_width > 200) && $g_preferences['photo_image_text'] != '')
+    if (($get_max_width > 200) && $g_preferences['photo_image_text'] != '')
     {
         $font_c = imagecolorallocate($image->imageResource,255,255,255);
         $font_ttf = THEME_SERVER_PATH.'/font.ttf';
-        $font_s = $max_width / 40;
+        $font_s = $get_max_width / 40;
         $font_x = $font_s;
         $font_y = $image->imageHeight-$font_s;
         $text = $g_preferences['photo_image_text'];

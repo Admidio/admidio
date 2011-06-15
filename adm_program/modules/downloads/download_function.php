@@ -148,7 +148,7 @@ if ($get_mode == 1)
 				$sender_email = $g_preferences['email_administrator'];
 				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
 			}
-			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $file_name. ' ('.$file_description.')', $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $sender_name, $sender_email);
+			admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $file_name. ' ('.$file_description.')', $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $sender_name, $sender_email);
 		}
 
         $g_message->setForwardUrl($g_root_path.'/adm_program/system/back.php');

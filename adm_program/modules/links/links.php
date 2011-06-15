@@ -149,7 +149,7 @@ if ($get_lnk_id == 0 && ($g_current_user->editWeblinksRight() || $g_preferences[
 
     // Navigation mit Vor- und Zurueck-Buttons
     $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $get_headline;
-    echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $get_start, TRUE);
+    echo admFuncGeneratePagination($baseUrl, $numLinks, $weblinks_per_page, $get_start, TRUE);
 }
 
 if ($g_db->num_rows($links_result) == 0)
@@ -247,7 +247,7 @@ echo '</div>';
 
 // Navigation mit Vor- und Zurueck-Buttons
 $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $get_headline;
-echo generatePagination($baseUrl, $numLinks, $weblinks_per_page, $get_start, TRUE);
+echo admFuncGeneratePagination($baseUrl, $numLinks, $weblinks_per_page, $get_start, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

@@ -236,7 +236,7 @@ else
 
 // Navigation mit Vor- und Zurueck-Buttons
 $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$get_headline;
-echo generatePagination($base_url, $num_announcements, $announcements_per_page, $get_start, TRUE);
+echo admFuncGeneratePagination($base_url, $num_announcements, $announcements_per_page, $get_start, TRUE);
         
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

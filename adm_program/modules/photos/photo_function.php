@@ -8,12 +8,12 @@
  *
  * Uebergaben:
  *
- * pho_id:      Id des Albums
- * job: - do_delete
- *      - rotate
- *      - delete_request
- * direction:   Drehrichtung links oder rechts
- * bild:        Nr des Bildes welches verarbeitet werden soll
+ * pho_id:   Id des Albums
+ * job:      delete - loeschen eines Bildes
+ *           rotate - drehen eines Bildes
+ * direction: left  - Bild nach links drehen
+ *            right - Bild nach rechts drehen
+ * photo_nr:  Nr des Bildes welches verarbeitet werden soll
  *
  *****************************************************************************/
 
@@ -22,53 +22,26 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
 require_once('../../system/classes/image.php');
 
-// die Funktionen sollten auch ausgeloggt irgendwo benutzt werden koennen
-if(isset($_GET['job']))
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_pho_id    = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$get_job       = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('delete', 'rotate'));
+$get_photo_nr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
+$get_direction = admFuncVariableIsValid($_GET, 'direction', 'string', null, false, array('left', 'right'));
+
+if ($g_preferences['enable_photo_module'] == 0)
 {
-    if ($g_preferences['enable_photo_module'] == 0)
-    {
-        // das Modul ist deaktiviert
-        $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
-    }
-
-    // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-    if(!$g_current_user->editPhotoRight())
-    {
-        $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
-    }
-
-    //URL auf Navigationstack ablegen
-    $_SESSION['navigation']->addUrl(CURRENT_URL);
+	// das Modul ist deaktiviert
+	$g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
 
-// Uebergabevariablen pruefen
-
-//ID Pruefen
-if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']))
+// erst pruefen, ob der User Fotoberarbeitungsrechte hat
+if(!$g_current_user->editPhotoRight())
 {
-    $pho_id = $_GET['pho_id'];
-}
-else 
-{
-    $pho_id = NULL;
+	$g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
 }
 
-if(isset($_GET['job']) == false 
-|| ($_GET['job'] != 'rotate' && $_GET['job'] != 'delete_request' && $_GET['job'] != 'do_delete'))
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_GET['direction']) && $_GET['direction'] != 'left' && $_GET['direction'] != 'right')
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_GET['job']) && (isset($_GET['bild']) == false || is_numeric($_GET['bild']) == false) )
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
+//URL auf Navigationstack ablegen
+$_SESSION['navigation']->addUrl(CURRENT_URL);
 
 //Loeschen eines Thumbnails
 // photo_album : Referenz auf Objekt des relevanten Albums
@@ -92,7 +65,7 @@ function deleteThumbnail(&$photo_album, $pic_nr)
 //Loeschen eines Bildes
 function deletePhoto($pho_id, $pic_nr)
 {
-    global $g_current_user, $g_db, $g_organization;
+    global $g_db;
 
     // nur bei gueltigen Uebergaben weiterarbeiten
     if(is_numeric($pho_id) && is_numeric($pic_nr))
@@ -145,36 +118,36 @@ function deletePhoto($pho_id, $pic_nr)
 
 
 // Foto um 90° drehen
-if($_GET['job'] == 'rotate')
+if($get_job == 'rotate')
 {
     // nur bei gueltigen Uebergaben weiterarbeiten
-    if(is_numeric($pho_id) && is_numeric($_GET['bild']) && ($_GET['direction'] == 'left' || $_GET['direction'] == 'right'))
+    if(strlen($get_direction) > 0)
     {
         //Aufruf des ggf. uebergebenen Albums
-        $photo_album = new TablePhotos($g_db, $pho_id);
+        $photo_album = new TablePhotos($g_db, $get_pho_id);
 
         //Thumbnail loeschen
-        deleteThumbnail($photo_album, $_GET['bild']);
+        deleteThumbnail($photo_album, $get_photo_nr);
         
         //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id'). '/'. $_GET['bild']. '.jpg';
+        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id'). '/'. $get_photo_nr. '.jpg';
         
         // Bild drehen
         $image = new Image($photo_path);
-        $image->rotate($_GET['direction']);
+        $image->rotate($get_direction);
         $image->delete();
     }    
 }
-elseif($_GET['job'] == 'do_delete')
+elseif($get_job == 'delete')
 {
     // das entsprechende Bild wird physikalisch und in der DB geloescht
-    deletePhoto($pho_id, $_GET['bild']);
+    deletePhoto($get_pho_id, $get_photo_nr);
     
     //Neu laden der Albumdaten
     $photo_album = new TablePhotos($g_db);
-    if($pho_id > 0)
+    if($get_pho_id > 0)
     {
-        $photo_album->readData($pho_id);
+        $photo_album->readData($get_pho_id);
     }
 
     $_SESSION['photo_album'] =& $photo_album;

@@ -179,9 +179,9 @@ if($g_current_user->editPhotoRight())
             //Bild drehen
             function imgrotate(img, direction)
             {                    
-                $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$pho_id.', bild: img, job: "rotate", direction: direction}, function(data){
+                $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$pho_id.', photo_nr: img, job: "rotate", direction: direction}, function(data){
                     //Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten                    
-                    $("#img_"+img).attr("src", "photo_show.php?pho_id='.$pho_id.'&pic_nr="+img+"&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&thumb=true&rand="+Math.random());
+                    $("#img_"+img).attr("src", "photo_show.php?pho_id='.$pho_id.'&photo_nr="+img+"&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&thumb=true&rand="+Math.random());
                     return false;
                 });
             }
@@ -369,8 +369,8 @@ echo '<div class="photoModuleContainer">';
                         if ($g_preferences['photo_show_mode'] == 0)
                         {
                             $photoThumbnailTable .= '<div>
-                                <img id="img_'.$bild.'" onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
-                                    src="photo_show.php?pho_id='.$pho_id.'&pic_nr='.$bild.'&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&thumb=true" alt="'.$bild.'" style="cursor: pointer"/>
+                                <img id="img_'.$bild.'" onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$pho_id.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
+                                    src="photo_show.php?pho_id='.$pho_id.'&photo_nr='.$bild.'&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&thumb=true" alt="'.$bild.'" style="cursor: pointer"/>
                             </div>';
                         }
 
@@ -378,8 +378,8 @@ echo '<div class="photoModuleContainer">';
                         else if ($g_preferences['photo_show_mode'] == 1)
                         {
                             $photoThumbnailTable .= '<div>
-                                <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'">
-                                	<img id="img_'.$bild.'" class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" alt="'.$bild.'" /></a>
+                                <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$pho_id.'">
+                                	<img id="img_'.$bild.'" class="photoThumbnail" src="photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" alt="'.$bild.'" /></a>
                             </div>';
                         }
 
@@ -387,8 +387,8 @@ echo '<div class="photoModuleContainer">';
                         else if ($g_preferences['photo_show_mode'] == 2)
                         {
                             $photoThumbnailTable .= '<div>
-                                <img id="img_'.$bild.'" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$bild.'&amp;pho_id='.$pho_id.'\'" 
-                                    src="photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" style="cursor: pointer"/>
+                                <img id="img_'.$bild.'" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$pho_id.'\'" 
+                                    src="photo_show.php?pho_id='.$pho_id.'&amp;photo_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" style="cursor: pointer"/>
                             </div>';
                         }   
                         
@@ -441,7 +441,7 @@ echo '<div class="photoModuleContainer">';
                 }
                 else
                 {
-                    echo '<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?bild='.$i.'&amp;pho_id='.$pho_id.'">&nbsp;</a>';
+                    echo '<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$i.'&amp;pho_id='.$pho_id.'">&nbsp;</a>';
                 }
             }
         }
@@ -580,7 +580,7 @@ echo '<div class="photoModuleContainer">';
                     {
                         echo '
                         <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'">
-                            <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;pic_nr='.$shuffle_image['shuffle_img_nr'].'&amp;pho_begin='.$shuffle_image['shuffle_img_begin'].'&amp;thumb=true"
+                            <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;photo_nr='.$shuffle_image['shuffle_img_nr'].'&amp;pho_begin='.$shuffle_image['shuffle_img_begin'].'&amp;thumb=true"
                             	class="imageFrame" alt="Zufallsfoto" />
                         </a>';
                     }
@@ -687,7 +687,7 @@ echo '<div class="photoModuleContainer">';
         // Navigation mit Vor- und Zurueck-Buttons
         // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
         $base_url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id;
-        echo generatePagination($base_url, $albums-$ignored, 10, $album_element, TRUE);
+        echo admFuncGeneratePagination($base_url, $albums-$ignored, 10, $album_element, TRUE);
     }
 echo '</div>';
 
