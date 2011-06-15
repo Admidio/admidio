@@ -223,7 +223,7 @@ if ($get_mode == 1 || $get_mode == 3)
 					$gbo_email = $g_preferences['email_administrator'];
 					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
 				}
-				EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $gbo_text, $gbo_name, date("d.m.Y H:m", time()))), $sender_name, $gbo_email);
+				admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $gbo_text, $gbo_name, date("d.m.Y H:m", time()))), $sender_name, $gbo_email);
 			}
 		}
 
@@ -400,7 +400,7 @@ elseif($get_mode == 4 || $get_mode == 8)
 					$gbc_email = $g_preferences['email_administrator'];
 					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
 				}
-				EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), 
+				admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), 
 				    str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $g_current_organization->getValue('org_longname'), 
 				    $guestbook_comment->getValue('gbc_text'), $gbc_name, date("d.m.Y H:m", time()))), $sender_name, $gbc_email);
 			}

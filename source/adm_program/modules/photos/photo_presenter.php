@@ -8,13 +8,17 @@
  *
  * Uebergaben:
  *
- * Bild: welches Bild soll angezeigt werden
- * pho_id: Id des Albums aus der das Bild stammt
+ * photo_nr: welches Bild soll angezeigt werden
+ * pho_id:   Id des Albums aus der das Bild stammt
  *
  *****************************************************************************/
 
 require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
+
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_pho_id   = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$get_photo_nr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -28,31 +32,15 @@ elseif($g_preferences['enable_photo_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_GET['bild']) && is_numeric($_GET['bild']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-//Uebernahme der uebergebenen variablen
-$pho_id = $_GET['pho_id'];
-$bild   = $_GET['bild'];
-
 //erfassen des Albums falls noch nicht in Session gespeichert
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $pho_id)
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $get_pho_id)
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $g_db;
 }
 else
 {
-    $photo_album = new TablePhotos($g_db, $pho_id);
+    $photo_album = new TablePhotos($g_db, $get_pho_id);
     $_SESSION['photo_album'] =& $photo_album;
 }
 
@@ -62,19 +50,19 @@ $ordner      = SERVER_PATH. $ordner_foto;
 $ordner_url  = $g_root_path. $ordner_foto;
 
 //Naechstes und Letztes Bild
-$prev_image = $bild-1;
-$next_image = $bild+1;
+$prev_image = $get_photo_nr - 1;
+$next_image = $get_photo_nr + 1;
 $url_prev_image = '#';
 $url_next_image = '#';
-$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$pho_id.'&amp;pic_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'];
+$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$get_pho_id.'&amp;photo_nr='.$get_photo_nr.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'];
 
 if($prev_image > 0)
 {
-    $url_prev_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?bild='. $prev_image. '&pho_id='. $pho_id;
+    $url_prev_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $prev_image. '&pho_id='. $get_pho_id;
 }
 if($next_image <= $photo_album->getValue('pho_quantity'))
 {
-    $url_next_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?bild='. $next_image. '&pho_id='. $pho_id;
+    $url_next_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $next_image. '&pho_id='. $get_pho_id;
 }
 
 $body_with   = $g_preferences['photo_show_width']  + 20;
@@ -161,8 +149,8 @@ else
 		echo'<ul class="iconTextLinkList">
 			<li>
 				<span class="iconTextLink">
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'" /></a>
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$pho_id.'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$get_pho_id.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'" /></a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$get_pho_id.'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
 				</span>
 			</li>
 		</ul>';

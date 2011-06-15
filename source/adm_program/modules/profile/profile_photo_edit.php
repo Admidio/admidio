@@ -163,7 +163,7 @@ elseif( isset($_POST['upload']))
     //Dateigroesse
     if ($_FILES['foto_upload_file']['error']==1)
     {
-        $g_message->show($g_l10n->get('PRO_PHOTO_FILE_TO_LARGE', round(maxUploadSize()/pow(1024, 2))));
+        $g_message->show($g_l10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
     }
 
     //Kontrolle ob Fotos ausgewaehlt wurden
@@ -181,9 +181,9 @@ elseif( isset($_POST['upload']))
 
     //Auflösungskontrolle
     $image_dimensions = $image_properties[0]*$image_properties[1];
-    if($image_dimensions > processableImageSize())
+    if($image_dimensions > admFuncProcessableImageSize())
     {
-    	$g_message->show($g_l10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(processableImageSize()/1000000, 2)));
+    	$g_message->show($g_l10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
     }
 }//Kontrollmechanismen
 

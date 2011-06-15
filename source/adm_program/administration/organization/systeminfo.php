@@ -161,7 +161,7 @@ if($req_mode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE').':</dt><dd>'.round((processableImageSize()/1000000), 2).' '.$g_l10n->get('SYS_MEGA_PIXEL').'</dd>
+                <dt>'.$g_l10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE').':</dt><dd>'.round((admFuncProcessableImageSize()/1000000), 2).' '.$g_l10n->get('SYS_MEGA_PIXEL').'</dd>
             </dl>
         </li>';
                 

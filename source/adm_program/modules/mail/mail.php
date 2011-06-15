@@ -24,6 +24,15 @@ require_once('../../system/classes/email.php');
 
 $formerMembers = 0;
 
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_rol_id      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
+$get_usr_id      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
+$get_rolle       = admFuncVariableIsValid($_GET, 'rolle', 'string', '');
+$get_category    = admFuncVariableIsValid($_GET, 'cat', 'string', '');
+$get_subject     = admFuncVariableIsValid($_GET, 'subject', 'string', '');
+$get_body        = admFuncVariableIsValid($_GET, 'body', 'string', '');
+$get_carbon_copy = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', 1);
+
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
 // Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
 if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1 && $g_preferences['captcha_type']=='calc')
@@ -46,15 +55,15 @@ if ($g_valid_login && strlen($g_current_user->getValue('EMAIL')) == 0)
     $g_message->show($g_l10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
 }
 
-
 //Falls ein Rollenname uebergeben wurde muss auch der Kategoriename uebergeben werden und umgekehrt...
-if ( (isset($_GET['rolle']) && !isset($_GET['cat'])) || (!isset($_GET['rolle']) && isset($_GET['cat'])) )
+if ( (strlen($get_rolle)  > 0 && strlen($get_category) == 0) 
+||   (strlen($get_rolle) == 0 && strlen($get_category)  > 0) )
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 
-if (isset($_GET['usr_id']))
+if ($get_usr_id > 0)
 {
     // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
@@ -64,13 +73,8 @@ if (isset($_GET['usr_id']))
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    if (is_numeric($_GET['usr_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($g_db, $_GET['usr_id']);
+    $user = new User($g_db, $get_usr_id);
 
     // darf auf die User-Id zugegriffen werden    
     if((  $g_current_user->editUsers() == false
@@ -88,23 +92,18 @@ if (isset($_GET['usr_id']))
 
     $userEmail = $user->getValue('EMAIL');
 }
-elseif (isset($_GET['rol_id']) || (isset($_GET['rolle']) && isset($_GET['cat'])))
+elseif ($get_rol_id > 0 || (strlen($get_rolle) > 0 && strlen($get_category) > 0))
 {
     // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
 
-    if(isset($_GET['rol_id']))
+    if($get_rol_id > 0)
     {
-        // Falls eine rol_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt auf diese zugreifen darf
-        if (is_numeric($_GET['rol_id']) == false)
-        {
-            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-        }
-        $sqlConditions = ' AND rol_id = '.$_GET['rol_id'];
+        $sqlConditions = ' AND rol_id = '.$get_rol_id;
     }
     else
     {
-        $sqlConditions = ' AND UPPER(rol_name) = UPPER(\''.$_GET['rolle'].'\')
-                           AND UPPER(cat_name) = UPPER(\''.$_GET['cat'].'\')';
+        $sqlConditions = ' AND UPPER(rol_name) = UPPER(\''.$get_rolle.'\')
+                           AND UPPER(cat_name) = UPPER(\''.$get_category.'\')';
     }
 
     $sql = 'SELECT rol_mail_this_role, rol_name, rol_id, 
@@ -132,23 +131,8 @@ elseif (isset($_GET['rol_id']) || (isset($_GET['rolle']) && isset($_GET['cat']))
     }
 
     $rollenName = $row['rol_name'];
-    $rollenID   = $_GET['rol_id'];
+    $rollenID   = $get_rol_id;
     $formerMembers = $row['former'];
-}
-
-if (array_key_exists('subject', $_GET) == false)
-{
-    $_GET['subject'] = '';
-}
-
-if (array_key_exists('body', $_GET) == false)
-{
-    $_GET['body']  = '';
-}
-
-if (!array_key_exists('carbon_copy', $_GET) || !is_numeric($_GET['carbon_copy']))
-{
-    $_GET['carbon_copy'] = '1';
 }
 
 // Wenn die letzte URL in der Zuruecknavigation die des Scriptes mail_send.php ist,
@@ -172,16 +156,14 @@ else
 }
 
 // Seiten fuer Zuruecknavigation merken
-if(isset($_GET['usr_id']) == false && isset($_GET['rol_id']) == false)
+if($get_usr_id == 0 && $get_rol_id == 0)
 {
     $_SESSION['navigation']->clear();
 }
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Focus auf das erste Eingabefeld setzen
-if (!isset($_GET['usr_id'])
- && !isset($_GET['rol_id'])
- && !isset($_GET['rolle']) )
+if ($get_usr_id == 0 && $get_rol_id == 0 && strlen($get_rolle)  == 0)
 {
     $focusField = 'rol_id';
 }
@@ -195,9 +177,9 @@ else
 }
 
 // Html-Kopf ausgeben
-if (strlen($_GET['subject']) > 0)
+if (strlen($get_subject) > 0)
 {
-    $g_layout['title'] = $_GET['subject'];
+    $g_layout['title'] = $get_subject;
 }
 else
 {
@@ -205,8 +187,7 @@ else
 }
 
 $g_layout['header'] =  '
-<script type="text/javascript">
-
+<script type="text/javascript"><!--
     // neue Zeile mit Button zum Hinzufuegen von Dateipfaden einblenden
     function addAttachment()
     {
@@ -257,16 +238,16 @@ $g_layout['header'] =  '
        	$("#rol_id").change(function() {showMembers(false)});    
         showMembers(true);
  	}); 	
-</script>';
+//--></script>';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '
 <form action="'.$g_root_path.'/adm_program/modules/mail/mail_send.php?';
     // usr_id wird mit GET uebergeben,
     // da keine E-Mail-Adresse von mail_send angenommen werden soll
-    if (array_key_exists("usr_id", $_GET))
+    if($get_usr_id > 0)
     {
-        echo 'usr_id='. $_GET['usr_id']. '&';
+        echo 'usr_id='.$get_usr_id.'&';
     }
     echo '" method="post" enctype="multipart/form-data">
 
@@ -278,13 +259,13 @@ echo '
                     <dl>
                         <dt><label for="rol_id">'.$g_l10n->get('SYS_TO').':</label></dt>
                         <dd>';
-                            if (array_key_exists('usr_id', $_GET))
+                            if ($get_usr_id > 0)
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                                 echo '<input type="text" readonly="readonly" id="mailto" name="mailto" style="width: 345px;" maxlength="50" value="'.$userEmail.'" />
                                 <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
-                            elseif ( array_key_exists('rol_id', $_GET) || (array_key_exists('rolle', $_GET) && array_key_exists('cat', $_GET)) )
+                            elseif ($get_rol_id > 0 || (strlen($get_rolle) > 0 && strlen($get_category) > 0) )
                             {
                                 // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
                                 echo '<select size="1" id="rol_id" name="rol_id"><option value="'.$rollenID.'" selected="selected">'.$rollenName.'</option></select>
@@ -360,8 +341,8 @@ echo '
                     </dl>
                 </li>';
                 
-                if ((array_key_exists('usr_id', $_GET) == false && $g_valid_login == true && array_key_exists('rol_id', $_GET) == false)
-                || (array_key_exists('rol_id', $_GET) == true && $formerMembers > 0))
+                if (($get_usr_id == 0 && $g_valid_login == true && $get_rol_id == 0)
+                ||  ($get_rol_id  > 0 && $formerMembers > 0))
                 {
                     echo '
                     <li>
@@ -420,9 +401,9 @@ echo '
                     <dl>
                         <dt><label for="subject">'.$g_l10n->get('MAI_SUBJECT').':</label></dt>
                         <dd>';
-                            if (strlen($_GET['subject']) > 0)
+                            if (strlen($get_subject) > 0)
                             {
-                               echo '<input type="text" readonly="readonly" id="subject" name="subject" style="width: 345px;" maxlength="50" value="'. $_GET['subject']. '" />';
+                               echo '<input type="text" readonly="readonly" id="subject" name="subject" style="width: 345px;" maxlength="50" value="'. $get_subject. '" />';
                             }
                             else
                             {
@@ -442,7 +423,7 @@ echo '
                             }
                             else
                             {
-                               echo '<textarea id="body" name="body" style="width: 345px;" rows="10" cols="45">'. $_GET['body']. '</textarea>';
+                               echo '<textarea id="body" name="body" style="width: 345px;" rows="10" cols="45">'. $get_body. '</textarea>';
                             }
                         echo '</dd>
                     </dl>
@@ -477,7 +458,7 @@ echo '
                         <dt>&nbsp;</dt>
                         <dd>
                             <input type="checkbox" id="carbon_copy" name="carbon_copy" value="1" ';
-                            if ($_GET['carbon_copy'] == 1)
+                            if ($get_carbon_copy == 1)
                             {
                                 echo ' checked="checked" ';
                             }
@@ -536,7 +517,7 @@ echo '
     </div>
 </form>';
 
-if(isset($_GET['usr_id']) || isset($_GET['rol_id']))
+if($get_usr_id > 0 || $get_rol_id > 0)
 {
     echo '
     <ul class="iconTextLinkList">

@@ -192,7 +192,7 @@ echo '
 	$fup = new FlexUpload($g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='.$_GET['pho_id'].'&'.$cookie_praefix. '_PHP_ID='.$_COOKIE[$cookie_praefix. '_PHP_ID'].'&'.$cookie_praefix. '_ID='.$_COOKIE[$cookie_praefix. '_ID'].'&'.$cookie_praefix.'_DATA='.$_COOKIE[$cookie_praefix. '_DATA'].'&uploadmethod=2');
 	$fup->setPathToSWF($g_root_path.'/adm_program/libs/flexupload/');		//Pfad zum swf-File
 	$fup->setLocale($g_root_path.'/adm_program/libs/flexupload/language.php');	//Pfad der Sprachdatei
-	$fup->setMaxFileSize(maxUploadSize());	//maximale Dateigröße
+	$fup->setMaxFileSize(admFuncMaxUploadSize());	//maximale Dateigröße
 	$fup->setMaxFiles(999);	//maximale Dateianzahl
 	$fup->setWidth(560);	// Breite des Uploaders
 	$fup->setHeight(400);	// Hoehe des Uploaders

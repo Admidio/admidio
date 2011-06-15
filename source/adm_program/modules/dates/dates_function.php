@@ -305,7 +305,7 @@ if($get_mode == 1)  // Neuen Termin anlegen/aendern
 				$sender_email = $g_preferences['email_administrator'];
 				$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
 			}
-			EmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message_part1.$message_part2.$message_part3, $sender_name, $sender_email);
+			admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message_part1.$message_part2.$message_part3, $sender_name, $sender_email);
 		}
 	}
     

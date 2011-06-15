@@ -16,6 +16,10 @@ require_once('../../system/common.php');
 require_once('../../system/classes/email.php');
 require_once('../../system/classes/table_roles.php');
 
+// Uebergabevariablen pruefen und ggf. initialisieren
+$post_rol_id = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
+$get_usr_id  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
+
 if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
@@ -27,7 +31,7 @@ $_SESSION['mail_request'] = $_REQUEST;
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
-if (isset($_GET['usr_id']))
+if ($get_usr_id > 0)
 {
     // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
@@ -37,13 +41,8 @@ if (isset($_GET['usr_id']))
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    if (is_numeric($_GET['usr_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($g_db, $_GET['usr_id']);
+    $user = new User($g_db, $get_usr_id);
 
     // darf auf die User-Id zugegriffen werden    
     if((  $g_current_user->editUsers() == false && isMember($user->getValue('usr_id')) == false)
@@ -58,22 +57,16 @@ if (isset($_GET['usr_id']))
         $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 }
-elseif (isset($_POST['rol_id']))
+elseif ($post_rol_id > 0)
 {
     // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
-
-    // Falls eine rol_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt auf diese zugreifen darf
-    if (is_numeric($_POST['rol_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
 
     $sql = 'SELECT rol_mail_this_role, rol_name, rol_id 
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_cat_id    = cat_id
                AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
                    OR cat_org_id IS NULL)
-               AND rol_id = '.$_POST['rol_id'];
+               AND rol_id = '.$post_rol_id;
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
 
@@ -176,17 +169,18 @@ else
     $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')));
 }
 
-if (array_key_exists('rol_id', $_POST))
-{    
-    if (strlen($_POST['rol_id']) == 0)
+if ($get_usr_id > 0)
+{
+	// wurde kein Benutzer uebergeben, dann muss Rolle uebergeben werden
+    if ($post_rol_id == 0)
     {
         $g_message->show($g_l10n->get('MAI_CHOOSE_ROLE'));
     }
     
-    $role->readData($_POST['rol_id']);
+    $role->readData($post_rol_id);
 
 	// Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
-	if ($g_valid_login == true && !$g_current_user->mailRole($_POST['rol_id']))
+	if ($g_valid_login == true && !$g_current_user->mailRole($post_rol_id))
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -209,7 +203,7 @@ if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
 }
 
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
-if (array_key_exists('usr_id', $_GET))
+if ($get_usr_id > 0)
 {
     //den gefundenen User dem Mailobjekt hinzufuegen...
     $email->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
@@ -251,7 +245,7 @@ else
                 LEFT JOIN '. TBL_USER_DATA. ' as first_name
                   ON first_name.usd_usr_id = usr_id
                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
-               WHERE rol_id      = '. $_POST['rol_id']. '
+               WHERE rol_id      = '.$post_rol_id.'
                  AND rol_cat_id  = cat_id
                  AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                      OR cat_org_id IS NULL )

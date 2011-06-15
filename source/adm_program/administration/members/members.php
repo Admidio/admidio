@@ -423,7 +423,7 @@ if($num_members > 0)
 
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = $g_root_path.'/adm_program/administration/members/members.php?letter='.$req_letter.'&amp;members='.$req_members.'&amp;queryForm='.$req_queryForm;
-    echo generatePagination($base_url, $num_members, $members_per_page, $req_start, true);
+    echo admFuncGeneratePagination($base_url, $num_members, $members_per_page, $req_start, true);
 }
 else
 {

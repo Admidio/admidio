@@ -534,7 +534,7 @@ echo '</div></div>';
 
 // Navigation mit Vor- und Zurueck-Buttons
 $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?category='. $get_category. '&category-selection='. $get_category_selection. '&active_role='.$get_active_role;
-echo generatePagination($base_url, $num_roles, $roles_per_page, $get_start, TRUE);
+echo admFuncGeneratePagination($base_url, $num_roles, $roles_per_page, $get_start, TRUE);
 
 echo '</div>';
 

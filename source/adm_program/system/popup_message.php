@@ -110,7 +110,7 @@ switch ($req_type)
         $url = 'new_user_function.php?mode=4&new_user_id='.$req_database_id;
         break;
     case 'pho':
-        $url  = 'photo_function.php?job=do_delete&pho_id='.$req_database_id_2.'&bild='.$req_database_id;
+        $url  = 'photo_function.php?job=delete&pho_id='.$req_database_id_2.'&photo_nr='.$req_database_id;
         $text = 'PHO_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':

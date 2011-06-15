@@ -710,7 +710,7 @@ else
     {
         // Navigation mit Vor- und Zurueck-Buttons
         $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&mode='.$get_mode.'&rol_id='.$get_rol_id.'&show_members='.$get_show_members;
-        echo generatePagination($base_url, $num_members, $members_per_page, $get_start, TRUE);
+        echo admFuncGeneratePagination($base_url, $num_members, $members_per_page, $get_start, TRUE);
     }
 
     //INFOBOX zur Gruppe

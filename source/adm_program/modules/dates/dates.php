@@ -36,16 +36,16 @@ if($g_preferences['enable_dates_module'] == 0)
 elseif($g_preferences['enable_dates_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
-    require('../../system/login_valid.php');
+    require_once('../../system/login_valid.php');
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_mode      = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old'));
-$get_start     = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$get_headline  = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
-$get_dat_id    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$get_date      = admFuncVariableIsValid($_GET, 'date', 'numeric');
-$get_calendar  = admFuncVariableIsValid($_GET, 'calendar', 'string');
+$get_mode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old'));
+$get_start    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
+$get_dat_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_date     = admFuncVariableIsValid($_GET, 'date', 'numeric');
+$get_calendar = admFuncVariableIsValid($_GET, 'calendar', 'string');
 $get_calendar_selection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $g_preferences['dates_show_calendar_select']);
 
 if(strlen($get_date) > 0)
@@ -617,7 +617,7 @@ else
 
 // Navigation mit Vor- und Zurueck-Buttons
 $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$get_mode.'&headline='.$get_headline.'&calendar='.$get_calendar;
-echo generatePagination($base_url, $num_dates, $dates_per_page, $get_start, TRUE);
+echo admFuncGeneratePagination($base_url, $num_dates, $dates_per_page, $get_start, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
