@@ -71,7 +71,7 @@ if(isset($_GET['new_user']))
 $roleCount = 0;
 foreach($_POST as $key=>$value)
 {
-	if(preg_match('/^(role-)[0-9]$/i',$key))
+	if(preg_match('/^(role-)[0-9]+$/i',$key))
 	{
 		$roleCount++;
     }
