@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.3.1
+ * Version 1.3.2
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
@@ -121,8 +121,9 @@ else
 $sql    = 'SELECT * FROM '. TBL_DATES. ', '. TBL_CATEGORIES. '
             WHERE dat_cat_id = cat_id
               AND (  dat_begin >= \''.DATE_NOW.'\'
-                  OR dat_end   >  \''.DATE_NOW.' 00:00:00\' ) '.
-                  $sql_syntax. $hidden.'
+                  OR dat_end   >  \''.DATE_NOW.' 00:00:00\' )
+              AND dat_id = dtr_dat_id '.
+                  $sql_syntax. $hidden. $login_sql.'
 			ORDER BY dat_begin ASC
 			LIMIT '.$plg_dates_count;
 $plg_result = $g_db->query($sql);
@@ -156,7 +157,7 @@ if($g_db->num_rows($plg_result) > 0)
             }
             if ($plg_date->getValue('dat_all_day') != 1)
             {
-                $plg_html_end_date .= $plg_date->getValue('dat_end', $g_preferences['system_time']);
+                $plg_html_end_date .= ' '. $plg_date->getValue('dat_end', $g_preferences['system_time']);
             }
             if(strlen($plg_html_end_date) > 0)
             {
