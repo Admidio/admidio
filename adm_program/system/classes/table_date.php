@@ -48,7 +48,7 @@ class TableDate extends TableAccess
     // Methode, die den Termin in der DB loescht
     public function delete()
     {
-		$g_db->startTransaction();
+		$this->db->startTransaction();
 
         $sql = 'DELETE FROM '.TBL_DATE_ROLE.' WHERE dtr_dat_id = '.$this->getValue('dat_id');
         $result = $this->db->query($sql);
@@ -65,7 +65,7 @@ class TableDate extends TableAccess
             $this->db->query($sql);
         }
 
-		$g_db->endTransaction();
+		$this->db->endTransaction();
 	}    
     
     // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
