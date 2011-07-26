@@ -1,13 +1,14 @@
 <?php
 /******************************************************************************
- * Sidebar-Kalender
+ * Calendar
  *
- * Version 1.7.0
+ * Version 1.7.1
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
  * Kompatibel ab Admidio-Versions 2.2.0
+ *
  * Übergaben: date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
  *            ajax_change (ist gesetzt bei Monatswechsel per Ajax)
  *
@@ -286,6 +287,13 @@ if($erster == 0)
 echo '<div id="plgCalendarContent" class="admPluginContent">
 <div class="admPluginHeader"><h3>'.$g_l10n->get('DAT_CALENDAR').'</h3></div>
 <div class="admPluginBody">
+
+<script type="text/javascript"><!-- 
+    if ( typeof gTranslations == "undefined") 
+    {
+        var gTranslations = new Array("'.$g_l10n->get('SYS_MON').'","'.$g_l10n->get('SYS_TUE').'","'.$g_l10n->get('SYS_WED').'","'.$g_l10n->get('SYS_THU').'","'.$g_l10n->get('SYS_FRI').'","'.$g_l10n->get('SYS_SAT').'","'.$g_l10n->get('SYS_SUN').'","'.$g_l10n->get('SYS_TODAY').'","'.$g_l10n->get('SYS_LOADING_CONTENT').'");
+    }
+--></script>
 
 <table border="0" id="plgCalendarTable">
     <tr>';
@@ -595,15 +603,15 @@ echo '</table>
 ';
 if($monat.$jahr != date('mY'))
 {
-    echo "<div id=\"plgCalendarReset\"><a href=\"#\" onclick=\"$.ajax({
-            type: 'GET',
-            url: '".$g_root_path."/adm_plugins/$plugin_folder/calendar.php',
+    echo '<div id="plgCalendarReset"><a href="#" onclick="$.ajax({
+            type: \'GET\',
+            url: \''.$g_root_path.'/adm_plugins/'.$plugin_folder.'/calendar.php\',
             cache: false,
-            data: 'ajax_change&amp;date_id=".date('mY')."',
+            data: \'ajax_change&amp;date_id='.date('mY').'\',
             success: function(html){
-                $('#plgCalendarContent').replaceWith(html);
+                $(\'#plgCalendarContent\').replaceWith(html);
             }
-        }); return false;\">".$g_l10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
+        }); return false;">'.$g_l10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
 echo '</div></div>';
 
