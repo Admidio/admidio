@@ -63,6 +63,7 @@ if(isset($_SESSION['photo_album_request']))
 function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 {
     global $g_db;
+    global $g_current_organization;
     $vorschub = $vorschub.'&nbsp;&nbsp;&nbsp;';
     $pho_id_condition = '';
     $parentPhotoAlbum = new TablePhotos($g_db);
@@ -80,7 +81,8 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
     $sql = 'SELECT *
               FROM '. TBL_PHOTOS. '
              WHERE pho_id <> '. $photo_album->getValue('pho_id').
-                   $pho_id_condition;
+                   $pho_id_condition
+                   .' AND pho_org_shortname LIKE "'.$g_current_organization->getValue('org_shortname').'"';
     $result_child = $g_db->query($sql);
 
     while($adm_photo_child = $g_db->fetch_array($result_child))
