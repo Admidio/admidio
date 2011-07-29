@@ -135,7 +135,7 @@ while ($row = $g_db->fetch_array($result))
             if (file_exists($bildpfad))
             {
                 $description = $description. '<img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.
-                               $photo_album->getValue('pho_id').'&amp;photo_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin').
+                               $photo_album->getValue('pho_id').'&amp;photo_nr='.$bild.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').
                                '&amp;thumb=true" border="0" />&nbsp;';
             }
         }

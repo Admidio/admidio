@@ -73,7 +73,7 @@ if($photo_album->getValue('pho_org_shortname') != $g_organization)
 
 if (empty($_POST) && $_GET['uploadmethod'] == 1)
 {
-    $g_message->show($g_l10n->get('PHO_NO_FILES_OR_TO_LARGE', ini_get(post_max_size)));
+    $g_message->show($g_l10n->get('PHO_NO_FILES_OR_TO_LARGE', ini_get('post_max_size')));
 }
 
 //bei Bedarf Uploadodner erzeugen
@@ -231,7 +231,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
                 {
                 	 echo '
                 	  <img class="photoOutput" 
-                	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&photo_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin').'&max_width=300&max_height=200" 
+                	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&photo_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&max_width=300&max_height=200" 
                 	  alt="'.$g_l10n->get('PHO_PHOTO').' '.$new_quantity.'" title="'.$g_l10n->get('PHO_PHOTO').' '.$new_quantity.'">
                 	  <br />';
                 }
