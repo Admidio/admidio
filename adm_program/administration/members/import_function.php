@@ -53,9 +53,11 @@ if($g_current_user->viewRole($role->getValue('rol_id')) == false
     $g_message->show($g_l10n->get('MEM_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
 }
 
+// read file in an array; auto-detect the line endings of different os
+ini_set('auto_detect_line_endings', 1);
+$_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name']);
 $_SESSION['rol_id']           = $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $_POST['user_import_mode'];
-$_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name']);
 
 if($_POST['coding'] == 'iso-8859-1')
 {
