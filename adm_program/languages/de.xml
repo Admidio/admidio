@@ -2,6 +2,7 @@
 <language id="de">
 <version id="2.3.0">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
+    <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Soll die Kategorie %VAR1_BOLD% wirklich gelöscht werden?\n\nDiese Kategorie besitzt %VAR2% abhängige Einträge, die ebenfalls gelöscht werden.</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
@@ -94,7 +95,6 @@
     <text id="CAT_CATEGORY_EXIST" development="new" translation="todo">Es existiert bereits eine Kategorie in dieser Organisation mit diesem Namen.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="todo">Ist diese Option aktiviert, erscheinen die Profilfelder dieser Kategorie auch im Profil folgender Organisationen und können dort ebenfalls gepflegt werden:\n\n%VAR1_BOLD%\n\n Möchtest du die Daten nur in deiner Organisation sehen, dann sollte diese Option deaktiviert werden.</text>
     <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="todo">Du kannst nicht alle Kategorien eines Moduls löschen.\nErstelle vorher eine neue Kategorie für dieses Modul.</text>
-    <text id="CAT_DELETE_CATEGORY" development="new" translation="todo">Soll die Kategorie %VAR1% wirklich gelöscht werden?\n\nEs werden alle Daten, die dieser Kategorie zugeordnet sind (Felder, Rollen, Links, Termine), gelöscht.</text>
     <text id="CAT_MOVE_DOWN" development="new" translation="todo">%VAR1% nach unten verschieben</text>
     <text id="CAT_MOVE_UP" development="new" translation="todo">%VAR1% nach oben verschieben</text>
 

@@ -9,9 +9,10 @@
  * Uebergaben:
  *
  * cat_id: ID der Rollen-Kategorien, die bearbeitet werden soll
- * type :  Typ der Kategorie, die angelegt werden sollen
+ * type  : Typ der Kategorie, die angelegt werden sollen
  *         ROL = Rollenkategorien
  *         LNK = Linkkategorien
+ * title : Übergabe des Synonyms für Kategorie.
  *
  ****************************************************************************/
 
@@ -19,52 +20,27 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_category.php');
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_cat_id = 0;
-
-// Uebergabevariablen pruefen
-$title = $g_l10n->get('SYS_CATEGORY');
-if (isset($_GET['title'])) 
-{
-   $title = $_GET['title'];
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_cat_id = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_type   = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
+$get_title  = admFuncVariableIsValid($_GET, 'title', 'string', $g_l10n->get('SYS_CATEGORY'));
 
 // Modus und Rechte pruefen
-if(isset($_GET['type']))
+if($get_type == 'ROL' && $g_current_user->assignRoles() == false)
 {
-    if($_GET['type'] != 'ROL' && $_GET['type'] != 'LNK' && $_GET['type'] != 'USF' && $_GET['type'] != 'DAT')
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'DAT' && $g_current_user->editUsers() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
-else
+elseif($get_type == 'LNK' && $g_current_user->editWeblinksRight() == false)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
-
-if(isset($_GET['cat_id']))
+elseif($get_type == 'USF' && $g_current_user->editUsers() == false)
 {
-    if(is_numeric($_GET['cat_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_cat_id = $_GET['cat_id'];
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+}
+elseif($get_type == 'DAT' && $g_current_user->editDates() == false)
+{
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -72,9 +48,9 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // UserField-objekt anlegen
 $category = new TableCategory($g_db);
 
-if($req_cat_id > 0)
+if($get_cat_id > 0)
 {
-    $category->readData($req_cat_id);
+    $category->readData($get_cat_id);
 
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue('cat_org_id') >  0
@@ -106,13 +82,13 @@ if($category->getValue('cat_system') == 1)
 }
 
 // Html-Kopf ausgeben
-if($req_cat_id > 0)
+if($get_cat_id > 0)
 {
-    $g_layout['title']  = $g_l10n->get('SYS_EDIT_VAR', $title);
+    $g_layout['title']  = $g_l10n->get('SYS_EDIT_VAR', $get_title);
 }
 else
 {
-    $g_layout['title']  = $g_l10n->get('SYS_CREATE_VAR', $title);
+    $g_layout['title']  = $g_l10n->get('SYS_CREATE_VAR', $get_title);
 }
 $g_layout['header'] = '
     <script type="text/javascript"><!--
@@ -125,7 +101,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<form action="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$req_cat_id.'&amp;type='. $_GET['type']. '&amp;mode=1" method="post">
+<form action="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$get_cat_id.'&amp;type='. $get_type. '&amp;mode=1" method="post">
 <div class="formLayout" id="edit_categories_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">
@@ -140,7 +116,7 @@ echo '
                 </dl>
             </li>';
 
-            if($_GET['type'] == 'USF')
+            if($get_type == 'USF')
             {
                 // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Kategorie fuer alle Organisationen sichtbar gemacht werden
                 if($category->getValue('cat_system') == 0
@@ -172,7 +148,7 @@ echo '
                 <li>
                     <dl>
                         <dt>
-                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" /></label>
+                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $get_title).'" /></label>
                         </dt>
                         <dd>
                             <input type="checkbox" id="cat_hidden" name="cat_hidden" ';
@@ -181,7 +157,7 @@ echo '
                                     echo ' checked="checked" ';
                                 }
                                 echo ' value="1" />
-                            <label for="cat_hidden">'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'</label>
+                            <label for="cat_hidden">'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $get_title).'</label>
                         </dd>
                     </dl>
                 </li>';
@@ -190,7 +166,7 @@ echo '
 			<li>
 				<dl>
 					<dt>
-						<label for="cat_default"><img src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" /></label>
+						<label for="cat_default"><img src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $get_title).'" /></label>
 					</dt>
 					<dd>
 						<input type="checkbox" id="cat_default" name="cat_default" ';
@@ -199,7 +175,7 @@ echo '
 								echo ' checked="checked" ';
 							}
 							echo ' value="1" />
-						<label for="cat_default">'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'</label>
+						<label for="cat_default">'.$g_l10n->get('CAT_DEFAULT_VAR', $get_title).'</label>
 					</dd>
 				</dl>
 			</li>

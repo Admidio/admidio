@@ -14,58 +14,40 @@
  *        LNK = Linkkategorien
  *        USF = Profilfelder
  *        DAT = Datum
- * title:  -Übergabe des Synonyms für Kategorie.
+ * title : Übergabe des Synonyms für Kategorie.
  *
  ****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_type = '';
-
-// Uebergabevariablen pruefen
-$title = $g_l10n->get('SYS_CATEGORY');
-if (isset($_GET['title'])) 
-{
-   $title = $_GET['title'];
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_type  = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
+$get_title = admFuncVariableIsValid($_GET, 'title', 'string', $g_l10n->get('SYS_CATEGORY'));
 
 // Modus und Rechte pruefen
-if(isset($_GET['type']))
+if($get_type == 'ROL' && $g_current_user->assignRoles() == false)
 {
-    if($_GET['type'] != 'ROL' && $_GET['type'] != 'LNK' && $_GET['type'] != 'USF' && $_GET['type'] != 'DAT')
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'DAT' && $g_current_user->editdates() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    $req_type = $_GET['type'];
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
-else
+elseif($get_type == 'LNK' && $g_current_user->editWeblinksRight() == false)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+}
+elseif($get_type == 'USF' && $g_current_user->editUsers() == false)
+{
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+}
+elseif($get_type == 'DAT' && $g_current_user->editDates() == false)
+{
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 unset($_SESSION['categories_request']);
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $g_l10n->get('SYS_ADMINISTRATION_VAR', $title);
+$g_layout['title']  = $g_l10n->get('SYS_ADMINISTRATION_VAR', $get_title);
 $g_layout['header'] = '
     <script type="text/javascript"><!--
         function moveCategory(direction, catID)
@@ -132,7 +114,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 $icon_login_user = '';
 if($_GET['type'] != 'USF')
 {
-    $icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" />';
+    $icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $get_title).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $get_title).'" />';
 }
 
 // Html des Modules ausgeben
@@ -142,9 +124,9 @@ echo '
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'"><img
-            src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $title).'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$req_type.'&amp;title='.$title.'">'.$g_l10n->get('SYS_CREATE_VAR', $title).'</a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$get_type.'&amp;title='.$get_title.'"><img
+            src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $get_title).'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$get_type.'&amp;title='.$get_title.'">'.$g_l10n->get('SYS_CREATE_VAR', $get_title).'</a>
         </span>
     </li>
 </ul>
@@ -155,7 +137,7 @@ echo '
             <th>'.$g_l10n->get('SYS_TITLE').'</th>
             <th>&nbsp;</th>
             <th>'.$icon_login_user.'</th>
-			<th><img class="iconInformation" src="'.THEME_PATH.'/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" title="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" /></th>
+			<th><img class="iconInformation" src="'.THEME_PATH.'/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $get_title).'" title="'.$g_l10n->get('CAT_DEFAULT_VAR', $get_title).'" /></th>
             <th>&nbsp;</th>
         </tr>
     </thead>';
@@ -163,7 +145,7 @@ echo '
     $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
              WHERE (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                    OR cat_org_id IS NULL )
-               AND cat_type   = \''.$req_type.'\'
+               AND cat_type   = \''.$get_type.'\'
              ORDER BY cat_sequence ASC ';
     $cat_result = $g_db->query($sql);
     $write_tbody = false;
@@ -200,21 +182,21 @@ echo '
         }
         echo '
         <tr id="row_'. $cat_row['cat_id']. '" class="tableMouseOver">
-            <td><a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'&amp;title='.$title.'">'. $cat_row['cat_name']. '</a></td>
+            <td><a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$get_type.'&amp;title='.$get_title.'">'. $cat_row['cat_name']. '</a></td>
             <td style="text-align: right; width: 45px;"> ';
                 if($cat_row['cat_system'] == 0 || $_GET['type'] != "USF")
                 {
                     echo '
                     <a class="iconLink" href="javascript:moveCategory(\'up\', '.$cat_row['cat_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('CAT_MOVE_UP', $title).'" title="'.$g_l10n->get('CAT_MOVE_UP', $title).'" /></a>
+                            src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('CAT_MOVE_UP', $get_title).'" title="'.$g_l10n->get('CAT_MOVE_UP', $get_title).'" /></a>
                     <a class="iconLink" href="javascript:moveCategory(\'down\', '.$cat_row['cat_id'].')"><img
-                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('CAT_MOVE_DOWN', $title).'" title="'.$g_l10n->get('CAT_MOVE_DOWN', $title).'" /></a>';
+                            src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('CAT_MOVE_DOWN', $get_title).'" title="'.$g_l10n->get('CAT_MOVE_DOWN', $get_title).'" /></a>';
                 }
             echo '</td>
             <td>';
                 if($cat_row['cat_hidden'] == 1)
                 {
-                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $title).'" />';
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $get_title).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $get_title).'" />';
                 }
                 else
                 {
@@ -224,7 +206,7 @@ echo '
             <td>';
                 if($cat_row['cat_default'] == 1)
                 {
-                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" title="'.$g_l10n->get('CAT_DEFAULT_VAR', $title).'" />';
+                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('CAT_DEFAULT_VAR', $get_title).'" title="'.$g_l10n->get('CAT_DEFAULT_VAR', $get_title).'" />';
                 }
                 else
                 {
@@ -232,7 +214,7 @@ echo '
                 }
             echo '</td>
             <td style="text-align: right; width: 90px;">
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$req_type.'&amp;title='.$title.'"><img
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$get_type.'&amp;title='.$get_title.'"><img
                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
 
                 if($cat_row['cat_system'] == 1)
@@ -241,7 +223,7 @@ echo '
                 }
                 else
                 {
-                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='. $cat_row['cat_id']. '&amp;mode=3&amp;type='.$req_type.'"><img
+                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='. $cat_row['cat_id']. '&amp;mode=3&amp;type='.$get_type.'"><img
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                 }
             echo '</td>

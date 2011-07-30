@@ -17,6 +17,9 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableCategory extends TableAccess
 {
+	protected $elementTable;
+	protected $elementColumn;
+
     // Konstruktor
     public function __construct(&$db, $cat_id = 0)
     {
@@ -40,6 +43,8 @@ class TableCategory extends TableAccess
 
         if($row['anzahl'] > 1)
         {
+			$this->db->startTransaction();
+
             // Luecke in der Reihenfolge schliessen
             $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence - 1
                      WHERE (  cat_org_id = '. $g_current_session->getValue('ses_org_id'). '
@@ -51,63 +56,38 @@ class TableCategory extends TableAccess
             // Abhaenigigkeiten loeschen
             if($this->getValue('cat_type') == 'DAT')
             {
-                $sql    = 'DELETE FROM '. TBL_DATES. '
-                            WHERE dat_cat_id = '. $this->getValue('cat_id');
-                $this->db->query($sql);
-            }
-            elseif($this->getValue('cat_type') == 'INV')
-            {
-                //Alle Inventarpositionen auslesen, die in der Kategorie enthalten sind
-                $sql_inventory = 'SELECT *
-                                  FROM '. TBL_INVENTORY. '
-                                  WHERE inv_cat_id = '. $this->getValue('cat_id');
-                $result_inventory = $this->db->query($sql_subfolders);
-
-                while($row_inventory = $this->db->fetch_object($result_inventory))
-                {
-                    //Jeder Verleihvorgang zu den einzlenen Inventarpositionen muss geloescht werden
-                    $sql    = 'DELETE FROM '. TBL_RENTAL_OVERVIEW. '
-                                WHERE rnt_inv_id = '. $row_inventory->inv_id;
-                    $this->db->query($sql);
-                }
-
-                //Jetzt koennen auch die abhaengigen Inventarposition geloescht werden
-                $sql    = 'DELETE FROM '. TBL_INVENTORY. '
-                            WHERE inv_cat_id = '. $this->getValue('cat_id');
-                $this->db->query($sql);
+				require_once(SERVER_PATH. '/adm_program/system/classes/table_date.php');
+				$object = new TableDate($this->db);
             }
             elseif($this->getValue('cat_type') == 'LNK')
             {
-                $sql    = 'DELETE FROM '. TBL_LINKS. '
-                            WHERE lnk_cat_id = '. $this->getValue('cat_id');
-                $this->db->query($sql);
+				require_once(SERVER_PATH. '/adm_program/system/classes/table_weblink.php');
+				$object = new TableWeblink($this->db);
             }
             elseif($this->getValue('cat_type') == 'ROL')
             {
-                $sql    = 'DELETE FROM '. TBL_MEMBERS. '
-                            WHERE mem_rol_id IN (SELECT rol_id FROM '. TBL_ROLES. '
-                                                  WHERE rol_cat_id = '.$this->getValue('cat_id').')';
-                $this->db->query($sql);
-    
-                $sql    = 'DELETE FROM '. TBL_ROLES. '
-                            WHERE rol_cat_id = '. $this->getValue('cat_id');
-                $this->db->query($sql);
+				require_once(SERVER_PATH. '/adm_program/system/classes/table_role.php');
+				$object = new TableRole($this->db);
             }
             elseif($this->getValue('cat_type') == 'USF')
             {
-                $sql    = 'DELETE FROM '. TBL_USER_DATA. '
-                            WHERE usd_usf_id IN (SELECT usf_id FROM '. TBL_USER_FIELDS. '
-                                                  WHERE usf_cat_id = '.$this->getValue('cat_id').')';
-                $this->db->query($sql);
-    
-                $sql    = 'DELETE FROM '. TBL_USER_FIELDS. '
-                            WHERE usf_cat_id = '. $this->getValue('cat_id');
-                $this->db->query($sql);
-    
-                // einlesen aller Userobjekte der angemeldeten User anstossen,
-                // da Aenderungen in den Profilfeldern vorgenommen wurden
-                $g_current_session->renewUserObject();
+				require_once(SERVER_PATH. '/adm_program/system/classes/table_user_field.php');
+				$object = new TableUserField($this->db);
             }
+			
+			// alle zugehoerigen abhaengigen Objekte suchen und mit weiteren Abhaengigkeiten loeschen
+			$sql    = 'SELECT * FROM '.$this->elementTable.'
+						WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
+			$resultRecordsets = $this->db->query($sql);
+			
+			while($row = $this->db->fetch_array($resultRecordsets))
+			{
+				$object->clear();
+				$object->setArray($row);
+				$object->delete();
+			}
+
+			$this->db->endTransaction();
             return parent::delete();
         }
         else
@@ -137,6 +117,16 @@ class TableCategory extends TableAccess
         }
         return $newNameIntern;
     }
+	
+	// number of child recordsets
+	public function getNumberElements()
+	{
+		$sql    = 'SELECT COUNT(1) FROM '.$this->elementTable.'
+					WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
+		$this->db->query($sql);
+		$row = $this->db->fetch_array();
+		return $row[0];
+	}
 
     // die Kategorie wird um eine Position in der Reihenfolge verschoben
     public function moveSequence($mode)
@@ -182,6 +172,34 @@ class TableCategory extends TableAccess
                 $this->save();
             }
         }
+    }
+
+    public function readData($cat_id, $sql_where_condition = '', $sql_additional_tables = '')
+    {
+        $returnValue = parent::readData($cat_id, $sql_where_condition, $sql_additional_tables);
+
+		if($this->getValue('cat_type') == 'ROL')
+		{
+			$this->elementTable = TBL_ROLES;
+			$this->elementColumn = 'rol_cat_id';
+		}
+		elseif($this->getValue('cat_type') == 'LNK')
+		{
+			$this->elementTable = TBL_LINKS;
+			$this->elementColumn = 'lnk_cat_id';
+		}
+		elseif($this->getValue('cat_type') == 'USF')
+		{
+			$this->elementTable = TBL_USER_FIELDS;
+			$this->elementColumn = 'usf_cat_id';
+		}
+		elseif($this->getValue('cat_type') == 'DAT')
+		{
+			$this->elementTable = TBL_DATES;
+			$this->elementColumn = 'dat_cat_id';
+		}
+		
+        return $returnValue;
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
