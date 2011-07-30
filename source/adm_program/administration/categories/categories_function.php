@@ -24,66 +24,37 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_category.php');
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_cat_id = 0;
-
-// Uebergabevariablen pruefen
-
-if(isset($_GET['cat_id']))
-{
-    if(is_numeric($_GET['cat_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_cat_id = $_GET['cat_id'];
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_cat_id   = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
+$get_type     = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
+$get_mode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$get_title    = admFuncVariableIsValid($_GET, 'title', 'string', $g_l10n->get('SYS_CATEGORY'));
+$get_sequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));
 
 // Modus und Rechte pruefen
-if(isset($_GET['type']))
+if($get_type == 'ROL' && $g_current_user->assignRoles() == false)
 {
-    if($_GET['type'] != 'ROL' && $_GET['type'] != 'LNK' && $_GET['type'] != 'USF' && $_GET['type'] != 'DAT')
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    if($_GET['type'] == 'ROL' && $g_current_user->assignRoles() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'LNK' && $g_current_user->editWeblinksRight() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'USF' && $g_current_user->editUsers() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
-    if($_GET['type'] == 'DAT' && $g_current_user->editUsers() == false)
-    {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-    }
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
-else
+elseif($get_type == 'LNK' && $g_current_user->editWeblinksRight() == false)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
-
-if(is_numeric($_GET['mode']) == false
-|| $_GET['mode'] < 1 || $_GET['mode'] > 4)
+elseif($get_type == 'USF' && $g_current_user->editUsers() == false)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
-
-if(isset($_GET['sequence']) && admStrToUpper($_GET['sequence']) != 'UP' && admStrToUpper($_GET['sequence']) != 'DOWN')
+elseif($get_type == 'DAT' && $g_current_user->editDates() == false)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
 // Kategorie-Objekt anlegen
 $category = new TableCategory($g_db);
 
-if($req_cat_id > 0)
+if($get_cat_id > 0)
 {
-    $category->readData($req_cat_id);
+    $category->readData($get_cat_id);
 
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue('cat_org_id') >  0
@@ -96,10 +67,10 @@ else
 {
     // es wird eine neue Kategorie angelegt
     $category->setValue('cat_org_id', $g_current_organization->getValue('org_id'));
-    $category->setValue('cat_type', $_GET['type']);
+    $category->setValue('cat_type', $get_type);
 }
 
-if($_GET['mode'] == 1)
+if($get_mode == 1)
 {
     // Kategorie anlegen oder updaten
 
@@ -114,9 +85,9 @@ if($_GET['mode'] == 1)
     
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
-    if(($_GET['type'] == 'USF' && (  isset($_POST['show_in_several_organizations']) 
-                                  || $g_current_organization->countAllRecords() == 1))
-    || ($_GET['type'] == 'ROL' && $category->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION'))
+    if(($get_type == 'USF' && (  isset($_POST['show_in_several_organizations']) 
+                              || $g_current_organization->countAllRecords() == 1))
+    || ($get_type == 'ROL' && $category->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION'))
     {
         $category->setValue('cat_org_id', '0');
         $search_orga = ' AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
@@ -133,7 +104,7 @@ if($_GET['mode'] == 1)
         // Schauen, ob die Kategorie bereits existiert
         $sql    = 'SELECT COUNT(*) as count
                      FROM '. TBL_CATEGORIES. '
-                    WHERE cat_type    = \''. $_GET['type']. '\'
+                    WHERE cat_type    = \''. $get_type. '\'
                       AND cat_name LIKE \''. $_POST['cat_name']. '\'
                       AND cat_id     <> '. $_GET['cat_id']. 
                           $search_orga;
@@ -186,7 +157,7 @@ if($_GET['mode'] == 1)
 
         $sql    = 'SELECT *
                      FROM '. TBL_CATEGORIES. '
-                    WHERE cat_type = "'. $_GET['type']. '"
+                    WHERE cat_type = "'. $get_type. '"
                       AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                           OR cat_org_id IS NULL )
                     ORDER BY cat_org_id ASC, cat_sequence ASC';
@@ -210,7 +181,7 @@ if($_GET['mode'] == 1)
     $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 
 }
-elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
+elseif($get_mode == 2 || $get_mode == 3)
 {
     // Kategorie loeschen
 
@@ -220,7 +191,7 @@ elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    if($_GET['mode'] == 2)
+    if($get_mode == 2)
     {
         // Feld loeschen
         $ret_code = $category->delete();
@@ -237,17 +208,17 @@ elseif($_GET['mode'] == 2 || $_GET['mode'] == 3)
             $g_message->show($g_l10n->get('CAT_CATEGORY_NOT_DELETE'));
         }
     }
-    elseif($_GET['mode'] == 3)
+    elseif($get_mode == 3)
     {
         // Frage, ob Kategorie geloescht werden soll
-        $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$req_cat_id.'&mode=2&type='. $_GET['type']);
-        $g_message->show($g_l10n->get('CAT_DELETE_CATEGORY', $category->getValue('cat_name')), $g_l10n->get('SYS_DELETE'));
+        $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$get_cat_id.'&mode=2&type='. $get_type);
+        $g_message->show($g_l10n->get('CAT_DELETE_CATEGORY', $category->getValue('cat_name'), $category->getNumberElements()), $g_l10n->get('SYS_DELETE'));
     }
 }
-elseif($_GET['mode'] == 4)
+elseif($get_mode == 4)
 {
     // Kategoriereihenfolge aktualisieren
-    $category->moveSequence($_GET['sequence']);
+    $category->moveSequence($get_sequence);
     exit();
 }
 ?>
