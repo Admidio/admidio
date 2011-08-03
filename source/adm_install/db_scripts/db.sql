@@ -541,6 +541,7 @@ create table %PREFIX%_user_fields
    usf_name_intern                varchar(110)  not null,
    usf_name                       varchar(100)  not null,
    usf_description                text,
+   usf_value_list                 text,
    usf_system                     boolean       not null default '0',
    usf_disabled                   boolean       not null default '0',
    usf_hidden                     boolean       not null default '0',

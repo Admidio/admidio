@@ -23,28 +23,17 @@ if (!$g_current_user->isWebmaster())
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_usf_id = 0;
-
-// Uebergabevariablen pruefen
-
-if(isset($_GET['usf_id']))
-{
-    if(is_numeric($_GET['usf_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_usf_id = $_GET['usf_id'];
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_usf_id = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // benutzerdefiniertes Feldobjekt anlegen
 $user_field = new TableUserField($g_db);
 
-if($req_usf_id > 0)
+if($get_usf_id > 0)
 {
-    $user_field->readData($req_usf_id);
+    $user_field->readData($get_usf_id);
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($user_field->getValue('cat_org_id') >  0
@@ -81,7 +70,7 @@ if($user_field->getValue('usf_system') == 1)
 }
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
-if($req_usf_id > 0)
+if($get_usf_id > 0)
 {
     $g_layout['title']  = $g_l10n->get('ORG_EDIT_PROFILE_FIELD');
 }
@@ -92,18 +81,32 @@ else
 
 // Kopfinformationen
 $g_layout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $("#'.$field_focus.'").focus();
-        }); 
-    //--></script>';
+<script type="text/javascript"><!--
+	function setValueList()
+	{
+		if($("#usf_type").val() == "DROPDOWN" || $("#usf_type").val() == "RADIO_BUTTON")
+		{
+			$("#admValueList").show("slow");
+		}
+		else
+		{
+			$("#admValueList").hide();
+		}
+	}
+	
+	$(document).ready(function() 
+	{
+		setValueList();
+		$("#'.$field_focus.'").focus();
+		$("#usf_type").click(function() {setValueList();});
+	}); 
+//--></script>';
 
 // Html-Kopf ausgeben
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
-<form id="edit_field" action="'.$g_root_path.'/adm_program/administration/organization/fields_function.php?usf_id='.$req_usf_id.'&amp;mode=1" method="post">
+<form id="edit_field" action="'.$g_root_path.'/adm_program/administration/organization/fields_function.php?usf_id='.$get_usf_id.'&amp;mode=1" method="post">
 <div class="formLayout" id="edit_fields_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">
@@ -148,9 +151,11 @@ echo '
                     <dt><label for="usf_type">'.$g_l10n->get('ORG_DATATYPE').':</label></dt>
                     <dd>';
                         $user_field_text = array(''         => '- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -',
+                                                 'CHECKBOX' => $g_l10n->get('SYS_CHECKBOX'),
                                                  'DATE'     => $g_l10n->get('SYS_DATE'),
+                                                 'DROPDOWN' => $g_l10n->get('SYS_DROPDOWN_LISTBOX'),
                                                  'EMAIL'    => $g_l10n->get('SYS_EMAIL'),
-                                                 'CHECKBOX' => $g_l10n->get('SYS_YES').' / '.$g_l10n->get('SYS_NO'),
+                                                 'RADIO_BUTTON' => $g_l10n->get('SYS_RADIO_BUTTON'),
                                                  'TEXT'     => $g_l10n->get('SYS_TEXT').' (50)',
                                                  'TEXT_BIG' => $g_l10n->get('SYS_TEXT').' (255)',
                                                  'URL'      => $g_l10n->get('ORG_URL'),
@@ -181,6 +186,17 @@ echo '
                     </dd>
                 </dl>
             </li>
+            <li id="admValueList">
+                <dl>
+                    <dt><label for="usf_value_list">'.$g_l10n->get('SYS_VALUE_LIST').':</label></dt>
+                    <dd><textarea name="usf_value_list" id="usf_value_list" style="width: 200px;" rows="6" cols="40">'.
+                        $user_field->getValue('usf_value_list'). '</textarea>
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC&amp;inline=true"><img 
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
+                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+                    </dd>
+                </dl>
+            </li>			
             <li>
                 <dl>
                     <dt>
