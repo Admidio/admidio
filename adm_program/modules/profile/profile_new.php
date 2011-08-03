@@ -213,6 +213,32 @@ function getFieldCode($field, $user, $new_user)
         }
         $value = '<input type="checkbox" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" '.$mode.' '.$readonly.' value="1" />';
     }
+    elseif($field->getValue('usf_type') == 'DROPDOWN')
+    {
+		$arrListValues = explode("\n", $field->getValue('usf_value_list'));
+		$position = 1;
+		
+		$value = '<select size="1" name="usf-'. $field->getValue('usf_id'). '" id="usf-'. $field->getValue('usf_id'). '">
+			<option value="" ';
+                if(strlen($field->getValue('usd_value')) == 0)
+                {
+                    $value .= ' selected="selected" ';
+                }
+			$value .= '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+
+			// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
+			foreach($arrListValues as $key => $valueList)
+			{
+				$value .= '<option value="'.$position.'" '; 
+				if($field->getValue('usd_value') == $position) 
+				{
+					$value .= ' selected="selected"';
+				}
+				$value .= '>'.$valueList.'</option>';
+				$position++;
+			}
+		$value .= '</select>';
+	}
     elseif($field->getValue('usf_type') == 'TEXT_BIG')
     {
         $value = '<textarea name="usf-'. $field->getValue('usf_id'). '" id="usf-'. $field->getValue('usf_id'). '" '.$readonly.' style="width: 300px;" rows="2" cols="40">'. $field->getValue('usd_value'). '</textarea>';

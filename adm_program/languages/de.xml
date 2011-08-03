@@ -10,10 +10,15 @@
     <text id="LST_PERIOD" development="deleted" translation="todo">Zeitraum</text>
     <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
+    <text id="SYS_CHECKBOX" development="deleted" translation="todo">Checkbox</text>
     <text id="SYS_DATABASE_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt %VAR1% oder höher</text>
+    <text id="SYS_DROPDOWN_LISTBOX" development="deleted" translation="todo">Dropdown-Listenfeld</text>
     <text id="SYS_MYSQL_VERSION" development="deleted" translation="todo">MySQL-Version</text>
     <text id="SYS_MYSQL_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt 4.1 oder höher</text>
 	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>    	
+    <text id="SYS_RADIO_BUTTON" development="deleted" translation="todo">Optionsfeld</text>
+    <text id="SYS_VALUE_LIST" development="new" translation="todo">Werteliste</text>
+    <text id="SYS_VALUE_LIST_DESC" development="new" translation="todo">In diesem Feld kannst du die Werte für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Wert des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Wert gespeichert, sondern die ausgewählte Position aus dem Feld. Ändert man somit die Bezeichnung in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort die neue Bezeichnung. Verschiebt man allerdings einen Wert in eine andere Zeile, so wird bei den Benutzern evtl. ein neuer Wert angezeigt.</text>
     <text id="SYS_VERSION" development="new" translation="todo">Version</text>
 
 </version>
