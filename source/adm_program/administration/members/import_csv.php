@@ -199,7 +199,13 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     {
 						if($duplicate_user->getProperty($field_name_intern, 'usf_type') == 'DATE')
 						{
+							// the date must be formated
 							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $g_preferences['system_date']));
+						}
+						elseif($field_name_intern == 'COUNTRY')
+						{
+							// we need the iso-code and not the name of the country
+							$duplicate_user->setValue($field_name_intern, $g_l10n->getCountryByName($user->getValue($field_name_intern)));
 						}
 						else
 						{
