@@ -303,7 +303,7 @@ function admFuncEmailNotification($receiptian, $reference, $message, $sender_nam
 	$absender = utf8_decode($sender_name);
 	$absendermail = $sender_mail;
 
-	mail($empfaenger, $betreff, $nachricht, "From: $absender <$absendermail>");
+	mail($empfaenger, $betreff, $nachricht, 'From: '.$absender.' <'.$absendermail.'>');
 	//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
 }
 
@@ -327,7 +327,8 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 		if($validValues != null)
 		{
 			// Variable muss einen gueltigen Wert haben
-			if(in_array($array[$variableName], $validValues) == false)
+			if(in_array(admStrToUpper($array[$variableName]), $validValues) == false
+			&& in_array(admStrToLower($array[$variableName]), $validValues) == false)
 			{
 				$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 			}

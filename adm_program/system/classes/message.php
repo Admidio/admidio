@@ -17,7 +17,7 @@
  * setCloseButton()        - es wird ein Button zum Schliessen der Seite angezeigt
  * hideButtons()           - es werden keine Buttons angezeigt
  * setExcludeThemeBody()   - die Themedateien my_header.php my_body_top.php und 
- *                           my_body_bottom.php werde nicht eingebunden
+ *                           my_body_bottom.php werden nicht eingebunden
  * show($content, $headline = '') - die Meldung wird ausgegeben
  *
  *****************************************************************************/
@@ -80,7 +80,7 @@ class Message
         $this->showButtons = false;
     }
     
-    // die Themedateien my_header.php my_body_top.php und my_body_bottom.php werde nicht eingebunden
+    // die Themedateien my_header.php my_body_top.php und my_body_bottom.php werden nicht eingebunden
     public function setExcludeThemeBody()
     {
         $this->includeThemeBody = false;

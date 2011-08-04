@@ -12,6 +12,8 @@
  * type  : Typ der Kategorie, die angelegt werden sollen
  *         ROL = Rollenkategorien
  *         LNK = Linkkategorien
+ *         USF = Profilfelder
+ *         DAT = Termine
  * title : Übergabe des Synonyms für Kategorie.
  *
  ****************************************************************************/

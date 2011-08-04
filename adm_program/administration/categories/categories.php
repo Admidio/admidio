@@ -8,12 +8,11 @@
  *
  * Uebergaben:
  *
- * type : (Pflichtuebergabe)
- *        Typ der Kategorien, die gepflegt werden sollen
+ * type : Typ der Kategorien, die gepflegt werden sollen
  *        ROL = Rollenkategorien
  *        LNK = Linkkategorien
  *        USF = Profilfelder
- *        DAT = Datum
+ *        DAT = Termine
  * title : Übergabe des Synonyms für Kategorie.
  *
  ****************************************************************************/
@@ -49,70 +48,75 @@ unset($_SESSION['categories_request']);
 // Html-Kopf ausgeben
 $g_layout['title']  = $g_l10n->get('SYS_ADMINISTRATION_VAR', $get_title);
 $g_layout['header'] = '
-    <script type="text/javascript"><!--
-        function moveCategory(direction, catID)
-        {
-            var actRow = document.getElementById("row_" + catID);
-            var childs = actRow.parentNode.childNodes;
-            var prevNode    = null;
-            var nextNode    = null;
-            var actRowCount = 0;
-            var actSequence = 0;
-            var secondSequence = 0;
+<script type="text/javascript"><!--
+	function moveCategory(direction, catID)
+	{
+		var actRow = document.getElementById("row_" + catID);
+		var childs = actRow.parentNode.childNodes;
+		var prevNode    = null;
+		var nextNode    = null;
+		var actRowCount = 0;
+		var actSequence = 0;
+		var secondSequence = 0;
 
-            // erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
-            for(i=0;i < childs.length; i++)
-            {
-                if(childs[i].tagName == "TR")
-                {
-                    actRowCount++;
-                    if(actSequence > 0 && nextNode == null)
-                    {
-                        nextNode = childs[i];
-                    }
+		// erst einmal aktuelle Sequenz und vorherigen/naechsten Knoten ermitteln
+		for(i=0;i < childs.length; i++)
+		{
+			if(childs[i].tagName == "TR")
+			{
+				actRowCount++;
+				if(actSequence > 0 && nextNode == null)
+				{
+					nextNode = childs[i];
+				}
 
-                    if(childs[i].id == "row_" + catID)
-                    {
-                        actSequence = actRowCount;
-                    }
+				if(childs[i].id == "row_" + catID)
+				{
+					actSequence = actRowCount;
+				}
 
-                    if(actSequence == 0)
-                    {
-                        prevNode = childs[i];
-                    }
-                }
-            }
+				if(actSequence == 0)
+				{
+					prevNode = childs[i];
+				}
+			}
+		}
 
-            // entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
-            if(direction == "up")
-            {
-                if(prevNode != null)
-                {
-                    actRow.parentNode.insertBefore(actRow, prevNode);
-                    secondSequence = actSequence - 1;
-                }
-            }
-            else
-            {
-                if(nextNode != null)
-                {
-                    actRow.parentNode.insertBefore(nextNode, actRow);
-                    secondSequence = actSequence + 1;
-                }
-            }
+		// entsprechende Werte zum Hoch- bzw. Runterverschieben ermitteln
+		if(direction == "up")
+		{
+			if(prevNode != null)
+			{
+				actRow.parentNode.insertBefore(actRow, prevNode);
+				secondSequence = actSequence - 1;
+			}
+		}
+		else
+		{
+			if(nextNode != null)
+			{
+				actRow.parentNode.insertBefore(nextNode, actRow);
+				secondSequence = actSequence + 1;
+			}
+		}
 
-            if(secondSequence > 0)
-            {
-                // Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-                $.get(gRootPath + "/adm_program/administration/categories/categories_function.php?cat_id=" + catID + "&type='. $_GET["type"]. '&mode=4&sequence=" + direction);
-            }
-        }
-    //--></script>';
+		if(secondSequence > 0)
+		{
+			// Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
+			$.get(gRootPath + "/adm_program/administration/categories/categories_function.php?cat_id=" + catID + "&type='. $get_type. '&mode=4&sequence=" + direction);
+		}
+	}
+	
+	$(document).ready(function() 
+	{
+		$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'320px\', onComplete:function(){$("#admButtonNo").focus();}});
+	}); 
+//--></script>';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 $icon_login_user = '';
-if($_GET['type'] != 'USF')
+if($get_type != 'USF')
 {
     $icon_login_user = '<img class="iconInformation" src="'.THEME_PATH.'/icons/user_key.png" alt="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $get_title).'" title="'.$g_l10n->get('SYS_VISIBLE_TO_USERS', $get_title).'" />';
 }
@@ -153,12 +157,12 @@ echo '
 
     while($cat_row = $g_db->fetch_array($cat_result))
     {
-        if($cat_row['cat_system'] == 1 && $_GET['type'] == 'USF')
+        if($cat_row['cat_system'] == 1 && $get_type == 'USF')
         {
             // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
             echo '<tbody id="cat_'.$cat_row['cat_id'].'">';
         }
-        elseif($cat_row['cat_org_id'] == 0 && $_GET['type'] == 'USF')
+        elseif($cat_row['cat_org_id'] == 0 && $get_type == 'USF')
         {
             // Kategorien über alle Organisationen kommen immer zuerst
             if($write_all_orgas == false)
@@ -173,7 +177,7 @@ echo '
             if($write_tbody == false)
             {
                 $write_tbody = true;
-                if($_GET['type'] == 'USF')
+                if($get_type == 'USF')
                 {
                     echo '</tbody>';
                 }
@@ -184,7 +188,7 @@ echo '
         <tr id="row_'. $cat_row['cat_id']. '" class="tableMouseOver">
             <td><a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$get_type.'&amp;title='.$get_title.'">'. $cat_row['cat_name']. '</a></td>
             <td style="text-align: right; width: 45px;"> ';
-                if($cat_row['cat_system'] == 0 || $_GET['type'] != "USF")
+                if($cat_row['cat_system'] == 0 || $get_type != 'USF')
                 {
                     echo '
                     <a class="iconLink" href="javascript:moveCategory(\'up\', '.$cat_row['cat_id'].')"><img
@@ -223,8 +227,9 @@ echo '
                 }
                 else
                 {
-                    echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='. $cat_row['cat_id']. '&amp;mode=3&amp;type='.$get_type.'"><img
-                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
+                    echo '<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
+						$cat_row['cat_id'].'&amp;name='.urlencode($cat_row['cat_name']).'&amp;database_id='.$cat_row['cat_id'].'&amp;database_id_2='.$get_type.'"><img 
+						src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                 }
             echo '</td>
         </tr>';

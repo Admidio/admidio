@@ -26,33 +26,17 @@ if (!$g_current_user->isWebmaster())
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-
-if(is_numeric($_GET['mode']) == false
-|| $_GET['mode'] < 1 || $_GET['mode'] > 4)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_GET['usf_id']))
-{
-    if(is_numeric($_GET['usf_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-}
-
-if(isset($_GET['sequence']) && admStrToUpper($_GET['sequence']) != 'UP' && admStrToUpper($_GET['sequence']) != 'DOWN')
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_usf_id   = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
+$get_mode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$get_sequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));
 
 // UserField-objekt anlegen
 $user_field = new TableUserField($g_db);
 
-if($_GET['usf_id'] > 0)
+if($get_usf_id > 0)
 {
-    $user_field->readData($_GET['usf_id']);
+    $user_field->readData($get_usf_id);
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($user_field->getValue('cat_org_id') >  0
@@ -64,7 +48,7 @@ if($_GET['usf_id'] > 0)
 
 $err_code = '';
 
-if($_GET['mode'] == 1)
+if($get_mode == 1)
 {
    // Feld anlegen oder updaten
 
@@ -101,7 +85,7 @@ if($_GET['mode'] == 1)
                      FROM '. TBL_USER_FIELDS. '
                     WHERE usf_name LIKE \''.$_POST['usf_name'].'\'
                       AND usf_cat_id  = '.$_POST['usf_cat_id'].'
-                      AND usf_id     <> '.$_GET['usf_id'];
+                      AND usf_id     <> '.$get_usf_id;
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);
 
@@ -158,7 +142,7 @@ if($_GET['mode'] == 1)
 
     $err_code = 'SYS_SAVE_DATA';
 }
-elseif($_GET['mode'] == 2)
+elseif($get_mode == 2)
 {
     if($user_field->getValue('usf_system') == 1)
     {
@@ -174,10 +158,10 @@ elseif($_GET['mode'] == 2)
     }
     exit();
 }
-elseif($_GET['mode'] == 4)
+elseif($get_mode == 4)
 {
     // Feldreihenfolge aktualisieren
-    $user_field->moveSequence($_GET['sequence']);
+    $user_field->moveSequence($get_sequence);
     exit();
 }
          
