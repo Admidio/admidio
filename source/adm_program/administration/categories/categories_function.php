@@ -12,9 +12,10 @@
  * type :  Typ der Kategorie, die angelegt werden sollen
  *         ROL = Rollenkategorien
  *         LNK = Linkkategorien
+ *         USF = Profilfelder
+ *         DAT = Termine
  * mode:   1 - Kategorie anlegen oder updaten
  *         2 - Kategorie loeschen
- *         3 - Frage, ob Kategorie geloescht werden soll
  *         4 - Reihenfolge fuer die uebergebene usf_id anpassen
  * sequence: neue Reihenfolge fuer die uebergebene usf_id
  *
@@ -181,39 +182,23 @@ if($get_mode == 1)
     $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 
 }
-elseif($get_mode == 2 || $get_mode == 3)
+elseif($get_mode == 2)
 {
-    // Kategorie loeschen
+    // delete category
 
     if($category->getValue('cat_system') == 1)
     {
-        // Systemfelder duerfen nicht geloescht werden
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        // system-category couldn't be deleted
+        echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+		exit();
     }
 
-    if($get_mode == 2)
-    {
-        // Feld loeschen
-        $ret_code = $category->delete();
+	$ret_code = $category->delete();
 
-        if($ret_code)
-        {
-            $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-            $g_message->show($g_l10n->get('SYS_DELETE_DATA'));
-        }
-        else
-        {
-            // Kategorie konnte nicht geloescht werden, da evtl. die letzte Kategorie fuer diesen Typ
-            $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-            $g_message->show($g_l10n->get('CAT_CATEGORY_NOT_DELETE'));
-        }
-    }
-    elseif($get_mode == 3)
-    {
-        // Frage, ob Kategorie geloescht werden soll
-        $g_message->setForwardYesNo($g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$get_cat_id.'&mode=2&type='. $get_type);
-        $g_message->show($g_l10n->get('CAT_DELETE_CATEGORY', $category->getValue('cat_name'), $category->getNumberElements()), $g_l10n->get('SYS_DELETE'));
-    }
+	if($ret_code)
+	{
+		echo 'done';
+	}
 }
 elseif($get_mode == 4)
 {

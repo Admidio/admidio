@@ -357,10 +357,10 @@ elseif($req_mode == 6)
                                           , ('. $g_current_organization->getValue('org_id').', \'ROL\', \'COURSES\',  \''.$g_l10n->get('INS_COURSES').'\', 0, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
                                           , ('. $g_current_organization->getValue('org_id').', \'ROL\', \'TEAMS\',  \''.$g_l10n->get('INS_TEAMS').'\', 0, 0, 4, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
                                           , ('. $g_current_organization->getValue('org_id').', \'LNK\', \'COMMON\',  \''.$g_l10n->get('SYS_COMMON').'\', 0, 0, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'LNK\', \'INTERN\',  \''.$g_l10n->get('INS_INTERN').'\', 1, 0, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $g_current_organization->getValue('org_id').', \'LNK\', \'INTERN\',  \''.$g_l10n->get('INS_INTERN').'\', 1, 0, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
                                           , ('. $g_current_organization->getValue('org_id').', \'DAT\', \'COMMON\',  \''.$g_l10n->get('SYS_COMMON').'\', 0, 0, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'DAT\', \'TRAINING\',  \''.$g_l10n->get('INS_TRAINING').'\', 0, 0, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'DAT\', \'COURSES\',  \''.$g_l10n->get('INS_COURSES').'\', 0, 0, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                          , ('. $g_current_organization->getValue('org_id').', \'DAT\', \'TRAINING\',  \''.$g_l10n->get('INS_TRAINING').'\', 0, 0, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $g_current_organization->getValue('org_id').', \'DAT\', \'COURSES\',  \''.$g_l10n->get('INS_COURSES').'\', 0, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
