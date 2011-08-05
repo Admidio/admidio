@@ -21,65 +21,46 @@
 
 require_once('../../system/common.php');
 
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_usr_id     = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$get_new_user   = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
+$get_lastname   = admFuncVariableIsValid($_GET, 'lastname', 'string', '');
+$get_firstname  = admFuncVariableIsValid($_GET, 'firstname', 'string', '');
+$get_remove_url = admFuncVariableIsValid($_GET, 'remove_url', 'boolean', 0);
+
 // im ausgeloggten Zustand koennen nur Registrierungen angelegt werden
 if($g_valid_login == false)
 {
-    $_GET['new_user'] = 2;
+    $get_new_user = 2;
 }
 
-// Uebergabevariablen pruefen
-
-$new_user = 0;
-$usr_id   = 0;
-$req_lastname  = '';
-$req_firstname = '';
-
-if(array_key_exists('new_user', $_GET) && is_numeric($_GET['new_user']))
-{
-    $new_user = $_GET['new_user'];
-}
-
-if(array_key_exists('lastname', $_GET))
-{
-    $req_lastname = $_GET['lastname'];
-}
-
-if(array_key_exists('firstname', $_GET))
-{
-    $req_firstname = $_GET['firstname'];
-}
-
-if(array_key_exists('remove_url', $_GET) && $_GET['remove_url'] == 1)
+if($get_remove_url == 1)
 {
     $_SESSION['navigation']->deleteLastUrl();
 }
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
 // Rechenaufgabe eingestellt wurde, muss die Klasse für neue Registrierungen geladen werden
-if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1 && $g_preferences['captcha_type']=='calc')
+if ($get_new_user == 2 && $g_preferences['enable_registration_captcha'] == 1 && $g_preferences['captcha_type']=='calc')
 {
 	require_once('../../system/classes/captcha.php');
 }
 
 // User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
-if(isset($_GET['user_id']) && ($new_user == 0 || $new_user == 3))
+if($get_usr_id > 0 && $get_new_user != 0 && $get_new_user != 3)
 {
-    if(is_numeric($_GET['user_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $usr_id  = $_GET['user_id'];
+    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // User auslesen
-$user = new User($g_db, $usr_id);
+$user = new User($g_db, $get_usr_id);
 
 // pruefen, ob Modul aufgerufen werden darf
-switch($new_user)
+switch($get_new_user)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($g_current_user->editProfile($usr_id) == false)
+        if($g_current_user->editProfile($get_usr_id) == false)
         {
             $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
@@ -93,8 +74,8 @@ switch($new_user)
         }
         
         // wurde Nachname und Vorname uebergeben, dann diese bereits vorbelegen
-        $user->setValue('LAST_NAME', $req_lastname);
-        $user->setValue('FIRST_NAME', $req_firstname);
+        $user->setValue('LAST_NAME', $get_lastname);
+        $user->setValue('FIRST_NAME', $get_firstname);
         break;
 
     case 2:
@@ -133,14 +114,14 @@ if(isset($_SESSION['profile_request']))
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
 // dabei wird der Inhalt richtig formatiert
-function getFieldCode($field, $user, $new_user)
+function getFieldCode($field, $user, $get_new_user)
 {
     global $g_preferences, $g_root_path, $g_current_user, $g_l10n;
     $value    = '';
     
     // Felder sperren, falls dies so eingestellt wurde
     $readonly = '';
-    if($field->getValue('usf_disabled') == 1 && $g_current_user->editUsers() == false && $new_user == 0)
+    if($field->getValue('usf_disabled') == 1 && $g_current_user->editUsers() == false && $get_new_user == 0)
     {
         if($field->getValue('usf_type') == 'CHECKBOX' || $field->getValue('usf_name_intern') == 'GENDER')
         {
@@ -192,11 +173,11 @@ function getFieldCode($field, $user, $new_user)
 			foreach($g_l10n->getCountries() as $key => $country_name)
 			{
 				$value = $value. '<option value="'.$key.'" ';
-				if($new_user > 0 && $key == $g_preferences['default_country'])
+				if($get_new_user > 0 && $key == $g_preferences['default_country'])
 				{
 					$value = $value. ' selected="selected" ';
 				}
-				if(!$new_user > 0 && $country_name == $field->getValue('usd_value'))
+				if(!$get_new_user > 0 && $country_name == $field->getValue('usd_value'))
 				{
 					$value = $value. ' selected="selected" ';
 				}
@@ -239,6 +220,27 @@ function getFieldCode($field, $user, $new_user)
 			}
 		$value .= '</select>';
 	}
+    elseif($field->getValue('usf_type') == 'RADIO_BUTTON')
+    {
+		$arrListValues = explode("\n", $field->getValue('usf_value_list'));
+		$position = 1;
+		$value = '';
+
+		// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
+		foreach($arrListValues as $key => $valueList)
+		{
+	        $checkedPosition = 0;
+	        if($field->getValue('usd_value') == $position)
+	        {
+	            $checkedPosition = ' checked="checked" ';
+	        }
+	        
+	        $value .= '<input type="radio" id="usf-'.$field->getValue('usf_id').'-'.$position.'" name="usf-'. $field->getValue('usf_id'). '" value="'.$position.'" '.$checkedPosition.' '.$readonly.' />
+	            <label for="usf-'. $field->getValue('usf_id').'-'.$position.'">'.$valueList.'</label>';
+			$position++;
+		}
+		
+    }
     elseif($field->getValue('usf_type') == 'TEXT_BIG')
     {
         $value = '<textarea name="usf-'. $field->getValue('usf_id'). '" id="usf-'. $field->getValue('usf_id'). '" '.$readonly.' style="width: 300px;" rows="2" cols="40">'. $field->getValue('usd_value'). '</textarea>';
@@ -356,15 +358,15 @@ function getFieldCode($field, $user, $new_user)
 }
 
 // Html-Kopf ausgeben
-if($new_user == 1)
+if($get_new_user == 1)
 {
     $g_layout['title'] = $g_l10n->get('PRO_ADD_USER');
 }
-elseif($new_user == 2)
+elseif($get_new_user == 2)
 {
     $g_layout['title'] = $g_l10n->get('SYS_REGISTRATION');
 }
-elseif($usr_id == $g_current_user->getValue('usr_id'))
+elseif($get_usr_id == $g_current_user->getValue('usr_id'))
 {
     $g_layout['title'] = $g_l10n->get('PRO_EDIT_MY_PROFILE');
 }
@@ -389,9 +391,9 @@ $g_layout['header'] .= '
 				';
 
 // setzt den Focus bei Neuanlagen/Registrierung auf das erste Feld im Dialog
-if($new_user == 1 || $new_user == 2)
+if($get_new_user == 1 || $get_new_user == 2)
 {
-    if($new_user == 1)
+    if($get_new_user == 1)
     {
     	$first_field = reset($g_current_user->userFieldData);
         $focusField = 'usf-'.$first_field->getValue('usf_id');
@@ -407,7 +409,7 @@ $g_layout['header'] .= '});
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
-<form action="'.$g_root_path.'/adm_program/modules/profile/profile_save.php?user_id='.$usr_id.'&amp;new_user='.$new_user.'" method="post">
+<form action="'.$g_root_path.'/adm_program/modules/profile/profile_save.php?user_id='.$get_usr_id.'&amp;new_user='.$get_new_user.'" method="post">
 <div class="formLayout" id="edit_profile_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">'; 
@@ -423,20 +425,20 @@ echo '
             
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
             // E-Mail ist Ausnahme und muss immer angezeigt werden
-            if($new_user == 2 
+            if($get_new_user == 2 
             && $g_preferences['registration_mode'] == 1 
             && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') == 'EMAIL'))
             {
                 $show_field = true;
             }
-            elseif($new_user == 2
+            elseif($get_new_user == 2
             && $g_preferences['registration_mode'] == 2)
             {
                 // bei der vollstaendigen Registrierung alle Felder anzeigen
                 $show_field = true;
             }
-            elseif($new_user != 2 
-            && ($usr_id == $g_current_user->getValue('usr_id') || $g_current_user->editUsers()))
+            elseif($get_new_user != 2 
+            && ($get_usr_id == $g_current_user->getValue('usr_id') || $g_current_user->editUsers()))
             {
                 // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
                 // Leiter duerfen dies nicht !!!
@@ -464,19 +466,19 @@ echo '
                 if($field->getValue('cat_name_intern') == 'MASTER_DATA')
                 {
                     // bei den Stammdaten erst einmal Benutzername und Passwort anzeigen
-                    if($usr_id > 0 || $new_user == 2)
+                    if($get_usr_id > 0 || $get_new_user == 2)
                     {
                         echo '<li>
                             <dl>
                                 <dt><label for="usr_login_name">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
                                 <dd>
                                     <input type="text" id="usr_login_name" name="usr_login_name" style="width: 200px;" maxlength="35" value="'. $user->getValue('usr_login_name'). '" ';
-                                    if($g_current_user->isWebmaster() == false && $new_user == 0)
+                                    if($g_current_user->isWebmaster() == false && $get_new_user == 0)
                                     {
                                         echo ' readonly="readonly" ';
                                     }
                                     echo ' />';
-                                    if($new_user > 0)
+                                    if($get_new_user > 0)
                                     {
                                         echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_USERNAME_DESCRIPTION&amp;inline=true"><img 
@@ -487,7 +489,7 @@ echo '
                             </dl>
                         </li>';
 
-                        if($new_user == 2)
+                        if($get_new_user == 2)
                         {
                             echo '<li>
                                 <dl>
@@ -514,16 +516,16 @@ echo '
                         else
                         {
                             // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-                            if($g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $usr_id )
+                            if($g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $get_usr_id )
                             {
                                 echo '<li>
                                     <dl>
                                         <dt><label>'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
-                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $usr_id. '&amp;inline=1"><img 
+                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $get_usr_id. '&amp;inline=1"><img 
                                                 	src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" title="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" /></a>
-                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $usr_id. '&amp;inline=1">'.$g_l10n->get('SYS_CHANGE_PASSWORD').'</a>
+                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $get_usr_id. '&amp;inline=1">'.$g_l10n->get('SYS_CHANGE_PASSWORD').'</a>
                                             </span>
                                         </dd>
                                     </dl>
@@ -539,7 +541,7 @@ echo '
             if($show_field == true)
             {
                 // Html des Feldes ausgeben
-                echo getFieldCode($field, $user, $new_user);
+                echo getFieldCode($field, $user, $get_new_user);
             }
         }
         
@@ -548,7 +550,7 @@ echo '
 
         // User, die sich registrieren wollen, bekommen jetzt noch das Captcha praesentiert,
         // falls es in den Orgaeinstellungen aktiviert wurde...
-        if ($new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
+        if ($get_new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
         {
             echo '
             <ul class="formFieldList">
@@ -591,7 +593,7 @@ echo '
         }
 
         // Bild und Text fuer den Speichern-Button
-        if($new_user == 2)
+        if($get_new_user == 2)
         {
             // Registrierung
             $btn_image = 'email.png';
@@ -603,7 +605,7 @@ echo '
             $btn_text  = $g_l10n->get('SYS_SAVE');
         }
 
-        if($new_user == 0)
+        if($get_new_user == 0)
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';

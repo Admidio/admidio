@@ -150,28 +150,28 @@ echo '
                 <dl>
                     <dt><label for="usf_type">'.$g_l10n->get('ORG_DATATYPE').':</label></dt>
                     <dd>';
-                        $user_field_text = array(''         => '- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -',
-                                                 'CHECKBOX' => $g_l10n->get('SYS_CHECKBOX'),
-                                                 'DATE'     => $g_l10n->get('SYS_DATE'),
-                                                 'DROPDOWN' => $g_l10n->get('SYS_DROPDOWN_LISTBOX'),
-                                                 'EMAIL'    => $g_l10n->get('SYS_EMAIL'),
-                                                 'RADIO_BUTTON' => $g_l10n->get('SYS_RADIO_BUTTON'),
-                                                 'TEXT'     => $g_l10n->get('SYS_TEXT').' (50)',
-                                                 'TEXT_BIG' => $g_l10n->get('SYS_TEXT').' (255)',
-                                                 'URL'      => $g_l10n->get('ORG_URL'),
-                                                 'NUMERIC'  => $g_l10n->get('SYS_NUMBER'));
+                        $userFieldText = array(''         => '- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -',
+                                               'CHECKBOX' => $g_l10n->get('SYS_CHECKBOX'),
+                                               'DATE'     => $g_l10n->get('SYS_DATE'),
+                                               'DROPDOWN' => $g_l10n->get('SYS_DROPDOWN_LISTBOX'),
+                                               'EMAIL'    => $g_l10n->get('SYS_EMAIL'),
+                                               'RADIO_BUTTON' => $g_l10n->get('SYS_RADIO_BUTTON'),
+                                               'TEXT'     => $g_l10n->get('SYS_TEXT').' (50)',
+                                               'TEXT_BIG' => $g_l10n->get('SYS_TEXT').' (255)',
+                                               'URL'      => $g_l10n->get('ORG_URL'),
+                                               'NUMERIC'  => $g_l10n->get('SYS_NUMBER'));
 
                         if($user_field->getValue('usf_system') == 1)
                         {
                             // bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
                             echo '<input type="text" name="usf_type" id="usf_type" readonly="readonly" style="width: 150px;" 
-                                maxlength="30" value="'. $user_field_text[$user_field->getValue('usf_type')]. '" />';
+                                maxlength="30" value="'. $userFieldText[$user_field->getValue('usf_type')]. '" />';
                         }
                         else
                         {
                             echo '<select size="1" name="usf_type" id="usf_type">';
                                 // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
-                                foreach($user_field_text as $key => $value)
+                                foreach($userFieldText as $key => $value)
                                 {
                                     echo '<option value="'.$key.'" '; 
                                     if($user_field->getValue('usf_type') == $key) 

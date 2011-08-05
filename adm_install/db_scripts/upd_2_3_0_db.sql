@@ -155,6 +155,7 @@ ALTER TABLE %PREFIX%_texts CHANGE COLUMN `txt_id` `txt_id` integer unsigned not 
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_id` `usf_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_cat_id` `usf_cat_id` integer unsigned not null;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_usr_id_create` `usf_usr_id_create` integer unsigned;
+ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_type` `usf_type` varchar(30);
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_timestamp_create` `usf_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_usr_id_change` `usf_usr_id_change` integer unsigned;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_timestamp_change` `usf_timestamp_change` timestamp;

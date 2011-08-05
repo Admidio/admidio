@@ -216,35 +216,17 @@ echo '
                     }
                 echo '</td>
                 <td>';
-                    if($row['usf_type'] == 'DATE')
-                    {
-                        echo $g_l10n->get('SYS_DATE');
-                    }
-                    elseif($row['usf_type'] == 'EMAIL')
-                    {
-                        echo $g_l10n->get('SYS_EMAIL');
-                    }
-                    elseif($row['usf_type'] == 'CHECKBOX')
-                    {
-                        echo $g_l10n->get('SYS_YES').' / '.$g_l10n->get('SYS_NO');
-                    }
-                    elseif($row['usf_type'] == 'TEXT')
-                    {
-                        echo $g_l10n->get('SYS_TEXT').' (50)';
-                    }
-                    elseif($row['usf_type'] == 'TEXT_BIG')
-                    {
-                        echo $g_l10n->get('SYS_TEXT').' (255)';
-                    }
-                    elseif($row['usf_type'] == 'URL')
-                    {
-                        echo $g_l10n->get('ORG_URL');
-                    }
-                    elseif($row['usf_type'] == 'NUMERIC')
-                    {
-                        echo $g_l10n->get('SYS_NUMBER');
-                    }
-                echo '</td>
+                    $userFieldText = array('CHECKBOX' => $g_l10n->get('SYS_CHECKBOX'),
+                                           'DATE'     => $g_l10n->get('SYS_DATE'),
+                                           'DROPDOWN' => $g_l10n->get('SYS_DROPDOWN_LISTBOX'),
+                                           'EMAIL'    => $g_l10n->get('SYS_EMAIL'),
+                                           'RADIO_BUTTON' => $g_l10n->get('SYS_RADIO_BUTTON'),
+                                           'TEXT'     => $g_l10n->get('SYS_TEXT').' (50)',
+                                           'TEXT_BIG' => $g_l10n->get('SYS_TEXT').' (255)',
+                                           'URL'      => $g_l10n->get('ORG_URL'),
+                                           'NUMERIC'  => $g_l10n->get('SYS_NUMBER'));
+					echo $userFieldText[$row['usf_type']].
+                '</td>
                 <td style="text-align: right; width: 45px;">
                     <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$row['usf_id'].'"><img 
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
