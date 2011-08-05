@@ -17,25 +17,11 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('roles_functions.php');
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET['user_id']))
-{
-    if(is_numeric($_GET['user_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    // Daten des uebergebenen Users anzeigen
-    $a_user_id = $_GET['user_id'];
-}
-else
-{
-    // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
-    $a_user_id = $g_current_user->getValue('usr_id');
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_usr_id = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $g_current_user->getValue('usr_id'));
 
 //Testen ob Recht besteht Profil einzusehn
-if(!$g_current_user->viewProfile($a_user_id))
+if(!$g_current_user->viewProfile($get_usr_id))
 {
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
@@ -80,6 +66,12 @@ function getFieldCode($field, $user_id)
                 }
             }
             break;
+            
+        case 'DROPDOWN':
+        case 'RADIO_BUTTON':
+        	$arrListValues = explode("\n", $field->getValue('usf_value_list'));
+			$value = $arrListValues[$field->getValue('usd_value')-1];
+        	break;
 
         case 'EMAIL':
             // E-Mail als Link darstellen
@@ -198,7 +190,7 @@ function getFieldCode($field, $user_id)
 }
 
 // User auslesen
-$user = new User($g_db, $a_user_id);
+$user = new User($g_db, $get_usr_id);
 
 unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken

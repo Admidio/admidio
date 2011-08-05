@@ -46,8 +46,6 @@ if($get_usf_id > 0)
     }
 }
 
-$err_code = '';
-
 if($get_mode == 1)
 {
    // Feld anlegen oder updaten
@@ -112,6 +110,7 @@ if($get_mode == 1)
     {
         $_POST['usf_mandatory'] = 0;
     }
+    error_log($_POST['usf_type']);
     
     if($user_field->getValue('usf_system') == 1)
     {
@@ -140,7 +139,9 @@ if($get_mode == 1)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['fields_request']);
 
-    $err_code = 'SYS_SAVE_DATA';
+	// zu den Organisationseinstellungen zurueck
+	$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+	$g_message->show($g_l10n->get('SYS_SAVE_DATA'));
 }
 elseif($get_mode == 2)
 {
@@ -165,7 +166,4 @@ elseif($get_mode == 4)
     exit();
 }
          
-// zu den Organisationseinstellungen zurueck
-$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($g_l10n->get($err_code));
 ?>

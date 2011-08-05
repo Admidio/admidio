@@ -537,7 +537,7 @@ create table %PREFIX%_user_fields
 (
    usf_id                         integer       unsigned not null AUTO_INCREMENT,
    usf_cat_id                     integer       unsigned not null,
-   usf_type                       varchar(10)   not null,
+   usf_type                       varchar(30)   not null,
    usf_name_intern                varchar(110)  not null,
    usf_name                       varchar(100)  not null,
    usf_description                text,
