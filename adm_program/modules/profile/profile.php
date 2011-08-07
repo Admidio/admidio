@@ -66,12 +66,6 @@ function getFieldCode($field, $user_id)
                 }
             }
             break;
-            
-        case 'DROPDOWN':
-        case 'RADIO_BUTTON':
-        	$arrListValues = explode("\n", $field->getValue('usf_value_list'));
-			$value = $arrListValues[$field->getValue('usd_value')-1];
-        	break;
 
         case 'EMAIL':
             // E-Mail als Link darstellen

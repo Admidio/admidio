@@ -16,32 +16,19 @@
  *
  *****************************************************************************/
 
-require_once("../../system/common.php");
-require_once("../../system/login_valid.php");
-require_once("../../system/classes/table_members.php");
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_members.php');
 
-// Uebergabevariablen pruefen
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_usr_id = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
+$get_rol_id = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
+$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
 
-if(isset($_REQUEST['user_id']) && is_numeric($_REQUEST['user_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(isset($_REQUEST['rol_id']) && is_numeric($_REQUEST['rol_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if(is_numeric($_REQUEST['mode']) == false
-|| $_REQUEST['mode'] < 1 || $_REQUEST['mode'] > 3)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-if($_REQUEST['mode'] == 1)
+if($get_mode == 1)
 {
     // Userdaten aus Datenbank holen
-    $user = new User($g_db, $_REQUEST['user_id']);
+    $user = new User($g_db, $get_usr_id);
 
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
     header('Content-Disposition: attachment; filename="'. urlencode($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')). '.vcf"');
@@ -51,25 +38,25 @@ if($_REQUEST['mode'] == 1)
 
     echo $user->getVCard();
 }
-elseif($_REQUEST['mode'] == 2)
+elseif($get_mode == 2)
 {
     // Mitgliedschaft bei einer aktuellen Rolle beenden
     if($g_current_user->assignRoles())
     {
         $member = new TableMembers($g_db);
-        $member->stopMembership($_REQUEST['rol_id'], $_REQUEST['user_id']);
+        $member->stopMembership($get_rol_id, $get_usr_id);
 
         // Beendigung erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo "done";
     }
 }
-elseif($_REQUEST['mode'] == 3)
+elseif($get_mode == 3)
 {
     // Ehemalige Rollenzuordnung entfernen
     if($g_current_user->isWebmaster())
     {
         $member = new TableMembers($g_db);
-        $member->readData(array('rol_id' => $_REQUEST['rol_id'], 'usr_id' => $_REQUEST['user_id']));
+        $member->readData(array('rol_id' => $get_rol_id, 'usr_id' => $get_usr_id));
         $member->delete();
 
         // Entfernen erfolgreich -> Rueckgabe fuer XMLHttpRequest

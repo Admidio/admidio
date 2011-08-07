@@ -91,6 +91,15 @@ class TableUserData extends TableAccess
                 }
                 $value = $date->format($format);
             }
+        	elseif($this->dbColumns['usf_type'] == 'DROPDOWN'
+        	    || $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
+        	{
+        		if($value > 0)
+        		{
+        			$arrListValues = explode("\r\n", $this->getValue('usf_value_list'));
+					$value = $arrListValues[$value-1];
+				}
+        	}
             elseif($this->dbColumns['usf_name_intern'] == 'COUNTRY' && strlen($value) > 0)
             {
                 // beim Land die sprachabhaengige Bezeichnung auslesen

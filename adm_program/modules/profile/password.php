@@ -17,33 +17,27 @@
  
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+
+$g_message->setExcludeThemeBody();
  
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_usr_id = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
+$get_inline = admFuncVariableIsValid($_GET, 'inline', 'numeric', 1);
+$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
+
 // nur Webmaster duerfen fremde Passwoerter aendern
-if($g_current_user->isWebmaster() == false && $g_current_user->getValue('usr_id') != $_GET['usr_id'])
+if($g_current_user->isWebmaster() == false && $g_current_user->getValue('usr_id') != $get_usr_id)
 {
-    $g_message->setExcludeThemeBody();
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
 
-if(isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
-{
-    $g_message->setExcludeThemeBody();
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-$inlineView = 0;
-if(isset($_GET['inline']) && is_numeric($_GET['inline']) == true)
-{
-    $inlineView = 1;
-}
-
-if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
+if($get_mode == 1)
 {
     /***********************************************************************/
     /* Formular verarbeiten */
     /***********************************************************************/
-    if($g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $_GET['usr_id'] )
+    if($g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $get_usr_id )
     {
         $_POST['old_password'] = '';
     }
@@ -57,11 +51,11 @@ if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
             if ($_POST['new_password'] == $_POST['new_password2'])
             {
                 // pruefen, ob altes Passwort korrekt eingegeben wurde              
-                $user = new User($g_db, $_GET['usr_id']);
+                $user = new User($g_db, $get_usr_id);
                 $old_password_crypt = md5($_POST['old_password']);
 
                 // Webmaster duerfen fremde Passwörter so aendern
-                if($user->getValue('usr_password') == $old_password_crypt || $g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $_GET['usr_id'] )
+                if($user->getValue('usr_password') == $old_password_crypt || $g_current_user->isWebmaster() && $g_current_user->getValue('usr_id') != $get_usr_id )
                 {
                     $user->setValue('usr_password', $_POST['new_password']);
                     $user->save();
@@ -100,7 +94,7 @@ if(isset($_GET['mode']) && is_numeric($_GET['mode']) && $_GET['mode'] == 1)
     {
         $phrase = $g_l10n->get('SYS_FIELDS_EMPTY');
     }
-	if ($inlineView == 0)
+	if ($get_inline == 0)
 	{
 		$g_message->setExcludeThemeBody();
 		$g_message->show($phrase);
@@ -119,19 +113,19 @@ else
     // Html-Kopf ausgeben
     $g_layout['title']    = $g_l10n->get('PRO_EDIT_PASSWORD');
     $g_layout['includes'] = false;
-    if ($inlineView == 0)
+    if ($get_inline == 0)
 	{
 		require(SERVER_PATH. '/adm_program/system/overall_header.php');
 	}
 
     // Html des Modules ausgeben
     echo '
-    <form id="passwordForm" action="'. $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $_GET['usr_id']. '&amp;mode=1&amp;inline=1" method="post">
+    <form id="passwordForm" action="'. $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $get_usr_id. '&amp;mode=1&amp;inline=1" method="post">
     <div class="formLayout" id="password_form" style="width: 300px">
         <div class="formHead">'. $g_layout['title']. '</div>
         <div class="formBody">
             <ul class="formFieldList">';
-                if($g_current_user->getValue('usr_id') == $_GET['usr_id'] )
+                if($g_current_user->getValue('usr_id') == $get_usr_id )
                 {
                 echo'
                     <li>
@@ -170,7 +164,7 @@ else
             </div>
         </div>
     </form>';
-    if ($inlineView == 0)
+    if ($get_inline == 0)
 	{  
 		require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 	}

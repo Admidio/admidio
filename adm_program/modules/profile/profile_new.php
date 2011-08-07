@@ -196,7 +196,7 @@ function getFieldCode($field, $user, $get_new_user)
     }
     elseif($field->getValue('usf_type') == 'DROPDOWN')
     {
-		$arrListValues = explode("\n", $field->getValue('usf_value_list'));
+		$arrListValues = explode("\r\n", $field->getValue('usf_value_list'));
 		$position = 1;
 		
 		$value = '<select size="1" name="usf-'. $field->getValue('usf_id'). '" id="usf-'. $field->getValue('usf_id'). '">
@@ -211,7 +211,7 @@ function getFieldCode($field, $user, $get_new_user)
 			foreach($arrListValues as $key => $valueList)
 			{
 				$value .= '<option value="'.$position.'" '; 
-				if($field->getValue('usd_value') == $position) 
+				if($field->getValue('usd_value') == $valueList) 
 				{
 					$value .= ' selected="selected"';
 				}
@@ -222,7 +222,7 @@ function getFieldCode($field, $user, $get_new_user)
 	}
     elseif($field->getValue('usf_type') == 'RADIO_BUTTON')
     {
-		$arrListValues = explode("\n", $field->getValue('usf_value_list'));
+		$arrListValues = explode("\r\n", $field->getValue('usf_value_list'));
 		$position = 1;
 		$value = '';
 
@@ -230,7 +230,7 @@ function getFieldCode($field, $user, $get_new_user)
 		foreach($arrListValues as $key => $valueList)
 		{
 	        $checkedPosition = 0;
-	        if($field->getValue('usd_value') == $position)
+	        if($field->getValue('usd_value') == $valueList)
 	        {
 	            $checkedPosition = ' checked="checked" ';
 	        }
