@@ -27,8 +27,8 @@ if($g_valid_login == false)
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_usr_id    = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$get_new_user = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
+$get_usr_id   = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$get_new_user = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 
 // pruefen, ob Modul aufgerufen werden darf
 switch($get_new_user)
@@ -169,7 +169,7 @@ if($g_current_user->isWebmaster() || $get_new_user > 0)
         {
             // pruefen, ob der Benutzername bereits vergeben ist
             $sql = 'SELECT usr_id FROM '. TBL_USERS. '
-                     WHERE usr_login_name LIKE "'. $_POST['usr_login_name']. '"';
+                     WHERE usr_login_name LIKE \''. $_POST['usr_login_name']. '\'';
             $g_db->query($sql);
 
             if($g_db->num_rows() > 0)
