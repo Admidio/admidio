@@ -131,6 +131,22 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                         $user->setValue($field->getValue('usf_name_intern'), '0');
                     }
                 }
+                elseif($field->getValue('usf_type') == 'DROPDOWN'
+                    || $field->getValue('usf_type') == 'RADIO_BUTTON')
+                {
+					// Position aus der Auswahlbox speichern
+					$arrListValues = explode("\r\n", $field->getValue('usf_value_list'));
+					$position = 0;
+					foreach($arrListValues as $key => $value)
+					{
+						if(strcmp($col_value, trim($arrListValues[$position])) == 0)
+						{
+							error_log('set');
+							$user->setValue($field->getValue('usf_name_intern'), $position+1);
+						}
+						$position++;
+					}
+                }
                 elseif($field->getValue('usf_type') == 'EMAIL')
                 {
                     $col_value = admStrToLower($col_value);

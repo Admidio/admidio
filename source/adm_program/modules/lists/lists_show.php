@@ -613,6 +613,16 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
 								$content = $date->format($g_preferences['system_date']);
 							}
                             break;
+
+                        case 'DROPDOWN':
+                        case 'RADIO_BUTTON':
+							if(strlen($row[$sql_column_number]) > 0)
+							{
+								// ausgewaehlten Text der Auswahlbox darstellen
+								$arrListValues = explode("\r\n", $g_current_user->getPropertyById($usf_id, 'usf_value_list'));
+								$content = $arrListValues[$row[$sql_column_number]-1];
+							}
+                            break;
     
                         case 'EMAIL':
                             // E-Mail als Link darstellen
