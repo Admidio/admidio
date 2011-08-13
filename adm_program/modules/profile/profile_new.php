@@ -198,6 +198,7 @@ function getFieldCode($field, $user, $get_new_user)
     {
 		$arrListValues = explode("\r\n", $field->getValue('usf_value_list'));
 		$position = 1;
+		$text     = '';
 		
 		$value = '<select size="1" name="usf-'. $field->getValue('usf_id'). '" id="usf-'. $field->getValue('usf_id'). '">
 			<option value="" ';
@@ -205,7 +206,11 @@ function getFieldCode($field, $user, $get_new_user)
                 {
                     $value .= ' selected="selected" ';
                 }
-			$value .= '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+                if($field->getValue('usf_mandatory') == 1)
+                {
+                    $text  .= '- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -';
+                }
+			$value .= '>'.$text.'</option>';
 
 			// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
 			foreach($arrListValues as $key => $valueList)
@@ -225,6 +230,17 @@ function getFieldCode($field, $user, $get_new_user)
 		$arrListValues = explode("\r\n", $field->getValue('usf_value_list'));
 		$position = 1;
 		$value = '';
+
+        if($field->getValue('usf_mandatory') == 0)
+        {
+	        $checkedPosition = 0;
+	        if(strlen($field->getValue('usd_value')) == 0)
+	        {
+	            $checkedPosition = ' checked="checked" ';
+	        }
+	        $value .= '<input type="radio" id="usf-'.$field->getValue('usf_id').'-0" name="usf-'. $field->getValue('usf_id'). '" value="" '.$checkedPosition.' '.$readonly.' />
+	            <label for="usf-'. $field->getValue('usf_id').'-0">---</label>';
+        }
 
 		// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
 		foreach($arrListValues as $key => $valueList)
