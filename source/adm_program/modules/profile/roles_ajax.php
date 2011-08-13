@@ -20,57 +20,25 @@ require_once('../../system/login_valid.php');
 require_once("../../system/classes/table_members.php");
 require_once('roles_functions.php');
 
-$action = 0;
-
-// Uebergabevariablen pruefen
-if(isset($_GET['user_id']))
-{
-    if(is_numeric($_GET['user_id']) == false)
-    {
-        die($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    // Daten des uebergebenen Users anzeigen
-    $a_user_id = $_GET['user_id'];
-}
-else
-{
-    // wenn nichts uebergeben wurde, dann eigene Daten anzeigen
-    $a_user_id = $g_current_user->getValue('usr_id');
-}
-
-//Testen ob Recht besteht Profil einzusehn
-if(!$g_current_user->viewProfile($a_user_id))
-{
-    die($g_l1n0->get('SYS_NO_RIGHTS'));
-}
-
-if(isset($_GET['action']))
-    {
-    if(is_numeric($_GET['action']) == false)
-    {
-        die($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    else
-    {
-        $action = $_GET['action'];
-    }
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$get_usr_id = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $g_current_user->getValue('usr_id'));
+$get_action = admFuncVariableIsValid($_GET, 'action', 'numeric', 0);
 
 // User auslesen
-$user = new User($g_db, $a_user_id);
+$user = new User($g_db, $get_usr_id);
 
-switch($action)
+switch($get_action)
 {
     case 0: // reload Role Memberships
         $count_show_roles 	= 0;
-        $result_role 		= getRolesFromDatabase($g_db,$a_user_id,$g_current_organization);
+        $result_role 		= getRolesFromDatabase($g_db,$get_usr_id,$g_current_organization);
         $count_role  		= $g_db->num_rows($result_role);
         getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,true,$g_l10n);
     break;
 
     case 1: // former reload Role Memberships
         $count_show_roles 	= 0;
-        $result_role 		= getFormerRolesFromDatabase($g_db,$a_user_id,$g_current_organization);
+        $result_role 		= getFormerRolesFromDatabase($g_db,$get_usr_id,$g_current_organization);
         $count_role  		= $g_db->num_rows($result_role);
         getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,true,$g_l10n);
         if($count_role == 0)
