@@ -32,7 +32,14 @@ function organizationClass()
 					organizationJS.toggleDiv($(this).attr("id").split("_",2)[0]);
 				});
 			}
-		}
+		}		
+		$("#accordion").accordion({
+			active: false,
+			autoHeight: false,
+			collapsible: true,
+			changestart: function(event, ui) { $.scrollTo(event.target,800); }
+		});
+		$("#org_longname").focus();
 	}
 	// Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
 	this.toggleDiv = function(element_id)
