@@ -34,10 +34,10 @@ elseif($g_preferences['enable_announcements_module'] == 2)
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_start    = funcVariableIsValid($_GET, 'start', 'numeric', 0);
-$get_headline = funcVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
-$get_ann_id   = funcVariableIsValid($_GET, 'id', 'numeric', 0);
-$get_date     = funcVariableIsValid($_GET, 'date', 'numeric');
+$get_start    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
+$get_ann_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_date     = admFuncVariableIsValid($_GET, 'date', 'numeric');
 
 if(strlen($get_date) > 0)
 {
@@ -220,7 +220,8 @@ else
             </div>
 
             <div class="boxBody">'.
-                $announcement->getDescription('HTML').'
+                $announcement->getValue('ann_description')
+                /*$announcement->getDescription('HTML')*/.'
                 <div class="editInformation">'.
                     $g_l10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'],  $announcement->getValue('ann_timestamp_create'));
 

@@ -36,8 +36,8 @@ if(!$g_current_user->editAnnouncements())
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_ann_id   = funcVariableIsValid($_GET, 'ann_id', 'numeric', 0);
-$get_headline = funcVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
+$get_ann_id   = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
@@ -74,17 +74,21 @@ else
 }
 //Script für BBCode laden
 $javascript = '';
-if ($g_preferences['enable_bbcode'] == 1)
+/*if ($g_preferences['enable_bbcode'] == 1)
 {
     $javascript = getBBcodeJS('ann_description');
-}
+}*/
 
 $g_layout['header'] = $javascript. '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/ckeditor/ckeditor.js"></script>
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
             $("#ann_headline").focus();
-        }); 
+            CKEDITOR.replace("ann_description", {toolbar: "Admidio", language: "'.$g_preferences['system_language'].'"
+            });
+        });
+        
     //--></script>';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -95,63 +99,66 @@ echo '
 <div class="formLayout" id="edit_announcements_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt><label for="ann_headline">'.$g_l10n->get('SYS_HEADLINE').':</label></dt>
-                    <dd>
-                        <input type="text" id="ann_headline" name="ann_headline" style="width: 345px;" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            ';
-         if ($g_preferences['enable_bbcode'] == 1)
+		<div class="groupBox" id="admAnnouncementTitle">
+			<div class="groupBoxHeadline" id="admAnnouncementTitleHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admAnnouncementTitleBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+				id="admAnnouncementTitleBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_TITLE').'
+			</div>
+
+			<div class="groupBoxBody" id="admAnnouncementTitleBody">
+                <ul class="formFieldList">
+                    <li>
+                        <div>
+                                <input type="text" id="ann_headline" name="ann_headline" style="width: 95%;" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
+                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        </div>
+                    </li>';
+                    
+        
+                    // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf 'global' gesetzt werden
+                    if($g_current_organization->getValue('org_org_id_parent') > 0
+                    || $g_current_organization->hasChildOrganizations())
+                    {
+                        echo '
+                        <li>
+                            <div>
+                                    <input type="checkbox" id="ann_global" name="ann_global" ';
+                                    if($announcement->getValue('ann_global') == 1)
+                                    {
+                                        echo ' checked="checked" ';
+                                    }
+                                    echo ' value="1" />
+                                    <label for="ann_global">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
+                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL&amp;inline=true"><img 
+                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
+                                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
+                            </div>
+                        </li>';
+                    }
+                echo '</ul>
+            </div>
+        </div>';
+
+/*         if ($g_preferences['enable_bbcode'] == 1)
          {
             printBBcodeIcons();
-         }
+         }*/
          echo '
-            <li>
-                <dl>
-                    <dt><label for="ann_description">'.$g_l10n->get('SYS_TEXT').':</label>';
-                        if($g_preferences['enable_bbcode'] == 1)
-                        {
-                            printEmoticons();
-                        }
-                    echo '</dt>
-                    <dd>
-                        <textarea id="ann_description" name="ann_description" style="width: 345px;" rows="10" cols="40">'. $announcement->getValue('ann_description'). '</textarea>
+		<div class="groupBox" id="admDescription">
+			<div class="groupBoxHeadline" id="admDescriptionHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
+				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_TEXT').'
+			</div>
+
+			<div class="groupBoxBody" id="admDescriptionBody">
+                <ul class="formFieldList">
+                    <li>
+                        <textarea id="ann_description" name="ann_description" style="width: 450px;" rows="12" cols="40">'. $announcement->getValue('ann_description'). '</textarea>
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>';
-
-            // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf 'global' gesetzt werden
-            if($g_current_organization->getValue('org_org_id_parent') > 0
-            || $g_current_organization->hasChildOrganizations())
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>&nbsp;</dt>
-                        <dd>
-                            <input type="checkbox" id="ann_global" name="ann_global" ';
-                            if($announcement->getValue('ann_global') == 1)
-                            {
-                                echo ' checked="checked" ';
-                            }
-                            echo ' value="1" />
-                            <label for="ann_global">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-        echo '</ul>
-
-        <hr />';
+                    </li>
+                </ul>
+            </div>
+        </div>';
 
         if($announcement->getValue('ann_usr_id_create') > 0)
         {

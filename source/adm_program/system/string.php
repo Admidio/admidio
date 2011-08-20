@@ -37,21 +37,35 @@ function admStrToUpper($string)
         return strtoupper($string);
     }
 }
+
+// removes html, php code and blancs at beginning and end 
+// of string or all elements of array without ckeditor variables !!!
+function admStrStripTagsSpecial($srcArray)
+{
+    foreach($srcArray as $key => $value)
+    {
+        if($key != 'ann_description') // ckeditor-variable
+        {
+            $srcArray[$key] = strStripTags($value);
+        }
+    }
+    return $srcArray;
+}
  
-// entfernt Html-, PHP-Codes und Spaces am Anfang und Ende
-// eines Strings oder aller Elemente eines Arrays
+// removes html, php code and blancs at beginning and end 
+// of string or all elements of array
 function strStripTags($srcString)
 {
     if(is_array($srcString))
     {
-        // Funktion fuer jedes Arrayelement aufrufen
+        // call function for every array element
         $srcString = array_map('strStripTags', $srcString);
     }
     else
     {
-        // Spaces vorne und hinten entfernen
+        // remove blancs at beginning and end
         $srcString = trim($srcString);
-        // HTML und PHP Tags entfernen
+        // removes html and php code
         $srcString = strip_tags($srcString);
     }
 

@@ -51,10 +51,10 @@ require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/forum/forum.php');
 
 // Variablen von HMTL & PHP-Code befreien
-$_REQUEST = array_map('strStripTags', $_REQUEST);
-$_GET     = array_map('strStripTags', $_GET);
-$_POST    = array_map('strStripTags', $_POST);
-$_COOKIE  = array_map('strStripTags', $_COOKIE);
+$_REQUEST = admStrStripTagsSpecial($_REQUEST);
+$_GET     = admStrStripTagsSpecial($_GET);
+$_POST    = admStrStripTagsSpecial($_POST);
+$_COOKIE  = admStrStripTagsSpecial($_COOKIE);
 
 // Anfuehrungszeichen escapen, damit DB-Abfragen sicher sind
 if(get_magic_quotes_gpc() == false)
