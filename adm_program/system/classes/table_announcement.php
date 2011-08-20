@@ -57,7 +57,7 @@ class TableAnnouncement extends TableAccess
     // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
     // type = 'HTML'   : BB-Code in HTML umgewandelt
     // type = 'BBCODE' : Beschreibung mit BBCode-Tags
-    public function getDescription($type = 'HTML')
+/*    public function getDescription($type = 'HTML')
     {
         global $g_preferences;
         $description = '';
@@ -82,6 +82,20 @@ class TableAnnouncement extends TableAccess
             $description = nl2br($this->getValue('ann_description'));
         }
         return $description;
+    }*/
+    
+    public function getValue($field_name, $format = '')
+    {
+        if($field_name == 'ann_description')
+        {
+            $value = $this->dbColumns['ann_description'];
+        }
+        else
+        {
+            $value = parent::getValue($field_name, $format);
+        }
+
+        return $value;
     }
 
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
@@ -95,6 +109,15 @@ class TableAnnouncement extends TableAccess
         }
 
         parent::save($updateFingerPrint);
+    }
+    
+    public function setValue($field_name, $field_value)
+    {
+        if($field_name == 'ann_description')
+        {
+            return parent::setValue($field_name, $field_value, false);
+        }
+        return parent::setValue($field_name, $field_value);
     }
 }
 ?>

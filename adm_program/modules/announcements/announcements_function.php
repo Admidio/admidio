@@ -14,9 +14,10 @@
  *
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/login_valid.php');
-require('../../system/classes/table_announcement.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_announcement.php');
+require_once('../../libs/htmlawed/htmlawed.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
@@ -66,6 +67,10 @@ if($get_mode == 1)
     {
         $_POST['ann_global'] = 0;
     }
+    
+    // make html in description secure
+    $_POST['ann_description'] = stripslashes($_POST['ann_description']);
+    $_POST['ann_description'] = htmLawed($_POST['ann_description']);
     
     // POST Variablen in das Ankuendigungs-Objekt schreiben
     foreach($_POST as $key => $value)

@@ -44,9 +44,9 @@ $arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $key => $value)
 {
-	$organizations = $organizations. '"'.$value.'",';
+	$organizations = $organizations. '\''.$value.'\',';
 }
-$organizations = $organizations. '"'. $g_current_organization->getValue("org_shortname"). '"';
+$organizations = $organizations. '\''. $g_current_organization->getValue('org_shortname'). '\'';
 
 // die neuesten 10 Ankuendigungen aus der DB fischen...
 $sql = 'SELECT ann.*, 
