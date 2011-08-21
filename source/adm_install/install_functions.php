@@ -80,9 +80,7 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
                 <div class="formHead" style="text-align: left; letter-spacing: 0em;">'. $headline. '</div>
     
                 <div class="formBody" style="text-align: left;">
-                    <p class="bigFontSize">'.
-                        $message.
-                    '</p>
+                    <p>'.$message.'</p>
     
                     <div class="formSubmit">
                         <button type="button" id="next_page" name="next_page" onclick="startUpdate()" value="'.$icon_text.'"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>';
