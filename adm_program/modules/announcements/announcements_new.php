@@ -16,12 +16,8 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/ckeditor_special.php');
 require_once('../../system/classes/table_announcement.php');
-
-if ($g_preferences['enable_bbcode'] == 1)
-{
-    require_once('../../system/bbcode.php');
-}
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_announcements_module'] == 0)
@@ -63,6 +59,9 @@ if(isset($_SESSION['announcements_request']))
     unset($_SESSION['announcements_request']);
 }
 
+// create an object of ckeditor and replace textarea-element
+$ckEditor = new CKEditorSpecial();
+
 // Html-Kopf ausgeben
 if($get_ann_id > 0)
 {
@@ -72,21 +71,13 @@ else
 {
     $g_layout['title'] = $g_l10n->get('SYS_CREATE_VAR', $g_l10n->get('ANN_ANNOUNCEMENT'));
 }
-//Script für BBCode laden
-$javascript = '';
-/*if ($g_preferences['enable_bbcode'] == 1)
-{
-    $javascript = getBBcodeJS('ann_description');
-}*/
 
-$g_layout['header'] = $javascript. '
+$g_layout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/ckeditor/ckeditor.js"></script>
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
             $("#ann_headline").focus();
-            CKEDITOR.replace("ann_description", {toolbar: "Admidio", language: "'.$g_preferences['system_language'].'"
-            });
         });
         
     //--></script>';
@@ -137,13 +128,7 @@ echo '
                     }
                 echo '</ul>
             </div>
-        </div>';
-
-/*         if ($g_preferences['enable_bbcode'] == 1)
-         {
-            printBBcodeIcons();
-         }*/
-         echo '
+        </div>
 		<div class="groupBox" id="admDescription">
 			<div class="groupBoxHeadline" id="admDescriptionHead">
 				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
@@ -153,8 +138,8 @@ echo '
 			<div class="groupBoxBody" id="admDescriptionBody">
                 <ul class="formFieldList">
                     <li>
-                        <textarea id="ann_description" name="ann_description" style="width: 450px;" rows="12" cols="40">'. $announcement->getValue('ann_description'). '</textarea>
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                         '.$ckEditor->createDefaultEditor('ann_description', $announcement->getValue('ann_description')).'
+                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </li>
                 </ul>
             </div>

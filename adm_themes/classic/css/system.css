@@ -13,14 +13,6 @@
 
 /* Allgemeine Anpassungen */
 
-.defaultFontSize, body {
-    font-size:          10pt;
-}
-
-.bigFontSize {
-    font-size:          12pt;
-}
-
 .veryBigFontSize {
     font-size:          14pt;
     font-weight:        bold;
@@ -66,9 +58,9 @@ img {
     border-width:       thin;
 }
 
-textarea {
-    font-family:        arial, sans-serif;
-    font-size:          10pt;
+textarea, input {
+    font-family:        Arial, sans-serif;
+    font-size:          11pt;
 }
 
 /* Hack fuer IE6, damit dieser lange Buttons vernuenftig darstellt */

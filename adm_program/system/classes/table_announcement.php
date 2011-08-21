@@ -52,37 +52,6 @@ class TableAnnouncement extends TableAccess
     
         return false;
     }
-
-    // liefert die Beschreibung je nach Type zurueck
-    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
-    // type = 'HTML'   : BB-Code in HTML umgewandelt
-    // type = 'BBCODE' : Beschreibung mit BBCode-Tags
-/*    public function getDescription($type = 'HTML')
-    {
-        global $g_preferences;
-        $description = '';
-
-        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-        if($g_preferences['enable_bbcode'] == 1 && $type != 'BBCODE')
-        {
-            if(is_object($this->bbCode) == false)
-            {
-                $this->bbCode = new ubbParser();
-            }
-
-            $description = $this->bbCode->parse($this->getValue('ann_description'));
-
-            if($type == 'PLAIN')
-            {
-                $description = strStripTags($description);
-            }
-        }
-        else
-        {
-            $description = nl2br($this->getValue('ann_description'));
-        }
-        return $description;
-    }*/
     
     public function getValue($field_name, $format = '')
     {
