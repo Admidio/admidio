@@ -123,7 +123,8 @@ function getFieldCode($field, $user, $get_new_user)
     $readonly = '';
     if($field->getValue('usf_disabled') == 1 && $g_current_user->editUsers() == false && $get_new_user == 0)
     {
-        if($field->getValue('usf_type') == 'CHECKBOX' || $field->getValue('usf_name_intern') == 'GENDER')
+        if($field->getValue('usf_type') == 'CHECKBOX'     || $field->getValue('usf_type') == 'DROPDOWN' 
+        || $field->getValue('usf_type') == 'RADIO_BUTTON' || $field->getValue('usf_name_intern') == 'COUNTRY')
         {
             $readonly = ' disabled="disabled" ';
         }
@@ -134,29 +135,11 @@ function getFieldCode($field, $user, $get_new_user)
     }
 
     // Code fuer die einzelnen Felder zusammensetzen    
-    if($field->getValue('usf_name_intern') == 'GENDER')
-    {
-        $checked_female = '';
-        $checked_male   = '';
-        if($field->getValue('usd_value') == 2)
-        {
-            $checked_female = ' checked="checked" ';
-        }
-        elseif($field->getValue('usd_value') == 1)
-        {
-            $checked_male = ' checked="checked" ';
-        }
-        $value = '<input type="radio" id="female" name="usf-'. $field->getValue('usf_id'). '" value="2" '.$checked_female.' '.$readonly.' />
-            <label for="female"><img src="'. THEME_PATH. '/icons/female.png" title="'.$g_l10n->get('SYS_FEMALE').'" alt="'.$g_l10n->get('SYS_FEMALE').'" /></label>
-            &nbsp;
-            <input type="radio" id="male" name="usf-'. $field->getValue('usf_id'). '" value="1" '.$checked_male.' '.$readonly.' />
-            <label for="male"><img src="'. THEME_PATH. '/icons/male.png" title="'.$g_l10n->get('SYS_MALE').'" alt="'.$g_l10n->get('SYS_MALE').'" /></label>';
-    }
-    elseif($field->getValue('usf_name_intern') == 'COUNTRY')
+    if($field->getValue('usf_name_intern') == 'COUNTRY')
     {
         //Laenderliste oeffnen
         $value = '
-		<select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '">
+		<select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" '.$readonly.'>
 			<option value="" ';
                 if(strlen($g_preferences['default_country']) == 0
                 && strlen($field->getValue('usd_value')) == 0)
@@ -200,7 +183,7 @@ function getFieldCode($field, $user, $get_new_user)
 		$position = 1;
 		$text     = '';
 		
-		$value = '<select size="1" name="usf-'. $field->getValue('usf_id'). '" id="usf-'. $field->getValue('usf_id'). '">
+		$value = '<select size="1" name="usf-'.$field->getValue('usf_id').'" id="usf-'.$field->getValue('usf_id').'" '.$readonly.'>
 			<option value="" ';
                 if(strlen($field->getValue('usd_value')) == 0)
                 {

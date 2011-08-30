@@ -145,16 +145,18 @@ class Language
                 }
             }
         }
+        // no text found then search in reference language for a string
         elseif($this->referenceLanguage != $this->language)
         {
             $text = $this->getReferenceText($text_id, $var1, $var2, $var3, $var4);
-					
-			// wurde kein Text gefunden, dann dies ausgeben
-			if($this->defaultL10nObject == true && strlen($text) == 0)
-			{
-				$text = '#undefined text#';
-			}
         }
+					
+		// no text found then write #undefined text#
+		if($this->defaultL10nObject == true && strlen($text) == 0)
+		{
+			$text = '#undefined text#';
+		}
+
         return $text;
     }
 

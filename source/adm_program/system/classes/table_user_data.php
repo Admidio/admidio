@@ -77,6 +77,8 @@ class TableUserData extends TableAccess
     // Methode formatiert bei Datumsfeldern in das eingestellte Datumsformat
     public function getValue($field_name, $format = '')
     {
+        global $g_l10n;
+    
         $value = parent::getValue($field_name, $format);
 
         if($field_name == 'usd_value')
@@ -109,6 +111,14 @@ class TableUserData extends TableAccess
                 $value = $g_l10n->getCountryByCode($value);
             }
         }
+        elseif($field_name == 'usf_name')
+        {
+            // if text is a translation-id then translate it
+            if(strpos($value, '_') == 3)
+			{
+                $value = $g_l10n->get(admStrToUpper($value));
+			}
+        }
 		elseif($field_name == 'usf_value_list')
 		{
         	if($this->dbColumns['usf_type'] == 'DROPDOWN'
@@ -123,15 +133,40 @@ class TableUserData extends TableAccess
 						// if value is imagefile or imageurl then show image
 						if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
 						{
-							if(isValidFileName($listValue, true) == 0)
+						    // if there is imagefile and text separated by | then explode them
+ 						    if(strpos($listValue, '|') > 0)
+ 						    {
+                                $listValueImage = substr($listValue, 0, strpos($listValue, '|'));
+                                $listValueText  = substr($listValue, strpos($listValue, '|') + 1);
+ 						    }
+ 						    else
+ 						    {
+                                $listValueImage = $listValue;
+                                $listValueText  = $this->getValue('usf_name');
+ 						    }
+ 						    
+ 						    // if text is a translation-id then translate it
+ 						    if(strpos($listValueText, '_') == 3)
+ 						    {
+                                $listValueText = $g_l10n->get(admStrToUpper($listValueText));
+ 						    }
+
+                            // create html for optionbox entry
+							if(isValidFileName($listValueImage, true) == 0)
 							{
-									$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValue.'" alt="'.$this->getValue('usf_name').'" />';
+									$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
 							}
-							elseif(strpos(admStrToLower($listValue), 'http') == 0 && strValidCharacters($listValue, 'url'))
+							elseif(strpos(admStrToLower($listValueImage), 'http') == 0 && strValidCharacters($listValueImage, 'url'))
 							{
-								$listValue = '<img src="'.$listValue.'" alt="'.$this->getValue('usf_name').'" />';
+								$listValue = '<img src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
 							}
 						}
+					}
+
+					// if text is a translation-id then translate it
+					if(strpos($listValue, '_') == 3)
+					{
+                        $listValue = $g_l10n->get(admStrToUpper($listValue));
 					}
 				}
 				$value = $arrListValues;
