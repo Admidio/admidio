@@ -282,9 +282,9 @@ if($get_mode != 'csv')
 
             echo '<li>
                 <span class="iconTextLink">
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'\', \'_blank\')"><img
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'&amp;show_members='.$get_show_members.'\', \'_blank\')"><img
                     src="'. THEME_PATH. '/icons/print.png" alt="'.$g_l10n->get('LST_PRINT_PREVIEW').'" title="'.$g_l10n->get('LST_PRINT_PREVIEW').'" /></a>
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'\', \'_blank\')">'.$g_l10n->get('LST_PRINT_PREVIEW').'</a>
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'&amp;show_members='.$get_show_members.'\', \'_blank\')">'.$g_l10n->get('LST_PRINT_PREVIEW').'</a>
                 </span>
             </li>
             <li>
@@ -619,7 +619,7 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
 							if(strlen($row[$sql_column_number]) > 0)
 							{
 								// ausgewaehlten Text der Auswahlbox darstellen
-								$arrListValues = explode("\r\n", $g_current_user->getPropertyById($usf_id, 'usf_value_list'));
+								$arrListValues = $g_current_user->getPropertyById($usf_id, 'usf_value_list');
 								$content = $arrListValues[$row[$sql_column_number]-1];
 							}
                             break;

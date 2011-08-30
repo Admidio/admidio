@@ -94,10 +94,12 @@ class TableUserData extends TableAccess
         	elseif($this->dbColumns['usf_type'] == 'DROPDOWN'
         	    || $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
         	{
+				// the value in db is only the position, now search for the text
         		if($value > 0)
         		{
-        			$arrListValues = explode("\r\n", $this->getValue('usf_value_list'));
+        			$arrListValues = $this->getValue('usf_value_list');
 					$value = $arrListValues[$value-1];
+					
 				}
         	}
             elseif($this->dbColumns['usf_name_intern'] == 'COUNTRY' && strlen($value) > 0)
@@ -107,6 +109,35 @@ class TableUserData extends TableAccess
                 $value = $g_l10n->getCountryByCode($value);
             }
         }
+		elseif($field_name == 'usf_value_list')
+		{
+        	if($this->dbColumns['usf_type'] == 'DROPDOWN'
+        	|| $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
+			{
+				$arrListValues = explode("\r\n", $value);
+
+				foreach($arrListValues as $key => &$listValue)
+				{
+					if($this->dbColumns['usf_type'] == 'RADIO_BUTTON')
+					{
+						// if value is imagefile or imageurl then show image
+						if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+						{
+							if(isValidFileName($listValue, true) == 0)
+							{
+									$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValue.'" alt="'.$this->getValue('usf_name').'" />';
+							}
+							elseif(strpos(admStrToLower($listValue), 'http') == 0 && strValidCharacters($listValue, 'url'))
+							{
+								$listValue = '<img src="'.$listValue.'" alt="'.$this->getValue('usf_name').'" />';
+							}
+						}
+					}
+				}
+				$value = $arrListValues;
+			}
+		}
+		
         return $value;
     }
 
