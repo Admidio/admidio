@@ -135,7 +135,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     || $field->getValue('usf_type') == 'RADIO_BUTTON')
                 {
 					// Position aus der Auswahlbox speichern
-					$arrListValues = explode("\r\n", $field->getValue('usf_value_list'));
+					$arrListValues = $field->getValue('usf_value_list');
 					$position = 0;
 					foreach($arrListValues as $key => $value)
 					{

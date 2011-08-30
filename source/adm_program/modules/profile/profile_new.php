@@ -196,7 +196,7 @@ function getFieldCode($field, $user, $get_new_user)
     }
     elseif($field->getValue('usf_type') == 'DROPDOWN')
     {
-		$arrListValues = explode("\r\n", $field->getValue('usf_value_list'));
+		$arrListValues = $field->getValue('usf_value_list');
 		$position = 1;
 		$text     = '';
 		
@@ -227,7 +227,7 @@ function getFieldCode($field, $user, $get_new_user)
 	}
     elseif($field->getValue('usf_type') == 'RADIO_BUTTON')
     {
-		$arrListValues = explode("\r\n", $field->getValue('usf_value_list'));
+		$arrListValues = $field->getValue('usf_value_list');
 		$position = 1;
 		$value = '';
 
@@ -239,7 +239,7 @@ function getFieldCode($field, $user, $get_new_user)
 	            $checkedPosition = ' checked="checked" ';
 	        }
 	        $value .= '<input type="radio" id="usf-'.$field->getValue('usf_id').'-0" name="usf-'. $field->getValue('usf_id'). '" value="" '.$checkedPosition.' '.$readonly.' />
-	            <label for="usf-'. $field->getValue('usf_id').'-0">---</label>';
+	            <label for="usf-'. $field->getValue('usf_id').'-0">---</label>&nbsp;&nbsp;';
         }
 
 		// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
@@ -252,7 +252,7 @@ function getFieldCode($field, $user, $get_new_user)
 	        }
 	        
 	        $value .= '<input type="radio" id="usf-'.$field->getValue('usf_id').'-'.$position.'" name="usf-'. $field->getValue('usf_id'). '" value="'.$position.'" '.$checkedPosition.' '.$readonly.' />
-	            <label for="usf-'. $field->getValue('usf_id').'-'.$position.'">'.$valueList.'</label>';
+	            <label for="usf-'. $field->getValue('usf_id').'-'.$position.'">'.$valueList.'</label>&nbsp;&nbsp;';
 			$position++;
 		}
 		

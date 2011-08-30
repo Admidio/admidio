@@ -550,10 +550,10 @@ echo '
         <table class="tableList" id="mylist_fields_table" style="width: 100%;" cellspacing="0">
             <thead>
                 <tr>
-                    <th style="width: 18%;">'.$g_l10n->get('SYS_ABR_NO').'</th>
+                    <th style="width: 19%;">'.$g_l10n->get('SYS_ABR_NO').'</th>
                     <th style="width: 37%;">'.$g_l10n->get('SYS_CONTENT').'</th>
                     <th style="width: 18%;">'.$g_l10n->get('SYS_ORDER').'</th>
-                    <th style="width: 27%;">'.$g_l10n->get('SYS_CONDITION').'
+                    <th style="width: 26%;">'.$g_l10n->get('SYS_CONDITION').'
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_SHOW_HELP').'" title="'.$g_l10n->get('SYS_SHOW_HELP').'" /></a>
                     </th>
