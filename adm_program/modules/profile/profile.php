@@ -241,17 +241,10 @@ echo '
                         <div style="float: left;">'. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
 
                             // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
-                            if($user->getValue('GENDER') > 0
+                            if(strlen($user->getValue('GENDER')) > 0
                             && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('GENDER', 'usf_hidden') == 0 ))
                             {
-                                if($user->getValue('GENDER') == 1)
-                                {
-                                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png" title="'.$g_l10n->get('SYS_MALE').'" alt="'.$g_l10n->get('SYS_MALE').'" />';
-                                }
-                                elseif($user->getValue('GENDER') == 2)
-                                {
-                                    echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png" title="'.$g_l10n->get('SYS_FEMALE').'" alt="'.$g_l10n->get('SYS_FEMALE').'" />';
-                                }
+                                echo $user->getValue('GENDER');
                             }
                         echo '</div>
                         <div style="text-align: right;">

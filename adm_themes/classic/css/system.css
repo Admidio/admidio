@@ -58,7 +58,7 @@ img {
     border-width:       thin;
 }
 
-textarea, input {
+textarea, input, select {
     font-family:        Arial, sans-serif;
     font-size:          11pt;
 }

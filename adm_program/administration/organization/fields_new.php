@@ -189,7 +189,7 @@ echo '
             <li id="admValueList">
                 <dl>
                     <dt><label for="usf_value_list">'.$g_l10n->get('SYS_VALUE_LIST').':</label></dt>
-                    <dd><textarea name="usf_value_list" id="usf_value_list" style="width: 200px;" rows="6" cols="40">'.
+                    <dd><textarea name="usf_value_list" id="usf_value_list" style="width: 345px;" rows="6" cols="40">'.
                         $user_field->getValue('usf_value_list'). '</textarea>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
@@ -232,7 +232,7 @@ echo '
                             echo ' checked="checked" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_disabled">'.$g_l10n->get('ORG_FIELD_DISABLED').'</label>
+                        <label for="usf_disabled">'.$g_l10n->get('ORG_FIELD_DISABLED', $g_l10n->get('ROL_RIGHT_EDIT_USER')).'</label>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>

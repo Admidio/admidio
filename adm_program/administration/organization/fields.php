@@ -10,6 +10,7 @@
  
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_user_field.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$g_current_user->isWebmaster())
@@ -131,7 +132,7 @@ echo '
             <th>&nbsp;</th>
             <th>'.$g_l10n->get('SYS_DESCRIPTION').'</th>
             <th><img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'" /></th>
-            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_FIELD_DISABLED').'" title="'.$g_l10n->get('ORG_FIELD_DISABLED').'" /></th>
+            <th><img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_FIELD_DISABLED', $g_l10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$g_l10n->get('ORG_FIELD_DISABLED', $g_l10n->get('ROL_RIGHT_EDIT_USER')).'" /></th>
             <th><img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" title="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" /></th>
             <th>'.$g_l10n->get('ORG_DATATYPE').'</th>
             <th style="width: 40px;">&nbsp;</th>
@@ -139,11 +140,15 @@ echo '
     </thead>';
     
     $cat_id = 0;
+    $field  = new TableUserField($g_db);
 
     if($g_db->num_rows($result) > 0)
     {
         while($row = $g_db->fetch_array($result))
         {
+            $field->clear();
+            $field->setArray($row);
+        
             if($cat_id != $row['cat_id'])
             {
                 if($cat_id > 0)
@@ -163,30 +168,30 @@ echo '
                 $cat_id = $row['cat_id'];
             }           
             echo '
-            <tr id="row_usf_'.$row['usf_id'].'" class="tableMouseOver">
-                <td><a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$row['usf_id'].'">'.$row['usf_name'].'</a></td>
+            <tr id="row_usf_'.$field->getValue('usf_id').'" class="tableMouseOver">
+                <td><a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$field->getValue('usf_id').'">'.$field->getValue('usf_name').'</a></td>
                 <td style="text-align: right; width: 45px;">
-                    <a class="iconLink" href="javascript:moveCategory(\'up\', '.$row['usf_id'].')"><img
+                    <a class="iconLink" href="javascript:moveCategory(\'up\', '.$field->getValue('usf_id').')"><img
                             src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$g_l10n->get('ORG_FIELD_UP').'" title="'.$g_l10n->get('ORG_FIELD_UP').'" /></a>
-                    <a class="iconLink" href="javascript:moveCategory(\'down\', '.$row['usf_id'].')"><img
+                    <a class="iconLink" href="javascript:moveCategory(\'down\', '.$field->getValue('usf_id').')"><img
                             src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$g_l10n->get('ORG_FIELD_DOWN').'" title="'.$g_l10n->get('ORG_FIELD_DOWN').'" /></a>
                 </td>
                 <td>';
                     // laengere Texte kuerzen und Tooltip mit Popup anbieten
-                    if(strlen($row['usf_description']) > 30)
+                    if(strlen($field->getValue('usf_description')) > 30)
                     {
-                        echo substr($row['usf_description'], 0, 30). ' 
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $row['usf_name_intern']. '&amp;inline=true"
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $row['usf_name_intern']. '\',this)" 
+                        echo substr($field->getValue('usf_description'), 0, 30). ' 
+                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '&amp;inline=true"
+                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '\',this)" 
                             onmouseout="ajax_hideTooltip()">[..]</a>';
                     }
                     else
                     {
-                        echo $row['usf_description'];
+                        echo $field->getValue('usf_description');
                     }
                 echo '</td>
                 <td>';
-                    if($row['usf_hidden'] == 1)
+                    if($field->getValue('usf_hidden') == 1)
                     {
                         echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/eye_gray.png" alt="'.$g_l10n->get('ORG_FIELD_HIDDEN').'" title="'.$g_l10n->get('ORG_FIELD_HIDDEN').'" />';
                     }
@@ -196,9 +201,9 @@ echo '
                     }
                 echo '</td>
                 <td>';
-                    if($row['usf_disabled'] == 1)
+                    if($field->getValue('usf_disabled') == 1)
                     {
-                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_FIELD_DISABLED').'" title="'.$g_l10n->get('ORG_FIELD_DISABLED').'" />';
+                        echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_FIELD_DISABLED', $g_l10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$g_l10n->get('ORG_FIELD_DISABLED', $g_l10n->get('ROL_RIGHT_EDIT_USER')).'" />';
                     }
                     else
                     {
@@ -206,7 +211,7 @@ echo '
                     }
                 echo '</td>
                 <td>';
-                    if($row['usf_mandatory'] == 1)
+                    if($field->getValue('usf_mandatory') == 1)
                     {
                         echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" title="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" />';
                     }
@@ -225,12 +230,12 @@ echo '
                                            'TEXT_BIG' => $g_l10n->get('SYS_TEXT').' (255)',
                                            'URL'      => $g_l10n->get('ORG_URL'),
                                            'NUMERIC'  => $g_l10n->get('SYS_NUMBER'));
-					echo $userFieldText[$row['usf_type']].
+					echo $userFieldText[$field->getValue('usf_type')].
                 '</td>
                 <td style="text-align: right; width: 45px;">
-                    <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$row['usf_id'].'"><img 
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$field->getValue('usf_id').'"><img 
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
-                    if($row['usf_system'] == 1)
+                    if($field->getValue('usf_system') == 1)
                     {
                         echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
                     }
@@ -238,7 +243,7 @@ echo '
                     {
                         echo '
                         <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=usf&amp;element_id=row_usf_'.
-                            $row['usf_id'].'&amp;name='.urlencode($row['usf_name']).'&amp;database_id='.$row['usf_id'].'"><img 
+                            $field->getValue('usf_id').'&amp;name='.urlencode($field->getValue('usf_name')).'&amp;database_id='.$field->getValue('usf_id').'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
                     }
                 echo '</td>

@@ -517,20 +517,20 @@ elseif($req_mode == 8)
     $cat_id_messenger = $db->insert_id();
 
     // Stammdatenfelder anlegen
-    $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_master_data.', \'TEXT\', \'LAST_NAME\', \''.$g_l10n->get('SYS_LASTNAME').'\', NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'FIRST_NAME\',\''.$g_l10n->get('SYS_FIRSTNAME').'\', NULL, 1, 1, 1, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'ADDRESS\',   \''.$g_l10n->get('SYS_ADDRESS').'\', NULL, 1, 0, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'POSTCODE\',  \''.$g_l10n->get('INS_POSTCODE').'\', NULL, 1, 0, 0, 4, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'CITY\',      \''.$g_l10n->get('INS_CITY').'\', NULL, 1, 0, 0, 5, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'COUNTRY\',   \''.$g_l10n->get('SYS_COUNTRY').'\', NULL, 1, 0, 0, 6, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'PHONE\',     \''.$g_l10n->get('SYS_PHONE').'\', NULL, 0, 0, 0, 7, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'MOBILE\',    \''.$g_l10n->get('INS_MOBILE').'\', NULL, 0, 0, 0, 8, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'FAX\',       \''.$g_l10n->get('INS_FAX').'\', NULL, 0, 0, 0, 9, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'DATE\', \'BIRTHDAY\',  \''.$g_l10n->get('INS_BIRTHDAY').'\', NULL, 1, 0, 0, 10, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'NUMERIC\', \'GENDER\', \''.$g_l10n->get('SYS_GENDER').'\', NULL, 1, 0, 0, 11, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'EMAIL\', \'EMAIL\',    \''.$g_l10n->get('SYS_EMAIL').'\', NULL, 1, 0, 1, 12, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'URL\',  \'WEBSITE\',   \''.$g_l10n->get('SYS_WEBSITE').'\', NULL, 1, 0, 0, 13, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+    $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+                                       VALUES ('.$cat_id_master_data.', \'TEXT\', \'LAST_NAME\', \''.$g_l10n->get('SYS_LASTNAME').'\', NULL, NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'FIRST_NAME\',\''.$g_l10n->get('SYS_FIRSTNAME').'\', NULL, NULL, 1, 1, 1, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'ADDRESS\',   \''.$g_l10n->get('SYS_ADDRESS').'\', NULL, NULL, 1, 0, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'POSTCODE\',  \''.$g_l10n->get('INS_POSTCODE').'\', NULL, NULL, 1, 0, 0, 4, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'CITY\',      \''.$g_l10n->get('INS_CITY').'\', NULL, NULL, 1, 0, 0, 5, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'COUNTRY\',   \''.$g_l10n->get('SYS_COUNTRY').'\', NULL, NULL, 1, 0, 0, 6, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'PHONE\',     \''.$g_l10n->get('SYS_PHONE').'\', NULL, NULL, 0, 0, 0, 7, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'MOBILE\',    \''.$g_l10n->get('INS_MOBILE').'\', NULL, NULL, 0, 0, 0, 8, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'FAX\',       \''.$g_l10n->get('INS_FAX').'\', NULL, NULL, 0, 0, 0, 9, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'DATE\', \'BIRTHDAY\',  \''.$g_l10n->get('INS_BIRTHDAY').'\', NULL, NULL, 1, 0, 0, 10, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'RADIO_BUTTON\', \'GENDER\', \''.$g_l10n->get('SYS_GENDER').'\', NULL, \'female.png|SYS_FEMALE\r\nmale.png|SYS_MALE\', 0, 0, 0, 11, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'EMAIL\', \'EMAIL\',    \''.$g_l10n->get('SYS_EMAIL').'\', NULL, NULL, 1, 0, 1, 12, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'URL\',  \'WEBSITE\',   \''.$g_l10n->get('SYS_WEBSITE').'\', NULL, NULL, 1, 0, 0, 13, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $usf_id_homepage = $db->insert_id();
 
