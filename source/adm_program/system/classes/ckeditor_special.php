@@ -31,6 +31,7 @@ class CKEditorSpecial extends CKEditor
         $this->config['height']   = $height;
         $this->config['toolbar']  = 'AdmidioDefault';
         $this->config['language'] = $g_preferences['system_language'];
+        $this->config['contentsCss'] = 'body {font-family: Arial, Verdana, sans-serif; font-size: 11pt; }';
 
         if($g_preferences['system_js_editor'] == 0)
         {
