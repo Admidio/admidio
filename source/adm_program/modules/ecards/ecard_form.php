@@ -9,22 +9,25 @@
  * Uebergaben:
  *
  * pho_id:      id des Albums dessen Bilder angezeigt werden sollen
- * photo:       Name des Bildes ohne(.jpg) spaeter -> (admidio/adm_my_files/photos/<* Album *>/$_GET['photo'].jpg)
+ * photo_nr:       Name des Bildes ohne(.jpg) spaeter -> (admidio/adm_my_files/photos/<* Album *>/$_GET['photo'].jpg)
  * usr_id:      Die Benutzer id an dem die Grußkarte gesendet werden soll
  *
  *****************************************************************************/
 
 require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 require_once('ecard_function.php');
+
 if ($g_preferences['enable_bbcode'] == 1)
 {
     require_once('../../system/bbcode.php');
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_pho_id = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$get_photo  = admFuncVariableIsValid($_GET, 'photo', 'numeric', null, true);
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
+$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
 
 // Initialisierung lokaler Variablen
 $funcClass 	 = new FunctionClass($g_l10n);
@@ -40,17 +43,12 @@ if ($g_preferences['enable_ecard_module'] != 1)
     // das Modul ist deaktiviert
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
 }
-// pruefen ob User eingeloggt ist
-if(!$g_valid_login)
-{
- $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
 
 //URL auf Navigationstack ablegen
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $get_pho_id)
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $g_db;
@@ -59,16 +57,16 @@ else
 {
     // einlesen des Albums falls noch nicht in Session gespeichert
     $photo_album = new TablePhotos($g_db);
-    if($get_pho_id > 0)
+    if($getPhotoId > 0)
     {
-        $photo_album->readData($get_pho_id);
+        $photo_album->readData($getPhotoId);
     }
 
     $_SESSION['photo_album'] =& $photo_album;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($get_pho_id > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization)
+if($getPhotoId > 0 && $photo_album->getValue('pho_org_shortname') != $g_organization)
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }  
@@ -80,23 +78,10 @@ if ($g_valid_login && strlen($g_current_user->getValue('EMAIL')) == 0)
     $g_message->show($g_l10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
 }
 
-if (isset($_GET['usr_id']))
+if ($getUserId > 0)
 {
-    // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
-    // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
-    if (!$g_valid_login)
-    {
-        //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    if (is_numeric($_GET['usr_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($g_db, $_GET['usr_id']);
+    $user = new User($g_db, $getUserId);
 
     // darf auf die User-Id zugegriffen werden
     if((  $g_current_user->editUsers() == false
@@ -187,13 +172,13 @@ echo '
             </div>
         </noscript>
 
-      <a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$get_pho_id.'&amp;photo_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'"><img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$get_pho_id.'&amp;photo_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
+      <a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'].'"><img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" 
          class="imageFrame" alt="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$g_l10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
       </a>
 
       <form id="ecard_form" action="javascript:ecardJS.makePreview();" method="post">
-        <input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$get_pho_id.'&amp;photo_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" />
-        <input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$get_photo.'.jpg" />
+        <input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$photo.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['ecard_view_width'].'&amp;max_height='.$g_preferences['ecard_view_height'].'" />
+        <input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$getPhotoNr.'.jpg" />
         <input type="hidden" name="submit_action" value="" />
         <ul class="formFieldList">
         <li>
@@ -213,28 +198,27 @@ echo '
                    echo'
                 </dt>
                 <dd id="Menue" style="height:49px; width:370px;">';
-                    if (array_key_exists("usr_id", $_GET))
+                    if ($getUserId > 0)
                     {
                         // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                         echo '<div id="extern">
-                                <input type="text" readonly="readonly" name="ecard[name_recipient]" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-                        echo '<input type="text" readonly="readonly" name="ecard[email_recipient]" style="width: 345px;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                <input type="text" readonly="readonly" name="ecard[name_recipient]" style="display: none;" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'">
+                                <input type="text" disabled="disabled" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                <input type="text" readonly="readonly" name="ecard[email_recipient]" style="display: none;" value="'.$user->getValue('EMAIL').'">
+                                <input type="text" disabled="disabled" style="width: 345px;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                              </div>';
 
                     }
                     else
                     {
-                       echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;">
-                             </div>
-                             <div id="basedropdownmenu" style="display:block; padding-bottom:3px;">
-                             </div>
-                             <div id="dropdownmenu" style="display:block;">
-                             </div>
+                       echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;"></div>
+                             <div id="basedropdownmenu" style="display:block; padding-bottom:3px;"></div>
+                             <div id="dropdownmenu" style="display:block;"></div>
                              <div id="extern">
                                 <input type="hidden" name="ecard[email_recipient]" value="" />
                                 <input type="hidden" name="ecard[name_recipient]"  value="" />
                              </div>
-                              <div id="wrong" style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:5px; border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left: 28px;display:none;"></div>';
+                             <div id="wrong" style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:5px; border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left: 28px;display:none;"></div>';
                     }
                     echo '
                 </dd>
@@ -267,36 +251,14 @@ echo '
         </li>
         <li>
             <dl>
-                <dt><label>'.$g_l10n->get("SYS_SENDER").':</label></dt>
-                <dd>
-                  <input type="text" name="ecard[name_sender]" size="25" readonly="readonly" maxlength="50" style="width: 200px;" value="';
-                    if (! empty($ecard["name_sender"]) && !$g_current_user->getValue('LAST_NAME'))
-                    {
-                       echo $ecard["name_sender"];
-                    }
-                    else
-                    {
-                       echo $g_current_user->getValue('FIRST_NAME')." ".$g_current_user->getValue('LAST_NAME');
-                    }
-                  echo'" />
-                </dd>
+                <dt><label>'.$g_l10n->get('SYS_SENDER').':</label></dt>
+                <dd><input type="text" disabled="disabled" maxlength="50" style="width: 345px;" value="'.$g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME').'" /></dd>
             </dl>
         </li>
          <li>
             <dl>
-                <dt><label>'.$g_l10n->get("SYS_EMAIL").':</label></dt>
-                <dd>
-                   <input type="text" name="ecard[email_sender]" size="25" readonly="readonly" maxlength="40" style="width: 345px;"  value="';
-                    if (! empty($ecard["email_sender"]) && !$g_current_user->getValue('EMAIL'))
-                    {
-                      echo $ecard["email_sender"];
-                    }
-                    else
-                    {
-                      echo $g_current_user->getValue('EMAIL');
-                    }
-                    echo'" />
-                </dd>
+                <dt><label>'.$g_l10n->get('SYS_EMAIL').':</label></dt>
+                <dd><input type="text" disabled="disabled" maxlength="50" style="width: 345px;"  value="'.$g_current_user->getValue('EMAIL').'" /></dd>
             </dl>
         </li>
         <li>

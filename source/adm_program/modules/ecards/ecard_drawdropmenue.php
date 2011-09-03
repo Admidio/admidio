@@ -19,14 +19,14 @@
 require_once('../../system/common.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
-$get_rol_id = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
-$get_usr_id = admFuncVariableIsValid($_GET, 'usr_id', 'string', 0);
-$get_extern = admFuncVariableIsValid($_GET, 'extern', 'boolean', 0);
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
+$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'string', 0);
+$getExtern = admFuncVariableIsValid($_GET, 'extern', 'boolean', 0);
 
 // Wenn das erste Menue mit den aufgelisteten Rollen gezeichnet werden soll (Uebergabe mode == 1)
 // Es werden alle Rollen die in dieser Organisation vorhanden sind aufgelistet und stehen nun bereit zur Auswahl
-if($g_valid_login && $get_mode == 1)
+if($g_valid_login && $getMode == 1)
 {
     echo '<select size="1" id="rol_id" name="rol_id" onchange="javascript:ecardJS.getMenuRecepientName()">';
     if (isset($form_values['rol_id']) == '')
@@ -94,7 +94,7 @@ if($g_valid_login && $get_mode == 1)
 // Wenn die Rolle ausgewaehlt worden ist wird dieses Menue gezeichnet
 // Es werden alle Mitglieder in dieser Rolle aufgelistet die eine gueltuige 
 // E-mail besitzen und stehen bereit zur Auswahl
-elseif($g_valid_login && $get_rol_id > 0 && $get_mode == 0 && $get_usr_id == '0')
+elseif($g_valid_login && $getRoleId > 0 && $getMode == 0 && $getUserId == '0')
 {
 	$sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
 		      FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
@@ -108,7 +108,7 @@ elseif($g_valid_login && $get_rol_id > 0 && $get_mode == 0 && $get_usr_id == '0'
 				ON email.usd_usr_id = usr_id
 			   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id').'
 			 WHERE usr_id   = mem_usr_id
-			   AND mem_rol_id = '.$get_rol_id.'
+			   AND mem_rol_id = '.$getRoleId.'
 			   AND mem_begin <= \''.DATE_NOW.'\'
 			   AND mem_end    > \''.DATE_NOW.'\'
 			   AND usr_valid  = 1
@@ -120,7 +120,7 @@ elseif($g_valid_login && $get_rol_id > 0 && $get_mode == 0 && $get_usr_id == '0'
 	$menubody     = '</select>';
 	if($g_db->num_rows($result)>0)
 	{
-		$menudata     = '<option value="Rolle_'.$get_rol_id.'" style="font-weight:bold;"><b>'.$g_l10n->get("ECA_TO_ALL_MEMBERS_FROM_A_ROLE").'</b></option>';
+		$menudata     = '<option value="Rolle_'.$getRoleId.'" style="font-weight:bold;"><b>'.$g_l10n->get("ECA_TO_ALL_MEMBERS_FROM_A_ROLE").'</b></option>';
 	}
 	while ($row = $g_db->fetch_object($result))
 	{
@@ -138,9 +138,9 @@ elseif($g_valid_login && $get_rol_id > 0 && $get_mode == 0 && $get_usr_id == '0'
 // Wenn ein User ausgewaehlt worden ist werden zwei input Boxen ausgegeben
 // Es wird von dem ausgewaehlten User der Name und die Email jeweils in eine input Box geschrieben und 
 // ausgegeben wobei nur die input Box mit den Namen sichtbar ist (schreibgeschuetzt!)
-elseif($g_valid_login && strlen($get_usr_id) > 0)
+elseif($g_valid_login && strlen($getUserId) > 0)
 {
-    if(is_numeric($get_usr_id) == 1)
+    if(is_numeric($getUserId) == 1)
     {
         $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, email.usd_value as email
                   FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
@@ -153,7 +153,7 @@ elseif($g_valid_login && strlen($get_usr_id) > 0)
                   LEFT JOIN '. TBL_USER_DATA. ' as email
                     ON email.usd_usr_id = usr_id
                    AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id').'
-                 WHERE usr_id   = '.$get_usr_id.'
+                 WHERE usr_id   = '.$getUserId.'
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'
                    AND usr_valid  = 1
@@ -166,15 +166,15 @@ elseif($g_valid_login && strlen($get_usr_id) > 0)
             echo '<input type="hidden" name="ecard[name_recipient]" value="'.$full_name.'" /><input type="hidden" name="ecard[email_recipient]" value="'.$row->email.'" />';
         }
     }
-    elseif($get_usr_id != 'bw')
+    elseif($getUserId != 'bw')
     {
-        echo '<input type="hidden" name="ecard[name_recipient]" value="die gesamte Rolle" /><input type="hidden" name="ecard[email_recipient]" value="'.$get_usr_id.'@rolle.com" />';
+        echo '<input type="hidden" name="ecard[name_recipient]" value="die gesamte Rolle" /><input type="hidden" name="ecard[email_recipient]" value="'.$getUserId.'@rolle.com" />';
     }
 }
 // Wenn der User sich entschliesst diese Grusskarte an einen Empfaenger zu senden der nicht
 // in dieser Organisation vorhanden ist wird ihm die Moeglichkeit der manuellen Eingabe des
 // Namen und Empfaenger geboten
-if($g_valid_login == true && $get_extern == true)
+if($g_valid_login == true && $getExtern == true)
 {
     echo '<input id="name_recipient" type="text" name="ecard[name_recipient]"  style="margin-bottom:3px; width: 200px;" 
 		onclick="javascript:ecardJS.blendout(this.id);" onfocus="javascript:ecardJS.blendout(this.id);" onmouseout="javascript:ecardJS.blendin(this.id,1);" 

@@ -23,10 +23,10 @@ require_once('../../system/classes/table_photos.php');
 require_once('../../system/classes/image.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_pho_id    = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$get_job       = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('delete', 'rotate'));
-$get_photo_nr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
-$get_direction = admFuncVariableIsValid($_GET, 'direction', 'string', null, false, array('left', 'right'));
+$getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$getJob       = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('delete', 'rotate'));
+$getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
+$getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', null, false, array('left', 'right'));
 
 if ($g_preferences['enable_photo_module'] == 0)
 {
@@ -118,36 +118,36 @@ function deletePhoto($pho_id, $pic_nr)
 
 
 // Foto um 90° drehen
-if($get_job == 'rotate')
+if($getJob == 'rotate')
 {
     // nur bei gueltigen Uebergaben weiterarbeiten
-    if(strlen($get_direction) > 0)
+    if(strlen($getDirection) > 0)
     {
         //Aufruf des ggf. uebergebenen Albums
-        $photo_album = new TablePhotos($g_db, $get_pho_id);
+        $photo_album = new TablePhotos($g_db, $getPhotoId);
 
         //Thumbnail loeschen
-        deleteThumbnail($photo_album, $get_photo_nr);
+        deleteThumbnail($photo_album, $getPhotoNr);
         
         //Ordnerpfad zusammensetzen
-        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id'). '/'. $get_photo_nr. '.jpg';
+        $photo_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id'). '/'. $getPhotoNr. '.jpg';
         
         // Bild drehen
         $image = new Image($photo_path);
-        $image->rotate($get_direction);
+        $image->rotate($getDirection);
         $image->delete();
     }    
 }
-elseif($get_job == 'delete')
+elseif($getJob == 'delete')
 {
     // das entsprechende Bild wird physikalisch und in der DB geloescht
-    deletePhoto($get_pho_id, $get_photo_nr);
+    deletePhoto($getPhotoId, $getPhotoNr);
     
     //Neu laden der Albumdaten
     $photo_album = new TablePhotos($g_db);
-    if($get_pho_id > 0)
+    if($getPhotoId > 0)
     {
-        $photo_album->readData($get_pho_id);
+        $photo_album->readData($getPhotoId);
     }
 
     $_SESSION['photo_album'] =& $photo_album;

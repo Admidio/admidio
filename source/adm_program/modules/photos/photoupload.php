@@ -8,10 +8,10 @@
  *
  * Uebergaben:
  *
- * pho_id : id des Albums zu dem die Bilder hinzugefuegt werden sollen
- * mode   : Das entsprechende Formular wird erzwungen !!!
- *          1 - Klassisches Formular zur Bilderauswahl
- * 		    2 - Flexuploder 
+ * pho_id       : id des Albums zu dem die Bilder hinzugefuegt werden sollen
+ * uploadmethod : Das entsprechende Formular wird erzwungen !!!
+ *                1 - Klassisches Formular zur Bilderauswahl
+ * 		          2 - Flexuploder 
  * 
  *****************************************************************************/
 
@@ -19,6 +19,10 @@ require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../libs/flexupload/class.flexupload.inc.php');
+
+// Uebergabevariablen pruefen und ggf. initialisieren
+$getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric', 0);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -33,19 +37,6 @@ if(!$g_current_user->editPhotoRight())
     $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-// im Zweifel den klassischen Upload nehmen
-if(!isset($_GET['mode']) || $_GET['mode'] < 1 || $_GET['mode'] > 2)
-{
-    $_GET['mode'] = 0;
-}
-
 //Kontrolle ob Server Dateiuploads zulaesst
 $ini = ini_get('file_uploads');
 if($ini!=1)
@@ -57,14 +48,14 @@ if($ini!=1)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $_GET['pho_id'])
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $g_db;
 }
 else
 {
-    $photo_album = new TablePhotos($g_db, $_GET['pho_id']);
+    $photo_album = new TablePhotos($g_db, $getPhotoId);
     $_SESSION['photo_album'] =& $photo_album;
 }
 
@@ -83,8 +74,8 @@ if($photo_album->getValue('pho_org_shortname') != $g_organization)
 }
 
 // Uploadtechnik auswaehlen
-if(($g_preferences['photo_upload_mode'] == 1 || $_GET['mode'] == 2)
-&&  $_GET['mode'] != 1)
+if(($g_preferences['photo_upload_mode'] == 1 || $getUploadmethod == 2)
+&&  $getUploadmethod != 1)
 {
 	$flash = 'flashInstalled()';
 }
@@ -143,7 +134,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <div class="formLayout" id="photo_upload_form" style="visibility: hide; display: none;">
-	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $_GET['pho_id']. '&amp;uploadmethod=1" enctype="multipart/form-data">
+	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $getPhotoId. '&amp;uploadmethod=1" enctype="multipart/form-data">
 	    <div class="formHead">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</div>
 	    <div class="formBody">
 	        <p>
@@ -189,7 +180,7 @@ echo '
     </p>';
 
     //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
-	$fup = new FlexUpload($g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='.$_GET['pho_id'].'&'.$cookie_praefix. '_PHP_ID='.$_COOKIE[$cookie_praefix. '_PHP_ID'].'&'.$cookie_praefix. '_ID='.$_COOKIE[$cookie_praefix. '_ID'].'&'.$cookie_praefix.'_DATA='.$_COOKIE[$cookie_praefix. '_DATA'].'&uploadmethod=2');
+	$fup = new FlexUpload($g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='.$getPhotoId.'&'.$cookie_praefix. '_PHP_ID='.$_COOKIE[$cookie_praefix. '_PHP_ID'].'&'.$cookie_praefix. '_ID='.$_COOKIE[$cookie_praefix. '_ID'].'&'.$cookie_praefix.'_DATA='.$_COOKIE[$cookie_praefix. '_DATA'].'&uploadmethod=2');
 	$fup->setPathToSWF($g_root_path.'/adm_program/libs/flexupload/');		//Pfad zum swf-File
 	$fup->setLocale($g_root_path.'/adm_program/libs/flexupload/language.php');	//Pfad der Sprachdatei
 	$fup->setMaxFileSize(admFuncMaxUploadSize());	//maximale Dateigröße
@@ -203,9 +194,9 @@ echo '</div>
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$_GET['pho_id'].'" title="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'"><img 
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'" title="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'"><img 
             src="'. THEME_PATH. '/icons/application_view_tile.png" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$_GET['pho_id'].'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
         </span>
     </li>    
     <li>

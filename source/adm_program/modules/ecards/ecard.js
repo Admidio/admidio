@@ -60,16 +60,6 @@ function ecardJSClass()
 		var error         = false;
 		var error_message = this.errMsg_Start_Text;
 	
-		if ($("#" + this.ecardformid + " input[name='ecard[name_sender]']").val() == "")
-		{
-			error = true;
-			error_message += "- "+ this.nameOfSender_Text +"\n";
-		}
-		if ($("#" + this.ecardformid+ "input[name='ecard[email_sender]']").val() == "" || this.emailValidation($("#" + this.ecardformid + " input[name='ecard[email_sender]']").val()) == false )
-		{
-			error = true;
-			error_message += "- "+ this.emailOfSender_Text +"\n";
-		}		
 		if ($("#" + this.ecardformid + " input[name='ecard[name_recipient]']").val() == "" || $("#" + this.ecardformid+ "input[name='ecard[name_recipient]']").val() == "< "+ this.recipientName_Text +" >")
 		{
 			error = true;

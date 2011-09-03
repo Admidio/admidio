@@ -17,8 +17,8 @@ require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_pho_id   = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$get_photo_nr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -33,14 +33,14 @@ elseif($g_preferences['enable_photo_module'] == 2)
 }
 
 //erfassen des Albums falls noch nicht in Session gespeichert
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $get_pho_id)
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $g_db;
 }
 else
 {
-    $photo_album = new TablePhotos($g_db, $get_pho_id);
+    $photo_album = new TablePhotos($g_db, $getPhotoId);
     $_SESSION['photo_album'] =& $photo_album;
 }
 
@@ -50,19 +50,19 @@ $ordner      = SERVER_PATH. $ordner_foto;
 $ordner_url  = $g_root_path. $ordner_foto;
 
 //Naechstes und Letztes Bild
-$prev_image = $get_photo_nr - 1;
-$next_image = $get_photo_nr + 1;
+$prev_image = $getPhotoNr - 1;
+$next_image = $getPhotoNr + 1;
 $url_prev_image = '#';
 $url_next_image = '#';
-$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$get_pho_id.'&amp;photo_nr='.$get_photo_nr.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'];
+$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'];
 
 if($prev_image > 0)
 {
-    $url_prev_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $prev_image. '&pho_id='. $get_pho_id;
+    $url_prev_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $prev_image. '&pho_id='. $getPhotoId;
 }
 if($next_image <= $photo_album->getValue('pho_quantity'))
 {
-    $url_next_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $next_image. '&pho_id='. $get_pho_id;
+    $url_next_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $next_image. '&pho_id='. $getPhotoId;
 }
 
 $body_with   = $g_preferences['photo_show_width']  + 20;
@@ -149,8 +149,8 @@ else
 		echo'<ul class="iconTextLinkList">
 			<li>
 				<span class="iconTextLink">
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$get_pho_id.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'" /></a>
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$get_pho_id.'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'" /></a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
 				</span>
 			</li>
 		</ul>';

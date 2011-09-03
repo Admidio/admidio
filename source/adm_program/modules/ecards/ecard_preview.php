@@ -29,7 +29,7 @@ else
 {
     if(isset($ecard['name_recipient']) && isset($ecard['email_recipient']))
     {
-        echo $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user->getValue('usr_id'),$ecard['name_recipient'],$ecard['email_recipient'],$bbcode_enable);
+        echo $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user,$ecard['name_recipient'],$ecard['email_recipient'],$bbcode_enable);
     }
 }
 ?>

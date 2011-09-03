@@ -19,8 +19,8 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_pho_id = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
-$get_job    = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change', 'delete'));
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
+$getJob     = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change', 'delete'));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -41,9 +41,9 @@ $_SESSION['photo_album_request'] = $_REQUEST;
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($g_db);
 
-if($get_job != 'new')
+if($getJob != 'new')
 {
-    $photo_album->readData($get_pho_id);
+    $photo_album->readData($getPhotoId);
     
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $g_organization)
@@ -56,7 +56,7 @@ if($get_job != 'new')
 $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
-if($get_job == 'new' || $get_job == 'change')
+if($getJob == 'new' || $getJob == 'change')
 {
     //Gesendete Variablen Uebernehmen und kontollieren
 
@@ -131,7 +131,7 @@ if($get_job == 'new' || $get_job == 'change')
     }
     
     /********************neuen Datensatz anlegen***********************************/
-    if ($get_job=='new')
+    if ($getJob=='new')
     {
         // Album in Datenbank schreiben
         $photo_album->save();
@@ -156,7 +156,7 @@ if($get_job == 'new' || $get_job == 'change')
 			}	
 		}
         
-        $get_pho_id = $photo_album->getValue('pho_id');
+        $getPhotoId = $photo_album->getValue('pho_id');
 
         // Anlegen des Albums war erfolgreich -> album_new aus der Historie entfernen
         $_SESSION['navigation']->deleteLastUrl();
@@ -164,7 +164,7 @@ if($get_job == 'new' || $get_job == 'change')
 
     /********************Aenderung des Ordners***********************************/
     // Wurde das Anfangsdatum bearbeitet, muss sich der Ordner aendern
-    elseif ($get_job=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$get_pho_id)
+    elseif ($getJob=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
     {
         $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
         
@@ -185,7 +185,7 @@ if($get_job == 'new' || $get_job == 'change')
 
     /********************Aenderung der Datenbankeinträge***********************************/
 
-    if($get_job == 'change')
+    if($getJob == 'change')
     {
         // geaenderte Daten in der Datenbank akutalisieren
         $photo_album->save();
@@ -272,8 +272,8 @@ if($get_job == 'new' || $get_job == 'change')
     <ul class="iconTextLinkList">
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$get_pho_id.'">'.$g_l10n->get('SYS_NEXT').'&nbsp;</a>
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$get_pho_id.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$g_l10n->get('SYS_NEXT').'&nbsp;</a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></a>
             </span>
         </li>
     </ul>';
@@ -281,7 +281,7 @@ if($get_job == 'new' || $get_job == 'change')
 
 /**************************************************************************/
 
-elseif($get_job == 'delete')
+elseif($getJob == 'delete')
 {
 	// Album loeschen
     if($photo_album->delete())
