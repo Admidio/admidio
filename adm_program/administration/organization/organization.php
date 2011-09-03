@@ -1729,23 +1729,18 @@ echo '
 
         	echo '<h3 class="iconTextLink">
 				<a href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$g_l10n->get('ORG_SYSTEM_INFOS').'" title="'.$g_l10n->get('ORG_SYSTEM_INFOS').'" /></a>
-            	<a href="#">'.$g_l10n->get('ORG_SYSTEM_INFOS').'</a>
+            	<a href="#">'.$g_l10n->get('ORG_SYSTEM_INFORMATIONS').'</a>
 			</h3>  
         	<div class="groupBox" id="systeminfo">
-				<div class="groupBoxHeadline"><img src="'. THEME_PATH. '/icons/info.png" alt="system infos" />
-					'.$g_l10n->get('ORG_SYSTEM_INFORMATIONS').'
-				</div>
 				<div class="groupBoxBody">';
 					require_once('systeminfo.php');
 				echo'</div>
-        	</div>';			
-				
-		echo'</div>
-		<div class="formLayout" id="organization_save_button">
-			<div class="formBody">
-				<button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
-			</div>
+        	</div>
 		</div>
+
+		<div class="formSubmit">	
+            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+        </div>
 	</form>
 	</div>
 </div>';

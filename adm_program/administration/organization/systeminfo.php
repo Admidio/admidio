@@ -20,10 +20,10 @@ if($g_current_user->isWebmaster() == false)
 }
 
 // Uebergabevariablen pruefen
-$req_mode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
 
 /************Systeminformationen********/
-if($req_mode == 1)
+if($getMode == 1)
 {
     echo'
     <ul class="formFieldList">
@@ -197,7 +197,7 @@ if($req_mode == 1)
 
 } 
 /************PHP Info*******************/
-if($req_mode == 2)
+if($getMode == 2)
 {
     phpinfo();
 }

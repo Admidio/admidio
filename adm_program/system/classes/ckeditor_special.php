@@ -27,11 +27,12 @@ class CKEditorSpecial extends CKEditor
         $this->config['toolbarCanCollapse'] = false;
         $this->config['filebrowserImageUploadUrl'] = '../../system/ckeditor_upload_handler.php';
         $this->config['fontSize_sizes'] = '8/8pt;9/9pt;10/10pt;11/11pt;12/12pt;14/14pt;16/16pt;18/18pt;20/20pt;22/22pt;24/24pt;26/26pt;28/28pt;36/36pt;48/48pt;72/72pt';
-        $this->config['width']    = '98%';
+        $this->config['uiColor']  = '#96c4cb';
         $this->config['height']   = $height;
         $this->config['toolbar']  = 'AdmidioDefault';
         $this->config['language'] = $g_preferences['system_language'];
         $this->config['contentsCss'] = 'body {font-family: Arial, Verdana, sans-serif; font-size: 11pt; }';
+        //$this->addEventHandler('instanceReady', 'function (ev) {$(".cke_wrapper").css("background-color", $("body").css("background-color")); }');
 
         if($g_preferences['system_js_editor'] == 0)
         {

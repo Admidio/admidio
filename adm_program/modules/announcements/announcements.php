@@ -34,14 +34,14 @@ elseif($g_preferences['enable_announcements_module'] == 2)
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_start    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
-$get_ann_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$get_date     = admFuncVariableIsValid($_GET, 'date', 'numeric');
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
+$getAnnId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
 
-if(strlen($get_date) > 0)
+if(strlen($getDate) > 0)
 {
-	$get_date = substr($get_date,0,4). '-'. substr($get_date,4,2). '-'. substr($get_date,6,2);
+	$getDate = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
 }
 
 // Navigation faengt hier im Modul an
@@ -49,7 +49,7 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $get_headline;
+$g_layout['title']  = $getHeadline;
 $g_layout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -60,14 +60,14 @@ $g_layout['header'] = '
 
 if($g_preferences['enable_rss'] == 1)
 {
-    $g_layout['header'] .= '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname').' - '.$get_headline).'"
-        href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$get_headline.'" />';
+    $g_layout['header'] .= '<link rel="alternate" type="application/rss+xml" title="'.$g_l10n->get('SYS_RSS_FEED_FOR_VAR', $g_current_organization->getValue('org_longname').' - '.$getHeadline).'"
+        href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$getHeadline.'" />';
 };
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">'.$get_headline.'</h1>';
+echo '<h1 class="moduleHeadline">'.$getHeadline.'</h1>';
 
 // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
@@ -80,17 +80,17 @@ foreach($arr_ref_orgas as $key => $value)
 $organizations = $organizations. '\''. $g_current_organization->getValue('org_shortname'). '\'';
 
 // falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
-if($get_ann_id > 0)
+if($getAnnId > 0)
 {
-    $conditions = 'AND ann_id ='. $get_ann_id;
+    $conditions = 'AND ann_id ='. $getAnnId;
 }
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
     // Ankuendigungen an einem Tag suchen
-    if(strlen($get_date) > 0)
+    if(strlen($getDate) > 0)
     {
-        $conditions = ' AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$get_date.'\'';        
+        $conditions = ' AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$getDate.'\'';        
     }
     //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
     else
@@ -99,7 +99,7 @@ else
     }
 }
 
-if($get_ann_id == 0)
+if($getAnnId == 0)
 {
     // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
     $sql = 'SELECT COUNT(1) as count 
@@ -149,7 +149,7 @@ $sql = 'SELECT ann.*,
            AND ann_org_shortname IN ('.$organizations.') ))
                '.$conditions.' 
          ORDER BY ann_timestamp_create DESC
-         LIMIT '.$announcements_per_page.' OFFSET '.$get_start;
+         LIMIT '.$announcements_per_page.' OFFSET '.$getStart;
 $announcements_result = $g_db->query($sql);
 
 // Neue Ankuendigung anlegen
@@ -159,9 +159,9 @@ if($g_current_user->editAnnouncements())
     <ul class="iconTextLinkList">
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$get_headline.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline.'"><img
                 src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$get_headline.'">'.$g_l10n->get('SYS_CREATE').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline.'">'.$g_l10n->get('SYS_CREATE').'</a>
             </span>
         </li>
     </ul>';        
@@ -170,7 +170,7 @@ if($g_current_user->editAnnouncements())
 if ($g_db->num_rows($announcements_result) == 0)
 {
     // Keine Ankuendigungen gefunden
-    if($get_ann_id > 0)
+    if($getAnnId > 0)
     {
         echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
     }
@@ -203,7 +203,7 @@ else
                         if($announcement->editRight() == true)
                         {
                             echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$get_headline.'"><img 
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><img 
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
                         }
 
@@ -236,8 +236,8 @@ else
 }
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$get_headline;
-echo admFuncGeneratePagination($base_url, $num_announcements, $announcements_per_page, $get_start, TRUE);
+$base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
+echo admFuncGeneratePagination($base_url, $num_announcements, $announcements_per_page, $getStart, TRUE);
         
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

@@ -96,7 +96,7 @@ a:hover, a:active {
    (z.B.: Ankuendigungen, Termine) */
 
 .boxLayout {
-    width:              550px;
+    width:              600px;
     border:             1px solid #555555;
     overflow:           hidden;
     margin:             auto;
@@ -143,7 +143,7 @@ a:hover, a:active {
    (z.B.: Profil, Login, Registrieren) */
    
 .formLayout {
-    width:              570px;
+    width:              600px;
     border:             1px solid #555555;
     margin:             auto;
     margin-top:         30px;
@@ -184,19 +184,19 @@ a:hover, a:active {
     list-style-type:    none;
 }
 
-.formFieldList li { 
-    display:            inline;
+.formFieldList > li { 
     text-align:         left;
 }
-.formFieldList li dl {
+.formFieldList > li > dl, 
+.formFieldList > li > div {
     padding:            0px;
     margin:             8px 0px 8px 0px;
 }
-.formFieldList li dl dt {
+.formFieldList > li > dl > dt {
     text-align:         left;
     float:              left;
 }
-.formFieldList li dl dd {
+.formFieldList > li > dl > dd {
     margin-left:        29%;
     text-align:         left;
 }
@@ -236,7 +236,7 @@ a:hover, a:active {
    (z.B.: Listen, Eigene Liste) */
 
 .tableList {
-    width:              550px;         /* Optimale Breite von Listen */
+    width:              600px;         /* Optimale Breite von Listen */
     color:              #555555;
     font-size:          10pt;
     background-color:   #eaeaea;

@@ -13,7 +13,7 @@
  *				 2 - Flexuploader
  *
  *****************************************************************************/
-if(isset($_GET['uploadmethod']) && is_numeric($_GET['pho_id']) && $_GET['uploadmethod'] == 2)
+if($_GET['uploadmethod'] == 2)
 {
     // Cookies wurden uebergeben, nun wieder in Cookievariable kopieren
     foreach($_GET as $key => $value)
@@ -30,6 +30,10 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/image.php');
 
+// Uebergabevariablen pruefen und ggf. initialisieren
+$getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
+$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric', null, true);
+
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
 {
@@ -44,25 +48,15 @@ if(!$g_current_user->editPhotoRight())
 }
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $_GET['pho_id'])
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $g_db;
 }
 else
 {
-    $photo_album = new TablePhotos($g_db, $_GET['pho_id']);
+    $photo_album = new TablePhotos($g_db, $getPhotoId);
     $_SESSION['photo_album'] =& $photo_album;
-}
-
-//Übergabevariable prüfen
-if(isset($_GET['pho_id']) && is_numeric($_GET['pho_id']) == false || !isset($_GET['pho_id']))
-{
-   $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-if(!isset($_GET['uploadmethod']) || (isset($_GET['uploadmethod']) && !is_numeric($_GET['pho_id'])))
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));  
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
@@ -71,7 +65,7 @@ if($photo_album->getValue('pho_org_shortname') != $g_organization)
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if (empty($_POST) && $_GET['uploadmethod'] == 1)
+if (empty($_POST) && $getUploadmethod == 1)
 {
     $g_message->show($g_l10n->get('PHO_NO_FILES_OR_TO_LARGE', ini_get('post_max_size')));
 }
@@ -88,7 +82,7 @@ if(!file_exists(SERVER_PATH. '/adm_my_files/photos/upload'))
 $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 //Bei Klassischem Upload beginn der Seitenausgabe
-if($_GET['uploadmethod'] == 1)
+if($getUploadmethod == 1)
 {
 	//Photomodulspezifische CSS laden
 	$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
@@ -105,7 +99,7 @@ if($_GET['uploadmethod'] == 1)
 }
 
 //Bei Klassischem upload erstmal testen ob Alle Dateien angekommen sind bei Flex reichen die Kontrollen in der Verarbeitung
-if(isset($_POST['upload']) && $_GET['uploadmethod'] == 1)
+if(isset($_POST['upload']) && $getUploadmethod == 1)
 {
     //zaehlen wieviele Fotos hochgeladen werden sollen und ob alle Uploads Fehlerfrei sind
     $counter=0;
@@ -137,7 +131,7 @@ if(isset($_POST['upload']) && $_GET['uploadmethod'] == 1)
 $new_quantity = $photo_album->getValue('pho_quantity');
 for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
 {
-    if($_GET['uploadmethod'] == 1)
+    if($getUploadmethod == 1)
     {
         $temp_filename = $_FILES['Filedata']['tmp_name'][$act_upload_nr];
         $filename = $_FILES['Filedata']['name'][$act_upload_nr];
@@ -156,7 +150,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     {
         $new_quantity++;
     	
-    	if($_GET['uploadmethod'] == 1)
+    	if($getUploadmethod == 1)
     	{
     		echo '<br /><br />'.$g_l10n->get('PHO_PHOTO').$new_quantity.':<br />';
     	}
@@ -227,7 +221,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
                 $photo_album->setValue('pho_quantity', $photo_album->getValue('pho_quantity')+1);
                 $photo_album->save(); 
                 
-                if($_GET['uploadmethod']  == 1)
+                if($getUploadmethod  == 1)
                 {
                 	 echo '
                 	  <img class="photoOutput" 
@@ -255,7 +249,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
 
 
 //Bei Klassischem Upload Reste der Seitenausgabe
-if($_GET['uploadmethod'] == 1)
+if($getUploadmethod == 1)
 {
 	//Buttons
 	echo '
@@ -271,10 +265,10 @@ if($_GET['uploadmethod'] == 1)
 		    </li>
 		    <li>
 		        <span class="iconTextLink">
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1" title="'.$g_l10n->get('PHO_UPLOAD_MORE').'">
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;uploadmethod=1" title="'.$g_l10n->get('PHO_UPLOAD_MORE').'">
 		            	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Weitere Fotos hochladen" />
 		            </a>
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;mode=1"  title="'.$g_l10n->get('PHO_UPLOAD_MORE').'">'.$g_l10n->get('PHO_UPLOAD_MORE').'</a>
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;uploadmethod=1"  title="'.$g_l10n->get('PHO_UPLOAD_MORE').'">'.$g_l10n->get('PHO_UPLOAD_MORE').'</a>
 		        </span>
 		    </li>
 		 </ul>

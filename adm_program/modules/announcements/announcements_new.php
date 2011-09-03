@@ -32,17 +32,17 @@ if(!$g_current_user->editAnnouncements())
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_ann_id   = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
+$getAnnId    = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($g_db);
 
-if($get_ann_id > 0)
+if($getAnnId > 0)
 {
-    $announcement->readData($get_ann_id);
+    $announcement->readData($getAnnId);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
@@ -63,7 +63,7 @@ if(isset($_SESSION['announcements_request']))
 $ckEditor = new CKEditorSpecial();
 
 // Html-Kopf ausgeben
-if($get_ann_id > 0)
+if($getAnnId > 0)
 {
     $g_layout['title'] = $g_l10n->get('SYS_EDIT_VAR', $g_l10n->get('ANN_ANNOUNCEMENT'));
 }
@@ -86,7 +86,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$get_ann_id.'&amp;headline='. $get_headline. '&amp;mode=1" >
+<form method="post" action="'.$g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1" >
 <div class="formLayout" id="edit_announcements_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">

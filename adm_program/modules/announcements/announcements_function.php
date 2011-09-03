@@ -33,15 +33,15 @@ if(!$g_current_user->editAnnouncements())
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_ann_id = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
-$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$getAnnId = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
+$getMode  = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
 
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($g_db);
 
-if($get_ann_id > 0)
+if($getAnnId > 0)
 {
-    $announcement->readData($get_ann_id);
+    $announcement->readData($getAnnId);
     
     // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
@@ -52,7 +52,7 @@ if($get_ann_id > 0)
 
 $_SESSION['announcements_request'] = $_REQUEST;
 
-if($get_mode == 1)
+if($getMode == 1)
 {
     if(strlen($_POST['ann_headline']) == 0)
     {
@@ -91,7 +91,7 @@ if($get_mode == 1)
 	else
 	{
 		// Benachrichtigungs-Email für neue Einträge
-		if($g_preferences['enable_email_notification'] == 1 && $get_ann_id == 0)
+		if($g_preferences['enable_email_notification'] == 1 && $getAnnId == 0)
 		{
 			$message = str_replace("<br />","\n", $g_l10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['ann_headline'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time())));
 			$sender_name = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
@@ -110,7 +110,7 @@ if($get_mode == 1)
     header('Location: '. $_SESSION['navigation']->getUrl());
     exit();
 }
-elseif($get_mode == 2)
+elseif($getMode == 2)
 {
     // Ankuendigung loeschen, wenn diese zur aktuellen Orga gehoert
     if($announcement->getValue('ann_org_shortname') == $g_current_organization->getValue('org_shortname'))

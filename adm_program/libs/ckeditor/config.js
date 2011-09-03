@@ -13,7 +13,7 @@ CKEDITOR.editorConfig = function( config )
      
     config.toolbar_AdmidioDefault =
     [
-        ['Preview', 'Font','FontSize','Bold', 'Italic', '-', 'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock', '-', 
+        ['Font','FontSize', 'Preview', '-', 'Bold', 'Italic', 'TextColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock', '-', 
         'NumberedList', 'BulletedList', '-', 'Image', 'Link', 'Unlink', 'Table']
     ];
 };

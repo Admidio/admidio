@@ -40,14 +40,8 @@ elseif($g_preferences['enable_photo_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_headline = $g_l10n->get('PHO_PHOTO_ALBUMS');
-
-// Uebergabevariablen pruefen
-if(isset($_GET['headline']))
-{
-    $req_headline = strStripTags($_GET['headline']);
-}
+// Uebergabevariablen pruefen und ggf. initialisieren
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('PHO_PHOTO_ALBUMS'));
 
 // die neuesten 10 Fotoalben aus der DB fischen...
 $sql = 'SELECT pho.*,
@@ -77,7 +71,7 @@ $photo_album = new TablePhotos($g_db);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$req_headline, 
+$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$getHeadline, 
 		$g_l10n->get('PHO_RECENT_ALBUMS_OF_ORGA', $g_current_organization->getValue('org_longname')));
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen

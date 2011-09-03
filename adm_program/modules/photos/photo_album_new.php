@@ -18,8 +18,8 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_pho_id = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
-$get_job    = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change'));
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
+$getJob     = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change'));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($g_preferences['enable_photo_module'] == 0)
@@ -40,9 +40,9 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 $photo_album = new TablePhotos($g_db);
 
 // nur Daten holen, wenn Album editiert werden soll
-if ($get_job == 'change')
+if ($getJob == 'change')
 {
-    $photo_album->readData($get_pho_id);
+    $photo_album->readData($getPhotoId);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $g_organization)
@@ -71,7 +71,7 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
     //Erfassen des auszugebenden Albums
     if($parent_id > 0)
     {
-        $pho_id_condition .= ' AND pho_pho_id_parent = "'.$parent_id.'" ';
+        $pho_id_condition .= ' AND pho_pho_id_parent = \''.$parent_id.'\' ';
     }
     else
     {
@@ -82,7 +82,7 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
               FROM '. TBL_PHOTOS. '
              WHERE pho_id <> '. $photo_album->getValue('pho_id').
                    $pho_id_condition
-                   .' AND pho_org_shortname LIKE "'.$g_current_organization->getValue('org_shortname').'"';
+                   .' AND pho_org_shortname LIKE \''.$g_current_organization->getValue('org_shortname').'\'';
     $result_child = $g_db->query($sql);
 
     while($adm_photo_child = $g_db->fetch_array($result_child))
@@ -110,11 +110,11 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 
 /******************************HTML-Kopf******************************************/
 
-if($get_job=='new')
+if($getJob=='new')
 {
     $g_layout['title'] = $g_l10n->get('PHO_CREATE_ALBUM');
 }
-elseif($get_job=='change')
+elseif($getJob=='change')
 {
     $g_layout['title'] = $g_l10n->get('PHO_EDIT_ALBUM');
 }
@@ -137,7 +137,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 /****************************Formular***********************************************/
 
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='. $get_pho_id. '&amp;job='. $get_job. '">
+<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='. $getPhotoId. '&amp;job='. $getJob. '">
 <div class="formLayout" id="photo_album_new_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">';
@@ -163,7 +163,7 @@ echo '
                         <select size="1" id="pho_pho_id_parent" name="pho_pho_id_parent" style="max-width: 95%;">
                             <option value="0">'.$g_l10n->get('PHO_PHOTO_ALBUMS').'</option>';
                                 // die Albenstruktur darstellen und das aktuelle Album vorauswählen
-                                subfolder($adm_photo_list['pho_id'], '', $photo_album, $get_pho_id);
+                                subfolder($adm_photo_list['pho_id'], '', $photo_album, $getPhotoId);
                         echo '</select>
                     </dd>
                 </dl>

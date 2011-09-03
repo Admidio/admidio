@@ -221,7 +221,7 @@ class FunctionClass
 	//      $ecard              ..  array mit allen Informationen die in den inputs der Form gespeichert sind
 	//      $ecard_data         ..  geparste Information von dem Grußkarten Template
 	//      $root_path          ..  der Pfad zu admidio Verzeichnis
-	//      $usr_id             ..  die User id
+	//      $user               ..  das User-Objekt (z.B. $g_current_user)
 	//      $empfaenger_name    ..  der Name des Empfaengers
 	//      $empfaenger_email   ..  die Email des Empfaengers
 	//
@@ -235,8 +235,10 @@ class FunctionClass
 	//      Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
 	//      Nachricht:              <%ecard_message%>
 	*/
-	function parseEcardTemplate($ecard,$ecard_data,$root_path,$usr_id,$empfaenger_name,$empfaenger_email,$bbcode_enable) 
-	{   
+	function parseEcardTemplate($ecard,$ecard_data,$root_path,&$user,$empfaenger_name,$empfaenger_email,$bbcode_enable) 
+	{
+        global $g_current_user;
+
 		// Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
 		if(strip_tags(trim($empfaenger_name)) == '')
 		{
@@ -263,9 +265,9 @@ class FunctionClass
 		$ecard_data = preg_replace ('/<%ecard_font_bold%>/',        $ecard['schrift_style_bold'], $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_font_italic%>/',      $ecard['schrift_style_italic'], $ecard_data);
 		// Hier wird der Sender Name, Email und Id ersetzt
-		$ecard_data = preg_replace ('/<%ecard_sender_id%>/',        $usr_id, $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_sender_email%>/',     utf8_decode($ecard['email_sender']), $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_sender_name%>/',      htmlentities(utf8_decode($ecard['name_sender'])), $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_sender_id%>/',        $user->getValue('usr_id'), $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_sender_email%>/',     $user->getValue('EMAIL'), $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_sender_name%>/',      $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $ecard_data);
 		// Hier wird der Empfaenger Name und Email ersetzt
 		$ecard_data = preg_replace ('/<%ecard_reciepient_email%>/', utf8_decode($empfaenger_email), $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_reciepient_name%>/',  htmlentities(utf8_decode($empfaenger_name)), $ecard_data);
