@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="dk">
+<language id="da">
+	<version id="1.4.1">
+		<text id="PLG_LOGIN_LAST_LOGIN" development="new" translation="todo">Sidste login</text>
+	</version>
 	<version id="1.4.0">
 	    <text id="PLG_LOGIN_ACTIVE_SINCE" development="new" translation="edited">Aktiv siden</text>
 		<text id="PLG_LOGIN_NEW_ONLINE_MEMBER" development="new" translation="todo">Nyt online medlem</text>

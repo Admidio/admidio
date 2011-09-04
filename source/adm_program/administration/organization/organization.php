@@ -78,7 +78,7 @@ $g_layout['header'] =  '
         $(document).ready(function()
         {
             organizationJS.init();
-            organizationJS.toggleDiv(organizationJS.ids[0]);
+            //organizationJS.toggleDiv(organizationJS.ids[0]);
             organizationJS.drawForumAccessDataTable();
         });
     //--></script>
@@ -104,7 +104,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/options.png" alt="'.$g_l10n->get('SYS_COMMON').'" title="'.$g_l10n->get('SYS_COMMON').'" /></a>
 				<a href="#">'.$g_l10n->get('SYS_COMMON').'</a>
 			</h3>
-			<div class="groupBoxBody">
+			<div class="groupBoxBody" style="display: none;">
 				<ul class="formFieldList">
 					<li>
 						<dl>
@@ -316,6 +316,10 @@ echo '
 					</li>
 					<li class="smallFontSize">'.$g_l10n->get('ORG_SEARCH_SIMILAR_NAMES_DESC').'</li>
 				</ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
 			</div>';
 			
 			/**************************************************************************************/
@@ -326,7 +330,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$g_l10n->get('SYS_REGISTRATION').'" title="'.$g_l10n->get('SYS_REGISTRATION').'" /></a>
 				<a href="#">'.$g_l10n->get('SYS_REGISTRATION').'</a>
 			</h3>
-			<div class="groupBoxBody">
+			<div class="groupBoxBody" style="display: none;">
 				<ul class="formFieldList">
 					<li>
 						<dl>
@@ -385,6 +389,10 @@ echo '
 					</li>
 					<li class="smallFontSize">'.$g_l10n->get('ORG_EMAIL_ALERTS_DESC', $g_l10n->get('ROL_RIGHT_APPROVE_USERS')).'</li>
 				</ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
 			</div>';
 			
 			/**************************************************************************************/
@@ -395,7 +403,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/announcements.png" alt="'.$g_l10n->get('ANN_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ANN_ANNOUNCEMENTS').'" /></a>
 				<a href="#">'.$g_l10n->get('ANN_ANNOUNCEMENTS').'</a>
 			</h3>
-			<div class="groupBoxBody">
+			<div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -436,6 +444,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
 			</div>';
 			
 			/**************************************************************************************/
@@ -446,7 +458,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/download.png" alt="'.$g_l10n->get('DOW_DOWNLOADS').'" title="'.$g_l10n->get('DOW_DOWNLOADS').'" /></a>
             	<a href="#">'.$g_l10n->get('DOW_DOWNLOADS').'</a>
 			</h3>
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -473,6 +485,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('DOW_MAXIMUM_FILE_SIZE_DESC').'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';
 
 			/**************************************************************************************/
@@ -483,7 +499,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/photo.png" alt="'.$g_l10n->get('PHO_PHOTOS').'" title="'.$g_l10n->get('PHO_PHOTOS').'" /></a>
             	<a href="#">'.$g_l10n->get('PHO_PHOTOS').'</a>
 			</h3>			
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -604,6 +620,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('PHO_SHOW_CAPTION_DESC' ,$g_current_organization->getValue('org_homepage')).'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';
 
 			/**************************************************************************************/
@@ -614,7 +634,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/forum.png" alt="'.$g_l10n->get('SYS_FORUM').'" title="'.$g_l10n->get('SYS_FORUM').'" /></a>
             	<a href="#">'.$g_l10n->get('SYS_FORUM').'</a>
 			</h3>
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -733,6 +753,10 @@ echo '
                     <li id="forum_access_data"></li>
                     <li id="forum_access_data_text" class="smallFontSize">'.$g_l10n->get('ORG_ACCESS_FORUM_DATABASE_DESC').'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';
 
 			/**************************************************************************************/
@@ -743,7 +767,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$g_l10n->get('GBO_GUESTBOOK').'" title="'.$g_l10n->get('GBO_GUESTBOOK').'" /></a>
             	<a href="#">'.$g_l10n->get('GBO_GUESTBOOK').'</a>
 			</h3>
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -864,6 +888,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('GBO_FLOODING_PROTECTION_INTERVALL_DESC').'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';
 
 			/**************************************************************************************/
@@ -874,7 +902,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/list.png" alt="'.$g_l10n->get('LST_LISTS').'" title="'.$g_l10n->get('LST_LISTS').'" /></a>
             	<a href="#">'.$g_l10n->get('LST_LISTS').'</a>
 			</h3>
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -911,6 +939,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('LST_HIDE_DETAILS_DESC').'</li>                 
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';
 
 			/**************************************************************************************/
@@ -921,7 +953,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$g_l10n->get('MAI_EMAILS').'" title="'.$g_l10n->get('MAI_EMAILS').'" /></a>
             	<a href="#">'.$g_l10n->get('MAI_EMAILS').'</a>
 			</h3>
-			<div class="groupBoxBody">
+			<div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -978,6 +1010,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
             </div>';
 			
 			/**************************************************************************************/
@@ -989,7 +1025,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$g_l10n->get('SYS_SYSTEM_MAILS').'" title="'.$g_l10n->get('SYS_SYSTEM_MAILS').'" /></a>
             	<a href="#">'.$g_l10n->get('SYS_SYSTEM_MAILS').'</a>
 			</h3>        
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -1077,6 +1113,10 @@ echo '
                         <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';
 
 			/**************************************************************************************/
@@ -1086,7 +1126,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$g_l10n->get('ECA_GREETING_CARDS').'" title="'.$g_l10n->get('ECA_GREETING_CARDS').'" /></a>
             	<a href="#">'.$g_l10n->get('ECA_GREETING_CARDS').'</a>
 			</h3>        
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -1235,8 +1275,11 @@ echo '
                     <li class="smallFontSize">
                         '.$g_l10n->get("ECA_FONT_COLOR").'
                     </li>
-
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';        
 
 			/**************************************************************************************/
@@ -1247,7 +1290,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('PRO_PROFILE').'" title="'.$g_l10n->get('PRO_PROFILE').'" /></a>
             	<a href="#">'.$g_l10n->get('PRO_PROFILE').'</a>
 			</h3>       		
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -1380,6 +1423,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('PRO_DEFAULT_ROLE_DESC').'</li>                       
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';
 
 			/**************************************************************************************/
@@ -1390,7 +1437,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/dates.png" alt="'.$g_l10n->get('DAT_DATES').'" title="'.$g_l10n->get('DAT_DATES').'" /></a>
             	<a href="#">'.$g_l10n->get('DAT_DATES').'</a>
 			</h3>  
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -1486,6 +1533,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('DAT_EDIT_ROOMS_DESC', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />').'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>                
         	</div>';
 
 			/**************************************************************************************/
@@ -1496,7 +1547,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$g_l10n->get('LNK_WEBLINKS').'" title="'.$g_l10n->get('LNK_WEBLINKS').'" /></a>
             	<a href="#">'.$g_l10n->get('LNK_WEBLINKS').'</a>
 			</h3>  
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -1566,6 +1617,10 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$g_l10n->get('LNK_DISPLAY_REDIRECT_DESC').'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>';		
 		
 			/**************************************************************************************/
@@ -1576,7 +1631,7 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$g_l10n->get('SYS_CAPTCHA').'" title="'.$g_l10n->get('SYS_CAPTCHA').'" /></a>
             	<a href="#">'.$g_l10n->get('SYS_CAPTCHA').'</a>
 			</h3>        
-            <div class="groupBoxBody">
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li class="smallFontSize">'.$g_l10n->get("ORG_CAPTCHA").'</li>
 					<li>
@@ -1721,6 +1776,10 @@ echo '
                     </li>
 					<li class="smallFontSize">'.$g_l10n->get('ORG_CAPTCHA_PREVIEW_TEXT').'</li>
                 </ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
             </div>';
 
 			/**************************************************************************************/
@@ -1731,16 +1790,14 @@ echo '
 				<a href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$g_l10n->get('ORG_SYSTEM_INFOS').'" title="'.$g_l10n->get('ORG_SYSTEM_INFOS').'" /></a>
             	<a href="#">'.$g_l10n->get('ORG_SYSTEM_INFORMATIONS').'</a>
 			</h3>  
-        	<div class="groupBox" id="systeminfo">
-				<div class="groupBoxBody">';
-					require_once('systeminfo.php');
-				echo'</div>
+			<div class="groupBoxBody" style="display: none;">';
+				require_once('systeminfo.php');
+				echo'<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+                </div>
         	</div>
 		</div>
-
-		<div class="formSubmit">	
-            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
-        </div>
 	</form>
 	</div>
 </div>';

@@ -2,7 +2,7 @@
 /******************************************************************************
  * Login Form
  *
- * Version 1.4.0
+ * Version 1.4.1
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
@@ -122,6 +122,12 @@ if($g_valid_login == 1)
             <dl>
                 <dt>'.$g_l10n->get('PLG_LOGIN_ACTIVE_SINCE').':</dt>
                 <dd>'. $g_current_session->getValue('ses_begin', $g_preferences['system_time']). ' '.$g_l10n->get('SYS_CLOCK').'</dd>
+            </dl>
+        </li>
+        <li>
+            <dl>
+                <dt>'.$g_l10n->get('PLG_LOGIN_LAST_LOGIN').':</dt>
+                <dd>'. $g_current_user->getValue('usr_last_login'). '</dd>
             </dl>
         </li>
         <li>

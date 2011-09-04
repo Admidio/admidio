@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="dk">
+<language id="da">
 	<version id="1.3.0">
 		<text id="PLG_ONLINE_SHOW_PROFILE" development="new" translation="todo">Vis profil</text>
 		<text id="PLG_ONLINE_VAR_NUM_VISITORS" development="new" translation="todo">%VAR1% Gæster</text>
