@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="dk">
+<language id="da">
 	<version id="1.6.0">
 		<text id="PLG_BIRTHDAY_FUTURE" development="new" translation="todo">%VAR1% bliver om %VAR2% dage %VAR3% år, den %VAR4%</text>
 		<text id="PLG_BIRTHDAY_MAN_VAR" development="new" translation="todo">Hr %VAR1%</text>

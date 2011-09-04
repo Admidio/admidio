@@ -24,25 +24,25 @@
     <text id="SYS_OCTOBER" development="new" translation="edited">October</text>
     <text id="SYS_NOVEMBER" development="new" translation="edited">November</text>
     <text id="SYS_DECEMBER" development="new" translation="edited">December</text>
-    <text id="SYS_JAN" development="new" translation="edited" description="Abbr. for January">Jan.</text>
-    <text id="SYS_FEB" development="new" translation="edited" description="Abbr. for February">Feb.</text>
-    <text id="SYS_MAR" development="new" translation="edited" description="Abbr. for March">Mar.</text>
-    <text id="SYS_APR" development="new" translation="edited" description="Abbr. for April">Apr.</text>
-    <text id="SYS_MAY" development="new" translation="edited" description="Abbr. for May">May.</text>
-    <text id="SYS_JUN" development="new" translation="edited" description="Abbr. for June">Jun.</text>
-    <text id="SYS_JUL" development="new" translation="edited" description="Abbr. for July">Jul.</text>
-    <text id="SYS_AUG" development="new" translation="edited" description="Abbr. for August">Aug.</text>
-    <text id="SYS_SEP" development="new" translation="edited" description="Abbr. for September">Sep.</text>
-    <text id="SYS_OCT" development="new" translation="edited" description="Abbr. for October">Oct.</text>
-    <text id="SYS_NOV" development="new" translation="edited" description="Abbr. for November">Nov.</text>
-    <text id="SYS_DEC" development="new" translation="edited" description="Abbr. for December">Dec.</text>
-    <text id="SYS_MON" development="new" translation="edited" description="Abbr. for Monday">Mon.</text>
-    <text id="SYS_TUE" development="new" translation="edited" description="Abbr. for Tuesday">Tue.</text>
-    <text id="SYS_WED" development="new" translation="edited" description="Abbr. for Wednesday">Wed.</text>
-    <text id="SYS_THU" development="new" translation="edited" description="Abbr. for Thursday">Thu.</text>
-    <text id="SYS_FRI" development="new" translation="edited" description="Abbr. for Friday">Fri.</text>
-    <text id="SYS_SAT" development="new" translation="edited" description="Abbr. for Saturday">Sat.</text>
-    <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Sun.</text>
+    <text id="SYS_JAN" development="new" translation="edited" description="Abbr. for January">Jan</text>
+    <text id="SYS_FEB" development="new" translation="edited" description="Abbr. for February">Feb</text>
+    <text id="SYS_MAR" development="new" translation="edited" description="Abbr. for March">Mar</text>
+    <text id="SYS_APR" development="new" translation="edited" description="Abbr. for April">Apr</text>
+    <text id="SYS_MAY" development="new" translation="edited" description="Abbr. for May">May</text>
+    <text id="SYS_JUN" development="new" translation="edited" description="Abbr. for June">Jun</text>
+    <text id="SYS_JUL" development="new" translation="edited" description="Abbr. for July">Jul</text>
+    <text id="SYS_AUG" development="new" translation="edited" description="Abbr. for August">Aug</text>
+    <text id="SYS_SEP" development="new" translation="edited" description="Abbr. for September">Sep</text>
+    <text id="SYS_OCT" development="new" translation="edited" description="Abbr. for October">Oct</text>
+    <text id="SYS_NOV" development="new" translation="edited" description="Abbr. for November">Nov</text>
+    <text id="SYS_DEC" development="new" translation="edited" description="Abbr. for December">Dec</text>
+    <text id="SYS_MON" development="new" translation="edited" description="Abbr. for Monday">Mon</text>
+    <text id="SYS_TUE" development="new" translation="edited" description="Abbr. for Tuesday">Tue</text>
+    <text id="SYS_WED" development="new" translation="edited" description="Abbr. for Wednesday">Wed</text>
+    <text id="SYS_THU" development="new" translation="edited" description="Abbr. for Thursday">Thu</text>
+    <text id="SYS_FRI" development="new" translation="edited" description="Abbr. for Friday">Fri</text>
+    <text id="SYS_SAT" development="new" translation="edited" description="Abbr. for Saturday">Sat</text>
+    <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Sun</text>
     <text id="SYS_TODAY" development="new" translation="edited">Today</text>
 </version>
 <version id="2.2.0">

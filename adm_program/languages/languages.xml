@@ -16,4 +16,8 @@
     <isocode>en</isocode>
     <name>English</name>
 </language>
+<language>
+    <isocode>fr</isocode>
+    <name>Français</name>
+</language>
 </languagelist>

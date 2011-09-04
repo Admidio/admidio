@@ -46,7 +46,7 @@ class Language
     
     private $language;						// Sprache dieser Klasse
     private $languageFilePath;				// Pfad der Sprachdatei aus dieser Klasse
-    private $referenceLanguage = 'de';		// die Referenzsprache, aus der Texte zurueckgegeben werden, wenn sie in der Defaultsprache nicht vorhanden sind
+    private $referenceLanguage = 'en';		// die Referenzsprache, aus der Texte zurueckgegeben werden, wenn sie in der Defaultsprache nicht vorhanden sind
     
     private $textCache; 					// eingelesene Texte werden in diesem Array gespeichert und spaeter nur noch aus dem Array gelesen
 	

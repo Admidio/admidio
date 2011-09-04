@@ -217,3 +217,7 @@ alter table %PREFIX%_texts add constraint %PREFIX%_FK_TXT_ORG foreign key (txt_o
       
 UPDATE %PREFIX%_user_fields SET usf_system = 0, usf_name = 'SYS_GENDER', usf_type = 'RADIO_BUTTON', usf_value_list = 'female.png|SYS_FEMALE\r\nmale.png|SYS_MALE'
  WHERE usf_name_intern LIKE 'GENDER';
+ 
+UPDATE %PREFIX%_preferences SET prf_value = 'da'
+ WHERE prf_name like 'system_language'
+   AND prf_value like 'dk';
