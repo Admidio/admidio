@@ -221,3 +221,15 @@ UPDATE %PREFIX%_user_fields SET usf_system = 0, usf_name = 'SYS_GENDER', usf_typ
 UPDATE %PREFIX%_preferences SET prf_value = 'da'
  WHERE prf_name like 'system_language'
    AND prf_value like 'dk';
+
+-- replace BB-Code with html for the new ckeditor
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/b]', '</b>'), '[b]', '<b>');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/i]', '</i>'), '[i]', '<i>');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/u]', '</u>'), '[u]', '<u>');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/big]', '</span>'), '[big]', '<span style="font-size:14pt">');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/small]', '</span>'), '[small]', '<span style="font-size:9pt">');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/center]', '</p>'), '[center]', '<p style="text-align: center">');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/img]', '" />'), '[img]', '<img src="');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/url]', '</a>'), '[url=', '<a href="');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/email]', '</a>'), '[email=', '<a href="mailto:');
+UPDATE %PREFIX%_announcements SET ann_description = REPLACE(ann_description, ']', '">');
