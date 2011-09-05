@@ -76,7 +76,7 @@ if($get_mode == 1)
         $_POST['usf_mandatory'] = 1;
     }
     
-    if($user_field->getValue('usf_name') != $_POST['usf_name'])
+    if(isset($_POST['usf_name']) && $user_field->getValue('usf_name') != $_POST['usf_name'])
     {
         // Schauen, ob das Feld bereits existiert
         $sql    = 'SELECT COUNT(*) as count 
@@ -109,14 +109,6 @@ if($get_mode == 1)
     if(isset($_POST['usf_mandatory']) == false)
     {
         $_POST['usf_mandatory'] = 0;
-    }
-    error_log($_POST['usf_type']);
-    
-    if($user_field->getValue('usf_system') == 1)
-    {
-        unset($_POST['usf_name']);
-        unset($_POST['usf_cat_id']);
-        unset($_POST['usf_type']);
     }
 
     // POST Variablen in das UserField-Objekt schreiben

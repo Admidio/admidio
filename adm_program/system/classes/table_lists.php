@@ -29,11 +29,16 @@ class TableLists extends TableAccess
     // Liste samt Abhaengigkeiten loeschen
     public function delete()
     {
+		$this->db->startTransaction();
+		
         // alle Spalten der Liste loeschen
         $sql = 'DELETE FROM '. TBL_LIST_COLUMNS. ' WHERE lsc_lst_id = '. $this->getValue('lst_id');
         $result = $this->db->query($sql);
         
-        return parent::delete();
+        $return = parent::delete();
+
+		$this->db->endTransaction();
+		return $return;
     } 
 
     public function save($updateFingerPrint = true)

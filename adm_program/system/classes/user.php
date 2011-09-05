@@ -224,6 +224,12 @@ class User extends TableUsers
         {
             return $this->userFieldData[$field_name]->getValue($property, $format);
         }
+		
+		// if id-field not exists then return zero
+		if(strpos($property, '_id') > 0)
+		{
+			return 0;
+		}
         return '';
     }
 

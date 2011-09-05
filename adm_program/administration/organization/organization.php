@@ -109,7 +109,7 @@ echo '
 					<li>
 						<dl>
 							<dt><label for="org_shortname">'.$g_l10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
-							<dd><input type="text" id="org_shortname" name="org_shortname" readonly="readonly" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
+							<dd><input type="text" id="org_shortname" name="org_shortname" disabled="disabled" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
 						</dl>
 					</li>
 					<li>

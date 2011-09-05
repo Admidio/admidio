@@ -61,11 +61,11 @@ if(isset($_SESSION['fields_request']))
     unset($_SESSION['fields_request']);
 }
 
-$html_readonly = '';
+$html_disabled = '';
 $field_focus   = 'usf_name';
 if($user_field->getValue('usf_system') == 1)
 {
-    $html_readonly = ' readonly="readonly" ';
+    $html_disabled = ' disabled="disabled" ';
     $field_focus   = 'usf_description';
 }
 
@@ -114,7 +114,7 @@ echo '
             <li>
                 <dl>
                     <dt><label for="usf_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
-                    <dd><input type="text" name="usf_name" id="usf_name" '.$html_readonly.' style="width: 345px;" maxlength="100"
+                    <dd><input type="text" name="usf_name" id="usf_name" '.$html_disabled.' style="width: 345px;" maxlength="100"
                         value="'. $user_field->getValue("usf_name"). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
@@ -135,7 +135,7 @@ echo '
                         if($user_field->getValue('usf_system') == 1)
                         {
                             // bei Systemfeldern darf die Kategorie nicht mehr veraendert werden
-                            echo '<input type="text" name="usf_cat_id" id="usf_cat_id" readonly="readonly" style="width: 150px;" 
+                            echo '<input type="text" name="usf_cat_id" id="usf_cat_id" disabled="disabled" style="width: 150px;" 
                                 maxlength="30" value="'. $user_field->getValue('cat_name'). '" />';
                         }
                         else
@@ -164,7 +164,7 @@ echo '
                         if($user_field->getValue('usf_system') == 1)
                         {
                             // bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
-                            echo '<input type="text" name="usf_type" id="usf_type" readonly="readonly" style="width: 150px;" 
+                            echo '<input type="text" name="usf_type" id="usf_type" disabled="disabled" style="width: 150px;" 
                                 maxlength="30" value="'. $userFieldText[$user_field->getValue('usf_type')]. '" />';
                         }
                         else

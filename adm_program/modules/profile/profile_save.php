@@ -27,15 +27,15 @@ if($g_valid_login == false)
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_usr_id   = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
-$get_new_user = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
+$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 
 // pruefen, ob Modul aufgerufen werden darf
-switch($get_new_user)
+switch($getNewUser)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($g_current_user->editProfile($get_usr_id) == false)
+        if($g_current_user->editProfile($getUserId) == false)
         {
             $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
         }
@@ -67,7 +67,7 @@ if(!isset($_POST['usr_login_name']))
 }
 
 // User auslesen
-$user = new User($g_db, $get_usr_id);
+$user = new User($g_db, $getUserId);
 
 
 /*------------------------------------------------------------*/
@@ -75,7 +75,7 @@ $user = new User($g_db, $get_usr_id);
 /*------------------------------------------------------------*/
 
 // bei Registrierung muss Loginname und Pw geprueft werden
-if($get_new_user == 2)
+if($getNewUser == 2)
 {
     if(strlen($_POST['usr_login_name']) == 0)
     {
@@ -105,62 +105,66 @@ foreach($user->userFieldData as $field)
 {
     $post_id = 'usf-'. $field->getValue('usf_id');    
     
-    if(isset($_POST[$post_id])) 
-    {
-        // Pflichtfelder muessen gefuellt sein
-        // E-Mail bei Registrierung immer !!!
-        if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
-        || ($get_new_user == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
-        {
-            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
-        }
+	// check and save only fields that aren't disabled
+	if($g_current_user->editUsers() == true || ($field->getValue('usf_disabled') == 0 && $getNewUser == 0))
+	{
+		if(isset($_POST[$post_id])) 
+		{
+			// Pflichtfelder muessen gefuellt sein
+			// E-Mail bei Registrierung immer !!!
+			if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
+			|| ($getNewUser == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
+			{
+				$g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+			}
 
-        // Wert aus Feld in das User-Klassenobjekt schreiben
-        $returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
-        
-        // Ausgabe der Fehlermeldung je nach Datentyp
-        if($returnCode == false)
-        {
-            if($field->getValue('usf_type') == 'CHECKBOX')
-            {
-                $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-            }
-            elseif($field->getValue('usf_type') == 'DATE')
-            {
-                $g_message->show($g_l10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
-            }
-            elseif($field->getValue('usf_type') == 'EMAIL')
-            {
-                $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
-            }
-            elseif($field->getValue('usf_type') == 'NUMERIC')
-            {
-                $g_message->show($g_l10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
-            }
-            elseif($field->getValue('usf_type') == 'URL')
-            {
-                $g_message->show($g_l10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
-            }
-        }
-    }
-    else
-    {
-        // Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
-        if($field->getValue('usf_type') == 'CHECKBOX')
-        {
-            $user->setValue($field->getValue('usf_name_intern'), '0');
-        }
-        elseif($field->getValue('usf_mandatory') == 1)
-        {
-    		$g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
-        }
-    }
+			// Wert aus Feld in das User-Klassenobjekt schreiben
+			$returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);
+			
+			// Ausgabe der Fehlermeldung je nach Datentyp
+			if($returnCode == false)
+			{
+				if($field->getValue('usf_type') == 'CHECKBOX')
+				{
+					$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+				}
+				elseif($field->getValue('usf_type') == 'DATE')
+				{
+					$g_message->show($g_l10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
+				}
+				elseif($field->getValue('usf_type') == 'EMAIL')
+				{
+					$g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
+				}
+				elseif($field->getValue('usf_type') == 'NUMERIC')
+				{
+					$g_message->show($g_l10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
+				}
+				elseif($field->getValue('usf_type') == 'URL')
+				{
+					$g_message->show($g_l10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
+				}
+			}
+		}
+		else
+		{
+			// Checkboxen uebergeben bei 0 keinen Wert, deshalb diesen hier setzen
+			if($field->getValue('usf_type') == 'CHECKBOX')
+			{
+				$user->setValue($field->getValue('usf_name_intern'), '0');
+			}
+			elseif($field->getValue('usf_mandatory') == 1)
+			{
+				$g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+			}
+		}
+	}
 }
 
 $login_name_changed = false;
 $forum_old_username = '';
 
-if($g_current_user->isWebmaster() || $get_new_user > 0)
+if($g_current_user->isWebmaster() || $getNewUser > 0)
 {
     // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden    
     if($_POST['usr_login_name'] != $user->getValue('usr_login_name'))
@@ -176,7 +180,7 @@ if($g_current_user->isWebmaster() || $get_new_user > 0)
             {
                 $row = $g_db->fetch_array();
 
-                if(strcmp($row['usr_id'], $get_usr_id) != 0)
+                if(strcmp($row['usr_id'], $getUserId) != 0)
                 {
                     $g_message->show($g_l10n->get('PRO_LOGIN_NAME_EXIST'));
                 }
@@ -210,7 +214,7 @@ if($g_current_user->isWebmaster() || $get_new_user > 0)
 }
 
 // falls Registrierung, dann die entsprechenden Felder noch besetzen
-if($get_new_user == 2)
+if($getNewUser == 2)
 {
     $user->setValue('usr_valid', 0);
     $user->setValue('usr_reg_org_shortname', $g_current_organization->getValue('org_shortname'));
@@ -220,7 +224,7 @@ if($get_new_user == 2)
 
 // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
-if ($get_new_user == 2 && $g_preferences['enable_registration_captcha'] == 1)
+if ($getNewUser == 2 && $g_preferences['enable_registration_captcha'] == 1)
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
@@ -237,7 +241,7 @@ if($user->getValue('usr_id') == 0)
 {
     // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
     $user->save();
-    if($get_new_user == 1)
+    if($getNewUser == 1)
     {
         $user->setValue('usr_usr_id_create', $g_current_user->getValue('usr_id'));
     }
@@ -252,14 +256,14 @@ $ret_code = $user->save();
 
 // wurde der Loginname vergeben oder geaendert, so muss ein Forumaccount gepflegt werden
 // bei einer Bestaetigung der Registrierung muss der Account aktiviert werden
-if($g_preferences['enable_forum_interface'] && ($login_name_changed || $get_new_user == 3))
+if($g_preferences['enable_forum_interface'] && ($login_name_changed || $getNewUser == 3))
 {
     $set_admin = false;
     if($g_preferences['forum_set_admin'] == 1 && $user->isWebmaster())
     {
         $set_admin = true;
     }
-    $g_forum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('EMAIL'), $forum_old_username, $get_new_user, $set_admin);
+    $g_forum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('EMAIL'), $forum_old_username, $getNewUser, $set_admin);
 }
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
@@ -274,7 +278,7 @@ $_SESSION['navigation']->deleteLastUrl();
 /*------------------------------------------------------------*/
 // je nach Aufrufmodus auf die richtige Seite weiterleiten
 /*------------------------------------------------------------*/
-if($get_new_user == 2)
+if($getNewUser == 2)
 {
     /*------------------------------------------------------------*/
     // Registrierung eines neuen Benutzers
@@ -322,14 +326,14 @@ if($get_new_user == 2)
     $g_message->setForwardUrl($g_homepage);
     $g_message->show($g_l10n->get('SYS_REGISTRATION_SAVED'));
 }
-elseif($get_new_user == 3 || $get_usr_id == 0)
+elseif($getNewUser == 3 || $getUserId == 0)
 {
     /*------------------------------------------------------------*/
     // neuer Benutzer wurde ueber Webanmeldung angelegt und soll nun zugeordnet werden
     // oder ein neuer User wurde in der Benutzerverwaltung angelegt
     /*------------------------------------------------------------*/
 
-    if($get_usr_id > 0) // Webanmeldung
+    if($getUserId > 0) // Webanmeldung
     {
         // User auf aktiv setzen
         $user->setValue('usr_valid', 1);
@@ -370,7 +374,7 @@ elseif($get_new_user == 3 || $get_usr_id == 0)
         $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
     }
 }
-elseif($get_new_user == 0 && $user->getValue('usr_valid') == 0)
+elseif($getNewUser == 0 && $user->getValue('usr_valid') == 0)
 {
     // neue Registrierung bearbeitet
     $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);

@@ -180,7 +180,7 @@ echo '
                         if ($g_current_user->getValue('usr_id') > 0)
                         {
                             // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                            echo '<input readonly="readonly" type="text" id="gbc_name" name="gbc_name" style="width: 345px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />';
+                            echo '<input type="text" id="gbc_name" name="gbc_name" disabled="disabled" style="width: 345px;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />';
                         }
                         else
                         {

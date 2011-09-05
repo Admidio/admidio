@@ -74,6 +74,8 @@ class TableRoles extends TableAccess
         // die Systemrollem duerfen nicht geloescht werden
         if($this->getValue('rol_system') == false)
         {
+			$this->db->startTransaction();
+			
             $sql    = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES. '
                         WHERE rld_rol_id_parent = '. $this->getValue('rol_id'). '
                            OR rld_rol_id_child  = '. $this->getValue('rol_id');
@@ -83,7 +85,10 @@ class TableRoles extends TableAccess
                         WHERE mem_rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
-            return parent::delete();
+            $return = parent::delete();
+
+			$this->db->endTransaction();
+			return $return;
         }
         else
         {

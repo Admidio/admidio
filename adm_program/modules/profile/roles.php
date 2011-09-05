@@ -26,12 +26,12 @@ if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue('
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_usr_id   = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
-$get_new_user = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
-$get_inline   = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
+$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
+$getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
-$user     = new User($g_db, $get_usr_id);
-if($get_inline == 0)
+$user = new User($g_db, $getUserId);
+if($getInline == 0)
 {
     $_SESSION['navigation']->addUrl(CURRENT_URL);
 }
@@ -53,7 +53,7 @@ $g_layout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_
     var profileJS = new profileJSClass();
 	profileJS.init();
 </script>';
-if($get_inline == 0)
+if($getInline == 0)
 {
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
 }
@@ -61,7 +61,7 @@ if($get_inline == 0)
 echo '
 <h1 class="moduleHeadline">'. $g_layout['title']. '</h1>
 
-<form id="rolesForm" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?user_id='.$get_usr_id.'&amp;new_user='.$get_new_user.'&amp;inline='.$get_inline.'" method="post">
+<form id="rolesForm" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">
     <table class="tableList" cellspacing="0">
         <thead>
             <tr>
@@ -69,7 +69,7 @@ echo '
                 <th>'.$g_l10n->get('ROL_ROLE').'</th>
                 <th>'.$g_l10n->get('SYS_DESCRIPTION').'</th>
                 <th style="text-align: center; width: 80px;">'.$g_l10n->get('SYS_LEADER');
-				if($get_inline == 0)
+				if($getInline == 0)
 				{
 					echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION&amp;inline=true"><img 
 		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
@@ -91,7 +91,7 @@ echo '
                          FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                          LEFT JOIN '. TBL_MEMBERS. '
                            ON rol_id      = mem_rol_id
-                          AND mem_usr_id  = '.$get_usr_id.'
+                          AND mem_usr_id  = '.$getUserId.'
                           AND mem_begin  <= \''.DATE_NOW.'\'
                           AND mem_end     > \''.DATE_NOW.'\'
                         WHERE rol_valid   = 1
@@ -109,7 +109,7 @@ echo '
                          FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                          LEFT JOIN '. TBL_MEMBERS. ' mgl
                            ON rol_id         = mgl.mem_rol_id
-                          AND mgl.mem_usr_id = '.$get_usr_id.'
+                          AND mgl.mem_usr_id = '.$getUserId.'
                           AND mgl.mem_begin <= \''.DATE_NOW.'\'
                           AND mgl.mem_end    > \''.DATE_NOW.'\'
                         WHERE bm.mem_usr_id  = '. $g_current_user->getValue('usr_id'). '
@@ -169,10 +169,10 @@ echo '
                          // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
                          if($row->rol_name == $g_l10n->get('SYS_WEBMASTER') && (!$g_current_user->isWebmaster()
                             ||  // man darf sich selbst an dieser Stelle aber nicht aus der Rolle Webmaster entfernen
-                            ($g_current_user->isWebmaster() && $get_usr_id == $g_current_user->getValue("usr_id")))
+                            ($g_current_user->isWebmaster() && $getUserId == $g_current_user->getValue("usr_id")))
                            )
                          {
-                           echo ' readonly="readonly" ';
+                           echo ' disabled="disabled" ';
                          }
     
                          echo ' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />
@@ -203,7 +203,7 @@ echo '
     <div class="formSubmit">
         <button id="btnSave" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
     </div>';
-    if($get_inline == 0)
+    if($getInline == 0)
     {
         echo '<ul class="iconTextLinkList">
                 <li>
@@ -216,7 +216,7 @@ echo '
              </ul>';
     }
 echo '</form>';
-if($get_inline == 0)
+if($getInline == 0)
 {
     require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }

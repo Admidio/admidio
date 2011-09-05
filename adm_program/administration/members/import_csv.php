@@ -141,7 +141,6 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
 					{
 						if(strcmp($col_value, trim($arrListValues[$position])) == 0)
 						{
-							error_log('set');
 							$user->setValue($field->getValue('usf_name_intern'), $position+1);
 						}
 						$position++;

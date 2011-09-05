@@ -165,7 +165,7 @@ echo '
                         if ($g_current_user->getValue('usr_id') > 0)
                         {
                             // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                            echo '<input type="text" id="gbo_name" name="gbo_name" readonly="readonly" style="width: 345px;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />';
+                            echo '<input type="text" id="gbo_name" name="gbo_name" disabled="disabled" style="width: 345px;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />';
                         }
                         else
                         {

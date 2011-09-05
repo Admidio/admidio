@@ -77,7 +77,7 @@ if($get_mode == 1)
 
     $_SESSION['categories_request'] = $_REQUEST;
 
-    if(strlen($_POST['cat_name']) == 0)
+    if(strlen($_POST['cat_name']) == 0 && $category->getValue('cat_system') == 0)
     {
         $g_message->show($g_l10n->get('SYS_FIELD_EMPTY',$g_l10n->get('SYS_NAME')));
     }
@@ -107,7 +107,7 @@ if($get_mode == 1)
                      FROM '. TBL_CATEGORIES. '
                     WHERE cat_type    = \''. $get_type. '\'
                       AND cat_name LIKE \''. $_POST['cat_name']. '\'
-                      AND cat_id     <> '. $_GET['cat_id']. 
+                      AND cat_id     <> '.$get_cat_id. 
                           $search_orga;
         $result = $g_db->query($sql);
         $row    = $g_db->fetch_array($result);

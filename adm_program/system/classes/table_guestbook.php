@@ -35,11 +35,16 @@ class TableGuestbook extends TableAccess
     // die Methode loescht den Gaestebucheintrag mit allen zugehoerigen Kommentaren
     public function delete()
     {
+		$this->db->startTransaction();
+		
         //erst einmal alle vorhanden Kommentare zu diesem Gaestebucheintrag loeschen...
         $sql = 'DELETE FROM '. TBL_GUESTBOOK_COMMENTS. ' WHERE gbc_gbo_id = '. $this->getValue('gbo_id');
         $result = $this->db->query($sql);
         
-        return parent::delete();
+        $return = parent::delete();
+
+		$this->db->endTransaction();
+		return $return;
     }
 
     // liefert den Text je nach Type zurueck
