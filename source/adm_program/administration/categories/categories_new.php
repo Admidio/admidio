@@ -23,7 +23,7 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_category.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_cat_id = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$get_cat_id = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $get_type   = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
 $get_title  = admFuncVariableIsValid($_GET, 'title', 'string', $g_l10n->get('SYS_CATEGORY'));
 
@@ -75,11 +75,11 @@ if(isset($_SESSION['categories_request']))
 }
 
 // Systemkategorien duerfen nicht umbenannt werden
-$html_readonly = '';
+$html_disabled = '';
 $field_focus   = 'cat_name';
 if($category->getValue('cat_system') == 1)
 {
-    $html_readonly = ' readonly="readonly" ';
+    $html_disabled = ' disabled="disabled" ';
     $field_focus   = 'btn_save';
 }
 
@@ -112,7 +112,7 @@ echo '
                 <dl>
                     <dt><label for="cat_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="cat_name" name="cat_name" '.$html_readonly.' style="width: 345px;" maxlength="100" value="'. $category->getValue('cat_name'). '" />
+                        <input type="text" id="cat_name" name="cat_name" '.$html_disabled.' style="width: 345px;" maxlength="100" value="'. $category->getValue('cat_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>

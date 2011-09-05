@@ -8,8 +8,7 @@
  *
  * Uebergaben:
  *
- * user_id: zeigt das Profil der uebergebenen user_id an
- *          (wird keine user_id uebergeben, dann Profil des eingeloggten Users anzeigen)
+ * user_id: bearbeitet die Rollenzuordnung des uebergebenen Users
  * action:  0 ... reload Role Memberships
  *          1 ... former reload Role Memberships
  *          2 ... Daten speichern
@@ -17,28 +16,28 @@
  *****************************************************************************/
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once("../../system/classes/table_members.php");
+require_once('../../system/classes/table_members.php');
 require_once('roles_functions.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_usr_id = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $g_current_user->getValue('usr_id'));
-$get_action = admFuncVariableIsValid($_GET, 'action', 'numeric', 0);
+$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', null, true);
+$getAction = admFuncVariableIsValid($_GET, 'action', 'numeric', 0);
 
 // User auslesen
-$user = new User($g_db, $get_usr_id);
+$user = new User($g_db, $getUserId);
 
-switch($get_action)
+switch($getAction)
 {
     case 0: // reload Role Memberships
         $count_show_roles 	= 0;
-        $result_role 		= getRolesFromDatabase($g_db,$get_usr_id,$g_current_organization);
+        $result_role 		= getRolesFromDatabase($g_db,$getUserId,$g_current_organization);
         $count_role  		= $g_db->num_rows($result_role);
         getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,true,$g_l10n);
     break;
 
     case 1: // former reload Role Memberships
         $count_show_roles 	= 0;
-        $result_role 		= getFormerRolesFromDatabase($g_db,$get_usr_id,$g_current_organization);
+        $result_role 		= getFormerRolesFromDatabase($g_db,$getUserId,$g_current_organization);
         $count_role  		= $g_db->num_rows($result_role);
         getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,true,$g_l10n);
         if($count_role == 0)
@@ -56,12 +55,8 @@ switch($get_action)
         {
             die($g_l10n->get('SYS_NO_RIGHTS'));
         }
+
         // Uebergabevariablen pruefen
-        if(isset($_GET['usr_id']) && is_numeric($_GET['usr_id']) == false)
-        {
-            die($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-        }
-        
         if(isset($_GET['rol_id']) && is_numeric($_GET['rol_id']) == false)
         {
             die($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -69,7 +64,7 @@ switch($get_action)
 
         //Einlesen der Mitgliedsdaten
         $mem = new TableMembers($g_db);
-        $mem->readData(array('rol_id' => $_GET['rol_id'], 'usr_id' => $_GET['usr_id']));
+        $mem->readData(array('rol_id' => $_GET['rol_id'], 'usr_id' => $getUserId));
          
         //Check das Beginn Datum
         $startDate = new DateTimeExtended($_GET['rol_begin'], $g_preferences['system_date'], 'date');

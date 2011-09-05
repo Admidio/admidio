@@ -119,6 +119,11 @@ if ($get_mode == 1 || $get_mode == 3)
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_entry_request'] = $_REQUEST;
 
+	// if login then fill name with login user
+	if($g_current_user->getValue('usr_id') > 0)
+	{
+		$_POST['gbo_name'] = $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME');
+	}
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
@@ -299,6 +304,11 @@ elseif($get_mode == 4 || $get_mode == 8)
     // Der Inhalt des Formulars wird nun in der Session gespeichert...
     $_SESSION['guestbook_comment_request'] = $_REQUEST;
 
+	// if login then fill name with login user
+	if($g_current_user->getValue('usr_id') > 0)
+	{
+		$_POST['gbc_name'] = $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME');
+	}
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden

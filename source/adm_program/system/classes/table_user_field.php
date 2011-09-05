@@ -30,6 +30,8 @@ class TableUserField extends TableAccess
     {
         global $g_current_session;
         
+		$this->db->startTransaction();
+		
         // Luecke in der Reihenfolge schliessen
         $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = usf_sequence - 1 
                  WHERE usf_cat_id   = '. $this->getValue('usf_cat_id'). '
@@ -62,7 +64,10 @@ class TableUserField extends TableAccess
         // da Aenderungen in den Profilfeldern vorgenommen wurden 
         $g_current_session->renewUserObject();
 
-        return parent::delete();
+        $return = parent::delete();
+		
+		$this->db->endTransaction();
+		return $return;
     }
 
     // diese rekursive Methode ermittelt fuer den uebergebenen Namen einen eindeutigen Namen
@@ -154,7 +159,13 @@ class TableUserField extends TableAccess
     // die Funktion wird innerhalb von setValue() aufgerufen
     public function setValue($field_name, $field_value)
     {
-        if($field_name == 'usf_cat_id'
+        // name, category and type couldn't be edited if it's a system field
+        if(($field_name == 'usf_name' || $field_name == 'usf_cat_id' || $field_name == 'usf_type')
+		&& $this->getValue('usf_system') == 1)
+        {
+            return false;
+        }
+        elseif($field_name == 'usf_cat_id'
         && $this->getValue($field_name) != $field_value)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln

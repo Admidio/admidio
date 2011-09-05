@@ -9,6 +9,7 @@
  * Uebergaben:
  *
  * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
+ * subject - Betreff der Mail kann unabhaengig vom Formular vorgegeben werden
  *
  *****************************************************************************/
 
@@ -17,21 +18,26 @@ require_once('../../system/classes/email.php');
 require_once('../../system/classes/table_roles.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$post_rol_id = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
-$get_usr_id  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
+$postRoleId = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
+$_POST['subject'] = admFuncVariableIsValid($_GET, 'subject', 'string', '');
 
 if ($g_preferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
     $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
-} 
+}
 
-// Der Inhalt des Formulars wird nun in der Session gespeichert...
-$_SESSION['mail_request'] = $_REQUEST;
+// if login then show sender name and email
+if ($g_current_user->getValue('usr_id') > 0)
+{
+	$_POST['name'] = $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME');
+	$_POST['mailfrom'] = $g_current_user->getValue('EMAIL');
+}
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
-if ($get_usr_id > 0)
+if ($getUserId > 0)
 {
     // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
@@ -42,7 +48,7 @@ if ($get_usr_id > 0)
     }
 
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($g_db, $get_usr_id);
+    $user = new User($g_db, $getUserId);
 
     // darf auf die User-Id zugegriffen werden    
     if((  $g_current_user->editUsers() == false && isMember($user->getValue('usr_id')) == false)
@@ -56,8 +62,10 @@ if ($get_usr_id > 0)
     {
         $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
+	
+	$_POST['mailto'] = $user->getValue('EMAIL');
 }
-elseif ($post_rol_id > 0)
+elseif ($postRoleId > 0)
 {
     // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
 
@@ -66,7 +74,7 @@ elseif ($post_rol_id > 0)
              WHERE rol_cat_id    = cat_id
                AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
                    OR cat_org_id IS NULL)
-               AND rol_id = '.$post_rol_id;
+               AND rol_id = '.$postRoleId;
     $result = $g_db->query($sql);
     $row    = $g_db->fetch_array($result);
 
@@ -107,7 +115,7 @@ if(strlen($_POST['name']) == 0)
 //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
 if ( $g_valid_login 
 && (  $_POST['mailfrom'] != $g_current_user->getValue('EMAIL') 
-   || $_POST['name'] != $g_current_user->getValue('FIRST_NAME'). " ". $g_current_user->getValue('LAST_NAME')) )
+   || $_POST['name'] != $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME')) )
 {
     $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -115,9 +123,9 @@ if ( $g_valid_login
 //Absenderangaben setzen
 if ($email->setSender($_POST['mailfrom'],$_POST['name']))
 {
-  //Betreff setzen
-  if ($email->setSubject($_POST['subject']))
-  {
+	//Betreff setzen
+	if ($email->setSubject($_POST['subject']))
+	{
         //Pruefen ob moeglicher Weise ein Attachment vorliegt
         if (isset($_FILES['userfile']))
         {
@@ -169,18 +177,18 @@ else
     $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')));
 }
 
-if ($get_usr_id > 0)
+if ($getUserId > 0)
 {
 	// wurde kein Benutzer uebergeben, dann muss Rolle uebergeben werden
-    if ($post_rol_id == 0)
+    if ($postRoleId == 0)
     {
         $g_message->show($g_l10n->get('MAI_CHOOSE_ROLE'));
     }
     
-    $role->readData($post_rol_id);
+    $role->readData($postRoleId);
 
 	// Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
-	if ($g_valid_login == true && !$g_current_user->mailRole($post_rol_id))
+	if ($g_valid_login == true && !$g_current_user->mailRole($postRoleId))
     {
         $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
     }
@@ -203,7 +211,7 @@ if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
 }
 
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
-if ($get_usr_id > 0)
+if ($getUserId > 0)
 {
     //den gefundenen User dem Mailobjekt hinzufuegen...
     $email->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
@@ -245,7 +253,7 @@ else
                 LEFT JOIN '. TBL_USER_DATA. ' as first_name
                   ON first_name.usd_usr_id = usr_id
                  AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
-               WHERE rol_id      = '.$post_rol_id.'
+               WHERE rol_id      = '.$postRoleId.'
                  AND rol_cat_id  = cat_id
                  AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
                      OR cat_org_id IS NULL )
@@ -324,9 +332,6 @@ if ($email->sendEmail())
     $_SESSION['navigation']->deleteLastUrl();
     // dann auch noch die mail.php entfernen
     $_SESSION['navigation']->deleteLastUrl();
-
-    // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
-    unset($_SESSION['mail_request']);
 
     // Meldung ueber erfolgreichen Versand und danach weiterleiten
     if($_SESSION['navigation']->count() > 0)

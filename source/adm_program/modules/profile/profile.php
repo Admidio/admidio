@@ -18,10 +18,10 @@ require_once('../../system/login_valid.php');
 require_once('roles_functions.php');
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_usr_id = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $g_current_user->getValue('usr_id'));
+$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $g_current_user->getValue('usr_id'));
 
 //Testen ob Recht besteht Profil einzusehn
-if(!$g_current_user->viewProfile($get_usr_id))
+if(!$g_current_user->viewProfile($getUserId))
 {
     $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
 }
@@ -184,11 +184,11 @@ function getFieldCode($field, $user_id)
 }
 
 // User auslesen
-$user = new User($g_db, $get_usr_id);
+$user = new User($g_db, $getUserId);
 
 unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken
-if($user->getValue('usr_id') != $g_current_user->getValue('usr_id') && isset($_GET['user_id']) == false)
+if($user->getValue('usr_id') != $g_current_user->getValue('usr_id'))
 {
     $_SESSION['navigation']->clear();
 }
@@ -753,7 +753,7 @@ echo '
     </div>
 </div>';
 
-if(isset($_GET['user_id']) == true)
+if($user->getValue('usr_id') != $g_current_user->getValue('usr_id'))
 {
     echo '
     <ul class="iconTextLinkList">

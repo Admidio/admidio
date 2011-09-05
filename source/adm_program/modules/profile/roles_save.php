@@ -29,9 +29,9 @@ if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue('
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_usr_id   = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
-$get_new_user = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
-$get_inline   = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
+$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
+$getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
 // detect number of selected roles
 $roleCount = 0;
@@ -46,7 +46,7 @@ foreach($_POST as $key=>$value)
 // if no role is selected than show notice
 if($roleCount == 0)
 {
-	if($get_inline == 0)
+	if($getInline == 0)
 	{
 		die($g_message->show($g_l10n->get('PRO_ROLE_NOT_ASSIGNED')));
 	}
@@ -63,7 +63,7 @@ if($g_current_user->assignRoles())
                  FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. '
                    ON rol_id      = mem_rol_id
-                  AND mem_usr_id  = '.$get_usr_id.'
+                  AND mem_usr_id  = '.$getUserId.'
                 WHERE rol_valid   = 1
                   AND rol_visible = 1
                   AND rol_cat_id  = cat_id
@@ -78,7 +78,7 @@ else
                  FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. ' mgl
                    ON rol_id         = mgl.mem_rol_id
-                  AND mgl.mem_usr_id = '.$get_usr_id.'
+                  AND mgl.mem_usr_id = '.$getUserId.'
                   AND mgl.mem_begin <= \''.DATE_NOW.'\'
                   AND mgl.mem_end    > \''.DATE_NOW.'\'
                 WHERE bm.mem_usr_id  = '. $g_current_user->getValue('usr_id'). '
@@ -107,10 +107,10 @@ while($row = $g_db->fetch_array($result_rol))
         $sql = 'SELECT COUNT(*)
                   FROM '. TBL_MEMBERS.'
                  WHERE mem_rol_id = '.$row['rol_id'].'
-                   AND mem_usr_id = '.$get_usr_id.'
+                   AND mem_usr_id = '.$getUserId.'
                    AND mem_leader = 0
-                   AND mem_begin <= "'.DATE_NOW.'"
-                   AND mem_end    > "'.DATE_NOW.'"';
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end    > \''.DATE_NOW.'\'';
         $g_db->query($sql);
 
         $row_usr = $g_db->fetch_array();
@@ -122,8 +122,8 @@ while($row = $g_db->fetch_array($result_rol))
                       FROM '. TBL_MEMBERS.'
                      WHERE mem_rol_id = '.$row['rol_id'].'
                        AND mem_leader = 0
-                       AND mem_begin <= "'.DATE_NOW.'"
-                       AND mem_end    > "'.DATE_NOW.'"';
+                       AND mem_begin <= \''.DATE_NOW.'\'
+                       AND mem_end    > \''.DATE_NOW.'\'';
             $g_db->query($sql);
 
             $row_members = $g_db->fetch_array();
@@ -133,7 +133,7 @@ while($row = $g_db->fetch_array($result_rol))
             && isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == false
             && isset($_POST['role-'.$row['rol_id']])   && $_POST['role-'.$row['rol_id']]   == true)
             {
-				if($get_inline == 0)
+				if($getInline == 0)
 				{
                 	$g_message->show($g_l10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
 				}
@@ -175,12 +175,12 @@ while($row = $g_db->fetch_array($result_rol))
         // Rollenmitgliedschaften aktualisieren
         if($role_assign == 1)
         {
-            $member->startMembership($row['rol_id'], $get_usr_id, $role_leader);
+            $member->startMembership($row['rol_id'], $getUserId, $role_leader);
             $count_assigned++;
         }
         else
         {
-            $member->stopMembership($row['rol_id'], $get_usr_id);
+            $member->stopMembership($row['rol_id'], $getUserId);
         }
 
         // find the parent roles
@@ -209,7 +209,7 @@ if(count($parentRoles) > 0 )
     // alle einzufuegenden Rollen anhaengen
     foreach($parentRoles as $actRole)
     {
-        $sql .= ' ('.$actRole.', '.$get_usr_id.', "'.DATE_NOW.'", "9999-12-31", 0),';
+        $sql .= ' ('.$actRole.', '.$getUserId.', "'.DATE_NOW.'", "9999-12-31", 0),';
     }
 
     // Das letzte Komma wieder wegschneiden
@@ -218,10 +218,10 @@ if(count($parentRoles) > 0 )
     $g_db->query($sql);
 }
 
-if($get_new_user == 1 && $count_assigned == 0)
+if($getNewUser == 1 && $count_assigned == 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
-	if($get_inline == 0)
+	if($getInline == 0)
 	{
     	$g_message->show($g_l10n->get('PRO_ROLE_NOT_ASSIGNED'));
 	}
@@ -237,7 +237,7 @@ if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
     // von hier aus direkt zur Registrierungsuebersicht zurueck
     $_SESSION['navigation']->deleteLastUrl();
 }
-if($get_inline == 0)
+if($getInline == 0)
 {
 	$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
 	$g_message->show($g_l10n->get('SYS_SAVE_DATA'));

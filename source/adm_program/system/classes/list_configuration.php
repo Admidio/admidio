@@ -207,11 +207,11 @@ class ListConfiguration extends TableLists
                         $value = admStrToLower($value);
                         
                         // Ja bzw. Nein werden durch 1 bzw. 0 ersetzt, damit Vergleich in DB gemacht werden kann
-                        if($value == 'ja' || $value == '1' || $value == 'true')
+                        if($value == admStrToLower($g_l10n->get('SYS_YES')) || $value == '1' || $value == 'true')
                         {
                             $value = '1';
                         }
-                        elseif($value == 'nein' || $value == '0' || $value == 'false')
+                        elseif($value == admStrToLower($g_l10n->get('SYS_NO')) || $value == '0' || $value == 'false')
                         {
                             $value = '0';
                         }
@@ -340,13 +340,18 @@ class ListConfiguration extends TableLists
     
     public function delete()
     {
-        // erst einmal die einzelnen Spalten loeschen
+		$this->db->startTransaction();
+		
+        // first delete all columns
         foreach($this->columns as $number => $list_column)
         {
             $list_column->delete();
         }
     
-        return parent::delete();
+        $return = parent::delete();
+		
+		$this->db->endTransaction();
+		return $return;
     }
 }
 ?>

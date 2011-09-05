@@ -46,7 +46,7 @@ $sql = 'SELECT * FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
   		 WHERE lnk_cat_id = cat_id
 		   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
 		   AND cat_type = \'LNK\'
-		   AND lnk_id = '. $_GET['lnk_id']. '
+		   AND lnk_id = '.$get_lnk_id.'
   		       '.$sqlCondition.'
 		 ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
 $result = $g_db->query($sql);
