@@ -11,6 +11,10 @@
     <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
     <text id="ORG_FIELD_DISABLED" development="changed" translation="todo">Feld nur für Benutzer mit dem Recht %VAR1_BOLD% editierbar</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_COLOR" development="changed" translation="todo">Farbe Javascript-Editor</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_COLOR_DESC" development="changed" translation="todo">Hier wird die Hintergrundfarbe des Javascripteditors angegeben. Dies kann ein hexadezimaler Farbwert sein z.B. #ffa500 oder ein RGB-Wert z.B. rgb(255, 185,0).</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_ENABLE" development="changed" translation="todo">Javascript-Editor benutzen</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC" development="changed" translation="todo">Ein umfangreicher Javascript-Editor wird an vielen Stellen im Programm genutzt, damit der Benutzer z.B. Ankündigungen, Terminbeschreibungen oder ähnliches komfortabler eingeben kann. Wird der Editor deaktiviert, so wird ein einfaches mehrzeiliges Textfeld dargestellt.</text>
     <text id="SYS_CHECKBOX" development="deleted" translation="todo">Checkbox</text>
     <text id="SYS_DATABASE_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt %VAR1% oder höher</text>
     <text id="SYS_DROPDOWN_LISTBOX" development="deleted" translation="todo">Dropdown-Listenfeld</text>

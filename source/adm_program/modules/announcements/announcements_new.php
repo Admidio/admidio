@@ -138,7 +138,7 @@ echo '
 			<div class="groupBoxBody" id="admDescriptionBody">
                 <ul class="formFieldList">
                     <li>
-                         '.$ckEditor->createDefaultEditor('ann_description', $announcement->getValue('ann_description')).'
+                         '.$ckEditor->createEditor('ann_description', $announcement->getValue('ann_description')).'
                          <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </li>
                 </ul>

@@ -86,8 +86,8 @@ if ($req_queryForm)
 {
     // Bedingung fuer die Suchanfrage
     $search_string = str_replace(',', '', $req_queryForm). '%';
-    $search_condition = ' AND (  last_name.usd_value || \' \' || first_name.usd_value LIKE \''.$search_string.'\'
-                              OR last_name.usd_value || \' \' || first_name.usd_value LIKE \''.$search_string.'\' ) ';
+    $search_condition = ' AND (  last_name.usd_value  || \' \' || first_name.usd_value LIKE \''.$search_string.'\'
+                              OR first_name.usd_value || \' \' || last_name.usd_value  LIKE \''.$search_string.'\' ) ';
 }
 else
 {

@@ -315,6 +315,27 @@ echo '
 						</dl>
 					</li>
 					<li class="smallFontSize">'.$g_l10n->get('ORG_SEARCH_SIMILAR_NAMES_DESC').'</li>
+					<li>
+						<dl>
+							<dt><label for="system_js_editor_enabled">'.$g_l10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE').':</label></dt>
+							<dd>
+								<input type="checkbox" id="system_js_editor_enabled" name="system_js_editor_enabled" ';
+								if(isset($form_values['system_js_editor_enabled']) && $form_values['system_js_editor_enabled'] == 1)
+								{
+									echo ' checked="checked" ';
+								}
+								echo ' value="1" />
+							</dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$g_l10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE_DESC', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
+					<li>
+						<dl>
+							<dt><label for="system_js_editor_color">'.$g_l10n->get('ORG_JAVASCRIPT_EDITOR_COLOR').':</label></dt>
+							<dd><input type="text" id="system_js_editor_color" name="system_js_editor_color" style="width: 100px;" maxlength="10" value="'. $form_values['system_js_editor_color']. '" /></dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$g_l10n->get('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
 				</ul>
 				<br />
 				<div class="formSubmit">	
