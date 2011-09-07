@@ -53,21 +53,9 @@ img {
     border-width:       0px;
 }
 
-*[readonly] {
-    background-color:   #e5e5e5;
-    border-width:       thin;
-}
-
 textarea, input, select {
     font-family:        Arial, sans-serif;
     font-size:          11pt;
-}
-
-/* Hack fuer IE6, damit dieser lange Buttons vernuenftig darstellt */
-html.* button {    
-    padding:            0em .25em;
-    width:              auto;
-    overflow:           visible;
 }
 
 button img {

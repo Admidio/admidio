@@ -66,8 +66,8 @@ class TableCategory extends TableAccess
             }
             elseif($this->getValue('cat_type') == 'ROL')
             {
-				require_once(SERVER_PATH. '/adm_program/system/classes/table_role.php');
-				$object = new TableRole($this->db);
+				require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
+				$object = new TableRoles($this->db);
             }
             elseif($this->getValue('cat_type') == 'USF')
             {

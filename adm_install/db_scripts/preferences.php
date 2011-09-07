@@ -28,7 +28,8 @@ $orga_preferences = array(
     'system_time'                   => 'H:i',
     'system_currency'               => '€',
     'system_search_similar'         => '1',
-    'system_js_editor'              => '1',
+    'system_js_editor_enabled'      => '1',
+    'system_js_editor_color'        => '#96c4cb',
 
     // Registrierung
     'registration_mode'              => '1',
