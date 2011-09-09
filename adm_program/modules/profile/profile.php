@@ -463,8 +463,8 @@ echo '
                 // Kategorienwechsel den Kategorienheader anzeigen
                 // Kategorie 'Messenger' nur anzeigen, wenn auch Daten zugeordnet sind
                 if($category != $field->getValue('cat_name')
-                && (  $field->getValue('cat_name') != 'Messenger'
-                   || ($field->getValue('cat_name') == 'Messenger' && strlen($field->getValue('usd_value')) > 0 )))
+                && (  $field->getValue('cat_name_intern') != 'MESSENGER'
+                   || ($field->getValue('cat_name_intern') == 'MESSENGER' && strlen($field->getValue('usd_value')) > 0 )))
                 {
                     if(strlen($category) > 0)
                     {
@@ -492,8 +492,8 @@ echo '
 
                 // Html des Feldes ausgeben
                 // bei Kategorie 'Messenger' nur anzeigen, wenn auch Daten zugeordnet sind
-                if($field->getValue('cat_name') != 'Messenger'
-                || ($field->getValue('cat_name') == 'Messenger' && strlen($field->getValue('usd_value')) > 0 ))
+                if($field->getValue('cat_name_intern') != 'MESSENGER'
+                || ($field->getValue('cat_name_intern') == 'MESSENGER' && strlen($field->getValue('usd_value')) > 0 ))
                 {
                     echo getFieldCode($field, $user->getValue('usr_id'));
                 }

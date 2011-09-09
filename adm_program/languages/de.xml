@@ -18,6 +18,8 @@
     <text id="SYS_CHECKBOX" development="deleted" translation="todo">Checkbox</text>
     <text id="SYS_DATABASE_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt %VAR1% oder höher</text>
     <text id="SYS_DROPDOWN_LISTBOX" development="deleted" translation="todo">Dropdown-Listenfeld</text>
+    <text id="SYS_INTERNAL_NAME" development="deleted" translation="todo">Interner Name</text>
+    <text id="SYS_INTERNAL_NAME_DESC" development="deleted" translation="todo">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</text>
     <text id="SYS_MYSQL_VERSION" development="deleted" translation="todo">MySQL-Version</text>
     <text id="SYS_MYSQL_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt 4.1 oder höher</text>
 	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>    	
