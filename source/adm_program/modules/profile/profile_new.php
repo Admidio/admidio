@@ -292,27 +292,27 @@ function getFieldCode($field, $user, $getNewUser)
     
     // Icons der Messenger anzeigen
     $icon = '';
-    if($field->getValue('usf_name') == 'AIM')
+    if($field->getValue('usf_name_intern') == 'AOL_INSTANT_MESSENGER')
     {
         $icon = 'aim.png';
     }
-    elseif($field->getValue('usf_name') == 'Google Talk')
+    elseif($field->getValue('usf_name_intern') == 'GOOGLE_TALK')
     {
         $icon = 'google.gif';
     }
-    elseif($field->getValue('usf_name') == 'ICQ')
+    elseif($field->getValue('usf_name_intern') == 'ICQ')
     {
         $icon = 'icq.png';
     }
-    elseif($field->getValue('usf_name') == 'MSN')
+    elseif($field->getValue('usf_name_intern') == 'MSN_MESSENGER')
     {
         $icon = 'msn.png';
     }
-    elseif($field->getValue('usf_name') == 'Skype')
+    elseif($field->getValue('usf_name_intern') == 'SKYPE')
     {
         $icon = 'skype.png';
     }
-    elseif($field->getValue('usf_name') == 'Yahoo')
+    elseif($field->getValue('usf_name_intern') == 'YAHOO_MESSENGER')
     {
         $icon = 'yahoo.png';
     }
@@ -330,7 +330,7 @@ function getFieldCode($field, $user, $getNewUser)
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
     $description = '';
-    if(strlen($field->getValue('usf_description')) > 0 && $field->getValue('cat_name') != 'Messenger')
+    if(strlen($field->getValue('usf_description')) > 0 && $field->getValue('cat_name_intern') != 'MESSENGER')
     {
         $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '&amp;inline=true"><img 
             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '\',this)" onmouseout="ajax_hideTooltip()"

@@ -24,16 +24,16 @@ if (!$g_current_user->isWebmaster())
 }
 
 // Uebergabevariablen pruefen und ggf. initialisieren
-$get_usf_id = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
+$getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // benutzerdefiniertes Feldobjekt anlegen
 $user_field = new TableUserField($g_db);
 
-if($get_usf_id > 0)
+if($getUsfId > 0)
 {
-    $user_field->readData($get_usf_id);
+    $user_field->readData($getUsfId);
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($user_field->getValue('cat_org_id') >  0
@@ -70,7 +70,7 @@ if($user_field->getValue('usf_system') == 1)
 }
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
-if($get_usf_id > 0)
+if($getUsfId > 0)
 {
     $g_layout['title']  = $g_l10n->get('ORG_EDIT_PROFILE_FIELD');
 }
@@ -106,7 +106,7 @@ $g_layout['header'] = '
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
-<form id="edit_field" action="'.$g_root_path.'/adm_program/administration/organization/fields_function.php?usf_id='.$get_usf_id.'&amp;mode=1" method="post">
+<form id="edit_field" action="'.$g_root_path.'/adm_program/administration/organization/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1" method="post">
 <div class="formLayout" id="edit_fields_form">
     <div class="formHead">'. $g_layout['title']. '</div>
     <div class="formBody">
@@ -115,12 +115,27 @@ echo '
                 <dl>
                     <dt><label for="usf_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
                     <dd><input type="text" name="usf_name" id="usf_name" '.$html_disabled.' style="width: 345px;" maxlength="100"
-                        value="'. $user_field->getValue("usf_name"). '" />
+                        value="'. $user_field->getValue('usf_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
-            </li>
-            <li>
+            </li>';
+			// show internal field name for information
+			if($getUsfId > 0)
+			{
+				echo '<li>
+					<dl>
+						<dt><label for="usf_name">'.$g_l10n->get('SYS_INTERNAL_NAME').':</label></dt>
+						<dd><input type="text" name="usf_name_intern" id="usf_name_intern" disabled="disabled" style="width: 345px;" maxlength="100"
+							value="'. $user_field->getValue('usf_name_intern'). '" />
+							<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC&amp;inline=true"><img 
+								onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC\',this)" onmouseout="ajax_hideTooltip()"
+								class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+						</dd>
+					</dl>
+				</li>';
+			}
+            echo '<li>
                 <dl>
                     <dt><label for="usf_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd><textarea name="usf_description" id="usf_description" style="width: 345px;" rows="4" cols="40">'.

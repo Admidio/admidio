@@ -304,12 +304,11 @@ elseif($req_mode == 6)
     // Default-Daten anlegen
 
     // Organisationsobjekt erstellen
-    $g_current_organization = new Organization($db, $_SESSION['orga_name_short']);
+    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname, org_homepage)
+                                         VALUES (\''.$_SESSION['orga_name_long'].'\', \''.$_SESSION['orga_name_short'].'\', \''.$_SERVER['HTTP_HOST'].'\')';
+    $db->query($sql);
 
-    $g_current_organization->setValue('org_shortname', $_SESSION['orga_name_short']);
-    $g_current_organization->setValue('org_longname',  $_SESSION['orga_name_long']);
-    $g_current_organization->setValue('org_homepage',  $_SERVER['HTTP_HOST']);
-    $g_current_organization->save();
+    $g_current_organization = new Organization($db, $_SESSION['orga_name_short']);
 
     // Userobjekt anlegen
     $g_current_user = new User($db, $_SESSION['webmaster_id']);
