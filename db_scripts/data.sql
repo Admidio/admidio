@@ -403,7 +403,7 @@ INSERT INTO `%PREFIX%_preferences` VALUES
  (11,1,'NUMERIC','GENDER','Geschlecht',NULL,1,0,0,0,11,1,'2011-04-06 22:05:20',NULL,NULL),
  (12,1,'EMAIL','EMAIL','E-Mail','Es muss eine gültige E-Mail-Adresse angegeben werden.\r\nOhne diese kann das Programm nicht genutzt werden.',1,0,0,1,12,1,'2011-04-06 22:05:20',NULL,NULL),
  (13,1,'URL','WEBSITE','Homepage',NULL,1,0,0,0,13,1,'2011-04-06 22:05:20',NULL,NULL),
- (14,2,'TEXT','AOL_INSTAND_MESSENGER','AIM','AOL Instant Messenger',0,0,0,0,1,1,'2011-04-06 22:05:20',NULL,NULL),
+ (14,2,'TEXT','AOL_INSTANT_MESSENGER','AIM','AOL Instant Messenger',0,0,0,0,1,1,'2011-04-06 22:05:20',NULL,NULL),
  (15,2,'TEXT','GOOGLE_TALK','Google Talk','Google Talk',0,0,0,0,2,1,'2011-04-06 22:05:20',NULL,NULL),
  (16,2,'TEXT','ICQ','ICQ','ICQ',0,0,0,0,3,1,'2011-04-06 22:05:20',NULL,NULL),
  (17,2,'TEXT','MSN_MESSENGER','MSN','MSN Messenger',0,0,0,0,4,1,'2011-04-06 22:05:20',NULL,NULL),
