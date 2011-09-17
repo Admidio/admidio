@@ -233,3 +233,14 @@ UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_descript
 UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/url]', '</a>'), '[url=', '<a href="');
 UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/email]', '</a>'), '[email=', '<a href="mailto:');
 UPDATE %PREFIX%_announcements SET ann_description = REPLACE(ann_description, ']', '">');
+
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/b]', '</b>'), '[b]', '<b>');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/i]', '</i>'), '[i]', '<i>');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/u]', '</u>'), '[u]', '<u>');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/big]', '</span>'), '[big]', '<span style="font-size:14pt">');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/small]', '</span>'), '[small]', '<span style="font-size:9pt">');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/center]', '</p>'), '[center]', '<p style="text-align: center">');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/img]', '" />'), '[img]', '<img src="');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/url]', '</a>'), '[url=', '<a href="');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(REPLACE(dat_description, '[/email]', '</a>'), '[email=', '<a href="mailto:');
+UPDATE %PREFIX%_dates SET dat_description = REPLACE(dat_description, ']', '">');

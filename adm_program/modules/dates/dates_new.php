@@ -17,15 +17,16 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/ckeditor_special.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
 require_once('../../system/classes/table_roles.php');
 
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    require_once('../../system/bbcode.php');
-}
+// Initialize and check the parameters
+$getDateId   = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
+$getCopy     = admFuncVariableIsValid($_GET, 'copy', 'boolean', 0);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_dates_module'] == 0)
@@ -38,11 +39,6 @@ if(!$gCurrentUser->editDates())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-
-// Initialize and check the parameters
-$getDateId   = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
-$getCopy     = admFuncVariableIsValid($_GET, 'copy', 'boolean', 0);
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $date_login   = 0;
@@ -144,6 +140,9 @@ else
         $date->getVisibleRoles();
     }
 }
+
+// create an object of ckeditor and replace textarea-element
+$ckEditor = new CKEditorSpecial();
 
 // Html-Kopf ausgeben
 if($getDateId > 0)
@@ -287,13 +286,6 @@ $gLayout['header'] = '
     }
 //--></script>';
 
-//Script für BBCode laden
-$javascript = "";
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    $javascript = getBBcodeJS('dat_description');
-}
-$gLayout['header'] .= $javascript;
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
  
 // Html des Modules ausgeben
@@ -560,29 +552,18 @@ echo '
 				</ul>
 			</div>
 		</div>
-            
-		<ul class="formFieldList">';
-            if ($gPreferences['enable_bbcode'] == 1)
-            {
-               printBBcodeIcons();
-            }
-            echo '
-            <li>
-                <dl>
-                    <dt><label for="dat_description">'.$gL10n->get('SYS_DESCRIPTION').':</label>';
-                        if($gPreferences['enable_bbcode'] == 1)
-                        {
-                            printEmoticons();
-                        }
-                    echo '</dt>
-                    <dd>
-                        <textarea id="dat_description" name="dat_description" style="width: 345px;" rows="10" cols="40">'. $date->getValue('dat_description'). '</textarea>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
+		<div class="groupBox" id="admDescription">
+			<div class="groupBoxHeadline" id="admDescriptionHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_DESCRIPTION').'
+			</div>
 
-        <hr />';
+			<div class="groupBoxBody" id="admDescriptionBody">
+                <ul class="formFieldList">
+                    <li>'.$ckEditor->createEditor('dat_description', $date->getValue('dat_description'), 'AdmidioDefault', 200).'</li>
+                </ul>
+            </div>
+        </div>';
 
         if($date->getValue('dat_usr_id_create') > 0)
         {

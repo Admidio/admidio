@@ -44,7 +44,8 @@ function admStrStripTagsSpecial($srcArray)
 {
     foreach($srcArray as $key => $value)
     {
-        if($key != 'ann_description') // ckeditor-variable
+        if($key != 'ann_description' // ckeditor-variable
+        && $key != 'dat_description')
         {
             $srcArray[$key] = strStripTags($value);
         }
