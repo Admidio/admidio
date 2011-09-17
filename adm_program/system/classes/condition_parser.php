@@ -26,7 +26,7 @@ class ConditionParser
     // liefert das Datum fertig formatiert fuer das SQL-Statement 'YYYY-MM-DD'
     private function getFormatDate($date)
     {
-        global $g_preferences;
+        global $gPreferences;
         $format_date = '';
 
         // bastwe: check if user searches for age
@@ -45,7 +45,7 @@ class ConditionParser
         // Datum validieren und im MySQL-Format ausgeben
         if(strlen($date) > 0)
         {
-            $date = new DateTimeExtended($date, $g_preferences['system_date'], 'date');
+            $date = new DateTimeExtended($date, $gPreferences['system_date'], 'date');
             if($date->valid())
             {
                 $format_date = $date->format('Y-m-d');

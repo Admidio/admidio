@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * pho_id:   Id des Albums
  * job:      delete - loeschen eines Bildes
@@ -22,22 +22,22 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
 require_once('../../system/classes/image.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getPhotoId   = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
 $getJob       = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('delete', 'rotate'));
 $getPhotoNr   = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
 $getDirection = admFuncVariableIsValid($_GET, 'direction', 'string', null, false, array('left', 'right'));
 
-if ($g_preferences['enable_photo_module'] == 0)
+if ($gPreferences['enable_photo_module'] == 0)
 {
 	// das Modul ist deaktiviert
-	$g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+	$gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-if(!$g_current_user->editPhotoRight())
+if(!$gCurrentUser->editPhotoRight())
 {
-	$g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
+	$gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
 //URL auf Navigationstack ablegen
@@ -65,13 +65,13 @@ function deleteThumbnail(&$photo_album, $pic_nr)
 //Loeschen eines Bildes
 function deletePhoto($pho_id, $pic_nr)
 {
-    global $g_db;
+    global $gDb;
 
     // nur bei gueltigen Uebergaben weiterarbeiten
     if(is_numeric($pho_id) && is_numeric($pic_nr))
     {
         // einlesen des Albums
-        $photo_album = new TablePhotos($g_db, $pho_id);
+        $photo_album = new TablePhotos($gDb, $pho_id);
         
         //Speicherort
         $album_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id');
@@ -124,7 +124,7 @@ if($getJob == 'rotate')
     if(strlen($getDirection) > 0)
     {
         //Aufruf des ggf. uebergebenen Albums
-        $photo_album = new TablePhotos($g_db, $getPhotoId);
+        $photo_album = new TablePhotos($gDb, $getPhotoId);
 
         //Thumbnail loeschen
         deleteThumbnail($photo_album, $getPhotoNr);
@@ -144,7 +144,7 @@ elseif($getJob == 'delete')
     deletePhoto($getPhotoId, $getPhotoNr);
     
     //Neu laden der Albumdaten
-    $photo_album = new TablePhotos($g_db);
+    $photo_album = new TablePhotos($gDb);
     if($getPhotoId > 0)
     {
         $photo_album->readData($getPhotoId);

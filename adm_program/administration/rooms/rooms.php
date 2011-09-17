@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Uebersicht und Pflege aller organisationsspezifischen Profilfelder
+ * Overview of room management
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -13,12 +13,12 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_rooms.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
-if (!$g_current_user->isWebmaster())
+if (!$gCurrentUser->isWebmaster())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$g_layout['header'] = '
+$gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
@@ -31,15 +31,15 @@ unset($_SESSION['rooms_request']);
 // Navigation weiterfuehren
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-$req_headline = $g_l10n->get('SYS_ROOM');
-$req_id       = 0;
+$req_headline = $gL10n->get('SYS_ROOM');
+
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
  // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">'.$g_l10n->get('ROO_ROOM_MANAGEMENT').'</h1>
+echo '<h1 class="moduleHeadline">'.$gL10n->get('ROO_ROOM_MANAGEMENT').'</h1>
 <span class="iconTextLink">
     <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?headline='.$req_headline.'"><img 
-        src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_VAR', $req_headline).'" /></a>
-    <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?headline='.$req_headline.'">'.$g_l10n->get('SYS_CREATE_VAR', $req_headline).'</a>
+        src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_VAR', $req_headline).'" /></a>
+    <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?headline='.$req_headline.'">'.$gL10n->get('SYS_CREATE_VAR', $req_headline).'</a>
 </span>
 <br/>';
 
@@ -49,36 +49,29 @@ $sql = 'SELECT room.*,
           FROM '.TBL_ROOMS.' room
           LEFT JOIN '. TBL_USER_DATA .' cre_surname 
             ON cre_surname.usd_usr_id = room_usr_id_create
-           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+           AND cre_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname 
             ON cre_firstname.usd_usr_id = room_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
+           AND cre_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_surname 
             ON cha_surname.usd_usr_id = room_usr_id_change
-           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+           AND cha_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname 
             ON cha_firstname.usd_usr_id = room_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
+           AND cha_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
          ORDER BY room_name';
-$rooms_result = $g_db->query($sql);
+$rooms_result = $gDb->query($sql);
 
-if($g_db->num_rows($rooms_result) == 0)
+if($gDb->num_rows($rooms_result) == 0)
 {
     // Keine Räume gefunden
-    if($req_id > 0)
-    {
-        echo '<p>'.$g_l10n->get('SYS_NO_ENTRY').'</p>';
-    }
-    else
-    {
-        echo '<p>'.$g_l10n->get('SYS_NO_ENTRIES').'</p>';
-    }
+	echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
 }
 else
 {
-    $room = new TableRooms($g_db);
+    $room = new TableRooms($gDb);
     //Räume auflisten
-    while($row=$g_db->fetch_array($rooms_result))
+    while($row=$gDb->fetch_array($rooms_result))
     {
         // GB-Objekt initialisieren und neuen DS uebergeben
         $room->clear();
@@ -93,18 +86,18 @@ else
                      . $room->getValue('room_name').'
                 </div>
                 <div class="boxHeadRight">';
-                    if ($g_current_user->editDates())
+                    if ($gCurrentUser->editDates())
                     {
                         //Bearbeiten
                         echo '
                         <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$req_headline.'"><img 
-                            src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT').'" title="'.$g_l10n->get('SYS_EDIT').'" /></a>';
+                            src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                             
                         //Löschen
                         echo '
                         <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
                             $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img 
-                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>';
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                     }
           echo '</div>
             </div>
@@ -112,13 +105,13 @@ else
                 <div class="date_info_block">
                     <table style="float:left; width: 200px;">
                         <tr>
-                            <td>'.$g_l10n->get('ROO_CAPACITY').':</td>
+                            <td>'.$gL10n->get('ROO_CAPACITY').':</td>
                             <td><strong>'.$room->getValue('room_capacity').'</strong></td>
                         </tr>';
                         if($room->getValue('room_overhang')!=null)
                         {
                             echo '<tr>
-                                    <td>'.$g_l10n->get('ROO_OVERHANG').':</td>
+                                    <td>'.$gL10n->get('ROO_OVERHANG').':</td>
                                     <td><strong>'.$room->getValue('room_overhang').'</strong></td>
                                   </tr>';
                         }
@@ -129,11 +122,11 @@ else
                             .$room->getDescription('HTML').'</div>';
                     }
                     echo '<div class="editInformation">'.
-                    $g_l10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create'));
+                    $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create'));
 
                     if($room->getValue('room_usr_id_change') > 0)
                     {
-                        echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $room->getValue('room_timestamp_change'));
+                        echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $room->getValue('room_timestamp_change'));
                     }
                 echo '</div>
                 </div>
@@ -147,8 +140,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

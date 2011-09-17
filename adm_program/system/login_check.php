@@ -14,7 +14,7 @@ require_once('classes/table_auto_login.php');
 
 // Variablen initialisieren
 $user_found   = 0;
-$b_auto_login = false;
+$bAutoLogin = false;
 $loginname    = '';
 $password     = '';
 
@@ -26,10 +26,10 @@ if(isset($_POST['usr_login_name']) && strlen($_POST['usr_login_name']) > 0)
     $loginname = $_POST['usr_login_name'];
     $password  = $_POST['usr_password'];
 
-    if($g_preferences['enable_auto_login'] == 1
+    if($gPreferences['enable_auto_login'] == 1
     && isset($_POST['auto_login']) && $_POST['auto_login'] == 1)
     {
-        $b_auto_login = true;
+        $bAutoLogin = true;
     }
 }
 
@@ -38,21 +38,21 @@ if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) >
     $loginname = $_POST['plg_usr_login_name'];
     $password  = $_POST['plg_usr_password'];
 
-    if($g_preferences['enable_auto_login'] == 1
+    if($gPreferences['enable_auto_login'] == 1
     && isset($_POST['plg_auto_login']) && $_POST['plg_auto_login'] == 1)
     {
-        $b_auto_login = true;
+        $bAutoLogin = true;
     }
 }
 
 if(strlen($loginname) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_USERNAME')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
 }
 
 if(strlen($password) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_PASSWORD')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
 }
 $password = md5($password);
 
@@ -69,45 +69,45 @@ $sql    = 'SELECT usr_id
               AND mem_end        > \''.DATE_NOW.'\'
               AND rol_valid      = 1
               AND rol_cat_id     = cat_id
-              AND cat_org_id     = '. $g_current_organization->getValue('org_id');
-$result = $g_db->query($sql);
+              AND cat_org_id     = '. $gCurrentOrganization->getValue('org_id');
+$result = $gDb->query($sql);
 
-$user_found = $g_db->num_rows($result);
-$user_row   = $g_db->fetch_array($result);
+$user_found = $gDb->num_rows($result);
+$user_row   = $gDb->fetch_array($result);
 
 if ($user_found >= 1)
 {
     // Userobjekt anlegen
-    $g_current_user = new User($g_db, $user_row['usr_id']);
+    $gCurrentUser = new User($gDb, $gUserFields, $user_row['usr_id']);
     
-    if($g_current_user->getValue('usr_number_invalid') >= 3)
+    if($gCurrentUser->getValue('usr_number_invalid') >= 3)
     {
         // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-        if(time() - strtotime($g_current_user->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 900)
+        if(time() - strtotime($gCurrentUser->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 900)
         {
-            $g_current_user->clear();
-            $g_message->show($g_l10n->get('SYS_LOGIN_FAILED'));
+            $gCurrentUser->clear();
+            $gMessage->show($gL10n->get('SYS_LOGIN_FAILED'));
         }
     }
 
-    if($g_current_user->getValue('usr_password') == $password)
+    if($gCurrentUser->getValue('usr_password') == $password)
     {
-        $g_current_session->setValue('ses_usr_id', $g_current_user->getValue('usr_id'));
-        $g_current_session->save();
+        $gCurrentSession->setValue('ses_usr_id', $gCurrentUser->getValue('usr_id'));
+        $gCurrentSession->save();
 
         // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
         $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
         // soll der Besucher automatisch eingeloggt bleiben, dann verfaellt das Cookie erst nach einem Jahr
-        if($b_auto_login == true)
+        if($bAutoLogin == true)
         {
             $timestamp_expired = time() + 60*60*24*365;
-            $auto_login = new TableAutoLogin($g_db, $g_session_id);
+            $auto_login = new TableAutoLogin($gDb, $gSessionId);
             
             // falls bereits ein Autologin existiert (Doppelanmeldung an 1 Browser), 
             // dann kein Neues anlegen, da dies zu 'Duplicate Key' fuehrt
             if(strlen($auto_login->getValue('atl_usr_id')) == 0)
             {
-                $auto_login->setValue('atl_session_id', $g_session_id);
+                $auto_login->setValue('atl_session_id', $gSessionId);
                 $auto_login->setValue('atl_usr_id', $user_row['usr_id']);            
                 $auto_login->save();
             }
@@ -115,26 +115,26 @@ if ($user_found >= 1)
         else
         {
             $timestamp_expired = 0;
-            $g_current_user->setValue('usr_last_session_id', NULL);
+            $gCurrentUser->setValue('usr_last_session_id', NULL);
         }
-        setcookie($cookie_praefix. '_ID', $g_session_id , $timestamp_expired, '/', $domain, 0);
+        setcookie($gCookiePraefix. '_ID', $gSessionId , $timestamp_expired, '/', $domain, 0);
         // User-Id und Autologin auch noch als Cookie speichern
         // vorher allerdings noch serialisieren, damit der Inhalt nicht so einfach ausgelesen werden kann
-        setcookie($cookie_praefix. '_DATA', $b_auto_login. ';'. $g_current_user->getValue('usr_id') , $timestamp_expired, '/', $domain, 0);
+        setcookie($gCookiePraefix. '_DATA', $bAutoLogin. ';'. $gCurrentUser->getValue('usr_id') , $timestamp_expired, '/', $domain, 0);
 
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
-        $g_current_user->updateLoginData();
+        $gCurrentUser->updateLoginData();
 
         // Parallel im Forum einloggen
-        if($g_preferences['enable_forum_interface'])
+        if($gPreferences['enable_forum_interface'])
         {
             $set_admin = false;
-            if($g_preferences['forum_set_admin'] == 1 && $g_current_user->isWebmaster())
+            if($gPreferences['forum_set_admin'] == 1 && $gCurrentUser->isWebmaster())
             {
                 $set_admin = true;
             }
-            $g_forum->userLogin($loginname, $password, $g_current_user->getValue('EMAIL'), $set_admin);
-            $login_message = $g_forum->message;
+            $gForum->userLogin($loginname, $password, $gCurrentUser->getValue('EMAIL'), $set_admin);
+            $login_message = $gForum->message;
         }
         else
         {
@@ -143,7 +143,7 @@ if ($user_found >= 1)
         }
 
         // bei einer Beta-Version noch einen Hinweis ausgeben !
-        if(BETA_VERSION > 0 && $g_debug == false)
+        if(BETA_VERSION > 0 && $gDebug == false)
         {
             $login_message = 'SYS_BETA_VERSION';
         }
@@ -152,7 +152,7 @@ if ($user_found >= 1)
         // die Startseite verweisen
         if(isset($_SESSION['login_forward_url']) == false)
         {
-            $_SESSION['login_forward_url'] = $g_root_path. '/'. $g_preferences['homepage_login'];
+            $_SESSION['login_forward_url'] = $g_root_path. '/'. $gPreferences['homepage_login'];
         }
 
         // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
@@ -165,25 +165,25 @@ if ($user_found >= 1)
     {
         // ungueltige Logins werden mitgeloggt
         
-        if($g_current_user->getValue('usr_number_invalid') >= 3)
+        if($gCurrentUser->getValue('usr_number_invalid') >= 3)
         {
-            $g_current_user->setValue('usr_number_invalid', 1);
+            $gCurrentUser->setValue('usr_number_invalid', 1);
         }
         else
         {
-            $g_current_user->setValue('usr_number_invalid', $g_current_user->getValue('usr_number_invalid') + 1);
+            $gCurrentUser->setValue('usr_number_invalid', $gCurrentUser->getValue('usr_number_invalid') + 1);
         }
-        $g_current_user->setValue('usr_date_invalid', DATETIME_NOW);
-        $g_current_user->save(false);   // Zeitstempel nicht aktualisieren
-        $g_current_user->clear();
+        $gCurrentUser->setValue('usr_date_invalid', DATETIME_NOW);
+        $gCurrentUser->save(false);   // Zeitstempel nicht aktualisieren
+        $gCurrentUser->clear();
 
-        if($g_current_user->getValue('usr_number_invalid') >= 3)
+        if($gCurrentUser->getValue('usr_number_invalid') >= 3)
         {
-            $g_message->show($g_l10n->get('SYS_LOGIN_FAILED'));
+            $gMessage->show($gL10n->get('SYS_LOGIN_FAILED'));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_PASSWORD_UNKNOWN'));
+            $gMessage->show($gL10n->get('SYS_PASSWORD_UNKNOWN'));
         }
     }
 }
@@ -194,16 +194,16 @@ else
                  FROM '. TBL_USERS. '
                 WHERE usr_login_name LIKE \''. $loginname. '\'
                   AND usr_valid      = 0
-                  AND usr_reg_org_shortname LIKE \''.$g_current_organization->getValue('org_shortname').'\' ';
-    $result = $g_db->query($sql);
+                  AND usr_reg_org_shortname LIKE \''.$gCurrentOrganization->getValue('org_shortname').'\' ';
+    $result = $gDb->query($sql);
 
-    if($g_db->num_rows($result) == 1)
+    if($gDb->num_rows($result) == 1)
     {
-        $g_message->show($g_l10n->get('SYS_LOGIN_NOT_ACTIVATED'));
+        $gMessage->show($gL10n->get('SYS_LOGIN_NOT_ACTIVATED'));
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_LOGIN_UNKNOWN'));
+        $gMessage->show($gL10n->get('SYS_LOGIN_UNKNOWN'));
     }
 }
 

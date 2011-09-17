@@ -28,7 +28,7 @@ class DBCommon
     // Ausgabe der Datenbank-Fehlermeldung
     public function db_error($code = 0, $message = '')
     {
-        global $g_root_path, $g_message, $g_preferences, $g_current_organization, $g_debug, $g_l10n;
+        global $g_root_path, $gMessage, $gPreferences, $gCurrentOrganization, $gDebug, $gL10n;
 
         $backtrace = $this->getBacktrace();
 
@@ -38,10 +38,10 @@ class DBCommon
             $this->endTransaction(true);
         }        
 
-        if(headers_sent() == false && isset($g_preferences) && defined('THEME_SERVER_PATH'))
+        if(headers_sent() == false && isset($gPreferences) && defined('THEME_SERVER_PATH'))
         {
             // Html-Kopf ausgeben
-            $g_layout['title']  = $g_l10n->get('SYS_DATABASE_ERROR');
+            $gLayout['title']  = $gL10n->get('SYS_DATABASE_ERROR');
             require(SERVER_PATH. '/adm_program/system/overall_header.php');       
         }
         
@@ -56,12 +56,12 @@ class DBCommon
         echo $error_string;
         
         // ggf. Ausgabe des Fehlers in Log-Datei
-        if($g_debug == 1)
+        if($gDebug == 1)
         {
             error_log($code. ': '. $message);
         }
         
-        if(headers_sent() == false && isset($g_preferences) && defined('THEME_SERVER_PATH'))
+        if(headers_sent() == false && isset($gPreferences) && defined('THEME_SERVER_PATH'))
         {
             require(SERVER_PATH. '/adm_program/system/overall_footer.php');       
         }

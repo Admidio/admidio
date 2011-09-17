@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * user_id     - Funktionen der uebergebenen ID aendern
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
@@ -23,12 +23,12 @@ require_once('../../system/classes/role_dependency.php');
 
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!$g_current_user->assignRoles() && !isGroupLeader($g_current_user->getValue('usr_id')))
+if(!$gCurrentUser->assignRoles() && !isGroupLeader($gCurrentUser->getValue('usr_id')))
 {
-   $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
@@ -48,15 +48,15 @@ if($roleCount == 0)
 {
 	if($getInline == 0)
 	{
-		die($g_message->show($g_l10n->get('PRO_ROLE_NOT_ASSIGNED')));
+		die($gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED')));
 	}
 	else
 	{
-		die($g_l10n->get('PRO_ROLE_NOT_ASSIGNED'));
+		die($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
 	}
 }
 
-if($g_current_user->assignRoles())
+if($gCurrentUser->assignRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
     $sql    = 'SELECT rol_id, rol_name, rol_max_members
@@ -67,7 +67,7 @@ if($g_current_user->assignRoles())
                 WHERE rol_valid   = 1
                   AND rol_visible = 1
                   AND rol_cat_id  = cat_id
-                  AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                  AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                       OR cat_org_id IS NULL )
                 ORDER BY cat_sequence, rol_name';
 }
@@ -81,7 +81,7 @@ else
                   AND mgl.mem_usr_id = '.$getUserId.'
                   AND mgl.mem_begin <= \''.DATE_NOW.'\'
                   AND mgl.mem_end    > \''.DATE_NOW.'\'
-                WHERE bm.mem_usr_id  = '. $g_current_user->getValue('usr_id'). '
+                WHERE bm.mem_usr_id  = '. $gCurrentUser->getValue('usr_id'). '
                   AND bm.mem_begin  <= \''.DATE_NOW.'\'
                   AND bm.mem_end     > \''.DATE_NOW.'\'
                   AND bm.mem_leader  = 1
@@ -89,17 +89,17 @@ else
                   AND rol_valid      = 1
                   AND rol_visible    = 1
                   AND rol_cat_id     = cat_id
-                  AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                  AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                       OR cat_org_id IS NULL )
                 ORDER BY cat_sequence, rol_name';
 }
-$result_rol = $g_db->query($sql);
+$result_rol = $gDb->query($sql);
 
 $count_assigned = 0;
 $parentRoles = array();
 
 // Ergebnisse durchlaufen und kontrollieren ob maximale Teilnehmerzahl ueberschritten wuerde
-while($row = $g_db->fetch_array($result_rol))
+while($row = $gDb->fetch_array($result_rol))
 {
     if($row['rol_max_members'] > 0)
     {
@@ -111,9 +111,9 @@ while($row = $g_db->fetch_array($result_rol))
                    AND mem_leader = 0
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'';
-        $g_db->query($sql);
+        $gDb->query($sql);
 
-        $row_usr = $g_db->fetch_array();
+        $row_usr = $gDb->fetch_array();
 
         if($row_usr[0] == 0)
         {
@@ -124,9 +124,9 @@ while($row = $g_db->fetch_array($result_rol))
                        AND mem_leader = 0
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end    > \''.DATE_NOW.'\'';
-            $g_db->query($sql);
+            $gDb->query($sql);
 
-            $row_members = $g_db->fetch_array();
+            $row_members = $gDb->fetch_array();
 
             //Bedingungen fuer Abbruch und Abbruch
             if($row_members[0] >= $row['rol_max_members']
@@ -135,11 +135,11 @@ while($row = $g_db->fetch_array($result_rol))
             {
 				if($getInline == 0)
 				{
-                	$g_message->show($g_l10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
+                	$gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']));
 				}
 				else
 				{
-					echo $g_l10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']);
+					echo $gL10n->get('SYS_ROLE_MAX_MEMBERS', $row['rol_name']);
 				}
             }
         }
@@ -147,18 +147,18 @@ while($row = $g_db->fetch_array($result_rol))
 }
 
 //Dateizeiger auf erstes Element zurueck setzen
-if($g_db->num_rows($result_rol)>0)
+if($gDb->num_rows($result_rol)>0)
 {
-    $g_db->data_seek($result_rol, 0);
+    $gDb->data_seek($result_rol, 0);
 }
 
-$member = new TableMembers($g_db);
+$member = new TableMembers($gDb);
 
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
-while($row = $g_db->fetch_array($result_rol))
+while($row = $gDb->fetch_array($result_rol))
 {
     // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
-    if($row['rol_name'] != $g_l10n->get('SYS_WEBMASTER') || $g_current_user->isWebmaster())
+    if($row['rol_name'] != $gL10n->get('SYS_WEBMASTER') || $gCurrentUser->isWebmaster())
     {
         $role_assign = 0;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)
@@ -186,7 +186,7 @@ while($row = $g_db->fetch_array($result_rol))
         // find the parent roles
         if($role_assign == 1)
         {
-            $tmpRoles = RoleDependency::getParentRoles($g_db, $row['rol_id']);
+            $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);
             foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))
@@ -200,7 +200,7 @@ $_SESSION['navigation']->deleteLastUrl();
 
 // falls Rollen dem eingeloggten User neu zugewiesen wurden,
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden
-$g_current_session->renewUserObject();
+$gCurrentSession->renewUserObject();
 
 if(count($parentRoles) > 0 )
 {
@@ -215,7 +215,7 @@ if(count($parentRoles) > 0 )
     // Das letzte Komma wieder wegschneiden
     $sql = substr($sql,0,-1);
 
-    $g_db->query($sql);
+    $gDb->query($sql);
 }
 
 if($getNewUser == 1 && $count_assigned == 0)
@@ -223,11 +223,11 @@ if($getNewUser == 1 && $count_assigned == 0)
     // Neuem User wurden keine Rollen zugewiesen
 	if($getInline == 0)
 	{
-    	$g_message->show($g_l10n->get('PRO_ROLE_NOT_ASSIGNED'));
+    	$gMessage->show($gL10n->get('PRO_ROLE_NOT_ASSIGNED'));
 	}
 	else
 	{
-		echo $g_l10n->get('PRO_ROLE_NOT_ASSIGNED');
+		echo $gL10n->get('PRO_ROLE_NOT_ASSIGNED');
 	}
 }
 
@@ -239,10 +239,10 @@ if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
 }
 if($getInline == 0)
 {
-	$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-	$g_message->show($g_l10n->get('SYS_SAVE_DATA'));
+	$gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+	$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 else
 {
-	echo $g_l10n->get('SYS_SAVE_DATA').'<SAVED/>';
+	echo $gL10n->get('SYS_SAVE_DATA').'<SAVED/>';
 }

@@ -9,12 +9,12 @@
  *****************************************************************************/
 require_once('../../system/common.php');
 require_once('ecard_function.php');
-if ($g_preferences['enable_bbcode'] == 1)
+if ($gPreferences['enable_bbcode'] == 1)
 {
     require('../../system/bbcode.php');
 }
 
-$funcClass 					= new FunctionClass($g_l10n);
+$funcClass 					= new FunctionClass($gL10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_cc     = array(); // Array wo alle CC Empfaenger aufgelistet werden;
 $font_sizes                 = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
@@ -23,18 +23,18 @@ $fonts                      = $funcClass->getElementsFromFile('../../system/schr
 $templates                  = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
 $template                   = THEME_SERVER_PATH. '/ecard_templates/';
 $error_msg                  = "";
-$msg_send_error             = $g_l10n->get('ECA_SEND_ERROR');
+$msg_send_error             = $gL10n->get('ECA_SEND_ERROR');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_ecard_module'] != 1)
+if ($gPreferences['enable_ecard_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $error_msg = $g_l10n->get('SYS_MODULE_DISABLED');
+    $error_msg = $gL10n->get('SYS_MODULE_DISABLED');
 }
 // pruefen ob User eingeloggt ist
-if(!$g_valid_login)
+if(!$gValidLogin)
 {
-	$error_msg = $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+	$error_msg = $gL10n->get('SYS_INVALID_PAGE_VIEW');
 }
 
 // ruf die Funktion auf die alle Post und Get Variablen parsed
@@ -49,9 +49,9 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 && ($ecard['email_recipient'] != '') && ($ecard['name_sender'] != '') && empty($error_msg))
 {
 	// Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
-	if (strlen($ecard['message']) > $g_preferences['ecard_text_length'])
+	if (strlen($ecard['message']) > $gPreferences['ecard_text_length'])
 	{
-		$ecard['message'] = substr($ecard['message'],0,$g_preferences['ecard_text_length']-1);
+		$ecard['message'] = substr($ecard['message'],0,$gPreferences['ecard_text_length']-1);
 	}
 	// Template wird geholt
 	list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($ecard['template_name'],$template);
@@ -69,8 +69,8 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 		if(!is_numeric($rolle))
 		{
 			array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
-			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user,$ecard['name_recipient'],$ecard['email_recipient'],$g_preferences['enable_bbcode']);
+			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
+			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$gCurrentUser,$ecard['name_recipient'],$ecard['email_recipient'],$gPreferences['enable_bbcode']);
 			$result = $funcClass->sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $ecard['image_serverPath']);
 			// Wenn die Grußkarte erfolgreich gesendet wurde
 			if ($result)
@@ -91,17 +91,17 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 					  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
 					 RIGHT JOIN '. TBL_USER_DATA. ' as email
 						ON email.usd_usr_id = usr_id
-					   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
+					   AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id'). '
 					   AND LENGTH(email.usd_value) > 0
 					  LEFT JOIN '. TBL_USER_DATA. ' as last_name
 						ON last_name.usd_usr_id = usr_id
-					   AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+					   AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
 					  LEFT JOIN '. TBL_USER_DATA. ' as first_name
 						ON first_name.usd_usr_id = usr_id
-					   AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+					   AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
 					 WHERE rol_id           = '. $rolle. '
 					   AND rol_cat_id       = cat_id
-					   AND cat_org_id       = '. $g_current_organization->getValue('org_id'). '
+					   AND cat_org_id       = '. $gCurrentOrganization->getValue('org_id'). '
 					   AND mem_rol_id       = rol_id
 					   AND mem_begin       <= \''.DATE_NOW.'\'
 					   AND mem_end          > \''.DATE_NOW.'\'
@@ -110,11 +110,11 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 					   AND email.usd_usr_id = email.usd_usr_id
 					 ORDER BY last_name, first_name';
 
-			$result             = $g_db->query($sql);
+			$result             = $gDb->query($sql);
 			$firstvalue_name    = '';
 			$firstvalue_email   = '';
 			$i  = 0 ;
-			while ($row = $g_db->fetch_object($result))
+			while ($row = $gDb->fetch_object($result))
 			{
 				if($i<1)
 				{
@@ -128,8 +128,8 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 				}
 				$i++;
 			}
-			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
-			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$g_current_user,$firstvalue_name,$firstvalue_email,$g_preferences['enable_bbcode']);
+			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
+			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$gCurrentUser,$firstvalue_name,$firstvalue_email,$gPreferences['enable_bbcode']);
 			$b=0;
 			foreach($email_versand_liste as $item)
 			{                       
@@ -162,12 +162,12 @@ else
 {
 	if(empty($error_msg))
 	{
-		$error_msg = $g_l10n->get('ECA_FIELD_ERROR');
+		$error_msg = $gL10n->get('ECA_FIELD_ERROR');
 	}
 }
 echo'
 <div class="formLayout">
-    <div class="formHead">'.$g_l10n->get("ECA_GREETING_CARD_SEND"). '</div>
+    <div class="formHead">'.$gL10n->get("ECA_GREETING_CARD_SEND"). '</div>
     <div class="formBody">
 		<div style="text-align: center;">
 			<div style="text-align:center;
@@ -188,11 +188,11 @@ echo'
 				<span style="font-size:16px; font-weight:bold">';
 				if($error_msg == '')
 				{
-					echo $g_l10n->get("ECA_SUCCESSFULLY_SEND");
+					echo $gL10n->get("ECA_SUCCESSFULLY_SEND");
 				}
 				else
 				{
-					echo $g_l10n->get("ECA_NOT_SUCCESSFULLY_SEND");
+					echo $gL10n->get("ECA_NOT_SUCCESSFULLY_SEND");
 				}
 				echo'</span>
 			</dv>
@@ -202,7 +202,7 @@ echo'
 		{
 			echo'<table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" style="text-align: center;">
 			<tr>
-				<td style="text-align: left;" colspan="2"><b>'.$g_l10n->get("SYS_SENDER").':</b></td>
+				<td style="text-align: left;" colspan="2"><b>'.$gL10n->get("SYS_SENDER").':</b></td>
 			</tr>
 			<tr>
 				<td style="padding-right:5px; text-align: left;">'. $ecard['name_sender'].',</td><td style="text-align: left;">'.$ecard['email_sender'].'</td>
@@ -211,7 +211,7 @@ echo'
 				<td style="text-align: left;">&nbsp;</td>
 			</tr>
 			<tr>
-				<td style="text-align: left;" colspan="2"><b>'.$g_l10n->get("SYS_RECIPIENT").':</b></td>
+				<td style="text-align: left;" colspan="2"><b>'.$gL10n->get("SYS_RECIPIENT").':</b></td>
 			</tr><tr>';
 			foreach($email_versand_liste as $item)
 			{
@@ -231,10 +231,10 @@ echo'
 			}
 			echo '</tr>';
 			$Liste = array();
-			$Liste = $funcClass->getCCRecipients($ecard,$g_preferences['ecard_cc_recipients']);
+			$Liste = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
 			if(count($Liste)>0)
 			{
-				echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2" style="text-align: left;"><b>'.$g_l10n->get("ECA_MORE_RECIPIENTS").':</b></td></tr><tr>';
+				echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2" style="text-align: left;"><b>'.$gL10n->get("ECA_MORE_RECIPIENTS").':</b></td></tr><tr>';
 				foreach($Liste as $item)
 				{
 					$i=0;

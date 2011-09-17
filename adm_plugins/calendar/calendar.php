@@ -115,7 +115,7 @@ else
 }
 
 // Sprachdatei des Plugins einbinden
-$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 	
 // Nun noch einige Variablen initialisieren
 
@@ -128,7 +128,7 @@ if(array_key_exists('date_id', $_GET))
 {
     if(is_numeric($_GET['date_id']) == false)
     {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
     else
     {
@@ -163,26 +163,26 @@ else
 $sql_dat = $jahr. '-'. $monat;
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->setCurrentDB();
+$gDb->setCurrentDB();
 
 // Abfrage der Termine
 if($plg_ter_aktiv == 1)
 {
     // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
     $plg_organizations = '';
-    $plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
+    $plg_arr_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
     
     foreach($plg_arr_orgas as $key => $value)
     {
     	$plg_organizations = $plg_organizations. $key. ', ';
     }
-    $plg_organizations = $plg_organizations. $g_current_organization->getValue('org_id');
+    $plg_organizations = $plg_organizations. $gCurrentOrganization->getValue('org_id');
 	
     // Ermitteln, welche Kalender angezeigt werden sollen
     if(in_array('all',$plg_kal_cat))
     {
 		// alle Kalender anzeigen
-        $sql_syntax = ' AND (cat_org_id = '. $g_current_organization->getValue('org_id'). '
+        $sql_syntax = ' AND (cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                          OR (   dat_global  = 1
                             AND cat_org_id IN ('.$plg_organizations.') ) ) ';
     }
@@ -203,9 +203,9 @@ if($plg_ter_aktiv == 1)
     $ter_aktuell = 0;
 
     // Datenbankabfrage mit Datum (Monat / Jahr)
-    if($g_current_user->getValue('usr_id') > 0)
+    if($gCurrentUser->getValue('usr_id') > 0)
     {
-        $login_sql = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$g_current_user->getValue('usr_id').') )';
+        $login_sql = 'AND ( dtr_rol_id IS NULL OR dtr_rol_id IN (SELECT mem_rol_id FROM '.TBL_MEMBERS.' WHERE mem_usr_id = '.$gCurrentUser->getValue('usr_id').') )';
     }
     else
     {
@@ -218,14 +218,14 @@ if($plg_ter_aktiv == 1)
                 AND DATE_FORMAT(dat_begin, \'%Y-%m\') = \''.$sql_dat.'\'
                 '.$sql_syntax.'
             ORDER BY dat_begin ASC';
-    $result = $g_db->query($sql);
+    $result = $gDb->query($sql);
 
-    while($row = $g_db->fetch_array($result))
+    while($row = $gDb->fetch_array($result))
     {
         $startDate = new DateTimeExtended($row['dat_begin'], 'Y-m-d H:i:s');
         $termin_id[$ter]       = $row['dat_id'];
         $termin_tag[$ter]      = $startDate->format('d');
-        $termin_uhr[$ter]      = $startDate->format($g_preferences['system_time']);
+        $termin_uhr[$ter]      = $startDate->format($gPreferences['system_time']);
         $termin_ganztags[$ter] = $row['dat_all_day'];
         $termin_ort[$ter]      = $row['dat_location'];
         $termin_titel[$ter]    = $row['dat_headline'];
@@ -247,14 +247,14 @@ if($plg_geb_aktiv == 1)
                    birthday.usd_value AS birthday
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
               JOIN '. TBL_USER_DATA. ' AS birthday ON birthday.usd_usr_id = usr_id
-               AND birthday.usd_usf_id = '. $g_current_user->getProperty('BIRTHDAY', 'usf_id'). '
+               AND birthday.usd_usf_id = '. $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'). '
                AND MONTH(birthday.usd_value) = '.$monat.'
               LEFT JOIN '. TBL_USER_DATA. ' AS last_name ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+               AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
               LEFT JOIN '. TBL_USER_DATA. ' AS first_name ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+               AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
              WHERE rol_cat_id = cat_id
-               AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+               AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND rol_id     = mem_rol_id
                AND mem_usr_id = usr_id
                AND mem_begin <= \''.DATE_NOW.'\'
@@ -262,10 +262,10 @@ if($plg_geb_aktiv == 1)
                AND usr_valid  = 1
              ORDER BY Month(birthday.usd_value) ASC, DayOfMonth(birthday.usd_value) ASC, last_name, first_name';
     
-    $result = $g_db->query($sql);
-    $anz_geb = $g_db->num_rows($result);
+    $result = $gDb->query($sql);
+    $anz_geb = $gDb->num_rows($result);
     
-    while($row = $g_db->fetch_array($result))
+    while($row = $gDb->fetch_array($result))
     {
         $birthdayDate   = new DateTimeExtended($row['birthday'], 'Y-m-d', 'date');
         $geb_day[$geb]  = $birthdayDate->format('d');
@@ -279,19 +279,19 @@ if($plg_geb_aktiv == 1)
 // Kalender erstellen
 $erster = date('w', mktime(0,0,0,$monat,1,$jahr));
 $insgesamt = date('t', mktime(0,0,0,$monat,1,$jahr));
-$monate = explode(',',$g_l10n->get('PLG_CALENDAR_MONTH'));
+$monate = explode(',',$gL10n->get('PLG_CALENDAR_MONTH'));
 if($erster == 0)
 {
     $erster = 7;
 }
 echo '<div id="plgCalendarContent" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$g_l10n->get('DAT_CALENDAR').'</h3></div>
+<div class="admPluginHeader"><h3>'.$gL10n->get('DAT_CALENDAR').'</h3></div>
 <div class="admPluginBody">
 
 <script type="text/javascript"><!-- 
     if ( typeof gTranslations == "undefined") 
     {
-        var gTranslations = new Array("'.$g_l10n->get('SYS_MON').'","'.$g_l10n->get('SYS_TUE').'","'.$g_l10n->get('SYS_WED').'","'.$g_l10n->get('SYS_THU').'","'.$g_l10n->get('SYS_FRI').'","'.$g_l10n->get('SYS_SAT').'","'.$g_l10n->get('SYS_SUN').'","'.$g_l10n->get('SYS_TODAY').'","'.$g_l10n->get('SYS_LOADING_CONTENT').'");
+        var gTranslations = new Array("'.$gL10n->get('SYS_MON').'","'.$gL10n->get('SYS_TUE').'","'.$gL10n->get('SYS_WED').'","'.$gL10n->get('SYS_THU').'","'.$gL10n->get('SYS_FRI').'","'.$gL10n->get('SYS_SAT').'","'.$gL10n->get('SYS_SUN').'","'.$gL10n->get('SYS_TODAY').'","'.$gL10n->get('SYS_LOADING_CONTENT').'");
     }
 --></script>
 
@@ -325,10 +325,10 @@ echo '<div id="plgCalendarContent" class="admPluginContent">
         }
     echo '</tr>
     <tr>
-        <td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_MONDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_TUESDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_WEDNESDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_THURSDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekday"><b>'.$g_l10n->get('PLG_CALENDAR_FRIDAY_SHORT').'</b></td><td class="plgCalendarWeekdaySaturday"><b>'.$g_l10n->get('PLG_CALENDAR_SATURDAY_SHORT').'</b></td>
-        <td class="plgCalendarWeekdaySunday"><b>'.$g_l10n->get('PLG_CALENDAR_SUNDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_MONDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_TUESDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_WEDNESDAY_SHORT').'</b></td><td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_THURSDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekday"><b>'.$gL10n->get('PLG_CALENDAR_FRIDAY_SHORT').'</b></td><td class="plgCalendarWeekdaySaturday"><b>'.$gL10n->get('PLG_CALENDAR_SATURDAY_SHORT').'</b></td>
+        <td class="plgCalendarWeekdaySunday"><b>'.$gL10n->get('PLG_CALENDAR_SUNDAY_SHORT').'</b></td>
     </tr>
     <tr>';
 
@@ -356,7 +356,7 @@ while($i<=$insgesamt)
         }
         if($plg_ter_login == 1)
         {
-            if($g_valid_login == TRUE)
+            if($gValidLogin == TRUE)
             {
                 $ter_valid = 1;
             }
@@ -386,11 +386,11 @@ while($i<=$insgesamt)
                             }
                             if($termin_ganztags[$j] == 1)
                             {
-                                $ter_title = $termin_titel[$j].$termin_ort[$j].', '.$g_l10n->get('DAT_ALL_DAY');
+                                $ter_title = $termin_titel[$j].$termin_ort[$j].', '.$gL10n->get('DAT_ALL_DAY');
                             }
                             else
                             {
-                                $ter_title = $termin_titel[$j].', '.$termin_uhr[$j].' '.$g_l10n->get('SYS_CLOCK').$termin_ort[$j];
+                                $ter_title = $termin_titel[$j].', '.$termin_uhr[$j].' '.$gL10n->get('SYS_CLOCK').$termin_ort[$j];
                             }
                         }
                     }
@@ -419,7 +419,7 @@ while($i<=$insgesamt)
                 }
                 else
                 {
-                    $ter_title = $ter_title. $g_l10n->get('PLG_CALENDAR_MORE');
+                    $ter_title = $ter_title. $gL10n->get('PLG_CALENDAR_MORE');
                 }
             }
         }
@@ -435,7 +435,7 @@ while($i<=$insgesamt)
         }
         if($plg_geb_login == 1)
         {
-            if($g_valid_login == TRUE)
+            if($gValidLogin == TRUE)
             {
                 $geb_valid = 1;
             }
@@ -611,7 +611,7 @@ if($monat.$jahr != date('mY'))
             success: function(html){
                 $(\'#plgCalendarContent\').replaceWith(html);
             }
-        }); return false;">'.$g_l10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
+        }); return false;">'.$gL10n->get('PLG_CALENDAR_CURRENT_MONTH').'</a></div>';
 }
 echo '</div></div>';
 

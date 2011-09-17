@@ -11,9 +11,9 @@
 require('common.php');
 
 // pruefen, ob Modul aufgerufen werden darf
-if($g_preferences['registration_mode'] == 0)
+if($gPreferences['registration_mode'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 else
 {

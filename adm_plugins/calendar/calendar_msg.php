@@ -30,7 +30,7 @@ require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
-$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // Werte definieren
 $geburtstage = '';
@@ -103,27 +103,27 @@ if($termine_uebergabe == 1)
     {
         if($ort == '')
         {
-            echo '<i>'.$g_l10n->get('PLG_CALENDAR_FULLTIME').'</i></div>';
+            echo '<i>'.$gL10n->get('PLG_CALENDAR_FULLTIME').'</i></div>';
         }
         else
         {
-            echo $ort. ' <i>'.$g_l10n->get('PLG_CALENDAR_FULLTIME').'</i></div>';
+            echo $ort. ' <i>'.$gL10n->get('PLG_CALENDAR_FULLTIME').'</i></div>';
         }
     }
     else
     {
         if($ort == '')
         {
-            echo $uhr.' '.$g_l10n->get('SYS_CLOCK').' </div>';
+            echo $uhr.' '.$gL10n->get('SYS_CLOCK').' </div>';
         }
         else
         {
-            echo $uhr.' '.$g_l10n->get('SYS_CLOCK').', '.$ort.'</div>';
+            echo $uhr.' '.$gL10n->get('SYS_CLOCK').', '.$ort.'</div>';
         }
     }
     if($weitere >> 0)
     {
-        echo '<div class="plgCalendarMSG" align="right"><i>'.$g_l10n->get('PLG_CALENDAR_MORE').'</i></div>';
+        echo '<div class="plgCalendarMSG" align="right"><i>'.$gL10n->get('PLG_CALENDAR_MORE').'</i></div>';
     }
 }
 

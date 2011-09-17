@@ -27,7 +27,7 @@ require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
-$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -70,7 +70,7 @@ else
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->setCurrentDB();
+$gDb->setCurrentDB();
 
 // Referenzzeit setzen
 $ref_date = date('Y.m.d H:i:s', time() - 60 * $plg_time_online);
@@ -85,30 +85,30 @@ if($plg_show_visitors == 0)
 {
     $sql = $sql. ' AND ses_usr_id IS NOT NULL ';
 }
-if($plg_show_self == 0 && $g_valid_login)
+if($plg_show_self == 0 && $gValidLogin)
 {
-    $sql = $sql. ' AND ses_usr_id <> '. $g_current_user->getValue('usr_id');
+    $sql = $sql. ' AND ses_usr_id <> '. $gCurrentUser->getValue('usr_id');
 }
 $sql = $sql. " ORDER BY ses_usr_id ";
-$result = $g_db->query($sql);
+$result = $gDb->query($sql);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$g_l10n->get('SYS_VISITORS').'</h3></div>
+<div class="admPluginHeader"><h3>'.$gL10n->get('SYS_VISITORS').'</h3></div>
 <div class="admPluginBody">';
 
-if($g_db->num_rows($result) > 0)
+if($gDb->num_rows($result) > 0)
 {
     echo $plg_online_text;
     $usr_id_merker  = 0;
     $count_visitors = 0;
     
-    while($row = $g_db->fetch_object($result))
+    while($row = $gDb->fetch_object($result))
     {
         if($row->ses_usr_id > 0)
         {
             if($row->ses_usr_id != $usr_id_merker)
             {
-                echo '<b><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$g_l10n->get('SYS_SHOW_PROFILE').'" alt="'.$g_l10n->get('SYS_SHOW_PROFILE').'"
+                echo '<b><a class="'. $plg_link_class. '" target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'"
                     href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row->ses_usr_id. '">'. $row->usr_login_name. '</a></b>';
 
                 // User neben-/untereinander anzeigen
@@ -131,12 +131,12 @@ if($g_db->num_rows($result) > 0)
     
     if($plg_show_visitors && $count_visitors > 0)
     {
-        echo $g_l10n->get('PLG_ONLINE_SHOW_PROFILE', $count_visitors);
+        echo $gL10n->get('PLG_ONLINE_SHOW_PROFILE', $count_visitors);
     }
 }
 else
 {
-    echo $g_l10n->get('PLG_ONLINE_NO_VISITORS_ON_WEBSITE');
+    echo $gL10n->get('PLG_ONLINE_NO_VISITORS_ON_WEBSITE');
 }
 
 echo '</div></div>';

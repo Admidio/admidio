@@ -12,29 +12,29 @@ require_once('../../system/common.php');
 
 // Falls die Ausgabe des Catpcha die Ausgabe als Rechenaufgabe eingestellt wurde, 
 // muss die Klasse geladen werden
-if ($g_preferences['captcha_type']=='calc')
+if ($gPreferences['captcha_type']=='calc')
 {
 	require_once('../../system/classes/captcha.php');
 }
 
-echo '<b>'.$g_l10n->get("ORG_CAPTCHA_PREVIEW").'</b><br><br>';
+echo '<b>'.$gL10n->get("ORG_CAPTCHA_PREVIEW").'</b><br><br>';
 
-if($g_preferences['captcha_type'] == 'pic')
+if($gPreferences['captcha_type'] == 'pic')
 {
-	$height = $g_preferences['captcha_height']+25;
-	$width = $g_preferences['captcha_width']+25;
+	$height = $gPreferences['captcha_height']+25;
+	$width = $gPreferences['captcha_width']+25;
 	echo '<div style="width: '.$width.'px; height: '.$height.'px">
-	<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$g_l10n->get('SYS_CAPTCHA').'" />
+	<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />
 	';
 }
-else if($g_preferences['captcha_type']=='calc')
+else if($gPreferences['captcha_type']=='calc')
 {
 	echo '<div style="width: 450px; height: 50px">
 		';
 	$captcha = new Captcha();
-	$captcha->getCaptchaCalc($g_l10n->get('SYS_CAPTCHA_CALC_PART1'),$g_l10n->get('SYS_CAPTCHA_CALC_PART2'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$g_l10n->get('SYS_CAPTCHA_CALC_PART4'));
+	$captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
 	
-	echo '<br><i>('.$g_l10n->get("SYS_CAPTCHA_CALC").': '.$_SESSION['captchacode'].')</i>';
+	echo '<br><i>('.$gL10n->get("SYS_CAPTCHA_CALC").': '.$_SESSION['captchacode'].')</i>';
 }
 
 echo '</div>';

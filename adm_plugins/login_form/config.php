@@ -38,9 +38,9 @@ $plg_link_target = '_self';
 // in der Seitenleiste und kann sich daran erfreuen :)
 // Falls dies nicht gewuenscht ist, einfach alle Zeilen mit den Raengen loeschen
 $plg_rank = array(
-    '0'   => $g_l10n->get('PLG_LOGIN_NEW_ONLINE_MEMBER'),
-    '50'  => $g_l10n->get('PLG_LOGIN_ONLINE_MEMBER'),
-    '100' => $g_l10n->get('PLG_LOGIN_SENIOR_ONLINE_MEMBER'),
-    '200' => $g_l10n->get('PLG_LOGIN_HONORARY_MEMBER')
+    '0'   => $gL10n->get('PLG_LOGIN_NEW_ONLINE_MEMBER'),
+    '50'  => $gL10n->get('PLG_LOGIN_ONLINE_MEMBER'),
+    '100' => $gL10n->get('PLG_LOGIN_SENIOR_ONLINE_MEMBER'),
+    '200' => $gL10n->get('PLG_LOGIN_HONORARY_MEMBER')
     );
 ?>

@@ -150,7 +150,7 @@ class DBPostgreSQL extends DBCommon
     
     public function query($sql)
     {
-        global $g_debug;
+        global $gDebug;
 
 		if(strpos(trim(strtolower($sql)), 'create table') !== false)
 		{
@@ -176,7 +176,7 @@ class DBPostgreSQL extends DBCommon
 		}
 		
         // im Debug-Modus werden alle SQL-Statements mitgeloggt
-        if($g_debug == 1)
+        if($gDebug == 1)
         {
             error_log($sql);
         }

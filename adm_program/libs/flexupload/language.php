@@ -14,31 +14,31 @@ echo'
 <?xml version="1.0" encoding="utf-8"?>
 <locale>
 	<!-- error messages -->
-	<error>'.$g_l10n->get('SYS_ERROR').'</error>
-	<io_error>'.$g_l10n->get('SYS_IO_ERROR').'</io_error>
-	<sec_error>'.$g_l10n->get('SYS_SECURITY_ERROR').'</sec_error>
-	<error_browse>'.$g_l10n->get('SYS_BROWSE_ERROR').'</error_browse>
-	<error_upload>'.$g_l10n->get('SYS_UPLOAD_ERROR').'</error_upload>
-	<error_http>'.$g_l10n->get('SYS_HTTP_ERROR').'</error_http>
+	<error>'.$gL10n->get('SYS_ERROR').'</error>
+	<io_error>'.$gL10n->get('SYS_IO_ERROR').'</io_error>
+	<sec_error>'.$gL10n->get('SYS_SECURITY_ERROR').'</sec_error>
+	<error_browse>'.$gL10n->get('SYS_BROWSE_ERROR').'</error_browse>
+	<error_upload>'.$gL10n->get('SYS_UPLOAD_ERROR').'</error_upload>
+	<error_http>'.$gL10n->get('SYS_HTTP_ERROR').'</error_http>
 		
 	<!-- warnings -->					
-	<warning>'.$g_l10n->get('SYS_WARNING').'</warning>
-	<warning_tooManyFiles>'.$g_l10n->get('SYS_TO_MANY_FILES').'</warning_tooManyFiles>
-	<warning_filesize>'.$g_l10n->get('SYS_FILE_TO_LARGE').'</warning_filesize>
+	<warning>'.$gL10n->get('SYS_WARNING').'</warning>
+	<warning_tooManyFiles>'.$gL10n->get('SYS_TO_MANY_FILES').'</warning_tooManyFiles>
+	<warning_filesize>'.$gL10n->get('SYS_FILE_TO_LARGE').'</warning_filesize>
 		
 	<!-- labels of the progressbars -->
-	<progressFile>'.$g_l10n->get('SYS_FILE_PROGRESS').'</progressFile>
-	<progressTotal>'.$g_l10n->get('SYS_TOTAL_PROGRESS').'</progressTotal>
+	<progressFile>'.$gL10n->get('SYS_FILE_PROGRESS').'</progressFile>
+	<progressTotal>'.$gL10n->get('SYS_TOTAL_PROGRESS').'</progressTotal>
 	
 	<!-- headlines of the grid -->
-	<file>'.$g_l10n->get('SYS_FILE').'</file>
-	<type>'.$g_l10n->get('SYS_TYPE').'</type>
-	<size>'.$g_l10n->get('SYS_SIZE').'</size>
-	<status>'.$g_l10n->get('SYS_STATUS').'</status>
+	<file>'.$gL10n->get('SYS_FILE').'</file>
+	<type>'.$gL10n->get('SYS_TYPE').'</type>
+	<size>'.$gL10n->get('SYS_SIZE').'</size>
+	<status>'.$gL10n->get('SYS_STATUS').'</status>
 	
 	<!-- buttons -->
-	<browse>'.$g_l10n->get('SYS_BROWSE').'</browse>
-	<remove>'.$g_l10n->get('SYS_REMOVE').'</remove>
-	<upload>'.$g_l10n->get('SYS_UPLOAD').'</upload>
-	<stop>'.$g_l10n->get('SYS_STOP').'</stop>
+	<browse>'.$gL10n->get('SYS_BROWSE').'</browse>
+	<remove>'.$gL10n->get('SYS_REMOVE').'</remove>
+	<upload>'.$gL10n->get('SYS_UPLOAD').'</upload>
+	<stop>'.$gL10n->get('SYS_STOP').'</stop>
 </locale>';

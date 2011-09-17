@@ -14,20 +14,20 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_weblink.php');
 
-if ($g_preferences['enable_weblinks_module'] == 0)
+if ($gPreferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-if($g_preferences['enable_weblinks_module'] == 2)
+if($gPreferences['enable_weblinks_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require('../../system/login_valid.php');
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $get_lnk_id   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', null, true);
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('LNK_WEBLINKS'));
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
 
 // Lokale Variablen initialisieren
 $url = '';
@@ -35,7 +35,7 @@ $urlName = '';
 $sqlCondition = '';
 
 // SQL-Statement zusammenbasteln
-if ($g_valid_login == false)
+if ($gValidLogin == false)
 {
 	// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
 	$sqlCondition = ' AND cat_hidden = 0 ';
@@ -44,14 +44,14 @@ if ($g_valid_login == false)
 // Link aus Datenbank auslesen
 $sql = 'SELECT * FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
   		 WHERE lnk_cat_id = cat_id
-		   AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+		   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 		   AND cat_type = \'LNK\'
 		   AND lnk_id = '.$get_lnk_id.'
   		       '.$sqlCondition.'
 		 ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
-$result = $g_db->query($sql);
+$result = $gDb->query($sql);
 
-while($row = $g_db->fetch_array($result))
+while($row = $gDb->fetch_array($result))
 {
 	$url = $row['lnk_url'];
 	$urlName = $row['lnk_name'];
@@ -59,21 +59,21 @@ while($row = $g_db->fetch_array($result))
 // Wenn kein Link gefunden wurde Fehler ausgeben
 if(strlen($url) == 0)
 {
-	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Wenn Link gültig ist, Counter um eine Position erhöhen
-$link = new TableWeblink($g_db, $get_lnk_id);
+$link = new TableWeblink($gDb, $get_lnk_id);
 $link->setValue('lnk_counter',$link->getValue('lnk_counter') + 1);
 $link->save();
 
 // MR: Neue Prüfung für direkte Weiterleitung oder mit Anzeige
-if ($g_preferences['weblinks_redirect_seconds'] > 0)
+if ($gPreferences['weblinks_redirect_seconds'] > 0)
 {
-	$g_layout['header'] = '<meta http-equiv="refresh" content="'. $g_preferences['weblinks_redirect_seconds'].'; url='.$url.'">';
+	$gLayout['header'] = '<meta http-equiv="refresh" content="'. $gPreferences['weblinks_redirect_seconds'].'; url='.$url.'">';
 
 	//Counter zählt die sekunden bis zur Weiterleitung runter
-	$g_layout['header'] = $g_layout['header'].'<script type="text/javascript">
+	$gLayout['header'] = $gLayout['header'].'<script type="text/javascript">
 		function countDown(init)
 		{
 			if (init || --document.getElementById( "counter" ).firstChild.nodeValue > 0 )
@@ -84,10 +84,10 @@ if ($g_preferences['weblinks_redirect_seconds'] > 0)
 		countDown(true);
 	</script>'; 
 	
-	$redirect_seconds = '<span id="counter">'.$g_preferences["weblinks_redirect_seconds"].'</span>';
+	$redirect_seconds = '<span id="counter">'.$gPreferences["weblinks_redirect_seconds"].'</span>';
 
 	// Html-Kopf ausgeben
-	$g_layout['title'] = $get_headline;
+	$gLayout['title'] = $get_headline;
 
 	require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
@@ -95,9 +95,9 @@ if ($g_preferences['weblinks_redirect_seconds'] > 0)
 	echo '<h1 class="moduleHeadline">'. $get_headline. '</h1>
 	<div id="links_overview">
 	<div class="formLayout">
-			<div class="formHead">'.$g_l10n->get('LNK_REDIRECT').'</div>
-			<div class="formBody" style="overflow: hidden;">'.$g_l10n->get('LNK_REDIRECT_DESC', $g_current_organization->getValue('org_longname'), 
-                '<span id="counter">'.$g_preferences['weblinks_redirect_seconds'].'</span>', '<b>'.$urlName.'</b> ('.$url.')', 
+			<div class="formHead">'.$gL10n->get('LNK_REDIRECT').'</div>
+			<div class="formBody" style="overflow: hidden;">'.$gL10n->get('LNK_REDIRECT_DESC', $gCurrentOrganization->getValue('org_longname'), 
+                '<span id="counter">'.$gPreferences['weblinks_redirect_seconds'].'</span>', '<b>'.$urlName.'</b> ('.$url.')', 
                 '<a href="'.$url.'" target="_self">hier</a>').'</div>
 			</div>
 	</div>';

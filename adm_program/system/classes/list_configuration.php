@@ -142,7 +142,7 @@ class ListConfiguration extends TableLists
     //                 2 - Aktive und ehemalige Rollenmitglieder
     public function getSQL($role_ids, $member_status = 0)
     {
-        global $g_current_user, $g_current_organization;
+        global $gCurrentUser, $gCurrentOrganization;
         $sql = '';
         $sql_select   = '';
         $sql_join     = '';
@@ -201,25 +201,25 @@ class ListConfiguration extends TableLists
                 {
                     // ein benutzerdefiniertes Feld
                     
-                    if($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
+                    if($gCurrentUser->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
                     {
                         $type = 'checkbox';
                         $value = admStrToLower($value);
                         
                         // Ja bzw. Nein werden durch 1 bzw. 0 ersetzt, damit Vergleich in DB gemacht werden kann
-                        if($value == admStrToLower($g_l10n->get('SYS_YES')) || $value == '1' || $value == 'true')
+                        if($value == admStrToLower($gL10n->get('SYS_YES')) || $value == '1' || $value == 'true')
                         {
                             $value = '1';
                         }
-                        elseif($value == admStrToLower($g_l10n->get('SYS_NO')) || $value == '0' || $value == 'false')
+                        elseif($value == admStrToLower($gL10n->get('SYS_NO')) || $value == '0' || $value == 'false')
                         {
                             $value = '0';
                         }
                     }
-                    elseif($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
+                    elseif($gCurrentUser->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
                     {
                         $type = 'int';
-                        if($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name_intern') == 'GENDER')
+                        if($gCurrentUser->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name_intern') == 'GENDER')
                         {
                             // bastwe: allow user to search for gender  M W U maennlich weiblich unbekannt
                             $value = admStrToLower($value);
@@ -237,7 +237,7 @@ class ListConfiguration extends TableLists
                             }
                         }
                     }
-                    elseif($g_current_user->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'DATE')
+                    elseif($gCurrentUser->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'DATE')
                     {
                         $type = 'date';
                     }
@@ -300,7 +300,7 @@ class ListConfiguration extends TableLists
                        '.$sql_join.'
                  WHERE rol_id    IN ('.$sql_role_ids.')
                    AND rol_cat_id = cat_id
-                   AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                    AND mem_rol_id = rol_id
                        '.$sql_member_status.'

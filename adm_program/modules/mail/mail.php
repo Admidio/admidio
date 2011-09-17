@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * usr_id    - E-Mail an den entsprechenden Benutzer schreiben
  * role_name - E-Mail an alle Mitglieder der Rolle schreiben
@@ -24,7 +24,7 @@ require_once('../../system/classes/email.php');
 
 $formerMembers = 0;
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getRoleId     = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getUserId     = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getRoleName   = admFuncVariableIsValid($_GET, 'role_name', 'string', '');
@@ -35,31 +35,31 @@ $getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', 1);
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
 // Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
-if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1 && $g_preferences['captcha_type']=='calc')
+if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && $gPreferences['captcha_type']=='calc')
 {
 	require_once('../../system/classes/captcha.php');
 }
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
-if ($g_preferences['enable_mail_module'] != 1)
+if ($gPreferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 
-if ($g_valid_login && strlen($g_current_user->getValue('EMAIL')) == 0)
+if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) == 0)
 {
     // der eingeloggte Benutzer hat in seinem Profil keine Mailadresse hinterlegt,
     // die als Absender genutzt werden kann...
-    $g_message->show($g_l10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
+    $gMessage->show($gL10n->get('SYS_CURRENT_USER_NO_EMAIL', '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">', '</a>'));
 }
 
 //Falls ein Rollenname uebergeben wurde muss auch der Kategoriename uebergeben werden und umgekehrt...
 if ( (strlen($getRoleName)  > 0 && strlen($getCategory) == 0) 
 ||   (strlen($getRoleName) == 0 && strlen($getCategory)  > 0) )
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 
@@ -67,27 +67,27 @@ if ($getUserId > 0)
 {
     // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
-    if (!$g_valid_login)
+    if (!$gValidLogin)
     {
         //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($g_db, $getUserId);
+    $user = new User($gDb, $gUserFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden    
-    if((  $g_current_user->editUsers() == false
+    if((  $gCurrentUser->editUsers() == false
        && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0 )
     {
-        $g_message->show($g_l10n->get('SYS_USER_ID_NOT_FOUND'));
+        $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
     {
-        $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 
     $userEmail = $user->getValue('EMAIL');
@@ -114,20 +114,20 @@ elseif ($getRoleId > 0 || (strlen($getRoleName) > 0 && strlen($getCategory) > 0)
                            OR mem_end   < \''.DATE_NOW.'\')) as former
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_cat_id    = cat_id
-               AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+               AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                    OR cat_org_id IS NULL)'.
                    $sqlConditions;
-    $result = $g_db->query($sql);
-    $row    = $g_db->fetch_array($result);
+    $result = $gDb->query($sql);
+    $row    = $gDb->fetch_array($result);
 
     // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
     // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
     // Rollen muessen zur aktuellen Organisation gehoeren
-    if(($g_valid_login == false && $row['rol_mail_this_role'] != 3)
-    || ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false)
+    if(($gValidLogin == false && $row['rol_mail_this_role'] != 3)
+    || ($gValidLogin == true  && $gCurrentUser->mailRole($row['rol_id']) == false)
     || $row['rol_id']  == null)
     {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     $rollenName = $row['rol_name'];
@@ -167,7 +167,7 @@ if ($getUserId == 0 && $getRoleId == 0 && strlen($getRoleName)  == 0)
 {
     $focusField = 'rol_id';
 }
-else if($g_current_user->getValue('usr_id') == 0)
+else if($gCurrentUser->getValue('usr_id') == 0)
 {
     $focusField = 'name';
 }
@@ -179,14 +179,14 @@ else
 // Html-Kopf ausgeben
 if (strlen($getSubject) > 0)
 {
-    $g_layout['title'] = $getSubject;
+    $gLayout['title'] = $getSubject;
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('MAI_SEND_EMAIL');
+    $gLayout['title'] = $gL10n->get('MAI_SEND_EMAIL');
 }
 
-$g_layout['header'] =  '
+$gLayout['header'] =  '
 <script type="text/javascript"><!--
     // neue Zeile mit Button zum Hinzufuegen von Dateipfaden einblenden
     function addAttachment()
@@ -256,24 +256,24 @@ echo '
     echo '" method="post" enctype="multipart/form-data">
 
     <div class="formLayout" id="write_mail_form">
-        <div class="formHead">'. $g_layout['title']. '</div>
+        <div class="formHead">'. $gLayout['title']. '</div>
         <div class="formBody">
             <ul class="formFieldList">
                 <li>
                     <dl>
-                        <dt><label for="rol_id">'.$g_l10n->get('SYS_TO').':</label></dt>
+                        <dt><label for="rol_id">'.$gL10n->get('SYS_TO').':</label></dt>
                         <dd>';
                             if ($getUserId > 0)
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
                                 echo '<input type="text" disabled="disabled" id="mailto" name="mailto" style="width: 345px;" maxlength="50" value="'.$userEmail.'" />
-                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+                                <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
                             elseif ($getRoleId > 0 || (strlen($getRoleName) > 0 && strlen($getCategory) > 0) )
                             {
                                 // Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
                                 echo '<select size="1" id="rol_id" name="rol_id"><option value="'.$rollenID.'" selected="selected">'.$rollenName.'</option></select>
-                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+                                <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
                             else
                             {
@@ -281,10 +281,10 @@ echo '
                                 echo '<select size="1" id="rol_id" name="rol_id">';
                                 if ($form_values['rol_id'] == "")
                                 {
-                                    echo '<option value="" selected="selected">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+                                    echo '<option value="" selected="selected">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
                                 }
 
-                                if ($g_valid_login)
+                                if ($gValidLogin)
                                 {
                                     // alle Rollen auflisten,
                                     // an die im eingeloggten Zustand Mails versendet werden duerfen
@@ -292,7 +292,7 @@ echo '
                                               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                                              WHERE rol_valid   = 1
                                                AND rol_cat_id  = cat_id
-                                               AND cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                                               AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                                              ORDER BY cat_sequence, rol_name ';
                                 }
                                 else
@@ -304,15 +304,15 @@ echo '
                                              WHERE rol_mail_this_role = 3
                                                AND rol_valid  = 1
                                                AND rol_cat_id = cat_id
-                                               AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                                               AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                              ORDER BY cat_sequence, rol_name ';
                                 }
-                                $result = $g_db->query($sql);
+                                $result = $gDb->query($sql);
                                 $act_category = '';
 
-                                while ($row = $g_db->fetch_object($result))
+                                while ($row = $gDb->fetch_object($result))
                                 {
-                                  	if(!$g_valid_login || ($g_valid_login && $g_current_user->mailRole($row->rol_id)))
+                                  	if(!$gValidLogin || ($gValidLogin && $gCurrentUser->mailRole($row->rol_id)))
                                     {
                                         if($act_category != $row->cat_name)
                                         {
@@ -335,7 +335,7 @@ echo '
 
                                 echo '</optgroup>
                                 </select>
-                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_SEND_MAIL_TO_ROLE&amp;inline=true"><img 
 						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_SEND_MAIL_TO_ROLE\',this)" onmouseout="ajax_hideTooltip()"
 						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
@@ -345,7 +345,7 @@ echo '
                     </dl>
                 </li>';
                 
-                if (($getUserId == 0 && $g_valid_login == true && $getRoleId == 0)
+                if (($getUserId == 0 && $gValidLogin == true && $getRoleId == 0)
                 ||  ($getRoleId  > 0 && $formerMembers > 0))
                 {
                     echo '
@@ -354,9 +354,9 @@ echo '
                             <dt>&nbsp;</dt>
                             <dd>
                                 <select size="1" id="show_members" name="show_members">
-                                    <option selected="selected" value="0">'.$g_l10n->get('LST_ACTIVE_MEMBERS').'</option>
-                                    <option value="1">'.$g_l10n->get('LST_FORMER_MEMBERS').'</option>
-                                    <option value="2">'.$g_l10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
+                                    <option selected="selected" value="0">'.$gL10n->get('LST_ACTIVE_MEMBERS').'</option>
+                                    <option value="1">'.$gL10n->get('LST_FORMER_MEMBERS').'</option>
+                                    <option value="2">'.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
                                 </select>
                             </dd>
                         </dl>
@@ -368,33 +368,33 @@ echo '
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="name">'.$g_l10n->get('SYS_NAME').':</label></dt>
+                        <dt><label for="name">'.$gL10n->get('SYS_NAME').':</label></dt>
                         <dd>';
-                            if ($g_current_user->getValue('usr_id') > 0)
+                            if ($gCurrentUser->getValue('usr_id') > 0)
                             {
-                               echo '<input type="text" id="name" name="name" disabled="disabled" style="width: 200px;" maxlength="50" value="'. $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'). '" />';
+                               echo '<input type="text" id="name" name="name" disabled="disabled" style="width: 200px;" maxlength="50" value="'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '" />';
                             }
                             else
                             {
                                echo '<input type="text" id="name" name="name" style="width: 200px;" maxlength="50" value="'. $form_values['name']. '" />';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                            echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
                     </dl>
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="mailfrom">'.$g_l10n->get('SYS_EMAIL').':</label></dt>
+                        <dt><label for="mailfrom">'.$gL10n->get('SYS_EMAIL').':</label></dt>
                         <dd>';
-                            if ($g_current_user->getValue('usr_id') > 0)
+                            if ($gCurrentUser->getValue('usr_id') > 0)
                             {
-                               echo '<input type="text" id="mailfrom" name="mailfrom" disabled="disabled" style="width: 345px;" maxlength="50" value="'. $g_current_user->getValue('EMAIL'). '" />';
+                               echo '<input type="text" id="mailfrom" name="mailfrom" disabled="disabled" style="width: 345px;" maxlength="50" value="'. $gCurrentUser->getValue('EMAIL'). '" />';
                             }
                             else
                             {
                                echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 345px;" maxlength="50" value="'. $form_values['mailfrom']. '" />';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                            echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
                     </dl>
                 </li>
@@ -403,7 +403,7 @@ echo '
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="subject">'.$g_l10n->get('MAI_SUBJECT').':</label></dt>
+                        <dt><label for="subject">'.$gL10n->get('MAI_SUBJECT').':</label></dt>
                         <dd>';
                             if (strlen($getSubject) > 0)
                             {
@@ -413,13 +413,13 @@ echo '
                             {
                                echo '<input type="text" id="subject" name="subject" style="width: 345px;" maxlength="50" value="'. $form_values['subject']. '" />';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                            echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
                     </dl>
                 </li>
                 <li>
                     <dl>
-                        <dt><label for="body">'.$g_l10n->get('MAI_MESSAGE').':</label></dt>
+                        <dt><label for="body">'.$gL10n->get('MAI_MESSAGE').':</label></dt>
                         <dd>';
                             if (strlen($form_values['body']) > 0)
                             {
@@ -434,19 +434,19 @@ echo '
                 </li>';
 
                 // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
-                if (($g_valid_login) && ($g_preferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
+                if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
                 {
                     // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(
                     echo '
                     <li>
                         <dl>
-                            <dt><label for="add_attachment">'.$g_l10n->get('MAI_ATTACHEMENT').'</label></dt>
+                            <dt><label for="add_attachment">'.$gL10n->get('MAI_ATTACHEMENT').'</label></dt>
                             <dd id="attachments">
-                                <input type="hidden" name="MAX_FILE_SIZE" value="' . ($g_preferences['max_email_attachment_size'] * 1024) . '" />
+                                <input type="hidden" name="MAX_FILE_SIZE" value="' . ($gPreferences['max_email_attachment_size'] * 1024) . '" />
                                 <span id="add_attachment" class="iconTextLink" style="display: block;">
                                     <a href="javascript:addAttachment()"><img
-                                    src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
-                                    <a href="javascript:addAttachment()">'.$g_l10n->get('MAI_ADD_ATTACHEMENT').'</a>
+                                    src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
+                                    <a href="javascript:addAttachment()">'.$gL10n->get('MAI_ADD_ATTACHEMENT').'</a>
                                     <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
                                         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
                                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -466,31 +466,31 @@ echo '
                             {
                                 echo ' checked="checked" ';
                             }
-                            echo ' /> <label for="carbon_copy">'.$g_l10n->get('MAI_SEND_COPY').'</label>
+                            echo ' /> <label for="carbon_copy">'.$gL10n->get('MAI_SEND_COPY').'</label>
                         </dd>
                     </dl>
                 </li>';
 
                 // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
                 // falls es in den Orgaeinstellungen aktiviert wurde...
-                if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
+                if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
                 {
                     echo '
                     <li>
                         <dl>
                             <dt>&nbsp;</dt>
                             <dd>';
-                                if($g_preferences['captcha_type']=='pic')
+                                if($gPreferences['captcha_type']=='pic')
                                 {
-                                    echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$g_l10n->get('SYS_CAPTCHA').'" />';
-                                    $captcha_label = $g_l10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
+                                    echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
+                                    $captcha_label = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
                                     $captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
                                 }
-                                else if($g_preferences['captcha_type']=='calc')
+                                else if($gPreferences['captcha_type']=='calc')
                                 {
                                     $captcha = new Captcha();
-                                    $captcha->getCaptchaCalc($g_l10n->get('SYS_CAPTCHA_CALC_PART1'),$g_l10n->get('SYS_CAPTCHA_CALC_PART2'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$g_l10n->get('SYS_CAPTCHA_CALC_PART4'));
-                                    $captcha_label = $g_l10n->get('SYS_CAPTCHA_CALC');
+                                    $captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
+                                    $captcha_label = $gL10n->get('SYS_CAPTCHA_CALC');
                                     $captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
                                 }
                             echo '
@@ -502,7 +502,7 @@ echo '
                             <dt><label for="captcha">'.$captcha_label.':</label></dt>
                             <dd>
                                 <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 	                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
 						            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
 						            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -515,7 +515,7 @@ echo '
             <hr />
 
             <div class="formSubmit">
-                <button id="btnSend" type="submit"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('SYS_SEND').'" />&nbsp;'.$g_l10n->get('SYS_SEND').'</button>
+                <button id="btnSend" type="submit"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_SEND').'" />&nbsp;'.$gL10n->get('SYS_SEND').'</button>
             </div>
         </div>
     </div>
@@ -528,8 +528,8 @@ if($getUserId > 0 || $getRoleId > 0)
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';

@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * id:      ID die bearbeitet werden soll
  * mode:     1 - Neue Gaestebucheintrag anlegen
@@ -27,21 +27,21 @@ require_once('../../system/classes/table_guestbook.php');
 require_once('../../system/classes/table_guestbook_comment.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_guestbook_module'] == 0)
+if ($gPreferences['enable_guestbook_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-elseif($g_preferences['enable_guestbook_module'] == 2)
+elseif($gPreferences['enable_guestbook_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $get_gbo_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 $get_mode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('GBO_GUESTBOOK'));
+$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
 if ($get_mode == 2 || $get_mode == 3 || $get_mode == 4 || $get_mode == 5 || $get_mode == 8 )
@@ -50,14 +50,14 @@ if ($get_mode == 2 || $get_mode == 3 || $get_mode == 4 || $get_mode == 5 || $get
     if ($get_mode == 4)
     {
         // Wenn nicht jeder kommentieren darf, muss man eingeloggt zu sein
-        if ($g_preferences['enable_gbook_comments4all'] == 0)
+        if ($gPreferences['enable_gbook_comments4all'] == 0)
         {
             require_once('../../system/login_valid.php');
 
             // Ausserdem werden dann commentGuestbook-Rechte benoetigt
-            if (!$g_current_user->commentGuestbookRight())
+            if (!$gCurrentUser->commentGuestbookRight())
             {
-                $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+                $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
             }
         }
 
@@ -73,9 +73,9 @@ if ($get_mode == 2 || $get_mode == 3 || $get_mode == 4 || $get_mode == 5 || $get
     if ($get_mode == 2 || $get_mode == 3 || $get_mode == 5 || $get_mode == 8)
     {
         // Fuer die modes 2,3,5,6,7 und 8 werden editGuestbook-Rechte benoetigt
-        if(!$g_current_user->editGuestbookRight())
+        if(!$gCurrentUser->editGuestbookRight())
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
     }
 }
@@ -83,32 +83,32 @@ if ($get_mode == 2 || $get_mode == 3 || $get_mode == 4 || $get_mode == 5 || $get
 if ($get_mode == 1 || $get_mode == 2 || $get_mode == 3 || $get_mode == 9)
 {
     // Gaestebuchobjekt anlegen
-    $guestbook = new TableGuestbook($g_db);
+    $guestbook = new TableGuestbook($gDb);
     
     if($get_gbo_id > 0)
     {
         $guestbook->readData($get_gbo_id);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
+        if($guestbook->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
     }
 }
 else
 {
     // Gaestebuchobjekt anlegen
-    $guestbook_comment = new TableGuestbookComment($g_db);
+    $guestbook_comment = new TableGuestbookComment($gDb);
     
     if($get_gbo_id > 0 && $get_mode != 4)
     {
         $guestbook_comment->readData($get_gbo_id);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
-        if($guestbook_comment->getValue('gbo_org_id') != $g_current_organization->getValue('org_id'))
+        if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
     }
 }
@@ -120,19 +120,19 @@ if ($get_mode == 1 || $get_mode == 3)
     $_SESSION['guestbook_entry_request'] = $_REQUEST;
 
 	// if login then fill name with login user
-	if($g_current_user->getValue('usr_id') > 0)
+	if($gCurrentUser->getValue('usr_id') > 0)
 	{
-		$_POST['gbo_name'] = $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME');
+		$_POST['gbo_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
 	}
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($get_mode == 1 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
+    if ($get_mode == 1 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
         {
-            if($g_preferences['captcha_type']=='pic') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-			else if($g_preferences['captcha_type']=='calc') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+			else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
 
@@ -147,11 +147,11 @@ if ($get_mode == 1 || $get_mode == 3)
 				// Daten wurden nicht uebernommen, Hinweis ausgeben
 				if($key == 'gbo_email')
 				{
-					$g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')));
+					$gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
 				}
 				elseif($key == 'gbo_homepage')
 				{
-					$g_message->show($g_l10n->get('SYS_URL_INVALID_CHAR', $g_l10n->get('SYS_WEBSITE')));
+					$gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('SYS_WEBSITE')));
 				}
 			}
         }
@@ -161,38 +161,38 @@ if ($get_mode == 1 || $get_mode == 3)
     {
         // Gaestebucheintrag speichern
         
-        if($g_valid_login)
+        if($gValidLogin)
         {
             if(strlen($guestbook->getValue('gbo_name')) == 0)
             { 
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $guestbook->setValue('gbo_name', $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'));
+                $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
             }
         }
         else
         {
-            if($g_preferences['flooding_protection_time'] != 0)
+            if($gPreferences['flooding_protection_time'] != 0)
             {
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag erzeugt hat...
                 $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK. '
-                        where unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
-                          and gbo_org_id = '. $g_current_organization->getValue('org_id'). '
+                        where unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
+                          and gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                           and gbo_ip_address = "'. $guestbook->getValue('gbo_ip_adress'). '"';
-                $result = $g_db->query($sql);
-                $row    = $g_db->fetch_array($result);
+                $result = $gDb->query($sql);
+                $row    = $gDb->fetch_array($result);
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $g_message->show($g_l10n->get('GBO_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
+                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
                 }
             }
         }
         
     	// Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
-        || ($g_preferences['enable_guestbook_moderation'] == 2 && $g_current_user->editGuestbookRight() == false))
+        if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
+        || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
             $guestbook->setValue('gbo_locked', '1');
         }
@@ -202,15 +202,15 @@ if ($get_mode == 1 || $get_mode == 3)
     
         if($return_code < 0)
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
 		
 		if($return_code == 0)
 		{	
 			// Benachrichtigungs-Email für neue Einträge
-			if($g_preferences['enable_email_notification'] == 1)
+			if($gPreferences['enable_email_notification'] == 1)
 			{
-				if(!$g_valid_login)
+				if(!$gValidLogin)
 				{
 					$gbo_name  = $_POST['gbo_name'];
 					$gbo_email = $_POST['gbo_email'];
@@ -218,17 +218,17 @@ if ($get_mode == 1 || $get_mode == 3)
 				}
 				else
 				{
-					$gbo_name  = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
-					$gbo_email = $g_current_user->getValue('EMAIL');
+					$gbo_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+					$gbo_email = $gCurrentUser->getValue('EMAIL');
 					$gbo_text  = $_POST['gbo_text'];
 				}
 				$sender_name = $gbo_name;
 				if(!strValidCharacters($gbo_email, 'email'))
 				{
-					$gbo_email = $g_preferences['email_administrator'];
-					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
+					$gbo_email = $gPreferences['email_administrator'];
+					$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
 				}
-				admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $gbo_text, $gbo_name, date("d.m.Y H:m", time()))), $sender_name, $gbo_email);
+				admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date("d.m.Y H:m", time()))), $sender_name, $gbo_email);
 			}
 		}
 
@@ -245,11 +245,11 @@ if ($get_mode == 1 || $get_mode == 3)
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $get_headline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
-        || ($g_preferences['enable_guestbook_moderation'] == 2 && $g_current_user->editGuestbookRight() == false))
+        if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
+        || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
-            $g_message->setForwardUrl($url);
-            $g_message->show($g_l10n->get('GBO_ENTRY_QUEUED'));
+            $gMessage->setForwardUrl($url);
+            $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));
         }
 
         header('Location: '.$url);
@@ -259,11 +259,11 @@ if ($get_mode == 1 || $get_mode == 3)
     {
         if(strlen($guestbook->getValue('gbo_name')) > 0)
         {
-            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_TEXT')));
+            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_TEXT')));
+            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TEXT')));
         }
     }
 }
@@ -305,19 +305,19 @@ elseif($get_mode == 4 || $get_mode == 8)
     $_SESSION['guestbook_comment_request'] = $_REQUEST;
 
 	// if login then fill name with login user
-	if($g_current_user->getValue('usr_id') > 0)
+	if($gCurrentUser->getValue('usr_id') > 0)
 	{
-		$_POST['gbc_name'] = $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME');
+		$_POST['gbc_name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
 	}
 
     // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
     // muss natuerlich der Code ueberprueft werden
-    if ($get_mode == 4 && !$g_valid_login && $g_preferences['enable_guestbook_captcha'] == 1)
+    if ($get_mode == 4 && !$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
         {
-            if($g_preferences['captcha_type']=='pic') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-			else if($g_preferences['captcha_type']=='calc') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+            if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+			else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
 
@@ -331,7 +331,7 @@ elseif($get_mode == 4 || $get_mode == 8)
 				// Daten wurden nicht uebernommen, Hinweis ausgeben
 				if($key == 'gbc_email')
 				{
-					$g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')));
+					$gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
 				}
 			}
         }
@@ -346,37 +346,37 @@ elseif($get_mode == 4 || $get_mode == 8)
     {
         // Gaestebuchkommentar speichern
         
-        if($g_valid_login)
+        if($gValidLogin)
         {
             if(strlen($guestbook_comment->getValue('gbc_name')) == 0)
             {
                 // Falls der User eingeloggt ist, wird die aktuelle UserId und der korrekte Name mitabgespeichert...
-                $guestbook_comment->setValue('gbc_name', $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME'));
+                $guestbook_comment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
             }
         }
         else
         {
-            if($g_preferences['flooding_protection_time'] != 0)
+            if($gPreferences['flooding_protection_time'] != 0)
             {
                 // Falls er nicht eingeloggt ist, wird vor dem Abspeichern noch geprueft ob der
                 // User innerhalb einer festgelegten Zeitspanne unter seiner IP-Adresse schon einmal
                 // einen GB-Eintrag/Kommentar erzeugt hat...
                 $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK_COMMENTS. '
-                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $g_preferences['flooding_protection_time']. '
+                         WHERE unix_timestamp(gbc_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                            AND gbc_ip_address = "'. $guestbook_comment->getValue('gbc_ip_adress'). '"';
-                $result = $g_db->query($sql);
-                $row = $g_db->fetch_array($result);
+                $result = $gDb->query($sql);
+                $row = $gDb->fetch_array($result);
                 if($row[0] > 0)
                 {
                     //Wenn dies der Fall ist, gibt es natuerlich keinen Gaestebucheintrag...
-                    $g_message->show($g_l10n->get('GBO_FLOODING_PROTECTION', $g_preferences['flooding_protection_time']));
+                    $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
                 }
             }
         }
         
     	// Bei Moderation wird die Nachricht zunächst nicht veröffentlicht
-        if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
-        || ($g_preferences['enable_guestbook_moderation'] == 2 && $g_current_user->editGuestbookRight() == false))
+        if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
+        || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
             $guestbook_comment->setValue('gbc_locked', '1');
         }
@@ -386,32 +386,32 @@ elseif($get_mode == 4 || $get_mode == 8)
     
         if($return_code < 0)
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
 		
 		if($return_code == 0)
 		{	
 			// Benachrichtigungs-Email für neue Einträge
-			if($g_preferences['enable_email_notification'] == 1)
+			if($gPreferences['enable_email_notification'] == 1)
 			{
-				if(!$g_valid_login)
+				if(!$gValidLogin)
 				{
 					$gbc_name  = $guestbook_comment->getValue('gbc_name');
 					$gbc_email = $guestbook_comment->getValue('gbc_email');
 				}
 				else
 				{
-					$gbc_name  = $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME');
-					$gbc_email = $g_current_user->getValue('EMAIL');
+					$gbc_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+					$gbc_email = $gCurrentUser->getValue('EMAIL');
 				}
 				$sender_name = $gbc_name;
 				if(strlen($gbc_email) == 0)
 				{
-					$gbc_email = $g_preferences['email_administrator'];
-					$sender_name = 'Administrator '.$g_current_organization->getValue('org_homepage');
+					$gbc_email = $gPreferences['email_administrator'];
+					$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
 				}
-				admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), 
-				    str_replace("<br />","\n",$g_l10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $g_current_organization->getValue('org_longname'), 
+				admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), 
+				    str_replace("<br />","\n",$gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), 
 				    $guestbook_comment->getValue('gbc_text'), $gbc_name, date("d.m.Y H:m", time()))), $sender_name, $gbc_email);
 			}
 		}
@@ -429,11 +429,11 @@ elseif($get_mode == 4 || $get_mode == 8)
         $url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook_comment->getValue('gbc_gbo_id'). '&headline='. $get_headline;
 
         // Bei Moderation Hinweis ausgeben dass Nachricht erst noch geprüft werden muss
-        if(($g_preferences['enable_guestbook_moderation'] == 1 && $g_valid_login == false)
-        || ($g_preferences['enable_guestbook_moderation'] == 2 && $g_current_user->editGuestbookRight() == false))
+        if(($gPreferences['enable_guestbook_moderation'] == 1 && $gValidLogin == false)
+        || ($gPreferences['enable_guestbook_moderation'] == 2 && $gCurrentUser->editGuestbookRight() == false))
         {
-            $g_message->setForwardUrl($url);
-            $g_message->show($g_l10n->get('GBO_ENTRY_QUEUED'));
+            $gMessage->setForwardUrl($url);
+            $gMessage->show($gL10n->get('GBO_ENTRY_QUEUED'));
         }
 
         header('Location: '.$url);
@@ -443,17 +443,17 @@ elseif($get_mode == 4 || $get_mode == 8)
     {
         if(strlen($guestbook_comment->getValue('gbc_name')) > 0)
         {
-            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_COMMENT')));
+            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_COMMENT')));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
+            $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
         }
     }
 }
 else
 {
     // Falls der Mode unbekannt ist, ist natürlich auch Ende...
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 ?>

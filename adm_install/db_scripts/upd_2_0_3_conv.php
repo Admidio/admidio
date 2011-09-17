@@ -13,9 +13,9 @@ $last_cat_id = 0;
 $counter     = 0;
 $sql = "SELECT * FROM ". TBL_USER_FIELDS. " 
          ORDER BY usf_cat_id, usf_sequence ";
-$result_fields = $g_db->query($sql);
+$result_fields = $gDb->query($sql);
 
-while($row_fields = $g_db->fetch_array($result_fields))
+while($row_fields = $gDb->fetch_array($result_fields))
 {
     if($row_fields['usf_cat_id'] != $last_cat_id)
     {
@@ -25,16 +25,16 @@ while($row_fields = $g_db->fetch_array($result_fields))
 
     $sql = "UPDATE ". TBL_USER_FIELDS. " SET usf_sequence = ". $counter. "
              WHERE usf_id = ". $row_fields['usf_id'];
-    $g_db->query($sql);
+    $gDb->query($sql);
     
     $counter++;
 } 
  
 // Reihenfolge der Kategorien noch einmal komplett neu vergeben
 $sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
-$result_orga = $g_db->query($sql);
+$result_orga = $gDb->query($sql);
 
-while($row_orga = $g_db->fetch_array($result_orga))
+while($row_orga = $gDb->fetch_array($result_orga))
 {
     $last_cat_type = "";
     $counter       = 0;
@@ -42,9 +42,9 @@ while($row_orga = $g_db->fetch_array($result_orga))
              WHERE (  cat_org_id = ". $row_orga['org_id']. "
                    OR cat_org_id IS NULL )
              ORDER BY cat_type, cat_org_id, cat_sequence ";
-    $result_cat = $g_db->query($sql);
+    $result_cat = $gDb->query($sql);
 
-    while($row_cat = $g_db->fetch_array($result_cat))
+    while($row_cat = $gDb->fetch_array($result_cat))
     {
         if($row_cat['cat_type'] != $last_cat_type)
         {
@@ -54,7 +54,7 @@ while($row_orga = $g_db->fetch_array($result_orga))
 
         $sql = "UPDATE ". TBL_CATEGORIES. " SET cat_sequence = ". $counter. "
                  WHERE cat_id = ". $row_cat['cat_id'];
-        $g_db->query($sql);
+        $gDb->query($sql);
         
         $counter++;
     } 

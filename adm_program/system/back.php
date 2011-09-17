@@ -21,7 +21,7 @@ $next_url = $_SESSION['navigation']->getUrl();
 // wurde keine Seite gefunden, dann immer die Startseite anzeigen
 if(strlen($next_url) == 0)
 {
-    $next_url = $g_homepage;
+    $next_url = $gHomepage;
 }
 header('Location: '.$next_url);
  

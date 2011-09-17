@@ -71,16 +71,16 @@ class TableDate extends TableAccess
     // prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
     public function editRight()
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
         
         // Termine der eigenen Orga darf bearbeitet werden
-        if($this->getValue('cat_org_id') == $g_current_organization->getValue('org_id'))
+        if($this->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
         {
             return true;
         }
         // Termine von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
         elseif($this->getValue('dat_global') == true
-        && $g_current_organization->isChildOrganization($this->getValue('cat_org_id')))
+        && $gCurrentOrganization->isChildOrganization($this->getValue('cat_org_id')))
         {
             return true;
         }
@@ -94,11 +94,11 @@ class TableDate extends TableAccess
     // type = 'BBCODE' : Beschreibung mit BBCode-Tags
     public function getDescription($type = 'HTML')
     {
-        global $g_preferences;
+        global $gPreferences;
         $description = '';
 
         // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-        if($g_preferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
         {
             if(is_object($this->bbCode) == false)
             {
@@ -182,8 +182,8 @@ class TableDate extends TableAccess
         if($field_name == 'dat_country' && strlen($value) > 0)
         {
             // beim Land die sprachabhaengige Bezeichnung auslesen
-            global $g_l10n;
-            $value = $g_l10n->getCountryByCode($value);
+            global $gL10n;
+            $value = $gL10n->getCountryByCode($value);
         }
 
         return $value;

@@ -12,9 +12,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
-if (!$g_current_user->editUsers())
+if (!$gCurrentUser->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 echo '
@@ -37,25 +37,25 @@ function send()
 
 <form id="admFormMembersCreateUser" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
 <div class="formLayout">
-    <div class="formHead">'. $g_l10n->get('MEM_CREATE_USER'). '</div>
+    <div class="formHead">'. $gL10n->get('MEM_CREATE_USER'). '</div>
     <div class="formBody">
         <ul class="formFieldList">
-            <li>'.$g_l10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</li>
+            <li>'.$gL10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</li>
             <li>
                 <dl>
-                    <dt><label for="lastname">'.$g_l10n->get('SYS_LASTNAME').':</label></dt>
+                    <dt><label for="lastname">'.$gL10n->get('SYS_LASTNAME').':</label></dt>
                     <dd>
                         <input type="text" id="lastname" name="lastname" style="width: 300px;" maxlength="100" />
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="firstname">'.$g_l10n->get('SYS_FIRSTNAME').':</label></dt>
+                    <dt><label for="firstname">'.$gL10n->get('SYS_FIRSTNAME').':</label></dt>
                     <dd>
                         <input type="text" id="firstname" name="firstname" style="width: 300px;" maxlength="100" />
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
@@ -64,7 +64,7 @@ function send()
         <hr />
 
         <div class="formSubmit">
-            <button id="btnAdd" type="button" onclick="send()"><img src="'.THEME_PATH.'/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" />&nbsp;'.$g_l10n->get('MEM_CREATE_USER').'</button>
+            <button id="btnAdd" type="button" onclick="send()"><img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('MEM_CREATE_USER').'" />&nbsp;'.$gL10n->get('MEM_CREATE_USER').'</button>
         </div>
     </div>
 </form>';

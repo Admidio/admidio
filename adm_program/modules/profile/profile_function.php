@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * mode   :  1 - User als vCard exportieren
  *           2 - Mitgliedschaft bei einer Rolle entfernen
@@ -20,7 +20,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_members.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $get_usr_id = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
 $get_rol_id = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 $get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
@@ -28,7 +28,7 @@ $get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
 if($get_mode == 1)
 {
     // Userdaten aus Datenbank holen
-    $user = new User($g_db, $get_usr_id);
+    $user = new User($gDb, $gUserFields, $get_usr_id);
 
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
     header('Content-Disposition: attachment; filename="'. urlencode($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')). '.vcf"');
@@ -41,9 +41,9 @@ if($get_mode == 1)
 elseif($get_mode == 2)
 {
     // Mitgliedschaft bei einer aktuellen Rolle beenden
-    if($g_current_user->assignRoles())
+    if($gCurrentUser->assignRoles())
     {
-        $member = new TableMembers($g_db);
+        $member = new TableMembers($gDb);
         $member->stopMembership($get_rol_id, $get_usr_id);
 
         // Beendigung erfolgreich -> Rueckgabe fuer XMLHttpRequest
@@ -53,9 +53,9 @@ elseif($get_mode == 2)
 elseif($get_mode == 3)
 {
     // Ehemalige Rollenzuordnung entfernen
-    if($g_current_user->isWebmaster())
+    if($gCurrentUser->isWebmaster())
     {
-        $member = new TableMembers($g_db);
+        $member = new TableMembers($gDb);
         $member->readData(array('rol_id' => $get_rol_id, 'usr_id' => $get_usr_id));
         $member->delete();
 

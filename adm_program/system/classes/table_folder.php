@@ -42,13 +42,13 @@ class TableFolder extends TableAccess
     // Folder mit der uebergebenen ID aus der Datenbank auslesen
     public function readData($folder_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
 
         if(strlen($sql_where_condition) == 0)
         {
             $sql_where_condition = '    fol_id     = '.$folder_id.'
                                     AND fol_type   = \'DOWNLOAD\'
-                                    AND fol_org_id = '. $g_current_organization->getValue('org_id');
+                                    AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
         }
         return parent::readData($folder_id, $sql_where_condition, $sql_additional_tables);
     }
@@ -58,7 +58,7 @@ class TableFolder extends TableAccess
 	// Rueckgabe: -2 = keine Rechte; -1 = Ordner existiert nicht; 1 = alles OK
     public function getFolderForDownload($folder_id)
     {
-        global $g_current_organization, $g_current_user, $g_valid_login;
+        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 		
 		$returnValue = -1;
 
@@ -66,7 +66,7 @@ class TableFolder extends TableAccess
         {
             $condition = '     fol_id     = '.$folder_id.'
                            AND fol_type   = \'DOWNLOAD\'
-                           AND fol_org_id = '. $g_current_organization->getValue('org_id');
+                           AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
             parent::readData($folder_id, $condition);
         }
         else 
@@ -74,7 +74,7 @@ class TableFolder extends TableAccess
             $condition = '     fol_name   = \'download\'
                            AND fol_type   = \'DOWNLOAD\'
                            AND fol_path   = \'/adm_my_files\'
-                           AND fol_org_id = '. $g_current_organization->getValue('org_id');
+                           AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
             parent::readData($folder_id, $condition);
         }
 
@@ -84,25 +84,25 @@ class TableFolder extends TableAccess
         if ($this->getValue('fol_id'))
         {
             //Falls der Ordner gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
-            if (!$g_current_user->editDownloadRight() && $this->getValue('fol_locked'))
+            if (!$gCurrentUser->editDownloadRight() && $this->getValue('fol_locked'))
             {
                 $this->clear();
 				$returnValue = -2;
             }
-            else if (!$g_valid_login && !$this->getValue('fol_public'))
+            else if (!$gValidLogin && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
 				$returnValue = -2;
             }
-            else if (!$g_current_user->editDownloadRight() && !$this->getValue('fol_public'))
+            else if (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer keine DownloadAdminrechte hat, muessen die Rechte untersucht werden
                 $sql_rights = 'SELECT count(*)
                          FROM '. TBL_FOLDER_ROLES. ', '. TBL_MEMBERS. '
                         WHERE flr_fol_id = '. $this->getValue('fol_id'). '
                           AND flr_rol_id = mem_rol_id
-                          AND mem_usr_id = '. $g_current_user->getValue('usr_id'). '
+                          AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                           AND mem_begin <= \''.DATE_NOW.'\'
                           AND mem_end    > \''.DATE_NOW.'\'';
                 $result_rights = $this->db->query($sql_rights);
@@ -131,7 +131,7 @@ class TableFolder extends TableAccess
     // Inhalt des aktuellen Ordners, abhaengig von den Benutzerrechten, als Array zurueckliefern...
     public function getFolderContentsForDownload()
     {
-        global $g_current_organization, $g_current_user, $g_valid_login;
+        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
         //RueckgabeArray initialisieren
         $completeFolder = null;
@@ -141,7 +141,7 @@ class TableFolder extends TableAccess
                          FROM '. TBL_FOLDERS. '
                         WHERE fol_type          = \'DOWNLOAD\'
                           AND fol_fol_id_parent = '. $this->getValue('fol_id'). '
-                          AND fol_org_id        = '. $g_current_organization->getValue('org_id'). '
+                          AND fol_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
                         ORDER BY fol_name';
         $result_folders = $this->db->query($sql_folders);
 
@@ -163,12 +163,12 @@ class TableFolder extends TableAccess
             {
                 $addToArray = true;
             }
-            else if ($g_current_user->editDownloadRight())
+            else if ($gCurrentUser->editDownloadRight())
             {
                 //Falls der User editDownloadRechte hat, bekommt er den Ordner natuerlich auch zu sehen
                 $addToArray = true;
             }
-            else if ($g_valid_login)
+            else if ($gValidLogin)
             {
 
                 //Gucken ob der angemeldete Benutzer Rechte an dem Unterordner hat...
@@ -176,7 +176,7 @@ class TableFolder extends TableAccess
                                  FROM '. TBL_FOLDER_ROLES. ', '. TBL_MEMBERS. '
                                 WHERE flr_fol_id = '. $row_folders->fol_id. '
                                   AND flr_rol_id = mem_rol_id
-                                  AND mem_usr_id = '. $g_current_user->getValue('usr_id'). '
+                                  AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                                   AND mem_begin <= \''.DATE_NOW.'\'
                                   AND mem_end    > \''.DATE_NOW.'\'';
                 $result_rights = $this->db->query($sql_rights);
@@ -199,7 +199,7 @@ class TableFolder extends TableAccess
             else {
                 $folderExists = false;
 
-                if ($g_current_user->editDownloadRight()) {
+                if ($gCurrentUser->editDownloadRight()) {
                     //falls der Ordner physikalisch nicht existiert wird er nur im Falle von AdminRechten dem Array hinzugefuegt
                     $addToArray = true;
                 }
@@ -234,7 +234,7 @@ class TableFolder extends TableAccess
             {
                 $addToArray = true;
             }
-            else if ($g_current_user->editDownloadRight())
+            else if ($gCurrentUser->editDownloadRight())
             {
                 //Falls der User editDownloadRechte hat, bekommt er das File natürlich auch zu sehen
                 $addToArray = true;
@@ -251,7 +251,7 @@ class TableFolder extends TableAccess
                 $fileExists = false;
                 $fileSize   = 0;
 
-                if ($g_current_user->editDownloadRight()) {
+                if ($gCurrentUser->editDownloadRight()) {
                     //falls das File physikalisch nicht existiert wird es nur im Falle von AdminRechten dem Array hinzugefuegt
                     $addToArray = true;
                 }
@@ -278,7 +278,7 @@ class TableFolder extends TableAccess
 
         //Falls der User Downloadadmin ist, wird jetzt noch im physikalischen Verzeichnis geschaut,
         //ob Sachen drin sind die nicht in der DB sind...
-        if ($g_current_user->editDownloadRight()) {
+        if ($gCurrentUser->editDownloadRight()) {
 
             //pruefen ob der Ordner wirklich existiert
             if (file_exists($this->getCompletePathOfFolder()))
@@ -374,7 +374,7 @@ class TableFolder extends TableAccess
     //Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
     public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
     {
-        global $g_current_organization, $g_root_path;
+        global $gCurrentOrganization, $g_root_path;
 
         $originalCall = false;
 
@@ -392,7 +392,7 @@ class TableFolder extends TableAccess
                                         WHERE fol_name = \'download\'
                                        AND fol_type    = \'DOWNLOAD\'
                                        AND fol_path    = \'/adm_my_files\'
-                                       AND fol_org_id  = '. $g_current_organization->getValue('org_id');
+                                       AND fol_org_id  = '. $gCurrentOrganization->getValue('org_id');
 
                 $result_rootFolder = $this->db->query($sql_rootFolder);
                 $rootFolderRow = $this->db->fetch_object($result_rootFolder);
@@ -710,13 +710,13 @@ class TableFolder extends TableAccess
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
     public function save($updateFingerPrint = true)
     {
-        global $g_current_organization, $g_current_user;
+        global $gCurrentOrganization, $gCurrentUser;
 
         if($this->new_record)
         {
             $this->setValue('fol_timestamp', DATETIME_NOW);
-            $this->setValue('fol_usr_id', $g_current_user->getValue('usr_id'));
-            $this->setValue('fol_org_id', $g_current_organization->getValue('org_id'));
+            $this->setValue('fol_usr_id', $gCurrentUser->getValue('usr_id'));
+            $this->setValue('fol_org_id', $gCurrentOrganization->getValue('org_id'));
         }
         parent::save($updateFingerPrint);
     }

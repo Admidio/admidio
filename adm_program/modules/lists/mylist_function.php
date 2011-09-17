@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * lst_id : ID der Liste, die aktuell bearbeitet werden soll
  * mode   : 1 - Listenkonfiguration speichern
@@ -22,7 +22,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/list_configuration.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $get_lst_id = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
 $get_mode   = admFuncVariableIsValid($_GET, 'mode', 'string', null, true);
 $get_name   = admFuncVariableIsValid($_GET, 'name', 'string', '');
@@ -30,14 +30,14 @@ $get_name   = admFuncVariableIsValid($_GET, 'name', 'string', '');
 // Mindestens ein Feld sollte zugeordnet sein
 if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', 'Feld 1'));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Feld 1'));
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
 if($get_mode == 2
 && (isset($_POST['rol_id']) == false || $_POST['rol_id'] == 0 || is_numeric($_POST['rol_id']) == false))
 {
-    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', 'Rolle'));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Rolle'));
 }
 
 if(isset($_POST['show_members']) == false)
@@ -56,21 +56,21 @@ else
 }
 
 // Listenobjekt anlegen
-$list = new ListConfiguration($g_db, $get_lst_id);
+$list = new ListConfiguration($gDb, $get_lst_id);
 
 // pruefen, ob Benutzer die Rechte hat, diese Liste zu bearbeiten
 if($get_mode != 2)
 {
     // globale Listen duerfen nur von Webmastern editiert werden
-    if($list->getValue('lst_global') == 1 && $g_current_user->isWebmaster() == false)
+    if($list->getValue('lst_global') == 1 && $gCurrentUser->isWebmaster() == false)
     {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
-    elseif($list->getValue('lst_usr_id') != $g_current_user->getValue('usr_id')
+    elseif($list->getValue('lst_usr_id') != $gCurrentUser->getValue('usr_id')
     && $list->getValue('lst_global') == 0
     && $list->getValue('lst_id') > 0)
     {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -97,7 +97,7 @@ if ($get_mode == 1 || $get_mode == 2 || $get_mode == 4)
         $list->setValue('lst_name', $get_name);
     }
     
-    if($get_mode == 4 && $g_current_user->isWebmaster())
+    if($get_mode == 4 && $gCurrentUser->isWebmaster())
     {
         $list->setValue('lst_global', 1);
     }

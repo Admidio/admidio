@@ -30,7 +30,7 @@ require_once(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
-$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden 
 // falls nicht, hier noch mal die Default-Werte setzen 
@@ -50,14 +50,14 @@ else
 
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen 
-$g_db->setCurrentDB(); 
+$gDb->setCurrentDB(); 
 
 
 // pruefen ob das Modul ueberhaupt aktiviert ist 
-if ($g_preferences['enable_download_module'] == 1) 
+if ($gPreferences['enable_download_module'] == 1) 
 { 
     echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-    <div class="admPluginHeader"><h3>'.$g_l10n->get('DOW_DOWNLOADS').'</h3></div>
+    <div class="admPluginHeader"><h3>'.$gL10n->get('DOW_DOWNLOADS').'</h3></div>
     <div class="admPluginBody">';
 
 	// erst pruefen, ob der User auch die entsprechenden Rechte hat 
@@ -68,14 +68,14 @@ if ($g_preferences['enable_download_module'] == 1)
     		 WHERE fil_fol_id = fol_id 
     		 ORDER BY fil_timestamp DESC';
 
-    $plg_result_fil = $g_db->query($sql); 
+    $plg_result_fil = $gDb->query($sql); 
 
-    if($g_db->num_rows($plg_result_fil) > 0) 
+    if($gDb->num_rows($plg_result_fil) > 0) 
     { 
         $anzahl = 0;
-        while($plg_row = $g_db->fetch_object($plg_result_fil)) 
+        while($plg_row = $gDb->fetch_object($plg_result_fil)) 
         {        
-            $file = new TableFile($g_db); 
+            $file = new TableFile($gDb); 
             $file->getFileForDownload($plg_row->fil_id);
                         
             if($file->getValue('fil_id')) 
@@ -91,7 +91,7 @@ if ($g_preferences['enable_download_module'] == 1)
 	            }
 
               	// Vorname und Nachname abfragen (Upload der Datei)
-              	$mein_user = new User($g_db, $plg_row->fil_usr_id);
+              	$mein_user = new User($gDb, $gUserFields, $plg_row->fil_usr_id);
 
                	echo '<span class="iconTextLink">
                		<a href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img 
@@ -112,12 +112,12 @@ if ($g_preferences['enable_download_module'] == 1)
 
      	if ($anzahl == 0) 
         { 
-        	echo $g_l10n->get('PLG_DOWNLAODS_NO_DOWNLOADS_AVAILABLE');           
+        	echo $gL10n->get('PLG_DOWNLAODS_NO_DOWNLOADS_AVAILABLE');           
         } 
     }
     else 
     { 
-        echo $g_l10n->get('PLG_DOWNLAODS_NO_DOWNLOADS_AVAILABLE');
+        echo $gL10n->get('PLG_DOWNLAODS_NO_DOWNLOADS_AVAILABLE');
     } 
     echo '</div></div>';
 } 

@@ -72,8 +72,8 @@ class TableSession extends TableAccess
         if($this->new_record)
         {
             // Insert
-            global $g_current_organization;
-            $this->setValue('ses_org_id', $g_current_organization->getValue('org_id'));
+            global $gCurrentOrganization;
+            $this->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('ses_begin', DATETIME_NOW);
             $this->setValue('ses_timestamp', DATETIME_NOW);
             $this->setValue('ses_ip_address', $_SERVER['REMOTE_ADDR']);

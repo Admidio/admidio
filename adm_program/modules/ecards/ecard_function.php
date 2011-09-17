@@ -19,16 +19,16 @@ class FunctionClass
 	public $newMessageReceivedString 	= "";
 	public $greetingCardFrom			= "";
 	public $greetingCardString			= "";
-	function __construct($g_l10n)
+	function __construct($gL10n)
 	{
-		$this->nameRecipientString 			= $g_l10n->get("ECA_RECIPIENT_NAME");
-		$this->emailRecipientString 		= $g_l10n->get("ECA_RECIPIENT_EMAIL");
-		$this->yourMessageString 			= $g_l10n->get("SYS_MESSAGE");
-		$this->newMessageReceivedString 	= $g_l10n->get("ECA_NEW_MESSAGE_RECEIVED");
-		$this->greetingCardFrom				= $g_l10n->get("ECA_A_ECARD_FROM");
-		$this->greetingCardString			= $g_l10n->get("ECA_GREETING_CARD");
-		$this->sendToString					= $g_l10n->get("SYS_TO");	
-		$this->emailString					= $g_l10n->get("SYS_EMAIL");	
+		$this->nameRecipientString 			= $gL10n->get("ECA_RECIPIENT_NAME");
+		$this->emailRecipientString 		= $gL10n->get("ECA_RECIPIENT_EMAIL");
+		$this->yourMessageString 			= $gL10n->get("SYS_MESSAGE");
+		$this->newMessageReceivedString 	= $gL10n->get("ECA_NEW_MESSAGE_RECEIVED");
+		$this->greetingCardFrom				= $gL10n->get("ECA_A_ECARD_FROM");
+		$this->greetingCardString			= $gL10n->get("ECA_GREETING_CARD");
+		$this->sendToString					= $gL10n->get("SYS_TO");	
+		$this->emailString					= $gL10n->get("SYS_EMAIL");	
 	}
 
 	// gibt ein Menue fuer die Einstellungen des Template aus
@@ -221,7 +221,7 @@ class FunctionClass
 	//      $ecard              ..  array mit allen Informationen die in den inputs der Form gespeichert sind
 	//      $ecard_data         ..  geparste Information von dem Grußkarten Template
 	//      $root_path          ..  der Pfad zu admidio Verzeichnis
-	//      $user               ..  das User-Objekt (z.B. $g_current_user)
+	//      $user               ..  das User-Objekt (z.B. $gCurrentUser)
 	//      $empfaenger_name    ..  der Name des Empfaengers
 	//      $empfaenger_email   ..  die Email des Empfaengers
 	//
@@ -237,7 +237,7 @@ class FunctionClass
 	*/
 	function parseEcardTemplate($ecard,$ecard_data,$root_path,&$user,$empfaenger_name,$empfaenger_email,$bbcode_enable) 
 	{
-        global $g_current_user;
+        global $gCurrentUser;
 
 		// Falls der Name des Empfaenger nicht vorhanden ist wird er fuer die Vorschau ersetzt
 		if(strip_tags(trim($empfaenger_name)) == '')
@@ -303,7 +303,7 @@ class FunctionClass
 	//      $empfaenger_email   .. die Email des Empfaengers
 	function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger, $photo_server_path) 
 	{
-		global $g_preferences;
+		global $gPreferences;
 		$img_photo_path = '';
 	
 		$email = new Email();
@@ -344,7 +344,7 @@ class FunctionClass
 					$img_photo_path  = $img_server_path;
 				
 					$image_sized = new Image($photo_server_path);
-					$image_sized->scale($g_preferences['ecard_card_picture_width'],$g_preferences['ecard_card_picture_height']);
+					$image_sized->scale($gPreferences['ecard_card_picture_width'],$gPreferences['ecard_card_picture_height']);
 					$image_sized->copyToFile(null, $img_server_path);
 				}
 	

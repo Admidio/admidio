@@ -10,7 +10,7 @@
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * headline  - Ueberschrift fuer den RSS-Feed
  *             (Default) Fotoalben
@@ -22,26 +22,26 @@ require_once('../../system/classes/rss.php');
 require_once('../../system/classes/table_photos.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($g_preferences['enable_rss'] != 1)
+if ($gPreferences['enable_rss'] != 1)
 {
-    $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_RSS_DISABLED'));
+    $gMessage->setForwardUrl($gHomepage);
+    $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_photo_module'] == 0)
+if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-elseif($g_preferences['enable_photo_module'] == 2)
+elseif($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('PHO_PHOTO_ALBUMS'));
+// Initialize and check the parameters
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('PHO_PHOTO_ALBUMS'));
 
 // die neuesten 10 Fotoalben aus der DB fischen...
 $sql = 'SELECT pho.*,
@@ -50,32 +50,32 @@ $sql = 'SELECT pho.*,
           FROM '. TBL_PHOTOS. ' pho
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = pho_usr_id_create
-           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+           AND cre_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = pho_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
+           AND cre_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = pho_usr_id_change
-           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+           AND cha_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = pho_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
-         WHERE (   pho_org_shortname = \''. $g_current_organization->getValue('org_shortname'). '\'
+           AND cha_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
+         WHERE (   pho_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
                AND pho_locked = 0)
          ORDER BY pho_timestamp_create DESC
          LIMIT 10';
-$result = $g_db->query($sql);
+$result = $gDb->query($sql);
 
-$photo_album = new TablePhotos($g_db);
+$photo_album = new TablePhotos($gDb);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '.$getHeadline, 
-		$g_l10n->get('PHO_RECENT_ALBUMS_OF_ORGA', $g_current_organization->getValue('org_longname')));
+$rss = new RSSfeed('http://'. $gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline, 
+		$gL10n->get('PHO_RECENT_ALBUMS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $g_db->fetch_array($result))
+while ($row = $gDb->fetch_array($result))
 {
     // Daten in ein Photo-Objekt uebertragen
     $photo_album->clear();
@@ -93,8 +93,8 @@ while ($row = $g_db->fetch_array($result))
         $sql=' SELECT *
                  FROM '. TBL_PHOTOS. '
                 WHERE pho_id = '.$pho_parent_id;
-        $result_parents = $g_db->query($sql);
-        $adm_photo_parent = $g_db->fetch_array($result_parents);
+        $result_parents = $gDb->query($sql);
+        $adm_photo_parent = $gDb->fetch_array($result_parents);
 
         //Link zusammensetzen
         $parents = ' > '.$adm_photo_parent['pho_name'].$parents;
@@ -102,26 +102,26 @@ while ($row = $g_db->fetch_array($result))
         //Elternveranst
         $pho_parent_id=$adm_photo_parent['pho_pho_id_parent'];
     }
-    $title = $g_l10n->get('PHO_PHOTO_ALBUMS').$parents.' > '.$photo_album->getValue('pho_name');
+    $title = $gL10n->get('PHO_PHOTO_ALBUMS').$parents.' > '.$photo_album->getValue('pho_name');
 
     //Link
     $link  = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
 
     //Inhalt zusammensetzen
-    $description = $g_l10n->get('PHO_PHOTO_ALBUMS').$parents.' > '. $photo_album->getValue('pho_name');
-    $description = $description. '<br /><br /> '.$g_l10n->get('PHO_PHOTOS').': '.$photo_album->countImages();
-    $description = $description. '<br /> '.$g_l10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
+    $description = $gL10n->get('PHO_PHOTO_ALBUMS').$parents.' > '. $photo_album->getValue('pho_name');
+    $description = $description. '<br /><br /> '.$gL10n->get('PHO_PHOTOS').': '.$photo_album->countImages();
+    $description = $description. '<br /> '.$gL10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
     //Enddatum nur wenn anders als startdatum
     if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
     {
-        $description = $g_l10n->get('SYS_DATE_FROM_TO', $description, $photo_album->getValue('pho_end', $g_preferences['system_date']));
+        $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $photo_album->getValue('pho_end', $gPreferences['system_date']));
     }
-    $description = $description. '<br />'.$g_l10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers');
+    $description = $description. '<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers');
 
     //die letzten fuenf Fotos sollen als Beispiel genutzt werden
     if($photo_album->getValue('pho_quantity') >0)
     {
-        $description = $description. '<br /><br />'.$g_l10n->get('SYS_PREVIEW').':<br />';
+        $description = $description. '<br /><br />'.$gL10n->get('SYS_PREVIEW').':<br />';
         for($bild=$photo_album->getValue('pho_quantity'); $bild>=$photo_album->getValue('pho_quantity')-4 && $bild>0; $bild--)
         {
             $bildpfad = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$bild.'.jpg';
@@ -136,14 +136,14 @@ while ($row = $g_db->fetch_array($result))
     }
 
     //Link zur Momepage
-    $description = $description. '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
+    $description = $description. '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter des Albums ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_CREATED_BY', $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname'), $photo_album->getValue('pho_timestamp_create')). '</i>';
+    $description = $description. '<br /><br /><i>'.$gL10n->get('SYS_CREATED_BY', $photo_album->getValue('create_firstname'). ' '. $photo_album->getValue('create_surname'), $photo_album->getValue('pho_timestamp_create')). '</i>';
 
     if($photo_album->getValue('pho_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>'.$g_l10n->get('SYS_LAST_EDITED_BY', $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname'), $photo_album->getValue('pho_timestamp_change')). '</i>';
+        $description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $photo_album->getValue('change_firstname'). ' '. $photo_album->getValue('change_surname'), $photo_album->getValue('pho_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r',strtotime($photo_album->getValue('pho_timestamp_create')));

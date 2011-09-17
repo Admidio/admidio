@@ -13,37 +13,37 @@ require_once('common.php');
 require_once('classes/table_auto_login.php');
 
 // User aus der Session entfernen 
-$g_current_session->setValue('ses_usr_id', '');
-$g_current_session->save();
+$gCurrentSession->setValue('ses_usr_id', '');
+$gCurrentSession->save();
 
 // Inhalt der Cookies loeschen
 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-setcookie($cookie_praefix. '_ID', '' , time() - 1000, '/', $domain, 0);
+setcookie($gCookiePraefix. '_ID', '' , time() - 1000, '/', $domain, 0);
 
 // Autologin wieder entfernen
-if(isset($_COOKIE[$cookie_praefix. '_DATA']))
+if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
 {
-    setcookie($cookie_praefix. '_DATA', '', time() - 1000, '/', $domain, 0);
+    setcookie($gCookiePraefix. '_DATA', '', time() - 1000, '/', $domain, 0);
     
-    $auto_login = new TableAutoLogin($g_db, $g_session_id);
+    $auto_login = new TableAutoLogin($gDb, $gSessionId);
     $auto_login->delete(); 
 }
 
-unset($_SESSION['g_current_user']);
+unset($_SESSION['gCurrentUser']);
 
 // da der Inhalt noch auf der eingeloggten Seite steht, hier umsetzen
-$g_homepage = $g_root_path. '/'. $g_preferences['homepage_logout'];
+$gHomepage = $g_root_path. '/'. $gPreferences['homepage_logout'];
 
 $message_code = 'SYS_LOGOUT_SUCCESSFUL';
 
 // Wenn die Session des Forums aktiv ist, diese ebenfalls loeschen.
-if($g_preferences['enable_forum_interface'] && $g_forum->session_valid)
+if($gPreferences['enable_forum_interface'] && $gForum->session_valid)
 {
-    $g_forum->userLogoff();
+    $gForum->userLogoff();
     $message_code = 'SYS_FORUM_LOGOUT';
 }
 
 // Hinweis auf erfolgreiches Ausloggen und weiter zur Startseite
-$g_message->setForwardUrl($g_homepage, 2000);
-$g_message->show($g_l10n->get($message_code));
+$gMessage->setForwardUrl($gHomepage, 2000);
+$gMessage->show($gL10n->get($message_code));
 ?>

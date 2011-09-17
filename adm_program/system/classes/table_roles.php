@@ -65,11 +65,11 @@ class TableRoles extends TableAccess
     // Loescht die Abhaengigkeiten zur Rolle und anschliessend die Rolle selbst...
     public function delete()
     {
-        global $g_current_session;
+        global $gCurrentSession;
 
         // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
         // eine Rechteaenderung vorgenommen wurde
-        $g_current_session->renewUserObject();
+        $gCurrentSession->renewUserObject();
 
         // die Systemrollem duerfen nicht geloescht werden
         if($this->getValue('rol_system') == false)
@@ -104,27 +104,27 @@ class TableRoles extends TableAccess
     // die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
     public static function getCostPeriodDesc($my_rol_cost_period)
     {
-        global $g_l10n;
+        global $gL10n;
     
         if($my_rol_cost_period == -1)
         {
-            return $g_l10n->get('ROL_UNIQUELY');
+            return $gL10n->get('ROL_UNIQUELY');
         }
         elseif($my_rol_cost_period == 1)
         {
-            return $g_l10n->get('ROL_ANNUALLY');
+            return $gL10n->get('ROL_ANNUALLY');
         }
         elseif($my_rol_cost_period == 2)
         {
-            return $g_l10n->get('ROL_SEMIYEARLY');
+            return $gL10n->get('ROL_SEMIYEARLY');
         }
         elseif($my_rol_cost_period == 4)
         {
-            return $g_l10n->get('ROL_QUARTERLY');
+            return $gL10n->get('ROL_QUARTERLY');
         }
         elseif($my_rol_cost_period == 12)
         {
-            return $g_l10n->get('ROL_MONTHLY');
+            return $gL10n->get('ROL_MONTHLY');
         }
         else
         {
@@ -140,35 +140,35 @@ class TableRoles extends TableAccess
     // die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
     public static function getWeekdayDesc($weekday)
     {
-        global $g_l10n;
+        global $gL10n;
     
         if($weekday == 1)
         {
-            return $g_l10n->get('SYS_MONDAY');
+            return $gL10n->get('SYS_MONDAY');
         }
         elseif($weekday == 2)
         {
-            return $g_l10n->get('SYS_TUESDAY');
+            return $gL10n->get('SYS_TUESDAY');
         }
         elseif($weekday == 3)
         {
-            return $g_l10n->get('SYS_WEDNESDAY');
+            return $gL10n->get('SYS_WEDNESDAY');
         }
         elseif($weekday == 4)
         {
-            return $g_l10n->get('SYS_THURSDAY');
+            return $gL10n->get('SYS_THURSDAY');
         }
         elseif($weekday == 5)
         {
-            return $g_l10n->get('SYS_FRIDAY');
+            return $gL10n->get('SYS_FRIDAY');
         }
         elseif($weekday == 6)
         {
-            return $g_l10n->get('SYS_SATURDAY');
+            return $gL10n->get('SYS_SATURDAY');
         }
         elseif($weekday == 7)
         {
-            return $g_l10n->get('SYS_SUNDAY');
+            return $gL10n->get('SYS_SUNDAY');
         }
         else
         {
@@ -197,7 +197,7 @@ class TableRoles extends TableAccess
     // Rolle mit der uebergebenen ID oder dem Rollennamen aus der Datenbank auslesen
     public function readData($role, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
 
         if(is_numeric($role))
         {
@@ -211,7 +211,7 @@ class TableRoles extends TableAccess
 
         $sql_additional_tables .= TBL_CATEGORIES;
         $sql_where_condition   .= ' AND rol_cat_id = cat_id
-                                    AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+                                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                                         OR cat_org_id IS NULL ) ';
         return parent::readData($role, $sql_where_condition, $sql_additional_tables);
     }
@@ -220,24 +220,24 @@ class TableRoles extends TableAccess
     // die Funktion wird innerhalb von save() aufgerufen
     public function save($updateFingerPrint = true)
     {
-        global $g_current_session;
+        global $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
  
         parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if($fields_changed && is_object($g_current_session))
+        if($fields_changed && is_object($gCurrentSession))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
-            $g_current_session->renewUserObject();
+            $gCurrentSession->renewUserObject();
         }
     }
 
     // aktuelle Rolle wird auf aktiv gesetzt
     public function setActive()
     {
-        global $g_current_session;
+        global $gCurrentSession;
 
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
@@ -248,7 +248,7 @@ class TableRoles extends TableAccess
 
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
-            $g_current_session->renewUserObject();
+            $gCurrentSession->renewUserObject();
 
             return 0;
         }
@@ -258,7 +258,7 @@ class TableRoles extends TableAccess
     // aktuelle Rolle wird auf inaktiv gesetzt
     public function setInactive()
     {
-        global $g_current_session;
+        global $gCurrentSession;
 
         // die Systemrollem sind immer aktiv
         if($this->getValue('rol_system') == false)
@@ -269,7 +269,7 @@ class TableRoles extends TableAccess
 
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
-            $g_current_session->renewUserObject();
+            $gCurrentSession->renewUserObject();
 
             return 0;
         }
@@ -281,9 +281,9 @@ class TableRoles extends TableAccess
     // sein, sondern nur in einer Rolle sein, die den Termin sehen darf)
     public function viewRole()
     {
-        global $g_current_user, $g_valid_login;
+        global $gCurrentUser, $gValidLogin;
         
-        if($g_valid_login == true)
+        if($gValidLogin == true)
         {
             if($this->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION')
             {
@@ -296,7 +296,7 @@ class TableRoles extends TableAccess
                                OR EXISTS (SELECT 1
                                             FROM '.TBL_MEMBERS.'
                                            WHERE mem_rol_id = dtr_rol_id
-                                             AND mem_usr_id = '.$g_current_user->getValue('usr_id').'))';
+                                             AND mem_usr_id = '.$gCurrentUser->getValue('usr_id').'))';
                 $this->db->query($sql);
                 
                 if($this->db->num_rows() > 0)
@@ -306,7 +306,7 @@ class TableRoles extends TableAccess
             }
             else
             {
-                return $g_current_user->viewRole($this->getValue('rol_id'));
+                return $gCurrentUser->viewRole($this->getValue('rol_id'));
             }
         }
         return false;

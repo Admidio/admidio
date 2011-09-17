@@ -38,11 +38,11 @@ class TableWeblink extends TableAccess
     // type = 'BBCODE' : Beschreibung mit BBCode-Tags
     public function getDescription($type = 'HTML')
     {
-        global $g_preferences;
+        global $gPreferences;
         $description = '';
 
         // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-        if($g_preferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
         {
             if(is_object($this->bbCode) == false)
             {
@@ -66,12 +66,12 @@ class TableWeblink extends TableAccess
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
     public function readData($lnk_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
         
         $sql_additional_tables .= TBL_CATEGORIES;
         $sql_where_condition   .= '     lnk_id     = '.$lnk_id.' 
                                     AND lnk_cat_id = cat_id
-                                    AND cat_org_id = '. $g_current_organization->getValue('org_id');
+                                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id');
         return parent::readData($lnk_id, $sql_where_condition, $sql_additional_tables);
     }
     

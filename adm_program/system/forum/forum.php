@@ -16,11 +16,11 @@ class Forum
         $forum_enable  = 0;
         $forum_version = 0;
         
-        $sql    = "SELECT prf_name, prf_value 
-                     FROM ". TBL_PREFERENCES. ", ". TBL_ORGANIZATIONS. "
-                    WHERE org_shortname = '". $g_organization. "'
+        $sql    = 'SELECT prf_name, prf_value 
+                     FROM '. TBL_PREFERENCES. ', '. TBL_ORGANIZATIONS. '
+                    WHERE org_shortname = \''.$g_organization.'\'
                       AND prf_org_id = org_id 
-                      AND prf_name IN ('forum_version','enable_forum_interface')";
+                      AND prf_name IN (\'forum_version\',\'enable_forum_interface\')';
         $result = $db->query($sql);
         
         while($row = $db->fetch_array($result))
@@ -39,8 +39,8 @@ class Forum
         {
             switch ($forum_version)
             {
-                case "phpBB2":
-                    require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
+                case 'phpBB2':
+                    require_once(SERVER_PATH. '/adm_program/system/forum/phpbb2.php');
                     
                 default:
                     return false;

@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * photo_nr: welches Bild soll angezeigt werden
  * pho_id:   Id des Albums aus der das Bild stammt
@@ -16,17 +16,17 @@
 require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
 $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_photo_module'] == 0)
+if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-elseif($g_preferences['enable_photo_module'] == 2)
+elseif($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
@@ -36,11 +36,11 @@ elseif($g_preferences['enable_photo_module'] == 2)
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
-    $photo_album->db =& $g_db;
+    $photo_album->db =& $gDb;
 }
 else
 {
-    $photo_album = new TablePhotos($g_db, $getPhotoId);
+    $photo_album = new TablePhotos($gDb, $getPhotoId);
     $_SESSION['photo_album'] =& $photo_album;
 }
 
@@ -54,7 +54,7 @@ $prev_image = $getPhotoNr - 1;
 $next_image = $getPhotoNr + 1;
 $url_prev_image = '#';
 $url_next_image = '#';
-$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$g_preferences['photo_show_width'].'&amp;max_height='.$g_preferences['photo_show_height'];
+$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'];
 
 if($prev_image > 0)
 {
@@ -65,25 +65,25 @@ if($next_image <= $photo_album->getValue('pho_quantity'))
     $url_next_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $next_image. '&pho_id='. $getPhotoId;
 }
 
-$body_with   = $g_preferences['photo_show_width']  + 20;
+$body_with   = $gPreferences['photo_show_width']  + 20;
 
-if($g_preferences['photo_show_mode']==1)
+if($gPreferences['photo_show_mode']==1)
 {
-	echo '<div style="width:'.$g_preferences['photo_show_width'].'px;height:'.$g_preferences['photo_show_height'].'px;"><img style="margin: auto; border: medium none; display: block; float: none; cursor: pointer;" id="cboxPhoto" src="'.$url_act_image.'" ></div>';
+	echo '<div style="width:'.$gPreferences['photo_show_width'].'px;height:'.$gPreferences['photo_show_height'].'px;"><img style="margin: auto; border: medium none; display: block; float: none; cursor: pointer;" id="cboxPhoto" src="'.$url_act_image.'" ></div>';
 }
 else
 {
 	
 	//Photomodulspezifische CSS laden
-	$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
+	$gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
 	
 	// Html-Kopf ausgeben
-	$g_layout['title']    = $g_l10n->get('PHO_PHOTO_ALBUMS');
+	$gLayout['title']    = $gL10n->get('PHO_PHOTO_ALBUMS');
 	
 	//wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
-	if($g_preferences['photo_show_mode']==0)
+	if($gPreferences['photo_show_mode']==0)
 	{                      
-		$g_layout['includes'] = false;
+		$gLayout['includes'] = false;
 	}
 	
 	require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -103,7 +103,7 @@ else
 	}
 	else
 	{
-		echo '<div><img class="photoOutput" src="'.$url_act_image.'" alt="'.$g_l10n->get('SYS_PHOTO').'" /></div>';
+		echo '<div><img class="photoOutput" src="'.$url_act_image.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>';
 	}
 	
 	//Vor und zurück Buttons
@@ -114,8 +114,8 @@ else
 		{
 			echo'<li>
 				<span class="iconTextLink">
-					<a href="'.$url_prev_image.'"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('PHO_PREVIOUS_PHOTO').'" /></a>
-					<a href="'.$url_prev_image.'">'.$g_l10n->get('PHO_PREVIOUS_PHOTO').'</a>
+					<a href="'.$url_prev_image.'"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" /></a>
+					<a href="'.$url_prev_image.'">'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</a>
 				</span>
 			</li>';
 		}
@@ -123,34 +123,34 @@ else
 		{
 			echo'<li>
 				<span class="iconTextLink">
-					<a href="'.$url_next_image.'">'.$g_l10n->get('PHO_NEXT_PHOTO').'</a>
-					<a href="'.$url_next_image.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('PHO_NEXT_PHOTO').'" /></a>
+					<a href="'.$url_next_image.'">'.$gL10n->get('PHO_NEXT_PHOTO').'</a>
+					<a href="'.$url_next_image.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" /></a>
 				</span>
 			</li>';
 		}
 		echo'
 	</ul>';    
 	
-	if($g_preferences['photo_show_mode']==0)
+	if($gPreferences['photo_show_mode']==0)
 	{   
 		// im Popupmodus Fenster schliessen Button
 		echo'<ul class="iconTextLinkList">
 			<li>
 				<span class="iconTextLink">
-					<a href="javascript:parent.window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$g_l10n->get('SYS_CLOSE_WINDOW').'" /></a>
-					<a href="javascript:parent.window.close()">'.$g_l10n->get('SYS_CLOSE_WINDOW').'</a>
+					<a href="javascript:parent.window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE_WINDOW').'" /></a>
+					<a href="javascript:parent.window.close()">'.$gL10n->get('SYS_CLOSE_WINDOW').'</a>
 				</span>
 			</li>
 		</ul>';
 	}
-	elseif($g_preferences['photo_show_mode']==2)
+	elseif($gPreferences['photo_show_mode']==2)
 	{   
 		// im Fenstermodus zurueck zur Uebersicht Button
 		echo'<ul class="iconTextLinkList">
 			<li>
 				<span class="iconTextLink">
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$g_l10n->get('PHO_BACK_TO_ALBUM').'" /></a>
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$g_l10n->get('PHO_BACK_TO_ALBUM').'</a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_BACK_TO_ALBUM').'" /></a>
+					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$gL10n->get('PHO_BACK_TO_ALBUM').'</a>
 				</span>
 			</li>
 		</ul>';
@@ -158,15 +158,15 @@ else
 	
 	
 	//Zusatzinformationen zum Album nur wenn im gleichen Fenster
-	if($g_preferences['photo_show_mode']==2)
+	if($gPreferences['photo_show_mode']==2)
 	{	
 		echo'
 		<p>
-			Datum: '.$photo_album->getValue('pho_begin', $g_preferences['system_date']);
+			Datum: '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
 			if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin')
 			&& strlen($photo_album->getValue('pho_end')) > 0)
 			{
-				echo ' bis '.$photo_album->getValue('pho_end', $g_preferences['system_date']);
+				echo ' bis '.$photo_album->getValue('pho_end', $gPreferences['system_date']);
 			}
 			echo '<br />Fotos von: '.$photo_album->getValue('pho_photographers').'
 		</p>';

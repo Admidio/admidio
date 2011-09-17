@@ -28,7 +28,7 @@ class TableUserField extends TableAccess
     // die Funktion wird innerhalb von delete() aufgerufen
     public function delete()
     {
-        global $g_current_session;
+        global $gCurrentSession;
         
 		$this->db->startTransaction();
 		
@@ -62,7 +62,7 @@ class TableUserField extends TableAccess
 
         // einlesen aller Userobjekte der angemeldeten User anstossen, 
         // da Aenderungen in den Profilfeldern vorgenommen wurden 
-        $g_current_session->renewUserObject();
+        $gCurrentSession->renewUserObject();
 
         $return = parent::delete();
 		
@@ -94,7 +94,7 @@ class TableUserField extends TableAccess
     // das Feld wird um eine Position in der Reihenfolge verschoben
     public function moveSequence($mode)
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
 
         // die Kategorie wird um eine Nummer gesenkt und wird somit in der Liste weiter nach oben geschoben
         if(admStrToUpper($mode) == 'UP')
@@ -134,7 +134,7 @@ class TableUserField extends TableAccess
     // Methode wird erst nach dem Speichern der Profilfelder aufgerufen
     public function save($updateFingerPrint = true)
     {
-        global $g_current_session;
+        global $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
         
         // wurde der Name veraendert, dann nach einem neuen eindeutigen internen Namen suchen
@@ -145,11 +145,11 @@ class TableUserField extends TableAccess
         
         parent::save($updateFingerPrint);
         
-        if($fields_changed && is_object($g_current_session))
+        if($fields_changed && is_object($gCurrentSession))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, 
             // da Aenderungen in den Profilfeldern vorgenommen wurden 
-            $g_current_session->renewUserObject();
+            $gCurrentSession->renewUserObject();
         }
     }
 
@@ -157,7 +157,7 @@ class TableUserField extends TableAccess
     // interne Funktion, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     // die Funktion wird innerhalb von setValue() aufgerufen
-    public function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value, $check_value = true)
     {
         // name, category and type couldn't be edited if it's a system field
         if(($field_name == 'usf_name' || $field_name == 'usf_cat_id' || $field_name == 'usf_type')

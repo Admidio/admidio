@@ -30,11 +30,11 @@ class TableCategory extends TableAccess
     // Rueckgabe ist true, wenn das Loeschen erfolgreich war und false, falls es nicht durchgefuehrt werden konnte
     public function delete()
     {
-        global $g_current_session;
+        global $gCurrentSession;
         
         // pruefen, ob noch mind. eine Kategorie fuer diesen Typ existiert, ansonsten das Loeschen nicht erlauben
         $sql = 'SELECT count(1) AS anzahl FROM '. TBL_CATEGORIES. '
-                 WHERE (  cat_org_id = '. $g_current_session->getValue('ses_org_id'). '
+                 WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )
                    AND cat_type     = \''. $this->getValue('cat_type'). '\'';
         $result = $this->db->query($sql);
@@ -47,7 +47,7 @@ class TableCategory extends TableAccess
 
             // Luecke in der Reihenfolge schliessen
             $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence - 1
-                     WHERE (  cat_org_id = '. $g_current_session->getValue('ses_org_id'). '
+                     WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
                            OR cat_org_id IS NULL )
                        AND cat_sequence > '. $this->getValue('cat_sequence'). '
                        AND cat_type     = \''. $this->getValue('cat_type'). '\'';
@@ -87,8 +87,10 @@ class TableCategory extends TableAccess
 				$object->delete();
 			}
 
+            $return = parent::delete();
+
 			$this->db->endTransaction();
-            return parent::delete();
+			return $return;
         }
         else
         {
@@ -131,7 +133,7 @@ class TableCategory extends TableAccess
     // die Kategorie wird um eine Position in der Reihenfolge verschoben
     public function moveSequence($mode)
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
 
         // Anzahl orgaunabhaengige ermitteln, da diese nicht mit den abhaengigen vermischt werden duerfen
         $sql = 'SELECT COUNT(1) as count FROM '. TBL_CATEGORIES. '
@@ -148,7 +150,7 @@ class TableCategory extends TableAccess
             {
                 $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                           OR cat_org_id IS NULL )
                            AND cat_sequence = '.$this->getValue('cat_sequence').' - 1 ';
                 $this->db->query($sql);
@@ -164,7 +166,7 @@ class TableCategory extends TableAccess
             {
                 $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = '.$this->getValue('cat_sequence').'
                          WHERE cat_type = \''. $this->getValue('cat_type'). '\'
-                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                           OR cat_org_id IS NULL )
                            AND cat_sequence = '.$this->getValue('cat_sequence').' + 1 ';
                 $this->db->query($sql);
@@ -205,14 +207,14 @@ class TableCategory extends TableAccess
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     public function save($updateFingerPrint = true)
     {
-        global $g_current_organization, $g_current_session;
+        global $gCurrentOrganization, $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
 
         if($this->new_record)
         {
             if($this->getValue('cat_org_id') > 0)
             {
-                $org_condition = ' AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                $org_condition = ' AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                                        OR cat_org_id IS NULL ) ';
             }
             else
@@ -221,7 +223,7 @@ class TableCategory extends TableAccess
             }
             // beim Insert die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) as count FROM '. TBL_CATEGORIES. '
-                     WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                     WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            '.$org_condition;
             $this->db->query($sql);
 
@@ -233,7 +235,7 @@ class TableCategory extends TableAccess
             {
                 // eine Orga-uebergreifende Kategorie ist immer am Anfang, also Kategorien anderer Orgas nach hinten schieben
                 $sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_sequence = cat_sequence + 1
-                         WHERE cat_type = "'. $this->getValue('cat_type'). '"
+                         WHERE cat_type = \''. $this->getValue('cat_type'). '\'
                            AND cat_org_id IS NOT NULL ';
                 $this->db->query($sql);
             }
@@ -248,18 +250,18 @@ class TableCategory extends TableAccess
         parent::save($updateFingerPrint);
 
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
-        if($fields_changed && $this->getValue('cat_type') == 'USF' && is_object($g_current_session))
+        if($fields_changed && $this->getValue('cat_type') == 'USF' && is_object($gCurrentSession))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen,
             // da Aenderungen in den Profilfeldern vorgenommen wurden
-            $g_current_session->renewUserObject();
+            $gCurrentSession->renewUserObject();
         }
     }
 
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
     public function setValue($field_name, $field_value)
     {
-		global $g_current_organization;
+		global $gCurrentOrganization;
 
         // Systemkategorien duerfen nicht umbenannt werden
         if($field_name == 'cat_name' && $this->getValue('cat_system') == 1)
@@ -272,7 +274,7 @@ class TableCategory extends TableAccess
 			$sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_default = 0
 					 WHERE cat_type = \''. $this->getValue('cat_type'). '\'
 					   AND (  cat_org_id IS NOT NULL 
-					       OR cat_org_id = '.$g_current_organization->getValue('org_id').')';
+					       OR cat_org_id = '.$gCurrentOrganization->getValue('org_id').')';
 			$this->db->query($sql);
 		}
 

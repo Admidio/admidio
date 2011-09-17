@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  * pho_id: id des Albums das bearbeitet werden soll
  * job:    - new    (neue eingaben speichern)
  *         - change (Aenderungen ausfuehren)
@@ -18,37 +18,37 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
 $getJob     = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change', 'delete'));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_photo_module'] == 0)
+if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-if(!$g_current_user->editPhotoRight())
+if(!$gCurrentUser->editPhotoRight())
 {
-    $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
 //Gepostete Variablen in Session speichern
 $_SESSION['photo_album_request'] = $_REQUEST;
 
 // Fotoalbumobjekt anlegen
-$photo_album = new TablePhotos($g_db);
+$photo_album = new TablePhotos($gDb);
 
 if($getJob != 'new')
 {
     $photo_album->readData($getPhotoId);
     
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
-    if($photo_album->getValue('pho_org_shortname') != $g_organization)
+    if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
     {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -68,13 +68,13 @@ if($getJob == 'new' || $getJob == 'change')
     //Album
     if(strlen($_POST['pho_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', 'Album'));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Album'));
     }
 	
     //Beginn
     if(strlen($_POST['pho_begin'] > 0))
     {
-        $startDate = new DateTimeExtended($_POST['pho_begin'], $g_preferences['system_date'], 'date');
+        $startDate = new DateTimeExtended($_POST['pho_begin'], $gPreferences['system_date'], 'date');
         
         if($startDate->valid())
         {
@@ -82,18 +82,18 @@ if($getJob == 'new' || $getJob == 'change')
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_DATE_INVALID', 'Beginn', $g_preferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', 'Beginn', $gPreferences['system_date']));
         }
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('START')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('START')));
     }    
     
     //Ende
     if(strlen($_POST['pho_end']) > 0)
     {
-        $endDate = new DateTimeExtended($_POST['pho_end'], $g_preferences['system_date'], 'date');
+        $endDate = new DateTimeExtended($_POST['pho_end'], $gPreferences['system_date'], 'date');
 
         if($endDate->valid())
         {
@@ -101,7 +101,7 @@ if($getJob == 'new' || $getJob == 'change')
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_DATE_INVALID', $g_l10n->get('SYS_END'), $g_preferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_END'), $gPreferences['system_date']));
         }
     }
     else
@@ -112,13 +112,13 @@ if($getJob == 'new' || $getJob == 'change')
     //Anfang muss vor oder gleich Ende sein
     if(strlen($_POST['pho_end']) > 0 && $_POST['pho_end'] < $_POST['pho_begin'])
     {
-        $g_message->show($g_l10n->get('SYS_DATE_END_BEFORE_BEGIN'));
+        $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
 
     //Photographen
     if(strlen($_POST['pho_photographers']) == 0)
     {
-        $_POST['pho_photographers'] = $g_l10n->get('SYS_UNKNOWN');
+        $_POST['pho_photographers'] = $gL10n->get('SYS_UNKNOWN');
     }
 
     // POST Variablen in das Role-Objekt schreiben
@@ -143,16 +143,16 @@ if($getJob == 'new' || $getJob == 'change')
             $photo_album->delete();
             
             // der entsprechende Ordner konnte nicht angelegt werden
-            $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
-            $g_message->show($g_l10n->get($error['text'], $error['path'], '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+            $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
+            $gMessage->show($gL10n->get($error['text'], $error['path'], '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
         }
 		
 		if(strlen($error['text']) == 0)
 		{
 			// Benachrichtigungs-Email für neue Einträge
-			if($g_preferences['enable_email_notification'] == 1)
+			if($gPreferences['enable_email_notification'] == 1)
 			{
-				admFuncEmailNotification($g_preferences['email_administrator'], $g_current_organization->getValue('org_shortname'). ": ".$g_l10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$g_l10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $g_current_organization->getValue('org_longname'), $_POST['pho_name'], $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME'), $g_current_user->getValue('EMAIL'));
+				admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
 			}	
 		}
         
@@ -175,8 +175,8 @@ if($getJob == 'new' || $getJob == 'change')
         // Verschieben war nicht erfolgreich, Schreibrechte vorhanden ?
         if($b_return == false)
         {
-            $g_message->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
-            $g_message->show($g_l10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+            $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
+            $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
         }
 
         // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen
@@ -192,69 +192,69 @@ if($getJob == 'new' || $getJob == 'change')
     }
 
     //Photomodulspezifische CSS laden
-    $g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
+    $gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
     
     // HTML-Kopf
-    $g_layout['title'] = $g_l10n->get('SYS_END');
+    $gLayout['title'] = $gL10n->get('SYS_END');
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
     echo'
     <div class="formLayout" id="photo_report_form">
-        <div class="formHead">'.$g_l10n->get('SYS_REPORT').'</div>
+        <div class="formHead">'.$gL10n->get('SYS_REPORT').'</div>
         <div class="formBody"> 
-            <p>'.$g_l10n->get('PHO_ALBUM_WRITE_SUCCESS').'</p>  
+            <p>'.$gL10n->get('PHO_ALBUM_WRITE_SUCCESS').'</p>  
             <ul class="formFieldList">
                 <li><dl>
-                    <dt>'.$g_l10n->get('SYS_REPORT').':</dt>
+                    <dt>'.$gL10n->get('SYS_REPORT').':</dt>
                     <dd>'.$photo_album->getValue('pho_name').'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>'.$g_l10n->get('PHO_PARENT_ALBUM').':</dt>
+                    <dt>'.$gL10n->get('PHO_PARENT_ALBUM').':</dt>
                     <dd>';
                         if($photo_album->getValue('pho_pho_id_parent') > 0)
                         {
-                            $photo_album_parent = new TablePhotos($g_db, $photo_album->getValue('pho_pho_id_parent'));
+                            $photo_album_parent = new TablePhotos($gDb, $photo_album->getValue('pho_pho_id_parent'));
                             echo $photo_album_parent->getValue('pho_name');
                         }
                         else
                         {
-                            echo $g_l10n->get('PHO_PHOTO_ALBUMS');
+                            echo $gL10n->get('PHO_PHOTO_ALBUMS');
                         }
                     echo'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>'.$g_l10n->get('SYS_START').':</dt>
-                    <dd>'.$photo_album->getValue('pho_begin', $g_preferences['system_date']).'</dd>
+                    <dt>'.$gL10n->get('SYS_START').':</dt>
+                    <dd>'.$photo_album->getValue('pho_begin', $gPreferences['system_date']).'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>'.$g_l10n->get('SYS_END').':</dt>
-                    <dd>'.$photo_album->getValue('pho_end', $g_preferences['system_date']).'</dd>
+                    <dt>'.$gL10n->get('SYS_END').':</dt>
+                    <dd>'.$photo_album->getValue('pho_end', $gPreferences['system_date']).'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>'.$g_l10n->get('PHO_PHOTOGRAPHER').':</dt>
+                    <dt>'.$gL10n->get('PHO_PHOTOGRAPHER').':</dt>
                     <dd>'.$photo_album->getValue('pho_photographers').'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>'.$g_l10n->get('SYS_LOCKED').':</dt>
+                    <dt>'.$gL10n->get('SYS_LOCKED').':</dt>
                     <dd>';
                         if($photo_album->getValue('pho_locked')==1)
                         {
-                             echo $g_l10n->get('SYS_YES');
+                             echo $gL10n->get('SYS_YES');
                         }
                         else
                         {
-                             echo $g_l10n->get('SYS_NO');
+                             echo $gL10n->get('SYS_NO');
                         }   
                     echo'</dd>
                 </dl></li>
 
                 <li><dl>
-                    <dt>'.$g_l10n->get('PHO_NUMBER_OF_FOTOS').':</dt>
+                    <dt>'.$gL10n->get('PHO_NUMBER_OF_FOTOS').':</dt>
                     <dd>';
                         if($photo_album->getValue('pho_quantity')!=NULL)
                         {
@@ -272,8 +272,8 @@ if($getJob == 'new' || $getJob == 'change')
     <ul class="iconTextLinkList">
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$g_l10n->get('SYS_NEXT').'&nbsp;</a>
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$gL10n->get('SYS_NEXT').'&nbsp;</a>
+                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" /></a>
             </span>
         </li>
     </ul>';

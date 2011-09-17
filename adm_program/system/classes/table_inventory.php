@@ -42,14 +42,14 @@ class TableInventory extends TableAccess
     //Liest den Eintrag zu einer uebergebenen inv_id aus der DB
 	public function readData($inv_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-		global $g_current_organization, $g_current_user, $g_valid_login;
+		global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
         if(is_numeric($inv_id))
         {
             $sql_additional_tables .= TBL_CATEGORIES. ", ". TBL_ROLES;
             $sql_where_condition   .= '    inv_cat_id = cat_id
                                        AND inv_rol_id = rol_id
-                                       AND cat_org_id = '. $g_current_organization->getValue('org_id');
+                                       AND cat_org_id = '. $gCurrentOrganization->getValue('org_id');
             return parent::readData($inv_id, $sql_where_condition, $sql_additional_tables);
         }
 
@@ -58,7 +58,7 @@ class TableInventory extends TableAccess
 
 			//Da das Inventarobjekt nicht verleihbar ist, muss geprueft werden,
 			// ob der aktuelle Benutzer es sehen darf.
-			if (!$g_valid_login) {
+			if (!$gValidLogin) {
 				//Der Benutzer ist nicht eingeloggt, also bekommt er nichts zu sehen
 				$this->clear();
 			} else {
@@ -66,7 +66,7 @@ class TableInventory extends TableAccess
 				$sql_rights = "SELECT count(*)
 	                         FROM ". TBL_MEMBERS. "
 	                        WHERE mem_rol_id = ". $this->getValue("inv_rol_id"). "
-	                          AND mem_usr_id = ". $g_current_user->getValue("usr_id"). "
+	                          AND mem_usr_id = ". $gCurrentUser->getValue("usr_id"). "
 	                          AND mem_begin <= '".DATE_NOW."'
 	                          AND mem_end    > '".DATE_NOW."'";
                 $result_rights = $this->db->query($sql_rights);
@@ -88,21 +88,21 @@ class TableInventory extends TableAccess
     // die Funktion wird innerhalb von save() aufgerufen
     public function save($updateFingerPrint = true)
     {
-        global $g_current_user;
+        global $gCurrentUser;
 
         if($this->new_record)
         {
             $this->setValue("inv_timestamp_create", DATETIME_NOW);
-            $this->setValue("inv_usr_id_create", $g_current_user->getValue("usr_id"));
+            $this->setValue("inv_usr_id_create", $gCurrentUser->getValue("usr_id"));
         }
         else
         {
             // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
             if(time() > (strtotime($this->getValue("inv_timestamp_create")) + 900)
-            || $g_current_user->getValue("usr_id") != $this->getValue("inv_usr_id_create") )
+            || $gCurrentUser->getValue("usr_id") != $this->getValue("inv_usr_id_create") )
             {
                 $this->setValue("inv_timestamp_change", DATETIME_NOW);
-                $this->setValue("inv_usr_id_change", $g_current_user->getValue("usr_id"));
+                $this->setValue("inv_usr_id_change", $gCurrentUser->getValue("usr_id"));
             }
         }
         parent::save($updateFingerPrint);

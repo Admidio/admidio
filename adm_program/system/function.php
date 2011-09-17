@@ -14,11 +14,11 @@
 
 function hasRole($role_name, $user_id = 0)
 {
-    global $g_current_user, $g_current_organization, $g_db;
+    global $gCurrentUser, $gCurrentOrganization, $gDb;
 
     if($user_id == 0)
     {
-        $user_id = $g_current_user->getValue('usr_id');
+        $user_id = $gCurrentUser->getValue('usr_id');
     }
     elseif(is_numeric($user_id) == false)
     {
@@ -34,11 +34,11 @@ function hasRole($role_name, $user_id = 0)
                   AND rol_name   = \''.$role_name.'"
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
-                  AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                  AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                       OR cat_org_id IS NULL ) ';
-    $result = $g_db->query($sql);
+    $result = $gDb->query($sql);
 
-    $user_found = $g_db->num_rows($result);
+    $user_found = $gDb->num_rows($result);
 
     if($user_found == 1)
     {
@@ -54,7 +54,7 @@ function hasRole($role_name, $user_id = 0)
 
 function isMember($user_id)
 {
-    global $g_current_organization, $g_db;
+    global $gCurrentOrganization, $gDb;
     
     if(is_numeric($user_id) && $user_id > 0)
     {
@@ -66,11 +66,11 @@ function isMember($user_id)
                       AND mem_rol_id = rol_id
                       AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
-                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                      AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                           OR cat_org_id IS NULL ) ';
-        $result = $g_db->query($sql);
+        $result = $gDb->query($sql);
 
-        $row = $g_db->fetch_array($result);
+        $row = $gDb->fetch_array($result);
         $row_count = $row[0];
 
         if($row_count > 0)
@@ -86,7 +86,7 @@ function isMember($user_id)
 
 function isGroupLeader($user_id, $role_id = 0)
 {
-    global $g_current_organization, $g_db;
+    global $gCurrentOrganization, $gDb;
 
     if(is_numeric($user_id) && $user_id >  0
     && is_numeric($role_id))
@@ -100,15 +100,15 @@ function isGroupLeader($user_id, $role_id = 0)
                       AND mem_rol_id = rol_id
                       AND rol_valid  = 1 
                       AND rol_cat_id = cat_id
-                      AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+                      AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                           OR cat_org_id IS NULL ) ';
         if ($role_id > 0)
         {
             $sql .= '  AND mem_rol_id = '.$role_id;
         }
-        $result = $g_db->query($sql);
+        $result = $gDb->query($sql);
 
-        $edit_user = $g_db->num_rows($result);
+        $edit_user = $gDb->num_rows($result);
 
         if($edit_user > 0)
         {
@@ -131,7 +131,7 @@ function isGroupLeader($user_id, $role_id = 0)
 
 function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true)
 {
-    global $g_root_path, $g_l10n;
+    global $g_root_path, $gL10n;
 
     if ( $num_items == 0)
     {
@@ -213,20 +213,20 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
         if ( $on_page > 1 )
         {
             $page_string = '<a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
-                                class="navigationArrow" src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-                            <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">'.$g_l10n->get('SYS_BACK').'</a>&nbsp;&nbsp;' . $page_string;
+                                class="navigationArrow" src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                            <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a>&nbsp;&nbsp;' . $page_string;
         }
 
         if ( $on_page < $total_pages )
         {
-            $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$g_l10n->get('SYS_NEXT').'</a>
+            $page_string .= '&nbsp;&nbsp;<a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_NEXT').'</a>
                             <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
-                                 src="'. THEME_PATH. '/icons/forward.png" alt="'.$g_l10n->get('SYS_NEXT').'" /></a>';
+                                 src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" /></a>';
         }
 
     }
 
-    $page_string = '<div class="pageNavigation">'.$g_l10n->get('SYS_PAGE').':&nbsp;&nbsp;' . $page_string. '</div>';
+    $page_string = '<div class="pageNavigation">'.$gL10n->get('SYS_PAGE').':&nbsp;&nbsp;' . $page_string. '</div>';
 
     return $page_string;
 }
@@ -311,7 +311,7 @@ function admFuncEmailNotification($receiptian, $reference, $message, $sender_nam
 // Dokumentation: http://www.admidio.org/dokuwiki/doku.php?id=de:entwickler:uebergabevariablen_pruefen
 function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
 {
-	global $g_l10n, $g_message;
+	global $gL10n, $gMessage;
 	
 	$errorMessage = '';
 	$type = admStrToLower($type);
@@ -330,7 +330,7 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 			if(in_array(admStrToUpper($array[$variableName]), $validValues) == false
 			&& in_array(admStrToLower($array[$variableName]), $validValues) == false)
 			{
-                $errorMessage = $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
 			}
 		}
 
@@ -342,11 +342,11 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
             {
                 if($returnCode == -2)
                 {
-                    $errorMessage = $g_l10n->get('BAC_FILE_NAME_INVALID');
+                    $errorMessage = $gL10n->get('BAC_FILE_NAME_INVALID');
                 }
                 else
                 {
-                    $errorMessage = $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+                    $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
                 }
             }
         }
@@ -355,7 +355,7 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 			// Numerische Datentypen duerfen nur Zahlen beinhalten
 			if (is_numeric($array[$variableName]) == false)
 			{
-                $errorMessage = $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
 			}
 		}
 		elseif($type == 'string')
@@ -372,7 +372,7 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 	elseif($requireValue == true)
 	{
 		// Array-Eintrag existiert nicht, soll aber Pflicht sein
-        $errorMessage = $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+        $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
 	}
 	if(strlen($errorMessage) > 0)
 	{
@@ -383,7 +383,7 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 	   }
 	   else
 	   {
-	       $g_message->show($errorMessage);
+	       $gMessage->show($errorMessage);
 	   }
 	}
 	

@@ -13,14 +13,14 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-// nur Webmaster duerfen Organisationen bearbeiten
-if($g_current_user->isWebmaster() == false)
-{
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-}
-
 // Uebergabevariablen pruefen
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
+
+// nur Webmaster duerfen Organisationen bearbeiten
+if($gCurrentUser->isWebmaster() == false)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
 
 /************Systeminformationen********/
 if($getMode == 1)
@@ -29,9 +29,9 @@ if($getMode == 1)
     <ul class="formFieldList">
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_ADMIDIO_VERSION').':</dt>
+                <dt>'.$gL10n->get('SYS_ADMIDIO_VERSION').':</dt>
                 <dd>'. ADMIDIO_VERSION. BETA_VERSION_TEXT.'&nbsp;
-                    <a rel="colorboxHelp" href="'.$g_root_path.'/adm_program/system/update_check.php?show=2&amp;inline=true" title="'.$g_l10n->get('SYS_CHECK_FOR_UPDATE').'">'.$g_l10n->get('SYS_CHECK_FOR_UPDATE').'</a>
+                    <a rel="colorboxHelp" href="'.$g_root_path.'/adm_program/system/update_check.php?mode=2&amp;inline=true" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
                 </dd>
             </dl>
         </li>';
@@ -40,10 +40,10 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_PHP_VERSION').':</dt><dd><span class="';
+                <dt>'.$gL10n->get('SYS_PHP_VERSION').':</dt><dd><span class="';
 				if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
                 {
-                    echo 'systeminfoBad">'.phpversion().'</span> &rarr; '.$g_l10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
+                    echo 'systeminfoBad">'.phpversion().'</span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
                 }
                 else
                 {
@@ -58,14 +58,14 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_db->getName().'-'.$g_l10n->get('SYS_VERSION').':</dt><dd><span class="';
-				if(version_compare($g_db->getVersion(), $g_db->getMinVersion()) == -1)
+                <dt>'.$gDb->getName().'-'.$gL10n->get('SYS_VERSION').':</dt><dd><span class="';
+				if(version_compare($gDb->getVersion(), $gDb->getMinVersion()) == -1)
                 {
-                    echo 'systeminfoBad">'.$g_db->getVersion().'</span> &rarr; '.$g_l10n->get('SYS_DATABASE_VERSION_REQUIRED', $g_db->getMinVersion());
+                    echo 'systeminfoBad">'.$gDb->getVersion().'</span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinVersion());
                 }
                 else
                 {
-                    echo 'systeminfoGood">'.$g_db->getVersion().'</span>';
+                    echo 'systeminfoGood">'.$gDb->getVersion().'</span>';
                 }
                 echo'
                 </dd>
@@ -76,14 +76,14 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_SAFE_MODE').':</dt><dd>';
+                <dt>'.$gL10n->get('SYS_SAFE_MODE').':</dt><dd>';
                 if(ini_get('safe_mode') == 1)
                 {
-                    echo '<span class="systeminfoBad">'.$g_l10n->get('SYS_ON').'</span> &rarr; '.$g_l10n->get('SYS_SAFE_MODE_PROBLEM');
+                    echo '<span class="systeminfoBad">'.$gL10n->get('SYS_ON').'</span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
                 }
                 else
                 {
-                    echo '<span class="systeminfoGood">'.$g_l10n->get('SYS_OFF').'</span>';
+                    echo '<span class="systeminfoGood">'.$gL10n->get('SYS_OFF').'</span>';
                 }
                 echo '</dd>
             </dl>
@@ -93,14 +93,14 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_POST_MAX_SIZE').':</dt><dd>';
+                <dt>'.$gL10n->get('SYS_POST_MAX_SIZE').':</dt><dd>';
                 if(ini_get('post_max_size')!='')
                 {
                     echo ini_get('post_max_size');
                 }
                 else
                 {
-                    echo $g_l10n->get('SYS_NOT_SET');
+                    echo $gL10n->get('SYS_NOT_SET');
                 }
                 echo '</dd>
             </dl>
@@ -110,14 +110,14 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_MEMORY_LIMIT').':</dt><dd>';
+                <dt>'.$gL10n->get('SYS_MEMORY_LIMIT').':</dt><dd>';
                 if(ini_get('memory_limit')!='')
                 {
                     echo ini_get('memory_limit');
                 }
                 else
                 {
-                    echo $g_l10n->get('SYS_NOT_SET');
+                    echo $gL10n->get('SYS_NOT_SET');
                 }
                 echo '</dd>
             </dl>
@@ -127,14 +127,14 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_FILE_UPLOADS').':</dt><dd>';
+                <dt>'.$gL10n->get('SYS_FILE_UPLOADS').':</dt><dd>';
                 if(ini_get('file_uploads') == 1)
                 {
-                    echo $g_l10n->get('SYS_ON');
+                    echo $gL10n->get('SYS_ON');
                 }
                 else
                 {
-                    echo $g_l10n->get('SYS_OFF');
+                    echo $gL10n->get('SYS_OFF');
                 }
                 echo '</dd>
             </dl>
@@ -144,14 +144,14 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_UPLOAD_MAX_FILESIZE').':</dt><dd>';
+                <dt>'.$gL10n->get('SYS_UPLOAD_MAX_FILESIZE').':</dt><dd>';
                 if(ini_get('upload_max_filesize')!='')
                 {
                     echo ini_get('upload_max_filesize');
                 }
                 else
                 {
-                    echo $g_l10n->get('SYS_NOT_SET');
+                    echo $gL10n->get('SYS_NOT_SET');
                 }
                 echo '</dd>
             </dl>
@@ -161,7 +161,7 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE').':</dt><dd>'.round((admFuncProcessableImageSize()/1000000), 2).' '.$g_l10n->get('SYS_MEGA_PIXEL').'</dd>
+                <dt>'.$gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE').':</dt><dd>'.round((admFuncProcessableImageSize()/1000000), 2).' '.$gL10n->get('SYS_MEGA_PIXEL').'</dd>
             </dl>
         </li>';
                 
@@ -169,25 +169,25 @@ if($getMode == 1)
         echo'
         <li>
             <dl>
-                <dt>'.$g_l10n->get('SYS_PHP_INFO').':</dt><dd><a href="systeminfo.php?mode=2" target="_blank">phpinfo()</a></dd>
+                <dt>'.$gL10n->get('SYS_PHP_INFO').':</dt><dd><a href="systeminfo.php?mode=2" target="_blank">phpinfo()</a></dd>
                 
             </dl>
         </li>';
         
         //Debugmodus       
-        if(isset($g_debug))
+        if(isset($gDebug))
         {
             echo'
             <li>
                 <dl>';           
-                    echo' <dt>'.$g_l10n->get('SYS_DEBUG_MODUS').':</dt><dd>';
-                    if($g_debug == 1)
+                    echo' <dt>'.$gL10n->get('SYS_DEBUG_MODUS').':</dt><dd>';
+                    if($gDebug == 1)
                     {
-                        echo '<span class="systeminfoBad">'.$g_l10n->get('SYS_ON').'</span>';
+                        echo '<span class="systeminfoBad">'.$gL10n->get('SYS_ON').'</span>';
                     }
                     else
                     {
-                        echo '<span class="systeminfoGood">'.$g_l10n->get('SYS_OFF').'</span>';
+                        echo '<span class="systeminfoGood">'.$gL10n->get('SYS_OFF').'</span>';
                     }
                     echo'</dd>                
                 </dl>

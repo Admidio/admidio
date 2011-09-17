@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * user_id :  ID des Benutzers, dessen Profil bearbeitet werden soll
  * new_user : 0 - (Default) vorhandenen User bearbeiten
@@ -21,12 +21,12 @@ require_once('../../system/classes/system_mail.php');
 require_once('../../system/classes/table_members.php');
 
 // im ausgeloggten Zustand koennen nur Registrierungen gespeichert werden
-if($g_valid_login == false)
+if($gValidLogin == false)
 {
     $_GET['new_user'] = 2;
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 
@@ -35,26 +35,26 @@ switch($getNewUser)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($g_current_user->editProfile($getUserId) == false)
+        if($gCurrentUser->editProfile($getUserId) == false)
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
         break;
 
     case 1:
         // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
-        if($g_current_user->editUsers() == false)
+        if($gCurrentUser->editUsers() == false)
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
         break;
 
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($g_preferences['registration_mode'] == 0)
+        if($gPreferences['registration_mode'] == 0)
         {
-            $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+            $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         }
         break;
 }
@@ -67,7 +67,7 @@ if(!isset($_POST['usr_login_name']))
 }
 
 // User auslesen
-$user = new User($g_db, $getUserId);
+$user = new User($gDb, $gUserFields, $getUserId);
 
 
 /*------------------------------------------------------------*/
@@ -79,24 +79,24 @@ if($getNewUser == 2)
 {
     if(strlen($_POST['usr_login_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_USERNAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_USERNAME')));
     }
 
     // Passwort sollte laenger als 6 Zeichen sein
     if(strlen($_POST['usr_password']) < 6)
     {
-        $g_message->show($g_l10n->get('PRO_PASSWORD_LENGTH'));
+        $gMessage->show($gL10n->get('PRO_PASSWORD_LENGTH'));
     }
 
     // beide Passwortfelder muessen identisch sein
     if ($_POST['usr_password'] != $_POST['password2'])
     {
-        $g_message->show($g_l10n->get('PRO_PASSWORDS_NOT_EQUAL'));
+        $gMessage->show($gL10n->get('PRO_PASSWORDS_NOT_EQUAL'));
     }
 
     if(strlen($_POST['usr_password']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_PASSWORD')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
     }
 }
 
@@ -106,7 +106,7 @@ foreach($user->userFieldData as $field)
     $post_id = 'usf-'. $field->getValue('usf_id');    
     
 	// check and save only fields that aren't disabled
-	if($g_current_user->editUsers() == true || ($field->getValue('usf_disabled') == 0 && $getNewUser == 0))
+	if($gCurrentUser->editUsers() == true || ($field->getValue('usf_disabled') == 0 && $getNewUser == 0))
 	{
 		if(isset($_POST[$post_id])) 
 		{
@@ -115,7 +115,7 @@ foreach($user->userFieldData as $field)
 			if(($field->getValue('usf_mandatory') == 1 && strlen($_POST[$post_id]) == 0)
 			|| ($getNewUser == 2 && $field->getValue('usf_name_intern') == 'EMAIL' && strlen($_POST[$post_id]) == 0))
 			{
-				$g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+				$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
 			}
 
 			// Wert aus Feld in das User-Klassenobjekt schreiben
@@ -126,23 +126,23 @@ foreach($user->userFieldData as $field)
 			{
 				if($field->getValue('usf_type') == 'CHECKBOX')
 				{
-					$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+					$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 				}
 				elseif($field->getValue('usf_type') == 'DATE')
 				{
-					$g_message->show($g_l10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $g_preferences['system_date']));
+					$gMessage->show($gL10n->get('SYS_DATE_INVALID', $field->getValue('usf_name'), $gPreferences['system_date']));
 				}
 				elseif($field->getValue('usf_type') == 'EMAIL')
 				{
-					$g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
+					$gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $field->getValue('usf_name')));
 				}
 				elseif($field->getValue('usf_type') == 'NUMERIC')
 				{
-					$g_message->show($g_l10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
+					$gMessage->show($gL10n->get('PRO_FIELD_NUMERIC', $field->getValue('usf_name')));
 				}
 				elseif($field->getValue('usf_type') == 'URL')
 				{
-					$g_message->show($g_l10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
+					$gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $field->getValue('usf_name')));
 				}
 			}
 		}
@@ -155,7 +155,7 @@ foreach($user->userFieldData as $field)
 			}
 			elseif($field->getValue('usf_mandatory') == 1)
 			{
-				$g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+				$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
 			}
 		}
 	}
@@ -164,7 +164,7 @@ foreach($user->userFieldData as $field)
 $login_name_changed = false;
 $forum_old_username = '';
 
-if($g_current_user->isWebmaster() || $getNewUser > 0)
+if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 {
     // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden    
     if($_POST['usr_login_name'] != $user->getValue('usr_login_name'))
@@ -174,26 +174,26 @@ if($g_current_user->isWebmaster() || $getNewUser > 0)
             // pruefen, ob der Benutzername bereits vergeben ist
             $sql = 'SELECT usr_id FROM '. TBL_USERS. '
                      WHERE usr_login_name LIKE \''. $_POST['usr_login_name']. '\'';
-            $g_db->query($sql);
+            $gDb->query($sql);
 
-            if($g_db->num_rows() > 0)
+            if($gDb->num_rows() > 0)
             {
-                $row = $g_db->fetch_array();
+                $row = $gDb->fetch_array();
 
                 if(strcmp($row['usr_id'], $getUserId) != 0)
                 {
-                    $g_message->show($g_l10n->get('PRO_LOGIN_NAME_EXIST'));
+                    $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
                 }
             }
 
             // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
             // Benutzernamenswechsel und diese Dinge
-            if($g_preferences['enable_forum_interface'])
+            if($gPreferences['enable_forum_interface'])
             {
                 // pruefen, ob der Benutzername bereits im Forum vergeben ist
-                if($g_forum->userExists($_POST['usr_login_name']))
+                if($gForum->userExists($_POST['usr_login_name']))
                 {
-                    $g_message->show($g_l10n->get('SYS_FORUM_USER_EXIST'));
+                    $gMessage->show($gL10n->get('SYS_FORUM_USER_EXIST'));
                 }
                 
                 // bisherigen Loginnamen merken, damit dieser spaeter im Forum geaendert werden kann
@@ -208,7 +208,7 @@ if($g_current_user->isWebmaster() || $getNewUser > 0)
         $login_name_changed = true;
         if(!$user->setValue('usr_login_name', $_POST['usr_login_name']))
 		{
-			$g_message->show($g_l10n->get('SYS_FIELD_INVALID_CHAR', $g_l10n->get('SYS_USERNAME')));
+			$gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')));
 		}
     }    
 }
@@ -217,19 +217,19 @@ if($g_current_user->isWebmaster() || $getNewUser > 0)
 if($getNewUser == 2)
 {
     $user->setValue('usr_valid', 0);
-    $user->setValue('usr_reg_org_shortname', $g_current_organization->getValue('org_shortname'));
+    $user->setValue('usr_reg_org_shortname', $gCurrentOrganization->getValue('org_shortname'));
     $user->setValue('usr_password', $_POST['usr_password']);
 }
 
 
 // Falls der User sich registrieren wollte, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
-if ($getNewUser == 2 && $g_preferences['enable_registration_captcha'] == 1)
+if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
-		if($g_preferences['captcha_type']=='pic') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-		else if($g_preferences['captcha_type']=='calc') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+		if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+		else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
     }
 }
 
@@ -243,7 +243,7 @@ if($user->getValue('usr_id') == 0)
     $user->save();
     if($getNewUser == 1)
     {
-        $user->setValue('usr_usr_id_create', $g_current_user->getValue('usr_id'));
+        $user->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
     }
     else
     {
@@ -256,20 +256,20 @@ $ret_code = $user->save();
 
 // wurde der Loginname vergeben oder geaendert, so muss ein Forumaccount gepflegt werden
 // bei einer Bestaetigung der Registrierung muss der Account aktiviert werden
-if($g_preferences['enable_forum_interface'] && ($login_name_changed || $getNewUser == 3))
+if($gPreferences['enable_forum_interface'] && ($login_name_changed || $getNewUser == 3))
 {
     $set_admin = false;
-    if($g_preferences['forum_set_admin'] == 1 && $user->isWebmaster())
+    if($gPreferences['forum_set_admin'] == 1 && $user->isWebmaster())
     {
         $set_admin = true;
     }
-    $g_forum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('EMAIL'), $forum_old_username, $getNewUser, $set_admin);
+    $gForum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('EMAIL'), $forum_old_username, $getNewUser, $set_admin);
 }
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
-if($user->getValue('usr_id') == $g_current_user->getValue('usr_id'))
+if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 {
-    $g_current_user = $user;
+    $gCurrentUser = $user;
 }
 
 unset($_SESSION['profile_request']);
@@ -285,46 +285,46 @@ if($getNewUser == 2)
     // -> E-Mail an alle Webmaster schreiben
     /*------------------------------------------------------------*/
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden und die Webmasterbenachrichtung aktiviert ist
-    if($g_preferences['enable_system_mails'] == 1 && $g_preferences['enable_registration_admin_mail'] == 1)
+    if($gPreferences['enable_system_mails'] == 1 && $gPreferences['enable_registration_admin_mail'] == 1)
     {
         $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
                  RIGHT JOIN '. TBL_USER_DATA. ' email
                     ON email.usd_usr_id = usr_id
-                   AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
+                   AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id'). '
                    AND LENGTH(email.usd_value) > 0
                   LEFT JOIN '. TBL_USER_DATA. ' first_name
                     ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+                   AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
                   LEFT JOIN '. TBL_USER_DATA. ' last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+                   AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
                  WHERE rol_approve_users = 1
                    AND rol_cat_id        = cat_id
-                   AND cat_org_id        = '. $g_current_organization->getValue('org_id'). '
+                   AND cat_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
                    AND mem_rol_id        = rol_id
                    AND mem_begin        <= \''.DATE_NOW.'\'
                    AND mem_end           > \''.DATE_NOW.'\'
                    AND mem_usr_id        = usr_id
                    AND usr_valid         = 1 ';
-        $result = $g_db->query($sql);
+        $result = $gDb->query($sql);
 
-        while($row = $g_db->fetch_array($result))
+        while($row = $gDb->fetch_array($result))
         {
             // Mail an die Webmaster schicken, dass sich ein neuer User angemeldet hat
-            $sysmail = new SystemMail($g_db);
+            $sysmail = new SystemMail($gDb);
             $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);
 
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $user) == false)
             {
-                $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $row['email']));
+                $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $row['email']));
             }
         }
     }
 
     // nach Registrierungmeldung auf die Startseite verweisen
-    $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_REGISTRATION_SAVED'));
+    $gMessage->setForwardUrl($gHomepage);
+    $gMessage->show($gL10n->get('SYS_REGISTRATION_SAVED'));
 }
 elseif($getNewUser == 3 || $getUserId == 0)
 {
@@ -341,20 +341,20 @@ elseif($getNewUser == 3 || $getUserId == 0)
         $user->save();
 
         // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-        if($g_preferences['enable_system_mails'] == 1)
+        if($gPreferences['enable_system_mails'] == 1)
         {
             // Mail an den User schicken, um die Anmeldung zu bestaetigen
-            $sysmail = new SystemMail($g_db);
+            $sysmail = new SystemMail($gDb);
             $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == false)
             {
-                $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
+                $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
             }
         }
     }
 
     // neuer User -> Rollen zuordnen
-    if($g_current_user->assignRoles())
+    if($gCurrentUser->assignRoles())
     {
         header('Location: roles.php?user_id='. $user->getValue('usr_id'). '&new_user=1');
         exit();
@@ -363,28 +363,28 @@ elseif($getNewUser == 3 || $getUserId == 0)
     {
         // da der angemeldete Benutzer keine Rechte besitzt Rollen zu zuordnen, 
         // wird der neue User der Default-Rolle zugeordnet
-        if($g_preferences['profile_default_role'] == 0)
+        if($gPreferences['profile_default_role'] == 0)
         {
-            $g_message->show($g_l10n->get('PRO_NO_DEFAULT_ROLE'));
+            $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
         }
-        $member = new TableMembers($g_db);
-        $member->startMembership($g_preferences['profile_default_role'], $user->getValue('usr_id'));
+        $member = new TableMembers($gDb);
+        $member->startMembership($gPreferences['profile_default_role'], $user->getValue('usr_id'));
         
-        $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-        $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
+        $gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+        $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
     }
 }
 elseif($getNewUser == 0 && $user->getValue('usr_valid') == 0)
 {
     // neue Registrierung bearbeitet
-    $g_message->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
+    $gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+    $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 else
 {
     // zur Profilseite zurueckkehren    
-    $g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
+    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 ?>
 

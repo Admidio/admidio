@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  * pho_id: id des Albums das bearbeitet werden soll
  * job:    - new (neues Formular)
  *         - change (Formular fuer Aenderunmgen)
@@ -17,27 +17,27 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
 $getJob     = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change'));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_photo_module'] == 0)
+if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-if(!$g_current_user->editPhotoRight())
+if(!$gCurrentUser->editPhotoRight())
 {
-    $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Fotoalbumobjekt anlegen
-$photo_album = new TablePhotos($g_db);
+$photo_album = new TablePhotos($gDb);
 
 // nur Daten holen, wenn Album editiert werden soll
 if ($getJob == 'change')
@@ -45,9 +45,9 @@ if ($getJob == 'change')
     $photo_album->readData($getPhotoId);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
-    if($photo_album->getValue('pho_org_shortname') != $g_organization)
+    if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
     {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -62,11 +62,11 @@ if(isset($_SESSION['photo_album_request']))
 // die Albenstruktur fuer eine Auswahlbox darstellen und das aktuelle Album vorauswählen
 function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 {
-    global $g_db;
-    global $g_current_organization;
+    global $gDb;
+    global $gCurrentOrganization;
     $vorschub = $vorschub.'&nbsp;&nbsp;&nbsp;';
     $pho_id_condition = '';
-    $parentPhotoAlbum = new TablePhotos($g_db);
+    $parentPhotoAlbum = new TablePhotos($gDb);
 
     //Erfassen des auszugebenden Albums
     if($parent_id > 0)
@@ -82,10 +82,10 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
               FROM '. TBL_PHOTOS. '
              WHERE pho_id <> '. $photo_album->getValue('pho_id').
                    $pho_id_condition
-                   .' AND pho_org_shortname LIKE \''.$g_current_organization->getValue('org_shortname').'\'';
-    $result_child = $g_db->query($sql);
+                   .' AND pho_org_shortname LIKE \''.$gCurrentOrganization->getValue('org_shortname').'\'';
+    $result_child = $gDb->query($sql);
 
-    while($adm_photo_child = $g_db->fetch_array($result_child))
+    while($adm_photo_child = $gDb->fetch_array($result_child))
     {
         $selected = '';
         
@@ -112,13 +112,13 @@ function subfolder($parent_id, $vorschub, $photo_album, $pho_id)
 
 if($getJob=='new')
 {
-    $g_layout['title'] = $g_l10n->get('PHO_CREATE_ALBUM');
+    $gLayout['title'] = $gL10n->get('PHO_CREATE_ALBUM');
 }
 elseif($getJob=='change')
 {
-    $g_layout['title'] = $g_l10n->get('PHO_EDIT_ALBUM');
+    $gLayout['title'] = $gL10n->get('PHO_EDIT_ALBUM');
 }
-$g_layout['header'] = '
+$gLayout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
@@ -139,17 +139,17 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='. $getPhotoId. '&amp;job='. $getJob. '">
 <div class="formLayout" id="photo_album_new_form">
-    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">';
         //Album
         echo'
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="pho_name">'.$g_l10n->get('PHO_ALBUM').':</label></dt>
+                    <dt><label for="pho_name">'.$gL10n->get('PHO_ALBUM').':</label></dt>
                     <dd>
                         <input type="text" id="pho_name" name="pho_name" style="width: 300px;" maxlength="50" value="'.$photo_album->getValue('pho_name').'" />
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>';
@@ -158,10 +158,10 @@ echo '
             echo'
             <li>
                 <dl>
-                    <dt><label for="pho_pho_id_parent">'.$g_l10n->get('PHO_PARENT_ALBUM').':</label></dt>
+                    <dt><label for="pho_pho_id_parent">'.$gL10n->get('PHO_PARENT_ALBUM').':</label></dt>
                     <dd>
                         <select size="1" id="pho_pho_id_parent" name="pho_pho_id_parent" style="max-width: 95%;">
-                            <option value="0">'.$g_l10n->get('PHO_PHOTO_ALBUMS').'</option>';
+                            <option value="0">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</option>';
                                 // die Albenstruktur darstellen und das aktuelle Album vorauswählen
                                 subfolder($adm_photo_list['pho_id'], '', $photo_album, $getPhotoId);
                         echo '</select>
@@ -173,23 +173,23 @@ echo '
             echo '
             <li>
                 <dl>
-                    <dt><label for="pho_begin">'.$g_l10n->get('SYS_START').':</label></dt>
+                    <dt><label for="pho_begin">'.$gL10n->get('SYS_START').':</label></dt>
                     <dd>
                         <input type="text" id="pho_begin" name="pho_begin" size="10" maxlength="10" value="'. $photo_album->getValue('pho_begin').'" />
-                        <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
-                        	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
+                        <a class="iconLink" id="anchor_pho_begin" href="javascript:calPopup.select(document.getElementById(\'pho_begin\'),\'anchor_pho_begin\',\''.$gPreferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
+                        	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
                         <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="pho_end">'.$g_l10n->get('SYS_END').':</label></dt>
+                    <dt><label for="pho_end">'.$gL10n->get('SYS_END').':</label></dt>
                     <dd>
                         <input type="text" id="pho_end" name="pho_end" size="10" maxlength="10" value="'. $photo_album->getValue('pho_end').'">
-                        <a class="iconLink" id="anchor_pho_end" href="javascript:calPopup.select(document.getElementById(\'pho_end\'),\'anchor_pho_end\',\''.$g_preferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
-                        	src="'. THEME_PATH. '/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
+                        <a class="iconLink" id="anchor_pho_end" href="javascript:calPopup.select(document.getElementById(\'pho_end\'),\'anchor_pho_end\',\''.$gPreferences['system_date'].'\',\'pho_begin\',\'pho_end\');"><img 
+                        	src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
                     </dd>
                 </dl>
             </li>';
@@ -198,7 +198,7 @@ echo '
             echo'
             <li>
                 <dl>
-                    <dt><label for="pho_photographers">'.$g_l10n->get('PHO_PHOTOGRAPHER').':</label></dt>
+                    <dt><label for="pho_photographers">'.$gL10n->get('PHO_PHOTOGRAPHER').':</label></dt>
                     <dd>
                         <input type="text" id="pho_photographers" name="pho_photographers" style="width: 300px;" maxlength="100" value="'.$photo_album->getValue('pho_photographers').'" />
                     </dd>
@@ -209,7 +209,7 @@ echo '
             echo'
             <li>
                 <dl>
-                    <dt><label for="pho_locked">'.$g_l10n->get('SYS_LOCK').':</label></dt>
+                    <dt><label for="pho_locked">'.$gL10n->get('SYS_LOCK').':</label></dt>
                     <dd>';
                         echo '<input type="checkbox" id="pho_locked" name="pho_locked" value="1"';
 
@@ -229,19 +229,19 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($g_db, $photo_album->getValue('pho_usr_id_create'));
-                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_create'));
+                $user_create = new User($gDb, $gUserFields, $photo_album->getValue('pho_usr_id_create'));
+                echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_create'));
 
                 if($photo_album->getValue('pho_usr_id_change') > 0)
                 {
-                    $user_change = new User($g_db, $photo_album->getValue('pho_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_change'));
+                    $user_change = new User($gDb, $gUserFields, $photo_album->getValue('pho_usr_id_change'));
+                    echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_change'));
                 }
             echo '</div>';
         }
 
         echo '<div class="formSubmit">
-            <button id="btnSave" type="submit" name="submit" value="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+            <button id="btnSave" type="submit" name="submit" value="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
         </div>
 
     </div>
@@ -252,15 +252,15 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
         </span>
     </li>
     <li>
         <span class="iconTextLink">
             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_HELP_DESC&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true"><img 
             	src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
-            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_HELP_DESC&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true">'.$g_l10n->get('SYS_HELP').'</a>
+            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_HELP_DESC&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true">'.$gL10n->get('SYS_HELP').'</a>
         </span>
     </li>
 </ul>';
