@@ -28,7 +28,7 @@ require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
-$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -97,14 +97,14 @@ else
 }
 
 // ist der Benutzer ausgeloggt und soll nur die Anzahl der Geb-Kinder angezeigt werden, dann Zeitraum auf 0 Tage setzen
-if($plg_show_names_extern == 0 && $g_valid_login == 0)
+if($plg_show_names_extern == 0 && $gValidLogin == 0)
 {
     $plg_show_zeitraum = 0;
     $plg_show_future = 0;
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->setCurrentDB();
+$gDb->setCurrentDB();
 
 $sql    = 'SELECT DISTINCT usr_id, usr_login_name, 
                            last_name.usd_value as last_name, first_name.usd_value as first_name, 
@@ -118,35 +118,35 @@ $sql    = 'SELECT DISTINCT usr_id, usr_login_name,
 					   FROM '. TBL_USER_DATA. ' bd1
 					  WHERE DATEDIFF(year(\''.DATETIME_NOW.'\') || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd1.usd_value), \''.DATETIME_NOW.'\') 
 							BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-						AND usd_usf_id = '. $g_current_user->getProperty('BIRTHDAY', 'usf_id'). ')
+						AND usd_usf_id = '. $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'). ')
 				  UNION
 					(SELECT usd_usr_id, usd_value AS bday,
 							year(\''.DATETIME_NOW.'\')-1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd2.usd_value) AS bdate
 					   FROM '. TBL_USER_DATA. ' bd2
 					  WHERE DATEDIFF(year(\''.DATETIME_NOW.'\')-1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd2.usd_value), \''.DATETIME_NOW.'\') 
 							BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-						AND usd_usf_id = '. $g_current_user->getProperty('BIRTHDAY', 'usf_id'). ')
+						AND usd_usf_id = '. $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'). ')
 				  UNION
 					(SELECT usd_usr_id, usd_value AS bday,
 							year(\''.DATETIME_NOW.'\')+1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd3.usd_value) AS bdate
 					   FROM '. TBL_USER_DATA. ' bd3
 					  WHERE DATEDIFF(year(\''.DATETIME_NOW.'\')+1 || \'-\' || month(usd_value) || \'-\' || dayofmonth(bd3.usd_value), \''.DATETIME_NOW.'\') 
 							BETWEEN -'.$plg_show_zeitraum.' AND '.$plg_show_future.'
-						AND usd_usf_id = '. $g_current_user->getProperty('BIRTHDAY', 'usf_id'). ')
+						AND usd_usf_id = '. $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'). ')
 				  ) birthday
                ON birthday.usd_usr_id = usr_id
              LEFT JOIN '. TBL_USER_DATA. ' as last_name
                ON last_name.usd_usr_id = usr_id
-              AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+              AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
              LEFT JOIN '. TBL_USER_DATA. ' as first_name
                ON first_name.usd_usr_id = usr_id
-              AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+              AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
              LEFT JOIN '. TBL_USER_DATA. ' as email
                ON email.usd_usr_id = usr_id
-              AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
+              AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id'). '
              LEFT JOIN '. TBL_USER_DATA. ' as gender
                ON gender.usd_usr_id = usr_id
-              AND gender.usd_usf_id = '. $g_current_user->getProperty('GENDER', 'usf_id'). '
+              AND gender.usd_usf_id = '. $gCurrentUser->getProperty('GENDER', 'usf_id'). '
              LEFT JOIN '. TBL_MEMBERS. '
                ON mem_usr_id = usr_id
               AND mem_begin <= \''.DATE_NOW.'\'
@@ -156,26 +156,26 @@ $sql    = 'SELECT DISTINCT usr_id, usr_login_name,
               AND rol_valid  = 1
              JOIN '. TBL_CATEGORIES. '
                ON rol_cat_id = cat_id
-              AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+              AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
             WHERE usr_valid = 1
               AND mem_rol_id '.$rol_sql.'
             ORDER BY days_to_bdate '.$sort_sql.', last_name, first_name ';
 //echo $sql; exit();
-$result = $g_db->query($sql);
+$result = $gDb->query($sql);
 
-$anz_geb = $g_db->num_rows($result);
+$anz_geb = $gDb->num_rows($result);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$g_l10n->get('SYS_BIRTHDAY').'</h3></div>
+<div class="admPluginHeader"><h3>'.$gL10n->get('SYS_BIRTHDAY').'</h3></div>
 <div class="admPluginBody">';
 
 if($anz_geb > 0)
 {
-    if($plg_show_names_extern == 1 || $g_valid_login == 1)
+    if($plg_show_names_extern == 1 || $gValidLogin == 1)
     {
         
 	    echo '<ul id="plgBirthdayNameList">';
-            while($row = $g_db->fetch_array($result))
+            while($row = $gDb->fetch_array($result))
             {
                 // Anzeigeart des Namens beruecksichtigen
                 if($plg_show_names == 2)        // Nachname, Vorname
@@ -196,48 +196,48 @@ if($anz_geb > 0)
                 }
 
 				// ab einem festgelegten Alter wird fuer ausgeloggte Besucher nur der Nachname mit Anrede angezeigt
-				if($g_valid_login == false
+				if($gValidLogin == false
 				&& $plg_show_alter_anrede <= $row['age'])
 				{
 					if (($row->gender) > 1)
 					{
-						$plg_show_name = $g_l10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row->last_name);
+						$plg_show_name = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row->last_name);
 					}
 					else
 					{
-						$plg_show_name = $g_l10n->get('PLG_BIRTHDAY_MAN_VAR', $row->last_name);
+						$plg_show_name = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', $row->last_name);
 					}
 				}
 
                 // Namen mit Alter und Mail-Link anzeigen
-				if($g_valid_login)
+				if($gValidLogin)
 				{
 					$plg_show_name = '<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '" 
-						target="'. $plg_link_target. '" title="'.$g_l10n->get('SYS_SHOW_PROFILE').'">'. $plg_show_name. '</a>';
+						target="'. $plg_link_target. '" title="'.$gL10n->get('SYS_SHOW_PROFILE').'">'. $plg_show_name. '</a>';
 					
 					// E-Mail-Adresse ist hinterlegt und soll auch bei eingeloggten Benutzern verlinkt werden
 					if(strlen($row['email']) > 0 && $plg_show_email_extern < 2)
 					{
 						$plg_show_name = $plg_show_name.' 
 						    <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '"><img 
-							src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
+							src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
 					}
 				}
 				elseif($plg_show_email_extern == 1 && strlen($row['email']) > 0)
 				{
 					$plg_show_name = $plg_show_name.' 
 						<a class="iconLink" href="mailto:'. $row['email']. '"><img 
-						src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('MAI_SEND_EMAIL').'" title="'.$g_l10n->get('MAI_SEND_EMAIL').'" /></a>';
+						src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('MAI_SEND_EMAIL').'" title="'.$gL10n->get('MAI_SEND_EMAIL').'" /></a>';
 				}
 
                 // Soll das Alter auch für nicht angemeldete Benutzer angezeigt werden?
-                if($plg_show_names_extern < 2 || $g_valid_login == true)
+                if($plg_show_names_extern < 2 || $gValidLogin == true)
                 {
                     // Geburtstagskinder am aktuellen Tag bekommen anderen Text
                     if($row['days_to_bdate'] == 0)
                     {
                         // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
-                        echo '<li><span id="plgBirthdayNameHighlight">'.$g_l10n->get('PLG_BIRTHDAY_TODAY', $plg_show_name, $row['age']).'</span></li>';
+                        echo '<li><span id="plgBirthdayNameHighlight">'.$gL10n->get('PLG_BIRTHDAY_TODAY', $plg_show_name, $row['age']).'</span></li>';
                     }
                     else
                     {
@@ -273,7 +273,7 @@ if($anz_geb > 0)
                         }
                         // Die Anzeige der Geburtstage folgt nicht mehr als Liste, sondern mittels div-Tag
                         echo '<li><span id="'.$plgCssClass.'">'.
-                            $g_l10n->get($birthdayText, $plg_show_name, $plgDays, $row['age'], $birthayDate->format($g_preferences['system_date'])).
+                            $gL10n->get($birthdayText, $plg_show_name, $plgDays, $row['age'], $birthayDate->format($gPreferences['system_date'])).
                         '</span></li>';
                     }
                 }		
@@ -284,11 +284,11 @@ if($anz_geb > 0)
     {
         if($anz_geb == 1)
         {
-            echo '<p>'.$g_l10n->get('PLG_BIRTHDAY_ONE_USER').'</p>';
+            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_ONE_USER').'</p>';
         }
         else
         {
-            echo '<p>'.$g_l10n->get('PLG_BIRTHDAY_MORE_USERS', $anz_geb).'</p>';
+            echo '<p>'.$gL10n->get('PLG_BIRTHDAY_MORE_USERS', $anz_geb).'</p>';
         }
     }
 }
@@ -297,7 +297,7 @@ else
     // Bei entsprechend gesetzter Konfiguration wird auch im Fall, dass keiner Geburtstag hat, eine Meldung ausgegeben.
     if($plg_show_hinweis_keiner == 0)
     {
-        echo '<p>'.$g_l10n->get('PLG_BIRTHDAY_NO_USER').'</p>';
+        echo '<p>'.$gL10n->get('PLG_BIRTHDAY_NO_USER').'</p>';
     }
 }
 

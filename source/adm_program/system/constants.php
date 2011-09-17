@@ -40,6 +40,7 @@ else
     define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
 }
 
+date_default_timezone_set('Europe/Berlin');
 define('DATE_NOW', date('Y-m-d', time()));
 define('DATETIME_NOW', date('Y-m-d H:i:s', time()));
 

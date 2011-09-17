@@ -34,7 +34,7 @@ class TableAccess
     protected $table_name;
     protected $column_praefix;
     protected $key_name;
-    public    $db;
+    public    $db;					// db object must public because of session handling
     
     protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
     protected $columnsValueChanged; // Merker ob an den dbColumns Daten was geaendert wurde
@@ -127,7 +127,7 @@ class TableAccess
     // $format kann fuer Datetime-Felder das Format aus der PHP-Funktion date() angegeben werden
     public function getValue($field_name, $format = '')
     {
-        global $g_preferences;
+        global $gPreferences;
         $field_value = '';
         
         if(isset($this->dbColumns[$field_name]))
@@ -158,19 +158,19 @@ class TableAccess
         {
             if(strlen($field_value) > 0)
             {
-                if(strlen($format) == 0 && isset($g_preferences))
+                if(strlen($format) == 0 && isset($gPreferences))
                 {
                     if(strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false)
                     {
-                        $format = $g_preferences['system_date'].' '.$g_preferences['system_time'];
+                        $format = $gPreferences['system_date'].' '.$gPreferences['system_time'];
                     }
                     elseif(strpos($this->columnsInfos[$field_name]['type'], 'date') !== false)
                     {
-                        $format = $g_preferences['system_date'];
+                        $format = $gPreferences['system_date'];
                     }
                     else
                     {
-                        $format = $g_preferences['system_time'];
+                        $format = $gPreferences['system_time'];
                     }
                 }
 
@@ -266,19 +266,19 @@ class TableAccess
                 // dann diese hier automatisiert fuellen
                 if($this->new_record && isset($this->dbColumns[$this->column_praefix.'_usr_id_create']))
                 {
-                    global $g_current_user;
+                    global $gCurrentUser;
                     $this->setValue($this->column_praefix.'_timestamp_create', DATETIME_NOW);
-                    $this->setValue($this->column_praefix.'_usr_id_create', $g_current_user->getValue('usr_id'));
+                    $this->setValue($this->column_praefix.'_usr_id_create', $gCurrentUser->getValue('usr_id'));
                 }
                 elseif(isset($this->dbColumns[$this->column_praefix.'_usr_id_change']))
                 {
-                    global $g_current_user;
+                    global $gCurrentUser;
                     // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
                     if(time() > (strtotime($this->getValue($this->column_praefix.'_timestamp_create')) + 900)
-                    || $g_current_user->getValue('usr_id') != $this->getValue($this->column_praefix.'_usr_id_create') )
+                    || $gCurrentUser->getValue('usr_id') != $this->getValue($this->column_praefix.'_usr_id_create') )
                     {
                         $this->setValue($this->column_praefix.'_timestamp_change', DATETIME_NOW);
-                        $this->setValue($this->column_praefix.'_usr_id_change', $g_current_user->getValue('usr_id'));
+                        $this->setValue($this->column_praefix.'_usr_id_change', $gCurrentUser->getValue('usr_id'));
                     }
                 }
             }

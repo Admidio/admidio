@@ -20,67 +20,32 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/system_mail.php');
 
+// Initialize and check the parameters
+$getMode      = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'numeric', null, true);
+$getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+
 // nur Webmaster duerfen User bestaetigen, ansonsten Seite verlassen
-if($g_current_user->approveUsers() == false)
+if($gCurrentUser->approveUsers() == false)
 {
-   $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf
-if($g_preferences['registration_mode'] == 0)
+if($gPreferences['registration_mode'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_user_id     = 0;
-$req_new_user_id = 0;
-$req_mode        = 0;
+// create user objects
+$new_user = new User($gDb, $gUserFields, $getNewUserId);
 
-// Uebergabevariablen pruefen
-
-if(isset($_GET['user_id']))
+if($getUserId > 0)
 {
-    if(is_numeric($_GET['user_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_user_id = $_GET['user_id'];
+    $user = new User($gDb, $gUserFields, $getUserId);
 }
 
-if(isset($_GET['new_user_id']))
-{
-    if(is_numeric($_GET['new_user_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_new_user_id = $_GET['new_user_id'];
-}
-
-if(is_numeric($_GET['mode']) == false
-|| $_GET['mode'] < 1 || $_GET['mode'] > 6)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-else
-{
-    $req_mode = $_GET['mode'];
-}
-
-$err_code = '';
-$err_text = '';
-
-if($req_new_user_id > 0)
-{
-    $new_user = new User($g_db, $req_new_user_id);
-}
-
-if($req_user_id > 0)
-{
-    $user = new User($g_db, $req_user_id);
-}
-
-if($req_mode == 1 || $req_mode == 2)
+if($getMode == 1 || $getMode == 2)
 {
     // User-Account einem existierenden Mitglied zuordnen
 
@@ -98,40 +63,40 @@ if($req_mode == 1 || $req_mode == 2)
     $user->save();
 }
 
-if($req_mode == 2)
+if($getMode == 2)
 {
     // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
     // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
-    $_SESSION['navigation']->addUrl($g_root_path.'/adm_program/administration/new_user/new_user_function.php?mode=3&user_id='.$req_user_id.'&new_user_id='.$req_new_user_id);
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$req_user_id);
+    $_SESSION['navigation']->addUrl($g_root_path.'/adm_program/administration/new_user/new_user_function.php?mode=3&user_id='.$getUserId.'&new_user_id='.$getNewUserId);
+    header('Location: '.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$getUserId);
     exit();
 }
 
-if($req_mode == 1 || $req_mode == 3)
+if($getMode == 1 || $getMode == 3)
 {
-    $g_message->setForwardUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');
+    $gMessage->setForwardUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-    if($g_preferences['enable_system_mails'] == 1)
+    if($gPreferences['enable_system_mails'] == 1)
     {
         // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
-        $sysmail = new SystemMail($g_db);
+        $sysmail = new SystemMail($gDb);
         $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
         if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == true)
         {
-            $g_message->show($g_l10n->get('NWU_ASSIGN_LOGIN_EMAIL'));
+            $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL'));
         }
         else
         {
-            $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
+            $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
         }
     }
     else
     {
-        $g_message->show($g_l10n->get('NWU_ASSIGN_LOGIN_SUCCESSFUL'));
+        $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_SUCCESSFUL'));
     }
 }
-elseif($req_mode == 4)
+elseif($getMode == 4)
 {
     // Registrierung loeschen    
     // im Forum muss er nicht geloescht werden, da der User erst nach der vollstaendigen 
@@ -141,7 +106,7 @@ elseif($req_mode == 4)
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
 }
-elseif($req_mode == 6)
+elseif($getMode == 6)
 {
     // Der User existiert schon und besitzt auch ein Login
     
@@ -152,7 +117,7 @@ elseif($req_mode == 6)
 
     // Zugangsdaten neu verschicken
     $_SESSION['navigation']->addUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');
-    header('Location: '.$g_root_path.'/adm_program/administration/members/members_function.php?mode=4&usr_id='.$req_user_id);
+    header('Location: '.$g_root_path.'/adm_program/administration/members/members_function.php?mode=4&usr_id='.$getUserId);
     exit();
 }
 

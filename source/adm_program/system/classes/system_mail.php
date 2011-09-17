@@ -45,7 +45,7 @@ class SystemMail extends Email
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
     public function getMailText($sysmail_id, &$user)
     {
-        global $g_current_organization, $g_preferences;
+        global $gCurrentOrganization, $gPreferences;
     
         if($this->textObject->getValue('txt_name') != $sysmail_id)
         {
@@ -59,10 +59,10 @@ class SystemMail extends Email
         $mailSrcText = preg_replace ('/%user_last_name%/',  $user->getValue('LAST_NAME'), $mailSrcText);
         $mailSrcText = preg_replace ('/%user_login_name%/', $user->getValue('usr_login_name'), $mailSrcText);
         $mailSrcText = preg_replace ('/%user_email%/', $user->getValue('EMAIL'),   $mailSrcText);
-        $mailSrcText = preg_replace ('/%webmaster_email%/', $g_preferences['email_administrator'],  $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_short_name%/', $g_current_organization->getValue('org_shortname'), $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_long_name%/',  $g_current_organization->getValue('org_longname'), $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_homepage%/',   $g_current_organization->getValue('org_homepage'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%webmaster_email%/', $gPreferences['email_administrator'],  $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_short_name%/', $gCurrentOrganization->getValue('org_shortname'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_long_name%/',  $gCurrentOrganization->getValue('org_longname'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_homepage%/',   $gCurrentOrganization->getValue('org_homepage'), $mailSrcText);
         
         // zusaetzliche Variablen ersetzen
         for($i = 1; $i <= count($this->variables); $i++)
@@ -77,7 +77,7 @@ class SystemMail extends Email
         }
         else
         {
-            $this->mailHeader = 'Systemmail von '. $g_current_organization->getValue('org_homepage');
+            $this->mailHeader = 'Systemmail von '. $gCurrentOrganization->getValue('org_homepage');
         }
         
         if(strpos($mailSrcText, '#content#') !== false)
@@ -103,10 +103,10 @@ class SystemMail extends Email
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden    
     public function sendSystemMail($sysmail_id, &$user)
     {
-        global $g_preferences;
+        global $gPreferences;
         
         $this->getMailText($sysmail_id, $user);
-        $this->setSender($g_preferences['email_administrator']);
+        $this->setSender($gPreferences['email_administrator']);
         $this->setSubject($this->mailHeader);
         $this->setText($this->mailText);
 

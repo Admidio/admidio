@@ -3,7 +3,7 @@
     if(file_exists('config.php'))
     {
         require_once('adm_program/system/common.php');
-        header('Location: '.$g_homepage);
+        header('Location: '.$gHomepage);
     }
     else
     {

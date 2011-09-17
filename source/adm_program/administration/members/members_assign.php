@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * lastname  : Der Nachname kann uebergeben und bei neuen Benutzern vorbelegt werden
  * firstname : Der Vorname kann uebergeben und bei neuen Benutzern vorbelegt werden
@@ -16,28 +16,31 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
+$getLastname  = admFuncVariableIsValid($_GET, 'lastname', 'string', null, true);
+$getFirstname = admFuncVariableIsValid($_GET, 'firstname', 'string', null, true);
+
 // nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
-if (!$g_current_user->editUsers())
+if (!$gCurrentUser->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // sollen Benutzer mit aehnlichen Namen gefunden werden ?
-if($g_preferences['system_search_similar'] == 1)
+if($gPreferences['system_search_similar'] == 1)
 {
     $sql_similar_name = 
-    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $_GET['lastname'].'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $_GET['firstname'].'\'), 1, 4) )
-     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $_GET['firstname'].'\'), 1, 4)
-        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $_GET['lastname'].'\'), 1, 4) ) )';
+    '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $getLastname.'\'), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $getFirstname.'\'), 1, 4) )
+     OR (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $getFirstname.'\'), 1, 4)
+        AND SUBSTRING(SOUNDEX(first_name.usd_value), 1, 4) LIKE SUBSTRING(SOUNDEX(\''. $getLastname.'\'), 1, 4) ) )';
 }
 else
 {
     $sql_similar_name = 
-    '(  (   last_name.usd_value  LIKE \''. $_GET['lastname'].'\'
-        AND first_name.usd_value LIKE \''. $_GET['firstname'].'\')
-     OR (   last_name.usd_value  LIKE \''. $_GET['firstname'].'\'
-        AND first_name.usd_value LIKE \''. $_GET['lastname'].'\') )';
+    '(  (   last_name.usd_value  LIKE \''. $getLastname.'\'
+        AND first_name.usd_value LIKE \''. $getFirstname.'\')
+     OR (   last_name.usd_value  LIKE \''. $getFirstname.'\'
+        AND first_name.usd_value LIKE \''. $getLastname.'\') )';
 }
 
 // alle User aus der DB selektieren, die denselben Vor- und Nachnamen haben
@@ -48,53 +51,53 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
           FROM '. TBL_USERS. '
          RIGHT JOIN '. TBL_USER_DATA. ' as last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+           AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
          RIGHT JOIN '. TBL_USER_DATA. ' as first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+           AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
           LEFT JOIN '. TBL_USER_DATA. ' as address
             ON address.usd_usr_id = usr_id
-           AND address.usd_usf_id = '. $g_current_user->getProperty('ADDRESS', 'usf_id'). '
+           AND address.usd_usf_id = '. $gCurrentUser->getProperty('ADDRESS', 'usf_id'). '
           LEFT JOIN '. TBL_USER_DATA. ' as zip_code
             ON zip_code.usd_usr_id = usr_id
-           AND zip_code.usd_usf_id = '. $g_current_user->getProperty('POSTCODE', 'usf_id'). '
+           AND zip_code.usd_usf_id = '. $gCurrentUser->getProperty('POSTCODE', 'usf_id'). '
           LEFT JOIN '. TBL_USER_DATA. ' as city
             ON city.usd_usr_id = usr_id
-           AND city.usd_usf_id = '. $g_current_user->getProperty('CITY', 'usf_id'). '
+           AND city.usd_usf_id = '. $gCurrentUser->getProperty('CITY', 'usf_id'). '
           LEFT JOIN '. TBL_USER_DATA. ' as email
             ON email.usd_usr_id = usr_id
-           AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
+           AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id'). '
          WHERE usr_valid = 1 
            AND '.$sql_similar_name;
-$result_usr   = $g_db->query($sql);
-$member_found = $g_db->num_rows($result_usr);
+$result_usr   = $gDb->query($sql);
+$member_found = $gDb->num_rows($result_usr);
 
 if($member_found == 0)
 {
     // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $_GET['lastname'].'&firstname='. $_GET['firstname']);
+    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname);
     exit();
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-$g_layout['title'] = $g_l10n->get('MEM_CREATE_USER');
+$gLayout['title'] = $gL10n->get('MEM_CREATE_USER');
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
 <div class="formLayout" id="assign_users_form" style="width: 400px;">
-    <div class="formHead">'.$g_l10n->get('MEM_CREATE_USER').'</div>
+    <div class="formHead">'.$gL10n->get('MEM_CREATE_USER').'</div>
     <div class="formBody">
-        '.$g_l10n->get('SYS_SIMILAR_USERS_FOUND', $_GET['firstname']. ' '. $_GET['lastname']).'<br />
+        '.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $getFirstname. ' '. $getLastname).'<br />
 
         <div class="groupBox">
-            <div class="groupBoxHeadline">'. $g_l10n->get('SYS_USERS_FOUND'). '</div>
+            <div class="groupBoxHeadline">'. $gL10n->get('SYS_USERS_FOUND'). '</div>
             <div class="groupBoxBody">';
                 // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
                 $i = 0;
-                while($row = $g_db->fetch_array($result_usr))
+                while($row = $gDb->fetch_array($result_usr))
                 {
                     if($i > 0)
                     {
@@ -102,7 +105,7 @@ echo '
                     }
                     echo '<div style="margin-left: 20px;">
 						<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img 
-                             src="'.THEME_PATH.'/icons/profile.png" alt="'.$g_l10n->get('SYS_SHOW_PROFILE').'" /></a>
+                             src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" /></a>
                         <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.
                             $row['first_name'].' '.$row['last_name'].'</a><br />';
                         if(strlen($row['address']) > 0)
@@ -115,7 +118,7 @@ echo '
                         }
                         if(strlen($row['email']) > 0)
                         {
-                            if($g_preferences['enable_mail_module'] == 1)
+                            if($gPreferences['enable_mail_module'] == 1)
                             {
                                 echo '<a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a><br />';
                             }
@@ -131,11 +134,11 @@ echo '
                             $link = $g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$row['usr_id'];
 
                             // KEINE Logindaten vorhanden
-                            echo '<br />'.$g_l10n->get('MEM_NO_MEMBERSHIP', $g_organization).'<br />
+                            echo '<br />'.$gL10n->get('MEM_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'<br />
                             
                             <span class="iconTextLink">
-                                <a href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('MEM_ASSIGN_ROLES').'" /></a>
-                                <a href="'.$link.'">'.$g_l10n->get('MEM_ASSIGN_ROLES').'</a>
+                                <a href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('MEM_ASSIGN_ROLES').'" /></a>
+                                <a href="'.$link.'">'.$gL10n->get('MEM_ASSIGN_ROLES').'</a>
                             </span>';
                         }
                     echo '</div>';
@@ -145,15 +148,15 @@ echo '
         </div>
 
         <div class="groupBox">
-            <div class="groupBoxHeadline">'.$g_l10n->get('SYS_CREATE_NEW_USER').'</div>
+            <div class="groupBoxHeadline">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
             <div class="groupBoxBody">
                 <div style="margin-left: 20px;">
-                    '. $g_l10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
+                    '. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
                     
                     <span class="iconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $_GET['lastname'].'&firstname='. $_GET['firstname'].'&remove_url=1"><img
-                        src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_CREATE_NEW_USER').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $_GET['lastname'].'&firstname='. $_GET['firstname'].'&remove_url=1">'.$g_l10n->get('SYS_CREATE_NEW_USER').'</a>
+                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1"><img
+                        src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" /></a>
+                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1">'.$gL10n->get('SYS_CREATE_NEW_USER').'</a>
                     </span>
                 </div>
             </div>
@@ -165,8 +168,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

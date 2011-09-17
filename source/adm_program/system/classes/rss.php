@@ -10,13 +10,13 @@
  *
  * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
  * function RSSfeed($homepage, $title, $description)
- * Uebergaben:  $homepage       - Link zur Homepage
+ * Parameters:  $homepage       - Link zur Homepage
  *              $title          - Titel des RSS-Feeds
  *              $description    - Ergaenzende Beschreibung zum Titel
  *
  * Dem RSSfeed koennen ueber die Funktion addItem Inhalt zugeordnet werden:
  * function addItem($title, $description, $date, $guid)
- * Uebergaben:  $title          - Titel des Items
+ * Parameters:  $title          - Titel des Items
  *              $description    - der Inhalt des Items
  *              $date           - Das Erstellungsdatum des Items
  *              $link           - Ein Link zum Termin/Newsbeitrag etc.
@@ -74,7 +74,7 @@ public function openChannel()
 
 public function addChannelInfos()
 {
-	global $g_preferences;
+	global $gPreferences;
 
     foreach (array('title', 'link', 'description') as $field)
     {
@@ -83,7 +83,7 @@ public function addChannelInfos()
             echo "<${field}>". htmlspecialchars($this->channel[$field], ENT_QUOTES). "</${field}>\n";
         }
     }
-    echo "<language>".$g_preferences['system_language']."</language>\n";
+    echo "<language>".$gPreferences['system_language']."</language>\n";
     echo "<generator>Admidio RSS-Class</generator>\n\n";
     echo "<pubDate>". date('r'). "</pubDate>\n\n";
 }

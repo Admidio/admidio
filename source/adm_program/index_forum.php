@@ -14,8 +14,8 @@ include("system/common.php");
 $_SESSION['navigation']->clear();
 
 // Html-Kopf ausgeben
-$g_layout['title']  = "Admidio Forum";
-$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
+$gLayout['title']  = "Admidio Forum";
+$gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
@@ -45,7 +45,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 // -->
 </script>
 <br />
-<iframe id="sizeframe" name="sizeframe" style="padding:0px; margin:0px; width:<?php if ($g_preferences['forum_width']){echo $g_preferences['forum_width'];}else{echo "570";}?>px ;height:100px;" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" marginheight="0" marginwidth="0"  src="<?php echo $g_forum->url_intern; ?>" onload="resizeIframe(this, 'sizeframe');"></iframe>
+<iframe id="sizeframe" name="sizeframe" style="padding:0px; margin:0px; width:<?php if ($gPreferences['forum_width']){echo $gPreferences['forum_width'];}else{echo "570";}?>px ;height:100px;" scrolling="no" frameborder="no" allowtransparency="true" background-color="transparent" marginheight="0" marginwidth="0"  src="<?php echo $gForum->url_intern; ?>" onload="resizeIframe(this, 'sizeframe');"></iframe>
 <br />
 <?
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');

@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * user_id: zeigt das Profil der uebergebenen user_id an
  *          (wird keine user_id uebergeben, dann Profil des eingeloggten Users anzeigen)
@@ -17,26 +17,26 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('roles_functions.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
-$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $g_current_user->getValue('usr_id'));
+// Initialize and check the parameters
+$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $gCurrentUser->getValue('usr_id'));
 
 //Testen ob Recht besteht Profil einzusehn
-if(!$g_current_user->viewProfile($getUserId))
+if(!$gCurrentUser->viewProfile($getUserId))
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
 // dabei wird der Inhalt richtig formatiert
 function getFieldCode($field, $user_id)
 {
-    global $g_preferences, $g_root_path, $g_current_user, $g_l10n;
+    global $gPreferences, $g_root_path, $gCurrentUser, $gL10n;
     $html      = '';
     $value     = '';
     $msg_image = '';
     $messenger = false;
 
-    if($g_current_user->editProfile($user_id) == false && $field->getValue('usf_hidden') == 1)
+    if($gCurrentUser->editProfile($user_id) == false && $field->getValue('usf_hidden') == 1)
     {
         return '';
     }
@@ -57,12 +57,12 @@ function getFieldCode($field, $user_id)
         case 'DATE':
             if(strlen($field->getValue('usd_value')) > 0)
             {
-                $value = $field->getValue('usd_value', $g_preferences['system_date']);
+                $value = $field->getValue('usd_value', $gPreferences['system_date']);
                 if($field->getValue('usf_name_intern') == 'BIRTHDAY')
                 {
                     // Alter mit ausgeben
-                    $birthday = new DateTimeExtended($value, $g_preferences['system_date'], 'date');
-                    $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$g_l10n->get('PRO_YEARS').')';
+                    $birthday = new DateTimeExtended($value, $gPreferences['system_date'], 'date');
+                    $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
                 }
             }
             break;
@@ -71,7 +71,7 @@ function getFieldCode($field, $user_id)
             // E-Mail als Link darstellen
             if(strlen($field->getValue('usd_value')) > 0)
             {
-                if($g_preferences['enable_mail_module'] != 1)
+                if($gPreferences['enable_mail_module'] != 1)
                 {
                     $mail_link = 'mailto:'. $field->getValue('usd_value');
                 }
@@ -127,8 +127,8 @@ function getFieldCode($field, $user_id)
 			$value = '
 			<a class="iconLink" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
 				src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
-				alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
-				title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
+				alt="'.$gL10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
+				title="'.$gL10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
 		}
 		$messenger = true;
 	}
@@ -140,8 +140,8 @@ function getFieldCode($field, $user_id)
 			$value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
 			<a class="iconLink" href="skype:'.$field->getValue('usd_value').'?add"><img
 				src="http://mystatus.skype.com/smallicon/'.$field->getValue('usd_value').'"
-				title="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
-				alt="'.$g_l10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
+				title="'.$gL10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
+				alt="'.$gL10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
 		}
 		$messenger = true;
 	}
@@ -184,26 +184,26 @@ function getFieldCode($field, $user_id)
 }
 
 // User auslesen
-$user = new User($g_db, $getUserId);
+$user = new User($gDb, $gUserFields, $getUserId);
 
 unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken
-if($user->getValue('usr_id') != $g_current_user->getValue('usr_id'))
+if($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id'))
 {
     $_SESSION['navigation']->clear();
 }
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-if($user->getValue('usr_id') == $g_current_user->getValue('usr_id'))
+if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 {
-    $g_layout['title'] = $g_l10n->get('PRO_MY_PROFILE');
+    $gLayout['title'] = $gL10n->get('PRO_MY_PROFILE');
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('PRO_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
+    $gLayout['title'] = $gL10n->get('PRO_PROFILE_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
 }
-$g_layout['header'] = '
+$gLayout['header'] = '
     <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
@@ -211,10 +211,10 @@ $g_layout['header'] = '
     <script type="text/javascript">
     <!--
         var profileJS = new profileJSClass();
-            profileJS.deleteRole_ConfirmText 	= \''.$g_l10n->get('ROL_MEMBERSHIP_DEL',"[rol_name]").'\';
-            profileJS.deleteFRole_ConfirmText 	= \''.$g_l10n->get('ROL_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
-            profileJS.changeRoleDates_ErrorText = \''.$g_l10n->get('ROL_CHANGE_ROLE_DATES_ERROR').'\';
-            profileJS.setBy_Text				= \''.$g_l10n->get('SYS_SET_BY').'\';
+            profileJS.deleteRole_ConfirmText 	= \''.$gL10n->get('ROL_MEMBERSHIP_DEL',"[rol_name]").'\';
+            profileJS.deleteFRole_ConfirmText 	= \''.$gL10n->get('ROL_LINK_MEMBERSHIP_DEL',"[rol_name]").'\';
+            profileJS.changeRoleDates_ErrorText = \''.$gL10n->get('ROL_CHANGE_ROLE_DATES_ERROR').'\';
+            profileJS.setBy_Text				= \''.$gL10n->get('SYS_SET_BY').'\';
             profileJS.usr_id = '.$user->getValue('usr_id').';
 			$(document).ready(function() {
 				profileJS.init();
@@ -227,7 +227,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <div class="formLayout" id="profile_form">
-    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
         <div>';
             // *******************************************************************************
@@ -242,7 +242,7 @@ echo '
 
                             // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
                             if(strlen($user->getValue('GENDER')) > 0
-                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('GENDER', 'usf_hidden') == 0 ))
+                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('GENDER', 'usf_hidden') == 0 ))
                             {
                                 echo $user->getValue('GENDER');
                             }
@@ -250,22 +250,22 @@ echo '
                         <div style="text-align: right;">
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue('usr_id'). '"><img
                                 src="'. THEME_PATH. '/icons/vcard.png"
-                                alt="'.$g_l10n->get('PRO_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'"
-                                title="'.$g_l10n->get('PRO_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'" /></a>';
+                                alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'"
+                                title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')).'" /></a>';
 
                             // Nur berechtigte User duerfen das Passwort editieren
-                            if($user->getValue('usr_id') == $g_current_user->getValue('usr_id') || $g_current_user->isWebmaster())
+                            if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id') || $gCurrentUser->isWebmaster())
                             {
                                 echo'
                                 <a rel="colorboxPWContent" href="password.php?usr_id='. $user->getValue('usr_id'). '&amp;inline=1"><img
-                                    src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" title="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
+                                    src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
                             }
                             // Nur berechtigte User duerfen ein Profil editieren
-                            if($g_current_user->editProfile($user->getValue('usr_id')) == true)
+                            if($gCurrentUser->editProfile($user->getValue('usr_id')) == true)
                             {
                                 echo '
                                 <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='. $user->getValue('usr_id'). '"><img
-                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$g_l10n->get('PRO_EDIT_PROFILE').'" title="'.$g_l10n->get('PRO_EDIT_PROFILE').'" /></a>';
+                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('PRO_EDIT_PROFILE').'" title="'.$gL10n->get('PRO_EDIT_PROFILE').'" /></a>';
                             }
                         echo '</div>
                     </div>
@@ -273,7 +273,7 @@ echo '
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('SYS_USERNAME').':</dt>
+                                    <dt>'.$gL10n->get('SYS_USERNAME').':</dt>
                                     <dd><i>';
                                     if(strlen($user->getValue('usr_login_name')) > 0)
                                     {
@@ -281,7 +281,7 @@ echo '
                                     }
                                     else
                                     {
-                                        echo $g_l10n->get('SYS_NOT_REGISTERED');
+                                        echo $gL10n->get('SYS_NOT_REGISTERED');
                                     }
                                     echo '&nbsp;</i></dd>
                                 </dl>
@@ -295,7 +295,7 @@ echo '
                             {
                                 // nur Felder der Stammdaten anzeigen
                                 if($field->getValue('cat_name_intern') == 'MASTER_DATA'
-                                && (  $g_current_user->editProfile($user->getValue('usr_id')) == true || $field->getValue('usf_hidden') == 0 ))
+                                && (  $gCurrentUser->editProfile($user->getValue('usr_id')) == true || $field->getValue('usf_hidden') == 0 ))
                                 {
                                     switch($field->getValue('usf_name_intern'))
                                     {
@@ -314,19 +314,19 @@ echo '
                                                 $bAddressOutput = true;
 												echo '<li>
                                                     <dl>
-                                                        <dt>'.$g_l10n->get('SYS_ADDRESS').':</dt>
+                                                        <dt>'.$gL10n->get('SYS_ADDRESS').':</dt>
                                                         <dd>';
                                                             $address = '';
                                                             $map_url = 'http://maps.google.com/?q=';
                                                             $route_url = 'http://maps.google.com/?f=d&amp;saddr='. 
-                                                                urlencode($g_current_user->getValue('ADDRESS')).
-                                                                ',%20'. urlencode($g_current_user->getValue('POSTCODE')).
-                                                                ',%20'. urlencode($g_current_user->getValue('CITY')).
-                                                                ',%20'. urlencode($g_current_user->getValue('COUNTRY')).
+                                                                urlencode($gCurrentUser->getValue('ADDRESS')).
+                                                                ',%20'. urlencode($gCurrentUser->getValue('POSTCODE')).
+                                                                ',%20'. urlencode($gCurrentUser->getValue('CITY')).
+                                                                ',%20'. urlencode($gCurrentUser->getValue('COUNTRY')).
                                                                 '&amp;daddr=';
 
                                                             if(strlen($user->getValue('ADDRESS')) > 0
-                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('ADDRESS', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('ADDRESS', 'usf_hidden') == 0))
                                                             {
                                                                 $address   .= '<div>'.$user->getValue('ADDRESS'). '</div>';
                                                                 $map_url   .= urlencode($user->getValue('ADDRESS'));
@@ -334,7 +334,7 @@ echo '
                                                             }
 
                                                             if(strlen($user->getValue('POSTCODE')) > 0
-                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('POSTCODE', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('POSTCODE', 'usf_hidden') == 0))
                                                             {
                                                                 $address   .= '<div>'.$user->getValue('POSTCODE');
                                                                 $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
@@ -342,18 +342,18 @@ echo '
 
 																// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
 	                                                            if(strlen($user->getValue('CITY')) == 0
-	                                                            || ($g_current_user->editProfile($user->getValue('usr_id')) == false && $g_current_user->getProperty('CITY', 'usf_hidden') == 1))
+	                                                            || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $gCurrentUser->getProperty('CITY', 'usf_hidden') == 1))
 	                                                            {
 	                                                                $address   .= '</div>';
 	                                                            }
                                                             }
 
                                                             if(strlen($user->getValue('CITY')) > 0
-                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('CITY', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('CITY', 'usf_hidden') == 0))
                                                             {
                                                             	// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
 	                                                            if(strlen($user->getValue('POSTCODE')) == 0
-	                                                            || ($g_current_user->editProfile($user->getValue('usr_id')) == false && $g_current_user->getProperty('POSTCODE', 'usf_hidden') == 1))
+	                                                            || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $gCurrentUser->getProperty('POSTCODE', 'usf_hidden') == 1))
 	                                                            {
 	                                                                $address   .= '<div>';
 	                                                            }
@@ -363,7 +363,7 @@ echo '
                                                             }
 
                                                             if(strlen($user->getValue('COUNTRY')) > 0
-                                                            && ($g_current_user->editProfile($user->getValue('usr_id')) == true || $g_current_user->getProperty('COUNTRY', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('COUNTRY', 'usf_hidden') == 0))
                                                             {
 																$country    = $user->getValue('COUNTRY');
                                                                 $address   .= '<div>'.$country. '</div>';
@@ -373,19 +373,19 @@ echo '
 
                                                             echo $address;
 
-                                                            if($g_preferences['profile_show_map_link'])
+                                                            if($gPreferences['profile_show_map_link'])
                                                             {
                                                                 // Button mit Karte anzeigen
                                                                 echo '<span class="iconTextLink">
                                                                     <a href="'. $map_url. '" target="_blank"><img
-                                                                        src="'. THEME_PATH. '/icons/map.png" alt="'.$g_l10n->get('SYS_MAP').'" /></a>
-                                                                    <a href="'. $map_url. '" target="_blank">'.$g_l10n->get('SYS_MAP').'</a>
+                                                                        src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_MAP').'" /></a>
+                                                                    <a href="'. $map_url. '" target="_blank">'.$gL10n->get('SYS_MAP').'</a>
                                                                 </span>';
 
-                                                                if($g_current_user->getValue('usr_id') != $user->getValue('usr_id'))
+                                                                if($gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
                                                                 {
                                                                     // Link fuer die Routenplanung
-                                                                    echo ' - <a href="'.$route_url.'" target="_blank">'.$g_l10n->get('SYS_SHOW_ROUTE').'</a>';
+                                                                    echo ' - <a href="'.$route_url.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                                                 }
                                                             }
                                                         echo '</dd>
@@ -417,24 +417,24 @@ echo '
                         <table width="100%" summary="Profilfoto" border="0" style="border:0px;" cellpadding="0" cellspacing="0" rules="none">
                             <tr>
                                 <td>
-                                	<img id="profile_picture" src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$g_l10n->get('PRO_CURRENT_PICTURE').'" />
+                                	<img id="profile_picture" src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />
                                 </td>
                             </tr>';
                              // Nur berechtigte User duerfen das Profilfoto editieren
-                            if($g_current_user->editProfile($user->getValue('usr_id')) == true)
+                            if($gCurrentUser->editProfile($user->getValue('usr_id')) == true)
                             {
                                 echo '
                                 <tr>
                                     <td align="center">
                                         <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
-                                            src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$g_l10n->get('PRO_CHANGE_PROFILE_PICTURE').'" title="'.$g_l10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /></a>';
+                                            src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /></a>';
                                     //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
-                                    if((strlen($user->getValue('usr_photo')) > 0 && $g_preferences['profile_photo_storage'] == 0)
-                                    	|| file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $g_preferences['profile_photo_storage'] == 1 )
+                                    if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
+                                    	|| file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
                                     {
                                         echo '<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
                                             '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
-                                            alt="'.$g_l10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$g_l10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>';
+                                            alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>';
                                     }
                                 echo '</td>
                                 </tr>';
@@ -457,8 +457,8 @@ echo '
             // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
             // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
             if($field->getValue('cat_name_intern') != 'MASTER_DATA'
-            && (  $g_current_user->editProfile($user->getValue('usr_id')) == true
-               || ($g_current_user->editProfile($user->getValue('usr_id')) == false && $field->getValue('usf_hidden') == 0 )))
+            && (  $gCurrentUser->editProfile($user->getValue('usr_id')) == true
+               || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $field->getValue('usf_hidden') == 0 )))
             {
                 // Kategorienwechsel den Kategorienheader anzeigen
                 // Kategorie 'Messenger' nur anzeigen, wenn auch Daten zugeordnet sind
@@ -477,12 +477,12 @@ echo '
                         <div class="groupBoxHeadline">
                             <div style="float: left;">'.$field->getValue('cat_name').'</div>';
                             // Nur berechtigte User duerfen ein Profil editieren
-                            if($g_current_user->editProfile($user->getValue('usr_id')) == true)
+                            if($gCurrentUser->editProfile($user->getValue('usr_id')) == true)
                             {
                                 echo '
                                 <div style="text-align: right;">
                                     <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$user->getValue('usr_id').'#cat-'.$field->getValue('cat_id').'"><img
-                                        src="'.THEME_PATH.'/icons/edit.png" alt="'.$g_l10n->get('SYS_EDIT_VAR',$field->getValue('cat_name')).'" title="'.$g_l10n->get('SYS_EDIT_VAR',$field->getValue('cat_name')).'" /></a>
+                                        src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT_VAR',$field->getValue('cat_name')).'" title="'.$gL10n->get('SYS_EDIT_VAR',$field->getValue('cat_name')).'" /></a>
                                 </div>';
                             }
                         echo '</div>
@@ -506,7 +506,7 @@ echo '
             echo '</ul></div></div>';
         }
 
-        if($g_preferences['profile_show_roles'] == 1)
+        if($gPreferences['profile_show_roles'] == 1)
         {
             // *******************************************************************************
             // Berechtigungen-Block
@@ -529,14 +529,14 @@ echo '
                            AND mem_usr_id = '.$user->getValue('usr_id').'
                            AND rol_valid  = 1
                            AND rol_cat_id = cat_id
-                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                                OR cat_org_id IS NULL )
                            AND '.$authorization_db_name.' = 1
                          ORDER BY cat_org_id, cat_sequence, rol_name';
-                $result_role = $g_db->query($sql);
+                $result_role = $gDb->query($sql);
                 $berechtigungs_Herkunft[$authorization_db_name] = NULL;
 
-                while($row = $g_db->fetch_array($result_role))
+                while($row = $gDb->fetch_array($result_role))
                 {
                     $berechtigungs_Herkunft[$authorization_db_name] = $berechtigungs_Herkunft[$authorization_db_name].', '.$row['rol_name'];
                 }
@@ -544,77 +544,77 @@ echo '
 
             echo '<div class="groupBox" id="profile_authorizations_box">
                      <div class="groupBoxHeadline">
-                        <div style="float: left;">'.$g_l10n->get('SYS_AUTHORIZATION').'&nbsp;</div>
+                        <div style="float: left;">'.$gL10n->get('SYS_AUTHORIZATION').'&nbsp;</div>
                      </div>
                      <div class="groupBoxBody" onmouseout="profileJS.deleteShowInfo()">';
             //checkRolesRight($right)
               if($user->checkRolesRight('rol_assign_roles') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_assign_roles'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$g_l10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" title="'.$gL10n->get('ROL_RIGHT_ASSIGN_ROLES').'" />';
               }
               if($user->checkRolesRight('rol_approve_users') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_approve_users'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/new_registrations.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$g_l10n->get('ROL_RIGHT_APPROVE_USERS').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" title="'.$gL10n->get('ROL_RIGHT_APPROVE_USERS').'" />';
               }
               if($user->checkRolesRight('rol_edit_user') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_edit_user'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/group.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$g_l10n->get('ROL_RIGHT_EDIT_USER').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" title="'.$gL10n->get('ROL_RIGHT_EDIT_USER').'" />';
               }
 
               if($user->checkRolesRight('rol_mail_to_all') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_mail_to_all'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/email.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$g_l10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" title="'.$gL10n->get('ROL_RIGHT_MAIL_TO_ALL').'" />';
               }
               if($user->checkRolesRight('rol_profile') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_profile'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/profile.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_PROFILE').'" title="'.$g_l10n->get('ROL_RIGHT_PROFILE').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_PROFILE').'" title="'.$gL10n->get('ROL_RIGHT_PROFILE').'" />';
               }
-              if($user->checkRolesRight('rol_announcements') == 1 && $g_preferences['enable_announcements_module'] > 0)
+              if($user->checkRolesRight('rol_announcements') == 1 && $gPreferences['enable_announcements_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_announcements'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/announcements.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$g_l10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" title="'.$gL10n->get('ROL_RIGHT_ANNOUNCEMENTS').'" />';
               }
-              if($user->checkRolesRight('rol_dates') == 1 && $g_preferences['enable_dates_module'] > 0)
+              if($user->checkRolesRight('rol_dates') == 1 && $gPreferences['enable_dates_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_dates'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/dates.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_DATES').'" title="'.$g_l10n->get('ROL_RIGHT_DATES').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_DATES').'" title="'.$gL10n->get('ROL_RIGHT_DATES').'" />';
               }
-              if($user->checkRolesRight('rol_photo') == 1 && $g_preferences['enable_photo_module'] > 0)
+              if($user->checkRolesRight('rol_photo') == 1 && $gPreferences['enable_photo_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_photo'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/photo.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_PHOTO').'" title="'.$g_l10n->get('ROL_RIGHT_PHOTO').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_PHOTO').'" title="'.$gL10n->get('ROL_RIGHT_PHOTO').'" />';
               }
-              if($user->checkRolesRight('rol_download') == 1 && $g_preferences['enable_download_module'] > 0)
+              if($user->checkRolesRight('rol_download') == 1 && $gPreferences['enable_download_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_download'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/download.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$g_l10n->get('ROL_RIGHT_DOWNLOAD').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" title="'.$gL10n->get('ROL_RIGHT_DOWNLOAD').'" />';
               }
-              if($user->checkRolesRight('rol_guestbook') == 1 && $g_preferences['enable_guestbook_module'] > 0)
+              if($user->checkRolesRight('rol_guestbook') == 1 && $gPreferences['enable_guestbook_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/guestbook.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK').'" />';
               }
-              if($user->checkRolesRight('rol_guestbook_comments') == 1 && $g_preferences['enable_guestbook_module'] > 0)
+              if($user->checkRolesRight('rol_guestbook_comments') == 1 && $gPreferences['enable_guestbook_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/comments.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$g_l10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />';
               }
-              if($user->checkRolesRight('rol_weblinks') == 1 && $g_preferences['enable_weblinks_module'] > 0)
+              if($user->checkRolesRight('rol_weblinks') == 1 && $gPreferences['enable_weblinks_module'] > 0)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_weblinks'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/weblinks.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$g_l10n->get('ROL_RIGHT_WEBLINKS').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" title="'.$gL10n->get('ROL_RIGHT_WEBLINKS').'" />';
               }
               if($user->checkRolesRight('rol_all_lists_view') == 1)
               {
                   echo '<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_all_lists_view'],2).'\')" class="iconInformation" src="'.THEME_PATH.'/icons/lists.png"
-                  alt="'.$g_l10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$g_l10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />';
+                  alt="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" title="'.$gL10n->get('ROL_RIGHT_ALL_LISTS_VIEW').'" />';
               }
-              echo '</div><div><p id="anzeige">'.$g_l10n->get('SYS_SET_BY').':</p></div>
+              echo '</div><div><p id="anzeige">'.$gL10n->get('SYS_SET_BY').':</p></div>
               </div>';
 
             // *******************************************************************************
@@ -623,16 +623,16 @@ echo '
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
             $count_show_roles = 0;
-            $result_role = getRolesFromDatabase($g_db,$user->getValue('usr_id'),$g_current_organization);
-            $count_role  = $g_db->num_rows($result_role);
+            $result_role = getRolesFromDatabase($gDb,$user->getValue('usr_id'),$gCurrentOrganization);
+            $count_role  = $gDb->num_rows($result_role);
 
             //Ausgabe
             echo '<div class="groupBox" id="profile_roles_box">
                 <div class="groupBoxHeadline">
-                    <div style="float: left;">'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS').'&nbsp;</div>';
+                    <div style="float: left;">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'&nbsp;</div>';
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                        if(($g_current_user->assignRoles() || isGroupLeader($g_current_user->getValue('usr_id')))
-                        && $user->getValue('usr_reg_org_shortname') != $g_current_organization->getValue('org_shortname'))
+                        if(($gCurrentUser->assignRoles() || isGroupLeader($gCurrentUser->getValue('usr_id')))
+                        && $user->getValue('usr_reg_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
                         {
                             echo '
                             <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
@@ -641,19 +641,19 @@ echo '
                                     calPopup.setCssPrefix("calendar");
                             </script>
                             <div style="text-align: right;">
-                                <a rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$user->getValue('usr_id').'&amp;inline=1" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'">
-                                    <img src="'.THEME_PATH.'/icons/edit.png" title="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$g_l10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />
+                                <a rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$user->getValue('usr_id').'&amp;inline=1" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'">
+                                    <img src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />
                                 </a>
                             </div>';
                         }
                 echo '</div>
                     <div id="profile_roles_box_body" class="groupBoxBody">
-                        '.getRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false,$g_l10n).'
+                        '.getRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,false,$gL10n).'
                     </div>
                 </div>';
         }
 
-        if($g_preferences['profile_show_former_roles'] == 1)
+        if($gPreferences['profile_show_former_roles'] == 1)
         {
             // *******************************************************************************
             // Ehemalige Rollen Block
@@ -662,8 +662,8 @@ echo '
             // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
 
             $count_show_roles = 0;
-            $result_role = getFormerRolesFromDatabase($g_db,$user->getValue('usr_id'),$g_current_organization);
-            $count_role  = $g_db->num_rows($result_role);
+            $result_role = getFormerRolesFromDatabase($gDb,$user->getValue('usr_id'),$gCurrentOrganization);
+            $count_role  = $gDb->num_rows($result_role);
             $visible     = "";
 
             if($count_role == 0)
@@ -675,18 +675,18 @@ echo '
                 echo '<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>';	
             }
             echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
-                  <div class="groupBoxHeadline">'.$g_l10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'&nbsp;</div>
+                  <div class="groupBoxHeadline">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'&nbsp;</div>
                     <div id="profile_former_roles_box_body" class="groupBoxBody">
-                    '.getFormerRoleMemberships($g_db,$g_current_user,$user,$result_role,$count_role,false,$g_l10n).'
+                    '.getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,false,$gL10n).'
                     </div>
                   </div>';
 
             
         }
 
-        if($g_preferences['profile_show_extern_roles'] == 1
-        && (  $g_current_organization->getValue('org_org_id_parent') > 0
-           || $g_current_organization->hasChildOrganizations() ))
+        if($gPreferences['profile_show_extern_roles'] == 1
+        && (  $gCurrentOrganization->getValue('org_org_id_parent') > 0
+           || $gCurrentOrganization->hasChildOrganizations() ))
         {
             // *******************************************************************************
             // Rollen-Block anderer Organisationen
@@ -703,17 +703,17 @@ echo '
                        AND rol_this_list_view = 2
                        AND rol_cat_id = cat_id
                        AND cat_org_id = org_id
-                       AND org_id    <> '. $g_current_organization->getValue('org_id'). '
+                       AND org_id    <> '. $gCurrentOrganization->getValue('org_id'). '
                      ORDER BY org_shortname, cat_sequence, rol_name';
-            $result_role = $g_db->query($sql);
+            $result_role = $gDb->query($sql);
 
-            if($g_db->num_rows($result_role) > 0)
+            if($gDb->num_rows($result_role) > 0)
             {
                 echo '<div class="groupBox" id="profile_roles_box_other_orga">
-                    <div class="groupBoxHeadline">'.$g_l10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'&nbsp;</div>
+                    <div class="groupBoxHeadline">'.$gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'&nbsp;</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">';
-                            while($row = $g_db->fetch_array($result_role))
+                            while($row = $gDb->fetch_array($result_role))
                             {
                                 $startDate = new DateTimeExtended($row['mem_begin'], 'Y-m-d', 'date');
                                 // jede einzelne Rolle anzeigen
@@ -725,11 +725,11 @@ echo '
                                                 $row['cat_name']. ' - '. $row['rol_name'];
                                                 if($row['mem_leader'] == 1)
                                                 {
-                                                    echo ' - '.$g_l10n->get('SYS_LEADER');
+                                                    echo ' - '.$gL10n->get('SYS_LEADER');
                                                 }
                                             echo '&nbsp;
                                         </dt>
-                                        <dd>'.$g_l10n->get('SYS_SINCE',$startDate->format($g_preferences['system_date'])).'</dd>
+                                        <dd>'.$gL10n->get('SYS_SINCE',$startDate->format($gPreferences['system_date'])).'</dd>
                                     </dl>
                                 </li>';
                             }
@@ -741,27 +741,27 @@ echo '
 
         // Infos der Benutzer, die diesen DS erstellt und geaendert haben
         echo '<div class="editInformation">';
-            $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
-            echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
+            $user_create = new User($gDb, $gUserFields, $user->getValue('usr_usr_id_create'));
+            echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
 
             if($user->getValue('usr_usr_id_change') > 0)
             {
-                $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
-                echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
+                $user_change = new User($gDb, $gUserFields, $user->getValue('usr_usr_id_change'));
+                echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
             }
         echo '</div>    
     </div>
 </div>';
 
-if($user->getValue('usr_id') != $g_current_user->getValue('usr_id'))
+if($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id'))
 {
     echo '
     <ul class="iconTextLinkList">
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'.THEME_PATH.'/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+                src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';

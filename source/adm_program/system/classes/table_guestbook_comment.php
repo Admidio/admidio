@@ -38,11 +38,11 @@ class TableGuestbookComment extends TableAccess
     // type = 'BBCODE' : Text mit BBCode-Tags
     public function getText($type = 'HTML')
     {
-        global $g_preferences;
+        global $gPreferences;
         $description = '';
 
         // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-        if($g_preferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
         {
             if(is_object($this->bbCode) == false)
             {
@@ -83,11 +83,11 @@ class TableGuestbookComment extends TableAccess
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
     public function save($updateFingerPrint = true)
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
         
         if($this->new_record)
         {
-            $this->setValue('gbc_org_id', $g_current_organization->getValue('org_id'));
+            $this->setValue('gbc_org_id', $gCurrentOrganization->getValue('org_id'));
             $this->setValue('gbc_ip_address', $_SERVER['REMOTE_ADDR']);
         }
 

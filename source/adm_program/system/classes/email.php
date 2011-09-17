@@ -14,7 +14,7 @@
  *
  * Nun wird der Absender gesetzt:
  * setSender($address, $name='')
- * Uebergaben: $address - Die Emailadresse
+ * Parameters: $address - Die Emailadresse
  *             $name    - Der Name des Absenders (optional)
  *
  * Nun koennen in beliebiger Reihenfolge und Anzahl Adressaten (To,Cc,Bcc)
@@ -25,22 +25,22 @@
  * addRecipient($address, $name='')
  * addCopy($address, $name='')
  * addBlindCopy($address, $name='')
- * Uebergaben: $address - Die Emailadresse
+ * Parameters: $address - Die Emailadresse
  *             $name    - Der Name des Absenders (optional)
  *
  * Nun noch ein Subject setzen (optional):
  * setSubject($subject)
- * Uebergaben: $subject - Der Text des Betreffs
+ * Parameters: $subject - Der Text des Betreffs
  *
  * Der Email einen Text geben:
  * function setText($text)
- * Uebergaben: $text - Der Text der Mail
+ * Parameters: $text - Der Text der Mail
  *
  * Nun kann man ein Attachment hinzufuegen:
  * (optional und mehrfach aufrufbar)
  * function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream',  
                           $file_disposition = 'attachment',$file_id = '')
- * Uebergaben: $tmp_filename     - Der Pfad und Name der Datei auf dem Server
+ * Parameters: $tmp_filename     - Der Pfad und Name der Datei auf dem Server
  *             $orig_filename    - Der Name der datei auf dem Rechner des Users
  *             $file_type        - Den Contenttype der Datei. (optional)
  *             $file_disposition - Damit kann mann festlegen ob mann das Attachment als Anhang (=> 'attachment') 
@@ -74,7 +74,7 @@ class Email
 //Konstruktor der Klasse.
 public function __construct()
 {
-    global $g_preferences;
+    global $gPreferences;
 
     //Wichtig ist das die MimeVersion das erste Element im Header ist...
     $this->headerOptions['MIME-Version'] = '1.0';
@@ -83,8 +83,8 @@ public function __construct()
     //Dieser wird im Falle eines Attachments oder HTML spaeter ersetzt.
     $this->headerOptions['Content-Type'] = 'text/plain; charset=iso-8859-1';
 
-    $this->headerOptions['Return-Path'] = $g_preferences['email_administrator'];
-    $this->headerOptions['Sender']      = $g_preferences['email_administrator'];
+    $this->headerOptions['Return-Path'] = $gPreferences['email_administrator'];
+    $this->headerOptions['Sender']      = $gPreferences['email_administrator'];
 
     $this->mailBoundary        = '--NextPart_AdmidioMailSystem_'. md5(uniqid(rand()));
     $this->mailBoundaryRelated = $this->mailBoundary;
@@ -101,16 +101,16 @@ public function __construct()
 // Funktion um den Absender zu setzen
 public function setSender($address, $name='')
 {
-    global $g_preferences;
+    global $gPreferences;
     $address = admStrToLower($address);
     
     if (strValidCharacters($address, 'email'))
     {
         //Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
-        if($g_preferences['mail_sendmail_address'] != '' && $address != $g_preferences['email_administrator'])
+        if($gPreferences['mail_sendmail_address'] != '' && $address != $gPreferences['email_administrator'])
         {
             //hier wird die Absenderadresse gesetzt
-            $this->headerOptions['From'] = " <". $g_preferences['mail_sendmail_address']. ">";    
+            $this->headerOptions['From'] = " <". $gPreferences['mail_sendmail_address']. ">";    
             //wenn der Empfänger dann auf anworten klickt soll die natürlich an den wirklichen Absender gehen
             if (strlen($name) > 0)
             {
@@ -269,15 +269,15 @@ private function prepareHeader()
 // size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
 public function getMaxAttachementSize($size_unit = 'kb')
 {
-    global $g_preferences;
+    global $gPreferences;
     
-    if(round(admFuncMaxUploadSize()/pow(1024, 1), 1) < $g_preferences['max_email_attachment_size'])
+    if(round(admFuncMaxUploadSize()/pow(1024, 1), 1) < $gPreferences['max_email_attachment_size'])
     {
         $attachment_size = round(admFuncMaxUploadSize()/pow(1024, 1), 2);
     }
     else
     {
-        $attachment_size = $g_preferences['max_email_attachment_size'];
+        $attachment_size = $gPreferences['max_email_attachment_size'];
     }
     
     if($size_unit == 'mb')
@@ -391,7 +391,7 @@ private function prepareBody()
 // Funktion um die Email endgueltig zu versenden...
 public function sendEmail()
 {
-    global $g_preferences, $g_l10n;
+    global $gPreferences, $gL10n;
     
 	// Wenn keine Absenderadresse gesetzt wurde, ist hier Ende im Gelaende...
     if (!isset($this->headerOptions['From']))
@@ -440,9 +440,9 @@ public function sendEmail()
 
             $bccCounter++;
 
-            //immer wenn die Anzahl der BCCs $g_preferences['mail_bcc_count'] (Standard: 50) erreicht hat 
+            //immer wenn die Anzahl der BCCs $gPreferences['mail_bcc_count'] (Standard: 50) erreicht hat 
             // oder aber das letzte Element des Arrays erreicht ist, wird die Mail versand.
-            if ($bccCounter == $g_preferences['mail_bcc_count'] || count($this->bccArray) == $key+1)
+            if ($bccCounter == $gPreferences['mail_bcc_count'] || count($this->bccArray) == $key+1)
             {
                 // Hier wird der Header fuer die Mail aufbereitet...
                 $this->prepareHeader();
@@ -489,14 +489,14 @@ public function sendEmail()
     if ($this->copyToSender)
     {
         $this->text = "*******************************************************************\n\n". $this->text;
-        $this->text = $g_l10n->get('MAI_COPY_OF_YOUR_EMAIL').":\n". $this->text;
+        $this->text = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL').":\n". $this->text;
 
          //Falls das listRecipientsFlag gesetzt ist werden in der Kopie
          //die einzelnen Empfaenger aufgelistet:
          if ($this->listRecipients)
          {
              $this->text = $this->addresses. "\n". $this->text;
-             $this->text = $g_l10n->get('MAI_MESSAGE_WENT_TO').":\n\n". $this->text;
+             $this->text = $gL10n->get('MAI_MESSAGE_WENT_TO').":\n\n". $this->text;
          }
 
          unset($this->headerOptions['To']);
@@ -510,12 +510,12 @@ public function sendEmail()
         $this->prepareBody();
 
         //Das Subject modifizieren
-        $subject = $g_l10n->get('MAI_CARBON_COPY').': '. $subject;
+        $subject = $gL10n->get('MAI_CARBON_COPY').': '. $subject;
 
         //Empfänger
         $mailto = $this->headerOptions['From'];
     	//Wenn gesonderte Versandadresse gesetzt ist die Antwortadresse verwenden
-        if($g_preferences['mail_sendmail_address'] != '' && $mailto != $g_preferences['email_administrator'])
+        if($gPreferences['mail_sendmail_address'] != '' && $mailto != $gPreferences['email_administrator'])
         {
             $mailto = $this->headerOptions['Reply-To'];
         }

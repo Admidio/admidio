@@ -9,9 +9,9 @@ include('../adm_program/system/classes/folder.php');
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'db_scripts')-1));
 
 // Default-DB-Type ist immer MySql
-if(!isset($g_db_type))
+if(!isset($gDbType))
 {
-    $g_db_type = 'mysql';
+    $gDbType = 'mysql';
 }
 
 // Teile dieser Funktion sind von get_backtrace aus phpBB3
@@ -100,7 +100,7 @@ if($b_return == false)
 echo 'Der Ordner <strong>adm_my_files</strong> wurde kopiert<br />';
 
  // Verbindung zu Datenbank herstellen
-$db = Database::createDatabaseObject($g_db_type);
+$db = Database::createDatabaseObject($gDbType);
 $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 $filename = 'db.sql';

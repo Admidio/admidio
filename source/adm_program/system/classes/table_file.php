@@ -34,13 +34,13 @@ class TableFile extends TableAccess
     // File mit der uebergebenen ID aus der Datenbank auslesen
     public function readData($file_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
 
         $sql_additional_tables .= TBL_FOLDERS;
         $sql_where_condition   .= '    fil_id     = '.$file_id.'
                                    AND fil_fol_id = fol_id
                                    AND fol_type   = \'DOWNLOAD\'
-                                   AND fol_org_id = '. $g_current_organization->getValue('org_id');
+                                   AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
         return parent::readData($file_id, $sql_where_condition, $sql_additional_tables);
     }
 
@@ -49,7 +49,7 @@ class TableFile extends TableAccess
     // Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
     public function getFileForDownload($file_id)
     {
-        global $g_current_organization, $g_current_user, $g_valid_login;
+        global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
         $this->readData($file_id);
 
@@ -59,23 +59,23 @@ class TableFile extends TableAccess
         {
 
             //Falls die Datei gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
-            if (!$g_current_user->editDownloadRight() && $this->getValue('fil_locked'))
+            if (!$gCurrentUser->editDownloadRight() && $this->getValue('fil_locked'))
             {
                 $this->clear();
             }
-            else if (!$g_valid_login && !$this->getValue('fol_public'))
+            else if (!$gValidLogin && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
             }
-            else if (!$g_current_user->editDownloadRight() && !$this->getValue('fol_public'))
+            else if (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer keine Downloadadminrechte hat, muessen die Rechte untersucht werden
                 $sql_rights = 'SELECT count(*)
                          FROM '. TBL_FOLDER_ROLES. ', '. TBL_MEMBERS. '
                         WHERE flr_fol_id = '. $this->getValue('fol_id'). '
                           AND flr_rol_id = mem_rol_id
-                          AND mem_usr_id = '. $g_current_user->getValue('usr_id'). '
+                          AND mem_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                           AND mem_begin <= \''.DATE_NOW.'\'
                           AND mem_end    > \''.DATE_NOW.'\'';
                 $result_rights = $this->db->query($sql_rights);
@@ -124,12 +124,12 @@ class TableFile extends TableAccess
     // die Funktion wird innerhalb von save() aufgerufen
     public function save($updateFingerPrint = true)
     {
-        global $g_current_organization, $g_current_user;
+        global $gCurrentOrganization, $gCurrentUser;
 
         if($this->new_record)
         {
             $this->setValue('fil_timestamp', DATETIME_NOW);
-            $this->setValue('fil_usr_id', $g_current_user->getValue('usr_id'));
+            $this->setValue('fil_usr_id', $gCurrentUser->getValue('usr_id'));
         }
         parent::save($updateFingerPrint);
     }

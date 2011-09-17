@@ -77,7 +77,7 @@ class TableUserData extends TableAccess
     // Methode formatiert bei Datumsfeldern in das eingestellte Datumsformat
     public function getValue($field_name, $format = '')
     {
-        global $g_l10n;
+        global $gL10n;
     
         $value = parent::getValue($field_name, $format);
 
@@ -107,8 +107,8 @@ class TableUserData extends TableAccess
             elseif($this->dbColumns['usf_name_intern'] == 'COUNTRY' && strlen($value) > 0)
             {
                 // beim Land die sprachabhaengige Bezeichnung auslesen
-                global $g_l10n;
-                $value = $g_l10n->getCountryByCode($value);
+                global $gL10n;
+                $value = $gL10n->getCountryByCode($value);
             }
         }
         elseif($field_name == 'usf_name')
@@ -116,7 +116,7 @@ class TableUserData extends TableAccess
             // if text is a translation-id then translate it
             if(strpos($value, '_') == 3)
 			{
-                $value = $g_l10n->get(admStrToUpper($value));
+                $value = $gL10n->get(admStrToUpper($value));
 			}
         }
 		elseif($field_name == 'usf_value_list')
@@ -148,7 +148,7 @@ class TableUserData extends TableAccess
  						    // if text is a translation-id then translate it
  						    if(strpos($listValueText, '_') == 3)
  						    {
-                                $listValueText = $g_l10n->get(admStrToUpper($listValueText));
+                                $listValueText = $gL10n->get(admStrToUpper($listValueText));
  						    }
 
                             // create html for optionbox entry
@@ -166,7 +166,7 @@ class TableUserData extends TableAccess
 					// if text is a translation-id then translate it
 					if(strpos($listValue, '_') == 3)
 					{
-                        $listValue = $g_l10n->get(admStrToUpper($listValue));
+                        $listValue = $gL10n->get(admStrToUpper($listValue));
 					}
 				}
 				$value = $arrListValues;
@@ -183,9 +183,9 @@ class TableUserData extends TableAccess
     }
 
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    public function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value, $check_value = true)
     {
-        global $g_preferences;
+        global $gPreferences;
 
         if($field_name == 'usd_value' && strlen($field_value) > 0)
         {
@@ -200,7 +200,7 @@ class TableUserData extends TableAccess
             elseif($this->dbColumns['usf_type'] == 'DATE')
             {
                 // Datum muss gueltig sein und formatiert werden
-                $date = new DateTimeExtended($field_value, $g_preferences['system_date'], 'date');
+                $date = new DateTimeExtended($field_value, $gPreferences['system_date'], 'date');
                 if($date->valid() == false)
                 {
                     if($this->noValueCheck != true)

@@ -12,14 +12,14 @@ require('../../system/common.php');
 require('../../system/login_valid.php');
 
 // nur berechtigte User duerfen User importieren
-if(!$g_current_user->editUsers())
+if(!$gCurrentUser->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 if(count($_SESSION['file_lines']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_FILE_NOT_EXIST'));
+    $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
 }
 
 // feststellen, welches Trennzeichen in der Datei verwendet wurde
@@ -54,8 +54,8 @@ else
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $g_l10n->get('MEM_ASSIGN_FIELDS');
-$g_layout['header'] = '
+$gLayout['title']  = $gL10n->get('MEM_ASSIGN_FIELDS');
+$gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
@@ -68,18 +68,18 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '
 <form action="'. $g_root_path. '/adm_program/administration/members/import_csv.php" method="post">
 <div class="formLayout" id="import_csv_form">
-    <div class="formHead">'.$g_layout['title'].'</div>
-    <div class="formBody"><p>'.$g_l10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>
+    <div class="formHead">'.$gLayout['title'].'</div>
+    <div class="formBody"><p>'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>
         <p style="margin-bottom: 10px;">
             <input type="checkbox" id="first_row" name="first_row" style="vertical-align: middle;" checked="checked" value="1" />&nbsp;
-            <label for="first_row">'.$g_l10n->get('MEM_FIRST_LINE_COLUMN_NAME').'</label>
+            <label for="first_row">'.$gL10n->get('MEM_FIRST_LINE_COLUMN_NAME').'</label>
         </p>
 
         <table class="tableList" style="width: 80%;" cellspacing="0">
             <thead>
                 <tr>
-                    <th>'.$g_l10n->get('MEM_PROFILE_FIELD').'</th>
-                    <th>'.$g_l10n->get('MEM_FILE_COLUMN').'</th>
+                    <th>'.$gL10n->get('MEM_PROFILE_FIELD').'</th>
+                    <th>'.$gL10n->get('MEM_FILE_COLUMN').'</th>
                 </tr>
             </thead>';
 
@@ -89,7 +89,7 @@ echo '
 
             // jedes Benutzerfeld aus der Datenbank auflisten
             
-            foreach($g_current_user->userFieldData as $field)
+            foreach($gCurrentUser->userFieldData as $field)
             {
                 if($category != $field->getValue('cat_id'))
                 {
@@ -101,8 +101,8 @@ echo '
                     echo '<tbody>
                         <tr>
                             <td class="tableSubHeader" colspan="4">
-                                <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img 
-                                id="'. $block_id. 'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'. $field->getValue('cat_name'). '
+                                <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img 
+                                id="'. $block_id. 'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'. $field->getValue('cat_name'). '
                             </td>
                         </tr>
                     </tbody>
@@ -126,7 +126,7 @@ echo '
                         // Nachname und Vorname als Pflichtfelder kennzeichnen
                         if($field->getValue('usf_mandatory') == 1)
                         {
-                            echo '&nbsp;<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+                            echo '&nbsp;<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         }
                     echo '</td>
                 </tr>';
@@ -135,9 +135,9 @@ echo '
         </table>
 
         <div class="formSubmit">
-            <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" />&nbsp;'.$g_l10n->get('SYS_BACK').'</button>
+            <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnForward" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$g_l10n->get('MEM_IMPORT').'" />&nbsp;'.$g_l10n->get('MEM_IMPORT').'</button>
+            <button id="btnForward" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('MEM_IMPORT').'" />&nbsp;'.$gL10n->get('MEM_IMPORT').'</button>
         </div>
     </div>
 </div>

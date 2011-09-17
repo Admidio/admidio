@@ -60,16 +60,16 @@ class TableMembers extends TableAccess
     // Speichert die Mitgliedschaft und aktualisiert das
     public function save($updateFingerPrint = true)
     {
-        global $g_current_session;
+        global $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
         
         parent::save($updateFingerPrint);
         
-        if($fields_changed && is_object($g_current_session))
+        if($fields_changed && is_object($gCurrentSession))
         {
             // einlesen des entsprechenden Userobjekts, da Aenderungen 
             // bei den Rollen vorgenommen wurden 
-            $g_current_session->renewUserObject($this->getValue('mem_usr_id'));
+            $gCurrentSession->renewUserObject($this->getValue('mem_usr_id'));
         }
     } 
     

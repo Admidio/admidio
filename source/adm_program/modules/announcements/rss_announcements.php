@@ -10,7 +10,7 @@
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * headline  - Ueberschrift fuer den RSS-Feed
  *             (Default) Ankuendigungen
@@ -22,31 +22,31 @@ require_once('../../system/classes/rss.php');
 require_once('../../system/classes/table_announcement.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
-if ($g_preferences['enable_rss'] != 1)
+if ($gPreferences['enable_rss'] != 1)
 {
-    $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_RSS_DISABLED'));
+    $gMessage->setForwardUrl($gHomepage);
+    $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
 }
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if ($g_preferences['enable_announcements_module'] != 1)
+if ($gPreferences['enable_announcements_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
+// Initialize and check the parameters
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
-$arr_ref_orgas = $g_current_organization->getReferenceOrganizations(true, true);
+$arr_ref_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
 
 foreach($arr_ref_orgas as $key => $value)
 {
 	$organizations = $organizations. '\''.$value.'\',';
 }
-$organizations = $organizations. '\''. $g_current_organization->getValue('org_shortname'). '\'';
+$organizations = $organizations. '\''. $gCurrentOrganization->getValue('org_shortname'). '\'';
 
 // die neuesten 10 Ankuendigungen aus der DB fischen...
 $sql = 'SELECT ann.*, 
@@ -55,31 +55,31 @@ $sql = 'SELECT ann.*,
           FROM '. TBL_ANNOUNCEMENTS. ' ann
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = ann_usr_id_create
-           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+           AND cre_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = ann_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
+           AND cre_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = ann_usr_id_change
-           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+           AND cha_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = ann_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
-         WHERE (  ann_org_shortname = \''. $g_current_organization->getValue('org_shortname').'\'
+           AND cha_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
+         WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname').'\'
                OR ( ann_global = 1 AND ann_org_shortname IN ('.$organizations.') ))
          ORDER BY ann_timestamp_create DESC
          LIMIT 10 ';
-$result = $g_db->query($sql);
+$result = $gDb->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '. $getHeadline, 
-		$g_l10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $g_current_organization->getValue('org_longname')));
-$announcement = new TableAnnouncement($g_db);
+$rss = new RSSfeed('http://'. $gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline, 
+		$gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
+$announcement = new TableAnnouncement($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $g_db->fetch_object($result))
+while ($row = $gDb->fetch_object($result))
 {
     // ausgelesene Ankuendigungsdaten in Announcement-Objekt schieben
     $announcement->clear();
@@ -92,14 +92,14 @@ while ($row = $g_db->fetch_object($result))
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $announcement->getValue('ann_description').
-                   '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
+                   '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $announcement->getValue('ann_timestamp_create')). '</i>';
+    $description = $description. '<br /><br /><i>'.$gL10n->get('SYS_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $announcement->getValue('ann_timestamp_create')). '</i>';
 
     if($row->ann_usr_id_change > 0)
     {
-		$description = $description. '<br /><i>'.$g_l10n->get('SYS_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $announcement->getValue('ann_timestamp_change')). '</i>';
+		$description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $announcement->getValue('ann_timestamp_change')). '</i>';
     }
                 
     $pubDate = date('r',strtotime($announcement->getValue('ann_timestamp_create')));

@@ -29,7 +29,7 @@ require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_date.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
-$g_l10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
 // falls nicht, hier noch mal die Default-Werte setzen
@@ -79,21 +79,21 @@ $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->setCurrentDB();
+$gDb->setCurrentDB();
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $plg_organizations = '';
-$plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
+$plg_arr_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
 
 foreach($plg_arr_orgas as $key => $value)
 {
 	$plg_organizations = $plg_organizations. $key. ', ';
 }
-$plg_organizations = $plg_organizations. $g_current_organization->getValue('org_id');
+$plg_organizations = $plg_organizations. $gCurrentOrganization->getValue('org_id');
 
 // Wenn User nicht eingeloggt ist, Kalender, die hidden sind, aussortieren
 $hidden = '';
-if ($g_valid_login == false)
+if ($gValidLogin == false)
 {
 	$hidden = ' AND cat_hidden = 0 ';
 }
@@ -102,7 +102,7 @@ if ($g_valid_login == false)
 if(in_array('all',$plg_kal_cat))
 {
 	// alle Kalender anzeigen
-    $sql_syntax = ' AND (cat_org_id = '. $g_current_organization->getValue('org_id'). '
+    $sql_syntax = ' AND (cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                      OR (   dat_global  = 1
                         AND cat_org_id IN ('.$plg_organizations.') ) ) ';
 }
@@ -126,38 +126,38 @@ $sql    = 'SELECT * FROM '. TBL_DATES. ', '. TBL_CATEGORIES. '
                   $sql_syntax. $hidden. $login_sql.'
 			ORDER BY dat_begin ASC
 			LIMIT '.$plg_dates_count;
-$plg_result = $g_db->query($sql);
-$plg_date = new TableDate($g_db);
+$plg_result = $gDb->query($sql);
+$plg_date = new TableDate($gDb);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$g_l10n->get('DAT_DATES').'</h3></div>
+<div class="admPluginHeader"><h3>'.$gL10n->get('DAT_DATES').'</h3></div>
 <div class="admPluginBody">';
 
-if($g_db->num_rows($plg_result) > 0)
+if($gDb->num_rows($plg_result) > 0)
 {
-    while($plg_row = $g_db->fetch_object($plg_result))
+    while($plg_row = $gDb->fetch_object($plg_result))
     {
         $plg_date->clear();
         $plg_date->setArray($plg_row);
         $plg_html_end_date = '';
 
-        echo $plg_date->getValue('dat_begin', $g_preferences['system_date']). '&nbsp;&nbsp;';
+        echo $plg_date->getValue('dat_begin', $gPreferences['system_date']). '&nbsp;&nbsp;';
 
         if ($plg_date->getValue('dat_all_day') != 1)
         {
-            echo $plg_date->getValue('dat_begin', $g_preferences['system_time']);
+            echo $plg_date->getValue('dat_begin', $gPreferences['system_time']);
         }
 
         // Bis-Datum und Uhrzeit anzeigen
         if($plg_show_date_end)
         {
-            if($plg_date->getValue('dat_begin', $g_preferences['system_date']) != $plg_date->getValue('dat_end', $g_preferences['system_date']))
+            if($plg_date->getValue('dat_begin', $gPreferences['system_date']) != $plg_date->getValue('dat_end', $gPreferences['system_date']))
             {
-                $plg_html_end_date .= $plg_date->getValue('dat_end', $g_preferences['system_date']);
+                $plg_html_end_date .= $plg_date->getValue('dat_end', $gPreferences['system_date']);
             }
             if ($plg_date->getValue('dat_all_day') != 1)
             {
-                $plg_html_end_date .= ' '. $plg_date->getValue('dat_end', $g_preferences['system_time']);
+                $plg_html_end_date .= ' '. $plg_date->getValue('dat_end', $gPreferences['system_time']);
             }
             if(strlen($plg_html_end_date) > 0)
             {
@@ -197,11 +197,11 @@ if($g_db->num_rows($plg_result) > 0)
     }
 
     // WEiterleitung über $plg_link_url ohne weiteren Übergabeparameter
-    echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$g_l10n->get('PLG_DATES_ALL_EVENTS').'</a>';
+    echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
 }
 else
 {
-    echo $g_l10n->get('SYS_NO_ENTRIES');
+    echo $gL10n->get('SYS_NO_ENTRIES');
 }
 
 echo '</div></div>';

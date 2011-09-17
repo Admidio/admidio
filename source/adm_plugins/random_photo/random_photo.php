@@ -59,7 +59,7 @@ if(isset($plg_headline))
 }
 else
 {
-    $plg_headline = $g_l10n->get('PHO_PHOTOS');
+    $plg_headline = $gL10n->get('PHO_PHOTOS');
 }
 
 if(!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width))
@@ -85,17 +85,17 @@ if(!isset($plg_photos_show_link))
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->setCurrentDB();
+$gDb->setCurrentDB();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$g_l10n->get('SYS_PHOTOS').'</h3></div>
+<div class="admPluginHeader"><h3>'.$gL10n->get('SYS_PHOTOS').'</h3></div>
 <div class="admPluginBody">';
 
 // Fotoalben Aufrufen
 // Bedingungen: freigegeben,Anzahllimit, Bilder enthalten 
 $sql='      SELECT *
             FROM '. TBL_PHOTOS. '
-            WHERE pho_org_shortname = \''.$g_organization.'\' 
+            WHERE pho_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\' 
             AND pho_locked = 0
             AND pho_quantity > 0
             ORDER BY pho_begin DESC';
@@ -106,23 +106,23 @@ if($plg_photos_albums != 0)
     $sql = $sql.' LIMIT '.$plg_photos_albums;
 }
 
-$result = $g_db->query($sql);
+$result = $gDb->query($sql);
 
 // Variablen initialisieren
 $i         = 0;
 $picnr     = 0;
 $picpath   = '';
 $link_text = '';
-$album = new TablePhotos($g_db);
+$album = new TablePhotos($gDb);
 
 // Schleife, falls nicht direkt ein Bild gefunden wird, aber auf 20 Durchlaeufe begrenzen
-while(!file_exists($picpath) && $i < 20 && $g_db->num_rows($result) > 0)
+while(!file_exists($picpath) && $i < 20 && $gDb->num_rows($result) > 0)
 {
     //Zeiger per Zufall auf ein Album setzen
-    $g_db->data_seek($result, mt_rand(0, $g_db->num_rows($result)-1));
+    $gDb->data_seek($result, mt_rand(0, $gDb->num_rows($result)-1));
     
     //Ausgewähltendatendatz holen
-    $album->setArray($g_db->fetch_array($result));
+    $album->setArray($gDb->fetch_array($result));
     
     //Falls gewuensch Bild per Zufall auswaehlen
     if($plg_photos_picnr ==0)
@@ -148,8 +148,8 @@ if(!file_exists($picpath))
 $bildgroesse = getimagesize($picpath);
 
 //Popupfenstergröße
-$popup_height = $g_preferences['photo_show_height']+210;
-$popup_width  = $g_preferences['photo_show_width']+70;
+$popup_height = $gPreferences['photo_show_height']+210;
+$popup_width  = $gPreferences['photo_show_width']+70;
 
 if($plg_photos_show_link && $plg_max_char_per_word > 0)
 {

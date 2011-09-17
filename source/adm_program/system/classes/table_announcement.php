@@ -36,16 +36,16 @@ class TableAnnouncement extends TableAccess
     // prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
     public function editRight()
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
         
         // Ankuendigung der eigenen Orga darf bearbeitet werden
-        if($this->getValue('ann_org_shortname') == $g_current_organization->getValue('org_shortname'))
+        if($this->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
         {
             return true;
         }
         // Ankuendigung von Kinder-Orgas darf bearbeitet werden, wenn diese als global definiert wurden
         elseif($this->getValue('ann_global') == true
-        && $g_current_organization->isChildOrganization($this->getValue('ann_org_shortname')))
+        && $gCurrentOrganization->isChildOrganization($this->getValue('ann_org_shortname')))
         {
             return true;
         }
@@ -70,11 +70,11 @@ class TableAnnouncement extends TableAccess
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
     public function save($updateFingerPrint = true)
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
         
         if($this->new_record)
         {
-            $this->setValue('ann_org_shortname', $g_current_organization->getValue('org_shortname'));
+            $this->setValue('ann_org_shortname', $gCurrentOrganization->getValue('org_shortname'));
         }
 
         parent::save($updateFingerPrint);

@@ -17,7 +17,7 @@ require_once('../../system/login_valid.php');
 require_once('backup.functions.php');
 
 // Some Defines
-define('ADMIN_EMAIL', $g_preferences['email_administrator']); // eg: admin@example.com
+define('ADMIN_EMAIL', $gPreferences['email_administrator']); // eg: admin@example.com
 
 define('BACKTICKCHAR',             '`');
 define('QUOTECHAR',                '\'');
@@ -53,16 +53,16 @@ $CloseWindowOnFinish = false;
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // nur Webmaster duerfen ein Backup starten
-if($g_current_user->isWebmaster() == false)
+if($gCurrentUser->isWebmaster() == false)
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$g_layout['title'] = $g_l10n->get('BAC_DATABASE_BACKUP');
+$gLayout['title'] = $gL10n->get('BAC_DATABASE_BACKUP');
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-echo '<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>';
+echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
 
 
 error_reporting(E_ALL);
@@ -74,8 +74,8 @@ OutputInformation('', '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php"><img
-            src="'. THEME_PATH. '/icons/error.png" alt="'.$g_l10n->get('SYS_ABORT').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">'.$g_l10n->get('SYS_ABORT').'</a>
+            src="'. THEME_PATH. '/icons/error.png" alt="'.$gL10n->get('SYS_ABORT').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">'.$gL10n->get('SYS_ABORT').'</a>
         </span>
     </li>
 </ul>');
@@ -118,9 +118,9 @@ $starttime = getmicrotime();
 			((OUTPUT_COMPRESSION_TYPE == 'none')  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb')))) {
 
 			$fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION. BETA_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
-			$fileheaderline .= '-- '.$g_l10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
-			$fileheaderline .= '-- '.$g_l10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
-			$fileheaderline .= '-- '.$g_l10n->get('SYS_USER').': '.$g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME').LINE_TERMINATOR.LINE_TERMINATOR;
+			$fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
+			$fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
+			$fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME').LINE_TERMINATOR.LINE_TERMINATOR;
 			$fileheaderline .= 'SET FOREIGN_KEY_CHECKS=0;'.LINE_TERMINATOR.LINE_TERMINATOR;
 			if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
 				bzwrite($bp, $fileheaderline, strlen($fileheaderline));
@@ -142,22 +142,22 @@ $starttime = getmicrotime();
 					OutputInformation('statusinfo', 'Checking table <b>'.htmlentities($dbname.'.'.$selectedtablename).'</b>');
 					@set_time_limit(60);
 					$SQLquery = 'CHECK TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR;
-					$result = $g_db->query($SQLquery);
-					while ($row = $g_db->fetch_assoc($result)) {
+					$result = $gDb->query($SQLquery);
+					while ($row = $gDb->fetch_assoc($result)) {
 						@set_time_limit(60);
 						if ($row['Msg_text'] == 'OK') {
 
 							$SQLquery = 'OPTIMIZE TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR;
-							$g_db->query($SQLquery);
+							$gDb->query($SQLquery);
 
 						} else {
 
 							OutputInformation('statusinfo', 'Repairing table <b>'.htmlentities($selectedtablename).'</b>');
-							$SQLquery  = 'REPAIR TABLE '.BACKTICKCHAR.$g_db->escape_string($selectedtablename).BACKTICKCHAR.' EXTENDED';
-							$fixresult = $g_db->query($SQLquery);
-							$repairresult .= $SQLquery.($g_db->db_error() ? LINE_TERMINATOR.$g_db->db_error() : '').LINE_TERMINATOR;
+							$SQLquery  = 'REPAIR TABLE '.BACKTICKCHAR.$gDb->escape_string($selectedtablename).BACKTICKCHAR.' EXTENDED';
+							$fixresult = $gDb->query($SQLquery);
+							$repairresult .= $SQLquery.($gDb->db_error() ? LINE_TERMINATOR.$gDb->db_error() : '').LINE_TERMINATOR;
 							$ThisCanContinue = false;
-							while (is_resource($fixresult) && ($fixrow = $g_db->fetch_assoc($fixresult))) {
+							while (is_resource($fixresult) && ($fixrow = $gDb->fetch_assoc($fixresult))) {
 								$thisMessage = $fixrow['Msg_type'].': '.$fixrow['Msg_text'];
 								$repairresult .= $thisMessage.LINE_TERMINATOR;
 								switch ($thisMessage) {
@@ -194,7 +194,7 @@ $starttime = getmicrotime();
 			OutputInformation('', '<br><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br>');
 			$overallrows = 0;
 			foreach ($SelectedTables as $dbname => $value) {
-				$g_db->select_db($dbname);
+				$gDb->select_db($dbname);
 				echo '<table class="tableList" cellspacing="0"><tr><th colspan="'.ceil(count($SelectedTables[$dbname]) / TABLES_PER_COL).'"><b>'.htmlentities($dbname).'</b></th></tr><tr><td nowrap valign="top">';
 				$tablecounter = 0;
 				for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
@@ -203,9 +203,9 @@ $starttime = getmicrotime();
 						$tablecounter = 1;
 					}
 					$SQLquery  = 'SELECT COUNT(*) AS '.BACKTICKCHAR.'num'.BACKTICKCHAR;
-					$SQLquery .= ' FROM '.BACKTICKCHAR.$g_db->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
-					$result = $g_db->query($SQLquery);
-					$row = $g_db->fetch_assoc($result);
+					$SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+					$result = $gDb->query($SQLquery);
+					$row = $gDb->fetch_assoc($result);
 					$rows[$t] = $row['num'];
 					$overallrows += $rows[$t];
 					echo '<span id="rows_'.$dbname.'_'.$SelectedTables[$dbname][$t].'">'.htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records)</span><br>';
@@ -215,7 +215,7 @@ $starttime = getmicrotime();
 
 			$alltablesstructure = '';
 			foreach ($SelectedTables as $dbname => $value) {
-				$g_db->select_db($dbname);
+				$gDb->select_db($dbname);
 				for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
 					@set_time_limit(60);
 					OutputInformation('statusinfo', 'Creating structure for <b>'.htmlentities($dbname.'.'.$SelectedTables[$dbname][$t]).'</b>');
@@ -223,27 +223,27 @@ $starttime = getmicrotime();
 					$fieldnames = array();
 
 					$SQLquery  = 'SHOW CREATE TABLE '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-					$result_showcreatetable = $g_db->query($SQLquery);
-					if ($g_db->num_rows($result_showcreatetable) == 1) {
-						$row = $g_db->fetch_assoc($result_showcreatetable);
+					$result_showcreatetable = $gDb->query($SQLquery);
+					if ($gDb->num_rows($result_showcreatetable) == 1) {
+						$row = $gDb->fetch_assoc($result_showcreatetable);
 						$tablestructure = $row['Create Table'];
 
 						$SQLquery  = 'SHOW FULL FIELDS';
 						$SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-						$result_showfields = $g_db->query($SQLquery);
-						while ($row = $g_db->fetch_assoc($result_showfields)) {
+						$result_showfields = $gDb->query($SQLquery);
+						while ($row = $gDb->fetch_assoc($result_showfields)) {
 							if (preg_match('#^[a-z]+#i', $row['Type'], $matches)) {
 								$RowTypes[$dbname][$SelectedTables[$dbname][$t]][$row['Field']] = $matches[0];
 							}
 							$fieldnames[] = $row['Field'];
 						}
-						$g_db->free_result($result_showfields);
+						$gDb->free_result($result_showfields);
 					} else {
 						$structurelines = array();
 						$SQLquery  = 'SHOW FULL FIELDS';
-						$SQLquery .= ' FROM '.BACKTICKCHAR.$g_db->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
-						$result_showfields = $g_db->query($SQLquery);
-						while ($row = $g_db->fetch_assoc($result_showfields)) {
+						$SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+						$result_showfields = $gDb->query($SQLquery);
+						while ($row = $gDb->fetch_assoc($result_showfields)) {
 							$structureline  = BACKTICKCHAR.$row['Field'].BACKTICKCHAR;
 							$structureline .= ' '.$row['Type'];
 							if (isset($row['Collation']) && !is_null($row['Collation']) && !empty($row['Collation'])) {
@@ -286,7 +286,7 @@ $starttime = getmicrotime();
 
 							$fieldnames[] = $row['Field'];
 						}
-						$g_db->free_result($result_showfields);
+						$gDb->free_result($result_showfields);
 
 						$tablekeys    = array();
 						$uniquekeys   = array();
@@ -294,12 +294,12 @@ $starttime = getmicrotime();
 
 						$SQLquery  = 'SHOW INDEX';
 						$SQLquery .= ' FROM '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR;
-						$result_showindex = $g_db->query($SQLquery);
+						$result_showindex = $gDb->query($SQLquery);
 						$INDICES = array();
-						while ($row = $g_db->fetch_assoc($result_showindex)) {
+						while ($row = $gDb->fetch_assoc($result_showindex)) {
 							$INDICES[$row['Key_name']][$row['Seq_in_index']] = $row;
 						}
-						$g_db->free_result($result_showindex);
+						$gDb->free_result($result_showindex);
 						foreach ($INDICES as $index_name => $columndata) {
 							$structureline  = '';
 							if ($index_name == 'PRIMARY') {
@@ -329,12 +329,12 @@ $starttime = getmicrotime();
 							$structurelines[] = $structureline;
 						}
 
-						$SQLquery  = 'SHOW TABLE STATUS LIKE "'.$g_db->escape_string($SelectedTables[$dbname][$t]).'"';
-						$result_tablestatus = $g_db->query($SQLquery);
-						if (!($TableStatusRow = $g_db->fetch_assoc($result_tablestatus))) {
+						$SQLquery  = 'SHOW TABLE STATUS LIKE "'.$gDb->escape_string($SelectedTables[$dbname][$t]).'"';
+						$result_tablestatus = $gDb->query($SQLquery);
+						if (!($TableStatusRow = $gDb->fetch_assoc($result_tablestatus))) {
 							die('failed to execute "'.$SQLquery.'" on '.$dbname.'.'.$tablename);
 						}
-						$g_db->free_result($result_tablestatus);
+						$gDb->free_result($result_tablestatus);
 
 						$tablestructure  = 'CREATE TABLE '.($CreateIfNotExists ? 'IF NOT EXISTS ' : '').($dbNameInCreate ? BACKTICKCHAR.$dbname.BACKTICKCHAR.'.' : '').BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.LINE_TERMINATOR;
 						$tablestructure .= '  '.implode(','.LINE_TERMINATOR.'  ', $structurelines).LINE_TERMINATOR;
@@ -347,7 +347,7 @@ $starttime = getmicrotime();
 						}
 					}
 					$tablestructure .= ';'.LINE_TERMINATOR.LINE_TERMINATOR;
-					$g_db->free_result($result_showcreatetable);
+					$gDb->free_result($result_showcreatetable);
 
 					$alltablesstructure .= str_replace(' ,', ',', $tablestructure);
 
@@ -368,12 +368,12 @@ $starttime = getmicrotime();
 				$processedrows    = 0;
 				foreach ($SelectedTables as $dbname => $value) {
 					@set_time_limit(60);
-					$g_db->select_db($dbname);
+					$gDb->select_db($dbname);
 					for ($t = 0; $t < count($SelectedTables[$dbname]); $t++) {
 						$SQLquery  = 'SELECT *';
-						$SQLquery .= ' FROM '.BACKTICKCHAR.$g_db->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
-						$result = $g_db->query($SQLquery);
-						$rows[$t] = $g_db->num_rows($result);
+						$SQLquery .= ' FROM '.BACKTICKCHAR.$gDb->escape_string($SelectedTables[$dbname][$t]).BACKTICKCHAR;
+						$result = $gDb->query($SQLquery);
+						$rows[$t] = $gDb->num_rows($result);
 						if ($rows[$t] > 0) {
 							$tabledatadumpline = '# dumping data for '.$dbname.'.'.$SelectedTables[$dbname][$t].LINE_TERMINATOR;
 							if (OUTPUT_COMPRESSION_TYPE == 'bzip2') {
@@ -385,8 +385,8 @@ $starttime = getmicrotime();
 							}
 						}
 						unset($fieldnames);
-						for ($i = 0; $i < $g_db->num_fields($result); $i++) {
-							$fieldnames[] = $g_db->field_name($result, $i);
+						for ($i = 0; $i < $gDb->num_fields($result); $i++) {
+							$fieldnames[] = $gDb->field_name($result, $i);
 						}
 						if ($_REQUEST['StartBackup'] == 'complete') {
 							$insertstatement = ($ReplaceInto ? 'REPLACE' : 'INSERT').' INTO '.BACKTICKCHAR.$SelectedTables[$dbname][$t].BACKTICKCHAR.' ('.BACKTICKCHAR.implode(BACKTICKCHAR.', '.BACKTICKCHAR, $fieldnames).BACKTICKCHAR.') VALUES (';
@@ -395,7 +395,7 @@ $starttime = getmicrotime();
 						}
 						$currentrow       = 0;
 						$thistableinserts = '';
-						while ($row = $g_db->fetch_array($result)) {
+						while ($row = $gDb->fetch_array($result)) {
 							unset($valuevalues);
 							foreach ($fieldnames as $key => $val) {
 								if ($row[$key] === null) {
@@ -419,7 +419,7 @@ $starttime = getmicrotime();
 												}
 												$valuevalues[] = $hexstring;
 											} else {
-												$valuevalues[] = QUOTECHAR.$g_db->escape_string($data).QUOTECHAR;
+												$valuevalues[] = QUOTECHAR.$gDb->escape_string($data).QUOTECHAR;
 											}
 											break;
 
@@ -433,7 +433,7 @@ $starttime = getmicrotime();
 										case 'double':
 										case 'decimal':
 										case 'year':
-											$valuevalues[] = $g_db->escape_string($row[$key]);
+											$valuevalues[] = $gDb->escape_string($row[$key]);
 											break;
 
 										// value surrounded by quotes
@@ -450,7 +450,7 @@ $starttime = getmicrotime();
 										case 'time':
 										case 'timestamp':
 										default:
-											$valuevalues[] = QUOTECHAR.$g_db->escape_string($row[$key]).QUOTECHAR;
+											$valuevalues[] = QUOTECHAR.$gDb->escape_string($row[$key]).QUOTECHAR;
 											break;
 									}
 
@@ -483,15 +483,15 @@ $starttime = getmicrotime();
 								}
 							}
 							if (($currentrow % MYSQL_RECONNECT_INTERVAL) == 0) {
-								$g_db->close();
-								if (!@$g_db->connect(DB_HOST, DB_USER, DB_PASS)) {
-									mail(ADMIN_EMAIL, 'backupDB: FAILURE! Failed to connect to MySQL database (line '.__LINE__.')', 'Failed to reconnect to SQL database (row #'.$currentrow.') on line '.__LINE__.' in file '.@$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].LINE_TERMINATOR.$g_db->db_error());
-									die('There was a problem connecting to the database:<br>'.LINE_TERMINATOR.$g_db->db_error());
+								$gDb->close();
+								if (!@$gDb->connect(DB_HOST, DB_USER, DB_PASS)) {
+									mail(ADMIN_EMAIL, 'backupDB: FAILURE! Failed to connect to MySQL database (line '.__LINE__.')', 'Failed to reconnect to SQL database (row #'.$currentrow.') on line '.__LINE__.' in file '.@$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'].LINE_TERMINATOR.$gDb->db_error());
+									die('There was a problem connecting to the database:<br>'.LINE_TERMINATOR.$gDb->db_error());
 								}
-								$g_db->select_db($dbname);
+								$gDb->select_db($dbname);
 							}
 						}
-						$g_db->free_result($result);
+						$gDb->free_result($result);
 						if ($DHTMLenabled) {
 							OutputInformation('rows_'.$dbname.'_'.$SelectedTables[$dbname][$t], htmlentities($SelectedTables[$dbname][$t]).' ('.number_format($rows[$t]).' records, [100%])');
 							$processedrows += $rows[$t];
@@ -544,17 +544,17 @@ $starttime = getmicrotime();
 		// End original backupDB
 
 
-echo '<p>'.$g_l10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</p>
+echo '<p>'.$gL10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</p>
 
-<p>'.$g_l10n->get('BAC_BACKUP_FILE').': <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+<p>'.$gL10n->get('BAC_BACKUP_FILE').': <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</p>
 
 <ul class="iconTextLinkList">
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('BAC_BACK_TO_BACKUP_PAGE').'" title="'.$g_l10n->get('BAC_BACK_TO_BACKUP_PAGE').'"/></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('BAC_BACK_TO_BACKUP_PAGE').'</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('BAC_BACK_TO_BACKUP_PAGE').'" title="'.$gL10n->get('BAC_BACK_TO_BACKUP_PAGE').'"/></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('BAC_BACK_TO_BACKUP_PAGE').'</a>
         </span>
     </li>
 </ul>';

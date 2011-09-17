@@ -16,7 +16,7 @@ if ('login_valid.php' == basename($_SERVER['SCRIPT_FILENAME']))
     die('This page may not be called directly !');
 }
 
-if($g_valid_login == false)
+if($gValidLogin == false)
 {
     if(isset($_SESSION['login_forward_url']) == false)
     {

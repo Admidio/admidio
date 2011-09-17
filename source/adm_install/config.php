@@ -9,7 +9,7 @@
  *****************************************************************************/
 
 // Select your database system for example 'mysql' or 'postgresql'
-$g_db_type = '%DB_TYPE%';
+$gDbType = '%DB_TYPE%';
  
 // Table prefix for Admidio-Tables in database
 // Example: 'adm'

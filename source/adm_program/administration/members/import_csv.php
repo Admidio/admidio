@@ -24,19 +24,19 @@ define('USER_IMPORT_DISPLACE', '3');
 define('USER_IMPORT_COMPLETE', '4');
 
 // nur berechtigte User duerfen User importieren
-if(!$g_current_user->editUsers())
+if(!$gCurrentUser->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // Pflichtfelder prüfen
 
-foreach($g_current_user->userFieldData as $field)
+foreach($gCurrentUser->userFieldData as $field)
 {
     if($field->getValue('usf_mandatory') == 1
     && strlen($_POST['usf-'. $field->getValue('usf_id')]) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
     }
 }
 
@@ -51,15 +51,15 @@ else
 
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
 $line = reset($_SESSION['file_lines']);
-$user = new User($g_db);
-$member = new TableMembers($g_db);
+$user = new User($gDb, $gUserFields);
+$member = new TableMembers($gDb);
 $start_row    = 0;
 $count_import = 0;
 $imported_fields = array();
 $depRoles = array();
 
 // Abhängige Rollen ermitteln
-$depRoles = RoleDependency::getParentRoles($g_db,$_SESSION['rol_id']);
+$depRoles = RoleDependency::getParentRoles($gDb,$_SESSION['rol_id']);
 
 if($first_row_title == true)
 {
@@ -96,13 +96,13 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 if($field->getValue('usf_name_intern') == 'GENDER')
                 {
                     if($col_value_to_lower == 'm'
-                    || $col_value_to_lower == admStrToLower($g_l10n->get('SYS_MALE'))
+                    || $col_value_to_lower == admStrToLower($gL10n->get('SYS_MALE'))
                     || $col_value_to_lower == '1')
                     {
                         $user->setValue($field->getValue('usf_name_intern'), '1');
                     }
                     if($col_value_to_lower == 'w'
-                    || $col_value_to_lower == admStrToLower($g_l10n->get('SYS_FEMALE'))
+                    || $col_value_to_lower == admStrToLower($gL10n->get('SYS_FEMALE'))
                     || $col_value_to_lower == '2')
                     {
                         $user->setValue($field->getValue('usf_name_intern'), '2');
@@ -110,12 +110,12 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 }
                 elseif($field->getValue('usf_name_intern') == 'COUNTRY')
 				{
-					$user->setValue($field->getValue('usf_name_intern'), $g_l10n->getCountryByName($col_value));
+					$user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($col_value));
 				}
                 elseif($field->getValue('usf_type') == 'CHECKBOX')
                 {
                     if($col_value_to_lower == 'j'
-                    || $col_value_to_lower == admStrToLower($g_l10n->get('SYS_YES'))
+                    || $col_value_to_lower == admStrToLower($gL10n->get('SYS_YES'))
                     || $col_value_to_lower == 'y'
                     || $col_value_to_lower == 'yes'
                     || $col_value_to_lower == '1')
@@ -123,7 +123,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                         $user->setValue($field->getValue('usf_name_intern'), '1');
                     }
                     if($col_value_to_lower == 'n'
-                    || $col_value_to_lower == admStrToLower($g_l10n->get('SYS_NO'))
+                    || $col_value_to_lower == admStrToLower($gL10n->get('SYS_NO'))
                     || $col_value_to_lower == 'no'
                     || $col_value_to_lower  == '0'
                     || strlen($col_value) == 0)
@@ -189,11 +189,11 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                    AND first_name.usd_usf_id = '.  $user->getProperty('FIRST_NAME', 'usf_id'). '
                    AND first_name.usd_value  = \''. $user->getValue('FIRST_NAME'). '\'
                  WHERE usr_valid = 1 ';
-        $result = $g_db->query($sql);
-        $row_duplicate_user = $g_db->fetch_array($result);
+        $result = $gDb->query($sql);
+        $row_duplicate_user = $gDb->fetch_array($result);
         if($row_duplicate_user['usr_id'] > 0)
         {
-            $duplicate_user = new User($g_db, $row_duplicate_user['usr_id']);
+            $duplicate_user = new User($gDb, $gUserFields, $row_duplicate_user['usr_id']);
         }
     
         if($row_duplicate_user['usr_id'] > 0)
@@ -215,12 +215,12 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
 						if($duplicate_user->getProperty($field_name_intern, 'usf_type') == 'DATE')
 						{
 							// the date must be formated
-							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $g_preferences['system_date']));
+							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $gPreferences['system_date']));
 						}
 						elseif($field_name_intern == 'COUNTRY')
 						{
 							// we need the iso-code and not the name of the country
-							$duplicate_user->setValue($field_name_intern, $g_l10n->getCountryByName($user->getValue($field_name_intern)));
+							$duplicate_user->setValue($field_name_intern, $gL10n->getCountryByName($user->getValue($field_name_intern)));
 						}
 						else
 						{
@@ -260,6 +260,6 @@ $_SESSION['user_import_mode'] = '';
 $_SESSION['file_lines']       = '';
 $_SESSION['value_separator']  = '';
 
-$g_message->setForwardUrl($g_root_path.'/adm_program/administration/members/members.php');
-$g_message->show($g_l10n->get('MEM_IMPORT_SUCCESSFUL', $count_import));
+$gMessage->setForwardUrl($g_root_path.'/adm_program/administration/members/members.php');
+$gMessage->show($gL10n->get('MEM_IMPORT_SUCCESSFUL', $count_import));
 ?>

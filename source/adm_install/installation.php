@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * mode     = 1 : (Default) Sprache auswaehlen
  *            2 : Willkommen zur Installation
@@ -69,9 +69,9 @@ require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 
 // Default-DB-Type ist immer MySql
-if(!isset($g_db_type))
+if(!isset($gDbType))
 {
-    $g_db_type = 'mysql';
+    $gDbType = 'mysql';
 }
 
 // Sprachdateien einlesen
@@ -83,7 +83,7 @@ else
 {
     $language = 'en';
 }
-$g_l10n = new Language($language);
+$gL10n = new Language($language);
 
 $message = '';
 
@@ -92,12 +92,12 @@ if($req_mode == 1)  // (Default) Sprache auswaehlen
     session_destroy();
 
     $message = '<div class="groupBox">
-                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_CHOOSE_LANGUAGE').'</div>
+                    <div class="groupBoxHeadline">'.$gL10n->get('INS_CHOOSE_LANGUAGE').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="system_language">'.$g_l10n->get('SYS_LANGUAGE').':</label></dt>
+                                    <dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
                                     <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language').'</dd>
                                 </dl>
                             </li>
@@ -105,34 +105,34 @@ if($req_mode == 1)  // (Default) Sprache auswaehlen
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'installation.php?mode=2', 'forward.png', $g_l10n->get('SYS_NEXT'));
+    showPage($message, 'installation.php?mode=2', 'forward.png', $gL10n->get('SYS_NEXT'));
 }
 elseif($req_mode == 2)  // Willkommen zur Installation
 {   
     // Pruefen ob Sprache uebergeben wurde
     if(isset($_POST['system_language']) == false || strlen($_POST['system_language']) == 0)
     {
-        showPage($g_l10n->get('INS_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', 'back.png', $g_l10n->get('SYS_BACK'));
+        showPage($gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', 'back.png', $gL10n->get('SYS_BACK'));
     }
     else
     {
         $_SESSION['language'] = $_POST['system_language'];
-        $g_l10n->setLanguage($_SESSION['language']);
+        $gL10n->setLanguage($_SESSION['language']);
     }
     
-    $message = '<strong>'.$g_l10n->get('INS_WELCOME_TO_INSTALLATION').'</strong><br /><br />'.$g_l10n->get('INS_WELCOME_TEXT');
+    $message = '<strong>'.$gL10n->get('INS_WELCOME_TO_INSTALLATION').'</strong><br /><br />'.$gL10n->get('INS_WELCOME_TEXT');
 
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
     if(BETA_VERSION > 0)
     {
-        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_WARNING_BETA_VERSION');
+        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('INS_WARNING_BETA_VERSION');
     }
 
     if(ini_get('safe_mode') == 1)
     {    
-        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_WARNING_SAFE_MODE');
+        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('INS_WARNING_SAFE_MODE');
     }
-    showPage($message, 'installation.php?mode=3', 'forward.png', $g_l10n->get('INS_DATABASE_LOGIN'));
+    showPage($message, 'installation.php?mode=3', 'forward.png', $gL10n->get('INS_DATABASE_LOGIN'));
 }
 elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
 {
@@ -152,44 +152,44 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
         $prefix  = 'adm';
     }
 
-    $message = '<strong>'.$g_l10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</strong><br /><br />'.$g_l10n->get('INS_DATABASE_LOGIN_DESC').'
+    $message = '<strong>'.$gL10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</strong><br /><br />'.$gL10n->get('INS_DATABASE_LOGIN_DESC').'
                 <div class="groupBox">
-                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_DATABASE_LOGIN').'</div>
+                    <div class="groupBoxHeadline">'.$gL10n->get('INS_DATABASE_LOGIN').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="db_type">'.$g_l10n->get('INS_DATABASE_SYSTEM').':</label></dt>
+                                    <dt><label for="db_type">'.$gL10n->get('INS_DATABASE_SYSTEM').':</label></dt>
                                     <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/db/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', 'mysql').'</dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="server">'.$g_l10n->get('SYS_SERVER').':</label></dt>
+                                    <dt><label for="server">'.$gL10n->get('SYS_SERVER').':</label></dt>
                                     <dd><input type="text" name="server" id="server" style="width: 250px;" maxlength="50" value="'. $server. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
+                                    <dt><label for="user">'.$gL10n->get('SYS_USERNAME').':</label></dt>
                                     <dd><input type="text" name="user" id="user" style="width: 250px;" maxlength="50" value="'. $user. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
+                                    <dt><label for="password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
                                     <dd><input type="password" name="password" id="password" style="width: 250px;" maxlength="50" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="database">'.$g_l10n->get('SYS_DATABASE').':</label></dt>
+                                    <dt><label for="database">'.$gL10n->get('SYS_DATABASE').':</label></dt>
                                     <dd><input type="text" name="database" id="database" style="width: 250px;" maxlength="50" value="'. $database. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="prefix">'.$g_l10n->get('INS_TABLE_PREFIX').':</label></dt>
+                                    <dt><label for="prefix">'.$gL10n->get('INS_TABLE_PREFIX').':</label></dt>
                                     <dd><input type="text" name="prefix" id="prefix" style="width: 80px;" maxlength="10" value="'. $prefix. '" /></dd>
                                 </dl>
                             </li>
@@ -197,8 +197,8 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                     </div>
                 </div>
                 <br />
-                <img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
-    showPage($message, 'installation.php?mode=4', 'forward.png', $g_l10n->get('INS_SET_ORGANIZATION'));
+                <img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
+    showPage($message, 'installation.php?mode=4', 'forward.png', $gL10n->get('INS_SET_ORGANIZATION'));
 }
 elseif($req_mode == 4)  // Organisationsnamen eingeben
 {
@@ -221,7 +221,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
 
             if($anz != strlen($_POST['prefix']))
             {
-                showPage($g_l10n->get('INS_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
+                showPage($gL10n->get('INS_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
             }
         }
 
@@ -238,20 +238,20 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         || strlen($_SESSION['user'])     == 0
         || strlen($_SESSION['database']) == 0 )
         {
-            showPage($g_l10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
         }
 
         // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
         $db = Database::createDatabaseObject($_SESSION['db_type']);
         if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
         {
-            showPage($g_l10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
         }
 
         //Datenbank- und PHP-Version prüfen
         if(checkVersions($db, $message) == false)
         {
-            showPage($message, 'installation.php?mode=3', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($message, 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
         }
     }
 
@@ -267,21 +267,21 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         $orga_name_long  = '';
     }
 
-    $message = $message.'<strong>'.$g_l10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
-                '.$g_l10n->get('INS_NAME_OF_ORGANIZATION_DESC').'
+    $message = $message.'<strong>'.$gL10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
+                '.$gL10n->get('INS_NAME_OF_ORGANIZATION_DESC').'
                 <div class="groupBox">
-                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_NAME_OF_ORGANIZATION').'</div>
+                    <div class="groupBoxHeadline">'.$gL10n->get('INS_NAME_OF_ORGANIZATION').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_short">'.$g_l10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
+                                    <dt><label for="orga_name_short">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
                                     <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_long">'.$g_l10n->get('SYS_NAME').':</label></dt>
+                                    <dt><label for="orga_name_long">'.$gL10n->get('SYS_NAME').':</label></dt>
                                     <dd><input type="text" name="orga_name_long" id="orga_name_long" style="width: 250px;" maxlength="60" value="'. $orga_name_long. '" /></dd>
                                 </dl>
                             </li>
@@ -289,7 +289,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'installation.php?mode=5', 'forward.png', $g_l10n->get('INS_CREATE_ADMINISTRATOR'));
+    showPage($message, 'installation.php?mode=5', 'forward.png', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
 }
 elseif($req_mode == 5)  // Daten des Administrator eingeben
 {
@@ -302,7 +302,7 @@ elseif($req_mode == 5)  // Daten des Administrator eingeben
         if(strlen($_SESSION['orga_name_short']) == 0
         || strlen($_SESSION['orga_name_long']) == 0 )
         {
-            showPage($g_l10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', 'back.png', $gL10n->get('SYS_BACK'));
         }
     }
 
@@ -321,45 +321,45 @@ elseif($req_mode == 5)  // Daten des Administrator eingeben
         $user_email      = '';
         $user_login      = '';
     }
-    $message = '<strong>'.$g_l10n->get('INS_CREATE_ADMINISTRATOR').'</strong><br /><br />
-                '.$g_l10n->get('INS_DATA_OF_ADMINISTRATOR_DESC').'
+    $message = '<strong>'.$gL10n->get('INS_CREATE_ADMINISTRATOR').'</strong><br /><br />
+                '.$gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC').'
                 <div class="groupBox">
-                    <div class="groupBoxHeadline">'.$g_l10n->get('INS_DATA_OF_ADMINISTRATOR').'</div>
+                    <div class="groupBoxHeadline">'.$gL10n->get('INS_DATA_OF_ADMINISTRATOR').'</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="user_last_name">'.$g_l10n->get('SYS_LASTNAME').':</label></dt>
+                                    <dt><label for="user_last_name">'.$gL10n->get('SYS_LASTNAME').':</label></dt>
                                     <dd><input type="text" name="user_last_name" id="user_last_name" style="width: 250px;" maxlength="50" value="'. $user_last_name. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_first_name">'.$g_l10n->get('SYS_FIRSTNAME').':</label></dt>
+                                    <dt><label for="user_first_name">'.$gL10n->get('SYS_FIRSTNAME').':</label></dt>
                                     <dd><input type="text" name="user_first_name" id="user_first_name" style="width: 250px;" maxlength="50" value="'. $user_first_name. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_email">'.$g_l10n->get('SYS_EMAIL').':</label></dt>
+                                    <dt><label for="user_email">'.$gL10n->get('SYS_EMAIL').':</label></dt>
                                     <dd><input type="text" name="user_email" id="user_email" style="width: 250px;" maxlength="50" value="'. $user_email. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_login">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
+                                    <dt><label for="user_login">'.$gL10n->get('SYS_USERNAME').':</label></dt>
                                     <dd><input type="text" name="user_login" id="user_login" style="width: 250px;" maxlength="35" value="'. $user_login. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
+                                    <dt><label for="user_password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
                                     <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="20" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="user_password_confirm">'.$g_l10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
+                                    <dt><label for="user_password_confirm">'.$gL10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
                                     <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" maxlength="20" /></dd>
                                 </dl>
                             </li>
@@ -367,7 +367,7 @@ elseif($req_mode == 5)  // Daten des Administrator eingeben
                     </div>
                 </div>
                 <br />';
-    showPage($message, 'installation.php?mode=6', 'forward.png', $g_l10n->get('INS_CREATE_CONFIGURATION_FILE'));
+    showPage($message, 'installation.php?mode=6', 'forward.png', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
 }
 elseif($req_mode == 6)  // Konfigurationsdatei erzeugen
 {
@@ -387,31 +387,31 @@ elseif($req_mode == 6)  // Konfigurationsdatei erzeugen
         || strlen($_SESSION['user_login'])      == 0
         || strlen($_SESSION['user_password'])   == 0 )
         {
-            showPage($g_l10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', 'back.png', $gL10n->get('SYS_BACK'));
         }
 
         $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
         if(!strValidCharacters($_SESSION['user_email'], 'email'))
         {
-            showPage($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')), 'installation.php?mode=5', 'back.png', $gL10n->get('SYS_BACK'));
         }
 
         if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])
         {
-            showPage($g_l10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', 'back.png', $g_l10n->get('SYS_BACK'));
+            showPage($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', 'back.png', $gL10n->get('SYS_BACK'));
         }
     }
 
-    $message = '<strong>'.$g_l10n->get('INS_CREATE_CONFIGURATION_FILE').'</strong><br /><br />
-                '.$g_l10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_example.php').'<br /><br />
+    $message = '<strong>'.$gL10n->get('INS_CREATE_CONFIGURATION_FILE').'</strong><br /><br />
+                '.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_example.php').'<br /><br />
 
                 <span class="iconTextLink">
                     <a href="installation.php?mode=7"><img
-                    src="layout/page_white_download.png" alt="'.$g_l10n->get('INS_DOWNLOAD', 'config.php').'" /></a>
-                    <a href="installation.php?mode=7">'.$g_l10n->get('INS_DOWNLOAD', 'config.php').'</a>
+                    src="layout/page_white_download.png" alt="'.$gL10n->get('INS_DOWNLOAD', 'config.php').'" /></a>
+                    <a href="installation.php?mode=7">'.$gL10n->get('INS_DOWNLOAD', 'config.php').'</a>
                 </span>
                 <br />';
-    showPage($message, 'installation.php?mode=8', 'database_in.png', $g_l10n->get('INS_INSTALL_ADMIDIO'));
+    showPage($message, 'installation.php?mode=8', 'database_in.png', $gL10n->get('INS_INSTALL_ADMIDIO'));
 }
 elseif($req_mode == 7)
 {
@@ -455,7 +455,7 @@ elseif($req_mode == 8)
 
     if(file_exists('../config.php') == false)
     {
-        showPage($g_l10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
+        showPage($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
     }
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
@@ -465,21 +465,21 @@ elseif($req_mode == 8)
     // Verbindung zu Datenbank herstellen
     require_once(SERVER_PATH. '/config.php');
     if($g_tbl_praefix != $_SESSION['prefix']
-    || $g_db_type     != $_SESSION['db_type']
+    || $gDbType     != $_SESSION['db_type']
     || $g_adm_srv     != $_SESSION['server']
     || $g_adm_usr     != $_SESSION['user']
     || $g_adm_pw      != $_SESSION['password']
     || $g_adm_db      != $_SESSION['database']
     || $g_organization!= $_SESSION['orga_name_short'])
     {
-        showPage($g_l10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
+        showPage($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
     }
-    $db = Database::createDatabaseObject($g_db_type);
+    $db = Database::createDatabaseObject($gDbType);
     $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
     $filename = 'db_scripts/db.sql';
     $file     = fopen($filename, 'r')
-                or showPage($g_l10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_install/db_scripts'), 'installation.php?mode=6', 'back.png', $g_l10n->get('SYS_BACK'));
+                or showPage($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_install/db_scripts'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
     $content  = fread($file, filesize($filename));
     $sql_arr  = explode(';', $content);
     fclose($file);
@@ -498,50 +498,50 @@ elseif($req_mode == 8)
 
     // User Webmaster schon mal in der User-Tabelle anlegen, damit die Id genutzt werden kann
     // weitere Daten folgen erst weiter unten, wenn die Profilfelder angelegt sind
-    $g_current_user = new TableUsers($db);
-    $g_current_user->setValue('usr_login_name', $_SESSION['user_login']);
-    $g_current_user->setValue('usr_password',   $_SESSION['user_password']);
-    $g_current_user->setValue('usr_timestamp_create', DATETIME_NOW);
-    $g_current_user->save(false); // kein angemeldeter User -> ErstelltVon kann nicht gefuellt werden
+    $gCurrentUser = new TableUsers($db);
+    $gCurrentUser->setValue('usr_login_name', $_SESSION['user_login']);
+    $gCurrentUser->setValue('usr_password',   $_SESSION['user_password']);
+    $gCurrentUser->setValue('usr_timestamp_create', DATETIME_NOW);
+    $gCurrentUser->save(false); // kein angemeldeter User -> ErstelltVon kann nicht gefuellt werden
 
 
     // Orga-Uebergreifende Kategorien anlegen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                      VALUES (NULL, \'USF\', \'MASTER_DATA\', \''.$g_l10n->get('SYS_MASTER_DATA').'\', 0, 1, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                      VALUES (NULL, \'USF\', \'MASTER_DATA\', \''.$gL10n->get('SYS_MASTER_DATA').'\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_master_data = $db->insert_id();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                      VALUES (NULL, \'USF\', \'MESSENGER\', \''.$g_l10n->get('INS_MESSENGER').'\', 0, 0, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                      VALUES (NULL, \'USF\', \'MESSENGER\', \''.$gL10n->get('INS_MESSENGER').'\', 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_messenger = $db->insert_id();
 
     // Stammdatenfelder anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_master_data.', \'TEXT\', \'LAST_NAME\', \''.$g_l10n->get('SYS_LASTNAME').'\', NULL, NULL, 1, 1, 1, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'FIRST_NAME\',\''.$g_l10n->get('SYS_FIRSTNAME').'\', NULL, NULL, 1, 1, 1, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'ADDRESS\',   \''.$g_l10n->get('SYS_ADDRESS').'\', NULL, NULL, 1, 0, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'POSTCODE\',  \''.$g_l10n->get('INS_POSTCODE').'\', NULL, NULL, 1, 0, 0, 4, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'CITY\',      \''.$g_l10n->get('INS_CITY').'\', NULL, NULL, 1, 0, 0, 5, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'COUNTRY\',   \''.$g_l10n->get('SYS_COUNTRY').'\', NULL, NULL, 1, 0, 0, 6, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'PHONE\',     \''.$g_l10n->get('SYS_PHONE').'\', NULL, NULL, 0, 0, 0, 7, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'MOBILE\',    \''.$g_l10n->get('INS_MOBILE').'\', NULL, NULL, 0, 0, 0, 8, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'TEXT\', \'FAX\',       \''.$g_l10n->get('INS_FAX').'\', NULL, NULL, 0, 0, 0, 9, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'DATE\', \'BIRTHDAY\',  \''.$g_l10n->get('INS_BIRTHDAY').'\', NULL, NULL, 1, 0, 0, 10, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'RADIO_BUTTON\', \'GENDER\', \''.$g_l10n->get('SYS_GENDER').'\', NULL, \'female.png|SYS_FEMALE\r\nmale.png|SYS_MALE\', 0, 0, 0, 11, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'EMAIL\', \'EMAIL\',    \''.$g_l10n->get('SYS_EMAIL').'\', NULL, NULL, 1, 0, 1, 12, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_master_data.', \'URL\',  \'WEBSITE\',   \''.$g_l10n->get('SYS_WEBSITE').'\', NULL, NULL, 1, 0, 0, 13, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                       VALUES ('.$cat_id_master_data.', \'TEXT\', \'LAST_NAME\', \''.$gL10n->get('SYS_LASTNAME').'\', NULL, NULL, 1, 1, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'FIRST_NAME\',\''.$gL10n->get('SYS_FIRSTNAME').'\', NULL, NULL, 1, 1, 1, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'ADDRESS\',   \''.$gL10n->get('SYS_ADDRESS').'\', NULL, NULL, 1, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'POSTCODE\',  \''.$gL10n->get('INS_POSTCODE').'\', NULL, NULL, 1, 0, 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'CITY\',      \''.$gL10n->get('INS_CITY').'\', NULL, NULL, 1, 0, 0, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'COUNTRY\',   \''.$gL10n->get('SYS_COUNTRY').'\', NULL, NULL, 1, 0, 0, 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'PHONE\',     \''.$gL10n->get('SYS_PHONE').'\', NULL, NULL, 0, 0, 0, 7, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'MOBILE\',    \''.$gL10n->get('INS_MOBILE').'\', NULL, NULL, 0, 0, 0, 8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'TEXT\', \'FAX\',       \''.$gL10n->get('INS_FAX').'\', NULL, NULL, 0, 0, 0, 9, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'DATE\', \'BIRTHDAY\',  \''.$gL10n->get('INS_BIRTHDAY').'\', NULL, NULL, 1, 0, 0, 10, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'RADIO_BUTTON\', \'GENDER\', \''.$gL10n->get('SYS_GENDER').'\', NULL, \'female.png|SYS_FEMALE\r\nmale.png|SYS_MALE\', 0, 0, 0, 11, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'EMAIL\', \'EMAIL\',    \''.$gL10n->get('SYS_EMAIL').'\', NULL, NULL, 1, 0, 1, 12, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_master_data.', \'URL\',  \'WEBSITE\',   \''.$gL10n->get('SYS_WEBSITE').'\', NULL, NULL, 1, 0, 0, 13, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $usf_id_homepage = $db->insert_id();
 
     // Messenger anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_messenger.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \''.$g_l10n->get('INS_AOL_INSTANT_MESSENGER').'\', NULL, 0, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'GOOGLE_TALK\',    \''.$g_l10n->get('INS_GOOGLE_TALK').'\', NULL, 0, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'ICQ\',            \''.$g_l10n->get('INS_ICQ').'\', NULL, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'MSN_MESSENGER\',  \''.$g_l10n->get('INS_MSN_MESSENGER').'\', NULL, 0, 4, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'SKYPE\',          \''.$g_l10n->get('INS_SKYPE').'\', NULL, 0, 5, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'YAHOO_MESSENGER\',\''.$g_l10n->get('INS_YAHOO_MESSENGER').'\', NULL, 0, 6, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                       VALUES ('.$cat_id_messenger.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \''.$gL10n->get('INS_AOL_INSTANT_MESSENGER').'\', NULL, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'GOOGLE_TALK\',    \''.$gL10n->get('INS_GOOGLE_TALK').'\', NULL, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'ICQ\',            \''.$gL10n->get('INS_ICQ').'\', NULL, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'MSN_MESSENGER\',  \''.$gL10n->get('INS_MSN_MESSENGER').'\', NULL, 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'SKYPE\',          \''.$gL10n->get('INS_SKYPE').'\', NULL, 0, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'YAHOO_MESSENGER\',\''.$gL10n->get('INS_YAHOO_MESSENGER').'\', NULL, 0, 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
     // Organisationsobjekt erstellen
@@ -549,7 +549,7 @@ elseif($req_mode == 8)
                                          VALUES (\''.$_SESSION['orga_name_long'].'\', \''.$_SESSION['orga_name_short'].'\', \''.$_SERVER['HTTP_HOST'].'\')';
     $db->query($sql);
 
-    $g_current_organization = new Organization($db, $_SESSION['orga_name_short']);
+    $gCurrentOrganization = new Organization($db, $_SESSION['orga_name_short']);
 
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include('db_scripts/preferences.php');
@@ -557,16 +557,16 @@ elseif($req_mode == 8)
     // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
     $orga_preferences['email_administrator'] = $_SESSION['user_email'];
 
-    $g_current_organization->setPreferences($orga_preferences, false);
+    $gCurrentOrganization->setPreferences($orga_preferences, false);
 	
 	// now set db specific admidio preferences
 	$db->setDBSpecificAdmidioProperties();
 
     // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
-    $systemmails_texts = array('SYSMAIL_REGISTRATION_USER' => $g_l10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
-                               'SYSMAIL_REGISTRATION_WEBMASTER' => $g_l10n->get('SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
-                               'SYSMAIL_NEW_PASSWORD' => $g_l10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
-                               'SYSMAIL_ACTIVATION_LINK' => $g_l10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
+    $systemmails_texts = array('SYSMAIL_REGISTRATION_USER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
+                               'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
+                               'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
+                               'SYSMAIL_ACTIVATION_LINK' => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
     $text = new TableText($db);
 
     foreach($systemmails_texts as $key => $value)
@@ -583,45 +583,45 @@ elseif($req_mode == 8)
     // nun noch die ausgewaehlte Sprache in den Einstellungen speichern
     $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$_SESSION['language'].'\'
              WHERE prf_name   = \'system_language\' 
-               AND prf_org_id = '. $g_current_organization->getValue('org_id');
+               AND prf_org_id = '. $gCurrentOrganization->getValue('org_id');
     $db->query($sql);
 
     // Admidio-Versionsnummer schreiben
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
-                                       VALUES ('. $g_current_organization->getValue('org_id'). ', \'db_version\',      \''. ADMIDIO_VERSION. '\') 
-                                            , ('. $g_current_organization->getValue('org_id'). ', \'db_version_beta\', \''. BETA_VERSION. '\')';
+                                       VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'db_version\',      \''. ADMIDIO_VERSION. '\') 
+                                            , ('. $gCurrentOrganization->getValue('org_id'). ', \'db_version_beta\', \''. BETA_VERSION. '\')';
     $db->query($sql);
 
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                           VALUES ('. $g_current_organization->getValue('org_id'). ', \'ROL\', \'COMMON\', \''.$g_l10n->get('SYS_COMMON').'\', 0, 1, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')';
+                                           VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'ROL\', \'COMMON\', \''.$gL10n->get('SYS_COMMON').'\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
     $db->query($sql);
     $category_common = $db->insert_id();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                     VALUES ('. $g_current_organization->getValue('org_id').', \'ROL\', \'GROUPS\',  \''.$g_l10n->get('INS_GROUPS').'\', 0, 0, 0, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'ROL\', \'COURSES\', \''.$g_l10n->get('INS_COURSES').'\', 0, 0, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'ROL\', \'TEAMS\',   \''.$g_l10n->get('INS_TEAMS').'\', 0, 0, 0, 4, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \''.$g_l10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'\', 1, 0, 1, 5, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'LNK\', \'COMMON\',  \''.$g_l10n->get('SYS_COMMON').'\', 0, 1, 0, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'LNK\', \'INTERN\',  \''.$g_l10n->get('INS_INTERN').'\', 1, 0, 0, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'DAT\', \'COMMON\',  \''.$g_l10n->get('SYS_COMMON').'\', 0, 1, 0, 1, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'DAT\', \'TRAINING\',\''.$g_l10n->get('INS_TRAINING').'\', 0, 0, 0, 2, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $g_current_organization->getValue('org_id').', \'DAT\', \'COURSES\', \''.$g_l10n->get('INS_COURSES').'\', 0, 0, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \''.$g_l10n->get('INS_ADDIDIONAL_DATA').'\', 0, 0, 0, 3, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                     VALUES ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'GROUPS\',  \''.$gL10n->get('INS_GROUPS').'\', 0, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'COURSES\', \''.$gL10n->get('INS_COURSES').'\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'TEAMS\',   \''.$gL10n->get('INS_TEAMS').'\', 0, 0, 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \''.$gL10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'\', 1, 0, 1, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'LNK\', \'COMMON\',  \''.$gL10n->get('SYS_COMMON').'\', 0, 1, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'LNK\', \'INTERN\',  \''.$gL10n->get('INS_INTERN').'\', 1, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'COMMON\',  \''.$gL10n->get('SYS_COMMON').'\', 0, 1, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'TRAINING\',\''.$gL10n->get('INS_TRAINING').'\', 0, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'COURSES\', \''.$gL10n->get('INS_COURSES').'\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \''.$gL10n->get('INS_ADDIDIONAL_DATA').'\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
     $sql = 'INSERT INTO '. TBL_FOLDERS. ' (fol_org_id, fol_type, fol_name, fol_path,
                                            fol_locked, fol_public, fol_timestamp)
-                                    VALUES ('. $g_current_organization->getValue('org_id'). ', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
+                                    VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
                                             0,1,\''.DATETIME_NOW.'\')';
     $db->query($sql);
 
     //Defaultraum fuer Raummodul in der DB anlegen:
     $sql = 'INSERT INTO '. TBL_ROOMS. ' (room_name, room_description, room_capacity, room_usr_id_create, room_timestamp_create)
-                                    VALUES (\''.$g_l10n->get('INS_CONFERENCE_ROOM').'\', \''.$g_l10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'\', 
-                                            15, '.$g_current_user->getValue('usr_id').',\''. DATETIME_NOW.'\')';
+                                    VALUES (\''.$gL10n->get('INS_CONFERENCE_ROOM').'\', \''.$gL10n->get('INS_DESCRIPTION_CONFERENCE_ROOM').'\', 
+                                            15, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
     $db->query($sql);
 
     // nun die Default-Rollen anlegen
@@ -629,8 +629,8 @@ elseif($req_mode == 8)
     // Webmaster
     $role_webmaster = new TableRoles($db);
     $role_webmaster->setValue('rol_cat_id', $category_common);
-    $role_webmaster->setValue('rol_name', $g_l10n->get('SYS_WEBMASTER'));
-    $role_webmaster->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_WEBMASTER'));
+    $role_webmaster->setValue('rol_name', $gL10n->get('SYS_WEBMASTER'));
+    $role_webmaster->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_WEBMASTER'));
     $role_webmaster->setValue('rol_assign_roles', 1);
     $role_webmaster->setValue('rol_approve_users', 1);
     $role_webmaster->setValue('rol_announcements', 1);
@@ -651,8 +651,8 @@ elseif($req_mode == 8)
     // Mitglied
     $role_member = new TableRoles($db);
     $role_member->setValue('rol_cat_id', $category_common);
-    $role_member->setValue('rol_name', $g_l10n->get('SYS_MEMBER'));
-    $role_member->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_MEMBER'));
+    $role_member->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
+    $role_member->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
     $role_member->setValue('rol_mail_this_role', 2);
     $role_member->setValue('rol_profile', 1);
     $role_member->setValue('rol_this_list_view', 1);
@@ -661,8 +661,8 @@ elseif($req_mode == 8)
     // Vorstand
     $role_management = new TableRoles($db);
     $role_management->setValue('rol_cat_id', $category_common);
-    $role_management->setValue('rol_name', $g_l10n->get('INS_BOARD'));
-    $role_management->setValue('rol_description', $g_l10n->get('INS_DESCRIPTION_BOARD'));
+    $role_management->setValue('rol_name', $gL10n->get('INS_BOARD'));
+    $role_management->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
     $role_management->setValue('rol_announcements', 1);
     $role_management->setValue('rol_dates', 1);
     $role_management->setValue('rol_weblinks', 1);
@@ -681,61 +681,64 @@ elseif($req_mode == 8)
 
     // Mitgliedschaft bei Rolle "Webmaster" anlegen
     $member = new TableMembers($db);
-    $member->startMembership($role_webmaster->getValue('rol_id'), $g_current_user->getValue('usr_id'));
-    $member->startMembership($role_member->getValue('rol_id'), $g_current_user->getValue('usr_id'));
+    $member->startMembership($role_webmaster->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
+    $member->startMembership($role_member->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
+	
+	// create object with current user field structure
+	$gUserFields = new UserFields($db, $gCurrentOrganization);
     
     // User Webmaster erst jetzt anlegen, da dieser die Rollenrechte bereits haben muss
-    $g_current_user = new User($db, $g_current_user->getValue('usr_id'));
-    $g_current_user->setValue('LAST_NAME', $_SESSION['user_last_name']);
-    $g_current_user->setValue('FIRST_NAME', $_SESSION['user_first_name']);
-    $g_current_user->setValue('EMAIL', $_SESSION['user_email']);
-    $g_current_user->setValue('usr_usr_id_create', $g_current_user->getValue('usr_id'));
-    $g_current_user->save(false); // Ersteller wird selber gesetzt, da User bereits angelegt worden ist
+    $gCurrentUser = new User($db, $gUserFields, $gCurrentUser->getValue('usr_id'));
+    $gCurrentUser->setValue('LAST_NAME', $_SESSION['user_last_name']);
+    $gCurrentUser->setValue('FIRST_NAME', $_SESSION['user_first_name']);
+    $gCurrentUser->setValue('EMAIL', $_SESSION['user_email']);
+    $gCurrentUser->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
+    $gCurrentUser->save(false); // Ersteller wird selber gesetzt, da User bereits angelegt worden ist
 
     // Default-Listen-Konfigurationen anlegen
     $address_list = new ListConfiguration($db);
-    $address_list->setValue('lst_name', $g_l10n->get('INS_ADDRESS_LIST'));
+    $address_list->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
     $address_list->setValue('lst_global', 1);
     $address_list->setValue('lst_default', 1);
-    $address_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $address_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $address_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
-    $address_list->addColumn(4, $g_current_user->getProperty('ADDRESS', 'usf_id'));
-    $address_list->addColumn(5, $g_current_user->getProperty('POSTCODE', 'usf_id'));
-    $address_list->addColumn(6, $g_current_user->getProperty('CITY', 'usf_id'));
+    $address_list->addColumn(1, $gCurrentUser->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $address_list->addColumn(2, $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $address_list->addColumn(3, $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'));
+    $address_list->addColumn(4, $gCurrentUser->getProperty('ADDRESS', 'usf_id'));
+    $address_list->addColumn(5, $gCurrentUser->getProperty('POSTCODE', 'usf_id'));
+    $address_list->addColumn(6, $gCurrentUser->getProperty('CITY', 'usf_id'));
     $address_list->save();
 
     $phone_list = new ListConfiguration($db);
-    $phone_list->setValue('lst_name', $g_l10n->get('INS_PHONE_LIST'));
+    $phone_list->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
     $phone_list->setValue('lst_global', 1);
-    $phone_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $phone_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $phone_list->addColumn(3, $g_current_user->getProperty('PHONE', 'usf_id'));
-    $phone_list->addColumn(4, $g_current_user->getProperty('MOBILE', 'usf_id'));
-    $phone_list->addColumn(5, $g_current_user->getProperty('EMAIL', 'usf_id'));
-    $phone_list->addColumn(6, $g_current_user->getProperty('FAX', 'usf_id'));
+    $phone_list->addColumn(1, $gCurrentUser->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $phone_list->addColumn(2, $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $phone_list->addColumn(3, $gCurrentUser->getProperty('PHONE', 'usf_id'));
+    $phone_list->addColumn(4, $gCurrentUser->getProperty('MOBILE', 'usf_id'));
+    $phone_list->addColumn(5, $gCurrentUser->getProperty('EMAIL', 'usf_id'));
+    $phone_list->addColumn(6, $gCurrentUser->getProperty('FAX', 'usf_id'));
     $phone_list->save();
 
     $contact_list = new ListConfiguration($db);
-    $contact_list->setValue('lst_name', $g_l10n->get('INS_CONTACT_DETAILS'));
+    $contact_list->setValue('lst_name', $gL10n->get('INS_CONTACT_DETAILS'));
     $contact_list->setValue('lst_global', 1);
-    $contact_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $contact_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $contact_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
-    $contact_list->addColumn(4, $g_current_user->getProperty('ADDRESS', 'usf_id'));
-    $contact_list->addColumn(5, $g_current_user->getProperty('POSTCODE', 'usf_id'));
-    $contact_list->addColumn(6, $g_current_user->getProperty('CITY', 'usf_id'));
-    $contact_list->addColumn(7, $g_current_user->getProperty('PHONE', 'usf_id'));
-    $contact_list->addColumn(8, $g_current_user->getProperty('MOBILE', 'usf_id'));
-    $contact_list->addColumn(9, $g_current_user->getProperty('EMAIL', 'usf_id'));
+    $contact_list->addColumn(1, $gCurrentUser->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $contact_list->addColumn(2, $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $contact_list->addColumn(3, $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'));
+    $contact_list->addColumn(4, $gCurrentUser->getProperty('ADDRESS', 'usf_id'));
+    $contact_list->addColumn(5, $gCurrentUser->getProperty('POSTCODE', 'usf_id'));
+    $contact_list->addColumn(6, $gCurrentUser->getProperty('CITY', 'usf_id'));
+    $contact_list->addColumn(7, $gCurrentUser->getProperty('PHONE', 'usf_id'));
+    $contact_list->addColumn(8, $gCurrentUser->getProperty('MOBILE', 'usf_id'));
+    $contact_list->addColumn(9, $gCurrentUser->getProperty('EMAIL', 'usf_id'));
     $contact_list->save();
 
     $former_list = new ListConfiguration($db);
-    $former_list->setValue('lst_name', $g_l10n->get('INS_MEMBERSHIP'));
+    $former_list->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
     $former_list->setValue('lst_global', 1);
-    $former_list->addColumn(1, $g_current_user->getProperty('LAST_NAME', 'usf_id'));
-    $former_list->addColumn(2, $g_current_user->getProperty('FIRST_NAME', 'usf_id'));
-    $former_list->addColumn(3, $g_current_user->getProperty('BIRTHDAY', 'usf_id'));
+    $former_list->addColumn(1, $gCurrentUser->getProperty('LAST_NAME', 'usf_id'));
+    $former_list->addColumn(2, $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'));
+    $former_list->addColumn(3, $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'));
     $former_list->addColumn(4, 'mem_begin');
     $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();
@@ -747,14 +750,14 @@ elseif($req_mode == 8)
     // Daten der Session loeschen
     session_unset();
 
-    $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$g_l10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong><br /><br />
-               '.$g_l10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />
-               '.$g_l10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
+    $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong><br /><br />
+               '.$gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />
+               '.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
     if(is_writeable("../adm_my_files") == false)
     {
-        $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" /> '.$g_l10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
+        $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /> '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
-    showPage($message, 'http://www.admidio.org/index.php?page=donate', 'money.png', $g_l10n->get('SYS_DONATE'));
+    showPage($message, 'http://www.admidio.org/index.php?page=donate', 'money.png', $gL10n->get('SYS_DONATE'));
 }
 
 ?>

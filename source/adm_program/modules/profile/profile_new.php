@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * user_id  :  ID des Benutzers, dessen Profil bearbeitet werden soll
  * new_user : 0 - (Default) vorhandenen User bearbeiten
@@ -21,7 +21,7 @@
 
 require_once('../../system/common.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
 $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 $getLastname  = admFuncVariableIsValid($_GET, 'lastname', 'string', '');
@@ -29,7 +29,7 @@ $getFirstname = admFuncVariableIsValid($_GET, 'firstname', 'string', '');
 $getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'boolean', 0);
 
 // im ausgeloggten Zustand koennen nur Registrierungen angelegt werden
-if($g_valid_login == false)
+if($gValidLogin == false)
 {
     $getNewUser = 2;
 }
@@ -41,7 +41,7 @@ if($getRemoveUrl == 1)
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
 // Rechenaufgabe eingestellt wurde, muss die Klasse für neue Registrierungen geladen werden
-if ($getNewUser == 2 && $g_preferences['enable_registration_captcha'] == 1 && $g_preferences['captcha_type']=='calc')
+if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1 && $gPreferences['captcha_type']=='calc')
 {
 	require_once('../../system/classes/captcha.php');
 }
@@ -49,28 +49,28 @@ if ($getNewUser == 2 && $g_preferences['enable_registration_captcha'] == 1 && $g
 // User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
 if($getUserId > 0 && $getNewUser != 0 && $getNewUser != 3)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // User auslesen
-$user = new User($g_db, $getUserId);
+$user = new User($gDb, $gUserFields, $getUserId);
 
 // pruefen, ob Modul aufgerufen werden darf
 switch($getNewUser)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($g_current_user->editProfile($getUserId) == false)
+        if($gCurrentUser->editProfile($getUserId) == false)
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
         break;
 
     case 1:
         // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
-        if($g_current_user->editUsers() == false)
+        if($gCurrentUser->editUsers() == false)
         {
-            $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
         
         // wurde Nachname und Vorname uebergeben, dann diese bereits vorbelegen
@@ -81,9 +81,9 @@ switch($getNewUser)
     case 2:
     case 3:
         // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($g_preferences['registration_mode'] == 0)
+        if($gPreferences['registration_mode'] == 0)
         {
-            $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+            $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         }
         break;
 }
@@ -116,12 +116,12 @@ if(isset($_SESSION['profile_request']))
 // dabei wird der Inhalt richtig formatiert
 function getFieldCode($field, $user, $getNewUser)
 {
-    global $g_preferences, $g_root_path, $g_current_user, $g_l10n;
+    global $gPreferences, $g_root_path, $gCurrentUser, $gL10n;
     $value    = '';
     
     // Felder sperren, falls dies so eingestellt wurde
     $disabled = '';
-    if($field->getValue('usf_disabled') == 1 && $g_current_user->editUsers() == false && $getNewUser == 0)
+    if($field->getValue('usf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
     {
 		$disabled = ' disabled="disabled" ';
     }
@@ -133,22 +133,22 @@ function getFieldCode($field, $user, $getNewUser)
         $value = '
 		<select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" '.$disabled.'>
 			<option value="" ';
-                if(strlen($g_preferences['default_country']) == 0
+                if(strlen($gPreferences['default_country']) == 0
                 && strlen($field->getValue('usd_value')) == 0)
                 {
                     $value = $value. ' selected="selected" ';
                 }
-			$value = $value. '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-            if(strlen($g_preferences['default_country']) > 0)
+			$value = $value. '>- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+            if(strlen($gPreferences['default_country']) > 0)
             {
                 $value = $value. ' <option value="">--------------------------------</option>
-				<option value="'. $g_preferences['default_country']. '">'. $g_l10n->getCountryByCode($g_preferences['default_country']). '</option>
+				<option value="'. $gPreferences['default_country']. '">'. $gL10n->getCountryByCode($gPreferences['default_country']). '</option>
                 <option value="">--------------------------------</option>';
             }
-			foreach($g_l10n->getCountries() as $key => $country_name)
+			foreach($gL10n->getCountries() as $key => $country_name)
 			{
 				$value = $value. '<option value="'.$key.'" ';
-				if($getNewUser > 0 && $key == $g_preferences['default_country'])
+				if($getNewUser > 0 && $key == $gPreferences['default_country'])
 				{
 					$value = $value. ' selected="selected" ';
 				}
@@ -183,7 +183,7 @@ function getFieldCode($field, $user, $getNewUser)
                 }
                 if($field->getValue('usf_mandatory') == 1)
                 {
-                    $text  .= '- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -';
+                    $text  .= '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -';
                 }
 			$value .= '>'.$text.'</option>';
 
@@ -279,9 +279,9 @@ function getFieldCode($field, $user, $getNewUser)
             }
             $value .= '
                     <input type="text" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: '.$width.';" 
-                        maxlength="'.$maxlength.'" '.$disabled.' value="'. $field->getValue('usd_value',$g_preferences['system_date']). '" '.$disabled.' />
-                    <a class="iconLink" id="anchor_'. $field->getValue('usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue('usf_id'). '\'),\'anchor_'. $field->getValue('usf_id'). '\',\''.$g_preferences['system_date'].'\');"><img 
-                    	src="'. THEME_PATH. '/icons/calendar.png" alt="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" title="'.$g_l10n->get('SYS_SHOW_CALENDAR').'" /></a>
+                        maxlength="'.$maxlength.'" '.$disabled.' value="'. $field->getValue('usd_value',$gPreferences['system_date']). '" '.$disabled.' />
+                    <a class="iconLink" id="anchor_'. $field->getValue('usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue('usf_id'). '\'),\'anchor_'. $field->getValue('usf_id'). '\',\''.$gPreferences['system_date'].'\');"><img 
+                    	src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
                     <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
         }
         else
@@ -325,7 +325,7 @@ function getFieldCode($field, $user, $getNewUser)
     $mandatory = '';
     if($field->getValue('usf_mandatory') == 1)
     {
-        $mandatory = '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+        $mandatory = '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
     }
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
@@ -334,7 +334,7 @@ function getFieldCode($field, $user, $getNewUser)
     {
         $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '&amp;inline=true"><img 
             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '\',this)" onmouseout="ajax_hideTooltip()"
-            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>';
+            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>';
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
@@ -351,29 +351,29 @@ function getFieldCode($field, $user, $getNewUser)
 // Html-Kopf ausgeben
 if($getNewUser == 1)
 {
-    $g_layout['title'] = $g_l10n->get('PRO_ADD_USER');
+    $gLayout['title'] = $gL10n->get('PRO_ADD_USER');
 }
 elseif($getNewUser == 2)
 {
-    $g_layout['title'] = $g_l10n->get('SYS_REGISTRATION');
+    $gLayout['title'] = $gL10n->get('SYS_REGISTRATION');
 }
-elseif($getUserId == $g_current_user->getValue('usr_id'))
+elseif($getUserId == $gCurrentUser->getValue('usr_id'))
 {
-    $g_layout['title'] = $g_l10n->get('PRO_EDIT_MY_PROFILE');
+    $gLayout['title'] = $gL10n->get('PRO_EDIT_MY_PROFILE');
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('PRO_EDIT_PROFILE');
+    $gLayout['title'] = $gL10n->get('PRO_EDIT_PROFILE');
 }
 
-$g_layout['header'] = '
+$gLayout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
     <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
 
-$g_layout['header'] .= '
+$gLayout['header'] .= '
         <script type="text/javascript"><!--
 			var profileJS = new profileJSClass();
 			$(document).ready(function() 
@@ -386,23 +386,23 @@ if($getNewUser == 1 || $getNewUser == 2)
 {
     if($getNewUser == 1)
     {
-    	$first_field = reset($g_current_user->userFieldData);
+    	$first_field = reset($gCurrentUser->userFieldData);
         $focusField = 'usf-'.$first_field->getValue('usf_id');
     }
     else
     {
         $focusField = 'usr_login_name';
     }
-	$g_layout['header'] .= '$("#'.$focusField.'").focus();';
+	$gLayout['header'] .= '$("#'.$focusField.'").focus();';
 }
-$g_layout['header'] .= '}); 
+$gLayout['header'] .= '}); 
         //--></script>';
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
 <form action="'.$g_root_path.'/adm_program/modules/profile/profile_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser.'" method="post">
 <div class="formLayout" id="edit_profile_form">
-    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">'; 
         // *******************************************************************************
         // Schleife ueber alle Kategorien und Felder ausser den Stammdaten
@@ -417,19 +417,19 @@ echo '
             // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
             // E-Mail ist Ausnahme und muss immer angezeigt werden
             if($getNewUser == 2 
-            && $g_preferences['registration_mode'] == 1 
+            && $gPreferences['registration_mode'] == 1 
             && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') == 'EMAIL'))
             {
                 $show_field = true;
             }
             elseif($getNewUser == 2
-            && $g_preferences['registration_mode'] == 2)
+            && $gPreferences['registration_mode'] == 2)
             {
                 // bei der vollstaendigen Registrierung alle Felder anzeigen
                 $show_field = true;
             }
             elseif($getNewUser != 2 
-            && ($getUserId == $g_current_user->getValue('usr_id') || $g_current_user->editUsers()))
+            && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->editUsers()))
             {
                 // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
                 // Leiter duerfen dies nicht !!!
@@ -461,20 +461,20 @@ echo '
                     {
                         echo '<li>
                             <dl>
-                                <dt><label for="usr_login_name">'.$g_l10n->get('SYS_USERNAME').':</label></dt>
+                                <dt><label for="usr_login_name">'.$gL10n->get('SYS_USERNAME').':</label></dt>
                                 <dd>
                                     <input type="text" id="usr_login_name" name="usr_login_name" style="width: 200px;" maxlength="35" value="'. $user->getValue('usr_login_name'). '" ';
-                                    if($g_current_user->isWebmaster() == false && $getNewUser == 0)
+                                    if($gCurrentUser->isWebmaster() == false && $getNewUser == 0)
                                     {
                                         echo ' disabled="disabled" ';
                                     }
                                     echo ' />';
                                     if($getNewUser > 0)
                                     {
-                                        echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                        echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_USERNAME_DESCRIPTION&amp;inline=true"><img 
                                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_USERNAME_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>';
+                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>';
                                     }
                                 echo '</dd>
                             </dl>
@@ -484,22 +484,22 @@ echo '
                         {
                             echo '<li>
                                 <dl>
-                                    <dt><label for="usr_password">'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
+                                    <dt><label for="usr_password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
                                     <dd>
                                         <input type="password" id="usr_password" name="usr_password" style="width: 130px;" maxlength="20" />
-                                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_PASSWORD_DESCRIPTION&amp;inline=true"><img 
                                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
+                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>
                                     </dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="password2">'.$g_l10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
+                                    <dt><label for="password2">'.$gL10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
                                     <dd>
                                         <input type="password" id="password2" name="password2" style="width: 130px;" maxlength="20" />
-                                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                     </dd>
                                 </dl>
                             </li>';
@@ -507,16 +507,16 @@ echo '
                         else
                         {
                             // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-                            if($g_current_user->isWebmaster() || $g_current_user->getValue("usr_id") == $getUserId )
+                            if($gCurrentUser->isWebmaster() || $gCurrentUser->getValue("usr_id") == $getUserId )
                             {
                                 echo '<li>
                                     <dl>
-                                        <dt><label>'.$g_l10n->get('SYS_PASSWORD').':</label></dt>
+                                        <dt><label>'.$gL10n->get('SYS_PASSWORD').':</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
                                                 <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '&amp;inline=1"><img 
-                                                	src="'. THEME_PATH. '/icons/key.png" alt="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" title="'.$g_l10n->get('SYS_CHANGE_PASSWORD').'" /></a>
-                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '&amp;inline=1">'.$g_l10n->get('SYS_CHANGE_PASSWORD').'</a>
+                                                	src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>
+                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '&amp;inline=1">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>
                                             </span>
                                         </dd>
                                     </dl>
@@ -541,7 +541,7 @@ echo '
 
         // User, die sich registrieren wollen, bekommen jetzt noch das Captcha praesentiert,
         // falls es in den Orgaeinstellungen aktiviert wurde...
-        if ($getNewUser == 2 && $g_preferences['enable_registration_captcha'] == 1)
+        if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
         {
             echo '
             <ul class="formFieldList">
@@ -550,17 +550,17 @@ echo '
                         <dt>&nbsp;</dt>
 						<dd>
 						';
-			if($g_preferences['captcha_type']=='pic')
+			if($gPreferences['captcha_type']=='pic')
 			{
-				echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$g_l10n->get('SYS_CAPTCHA').'" />';
-				$captcha_label = $g_l10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
+				echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
+				$captcha_label = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
 				$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
 			}
-			else if($g_preferences['captcha_type']=='calc')
+			else if($gPreferences['captcha_type']=='calc')
 			{
 				$captcha = new Captcha();
-				$captcha->getCaptchaCalc($g_l10n->get('SYS_CAPTCHA_CALC_PART1'),$g_l10n->get('SYS_CAPTCHA_CALC_PART2'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$g_l10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$g_l10n->get('SYS_CAPTCHA_CALC_PART4'));
-				$captcha_label = $g_l10n->get('SYS_CAPTCHA_CALC');
+				$captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
+				$captcha_label = $gL10n->get('SYS_CAPTCHA_CALC');
 				$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
 			}
 			echo '
@@ -572,10 +572,10 @@ echo '
                         <dt>'.$captcha_label.':</dt>
                         <dd>
                             <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-                            <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                            <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
 					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
-					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_HELP').'" title="" /></a>
+					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>
                         </dd>
                     </dl>
                 </li>
@@ -588,25 +588,25 @@ echo '
         {
             // Registrierung
             $btn_image = 'email.png';
-            $btn_text  = $g_l10n->get('SYS_SEND');
+            $btn_text  = $gL10n->get('SYS_SEND');
         }
         else
         {
             $btn_image = 'disk.png';
-            $btn_text  = $g_l10n->get('SYS_SAVE');
+            $btn_text  = $gL10n->get('SYS_SAVE');
         }
 
         if($getNewUser == 0)
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($g_db, $user->getValue('usr_usr_id_create'));
-                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
+                $user_create = new User($gDb, $gUserFields, $user->getValue('usr_usr_id_create'));
+                echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
 
                 if($user->getValue('usr_usr_id_change') > 0)
                 {
-                    $user_change = new User($g_db, $user->getValue('usr_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
+                    $user_change = new User($gDb, $gUserFields, $user->getValue('usr_usr_id_change'));
+                    echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
                 }
             echo '</div>';
         }
@@ -625,8 +625,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'. $g_root_path. '/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-            <a href="'. $g_root_path. '/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+            <a href="'. $g_root_path. '/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

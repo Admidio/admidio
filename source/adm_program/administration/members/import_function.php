@@ -15,42 +15,42 @@ require_once('../../system/classes/table_roles.php');
 // Uebergabevariablen pruefen
 if(isset($_POST['rol_id']) == false || is_numeric($_POST['rol_id']) == false)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if(isset($_POST['user_import_mode']) == false || is_numeric($_POST['user_import_mode']) == false)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // nur berechtigte User duerfen User importieren
-if(!$g_current_user->editUsers())
+if(!$gCurrentUser->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 if(strlen($_FILES['userfile']['tmp_name']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_FILE')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FILE')));
 }
 else if($_FILES['userfile']['error'] == 1)
 {
     //Dateigroesse ueberpruefen Servereinstellungen
-    $g_message->show($g_l10n->get('SYS_FILE_TO_LARGE_SERVER', $g_preferences['max_file_upload_size']));
+    $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', $gPreferences['max_file_upload_size']));
 }
 else if($_POST['rol_id'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_ROLE')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
 }
 
 // Rolle einlesen und pruefen, ob der User diese selektieren kann und dadurch nicht
 // evtl. ein Rollenzuordnungsrecht bekommt, wenn er es vorher nicht hatte
-$role = new TableRoles($g_db, $_POST['rol_id']);
+$role = new TableRoles($gDb, $_POST['rol_id']);
 
-if($g_current_user->viewRole($role->getValue('rol_id')) == false
-|| ($g_current_user->assignRoles() == false && $role->getValue('rol_assign_roles') == false))
+if($gCurrentUser->viewRole($role->getValue('rol_id')) == false
+|| ($gCurrentUser->assignRoles() == false && $role->getValue('rol_assign_roles') == false))
 {
-    $g_message->show($g_l10n->get('MEM_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
+    $gMessage->show($gL10n->get('MEM_ROLE_SELECT_RIGHT', $role->getValue('rol_name')));
 }
 
 // read file in an array; auto-detect the line endings of different os

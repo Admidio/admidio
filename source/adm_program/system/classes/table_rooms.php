@@ -29,11 +29,11 @@ class TableRooms extends TableAccess
     // type = 'BBCODE' : Beschreibung mit BBCode-Tags
     public function getDescription($type = 'HTML')
     {
-        global $g_preferences;
+        global $gPreferences;
         $description = '';
 
         // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-        if($g_preferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
         {
             if(is_object($this->bbCode) == false)
             {
@@ -57,7 +57,7 @@ class TableRooms extends TableAccess
     // Raum mit der uebergebenen ID oder dem Raumnamen aus der Datenbank auslesen
     public function readData($room, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
 
         if(is_numeric($room))
         {

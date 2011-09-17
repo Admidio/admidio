@@ -10,7 +10,7 @@
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * headline  - Ueberschrift fuer den RSS-Feed
  *             (Default) Termine
@@ -22,34 +22,34 @@ require_once('../../system/classes/rss.php');
 require_once('../../system/classes/table_date.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
-if ($g_preferences['enable_rss'] != 1)
+if ($gPreferences['enable_rss'] != 1)
 {
-    $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('SYS_RSS_DISABLED'));
+    $gMessage->setForwardUrl($gHomepage);
+    $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_dates_module'] != 1)
+if ($gPreferences['enable_dates_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
+// Initialize and check the parameters
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
-$arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
+$arr_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
 
 foreach($arr_orgas as $org_id => $value)
 {
     $organizations = $organizations. $org_id. ', ';
 }
-$organizations = $organizations. $g_current_organization->getValue('org_id');
+$organizations = $organizations. $gCurrentOrganization->getValue('org_id');
 
 $hidden = '';
-if ($g_valid_login == false)
+if ($gValidLogin == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
     $hidden = ' AND cat_hidden = 0 ';
@@ -62,18 +62,18 @@ $sql = 'SELECT cat.*, dat.*,
           FROM '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = dat_usr_id_create
-           AND cre_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+           AND cre_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = dat_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
+           AND cre_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = dat_usr_id_change
-           AND cha_surname.usd_usf_id = '.$g_current_user->getProperty('LAST_NAME', 'usf_id').'
+           AND cha_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = dat_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$g_current_user->getProperty('FIRST_NAME', 'usf_id').'
+           AND cha_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
          WHERE dat_cat_id = cat_id
-           AND (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR (   dat_global  = 1
                   AND cat_org_id IN ('.$organizations.') ))
            AND (  dat_begin >= \''.DATETIME_NOW.'\' 
@@ -81,67 +81,67 @@ $sql = 'SELECT cat.*, dat.*,
                '.$hidden.'
          ORDER BY dat_begin ASC
          LIMIT 10 ';
-$result = $g_db->query($sql);
+$result = $gDb->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss  = new RSSfeed('http://'. $g_current_organization->getValue('org_homepage'), $g_current_organization->getValue('org_longname'). ' - '. $get_headline,
-		$g_l10n->get('DAT_CURRENT_DATES_OF_ORGA', $g_current_organization->getValue('org_longname')));
-$date = new TableDate($g_db);
+$rss  = new RSSfeed('http://'. $gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline,
+		$gL10n->get('DAT_CURRENT_DATES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
+$date = new TableDate($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $g_db->fetch_array($result))
+while ($row = $gDb->fetch_array($result))
 {
     // ausgelesene Termindaten in Date-Objekt schieben
     $date->clear();
     $date->setArray($row);
 
     // Die Attribute fuer das Item zusammenstellen
-    $title = $date->getValue('dat_begin', $g_preferences['system_date']);
-    if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
+    $title = $date->getValue('dat_begin', $gPreferences['system_date']);
+    if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
     {
-        $title = $title. ' - '. $date->getValue('dat_end', $g_preferences['system_date']);
+        $title = $title. ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
     }
     $title = $title. ' '. $date->getValue('dat_headline');
     $link  = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
-    $description = '<b>'.$date->getValue('dat_headline').'</b> <br />'. $date->getValue('dat_begin', $g_preferences['system_date']);
+    $description = '<b>'.$date->getValue('dat_headline').'</b> <br />'. $date->getValue('dat_begin', $gPreferences['system_date']);
 
     if ($date->getValue('dat_all_day') == 0)
     {
-        $description = $description. ' von '. $date->getValue('dat_begin', $g_preferences['system_time']). ' '.$g_l10n->get('SYS_CLOCK').' bis ';
-        if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
+        $description = $description. ' von '. $date->getValue('dat_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK').' bis ';
+        if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
         {
-            $description = $description. $date->getValue('dat_end', $g_preferences['system_date']). ' ';
+            $description = $description. $date->getValue('dat_end', $gPreferences['system_date']). ' ';
         }
-        $description = $description. $date->getValue('dat_end', $g_preferences['system_time']). ' '.$g_l10n->get('SYS_CLOCK');
+        $description = $description. $date->getValue('dat_end', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK');
     }
     else
     {
-        if($date->getValue('dat_begin', $g_preferences['system_date']) != $date->getValue('dat_end', $g_preferences['system_date']))
+        if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
         {
-            $description = $g_l10n->get('SYS_DATE_FROM_TO', $description, $date->getValue('dat_end', $g_preferences['system_date']));
+            $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $date->getValue('dat_end', $gPreferences['system_date']));
         }
     }
 
     if ($date->getValue('dat_location') != '')
     {
-        $description = $description. '<br /><br />'.$g_l10n->get('DAT_LOCATION').':&nbsp;'. $date->getValue('dat_location');
+        $description = $description. '<br /><br />'.$gL10n->get('DAT_LOCATION').':&nbsp;'. $date->getValue('dat_location');
     }
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $date->getDescription('HTML'). 
-                   '<br /><br /><a href="'.$link.'">'. $g_l10n->get('SYS_LINK_TO', $g_current_organization->getValue('org_homepage')). '</a>';
+                   '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
 
     //i-cal downloadlink
-    $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=6">'.$g_l10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
+    $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=6">'.$gL10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
 
     // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$g_l10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create')). '</i>';
+    $description = $description. '<br /><br /><i>'.$gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create')). '</i>';
 
     if($date->getValue('dat_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>'.$g_l10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change')). '</i>';
+        $description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r',strtotime($date->getValue('dat_timestamp_create')));

@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * usf_id: ID des Feldes, das bearbeitet werden soll
  *
@@ -18,18 +18,18 @@ require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_user_field.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
-if (!$g_current_user->isWebmaster())
+if (!$gCurrentUser->isWebmaster())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // benutzerdefiniertes Feldobjekt anlegen
-$user_field = new TableUserField($g_db);
+$user_field = new TableUserField($gDb);
 
 if($getUsfId > 0)
 {
@@ -37,9 +37,9 @@ if($getUsfId > 0)
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($user_field->getValue('cat_org_id') >  0
-    && $user_field->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
+    && $user_field->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -72,15 +72,15 @@ if($user_field->getValue('usf_system') == 1)
 // zusaetzliche Daten fuer den Html-Kopf setzen
 if($getUsfId > 0)
 {
-    $g_layout['title']  = $g_l10n->get('ORG_EDIT_PROFILE_FIELD');
+    $gLayout['title']  = $gL10n->get('ORG_EDIT_PROFILE_FIELD');
 }
 else
 {
-    $g_layout['title']  = $g_l10n->get('ORG_CREATE_PROFILE_FIELD');
+    $gLayout['title']  = $gL10n->get('ORG_CREATE_PROFILE_FIELD');
 }
 
 // Kopfinformationen
-$g_layout['header'] = '
+$gLayout['header'] = '
 <script type="text/javascript"><!--
 	function setValueList()
 	{
@@ -108,15 +108,15 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '
 <form id="edit_field" action="'.$g_root_path.'/adm_program/administration/organization/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1" method="post">
 <div class="formLayout" id="edit_fields_form">
-    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
         <ul class="formFieldList">
             <li>
                 <dl>
-                    <dt><label for="usf_name">'.$g_l10n->get('SYS_NAME').':</label></dt>
+                    <dt><label for="usf_name">'.$gL10n->get('SYS_NAME').':</label></dt>
                     <dd><input type="text" name="usf_name" id="usf_name" '.$html_disabled.' style="width: 345px;" maxlength="100"
                         value="'. $user_field->getValue('usf_name'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>';
@@ -125,7 +125,7 @@ echo '
 			{
 				echo '<li>
 					<dl>
-						<dt><label for="usf_name">'.$g_l10n->get('SYS_INTERNAL_NAME').':</label></dt>
+						<dt><label for="usf_name">'.$gL10n->get('SYS_INTERNAL_NAME').':</label></dt>
 						<dd><input type="text" name="usf_name_intern" id="usf_name_intern" disabled="disabled" style="width: 345px;" maxlength="100"
 							value="'. $user_field->getValue('usf_name_intern'). '" />
 							<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC&amp;inline=true"><img 
@@ -137,7 +137,7 @@ echo '
 			}
             echo '<li>
                 <dl>
-                    <dt><label for="usf_description">'.$g_l10n->get('SYS_DESCRIPTION').':</label></dt>
+                    <dt><label for="usf_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd><textarea name="usf_description" id="usf_description" style="width: 345px;" rows="4" cols="40">'.
                         $user_field->getValue('usf_description'). '</textarea>
                     </dd>
@@ -145,7 +145,7 @@ echo '
             </li>
             <li>
                 <dl>
-                    <dt><label for="usf_cat_id">'.$g_l10n->get('SYS_CATEGORY').':</label></dt>
+                    <dt><label for="usf_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
                     <dd>';
                         if($user_field->getValue('usf_system') == 1)
                         {
@@ -157,24 +157,24 @@ echo '
                         {
 							echo FormElements::generateCategorySelectBox('USF', $user_field->getValue('usf_cat_id'), 'usf_cat_id');
                         }
-                        echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="usf_type">'.$g_l10n->get('ORG_DATATYPE').':</label></dt>
+                    <dt><label for="usf_type">'.$gL10n->get('ORG_DATATYPE').':</label></dt>
                     <dd>';
-                        $userFieldText = array(''         => '- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -',
-                                               'CHECKBOX' => $g_l10n->get('SYS_CHECKBOX'),
-                                               'DATE'     => $g_l10n->get('SYS_DATE'),
-                                               'DROPDOWN' => $g_l10n->get('SYS_DROPDOWN_LISTBOX'),
-                                               'EMAIL'    => $g_l10n->get('SYS_EMAIL'),
-                                               'RADIO_BUTTON' => $g_l10n->get('SYS_RADIO_BUTTON'),
-                                               'TEXT'     => $g_l10n->get('SYS_TEXT').' (50)',
-                                               'TEXT_BIG' => $g_l10n->get('SYS_TEXT').' (255)',
-                                               'URL'      => $g_l10n->get('ORG_URL'),
-                                               'NUMERIC'  => $g_l10n->get('SYS_NUMBER'));
+                        $userFieldText = array(''         => '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -',
+                                               'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
+                                               'DATE'     => $gL10n->get('SYS_DATE'),
+                                               'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+                                               'EMAIL'    => $gL10n->get('SYS_EMAIL'),
+                                               'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
+                                               'TEXT'     => $gL10n->get('SYS_TEXT').' (50)',
+                                               'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (255)',
+                                               'URL'      => $gL10n->get('ORG_URL'),
+                                               'NUMERIC'  => $gL10n->get('SYS_NUMBER'));
 
                         if($user_field->getValue('usf_system') == 1)
                         {
@@ -197,13 +197,13 @@ echo '
                                 }
                             echo '</select>';
                         }
-                        echo '<span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                        echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
             </li>
             <li id="admValueList">
                 <dl>
-                    <dt><label for="usf_value_list">'.$g_l10n->get('SYS_VALUE_LIST').':</label></dt>
+                    <dt><label for="usf_value_list">'.$gL10n->get('SYS_VALUE_LIST').':</label></dt>
                     <dd><textarea name="usf_value_list" id="usf_value_list" style="width: 345px;" rows="6" cols="40">'.
                         $user_field->getValue('usf_value_list'). '</textarea>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC&amp;inline=true"><img 
@@ -216,7 +216,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_hidden">
-                            <img src="'. THEME_PATH. '/icons/eye.png" alt="'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'" />
+                            <img src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />
                         </label>
                     </dt>
                     <dd>
@@ -226,7 +226,7 @@ echo '
                             echo ' checked="checked" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_hidden">'.$g_l10n->get('ORG_FIELD_NOT_HIDDEN').'</label>
+                        <label for="usf_hidden">'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'</label>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_HIDDEN_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_HIDDEN_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -237,7 +237,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_disabled">
-                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$g_l10n->get('ORG_FIELD_DISABLED').'" />
+                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED').'" />
                         </label>
                     </dt>
                     <dd>
@@ -247,7 +247,7 @@ echo '
                             echo ' checked="checked" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_disabled">'.$g_l10n->get('ORG_FIELD_DISABLED', $g_l10n->get('ROL_RIGHT_EDIT_USER')).'</label>
+                        <label for="usf_disabled">'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'</label>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -258,7 +258,7 @@ echo '
                 <dl>
                     <dt>
                         <label for="usf_mandatory">
-                            <img src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$g_l10n->get('ORG_FIELD_MANDATORY').'" />
+                            <img src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_MANDATORY').'" />
                         </label>
                     </dt>
                     <dd>
@@ -273,7 +273,7 @@ echo '
                             echo ' disabled="disabled" ';
                         }
                         echo ' value="1" />
-                        <label for="usf_mandatory">'.$g_l10n->get('ORG_FIELD_MANDATORY').'</label>
+                        <label for="usf_mandatory">'.$gL10n->get('ORG_FIELD_MANDATORY').'</label>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_MANDATORY_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_MANDATORY_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -288,19 +288,19 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($g_db, $user_field->getValue('usf_usr_id_create'));
-                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_create'));
+                $user_create = new User($gDb, $gUserFields, $user_field->getValue('usf_usr_id_create'));
+                echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_create'));
 
                 if($user_field->getValue('usf_usr_id_change') > 0)
                 {
-                    $user_change = new User($g_db, $user_field->getValue('usf_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_change'));
+                    $user_change = new User($gDb, $gUserFields, $user_field->getValue('usf_usr_id_change'));
+                    echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_change'));
                 }
             echo '</div>';
         }
 
         echo '<div class="formSubmit">
-            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>
@@ -310,8 +310,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

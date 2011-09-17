@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * pho_id: id des Albums zu dem die Fotos hinzugefuegt werden sollen
  * uploadmethod: 1 - Klassisch
@@ -30,44 +30,44 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/image.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
 $getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric', null, true);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_photo_module'] == 0)
+if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-if(!$g_current_user->editPhotoRight())
+if(!$gCurrentUser->editPhotoRight())
 {
-    $g_message->show($g_l10n->get('PHO_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
-    $photo_album->db =& $g_db;
+    $photo_album->db =& $gDb;
 }
 else
 {
-    $photo_album = new TablePhotos($g_db, $getPhotoId);
+    $photo_album = new TablePhotos($gDb, $getPhotoId);
     $_SESSION['photo_album'] =& $photo_album;
 }
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($photo_album->getValue('pho_org_shortname') != $g_organization)
+if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if (empty($_POST) && $getUploadmethod == 1)
 {
-    $g_message->show($g_l10n->get('PHO_NO_FILES_OR_TO_LARGE', ini_get('post_max_size')));
+    $gMessage->show($gL10n->get('PHO_NO_FILES_OR_TO_LARGE', ini_get('post_max_size')));
 }
 
 //bei Bedarf Uploadodner erzeugen
@@ -85,16 +85,16 @@ $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin
 if($getUploadmethod == 1)
 {
 	//Photomodulspezifische CSS laden
-	$g_layout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
+	$gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
 
 	// Html-Kopf ausgeben
-	$g_layout['title'] = $g_l10n->get('PHO_UPLOAD_PHOTOS');
+	$gLayout['title'] = $gL10n->get('PHO_UPLOAD_PHOTOS');
 	require(SERVER_PATH. '/adm_program/system/overall_header.php');
 	
 	echo '
-	<h1 class="moduleHeadline">'.$g_l10n->get('PHO_UPLOAD_PHOTOS').'</h1>
-    <p> '.$g_l10n->get('SYS_PLEASE_WAIT').'...<br /><br />
-        '.$g_l10n->get('PHO_SHOWN_ON_READY').'<strong>('.$photo_album->getValue('pho_name').')</strong>
+	<h1 class="moduleHeadline">'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</h1>
+    <p> '.$gL10n->get('SYS_PLEASE_WAIT').'...<br /><br />
+        '.$gL10n->get('PHO_SHOWN_ON_READY').'<strong>('.$photo_album->getValue('pho_name').')</strong>
     </p>';
 }
 
@@ -113,7 +113,7 @@ if(isset($_POST['upload']) && $getUploadmethod == 1)
             //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
             if($_FILES['Filedata']['error'][$x]==1)
             {
-                $g_message->show($g_l10n->get('PHO_PHOTO_FILES_TO_LARGE', admFuncMaxUploadSize()));
+                $gMessage->show($gL10n->get('PHO_PHOTO_FILES_TO_LARGE', admFuncMaxUploadSize()));
                 $x = 5;
             }
         }
@@ -121,7 +121,7 @@ if(isset($_POST['upload']) && $getUploadmethod == 1)
     //Kontrolle ob Fotos ausgewaehlt wurden
     if($counter==0)
     {
-        $g_message->show($g_l10n->get('PHO_NO_FILES_SELECTED'));
+        $gMessage->show($gL10n->get('PHO_NO_FILES_SELECTED'));
     }
     // Fotos wurden erfolgreich hochgeladen -> Upload-Seite aus der Navi-Klasse entfernen
     $_SESSION['navigation']->deleteLastUrl();
@@ -140,7 +140,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     {
         if(!is_uploaded_file($_FILES['Filedata']['tmp_name']))
         {
-            echo $g_l10n->get('SYS_UPLOAD_ERROR');
+            echo $gL10n->get('SYS_UPLOAD_ERROR');
         }
         $temp_filename = $_FILES['Filedata']['tmp_name'];
         $filename = $_FILES['Filedata']['name'];
@@ -152,7 +152,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	
     	if($getUploadmethod == 1)
     	{
-    		echo '<br /><br />'.$g_l10n->get('PHO_PHOTO').$new_quantity.':<br />';
+    		echo '<br /><br />'.$gL10n->get('PHO_PHOTO').$new_quantity.':<br />';
     	}
     	
     	// Sonderzeichen aus Dateinamen entfernen
@@ -168,13 +168,13 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     	$image_dimensions = $image_properties[0]*$image_properties[1];
     	if($image_dimensions > admFuncProcessableImageSize())
     	{
-        	echo $g_l10n->get('PHP_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$g_l10n->get('MEGA_PIXEL');
+        	echo $gL10n->get('PHP_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
     	}
     	
     	//Typkontrolle
         elseif($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
         {
-            $g_message->show($g_l10n->get('PHO_PHOTO_FORMAT_INVALID'));
+            $gMessage->show($gL10n->get('PHO_PHOTO_FORMAT_INVALID'));
         }
     	
     	//Bild in Tempordner verschieben und weiterverarbeiten
@@ -184,7 +184,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     		//Bildobjekt erzeugen und scaliert speichern
     	    $image = new Image($image_file);
             $image->setImageType('jpeg');
-            $image->scaleLargerSide($g_preferences['photo_save_scale']);
+            $image->scaleLargerSide($gPreferences['photo_save_scale']);
             $image->copyToFile(null, $ordner.'/'.$new_quantity.'.jpg');
             $image->delete();
             
@@ -198,7 +198,7 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
     
             //Thumbnail speichern
             $image = new Image($image_file);
-            $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
+            $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
             $image->copyToFile(null, $ordner.'/thumbnails/'.$new_quantity.'.jpg');
             $image->delete(); 
       
@@ -226,23 +226,23 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
                 	 echo '
                 	  <img class="photoOutput" 
                 	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&photo_nr='.$new_quantity.'&pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&max_width=300&max_height=200" 
-                	  alt="'.$g_l10n->get('PHO_PHOTO').' '.$new_quantity.'" title="'.$g_l10n->get('PHO_PHOTO').' '.$new_quantity.'">
+                	  alt="'.$gL10n->get('PHO_PHOTO').' '.$new_quantity.'" title="'.$gL10n->get('PHO_PHOTO').' '.$new_quantity.'">
                 	  <br />';
                 }
                 else
                 {
-                	echo $g_l10n->get('PHO_PHOTO_UPLOAD_SUCCESS');exit();
+                	echo $gL10n->get('PHO_PHOTO_UPLOAD_SUCCESS');exit();
                 }          
             }
             else
             {
                 $new_quantity --;
-                echo $g_l10n->get('PHO_PHOTO_PROCESSING_ERROR');
+                echo $gL10n->get('PHO_PHOTO_PROCESSING_ERROR');
             }	        
     	}
     	else
     	{
-    	   echo $g_l10n->get('SYS_UPLOAD_ERROR');
+    	   echo $gL10n->get('SYS_UPLOAD_ERROR');
     	}
     }
 }
@@ -257,18 +257,18 @@ if($getUploadmethod == 1)
 		<ul class="iconTextLinkList">
 		    <li>
 		        <span class="iconTextLink">
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$g_l10n->get('SYS_OVERVIEW').'">
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$gL10n->get('SYS_OVERVIEW').'">
 		            	<img src="'. THEME_PATH. '/icons/application_view_tile.png" />
 		            </a>
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$g_l10n->get('SYS_OVERVIEW').'">'.$g_l10n->get('SYS_OVERVIEW').'</a>
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album->getValue('pho_id').'"  title="'.$gL10n->get('SYS_OVERVIEW').'">'.$gL10n->get('SYS_OVERVIEW').'</a>
 		        </span>
 		    </li>
 		    <li>
 		        <span class="iconTextLink">
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;uploadmethod=1" title="'.$g_l10n->get('PHO_UPLOAD_MORE').'">
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;uploadmethod=1" title="'.$gL10n->get('PHO_UPLOAD_MORE').'">
 		            	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="Weitere Fotos hochladen" />
 		            </a>
-		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;uploadmethod=1"  title="'.$g_l10n->get('PHO_UPLOAD_MORE').'">'.$g_l10n->get('PHO_UPLOAD_MORE').'</a>
+		            <a href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$photo_album->getValue('pho_id').'&amp;uploadmethod=1"  title="'.$gL10n->get('PHO_UPLOAD_MORE').'">'.$gL10n->get('PHO_UPLOAD_MORE').'</a>
 		        </span>
 		    </li>
 		 </ul>

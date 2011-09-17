@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
  * subject - Betreff der Mail kann unabhaengig vom Formular vorgegeben werden
@@ -17,22 +17,22 @@ require_once('../../system/common.php');
 require_once('../../system/classes/email.php');
 require_once('../../system/classes/table_roles.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $postRoleId = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $_POST['subject'] = admFuncVariableIsValid($_GET, 'subject', 'string', '');
 
-if ($g_preferences['enable_mail_module'] != 1)
+if ($gPreferences['enable_mail_module'] != 1)
 {
     // es duerfen oder koennen keine Mails ueber den Server verschickt werden
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // if login then show sender name and email
-if ($g_current_user->getValue('usr_id') > 0)
+if ($gCurrentUser->getValue('usr_id') > 0)
 {
-	$_POST['name'] = $g_current_user->getValue('FIRST_NAME'). ' '. $g_current_user->getValue('LAST_NAME');
-	$_POST['mailfrom'] = $g_current_user->getValue('EMAIL');
+	$_POST['name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+	$_POST['mailfrom'] = $gCurrentUser->getValue('EMAIL');
 }
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
@@ -41,26 +41,26 @@ if ($getUserId > 0)
 {
     // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
     // auf diese zugreifen darf oder ob die UsrId ueberhaupt eine gueltige Mailadresse hat...
-    if (!$g_valid_login)
+    if (!$gValidLogin)
     {
         //in ausgeloggtem Zustand duerfen nie direkt usr_ids uebergeben werden...
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($g_db, $getUserId);
+    $user = new User($gDb, $gUserFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden    
-    if((  $g_current_user->editUsers() == false && isMember($user->getValue('usr_id')) == false)
+    if((  $gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0 )
     {
-        $g_message->show($g_l10n->get('SYS_USER_ID_NOT_FOUND'));
+        $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }
 
     // besitzt der User eine gueltige E-Mail-Adresse
     if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
     {
-        $g_message->show($g_l10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+        $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 	
 	$_POST['mailto'] = $user->getValue('EMAIL');
@@ -72,20 +72,20 @@ elseif ($postRoleId > 0)
     $sql = 'SELECT rol_mail_this_role, rol_name, rol_id 
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_cat_id    = cat_id
-               AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+               AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                    OR cat_org_id IS NULL)
                AND rol_id = '.$postRoleId;
-    $result = $g_db->query($sql);
-    $row    = $g_db->fetch_array($result);
+    $result = $gDb->query($sql);
+    $row    = $gDb->fetch_array($result);
 
     // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
     // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
     // Rollen muessen zur aktuellen Organisation gehoeren
-    if(($g_valid_login == false && $row['rol_mail_this_role'] != 3)
-    || ($g_valid_login == true  && $g_current_user->mailRole($row['rol_id']) == false)
+    if(($gValidLogin == false && $row['rol_mail_this_role'] != 3)
+    || ($gValidLogin == true  && $gCurrentUser->mailRole($row['rol_id']) == false)
     || $row['rol_id']  == null)
     {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 
@@ -97,27 +97,27 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // Deswegen muss dies ueberprueft werden...
 if (empty($_POST))
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Erst mal ein neues Emailobjekt erstellen...
 $email = new Email();
 
 // und ein Dummy Rollenobjekt dazu
-$role = new TableRoles($g_db);
+$role = new TableRoles($gDb);
 
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
 if(strlen($_POST['name']) == 0)
 {
-    $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_NAME')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
 }
 
 //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
-if ( $g_valid_login 
-&& (  $_POST['mailfrom'] != $g_current_user->getValue('EMAIL') 
-   || $_POST['name'] != $g_current_user->getValue('FIRST_NAME').' '.$g_current_user->getValue('LAST_NAME')) )
+if ( $gValidLogin 
+&& (  $_POST['mailfrom'] != $gCurrentUser->getValue('EMAIL') 
+   || $_POST['name'] != $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')) )
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Absenderangaben setzen
@@ -130,9 +130,9 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
         if (isset($_FILES['userfile']))
         {
             //noch mal schnell pruefen ob der User wirklich eingelogt ist...
-            if (!$g_valid_login)
+            if (!$gValidLogin)
             {
-                $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+                $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
             }
             $attachment_size = 0;
             // Nun jedes Attachment
@@ -141,7 +141,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
                 //Pruefen ob ein Fehler beim Upload vorliegt
                 if (($_FILES['userfile']['error'][$act_attachment_nr] != 0) &&  ($_FILES['userfile']['error'][$act_attachment_nr] != 4))
                 {
-                    $g_message->show($g_l10n->get('MAI_ATTACHMENT_TO_LARGE'));
+                    $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                 }
                 //Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
                 if ($_FILES['userfile']['error'][$act_attachment_nr] == 0)
@@ -150,7 +150,7 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
                     $attachment_size = $attachment_size + $_FILES['userfile']['size'][$act_attachment_nr];
                     if($attachment_size > $email->getMaxAttachementSize("b"))
                     {
-                        $g_message->show($g_l10n->get('MAI_ATTACHMENT_TO_LARGE'));
+                        $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                     }
                     
                     if (strlen($_FILES['userfile']['type'][$act_attachment_nr]) > 0)
@@ -169,12 +169,12 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('MAI_SUBJECT')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('MAI_SUBJECT')));
     }
 }
 else
 {
-    $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('SYS_EMAIL')));
+    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
 }
 
 if ($getUserId > 0)
@@ -182,31 +182,31 @@ if ($getUserId > 0)
 	// wurde kein Benutzer uebergeben, dann muss Rolle uebergeben werden
     if ($postRoleId == 0)
     {
-        $g_message->show($g_l10n->get('MAI_CHOOSE_ROLE'));
+        $gMessage->show($gL10n->get('MAI_CHOOSE_ROLE'));
     }
     
     $role->readData($postRoleId);
 
 	// Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
-	if ($g_valid_login == true && !$g_current_user->mailRole($postRoleId))
+	if ($gValidLogin == true && !$gCurrentUser->mailRole($postRoleId))
     {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 	// Falls der User nicht eingeloggt ist, muss der Wert 3 sein
-    if ($g_valid_login == false && $role->getValue('rol_mail_this_role') != 3)
+    if ($gValidLogin == false && $role->getValue('rol_mail_this_role') != 3)
     {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 }
 
 // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
 // muss natuerlich der Code ueberprueft werden
-if (!$g_valid_login && $g_preferences['enable_mail_captcha'] == 1)
+if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
     {
-		if($g_preferences['captcha_type']=='pic') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-		else if($g_preferences['captcha_type']=='calc') {$g_message->show($g_l10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+		if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+		else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
     }
 }
 
@@ -249,13 +249,13 @@ else
 				 AND field.usf_type = "EMAIL"
                 LEFT JOIN '. TBL_USER_DATA. ' as last_name
                   ON last_name.usd_usr_id = usr_id
-                 AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+                 AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
                 LEFT JOIN '. TBL_USER_DATA. ' as first_name
                   ON first_name.usd_usr_id = usr_id
-                 AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+                 AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
                WHERE rol_id      = '.$postRoleId.'
                  AND rol_cat_id  = cat_id
-                 AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                 AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                      OR cat_org_id IS NULL )
                  AND mem_rol_id  = rol_id
                  AND mem_usr_id  = usr_id
@@ -264,16 +264,16 @@ else
 
 	// Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 
 	//damit er die Mail nicht an sich selber schickt.
-	if ($g_valid_login)
+	if ($gValidLogin)
 	{
-		$sql =$sql. ' AND usr_id <> '. $g_current_user->getValue('usr_id');
+		$sql =$sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
     } 
-    $result = $g_db->query($sql);
+    $result = $gDb->query($sql);
 
-    if($g_db->num_rows($result) > 0)
+    if($gDb->num_rows($result) > 0)
     {
         // alle Mitglieder als BCC an die Mail haengen
-        while ($row = $g_db->fetch_object($result))
+        while ($row = $gDb->fetch_object($result))
         {
             $email->addBlindCopy($row->email, $row->first_name.' '.$row->last_name);
         }
@@ -282,7 +282,7 @@ else
     {
         // Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
         // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
-        $g_message->show($g_l10n->get('MAI_ROLE_NO_EMAILS'));
+        $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));
     }
 
 }
@@ -293,7 +293,7 @@ if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
     $email->setCopyToSenderFlag();
 
     //Falls der User eingeloggt ist, werden die Empfaenger der Mail in der Kopie aufgelistet
-    if ($g_valid_login)
+    if ($gValidLogin)
     {
         $email->setListRecipientsFlag();
     }
@@ -302,16 +302,16 @@ if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
 //Den Text fuer die Mail aufbereiten
 if ($role->getValue('rol_id') > 0)
 {
-    $mail_body = $g_l10n->get('MAI_EMAIL_SEND_TO_ROLE', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
+    $mail_body = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE', $_POST['name'], $gCurrentOrganization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
 }
 else
 {
-    $mail_body = $g_l10n->get('MAI_EMAIL_SEND_TO_USER', $_POST['name'], $g_current_organization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
+    $mail_body = $gL10n->get('MAI_EMAIL_SEND_TO_USER', $_POST['name'], $gCurrentOrganization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
 }
 
-if (!$g_valid_login)
+if (!$gValidLogin)
 {
-    $mail_body = $mail_body. "\n".$g_l10n->get('MAI_SENDER_NOT_LOGGED_IN');
+    $mail_body = $mail_body. "\n".$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
 }
 $mail_body = $mail_body. "\n\n\n". $_POST['body'];
 
@@ -336,31 +336,31 @@ if ($email->sendEmail())
     // Meldung ueber erfolgreichen Versand und danach weiterleiten
     if($_SESSION['navigation']->count() > 0)
     {
-        $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
+        $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
     }
     else
     {
-        $g_message->setForwardUrl($g_homepage);
+        $gMessage->setForwardUrl($gHomepage);
     }
     
     if ($role->getValue('rol_id') > 0)
     {
-        $g_message->show($g_l10n->get('SYS_EMAIL_SEND', $g_l10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
+        $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_EMAIL_SEND', $_POST['mailto']));
+        $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $_POST['mailto']));
     }
 }
 else
 {
     if ($role->getValue('rol_id') > 0)
     {
-        $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $g_l10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
+        $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
     }
     else
     {
-        $g_message->show($g_l10n->get('SYS_EMAIL_NOT_SEND', $_POST['mailto']));
+        $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $_POST['mailto']));
     }
 }
 

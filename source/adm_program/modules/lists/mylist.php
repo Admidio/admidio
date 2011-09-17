@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * lst_id : Liste deren Konfiguration direkt angezeigt werden soll
  * rol_id : das Feld Rolle kann mit der entsprechenden Rolle vorbelegt werden
@@ -23,7 +23,7 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/list_configuration.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $get_lst_id       = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
 $get_rol_id       = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $get_active_role  = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
@@ -45,7 +45,7 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 $default_column_rows = 6;    // Anzahl der Spalten, die beim Aufruf angezeigt werden
 
 // Listenobjekt anlegen
-$list = new ListConfiguration($g_db, $get_lst_id);
+$list = new ListConfiguration($gDb, $get_lst_id);
 
 if(isset($_SESSION['mylist_request']))
 {
@@ -73,8 +73,8 @@ elseif($get_lst_id > 0)
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $g_l10n->get('LST_MY_LIST').' - '.$g_l10n->get('SYS_CONFIGURATION');
-$g_layout['header'] = '
+$gLayout['title']  = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('SYS_CONFIGURATION');
+$gLayout['header'] = '
     <script type="text/javascript">
         var listId             = '.$get_lst_id.';
         var fieldNumberIntern  = 0;
@@ -87,7 +87,7 @@ $g_layout['header'] = '
             // MySQL erlaubt nur 61 gejointe Tabellen
             if(fieldNumberIntern >= 57)
             {
-                alert("'.$g_l10n->get('LST_NO_MORE_COLUMN').'");
+                alert("'.$gL10n->get('LST_NO_MORE_COLUMN').'");
                 return;
             }
             
@@ -97,7 +97,7 @@ $g_layout['header'] = '
             var newTableRow = table.insertRow(fieldNumberIntern);
             //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
             var newCellCount = newTableRow.insertCell(-1);
-            newCellCount.innerHTML = (fieldNumberShow) + ". '.$g_l10n->get('LST_COLUMN').' :";
+            newCellCount.innerHTML = (fieldNumberShow) + ". '.$gL10n->get('LST_COLUMN').' :";
             
             // neue Spalte zur Auswahl des Profilfeldes
             var newCellField = newTableRow.insertCell(-1);
@@ -160,8 +160,8 @@ $g_layout['header'] = '
             var newCellOrder = newTableRow.insertCell(-1);
             newCellOrder.innerHTML = "<select size=\"1\" id=\"sort" + fieldNumberShow + "\" name=\"sort" + fieldNumberShow + "\">" +
                     "<option value=\"\">&nbsp;</option>" +
-                    "<option value=\"ASC\" " + selectAsc + ">'.$g_l10n->get('LST_A_TO_Z').'</option>" +
-                    "<option value=\"DESC\" " + selectDesc + ">'.$g_l10n->get('LST_Z_TO_A').'</option>" +
+                    "<option value=\"ASC\" " + selectAsc + ">'.$gL10n->get('LST_A_TO_Z').'</option>" +
+                    "<option value=\"DESC\" " + selectDesc + ">'.$gL10n->get('LST_Z_TO_A').'</option>" +
                 "</select>";
             
             // neue Spalte fuer Bedingungen
@@ -192,34 +192,34 @@ $g_layout['header'] = '
             $old_cat_name_intern = '';
             $old_cat_id   = 0;
 
-            foreach($g_current_user->userFieldData as $field)
+            foreach($gCurrentUser->userFieldData as $field)
             {    
                 // bei den Stammdaten noch Foto und Loginname anhaengen
                 if($old_cat_name_intern == 'MASTER_DATA'
                 && $field->getValue('cat_name_intern') != 'MASTER_DATA')
                 {
-                    $g_layout['header'] .= '
+                    $gLayout['header'] .= '
                     user_fields['. $i. '] = new Object();
                     user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
                     user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
                     user_fields['. $i. ']["usf_id"]   = "usr_login_name";
-                    user_fields['. $i. ']["usf_name"] = "'.$g_l10n->get('SYS_USERNAME').'";
-                    user_fields['. $i. ']["usf_name_intern"] = "'.$g_l10n->get('SYS_USERNAME').'";';
+                    user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('SYS_USERNAME').'";
+                    user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('SYS_USERNAME').'";';
                     $i++;
                     
-                    $g_layout['header'] .= '
+                    $gLayout['header'] .= '
                     user_fields['. $i. '] = new Object();
                     user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
                     user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
                     user_fields['. $i. ']["usf_id"]   = "usr_photo";
-                    user_fields['. $i. ']["usf_name"] = "'.$g_l10n->get('PHO_PHOTO').'";
-                    user_fields['. $i. ']["usf_name_intern"] = "'.$g_l10n->get('PHO_PHOTO').'";';
+                    user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
+                    user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";';
                     $i++;
                 }
                 
-                if($field->getValue("usf_hidden") == 0 || $g_current_user->editUsers())
+                if($field->getValue("usf_hidden") == 0 || $gCurrentUser->editUsers())
                 {
-                    $g_layout['header'] .= '
+                    $gLayout['header'] .= '
                     user_fields['. $i. '] = new Object();
                     user_fields['. $i. ']["cat_id"]   = '. $field->getValue('cat_id'). ';
                     user_fields['. $i. ']["cat_name"] = "'. $field->getValue('cat_name'). '";
@@ -235,22 +235,22 @@ $g_layout['header'] = '
             }       
 
             // Anfangs- und Enddatum der Rollenmitgliedschaft als Inhalte noch anhaengen
-            $g_layout['header'] .= '
+            $gLayout['header'] .= '
             user_fields['. $i. '] = new Object();
             user_fields['. $i. ']["cat_id"]   = -1;
-            user_fields['. $i. ']["cat_name"] = "'.$g_l10n->get('LST_ROLE_INFORMATION').'";
+            user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
             user_fields['. $i. ']["usf_id"]   = "mem_begin";
-            user_fields['. $i. ']["usf_name"] = "'.$g_l10n->get('LST_MEMBERSHIP_START').'";
-            user_fields['. $i. ']["usf_name_intern"] = "'.$g_l10n->get('LST_MEMBERSHIP_START').'";';
+            user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";
+            user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_START').'";';
             
             $i++;
-            $g_layout['header'] .= '
+            $gLayout['header'] .= '
             user_fields['. $i. '] = new Object();
             user_fields['. $i. ']["cat_id"]   = -1;
-            user_fields['. $i. ']["cat_name"] = "'.$g_l10n->get('LST_ROLE_INFORMATION').'";
+            user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";
             user_fields['. $i. ']["usf_id"]   = "mem_end";
-            user_fields['. $i. ']["usf_name"] = "'.$g_l10n->get('LST_MEMBERSHIP_END').'";
-            user_fields['. $i. ']["usf_name_intern"] = "'.$g_l10n->get('LST_MEMBERSHIP_END').'";
+            user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
+            user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('LST_MEMBERSHIP_END').'";
             
             return user_fields;
         }
@@ -265,7 +265,7 @@ $g_layout['header'] = '
                 $act_field_count = 0;
                 while(isset($form_values['column'. $act_field_count]))
                 {
-                    $g_layout['header'] .= '
+                    $gLayout['header'] .= '
                     default_fields['. $act_field_count. '] = new Object();
                     default_fields['. $act_field_count. ']["usf_id"]    = "'. $form_values['column'. $act_field_count]. '";
                     default_fields['. $act_field_count. ']["sort"]      = "'. $form_values['sort'. $act_field_count]. '";
@@ -291,7 +291,7 @@ $g_layout['header'] = '
                     {
                         $column_content = $column->getValue('lsc_special_field');
                     }
-                    $g_layout['header'] .= '
+                    $gLayout['header'] .= '
                     default_fields['. $number. '] = new Object();
                     default_fields['. $number. ']["usf_id"]    = "'. $column_content. '";
                     default_fields['. $number. ']["sort"]      = "'. $column->getValue('lsc_sort'). '";
@@ -299,7 +299,7 @@ $g_layout['header'] = '
                 }
             }
 
-            $g_layout['header'] .= '
+            $gLayout['header'] .= '
             return default_fields;
         }
 
@@ -337,7 +337,7 @@ $g_layout['header'] = '
 
                 case "save_as":
                     var listName = "";
-                    listName = prompt("'.$g_l10n->get('LST_CONFIGURATION_SAVE').'");
+                    listName = prompt("'.$gL10n->get('LST_CONFIGURATION_SAVE').'");
                     if(listName != null)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?mode=1&name=" + listName;
@@ -346,7 +346,7 @@ $g_layout['header'] = '
                     break;
 
                 case "delete":
-                    var msg_result = confirm("'.$g_l10n->get('LST_CONFIGURATION_DELETE').'");
+                    var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$get_lst_id.'&mode=3";
@@ -355,7 +355,7 @@ $g_layout['header'] = '
                     break;
 
                 case "system":
-                    var msg_result = confirm("'.$g_l10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
+                    var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$get_lst_id.'&mode=4";
@@ -364,7 +364,7 @@ $g_layout['header'] = '
                     break;
 
                 case "default":
-                    var msg_result = confirm("'.$g_l10n->get('LST_CONFIGURATION_DEFAULT').'");
+                    var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DEFAULT').'");
                     if(msg_result)
                     {
                         document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$get_lst_id.'&mode=5";
@@ -380,10 +380,10 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '
 <form id="form_mylist" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
 <div class="formLayout" id="mylist_form">
-    <div class="formHead">'.$g_l10n->get('LST_MY_LIST').'</div>
+    <div class="formHead">'.$gL10n->get('LST_MY_LIST').'</div>
     <div class="formBody">
-        <p><b>1.</b> '.$g_l10n->get('LST_CHANGE_LIST').'</p>
-        <p><b>'.$g_l10n->get('LST_CONFIGURATION_LIST').' :</b>&nbsp;&nbsp;
+        <p><b>1.</b> '.$gL10n->get('LST_CHANGE_LIST').'</p>
+        <p><b>'.$gL10n->get('LST_CONFIGURATION_LIST').' :</b>&nbsp;&nbsp;
         <select size="1" id="lists_config" name="lists_config" onchange="loadList()">
             <option ';
                 if($get_lst_id == 0)
@@ -394,25 +394,25 @@ echo '
                 {
                     $selected = '';
                 }
-            echo $selected.' value="0">'.$g_l10n->get('LST_CREATE_NEW_CONFIGURATION').'</option>';
+            echo $selected.' value="0">'.$gL10n->get('LST_CREATE_NEW_CONFIGURATION').'</option>';
 
             // alle relevanten Konfigurationen fuer den User suchen
             $sql = 'SELECT * FROM '. TBL_LISTS. '
-                     WHERE lst_org_id = '. $g_current_organization->getValue('org_id') .'
-                       AND (  lst_usr_id = '. $g_current_user->getValue('usr_id'). '
+                     WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id') .'
+                       AND (  lst_usr_id = '. $gCurrentUser->getValue('usr_id'). '
                            OR lst_global = 1)
                      ORDER BY lst_global ASC, lst_name ASC, lst_timestamp DESC ';
-            $lst_result = $g_db->query($sql);
+            $lst_result = $gDb->query($sql);
             
-            if($g_db->num_rows() > 0)
+            if($gDb->num_rows() > 0)
             {
                 $list_global_flag = '';
                 $list_name_flag   = '';
                 $optgroup_flag    = 0;
                 $counter_unsaved_lists = 0;
-                $tableList = new TableLists($g_db);
+                $tableList = new TableLists($gDb);
                 
-                while($row = $g_db->fetch_array($lst_result))
+                while($row = $gDb->fetch_array($lst_result))
                 {
                     $tableList->clear();
                     $tableList->setArray($row);
@@ -426,7 +426,7 @@ echo '
                     if($counter_unsaved_lists > 5 && strlen($tableList->getValue('lst_name')) == 0)
                     {
                         // alle weiteren Konfigurationen ohne Namen loeschen
-                        $del_list = new ListConfiguration($g_db, $tableList->getValue('lst_id'));
+                        $del_list = new ListConfiguration($gDb, $tableList->getValue('lst_id'));
                         $del_list->delete();
                     }
                     else
@@ -441,15 +441,15 @@ echo '
                             }
                             if($tableList->getValue('lst_global') == 0 && strlen($tableList->getValue('lst_name')) == 0)
                             {
-                                echo '<optgroup label="'.$g_l10n->get('LST_YOUR_LAST_CONFIGURATION').'">';
+                                echo '<optgroup label="'.$gL10n->get('LST_YOUR_LAST_CONFIGURATION').'">';
                             }
                             elseif($tableList->getValue('lst_global') == 0 && strlen($tableList->getValue('lst_name')) > 0)
                             {
-                                echo '<optgroup label="'.$g_l10n->get('LST_YOUR_CONFIGURATION').'">';
+                                echo '<optgroup label="'.$gL10n->get('LST_YOUR_CONFIGURATION').'">';
                             }
                             else
                             {
-                                echo '<optgroup label="'.$g_l10n->get('LST_PRESET_CONFIGURATION').'">';
+                                echo '<optgroup label="'.$gL10n->get('LST_PRESET_CONFIGURATION').'">';
                             }
                             $tableList_global_flag = $tableList->getValue('lst_global');
                             $tableList_name_flag   = $tableList->getValue('lst_name');
@@ -468,7 +468,7 @@ echo '
                         // Zeitstempel der Konfigurationen ohne Namen oder Namen anzeigen
                         if(strlen($tableList->getValue('lst_name')) == 0)
                         {
-                            $description = $tableList->getValue('lst_timestamp', $g_preferences['system_date'].' '.$g_preferences['system_time']);
+                            $description = $tableList->getValue('lst_timestamp', $gPreferences['system_date'].' '.$gPreferences['system_time']);
                         }
                         else
                         {
@@ -483,27 +483,27 @@ echo '
         echo '</select>';
         
         // Listen speichern darf man speichern, wenn es Eigene sind, Neue oder als Webmaster auch Systemlisten
-        if(($g_current_user->isWebmaster() && $list->getValue('lst_global') == 1)
-        || ($g_current_user->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
+        if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
+        || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
         {
             echo '
             <a class="iconLink" href="javascript:send(\'save\');"><img
-                src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('LST_SAVE_CONFIGURATION').'" title="'.$g_l10n->get('LST_SAVE_CONFIGURATION').'" /></a>';
+                src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" title="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" /></a>';
         }
 
-        if($g_current_user->isWebmaster()
+        if($gCurrentUser->isWebmaster()
         || $get_lst_id == 0
-        || $g_current_user->getValue('usr_id') == $list->getValue('lst_usr_id'))
+        || $gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id'))
         {
         	if(strlen($list->getValue('lst_name')) > 0)
         	{
         		$icon = 'disk_copy.png';
-        		$icon_text = $g_l10n->get('LST_SAVE_CONFIGURATION_OTHER_NAME');
+        		$icon_text = $gL10n->get('LST_SAVE_CONFIGURATION_OTHER_NAME');
         	}
         	else
         	{
         		$icon = 'disk.png';
-        		$icon_text = $g_l10n->get('LST_SAVE_CONFIGURATION');
+        		$icon_text = $gL10n->get('LST_SAVE_CONFIGURATION');
         	}
             echo '
             <a class="iconLink" href="javascript:send(\'save_as\');"><img
@@ -511,32 +511,32 @@ echo '
         }
 
         // eigene Liste duerfen geloescht werden, Webmaster koennen auch Systemkonfigurationen loeschen
-        if(($g_current_user->isWebmaster() && $list->getValue('lst_global') == 1)
-        || ($g_current_user->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
+        if(($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
+        || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
         {
             echo '
             <a class="iconLink" href="javascript:send(\'delete\');"><img
-                src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('LST_DELETE_CONFIGURATION').'" title="'.$g_l10n->get('LST_DELETE_CONFIGURATION').'" /></a>';
+                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" title="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" /></a>';
         }
 
         // eine gespeicherte Konfiguration kann vom Webmaster zur Systemkonfiguration gemacht werden
-        if($g_current_user->isWebmaster() && $list->getValue('lst_global') == 0 && strlen($list->getValue('lst_name')) > 0)
+        if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 0 && strlen($list->getValue('lst_name')) > 0)
         {
             echo '
             <a class="iconLink" href="javascript:send(\'system\');"><img
-                src="'. THEME_PATH. '/icons/list_global.png" alt="'.$g_l10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$g_l10n->get('LST_CONFIGURATION_ALL_USERS').'" /></a>';
+                src="'. THEME_PATH. '/icons/list_global.png" alt="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" /></a>';
         }
         
         // eine Systemkonfiguration kann vom Webmaster zur Default-Liste gemacht werden
-        if($g_current_user->isWebmaster() && $list->getValue('lst_global') == 1)
+        if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
         {
             echo '
             <a class="iconLink" href="javascript:send(\'default\');"><img
-                src="'. THEME_PATH. '/icons/star.png" alt="'.$g_l10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$g_l10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" /></a>';
+                src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" /></a>';
         }
         
         // Hinweistext fuer Webmaster
-        if($g_current_user->isWebmaster())
+        if($gCurrentUser->isWebmaster())
         {
             echo '
             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_config_webmaster&amp;inline=true"><img 
@@ -545,17 +545,17 @@ echo '
         }
         echo '</p>
         
-        <p><b>2.</b> '.$g_l10n->get('LST_SET_COLUMNS').':</p>
+        <p><b>2.</b> '.$gL10n->get('LST_SET_COLUMNS').':</p>
 
         <table class="tableList" id="mylist_fields_table" style="width: 100%;" cellspacing="0">
             <thead>
                 <tr>
-                    <th style="width: 19%;">'.$g_l10n->get('SYS_ABR_NO').'</th>
-                    <th style="width: 37%;">'.$g_l10n->get('SYS_CONTENT').'</th>
-                    <th style="width: 18%;">'.$g_l10n->get('SYS_ORDER').'</th>
-                    <th style="width: 26%;">'.$g_l10n->get('SYS_CONDITION').'
+                    <th style="width: 19%;">'.$gL10n->get('SYS_ABR_NO').'</th>
+                    <th style="width: 37%;">'.$gL10n->get('SYS_CONTENT').'</th>
+                    <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
+                    <th style="width: 26%;">'.$gL10n->get('SYS_CONDITION').'
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$g_l10n->get('SYS_SHOW_HELP').'" title="'.$g_l10n->get('SYS_SHOW_HELP').'" /></a>
+                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_SHOW_HELP').'" title="'.$gL10n->get('SYS_SHOW_HELP').'" /></a>
                     </th>
                 </tr>
             </thead>
@@ -570,8 +570,8 @@ echo '
                     <td colspan="4">
                         <span class="iconTextLink">
                             <a href="javascript:addColumn()"><img
-                            src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('LST_ADD_ANOTHER_COLUMN').'" /></a>
-                            <a href="javascript:addColumn()">'.$g_l10n->get('LST_ADD_ANOTHER_COLUMN').'</a>
+                            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'" /></a>
+                            <a href="javascript:addColumn()">'.$gL10n->get('LST_ADD_ANOTHER_COLUMN').'</a>
                         </span>
                     </td>
                 </tr>
@@ -580,8 +580,8 @@ echo '
         
         <br />
         
-        <b>3.</b> '.$g_l10n->get('LST_CHOOSE_ROLE').':
-        <p><b>'.$g_l10n->get('SYS_ROLE').' :</b>&nbsp;&nbsp;';
+        <b>3.</b> '.$gL10n->get('LST_CHOOSE_ROLE').':
+        <p><b>'.$gL10n->get('SYS_ROLE').' :</b>&nbsp;&nbsp;';
 
         // Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen
         $role_select_box_mode = 0;
@@ -601,9 +601,9 @@ echo '
             $selected[$get_show_members] = ' selected="selected" ';
             echo '&nbsp;&nbsp;&nbsp;
             <select size="1" id="show_members" name="show_members">
-                <option '.$selected[0].' value="0">'.$g_l10n->get('LST_ACTIVE_MEMBERS').'</option>
-                <option '.$selected[1].' value="1">'.$g_l10n->get('LST_FORMER_MEMBERS').'</option>
-                <option '.$selected[2].' value="2">'.$g_l10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
+                <option '.$selected[0].' value="0">'.$gL10n->get('LST_ACTIVE_MEMBERS').'</option>
+                <option '.$selected[1].' value="1">'.$gL10n->get('LST_FORMER_MEMBERS').'</option>
+                <option '.$selected[2].' value="2">'.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
             </select>';
         }
         
@@ -611,7 +611,7 @@ echo '
 
         <div class="formSubmit">
             <button id="btnShow" type="button" onclick="javascript:send(\'show\');"><img 
-                src="'. THEME_PATH. '/icons/list.png" alt="'.$g_l10n->get('LST_SHOW_LIST').'" />&nbsp;'.$g_l10n->get('LST_SHOW_LIST').'</button>
+                src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('LST_SHOW_LIST').'" />&nbsp;'.$gL10n->get('LST_SHOW_LIST').'</button>
         </div>
     </div>
 </div>
@@ -625,8 +625,8 @@ if($_SESSION['navigation']->count() > 1)
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';

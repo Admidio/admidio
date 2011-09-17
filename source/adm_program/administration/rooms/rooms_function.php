@@ -1,66 +1,49 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen zur Pflege der Raeume
+ * Various functions for rooms handling
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  * 
- *  mode:   1 - Neuen Raum anlegen
- *          2 - Raum löschen 
+ * room_id : ID of room, that should be shown
+ * mode :    1 - create or edit room
+ *           2 - delete room
  *****************************************************************************/
 
 require('../../system/common.php');
 require('../../system/classes/table_rooms.php');
 
+// Initialize and check the parameters
+$getRoomId = admFuncVariableIsValid($_GET, 'room_id', 'numeric', 0);
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+
 // nur berechtigte User duerfen die Profilfelder bearbeiten
-if (!$g_current_user->isWebmaster())
+if (!$gCurrentUser->isWebmaster())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
-}
-
-// lokale Variablen der Uebergabevariablen initialisieren
-$req_room_id = 0;
-
-// Uebergabevariablen pruefen
-
-if(isset($_GET['room_id']))
-{
-    if(is_numeric($_GET['room_id']) == false)
-    {
-        $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-    $req_room_id = $_GET['room_id'];
-}
-
-if(is_numeric($_GET['mode']) == false
-|| $_GET['mode'] < 1 || $_GET['mode'] > 2)
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // Raumobjekt anlegen
-$room = new TableRooms($g_db);
-if($req_room_id > 0)
+$room = new TableRooms($gDb);
+if($getRoomId > 0)
 {
-    $room->readData($req_room_id);
-
-    
+    $room->readData($getRoomId);   
 }
 
-if($_GET['mode'] == 1)
+if($getMode == 1)
 {
     $_SESSION['rooms_request'] = $_REQUEST;
 
     if(strlen($_POST['room_name']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('SYS_ROOM')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROOM')));
     }
     if(strlen($_POST['room_capacity']) == 0)
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY', $g_l10n->get('ROO_CAPACITY')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ROO_CAPACITY')));
     }
     // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)
@@ -79,12 +62,12 @@ if($_GET['mode'] == 1)
     header('Location: '. $_SESSION['navigation']->getUrl());
     exit();
 }
-//Löschen des Raums
-else if($_GET['mode'] == 2) 
+// Löschen des Raums
+else if($getMode == 2) 
 {
-    $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = '.$_GET['room_id'];
-    $result = $g_db->query($sql);
-    $row = $g_db->num_rows($result);
+    $sql = 'SELECT * FROM '.TBL_DATES.' WHERE dat_room_id = '.$getRoomId;
+    $result = $gDb->query($sql);
+    $row = $gDb->num_rows($result);
     if($row == 0)
     {
         $room->delete();

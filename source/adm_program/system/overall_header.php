@@ -14,41 +14,41 @@
  *
  *****************************************************************************/
 
-if(isset($g_layout['title']))
+if(isset($gLayout['title']))
 {
-    $g_layout['title'] = strStripTags($g_layout['title']);
+    $gLayout['title'] = strStripTags($gLayout['title']);
 }
 else
 {
-    $g_layout['title'] = '';
+    $gLayout['title'] = '';
 }
 
-if(isset($g_layout['header']) == false)
+if(isset($gLayout['header']) == false)
 {
-    $g_layout['header'] = '';
+    $gLayout['header'] = '';
 }
 
-if(isset($g_layout['onload']))
+if(isset($gLayout['onload']))
 {
-    $g_layout['onload'] = ' onload="'. $g_layout['onload']. '"';
+    $gLayout['onload'] = ' onload="'. $gLayout['onload']. '"';
 }
 else
 {
-    $g_layout['onload'] = '';
+    $gLayout['onload'] = '';
 }
 
-if(isset($g_layout['includes']) == false)
+if(isset($gLayout['includes']) == false)
 {
-    $g_layout['includes'] = true;
+    $gLayout['includes'] = true;
 }
 
-if(strlen($g_layout['title']) > 0)
+if(strlen($gLayout['title']) > 0)
 {
-    $g_page_title = $g_current_organization->getValue('org_longname'). ' - '. $g_layout['title'];
+    $g_page_title = $gCurrentOrganization->getValue('org_longname'). ' - '. $gLayout['title'];
 }
 else
 {
-	$g_page_title = $g_current_organization->getValue('org_longname');
+	$g_page_title = $gCurrentOrganization->getValue('org_longname');
 }
 
 header('Content-type: text/html; charset=utf-8'); 
@@ -69,8 +69,8 @@ echo '
     <script type="text/javascript"><!-- 
 		var gRootPath  = "'. $g_root_path. '"; 
 		var gThemePath = "'. THEME_PATH. '";
-		var gMonthNames = new Array("'.$g_l10n->get('SYS_JANUARY').'","'.$g_l10n->get('SYS_FEBRUARY').'","'.$g_l10n->get('SYS_MARCH').'","'.$g_l10n->get('SYS_APRIL').'","'.$g_l10n->get('SYS_MAY').'","'.$g_l10n->get('SYS_JUNE').'","'.$g_l10n->get('SYS_JULY').'","'.$g_l10n->get('SYS_AUGUST').'","'.$g_l10n->get('SYS_SEPTEMBER').'","'.$g_l10n->get('SYS_OCTOBER').'","'.$g_l10n->get('SYS_NOVEMBER').'","'.$g_l10n->get('SYS_DECEMBER').'","'.$g_l10n->get('SYS_JAN').'","'.$g_l10n->get('SYS_FEB').'","'.$g_l10n->get('SYS_MAR').'","'.$g_l10n->get('SYS_APR').'","'.$g_l10n->get('SYS_MAY').'","'.$g_l10n->get('SYS_JUN').'","'.$g_l10n->get('SYS_JUL').'","'.$g_l10n->get('SYS_AUG').'","'.$g_l10n->get('SYS_SEP').'","'.$g_l10n->get('SYS_OCT').'","'.$g_l10n->get('SYS_NOV').'","'.$g_l10n->get('SYS_DEC').'");
-        var gTranslations = new Array("'.$g_l10n->get('SYS_MON').'","'.$g_l10n->get('SYS_TUE').'","'.$g_l10n->get('SYS_WED').'","'.$g_l10n->get('SYS_THU').'","'.$g_l10n->get('SYS_FRI').'","'.$g_l10n->get('SYS_SAT').'","'.$g_l10n->get('SYS_SUN').'","'.$g_l10n->get('SYS_TODAY').'","'.$g_l10n->get('SYS_LOADING_CONTENT').'");
+		var gMonthNames = new Array("'.$gL10n->get('SYS_JANUARY').'","'.$gL10n->get('SYS_FEBRUARY').'","'.$gL10n->get('SYS_MARCH').'","'.$gL10n->get('SYS_APRIL').'","'.$gL10n->get('SYS_MAY').'","'.$gL10n->get('SYS_JUNE').'","'.$gL10n->get('SYS_JULY').'","'.$gL10n->get('SYS_AUGUST').'","'.$gL10n->get('SYS_SEPTEMBER').'","'.$gL10n->get('SYS_OCTOBER').'","'.$gL10n->get('SYS_NOVEMBER').'","'.$gL10n->get('SYS_DECEMBER').'","'.$gL10n->get('SYS_JAN').'","'.$gL10n->get('SYS_FEB').'","'.$gL10n->get('SYS_MAR').'","'.$gL10n->get('SYS_APR').'","'.$gL10n->get('SYS_MAY').'","'.$gL10n->get('SYS_JUN').'","'.$gL10n->get('SYS_JUL').'","'.$gL10n->get('SYS_AUG').'","'.$gL10n->get('SYS_SEP').'","'.$gL10n->get('SYS_OCT').'","'.$gL10n->get('SYS_NOV').'","'.$gL10n->get('SYS_DEC').'");
+        var gTranslations = new Array("'.$gL10n->get('SYS_MON').'","'.$gL10n->get('SYS_TUE').'","'.$gL10n->get('SYS_WED').'","'.$gL10n->get('SYS_THU').'","'.$gL10n->get('SYS_FRI').'","'.$gL10n->get('SYS_SAT').'","'.$gL10n->get('SYS_SUN').'","'.$gL10n->get('SYS_TODAY').'","'.$gL10n->get('SYS_LOADING_CONTENT').'");
 		$(document).ready(function(){
 			$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'});
 		});
@@ -79,22 +79,22 @@ echo '
     <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js"></script>
     
-    '. $g_layout['header'];
+    '. $gLayout['header'];
 
-    if($g_layout['includes'])
+    if($gLayout['includes'])
     {
         require(THEME_SERVER_PATH. '/my_header.php');
     }
     
 echo '</head>
-<body'. $g_layout['onload']. '>';
-    if($g_layout['includes'])
+<body'. $gLayout['onload']. '>';
+    if($gLayout['includes'])
     {
         require(THEME_SERVER_PATH. '/my_body_top.php');
-        if(isset($g_db))
+        if(isset($gDb))
         {
             // falls Anwender andere DB nutzt, hier zur Sicherheit wieder zu Admidio-DB wechseln
-            $g_db->setCurrentDB();
+            $gDb->setCurrentDB();
         }
     }
 

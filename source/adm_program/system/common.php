@@ -1,7 +1,7 @@
 <?php
 /******************************************************************************
- * Script beinhaltet allgemeine Daten / Variablen, die fuer alle anderen
- * Scripte notwendig sind
+ * Basic script for all other Admidio scripts with all the necessary data und
+ * variables to run a script in the Admidio environment
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -14,30 +14,30 @@ if ('common.php' == basename($_SERVER['SCRIPT_FILENAME']))
     die('This page may not be called directly !');
 }
 
-// Konstanten und Konfigurationsdatei einbinden
+// embed config and constants file
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/config.php');
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
-// falls Debug-Kennzeichen nicht in config.php gesetzt wurde, dann hier auf false setzen
-if(isset($g_debug) == false || $g_debug != 1)
+// if there is no debug flag in config.php than set debug to false
+if(isset($gDebug) == false || $gDebug != 1)
 {
-    $g_debug = 0;
+    $gDebug = 0;
 }
 
-if($g_debug)
+if($gDebug)
 {
-    // aktuelles Script mit Uebergaben in Logdatei schreiben
+    // write actual script with parameters in log file
     error_log("--------------------------------------------------------------------------------\n".
               $_SERVER['SCRIPT_FILENAME']. "\n? ". $_SERVER['QUERY_STRING']);
 }
 
- // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
+ // default prefix is set to 'adm' because of compatibility to old versions
 if(strlen($g_tbl_praefix) == 0)
 {
     $g_tbl_praefix = 'adm';
 }
 
-// includes OHNE Datenbankverbindung
+// includes WITHOUT database connections
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
@@ -48,15 +48,16 @@ require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_session.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/user_fields.php');
 require_once(SERVER_PATH. '/adm_program/system/forum/forum.php');
 
-// Variablen von HMTL & PHP-Code befreien
+// remove HMTL & PHP-Code from all parameters
 $_REQUEST = admStrStripTagsSpecial($_REQUEST);
 $_GET     = admStrStripTagsSpecial($_GET);
 $_POST    = admStrStripTagsSpecial($_POST);
 $_COOKIE  = admStrStripTagsSpecial($_COOKIE);
 
-// Anfuehrungszeichen escapen, damit DB-Abfragen sicher sind
+// escape all quotes so db queries are save
 if(get_magic_quotes_gpc() == false)
 {
     $_REQUEST = strAddSlashesDeep($_REQUEST);
@@ -65,99 +66,105 @@ if(get_magic_quotes_gpc() == false)
     $_COOKIE  = strAddSlashesDeep($_COOKIE);
 }
 
-// Globale Variablen
-$g_valid_login = false;
-$g_layout      = array();
+// global parameters
+$gValidLogin = false;
+$gLayout     = array();
 
  // Datenbankobjekt anlegen und Verbindung zu Datenbank herstellen
-if(!isset($g_db_type))
+if(!isset($gDbType))
 {
-    $g_db_type = 'mysql';
+    $gDbType = 'mysql';
 }
-$g_db = Database::createDatabaseObject($g_db_type);
-$g_adm_con = $g_db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+$gDb = Database::createDatabaseObject($gDbType);
+$gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 // Script fuer das Forum ermitteln und includen, bevor die Session erstellt wird
-Forum::includeForumScript($g_db);
+Forum::includeForumScript($gDb);
 
 // Cookie-Praefix ermitteln und Sonderzeichen entfernen
-$cookie_praefix = 'ADMIDIO_'. $g_organization;
-if($g_debug)
+$gCookiePraefix = 'ADMIDIO_'. $g_organization;
+if($gDebug)
 {
-    $cookie_praefix .= '_'. ADMIDIO_VERSION. '_'. BETA_VERSION;
+    $gCookiePraefix .= '_'. ADMIDIO_VERSION. '_'. BETA_VERSION;
 }
-$cookie_praefix = strtr($cookie_praefix, ' .,;:','_____');
+$gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
 
 // PHP-Session starten
 if(headers_sent() == false)
 {
-    session_name($cookie_praefix. '_PHP_ID');
+    session_name($gCookiePraefix. '_PHP_ID');
     session_start();
 }
 
 // Session-ID ermitteln
-if(isset($_COOKIE[$cookie_praefix. '_ID']))
+if(isset($_COOKIE[$gCookiePraefix. '_ID']))
 {
-    $g_session_id = $_COOKIE[$cookie_praefix. '_ID'];
+    $gSessionId = $_COOKIE[$gCookiePraefix. '_ID'];
 }
 else
 {
-    $g_session_id = session_id();
+    $gSessionId = session_id();
 }
 
 // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
 // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
-if(isset($_SESSION['g_current_organization']) 
-&& isset($_SESSION['g_preferences'])
-&& $g_organization == $_SESSION['g_current_organization']->getValue('org_shortname'))
+if(isset($_SESSION['gCurrentOrganization']) 
+&& isset($_SESSION['gPreferences'])
+&& $g_organization == $_SESSION['gCurrentOrganization']->getValue('org_shortname'))
 {
-    $g_current_organization     =& $_SESSION['g_current_organization'];
-    $g_current_organization->db =& $g_db;
-    $g_preferences              =& $_SESSION['g_preferences'];
+    $gCurrentOrganization     =& $_SESSION['gCurrentOrganization'];
+    $gCurrentOrganization->db =& $gDb;
+    $gPreferences             =& $_SESSION['gPreferences'];
+	$gUserFields              =& $_SESSION['gUserFields'];
+    $gUserFields->mDb         =& $gDb;
 }
 else
 {
-    $g_current_organization = new Organization($g_db, $g_organization);
+    $gCurrentOrganization = new Organization($gDb, $g_organization);
     
-    if($g_current_organization->getValue('org_id') == 0)
+    if($gCurrentOrganization->getValue('org_id') == 0)
     {
         // Organisation wurde nicht gefunden
         die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     
     // organisationsspezifische Einstellungen aus adm_preferences auslesen
-    $g_preferences = $g_current_organization->getPreferences();
+    $gPreferences = $gCurrentOrganization->getPreferences();
+	
+	// create object with current user field structure
+	$gUserFields = new UserFields($gDb, $gCurrentOrganization);
     
     // Daten in Session-Variablen sichern
-    $_SESSION['g_current_organization'] =& $g_current_organization;
-    $_SESSION['g_preferences']          =& $g_preferences;
+    $_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
+    $_SESSION['gPreferences']         =& $gPreferences;
+    $_SESSION['gUserFields']          =& $gUserFields;
 }
 
 // Sprachdateien einlesen
-$g_l10n = new Language($g_preferences['system_language']);
+$gL10n = new Language($gPreferences['system_language']);
 
 // Pfad zum gewaehlten Theme zusammensetzen
-if(isset($g_preferences['theme']) == false)
+if(isset($gPreferences['theme']) == false)
 {
-    $g_preferences['theme'] = 'classic';
+    $gPreferences['theme'] = 'classic';
 }
-define('THEME_SERVER_PATH', SERVER_PATH. '/adm_themes/'. $g_preferences['theme']);
-define('THEME_PATH', $g_root_path. '/adm_themes/'. $g_preferences['theme']);
+define('THEME_SERVER_PATH', SERVER_PATH. '/adm_themes/'. $gPreferences['theme']);
+define('THEME_PATH', $g_root_path. '/adm_themes/'. $gPreferences['theme']);
 
 // Daten des angemeldeten Users auch in Session speichern
-if(isset($_SESSION['g_current_user']))
+if(isset($_SESSION['gCurrentUser']))
 {
-    $g_current_user =& $_SESSION['g_current_user'];
-    $g_current_user->db =& $g_db;
+    $gCurrentUser =& $_SESSION['gCurrentUser'];
+    $gCurrentUser->db =& $gDb;
 }
 else
 {
-    $g_current_user  = new User($g_db);
-    $_SESSION['g_current_user'] =& $g_current_user;
+    $gCurrentUser = new User($gDb, $gUserFields, 0);
+    $_SESSION['gCurrentUser'] =& $gCurrentUser;
 }
 
 // Nachrichtenklasse anlegen
-$g_message = new Message();
+$gMessage = new Message();
 
 // Objekt fuer die Zuruecknavigation in den Modulen
 // hier werden die Urls in einem Stack gespeichert
@@ -167,45 +174,45 @@ if(isset($_SESSION['navigation']) == false)
 }
 
 // pruefen, ob Datenbank-Version zu den Scripten passt
-if(isset($g_preferences['db_version']) == false
-|| isset($g_preferences['db_version_beta']) == false
-|| version_compare($g_preferences['db_version'], ADMIDIO_VERSION) != 0
-|| version_compare($g_preferences['db_version_beta'], BETA_VERSION) != 0)
+if(isset($gPreferences['db_version']) == false
+|| isset($gPreferences['db_version_beta']) == false
+|| version_compare($gPreferences['db_version'], ADMIDIO_VERSION) != 0
+|| version_compare($gPreferences['db_version_beta'], BETA_VERSION) != 0)
 {
-    unset($_SESSION['g_current_organization']);
-    $g_message->show($g_l10n->get('SYS_DATABASE_INVALID', $g_preferences['db_version'], ADMIDIO_VERSION, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>'));
+    unset($_SESSION['gCurrentOrganization']);
+    $gMessage->show($gL10n->get('SYS_DATABASE_INVALID', $gPreferences['db_version'], ADMIDIO_VERSION, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
 }
 
 /*********************************************************************************
 Session auf Gueltigkeit pruefen bzw. anlegen
 /********************************************************************************/
 
-$g_current_session = new TableSession($g_db, $g_session_id);
+$gCurrentSession = new TableSession($gDb, $gSessionId);
 
 // erst einmal pruefen, ob evtl. frueher ein Autologin-Cookie gesetzt wurde
 // dann diese Session wiederherstellen
 
-$b_auto_login = false;
-if($g_preferences['enable_auto_login'] == 1 && isset($_COOKIE[$cookie_praefix. '_DATA']))
+$autoLogin = false;
+if($gPreferences['enable_auto_login'] == 1 && isset($_COOKIE[$gCookiePraefix. '_DATA']))
 {
-    $admidio_data = explode(';', $_COOKIE[$cookie_praefix. '_DATA']);
+    $admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
     
     if($admidio_data[0] == true         // autologin
     && is_numeric($admidio_data[1]))    // user_id 
     {   
-        if($g_current_user->getValue('usr_id') != $admidio_data[1])
+        if($gCurrentUser->getValue('usr_id') != $admidio_data[1])
         {
             // User aus der Autologin-Session wiederherstellen
             require_once(SERVER_PATH. '/adm_program/system/classes/table_auto_login.php');
-            $auto_login = new TableAutoLogin($g_db, $g_session_id);
+            $auto_login = new TableAutoLogin($gDb, $gSessionId);
             
             // User nur herstellen, wenn Cookie-User-Id == gespeicherte DB-User-Id
             if($auto_login->getValue('atl_usr_id') == $admidio_data[1])
             {
-                $g_current_user->readData($auto_login->getValue('atl_usr_id'));
+                $gCurrentUser->readData($auto_login->getValue('atl_usr_id'));
                 // Logins zaehlen und aktuelles Login-Datum aktualisieren
-                $g_current_user->updateLoginData();            
-                $b_auto_login = true;
+                $gCurrentUser->updateLoginData();            
+                $autoLogin = true;
             }
             else
             {
@@ -215,136 +222,136 @@ if($g_preferences['enable_auto_login'] == 1 && isset($_COOKIE[$cookie_praefix. '
         }
         else
         {
-            $b_auto_login = true;
+            $autoLogin = true;
         }
         
-        if($g_current_session->getValue('ses_id') == 0)
+        if($gCurrentSession->getValue('ses_id') == 0)
         {
-            $g_current_session->setValue('ses_session_id', $g_session_id);
-            $g_current_session->setValue('ses_usr_id',  $g_current_user->getValue('usr_id'));
-            $g_current_session->save();
+            $gCurrentSession->setValue('ses_session_id', $gSessionId);
+            $gCurrentSession->setValue('ses_usr_id',  $gCurrentUser->getValue('usr_id'));
+            $gCurrentSession->save();
         }
     }
 }
 
-if($g_current_session->getValue('ses_id') > 0)
+if($gCurrentSession->getValue('ses_id') > 0)
 {
     // erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
     // da die Daten evtl. von anderen Usern in der DB geaendert wurden
-    if($g_current_session->getValue('ses_renew') == 1 || $g_current_session->getValue('ses_renew') == 3)
+    if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('ses_renew') == 3)
     {
         // Feldstruktur entfernen und Userobjekt neu einlesen
-        $g_current_user->userFieldData = array();
-        $g_current_user->readData($g_current_user->getValue('usr_id'));
-        $g_current_session->setValue('ses_renew', 0);
+        $gCurrentUser->userFieldData = array();
+        $gCurrentUser->readData($gCurrentUser->getValue('usr_id'));
+        $gCurrentSession->setValue('ses_renew', 0);
     }
-    if($g_current_session->getValue('ses_renew') == 2 || $g_current_session->getValue('ses_renew') == 3)
+    if($gCurrentSession->getValue('ses_renew') == 2 || $gCurrentSession->getValue('ses_renew') == 3)
     {
         // Organisationsobjekt neu einlesen
-        $g_current_organization->readData($g_organization);
-        $g_preferences = $g_current_organization->getPreferences();
-        $g_current_session->setValue('ses_renew', 0);
+        $gCurrentOrganization->readData($g_organization);
+        $gPreferences = $gCurrentOrganization->getPreferences();
+        $gCurrentSession->setValue('ses_renew', 0);
     }
 
     // nun die Session pruefen
-    if($g_current_session->getValue('ses_usr_id') > 0)
+    if($gCurrentSession->getValue('ses_usr_id') > 0)
     {
-        if($g_current_session->getValue('ses_usr_id') == $g_current_user->getValue('usr_id'))
+        if($gCurrentSession->getValue('ses_usr_id') == $gCurrentUser->getValue('usr_id'))
         {
             // Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
-            $time_gap = time() - strtotime($g_current_session->getValue('ses_timestamp', 'Y-m-d H:i:s'));
+            $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
             
             // wenn laenger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
-            if($time_gap < $g_preferences['logout_minutes'] * 60 || $b_auto_login == true) 
+            if($time_gap < $gPreferences['logout_minutes'] * 60 || $autoLogin == true) 
             {
                 // bei Autologin ggf. den Beginn aktualisieren, wenn die Luecke zu gross geworden ist
-                if($time_gap > $g_preferences['logout_minutes'] * 60 && $b_auto_login == true)
+                if($time_gap > $gPreferences['logout_minutes'] * 60 && $autoLogin == true)
                 {
-                    $g_current_session->setValue('ses_begin', DATETIME_NOW);
+                    $gCurrentSession->setValue('ses_begin', DATETIME_NOW);
                 }
 
                 // User-Login ist gueltig
-                $g_valid_login = true;
-                $g_current_session->setValue('ses_timestamp', DATETIME_NOW);
+                $gValidLogin = true;
+                $gCurrentSession->setValue('ses_timestamp', DATETIME_NOW);
             }
             else
             {
                 // User war zu lange inaktiv -> User aus Session entfernen
-                $g_current_user->clear();
-                $g_current_session->setValue('ses_usr_id', '');
+                $gCurrentUser->clear();
+                $gCurrentSession->setValue('ses_usr_id', '');
             }
         }
         else
         {
             // irgendwas stimmt nicht, also alles zuruecksetzen
-            $g_current_user->clear();
-            $g_current_session->setValue('ses_usr_id', '');
+            $gCurrentUser->clear();
+            $gCurrentSession->setValue('ses_usr_id', '');
         }
     }
     
     // Update auf Sessionsatz machen (u.a. timestamp aktualisieren)
-    $g_current_session->save();
+    $gCurrentSession->save();
 }
 else
 {
     // Session existierte noch nicht, dann neu anlegen
-    $g_current_user->clear();
-    $g_current_session->setValue('ses_session_id', $g_session_id);
-    $g_current_session->save();
+    $gCurrentUser->clear();
+    $gCurrentSession->setValue('ses_session_id', $gSessionId);
+    $gCurrentSession->save();
     
     // Alle alten Session loeschen
-    $g_current_session->tableCleanup($g_preferences['logout_minutes']);
+    $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
 }
 
 // Homepageseite festlegen
-if($g_valid_login)
+if($gValidLogin)
 {
-    $g_homepage = $g_root_path. '/'. $g_preferences['homepage_login'];
+    $gHomepage = $g_root_path. '/'. $gPreferences['homepage_login'];
 }
 else
 {
-    $g_homepage = $g_root_path. '/'. $g_preferences['homepage_logout'];
+    $gHomepage = $g_root_path. '/'. $gPreferences['homepage_logout'];
 }
 
 /*********************************************************************************
 Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
 /********************************************************************************/
 
-if($g_preferences['enable_forum_interface']) 
+if($gPreferences['enable_forum_interface']) 
 {
     // Admidio-Zugangsdaten nehmen, wenn entsprechende Einstellung gesetzt ist
-    if($g_preferences['forum_sqldata_from_admidio']) 
+    if($gPreferences['forum_sqldata_from_admidio']) 
     {
-        $g_preferences['forum_srv'] = $g_db->server;
-        $g_preferences['forum_usr'] = $g_db->user;
-        $g_preferences['forum_pw']  = $g_db->password;
-        $g_preferences['forum_db']  = $g_db->dbname;
+        $gPreferences['forum_srv'] = $gDb->server;
+        $gPreferences['forum_usr'] = $gDb->user;
+        $gPreferences['forum_pw']  = $gDb->password;
+        $gPreferences['forum_db']  = $gDb->dbname;
     }
     
     // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
     // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
-    if(isset($_SESSION['g_forum']))
+    if(isset($_SESSION['gForum']))
     {
-        $g_forum =& $_SESSION['g_forum'];
+        $gForum =& $_SESSION['gForum'];
     }
     else
     {
-        $g_forum = Forum::createForumObject($g_preferences['forum_version']);
-        $_SESSION['g_forum'] =& $g_forum;
+        $gForum = Forum::createForumObject($gPreferences['forum_version']);
+        $_SESSION['gForum'] =& $gForum;
     }
         
-    if(!$g_forum->connect($g_preferences['forum_srv'], $g_preferences['forum_usr'], $g_preferences['forum_pw'], $g_preferences['forum_db'], $g_db))
+    if(!$gForum->connect($gPreferences['forum_srv'], $gPreferences['forum_usr'], $gPreferences['forum_pw'], $gPreferences['forum_db'], $gDb))
     {
         // Verbindungsprobleme, deshalb Forum deaktivieren, damit Admidio ggf. noch funktioniert
-        $g_preferences['enable_forum_interface'] = 0;
+        $gPreferences['enable_forum_interface'] = 0;
     }
     else
     {
         // Einstellungen des Forums einlesen
-        if(!$g_forum->initialize(session_id(), $g_preferences['forum_praefix'], $g_preferences['forum_export_user'], $g_preferences['forum_link_intern'], $g_current_user->getValue('usr_login_name')))
+        if(!$gForum->initialize(session_id(), $gPreferences['forum_praefix'], $gPreferences['forum_export_user'], $gPreferences['forum_link_intern'], $gCurrentUser->getValue('usr_login_name')))
         {
             echo '<div style="color: #CC0000;">Verbindungsfehler zum Forum !<br />
-                Das eingegebene Forumpräfix <strong>'. $g_preferences['forum_praefix'].'</strong> ist nicht korrekt oder<br />
+                Das eingegebene Forumpräfix <strong>'. $gPreferences['forum_praefix'].'</strong> ist nicht korrekt oder<br />
                 es wurde die falsche Datenbankverbindung zum Forum angegeben.</div>';
         }
     }    

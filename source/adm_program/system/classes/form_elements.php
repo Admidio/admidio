@@ -24,7 +24,7 @@ class FormElements
 	// visitors = 1 : weiterer Eintrag um auch Besucher auswaehlen zu koennen
 	 public static function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0, $visitors = 0)
 	{
-		global $g_current_user, $g_current_organization, $g_db, $g_l10n;
+		global $gCurrentUser, $gCurrentOrganization, $gDb, $gL10n;
 		
 		if(strlen($field_id) == 0)
 		{
@@ -34,15 +34,15 @@ class FormElements
 		// SQL-Statement entsprechend dem Modus zusammensetzen
 		$condition = '';
 		$active_roles = 1;
-		if($show_mode == 1 && $g_current_user->assignRoles() == false)
+		if($show_mode == 1 && $gCurrentUser->assignRoles() == false)
 		{
 			// keine Rollen mit Rollenzuordnungsrecht anzeigen
 			$condition .= ' AND rol_assign_roles = 0 ';
 		}
-		elseif($show_mode == 1 && $g_current_user->isWebmaster() == false)
+		elseif($show_mode == 1 && $gCurrentUser->isWebmaster() == false)
 		{
 			// Webmasterrolle nicht anzeigen
-			$condition .= ' AND rol_name <> \''.$g_l10n->get('SYS_WEBMASTER').'\' ';
+			$condition .= ' AND rol_name <> \''.$gL10n->get('SYS_WEBMASTER').'\' ';
 		}
 		elseif($show_mode == 2)
 		{
@@ -53,11 +53,11 @@ class FormElements
 				 WHERE rol_valid   = \''.$active_roles.'\'
 				   AND rol_visible = 1
 				   AND rol_cat_id  = cat_id
-				   AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+				   AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )
 					   '.$condition.'
 				 ORDER BY cat_sequence, rol_name';
-		$result_lst = $g_db->query($sql);
+		$result_lst = $gDb->query($sql);
 
 		// Selectbox mit allen selektierten Rollen zusammensetzen
 		$act_category = '';
@@ -68,7 +68,7 @@ class FormElements
 			{
 				$selectBoxHtml .= ' selected="selected" ';
 			}
-			$selectBoxHtml .= '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+			$selectBoxHtml .= '>- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
 			if($visitors == 1)
 			{
@@ -77,12 +77,12 @@ class FormElements
 				{
 					$selectBoxHtml .= ' selected="selected" ';
 				}
-				$selectBoxHtml .= '>'.$g_l10n->get('SYS_ALL').' ('.$g_l10n->get('SYS_ALSO_VISITORS').')</option>';
+				$selectBoxHtml .= '>'.$gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')</option>';
 			}
 
-			while($row = $g_db->fetch_object($result_lst))
+			while($row = $gDb->fetch_object($result_lst))
 			{
-				if($g_current_user->viewRole($row->rol_id))
+				if($gCurrentUser->viewRole($row->rol_id))
 				{
 					if($act_category != $row->cat_name)
 					{
@@ -115,7 +115,7 @@ class FormElements
 	// field_id       : Id und Name der Select-Box
 	public static function generateCategorySelectBox($category_type, $default_category = 0, $field_id = '')
 	{
-		global $g_current_organization, $g_db, $g_l10n;
+		global $gCurrentOrganization, $gDb, $gL10n;
 
 		if(strlen($field_id) == 0)
 		{
@@ -124,11 +124,11 @@ class FormElements
 		
 		$sql = 'SELECT cat_id, cat_default, cat_name 
 		          FROM '. TBL_CATEGORIES. '
-				 WHERE (  cat_org_id = '. $g_current_organization->getValue('org_id'). '
+				 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )
 				   AND cat_type   = \''.$category_type.'\'
 				 ORDER BY cat_sequence ASC ';
-		$result = $g_db->query($sql);
+		$result = $gDb->query($sql);
 
 		$selectBoxHtml = '
 		<select size="1" id="'.$field_id.'" name="'.$field_id.'">
@@ -137,9 +137,9 @@ class FormElements
 				{
 					$selectBoxHtml .= ' selected="selected" ';
 				}
-				$selectBoxHtml .= '>- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+				$selectBoxHtml .= '>- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
-			while($row = $g_db->fetch_array($result))
+			while($row = $gDb->fetch_array($result))
 			{
 				$selectBoxHtml .= '<option value="'.$row['cat_id'].'"';
 					if($default_category == $row['cat_id']
@@ -163,7 +163,7 @@ class FormElements
 	// defaultValue : (optional) Eintrag des xmlValueTag der vorausgewaehlt sein soll
 	 public static function generateXMLSelectBox($xmlFile, $xmlValueTag, $xmlViewTag, $htmlFieldId = '', $defaultValue = '')
 	{
-		global $g_l10n;
+		global $gL10n;
 
 		// Inhalt der XML-Datei in Arrays schreiben
 		$data = implode('', file($xmlFile));
@@ -173,7 +173,7 @@ class FormElements
 		
 		// SelectBox ausgeben
 		$selectBoxHtml = '<select size="1" id="'.$htmlFieldId.'" name="'.$htmlFieldId.'">
-			<option value="">- '.$g_l10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+			<option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
 			for($i = 0; $i < count($index[$xmlValueTag]); $i++)
 			{

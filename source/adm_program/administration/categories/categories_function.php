@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * cat_id: ID der Rollen-Kategorien
  * type :  Typ der Kategorie, die angelegt werden sollen
@@ -25,53 +25,53 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_category.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
-$get_cat_id   = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
-$get_type     = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
-$get_mode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
-$get_title    = admFuncVariableIsValid($_GET, 'title', 'string', $g_l10n->get('SYS_CATEGORY'));
-$get_sequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));
+// Initialize and check the parameters
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
+$getType     = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$getTitle    = admFuncVariableIsValid($_GET, 'title', 'string', $gL10n->get('SYS_CATEGORY'));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));
 
 // Modus und Rechte pruefen
-if($get_type == 'ROL' && $g_current_user->assignRoles() == false)
+if($getType == 'ROL' && $gCurrentUser->assignRoles() == false)
 {
-	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($get_type == 'LNK' && $g_current_user->editWeblinksRight() == false)
+elseif($getType == 'LNK' && $gCurrentUser->editWeblinksRight() == false)
 {
-	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($get_type == 'USF' && $g_current_user->editUsers() == false)
+elseif($getType == 'USF' && $gCurrentUser->editUsers() == false)
 {
-	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-elseif($get_type == 'DAT' && $g_current_user->editDates() == false)
+elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
 {
-	$g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // Kategorie-Objekt anlegen
-$category = new TableCategory($g_db);
+$category = new TableCategory($gDb);
 
-if($get_cat_id > 0)
+if($getCatId > 0)
 {
-    $category->readData($get_cat_id);
+    $category->readData($getCatId);
 
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue('cat_org_id') >  0
-    && $category->getValue('cat_org_id') != $g_current_organization->getValue('org_id'))
+    && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 else
 {
     // es wird eine neue Kategorie angelegt
-    $category->setValue('cat_org_id', $g_current_organization->getValue('org_id'));
-    $category->setValue('cat_type', $get_type);
+    $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+    $category->setValue('cat_type', $getType);
 }
 
-if($get_mode == 1)
+if($getMode == 1)
 {
     // Kategorie anlegen oder updaten
 
@@ -79,25 +79,25 @@ if($get_mode == 1)
 
     if(strlen($_POST['cat_name']) == 0 && $category->getValue('cat_system') == 0)
     {
-        $g_message->show($g_l10n->get('SYS_FIELD_EMPTY',$g_l10n->get('SYS_NAME')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_NAME')));
     }
 
     $search_orga = '';
     
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
-    if(($get_type == 'USF' && (  isset($_POST['show_in_several_organizations']) 
-                              || $g_current_organization->countAllRecords() == 1))
-    || ($get_type == 'ROL' && $category->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION'))
+    if(($getType == 'USF' && (  isset($_POST['show_in_several_organizations']) 
+                              || $gCurrentOrganization->countAllRecords() == 1))
+    || ($getType == 'ROL' && $category->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION'))
     {
         $category->setValue('cat_org_id', '0');
-        $search_orga = ' AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+        $search_orga = ' AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                              OR cat_org_id IS NULL )';
     }
     else
     {
-        $category->setValue('cat_org_id', $g_current_organization->getValue('org_id'));
-        $search_orga = ' AND cat_org_id  = '. $g_current_organization->getValue('org_id');
+        $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
+        $search_orga = ' AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id');
     }
 
     if($category->getValue('cat_name') != $_POST['cat_name'])
@@ -105,16 +105,16 @@ if($get_mode == 1)
         // Schauen, ob die Kategorie bereits existiert
         $sql    = 'SELECT COUNT(*) as count
                      FROM '. TBL_CATEGORIES. '
-                    WHERE cat_type    = \''. $get_type. '\'
+                    WHERE cat_type    = \''. $getType. '\'
                       AND cat_name LIKE \''. $_POST['cat_name']. '\'
-                      AND cat_id     <> '.$get_cat_id. 
+                      AND cat_id     <> '.$getCatId. 
                           $search_orga;
-        $result = $g_db->query($sql);
-        $row    = $g_db->fetch_array($result);
+        $result = $gDb->query($sql);
+        $row    = $gDb->fetch_array($result);
 
         if($row['count'] > 0)
         {
-            $g_message->show($g_l10n->get('CAT_CATEGORY_EXIST'));
+            $gMessage->show($gL10n->get('CAT_CATEGORY_EXIST'));
         }
     }
 	
@@ -146,25 +146,25 @@ if($get_mode == 1)
 
     if($return_code < 0)
     {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
     // falls eine Kategorie von allen Orgas auf eine Bestimmte umgesetzt wurde oder anders herum,
     // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
     if(isset($_POST['cat_org_id']) && $_POST['cat_org_id'] <> $cat_org_merker)
     {
-        $sequence_category = new TableCategory($g_db);
+        $sequence_category = new TableCategory($gDb);
         $sequence = 0;
 
         $sql    = 'SELECT *
                      FROM '. TBL_CATEGORIES. '
-                    WHERE cat_type = "'. $get_type. '"
-                      AND (  cat_org_id  = '. $g_current_organization->getValue('org_id'). '
+                    WHERE cat_type = "'. $getType. '"
+                      AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                           OR cat_org_id IS NULL )
                     ORDER BY cat_org_id ASC, cat_sequence ASC';
-        $result = $g_db->query($sql);
+        $result = $gDb->query($sql);
 
-        while($row = $g_db->fetch_array($result))
+        while($row = $gDb->fetch_array($result))
         {
             $sequence++;
             $sequence_category->clear();
@@ -178,18 +178,18 @@ if($get_mode == 1)
     $_SESSION['navigation']->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
-    $g_message->setForwardUrl($_SESSION['navigation']->getUrl());
-    $g_message->show($g_l10n->get('SYS_SAVE_DATA'));
+    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
+    $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 
 }
-elseif($get_mode == 2)
+elseif($getMode == 2)
 {
     // delete category
 
     if($category->getValue('cat_system') == 1)
     {
         // system-category couldn't be deleted
-        echo $g_l10n->get('SYS_INVALID_PAGE_VIEW');
+        echo $gL10n->get('SYS_INVALID_PAGE_VIEW');
 		exit();
     }
 
@@ -200,10 +200,10 @@ elseif($get_mode == 2)
 		echo 'done';
 	}
 }
-elseif($get_mode == 4)
+elseif($getMode == 4)
 {
     // Kategoriereihenfolge aktualisieren
-    $category->moveSequence($get_sequence);
+    $category->moveSequence($getSequence);
     exit();
 }
 ?>

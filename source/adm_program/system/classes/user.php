@@ -45,10 +45,12 @@ class User extends TableUsers
     public $roles_rights     = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
     protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $role_mail_rights = array(); // Array ueber Mailrechte einzelner Rollen
+    protected $mUserFieldsData; // object with current user field structure
 
     // Konstruktor
-    public function __construct(&$db, $usr_id = 0)
+    public function __construct(&$db, $userFields, $usr_id = 0)
     {
+		//$this->mUserFieldsData = $userFields;
         parent::__construct($db, $usr_id);
     }
 
@@ -56,13 +58,13 @@ class User extends TableUsers
     // welche Rollen der User einsehen darf
     public function checkRolesRight($right = '')
     {
-        global $g_l10n;
+        global $gL10n;
 
         if($this->getValue('usr_id') > 0)
         {
             if(count($this->roles_rights) == 0)
             {
-                global $g_current_organization;
+                global $gCurrentOrganization;
                 $tmp_roles_rights  = array('rol_assign_roles'  => '0', 'rol_approve_users' => '0',
                                            'rol_announcements' => '0', 'rol_dates' => '0',
                                            'rol_download'      => '0', 'rol_edit_user' => '0',
@@ -82,7 +84,7 @@ class User extends TableUsers
                            AND mem_end     > \''.DATE_NOW.'\'
                          WHERE rol_valid   = 1
                            AND rol_cat_id  = cat_id
-                           AND (  cat_org_id = '. $g_current_organization->getValue('org_id').' 
+                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').' 
                                OR cat_org_id IS NULL ) ';
                 $this->db->query($sql);
 
@@ -103,7 +105,7 @@ class User extends TableUsers
                     }
 
                     // Webmasterflag setzen
-                    if($row['mem_usr_id'] > 0 && $row['rol_name'] == $g_l10n->get('SYS_WEBMASTER'))
+                    if($row['mem_usr_id'] > 0 && $row['rol_name'] == $gL10n->get('SYS_WEBMASTER'))
                     {
                         $this->webmaster = 1;
                     }
@@ -256,6 +258,7 @@ class User extends TableUsers
         }
         else
         {
+			//return $this->mUserFieldsData->getValue($field_name, $format);
             return $this->getProperty($field_name, 'usd_value', $format);
         }
     }
@@ -264,9 +267,9 @@ class User extends TableUsers
     // da das Windows-Adressbuch einschliesslich XP kein UTF8 verarbeiten kann, alles in ISO-8859-1 ausgeben
     public function getVCard()
     {
-        global $g_current_user, $g_preferences;
+        global $gCurrentUser, $gPreferences;
 
-        $editAllUsers = $g_current_user->editProfile($this->getValue('usr_id'));
+        $editAllUsers = $gCurrentUser->editProfile($this->getValue('usr_id'));
 
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
@@ -317,13 +320,13 @@ class User extends TableUsers
         {
             $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue('EMAIL'). "\r\n";
         }
-        if (file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $g_preferences['profile_photo_storage'] == 1)
+        if (file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
         {
             $img_handle = fopen (SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
             $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode(fread ($img_handle, filesize (SERVER_PATH. "/adm_my_files/user_profile_photos/".$this->getValue("usr_id").".jpg"))). "\r\n";
             fclose($img_handle);
         }
-        if (strlen($this->getValue('usr_photo')) > 0 && $g_preferences['profile_photo_storage'] == 0)
+        if (strlen($this->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
         {
             $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue("usr_photo")). "\r\n";
         }
@@ -354,6 +357,8 @@ class User extends TableUsers
     {
         parent::readData($usr_id, $sql_where_condition, $sql_additional_tables);
 
+		// read data of all user fields from current user
+		//$this->mUserFieldsData->readUserData($this->getValue('usr_id'));
         $this->readUserData();
     }
     
@@ -369,7 +374,7 @@ class User extends TableUsers
     // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
     public function readUserData()
     {
-    	global $g_current_organization;
+    	global $gCurrentOrganization;
 
         if($this->getValue('usr_id') > 0)
         {
@@ -386,7 +391,7 @@ class User extends TableUsers
                        '.$join_user_data.'
                  WHERE usf_cat_id = cat_id
                    AND (  cat_org_id IS NULL
-                       OR cat_org_id  = '. $g_current_organization->getValue('org_id'). ' )
+                       OR cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). ' )
                  ORDER BY cat_sequence ASC, usf_sequence ASC ';
         $usf_result   = $this->db->query($sql);
 
@@ -402,10 +407,13 @@ class User extends TableUsers
 
     public function save($updateFingerPrint = true)
     {
-        global $g_current_session;
+        global $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
 
         parent::save($updateFingerPrint);
+		
+		// save data of all user fields
+		//$this->mUserFieldsData->saveUserData();
 
         // jetzt noch die einzelnen Spalten sichern
         foreach($this->userFieldData as $field)
@@ -437,19 +445,19 @@ class User extends TableUsers
             }
         }
 
-        if($fields_changed && is_object($g_current_session))
+        if($fields_changed && is_object($gCurrentSession))
         {
             // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
             // eine Rechteaenderung vorgenommen wurde
-            $g_current_session->renewUserObject($this->getValue('usr_id'));
+            $gCurrentSession->renewUserObject($this->getValue('usr_id'));
         }
     }
 
     // interne Methode, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
-    public function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value, $check_value = true)
     {
-        global $g_current_user;
+        global $gCurrentUser;
         $return_code  = true;
         $update_field = false;
 
@@ -460,16 +468,16 @@ class User extends TableUsers
             // gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
             // bei Registrierung muss die Eingabe auch erlaubt sein
             if((  $this->getProperty($field_name, 'usf_disabled') == 1
-               && $g_current_user->editUsers() == true)
+               && $gCurrentUser->editUsers() == true)
             || $this->getProperty($field_name, 'usf_disabled') == 0
-            || ($g_current_user->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
+            || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
             {
                 // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
                 // oder im eigenen Profil
                 if((  $this->getProperty($field_name, 'usf_hidden') == 1
-                   && $g_current_user->editUsers() == true)
+                   && $gCurrentUser->editUsers() == true)
                 || $this->getProperty($field_name, 'usf_hidden') == 0
-                || $g_current_user->getValue('usr_id') == $this->getValue('usr_id'))
+                || $gCurrentUser->getValue('usr_id') == $this->getValue('usr_id'))
                 {
                     $update_field = true;
                 }
@@ -599,7 +607,7 @@ class User extends TableUsers
     // Funktion prueft, ob der User ein Profil einsehen darf
     public function viewProfile($usr_id)
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
         $view_profile = false;
 
         //Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
@@ -624,7 +632,7 @@ class User extends TableUsers
                               AND mem_rol_id = rol_id
                               AND rol_valid  = 1
                               AND rol_cat_id = cat_id
-                              AND (  cat_org_id = '. $g_current_organization->getValue('org_id').'
+                              AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                                   OR cat_org_id IS NULL ) ';
                 $this->db->query($sql);
 

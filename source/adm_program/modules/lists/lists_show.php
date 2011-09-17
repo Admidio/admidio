@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * mode   : Ausgabeart   (html, print, csv-ms, csv-oo)
  * lst_id : ID der Listenkonfiguration, die angezeigt werden soll
@@ -23,7 +23,7 @@ require_once('../../system/common.php');
 require_once('../../system/classes/list_configuration.php');
 require_once('../../system/classes/table_roles.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $get_mode         = admFuncVariableIsValid($_GET, 'mode', 'string', null, true, array('csv-ms', 'csv-oo', 'html', 'print'));
 $get_lst_id       = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
 $get_rol_id       = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
@@ -34,15 +34,15 @@ if($get_lst_id == 0)
 {
 	// wurde keine Liste uebergeben dann Default-Konfiguration laden
 	$sql = 'SELECT lst_id FROM '. TBL_LISTS. '
-	         WHERE lst_org_id  = '. $g_current_organization->getValue('org_id'). '
+	         WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
 	           AND lst_default = 1 ';
-	$g_db->query($sql);
-	$row = $g_db->fetch_array();
+	$gDb->query($sql);
+	$row = $gDb->fetch_array();
 	$get_lst_id = $row[0];
 
 	if(is_numeric($get_lst_id) == false || $get_lst_id == 0)
 	{
-	   $g_message->show($g_l10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
+	   $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
 	}
 }
 
@@ -60,12 +60,12 @@ else
 }
 
 // Rollenobjekt erzeugen
-$role = new TableRoles($g_db, $get_rol_id);
+$role = new TableRoles($gDb, $get_rol_id);
 
 //Testen ob Recht zur Listeneinsicht besteht
 if($role->viewRole() == false)
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 $charset    = '';
@@ -91,11 +91,11 @@ else
 }
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
-$arr_col_name = array('usr_login_name' => $g_l10n->get('SYS_USERNAME'),
-                      'usr_photo'      => $g_l10n->get('PHO_PHOTO'),
-                      'mem_begin'      => $g_l10n->get('SYS_START'),
-                      'mem_end'        => $g_l10n->get('SYS_END'),
-                      'mem_leader'     => $g_l10n->get('SYS_LEADER')
+$arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
+                      'usr_photo'      => $gL10n->get('PHO_PHOTO'),
+                      'mem_begin'      => $gL10n->get('SYS_START'),
+                      'mem_end'        => $gL10n->get('SYS_END'),
+                      'mem_leader'     => $gL10n->get('SYS_LEADER')
                       );
 
 if($get_mode == 'html')
@@ -116,24 +116,24 @@ $str_csv   = '';   // enthaelt die komplette CSV-Datei als String
 $leiter    = 0;    // Gruppe besitzt Leiter
 
 // Listenkonfigurationsobjekt erzeugen und entsprechendes SQL-Statement erstellen
-$list = new ListConfiguration($g_db, $get_lst_id);
+$list = new ListConfiguration($gDb, $get_lst_id);
 $main_sql = $list->getSQL($role_ids, $get_show_members);
 //echo $main_sql; exit();
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
-$result_list = $g_db->query($main_sql);
+$result_list = $gDb->query($main_sql);
 
-$num_members = $g_db->num_rows($result_list);
+$num_members = $gDb->num_rows($result_list);
 
 if($num_members == 0)
 {
     // Es sind keine Daten vorhanden !
-    $g_message->show($g_l10n->get('LST_NO_USER_FOUND'));
+    $gMessage->show($gL10n->get('LST_NO_USER_FOUND'));
 }
 
 if($num_members < $get_start)
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 if($get_mode == 'html' && $get_start == 0)
@@ -156,7 +156,7 @@ if($get_mode != 'csv')
             
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
-            <title>'. $g_current_organization->getValue('org_longname'). ' - Liste - '. $role->getValue('rol_name'). '</title>
+            <title>'. $gCurrentOrganization->getValue('org_longname'). ' - Liste - '. $role->getValue('rol_name'). '</title>
             
             <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
             <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
@@ -169,9 +169,9 @@ if($get_mode != 'csv')
     }
     else
     {
-        $g_layout['title']    = $g_l10n->get('LST_LIST').' - '. $role->getValue('rol_name');
-        $g_layout['includes'] = false;
-        $g_layout['header']   = '
+        $gLayout['title']    = $gL10n->get('LST_LIST').' - '. $role->getValue('rol_name');
+        $gLayout['includes'] = false;
+        $gLayout['header']   = '
             <style type="text/css">
                 body {
                     margin: 20px;
@@ -194,15 +194,15 @@ if($get_mode != 'csv')
 
     if($get_show_members == 0)
     {
-    	$member_status = $g_l10n->get('LST_ACTIVE_MEMBERS');
+    	$member_status = $gL10n->get('LST_ACTIVE_MEMBERS');
     }
     elseif($get_show_members == 1)
     {
-    	$member_status = $g_l10n->get('LST_FORMER_MEMBERS');
+    	$member_status = $gL10n->get('LST_FORMER_MEMBERS');
     }
     elseif($get_show_members == 2)
     {
-    	$member_status = $g_l10n->get('LST_ACTIVE_FORMER_MEMBERS');
+    	$member_status = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
     echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>
@@ -235,46 +235,46 @@ if($get_mode != 'csv')
                     }
                     echo '
                     <a href="'.$url.'"><img
-                    src="'. THEME_PATH. '/icons/application_view_list.png" alt="'.$g_l10n->get('LST_LIST_VIEW').'" title="'.$g_l10n->get('LST_LIST_VIEW').'" /></a>
-                    <a href="'.$url.'">'.$g_l10n->get('LST_LIST_VIEW').'</a>';
+                    src="'. THEME_PATH. '/icons/application_view_list.png" alt="'.$gL10n->get('LST_LIST_VIEW').'" title="'.$gL10n->get('LST_LIST_VIEW').'" /></a>
+                    <a href="'.$url.'">'.$gL10n->get('LST_LIST_VIEW').'</a>';
                 }
                 else
                 {
                     echo '
                     <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $get_lst_id. '&rol_id='. $get_rol_id. '&show_members='.$get_show_members.'"><img
-                    src="'. THEME_PATH. '/icons/application_form.png" alt="'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'" title="'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $get_lst_id. '&rol_id='. $get_rol_id. '&show_members='.$get_show_members.'">'.$g_l10n->get('LST_KONFIGURATION_OWN_LIST').'</a>';
+                    src="'. THEME_PATH. '/icons/application_form.png" alt="'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'" title="'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'" /></a>
+                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $get_lst_id. '&rol_id='. $get_rol_id. '&show_members='.$get_show_members.'">'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'</a>';
                 }
             echo '</span>
             </li>';
 
             // Aufruf des Mailmoduls mit dieser Rolle
-            if($g_current_user->mailRole($role->getValue("rol_id")) && $g_preferences['enable_mail_module'] == 1)
+            if($gCurrentUser->mailRole($role->getValue("rol_id")) && $gPreferences['enable_mail_module'] == 1)
             {
                 echo '<li>
                     <span class="iconTextLink">
                         <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$get_rol_id.'"><img
-                        src="'. THEME_PATH. '/icons/email.png" alt="'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'"  title="'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$get_rol_id.'">'.$g_l10n->get('LST_EMAIL_TO_MEMBERS').'</a>
+                        src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"  title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>
+                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$get_rol_id.'">'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'</a>
                     </span>
                 </li>';
             }
 
             // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
-            if((  $g_current_user->assignRoles() 
-               || isGroupLeader($g_current_user->getValue('usr_id'), $role->getValue('rol_id')))
+            if((  $gCurrentUser->assignRoles() 
+               || isGroupLeader($gCurrentUser->getValue('usr_id'), $role->getValue('rol_id')))
             && $role->getValue('rol_valid') == 1)
             {
                 // der Webmasterrolle darf nur von Webmastern neue User zugeordnet werden
-                if($role->getValue('rol_name')  != $g_l10n->get('SYS_WEBMASTER')
-                || ($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER') && $g_current_user->isWebmaster()))
+                if($role->getValue('rol_name')  != $gL10n->get('SYS_WEBMASTER')
+                || ($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->isWebmaster()))
                 {
                     echo '
                     <li>
                         <span class="iconTextLink">
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '"><img 
-                                src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'n" /></a>
-                            <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">'.$g_l10n->get('SYS_ASSIGN_MEMBERS').'</a>
+                                src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'n" /></a>
+                            <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">'.$gL10n->get('SYS_ASSIGN_MEMBERS').'</a>
                         </span>
                     </li>';
                 }
@@ -283,17 +283,17 @@ if($get_mode != 'csv')
             echo '<li>
                 <span class="iconTextLink">
                     <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'&amp;show_members='.$get_show_members.'\', \'_blank\')"><img
-                    src="'. THEME_PATH. '/icons/print.png" alt="'.$g_l10n->get('LST_PRINT_PREVIEW').'" title="'.$g_l10n->get('LST_PRINT_PREVIEW').'" /></a>
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'&amp;show_members='.$get_show_members.'\', \'_blank\')">'.$g_l10n->get('LST_PRINT_PREVIEW').'</a>
+                    src="'. THEME_PATH. '/icons/print.png" alt="'.$gL10n->get('LST_PRINT_PREVIEW').'" title="'.$gL10n->get('LST_PRINT_PREVIEW').'" /></a>
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$get_lst_id.'&amp;mode=print&amp;rol_id='.$get_rol_id.'&amp;show_members='.$get_show_members.'\', \'_blank\')">'.$gL10n->get('LST_PRINT_PREVIEW').'</a>
                 </span>
             </li>
             <li>
                 <span class="iconTextLink">
-                    <img src="'. THEME_PATH. '/icons/database_out.png" alt="'.$g_l10n->get('LST_EXPORT_TO').'" />
+                    <img src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('LST_EXPORT_TO').'" />
                     <select size="1" name="export_mode" onchange="exportList(this)">
-                        <option value="" selected="selected">'.$g_l10n->get('LST_EXPORT_TO').' ...</option>
-                        <option value="csv-ms">'.$g_l10n->get('LST_MICROSOFT_EXCEL').' ('.$g_l10n->get('SYS_ISO_8859_1').')</option>
-                        <option value="csv-oo">'.$g_l10n->get('LST_CSV_FILE').' ('.$g_l10n->get('SYS_UTF8').')</option>
+                        <option value="" selected="selected">'.$gL10n->get('LST_EXPORT_TO').' ...</option>
+                        <option value="csv-ms">'.$gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')</option>
+                        <option value="csv-oo">'.$gL10n->get('LST_CSV_FILE').' ('.$gL10n->get('SYS_UTF8').')</option>
                     </select>
                 </span>
             </li>   
@@ -319,14 +319,14 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
     {
         // benutzerdefiniertes Feld
         $usf_id = $column->getValue('lsc_usf_id');
-        $col_name = $g_current_user->getPropertyById($usf_id, 'usf_name');
+        $col_name = $gCurrentUser->getPropertyById($usf_id, 'usf_name');
 
-        if($g_current_user->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
-        || $g_current_user->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
+        if($gCurrentUser->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
+        || $gCurrentUser->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
         {
             $align = 'center';
         }
-        elseif($g_current_user->getPropertyById($usf_id, 'usf_type') == 'NUMERIC')
+        elseif($gCurrentUser->getPropertyById($usf_id, 'usf_type') == 'NUMERIC')
         {
             $align = 'right';
         }
@@ -339,15 +339,15 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
 
     // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
     if($usf_id == 0
-    || $g_current_user->editUsers()
-    || $g_current_user->getPropertyById($usf_id, 'usf_hidden') == 0)
+    || $gCurrentUser->editUsers()
+    || $gCurrentUser->getPropertyById($usf_id, 'usf_hidden') == 0)
     {
         if($get_mode == 'csv')
         {
             if($column_number == 1)
             {
                 // die Laufende Nummer noch davorsetzen
-                $str_csv = $str_csv. $value_quotes. $g_l10n->get('SYS_ABR_NO'). $value_quotes;
+                $str_csv = $str_csv. $value_quotes. $gL10n->get('SYS_ABR_NO'). $value_quotes;
             }
             $str_csv = $str_csv. $separator. $value_quotes. $col_name. $value_quotes;
         }
@@ -356,7 +356,7 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
             if($column_number == 1)
             {
                 // die Laufende Nummer noch davorsetzen
-                echo '<th style="text-align: '.$align.';">'.$g_l10n->get('SYS_ABR_NO').'</th>';
+                echo '<th style="text-align: '.$align.';">'.$gL10n->get('SYS_ABR_NO').'</th>';
             }
             echo '<th style="text-align: '.$align.';">'.$col_name.'</th>';
         }
@@ -374,9 +374,9 @@ else
 
 $irow        = $get_start + 1;  // Zahler fuer die jeweilige Zeile
 $leader_head = -1;              // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
-if($get_mode == 'html' && $g_preferences['lists_members_per_page'] > 0)
+if($get_mode == 'html' && $gPreferences['lists_members_per_page'] > 0)
 {
-    $members_per_page = $g_preferences['lists_members_per_page'];     // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
+    $members_per_page = $gPreferences['lists_members_per_page'];     // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
 }
 else
 {
@@ -384,14 +384,14 @@ else
 }
 
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-if(!$g_db->data_seek($result_list, $get_start))
+if(!$gDb->data_seek($result_list, $get_start))
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
 {
-    if($row = $g_db->fetch_array($result_list))
+    if($row = $gDb->fetch_array($result_list))
     {
         if($get_mode != 'csv')
         {
@@ -402,11 +402,11 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
             {
                 if($row['mem_leader'] == 1)
                 {
-                    $title = $g_l10n->get('SYS_LEADER');
+                    $title = $gL10n->get('SYS_LEADER');
                 }
                 else
                 {
-                    $title = $g_l10n->get('SYS_PARTICIPANTS');
+                    $title = $gL10n->get('SYS_PARTICIPANTS');
                 }
                 echo '<tr>
                     <td class="'.$class_sub_header.'" colspan="'. ($list->countColumns() + 1). '">
@@ -450,20 +450,20 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
 
             // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
             if($usf_id == 0
-            || $g_current_user->editUsers()
-            || $g_current_user->getPropertyById($usf_id, 'usf_hidden') == 0)
+            || $gCurrentUser->editUsers()
+            || $gCurrentUser->getPropertyById($usf_id, 'usf_hidden') == 0)
             {
                 if($get_mode != 'csv')
                 {
                     $align = 'left';
                     if($b_user_field == true)
                     {
-                        if($g_current_user->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
-                        || $g_current_user->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
+                        if($gCurrentUser->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
+                        || $gCurrentUser->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
                         {
                             $align = 'center';
                         }
-                        elseif($g_current_user->getPropertyById($usf_id, 'usf_type') == 'NUMERIC')
+                        elseif($gCurrentUser->getPropertyById($usf_id, 'usf_type') == 'NUMERIC')
                         {
                             $align = 'right';
                         }
@@ -500,35 +500,35 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
                 }
                 elseif($usf_id > 0)
                 {
-                    $usf_type = $g_current_user->getPropertyById($usf_id, 'usf_type');
+                    $usf_type = $gCurrentUser->getPropertyById($usf_id, 'usf_type');
                 }
                             
                 // Ausgabe je nach Feldtyp aufbereiten
-                if($usf_id == $g_current_user->getProperty('GENDER', 'usf_id'))
+                if($usf_id == $gCurrentUser->getProperty('GENDER', 'usf_id'))
                 {
                     // Geschlecht anzeigen
                     if($row[$sql_column_number] == 1)
                     {
                         if($get_mode == 'csv' || $get_mode == 'print')
                         {
-                            $content = $g_l10n->get('SYS_MALE');
+                            $content = $gL10n->get('SYS_MALE');
                         }
                         else
                         {
                             $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png"
-                                        title="'.$g_l10n->get('SYS_MALE').'" alt="'.$g_l10n->get('SYS_MALE').'" />';
+                                        title="'.$gL10n->get('SYS_MALE').'" alt="'.$gL10n->get('SYS_MALE').'" />';
                         }
                     }
                     elseif($row[$sql_column_number] == 2)
                     {
                         if($get_mode == 'csv' || $get_mode == 'print')
                         {
-                            $content = $g_l10n->get('SYS_FEMALE');
+                            $content = $gL10n->get('SYS_FEMALE');
                         }
                         else
                         {
                             $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png"
-                                        alt="'.$g_l10n->get('SYS_FEMALE').'" alt="'.$g_l10n->get('SYS_FEMALE').'" />';
+                                        alt="'.$gL10n->get('SYS_FEMALE').'" alt="'.$gL10n->get('SYS_FEMALE').'" />';
                         }
                     }
                     else
@@ -539,9 +539,9 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
                         }
                     }
                 }
-                elseif($usf_id == $g_current_user->getProperty('COUNTRY', 'usf_id'))
+                elseif($usf_id == $gCurrentUser->getProperty('COUNTRY', 'usf_id'))
 				{
-					$content = $g_l10n->getCountryByCode($row[$sql_column_number]);
+					$content = $gL10n->getCountryByCode($row[$sql_column_number]);
 				}
                 elseif($column->getValue('lsc_special_field') == 'usr_photo')
                 {
@@ -549,7 +549,7 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
                     if($get_mode == 'html' || $get_mode == 'print')
                     {
                         $imgSource = 'photo_show.php?usr_id='.$row['usr_id'];
-                        if($g_preferences['profile_photo_storage'] == 0)
+                        if($gPreferences['profile_photo_storage'] == 0)
                         {
                             if(strlen($row[$sql_column_number]) == 0)
                             {
@@ -568,11 +568,11 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
                                 $imgSource = THEME_PATH. '/images/no_profile_pic.png';
                             }
                         }
-                        $content = '<img src="'.$imgSource.'" style="vertical-align: middle;" alt="'.$g_l10n->get('LST_USER_PHOTO').'" />';
+                        $content = '<img src="'.$imgSource.'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                     }
                     if ($get_mode == 'csv' && $row[$sql_column_number] != NULL)
                     {
-                        $content = $g_l10n->get('LST_USER_PHOTO');
+                        $content = $gL10n->get('LST_USER_PHOTO');
                     }
                 }
                 else
@@ -585,7 +585,7 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
                             {
                                 if($get_mode == 'csv')
                                 {
-                                    $content = $g_l10n->get('SYS_YES');
+                                    $content = $gL10n->get('SYS_YES');
                                 }
                                 else
                                 {
@@ -596,7 +596,7 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
                             {
                                 if($get_mode == 'csv')
                                 {
-                                    $content = $g_l10n->get('SYS_NO');
+                                    $content = $gL10n->get('SYS_NO');
                                 }
                                 else
                                 {
@@ -610,7 +610,7 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
 							{
 								// Datum muss noch formatiert werden
 								$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
-								$content = $date->format($g_preferences['system_date']);
+								$content = $date->format($gPreferences['system_date']);
 							}
                             break;
 
@@ -619,7 +619,7 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
 							if(strlen($row[$sql_column_number]) > 0)
 							{
 								// ausgewaehlten Text der Auswahlbox darstellen
-								$arrListValues = $g_current_user->getPropertyById($usf_id, 'usf_value_list');
+								$arrListValues = $gCurrentUser->getPropertyById($usf_id, 'usf_value_list');
 								$content = $arrListValues[$row[$sql_column_number]-1];
 							}
                             break;
@@ -630,8 +630,8 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
                             {
                                 if($get_mode == 'html')
                                 {
-                                    if($g_preferences['enable_mail_module'] == 1 
-                                    && $g_current_user->getPropertyById($usf_id, 'usf_name_intern') == 'EMAIL')
+                                    if($gPreferences['enable_mail_module'] == 1 
+                                    && $gCurrentUser->getPropertyById($usf_id, 'usf_name_intern') == 'EMAIL')
                                     {
                                         $content = '<a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '">'. $row[$sql_column_number]. '</a>';
                                     }
@@ -696,7 +696,7 @@ for($j = 0; $j < $members_per_page && $j + $get_start < $num_members; $j++)
 if($get_mode == 'csv')
 {
     // nun die erstellte CSV-Datei an den User schicken
-    $filename = $g_organization. '-'. str_replace('.', '', $role->getValue('rol_name')). '.csv';
+    $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.csv';
     header('Content-Type: text/comma-separated-values; charset='.$charset);
     header('Content-Disposition: attachment; filename="'.urlencode($filename).'"');
 	// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
@@ -741,7 +741,7 @@ else
                         //Kategorie
                         echo '
                         <dl>
-                            <dt>'.$g_l10n->get('SYS_CATEGORY').':</dt>
+                            <dt>'.$gL10n->get('SYS_CATEGORY').':</dt>
                             <dd>'.$role->getValue('cat_name').'</dd>
                         </dl>
                     </li>';
@@ -751,7 +751,7 @@ else
                         {
                             echo'<li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('SYS_DESCRIPTION').':</dt>
+                                    <dt>'.$gL10n->get('SYS_DESCRIPTION').':</dt>
                                     <dd>'.$role->getValue('rol_description').'</dd>
                                 </dl>
                             </li>';
@@ -762,8 +762,8 @@ else
                         {
                             echo'<li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('SYS_PERIOD').':</dt>
-                                    <dd>'.$g_l10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $g_preferences['system_date']), $role->getValue('rol_end_date', $g_preferences['system_date'])).'</dd>
+                                    <dt>'.$gL10n->get('SYS_PERIOD').':</dt>
+                                    <dd>'.$gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])).'</dd>
                                 </dl>
                             </li>';
                         }
@@ -773,7 +773,7 @@ else
                         {
                             echo '<li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('DAT_DATE').': </dt>
+                                    <dt>'.$gL10n->get('DAT_DATE').': </dt>
                                     <dd>'; 
                                         if($role->getValue('rol_weekday') > 0)
                                         {
@@ -781,7 +781,7 @@ else
                                         }
                                         if(strlen($role->getValue('rol_start_time')) > 0)
                                         {
-                                            echo $g_l10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $g_preferences['system_time']), $role->getValue('rol_end_time', $g_preferences['system_time']));
+                                            echo $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
                                         }
 
                                     echo '</dd>
@@ -794,7 +794,7 @@ else
                         {
                             echo '<li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('SYS_LOCATION').':</dt>
+                                    <dt>'.$gL10n->get('SYS_LOCATION').':</dt>
                                     <dd>'.$role->getValue('rol_location').'</dd>
                                 </dl>
                             </li>';
@@ -805,8 +805,8 @@ else
                         {
                             echo '<li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('SYS_CONTRIBUTION').':</dt>
-                                    <dd>'. $role->getValue('rol_cost'). ' '.$g_preferences['system_currency'].'</dd>
+                                    <dt>'.$gL10n->get('SYS_CONTRIBUTION').':</dt>
+                                    <dd>'. $role->getValue('rol_cost'). ' '.$gPreferences['system_currency'].'</dd>
                                 </dl>
                             </li>';
                         }
@@ -816,7 +816,7 @@ else
                         {
                             echo '<li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
+                                    <dt>'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
                                     <dd>'.$role->getCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
                                 </dl>
                             </li>';
@@ -827,7 +827,7 @@ else
                         {
                             echo'<li>
                                 <dl>
-                                    <dt>'.$g_l10n->get('SYS_MAX_PARTICIPANTS').':</dt>
+                                    <dt>'.$gL10n->get('SYS_MAX_PARTICIPANTS').':</dt>
                                     <dd>'. $role->getValue('rol_max_members'). '</dd>
                                 </dl>
                             </li>';
@@ -848,8 +848,8 @@ else
             <li>
                 <span class="iconTextLink">
                     <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                    src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+                    src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                    <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
                 </span>
             </li>
         </ul>';

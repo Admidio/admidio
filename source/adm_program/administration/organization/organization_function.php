@@ -13,9 +13,9 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_text.php');
 
 // nur Webmaster duerfen Organisationen bearbeiten
-if($g_current_user->isWebmaster() == false)
+if($gCurrentUser->isWebmaster() == false)
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 $_SESSION['organization_request'] = $_REQUEST;
@@ -26,19 +26,19 @@ $_SESSION['organization_request'] = $_REQUEST;
 
 if(strlen($_POST['org_longname']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('SYS_NAME'), $g_l10n->get('SYS_COMMON')));
+    $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('SYS_NAME'), $gL10n->get('SYS_COMMON')));
 }
 
 if(strlen($_POST['email_administrator']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $g_l10n->get('SYS_SYSTEM_MAILS')));
+    $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $gL10n->get('SYS_SYSTEM_MAILS')));
 }
 else
 {
     $_POST['email_administrator'] = admStrToLower($_POST['email_administrator']);
     if(!strValidCharacters($_POST['email_administrator'], 'email'))
     {
-        $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
     }
 }
 
@@ -47,23 +47,23 @@ if(strlen($_POST['mail_sendmail_address']) > 0)
     $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
     if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
     {
-        $g_message->show($g_l10n->get('SYS_EMAIL_INVALID', $g_l10n->get('MAI_SENDER_EMAIL')));
+        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
     }
 }
 
 if(strlen($_POST['theme']) == 0)
 {
-    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('ORG_ADMIDIO_THEME'), $g_l10n->get('SYS_COMMON')));
+    $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_ADMIDIO_THEME'), $gL10n->get('SYS_COMMON')));
 }
 
 if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
 {
-    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $g_l10n->get('SYS_COMMON')));
+    $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $gL10n->get('SYS_COMMON')));
 }
 
 if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
 {
-    $g_message->show($g_l10n->get('ORG_FIELD_EMPTY_AREA', $g_l10n->get('LNK_DISPLAY_REDIRECT'), $g_l10n->get('LNK_WEBLINKS')));
+    $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('LNK_DISPLAY_REDIRECT'), $gL10n->get('LNK_WEBLINKS')));
 }
 
 // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
@@ -114,29 +114,29 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 {
     if($_POST['forum_sqldata_from_admidio'] == 0 && (strlen($_POST['forum_srv']) == 0 || strlen($_POST['forum_usr']) == 0 || strlen($_POST['forum_pw']) == 0 || strlen($_POST['forum_db']) == 0 ))
     {
-        $g_message->show($g_l10n->get('SYS_FORUM_ACCESS_DATA'));
+        $gMessage->show($gL10n->get('SYS_FORUM_ACCESS_DATA'));
     }
     else
     {
         // Password 0000 ist aus Sicherheitsgruenden ein Dummy und bedeutet, dass es sich nicht geaendert hat
         if($_POST['forum_pw'] == '0000')
         {
-            $_POST['forum_pw'] = $g_preferences['forum_pw'];
+            $_POST['forum_pw'] = $gPreferences['forum_pw'];
         }
 
         $forum_test = Forum::createForumObject($_POST['forum_version']);
 
         if($_POST['forum_sqldata_from_admidio'] == 0)
         {
-            $connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $g_db);
+            $connect_id = $forum_test->connect($_POST['forum_srv'], $_POST['forum_usr'], $_POST['forum_pw'], $_POST['forum_db'], $gDb);
         }
         else
         {
-            $connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $g_db);
+            $connect_id = $forum_test->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $_POST['forum_db'], $gDb);
         }
         if($connect_id == false)
         {
-            $g_message->show($g_l10n->get('SYS_FORUM_DB_CONNECTION_FAILED'));
+            $gMessage->show($gL10n->get('SYS_FORUM_DB_CONNECTION_FAILED'));
         }
     }
 }
@@ -145,7 +145,7 @@ if(isset($_POST['enable_forum_interface']) && $_POST['enable_forum_interface'] =
 // Organisation updaten
 // *******************************************************************************
 
-$text = new TableText($g_db);
+$text = new TableText($gDb);
 
 // Einstellungen speichern
 
@@ -156,7 +156,7 @@ foreach($_POST as $key => $value)
     {
         if(strpos($key, 'org_') === 0)
         {
-            $g_current_organization->setValue($key, $value);
+            $gCurrentOrganization->setValue($key, $value);
         }
         elseif(strpos($key, 'SYSMAIL_') === 0)
         {
@@ -170,32 +170,32 @@ foreach($_POST as $key => $value)
             // 0000 bedeutet, dass das PW sich nicht veraendert hat
             if($key == 'forum_pw' && $value == '0000')
             {
-                $g_preferences[$key] = $g_preferences[$key];
+                $gPreferences[$key] = $gPreferences[$key];
             }
             else
             {
-                $g_preferences[$key] = $value;
+                $gPreferences[$key] = $value;
             }
         }
     }
 }
 
 // alle Daten nun speichern
-$ret_code = $g_current_organization->save();
+$ret_code = $gCurrentOrganization->save();
 if($ret_code != 0)
 {
-    $g_current_organization->clear();
-    $g_message->show($g_l10n->get('SYS_ERROR_DATABASE_ACCESS', $ret_code));
+    $gCurrentOrganization->clear();
+    $gMessage->show($gL10n->get('SYS_ERROR_DATABASE_ACCESS', $ret_code));
 }
 
-$g_current_organization->setPreferences($g_preferences);
+$gCurrentOrganization->setPreferences($gPreferences);
 
 // Aufraeumen
 unset($_SESSION['organization_request']);
-unset($_SESSION['g_forum']);
-$g_current_session->renewOrganizationObject();
+unset($_SESSION['gForum']);
+$gCurrentSession->renewOrganizationObject();
 
 // zur Ausgangsseite zurueck
-$g_message->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-$g_message->show($g_l10n->get('SYS_SAVE_DATA'));
+$gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 ?>

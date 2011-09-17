@@ -6,11 +6,11 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * ann_id    - ID der Ankuendigung, die bearbeitet werden soll
  * headline  - Ueberschrift, die ueber den Ankuendigungen steht
- *             (Default) Ankuendigungen
+ *             (Default) ANN_ANNOUNCEMENTS
  *
  *****************************************************************************/
 
@@ -20,25 +20,25 @@ require_once('../../system/classes/ckeditor_special.php');
 require_once('../../system/classes/table_announcement.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_announcements_module'] == 0)
+if ($gPreferences['enable_announcements_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-if(!$g_current_user->editAnnouncements())
+if(!$gCurrentUser->editAnnouncements())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getAnnId    = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('ANN_ANNOUNCEMENTS'));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Ankuendigungsobjekt anlegen
-$announcement = new TableAnnouncement($g_db);
+$announcement = new TableAnnouncement($gDb);
 
 if($getAnnId > 0)
 {
@@ -47,7 +47,7 @@ if($getAnnId > 0)
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)
     {
-        $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
 
@@ -65,14 +65,14 @@ $ckEditor = new CKEditorSpecial();
 // Html-Kopf ausgeben
 if($getAnnId > 0)
 {
-    $g_layout['title'] = $g_l10n->get('SYS_EDIT_VAR', $g_l10n->get('ANN_ANNOUNCEMENT'));
+    $gLayout['title'] = $gL10n->get('SYS_EDIT_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
 }
 else
 {
-    $g_layout['title'] = $g_l10n->get('SYS_CREATE_VAR', $g_l10n->get('ANN_ANNOUNCEMENT'));
+    $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
 }
 
-$g_layout['header'] = '
+$gLayout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/ckeditor/ckeditor.js"></script>
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -88,12 +88,12 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1" >
 <div class="formLayout" id="edit_announcements_form">
-    <div class="formHead">'. $g_layout['title']. '</div>
+    <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
 		<div class="groupBox" id="admAnnouncementTitle">
 			<div class="groupBoxHeadline" id="admAnnouncementTitleHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admAnnouncementTitleBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
-				id="admAnnouncementTitleBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_TITLE').'
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admAnnouncementTitleBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admAnnouncementTitleBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_TITLE').'
 			</div>
 
 			<div class="groupBoxBody" id="admAnnouncementTitleBody">
@@ -101,14 +101,14 @@ echo '
                     <li>
                         <div>
                                 <input type="text" id="ann_headline" name="ann_headline" style="width: 95%;" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
-                                <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </div>
                     </li>';
                     
         
                     // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf 'global' gesetzt werden
-                    if($g_current_organization->getValue('org_org_id_parent') > 0
-                    || $g_current_organization->hasChildOrganizations())
+                    if($gCurrentOrganization->getValue('org_org_id_parent') > 0
+                    || $gCurrentOrganization->hasChildOrganizations())
                     {
                         echo '
                         <li>
@@ -119,7 +119,7 @@ echo '
                                         echo ' checked="checked" ';
                                     }
                                     echo ' value="1" />
-                                    <label for="ann_global">'.$g_l10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
+                                    <label for="ann_global">'.$gL10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
                                     <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL&amp;inline=true"><img 
                                         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
                                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
@@ -131,15 +131,15 @@ echo '
         </div>
 		<div class="groupBox" id="admDescription">
 			<div class="groupBoxHeadline" id="admDescriptionHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$g_l10n->get('SYS_FADE_IN').'\', \''.$g_l10n->get('SYS_HIDE').'\')"><img
-				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$g_l10n->get('SYS_HIDE').'" title="'.$g_l10n->get('SYS_HIDE').'" /></a>'.$g_l10n->get('SYS_TEXT').'
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_TEXT').'
 			</div>
 
 			<div class="groupBoxBody" id="admDescriptionBody">
                 <ul class="formFieldList">
                     <li>
                          '.$ckEditor->createEditor('ann_description', $announcement->getValue('ann_description')).'
-                         <span class="mandatoryFieldMarker" title="'.$g_l10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </li>
                 </ul>
             </div>
@@ -149,19 +149,19 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($g_db, $announcement->getValue('ann_usr_id_create'));
-                echo $g_l10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $announcement->getValue('ann_timestamp_create'));
+                $user_create = new User($gDb, $gUserFields, $announcement->getValue('ann_usr_id_create'));
+                echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $announcement->getValue('ann_timestamp_create'));
 
                 if($announcement->getValue('ann_usr_id_change') > 0)
                 {
-                    $user_change = new User($g_db, $announcement->getValue('ann_usr_id_change'));
-                    echo '<br />'.$g_l10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $announcement->getValue('ann_timestamp_change'));
+                    $user_change = new User($gDb, $gUserFields, $announcement->getValue('ann_usr_id_change'));
+                    echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $announcement->getValue('ann_timestamp_change'));
                 }
             echo '</div>';
         }
 
         echo '<div class="formSubmit">
-            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$g_l10n->get('SYS_SAVE').'" />&nbsp;'.$g_l10n->get('SYS_SAVE').'</button>
+            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>
@@ -171,8 +171,8 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
         </span>
     </li>
 </ul>';

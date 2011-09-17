@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * aid      ..  Activation Id für die Bestaetigung das der User wirklich ein neues Passwort wuenscht
  * usr_id   ..  Die Id des Useres der ein neues Passwort wuenscht
@@ -14,33 +14,30 @@
  
 require_once('common.php');
 
+// Initialize and check the parameters
+$getActivationId = admFuncVariableIsValid($_GET, 'aid', 'string', null, true);
+$getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
+
 // Systemmails und Passwort zusenden muessen aktiviert sein
-if($g_preferences['enable_system_mails'] != 1 || $g_preferences['enable_password_recovery'] != 1)
+if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)
 {
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-if(isset($_GET['aid']) && isset($_GET['usr_id']) && is_numeric($_GET['usr_id']))
+$user = new TableUsers($gDb, $getUserId);
+
+if($user->getValue('usr_activation_code') == $getActivationId)
 {
-    $user = new TableUsers($g_db, $_GET['usr_id']);
-    
-    if($user->getValue('usr_activation_code') == $_GET['aid'])
-    {
-        // das neue Passwort aktivieren
-        $user->setValue('usr_password', $user->getValue('usr_new_password'));
-        $user->setValue('usr_new_password', '');
-        $user->setValue('usr_activation_code', '');
-        $user->save();
-        
-        $g_message->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
-        $g_message->show($g_l10n->get('SYS_PWACT_PW_SAVED'));
-    }
-    else
-    {
-        $g_message->show($g_l10n->get('SYS_PWACT_CODE_INVALID'));
-    }
+	// das neue Passwort aktivieren
+	$user->setValue('usr_password', $user->getValue('usr_new_password'));
+	$user->setValue('usr_new_password', '');
+	$user->setValue('usr_activation_code', '');
+	$user->save();
+	
+	$gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php', 2000);
+	$gMessage->show($gL10n->get('SYS_PWACT_PW_SAVED'));
 }
 else
 {
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	$gMessage->show($gL10n->get('SYS_PWACT_CODE_INVALID'));
 }

@@ -63,39 +63,39 @@ if(isset($plg_headline))
 }
 else
 {
-    $plg_headline = $g_l10n->get('ANN_ANNOUNCEMENTS');
+    $plg_headline = $gL10n->get('ANN_ANNOUNCEMENTS');
 }
 
 // DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
-$g_db->setCurrentDB();
+$gDb->setCurrentDB();
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $plg_organizations = "";
-$plg_arr_orgas = $g_current_organization->getReferenceOrganizations(true, true);
+$plg_arr_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
 
 foreach($plg_arr_orgas as $key => $value)
 {
 	$plg_organizations = $plg_organizations. '\''.$value.'\', ';
 }
-$plg_organizations = $plg_organizations. '\''. $g_current_organization->getValue('org_shortname'). '\'';
+$plg_organizations = $plg_organizations. '\''. $gCurrentOrganization->getValue('org_shortname'). '\'';
 
 // nun alle relevanten Ankuendigungen finden
 $sql    = 'SELECT * FROM '. TBL_ANNOUNCEMENTS. '
-			WHERE (  ann_org_shortname = \''. $g_current_organization->getValue('org_shortname').'\'
+			WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname').'\'
 				  OR (   ann_global   = 1
 					 AND ann_org_shortname IN ('.$plg_organizations.') ))
 			ORDER BY ann_timestamp_create DESC
 			LIMIT '.$plg_announcements_count;
-$plg_result = $g_db->query($sql);
-$plg_announcement = new TableAnnouncement($g_db);
+$plg_result = $gDb->query($sql);
+$plg_announcement = new TableAnnouncement($gDb);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$g_l10n->get('ANN_ANNOUNCEMENTS').'</h3></div>
+<div class="admPluginHeader"><h3>'.$gL10n->get('ANN_ANNOUNCEMENTS').'</h3></div>
 <div class="admPluginBody">';
 
-if($g_db->num_rows($plg_result) > 0)
+if($gDb->num_rows($plg_result) > 0)
 {
-    while($plg_row = $g_db->fetch_object($plg_result))
+    while($plg_row = $gDb->fetch_object($plg_result))
     {
         $plg_announcement->clear();
         $plg_announcement->setArray($plg_row);
@@ -129,14 +129,14 @@ if($g_db->num_rows($plg_result) > 0)
             echo $plg_announcement->getValue('ann_headline').'</a><br />';
         }
          
-        echo '(&nbsp;'. $plg_announcement->getValue('ann_timestamp_create', $g_preferences['system_date']). '&nbsp;)<hr />';
+        echo '(&nbsp;'. $plg_announcement->getValue('ann_timestamp_create', $gPreferences['system_date']). '&nbsp;)<hr />';
     }
     
-    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">'.$g_l10n->get('SYS_ALL').' '.$plg_headline.'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">'.$gL10n->get('SYS_ALL').' '.$plg_headline.'</a>';
 }
 else
 {
-    echo $g_l10n->get('SYS_NO_ENTRIES');
+    echo $gL10n->get('SYS_NO_ENTRIES');
 }
 
 echo '</div></div>';

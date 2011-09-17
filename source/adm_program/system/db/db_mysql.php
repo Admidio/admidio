@@ -149,10 +149,10 @@ class DBMySQL extends DBCommon
     
     public function query($sql)
     {
-        global $g_debug;
+        global $gDebug;
         
         // im Debug-Modus werden alle SQL-Statements mitgeloggt
-        if($g_debug == 1)
+        if($gDebug == 1)
         {
             error_log($sql);
         }

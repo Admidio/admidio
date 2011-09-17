@@ -39,13 +39,13 @@ class TableText extends TableAccess
     // Text mit dem uebergebenen Text-Id oder Namen aus der Datenbank auslesen
     public function readData($name, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
     
         // wurde txt_name uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($name) == false)
         {
             $sql_where_condition .= '    txt_name   = \''.$name.'\' 
-                                     AND txt_org_id = '. $g_current_organization->getValue('org_id');
+                                     AND txt_org_id = '. $gCurrentOrganization->getValue('org_id');
         }
         
         return parent::readData($name, $sql_where_condition, $sql_additional_tables);
@@ -58,8 +58,8 @@ class TableText extends TableAccess
         if($this->new_record)
         {
             // Insert
-            global $g_current_organization;
-            $this->setValue('txt_org_id', $g_current_organization->getValue('org_id'));
+            global $gCurrentOrganization;
+            $this->setValue('txt_org_id', $gCurrentOrganization->getValue('org_id'));
         }
         parent::save($updateFingerPrint);
     }    

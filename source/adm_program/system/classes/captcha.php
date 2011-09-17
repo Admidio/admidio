@@ -62,23 +62,23 @@ class Captcha
 
     public function __construct()
     {
-		global $g_preferences;
+		global $gPreferences;
 		
         // Hier wird jetzt die Schriftart festgelegt. (Standard: Theme)
-		if($g_preferences['captcha_fonts'] == 'Theme')
+		if($gPreferences['captcha_fonts'] == 'Theme')
 			{$this->font = THEME_SERVER_PATH. '/font.ttf';}
 		else
-			{$this->font = SERVER_PATH .'/adm_program/system/fonts/'.$g_preferences['captcha_fonts'];}
+			{$this->font = SERVER_PATH .'/adm_program/system/fonts/'.$gPreferences['captcha_fonts'];}
 		
 		// Hier wird die Schriftart für die Bildunterschrift festgelegt. (Standard: Theme, nicht wechselbar)
 		$this->signature = THEME_SERVER_PATH. '/font.ttf';
 		
         // Nun die Bildgroesse des Captchas festlegen
-        $this->width = $g_preferences['captcha_width'];
-        $this->height = $g_preferences['captcha_height'];
+        $this->width = $gPreferences['captcha_width'];
+        $this->height = $gPreferences['captcha_height'];
 
         // Hier wird die Hintergrundfarbe festgelegt. Einzelne RGB-Werte (Umwandlung aus Hex-Wert)
-		$color = $g_preferences['captcha_background_color'];
+		$color = $gPreferences['captcha_background_color'];
 		if($color[0] == '#')
 			{$color = substr($color, 1);}
 		if(strlen($color) == 6)
@@ -90,14 +90,14 @@ class Captcha
 		$this->backgroundColourB = hexdec($b);
         
         // Hier wird die Schriftgroesse des CaptchaCodes festgelegt.
-        $this->codeSize = $g_preferences['captcha_text_size'];
+        $this->codeSize = $gPreferences['captcha_text_size'];
 
         // Hier wird der Untertitel festgelegt.
-        $this->backgroundWriting = $g_preferences['captcha_signature'];
-        $this->backgroundWritingSize = $g_preferences['captcha_signature_font_size'];
+        $this->backgroundWriting = $gPreferences['captcha_signature'];
+        $this->backgroundWritingSize = $gPreferences['captcha_signature_font_size'];
 
         // Diese Zeichen sind erlaubt innerhalb des Captcha-Codes.
-        $this->allowedChars = $g_preferences['captcha_signs'];
+        $this->allowedChars = $gPreferences['captcha_signs'];
 
     }
 
@@ -235,7 +235,7 @@ class Captcha
 }
 
 // Wenn ein Bildchen erzeugt werden soll, wird hier die Klasse initialisiert und die Ausgabe angestossen.
-if($g_preferences['captcha_type']=='pic')
+if($gPreferences['captcha_type']=='pic')
 {
 	$captcha = new Captcha();
 	$captcha->getCaptcha();

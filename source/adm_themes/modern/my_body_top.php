@@ -5,7 +5,7 @@
 
 
 <div id="page_header">
-	<h1><?php echo $g_current_organization->getValue("org_longname"); ?></h1>
+	<h1><?php echo $gCurrentOrganization->getValue("org_longname"); ?></h1>
 </div>
 
 <div style="clear: left;"><br /></div>

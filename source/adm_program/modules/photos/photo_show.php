@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * pho_id    : Id des Albums, aus dem das Bild kommen soll
  * pho_begin : Datum des Albums
@@ -21,7 +21,7 @@ require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 require_once('../../system/classes/image.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $getPhotoId    = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
 $getAlbumBegin = admFuncVariableIsValid($_GET, 'pho_begin', 'string', null, true);
 $getPhotoNr    = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', 0);
@@ -30,12 +30,12 @@ $getMaxHeight  = admFuncVariableIsValid($_GET, 'max_height', 'numeric', 0);
 $getThumbnail  = admFuncVariableIsValid($_GET, 'thumb', 'boolean', 0);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_photo_module'] == 0)
+if ($gPreferences['enable_photo_module'] == 0)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-elseif($g_preferences['enable_photo_module'] == 2)
+elseif($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require('../../system/login_valid.php');
@@ -48,7 +48,7 @@ $image      = NULL;
 $albumStartDate = new DateTimeExtended($getAlbumBegin, 'Y-m-d', 'date');
 if($albumStartDate->valid() == false)
 {
-	$g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 // Bildpfad zusammensetzten
@@ -56,7 +56,7 @@ $ordner  = SERVER_PATH. '/adm_my_files/photos/'.$getAlbumBegin.'_'.$getPhotoId;
 $picpath = $ordner.'/'.$getPhotoNr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben
-if($g_debug == 1)
+if($gDebug == 1)
 {
     error_log($picpath);
 }
@@ -81,7 +81,7 @@ if($getThumbnail)
         
         //Nachsehen ob Bild als Thumbnail in entsprechender Groesse hinterlegt ist
         //Wenn nicht anlegen
-        if(!file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length !=$g_preferences['photo_thumbs_scale'])
+        if(!file_exists($ordner.'/thumbnails/'.$getPhotoNr.'.jpg') || $thumb_length !=$gPreferences['photo_thumbs_scale'])
         {
             //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if(file_exists($ordner.'/thumbnails') == false)
@@ -93,7 +93,7 @@ if($getThumbnail)
 
             // nun das Thumbnail anlegen
             $image = new Image($picpath);
-            $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
+            $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
             $image->copyToFile(null, $ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
         }
         else
@@ -105,7 +105,7 @@ if($getThumbnail)
     {
         // kein Bild uebergeben, dann NoPix anzeigen
         $image = new Image(THEME_SERVER_PATH. '/images/nopix.jpg');
-        $image->scaleLargerSide($g_preferences['photo_thumbs_scale']);
+        $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
     }
 }
 else
@@ -122,14 +122,14 @@ else
 if($image != NULL)
 {
     // Einfuegen des Textes bei Bildern, die in der Ausgabe groesser als 200px sind
-    if (($getMaxWidth > 200) && $g_preferences['photo_image_text'] != '')
+    if (($getMaxWidth > 200) && $gPreferences['photo_image_text'] != '')
     {
         $font_c = imagecolorallocate($image->imageResource,255,255,255);
         $font_ttf = THEME_SERVER_PATH.'/font.ttf';
         $font_s = $getMaxWidth / 40;
         $font_x = $font_s;
         $font_y = $image->imageHeight-$font_s;
-        $text = $g_preferences['photo_image_text'];
+        $text = $gPreferences['photo_image_text'];
         imagettftext($image->imageResource, $font_s, 0, $font_x, $font_y, $font_c, $font_ttf, $text);
     }
 

@@ -43,19 +43,19 @@ class TableLists extends TableAccess
 
     public function save($updateFingerPrint = true)
     {
-        global $g_current_organization, $g_current_user;
+        global $gCurrentOrganization, $gCurrentUser;
         
         // Standardfelder fuellen
         if($this->new_record)
         {
             $this->setValue('lst_timestamp', DATETIME_NOW);
-            $this->setValue('lst_usr_id', $g_current_user->getValue('usr_id'));
-            $this->setValue('lst_org_id', $g_current_organization->getValue('org_id'));
+            $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
+            $this->setValue('lst_org_id', $gCurrentOrganization->getValue('org_id'));
         }
         else
         {
             $this->setValue('lst_timestamp', DATETIME_NOW);
-            $this->setValue('lst_usr_id', $g_current_user->getValue('usr_id'));
+            $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
         }
         
         // falls nicht explizit auf global = 1 gesetzt wurde, immer auf 0 setzen
@@ -70,11 +70,11 @@ class TableLists extends TableAccess
     // Aktuelle Liste wird zur Default-Liste der Organisation
     public function setDefault()
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
         
         // erst die bisherige Default-Liste zuruecksetzen
         $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 0
-                 WHERE lst_org_id  = '. $g_current_organization->getValue('org_id'). '
+                 WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                    AND lst_default = 1 ';
         $this->db->query($sql);
 

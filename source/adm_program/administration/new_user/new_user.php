@@ -8,19 +8,19 @@
  *
  *****************************************************************************/
  
-require("../../system/common.php");
-require("../../system/login_valid.php");
+require('../../system/common.php');
+require('../../system/login_valid.php');
 
 // nur Webmaster dürfen User bestätigen, ansonsten Seite verlassen
-if($g_current_user->approveUsers() == false)
+if($gCurrentUser->approveUsers() == false)
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // pruefen, ob Modul aufgerufen werden darf
-if($g_preferences['registration_mode'] == 0)
+if($gPreferences['registration_mode'] == 0)
 {
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 // Navigation faengt hier im Modul an
@@ -33,28 +33,28 @@ $sql    = 'SELECT usr_id, usr_login_name, usr_timestamp_create, last_name.usd_va
              FROM '. TBL_USERS. ' 
              LEFT JOIN '. TBL_USER_DATA. ' as last_name
                ON last_name.usd_usr_id = usr_id
-              AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+              AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
              LEFT JOIN '. TBL_USER_DATA. ' as first_name
                ON first_name.usd_usr_id = usr_id
-              AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+              AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
              LEFT JOIN '. TBL_USER_DATA. ' as email
                ON email.usd_usr_id = usr_id
-              AND email.usd_usf_id = '. $g_current_user->getProperty('EMAIL', 'usf_id'). '
+              AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id'). '
             WHERE usr_valid = 0
-              AND usr_reg_org_shortname = \''.$g_organization.'\' 
+              AND usr_reg_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\' 
             ORDER BY last_name, first_name ';
-$usr_result   = $g_db->query($sql);
-$member_found = $g_db->num_rows($usr_result);
+$usr_result   = $gDb->query($sql);
+$member_found = $gDb->num_rows($usr_result);
 
 if ($member_found == 0)
 {
-    $g_message->setForwardUrl($g_homepage);
-    $g_message->show($g_l10n->get('NWU_NO_REGISTRATIONS'), $g_l10n->get('NWU_REGISTRATION'));
+    $gMessage->setForwardUrl($gHomepage);
+    $gMessage->show($gL10n->get('NWU_NO_REGISTRATIONS'), $gL10n->get('NWU_REGISTRATION'));
 }
 
 // Html-Kopf ausgeben
-$g_layout['title']  = $g_l10n->get('NWU_NEW_REGISTRATIONS');
-$g_layout['header'] = '
+$gLayout['title']  = $gL10n->get('NWU_NEW_REGISTRATIONS');
+$gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
@@ -66,28 +66,28 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<h1 class="moduleHeadline">'.$g_layout['title'].'</h1>
+<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>
 
 <table class="tableList" cellspacing="0">
     <tr>
-        <th colspan="2">'.$g_l10n->get('SYS_NAME').'</th>
-        <th>'.$g_l10n->get('SYS_USERNAME').'</th>
-        <th>'.$g_l10n->get('SYS_EMAIL').'</th>
-        <th style="text-align: center;">'.$g_l10n->get('SYS_FEATURES').'</th>
+        <th colspan="2">'.$gL10n->get('SYS_NAME').'</th>
+        <th>'.$gL10n->get('SYS_USERNAME').'</th>
+        <th>'.$gL10n->get('SYS_EMAIL').'</th>
+        <th style="text-align: center;">'.$gL10n->get('SYS_FEATURES').'</th>
     </tr>';
 
-    while($row = $g_db->fetch_array($usr_result))
+    while($row = $gDb->fetch_array($usr_result))
     {
         $timestampCreate = new DateTimeExtended($row['usr_timestamp_create'], 'Y-m-d H:i:s');
-        $datetimeCreate  = $timestampCreate->format($g_preferences['system_date'].' '.$g_preferences['system_time']);
+        $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
         echo '
         <tr class="tableMouseOver" id="row_user_'.$row['usr_id'].'">
             <td><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a></td>
             <td><img class="iconInformation" src="'. THEME_PATH. '/icons/calendar_time.png"
-                    alt="'.$g_l10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" title="'.$g_l10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" /></td>
+                    alt="'.$gL10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" title="'.$gL10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" /></td>
             <td>'.$row['usr_login_name'].'</td>
             <td>';
-                if($g_preferences['enable_mail_module'] == 1)
+                if($gPreferences['enable_mail_module'] == 1)
                 {
                     echo '<a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
                 }
@@ -98,10 +98,10 @@ echo '
             echo '</td>
             <td style="text-align: center;">
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/new_user/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
-                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$g_l10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$g_l10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
+                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
                 <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
                     $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img 
-                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$g_l10n->get('SYS_DELETE').'" title="'.$g_l10n->get('SYS_DELETE').'" /></a>
+                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
             </td>
         </tr>';
     }

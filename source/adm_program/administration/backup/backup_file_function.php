@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * job      - get_file : die uebergebene Backupdatei wird heruntergeladen
  *          - delete   : die uebergebene Backupdatei wird geloescht
@@ -16,54 +16,28 @@
 require('../../system/common.php');
 require('../../system/login_valid.php');
 
+// Initialize and check the parameters
+$getJob      = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('delete', 'get_file'));
+$getFilename = admFuncVariableIsValid($_GET, 'filename', 'file', null, true);
+
 // nur Webmaster duerfen ein Backup starten
-if($g_current_user->isWebmaster() == false)
+if($gCurrentUser->isWebmaster() == false)
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 $backupAbsolutePath = SERVER_PATH. '/adm_my_files/backup/'; // make sure to include trailing slash
 
-if(isset($_GET['job']) == false || ($_GET['job'] != 'get_file' && $_GET['job'] != 'delete'))
-{
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-//pruefen ob ein Dateiname übergeben wurde
-if (array_key_exists('filename', $_GET))
-{
-    $returnCode = isValidFileName($_GET['filename']);
-    
-    if($returnCode < 0)
-    {
-        if($returnCode == -2)
-        {
-            $g_message->show($g_l10n->get('BAC_FILE_NAME_INVALID'));
-        }
-        else
-        {
-            $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-        }
-    }
-	
-	$filename = $_GET['filename'];	
-}
-else
-{
-    // ohne Dateiname gehts auch nicht weiter
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
 //kompletten Pfad der Datei holen
-$completePath = $backupAbsolutePath.$filename;
+$completePath = $backupAbsolutePath.$getFilename;
 
 //pruefen ob File ueberhaupt physikalisch existiert
 if(!file_exists($completePath))
 {
-    $g_message->show($g_l10n->get('SYS_FILE_NOT_EXIST'));
+    $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
 }
 
-switch($_GET['job'])
+switch($getJob)
 {
 	case 'get_file':
 		//Dateigroese ermitteln
@@ -72,7 +46,7 @@ switch($_GET['job'])
 		// Passenden Datentyp erzeugen.
 		header('Content-Type: application/octet-stream');
 		header('Content-Length: '.$fileSize);
-		header('Content-Disposition: attachment; filename="'.urlencode($_GET['filename']).'"');
+		header('Content-Disposition: attachment; filename="'.urlencode($getFilename).'"');
 		// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
 		header('Cache-Control: private');
 		header('Pragma: public');

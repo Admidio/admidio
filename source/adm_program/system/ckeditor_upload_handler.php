@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * CKEditor        : ID der Textarea, die den Upload ausgelöst hat
  * CKEditorFuncNum : Funktionsnummer, die im Editor die neue URL verarbeitet
@@ -24,7 +24,7 @@ $message = '';
 //pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
 if (ini_get('file_uploads') != '1')
 {
-    $message = $g_l10n->get('SYS_SERVER_NO_UPLOAD');
+    $message = $gL10n->get('SYS_SERVER_NO_UPLOAD');
 }
 
 // ggf. Ordner für Uploads in adm_my_files anlegen
@@ -35,7 +35,7 @@ if($_GET['CKEditor'] == 'ann_description')
 $myFilesProfilePhotos = new MyFiles($folderName);
 if($myFilesProfilePhotos->checkSettings() == false)
 {
-    $message = $g_l10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$g_preferences['email_administrator'].'">', '</a>');
+    $message = $gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>');
 }
 
 

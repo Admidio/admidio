@@ -86,15 +86,7 @@ class TableUsers extends TableAccess
         $sql    = 'UPDATE '. TBL_GUESTBOOK. ' SET gbo_usr_id_change = NULL
                     WHERE gbo_usr_id_change = '. $this->getValue('usr_id');
         $this->db->query($sql);
-/*
-        $sql    = 'UPDATE '. TBL_INVENTORY. ' SET inv_usr_id_create = NULL
-                    WHERE inv_usr_id_create = '. $this->getValue('usr_id');
-        $this->db->query($sql);
 
-        $sql    = 'UPDATE '. TBL_INVENTORY. ' SET inv_usr_id_change = NULL
-                    WHERE inv_usr_id_change = '. $this->getValue('usr_id');
-        $this->db->query($sql);
-*/
         $sql    = 'UPDATE '. TBL_LINKS. ' SET lnk_usr_id_create = NULL
                     WHERE lnk_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);
@@ -115,15 +107,7 @@ class TableUsers extends TableAccess
         $sql    = 'UPDATE '. TBL_PHOTOS. ' SET pho_usr_id_change = NULL
                     WHERE pho_usr_id_change = '. $this->getValue('usr_id');
         $this->db->query($sql);
-/*
-        $sql    = 'UPDATE '. TBL_RENTAL_OVERVIEW. ' SET rnt_usr_id_create = NULL
-                    WHERE rnt_usr_id_create = '. $this->getValue('usr_id');
-        $this->db->query($sql);
 
-        $sql    = 'UPDATE '. TBL_RENTAL_OVERVIEW. ' SET rnt_usr_id_change = NULL
-                    WHERE rnt_usr_id_change = '. $this->getValue('usr_id');
-        $this->db->query($sql);
-*/
         $sql    = 'UPDATE '. TBL_ROLES. ' SET rol_usr_id_create = NULL
                     WHERE rol_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);
@@ -172,7 +156,7 @@ class TableUsers extends TableAccess
         return $return;
     }
 
-    public function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value, $check_value = true)
     {
         // Passwortfelder sollten verschluesselt als md5-Hash gespeichert werden
         if(($field_name == 'usr_password' || $field_name == 'usr_new_password') && strlen($field_value) < 30)
@@ -183,8 +167,8 @@ class TableUsers extends TableAccess
         }
 		elseif($field_name == 'usr_login_name')
 		{
-			// Benutzername soll keine Sonderzeichen beinhalten
-			if (!strValidCharacters($field_value, 'noSpecialChar'))
+			// username should not contain special characters
+			if (strlen($field_value) > 0 && strValidCharacters($field_value, 'noSpecialChar') == false)
 			{
 				return false;
 			}

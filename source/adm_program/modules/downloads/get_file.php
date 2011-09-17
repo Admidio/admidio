@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
  * file_id      :  Die Id der Datei, welche heruntergeladen werden soll
  *
@@ -15,27 +15,27 @@
 require('../../system/common.php');
 require('../../system/classes/table_file.php');
 
+// Initialize and check the parameters
+$getFileId = admFuncVariableIsValid($_GET, 'file_id', 'numeric', null, true);
+
 //pruefen ob das Modul ueberhaupt aktiviert ist
-if ($g_preferences['enable_download_module'] != 1)
+if ($gPreferences['enable_download_module'] != 1)
 {
     // das Modul ist deaktiviert
-    $g_message->show($g_l10n->get('SYS_MODULE_DISABLED'));
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// Uebergabevariablen pruefen und ggf. initialisieren
-$get_file_id = admFuncVariableIsValid($_GET, 'file_id', 'numeric', null, true);
-
 //Fileobject erstellen
-$file = new TableFile($g_db);
+$file = new TableFile($gDb);
 
 //Fileproperties aus DB lesen fuer den Download
-$file->getFileForDownload($get_file_id);
+$file->getFileForDownload($getFileId);
 
 //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
 if (!$file->getValue('fil_id'))
 {
     //Datensatz konnte nicht in DB gefunden werden...
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //kompletten Pfad der Datei holen
@@ -45,7 +45,7 @@ $completePath = $file->getCompletePathOfFile();
 //pruefen ob File ueberhaupt physikalisch existiert
 if (!file_exists($completePath))
 {
-    $g_message->show($g_l10n->get('SYS_FILE_NOT_EXIST'));
+    $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
 }
 
 //Downloadcounter inkrementieren

@@ -11,22 +11,22 @@
 function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
 {
     // Html des Modules ausgeben
-    global $g_root_path, $g_l10n;
+    global $g_root_path, $gL10n;
     
     if($mode == 1)
     {
-        $headline = $g_l10n->get('INS_INSTALLATION_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
-        $title    = $g_l10n->get('INS_INSTALLATION');
+        $headline = $gL10n->get('INS_INSTALLATION_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
+        $title    = $gL10n->get('INS_INSTALLATION');
     }
     elseif($mode == 2)
     {
-        $headline = $g_l10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
-        $title    = $g_l10n->get('INS_UPDATE');
+        $headline = $gL10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
+        $title    = $gL10n->get('INS_UPDATE');
     }
     elseif($mode == 3)
     {
-        $headline = $g_l10n->get('INS_ADD_ANOTHER_ORGANIZATION');
-        $title    = $g_l10n->get('INS_ADD_ORGANIZATION');
+        $headline = $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION');
+        $title    = $gL10n->get('INS_ADD_ORGANIZATION');
     }
     
     header('Content-type: text/html; charset=utf-8'); 
@@ -53,18 +53,18 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
             function startUpdate()
             {
                 submit_button = document.getElementById("next_page");
-                if(submit_button.value == "'.$g_l10n->get('INS_UPDATE_DATABASE').'"
-                || submit_button.value == "'.$g_l10n->get('INS_INSTALL_ADMIDIO').'")
+                if(submit_button.value == "'.$gL10n->get('INS_UPDATE_DATABASE').'"
+                || submit_button.value == "'.$gL10n->get('INS_INSTALL_ADMIDIO').'")
                 {
                     submit_button.disabled  = true;
                     document.getElementById("btn_icon").src = imgLoader.src;
-                    if(submit_button.value == "'.$g_l10n->get('INS_UPDATE_DATABASE').'")
+                    if(submit_button.value == "'.$gL10n->get('INS_UPDATE_DATABASE').'")
                     {
-                        document.getElementById("btn_text").innerHTML = "'.$g_l10n->get('INS_DATABASE_IS_UPDATED').'";
+                        document.getElementById("btn_text").innerHTML = "'.$gL10n->get('INS_DATABASE_IS_UPDATED').'";
                     }
                     else
                     {
-                        document.getElementById("btn_text").innerHTML = "'.$g_l10n->get('INS_DATABASE_WILL_BE_ESTABLISHED').'";
+                        document.getElementById("btn_text").innerHTML = "'.$gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED').'";
                     }
                 }
                 document.getElementById("adm_install").submit();
@@ -87,7 +87,7 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
                         if($icon == 'money.png')
                         {
                             echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button type="button" onclick="self.location.href=\'../adm_program/index.php\'" value="'.$g_l10n->get('SYS_LATER').'"><img id="btn_icon" src="layout/application_view_list.png" alt="'. $g_l10n->get('SYS_LATER'). '" />&nbsp;'. $g_l10n->get('SYS_LATER'). '</button>';
+                            <button type="button" onclick="self.location.href=\'../adm_program/index.php\'" value="'.$gL10n->get('SYS_LATER').'"><img id="btn_icon" src="layout/application_view_list.png" alt="'. $gL10n->get('SYS_LATER'). '" />&nbsp;'. $gL10n->get('SYS_LATER'). '</button>';
                         }
                     echo '</div>
                 </div>
@@ -108,7 +108,7 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
 // prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
 function checkVersions(&$db, &$message)
 {
-    global $g_l10n;
+    global $gL10n;
     $message = '';
 
     // Datenbank pruefen
@@ -117,9 +117,9 @@ function checkVersions(&$db, &$message)
         $message = $message. ' 
         <li>
             <dl>
-                <dt>'.$g_l10n->get('INS_MYSQL_VERSION').':</dt>
+                <dt>'.$gL10n->get('INS_MYSQL_VERSION').':</dt>
                 <dd><strong>'.$db->getVersion().'</strong><br />'.
-                    $g_l10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, $db->getMinVersion(), '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
+                    $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, $db->getMinVersion(), '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
                 '</dd>
             </dl>
         </li>';
@@ -131,9 +131,9 @@ function checkVersions(&$db, &$message)
         $message = $message. ' 
         <li>
             <dl>
-                <dt>'.$g_l10n->get('INS_PHP_VERSION').':</dt>
+                <dt>'.$gL10n->get('INS_PHP_VERSION').':</dt>
                 <dd><strong>'.phpversion().'</strong><br />'.
-                    $g_l10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, MIN_PHP_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
+                    $gL10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, MIN_PHP_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
                 '</dd>
             </dl>
         </li>';
@@ -143,7 +143,7 @@ function checkVersions(&$db, &$message)
     {
         $message = '
         <div class="groupBox">
-            <div class="groupBoxHeadline"><img src="layout/warning.png" alt="'.$g_l10n->get('SYS_WARNING').'" />'.$g_l10n->get('SYS_WARNING').'</div>
+            <div class="groupBoxHeadline"><img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('SYS_WARNING').'</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">'. $message. '</ul>
             </div>

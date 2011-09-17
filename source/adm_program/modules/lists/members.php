@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.result
  *
- * Uebergaben:
+ * Parameters:
  *
  * rol_id   : Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
  *
@@ -16,7 +16,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_roles.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
+// Initialize and check the parameters
 $get_rol_id = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true);
 
 $_SESSION['set_rol_id'] = $get_rol_id;
@@ -25,24 +25,24 @@ $_SESSION['set_rol_id'] = $get_rol_id;
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new TableRoles($g_db, $get_rol_id);
+$role = new TableRoles($gDb, $get_rol_id);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen Mitglied der richtigen Gliedgemeinschaft sein
-if(  (!$g_current_user->assignRoles()
-   && !isGroupLeader($g_current_user->getValue('usr_id'), $get_rol_id))
-|| (  !$g_current_user->isWebmaster()
-   && $role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
-|| ($role->getValue('cat_org_id') != $g_current_organization->getValue('org_id') && $role->getValue('cat_org_id') > 0 ))
+if(  (!$gCurrentUser->assignRoles()
+   && !isGroupLeader($gCurrentUser->getValue('usr_id'), $get_rol_id))
+|| (  !$gCurrentUser->isWebmaster()
+   && $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
+|| ($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 ))
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // result-Kopf ausgeben
-$g_layout['title']  = $g_l10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
+$gLayout['title']  = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
-$g_layout['header'] ='
+$gLayout['header'] ='
 <script type="text/javascript"><!--
     //Erstmal warten bis Dokument fertig geladen ist
     $(document).ready(function(){       
@@ -133,9 +133,9 @@ $g_layout['header'] ='
             }';
             
             //Bei der Rolle Webmaster muss konrolliert werden ob noch mindestend ein User Mitglied bleibt
-            if($role->getValue('rol_name') == $g_l10n->get('SYS_WEBMASTER'))
+            if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
             {
-            	$g_layout['header'] .='
+            	$gLayout['header'] .='
             	if($("input[name^=\'member_\'].memlist_checkbox:checked").size()<1){
                    //Checkbox wieder setzen. 
             	   $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
@@ -145,7 +145,7 @@ $g_layout['header'] ='
                 }';
             }                
             
-            $g_layout['header'] .='                     
+            $gLayout['header'] .='                     
             //Ladebalken an checkbox
             $("#loadindicator_" + checkbox_id).append("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' alt=\'loadindicator\' />").show();
                                  
@@ -186,25 +186,25 @@ $g_layout['header'] ='
 //--></script>';
         
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
-echo '<h1>'. $g_layout['title']. '</h1>';
+echo '<h1>'. $gLayout['title']. '</h1>';
 
 //Suchleiste
 echo '
 <form id="memsearch_form">
     <ul class="iconTextLinkList">
-        <li>'.$g_l10n->get('SYS_SEARCH').': <input type="text" name="mem_search" id="mem_search" /></li>
-        <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /><label for="mem_show_all">'.$g_l10n->get('MEM_SHOW_ALL_USERS').'</label></li>
+        <li>'.$gL10n->get('SYS_SEARCH').': <input type="text" name="mem_search" id="mem_search" /></li>
+        <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /><label for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label></li>
         <li>
 	        <span class="iconTextLink" id="add_user_link" style="display: none;">
-		        <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$g_l10n->get('MEM_CREATE_USER').'" /></a>
-		        <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$g_l10n->get('MEM_CREATE_USER').'</a>
+		        <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MEM_CREATE_USER').'" /></a>
+		        <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$gL10n->get('MEM_CREATE_USER').'</a>
 	        </span>
         </li>
     </ul>
 </form>';
 
 //ladebalken
-echo '<img src="'.THEME_PATH.'/images/loading_animation.gif" alt="'.$g_l10n->get('SYS_PROGRESS_BAR').'" id="list_load_animation"/>';
+echo '<img src="'.THEME_PATH.'/images/loading_animation.gif" alt="'.$gL10n->get('SYS_PROGRESS_BAR').'" id="list_load_animation"/>';
 
 //Liste mit Namen zu abhaken
 echo '<form id="memlist_form"></form>';
@@ -217,8 +217,8 @@ if($_SESSION['navigation']->count() > 1)
         <li>
             <span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'. THEME_PATH. '/icons/back.png" alt="'.$g_l10n->get('SYS_BACK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$g_l10n->get('SYS_BACK').'</a>
+                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
             </span>
         </li>
     </ul>';

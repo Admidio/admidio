@@ -6,46 +6,33 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Uebergaben:
+ * Parameters:
  *
- * query : hier steht der Suchstring drin
+ * members - 1 : (Default) Nur Mitglieder der Gliedgemeinschaft anzeigen
+ *           0 : Mitglieder, Ehemalige, Mitglieder anderer Gliedgemeinschaften
+ * search      : hier steht der Suchstring drin
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
+// aus einem bisher unerfindlichen Grund wird query als Latin1 uebertragen
+$_GET['search'] = utf8_encode($_GET['search']);
+
+// Initialize and check the parameters
+$getMembers = admFuncVariableIsValid($_GET, 'members', 'boolean', 1);
+$getSearch  = admFuncVariableIsValid($_GET, 'search', 'string', '');
+
 // nur berechtigte User duerfen Querysuggestions empfangen
-if (!$g_current_user->editUsers())
+if (!$gCurrentUser->editUsers())
 {
-    $g_message->show($g_l10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-
-if (isset($_GET['members']) && is_numeric($_GET['members']))
-{
-    $members = $_GET['members'];
-}
-else
-{
-    $members = 1;
-}
-
-if (isset($_GET['query']) && strlen($_GET['query']) > 0)
-{
-    // aus einem bisher unerfindlichen Grund wird query als Latin1 uebertragen
-    $query = strStripTags(utf8_encode($_GET['query']));
-}
-else
-{
-    $query = null;
-}
-
-
-
 
 $xml='<?xml version="1.0" encoding="utf-8" ?>';
 
-if (!$query)
+if (strlen($getSearch) == 0)
 {
     // kein Query - keine Daten...
     $xml .= '<results></results>';
@@ -61,16 +48,16 @@ else
     else
     {
         // erst mal die Benutzerliste aus der DB holen und in der Session speichern
-        if($members == true)
+        if($getMembers == true)
         {
             $sql    = 'SELECT DISTINCT last_name.usd_value as last_name, first_name.usd_value as first_name
                          FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
                          LEFT JOIN '. TBL_USER_DATA. ' as last_name
                            ON last_name.usd_usr_id = usr_id
-                          AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+                          AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
                          LEFT JOIN '. TBL_USER_DATA. ' as first_name
                            ON first_name.usd_usr_id = usr_id
-                          AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+                          AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
                         WHERE usr_valid = 1
                           AND mem_usr_id = usr_id
                           AND mem_rol_id = rol_id
@@ -78,7 +65,7 @@ else
                           AND mem_end    > \''.DATE_NOW.'\'
                           AND rol_valid  = 1
                           AND rol_cat_id = cat_id
-                          AND cat_org_id = '. $g_current_organization->getValue('org_id'). '
+                          AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                         ORDER BY last_name, first_name ';
         }
         else
@@ -87,17 +74,17 @@ else
                          FROM '. TBL_USERS. '
                          LEFT JOIN '. TBL_USER_DATA. ' as last_name
                            ON last_name.usd_usr_id = usr_id
-                          AND last_name.usd_usf_id = '. $g_current_user->getProperty('LAST_NAME', 'usf_id'). '
+                          AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
                          LEFT JOIN '. TBL_USER_DATA. ' as first_name
                            ON first_name.usd_usr_id = usr_id
-                          AND first_name.usd_usf_id = '. $g_current_user->getProperty('FIRST_NAME', 'usf_id'). '
+                          AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
                         WHERE usr_valid = 1
                         ORDER BY last_name, first_name ';
         }
-        $result_mgl = $g_db->query($sql);
+        $result_mgl = $gDb->query($sql);
 
         // Jetzt das komplette resultSet in ein Array schreiben...
-        while($row = $g_db->fetch_object($result_mgl))
+        while($row = $gDb->fetch_object($result_mgl))
         {
             $entry = array('lastName' => $row->last_name, 'firstName' => $row->first_name);
             $querySuggestions[]=$entry;
@@ -110,7 +97,7 @@ else
 
     // ab hier werden jetzt die zur Query passenden Eintraege ermittelt...
     $match = array();
-    $q = admStrToLower($query);
+    $q = admStrToLower($getSearch);
 
     foreach ($querySuggestions as $suggest)
     {

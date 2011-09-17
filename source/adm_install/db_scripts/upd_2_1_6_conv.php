@@ -10,17 +10,17 @@
 
 // Fotoeinstellungen anpassen
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
-$result_orga = $g_db->query($sql); 
+$result_orga = $gDb->query($sql); 
 
-while($row_orga = $g_db->fetch_array($result_orga))
+while($row_orga = $gDb->fetch_array($result_orga))
 {
 	// erstmal die Fotoskalierung fuer den Upload auslesen
 	$sql = 'SELECT prf_value
               FROM '. TBL_PREFERENCES. '
              WHERE prf_org_id = '. $row_orga['org_id']. '
                AND prf_name   = "photo_save_scale" ';
-    $result = $g_db->query($sql);
-    $row_photo_image_text = $g_db->fetch_array($result);
+    $result = $gDb->query($sql);
+    $row_photo_image_text = $gDb->fetch_array($result);
 
 	// ist die Fotoskalierung kleiner 1030 Pixel, dann die Anzeige darauf anpassen
 	if($row_photo_image_text['prf_value'] < 1030)
@@ -30,22 +30,22 @@ while($row_orga = $g_db->fetch_array($result_orga))
 				   SET prf_value = "'.$row_photo_image_text['prf_value'].'"
        			 WHERE prf_org_id = '. $row_orga['org_id']. '
                    AND prf_name   = "photo_show_width" ';
-		$g_db->query($sql);
+		$gDb->query($sql);
 
 		$sql = 'UPDATE '. TBL_PREFERENCES. '
 				   SET prf_value = "'.$new_photo_size_y.'"
        			 WHERE prf_org_id = '. $row_orga['org_id']. '
                	   AND prf_name   = "photo_show_height" ';
-		$g_db->query($sql);
+		$gDb->query($sql);
 	}
 }
 
 $sql = 'DELETE FROM '. TBL_PREFERENCES. '
    			WHERE prf_name = "photo_preview_scale" ';
-$g_db->query($sql);
+$gDb->query($sql);
 
 $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_end = "9999-12-31" 
          WHERE mem_end = "" OR mem_end = "0000-00-00" ';
-$g_db->query($sql);
+$gDb->query($sql);
 
 ?>

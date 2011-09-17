@@ -148,11 +148,11 @@ class TablePhotos extends TableAccess
     // die Funktion wird innerhalb von save() aufgerufen
     public function save($updateFingerPrint = true)
     {
-        global $g_current_organization;
+        global $gCurrentOrganization;
         
         if($this->new_record)
         {
-            $this->setValue('pho_org_shortname', $g_current_organization->getValue('org_shortname'));
+            $this->setValue('pho_org_shortname', $gCurrentOrganization->getValue('org_shortname'));
         }
 
         parent::save($updateFingerPrint);

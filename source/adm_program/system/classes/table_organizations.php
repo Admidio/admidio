@@ -34,7 +34,7 @@ class TableOrganizations extends TableAccess
         return parent::readData($organization, $sql_where_condition, $sql_additional_tables);
     }
 	
-    public function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value, $check_value = true)
     {
         // org_shortname shouldn't be edited
         if($field_name == 'org_shortname')

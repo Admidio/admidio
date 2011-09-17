@@ -17,8 +17,8 @@
 require_once('common.php');
 require_once('login_valid.php');
 
-// Uebergabevariablen pruefen und ggf. initialisieren
-$g_message->setExcludeThemeBody();
+// Initialize and check the parameters
+$gMessage->setExcludeThemeBody();
 $get_type          = admFuncVariableIsValid($_GET, 'type', 'string', null, true);
 $get_element_id    = admFuncVariableIsValid($_GET, 'element_id', 'string', null, true);
 $get_database_id   = admFuncVariableIsValid($_GET, 'database_id', 'string', null, true);
@@ -45,7 +45,7 @@ switch ($get_type)
 		require_once('classes/table_category.php');
         $url  = 'categories_function.php?cat_id='.$get_database_id.'&mode=2&type='.$get_database_id_2;
 		$text = 'CAT_DELETE_CATEGORY';
-		$category = new TableCategory($g_db, $get_database_id);
+		$category = new TableCategory($gDb, $get_database_id);
 		$textVariable2 = $category->getNumberElements();
         break;
     case 'dat':
@@ -125,8 +125,8 @@ switch ($get_type)
 
 if(strlen($url) == 0)
 {
-    $g_message->setExcludeThemeBody();
-    $g_message->show($g_l10n->get('SYS_INVALID_PAGE_VIEW'));
+    $gMessage->setExcludeThemeBody();
+    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 echo '
@@ -146,7 +146,7 @@ function deleteEntry()
         }
         else
         {
-            $("#admMessageText").html("'.$g_l10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'<br /><br />" + data);
+            $("#admMessageText").html("'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'<br /><br />" + data);
         }
         '.$callbackSuccess.'
     });
@@ -155,21 +155,21 @@ function deleteEntry()
 
 <form id="admFormPopupMessage" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
 <div class="formLayout">
-    <div class="formHead">'. $g_l10n->get('SYS_NOTE'). '</div>
+    <div class="formHead">'. $gL10n->get('SYS_NOTE'). '</div>
     <div class="formBody">
         <table>
 			<tr>
 				<td style="width: 70px; text-align: center;"><br /><img src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></td>
-				<td id="admMessageText"><br />'.$g_l10n->get($text, $textVariable, $textVariable2).'</td>
+				<td id="admMessageText"><br />'.$gL10n->get($text, $textVariable, $textVariable2).'</td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
 				<td style="padding-top: 30px;">
 					<button id="admButtonYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
-						alt="'.$g_l10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$g_l10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
+						alt="'.$gL10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<button id="admButtonNo" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
-						alt="'.$g_l10n->get('SYS_NO').'" />&nbsp;'.$g_l10n->get('SYS_NO').'</button>
+						alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>
 				</td>
 			</tr>
         </table>
