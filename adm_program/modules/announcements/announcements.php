@@ -220,8 +220,7 @@ else
             </div>
 
             <div class="boxBody">'.
-                $announcement->getValue('ann_description')
-                /*$announcement->getDescription('HTML')*/.'
+                $announcement->getValue('ann_description').'
                 <div class="editInformation">'.
                     $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'],  $announcement->getValue('ann_timestamp_create'));
 
