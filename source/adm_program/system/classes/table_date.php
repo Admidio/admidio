@@ -174,6 +174,10 @@ class TableDate extends TableAccess
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $this->dbColumns['dat_end']);
             $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);
         }
+        elseif($field_name == 'dat_description')
+        {
+            $value = $this->dbColumns['dat_description'];
+        }
         else
         {
             $value = parent::getValue($field_name, $format);
@@ -271,6 +275,10 @@ class TableDate extends TableAccess
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $field_value);
             $field_value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 86400);
+        }
+        elseif($field_name == 'dat_description')
+        {
+            return parent::setValue($field_name, $field_value, false);
         }
         return parent::setValue($field_name, $field_value);
     }

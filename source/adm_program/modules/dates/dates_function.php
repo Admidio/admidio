@@ -26,6 +26,7 @@ require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/table_roles.php');
 require_once('../../system/classes/table_rooms.php');
+require_once('../../libs/htmlawed/htmlawed.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_dates_module'] == 0)
@@ -191,6 +192,10 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['date_login'] = 0;
     }
+    
+    // make html in description secure
+    $_POST['dat_description'] = stripslashes($_POST['dat_description']);
+    $_POST['dat_description'] = htmLawed($_POST['dat_description']);
 	
     // ------------------------------------------------
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist

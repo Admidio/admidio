@@ -30,8 +30,13 @@ if (ini_get('file_uploads') != '1')
 // ggf. Ordner für Uploads in adm_my_files anlegen
 if($_GET['CKEditor'] == 'ann_description')
 {
-    $folderName = 'ANNOUNCEMENTS';
+    $folderName = 'announcements';
 }
+elseif($_GET['CKEditor'] == 'dat_description')
+{
+    $folderName = 'dates';
+}
+
 $myFilesProfilePhotos = new MyFiles($folderName);
 if($myFilesProfilePhotos->checkSettings() == false)
 {
@@ -39,13 +44,13 @@ if($myFilesProfilePhotos->checkSettings() == false)
 }
 
 
-$local_file = $_FILES['upload']['name'];
-$server_url = SERVER_PATH.'/adm_my_files/announcements/'.$local_file;
-$html_url   = $g_root_path.'/adm_program/system/show_image.php?module=announcements&file='.$local_file;
-move_uploaded_file($_FILES['upload']['tmp_name'], $server_url);
+$localFile = $_FILES['upload']['name'];
+$serverUrl = SERVER_PATH.'/adm_my_files/'.$folderName.'/'.$localFile;
+$htmlUrl   = $g_root_path.'/adm_program/system/show_image.php?module='.$folderName.'&file='.$localFile;
+move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
 
 $callback = $_GET['CKEditorFuncNum'];
-$output = '<html><body><script type="text/javascript">window.parent.CKEDITOR.tools.callFunction('.$callback.', "'.$html_url.'","'.$message.'");</script></body></html>';
+$output = '<html><body><script type="text/javascript">window.parent.CKEDITOR.tools.callFunction('.$callback.', "'.$htmlUrl.'","'.$message.'");</script></body></html>';
 echo $output;
 
 ?>
