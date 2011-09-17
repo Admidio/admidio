@@ -12,10 +12,6 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * getDescription($type = 'HTML') - liefert die Beschreibung je nach Type zurueck
- *                 type = 'PLAIN'  : reiner Text ohne Html oder BBCode
- *                 type = 'HTML'   : BB-Code in HTML umgewandelt
- *                 type = 'BBCODE' : Beschreibung mit BBCode-Tags
  * getIcal($domain)  - gibt String mit dem Termin im iCal-Format zurueck
  * editRight()       - prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf
  *
@@ -27,7 +23,6 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 class TableDate extends TableAccess
 {
     protected $max_members_role = array();
-    protected $bbCode;
     protected $visibleRoles = array();
     protected $changeVisibleRoles;
     
@@ -88,37 +83,6 @@ class TableDate extends TableAccess
         return false;
     }
 
-    // liefert die Beschreibung je nach Type zurueck
-    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
-    // type = 'HTML'   : BB-Code in HTML umgewandelt
-    // type = 'BBCODE' : Beschreibung mit BBCode-Tags
-    public function getDescription($type = 'HTML')
-    {
-        global $gPreferences;
-        $description = '';
-
-        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
-        {
-            if(is_object($this->bbCode) == false)
-            {
-                $this->bbCode = new ubbParser();
-            }
-
-            $description = $this->bbCode->parse($this->getValue('dat_description'));
-
-            if($type == 'PLAIN')
-            {
-                $description = strStripTags($description);
-            }
-        }
-        else
-        {
-            $description = nl2br($this->getValue('dat_description'));
-        }
-        return $description;
-    }
-
     // gibt einen Termin im iCal-Format zurueck
     public function getIcal($domain)
     {
@@ -132,7 +96,7 @@ class TableDate extends TableAccess
                 "BEGIN:VEVENT\n".
                 "UID:". $uid. "\n".
                 "SUMMARY:". $this->getValue('dat_headline'). "\n".
-                "DESCRIPTION:". str_replace("\r\n", '\n', $this->getDescription('PLAIN')). "\n".
+                "DESCRIPTION:". str_replace("\r\n", '\n', html_entity_decode(strStripTags($this->getValue('dat_description')))). "\n".
                 "DTSTAMP:". $this->getValue('dat_timestamp_create', 'Ymd')."T".$this->getValue('dat_timestamp_create', 'His')."\n".
                 "LOCATION:". $this->getValue('dat_location'). "\n";
         if($this->getValue('dat_all_day') == 1)

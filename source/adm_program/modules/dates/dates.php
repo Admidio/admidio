@@ -526,7 +526,7 @@ else
                 echo '</table>';
 
                 // Beschreibung anzeigen
-                echo '<div class="date_description" style="clear: left;">'.$date->getDescription('HTML').'</div>';
+                echo '<div class="date_description" style="clear: left;">'.$date->getValue('dat_description').'</div>';
 
                 if($date->getValue('dat_rol_id') > 0)
                 {

@@ -130,7 +130,7 @@ while ($row = $gDb->fetch_array($result))
     }
 
     // Beschreibung und Link zur Homepage ausgeben
-    $description = $description. '<br /><br />'. $date->getDescription('HTML'). 
+    $description = $description. '<br /><br />'. $date->getValue('dat_description'). 
                    '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
 
     //i-cal downloadlink

@@ -12,10 +12,6 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * getDescription($type = 'HTML') - liefert die Beschreibung je nach Type zurueck
- *                 type = 'PLAIN'  : reiner Text ohne Html oder BBCode
- *                 type = 'HTML'   : BB-Code in HTML umgewandelt
- *                 type = 'BBCODE' : Beschreibung mit BBCode-Tags
  * editRight()       - prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
  *
  *****************************************************************************/
@@ -25,8 +21,6 @@ require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableAnnouncement extends TableAccess
 {
-    protected $bbCode;
-
     // Konstruktor
     public function __construct(&$db, $ann_id = 0)
     {
