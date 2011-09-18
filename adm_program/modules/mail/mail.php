@@ -194,7 +194,6 @@ $gLayout['header'] =  '
         new_attachment = document.createElement("input");
         $(new_attachment).attr("type", "file");
         $(new_attachment).attr("name", "userfile[]");
-        $(new_attachment).attr("size", "35");
         $(new_attachment).css("display", "block");
         $(new_attachment).css("width", "350px");
         $(new_attachment).hide();
@@ -372,7 +371,7 @@ echo '
                         <dd>';
                             if ($gCurrentUser->getValue('usr_id') > 0)
                             {
-                               echo '<input type="text" id="name" name="name" disabled="disabled" style="width: 200px;" maxlength="50" value="'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '" />';
+                               echo '<input type="text" id="name" name="name" disabled="disabled" style="width: 345px;" maxlength="50" value="'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '" />';
                             }
                             else
                             {
@@ -433,10 +432,9 @@ echo '
                     </dl>
                 </li>';
 
-                // Nur eingeloggte User duerfen Attachments mit max 3MB anhaengen...
+                // Nur eingeloggte User duerfen Attachments anhaengen...
                 if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
                 {
-                    // das Feld userfile wird in der Breite mit size und width gesetzt, da FF nur size benutzt und IE size zu breit macht :(
                     echo '
                     <li>
                         <dl>
