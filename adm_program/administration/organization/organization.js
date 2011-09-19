@@ -33,13 +33,28 @@ function organizationClass()
 				});
 			}
 		}		
-		$("#accordion").accordion({
+		$("#accordion-common").accordion({
 			active: false,
 			autoHeight: false,
 			collapsible: true,
-			changestart: function(event, ui) { $.scrollTo(event.target,800); }
+			change: function(event, ui) {
+				var selectedItem = $("#accordion-common .ui-state-active");
+				if( selectedItem != null || selectedItem != undefined )
+					$.scrollTo(selectedItem,800,{axis:'y'});
+			}
+		});
+		$("#accordion-modules").accordion({
+			active: false,
+			autoHeight: false,
+			collapsible: true,
+			change: function(event, ui) {
+				var selectedItem = $("#accordion-modules .ui-state-active");
+				if( selectedItem != null || selectedItem != undefined )
+					$.scrollTo(selectedItem,800,{axis:'y'});
+			}
 		});
 		$("#org_longname").focus();
+		$("#tabs").tabs();
 	}
 	// Die eigentliche Funktion: Schaltet die Einstellungsdialoge durch
 	this.toggleDiv = function(element_id)
