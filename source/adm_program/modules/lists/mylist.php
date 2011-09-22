@@ -24,18 +24,18 @@ require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/list_configuration.php');
 
 // Initialize and check the parameters
-$get_lst_id       = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
-$get_rol_id       = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
-$get_active_role  = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
-$get_show_members = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
+$getActiveRole  = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
+$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
 
 // falls ehemalige Rolle, dann auch nur ehemalige Mitglieder anzeigen
-if($get_active_role == 0)
+if($getActiveRole == 0)
 {
-    $get_show_members = 1;
+    $getShowMembers = 1;
 }
 
-if($get_rol_id == 0)
+if($getRoleId == 0)
 {
     // Navigation faengt hier im Modul an
     $_SESSION['navigation']->clear();
@@ -45,13 +45,13 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 $default_column_rows = 6;    // Anzahl der Spalten, die beim Aufruf angezeigt werden
 
 // Listenobjekt anlegen
-$list = new ListConfiguration($gDb, $get_lst_id);
+$list = new ListConfiguration($gDb, $getListId);
 
 if(isset($_SESSION['mylist_request']))
 {
     $form_values = strStripSlashesDeep($_SESSION['mylist_request']);
     unset($_SESSION['mylist_request']);
-    $get_rol_id = $form_values['rol_id'];
+    $getRoleId = $form_values['rol_id'];
     
     // falls vorher schon Zeilen fuer Spalten manuell hinzugefuegt wurden, 
     // muessen diese nun direkt angelegt werden
@@ -67,7 +67,7 @@ if(isset($_SESSION['mylist_request']))
         }
     }
 }
-elseif($get_lst_id > 0)
+elseif($getListId > 0)
 {
     $default_column_rows = $list->countColumns();
 }
@@ -76,9 +76,9 @@ elseif($get_lst_id > 0)
 $gLayout['title']  = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('SYS_CONFIGURATION');
 $gLayout['header'] = '
     <script type="text/javascript">
-        var listId             = '.$get_lst_id.';
+        var listId             = '.$getListId.';
         var fieldNumberIntern  = 0;
-        var arr_user_fields    = createUserFieldsArray();
+        var arr_user_fields    = createProfileFieldsArray();
         var arr_default_fields = createColumnsArray();
 
         // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
@@ -182,7 +182,7 @@ $gLayout['header'] = '
             fieldNumberIntern++;
         }
         
-        function createUserFieldsArray()
+        function createProfileFieldsArray()
         { 
             var user_fields = new Array(); ';
         
@@ -192,7 +192,7 @@ $gLayout['header'] = '
             $old_cat_name_intern = '';
             $old_cat_id   = 0;
 
-            foreach($gCurrentUser->userFieldData as $field)
+            foreach($gProfileFields->mUserField as $field)
             {    
                 // bei den Stammdaten noch Foto und Loginname anhaengen
                 if($old_cat_name_intern == 'MASTER_DATA'
@@ -217,7 +217,7 @@ $gLayout['header'] = '
                     $i++;
                 }
                 
-                if($field->getValue("usf_hidden") == 0 || $gCurrentUser->editUsers())
+                if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
                 {
                     $gLayout['header'] .= '
                     user_fields['. $i. '] = new Object();
@@ -308,7 +308,7 @@ $gLayout['header'] = '
             var lst_id = $("#lists_config").attr("value");
             var rol_id = $("#rol_id").attr("value");
             var show_members = $("#show_members").attr("value");
-            self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + lst_id + "&rol_id=" + rol_id + "&active_role='.$get_active_role.'&show_members=" + show_members;
+            self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?lst_id=" + lst_id + "&rol_id=" + rol_id + "&active_role='.$getActiveRole.'&show_members=" + show_members;
         }
 
         function send(mode)
@@ -331,7 +331,7 @@ $gLayout['header'] = '
                     break;
 
                 case "save":
-                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$get_lst_id.'&mode=1";
+                    document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=1";
                     document.getElementById("form_mylist").submit();
                     break;
 
@@ -349,7 +349,7 @@ $gLayout['header'] = '
                     var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DELETE').'");
                     if(msg_result)
                     {
-                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$get_lst_id.'&mode=3";
+                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=3";
                         document.getElementById("form_mylist").submit();
                     }
                     break;
@@ -358,7 +358,7 @@ $gLayout['header'] = '
                     var msg_result = confirm("'.$gL10n->get('LST_WANT_CONFIGURATION_FOR_ALL_USERS').'");
                     if(msg_result)
                     {
-                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$get_lst_id.'&mode=4";
+                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=4";
                         document.getElementById("form_mylist").submit();
                     }
                     break;
@@ -367,7 +367,7 @@ $gLayout['header'] = '
                     var msg_result = confirm("'.$gL10n->get('LST_CONFIGURATION_DEFAULT').'");
                     if(msg_result)
                     {
-                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$get_lst_id.'&mode=5";
+                        document.getElementById("form_mylist").action  = gRootPath + "/adm_program/modules/lists/mylist_function.php?lst_id='.$getListId.'&mode=5";
                         document.getElementById("form_mylist").submit();
                     }
                     break;
@@ -386,7 +386,7 @@ echo '
         <p><b>'.$gL10n->get('LST_CONFIGURATION_LIST').' :</b>&nbsp;&nbsp;
         <select size="1" id="lists_config" name="lists_config" onchange="loadList()">
             <option ';
-                if($get_lst_id == 0)
+                if($getListId == 0)
                 {
                     $selected = ' selected="selected" ';
                 }
@@ -456,7 +456,7 @@ echo '
                         }
                         
                         // auf die Konfiguration selektieren, die uebergeben wurde
-                        if($get_lst_id == $tableList->getValue('lst_id'))
+                        if($getListId == $tableList->getValue('lst_id'))
                         {
                             $selected = ' selected="selected" ';
                         }
@@ -492,7 +492,7 @@ echo '
         }
 
         if($gCurrentUser->isWebmaster()
-        || $get_lst_id == 0
+        || $getListId == 0
         || $gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id'))
         {
         	if(strlen($list->getValue('lst_name')) > 0)
@@ -585,20 +585,20 @@ echo '
 
         // Combobox mit allen Rollen ausgeben, ggf. nur die inaktiven Rollen anzeigen
         $role_select_box_mode = 0;
-        if($get_active_role == 0)
+        if($getActiveRole == 0)
         {
             $role_select_box_mode = 2;
         }
-        echo FormElements::generateRoleSelectBox($get_rol_id, '', $role_select_box_mode);
+        echo FormElements::generateRoleSelectBox($getRoleId, '', $role_select_box_mode);
 
         // Auswahlbox, ob aktive oder ehemalige Mitglieder angezeigt werden sollen
         // bei inaktiven Rollen gibt es nur Ehemalige
-        if($get_active_role == 1)
+        if($getActiveRole == 1)
         {
             $selected[0] = '';
             $selected[1] = '';
             $selected[2] = '';
-            $selected[$get_show_members] = ' selected="selected" ';
+            $selected[$getShowMembers] = ' selected="selected" ';
             echo '&nbsp;&nbsp;&nbsp;
             <select size="1" id="show_members" name="show_members">
                 <option '.$selected[0].' value="0">'.$gL10n->get('LST_ACTIVE_MEMBERS').'</option>

@@ -30,7 +30,7 @@ $getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
-$user = new User($gDb, $gUserFields, $getUserId);
+$user = new User($gDb, $gProfileFields, $getUserId);
 if($getInline == 0)
 {
     $_SESSION['navigation']->addUrl(CURRENT_URL);

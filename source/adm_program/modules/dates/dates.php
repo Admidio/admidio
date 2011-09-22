@@ -213,16 +213,16 @@ $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.me
           FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
           LEFT JOIN '. TBL_USER_DATA .' cre_surname 
             ON cre_surname.usd_usr_id = dat_usr_id_create
-           AND cre_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
+           AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname 
             ON cre_firstname.usd_usr_id = dat_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
+           AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = dat_usr_id_change
-           AND cha_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
+           AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = dat_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
+           AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_MEMBERS. ' mem
             ON mem.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
            AND mem.mem_rol_id = dat_rol_id

@@ -67,7 +67,7 @@ if(!isset($_POST['usr_login_name']))
 }
 
 // User auslesen
-$user = new User($gDb, $gUserFields, $getUserId);
+$user = new User($gDb, $gProfileFields, $getUserId);
 
 
 /*------------------------------------------------------------*/
@@ -101,12 +101,12 @@ if($getNewUser == 2)
 }
 
 // nun alle Profilfelder pruefen
-foreach($user->userFieldData as $field)
+foreach($gProfileFields->mProfileFields as $field)
 {
     $post_id = 'usf-'. $field->getValue('usf_id');    
     
 	// check and save only fields that aren't disabled
-	if($gCurrentUser->editUsers() == true || ($field->getValue('usf_disabled') == 0 && $getNewUser == 0))
+	if($gCurrentUser->editUsers() == true || $field->getValue('usf_disabled') == 0 || ($field->getValue('usf_disabled') == 1 && $getNewUser > 0))
 	{
 		if(isset($_POST[$post_id])) 
 		{
@@ -291,14 +291,14 @@ if($getNewUser == 2)
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
                  RIGHT JOIN '. TBL_USER_DATA. ' email
                     ON email.usd_usr_id = usr_id
-                   AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id'). '
+                   AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
                    AND LENGTH(email.usd_value) > 0
                   LEFT JOIN '. TBL_USER_DATA. ' first_name
                     ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
+                   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                   LEFT JOIN '. TBL_USER_DATA. ' last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
+                   AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
                  WHERE rol_approve_users = 1
                    AND rol_cat_id        = cat_id
                    AND cat_org_id        = '. $gCurrentOrganization->getValue('org_id'). '

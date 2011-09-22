@@ -59,7 +59,7 @@ if($getMode != 1)
     $other_orga = $gDb->num_rows($result);
 
     // User-Objekt anlegen
-    $user = new User($gDb, $gUserFields, $getUserId);
+    $user = new User($gDb, $gProfileFields, $getUserId);
 }
 
 if($getMode == 1)

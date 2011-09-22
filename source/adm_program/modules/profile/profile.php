@@ -28,23 +28,23 @@ if(!$gCurrentUser->viewProfile($getUserId))
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
 // dabei wird der Inhalt richtig formatiert
-function getFieldCode($field, $user_id)
+function getFieldCode($fieldNameIntern, $User)
 {
-    global $gPreferences, $g_root_path, $gCurrentUser, $gL10n;
+    global $gPreferences, $g_root_path, $gCurrentUser, $gProfileFields, $gL10n;
     $html      = '';
     $value     = '';
     $msg_image = '';
     $messenger = false;
 
-    if($gCurrentUser->editProfile($user_id) == false && $field->getValue('usf_hidden') == 1)
+    if($gCurrentUser->editProfile($User->getValue('usr_id')) == false && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
     {
         return '';
     }
 
-    switch($field->getValue('usf_type'))
+    switch($gProfileFields->getProperty($fieldNameIntern, 'usf_type'))
     {
         case 'CHECKBOX':
-            if($field->getValue('usd_value') == 1)
+            if($User->getValue($fieldNameIntern) == 1)
             {
                 $value = '<img src="'.THEME_PATH.'/icons/checkbox_checked.gif" alt="on" />';
             }
@@ -55,10 +55,10 @@ function getFieldCode($field, $user_id)
             break;
 
         case 'DATE':
-            if(strlen($field->getValue('usd_value')) > 0)
+            if(strlen($User->getValue($fieldNameIntern)) > 0)
             {
-                $value = $field->getValue('usd_value', $gPreferences['system_date']);
-                if($field->getValue('usf_name_intern') == 'BIRTHDAY')
+                $value = $gProfileFields->getProperty($fieldNameIntern, 'usd_value', $gPreferences['system_date']);
+                if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
                 {
                     // Alter mit ausgeben
                     $birthday = new DateTimeExtended($value, $gPreferences['system_date'], 'date');
@@ -69,112 +69,112 @@ function getFieldCode($field, $user_id)
 
         case 'EMAIL':
             // E-Mail als Link darstellen
-            if(strlen($field->getValue('usd_value')) > 0)
+            if(strlen($User->getValue($fieldNameIntern)) > 0)
             {
                 if($gPreferences['enable_mail_module'] != 1)
                 {
-                    $mail_link = 'mailto:'. $field->getValue('usd_value');
+                    $mail_link = 'mailto:'. $User->getValue($fieldNameIntern);
                 }
                 else
                 {
-                    $mail_link = $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $user_id;
+                    $mail_link = $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $User->getValue('usr_id');
                 }
-                if(strlen($field->getValue('usd_value')) > 25)
+                if(strlen($User->getValue($fieldNameIntern)) > 25)
                 {
-                    $value = '<a href="'. $mail_link. '" title="'. $field->getValue('usd_value').'">'.substr($field->getValue('usd_value'), 0, 25).'...</a>';
+                    $value = '<a href="'. $mail_link. '" title="'. $User->getValue($fieldNameIntern).'">'.substr($User->getValue($fieldNameIntern), 0, 25).'...</a>';
                 }
                 else
                 {
-                    $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;" title="'.$field->getValue('usd_value').'">'. $field->getValue('usd_value'). '</a>';;
+                    $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;" title="'.$User->getValue($fieldNameIntern).'">'. $User->getValue($fieldNameIntern). '</a>';;
                 }
             }
             break;
 
         case 'URL':
             // Homepage als Link darstellen
-            if(strlen($field->getValue('usd_value')) > 0)
+            if(strlen($User->getValue($fieldNameIntern)) > 0)
             {
-                if(strlen($field->getValue('usd_value')) > 25)
+                if(strlen($User->getValue($fieldNameIntern)) > 25)
                 {
-                    $value = '<a href="'. $field->getValue('usd_value').'" target="_blank" title="'. $field->getValue('usd_value').'">'. substr($field->getValue('usd_value'), strpos($field->getValue('usd_value'), '//') + 2, 25). '...</a>';
+                    $value = '<a href="'. $User->getValue($fieldNameIntern).'" target="_blank" title="'. $User->getValue($fieldNameIntern).'">'. substr($User->getValue($fieldNameIntern), strpos($User->getValue($fieldNameIntern), '//') + 2, 25). '...</a>';
                 }
                 else
                 {
-                    $value = '<a href="'. $field->getValue('usd_value').'" target="_blank" title="'. $field->getValue('usd_value').'">'. substr($field->getValue('usd_value'), strpos($field->getValue('usd_value'), '//') + 2). '</a>';
+                    $value = '<a href="'. $User->getValue($fieldNameIntern).'" target="_blank" title="'. $User->getValue($fieldNameIntern).'">'. substr($User->getValue($fieldNameIntern), strpos($User->getValue($fieldNameIntern), '//') + 2). '</a>';
                 }
             }
             break;
 
         case 'TEXT_BIG':
-            $value = nl2br($field->getValue('usd_value'));
+            $value = nl2br($User->getValue($fieldNameIntern));
             break;
 
         default:
-            $value = $field->getValue('usd_value');
+            $value = $User->getValue($fieldNameIntern);
             break;
     }
 
 	// Icons der Messenger anzeigen
-	if($field->getValue('usf_name_intern') == 'ICQ')
+	if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'ICQ')
 	{
-		if(strlen($field->getValue('usd_value')) > 0)
+		if(strlen($User->getValue($fieldNameIntern)) > 0)
 		{
 			// Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
-			preg_match_all('/\d+/', $field->getValue('usd_value'), $matches);
+			preg_match_all('/\d+/', $User->getValue($fieldNameIntern), $matches);
 			$icq_number = implode("", reset($matches));
 
 			// ICQ Onlinestatus anzeigen
 			$value = '
 			<a class="iconLink" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
 				src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
-				alt="'.$gL10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
-				title="'.$gL10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
+				alt="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
+				title="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
 		}
 		$messenger = true;
 	}
-	elseif($field->getValue('usf_name_intern') == 'SKYPE')
+	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'SKYPE')
 	{
-		if(strlen($field->getValue('usd_value')) > 0)
+		if(strlen($User->getValue($fieldNameIntern)) > 0)
 		{
 			// Skype Onlinestatus anzeigen
 			$value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
-			<a class="iconLink" href="skype:'.$field->getValue('usd_value').'?add"><img
-				src="http://mystatus.skype.com/smallicon/'.$field->getValue('usd_value').'"
-				title="'.$gL10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'"
-				alt="'.$gL10n->get('PRO_TO_ADD', $field->getValue('usd_value'), $field->getValue('usf_name')).'" /></a> '.$value;
+			<a class="iconLink" href="skype:'.$User->getValue($fieldNameIntern).'?add"><img
+				src="http://mystatus.skype.com/smallicon/'.$User->getValue($fieldNameIntern).'"
+				title="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
+				alt="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
 		}
 		$messenger = true;
 	}
-	elseif($field->getValue('usf_name_intern') == 'AOL_INSTANT_MESSENGER')
+	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'AOL_INSTANT_MESSENGER')
 	{
 		$msg_image = 'aim.png';
 	}
-	elseif($field->getValue('usf_name_intern') == 'GOOGLE_TALK')
+	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'GOOGLE_TALK')
 	{
 		$msg_image = 'google.gif';
 	}
-	elseif($field->getValue('usf_name_intern') == 'MSN_MESSENGER')
+	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'MSN_MESSENGER')
 	{
 		$msg_image = 'msn.png';
 	}
-	elseif($field->getValue('usf_name_intern') == 'YAHOO_MESSENGER')
+	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'YAHOO_MESSENGER')
 	{
 		$msg_image = 'yahoo.png';
 	}
 	if(strlen($msg_image) > 0)
 	{
 		$value = '<img src="'. THEME_PATH. '/icons/'. $msg_image. '" style="vertical-align: middle;"
-			alt="'. $field->getValue('usf_name'). '" title="'. $field->getValue('usf_name'). '" />&nbsp;&nbsp;'. $value;
+			alt="'. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). '" title="'. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). '" />&nbsp;&nbsp;'. $value;
 		$messenger = true;
 	}
 
     // Feld anzeigen, außer bei Messenger, wenn dieser keine Daten enthält
     if($messenger == false
-    || ($messenger == true && strlen($field->getValue('usd_value')) > 0))
+    || ($messenger == true && strlen($User->getValue($fieldNameIntern)) > 0))
     {
         $html = '<li>
                     <dl>
-                        <dt>'. $field->getValue('usf_name'). ':</dt>
+                        <dt>'. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). ':</dt>
                         <dd>'. $value. '&nbsp;</dd>
                     </dl>
                 </li>';
@@ -184,7 +184,7 @@ function getFieldCode($field, $user_id)
 }
 
 // User auslesen
-$user = new User($gDb, $gUserFields, $getUserId);
+$user = new User($gDb, $gProfileFields, $getUserId);
 
 unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken
@@ -242,7 +242,7 @@ echo '
 
                             // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
                             if(strlen($user->getValue('GENDER')) > 0
-                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('GENDER', 'usf_hidden') == 0 ))
+                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0 ))
                             {
                                 echo $user->getValue('GENDER');
                             }
@@ -291,7 +291,7 @@ echo '
 
                             // Schleife ueber alle Felder der Stammdaten
 
-                            foreach($user->userFieldData as $field)
+                            foreach($gProfileFields->mProfileFields as $field)
                             {
                                 // nur Felder der Stammdaten anzeigen
                                 if($field->getValue('cat_name_intern') == 'MASTER_DATA'
@@ -326,7 +326,7 @@ echo '
                                                                 '&amp;daddr=';
 
                                                             if(strlen($user->getValue('ADDRESS')) > 0
-                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('ADDRESS', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
                                                             {
                                                                 $address   .= '<div>'.$user->getValue('ADDRESS'). '</div>';
                                                                 $map_url   .= urlencode($user->getValue('ADDRESS'));
@@ -334,7 +334,7 @@ echo '
                                                             }
 
                                                             if(strlen($user->getValue('POSTCODE')) > 0
-                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('POSTCODE', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
                                                             {
                                                                 $address   .= '<div>'.$user->getValue('POSTCODE');
                                                                 $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
@@ -342,18 +342,18 @@ echo '
 
 																// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
 	                                                            if(strlen($user->getValue('CITY')) == 0
-	                                                            || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $gCurrentUser->getProperty('CITY', 'usf_hidden') == 1))
+	                                                            || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
 	                                                            {
 	                                                                $address   .= '</div>';
 	                                                            }
                                                             }
 
                                                             if(strlen($user->getValue('CITY')) > 0
-                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('CITY', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                                             {
                                                             	// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
 	                                                            if(strlen($user->getValue('POSTCODE')) == 0
-	                                                            || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $gCurrentUser->getProperty('POSTCODE', 'usf_hidden') == 1))
+	                                                            || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 1))
 	                                                            {
 	                                                                $address   .= '<div>';
 	                                                            }
@@ -363,7 +363,7 @@ echo '
                                                             }
 
                                                             if(strlen($user->getValue('COUNTRY')) > 0
-                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gCurrentUser->getProperty('COUNTRY', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
                                                             {
 																$country    = $user->getValue('COUNTRY');
                                                                 $address   .= '<div>'.$country. '</div>';
@@ -395,7 +395,7 @@ echo '
                                             break;
 
                                         default:
-                                            echo getFieldCode($field, $user->getValue('usr_id'));
+                                            echo getFieldCode($field->getValue('usf_name_intern'), $user);
                                             break;
                                     }
                                 }
@@ -452,7 +452,7 @@ echo '
         // *******************************************************************************
 
         $category = '';
-        foreach($user->userFieldData as $field)
+        foreach($gProfileFields->mProfileFields as $field)
         {
             // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
             // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
@@ -464,7 +464,7 @@ echo '
                 // Kategorie 'Messenger' nur anzeigen, wenn auch Daten zugeordnet sind
                 if($category != $field->getValue('cat_name')
                 && (  $field->getValue('cat_name_intern') != 'MESSENGER'
-                   || ($field->getValue('cat_name_intern') == 'MESSENGER' && strlen($field->getValue('usd_value')) > 0 )))
+                   || ($field->getValue('cat_name_intern') == 'MESSENGER' && strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 )))
                 {
                     if(strlen($category) > 0)
                     {
@@ -493,9 +493,9 @@ echo '
                 // Html des Feldes ausgeben
                 // bei Kategorie 'Messenger' nur anzeigen, wenn auch Daten zugeordnet sind
                 if($field->getValue('cat_name_intern') != 'MESSENGER'
-                || ($field->getValue('cat_name_intern') == 'MESSENGER' && strlen($field->getValue('usd_value')) > 0 ))
+                || ($field->getValue('cat_name_intern') == 'MESSENGER' && strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 ))
                 {
-                    echo getFieldCode($field, $user->getValue('usr_id'));
+                    echo getFieldCode($field->getValue('usf_name_intern'), $user);
                 }
             }
         }
@@ -741,12 +741,12 @@ echo '
 
         // Infos der Benutzer, die diesen DS erstellt und geaendert haben
         echo '<div class="editInformation">';
-            $user_create = new User($gDb, $gUserFields, $user->getValue('usr_usr_id_create'));
+            $user_create = new User($gDb, $gProfileFields, $user->getValue('usr_usr_id_create'));
             echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
 
             if($user->getValue('usr_usr_id_change') > 0)
             {
-                $user_change = new User($gDb, $gUserFields, $user->getValue('usr_usr_id_change'));
+                $user_change = new User($gDb, $gProfileFields, $user->getValue('usr_usr_id_change'));
                 echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
             }
         echo '</div>    

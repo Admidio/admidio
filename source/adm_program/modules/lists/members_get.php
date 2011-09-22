@@ -20,18 +20,18 @@ require_once('../../system/classes/table_roles.php');
 
 
 // Initialize and check the parameters
-$get_rol_id        = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true);
-$post_mem_show_all = admFuncVariableIsValid($_POST, 'mem_show_all', 'string', 'off');
-$post_mem_search   = admFuncVariableIsValid($_POST, 'mem_search', 'string');
+$getRoleId          = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true);
+$postMembersShowAll = admFuncVariableIsValid($_POST, 'mem_show_all', 'string', 'off');
+$postMembersSearch  = admFuncVariableIsValid($_POST, 'mem_search', 'string');
 
 // Objekt der uebergeben Rollen-ID erstellen
-$role = new TableRoles($gDb, $get_rol_id);
+$role = new TableRoles($gDb, $getRoleId);
 
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen Mitglied der richtigen Gliedgemeinschaft sein
 if(  (!$gCurrentUser->assignRoles()
-   && !isGroupLeader($gCurrentUser->getValue('usr_id'), $get_rol_id))
+   && !isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId))
 || (  !$gCurrentUser->isWebmaster()
    && $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
 || ($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 ))
@@ -42,7 +42,7 @@ if(  (!$gCurrentUser->assignRoles()
 $condition = '';
 $limit = '';
 
-if($post_mem_show_all == 'on')
+if($postMembersShowAll == 'on')
 {
     // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
     $member_condition = ' usr_valid = 1 ';
@@ -64,10 +64,10 @@ else
 }
 
 //Suchstring zerlegen
-if(strlen($post_mem_search) > 0)
+if(strlen($postMembersSearch) > 0)
 {
-    $post_mem_search = str_replace('%', ' ', $post_mem_search);
-    $search_therms = explode(' ', $post_mem_search);
+    $postMembersSearch = str_replace('%', ' ', $postMembersSearch);
+    $search_therms = explode(' ', $postMembersSearch);
     
     if(count($search_therms)>0)
     {
@@ -100,28 +100,28 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
         FROM '. TBL_USERS. '
         LEFT JOIN '. TBL_USER_DATA. ' as last_name
           ON last_name.usd_usr_id = usr_id
-         AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
+         AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as first_name
           ON first_name.usd_usr_id = usr_id
-         AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
+         AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as birthday
           ON birthday.usd_usr_id = usr_id
-         AND birthday.usd_usf_id = '. $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'). '
+         AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as city
           ON city.usd_usr_id = usr_id
-         AND city.usd_usf_id = '. $gCurrentUser->getProperty('CITY', 'usf_id'). '
+         AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as address
           ON address.usd_usr_id = usr_id
-         AND address.usd_usf_id = '. $gCurrentUser->getProperty('ADDRESS', 'usf_id'). '
+         AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as zip_code
           ON zip_code.usd_usr_id = usr_id
-         AND zip_code.usd_usf_id = '. $gCurrentUser->getProperty('POSTCODE', 'usf_id'). '
+         AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
         LEFT JOIN '. TBL_USER_DATA. ' as country
           ON country.usd_usr_id = usr_id
-         AND country.usd_usf_id = '. $gCurrentUser->getProperty('COUNTRY', 'usf_id'). '
+         AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
         LEFT JOIN '. TBL_ROLES. ' rol
           ON rol.rol_valid   = 1
-         AND rol.rol_id      = '.$get_rol_id.'
+         AND rol.rol_id      = '.$getRoleId.'
         LEFT JOIN '. TBL_MEMBERS. ' mem
           ON mem.mem_rol_id  = rol.rol_id
          AND mem.mem_begin  <= \''.DATE_NOW.'\'

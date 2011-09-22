@@ -23,38 +23,38 @@ require_once('../../system/classes/table_roles.php');
 unset($_SESSION['mylist_request']);
 
 // Initialize and check the parameters
-$get_start     = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$get_category  = admFuncVariableIsValid($_GET, 'category', 'string', '');
-$get_category_selection = admFuncVariableIsValid($_GET, 'category-selection', 'boolean', 1);
-$get_active_role = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
+$getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$getCategory   = admFuncVariableIsValid($_GET, 'category', 'string', '');
+$getCategorySelection = admFuncVariableIsValid($_GET, 'category-selection', 'boolean', 1);
+$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
 
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Alle Rollen-IDs ermitteln, die der User sehen darf
-$rol_id_list = '';
-if($get_active_role)
+$roleIdList = '';
+if($getActiveRole)
 {
     foreach($gCurrentUser->getListViewRights() as $key => $value)
     {
         if($value == 1)
         {
-            $rol_id_list = $rol_id_list. $key. ', ';
+            $roleIdList = $roleIdList. $key. ', ';
         }
     }
-    if(strlen($rol_id_list) > 0)
+    if(strlen($roleIdList) > 0)
     {
-        $rol_id_list = ' AND rol_id IN ('. substr($rol_id_list, 0, strlen($rol_id_list)-2). ') ';
+        $roleIdList = ' AND rol_id IN ('. substr($roleIdList, 0, strlen($roleIdList)-2). ') ';
     }
     else
     {
-        $rol_id_list = ' AND rol_id = 0 ';
+        $roleIdList = ' AND rol_id = 0 ';
     }
 }
 
 // Listen-SQL-Statement zusammensetzen
-if($get_active_role == 1)
+if($getActiveRole == 1)
 {
     $sql_member_status = ' AND mem_begin <= \''.DATE_NOW.'\'
                            AND mem_end   >= \''.DATE_NOW.'\' ';
@@ -69,9 +69,9 @@ $sql = 'SELECT rol.*, cat.*,
                (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id '.$sql_member_status.' AND mem_leader = 1) as num_leader,
                (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id AND mem_end < \''. DATE_NOW.'\') as num_former
           FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
-         WHERE rol_valid   = '.$get_active_role.'
+         WHERE rol_valid   = '.$getActiveRole.'
            AND rol_visible = 1
-               '.$rol_id_list.'
+               '.$roleIdList.'
            AND rol_cat_id = cat_id 
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL ) ';
@@ -79,11 +79,11 @@ if($gValidLogin == false)
 {
     $sql .= ' AND cat_hidden = 0 ';
 }
-if(strlen($get_category) > 0 && $get_category != $gL10n->get('SYS_ALL'))
+if(strlen($getCategory) > 0 && $getCategory != $gL10n->get('SYS_ALL'))
 {
     // wenn eine Kategorie uebergeben wurde, dann nur Rollen dieser anzeigen
     $sql .= ' AND cat_type   = \'ROL\'
-              AND cat_name   = \''. $get_category. '\' ';
+              AND cat_name   = \''. $getCategory. '\' ';
 }
 $sql .= ' ORDER BY cat_sequence, rol_name ';
 
@@ -95,7 +95,7 @@ if($num_roles == 0)
     if($gValidLogin == true)
     {
         // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
-        if($get_active_role == 0)
+        if($getActiveRole == 0)
         {
             $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
         }
@@ -112,7 +112,7 @@ if($num_roles == 0)
 }
 
 // Html-Kopf ausgeben
-if($get_active_role)
+if($getActiveRole)
 {
     $gLayout['title']  = $gL10n->get('LST_ACTIVE_ROLES');
 }
@@ -125,7 +125,7 @@ $gLayout['header'] = '
         function showCategory()
         {
             var category = document.getElementById("category").value;
-            self.location.href = "lists.php?category=" + category + "&category-selection='. $get_category_selection. '&active_role='.$get_active_role.'";
+            self.location.href = "lists.php?category=" + category + "&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole.'";
         }
 
         function showList(element, rol_id)
@@ -134,7 +134,7 @@ $gLayout['header'] = '
 
             if(lst_id == "mylist")
             {
-                self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + rol_id + "&active_role='.$get_active_role.'";
+                self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + rol_id + "&active_role='.$getActiveRole.'";
             }
             else
             {
@@ -150,7 +150,7 @@ echo '<div id="lists_overview">
 <h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';
 
 // Kategorienauswahlbox soll angezeigt werden oder der User darf neue Rollen anlegen
-if($get_category_selection == 1 || $gCurrentUser->assignRoles())
+if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
 {
     echo '<ul class="iconTextLinkList">';
     //Neue Termine anlegen
@@ -166,7 +166,7 @@ if($get_category_selection == 1 || $gCurrentUser->assignRoles())
         </li>';
     }
 
-    if($get_category_selection == 1)
+    if($getCategorySelection == 1)
     {
         // Combobox mit allen Kategorien anzeigen, denen auch Rollen zugeordnet sind
         $sql = 'SELECT DISTINCT cat_name, cat_sequence 
@@ -176,7 +176,7 @@ if($get_category_selection == 1 || $gCurrentUser->assignRoles())
                    AND cat_type    = \'ROL\' 
                    AND rol_cat_id  = cat_id
                    AND rol_visible = 1
-                       '.$rol_id_list;
+                       '.$roleIdList;
         if($gValidLogin == false)
         {
             $sql .= ' AND cat_hidden = 0 ';
@@ -189,7 +189,7 @@ if($get_category_selection == 1 || $gCurrentUser->assignRoles())
             echo '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;
             <select size="1" id="category" onchange="showCategory()">
                 <option value="'.$gL10n->get('SYS_ALL').'" ';
-                if(strlen($get_category) == 0)
+                if(strlen($getCategory) == 0)
                 {
                     echo ' selected="selected" ';
                 }
@@ -198,7 +198,7 @@ if($get_category_selection == 1 || $gCurrentUser->assignRoles())
                 while($row = $gDb->fetch_array($result))
                 {
                     echo '<option value="'. urlencode($row['cat_name']). '"';
-                    if($get_category == $row['cat_name'])
+                    if($getCategory == $row['cat_name'])
                     {
                         echo ' selected="selected" ';
                     }
@@ -228,7 +228,7 @@ if($get_category_selection == 1 || $gCurrentUser->assignRoles())
 $previous_cat_id   = 0;
 $count_cat_entries = 0;
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-if(!$gDb->data_seek($result_lst, $get_start))
+if(!$gDb->data_seek($result_lst, $getStart))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -255,7 +255,7 @@ else
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
 
-for($i = 0; $i < $roles_per_page && $i + $get_start < $num_roles; $i++)
+for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
 {
     if($row_lst = $gDb->fetch_array($result_lst))
     {
@@ -463,7 +463,7 @@ for($i = 0; $i < $roles_per_page && $i + $get_start < $num_roles; $i++)
                                 {
                                     echo '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
                                 }
-                                if($get_active_role && $row_lst['num_former'] > 0)
+                                if($getActiveRole && $row_lst['num_former'] > 0)
                                 {
                                     // Anzahl Ehemaliger anzeigen
                                     if($row_lst['num_former'] == 1)
@@ -533,8 +533,8 @@ if($count_cat_entries == 0)
 echo '</div></div>';
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?category='. $get_category. '&category-selection='. $get_category_selection. '&active_role='.$get_active_role;
-echo admFuncGeneratePagination($base_url, $num_roles, $roles_per_page, $get_start, TRUE);
+$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?category='. $getCategory. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;
+echo admFuncGeneratePagination($base_url, $num_roles, $roles_per_page, $getStart, TRUE);
 
 echo '</div>';
 

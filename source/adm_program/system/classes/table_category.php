@@ -259,7 +259,7 @@ class TableCategory extends TableAccess
     }
 
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
-    public function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value, $check_value = true)
     {
 		global $gCurrentOrganization;
 

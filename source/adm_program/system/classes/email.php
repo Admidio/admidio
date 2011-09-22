@@ -55,8 +55,8 @@
  * function setListRecipientsFlag()
  *
  * Methode gibt die maximale Groesse der Anhaenge zurueck
- * size_unit : "b" = byte; "kb" = kilobyte; "mb" = megabyte
- * getMaxAttachementSize($size_unit = "kb") 
+ * size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
+ * getMaxAttachementSize($size_unit = 'kb') 
  *
  * Soll die Nachricht als HTML Code interpretiert und versendet werden,
  * muss folgende Funktion auch noch aufgerufen werden (optional):
@@ -267,7 +267,7 @@ private function prepareHeader()
 
 // Methode gibt die maximale Groesse der Anhaenge zurueck
 // size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
-public function getMaxAttachementSize($size_unit = 'kb')
+public static function getMaxAttachementSize($size_unit = 'kb')
 {
     global $gPreferences;
     

@@ -43,7 +43,7 @@ if($gPreferences['profile_photo_storage'] == 1 && $get_new_photo == 0)
 //Foto aus der Datenbank
 elseif($gPreferences['profile_photo_storage'] == 0 && $get_new_photo == 0)
 {
-	$user = new User($gDb, $gUserFields, $get_usr_id);
+	$user = new User($gDb, $gProfileFields, $get_usr_id);
 	if(strlen($user->getValue('usr_photo')) != NULL)
     {
         $image = new Image();

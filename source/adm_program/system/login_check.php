@@ -78,7 +78,7 @@ $user_row   = $gDb->fetch_array($result);
 if ($user_found >= 1)
 {
     // Userobjekt anlegen
-    $gCurrentUser = new User($gDb, $gUserFields, $user_row['usr_id']);
+    $gCurrentUser = new User($gDb, $gProfileFields, $user_row['usr_id']);
     
     if($gCurrentUser->getValue('usr_number_invalid') >= 3)
     {

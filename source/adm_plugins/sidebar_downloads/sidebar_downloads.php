@@ -91,7 +91,7 @@ if ($gPreferences['enable_download_module'] == 1)
 	            }
 
               	// Vorname und Nachname abfragen (Upload der Datei)
-              	$mein_user = new User($gDb, $gUserFields, $plg_row->fil_usr_id);
+              	$mein_user = new User($gDb, $gProfileFields, $plg_row->fil_usr_id);
 
                	echo '<span class="iconTextLink">
                		<a href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img 

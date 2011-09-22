@@ -115,7 +115,7 @@ echo '
                 <dl>
                     <dt><label for="usf_name">'.$gL10n->get('SYS_NAME').':</label></dt>
                     <dd><input type="text" name="usf_name" id="usf_name" '.$html_disabled.' style="width: 345px;" maxlength="100"
-                        value="'. $user_field->getValue('usf_name'). '" />
+                        value="'. $user_field->getValue('usf_name', 'plain'). '" />
                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -205,7 +205,7 @@ echo '
                 <dl>
                     <dt><label for="usf_value_list">'.$gL10n->get('SYS_VALUE_LIST').':</label></dt>
                     <dd><textarea name="usf_value_list" id="usf_value_list" style="width: 345px;" rows="6" cols="40">'.
-                        $user_field->getValue('usf_value_list'). '</textarea>
+                        $user_field->getValue('usf_value_list', 'plain'). '</textarea>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC&amp;inline=true"><img 
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -288,12 +288,12 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($gDb, $gUserFields, $user_field->getValue('usf_usr_id_create'));
+                $user_create = new User($gDb, $gProfileFields, $user_field->getValue('usf_usr_id_create'));
                 echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_create'));
 
                 if($user_field->getValue('usf_usr_id_change') > 0)
                 {
-                    $user_change = new User($gDb, $gUserFields, $user_field->getValue('usf_usr_id_change'));
+                    $user_change = new User($gDb, $gProfileFields, $user_field->getValue('usf_usr_id_change'));
                     echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_change'));
                 }
             echo '</div>';

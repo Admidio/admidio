@@ -31,7 +31,7 @@ if(!$gCurrentUser->editUsers())
 
 // Pflichtfelder prüfen
 
-foreach($gCurrentUser->userFieldData as $field)
+foreach($gProfileFields->mUserField as $field)
 {
     if($field->getValue('usf_mandatory') == 1
     && strlen($_POST['usf-'. $field->getValue('usf_id')]) == 0)
@@ -51,7 +51,7 @@ else
 
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
 $line = reset($_SESSION['file_lines']);
-$user = new User($gDb, $gUserFields);
+$user = new User($gDb, $gProfileFields);
 $member = new TableMembers($gDb);
 $start_row    = 0;
 $count_import = 0;
@@ -83,7 +83,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
         // dieser dann den Wert zuordnen
-        foreach($user->userFieldData as $field)
+        foreach($gProfileFields->mUserField as $field)
         {
             if(strlen($_POST['usf-'. $field->getValue('usf_id')]) > 0 && $col_key == $_POST['usf-'. $field->getValue('usf_id')])
             {
@@ -182,18 +182,18 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                   FROM '. TBL_USERS. '
                   JOIN '. TBL_USER_DATA. ' last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '.  $user->getProperty('LAST_NAME', 'usf_id'). '
+                   AND last_name.usd_usf_id = '.  $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
                    AND last_name.usd_value  = \''. $user->getValue('LAST_NAME'). '\'
                   JOIN '. TBL_USER_DATA. ' first_name
                     ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = '.  $user->getProperty('FIRST_NAME', 'usf_id'). '
+                   AND first_name.usd_usf_id = '.  $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                    AND first_name.usd_value  = \''. $user->getValue('FIRST_NAME'). '\'
                  WHERE usr_valid = 1 ';
         $result = $gDb->query($sql);
         $row_duplicate_user = $gDb->fetch_array($result);
         if($row_duplicate_user['usr_id'] > 0)
         {
-            $duplicate_user = new User($gDb, $gUserFields, $row_duplicate_user['usr_id']);
+            $duplicate_user = new User($gDb, $gProfileFields, $row_duplicate_user['usr_id']);
         }
     
         if($row_duplicate_user['usr_id'] > 0)
@@ -212,7 +212,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                 {
                     if($duplicate_user->getValue($field_name_intern) != $user->getValue($field_name_intern))
                     {
-						if($duplicate_user->getProperty($field_name_intern, 'usf_type') == 'DATE')
+						if($gProfileFields->getProperty($field_name_intern, 'usf_type') == 'DATE')
 						{
 							// the date must be formated
 							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, $gPreferences['system_date']));

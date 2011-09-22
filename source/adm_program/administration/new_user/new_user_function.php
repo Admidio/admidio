@@ -38,11 +38,11 @@ if($gPreferences['registration_mode'] == 0)
 }
 
 // create user objects
-$new_user = new User($gDb, $gUserFields, $getNewUserId);
+$new_user = new User($gDb, $gProfileFields, $getNewUserId);
 
 if($getUserId > 0)
 {
-    $user = new User($gDb, $gUserFields, $getUserId);
+    $user = new User($gDb, $gProfileFields, $getUserId);
 }
 
 if($getMode == 1 || $getMode == 2)

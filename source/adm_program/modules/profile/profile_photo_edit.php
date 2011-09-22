@@ -49,7 +49,7 @@ if($gPreferences['profile_photo_storage'] == 1)
 }
 
 // User auslesen
-$user = new User($gDb, $gUserFields, $get_usr_id);
+$user = new User($gDb, $gProfileFields, $get_usr_id);
 
 if($get_job=='save')
 {

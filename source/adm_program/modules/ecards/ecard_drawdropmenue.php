@@ -100,13 +100,13 @@ elseif($gValidLogin && $getRoleId > 0 && $getMode == 0 && $getUserId == '0')
 		      FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
 			  LEFT JOIN '. TBL_USER_DATA. ' as last_name
 			    ON last_name.usd_usr_id = usr_id
-			   AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
+			   AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
 			  LEFT JOIN '. TBL_USER_DATA. ' as first_name
 				ON first_name.usd_usr_id = usr_id
-			   AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
+			   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
 			  LEFT JOIN '. TBL_USER_DATA. ' as email
 				ON email.usd_usr_id = usr_id
-			   AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id').'
+			   AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id').'
 			 WHERE usr_id   = mem_usr_id
 			   AND mem_rol_id = '.$getRoleId.'
 			   AND mem_begin <= \''.DATE_NOW.'\'
@@ -146,13 +146,13 @@ elseif($gValidLogin && strlen($getUserId) > 0)
                   FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
                   LEFT JOIN '. TBL_USER_DATA. ' as last_name
                     ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
+                   AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id').'
                   LEFT JOIN '. TBL_USER_DATA. ' as first_name
                     ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
+                   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
                   LEFT JOIN '. TBL_USER_DATA. ' as email
                     ON email.usd_usr_id = usr_id
-                   AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id').'
+                   AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id').'
                  WHERE usr_id   = '.$getUserId.'
                    AND mem_begin <= \''.DATE_NOW.'\'
                    AND mem_end    > \''.DATE_NOW.'\'

@@ -36,7 +36,7 @@ if ($gPreferences['enable_guestbook_module'] != 1)
 }
 
 // Initialize and check the parameters
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
@@ -48,7 +48,7 @@ $result = $gDb->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$get_headline,
+$rss = new RSSfeed('http://'. $gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline,
 		$gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
 $guestbook = new TableGuestbook($gDb);
 

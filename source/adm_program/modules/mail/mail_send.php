@@ -48,7 +48,7 @@ if ($getUserId > 0)
     }
 
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($gDb, $gUserFields, $getUserId);
+    $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden    
     if((  $gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)
@@ -249,10 +249,10 @@ else
 				 AND field.usf_type = "EMAIL"
                 LEFT JOIN '. TBL_USER_DATA. ' as last_name
                   ON last_name.usd_usr_id = usr_id
-                 AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
+                 AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
                 LEFT JOIN '. TBL_USER_DATA. ' as first_name
                   ON first_name.usd_usr_id = usr_id
-                 AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
+                 AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
                WHERE rol_id      = '.$postRoleId.'
                  AND rol_cat_id  = cat_id
                  AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
