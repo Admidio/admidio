@@ -247,12 +247,12 @@ if($plg_geb_aktiv == 1)
                    birthday.usd_value AS birthday
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
               JOIN '. TBL_USER_DATA. ' AS birthday ON birthday.usd_usr_id = usr_id
-               AND birthday.usd_usf_id = '. $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'). '
+               AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
                AND MONTH(birthday.usd_value) = '.$monat.'
               LEFT JOIN '. TBL_USER_DATA. ' AS last_name ON last_name.usd_usr_id = usr_id
-               AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
+               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
               LEFT JOIN '. TBL_USER_DATA. ' AS first_name ON first_name.usd_usr_id = usr_id
-               AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
+               AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
              WHERE rol_cat_id = cat_id
                AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                AND rol_id     = mem_rol_id

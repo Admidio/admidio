@@ -26,7 +26,7 @@ $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getAction = admFuncVariableIsValid($_GET, 'action', 'numeric', 0);
 
 // User auslesen
-$user = new User($gDb, $gUserFields, $getUserId);
+$user = new User($gDb, $gProfileFields, $getUserId);
 
 switch($getAction)
 {

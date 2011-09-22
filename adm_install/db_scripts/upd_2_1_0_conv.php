@@ -10,7 +10,7 @@
 
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/user_fields.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
 
 $systemmails_texts = array(
 
@@ -150,9 +150,9 @@ while($row_orga = $gDb->fetch_array($result_orga))
     $gDb->query($sql);
 
 	// create object with current user field structure
-	$gUserFields = new UserFields($db, $gCurrentOrganization);
+	$gProfileFields = new ProfileFields($db, $gCurrentOrganization);
 
-    $gCurrentUser = new User($gDb, $gUserFields, $row_webmaster['webmaster_id']);
+    $gCurrentUser = new User($gDb, $gProfileFields, $row_webmaster['webmaster_id']);
     $gCurrentOrganization->readData($row_orga['org_id']);
 
     // Default-Listen-Konfigurationen anlegen

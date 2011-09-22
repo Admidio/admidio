@@ -20,9 +20,9 @@
  *                  - es wird ein Array mit allen noetigen gefuellten Tabellenfeldern
  *                    uebergeben. Key ist Spaltenname und Wert ist der Inhalt.
  *                    Mit dieser Methode kann das Einlesen der Werte umgangen werden.
- * setValue($field_name, $field_value) 
+ * setValue($field_name, $field_value, $check_value = true)
  *                  - setzt einen Wert fuer ein bestimmtes Feld der Tabelle
- * getValue($field_name)- gibt den Wert eines Feldes der Tabelle zurueck
+ * getValue($field_name, format)- gibt den Wert eines Feldes der Tabelle zurueck
  * save()           - die aktuellen Daten werden in die Datenbank zurueckgeschrieben
  *                    Es wird automatisch ein Update oder Insert erstellt
  * delete()         - der aktuelle Datensatz wird aus der Tabelle geloescht
@@ -123,8 +123,9 @@ class TableAccess
         return true;
     }
 
-    // Methode gibt den Wert eines Feldes ($field_name) zurueck
-    // $format kann fuer Datetime-Felder das Format aus der PHP-Funktion date() angegeben werden
+    // method gets the value of the field ($field_name)
+    // $format - Datetime 'd.m.Y' = '02.04.2011'
+	//         - Text     'plain' the db field value without any transformation
     public function getValue($field_name, $format = '')
     {
         global $gPreferences;
@@ -143,8 +144,9 @@ class TableAccess
             }
         }
 
-        // bei Textfeldern muessen Anfuehrungszeichen noch escaped werden
+        // if text field and format not 'plain' then convert all quotes to html syntax
         if(isset($this->columnsInfos[$field_name]['type'])
+		&& $format != 'plain'
         && (  strpos($this->columnsInfos[$field_name]['type'], 'char') !== false
            || strpos($this->columnsInfos[$field_name]['type'], 'text') !== false))
         {

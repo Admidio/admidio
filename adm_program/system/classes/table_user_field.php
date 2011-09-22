@@ -90,6 +90,80 @@ class TableUserField extends TableAccess
         }
         return $newNameIntern;
     }
+	
+    public function getValue($field_name, $format = '')
+    {
+		global $gL10n;
+
+		$value = parent::getValue($field_name, $format);
+
+		if($format != 'plain')
+		{
+			if($field_name == 'usf_name')
+			{
+				// if text is a translation-id then translate it
+				if(strpos($value, '_') == 3)
+				{
+					$value = $gL10n->get(admStrToUpper($value));
+				}
+			}
+			elseif($field_name == 'usf_value_list')
+			{
+				if($this->dbColumns['usf_type'] == 'DROPDOWN'
+				|| $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
+				{
+					$arrListValues = explode("\r\n", $value);
+
+					foreach($arrListValues as $key => &$listValue)
+					{
+						if($this->dbColumns['usf_type'] == 'RADIO_BUTTON')
+						{
+							// if value is imagefile or imageurl then show image
+							if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+							{
+								// if there is imagefile and text separated by | then explode them
+								if(strpos($listValue, '|') > 0)
+								{
+									$listValueImage = substr($listValue, 0, strpos($listValue, '|'));
+									$listValueText  = substr($listValue, strpos($listValue, '|') + 1);
+								}
+								else
+								{
+									$listValueImage = $listValue;
+									$listValueText  = $this->getValue('usf_name');
+								}
+								
+								// if text is a translation-id then translate it
+								if(strpos($listValueText, '_') == 3)
+								{
+									$listValueText = $gL10n->get(admStrToUpper($listValueText));
+								}
+
+								// create html for optionbox entry
+								if(isValidFileName($listValueImage, true) == 0)
+								{
+										$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+								}
+								elseif(strpos(admStrToLower($listValueImage), 'http') == 0 && strValidCharacters($listValueImage, 'url'))
+								{
+									$listValue = '<img src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+								}
+							}
+						}
+
+						// if text is a translation-id then translate it
+						if(strpos($listValue, '_') == 3)
+						{
+							$listValue = $gL10n->get(admStrToUpper($listValue));
+						}
+					}
+					$value = $arrListValues;
+				}
+			}
+		}
+
+        return $value;
+    }
     
     // das Feld wird um eine Position in der Reihenfolge verschoben
     public function moveSequence($mode)
@@ -140,7 +214,7 @@ class TableUserField extends TableAccess
         // wurde der Name veraendert, dann nach einem neuen eindeutigen internen Namen suchen
         if($this->columnsInfos['usf_name']['changed'])
         {
-            $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name'), 1));
+            $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'plain'), 1));
         }
         
         parent::save($updateFingerPrint);

@@ -91,14 +91,14 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 					  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
 					 RIGHT JOIN '. TBL_USER_DATA. ' as email
 						ON email.usd_usr_id = usr_id
-					   AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id'). '
+					   AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
 					   AND LENGTH(email.usd_value) > 0
 					  LEFT JOIN '. TBL_USER_DATA. ' as last_name
 						ON last_name.usd_usr_id = usr_id
-					   AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
+					   AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
 					  LEFT JOIN '. TBL_USER_DATA. ' as first_name
 						ON first_name.usd_usr_id = usr_id
-					   AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
+					   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
 					 WHERE rol_id           = '. $rolle. '
 					   AND rol_cat_id       = cat_id
 					   AND cat_org_id       = '. $gCurrentOrganization->getValue('org_id'). '

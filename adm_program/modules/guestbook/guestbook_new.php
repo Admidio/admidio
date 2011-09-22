@@ -42,15 +42,15 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
 }
 
 // Initialize and check the parameters
-$get_gbo_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
+$getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Gaestebuchobjekt anlegen
 $guestbook = new TableGuestbook($gDb);
 
-if($get_gbo_id > 0)
+if($getGboId > 0)
 {
 	// Falls ein Eintrag bearbeitet werden soll muss geprueft weden ob die Rechte gesetzt sind...
     require('../../system/login_valid.php');
@@ -60,7 +60,7 @@ if($get_gbo_id > 0)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    $guestbook->readData($get_gbo_id);
+    $guestbook->readData($getGboId);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
@@ -71,7 +71,7 @@ if($get_gbo_id > 0)
 
 // Wenn keine ID uebergeben wurde, der User aber eingeloggt ist koennen zumindest
 // Name, Emailadresse und Homepage vorbelegt werden...
-if ($get_gbo_id == 0 && $gValidLogin)
+if ($getGboId == 0 && $gValidLogin)
 {
     $guestbook->setValue('gbo_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
     $guestbook->setValue('gbo_email', $gCurrentUser->getValue('EMAIL'));
@@ -107,13 +107,13 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 }
 
 // Html-Kopf ausgeben
-if ($get_gbo_id > 0)
+if ($getGboId > 0)
 {
-    $gLayout['title'] = $gL10n->get('GBO_EDIT_ENTRY', $get_headline);
+    $gLayout['title'] = $gL10n->get('GBO_EDIT_ENTRY', $getHeadline);
 }
 else
 {
-    $gLayout['title'] = $gL10n->get('GBO_CREATE_VAR_ENTRY', $get_headline);
+    $gLayout['title'] = $gL10n->get('GBO_CREATE_VAR_ENTRY', $getHeadline);
 }
 
 //Script für BBCode laden
@@ -143,7 +143,7 @@ $gLayout['header'] = $javascript. '
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
-if ($get_gbo_id > 0)
+if ($getGboId > 0)
 {
     $mode = '3';
 }
@@ -153,7 +153,7 @@ else
 }
 
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $get_gbo_id. '&amp;headline='. $get_headline. '&amp;mode='.$mode.'" >
+<form method="post" action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode.'" >
 <div class="formLayout" id="edit_guestbook_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
@@ -260,12 +260,12 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($gDb, $gUserFields, $guestbook->getValue('gbo_usr_id_create'));
+                $user_create = new User($gDb, $gProfileFields, $guestbook->getValue('gbo_usr_id_create'));
                 echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $guestbook->getValue('gbo_timestamp_create'));
 
                 if($guestbook->getValue('gbo_usr_id_change') > 0)
                 {
-                    $user_change = new User($gDb, $gUserFields, $guestbook->getValue('gbo_usr_id_change'));
+                    $user_change = new User($gDb, $gProfileFields, $guestbook->getValue('gbo_usr_id_change'));
                     echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $guestbook->getValue('gbo_timestamp_change'));
                 }
             echo '</div>';

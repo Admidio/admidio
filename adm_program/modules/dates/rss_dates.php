@@ -62,16 +62,16 @@ $sql = 'SELECT cat.*, dat.*,
           FROM '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = dat_usr_id_create
-           AND cre_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
+           AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = dat_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
+           AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_surname
             ON cha_surname.usd_usr_id = dat_usr_id_change
-           AND cha_surname.usd_usf_id = '.$gCurrentUser->getProperty('LAST_NAME', 'usf_id').'
+           AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = dat_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$gCurrentUser->getProperty('FIRST_NAME', 'usf_id').'
+           AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE dat_cat_id = cat_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR (   dat_global  = 1

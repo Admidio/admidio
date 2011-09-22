@@ -201,7 +201,7 @@ class ListConfiguration extends TableLists
                 {
                     // ein benutzerdefiniertes Feld
                     
-                    if($gCurrentUser->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
+                    if($gProfileFields->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
                     {
                         $type = 'checkbox';
                         $value = admStrToLower($value);
@@ -216,10 +216,10 @@ class ListConfiguration extends TableLists
                             $value = '0';
                         }
                     }
-                    elseif($gCurrentUser->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
+                    elseif($gProfileFields->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
                     {
                         $type = 'int';
-                        if($gCurrentUser->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name_intern') == 'GENDER')
+                        if($gProfileFields->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name_intern') == 'GENDER')
                         {
                             // bastwe: allow user to search for gender  M W U maennlich weiblich unbekannt
                             $value = admStrToLower($value);
@@ -237,7 +237,7 @@ class ListConfiguration extends TableLists
                             }
                         }
                     }
-                    elseif($gCurrentUser->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'DATE')
+                    elseif($gProfileFields->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'DATE')
                     {
                         $type = 'date';
                     }

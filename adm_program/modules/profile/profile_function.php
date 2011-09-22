@@ -28,7 +28,7 @@ $get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
 if($get_mode == 1)
 {
     // Userdaten aus Datenbank holen
-    $user = new User($gDb, $gUserFields, $get_usr_id);
+    $user = new User($gDb, $gProfileFields, $get_usr_id);
 
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
     header('Content-Disposition: attachment; filename="'. urlencode($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')). '.vcf"');

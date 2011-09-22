@@ -48,7 +48,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
               LEFT JOIN '. TBL_USER_DATA. ' as email
                 ON email.usd_usr_id = usr_id
-               AND email.usd_usf_id = '.$gCurrentUser->getProperty('EMAIL', 'usf_id').'
+               AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
                AND email.usd_value  = \''.$_POST['recipient_email'].'\'
              WHERE rol_cat_id = cat_id
                AND rol_valid   = 1
@@ -68,7 +68,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
         $gMessage->show($gL10n->get('SYS_LOSTPW_EMAIL_ERROR',$_POST['recipient_email']));    
     }
 
-    $user = new User($gDb, $gUserFields, $row['usr_id']);
+    $user = new User($gDb, $gProfileFields, $row['usr_id']);
 
     // Passwort und Aktivierungs-ID erzeugen und speichern
     $new_password  = generatePassword();

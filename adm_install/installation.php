@@ -685,10 +685,10 @@ elseif($req_mode == 8)
     $member->startMembership($role_member->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
 	
 	// create object with current user field structure
-	$gUserFields = new UserFields($db, $gCurrentOrganization);
+	$gProfileFields = new ProfileFields($db, $gCurrentOrganization);
     
     // User Webmaster erst jetzt anlegen, da dieser die Rollenrechte bereits haben muss
-    $gCurrentUser = new User($db, $gUserFields, $gCurrentUser->getValue('usr_id'));
+    $gCurrentUser = new User($db, $gProfileFields, $gCurrentUser->getValue('usr_id'));
     $gCurrentUser->setValue('LAST_NAME', $_SESSION['user_last_name']);
     $gCurrentUser->setValue('FIRST_NAME', $_SESSION['user_first_name']);
     $gCurrentUser->setValue('EMAIL', $_SESSION['user_email']);
@@ -700,45 +700,45 @@ elseif($req_mode == 8)
     $address_list->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
     $address_list->setValue('lst_global', 1);
     $address_list->setValue('lst_default', 1);
-    $address_list->addColumn(1, $gCurrentUser->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $address_list->addColumn(2, $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $address_list->addColumn(3, $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'));
-    $address_list->addColumn(4, $gCurrentUser->getProperty('ADDRESS', 'usf_id'));
-    $address_list->addColumn(5, $gCurrentUser->getProperty('POSTCODE', 'usf_id'));
-    $address_list->addColumn(6, $gCurrentUser->getProperty('CITY', 'usf_id'));
+    $address_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $address_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $address_list->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+    $address_list->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+    $address_list->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
+    $address_list->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
     $address_list->save();
 
     $phone_list = new ListConfiguration($db);
     $phone_list->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
     $phone_list->setValue('lst_global', 1);
-    $phone_list->addColumn(1, $gCurrentUser->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $phone_list->addColumn(2, $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $phone_list->addColumn(3, $gCurrentUser->getProperty('PHONE', 'usf_id'));
-    $phone_list->addColumn(4, $gCurrentUser->getProperty('MOBILE', 'usf_id'));
-    $phone_list->addColumn(5, $gCurrentUser->getProperty('EMAIL', 'usf_id'));
-    $phone_list->addColumn(6, $gCurrentUser->getProperty('FAX', 'usf_id'));
+    $phone_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $phone_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $phone_list->addColumn(3, $gProfileFields->getProperty('PHONE', 'usf_id'));
+    $phone_list->addColumn(4, $gProfileFields->getProperty('MOBILE', 'usf_id'));
+    $phone_list->addColumn(5, $gProfileFields->getProperty('EMAIL', 'usf_id'));
+    $phone_list->addColumn(6, $gProfileFields->getProperty('FAX', 'usf_id'));
     $phone_list->save();
 
     $contact_list = new ListConfiguration($db);
     $contact_list->setValue('lst_name', $gL10n->get('INS_CONTACT_DETAILS'));
     $contact_list->setValue('lst_global', 1);
-    $contact_list->addColumn(1, $gCurrentUser->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $contact_list->addColumn(2, $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $contact_list->addColumn(3, $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'));
-    $contact_list->addColumn(4, $gCurrentUser->getProperty('ADDRESS', 'usf_id'));
-    $contact_list->addColumn(5, $gCurrentUser->getProperty('POSTCODE', 'usf_id'));
-    $contact_list->addColumn(6, $gCurrentUser->getProperty('CITY', 'usf_id'));
-    $contact_list->addColumn(7, $gCurrentUser->getProperty('PHONE', 'usf_id'));
-    $contact_list->addColumn(8, $gCurrentUser->getProperty('MOBILE', 'usf_id'));
-    $contact_list->addColumn(9, $gCurrentUser->getProperty('EMAIL', 'usf_id'));
+    $contact_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $contact_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $contact_list->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+    $contact_list->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+    $contact_list->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
+    $contact_list->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
+    $contact_list->addColumn(7, $gProfileFields->getProperty('PHONE', 'usf_id'));
+    $contact_list->addColumn(8, $gProfileFields->getProperty('MOBILE', 'usf_id'));
+    $contact_list->addColumn(9, $gProfileFields->getProperty('EMAIL', 'usf_id'));
     $contact_list->save();
 
     $former_list = new ListConfiguration($db);
     $former_list->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
     $former_list->setValue('lst_global', 1);
-    $former_list->addColumn(1, $gCurrentUser->getProperty('LAST_NAME', 'usf_id'));
-    $former_list->addColumn(2, $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'));
-    $former_list->addColumn(3, $gCurrentUser->getProperty('BIRTHDAY', 'usf_id'));
+    $former_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'));
+    $former_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'));
+    $former_list->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
     $former_list->addColumn(4, 'mem_begin');
     $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();

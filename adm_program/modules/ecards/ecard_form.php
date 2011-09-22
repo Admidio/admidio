@@ -81,7 +81,7 @@ if ($gValidLogin && strlen($gCurrentUser->getValue('EMAIL')) == 0)
 if ($getUserId > 0)
 {
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($gDb, $gUserFields, $getUserId);
+    $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden
     if((  $gCurrentUser->editUsers() == false

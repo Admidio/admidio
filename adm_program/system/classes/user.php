@@ -12,15 +12,12 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * readUserData()       - baut ein Array mit allen Profilfeldern und
- *                        den entsprechenden Werten des Users auf
  * clearUserFieldArray($delete_db_data = false)
  *                      - der Inhalt der Profilfelder wird geloescht, 
  *                        die Objekte mit DB-Struktur aber nicht !
  * getProperty($field_name, $property)
  *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
  *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
- * getPropertyById($field_id, $property)
  * getListViewRights()  - Liefert ein Array mit allen Rollen und der 
  *                        Berechtigung, ob der User die Liste einsehen darf
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
@@ -35,22 +32,20 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_users.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_user_data.php');
 
 class User extends TableUsers
 {
     protected $webmaster;
 
-    public $userFieldData       = array(); // Array ueber alle Userdatenobjekte mit den entsprechenden Feldeigenschaften
-    public $roles_rights     = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
+    public $mProfileFieldsData; 		// object with current user field structure
+    public $roles_rights = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
     protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $role_mail_rights = array(); // Array ueber Mailrechte einzelner Rollen
-    protected $mUserFieldsData; // object with current user field structure
 
     // Konstruktor
     public function __construct(&$db, $userFields, $usr_id = 0)
     {
-		//$this->mUserFieldsData = $userFields;
+		$this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         parent::__construct($db, $usr_id);
     }
 
@@ -196,18 +191,13 @@ class User extends TableUsers
     // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur nur auf Wunsch
     public function clearUserFieldArray($delete_db_data = false)
     {
-        // Jedes Feld durchgehen und alle Inhalte der Tabelle adm_user_data entfernen
-        foreach($this->userFieldData as $field_name => $object)
+        // delete every entry from adm_users_data
+        foreach($this->mProfileFieldsData->mUserData as $field)
         {
-            $this->userFieldData[$field_name]->clearFieldData();
+			$field->delete();
         }
         
-        // Daten in der DB auch loeschen
-        if($delete_db_data)
-        {
-            $sql    = 'DELETE FROM '. TBL_USER_DATA. ' WHERE usd_usr_id = '. $this->getValue('usr_id');
-            $this->db->query($sql);
-        }
+		$this->mProfileFieldsData->mUserData = array();
     }
     
     // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf
@@ -222,9 +212,9 @@ class User extends TableUsers
     // hier koennen auch noch bestimmte Formatierungen angewandt werden
     public function getProperty($field_name, $property, $format = '')
     {
-        if(isset($this->userFieldData[$field_name]))
+        if(isset($this->mProfileFieldsData->mProfileFields[$field_name]))
         {
-            return $this->userFieldData[$field_name]->getValue($property, $format);
+            return $this->mProfileFieldsData->mProfileFields[$field_name]->getValue($property, $format);
         }
 		
 		// if id-field not exists then return zero
@@ -232,19 +222,6 @@ class User extends TableUsers
 		{
 			return 0;
 		}
-        return '';
-    }
-
-    // aehnlich getProperty, allerdings suche ueber usf_id
-    public function getPropertyById($field_id, $property, $format = '')
-    {
-        foreach($this->userFieldData as $field)
-        {
-            if($field->getValue('usf_id') == $field_id)
-            {
-                return $field->getValue($property, $format);
-            }
-        }
         return '';
     }
 
@@ -258,8 +235,7 @@ class User extends TableUsers
         }
         else
         {
-			//return $this->mUserFieldsData->getValue($field_name, $format);
-            return $this->getProperty($field_name, 'usd_value', $format);
+			return $this->mProfileFieldsData->getValue($field_name, $format);
         }
     }
 
@@ -273,11 +249,11 @@ class User extends TableUsers
 
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['FIRST_NAME']->getValue('usf_hidden') == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
         {
             $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue('LAST_NAME')). ";". utf8_decode($this->getValue('FIRST_NAME')) . ";;;\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['LAST_NAME']->getValue('usf_hidden') == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
         {
             $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue('FIRST_NAME')) . " ". utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
         }
@@ -286,53 +262,53 @@ class User extends TableUsers
             $vcard .= (string) "NICKNAME;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("usr_login_name")). "\r\n";
         }
         if (strlen($this->getValue('PHONE')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['PHONE']->getValue('usf_hidden') == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('PHONE', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue('PHONE'). "\r\n";
         }
         if (strlen($this->getValue('MOBILE')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['MOBILE']->getValue('usf_hidden') == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('MOBILE', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue('MOBILE'). "\r\n";
         }
         if (strlen($this->getValue('FAX')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['FAX']->getValue('usf_hidden') == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('FAX', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue('FAX'). "\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->userFieldData['ADDRESS']->getValue('usf_hidden') == 0 && $this->userFieldData['CITY']->getValue('usf_hidden') == 0
-        && $this->userFieldData['POSTCODE']->getValue('usf_hidden') == 0  && $this->userFieldData['COUNTRY']->getValue('usf_hidden') == 0))
+        if($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
+        && $this->mProfileFieldsData->getProperty('POSTCODE', 'usf_hidden') == 0  && $this->mProfileFieldsData->getProperty('COUNTRY', 'usf_hidden') == 0))
         {
             $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue('ADDRESS')). ";" . utf8_decode($this->getValue('CITY')). ";;" . utf8_decode($this->getValue('POSTCODE')). ";" . utf8_decode($this->getValue('COUNTRY')). "\r\n";
         }
         if (strlen($this->getValue('WEBSITE')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['WEBSITE']->getValue('usf_hidden') == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('WEBSITE', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "URL;HOME:" . $this->getValue('WEBSITE'). "\r\n";
         }
         if (strlen($this->getValue('BIRTHDAY')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['BIRTHDAY']->getValue('usf_hidden') == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('BIRTHDAY', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "BDAY:" . $this->getValue('BIRTHDAY', 'Ymd') . "\r\n";
         }
         if (strlen($this->getValue('EMAIL')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['EMAIL']->getValue('usf_hidden') == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('EMAIL', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue('EMAIL'). "\r\n";
         }
         if (file_exists(SERVER_PATH.'/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1)
         {
             $img_handle = fopen (SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg', 'rb');
-            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode(fread ($img_handle, filesize (SERVER_PATH. "/adm_my_files/user_profile_photos/".$this->getValue("usr_id").".jpg"))). "\r\n";
+            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode(fread ($img_handle, filesize (SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))). "\r\n";
             fclose($img_handle);
         }
         if (strlen($this->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
         {
-            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue("usr_photo")). "\r\n";
+            $vcard .= (string) "PHOTO;ENCODING=BASE64;TYPE=JPEG:".base64_encode($this->getValue('usr_photo')). "\r\n";
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
         if ($this->getValue('GENDER') > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->userFieldData['GENDER']->getValue('usf_hidden') == 0)))
+        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('GENDER', 'usf_hidden') == 0)))
         {
             if($this->getValue('GENDER') == 1)
             {
@@ -358,51 +334,13 @@ class User extends TableUsers
         parent::readData($usr_id, $sql_where_condition, $sql_additional_tables);
 
 		// read data of all user fields from current user
-		//$this->mUserFieldsData->readUserData($this->getValue('usr_id'));
-        $this->readUserData();
+		$this->mProfileFieldsData->readUserData($this->getValue('usr_id'));//MFA
     }
     
     // bei setValue werden die Werte nicht auf Gueltigkeit geprueft
     public function noValueCheck()
     {
-        foreach($this->userFieldData as $field)
-        {
-            $field->noValueCheck();
-        }
-    }
-
-    // baut ein Array mit allen Profilfeldern und den entsprechenden Werten des Users auf
-    public function readUserData()
-    {
-    	global $gCurrentOrganization;
-
-        if($this->getValue('usr_id') > 0)
-        {
-            $join_user_data  = 'LEFT JOIN '. TBL_USER_DATA. '
-                                  ON usd_usf_id = usf_id
-                                 AND usd_usr_id = '. $this->getValue('usr_id');
-        }
-        else
-        {
-            $join_user_data  = '';
-        }
-
-        $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
-                       '.$join_user_data.'
-                 WHERE usf_cat_id = cat_id
-                   AND (  cat_org_id IS NULL
-                       OR cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). ' )
-                 ORDER BY cat_sequence ASC, usf_sequence ASC ';
-        $usf_result   = $this->db->query($sql);
-
-        while($usf_row = $this->db->fetch_array($usf_result))
-        {
-            if(isset($this->userFieldData[$usf_row['usf_name_intern']]) == false)
-            {
-                $this->userFieldData[$usf_row['usf_name_intern']] = new TableUserData($this->db);
-            }
-            $this->userFieldData[$usf_row['usf_name_intern']]->setArray($usf_row);
-        }
+        $this->mProfileFieldsData->noValueCheck();
     }
 
     public function save($updateFingerPrint = true)
@@ -413,37 +351,7 @@ class User extends TableUsers
         parent::save($updateFingerPrint);
 		
 		// save data of all user fields
-		//$this->mUserFieldsData->saveUserData();
-
-        // jetzt noch die einzelnen Spalten sichern
-        foreach($this->userFieldData as $field)
-        {
-            // update nur machen, wenn auch noetig
-            if($field->getValue('usd_id') > 0 || strlen($field->getValue('usd_value')) > 0)
-            {
-                // wird das Feld neu gefuellt, dann auch User-ID setzen
-                if(strlen($field->getValue('usd_usr_id')) == 0
-                && strlen($field->getValue('usd_value')) > 0)
-                {
-                	// PHP4 liefert nur eine Kopie des Objekts, aus diesem Grund muss die Aenderung direkt auf das 
-                	// richtige Objekt verwiesen werden
-                	$this->userFieldData[$field->getValue('usf_name_intern')]->setValue('usd_usr_id', $this->getValue('usr_id'));
-                    $this->userFieldData[$field->getValue('usf_name_intern')]->setValue('usd_usf_id', $field->getValue('usf_id'));
-                    $this->userFieldData[$field->getValue('usf_name_intern')]->new_record = true;
-                }
-
-                // existiert schon ein Wert und dieser wird entfernt, dann auch DS loeschen
-                if($field->getValue('usd_id') > 0
-                && strlen($field->getValue('usd_value')) == 0)
-                {
-                    $this->userFieldData[$field->getValue('usf_name_intern')]->delete();
-                }
-                else
-                {
-                    $this->userFieldData[$field->getValue('usf_name_intern')]->save();
-                }
-            }
-        }
+		$this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
 
         if($fields_changed && is_object($gCurrentSession))
         {
@@ -467,16 +375,16 @@ class User extends TableUsers
 
             // gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
             // bei Registrierung muss die Eingabe auch erlaubt sein
-            if((  $this->getProperty($field_name, 'usf_disabled') == 1
+            if((  $this->mProfileFieldsData->getProperty($field_name, 'usf_disabled') == 1
                && $gCurrentUser->editUsers() == true)
-            || $this->getProperty($field_name, 'usf_disabled') == 0
+            || $this->mProfileFieldsData->getProperty($field_name, 'usf_disabled') == 0
             || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
             {
                 // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
                 // oder im eigenen Profil
-                if((  $this->getProperty($field_name, 'usf_hidden') == 1
+                if((  $this->mProfileFieldsData->getProperty($field_name, 'usf_hidden') == 1
                    && $gCurrentUser->editUsers() == true)
-                || $this->getProperty($field_name, 'usf_hidden') == 0
+                || $this->mProfileFieldsData->getProperty($field_name, 'usf_hidden') == 0
                 || $gCurrentUser->getValue('usr_id') == $this->getValue('usr_id'))
                 {
                     $update_field = true;
@@ -485,9 +393,9 @@ class User extends TableUsers
 
             // nur Updaten, wenn sich auch der Wert geaendert hat
             if($update_field == true
-            && $field_value  != $this->userFieldData[$field_name]->getValue('usd_value'))
+            && $field_value  != $this->mProfileFieldsData->getValue($field_name))
             {
-                $return_code = $this->userFieldData[$field_name]->setValue('usd_value', $field_value);
+				$return_code = $this->mProfileFieldsData->setValue($field_name, $field_value);
             }
         }
         else

@@ -569,12 +569,12 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($gDb, $gUserFields, $date->getValue('dat_usr_id_create'));
+                $user_create = new User($gDb, $gProfileFields, $date->getValue('dat_usr_id_create'));
                 echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $date->getValue('dat_timestamp_create'));
 
                 if($date->getValue('dat_usr_id_change') > 0)
                 {
-                    $user_change = new User($gDb, $gUserFields, $date->getValue('dat_usr_id_change'));
+                    $user_change = new User($gDb, $gProfileFields, $date->getValue('dat_usr_id_change'));
                     echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $date->getValue('dat_timestamp_change'));
                 }
             echo '</div>';

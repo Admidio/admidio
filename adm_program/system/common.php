@@ -46,9 +46,9 @@ require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_session.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/user_fields.php');
 require_once(SERVER_PATH. '/adm_program/system/forum/forum.php');
 
 // remove HMTL & PHP-Code from all parameters
@@ -115,8 +115,8 @@ if(isset($_SESSION['gCurrentOrganization'])
     $gCurrentOrganization     =& $_SESSION['gCurrentOrganization'];
     $gCurrentOrganization->db =& $gDb;
     $gPreferences             =& $_SESSION['gPreferences'];
-	$gUserFields              =& $_SESSION['gUserFields'];
-    $gUserFields->mDb         =& $gDb;
+	$gProfileFields              =& $_SESSION['gProfileFields'];
+    $gProfileFields->mDb         =& $gDb;
 }
 else
 {
@@ -132,12 +132,12 @@ else
     $gPreferences = $gCurrentOrganization->getPreferences();
 	
 	// create object with current user field structure
-	$gUserFields = new UserFields($gDb, $gCurrentOrganization);
+	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
     
     // Daten in Session-Variablen sichern
     $_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
     $_SESSION['gPreferences']         =& $gPreferences;
-    $_SESSION['gUserFields']          =& $gUserFields;
+    $_SESSION['gProfileFields']          =& $gProfileFields;
 }
 
 // Sprachdateien einlesen
@@ -159,7 +159,7 @@ if(isset($_SESSION['gCurrentUser']))
 }
 else
 {
-    $gCurrentUser = new User($gDb, $gUserFields, 0);
+    $gCurrentUser = new User($gDb, $gProfileFields, 0);
     $_SESSION['gCurrentUser'] =& $gCurrentUser;
 }
 
@@ -240,9 +240,11 @@ if($gCurrentSession->getValue('ses_id') > 0)
     // da die Daten evtl. von anderen Usern in der DB geaendert wurden
     if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('ses_renew') == 3)
     {
-        // Feldstruktur entfernen und Userobjekt neu einlesen
-        $gCurrentUser->userFieldData = array();
-        $gCurrentUser->readData($gCurrentUser->getValue('usr_id'));
+        // read new field structure in object and than create new user object with new field structure
+		$gProfileFields->readProfileFields();
+		$userID = $gCurrentUser->getValue('usr_id');
+		$gCurrentUser = new User($gDb, $gProfileFields, $userID);
+		$_SESSION['gCurrentUser'] =& $gCurrentUser;
         $gCurrentSession->setValue('ses_renew', 0);
     }
     if($gCurrentSession->getValue('ses_renew') == 2 || $gCurrentSession->getValue('ses_renew') == 3)

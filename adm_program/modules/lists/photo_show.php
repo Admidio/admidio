@@ -14,13 +14,13 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-$get_usr_id = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true, null, true);
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true, null, true);
 
 // pruefen, ob Profilfoto aus DB oder Filesystem kommt
 if($gPreferences['profile_photo_storage'] == 0)
 {
     // Profilbild aus DB einlesen
-    $sql = 'SELECT usr_photo FROM '.TBL_USERS.' WHERE usr_id = '.$get_usr_id;
+    $sql = 'SELECT usr_photo FROM '.TBL_USERS.' WHERE usr_id = '.$getUserId;
     $gDb->query($sql);
     $row = $gDb->fetch_array();
 
@@ -34,10 +34,10 @@ if($gPreferences['profile_photo_storage'] == 0)
 else
 {
     // Profilbild aus dem Filesystem einlesen bzw. Default-Bild anzeigen
-    if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg'))
+    if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
     {
         header('Content-Type: image/jpeg');
-        readfile(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg');
+        readfile(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
         exit();
     }
 }

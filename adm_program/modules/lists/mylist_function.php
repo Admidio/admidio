@@ -23,9 +23,9 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/list_configuration.php');
 
 // Initialize and check the parameters
-$get_lst_id = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
-$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'string', null, true);
-$get_name   = admFuncVariableIsValid($_GET, 'name', 'string', '');
+$getListId = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', null, true);
+$getName   = admFuncVariableIsValid($_GET, 'name', 'string', '');
 
 // Mindestens ein Feld sollte zugeordnet sein
 if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)
@@ -34,7 +34,7 @@ if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)
 }
 
 // Rolle muss beim Anzeigen gefuellt sein
-if($get_mode == 2
+if($getMode == 2
 && (isset($_POST['rol_id']) == false || $_POST['rol_id'] == 0 || is_numeric($_POST['rol_id']) == false))
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Rolle'));
@@ -56,10 +56,10 @@ else
 }
 
 // Listenobjekt anlegen
-$list = new ListConfiguration($gDb, $get_lst_id);
+$list = new ListConfiguration($gDb, $getListId);
 
 // pruefen, ob Benutzer die Rechte hat, diese Liste zu bearbeiten
-if($get_mode != 2)
+if($getMode != 2)
 {
     // globale Listen duerfen nur von Webmastern editiert werden
     if($list->getValue('lst_global') == 1 && $gCurrentUser->isWebmaster() == false)
@@ -75,7 +75,7 @@ if($get_mode != 2)
 }
 
 // Liste speichern
-if ($get_mode == 1 || $get_mode == 2 || $get_mode == 4)
+if ($getMode == 1 || $getMode == 2 || $getMode == 4)
 {
     // alle vorhandenen Spalten durchgehen
     $columnNumber = 0;
@@ -92,12 +92,12 @@ if ($get_mode == 1 || $get_mode == 2 || $get_mode == 4)
         }
     }
     
-    if(strlen($get_name) > 0)
+    if(strlen($getName) > 0)
     {
-        $list->setValue('lst_name', $get_name);
+        $list->setValue('lst_name', $getName);
     }
     
-    if($get_mode == 4 && $gCurrentUser->isWebmaster())
+    if($getMode == 4 && $gCurrentUser->isWebmaster())
     {
         $list->setValue('lst_global', 1);
     }
@@ -108,7 +108,7 @@ if ($get_mode == 1 || $get_mode == 2 || $get_mode == 4)
     
     $list->save();
     
-    if($get_mode == 1 || $get_mode == 4)
+    if($getMode == 1 || $getMode == 4)
     {
         // wieder zur eigenen Liste zurueck
         header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $list->getValue('lst_id'). '&rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
@@ -124,7 +124,7 @@ if ($get_mode == 1 || $get_mode == 2 || $get_mode == 4)
     header('Location: '.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$list->getValue('lst_id').'&mode=html&show_members='. $_POST['show_members']);
     exit();
 }
-elseif ($get_mode == 3)
+elseif ($getMode == 3)
 {
     // Listenkonfiguration loeschen
     $list->delete();
@@ -133,7 +133,7 @@ elseif ($get_mode == 3)
     header('Location: '.$g_root_path.'/adm_program/modules/lists/mylist.php?rol_id='. $_POST['rol_id']. '&show_members='.$_POST['show_members']);
     exit();
 }
-elseif ($get_mode == 5)
+elseif ($getMode == 5)
 {
     // Listenkonfiguration zur Standardkonfiguration machen
     $list->setDefault();

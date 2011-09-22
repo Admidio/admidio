@@ -38,19 +38,19 @@ if ($gPreferences['enable_guestbook_module'] == 0)
 }
 
 // Initialize and check the parameters
-$get_gbo_id   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$get_gbc_id   = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
+$getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$getGbcId    = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
 // Es muss ein (nicht zwei) Parameter uebergeben werden: Entweder id oder cid...
-if($get_gbo_id > 0 && $get_gbc_id > 0)
+if($getGboId > 0 && $getGbcId > 0)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Erst einmal die Rechte abklopfen...
 if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0)
-&& $get_gbo_id > 0)
+&& $getGboId > 0)
 {
     // Falls anonymes kommentieren nicht erlaubt ist, muss der User eingeloggt sein zum kommentieren
     require_once('../../system/login_valid.php');
@@ -62,7 +62,7 @@ if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook
     }
 }
 
-if($get_gbc_id > 0)
+if($getGbcId > 0)
 {
     // Zum editieren von Kommentaren muss der User auch eingeloggt sein
     require_once('../../system/login_valid.php');
@@ -80,9 +80,9 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // Gaestebuchkommentarobjekt anlegen
 $guestbook_comment = new TableGuestbookComment($gDb);
 
-if($get_gbc_id > 0)
+if($getGbcId > 0)
 {
-    $guestbook_comment->readData($get_gbc_id);
+    $guestbook_comment->readData($getGbcId);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
@@ -101,7 +101,7 @@ if(isset($_SESSION['guestbook_comment_request']))
 
 // Wenn der User eingeloggt ist und keine cid uebergeben wurde
 // koennen zumindest Name und Emailadresse vorbelegt werden...
-if($get_gbc_id == 0 && $gValidLogin)
+if($getGbcId == 0 && $gValidLogin)
 {
     $guestbook_comment->setValue('gbc_name', $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'));
     $guestbook_comment->setValue('gbc_email', $gCurrentUser->getValue('EMAIL'));
@@ -128,15 +128,15 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 }
 
 // Html-Kopf ausgeben
-if($get_gbo_id > 0)
+if($getGboId > 0)
 {
-    $id   = $get_gbo_id;
+    $id   = $getGboId;
     $mode = '4';
     $gLayout['title'] = $gL10n->get('GBO_CREATE_COMMENT');
 }
 else
 {
-    $id   = $get_gbc_id;
+    $id   = $getGbcId;
     $mode = '8';
     $gLayout['title'] = $gL10n->get('GBO_EDIT_COMMENT');
 }
@@ -168,7 +168,7 @@ $gLayout['header'] = $javascript. '
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
-<form action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='.$get_headline.'&amp;mode='.$mode.'" method="post">
+<form action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='.$getHeadline.'&amp;mode='.$mode.'" method="post">
 <div class="formLayout" id="edit_guestbook_comment_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
@@ -266,12 +266,12 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($gDb, $gUserFields, $guestbook_comment->getValue('gbc_usr_id_create'));
+                $user_create = new User($gDb, $gProfileFields, $guestbook_comment->getValue('gbc_usr_id_create'));
                 echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $guestbook_comment->getValue('gbc_timestamp_create'));
 
                 if($guestbook_comment->getValue('gbc_usr_id_change') > 0)
                 {
-                    $user_change = new User($gDb, $gUserFields, $guestbook_comment->getValue('gbc_usr_id_change'));
+                    $user_change = new User($gDb, $gProfileFields, $guestbook_comment->getValue('gbc_usr_id_change'));
                     echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $guestbook_comment->getValue('gbc_timestamp_change'));
                 }
             echo '</div>';

@@ -89,10 +89,10 @@ $sql = 'SELECT COUNT(1) as count
 		  FROM '. TBL_USERS. '
           JOIN '. TBL_USER_DATA. ' as last_name
             ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
+           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
           JOIN '. TBL_USER_DATA. ' as first_name
             ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
+           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
          WHERE usr_valid = 1
                '.$member_condition.
                  $search_condition;
@@ -127,16 +127,16 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
              FROM '. TBL_USERS. '
              JOIN '. TBL_USER_DATA. ' as last_name
                ON last_name.usd_usr_id = usr_id
-              AND last_name.usd_usf_id = '. $gCurrentUser->getProperty('LAST_NAME', 'usf_id'). '
+              AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
              JOIN '. TBL_USER_DATA. ' as first_name
                ON first_name.usd_usr_id = usr_id
-              AND first_name.usd_usf_id = '. $gCurrentUser->getProperty('FIRST_NAME', 'usf_id'). '
+              AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
              LEFT JOIN '. TBL_USER_DATA. ' as email
                ON email.usd_usr_id = usr_id
-              AND email.usd_usf_id = '. $gCurrentUser->getProperty('EMAIL', 'usf_id'). '
+              AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
              LEFT JOIN '. TBL_USER_DATA. ' as website
                ON website.usd_usr_id = usr_id
-              AND website.usd_usf_id = '. $gCurrentUser->getProperty('WEBSITE', 'usf_id'). '
+              AND website.usd_usf_id = '. $gProfileFields->getProperty('WEBSITE', 'usf_id'). '
             WHERE usr_valid = 1
                   '.$member_condition.
                     $search_condition.'

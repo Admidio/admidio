@@ -51,7 +51,7 @@ if($get_mode == 1)
             if ($_POST['new_password'] == $_POST['new_password2'])
             {
                 // pruefen, ob altes Passwort korrekt eingegeben wurde              
-                $user = new User($gDb, $gUserFields, $get_usr_id);
+                $user = new User($gDb, $gProfileFields, $get_usr_id);
                 $old_password_crypt = md5($_POST['old_password']);
 
                 // Webmaster duerfen fremde Passwörter so aendern

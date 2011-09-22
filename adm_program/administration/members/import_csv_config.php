@@ -89,7 +89,7 @@ echo '
 
             // jedes Benutzerfeld aus der Datenbank auflisten
             
-            foreach($gCurrentUser->userFieldData as $field)
+            foreach($gProfileFields->mUserField as $field)
             {
                 if($category != $field->getValue('cat_id'))
                 {

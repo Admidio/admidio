@@ -74,7 +74,7 @@ class TableAnnouncement extends TableAccess
         parent::save($updateFingerPrint);
     }
     
-    public function setValue($field_name, $field_value)
+    public function setValue($field_name, $field_value, $check_value = true)
     {
         if($field_name == 'ann_description')
         {

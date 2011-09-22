@@ -53,7 +53,7 @@ if($getUserId > 0 && $getNewUser != 0 && $getNewUser != 3)
 }
 
 // User auslesen
-$user = new User($gDb, $gUserFields, $getUserId);
+$user = new User($gDb, $gProfileFields, $getUserId);
 
 // pruefen, ob Modul aufgerufen werden darf
 switch($getNewUser)
@@ -95,7 +95,7 @@ if(isset($_SESSION['profile_request']))
 {
     $user->noValueCheck();
 
-    foreach($user->userFieldData as $field)
+    foreach($gProfileFields->mUserField as $field)
     {
         $field_name = 'usf-'. $field->getValue('usf_id');
         if(isset($_SESSION['profile_request'][$field_name]))
@@ -114,27 +114,27 @@ if(isset($_SESSION['profile_request']))
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
 // dabei wird der Inhalt richtig formatiert
-function getFieldCode($field, $user, $getNewUser)
+function getFieldCode($fieldNameIntern, $user, $getNewUser)
 {
-    global $gPreferences, $g_root_path, $gCurrentUser, $gL10n;
+    global $gPreferences, $g_root_path, $gCurrentUser, $gL10n, $gProfileFields;
     $value    = '';
     
     // Felder sperren, falls dies so eingestellt wurde
     $disabled = '';
-    if($field->getValue('usf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
     {
 		$disabled = ' disabled="disabled" ';
     }
 
     // Code fuer die einzelnen Felder zusammensetzen    
-    if($field->getValue('usf_name_intern') == 'COUNTRY')
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'COUNTRY')
     {
         //Laenderliste oeffnen
         $value = '
-		<select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" '.$disabled.'>
+		<select size="1" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" '.$disabled.'>
 			<option value="" ';
                 if(strlen($gPreferences['default_country']) == 0
-                && strlen($field->getValue('usd_value')) == 0)
+                && strlen($user->getValue($fieldNameIntern)) == 0)
                 {
                     $value = $value. ' selected="selected" ';
                 }
@@ -152,7 +152,7 @@ function getFieldCode($field, $user, $getNewUser)
 				{
 					$value = $value. ' selected="selected" ';
 				}
-				if(!$getNewUser > 0 && $country_name == $field->getValue('usd_value'))
+				if(!$getNewUser > 0 && $country_name == $user->getValue($fieldNameIntern))
 				{
 					$value = $value. ' selected="selected" ';
 				}
@@ -160,28 +160,28 @@ function getFieldCode($field, $user, $getNewUser)
 			}
 		$value = $value. '</select>';
     }
-    elseif($field->getValue('usf_type') == 'CHECKBOX')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'CHECKBOX')
     {
         $mode = '';
-        if($field->getValue('usd_value') == 1)
+        if($user->getValue($fieldNameIntern) == 1)
         {
             $mode = ' checked="checked" ';
         }
-        $value = '<input type="checkbox" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" '.$mode.' '.$disabled.' value="1" />';
+        $value = '<input type="checkbox" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" '.$mode.' '.$disabled.' value="1" />';
     }
-    elseif($field->getValue('usf_type') == 'DROPDOWN')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'DROPDOWN')
     {
-		$arrListValues = $field->getValue('usf_value_list');
+		$arrListValues = $gProfileFields->getProperty($fieldNameIntern, 'usf_value_list');
 		$position = 1;
 		$text     = '';
 		
-		$value = '<select size="1" name="usf-'.$field->getValue('usf_id').'" id="usf-'.$field->getValue('usf_id').'" '.$disabled.'>
+		$value = '<select size="1" name="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'" '.$disabled.'>
 			<option value="" ';
-                if(strlen($field->getValue('usd_value')) == 0)
+                if(strlen($user->getValue($fieldNameIntern)) == 0)
                 {
                     $value .= ' selected="selected" ';
                 }
-                if($field->getValue('usf_mandatory') == 1)
+                if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 1)
                 {
                     $text  .= '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -';
                 }
@@ -191,7 +191,7 @@ function getFieldCode($field, $user, $getNewUser)
 			foreach($arrListValues as $key => $valueList)
 			{
 				$value .= '<option value="'.$position.'" '; 
-				if($field->getValue('usd_value') == $valueList) 
+				if($user->getValue($fieldNameIntern) == $valueList) 
 				{
 					$value .= ' selected="selected"';
 				}
@@ -200,50 +200,50 @@ function getFieldCode($field, $user, $getNewUser)
 			}
 		$value .= '</select>';
 	}
-    elseif($field->getValue('usf_type') == 'RADIO_BUTTON')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'RADIO_BUTTON')
     {
-		$arrListValues = $field->getValue('usf_value_list');
+		$arrListValues = $gProfileFields->getProperty($fieldNameIntern, 'usf_value_list');
 		$position = 1;
 		$value = '';
 
-        if($field->getValue('usf_mandatory') == 0)
+        if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 0)
         {
 	        $checkedPosition = 0;
-	        if(strlen($field->getValue('usd_value')) == 0)
+	        if(strlen($user->getValue($fieldNameIntern)) == 0)
 	        {
 	            $checkedPosition = ' checked="checked" ';
 	        }
-	        $value .= '<input type="radio" id="usf-'.$field->getValue('usf_id').'-0" name="usf-'. $field->getValue('usf_id'). '" value="" '.$checkedPosition.' '.$disabled.' />
-	            <label for="usf-'. $field->getValue('usf_id').'-0">---</label>&nbsp;&nbsp;';
+	        $value .= '<input type="radio" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-0" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" value="" '.$checkedPosition.' '.$disabled.' />
+	            <label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-0">---</label>&nbsp;&nbsp;';
         }
 
 		// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
 		foreach($arrListValues as $key => $valueList)
 		{
 	        $checkedPosition = 0;
-	        if($field->getValue('usd_value') == $valueList)
+	        if($user->getValue($fieldNameIntern) == $valueList)
 	        {
 	            $checkedPosition = ' checked="checked" ';
 	        }
 	        
-	        $value .= '<input type="radio" id="usf-'.$field->getValue('usf_id').'-'.$position.'" name="usf-'. $field->getValue('usf_id'). '" value="'.$position.'" '.$checkedPosition.' '.$disabled.' />
-	            <label for="usf-'. $field->getValue('usf_id').'-'.$position.'">'.$valueList.'</label>&nbsp;&nbsp;';
+	        $value .= '<input type="radio" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-'.$position.'" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" value="'.$position.'" '.$checkedPosition.' '.$disabled.' />
+	            <label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-'.$position.'">'.$valueList.'</label>&nbsp;&nbsp;';
 			$position++;
 		}
 		
     }
-    elseif($field->getValue('usf_type') == 'TEXT_BIG')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'TEXT_BIG')
     {
-        $value = '<textarea name="usf-'. $field->getValue('usf_id'). '" id="usf-'. $field->getValue('usf_id'). '" '.$disabled.' style="width: 300px;" rows="2" cols="40">'. $field->getValue('usd_value'). '</textarea>';
+        $value = '<textarea name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" '.$disabled.' style="width: 300px;" rows="2" cols="40">'. $user->getValue($fieldNameIntern). '</textarea>';
     }
     else
     {
-        if($field->getValue('usf_type') == 'DATE')
+        if($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'DATE')
         {
             $width = '80px';
             $maxlength = '10';
         }
-        elseif($field->getValue('usf_type') == 'EMAIL' || $field->getValue('usf_type') == 'URL')
+        elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'EMAIL' || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'URL')
         {
             $width     = '300px';
             $maxlength = '255';
@@ -253,9 +253,9 @@ function getFieldCode($field, $user, $getNewUser)
             $width = '200px';
             $maxlength = '50';
         }
-        if($field->getValue('usf_type') == 'DATE')
+        if($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'DATE')
         {
-            if($field->getValue('usf_name_intern') == 'BIRTHDAY')
+            if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
             {
                 $value = '<script type="text/javascript">
                             var calBirthday = new CalendarPopup("calendardiv");
@@ -278,69 +278,69 @@ function getFieldCode($field, $user, $getNewUser)
                 $calObject = 'calDate';
             }
             $value .= '
-                    <input type="text" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: '.$width.';" 
-                        maxlength="'.$maxlength.'" '.$disabled.' value="'. $field->getValue('usd_value',$gPreferences['system_date']). '" '.$disabled.' />
-                    <a class="iconLink" id="anchor_'. $field->getValue('usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $field->getValue('usf_id'). '\'),\'anchor_'. $field->getValue('usf_id'). '\',\''.$gPreferences['system_date'].'\');"><img 
+                    <input type="text" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" style="width: '.$width.';" 
+                        maxlength="'.$maxlength.'" '.$disabled.' value="'. $user->getValue($fieldNameIntern, $gPreferences['system_date']). '" '.$disabled.' />
+                    <a class="iconLink" id="anchor_'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '\'),\'anchor_'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '\',\''.$gPreferences['system_date'].'\');"><img 
                     	src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
                     <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
         }
         else
         {
-            $value = '<input type="text" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: '.$width.';" maxlength="'.$maxlength.'" '.$disabled.' value="'. $field->getValue('usd_value'). '" '.$disabled.' />';
+            $value = '<input type="text" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" style="width: '.$width.';" maxlength="'.$maxlength.'" '.$disabled.' value="'. $user->getValue($fieldNameIntern). '" '.$disabled.' />';
         }
     }
     
     // Icons der Messenger anzeigen
     $icon = '';
-    if($field->getValue('usf_name_intern') == 'AOL_INSTANT_MESSENGER')
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'AOL_INSTANT_MESSENGER')
     {
         $icon = 'aim.png';
     }
-    elseif($field->getValue('usf_name_intern') == 'GOOGLE_TALK')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'GOOGLE_TALK')
     {
         $icon = 'google.gif';
     }
-    elseif($field->getValue('usf_name_intern') == 'ICQ')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'ICQ')
     {
         $icon = 'icq.png';
     }
-    elseif($field->getValue('usf_name_intern') == 'MSN_MESSENGER')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'MSN_MESSENGER')
     {
         $icon = 'msn.png';
     }
-    elseif($field->getValue('usf_name_intern') == 'SKYPE')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'SKYPE')
     {
         $icon = 'skype.png';
     }
-    elseif($field->getValue('usf_name_intern') == 'YAHOO_MESSENGER')
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'YAHOO_MESSENGER')
     {
         $icon = 'yahoo.png';
     }
     if(strlen($icon) > 0)
     {
-        $icon = '<img src="'. THEME_PATH. '/icons/'. $icon. '" style="vertical-align: middle;" alt="'. $field->getValue('usf_name'). '" />&nbsp;';
+        $icon = '<img src="'. THEME_PATH. '/icons/'. $icon. '" style="vertical-align: middle;" alt="'. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). '" />&nbsp;';
     }
         
     // Kennzeichen fuer Pflichtfeld setzen
     $mandatory = '';
-    if($field->getValue('usf_mandatory') == 1)
+    if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 1)
     {
         $mandatory = '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
     }
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
     $description = '';
-    if(strlen($field->getValue('usf_description')) > 0 && $field->getValue('cat_name_intern') != 'MESSENGER')
+    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_description')) > 0 && $gProfileFields->getProperty($fieldNameIntern, 'cat_name_intern') != 'MESSENGER')
     {
-        $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '&amp;inline=true"><img 
-            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '\',this)" onmouseout="ajax_hideTooltip()"
+        $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'). '&amp;inline=true"><img 
+            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'). '\',this)" onmouseout="ajax_hideTooltip()"
             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>';
     }
     
     // nun den Html-Code fuer das Feld zusammensetzen
     $html = '<li>
                 <dl>
-                    <dt><label for="usf-'. $field->getValue("usf_id"). '">'. $icon. $field->getValue("usf_name"). ':</label></dt>
+                    <dt><label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '">'. $icon. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). ':</label></dt>
                     <dd>'. $value. $mandatory. $description. '</dd>
                 </dl>
             </li>';
@@ -386,7 +386,7 @@ if($getNewUser == 1 || $getNewUser == 2)
 {
     if($getNewUser == 1)
     {
-    	$first_field = reset($gCurrentUser->userFieldData);
+    	$first_field = reset($gProfileFields->mUserField);
         $focusField = 'usf-'.$first_field->getValue('usf_id');
     }
     else
@@ -410,7 +410,7 @@ echo '
 
         $category = '';
         
-        foreach($user->userFieldData as $field)
+        foreach($gProfileFields->mProfileFields as $field)
         {
             $show_field = false;
             
@@ -532,7 +532,7 @@ echo '
             if($show_field == true)
             {
                 // Html des Feldes ausgeben
-                echo getFieldCode($field, $user, $getNewUser);
+                echo getFieldCode($field->getValue('usf_name_intern'), $user, $getNewUser);
             }
         }
         
@@ -600,12 +600,12 @@ echo '
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($gDb, $gUserFields, $user->getValue('usr_usr_id_create'));
+                $user_create = new User($gDb, $gProfileFields, $user->getValue('usr_usr_id_create'));
                 echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user->getValue('usr_timestamp_create'));
 
                 if($user->getValue('usr_usr_id_change') > 0)
                 {
-                    $user_change = new User($gDb, $gUserFields, $user->getValue('usr_usr_id_change'));
+                    $user_change = new User($gDb, $gProfileFields, $user->getValue('usr_usr_id_change'));
                     echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user->getValue('usr_timestamp_change'));
                 }
             echo '</div>';
