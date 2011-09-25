@@ -20,13 +20,13 @@ $sql = 'SELECT usr_id as webmaster_id, usr_timestamp_create as timestamp
                             FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                            WHERE cat_org_id = '. $row_orga['org_id']. '
                              AND rol_cat_id = cat_id
-                             AND rol_name   = "Webmaster"
+                             AND rol_name   = \'Webmaster\'
                              AND mem_rol_id = rol_id )';
 $result = $gDb->query($sql);
 $row_webmaster = $gDb->fetch_array($result);
 
 // Rollenpflichtfelder fuellen, falls dies noch nicht passiert ist
-$sql = 'UPDATE '. TBL_ROLES. ' SET rol_timestamp_create = "'. $row_webmaster['timestamp'].'"
+$sql = 'UPDATE '. TBL_ROLES. ' SET rol_timestamp_create = \''. $row_webmaster['timestamp'].'\'
                                  , rol_usr_id_create    = '. $row_webmaster['webmaster_id'].'
      WHERE rol_usr_id_create IS NULL ';
 $gDb->query($sql);

@@ -53,7 +53,7 @@ else
     $form_values['forum_pw'] = '0000';
 }
 
-$showOptionGenJS = "";
+$showOptionGenJs = '';
 $showOption = admFuncVariableIsValid($_GET, 'showOption', 'string');
 
 if( strlen($showOption) > 0 )

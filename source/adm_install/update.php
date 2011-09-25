@@ -109,7 +109,7 @@ if($req_mode == 1)
     elseif(version_compare($gPreferences['db_version'], ADMIDIO_VERSION) != 0 || $gPreferences['db_version_beta'] != BETA_VERSION)
     {
         $message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
-                    <strong>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED').'</strong>';
+                    <strong>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $gPreferences['db_version'], ADMIDIO_VERSION).'</strong>';
     }
     else
     {
