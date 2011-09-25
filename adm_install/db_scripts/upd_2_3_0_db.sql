@@ -39,13 +39,13 @@ ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_global` `ann_global` char(
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_usr_id_create` `ann_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_timestamp_create` `ann_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_usr_id_change` `ann_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_timestamp_change` `ann_timestamp_change` timestamp;
+ALTER TABLE %PREFIX%_announcements CHANGE COLUMN `ann_timestamp_change` `ann_timestamp_change` timestamp null;
 
 ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_id` `cat_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_usr_id_create` `cat_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_timestamp_create` `cat_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_usr_id_change` `cat_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_timestamp_change` `cat_timestamp_change` timestamp;
+ALTER TABLE %PREFIX%_categories CHANGE COLUMN `cat_timestamp_change` `cat_timestamp_change` timestamp null;
 
 ALTER TABLE %PREFIX%_date_role CHANGE COLUMN  `dtr_id` `dtr_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_date_role CHANGE COLUMN `dtr_dat_id` `dtr_dat_id` integer unsigned not null;
@@ -58,7 +58,7 @@ ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_end` `dat_end` timestamp not null;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_usr_id_create` `dat_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_timestamp_create` `dat_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_usr_id_change` `dat_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_timestamp_change` `dat_timestamp_change` timestamp;
+ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_timestamp_change` `dat_timestamp_change` timestamp null;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_rol_id` `dat_rol_id` integer unsigned;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_room_id` `dat_room_id` integer unsigned;
 ALTER TABLE %PREFIX%_dates CHANGE COLUMN `dat_max_members` `dat_max_members` integer not null default 0;
@@ -76,25 +76,27 @@ ALTER TABLE %PREFIX%_folders CHANGE COLUMN `fol_fol_id_parent` `fol_fol_id_paren
 ALTER TABLE %PREFIX%_folders CHANGE COLUMN `fol_usr_id` `fol_usr_id` integer unsigned;
 ALTER TABLE %PREFIX%_folders CHANGE COLUMN `fol_timestamp` `fol_timestamp` timestamp not null;
 
+ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_timestamp_change` `gbo_timestamp_change` timestamp null;
+ALTER TABLE %PREFIX%_guestbook ALTER COLUMN `gbo_timestamp_change` drop default;
 ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_id` `gbo_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_usr_id_create` `gbo_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_timestamp_create` `gbo_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_usr_id_change` `gbo_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_guestbook CHANGE COLUMN `gbo_timestamp_change` `gbo_timestamp_change` timestamp;
 
+ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_timestamp_change` `gbc_timestamp_change` timestamp null;
+ALTER TABLE %PREFIX%_guestbook_comments ALTER COLUMN `gbc_timestamp_change` drop default;
 ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_id` `gbc_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_gbo_id` `gbc_gbo_id` integer unsigned not null;
 ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_usr_id_create` `gbc_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_timestamp_create` `gbc_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_usr_id_change` `gbc_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_guestbook_comments CHANGE COLUMN `gbc_timestamp_change` `gbc_timestamp_change` timestamp;
 
 ALTER TABLE %PREFIX%_links CHANGE COLUMN `lnk_id` `lnk_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_links CHANGE COLUMN `lnk_cat_id` `lnk_cat_id` integer unsigned not null;
 ALTER TABLE %PREFIX%_links CHANGE COLUMN `lnk_usr_id_create` `lnk_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_links CHANGE COLUMN `lnk_timestamp_create` `lnk_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_links CHANGE COLUMN `lnk_usr_id_change` `lnk_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_links CHANGE COLUMN `lnk_timestamp_change` `lnk_timestamp_change` timestamp;
+ALTER TABLE %PREFIX%_links CHANGE COLUMN `lnk_timestamp_change` `lnk_timestamp_change` timestamp null;
 
 ALTER TABLE %PREFIX%_lists CHANGE COLUMN `lst_id` `lst_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_lists CHANGE COLUMN `lst_usr_id` `lst_usr_id` integer unsigned not null;
@@ -114,7 +116,7 @@ ALTER TABLE %PREFIX%_photos CHANGE COLUMN `pho_pho_id_parent` `pho_pho_id_parent
 ALTER TABLE %PREFIX%_photos CHANGE COLUMN `pho_usr_id_create` `pho_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_photos CHANGE COLUMN `pho_timestamp_create` `pho_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_photos CHANGE COLUMN `pho_usr_id_change` `pho_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_photos CHANGE COLUMN `pho_timestamp_change` `pho_timestamp_change` timestamp;
+ALTER TABLE %PREFIX%_photos CHANGE COLUMN `pho_timestamp_change` `pho_timestamp_change` timestamp null;
 
 ALTER TABLE %PREFIX%_preferences CHANGE COLUMN `prf_id` `prf_id` integer unsigned not null AUTO_INCREMENT;
 
@@ -133,7 +135,7 @@ ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_cost_period` `rol_cost_period` sma
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_usr_id_create` `rol_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_timestamp_create` `rol_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_usr_id_change` `rol_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_timestamp_change` `rol_timestamp_change` timestamp;
+ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_timestamp_change` `rol_timestamp_change` timestamp null;
 
 ALTER TABLE %PREFIX%_rooms CHANGE COLUMN `room_id` `room_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_rooms CHANGE COLUMN `room_capacity` `room_capacity` integer unsigned not null default 0;
@@ -158,7 +160,7 @@ ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_usr_id_create` `usf_usr_id_c
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_type` `usf_type` varchar(30);
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_timestamp_create` `usf_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_usr_id_change` `usf_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_timestamp_change` `usf_timestamp_change` timestamp;
+ALTER TABLE %PREFIX%_user_fields CHANGE COLUMN `usf_timestamp_change` `usf_timestamp_change` timestamp null;
 
 ALTER TABLE %PREFIX%_user_data CHANGE COLUMN `usd_id` `usd_id` integer unsigned not null AUTO_INCREMENT;
 ALTER TABLE %PREFIX%_user_data CHANGE COLUMN `usd_usr_id` `usd_usr_id` integer unsigned not null;
@@ -173,7 +175,7 @@ ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_number_invalid` `usr_number_invali
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_usr_id_create` `usr_usr_id_create` integer unsigned;
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_timestamp_create` `usr_timestamp_create` timestamp not null;
 ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_usr_id_change` `usr_usr_id_change` integer unsigned;
-ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_timestamp_change` `usr_timestamp_change` timestamp;
+ALTER TABLE %PREFIX%_users CHANGE COLUMN `usr_timestamp_change` `usr_timestamp_change` timestamp null;
 
 -- Org_Id wird nun auch ein Index vom Typ INTEGER
 ALTER TABLE %PREFIX%_categories DROP FOREIGN KEY %PREFIX%_FK_CAT_ORG;

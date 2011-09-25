@@ -15,9 +15,6 @@
  * clearUserFieldArray($delete_db_data = false)
  *                      - der Inhalt der Profilfelder wird geloescht, 
  *                        die Objekte mit DB-Struktur aber nicht !
- * getProperty($field_name, $property)
- *                      - gibt den Inhalt einer Eigenschaft eines Feldes zurueck.
- *                        Dies kann die usf_id, usf_type, cat_id, cat_name usw. sein
  * getListViewRights()  - Liefert ein Array mit allen Rollen und der 
  *                        Berechtigung, ob der User die Liste einsehen darf
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
@@ -205,24 +202,6 @@ class User extends TableUsers
     {
         $this->checkRolesRight();
         return $this->list_view_rights;
-    }
-
-    // Methode gibt den Wert eines Profilfeldes zurueck
-    // Property ist dabei ein Feldname aus der Tabelle adm_user_fields oder adm_user_data
-    // hier koennen auch noch bestimmte Formatierungen angewandt werden
-    public function getProperty($field_name, $property, $format = '')
-    {
-        if(isset($this->mProfileFieldsData->mProfileFields[$field_name]))
-        {
-            return $this->mProfileFieldsData->mProfileFields[$field_name]->getValue($property, $format);
-        }
-		
-		// if id-field not exists then return zero
-		if(strpos($property, '_id') > 0)
-		{
-			return 0;
-		}
-        return '';
     }
 
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle

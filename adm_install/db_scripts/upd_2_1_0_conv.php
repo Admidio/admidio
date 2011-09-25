@@ -8,10 +8,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
-
 $systemmails_texts = array(
 
     'SYSMAIL_REGISTRATION_USER' => '#Betreff# Anmeldung bei %organization_long_name%
@@ -82,50 +78,50 @@ $result_orga = $gDb->query($sql);
 
 while($row_orga = $gDb->fetch_array($result_orga))
 {
-    $sql = "INSERT INTO ". TBL_TEXTS. " (txt_org_id, txt_name, txt_text)
-                 VALUES (".$row_orga['org_id'].", 'SYSMAIL_REGISTRATION_USER', '".$systemmails_texts['SYSMAIL_REGISTRATION_USER']."')
-                      , (".$row_orga['org_id'].", 'SYSMAIL_REGISTRATION_WEBMASTER', '".$systemmails_texts['SYSMAIL_REGISTRATION_WEBMASTER']."')
-                      , (".$row_orga['org_id'].", 'SYSMAIL_NEW_PASSWORD', '".$systemmails_texts['SYSMAIL_NEW_PASSWORD']."')
-                      , (".$row_orga['org_id'].", 'SYSMAIL_ACTIVATION_LINK', '".$systemmails_texts['SYSMAIL_ACTIVATION_LINK']."') ";
+    $sql = 'INSERT INTO '. TBL_TEXTS. ' (txt_org_id, txt_name, txt_text)
+                 VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REGISTRATION_USER\', \''.$systemmails_texts['SYSMAIL_REGISTRATION_USER'].'\')
+                      , ('.$row_orga['org_id'].', \'SYSMAIL_REGISTRATION_WEBMASTER\', \''.$systemmails_texts['SYSMAIL_REGISTRATION_WEBMASTER'].'\')
+                      , ('.$row_orga['org_id'].', \'SYSMAIL_NEW_PASSWORD\', \''.$systemmails_texts['SYSMAIL_NEW_PASSWORD'].'\')
+                      , ('.$row_orga['org_id'].', \'SYSMAIL_ACTIVATION_LINK\', \''.$systemmails_texts['SYSMAIL_ACTIVATION_LINK'].'\') ';
     $gDb->query($sql);
 
     // Default-Kategorie fuer Datum eintragen
-    $sql = "INSERT INTO ". TBL_CATEGORIES. " (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
-                                      VALUES (". $row_orga['org_id']. ", 'DAT', 'Allgemein', 0, 1)
-                                           , (". $row_orga['org_id']. ", 'DAT', 'Kurse', 0, 1)
-                                           , (". $row_orga['org_id']. ", 'DAT', 'Training', 0, 1)";
+    $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name, cat_hidden, cat_sequence)
+                                      VALUES ('. $row_orga['org_id']. ', \'DAT\', \'Allgemein\', 0, 1)
+                                           , ('. $row_orga['org_id']. ', \'DAT\', \'Kurse\', 0, 1)
+                                           , ('. $row_orga['org_id']. ', \'DAT\', \'Training\', 0, 1)';
     $gDb->query($sql);
     $category_common = $gDb->insert_id();
 
     // Alle Termine der neuen Kategorie zuordnen
-    $sql = "UPDATE ". TBL_DATES. " SET dat_cat_id = ". $category_common. "
+    $sql = 'UPDATE '. TBL_DATES. ' SET dat_cat_id = '. $category_common. '
              WHERE dat_cat_id is null
-               AND dat_org_shortname LIKE '". $row_orga['org_shortname']. "'";
+               AND dat_org_shortname LIKE \''. $row_orga['org_shortname']. '\'';
     $gDb->query($sql);
 
     // bei allen Alben ohne Ersteller, die Erstellungs-ID mit Webmaster befuellen,
     // damit das Feld auf NOT NULL gesetzt werden kann
-    $sql = "SELECT min(mem_usr_id) as webmaster_id
-              FROM ". TBL_MEMBERS. ", ". TBL_ROLES. ", ". TBL_CATEGORIES. "
-             WHERE cat_org_id = ". $row_orga['org_id']. "
+    $sql = 'SELECT min(mem_usr_id) as webmaster_id
+              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE cat_org_id = '. $row_orga['org_id']. '
                AND rol_cat_id = cat_id
-               AND rol_name   = 'Webmaster'
-               AND mem_rol_id = rol_id ";
+               AND rol_name   = \'Webmaster\'
+               AND mem_rol_id = rol_id ';
     $result = $gDb->query($sql);
     $row_webmaster = $gDb->fetch_array($result);
 
-    $sql = "UPDATE ". TBL_PHOTOS. " SET pho_usr_id_create = ". $row_webmaster['webmaster_id']. "
+    $sql = 'UPDATE '. TBL_PHOTOS. ' SET pho_usr_id_create = '. $row_webmaster['webmaster_id']. '
              WHERE pho_usr_id_create IS NULL
-               AND pho_org_shortname = '". $row_orga['org_shortname']."'";
+               AND pho_org_shortname = \''. $row_orga['org_shortname'].'\'';
     $gDb->query($sql);
 
-    $sql = "UPDATE ". TBL_USERS. " SET usr_usr_id_create = ". $row_webmaster['webmaster_id']. "
-             WHERE usr_usr_id_create IS NULL ";
+    $sql = 'UPDATE '. TBL_USERS. ' SET usr_usr_id_create = '. $row_webmaster['webmaster_id']. '
+             WHERE usr_usr_id_create IS NULL ';
     $gDb->query($sql);
 
-    $sql = "SELECT * FROM ". TBL_CATEGORIES. "
-             WHERE cat_org_id = ".$row_orga['org_id']. "
-               AND cat_type   = 'ROL'";
+    $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
+             WHERE cat_org_id = '.$row_orga['org_id']. '
+               AND cat_type   = \'ROL\'';
     $result = $gDb->query($sql);
 
     $all_cat_ids = array();
@@ -136,107 +132,153 @@ while($row_orga = $gDb->fetch_array($result_orga))
     $all_cat_str = implode(",", $all_cat_ids);
 
     // neue Rollenfelder fuellen
-    $sql = "UPDATE ". TBL_ROLES. " SET rol_timestamp_create = rol_timestamp_change
-                                     , rol_usr_id_create    = ". $row_webmaster['webmaster_id']. "
+    $sql = 'UPDATE '. TBL_ROLES. ' SET rol_timestamp_create = rol_timestamp_change
+                                     , rol_usr_id_create    = '. $row_webmaster['webmaster_id']. '
          WHERE rol_timestamp_change IS NOT NULL
            AND rol_usr_id_change IS NOT NULL
-           AND rol_cat_id IN (".$all_cat_str.")";
+           AND rol_cat_id IN ('.$all_cat_str.')';
     $gDb->query($sql);
 
-    $sql = "UPDATE ". TBL_ROLES. " SET rol_timestamp_create = '".DATETIME_NOW."'
-                                     , rol_usr_id_create    = ". $row_webmaster['webmaster_id']. "
+    $sql = 'UPDATE '. TBL_ROLES. ' SET rol_timestamp_create = \''.DATETIME_NOW.'\'
+                                     , rol_usr_id_create    = '. $row_webmaster['webmaster_id']. '
          WHERE rol_timestamp_create IS NULL
-           AND rol_cat_id IN (".$all_cat_str.")";
+           AND rol_cat_id IN ('.$all_cat_str.')';
     $gDb->query($sql);
 
-	// create object with current user field structure
-	$gProfileFields = new ProfileFields($db, $gCurrentOrganization);
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Nachname\' ';
+    $result = $gDb->query($sql);
+    $rowNachname = $gDb->fetch_array($result);
 
-    $gCurrentUser = new User($gDb, $gProfileFields, $row_webmaster['webmaster_id']);
-    $gCurrentOrganization->readData($row_orga['org_id']);
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Vorname\' ';
+    $result = $gDb->query($sql);
+    $rowVorname = $gDb->fetch_array($result);
 
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Geburtstag\' ';
+    $result = $gDb->query($sql);
+    $rowGeburtstag = $gDb->fetch_array($result);
+
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Adresse\' ';
+    $result = $gDb->query($sql);
+    $rowAdresse = $gDb->fetch_array($result);
+
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'PLZ\' ';
+    $result = $gDb->query($sql);
+    $rowPLZ = $gDb->fetch_array($result);
+
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Ort\' ';
+    $result = $gDb->query($sql);
+    $rowOrt = $gDb->fetch_array($result);
+
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Telefon\' ';
+    $result = $gDb->query($sql);
+    $rowTelefon = $gDb->fetch_array($result);
+
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Handy\' ';
+    $result = $gDb->query($sql);
+    $rowHandy = $gDb->fetch_array($result);
+
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'E-Mail\' ';
+    $result = $gDb->query($sql);
+    $rowEMail = $gDb->fetch_array($result);
+
+    $sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name = \'Fax\' ';
+    $result = $gDb->query($sql);
+    $rowFax = $gDb->fetch_array($result);
+    
     // Default-Listen-Konfigurationen anlegen
-    $address_list = new ListConfiguration($gDb);
-    $address_list->setValue('lst_name', 'Adressliste');
-    $address_list->setValue('lst_global', 1);
-    $address_list->setValue('lst_default', 1);
-    $address_list->addColumn(1, $gCurrentUser->getProperty('Nachname', 'usf_id'), 'ASC');
-    $address_list->addColumn(2, $gCurrentUser->getProperty('Vorname', 'usf_id'), 'ASC');
-    $address_list->addColumn(3, $gCurrentUser->getProperty('Geburtstag', 'usf_id'));
-    $address_list->addColumn(4, $gCurrentUser->getProperty('Adresse', 'usf_id'));
-    $address_list->addColumn(5, $gCurrentUser->getProperty('PLZ', 'usf_id'));
-    $address_list->addColumn(6, $gCurrentUser->getProperty('Ort', 'usf_id'));
-    $address_list->save();
+    
+    $sql = 'INSERT INTO '. TBL_LISTS. ' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
+                 VALUES ('.$row_orga['org_id'].', '.$row_webmaster['webmaster_id'].', \'Adressliste\', \''.DATETIME_NOW.'\', 1, 1)';
+    $gDb->query($sql);
+    $AdresslisteId = $gDb->insert_id();
 
-    $phone_list = new ListConfiguration($gDb);
-    $phone_list->setValue('lst_name', 'Telefonliste');
-    $phone_list->setValue('lst_global', 1);
-    $phone_list->addColumn(1, $gCurrentUser->getProperty('Nachname', 'usf_id'), 'ASC');
-    $phone_list->addColumn(2, $gCurrentUser->getProperty('Vorname', 'usf_id'), 'ASC');
-    $phone_list->addColumn(3, $gCurrentUser->getProperty('Telefon', 'usf_id'));
-    $phone_list->addColumn(4, $gCurrentUser->getProperty('Handy', 'usf_id'));
-    $phone_list->addColumn(5, $gCurrentUser->getProperty('E-Mail', 'usf_id'));
-    $phone_list->addColumn(6, $gCurrentUser->getProperty('Fax', 'usf_id'));
-    $phone_list->save();
+    $sql = 'INSERT INTO '. TBL_LIST_COLUMNS. ' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort)
+                 VALUES ('.$AdresslisteId.', 1, '.$rowNachname[0].', null, \'ASC\')
+                      , ('.$AdresslisteId.', 2, '.$rowVorname[0].', null, \'ASC\')
+                      , ('.$AdresslisteId.', 3, '.$rowGeburtstag[0].', null, null)
+                      , ('.$AdresslisteId.', 4, '.$rowAdresse[0].', null, null)
+                      , ('.$AdresslisteId.', 5, '.$rowPLZ[0].', null, null)
+                      , ('.$AdresslisteId.', 6, '.$rowOrt[0].', null, null)';
+    $gDb->query($sql);
+    
+    $sql = 'INSERT INTO '. TBL_LISTS. ' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
+                 VALUES ('.$row_orga['org_id'].', '.$row_webmaster['webmaster_id'].', \'Telefonliste\', \''.DATETIME_NOW.'\', 1, 0)';
+    $gDb->query($sql);
+    $AdresslisteId = $gDb->insert_id();
 
-    $contact_list = new ListConfiguration($gDb);
-    $contact_list->setValue('lst_name', 'Kontaktdaten');
-    $contact_list->setValue('lst_global', 1);
-    $contact_list->addColumn(1, $gCurrentUser->getProperty('Nachname', 'usf_id'), 'ASC');
-    $contact_list->addColumn(2, $gCurrentUser->getProperty('Vorname', 'usf_id'), 'ASC');
-    $contact_list->addColumn(3, $gCurrentUser->getProperty('Geburtstag', 'usf_id'));
-    $contact_list->addColumn(4, $gCurrentUser->getProperty('Adresse', 'usf_id'));
-    $contact_list->addColumn(5, $gCurrentUser->getProperty('PLZ', 'usf_id'));
-    $contact_list->addColumn(6, $gCurrentUser->getProperty('Ort', 'usf_id'));
-    $contact_list->addColumn(7, $gCurrentUser->getProperty('Telefon', 'usf_id'));
-    $contact_list->addColumn(8, $gCurrentUser->getProperty('Handy', 'usf_id'));
-    $contact_list->addColumn(9, $gCurrentUser->getProperty('E-Mail', 'usf_id'));
-    $contact_list->save();
+    $sql = 'INSERT INTO '. TBL_LIST_COLUMNS. ' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort)
+                 VALUES ('.$AdresslisteId.', 1, '.$rowNachname[0].', null, \'ASC\')
+                      , ('.$AdresslisteId.', 2, '.$rowVorname[0].', null, \'ASC\')
+                      , ('.$AdresslisteId.', 3, '.$rowTelefon[0].', null, null)
+                      , ('.$AdresslisteId.', 4, '.$rowHandy[0].', null, null)
+                      , ('.$AdresslisteId.', 5, '.$rowEMail[0].', null, null)
+                      , ('.$AdresslisteId.', 6, '.$rowFax[0].', null, null)';
+    $gDb->query($sql);
+    
+    $sql = 'INSERT INTO '. TBL_LISTS. ' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
+                 VALUES ('.$row_orga['org_id'].', '.$row_webmaster['webmaster_id'].', \'Kontaktdaten\', \''.DATETIME_NOW.'\', 1, 0)';
+    $gDb->query($sql);
+    $AdresslisteId = $gDb->insert_id();
 
-    $former_list = new ListConfiguration($gDb);
-    $former_list->setValue('lst_name', 'Mitgliedschaft');
-    $former_list->setValue('lst_global', 1);
-    $former_list->addColumn(1, $gCurrentUser->getProperty('Nachname', 'usf_id'));
-    $former_list->addColumn(2, $gCurrentUser->getProperty('Vorname', 'usf_id'));
-    $former_list->addColumn(3, $gCurrentUser->getProperty('Geburtstag', 'usf_id'));
-    $former_list->addColumn(4, 'mem_begin');
-    $former_list->addColumn(5, 'mem_end', 'DESC');
-    $former_list->save();
+    $sql = 'INSERT INTO '. TBL_LIST_COLUMNS. ' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort)
+                 VALUES ('.$AdresslisteId.', 1, '.$rowNachname[0].', null, \'ASC\')
+                      , ('.$AdresslisteId.', 2, '.$rowVorname[0].', null, \'ASC\')
+                      , ('.$AdresslisteId.', 3, '.$rowGeburtstag[0].', null, null)
+                      , ('.$AdresslisteId.', 4, '.$rowAdresse[0].', null, null)
+                      , ('.$AdresslisteId.', 5, '.$rowPLZ[0].', null, null)
+                      , ('.$AdresslisteId.', 6, '.$rowOrt[0].', null, null)
+                      , ('.$AdresslisteId.', 7, '.$rowTelefon[0].', null, null)
+                      , ('.$AdresslisteId.', 8, '.$rowHandy[0].', null, null)
+                      , ('.$AdresslisteId.', 9, '.$rowEMail[0].', null, null)';
+    $gDb->query($sql);
+    
+    $sql = 'INSERT INTO '. TBL_LISTS. ' (lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default)
+                 VALUES ('.$row_orga['org_id'].', '.$row_webmaster['webmaster_id'].', \'Mitgliedschaft\', \''.DATETIME_NOW.'\', 1, 0)';
+    $gDb->query($sql);
+    $AdresslisteId = $gDb->insert_id();
+
+    $sql = 'INSERT INTO '. TBL_LIST_COLUMNS. ' (lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort)
+                 VALUES ('.$AdresslisteId.', 1, '.$rowNachname[0].', null, \'ASC\')
+                      , ('.$AdresslisteId.', 2, '.$rowVorname[0].', null, \'ASC\')
+                      , ('.$AdresslisteId.', 3, '.$rowGeburtstag[0].', null, null)
+                      , ('.$AdresslisteId.', 4, null, \'mem_begin\', null)
+                      , ('.$AdresslisteId.', 5, null, \'mem_end\', null)';
+    $gDb->query($sql);
 
     // Beta-Flag für Datenbank-Versionsnummer schreiben
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
-            VALUES ('.$row_orga['org_id'].', "db_version_beta", "1") ';
+            VALUES ('.$row_orga['org_id'].', \'db_version_beta\', \'1\') ';
     $gDb->query($sql);
 }
 
-$sql = "UPDATE ". TBL_PHOTOS. " SET pho_timestamp_create = '".DATETIME_NOW."'
-         WHERE pho_timestamp_create IS NULL ";
+$sql = 'UPDATE '. TBL_PHOTOS. ' SET pho_timestamp_create = \''.DATETIME_NOW.'\'
+         WHERE pho_timestamp_create IS NULL ';
 $gDb->query($sql);
 
 // neue Userfelder fuellen
-$sql = "UPDATE ". TBL_USERS. " SET usr_timestamp_create = usr_timestamp_change
-         WHERE usr_timestamp_change IS NOT NULL ";
+$sql = 'UPDATE '. TBL_USERS. ' SET usr_timestamp_create = usr_timestamp_change
+         WHERE usr_timestamp_change IS NOT NULL ';
 $gDb->query($sql);
 
-$sql = "UPDATE ". TBL_USERS. " SET usr_timestamp_create = '".DATETIME_NOW."'
-         WHERE usr_timestamp_create IS NULL ";
+$sql = 'UPDATE '. TBL_USERS. ' SET usr_timestamp_create = \''.DATETIME_NOW.'\'
+         WHERE usr_timestamp_create IS NULL ';
 $gDb->query($sql);
 
 
 // Datenstruktur nach Update anpassen
-$sql = "ALTER TABLE ". TBL_USERS. " MODIFY COLUMN usr_timestamp_create datetime NOT NULL ";
+$sql = 'ALTER TABLE '. TBL_USERS. ' MODIFY COLUMN usr_timestamp_create datetime NOT NULL ';
 $gDb->query($sql);
 
-$sql = "ALTER TABLE ". TBL_ROLES. " MODIFY COLUMN rol_timestamp_create datetime NOT NULL ";
+$sql = 'ALTER TABLE '. TBL_ROLES. ' MODIFY COLUMN rol_timestamp_create datetime NOT NULL ';
 $gDb->query($sql);
 
-$sql = "ALTER TABLE ". TBL_PHOTOS. " MODIFY COLUMN pho_timestamp_create datetime NOT NULL ";
+$sql = 'ALTER TABLE '. TBL_PHOTOS. ' MODIFY COLUMN pho_timestamp_create datetime NOT NULL ';
 $gDb->query($sql);
 
-$sql = "ALTER TABLE ". TBL_DATES. " MODIFY COLUMN dat_cat_id int(11) unsigned NOT NULL ";
+$sql = 'ALTER TABLE '. TBL_DATES. ' MODIFY COLUMN dat_cat_id int(11) unsigned NOT NULL ';
 $gDb->query($sql);
 
-$sql = "ALTER TABLE ". TBL_DATES. " DROP COLUMN dat_org_shortname ";
+$sql = 'ALTER TABLE '. TBL_DATES. ' DROP COLUMN dat_org_shortname ';
 $gDb->query($sql);
 
 //Neu Mailrechte installieren
@@ -244,25 +286,25 @@ $gDb->query($sql);
 	//passiert schon in upd_2_1_0_db.sql
 
 //2.Webmaster mit globalem Mailsenderecht ausstatten
-$sql = "UPDATE ". TBL_ROLES. " SET rol_mail_to_all = '1'
-        WHERE rol_name = 'Webmaster'";
+$sql = 'UPDATE '. TBL_ROLES. ' SET rol_mail_to_all = \'1\'
+        WHERE rol_name = \'Webmaster\'';
 $gDb->query($sql);
 
 //3. alte Mailrechte Übertragen
 //3.1 eingeloggte konnten bisher eine Mail an diese Rolle schreiben
-$sql = "UPDATE ". TBL_ROLES. " SET rol_mail_this_role = '2'
-        WHERE rol_mail_login = 1";
+$sql = 'UPDATE '. TBL_ROLES. ' SET rol_mail_this_role = \'2\'
+        WHERE rol_mail_login = 1';
 $gDb->query($sql);
 
 //3.2 ausgeloggte konnten bisher eine Mail an diese Rolle schreiben
-$sql = "UPDATE ". TBL_ROLES. " SET rol_mail_this_role = '3'
-        WHERE rol_mail_logout = 1";
+$sql = 'UPDATE '. TBL_ROLES. ' SET rol_mail_this_role = \'3\'
+        WHERE rol_mail_logout = 1';
 $gDb->query($sql);
 
 //4. Überflüssige Spalten löschen
-$sql = "ALTER TABLE ". TBL_ROLES. "
+$sql = 'ALTER TABLE '. TBL_ROLES. '
 		DROP rol_mail_login,
-		DROP rol_mail_logout";
+		DROP rol_mail_logout';
 $gDb->query($sql);
 
 
@@ -271,40 +313,40 @@ $gDb->query($sql);
 	//passiert schon in upd_2_1_0_db.sql
 
 //2.Webmaster mit Inventarverwaltungsrecht ausstatten
-$sql = "UPDATE ". TBL_ROLES. " SET rol_inventory = '1'
-        WHERE rol_name = 'Webmaster'";
+$sql = 'UPDATE '. TBL_ROLES. ' SET rol_inventory = \'1\'
+        WHERE rol_name = \'Webmaster\'';
 $gDb->query($sql);
 
 
 
 //Fototext updaten
-$sql = "SELECT * FROM ". TBL_ORGANIZATIONS;
+$sql = 'SELECT * FROM '. TBL_ORGANIZATIONS;
 $result_orga = $gDb->query($sql);
 while($row_orga = $gDb->fetch_array($result_orga))
 {
 	//erstmal gucken ob die Funktion bisher aktiviert war
-	$sql = "SELECT prf_value
-              FROM ". TBL_PREFERENCES. "
-             WHERE prf_org_id = ". $row_orga['org_id']. "
-               AND prf_name   = 'photo_image_text' ";
+	$sql = 'SELECT prf_value
+              FROM '. TBL_PREFERENCES. '
+             WHERE prf_org_id = '. $row_orga['org_id']. '
+               AND prf_name   = \'photo_image_text\' ';
     $result = $gDb->query($sql);
     $row_photo_image_text = $gDb->fetch_array($result);
 
 	//wenn ja
 	if($row_photo_image_text['prf_value'] == 1)
 	{
-		$sql = "UPDATE ". TBL_PREFERENCES. "
-				SET prf_value = '© ".$row_orga['org_homepage']."'
-       			WHERE prf_org_id = ". $row_orga['org_id']. "
-               	AND prf_name   = 'photo_image_text' ";
+		$sql = 'UPDATE '. TBL_PREFERENCES. '
+				SET prf_value = \'© '.$row_orga['org_homepage'].'\'
+       			WHERE prf_org_id = '. $row_orga['org_id']. '
+               	AND prf_name   = \'photo_image_text\' ';
 	}
 	//wenn nicht
 	else
 	{
-		$sql = "UPDATE ". TBL_PREFERENCES. "
-				SET prf_value = ''
-         		WHERE prf_org_id = ". $row_orga['org_id']. "
-               	AND prf_name   = 'photo_image_text' ";
+		$sql = 'UPDATE '. TBL_PREFERENCES. '
+				SET prf_value = \'\'
+         		WHERE prf_org_id = '. $row_orga['org_id']. '
+               	AND prf_name   = \'photo_image_text\' ';
 	}
 	$gDb->query($sql);
 }
