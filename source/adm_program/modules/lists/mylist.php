@@ -192,7 +192,7 @@ $gLayout['header'] = '
             $old_cat_name_intern = '';
             $old_cat_id   = 0;
 
-            foreach($gProfileFields->mUserField as $field)
+            foreach($gProfileFields->mProfileFields as $field)
             {    
                 // bei den Stammdaten noch Foto und Loginname anhaengen
                 if($old_cat_name_intern == 'MASTER_DATA'

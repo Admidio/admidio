@@ -97,52 +97,64 @@ class TableUserField extends TableAccess
 
 		$value = parent::getValue($field_name, $format);
 
-		if($format != 'plain')
+		if($field_name == 'usf_name' && $format != 'plain')
 		{
-			if($field_name == 'usf_name')
+			// if text is a translation-id then translate it
+			if(strpos($value, '_') == 3)
 			{
-				// if text is a translation-id then translate it
-				if(strpos($value, '_') == 3)
-				{
-					$value = $gL10n->get(admStrToUpper($value));
-				}
+				$value = $gL10n->get(admStrToUpper($value));
 			}
-			elseif($field_name == 'usf_value_list')
+		}
+		elseif($field_name == 'usf_value_list' && $format != 'plain')
+		{
+			if($this->dbColumns['usf_type'] == 'DROPDOWN'
+			|| $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
 			{
-				if($this->dbColumns['usf_type'] == 'DROPDOWN'
-				|| $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
-				{
-					$arrListValues = explode("\r\n", $value);
+				$arrListValues = explode("\r\n", $value);
 
-					foreach($arrListValues as $key => &$listValue)
+				foreach($arrListValues as $key => &$listValue)
+				{
+					if($this->dbColumns['usf_type'] == 'RADIO_BUTTON')
 					{
-						if($this->dbColumns['usf_type'] == 'RADIO_BUTTON')
+						// if value is imagefile or imageurl then show image
+						if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
 						{
-							// if value is imagefile or imageurl then show image
-							if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+							// if there is imagefile and text separated by | then explode them
+							if(strpos($listValue, '|') > 0)
 							{
-								// if there is imagefile and text separated by | then explode them
+								$listValueImage = substr($listValue, 0, strpos($listValue, '|'));
+								$listValueText  = substr($listValue, strpos($listValue, '|') + 1);
+							}
+							else
+							{
+								$listValueImage = $listValue;
+								$listValueText  = $this->getValue('usf_name');
+							}
+							
+							// if text is a translation-id then translate it
+							if(strpos($listValueText, '_') == 3)
+							{
+								$listValueText = $gL10n->get(admStrToUpper($listValueText));
+							}
+
+							if($format == 'text')
+							{
+								// if no image is wanted then return the text part or only the position of the entry
 								if(strpos($listValue, '|') > 0)
 								{
-									$listValueImage = substr($listValue, 0, strpos($listValue, '|'));
-									$listValueText  = substr($listValue, strpos($listValue, '|') + 1);
+									$listValue = $listValueText;
 								}
 								else
 								{
-									$listValueImage = $listValue;
-									$listValueText  = $this->getValue('usf_name');
+									$listValue = $key + 1;
 								}
-								
-								// if text is a translation-id then translate it
-								if(strpos($listValueText, '_') == 3)
-								{
-									$listValueText = $gL10n->get(admStrToUpper($listValueText));
-								}
-
+							}
+							else
+							{
 								// create html for optionbox entry
 								if(isValidFileName($listValueImage, true) == 0)
 								{
-										$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+									$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
 								}
 								elseif(strpos(admStrToLower($listValueImage), 'http') == 0 && strValidCharacters($listValueImage, 'url'))
 								{
@@ -150,15 +162,15 @@ class TableUserField extends TableAccess
 								}
 							}
 						}
-
-						// if text is a translation-id then translate it
-						if(strpos($listValue, '_') == 3)
-						{
-							$listValue = $gL10n->get(admStrToUpper($listValue));
-						}
 					}
-					$value = $arrListValues;
+
+					// if text is a translation-id then translate it
+					if(strpos($listValue, '_') == 3)
+					{
+						$listValue = $gL10n->get(admStrToUpper($listValue));
+					}
 				}
+				$value = $arrListValues;
 			}
 		}
 
@@ -211,8 +223,8 @@ class TableUserField extends TableAccess
         global $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
         
-        // wurde der Name veraendert, dann nach einem neuen eindeutigen internen Namen suchen
-        if($this->columnsInfos['usf_name']['changed'])
+		// if new field than generate new name intern, otherwise no change will be made
+		if($this->new_record == true)
         {
             $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'plain'), 1));
         }
