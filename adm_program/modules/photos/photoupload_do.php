@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Photoupload
+ * Saves photos from file upload in filesystem
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,9 +8,9 @@
  *
  * Parameters:
  *
- * pho_id: id des Albums zu dem die Fotos hinzugefuegt werden sollen
- * uploadmethod: 1 - Klassisch
- *				 2 - Flexuploader
+ * pho_id       : album id to which the photos are assigned
+ * uploadmethod : 1 - classic html upload
+ *				  2 - Flexuploader
  *
  *****************************************************************************/
 if($_GET['uploadmethod'] == 2)
@@ -65,13 +65,13 @@ if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValu
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if (empty($_POST) && $getUploadmethod == 1)
+if(strlen($_FILES['userfile']['name'][0]) == 0 && $getUploadmethod == 1)
 {
-    $gMessage->show($gL10n->get('PHO_NO_FILES_OR_TO_LARGE', ini_get('post_max_size')));
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_PHOTO')));
 }
 
 //bei Bedarf Uploadodner erzeugen
-if(!file_exists(SERVER_PATH. '/adm_my_files/photos/upload'))
+if(file_exists(SERVER_PATH. '/adm_my_files/photos/upload') == false)
 {
     require_once('../../system/classes/folder.php');
     $folder = new Folder(SERVER_PATH. '/adm_my_files/photos');
@@ -106,12 +106,12 @@ if(isset($_POST['upload']) && $getUploadmethod == 1)
     for($x=0; $x<=4; $x++)
     {
         //Datei wurde hochgeladen
-        if(isset($_FILES['Filedata']['name'][$x]))
+        if(isset($_FILES['userfile']['name'][$x]))
         {
             $counter++;
 
             //Die hochgeladene Datei ueberschreitet die in der Anweisung upload_max_filesize in php.ini festgelegte Groesse.
-            if($_FILES['Filedata']['error'][$x]==1)
+            if($_FILES['userfile']['error'][$x]==1)
             {
                 $gMessage->show($gL10n->get('PHO_PHOTO_FILES_TO_LARGE', admFuncMaxUploadSize()));
                 $x = 5;
@@ -133,20 +133,20 @@ for($act_upload_nr = 0; $act_upload_nr < 5; $act_upload_nr++)
 {
     if($getUploadmethod == 1)
     {
-        $temp_filename = $_FILES['Filedata']['tmp_name'][$act_upload_nr];
-        $filename = $_FILES['Filedata']['name'][$act_upload_nr];
+        $temp_filename = $_FILES['userfile']['tmp_name'][$act_upload_nr];
+        $filename = $_FILES['userfile']['name'][$act_upload_nr];
     }
     else
     {
-        if(!is_uploaded_file($_FILES['Filedata']['tmp_name']))
+        if(!is_uploaded_file($_FILES['userfile']['tmp_name']))
         {
             echo $gL10n->get('SYS_UPLOAD_ERROR');
         }
-        $temp_filename = $_FILES['Filedata']['tmp_name'];
-        $filename = $_FILES['Filedata']['name'];
+        $temp_filename = $_FILES['userfile']['tmp_name'];
+        $filename = $_FILES['userfile']['name'];
     }
     //Datei wurde hochgeladen
-    if(isset($_FILES['Filedata']['name']) && is_uploaded_file($temp_filename))
+    if(isset($_FILES['userfile']['name']) && is_uploaded_file($temp_filename))
     {
         $new_quantity++;
     	

@@ -504,42 +504,8 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                 }
                             
                 // Ausgabe je nach Feldtyp aufbereiten
-                if($usf_id == $gProfileFields->getProperty('GENDER', 'usf_id'))
-                {
-                    // Geschlecht anzeigen
-                    if($row[$sql_column_number] == 1)
-                    {
-                        if($getMode == 'csv' || $getMode == 'print')
-                        {
-                            $content = $gL10n->get('SYS_MALE');
-                        }
-                        else
-                        {
-                            $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/male.png"
-                                        title="'.$gL10n->get('SYS_MALE').'" alt="'.$gL10n->get('SYS_MALE').'" />';
-                        }
-                    }
-                    elseif($row[$sql_column_number] == 2)
-                    {
-                        if($getMode == 'csv' || $getMode == 'print')
-                        {
-                            $content = $gL10n->get('SYS_FEMALE');
-                        }
-                        else
-                        {
-                            $content = '<img class="iconInformation" src="'. THEME_PATH. '/icons/female.png"
-                                        alt="'.$gL10n->get('SYS_FEMALE').'" alt="'.$gL10n->get('SYS_FEMALE').'" />';
-                        }
-                    }
-                    else
-                    {
-                        if($getMode != 'csv')
-                        {
-                            $content = '&nbsp;';
-                        }
-                    }
-                }
-                elseif($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
+
+				if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
 				{
 					$content = $gL10n->getCountryByCode($row[$sql_column_number]);
 				}
@@ -618,8 +584,15 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                         case 'RADIO_BUTTON':
 							if(strlen($row[$sql_column_number]) > 0)
 							{
-								// ausgewaehlten Text der Auswahlbox darstellen
-								$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list');
+								// show selected text of optionfield or combobox
+								if($getMode == 'csv')
+								{
+									$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
+								}
+								else
+								{
+									$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list');
+								}
 								$content = $arrListValues[$row[$sql_column_number]-1];
 							}
                             break;

@@ -93,7 +93,7 @@ class Message
     {
         // noetig, da dies bei den includes benoetigt wird
         global $gForum, $gLayout, $gDb, $gDbConnection, $g_adm_db, $gL10n;
-        global $gValidLogin, $g_root_path, $gPreferences, $gHomepage, $gMessages;
+        global $gValidLogin, $g_root_path, $gPreferences, $gHomepage, $gMessages, $gProfileFields;
         global $g_organization, $gCurrentOrganization, $gCurrentUser, $gCurrentSession;
 
         // Ueberschrift setzen, falls diese vorher nicht explizit gesetzt wurde

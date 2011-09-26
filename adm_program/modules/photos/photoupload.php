@@ -9,9 +9,8 @@
  * Parameters:
  *
  * pho_id       : id des Albums zu dem die Bilder hinzugefuegt werden sollen
- * uploadmethod : Das entsprechende Formular wird erzwungen !!!
- *                1 - Klassisches Formular zur Bilderauswahl
- * 		          2 - Flexuploder 
+ * uploadmethod : 1 - classic html upload
+ *				  2 - Flexuploader
  * 
  *****************************************************************************/
 
@@ -38,8 +37,7 @@ if(!$gCurrentUser->editPhotoRight())
 }
 
 //Kontrolle ob Server Dateiuploads zulaesst
-$ini = ini_get('file_uploads');
-if($ini!=1)
+if(ini_get('file_uploads') != 1)
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
@@ -145,23 +143,23 @@ echo '
 	        <ul class="formFieldList">
 	            <li><dl>
 	                <dt><label for="admPhotoFile1">'.$gL10n->get('PHO_PHOTO').' 1:</label></dt>
-	                <dd><input type="file" id="admPhotoFile1" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile1" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile2">'.$gL10n->get('PHO_PHOTO').' 2:</label></dt>
-	                <dd><input type="file" id="admPhotoFile2" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile2" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile3">'.$gL10n->get('PHO_PHOTO').' 3:</label></dt>
-	                <dd><input type="file" id="admPhotoFile3" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile3" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile4">'.$gL10n->get('PHO_PHOTO').' 4:</label></dt>
-	                <dd><input type="file" id="admPhotoFile4" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile4" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile5">'.$gL10n->get('PHO_PHOTO').' 5:</label></dt>
-	                <dd><input type="file" id="admPhotoFile5" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile5" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	        </ul>
 	        <hr />
