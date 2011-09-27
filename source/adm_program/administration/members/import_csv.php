@@ -31,7 +31,7 @@ if(!$gCurrentUser->editUsers())
 
 // Pflichtfelder prüfen
 
-foreach($gProfileFields->mUserField as $field)
+foreach($gProfileFields->mProfileFields as $field)
 {
     if($field->getValue('usf_mandatory') == 1
     && strlen($_POST['usf-'. $field->getValue('usf_id')]) == 0)
@@ -83,7 +83,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
         // dieser dann den Wert zuordnen
-        foreach($gProfileFields->mUserField as $field)
+        foreach($gProfileFields->mProfileFields as $field)
         {
             if(strlen($_POST['usf-'. $field->getValue('usf_id')]) > 0 && $col_key == $_POST['usf-'. $field->getValue('usf_id')])
             {
@@ -93,22 +93,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     $imported_fields[$field->getValue('usf_id')] = $field->getValue('usf_name_intern');
                 }
 
-                if($field->getValue('usf_name_intern') == 'GENDER')
-                {
-                    if($col_value_to_lower == 'm'
-                    || $col_value_to_lower == admStrToLower($gL10n->get('SYS_MALE'))
-                    || $col_value_to_lower == '1')
-                    {
-                        $user->setValue($field->getValue('usf_name_intern'), '1');
-                    }
-                    if($col_value_to_lower == 'w'
-                    || $col_value_to_lower == admStrToLower($gL10n->get('SYS_FEMALE'))
-                    || $col_value_to_lower == '2')
-                    {
-                        $user->setValue($field->getValue('usf_name_intern'), '2');
-                    }
-                }
-                elseif($field->getValue('usf_name_intern') == 'COUNTRY')
+				if($field->getValue('usf_name_intern') == 'COUNTRY')
 				{
 					$user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($col_value));
 				}
@@ -135,13 +120,20 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                     || $field->getValue('usf_type') == 'RADIO_BUTTON')
                 {
 					// Position aus der Auswahlbox speichern
-					$arrListValues = $field->getValue('usf_value_list');
+					$arrListValues = $field->getValue('usf_value_list', 'text');
 					$position = 0;
+
 					foreach($arrListValues as $key => $value)
 					{
 						if(strcmp($col_value, trim($arrListValues[$position])) == 0)
 						{
+							// if col_value is text than save position if text is equal to text of position
 							$user->setValue($field->getValue('usf_name_intern'), $position+1);
+						}
+						elseif(is_numeric($col_value) && !is_numeric($arrListValues[$position]) && $col_value > 0 && $col_value < 1000)
+						{
+							// if col_value is numeric than save position if col_value is equal to position
+							$user->setValue($field->getValue('usf_name_intern'), $col_value);
 						}
 						$position++;
 					}

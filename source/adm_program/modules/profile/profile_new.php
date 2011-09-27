@@ -95,7 +95,7 @@ if(isset($_SESSION['profile_request']))
 {
     $user->noValueCheck();
 
-    foreach($gProfileFields->mUserField as $field)
+    foreach($gProfileFields->mProfileFields as $field)
     {
         $field_name = 'usf-'. $field->getValue('usf_id');
         if(isset($_SESSION['profile_request'][$field_name]))
@@ -386,7 +386,7 @@ if($getNewUser == 1 || $getNewUser == 2)
 {
     if($getNewUser == 1)
     {
-    	$first_field = reset($gProfileFields->mUserField);
+    	$first_field = reset($gProfileFields->mProfileFields);
         $focusField = 'usf-'.$first_field->getValue('usf_id');
     }
     else
