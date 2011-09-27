@@ -48,6 +48,12 @@ class ProfileFields
 		$this->noValueCheck = false;
     }
 	
+	public function clearUserData()
+	{
+		$this->mUserData = array();
+		$this->mUserId = 0;
+	}
+	
 	// returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
 	public function getProperty($fieldNameIntern, $column, $format = '')
 	{

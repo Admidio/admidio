@@ -172,7 +172,8 @@ class User extends TableUsers
         parent::clear();
 
         // die Daten der Profilfelder werden geloescht, die Struktur bleibt
-        $this->clearUserFieldArray();
+		$this->mProfileFieldsData->clearUserData();
+        //$this->clearUserFieldArray();
 
         $this->webmaster = 0;
 

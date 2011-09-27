@@ -91,6 +91,10 @@ class TableUserField extends TableAccess
         return $newNameIntern;
     }
 	
+	// returns the value of database column $field_name
+	// for column usf_value_list the following format is accepted
+	// 'plain' -> returns database value of usf_value_list
+	// 'text'  -> extract only text from usf_value_list, image infos will be ignored
     public function getValue($field_name, $format = '')
     {
 		global $gL10n;
