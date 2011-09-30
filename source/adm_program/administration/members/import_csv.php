@@ -192,8 +192,8 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
         {
             if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
-                // alle vorhandene Profilfelddaten des Users loeschen
-                $duplicate_user->clearUserFieldArray(true);
+                // delete all user data of profile fields
+                $duplicate_user->deleteUserFieldData();
             }
     
             if($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE

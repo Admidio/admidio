@@ -290,35 +290,11 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
         }
     }
     
-    // Icons der Messenger anzeigen
+    // display icon of field
     $icon = '';
-    if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'AOL_INSTANT_MESSENGER')
+    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
     {
-        $icon = 'aim.png';
-    }
-    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'GOOGLE_TALK')
-    {
-        $icon = 'google.gif';
-    }
-    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'ICQ')
-    {
-        $icon = 'icq.png';
-    }
-    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'MSN_MESSENGER')
-    {
-        $icon = 'msn.png';
-    }
-    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'SKYPE')
-    {
-        $icon = 'skype.png';
-    }
-    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'YAHOO_MESSENGER')
-    {
-        $icon = 'yahoo.png';
-    }
-    if(strlen($icon) > 0)
-    {
-        $icon = '<img src="'. THEME_PATH. '/icons/'. $icon. '" style="vertical-align: middle;" alt="'. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). '" />&nbsp;';
+        $icon = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;';
     }
         
     // Kennzeichen fuer Pflichtfeld setzen
@@ -330,7 +306,7 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
     $description = '';
-    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_description')) > 0 && $gProfileFields->getProperty($fieldNameIntern, 'cat_name_intern') != 'MESSENGER')
+    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_description')) > 0 && $gProfileFields->getProperty($fieldNameIntern, 'cat_name_intern') != 'SOCIAL_NETWORKS')
     {
         $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'). '&amp;inline=true"><img 
             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'). '\',this)" onmouseout="ajax_hideTooltip()"

@@ -79,7 +79,7 @@ echo '
                 <dl>
                     <dt><label for="room_name">'.$gL10n->get('SYS_ROOM').':</label></dt>
                     <dd>
-                        <input type="text" id="room_name" name="room_name" style="width: 345px;" maxlength="100" value="'. $room->getValue('room_name'). '" />
+                        <input type="text" id="room_name" name="room_name" style="width: 90%;" maxlength="100" value="'. $room->getValue('room_name'). '" />
                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -123,7 +123,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="room_description" name="room_description" style="width: 345px;" rows="10" cols="40">'. $room->getValue('room_description'). '</textarea>
+                        <textarea id="room_description" name="room_description" style="width: 90%;" rows="10" cols="40">'. $room->getValue('room_description'). '</textarea>
                     </dd>
                 </dl>
             </li>

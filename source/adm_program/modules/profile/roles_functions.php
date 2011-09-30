@@ -14,6 +14,7 @@ if ('roles_functions.php' == basename($_SERVER['SCRIPT_FILENAME']))
 }
 
 require_once('../../system/classes/table_members.php');
+require_once('../../system/classes/table_roles.php');
 
 
 function getRolesFromDatabase($gDb,$user_id,$gCurrentOrganization)
@@ -56,6 +57,7 @@ function getRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,$d
     
     $count_show_roles  = 0;
     $member = new TableMembers($gDb);
+	$role   = new TableRoles($gDb);
     $roleMemHTML = '<ul class="formFieldList" id="role_list">';
 
     while($row = $gDb->fetch_array($result_role))
@@ -66,6 +68,8 @@ function getRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,$d
 
             $member->clear();
             $member->setArray($row);
+			$role->clear();
+			$role->setArray($row);
             
             // falls die Mitgliedschaft nicht endet, dann soll das fiktive Enddatum auch nicht angezeigt werden
             $dateEndless = new DateTime('9999-12-31 00:00:00');
@@ -78,14 +82,14 @@ function getRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,$d
             $roleMemHTML .= '<li id="role_'. $row['mem_rol_id']. '">
                 <dl>
                     <dt>
-                        '. $row['cat_name']. ' - ';
+                        '. $role->getValue('cat_name'). ' - ';
                             if($gCurrentUser->viewRole($member->getValue('mem_rol_id')))
                             {
-                                $roleMemHTML .= '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '" title="'. $row['rol_description']. '">'. $row['rol_name']. '</a>';
+                                $roleMemHTML .= '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
                             }
                             else
                             {
-                                echo $row['rol_name'];
+                                echo $role->getValue('rol_name');
                             }
                             if($member->getValue('mem_leader') == 1)
                             {
@@ -105,11 +109,11 @@ function getRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,$d
                         if($gCurrentUser->assignRoles())
                         {
                             // Löschen wird nur bei anderen Webmastern ermöglicht
-                            if (($row['rol_name'] == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id')) || ($row['rol_name'] != $gL10n->get('SYS_WEBMASTER')))
+                            if (($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id')) || ($role->getValue('rol_name') != $gL10n->get('SYS_WEBMASTER')))
                             {
                                 $roleMemHTML .= '
                                 <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_role&amp;element_id=role_'.
-                                    $row['rol_id']. '&amp;database_id='.$row['rol_id'].'&amp;database_id_2='.$user->getValue('usr_id').'&amp;name='.urlencode($row['rol_name']).'"><img
+                                    $role->getValue('rol_id'). '&amp;database_id='.$role->getValue('rol_id').'&amp;database_id_2='.$user->getValue('usr_id').'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
                             }
                             else
@@ -132,21 +136,21 @@ function getRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,$d
                     $roleMemHTML .= '</dd>
                 </dl>
             </li>
-            <li id="mem_rol_'.$row['rol_id'].'" style="text-align: right; visibility: hidden; display: none;">
-                <form action="'.$g_root_path.'/adm_program/modules/profile/roles_date.php?usr_id='.$user->getValue('usr_id').'&amp;mode=1&amp;rol_id='.$row['rol_id'].'" method="post">
+            <li id="mem_rol_'.$role->getValue('rol_id').'" style="text-align: right; visibility: hidden; display: none;">
+                <form action="'.$g_root_path.'/adm_program/modules/profile/roles_date.php?usr_id='.$user->getValue('usr_id').'&amp;mode=1&amp;rol_id='.$role->getValue('rol_id').'" method="post">
                     <div>
-                        <label for="admRoleStart'.$row['rol_id'].'">'.$gL10n->get('SYS_START').':</label>
-                        <input type="text" id="admRoleStart'.$row['rol_id'].'" name="rol_begin" size="10" maxlength="20" value="'.$member->getValue('mem_begin', $gPreferences['system_date']).'"/>
-                        <a class="iconLink" id="admRoleAnchorStart'.$row['rol_id'].'" href="javascript:calPopup.select(document.getElementById(\'admRoleStart'.$row['rol_id'].'\'),\'admRoleAnchorStart'.$row['rol_id'].'\',\''.$gPreferences['system_date'].'\',\'admRoleStart'.$row['rol_id'].'\',\'admRoleEnd'.$row['rol_id'].'\');"><img 
+                        <label for="admRoleStart'.$role->getValue('rol_id').'">'.$gL10n->get('SYS_START').':</label>
+                        <input type="text" id="admRoleStart'.$role->getValue('rol_id').'" name="rol_begin" size="10" maxlength="20" value="'.$member->getValue('mem_begin', $gPreferences['system_date']).'"/>
+                        <a class="iconLink" id="admRoleAnchorStart'.$role->getValue('rol_id').'" href="javascript:calPopup.select(document.getElementById(\'admRoleStart'.$role->getValue('rol_id').'\'),\'admRoleAnchorStart'.$role->getValue('rol_id').'\',\''.$gPreferences['system_date'].'\',\'admRoleStart'.$role->getValue('rol_id').'\',\'admRoleEnd'.$role->getValue('rol_id').'\');"><img 
                         src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;
 
-                        <label for="admRoleEnd'.$row['rol_id'].'">'.$gL10n->get('SYS_END').':</label>
-                        <input type="text" id="admRoleEnd'.$row['rol_id'].'" name="rol_end" size="10" maxlength="20" value="'.$member->getValue('mem_end', $gPreferences['system_date']).'"/>
-                        <a class="iconLink" id="admRoleAnchorEnd'.$row['rol_id'].'" href="javascript:calPopup.select(document.getElementById(\'admRoleEnd'.$row['rol_id'].'\'),\'admRoleAnchorEnd'.$row['rol_id'].'\',\''.$gPreferences['system_date'].'\',\'admRoleStart'.$row['rol_id'].'\',\'admRoleEnd'.$row['rol_id'].'\');"><img 
+                        <label for="admRoleEnd'.$role->getValue('rol_id').'">'.$gL10n->get('SYS_END').':</label>
+                        <input type="text" id="admRoleEnd'.$role->getValue('rol_id').'" name="rol_end" size="10" maxlength="20" value="'.$member->getValue('mem_end', $gPreferences['system_date']).'"/>
+                        <a class="iconLink" id="admRoleAnchorEnd'.$role->getValue('rol_id').'" href="javascript:calPopup.select(document.getElementById(\'admRoleEnd'.$role->getValue('rol_id').'\'),\'admRoleAnchorEnd'.$role->getValue('rol_id').'\',\''.$gPreferences['system_date'].'\',\'admRoleStart'.$role->getValue('rol_id').'\',\'admRoleEnd'.$role->getValue('rol_id').'\');"><img 
                         src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
 
-                        <a class="iconLink" href="javascript:profileJS.changeRoleDates('.$row['rol_id'].')" id="admSaveMembership'.$row['rol_id'].'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" title="'.$gL10n->get('SYS_SAVE').'"/></a>
-                        <a class="iconLink" href="javascript:profileJS.toggleDetailsOff('.$row['rol_id'].')"><img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_ABORT').'" title="'.$gL10n->get('SYS_ABORT').'"/></a>
+                        <a class="iconLink" href="javascript:profileJS.changeRoleDates('.$role->getValue('rol_id').')" id="admSaveMembership'.$role->getValue('rol_id').'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" title="'.$gL10n->get('SYS_SAVE').'"/></a>
+                        <a class="iconLink" href="javascript:profileJS.toggleDetailsOff('.$role->getValue('rol_id').')"><img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_ABORT').'" title="'.$gL10n->get('SYS_ABORT').'"/></a>
                     </div>
                 </form>
             </li>';
@@ -177,12 +181,15 @@ function getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_r
 
     $count_show_roles = 0;
     $member = new TableMembers($gDb);
+	$role   = new TableRoles($gDb);
     $formerRoleMemHTML = '<ul class="formFieldList" id="former_role_list">';
     while($row = $gDb->fetch_array($result_role))
     {
         $member->clear();
         $member->setArray($row);
-        
+		$role->clear();
+		$role->setArray($row);
+
         if($gCurrentUser->viewRole($member->getValue('mem_rol_id')))
         {
             // jede einzelne Rolle anzeigen
@@ -190,14 +197,14 @@ function getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_r
             <li id="former_role_'. $member->getValue('mem_rol_id'). '">
                 <dl>
                     <dt>'.
-                        $row['cat_name'];
+                        $role->getValue('cat_name');
                         if($gCurrentUser->viewRole($member->getValue('mem_rol_id')))
                         {
-                            $formerRoleMemHTML .= ' - <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '">'. $row['rol_name']. '</a>';
+                            $formerRoleMemHTML .= ' - <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '">'. $role->getValue('rol_name'). '</a>';
                         }
                         else
                         {
-                            $formerRoleMemHTML .= ' - '. $row['rol_name'];
+                            $formerRoleMemHTML .= ' - '. $role->getValue('rol_name');
                         }
                         if($member->getValue('mem_leader') == 1)
                         {
@@ -209,7 +216,7 @@ function getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_r
                         {
                             $formerRoleMemHTML .= '
                             <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_former&amp;element_id=former_role_'.
-                                $row['rol_id']. '&amp;database_id='.$row['rol_id'].'&amp;database_id_2='.$user->getValue('usr_id').'&amp;name='.urlencode($row['rol_name']).'"><img
+                                $role->getValue('rol_id'). '&amp;database_id='.$role->getValue('rol_id').'&amp;database_id_2='.$user->getValue('usr_id').'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
                         }
                     $formerRoleMemHTML .= '</dd>

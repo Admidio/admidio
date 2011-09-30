@@ -15,6 +15,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_roles.php');
 require_once('roles_functions.php');
 
 // Initialize and check the parameters
@@ -34,7 +35,6 @@ function getFieldCode($fieldNameIntern, $User)
     $html      = '';
     $value     = '';
     $msg_image = '';
-    $messenger = false;
 
     if($gCurrentUser->editProfile($User->getValue('usr_id')) == false && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
     {
@@ -113,6 +113,12 @@ function getFieldCode($fieldNameIntern, $User)
             $value = $User->getValue($fieldNameIntern);
             break;
     }
+	
+	// if url is set then create the link
+	if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_url')) > 0)
+	{
+		$value = '<a href="'.$gProfileFields->getProperty($fieldNameIntern, 'usf_url').'">'.$value.'</a>';
+	}
 
 	// Icons der Messenger anzeigen
 	if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'ICQ')
@@ -130,7 +136,6 @@ function getFieldCode($fieldNameIntern, $User)
 				alt="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
 				title="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
 		}
-		$messenger = true;
 	}
 	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'SKYPE')
 	{
@@ -143,34 +148,14 @@ function getFieldCode($fieldNameIntern, $User)
 				title="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
 				alt="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
 		}
-		$messenger = true;
 	}
-	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'AOL_INSTANT_MESSENGER')
+	elseif(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
 	{
-		$msg_image = 'aim.png';
-	}
-	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'GOOGLE_TALK')
-	{
-		$msg_image = 'google.gif';
-	}
-	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'MSN_MESSENGER')
-	{
-		$msg_image = 'msn.png';
-	}
-	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'YAHOO_MESSENGER')
-	{
-		$msg_image = 'yahoo.png';
-	}
-	if(strlen($msg_image) > 0)
-	{
-		$value = '<img src="'. THEME_PATH. '/icons/'. $msg_image. '" style="vertical-align: middle;"
-			alt="'. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). '" title="'. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). '" />&nbsp;&nbsp;'. $value;
-		$messenger = true;
+		$value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;&nbsp;'. $value;
 	}
 
-    // Feld anzeigen, außer bei Messenger, wenn dieser keine Daten enthält
-    if($messenger == false
-    || ($messenger == true && strlen($User->getValue($fieldNameIntern)) > 0))
+	// show field, if user has a value for that field
+    if(strlen($User->getValue($fieldNameIntern)) > 0)
     {
         $html = '<li>
                     <dl>
@@ -461,10 +446,8 @@ echo '
                || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $field->getValue('usf_hidden') == 0 )))
             {
                 // Kategorienwechsel den Kategorienheader anzeigen
-                // Kategorie 'Messenger' nur anzeigen, wenn auch Daten zugeordnet sind
                 if($category != $field->getValue('cat_name')
-                && (  $field->getValue('cat_name_intern') != 'MESSENGER'
-                   || ($field->getValue('cat_name_intern') == 'MESSENGER' && strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 )))
+                && strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 )
                 {
                     if(strlen($category) > 0)
                     {
@@ -490,10 +473,8 @@ echo '
                             <ul class="formFieldList">';
                 }
 
-                // Html des Feldes ausgeben
-                // bei Kategorie 'Messenger' nur anzeigen, wenn auch Daten zugeordnet sind
-                if($field->getValue('cat_name_intern') != 'MESSENGER'
-                || ($field->getValue('cat_name_intern') == 'MESSENGER' && strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 ))
+				// show html of profile field
+                if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 )
                 {
                     echo getFieldCode($field->getValue('usf_name_intern'), $user);
                 }
@@ -713,8 +694,13 @@ echo '
                     <div class="groupBoxHeadline">'.$gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'&nbsp;</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">';
+							$role = new TableRoles($gDb);
+							
                             while($row = $gDb->fetch_array($result_role))
                             {
+								$role->clear();
+								$role->setArray($row);
+		
                                 $startDate = new DateTimeExtended($row['mem_begin'], 'Y-m-d', 'date');
                                 // jede einzelne Rolle anzeigen
                                 echo '
@@ -722,7 +708,7 @@ echo '
                                     <dl>
                                         <dt>
                                             '. $row['org_shortname']. ' - '.
-                                                $row['cat_name']. ' - '. $row['rol_name'];
+                                                $role->getValue('cat_name'). ' - '. $role->getValue('rol_name');
                                                 if($row['mem_leader'] == 1)
                                                 {
                                                     echo ' - '.$gL10n->get('SYS_LEADER');

@@ -14,6 +14,7 @@
  
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/ckeditor_special.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_user_field.php');
 
@@ -69,6 +70,9 @@ if($user_field->getValue('usf_system') == 1)
     $field_focus   = 'usf_description';
 }
 
+// create an object of ckeditor and replace textarea-element
+$ckEditor = new CKEditorSpecial();
+
 // zusaetzliche Daten fuer den Html-Kopf setzen
 if($getUsfId > 0)
 {
@@ -110,179 +114,231 @@ echo '
 <div class="formLayout" id="edit_fields_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt><label for="usf_name">'.$gL10n->get('SYS_NAME').':</label></dt>
-                    <dd><input type="text" name="usf_name" id="usf_name" '.$html_disabled.' style="width: 345px;" maxlength="100"
-                        value="'. $user_field->getValue('usf_name', 'plain'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>';
-			// show internal field name for information
-			if($getUsfId > 0)
-			{
-				echo '<li>
-					<dl>
-						<dt><label for="usf_name">'.$gL10n->get('SYS_INTERNAL_NAME').':</label></dt>
-						<dd><input type="text" name="usf_name_intern" id="usf_name_intern" disabled="disabled" style="width: 345px;" maxlength="100"
-							value="'. $user_field->getValue('usf_name_intern'). '" />
-							<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC&amp;inline=true"><img 
-								onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC\',this)" onmouseout="ajax_hideTooltip()"
-								class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-						</dd>
-					</dl>
-				</li>';
-			}
-            echo '<li>
-                <dl>
-                    <dt><label for="usf_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
-                    <dd><textarea name="usf_description" id="usf_description" style="width: 345px;" rows="4" cols="40">'.
-                        $user_field->getValue('usf_description'). '</textarea>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="usf_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
-                    <dd>';
-                        if($user_field->getValue('usf_system') == 1)
-                        {
-                            // bei Systemfeldern darf die Kategorie nicht mehr veraendert werden
-                            echo '<input type="text" name="usf_cat_id" id="usf_cat_id" disabled="disabled" style="width: 150px;" 
-                                maxlength="30" value="'. $user_field->getValue('cat_name'). '" />';
-                        }
-                        else
-                        {
-							echo FormElements::generateCategorySelectBox('USF', $user_field->getValue('usf_cat_id'), 'usf_cat_id');
-                        }
-                        echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="usf_type">'.$gL10n->get('ORG_DATATYPE').':</label></dt>
-                    <dd>';
-                        $userFieldText = array(''         => '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -',
-                                               'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
-                                               'DATE'     => $gL10n->get('SYS_DATE'),
-                                               'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
-                                               'EMAIL'    => $gL10n->get('SYS_EMAIL'),
-                                               'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
-                                               'TEXT'     => $gL10n->get('SYS_TEXT').' (50)',
-                                               'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (255)',
-                                               'URL'      => $gL10n->get('ORG_URL'),
-                                               'NUMERIC'  => $gL10n->get('SYS_NUMBER'));
+		<div class="groupBox" id="admDesignation">
+			<div class="groupBoxHeadline" id="admDesignationHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admDesignationBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admDesignationBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_DESIGNATION').'
+			</div>
 
-                        if($user_field->getValue('usf_system') == 1)
-                        {
-                            // bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
-                            echo '<input type="text" name="usf_type" id="usf_type" disabled="disabled" style="width: 150px;" 
-                                maxlength="30" value="'. $userFieldText[$user_field->getValue('usf_type')]. '" />';
-                        }
-                        else
-                        {
-                            echo '<select size="1" name="usf_type" id="usf_type">';
-                                // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
-                                foreach($userFieldText as $key => $value)
-                                {
-                                    echo '<option value="'.$key.'" '; 
-                                    if($user_field->getValue('usf_type') == $key) 
-                                    {
-                                        echo ' selected="selected"';
-                                    }
-                                    echo '>'.$value.'</option>';
-                                }
-                            echo '</select>';
-                        }
-                        echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li id="admValueList">
-                <dl>
-                    <dt><label for="usf_value_list">'.$gL10n->get('SYS_VALUE_LIST').':</label></dt>
-                    <dd><textarea name="usf_value_list" id="usf_value_list" style="width: 345px;" rows="6" cols="40">'.
-                        $user_field->getValue('usf_value_list', 'plain'). '</textarea>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>			
-            <li>
-                <dl>
-                    <dt>
-                        <label for="usf_hidden">
-                            <img src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />
-                        </label>
-                    </dt>
-                    <dd>
-                        <input type="checkbox" name="usf_hidden" id="usf_hidden" ';
-                        if($user_field->getValue('usf_hidden') == 0)
-                        {
-                            echo ' checked="checked" ';
-                        }
-                        echo ' value="1" />
-                        <label for="usf_hidden">'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_HIDDEN_DESC&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_HIDDEN_DESC\',this)" onmouseout="ajax_hideTooltip()"
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>            
-            <li>
-                <dl>
-                    <dt>
-                        <label for="usf_disabled">
-                            <img src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED').'" />
-                        </label>
-                    </dt>
-                    <dd>
-                        <input type="checkbox" name="usf_disabled" id="usf_disabled" ';
-                        if($user_field->getValue('usf_disabled') == 1)
-                        {
-                            echo ' checked="checked" ';
-                        }
-                        echo ' value="1" />
-                        <label for="usf_disabled">'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC\',this)" onmouseout="ajax_hideTooltip()"
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>            
-            <li>
-                <dl>
-                    <dt>
-                        <label for="usf_mandatory">
-                            <img src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_MANDATORY').'" />
-                        </label>
-                    </dt>
-                    <dd>
-                        <input type="checkbox" name="usf_mandatory" id="usf_mandatory" ';
-                        if($user_field->getValue('usf_mandatory') == 1)
-                        {
-                            echo ' checked="checked" ';
-                        }
-                        if($user_field->getValue('usf_name_intern') == 'LAST_NAME'
-                        || $user_field->getValue('usf_name_intern') == 'FIRST_NAME')
-                        {
-                            echo ' disabled="disabled" ';
-                        }
-                        echo ' value="1" />
-                        <label for="usf_mandatory">'.$gL10n->get('ORG_FIELD_MANDATORY').'</label>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_MANDATORY_DESC&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_MANDATORY_DESC\',this)" onmouseout="ajax_hideTooltip()"
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>            
-        </ul>
+			<div class="groupBoxBody" id="admDesignationBody">	
+				<ul class="formFieldList">
+					<li>
+						<dl>
+							<dt><label for="usf_name">'.$gL10n->get('SYS_NAME').':</label></dt>
+							<dd><input type="text" name="usf_name" id="usf_name" '.$html_disabled.' style="width: 90%;" maxlength="100"
+								value="'. $user_field->getValue('usf_name', 'plain'). '" />
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>';
+					// show internal field name for information
+					if($getUsfId > 0)
+					{
+						echo '<li>
+							<dl>
+								<dt><label for="usf_name">'.$gL10n->get('SYS_INTERNAL_NAME').':</label></dt>
+								<dd><input type="text" name="usf_name_intern" id="usf_name_intern" disabled="disabled" style="width: 90%;" maxlength="100"
+									value="'. $user_field->getValue('usf_name_intern'). '" />
+									<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC&amp;inline=true"><img 
+										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC\',this)" onmouseout="ajax_hideTooltip()"
+										class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+								</dd>
+							</dl>
+						</li>';
+					}
+            echo '
+					<li>
+						<dl>
+							<dt><label for="usf_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
+							<dd>';
+								if($user_field->getValue('usf_system') == 1)
+								{
+									// bei Systemfeldern darf die Kategorie nicht mehr veraendert werden
+									echo '<input type="text" name="usf_cat_id" id="usf_cat_id" disabled="disabled" style="width: 150px;" 
+										maxlength="30" value="'. $user_field->getValue('cat_name'). '" />';
+								}
+								else
+								{
+									echo FormElements::generateCategorySelectBox('USF', $user_field->getValue('usf_cat_id'), 'usf_cat_id');
+								}
+								echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+		</div>
+		<div class="groupBox" id="admPresentation">
+			<div class="groupBoxHeadline" id="admPresentationHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admPresentationBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admPresentationBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_PRESENTATION').'
+			</div>
 
-        <hr />';
+			<div class="groupBoxBody" id="admPresentationBody">	
+				<ul class="formFieldList">
+					<li>
+						<dl>
+							<dt><label for="usf_type">'.$gL10n->get('ORG_DATATYPE').':</label></dt>
+							<dd>';
+								$userFieldText = array(''         => '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -',
+													   'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
+													   'DATE'     => $gL10n->get('SYS_DATE'),
+													   'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
+													   'EMAIL'    => $gL10n->get('SYS_EMAIL'),
+													   'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
+													   'TEXT'     => $gL10n->get('SYS_TEXT').' (50)',
+													   'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (255)',
+													   'URL'      => $gL10n->get('ORG_URL'),
+													   'NUMERIC'  => $gL10n->get('SYS_NUMBER'));
+
+								if($user_field->getValue('usf_system') == 1)
+								{
+									// bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
+									echo '<input type="text" name="usf_type" id="usf_type" disabled="disabled" style="width: 150px;" 
+										maxlength="30" value="'. $userFieldText[$user_field->getValue('usf_type')]. '" />';
+								}
+								else
+								{
+									echo '<select size="1" name="usf_type" id="usf_type">';
+										// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
+										foreach($userFieldText as $key => $value)
+										{
+											echo '<option value="'.$key.'" '; 
+											if($user_field->getValue('usf_type') == $key) 
+											{
+												echo ' selected="selected"';
+											}
+											echo '>'.$value.'</option>';
+										}
+									echo '</select>';
+								}
+								echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+					<li id="admValueList">
+						<dl>
+							<dt><label for="usf_value_list">'.$gL10n->get('SYS_VALUE_LIST').':</label></dt>
+							<dd><textarea name="usf_value_list" id="usf_value_list" style="width: 90%;" rows="6" cols="40">'.
+								$user_field->getValue('usf_value_list', 'plain'). '</textarea>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
+									class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="usf_icon">'.$gL10n->get('SYS_ICON').':</label></dt>
+							<dd><input type="text" name="usf_icon" id="usf_icon" '.$html_disabled.' style="width: 90%;" maxlength="100"
+								value="'. $user_field->getValue('usf_icon', 'plain'). '" />
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="usf_url">'.$gL10n->get('ORG_URL').':</label></dt>
+							<dd><input type="text" name="usf_url" id="usf_url" '.$html_disabled.' style="width: 90%;" maxlength="100"
+								value="'. $user_field->getValue('usf_url'). '" />
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>					
+				</ul>
+			</div>
+		</div>
+		<div class="groupBox" id="admAuthorization">
+			<div class="groupBoxHeadline" id="admAuthorizationHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admAuthorizationBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admAuthorizationBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_AUTHORIZATION').'
+			</div>
+
+			<div class="groupBoxBody" id="admAuthorizationBody">	
+				<ul class="formFieldList">		
+					<li>
+						<dl>
+							<dt>
+								<label for="usf_hidden">
+									<img src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />
+								</label>
+							</dt>
+							<dd>
+								<input type="checkbox" name="usf_hidden" id="usf_hidden" ';
+								if($user_field->getValue('usf_hidden') == 0)
+								{
+									echo ' checked="checked" ';
+								}
+								echo ' value="1" />
+								<label for="usf_hidden">'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'</label>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_HIDDEN_DESC&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_HIDDEN_DESC\',this)" onmouseout="ajax_hideTooltip()"
+									class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
+					</li>            
+					<li>
+						<dl>
+							<dt>
+								<label for="usf_disabled">
+									<img src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED').'" />
+								</label>
+							</dt>
+							<dd>
+								<input type="checkbox" name="usf_disabled" id="usf_disabled" ';
+								if($user_field->getValue('usf_disabled') == 1)
+								{
+									echo ' checked="checked" ';
+								}
+								echo ' value="1" />
+								<label for="usf_disabled">'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'</label>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_DISABLED_DESC\',this)" onmouseout="ajax_hideTooltip()"
+									class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
+					</li>            
+					<li>
+						<dl>
+							<dt>
+								<label for="usf_mandatory">
+									<img src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_MANDATORY').'" />
+								</label>
+							</dt>
+							<dd>
+								<input type="checkbox" name="usf_mandatory" id="usf_mandatory" ';
+								if($user_field->getValue('usf_mandatory') == 1)
+								{
+									echo ' checked="checked" ';
+								}
+								if($user_field->getValue('usf_name_intern') == 'LAST_NAME'
+								|| $user_field->getValue('usf_name_intern') == 'FIRST_NAME')
+								{
+									echo ' disabled="disabled" ';
+								}
+								echo ' value="1" />
+								<label for="usf_mandatory">'.$gL10n->get('ORG_FIELD_MANDATORY').'</label>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_MANDATORY_DESC&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_MANDATORY_DESC\',this)" onmouseout="ajax_hideTooltip()"
+									class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
+					</li>            
+				</ul>
+			</div>
+		</div>
+		<div class="groupBox" id="admDescription">
+			<div class="groupBoxHeadline" id="admDescriptionHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_DESCRIPTION').'
+			</div>
+
+			<div class="groupBoxBody" id="admDescriptionBody">
+                <ul class="formFieldList">
+                    <li>'.$ckEditor->createEditor('usf_description', $user_field->getValue('usf_description'), 'AdmidioDefault', 200).'</li>
+                </ul>
+			</div>
+		</div>';
 
         if($user_field->getValue('usf_usr_id_create') > 0)
         {

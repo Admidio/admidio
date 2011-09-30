@@ -149,23 +149,23 @@ echo '
             $field->clear();
             $field->setArray($row);
         
-            if($cat_id != $row['cat_id'])
+            if($cat_id != $field->getValue('cat_id'))
             {
                 if($cat_id > 0)
                 {
                     echo '</tbody>';
                 }
-                $block_id = 'admCategory'.$row['cat_id'];
+                $block_id = 'admCategory'.$field->getValue('usf_cat_id');
                 echo '<tbody>
                     <tr>
                         <td class="tableSubHeader" colspan="8">
                             <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img 
-                            id="'.$block_id.'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$row['cat_name'].'
+                            id="'.$block_id.'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$field->getValue('cat_name').'
                         </td>
                     </tr>
                 </tbody>
                 <tbody id="'.$block_id.'">';
-                $cat_id = $row['cat_id'];
+                $cat_id = $field->getValue('usf_cat_id');
             }           
             echo '
             <tr id="row_usf_'.$field->getValue('usf_id').'" class="tableMouseOver">
@@ -178,9 +178,9 @@ echo '
                 </td>
                 <td>';
                     // laengere Texte kuerzen und Tooltip mit Popup anbieten
-                    if(strlen($field->getValue('usf_description')) > 30)
+                    if(strlen($field->getValue('usf_description')) > 22)
                     {
-                        echo substr($field->getValue('usf_description'), 0, 30). ' 
+                        echo substr($field->getValue('usf_description', 'plain'), 0, 22). ' 
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '&amp;inline=true"
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $field->getValue('usf_name_intern'). '\',this)" 
                             onmouseout="ajax_hideTooltip()">[..]</a>';

@@ -1,7 +1,7 @@
 /******************************************************************************
- * Skript fuer die MySql-Datenbank
+ * SQL script with database structure
  *
- * Copyright    : (c) 2004 - 2005 The Admidio Team
+ * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -542,6 +542,8 @@ create table %PREFIX%_user_fields
    usf_name                       varchar(100)  not null,
    usf_description                text,
    usf_value_list                 text,
+   usf_icon 					  varchar(255),
+   usf_url	 				      varchar(255),
    usf_system                     boolean       not null default '0',
    usf_disabled                   boolean       not null default '0',
    usf_hidden                     boolean       not null default '0',

@@ -83,7 +83,7 @@ function printBBcodeIcons()
         <dl>
             <dt></dt>
             <dd>
-                <div style="width: 345px;">
+                <div style="width: 90%;">
                     <div style="float: left;">
                         <a class="iconLink" href="javascript:bbcode(0)"><img id="b"
                             src="'. THEME_PATH. '/icons/text_bold.png" title="'.$gL10n->get('SYS_BOLD').'" alt="'.$gL10n->get('SYS_BOLD').'" /></a>

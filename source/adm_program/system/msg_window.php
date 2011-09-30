@@ -121,7 +121,7 @@ switch ($getMessageId)
         break;
 
     case 'user_field_description':
-        echo $gCurrentUser->getProperty($getMessageVar1, 'usf_description');
+        echo $gProfileFields->getProperty($getMessageVar1, 'usf_description');
         break;
 
 	// Eigene Listen

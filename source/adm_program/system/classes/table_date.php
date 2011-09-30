@@ -96,8 +96,8 @@ class TableDate extends TableAccess
                 "BEGIN:VEVENT\n".
                 "UID:". $uid. "\n".
                 "SUMMARY:". $this->getValue('dat_headline'). "\n".
-                "DESCRIPTION:". str_replace("\r\n", '\n', html_entity_decode(strStripTags($this->getValue('dat_description')))). "\n".
-                "DTSTAMP:". $this->getValue('dat_timestamp_create', 'Ymd')."T".$this->getValue('dat_timestamp_create', 'His')."\n".
+                "DESCRIPTION:". str_replace("\r\n", "\n", $this->getValue('dat_description', 'plain')). "\n".
+                "DTSTAMP:". $this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')."\n".
                 "LOCATION:". $this->getValue('dat_location'). "\n";
         if($this->getValue('dat_all_day') == 1)
         {
@@ -140,7 +140,14 @@ class TableDate extends TableAccess
         }
         elseif($field_name == 'dat_description')
         {
-            $value = $this->dbColumns['dat_description'];
+			if($format == 'plain')
+			{
+				$value = html_entity_decode(strStripTags($this->dbColumns['dat_description']));
+			}
+			else
+			{
+				$value = $this->dbColumns['dat_description'];
+			}
         }
         else
         {

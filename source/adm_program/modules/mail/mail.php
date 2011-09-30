@@ -266,7 +266,7 @@ echo '
                             if ($getUserId > 0)
                             {
                                 // usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-                                echo '<input type="text" disabled="disabled" id="mailto" name="mailto" style="width: 345px;" maxlength="50" value="'.$userEmail.'" />
+                                echo '<input type="text" disabled="disabled" id="mailto" name="mailto" style="width: 90%;" maxlength="50" value="'.$userEmail.'" />
                                 <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
                             elseif ($getRoleId > 0 || (strlen($getRoleName) > 0 && strlen($getCategory) > 0) )
@@ -372,7 +372,7 @@ echo '
                         <dd>';
                             if ($gCurrentUser->getValue('usr_id') > 0)
                             {
-                               echo '<input type="text" id="name" name="name" disabled="disabled" style="width: 345px;" maxlength="50" value="'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '" />';
+                               echo '<input type="text" id="name" name="name" disabled="disabled" style="width: 90%;" maxlength="50" value="'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '" />';
                             }
                             else
                             {
@@ -388,11 +388,11 @@ echo '
                         <dd>';
                             if ($gCurrentUser->getValue('usr_id') > 0)
                             {
-                               echo '<input type="text" id="mailfrom" name="mailfrom" disabled="disabled" style="width: 345px;" maxlength="50" value="'. $gCurrentUser->getValue('EMAIL'). '" />';
+                               echo '<input type="text" id="mailfrom" name="mailfrom" disabled="disabled" style="width: 90%;" maxlength="50" value="'. $gCurrentUser->getValue('EMAIL'). '" />';
                             }
                             else
                             {
-                               echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 345px;" maxlength="50" value="'. $form_values['mailfrom']. '" />';
+                               echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 90%;" maxlength="50" value="'. $form_values['mailfrom']. '" />';
                             }
                             echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
@@ -407,11 +407,11 @@ echo '
                         <dd>';
                             if (strlen($getSubject) > 0)
                             {
-                               echo '<input type="text" disabled="disabled" id="subject" name="subject" style="width: 345px;" maxlength="50" value="'. $getSubject. '" />';
+                               echo '<input type="text" disabled="disabled" id="subject" name="subject" style="width: 90%;" maxlength="50" value="'. $getSubject. '" />';
                             }
                             else
                             {
-                               echo '<input type="text" id="subject" name="subject" style="width: 345px;" maxlength="50" value="'. $form_values['subject']. '" />';
+                               echo '<input type="text" id="subject" name="subject" style="width: 90%;" maxlength="50" value="'. $form_values['subject']. '" />';
                             }
                             echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         </dd>
@@ -423,11 +423,11 @@ echo '
                         <dd>';
                             if (strlen($form_values['body']) > 0)
                             {
-                               echo '<textarea id="body" name="body" style="width: 345px;" rows="10" cols="45">'. $form_values['body']. '</textarea>';
+                               echo '<textarea id="body" name="body" style="width: 90%;" rows="10" cols="45">'. $form_values['body']. '</textarea>';
                             }
                             else
                             {
-                               echo '<textarea id="body" name="body" style="width: 345px;" rows="10" cols="45">'. $getBody. '</textarea>';
+                               echo '<textarea id="body" name="body" style="width: 90%;" rows="10" cols="45">'. $getBody. '</textarea>';
                             }
                         echo '</dd>
                     </dl>

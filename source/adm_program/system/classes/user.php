@@ -12,9 +12,7 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * clearUserFieldArray($delete_db_data = false)
- *                      - der Inhalt der Profilfelder wird geloescht, 
- *                        die Objekte mit DB-Struktur aber nicht !
+ * deleteUserFieldData()- delete all user data of profile fields; user record will not be deleted
  * getListViewRights()  - Liefert ein Array mit allen Rollen und der 
  *                        Berechtigung, ob der User die Liste einsehen darf
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
@@ -173,7 +171,6 @@ class User extends TableUsers
 
         // die Daten der Profilfelder werden geloescht, die Struktur bleibt
 		$this->mProfileFieldsData->clearUserData();
-        //$this->clearUserFieldArray();
 
         $this->webmaster = 0;
 
@@ -186,8 +183,8 @@ class User extends TableUsers
         $this->role_mail_rights = array();
     }
     
-    // der Inhalt der Felder wird geloescht, die Objekte mit DB-Struktur nur auf Wunsch
-    public function clearUserFieldArray($delete_db_data = false)
+    // delete all user data of profile fields; user record will not be deleted
+    public function deleteUserFieldData()
     {
         // delete every entry from adm_users_data
         foreach($this->mProfileFieldsData->mUserData as $field)

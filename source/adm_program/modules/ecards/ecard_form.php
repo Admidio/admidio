@@ -206,7 +206,7 @@ echo '
                                 <input type="text" readonly="readonly" name="ecard[name_recipient]" style="display: none;" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'">
                                 <input type="text" disabled="disabled" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'"><span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                                 <input type="text" readonly="readonly" name="ecard[email_recipient]" style="display: none;" value="'.$user->getValue('EMAIL').'">
-                                <input type="text" disabled="disabled" style="width: 345px;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                <input type="text" disabled="disabled" style="width: 90%;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                              </div>';
 
                     }
@@ -253,13 +253,13 @@ echo '
         <li>
             <dl>
                 <dt><label>'.$gL10n->get('SYS_SENDER').':</label></dt>
-                <dd><input type="text" disabled="disabled" maxlength="50" style="width: 345px;" value="'.$gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME').'" /></dd>
+                <dd><input type="text" disabled="disabled" maxlength="50" style="width: 90%;" value="'.$gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME').'" /></dd>
             </dl>
         </li>
          <li>
             <dl>
                 <dt><label>'.$gL10n->get('SYS_EMAIL').':</label></dt>
-                <dd><input type="text" disabled="disabled" maxlength="50" style="width: 345px;"  value="'.$gCurrentUser->getValue('EMAIL').'" /></dd>
+                <dd><input type="text" disabled="disabled" maxlength="50" style="width: 90%;"  value="'.$gCurrentUser->getValue('EMAIL').'" /></dd>
             </dl>
         </li>
         <li>
@@ -292,7 +292,7 @@ echo '
                     </div>
                 </dt>
                 <dd>
-                    <textarea id="Nachricht" style="width: 345px; height: 180px; overflow:auto; font:'.$gPreferences['ecard_text_size'].'px '.$gPreferences['ecard_text_font'].'; color:'.$gPreferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
+                    <textarea id="Nachricht" style="width: 90%; height: 180px; overflow:auto; font:'.$gPreferences['ecard_text_size'].'px '.$gPreferences['ecard_text_font'].'; color:'.$gPreferences['ecard_text_color'].'; wrap:virtual;" rows="10" cols="45" name="ecard[message]"';
                     if($gPreferences['enable_ecard_text_length'])
                     {
                     echo' onfocus="javascript:ecardJS.countMax();" onclick="javascript:ecardJS.countMax();" onchange="javascript:ecardJS.countMax();" onkeydown="javascript:ecardJS.countMax();" onkeyup="javascript:ecardJS.countMax();" onkeypress="javascript:ecardJS.countMax();"';

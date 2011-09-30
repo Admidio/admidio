@@ -507,12 +507,12 @@ elseif($req_mode == 8)
 
     // Orga-Uebergreifende Kategorien anlegen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                      VALUES (NULL, \'USF\', \'MASTER_DATA\', \''.$gL10n->get('SYS_MASTER_DATA').'\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                      VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_master_data = $db->insert_id();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                      VALUES (NULL, \'USF\', \'MESSENGER\', \''.$gL10n->get('INS_MESSENGER').'\', 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                      VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_messenger = $db->insert_id();
 
@@ -535,13 +535,16 @@ elseif($req_mode == 8)
     $usf_id_homepage = $db->insert_id();
 
     // Messenger anlegen
-    $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_messenger.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \''.$gL10n->get('INS_AOL_INSTANT_MESSENGER').'\', NULL, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'GOOGLE_TALK\',    \''.$gL10n->get('INS_GOOGLE_TALK').'\', NULL, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'ICQ\',            \''.$gL10n->get('INS_ICQ').'\', NULL, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'MSN_MESSENGER\',  \''.$gL10n->get('INS_MSN_MESSENGER').'\', NULL, 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'SKYPE\',          \''.$gL10n->get('INS_SKYPE').'\', NULL, 0, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'YAHOO_MESSENGER\',\''.$gL10n->get('INS_YAHOO_MESSENGER').'\', NULL, 0, 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+    $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+                                       VALUES ('.$cat_id_messenger.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \'INS_AOL_INSTANT_MESSENGER\', NULL, \'aim.png\', 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'FACEBOOK\',       \'INS_FACEBOOK\', NULL, \'facebook.png\', 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'GOOGLE_PLUS\',    \'INS_GOOGLE_PLUS\', NULL, \'google.png\', 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'ICQ\',            \'INS_ICQ\', NULL, \'icq.png\', 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'WINDOWS_LIVE\',   \'INS_WINDOWS_LIVE\', NULL, \'windows_live.png\', 0, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'SKYPE\',          \'INS_SKYPE\', NULL, \'skype.png\', 0, 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'TWITTER\',        \'INS_TWITTER\', NULL, \'twitter.png\', 0, 7, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'XING\',           \'INS_XING\', NULL, \'xing.png\', 0, 8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'YAHOO_MESSENGER\',\'INS_YAHOO_MESSENGER\', NULL, \'yahoo.png\', 0, 9, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
     // Organisationsobjekt erstellen
@@ -594,21 +597,21 @@ elseif($req_mode == 8)
 
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                           VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'ROL\', \'COMMON\', \''.$gL10n->get('SYS_COMMON').'\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
+                                           VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
     $db->query($sql);
     $category_common = $db->insert_id();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                     VALUES ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'GROUPS\',  \''.$gL10n->get('INS_GROUPS').'\', 0, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'COURSES\', \''.$gL10n->get('INS_COURSES').'\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'TEAMS\',   \''.$gL10n->get('INS_TEAMS').'\', 0, 0, 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \''.$gL10n->get('SYS_CONFIRMATION_OF_PARTICIPATION').'\', 1, 0, 1, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $gCurrentOrganization->getValue('org_id').', \'LNK\', \'COMMON\',  \''.$gL10n->get('SYS_COMMON').'\', 0, 1, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $gCurrentOrganization->getValue('org_id').', \'LNK\', \'INTERN\',  \''.$gL10n->get('INS_INTERN').'\', 1, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'COMMON\',  \''.$gL10n->get('SYS_COMMON').'\', 0, 1, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'TRAINING\',\''.$gL10n->get('INS_TRAINING').'\', 0, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'COURSES\', \''.$gL10n->get('INS_COURSES').'\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                          , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \''.$gL10n->get('INS_ADDIDIONAL_DATA').'\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                     VALUES ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'GROUPS\',  \'INS_GROUPS\', 0, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'TEAMS\',   \'INS_TEAMS\', 0, 0, 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'LNK\', \'COMMON\',  \'SYS_COMMON\', 0, 1, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'LNK\', \'INTERN\',  \'INS_INTERN\', 1, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'COMMON\',  \'SYS_COMMON\', 0, 1, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'TRAINING\',\'INS_TRAINING\', 0, 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                          , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
