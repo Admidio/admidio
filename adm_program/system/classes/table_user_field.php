@@ -99,9 +99,24 @@ class TableUserField extends TableAccess
     {
 		global $gL10n;
 
-		$value = parent::getValue($field_name, $format);
+		if($field_name == 'usf_description')
+        {
+			if($format == 'plain')
+			{
+				$value = html_entity_decode(strStripTags($this->dbColumns['usf_description']));
+			}
+			else
+			{
+				$value = $this->dbColumns['usf_description'];
+			}
+        }
+        else
+        {
+            $value = parent::getValue($field_name, $format);
+        }
 
-		if($field_name == 'usf_name' && $format != 'plain')
+		if(($field_name == 'usf_name' || $field_name == 'cat_name')
+		&& $format != 'plain')
 		{
 			// if text is a translation-id then translate it
 			if(strpos($value, '_') == 3)
@@ -176,6 +191,23 @@ class TableUserField extends TableAccess
 				}
 				$value = $arrListValues;
 			}
+		}
+		elseif($field_name == 'usf_icon' && $format != 'plain')
+		{
+			// if value is imagefile or imageurl then show image
+			if(strpos(admStrToLower($value), '.png') > 0 || strpos(admStrToLower($value), '.jpg') > 0)
+			{
+				// create html for icon
+				if(isValidFileName($value, true) == 0)
+				{
+					$value = '<img src="'.THEME_PATH.'/icons/'.$value.'" style="vertical-align: middle;" title="'.$this->getValue('usf_name').'" alt="'.$this->getValue('usf_name').'" />';
+				}
+				elseif(strpos(admStrToLower($value), 'http') == 0 && strValidCharacters($value, 'url'))
+				{
+					$value = '<img src="'.$value.'" style="vertical-align: middle;" title="'.$this->getValue('usf_name').'" alt="'.$this->getValue('usf_name').'" />';
+				}
+			}
+
 		}
 
         return $value;
@@ -266,7 +298,26 @@ class TableUserField extends TableAccess
             $row = $this->db->fetch_array();
 
             $this->setValue('usf_sequence', $row['count'] + 1);
-        }     
+        }
+        elseif($field_name == 'usf_description')
+        {
+            return parent::setValue($field_name, $field_value, false);
+        }
+        elseif($field_name == 'usf_url' && strlen($field_value) > 0)
+		{
+			// Homepage darf nur gueltige Zeichen enthalten
+			if (!strValidCharacters($field_value, 'url'))
+			{
+				return false;
+			}
+			// Homepage noch mit http vorbelegen
+			if(strpos(admStrToLower($field_value), 'http://')  === false
+			&& strpos(admStrToLower($field_value), 'https://') === false )
+			{
+				$field_value = 'http://'. $field_value;
+			}
+		}
+		
         return parent::setValue($field_name, $field_value);
     }
 }

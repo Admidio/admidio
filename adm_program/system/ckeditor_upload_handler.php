@@ -40,6 +40,10 @@ elseif($getCKEditor == 'dat_description')
 {
     $folderName = 'dates';
 }
+elseif($getCKEditor == 'usf_description')
+{
+    $folderName = 'user_fields';
+}
 
 $myFilesProfilePhotos = new MyFiles($folderName);
 if($myFilesProfilePhotos->checkSettings() == false)

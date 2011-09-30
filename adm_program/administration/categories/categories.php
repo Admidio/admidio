@@ -19,6 +19,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_category.php');
 
 // Initialize and check the parameters
 $getType  = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
@@ -154,15 +155,20 @@ echo '
     $cat_result = $gDb->query($sql);
     $write_tbody = false;
     $write_all_orgas = false;
+	
+	$category = new TableCategory($gDb);
 
     while($cat_row = $gDb->fetch_array($cat_result))
     {
-        if($cat_row['cat_system'] == 1 && $getType == 'USF')
+        $category->clear();
+		$category->setArray($cat_row);
+			
+        if($category->getValue('cat_system') == 1 && $getType == 'USF')
         {
             // da bei USF die Kategorie Stammdaten nicht verschoben werden darf, muss hier ein bischen herumgewurschtelt werden
-            echo '<tbody id="cat_'.$cat_row['cat_id'].'">';
+            echo '<tbody id="cat_'.$category->getValue('cat_id').'">';
         }
-        elseif($cat_row['cat_org_id'] == 0 && $getType == 'USF')
+        elseif($category->getValue('cat_org_id') == 0 && $getType == 'USF')
         {
             // Kategorien über alle Organisationen kommen immer zuerst
             if($write_all_orgas == false)
@@ -185,20 +191,20 @@ echo '
             }
         }
         echo '
-        <tr id="row_'. $cat_row['cat_id']. '" class="tableMouseOver">
-            <td><a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $cat_row['cat_name']. '</a></td>
+        <tr id="row_'. $category->getValue('cat_id'). '" class="tableMouseOver">
+            <td><a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a></td>
             <td style="text-align: right; width: 45px;"> ';
-                if($cat_row['cat_system'] == 0 || $getType != 'USF')
+                if($category->getValue('cat_system') == 0 || $getType != 'USF')
                 {
                     echo '
-                    <a class="iconLink" href="javascript:moveCategory(\'up\', '.$cat_row['cat_id'].')"><img
+                    <a class="iconLink" href="javascript:moveCategory(\'up\', '.$category->getValue('cat_id').')"><img
                             src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_UP', $getTitle).'" /></a>
-                    <a class="iconLink" href="javascript:moveCategory(\'down\', '.$cat_row['cat_id'].')"><img
+                    <a class="iconLink" href="javascript:moveCategory(\'down\', '.$category->getValue('cat_id').')"><img
                             src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" title="'.$gL10n->get('CAT_MOVE_DOWN', $getTitle).'" /></a>';
                 }
             echo '</td>
             <td>';
-                if($cat_row['cat_hidden'] == 1)
+                if($category->getValue('cat_hidden') == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" />';
                 }
@@ -208,7 +214,7 @@ echo '
                 }
             echo '</td>
             <td>';
-                if($cat_row['cat_default'] == 1)
+                if($category->getValue('cat_default') == 1)
                 {
                     echo '<img class="iconInformation" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />';
                 }
@@ -218,17 +224,17 @@ echo '
                 }
             echo '</td>
             <td style="text-align: right; width: 90px;">
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $cat_row['cat_id']. '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
+                <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
 
-                if($cat_row['cat_system'] == 1)
+                if($category->getValue('cat_system') == 1)
                 {
                     echo '<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
                 }
                 else
                 {
                     echo '<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
-						$cat_row['cat_id'].'&amp;name='.urlencode($cat_row['cat_name']).'&amp;database_id='.$cat_row['cat_id'].'&amp;database_id_2='.$getType.'"><img 
+						$category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img 
 						src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }
             echo '</td>

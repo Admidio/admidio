@@ -2,6 +2,8 @@
 -- Tabellen erweitern
 ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_default` tinyint (1) unsigned not null default 0 AFTER cat_system;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_value_list` text AFTER usf_description;
+ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_icon` varchar(255) AFTER usf_value_list;
+ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_url` varchar(255) AFTER usf_icon;
 
 -- Autoincrement-Spalte fuer adm_auto_login anlegen
 ALTER TABLE %PREFIX%_auto_login DROP FOREIGN KEY %PREFIX%_FK_ATL_USR;
@@ -223,6 +225,17 @@ UPDATE %PREFIX%_user_fields SET usf_system = 0, usf_name = 'SYS_GENDER', usf_typ
 UPDATE %PREFIX%_preferences SET prf_value = 'da'
  WHERE prf_name like 'system_language'
    AND prf_value like 'dk';
+
+-- replace category name with translation id   
+UPDATE %PREFIX%_categories SET cat_name = 'SYS_MASTER_DATA' WHERE cat_name_intern = 'MASTER_DATA';
+UPDATE %PREFIX%_categories SET cat_name = 'SYS_COMMON', cat_name_intern = 'COMMON' WHERE cat_name_intern IN ('COMMON', 'ALLGEMEIN');
+UPDATE %PREFIX%_categories SET cat_name = 'INS_GROUPS', cat_name_intern = 'GROUPS' WHERE cat_name_intern IN ('GROUPS', 'GRUPPEN');
+UPDATE %PREFIX%_categories SET cat_name = 'INS_COURSES', cat_name_intern = 'COURSES' WHERE cat_name_intern IN ('COURSES', 'KURSE');
+UPDATE %PREFIX%_categories SET cat_name = 'INS_TEAMS', cat_name_intern = 'TEAMS' WHERE cat_name_intern IN ('TEAMS', 'MANNSCHAFTEN');
+UPDATE %PREFIX%_categories SET cat_name = 'SYS_CONFIRMATION_OF_PARTICIPATION' WHERE cat_name_intern = 'CONFIRMATION_OF_PARTICIPATION';
+UPDATE %PREFIX%_categories SET cat_name = 'INS_INTERN' WHERE cat_name_intern = 'INTERN';
+UPDATE %PREFIX%_categories SET cat_name = 'INS_TRAINING' WHERE cat_name_intern = 'TRAINING';
+UPDATE %PREFIX%_categories SET cat_name = 'INS_ADDIDIONAL_DATA', cat_name_intern = 'ADDIDIONAL_DATA' WHERE cat_name_intern IN ('ADDIDIONAL_DATA', 'ZUSÄTZLICHE_DATEN');
 
 -- replace BB-Code with html for the new ckeditor
 UPDATE %PREFIX%_announcements SET ann_description = REPLACE(REPLACE(ann_description, '[/b]', '</b>'), '[b]', '<b>');

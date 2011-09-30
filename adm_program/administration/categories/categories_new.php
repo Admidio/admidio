@@ -112,7 +112,7 @@ echo '
                 <dl>
                     <dt><label for="cat_name">'.$gL10n->get('SYS_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="cat_name" name="cat_name" '.$html_disabled.' style="width: 345px;" maxlength="100" value="'. $category->getValue('cat_name'). '" />
+                        <input type="text" id="cat_name" name="cat_name" '.$html_disabled.' style="width: 90%;" maxlength="100" value="'. $category->getValue('cat_name', 'plain'). '" />
                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>

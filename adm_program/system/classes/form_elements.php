@@ -141,6 +141,13 @@ class FormElements
 
 			while($row = $gDb->fetch_array($result))
 			{
+				// if text is a translation-id then translate it
+				if(strpos($row['cat_name'], '_') == 3)
+				{
+					$row['cat_name'] = $gL10n->get(admStrToUpper($row['cat_name']));
+				}
+				
+				// create entry in html
 				$selectBoxHtml .= '<option value="'.$row['cat_id'].'"';
 					if($default_category == $row['cat_id']
 					|| ($default_category == 0 && $row['cat_default'] == 1))

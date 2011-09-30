@@ -142,7 +142,7 @@ echo '
                 <dl>
                     <dt><label for="new_name">'.$gL10n->get('DOW_NEW_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 345px;" maxlength="255" />
+                        <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 90%;" maxlength="255" />
                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES&amp;inline=true"><img 
 			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"
@@ -154,7 +154,7 @@ echo '
                 <dl>
                     <dt><label for="new_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd>
-                        <textarea id="new_description" name="new_description" style="width: 345px;" rows="5">'. $form_values['new_description']. '</textarea>
+                        <textarea id="new_description" name="new_description" style="width: 90%;" rows="5">'. $form_values['new_description']. '</textarea>
                     </dd>
                 </dl>
             </li>

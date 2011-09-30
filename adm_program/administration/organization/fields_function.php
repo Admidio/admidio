@@ -19,6 +19,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_user_field.php');
+require_once('../../libs/htmlawed/htmlawed.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())
@@ -110,6 +111,10 @@ if($getMode == 1)
     {
         $_POST['usf_mandatory'] = 0;
     }
+	
+    // make html in description secure
+    $_POST['usf_description'] = stripslashes($_POST['usf_description']);
+    $_POST['usf_description'] = htmLawed($_POST['usf_description']);
 
     // POST Variablen in das UserField-Objekt schreiben
     foreach($_POST as $key => $value)

@@ -555,7 +555,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                                 }
                                 else
                                 {
-                                    echo '<img src="'. THEME_PATH. '/icons/checkbox_checked.gif" style="vertical-align: middle;" alt="on" />';
+                                    $content = '<img src="'. THEME_PATH. '/icons/checkbox_checked.gif" style="vertical-align: middle;" alt="on" />';
                                 }
                             }
                             else
@@ -566,7 +566,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                                 }
                                 else
                                 {
-                                    echo '<img src="'. THEME_PATH. '/icons/checkbox.gif" style="vertical-align: middle;" alt="off" />';
+                                    $content = '<img src="'. THEME_PATH. '/icons/checkbox.gif" style="vertical-align: middle;" alt="off" />';
                                 }
                             }
                             break;

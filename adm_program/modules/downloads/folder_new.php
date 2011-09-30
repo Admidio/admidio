@@ -87,7 +87,7 @@ echo '
                 <dl>
                     <dt><label for="new_folder">'.$gL10n->get('SYS_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="new_folder" name="new_folder" value="'.$form_values['new_folder'].'" style="width: 345px;" maxlength="255" />
+                        <input type="text" id="new_folder" name="new_folder" value="'.$form_values['new_folder'].'" style="width: 90%;" maxlength="255" />
                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
@@ -96,7 +96,7 @@ echo '
                 <dl>
                     <dt><label for="new_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
                     <dd>
-                        <textarea id="new_description" name="new_description" style="width: 345px;" rows="4" cols="40" >'.$form_values['new_description'].'</textarea>
+                        <textarea id="new_description" name="new_description" style="width: 90%;" rows="4" cols="40" >'.$form_values['new_description'].'</textarea>
                     </dd>
                 </dl>
             </li>

@@ -125,7 +125,7 @@ class Message
         }
         
         echo '
-        <div class="formLayout" id="message_form" style="width: 345px; margin-top: 60px;">
+        <div class="formLayout" id="message_form" style="width: 90%; margin-top: 60px;">
             <div class="formHead">'. $headline. '</div>
             <div class="formBody">
                 <p>'. $content. '</p>';

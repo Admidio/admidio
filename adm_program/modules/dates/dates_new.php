@@ -306,7 +306,7 @@ echo '
 						<dl>
 							<dt><label for="dat_headline">'.$gL10n->get('SYS_TITLE').':</label></dt>
 							<dd>
-								<input type="text" id="dat_headline" name="dat_headline" style="width: 345px;" maxlength="100" value="'. $date->getValue('dat_headline'). '" />
+								<input type="text" id="dat_headline" name="dat_headline" style="width: 90%;" maxlength="100" value="'. $date->getValue('dat_headline'). '" />
 								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 							</dd>
 						</dl>
@@ -315,7 +315,7 @@ echo '
 						<dl>
 							<dt><label for="dat_location">'.$gL10n->get('DAT_LOCATION').':</label></dt>
 							<dd>
-								<input type="text" id="dat_location" name="dat_location" style="width: 345px;" maxlength="50" value="'. $date->getValue('dat_location').$date->getValue('dat_country'). '" />';
+								<input type="text" id="dat_location" name="dat_location" style="width: 90%;" maxlength="50" value="'. $date->getValue('dat_location').$date->getValue('dat_country'). '" />';
 								if($gPreferences['dates_show_map_link'])
 								{
 									echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK&amp;inline=true"><img 
@@ -560,7 +560,7 @@ echo '
 
 			<div class="groupBoxBody" id="admDescriptionBody">
                 <ul class="formFieldList">
-                    <li>'.$ckEditor->createEditor('dat_description', $date->getValue('dat_description'), 'AdmidioDefault', 200).'</li>
+                    <li>'.$ckEditor->createEditor('dat_description', $date->getValue('dat_description'), 'AdmidioDefault', 150).'</li>
                 </ul>
             </div>
         </div>';

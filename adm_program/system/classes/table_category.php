@@ -129,6 +129,27 @@ class TableCategory extends TableAccess
 		$row = $this->db->fetch_array();
 		return $row[0];
 	}
+	
+	// returns the value of database column $field_name
+	// for column usf_value_list the following format is accepted
+	// 'plain' -> returns database value of usf_value_list
+    public function getValue($field_name, $format = '')
+    {
+		global $gL10n;
+
+		$value = parent::getValue($field_name, $format);
+
+		if($field_name == 'cat_name' && $format != 'plain')
+		{
+			// if text is a translation-id then translate it
+			if(strpos($value, '_') == 3)
+			{
+				$value = $gL10n->get(admStrToUpper($value));
+			}
+		}
+
+        return $value;
+    }
 
     // die Kategorie wird um eine Position in der Reihenfolge verschoben
     public function moveSequence($mode)
@@ -241,8 +262,8 @@ class TableCategory extends TableAccess
             }
         }
         
-        // wurde der Name veraendert, dann nach einem neuen eindeutigen internen Namen suchen
-        if($this->columnsInfos['cat_name']['changed'])
+		// if new category than generate new name intern, otherwise no change will be made
+		if($this->new_record == true)
         {
             $this->setValue('cat_name_intern', $this->getNewNameIntern($this->getValue('cat_name'), 1));
         }

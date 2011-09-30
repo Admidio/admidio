@@ -165,11 +165,11 @@ echo '
                         if ($gCurrentUser->getValue('usr_id') > 0)
                         {
                             // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                            echo '<input type="text" id="gbo_name" name="gbo_name" disabled="disabled" style="width: 345px;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />';
+                            echo '<input type="text" id="gbo_name" name="gbo_name" disabled="disabled" style="width: 90%;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />';
                         }
                         else
                         {
-                            echo '<input type="text" id="gbo_name" name="gbo_name" style="width: 345px;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />
+                            echo '<input type="text" id="gbo_name" name="gbo_name" style="width: 90%;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />
                             <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         }
                     echo '</dd>
@@ -179,7 +179,7 @@ echo '
                 <dl>
                     <dt><label for="gbo_email">'.$gL10n->get('SYS_EMAIL').':</label></dt>
                     <dd>
-                        <input type="text" id="gbo_email" name="gbo_email" style="width: 345px;" maxlength="50" value="'. $guestbook->getValue('gbo_email'). '" />
+                        <input type="text" id="gbo_email" name="gbo_email" style="width: 90%;" maxlength="50" value="'. $guestbook->getValue('gbo_email'). '" />
                     </dd>
                 </dl>
             </li>
@@ -187,7 +187,7 @@ echo '
                 <dl>
                     <dt><label for="gbo_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
                     <dd>
-                        <input type="text" id="gbo_homepage" name="gbo_homepage" style="width: 345px;" maxlength="50" value="'. $guestbook->getValue('gbo_homepage'). '" />
+                        <input type="text" id="gbo_homepage" name="gbo_homepage" style="width: 90%;" maxlength="50" value="'. $guestbook->getValue('gbo_homepage'). '" />
                     </dd>
                 </dl>
             </li>';
@@ -207,7 +207,7 @@ echo '
                         }
                     echo '</dt>
                     <dd>
-                        <textarea id="gbo_text" name="gbo_text" style="width: 345px;" rows="10" cols="40">'. $guestbook->getValue('gbo_text'). '</textarea>
+                        <textarea id="gbo_text" name="gbo_text" style="width: 90%;" rows="10" cols="40">'. $guestbook->getValue('gbo_text'). '</textarea>
                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                     </dd>
                 </dl>
