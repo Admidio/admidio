@@ -54,7 +54,6 @@ if(strlen($password) == 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
 }
-$password = md5($password);
 
 // Name und Passwort pruefen
 // Rolle muss mind. Mitglied sein
@@ -90,7 +89,7 @@ if ($user_found >= 1)
         }
     }
 
-    if($gCurrentUser->getValue('usr_password') == $password)
+    if($gCurrentUser->checkPassword($password) == true)
     {
         $gCurrentSession->setValue('ses_usr_id', $gCurrentUser->getValue('usr_id'));
         $gCurrentSession->save();

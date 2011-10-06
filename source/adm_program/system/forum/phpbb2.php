@@ -24,13 +24,13 @@
  *                          $username = Der login_name des Users
  *                          RETURNCODE = TRUE  - Den User gibt es
  *                          RETURNCODE = FALSE - Den User gibt es nicht
- * userLogin($login_name, $password_crypt, $email, $webmaster = 0)
+ * userLogin($login_name, $password, $email, $webmaster = 0)
  *                        - Meldet den User (Username) im Forum an.
- *                          $login_name     = Der aktuelle Admidio Login reg_login_name des Users
- *                          $password_crypt = Der aktuelle Admidio Login reg_password Crypt des Users
- *                          $email          = Der aktuelle Admidio email des Users
- *                          $webmaster      = Kennzeichen, ob User ein Admidio-Webmaster ist true/false
- *                                            dann wird er auch im Forum zum Administrator gemacht
+ *                          $login_name = Der aktuelle Admidio Login reg_login_name des Users
+ *                          $password   = Der aktuelle Admidio Login reg_password des Users
+ *                          $email      = Der aktuelle Admidio email des Users
+ *                          $webmaster  = Kennzeichen, ob User ein Admidio-Webmaster ist true/false
+ *                                        dann wird er auch im Forum zum Administrator gemacht
  *                          RETURNCODE  = TRUE  - User angemeldet
  *                          RETURNCODE  = FALSE - User nicht angemeldet
  * userLogoff()               - Meldet den aktuellen User im Forum ab.
@@ -245,7 +245,7 @@ class PhpBB2
 
 
     // Funktion meldet den aktuellen User im Forum an
-    function userLogin($login_name, $password_crypt, $email, $set_admin = 0)
+    function userLogin($login_name, $password, $email, $set_admin = 0)
     {
         // Pruefen, ob es den User im Forum gibt, im Nein Fall diesem User ein Forum Account anlegen
         if(!$this->userExists($login_name))
@@ -253,7 +253,7 @@ class PhpBB2
             if($this->export)
             {
                 // Export der Admido Daten ins Forum und einen Forum Account erstellen
-                $this->userInsert($login_name, 1, $password_crypt, $email);
+                $this->userInsert($login_name, 1, md5($password), $email);
 
                 $this->message = 'SYS_FORUM_LOGIN_NEW';
                 $this->session_valid = TRUE;        
@@ -285,7 +285,7 @@ class PhpBB2
             $this->userDaten($login_name);
 
             // Password Admidio und Forum pruefen, ggf. zuruecksetzen
-            if(!($this->checkPassword($password_crypt, $this->password, $this->userid)))
+            if(!($this->checkPassword(md5($password), $this->password, $this->userid)))
             {
                 // Password wurde zurueck gesetzt, Meldung vorbereiten
                 $this->message = 'SYS_FORUM_LOGIN_PASSWORD';

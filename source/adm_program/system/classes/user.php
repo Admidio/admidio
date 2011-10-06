@@ -12,7 +12,8 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * deleteUserFieldData()- delete all user data of profile fields; user record will not be deleted
+ * checkPassword($password) - check password against stored hash    
+ * deleteUserFieldData()    - delete all user data of profile fields; user record will not be deleted
  * getListViewRights()  - Liefert ein Array mit allen Rollen und der 
  *                        Berechtigung, ob der User die Liste einsehen darf
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
@@ -42,6 +43,27 @@ class User extends TableUsers
     {
 		$this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
         parent::__construct($db, $usr_id);
+    }
+
+    // check password against stored hash    
+    public function checkPassword($password)
+    {
+        // if password is stored with phpass hash, then use phpass
+        if(substr($this->getValue('usr_password'), 0, 1) == '$')
+        {
+            $passwordHasher = new PasswordHash(8, true);
+            if($passwordHasher->CheckPassword($password, $this->getValue('usr_password')) == true)
+            {
+                return true;
+            }
+        }
+        // if password is stored the old was then use md5
+        elseif(md5($password) == $this->getValue('usr_password'))
+        {
+            $this->setValue('usr_password', $password);
+            return true;
+        }
+        return false;
     }
 
     // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags,

@@ -18,6 +18,7 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
+require_once(SERVER_PATH. '/adm_program/libs/phpass/passwordhash.php');
 
 class TableUsers extends TableAccess
 {
@@ -158,16 +159,16 @@ class TableUsers extends TableAccess
 
     public function setValue($field_name, $field_value, $check_value = true)
     {
-        // Passwortfelder sollten verschluesselt als md5-Hash gespeichert werden
+        // encode Passwort with phpAss
         if(($field_name == 'usr_password' || $field_name == 'usr_new_password') && strlen($field_value) < 30)
         {
-            // Passwort verschluesselt und unverschluesselt speichern
-            $this->real_password = $field_value;
-            $field_value = md5($field_value);
+            $check_value    = false;
+            $passwordHasher = new PasswordHash(8, true);
+            $field_value    = $passwordHasher->HashPassword($field_value);
         }
+		// username should not contain special characters
 		elseif($field_name == 'usr_login_name')
 		{
-			// username should not contain special characters
 			if (strlen($field_value) > 0 && strValidCharacters($field_value, 'noSpecialChar') == false)
 			{
 				return false;
