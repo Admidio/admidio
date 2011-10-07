@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer den Zugriff auf die Datenbanktabelle adm_users
+ * Class handle database access to table adm_users
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -163,7 +163,7 @@ class TableUsers extends TableAccess
         if(($field_name == 'usr_password' || $field_name == 'usr_new_password') && strlen($field_value) < 30)
         {
             $check_value    = false;
-            $passwordHasher = new PasswordHash(8, true);
+            $passwordHasher = new PasswordHash(9, true);
             $field_value    = $passwordHasher->HashPassword($field_value);
         }
 		// username should not contain special characters
