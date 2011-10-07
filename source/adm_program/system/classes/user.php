@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_users
+ * Class handle role rights, cards and other things of users
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -13,7 +13,8 @@
  * folgende Methoden zur Verfuegung:
  *
  * checkPassword($password) - check password against stored hash    
- * deleteUserFieldData()    - delete all user data of profile fields; user record will not be deleted
+ * deleteUserFieldData()    - delete all user data of profile fields; 
+ *                            user record will not be deleted
  * getListViewRights()  - Liefert ein Array mit allen Rollen und der 
  *                        Berechtigung, ob der User die Liste einsehen darf
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
@@ -51,7 +52,7 @@ class User extends TableUsers
         // if password is stored with phpass hash, then use phpass
         if(substr($this->getValue('usr_password'), 0, 1) == '$')
         {
-            $passwordHasher = new PasswordHash(8, true);
+            $passwordHasher = new PasswordHash(9, true);
             if($passwordHasher->CheckPassword($password, $this->getValue('usr_password')) == true)
             {
                 return true;
