@@ -19,6 +19,10 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_weblink.php');
 
+// Initialize and check the parameters
+$getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
+
 if ($gPreferences['enable_bbcode'] == 1)
 {
     require_once('../../system/bbcode.php');
@@ -37,14 +41,10 @@ if (!$gCurrentUser->editWeblinksRight())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Initialize and check the parameters
-$get_lnk_id   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
-
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Weblinkobjekt anlegen
-$link = new TableWeblink($gDb, $get_lnk_id);
+$link = new TableWeblink($gDb, $getLinkId);
 
 if(isset($_SESSION['links_request']))
 {
@@ -55,13 +55,13 @@ if(isset($_SESSION['links_request']))
 }
 
 // Html-Kopf ausgeben
-if($get_lnk_id > 0)
+if($getLinkId > 0)
 {
-    $gLayout['title'] = $gL10n->get('SYS_EDIT_VAR', $get_headline);
+    $gLayout['title'] = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
 }
 else
 {
-    $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $get_headline);
+    $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
 }
 
 //Script für BBCode laden
@@ -82,7 +82,7 @@ $gLayout['header'] = $javascript. '
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
-if($get_lnk_id > 0)
+if($getLinkId > 0)
 {
     $new_mode = '3';
 }
@@ -92,7 +92,7 @@ else
 }
 
 echo '
-<form action="'.$g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $get_lnk_id. '&amp;headline='. $get_headline. '&amp;mode='.$new_mode.'" method="post">
+<form action="'.$g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$new_mode.'" method="post">
 <div class="formLayout" id="edit_links_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">

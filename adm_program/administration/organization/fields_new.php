@@ -218,12 +218,13 @@ echo '
 					</li>
 					<li id="admValueList">
 						<dl>
-							<dt><label for="usf_value_list">'.$gL10n->get('SYS_VALUE_LIST').':</label></dt>
+							<dt><label for="usf_value_list">'.$gL10n->get('ORG_VALUE_LIST').':</label></dt>
 							<dd><textarea name="usf_value_list" id="usf_value_list" style="width: 90%;" rows="6" cols="40">'.
 								$user_field->getValue('usf_value_list', 'plain'). '</textarea>
-								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC&amp;inline=true"><img 
-									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
-									class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+								<span class="mandatoryFieldMarker" style="margin: 0px;" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_VALUE_LIST_DESC&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
+									class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" style="margin: 0px;" alt="Help" title="" /></a>
 							</dd>
 						</dl>
 					</li>
@@ -232,7 +233,6 @@ echo '
 							<dt><label for="usf_icon">'.$gL10n->get('SYS_ICON').':</label></dt>
 							<dd><input type="text" name="usf_icon" id="usf_icon" '.$html_disabled.' style="width: 90%;" maxlength="100"
 								value="'. $user_field->getValue('usf_icon', 'plain'). '" />
-								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 							</dd>
 						</dl>
 					</li>
@@ -241,7 +241,9 @@ echo '
 							<dt><label for="usf_url">'.$gL10n->get('ORG_URL').':</label></dt>
 							<dd><input type="text" name="usf_url" id="usf_url" '.$html_disabled.' style="width: 90%;" maxlength="100"
 								value="'. $user_field->getValue('usf_url'). '" />
-								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_URL_DESC&amp;inline=true"><img 
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_URL_DESC\',this)" onmouseout="ajax_hideTooltip()"
+									class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" style="margin: 0px;" alt="Help" title="" /></a>
 							</dd>
 						</dl>
 					</li>					

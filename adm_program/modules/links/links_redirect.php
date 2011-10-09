@@ -14,6 +14,10 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_weblink.php');
 
+// Initialize and check the parameters
+$getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', null, true);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
+
 if ($gPreferences['enable_weblinks_module'] == 0)
 {
     // das Modul ist deaktiviert
@@ -24,10 +28,6 @@ if($gPreferences['enable_weblinks_module'] == 2)
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require('../../system/login_valid.php');
 }
-
-// Initialize and check the parameters
-$get_lnk_id   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', null, true);
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
 
 // Lokale Variablen initialisieren
 $url = '';
@@ -46,7 +46,7 @@ $sql = 'SELECT * FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
   		 WHERE lnk_cat_id = cat_id
 		   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 		   AND cat_type = \'LNK\'
-		   AND lnk_id = '.$get_lnk_id.'
+		   AND lnk_id = '.$getLinkId.'
   		       '.$sqlCondition.'
 		 ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
 $result = $gDb->query($sql);
@@ -63,7 +63,7 @@ if(strlen($url) == 0)
 }
 
 // Wenn Link gültig ist, Counter um eine Position erhöhen
-$link = new TableWeblink($gDb, $get_lnk_id);
+$link = new TableWeblink($gDb, $getLinkId);
 $link->setValue('lnk_counter',$link->getValue('lnk_counter') + 1);
 $link->save();
 
@@ -87,12 +87,12 @@ if ($gPreferences['weblinks_redirect_seconds'] > 0)
 	$redirect_seconds = '<span id="counter">'.$gPreferences["weblinks_redirect_seconds"].'</span>';
 
 	// Html-Kopf ausgeben
-	$gLayout['title'] = $get_headline;
+	$gLayout['title'] = $getHeadline;
 
 	require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 	// Html des Modules ausgeben
-	echo '<h1 class="moduleHeadline">'. $get_headline. '</h1>
+	echo '<h1 class="moduleHeadline">'. $getHeadline. '</h1>
 	<div id="links_overview">
 	<div class="formLayout">
 			<div class="formHead">'.$gL10n->get('LNK_REDIRECT').'</div>

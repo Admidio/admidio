@@ -19,25 +19,27 @@
     <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
     <text id="ORG_FIELD_DISABLED" development="changed" translation="todo">Feld nur für Benutzer mit dem Recht %VAR1_BOLD% editierbar</text>
+    <text id="ORG_FIELD_URL_DESC" development="new" translation="todo">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter %user_content% in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: http://www.google.de/search?q=%user_content%\nFeldinhalt: Admidio\nLink im Profil: http://www.google.de/search?q=Admidio</text>
     <text id="ORG_JAVASCRIPT_EDITOR_COLOR" development="changed" translation="todo">Farbe Javascript-Editor</text>
     <text id="ORG_JAVASCRIPT_EDITOR_COLOR_DESC" development="changed" translation="todo">Hier wird die Hintergrundfarbe des Javascripteditors angegeben. Dies kann ein hexadezimaler Farbwert sein z.B. #ffa500 oder ein RGB-Wert z.B. rgb(255, 185,0).</text>
     <text id="ORG_JAVASCRIPT_EDITOR_ENABLE" development="changed" translation="todo">Javascript-Editor benutzen</text>
     <text id="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC" development="changed" translation="todo">Ein umfangreicher Javascript-Editor wird an vielen Stellen im Programm genutzt, damit der Benutzer z.B. Ankündigungen, Terminbeschreibungen oder ähnliches komfortabler eingeben kann. Wird der Editor deaktiviert, so wird ein einfaches mehrzeiliges Textfeld dargestellt.</text>
-    <text id="SYS_CHECKBOX" development="deleted" translation="todo">Checkbox</text>
-    <text id="SYS_DATABASE_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt %VAR1% oder höher</text>
-    <text id="SYS_DESIGNATION" development="deleted" translation="todo">Bezeichnung</text>
-    <text id="SYS_DROPDOWN_LISTBOX" development="deleted" translation="todo">Dropdown-Listenfeld</text>
-    <text id="SYS_ICON" development="deleted" translation="todo">Icon</text>
-    <text id="SYS_INTERNAL_NAME" development="deleted" translation="todo">Interner Name</text>
-    <text id="SYS_INTERNAL_NAME_DESC" development="deleted" translation="todo">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</text>
+    <text id="ORG_VALUE_LIST" development="new" translation="todo">Werteliste</text>
+    <text id="ORG_VALUE_LIST_DESC" development="new" translation="todo">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: http://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</text>
+    <text id="SYS_CHECKBOX" development="new" translation="todo">Checkbox</text>
+    <text id="SYS_DATABASE_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt %VAR1% oder höher</text>
+    <text id="SYS_DESIGNATION" development="new" translation="todo">Bezeichnung</text>
+    <text id="SYS_DROPDOWN_LISTBOX" development="new" translation="todo">Dropdown-Listenfeld</text>
+    <text id="SYS_ICON" development="new" translation="todo">Icon</text>
+    <text id="SYS_INTERNAL_NAME" development="new" translation="todo">Interner Name</text>
+    <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="todo">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</text>
     <text id="SYS_MYSQL_VERSION" development="deleted" translation="todo">MySQL-Version</text>
     <text id="SYS_MYSQL_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt 4.1 oder höher</text>
 	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>    	
 	<text id="SYS_PRESENTATION" development="new" translation="todo">Darstellung</text>
-    <text id="SYS_RADIO_BUTTON" development="deleted" translation="todo">Optionsfeld</text>
-    <text id="SYS_SOCIAL_NETWORKS" development="deleted" translation="todo">Soziale Netzwerke</text>
-    <text id="SYS_VALUE_LIST" development="new" translation="todo">Werteliste</text>
-    <text id="SYS_VALUE_LIST_DESC" development="new" translation="todo">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: http://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</text>
+    <text id="SYS_RADIO_BUTTON" development="new" translation="todo">Optionsfeld</text>
+    <text id="SYS_SOCIAL_NETWORKS" development="new" translation="todo">Soziale Netzwerke</text>
+    <text id="SYS_URL_INVALID_CHAR" development="changed" translation="todo">Die URL im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/#?=% .</text>
     <text id="SYS_VERSION" development="new" translation="todo">Version</text>
 
 </version>
@@ -321,10 +323,8 @@
     <text id="INS_ADDRESS_LIST" development="new" translation="todo">Adressliste</text>
     <text id="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Daten für den Administrator eingegeben worden!</text>
     <text id="INS_AOL_INSTANT_MESSENGER" development="new" translation="todo">AOL Instant Messenger</text>
-    <text id="INS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
     <text id="INS_BOARD" development="new" translation="todo">Vorstand</text>
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="todo">Wähle bitte eine Sprache aus</text>
-    <text id="INS_CITY" development="new" translation="todo">Ort</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="todo">Besprechnungsraum</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="todo">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</text>
     <text id="INS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
@@ -351,7 +351,6 @@
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="todo">Lade die Konfigurationsdatei %VAR1_BOLD% herunter und kopiere diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine %VAR2_BOLD%.\n\nErst nachdem die Datei dort abgelegt wurde, kannst du mit der Installation fortfahren.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank eingeben</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="todo">Die Datei %VAR1_BOLD% konnte nicht geöffnet werden.</text>
-    <text id="INS_FAX" development="new" translation="todo">Fax</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="todo">Der Ordner %VAR1_BOLD% besitzt noch keine Schreibrechte. Diese solltest du noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</text>
     <text id="INS_GROUPS" development="new" translation="todo">Gruppen</text>
     <text id="INS_ICQ" development="new" translation="todo">ICQ</text>
@@ -368,7 +367,6 @@
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="todo">Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation!</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
-    <text id="INS_MOBILE" development="new" translation="todo">Handy</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="todo">Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, für die du Admidio nutzen möchtest.</text>
@@ -380,7 +378,6 @@
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu deiner Datenbank ist.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Du solltest versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
-    <text id="INS_POSTCODE" development="new" translation="todo">PLZ</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="todo">Organisation festlegen</text>
@@ -953,6 +950,7 @@
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="todo">Abbrechen</text>
+    <text id="SYS_ABR_NO" development="new" translation="todo" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_ACTIVE" development="new" translation="todo">Aktiv</text>
     <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiviert</text>
     <text id="SYS_ADD_EMAIL" development="new" translation="todo">E-Mail-Adresse einfügen</text>
@@ -1000,6 +998,7 @@
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">nach Update suchen</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
+    <text id="SYS_CITY" development="new" translation="todo">Ort</text>
     <text id="SYS_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="todo">Alle Tags schließen</text>
@@ -1056,6 +1055,7 @@
     <text id="SYS_EXAMPLE" development="new" translation="todo">Beispiel</text>
     <text id="SYS_EXAMPLES" development="new" translation="todo">Beispiele</text>
     <text id="SYS_FADE_IN" development="new" translation="todo">Einblenden</text>
+    <text id="SYS_FAX" development="new" translation="todo">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="todo">Funktionen</text>
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
     <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
@@ -1143,13 +1143,13 @@
     <text id="SYS_MEMORY_LIMIT" development="new" translation="todo">Arbeitsspeicher</text>
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="SYS_MINUTES" development="new" translation="todo">Minuten</text>
+    <text id="SYS_MOBILE" development="new" translation="todo">Handy</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_MODULES" development="new" translation="todo">Module</text>
     <text id="SYS_MONDAY" development="new" translation="todo">Montag</text>
     <text id="SYS_NAME" development="new" translation="todo">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
-    <text id="SYS_ABR_NO" development="new" translation="todo" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_NO" development="new" translation="todo">Nein</text>
     <text id="SYS_NO_ENTRY" development="new" translation="todo">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="todo">Es sind keine Einträge vorhanden.</text>
@@ -1184,6 +1184,7 @@
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="todo">Bitte warten</text>
     <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST-Größe</text>
+    <text id="SYS_POSTCODE" development="new" translation="todo">PLZ</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_PREVIOUS" development="new" translation="todo">Voriges</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="todo">Der Vorgang wurde abgebrochen.</text>
@@ -1268,7 +1269,6 @@
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Die Datei(en) konnten nicht hochgeladen werden.</text>
 	<text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. Uploadgröße</text>
 	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" sein!</text>
-    <text id="SYS_URL_INVALID_CHAR" development="new" translation="todo">Die URL im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/ .</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>

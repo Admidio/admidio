@@ -20,6 +20,7 @@
     font-size:        10pt;
     background-color: #ffffff;
     text-align:       center;
+	margin:			  20px;
 }
 
 .tableListPrint {
@@ -66,7 +67,7 @@
     border:           1px solid #cccccc;
     padding:          5px 10px 5px 10px;
     text-align:       left;
-    margin-top:       12px;
+    margin-top:       20px;
 }
 
 /* Ueberschrift der rechteckigen Groupbox */

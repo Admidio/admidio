@@ -154,8 +154,8 @@ function getFieldCode($fieldNameIntern, $User)
 		$value = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;&nbsp;'. $value;
 	}
 
-	// show field, if user has a value for that field
-    if(strlen($User->getValue($fieldNameIntern)) > 0)
+	// show html of field, if user has a value for that field or it's a checkbox field
+    if(strlen($User->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'CHECKBOX')
     {
         $html = '<li>
                     <dl>
@@ -445,9 +445,9 @@ echo '
             && (  $gCurrentUser->editProfile($user->getValue('usr_id')) == true
                || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $field->getValue('usf_hidden') == 0 )))
             {
-                // Kategorienwechsel den Kategorienheader anzeigen
+                // show new category header if new category and field has value or is a checkbox field
                 if($category != $field->getValue('cat_name')
-                && strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 )
+                && (strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') == 'CHECKBOX'))
                 {
                     if(strlen($category) > 0)
                     {
@@ -473,8 +473,8 @@ echo '
                             <ul class="formFieldList">';
                 }
 
-				// show html of profile field
-                if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 )
+				// show html of field, if user has a value for that field or it's a checkbox field
+                if(strlen($user->getValue($field->getValue('usf_name_intern'))) > 0 || $field->getValue('usf_type') == 'CHECKBOX')
                 {
                     echo getFieldCode($field->getValue('usf_name_intern'), $user);
                 }

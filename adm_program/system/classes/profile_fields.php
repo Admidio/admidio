@@ -96,6 +96,18 @@ class ProfileFields
 		{
 			$value = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->getValue('usd_value', $format);
 			
+			// if field has url then create a link
+			if($format != 'plain' && strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
+			{
+				$htmlValue = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'">'.$value.'</a>';
+				if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '%user_content%') !== false)
+				{
+			        $htmlValue = preg_replace ('/%user_content%/', $value,  $htmlValue);
+
+				}
+				$value = $htmlValue;
+			}
+			
 			if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($format) > 0 && strlen($value) > 0)
 			{
 				// ist das Feld ein Datumsfeld, dann das Datum formatieren

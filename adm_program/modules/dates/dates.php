@@ -286,15 +286,19 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
                     $topNavigation .= ' selected="selected" ';
                 }
                 $topNavigation .= '>'.$gL10n->get('SYS_ALL').'</option>';
+				
+				$date = new TableDate($gDb);
         
-                while($row = $gDb->fetch_object($result))
+                while($row = $gDb->fetch_array($result))
                 {
-                    $topNavigation .= '<option value="'. urlencode($row->cat_name). '"';
-                    if($getCalendar == $row->cat_name)
+					$date->setArray($row);
+
+                    $topNavigation .= '<option value="'. urlencode($date->getValue('cat_name')). '"';
+                    if($getCalendar == $date->getValue('cat_name'))
                     {
                         $topNavigation .= ' selected="selected" ';
                     }
-                    $topNavigation .= '>'.$row->cat_name.'</option>';
+                    $topNavigation .= '>'.$date->getValue('cat_name').'</option>';
                 }
             $topNavigation .=  '</select>';
             if($gCurrentUser->editDates())

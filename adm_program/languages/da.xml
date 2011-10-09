@@ -284,10 +284,8 @@
     <text id="INS_ADDRESS_LIST" development="new" translation="edited">Adresseliste</text>
 	<text id="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY" development="new" translation="edited">Administrators information er ikke fyldestgørende!</text>
 	<text id="INS_AOL_INSTANT_MESSENGER" development="new1" translation="edited">AOL Instant Messenger</text>
-    <text id="INS_BIRTHDAY" development="new" translation="edited">Fødselsdag</text>
     <text id="INS_BOARD" development="new" translation="edited">Bestyrelsen</text>
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="edited">Vælg sprog</text>
-    <text id="INS_CITY" development="new" translation="edited">By</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="edited">Konference lokale</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="edited">Fil %VAR1_BOLD% kan ikke findes i hoved folderen for Admidio!\n\nVenligst download filen igen og kopier den til den oplyste folder.</text>
     <text id="INS_CONTACT_DETAILS" development="new" translation="edited">Kontakt detaljer</text>
@@ -314,7 +312,6 @@
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download konfigurations fil %VAR1_BOLD% og kopier den til Admidio's rod folder. Du kan også finde %VAR2_BOLD% her.\n\nFortsæt installationen når du har kopieret filen på plads.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Indtast database adgangs information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Filen %VAR1_BOLD% kunne ikke åbnes.</text>
-    <text id="INS_FAX" development="new" translation="edited">Fax</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folderen %VAR1_BOLD% er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne uploade billeder og filer til fil modulet.</text>
     <text id="INS_GOOGLE_TALK" development="new1" translation="edited">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="edited">Grupper</text>
@@ -333,7 +330,6 @@
 	<text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Medlemskab</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
-    <text id="INS_MOBILE" development="new" translation="edited">Mobil</text>
     <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Ikke alle MySQL database adgangs informationer er blevet oplyst!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organisations navn</text>
@@ -347,7 +343,6 @@
     <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst MySQL version %VAR2%. Venligst opdater din MySQL database eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst PHP version %VAR2%. Venligst opdater din PHP version eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>    
-    <text id="INS_POSTCODE" development="new" translation="edited">Postnummer</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Tidligere Admidio version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Sæt administrator</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Opretter organisation</text>
@@ -924,6 +919,7 @@
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="edited">Afbryd</text>
+    <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_ACTIVE" development="new" translation="edited">Aktiv</text>
     <text id="SYS_ACTIVATED" development="new" translation="edited">Aktiveret</text>
     <text id="SYS_ADD_EMAIL" development="new" translation="edited">Tilføj e-mail adresse</text>
@@ -973,6 +969,7 @@
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Skift kodeord</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">Kig efter opdatering</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox'enes status bliver automatisk gemt når de markeres.</text>
+    <text id="SYS_CITY" development="new" translation="edited">By</text>
     <text id="SYS_CLOCK" development="new" translation="edited">idag</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Luk</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="edited">Luk alle tags</text>
@@ -1029,6 +1026,7 @@
     <text id="SYS_EXAMPLE" development="new" translation="edited">Eksempel</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Eksempler</text>
     <text id="SYS_FADE_IN" development="new" translation="edited">Fade ind</text>
+    <text id="SYS_FAX" development="new" translation="edited">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="edited">Funktioner</text>
     <text id="SYS_FEMALE" development="new" translation="edited">Hunkøn</text>
     <text id="SYS_FIELD" development="new" translation="edited">Felt</text>
@@ -1116,6 +1114,7 @@
  	<text id="SYS_MEMORY_LIMIT" development="new" translation="todo">hukommelses grænse</text>
     <text id="SYS_MESSAGE" development="new" translation="edited">Besked</text>
     <text id="SYS_MINUTES" development="new" translation="edited">Minutter</text>
+    <text id="SYS_MOBILE" development="new" translation="edited">Mobil</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">Dette modul er deaktiveret.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Moduler</text>
     <text id="SYS_MONDAY" development="new" translation="todo">Mandag</text>
@@ -1124,7 +1123,6 @@
     <text id="SYS_NAME" development="new" translation="edited">Navn</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Kort navn</text>
     <text id="SYS_NEXT" development="new" translation="edited">Næste</text>
-    <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_NO" development="new" translation="edited">Nej</text>
     <text id="SYS_NO_ENTRY" development="new" translation="edited">Det efterspurgte post eksisterer ikke i databasen.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="edited">Ingen poster tilgængelige.</text>
@@ -1160,6 +1158,7 @@
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">Vælg</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Vent venligst</text>
     <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST størrelse</text>
+    <text id="SYS_POSTCODE" development="new" translation="edited">Postnummer</text>
     <text id="SYS_PREVIEW" development="new" translation="edited">Vis</text>
     <text id="SYS_PREVIOUS" development="new" translation="edited">Tidligere</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Proces afbrudt.</text>
