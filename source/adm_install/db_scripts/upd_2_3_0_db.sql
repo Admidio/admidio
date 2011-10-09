@@ -221,6 +221,18 @@ alter table %PREFIX%_texts add constraint %PREFIX%_FK_TXT_ORG foreign key (txt_o
       
 UPDATE %PREFIX%_user_fields SET usf_system = 0, usf_name = 'SYS_GENDER', usf_type = 'RADIO_BUTTON', usf_value_list = 'female.png|SYS_FEMALE\r\nmale.png|SYS_MALE'
  WHERE usf_name_intern LIKE 'GENDER';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_LASTNAME' WHERE usf_name_intern LIKE 'LAST_NAME';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_FIRSTNAME' WHERE usf_name_intern LIKE 'FIRST_NAME';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_ADDRESS' WHERE usf_name_intern LIKE 'ADDRESS';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_POSTCODE' WHERE usf_name_intern LIKE 'POSTCODE';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_CITY' WHERE usf_name_intern LIKE 'CITY';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_COUNTRY' WHERE usf_name_intern LIKE 'COUNTRY';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_PHONE' WHERE usf_name_intern LIKE 'PHONE';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_MOBILE' WHERE usf_name_intern LIKE 'MOBILE';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_FAX' WHERE usf_name_intern LIKE 'FAX';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_BIRTHDAY' WHERE usf_name_intern LIKE 'BIRTHDAY';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_EMAIL' WHERE usf_name_intern LIKE 'EMAIL';
+UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_WEBSITE' WHERE usf_name_intern LIKE 'WEBSITE';
  
 UPDATE %PREFIX%_preferences SET prf_value = 'da'
  WHERE prf_name like 'system_language'

@@ -21,14 +21,14 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_members.php');
 
 // Initialize and check the parameters
-$get_usr_id = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
-$get_rol_id = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
-$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
+$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
+$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
 
-if($get_mode == 1)
+if($getMode == 1)
 {
     // Userdaten aus Datenbank holen
-    $user = new User($gDb, $gProfileFields, $get_usr_id);
+    $user = new User($gDb, $gProfileFields, $getUserId);
 
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
     header('Content-Disposition: attachment; filename="'. urlencode($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')). '.vcf"');
@@ -38,25 +38,25 @@ if($get_mode == 1)
 
     echo $user->getVCard();
 }
-elseif($get_mode == 2)
+elseif($getMode == 2)
 {
     // Mitgliedschaft bei einer aktuellen Rolle beenden
     if($gCurrentUser->assignRoles())
     {
         $member = new TableMembers($gDb);
-        $member->stopMembership($get_rol_id, $get_usr_id);
+        $member->stopMembership($getRoleId, $getUserId);
 
         // Beendigung erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo "done";
     }
 }
-elseif($get_mode == 3)
+elseif($getMode == 3)
 {
     // Ehemalige Rollenzuordnung entfernen
     if($gCurrentUser->isWebmaster())
     {
         $member = new TableMembers($gDb);
-        $member->readData(array('rol_id' => $get_rol_id, 'usr_id' => $get_usr_id));
+        $member->readData(array('rol_id' => $getRoleId, 'usr_id' => $getUserId));
         $member->delete();
 
         // Entfernen erfolgreich -> Rueckgabe fuer XMLHttpRequest

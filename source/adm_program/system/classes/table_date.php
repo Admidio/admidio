@@ -132,6 +132,8 @@ class TableDate extends TableAccess
 
     public function getValue($field_name, $format = '')
     {
+		global $gL10n;
+
         if($field_name == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
         {
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
@@ -160,6 +162,14 @@ class TableDate extends TableAccess
             global $gL10n;
             $value = $gL10n->getCountryByCode($value);
         }
+		elseif($field_name == 'cat_name' && $format != 'plain')
+		{
+			// if text is a translation-id then translate it
+			if(strpos($value, '_') == 3)
+			{
+				$value = $gL10n->get(admStrToUpper($value));
+			}
+		}
 
         return $value;
     }

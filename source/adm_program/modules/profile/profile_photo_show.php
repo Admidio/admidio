@@ -18,32 +18,32 @@ require('../../system/login_valid.php');
 require('../../system/classes/image.php');
 
 // Initialize and check the parameters
-$get_usr_id    = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
-$get_new_photo = admFuncVariableIsValid($_GET, 'new_photo', 'boolean', 0);
+$getUserId   = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
+$getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'boolean', 0);
 
 // lokale Variablen der Uebergabevariablen initialisieren
 $image         = null;
 $picpath       = THEME_SERVER_PATH. '/images/no_profile_pic.png';
 
 //Testen ob Recht besteht Profil einzusehn
-if(!$gCurrentUser->viewProfile($get_usr_id))
+if(!$gCurrentUser->viewProfile($getUserId))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 //Foto aus adm_my_files
-if($gPreferences['profile_photo_storage'] == 1 && $get_new_photo == 0)
+if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
 {
-	if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg'))
+	if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
 	{
-		$picpath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg';
+		$picpath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg';
 	}
 	$image = new Image($picpath);
 }
 //Foto aus der Datenbank
-elseif($gPreferences['profile_photo_storage'] == 0 && $get_new_photo == 0)
+elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 {
-	$user = new User($gDb, $gProfileFields, $get_usr_id);
+	$user = new User($gDb, $gProfileFields, $getUserId);
 	if(strlen($user->getValue('usr_photo')) != NULL)
     {
         $image = new Image();
@@ -55,13 +55,13 @@ elseif($gPreferences['profile_photo_storage'] == 0 && $get_new_photo == 0)
     }
 }
 //neues Foto, Ordnerspeicherung
-elseif($gPreferences['profile_photo_storage'] == 1 && $get_new_photo == 1)
+elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 1)
 {
-	$picpath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'_new.jpg';
+	$picpath = SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg';
 	$image = new Image($picpath);
 }
 //neues Foto, Datenbankspeicherung
-elseif($gPreferences['profile_photo_storage'] == 0 && $get_new_photo == 1)
+elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 1)
 {
    	$image = new Image();
     //$image->setImageFromData(addslashes(pack('H*', $gCurrentSession->getValue('ses_binary'))));

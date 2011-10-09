@@ -356,7 +356,7 @@ ul.autosuggest li.highlight a:visited  {
     border:             none;
     cursor:             pointer;
     vertical-align:     middle;
-    margin:             0px 3px 0px 3px;
+    margin-left:        3px;
 }
 
 /* Elemente fuer Navigationsklasse */

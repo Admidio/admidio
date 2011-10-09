@@ -283,10 +283,8 @@
     <text id="INS_ADDRESS_LIST" development="new" translation="todo">Adressliste</text>
     <text id="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Daten für den Administrator eingegeben worden!</text>
     <text id="INS_AOL_INSTANT_MESSENGER" development="new" translation="todo">AOL Instant Messenger</text>
-    <text id="INS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
     <text id="INS_BOARD" development="new" translation="todo">Vorstand</text>
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="todo">Bitte wählen Sie eine Sprache aus</text>
-    <text id="INS_CITY" development="new" translation="todo">Ort</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="todo">Besprechnungsraum</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="todo">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis!\n\nLaden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.</text>
     <text id="INS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
@@ -313,7 +311,6 @@
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="todo">Laden Sie die Konfigurationsdatei %VAR1_BOLD% herunter und kopieren Sie diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine %VAR2_BOLD%.\n\nErst nachdem die Datei dort abgelegt wurde, können Sie mit der Installation fortfahren.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank eingeben</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="todo">Die Datei %VAR1_BOLD% konnte nicht geöffnet werden.</text>
-    <text id="INS_FAX" development="new" translation="todo">Fax</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="todo">Der Ordner %VAR1_BOLD% besitzt noch keine Schreibrechte. Diese sollten Sie noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</text>
     <text id="INS_GOOGLE_TALK" development="new" translation="todo">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="todo">Gruppen</text>
@@ -331,7 +328,6 @@
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="todo">Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation!</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
-    <text id="INS_MOBILE" development="new" translation="todo">Handy</text>
     <text id="INS_MSN_MESSENGER" development="new" translation="todo">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
@@ -344,7 +340,6 @@
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu Ihrer Datenbank ist.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Sie sollten versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
-    <text id="INS_POSTCODE" development="new" translation="todo">PLZ</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="todo">Organisation festlegen</text>
@@ -920,6 +915,7 @@
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="todo">Abbrechen</text>
+    <text id="SYS_ABR_NO" development="new" translation="todo" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_ACTIVE" development="new" translation="todo">Aktiv</text>
     <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiviert</text>
     <text id="SYS_ADD_EMAIL" development="new" translation="todo">E-Mail-Adresse einfügen</text>
@@ -967,6 +963,7 @@
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">nach Update suchen</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
+    <text id="SYS_CITY" development="new" translation="todo">Ort</text>
     <text id="SYS_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="todo">Alle Tags schließen</text>
@@ -1023,6 +1020,7 @@
     <text id="SYS_EXAMPLE" development="new" translation="todo">Beispiel</text>
     <text id="SYS_EXAMPLES" development="new" translation="todo">Beispiele</text>
     <text id="SYS_FADE_IN" development="new" translation="todo">Einblenden</text>
+    <text id="SYS_FAX" development="new" translation="todo">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="todo">Funktionen</text>
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
     <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
@@ -1110,6 +1108,7 @@
     <text id="SYS_MEMORY_LIMIT" development="new" translation="todo">Arbeitsspeicher</text>
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="SYS_MINUTES" development="new" translation="todo">Minuten</text>
+    <text id="SYS_MOBILE" development="new" translation="todo">Handy</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_MODULES" development="new" translation="todo">Module</text>
     <text id="SYS_MONDAY" development="new" translation="todo">Montag</text>
@@ -1119,7 +1118,6 @@
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
   	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="todo">Kein Mitglied der Organisation %VAR1%</text>
-    <text id="SYS_ABR_NO" development="new" translation="todo" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_NO" development="new" translation="todo">Nein</text>
     <text id="SYS_NO_ENTRY" development="new" translation="todo">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="todo">Es sind keine Einträge vorhanden.</text>
@@ -1154,6 +1152,7 @@
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="todo">Bitte warten</text>
     <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST-Größe</text>
+    <text id="SYS_POSTCODE" development="new" translation="todo">PLZ</text>
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_PREVIOUS" development="new" translation="todo">Voriges</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="todo">Der Vorgang wurde abgebrochen.</text>

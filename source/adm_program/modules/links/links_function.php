@@ -19,6 +19,10 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_weblink.php');
 
+// Initialize and check the parameters
+$getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_weblinks_module'] == 0)
 {
@@ -32,16 +36,12 @@ if (!$gCurrentUser->editWeblinksRight())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Initialize and check the parameters
-$get_lnk_id = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
-$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
-
 // Linkobjekt anlegen
-$link = new TableWeblink($gDb, $get_lnk_id);
+$link = new TableWeblink($gDb, $getLinkId);
 
 $_SESSION['links_request'] = $_REQUEST;
 
-if ($get_mode == 1 || ($get_mode == 3 && $get_lnk_id > 0) )
+if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0) )
 {
     if(strlen(strStripTags($_POST['lnk_name'])) == 0)
     {
@@ -61,7 +61,7 @@ if ($get_mode == 1 || ($get_mode == 3 && $get_lnk_id > 0) )
     {
         if(strpos($key, 'lnk_') === 0)
         {
-            if(!$link->setValue($key, $value))
+            if($link->setValue($key, $value) == false)
 			{
 				// Daten wurden nicht uebernommen, Hinweis ausgeben
 				if($key == 'lnk_url')
@@ -73,7 +73,7 @@ if ($get_mode == 1 || ($get_mode == 3 && $get_lnk_id > 0) )
     }
 	
 	// Link-Counter auf 0 setzen
-	if ($get_mode == 1)
+	if ($getMode == 1)
 	{
 		$link->setValue('lnk_counter', '0');
 	}
@@ -86,7 +86,7 @@ if ($get_mode == 1 || ($get_mode == 3 && $get_lnk_id > 0) )
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 	
-	if($return_code == 0 && $get_mode == 1)
+	if($return_code == 0 && $getMode == 1)
 	{
 		// Benachrichtigungs-Email für neue Einträge
 		if($gPreferences['enable_email_notification'] == 1)
@@ -111,7 +111,7 @@ if ($get_mode == 1 || ($get_mode == 3 && $get_lnk_id > 0) )
     exit();
 }
 
-elseif ($get_mode == 2 && $get_lnk_id > 0)
+elseif ($getMode == 2 && $getLinkId > 0)
 {
     // Loeschen von Weblinks...
     $link->delete();

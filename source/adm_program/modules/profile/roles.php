@@ -18,17 +18,18 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/table_roles.php');
+
+// Initialize and check the parameters
+$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
+$getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
 // nur Webmaster & Moderatoren duerfen Rollen zuweisen
 if(!$gCurrentUser->assignRoles() && !isGroupLeader($gCurrentUser->getValue('usr_id')))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-
-// Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
-$getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
 $user = new User($gDb, $gProfileFields, $getUserId);
 if($getInline == 0)
@@ -124,52 +125,55 @@ echo '
                               OR cat_org_id IS NULL
                         ORDER BY cat_sequence, cat_id, rol_name';
         }
-        $result = $gDb->query($sql);
+        $result   = $gDb->query($sql);
         $category = '';
+		$role     = new TableRoles($gDb);
 
-        while($row = $gDb->fetch_object($result))
+        while($row = $gDb->fetch_array($result))
         {
-            if($row->rol_visible==1)
+			$role->setArray($row);
+
+            if($role->getValue('rol_visible') == 1)
             {
-                if($category != $row->cat_id)
+                if($category != $role->getValue('cat_id'))
                 {
                     if(strlen($category) > 0)
                     {
                         echo '</tbody>';
                     }
-                    $block_id = 'admCategory'.$row->cat_id;
+                    $block_id = 'admCategory'.$role->getValue('cat_id');
                     echo '<tbody>
                         <tr>
                             <td class="tableSubHeader" colspan="4">
                                 <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\');"><img
-                                id="'.$block_id.'Image" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$row->cat_name.'
+                                id="'.$block_id.'Image" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name').'
                             </td>
                         </tr>
                     </tbody>
                     <tbody id="'.$block_id.'">';
     
-                    $category = $row->cat_id;
+                    $category = $role->getValue('cat_id');
                 }
                 echo '
                 <tr class="tableMouseOver">
                    <td style="text-align: center;">
-                      <input type="checkbox" id="role-'.$row->rol_id.'" name="role-'.$row->rol_id.'" ';
-                         if($row->mem_usr_id > 0)
+                      <input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" ';
+                         if($row['mem_usr_id'] > 0)
                          {
                             echo ' checked="checked" ';
                          }
     
                          // wenn der User aus der Mitgliederzuordnung heraus neu angelegt wurde
                          // entsprechende Rolle sofort hinzufuegen
-                         if($row->rol_id == $set_rol_id)
+                         if($role->getValue('rol_id') == $set_rol_id)
                          {
                             echo ' checked="checked" ';
                          }
     
                          // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                         if($row->rol_name == $gL10n->get('SYS_WEBMASTER') && (!$gCurrentUser->isWebmaster()
+                         if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && (!$gCurrentUser->isWebmaster()
                             ||  // man darf sich selbst an dieser Stelle aber nicht aus der Rolle Webmaster entfernen
-                            ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue("usr_id")))
+                            ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue('usr_id')))
                            )
                          {
                            echo ' disabled="disabled" ';
@@ -177,17 +181,17 @@ echo '
     
                          echo ' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />
                    </td>
-                   <td><label for="role-'.$row->rol_id.'">'.$row->rol_name.'</label></td>
-                   <td>'.$row->rol_description.'</td>
+                   <td><label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label></td>
+                   <td>'.$role->getValue('rol_description').'</td>
                    <td style="text-align: center;">
-                            <input type="checkbox" id="leader-'.$row->rol_id.'" name="leader-'.$row->rol_id.'" ';
-                            if($row->mem_leader > 0)
+                            <input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" ';
+                            if($row['mem_leader'] > 0)
                             {
                                 echo ' checked="checked" ';
                             }
     
                             // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                            if($row->rol_name == $gL10n->get('SYS_WEBMASTER') && !$gCurrentUser->isWebmaster())
+                            if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && !$gCurrentUser->isWebmaster())
                             {
                                 echo ' disabled="disabled" ';
                             }

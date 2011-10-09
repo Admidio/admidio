@@ -285,10 +285,8 @@
     <text id="INS_ADDRESS_LIST" development="new" translation="edited">Address list</text>
 	<text id="INS_ADMINISTRATOR_DATA_NOT_COMPLETELY" development="new" translation="edited">Administrator's information is incomplete!</text>
 	<text id="INS_AOL_INSTANT_MESSENGER" development="new1" translation="edited">AOL Instant Messenger</text>
-    <text id="INS_BIRTHDAY" development="new" translation="edited">Birthday</text>
     <text id="INS_BOARD" development="new" translation="edited">Administrative board</text>
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="edited">Choose language</text>
-    <text id="INS_CITY" development="new" translation="edited">Place</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="edited">Conference room</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="edited">File %VAR1_BOLD% can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</text>
     <text id="INS_CONTACT_DETAILS" development="new" translation="edited">Contact details</text>
@@ -315,7 +313,6 @@
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Enter database access information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">File %VAR1_BOLD% could not be opened.</text>
-    <text id="INS_FAX" development="new" translation="edited">Fax</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download module.</text>
     <text id="INS_GOOGLE_TALK" development="new1" translation="edited">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="edited">Groups</text>
@@ -334,7 +331,6 @@
 	<text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Membership</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
-    <text id="INS_MOBILE" development="new" translation="edited">Mobile</text>
     <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Not all MySQL database access information has been provided!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organization name</text>
@@ -348,7 +344,6 @@
     <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
-    <text id="INS_POSTCODE" development="new" translation="edited">Postal code</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Previous Admidio version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Set administrator</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Creating organization</text>
@@ -925,6 +920,7 @@
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="edited">Cancel</text>
+    <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">No.</text>
     <text id="SYS_ACTIVE" development="new" translation="edited">Active</text>
     <text id="SYS_ACTIVATED" development="new" translation="edited">Active</text>
     <text id="SYS_ADD_EMAIL" development="new" translation="edited">Add e-mail address</text>
@@ -974,6 +970,7 @@
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Change password</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="edited">Check for update</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox status is saved automatically after marking.</text>
+    <text id="SYS_CITY" development="new" translation="edited">Place</text>
     <text id="SYS_CLOCK" development="new" translation="edited">o'clock</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Close</text>
     <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="edited">Close all tags</text>
@@ -1030,6 +1027,7 @@
     <text id="SYS_EXAMPLE" development="new" translation="edited">Example</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Examples</text>
     <text id="SYS_FADE_IN" development="new" translation="edited">Fade in</text>
+    <text id="SYS_FAX" development="new" translation="edited">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="edited">Features</text>
     <text id="SYS_FEMALE" development="new" translation="edited">Female</text>
     <text id="SYS_FIELD" development="new" translation="edited">Field</text>
@@ -1117,6 +1115,7 @@
  	<text id="SYS_MEMORY_LIMIT" development="new" translation="edited">Memory limit</text>
     <text id="SYS_MESSAGE" development="new" translation="edited">Message</text>
     <text id="SYS_MINUTES" development="new" translation="edited">Minutes</text>
+    <text id="SYS_MOBILE" development="new" translation="edited">Mobile</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">This module is disabled.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Modules</text>
     <text id="SYS_MONDAY" development="new" translation="edited">Monday</text>
@@ -1125,7 +1124,6 @@
     <text id="SYS_NAME" development="new" translation="edited">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Short name</text>
     <text id="SYS_NEXT" development="new" translation="edited">Next</text>
-    <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">No.</text>
     <text id="SYS_NO" development="new" translation="edited">No</text>
     <text id="SYS_NO_ENTRY" development="new" translation="edited">Requested entry does not exist in the database.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="edited">No entries available.</text>
@@ -1161,6 +1159,7 @@
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">Select option</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Please wait</text>
     <text id="SYS_POST_MAX_SIZE" development="new" translation="edited">Max. POST size</text>
+    <text id="SYS_POSTCODE" development="new" translation="edited">Postal code</text>
     <text id="SYS_PREVIEW" development="new" translation="edited">Preview</text>
     <text id="SYS_PREVIOUS" development="new" translation="edited">Previous</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Process canceled.</text>

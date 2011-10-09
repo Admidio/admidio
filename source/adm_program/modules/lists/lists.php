@@ -183,7 +183,7 @@ if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
         }
         $sql .= ' ORDER BY cat_sequence ASC ';
         $result = $gDb->query($sql);
-
+		
         if($gDb->num_rows($result) > 1)
         {
             echo '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;
@@ -195,14 +195,18 @@ if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
                 }
                 echo '>'.$gL10n->get('SYS_ALL').'</option>';
 
+				$role = new TableRoles($gDb);
+
                 while($row = $gDb->fetch_array($result))
                 {
-                    echo '<option value="'. urlencode($row['cat_name']). '"';
-                    if($getCategory == $row['cat_name'])
+					$role->setArray($row);
+
+                    echo '<option value="'. urlencode($role->getValue('cat_name')). '"';
+                    if($getCategory == $role->getValue('cat_name'))
                     {
                         echo ' selected="selected" ';
                     }
-                    echo '>'.$row['cat_name'].'</option>';
+                    echo '>'.$role->getValue('cat_name').'</option>';
                 }
             echo '</select>';
             if($gCurrentUser->assignRoles())

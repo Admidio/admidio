@@ -21,23 +21,23 @@ require_once('../../system/login_valid.php');
 $gMessage->setExcludeThemeBody();
  
 // Initialize and check the parameters
-$get_usr_id = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
-$get_inline = admFuncVariableIsValid($_GET, 'inline', 'numeric', 1);
-$get_mode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
+$getInline = admFuncVariableIsValid($_GET, 'inline', 'numeric', 1);
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
 
 // nur Webmaster duerfen fremde Passwoerter aendern
-if($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $get_usr_id)
+if($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 
-if($get_mode == 1)
+if($getMode == 1)
 {
     /***********************************************************************/
     /* Formular verarbeiten */
     /***********************************************************************/
-    if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $get_usr_id )
+    if($gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId )
     {
         $_POST['old_password'] = '';
     }
@@ -51,11 +51,11 @@ if($get_mode == 1)
             if ($_POST['new_password'] == $_POST['new_password2'])
             {
                 // pruefen, ob altes Passwort korrekt eingegeben wurde              
-                $user = new User($gDb, $gProfileFields, $get_usr_id);
+                $user = new User($gDb, $gProfileFields, $getUserId);
                 $old_password_crypt = md5($_POST['old_password']);
 
                 // Webmaster duerfen fremde Passwörter so aendern
-                if($user->getValue('usr_password') == $old_password_crypt || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $get_usr_id )
+                if($user->getValue('usr_password') == $old_password_crypt || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId )
                 {
                     $user->setValue('usr_password', $_POST['new_password']);
                     $user->save();
@@ -94,7 +94,7 @@ if($get_mode == 1)
     {
         $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
     }
-	if ($get_inline == 0)
+	if ($getInline == 0)
 	{
 		$gMessage->setExcludeThemeBody();
 		$gMessage->show($phrase);
@@ -113,19 +113,19 @@ else
     // Html-Kopf ausgeben
     $gLayout['title']    = $gL10n->get('PRO_EDIT_PASSWORD');
     $gLayout['includes'] = false;
-    if ($get_inline == 0)
+    if ($getInline == 0)
 	{
 		require(SERVER_PATH. '/adm_program/system/overall_header.php');
 	}
 
     // Html des Modules ausgeben
     echo '
-    <form id="passwordForm" action="'. $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $get_usr_id. '&amp;mode=1&amp;inline=1" method="post">
+    <form id="passwordForm" action="'. $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $getUserId. '&amp;mode=1&amp;inline=1" method="post">
     <div class="formLayout" id="password_form" style="width: 300px">
         <div class="formHead">'. $gLayout['title']. '</div>
         <div class="formBody">
             <ul class="formFieldList">';
-                if($gCurrentUser->getValue('usr_id') == $get_usr_id )
+                if($gCurrentUser->getValue('usr_id') == $getUserId )
                 {
                 echo'
                     <li>
@@ -164,7 +164,7 @@ else
             </div>
         </div>
     </form>';
-    if ($get_inline == 0)
+    if ($getInline == 0)
 	{  
 		require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 	}

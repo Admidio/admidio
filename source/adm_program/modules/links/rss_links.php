@@ -21,6 +21,9 @@ require_once('../../system/common.php');
 require_once('../../system/classes/rss.php');
 require_once('../../system/classes/table_weblink.php');
 
+// Initialize and check the parameters
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
+
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($gPreferences['enable_rss'] != 1)
 {
@@ -34,9 +37,6 @@ if ($gPreferences['enable_weblinks_module'] != 1)
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-
-// Initialize and check the parameters
-$get_headline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
 
 // alle Links aus der DB fischen...
 $sql = 'SELECT cat.*, lnk.*,
@@ -65,7 +65,7 @@ $result = $gDb->query($sql);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$get_headline, 
+$rss = new RSSfeed('http://'. $gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline, 
 		$gL10n->get('LNK_LINKS_FROM', $gCurrentOrganization->getValue('org_longname')));
 $weblink = new TableWeblink($gDb);
 

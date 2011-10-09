@@ -63,6 +63,27 @@ class TableWeblink extends TableAccess
         return $description;
     }
 
+	// returns the value of database column $field_name
+	// for column usf_value_list the following format is accepted
+	// 'plain' -> returns database value of usf_value_list
+    public function getValue($field_name, $format = '')
+    {
+		global $gL10n;
+
+        $value = parent::getValue($field_name, $format);
+
+		if($field_name == 'cat_name' && $format != 'plain')
+		{
+			// if text is a translation-id then translate it
+			if(strpos($value, '_') == 3)
+			{
+				$value = $gL10n->get(admStrToUpper($value));
+			}
+		}
+
+        return $value;
+    }
+	
     // Termin mit der uebergebenen ID aus der Datenbank auslesen
     public function readData($lnk_id, $sql_where_condition = '', $sql_additional_tables = '')
     {

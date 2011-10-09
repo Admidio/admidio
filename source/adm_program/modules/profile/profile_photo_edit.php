@@ -28,11 +28,11 @@ if (ini_get('file_uploads') != '1')
 }
 
 // Initialize and check the parameters
-$get_usr_id = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', $gCurrentUser->getValue('usr_id'));
-$get_job    = admFuncVariableIsValid($_GET, 'job', 'string', null, null, array('save', 'dont_save', 'upload', 'delete'));
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', $gCurrentUser->getValue('usr_id'));
+$getJob    = admFuncVariableIsValid($_GET, 'job', 'string', null, null, array('save', 'dont_save', 'upload', 'delete'));
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if($gCurrentUser->editProfile($get_usr_id) == false)
+if($gCurrentUser->editProfile($getUserId) == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -49,9 +49,9 @@ if($gPreferences['profile_photo_storage'] == 1)
 }
 
 // User auslesen
-$user = new User($gDb, $gProfileFields, $get_usr_id);
+$user = new User($gDb, $gProfileFields, $getUserId);
 
-if($get_job=='save')
+if($getJob=='save')
 {
     /*****************************Foto speichern*************************************/
     
@@ -60,14 +60,14 @@ if($get_job=='save')
         // Foto im Dateisystem speichern      
 
         //Nachsehen ob fuer den User ein Photo gespeichert war
-        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'_new.jpg'))
+        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
         {
-            if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg'))
+            if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
             {
-                unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg');
+                unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
             }
             
-            rename(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'_new.jpg', SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg');
+            rename(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg', SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
         }
     }
     else
@@ -84,24 +84,24 @@ if($get_job=='save')
             // Foto aus Session entfernen und neues Einlesen des Users veranlassen
             $gCurrentSession->setValue('ses_binary', '');
             $gCurrentSession->save();
-            $gCurrentSession->renewUserObject($get_usr_id);
+            $gCurrentSession->renewUserObject($getUserId);
         }
     }
     
     // zur Ausgangsseite zurueck
     $_SESSION['navigation']->deleteLastUrl();
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$get_usr_id);
+    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId);
     exit();
 }    
-elseif($get_job=='dont_save')
+elseif($getJob=='dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
     //Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'_new.jpg'))
+        if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg'))
         {
-            unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'_new.jpg');
+            unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
         }
     }
     //Datenbankspeicherung
@@ -111,23 +111,23 @@ elseif($get_job=='dont_save')
         $gCurrentSession->save();
     }
     // zur Ausgangsseite zurueck
-    $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$get_usr_id, 2000);
+    $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId, 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
 }
-elseif($get_job=='delete')
+elseif($getJob=='delete')
 {
     /***************************** Foto loeschen *************************************/
     //Ordnerspeicherung, Datei löschen
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'.jpg');
+        unlink(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
     }
     //Datenbankspeicherung, Daten aus Session entfernen
     else
     {
         $user->setValue('usr_photo', '');
         $user->save();
-        $gCurrentSession->renewUserObject($get_usr_id);
+        $gCurrentSession->renewUserObject($getUserId);
     }
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
@@ -167,11 +167,11 @@ elseif( isset($_POST['upload']))
 
 
 /*****************************Foto hochladen*************************************/    
-if($get_job==NULL)
+if($getJob==NULL)
 {
     $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-    if($get_usr_id == $gCurrentUser->getValue('usr_id'))
+    if($getUserId == $gCurrentUser->getValue('usr_id'))
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }
@@ -191,12 +191,12 @@ if($get_job==NULL)
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
     
     echo '
-    <form method="post" action="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id='.$get_usr_id.'" enctype="multipart/form-data">
+    <form method="post" action="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id='.$getUserId.'" enctype="multipart/form-data">
     <div class="formLayout" id="profile_photo_upload_form">
         <div class="formHead">'.$headline.'</div>
         <div class="formBody">
             <p>'.$gL10n->get('PRO_CURRENT_PICTURE').':</p>
-            <img class="imageFrame" src="profile_photo_show.php?usr_id='.$get_usr_id.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />
+            <img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />
             <p>'.$gL10n->get('PRO_SELECT_NEW_PIC_HERE').':</p>
             <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="'.$gL10n->get('SYS_BROWSE').'" /></p>
 
@@ -225,7 +225,7 @@ if($get_job==NULL)
         </li>
     </ul>';    
 }
-elseif($get_job=='upload')
+elseif($getJob=='upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
     
@@ -237,7 +237,7 @@ elseif($get_job=='upload')
     //Ordnerspeicherung
     if($gPreferences['profile_photo_storage'] == 1)
     {
-        $user_image->copyToFile(null, SERVER_PATH. '/adm_my_files/user_profile_photos/'.$get_usr_id.'_new.jpg');
+        $user_image->copyToFile(null, SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'_new.jpg');
     }
     //Datenbankspeicherung
     else
@@ -256,7 +256,7 @@ elseif($get_job=='upload')
     //Image-Objekt löschen	
     $user_image->delete();
 
-    if($get_usr_id == $gCurrentUser->getValue('usr_id'))
+    if($getUserId == $gCurrentUser->getValue('usr_id'))
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
     }
@@ -278,19 +278,19 @@ elseif($get_job=='upload')
                     <td>'.$gL10n->get('PRO_NEW_PICTURE').':</td>
                 </tr>
                 <tr style="text-align: center;">
-                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$get_usr_id.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" /></td>
-                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$get_usr_id.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" /></td>
+                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" /></td>
+                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" /></td>
                 </tr>
             </table>
 
             <hr />
             
             <div class="formSubmit">
-                <button id="btnCancel" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id='.$get_usr_id.'\'">
+                <button id="btnCancel" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id='.$getUserId.'\'">
                     <img src="'.THEME_PATH.'/icons/error.png" alt="'.$gL10n->get('SYS_ABORT').'" />
                     &nbsp;'.$gL10n->get('SYS_ABORT').'
                 </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button id="btnUpdate" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$get_usr_id.'\'">
+                <button id="btnUpdate" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$getUserId.'\'">
                     <img src="'.THEME_PATH.'/icons/database_in.png" alt="'.$gL10n->get('SYS_UPDATE').'" />
                     &nbsp;'.$gL10n->get('PRO_ACCEPT_NEW_PICTURE').'
                 </button>

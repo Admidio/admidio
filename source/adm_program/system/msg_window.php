@@ -1,15 +1,15 @@
 <?php
 /******************************************************************************
- * Popup-Fenster mit Informationen
+ * Popup window with informations
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * message_id    - ID des Sprachtextes, der angezeigt werden soll
- * message_title - (optional) Titel des Fensters (Default: Hinweis)
- * message_var1  - (optional) Text, der innerhalb einer Meldung angezeigt werden kann
- * inline        - true wenn die Nachricht nicht in einem separaten Fenster angezeigt wird
+ * message_id    - ID of language text, that should be shown
+ * message_title - (optional) title of window (Default: Note)
+ * message_var1  - (optional) text, that should be shown in the message
+ * inline        - true : message should not be shown in separate window
  *****************************************************************************/
 
 require_once('common.php');
@@ -21,10 +21,9 @@ $getMessageTitle = admFuncVariableIsValid($_GET, 'message_title', 'string', 'SYS
 $getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1', 'string', '', false, null, true);
 $getInlineView   = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0, false, null, true);
 
-// Html-Kopf ausgeben
+// show headline
 if($getInlineView)
 {
-    // Html des Modules ausgeben
     echo '
     <div class="formLayout" id="message_window">
             <div class="formHead">'.$gL10n->get($getMessageTitle).'</div>
@@ -228,8 +227,11 @@ switch ($getMessageId)
         $msg_var1 = '';
         if(strlen($getMessageVar1) > 0)
         {
-            $msg_var1 = $gL10n->get($getMessageVar1);
-            if(strlen($msg_var1) == 0)
+			if(strpos($getMessageVar1, '_') == 3)
+			{
+				$msg_var1 = $gL10n->get($getMessageVar1);
+			}
+            else
             {
                 $msg_var1 = $getMessageVar1;
             }

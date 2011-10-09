@@ -69,6 +69,12 @@ if($getMode == 1)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
     }
+
+    if(($_POST['usf_type'] == 'DROPDOWN' || $_POST['usf_type'] == 'RADIO_BUTTON')
+	&& strlen($_POST['usf_value_list']) == 0)
+    {
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_VALUE_LIST')));
+    }
     
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
     if($user_field->getValue('usf_name_intern') == 'LAST_NAME'
@@ -121,7 +127,14 @@ if($getMode == 1)
     {
         if(strpos($key, 'usf_') === 0)
         {
-            $user_field->setValue($key, $value);
+            if($user_field->setValue($key, $value) == false)
+			{
+				// Daten wurden nicht uebernommen, Hinweis ausgeben
+				if($key == 'usf_url')
+				{
+					$gMessage->show($gL10n->get('SYS_URL_INVALID_CHAR', $gL10n->get('ORG_URL')));
+				}
+			}
         }
     }
     
