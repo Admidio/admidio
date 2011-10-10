@@ -83,40 +83,128 @@ class ProfileFields
         return null;
     }
 
+	
+	public function getHtmlValue($fieldNameIntern, $value)
+	{
+		global $gPreferences, $g_root_path;
+
+		if(strlen($value) > 0
+		&& array_key_exists($fieldNameIntern, $this->mProfileFields) == true)
+		{
+			// create html for each field type
+			$htmlValue = $value;
+
+			if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
+			{
+				if($value == 1)
+				{
+					$htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox_checked.gif" alt="on" />';
+				}
+				else
+				{
+					$htmlValue = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
+				}
+			}
+			elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'EMAIL')
+			{
+				// the value in db is only the position, now search for the text
+				if(strlen($value) > 0)
+				{
+					if($gPreferences['enable_mail_module'] != 1)
+					{
+						$emailLink = 'mailto:'.$value;
+					}
+					else
+					{
+						$emailLink = $g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $this->mUserId;
+					}
+					if(strlen($value) > 30)
+					{
+						$htmlValue = '<a href="'.$emailLink.'" title="'.$value.'">'.substr($value, 0, 30).'...</a>';
+					}
+					else
+					{
+						$htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';;
+					}
+				}
+			}
+			elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')
+			{
+				if(strlen($value) > 0)
+				{
+					if(strlen($value) > 35)
+					{
+						$htmlValue = '<a href="'. $value.'" target="_blank" title="'. $value.'">'. substr($value, strpos($value, '//') + 2, 35). '...</a>';
+					}
+					else
+					{
+						$htmlValue = '<a href="'. $value.'" target="_blank" title="'. $value.'">'. substr($value, strpos($value, '//') + 2). '</a>';
+					}
+				}
+			}
+			elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'TEXT_BIG')
+			{
+				$htmlValue = nl2br($value);
+			}
+		
+			// if field has url then create a link
+			if(strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
+			{
+				$htmlValue = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$htmlValue.'</a>';
+				
+				// replace a variable in url with user value
+				if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '%user_content%') !== false)
+				{
+					$htmlValue = preg_replace ('/%user_content%/', $value,  $htmlValue);
+
+				}
+			}
+			$value = $htmlValue;
+		}
+		else
+		{
+			// special case for type CHECKBOX and no value is there, then show unchecked checkbox
+			if(array_key_exists($fieldNameIntern, $this->mProfileFields) == true
+			&& $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'CHECKBOX')
+			{
+				$value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
+			}
+		}
+		return $value;
+	}
+
 	// returns the user value for this field
+	// format = 'html' : returns the value in html-format if this is necessary for that field type
 	public function getValue($fieldNameIntern, $format = '')
 	{
-		global $gL10n;
+		global $gL10n, $gPreferences;
 		$value = '';
 
 		// exists a profile field with that name ?
 		// then check if user has a data object for this field and then read value of this object
 		if(array_key_exists($fieldNameIntern, $this->mProfileFields)
-		&& array_key_exists($this->mProfileFields[$fieldNameIntern]->getValue('usf_id'), $this->mUserData))
+		&& array_key_exists($this->mProfileFields[$fieldNameIntern]->getValue('usf_id'), $this->mUserData)) 
 		{
 			$value = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->getValue('usd_value', $format);
-			
-			// if field has url then create a link
-			if($format != 'plain' && strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
-			{
-				$htmlValue = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'">'.$value.'</a>';
-				if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '%user_content%') !== false)
-				{
-			        $htmlValue = preg_replace ('/%user_content%/', $value,  $htmlValue);
 
-				}
-				$value = $htmlValue;
-			}
-			
-			if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($format) > 0 && strlen($value) > 0)
+			if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($value) > 0)
 			{
+				if(strlen($format) == 0 || $format == 'html')
+				{
+					$dateFormat = $gPreferences['system_date'];
+				}
+				else
+				{
+					$dateFormat = $format;
+				}
+				
 				// ist das Feld ein Datumsfeld, dann das Datum formatieren
 				$date = new DateTimeExtended($value, 'Y-m-d', 'date');
 				if($date->valid() == false)
 				{
 					return $value;
 				}
-				$value = $date->format($format);
+				$value = $date->format($dateFormat);
 			}
 			elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DROPDOWN'
 				|| $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
@@ -136,6 +224,12 @@ class ProfileFields
 			}
 		}
 		
+		// get html output for that field type and value
+		if($format == 'html')
+		{
+			$value = $this->getHtmlValue($fieldNameIntern, $value);
+		}
+
 		return $value;
 	}
 

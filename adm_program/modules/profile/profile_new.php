@@ -306,7 +306,7 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
     
     // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
     $description = '';
-    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_description')) > 0 && $gProfileFields->getProperty($fieldNameIntern, 'cat_name_intern') != 'SOCIAL_NETWORKS')
+    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_description')) > 0)
     {
         $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'). '&amp;inline=true"><img 
             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'). '\',this)" onmouseout="ajax_hideTooltip()"

@@ -72,22 +72,22 @@ $charset    = '';
 
 if($getMode == 'csv-ms')
 {
-    $separator    = ';'; // Microsoft Excel 2007 und neuer braucht ein Semicolon
-    $value_quotes = '"';
+    $separator   = ';'; // Microsoft Excel 2007 und neuer braucht ein Semicolon
+    $valueQuotes = '"';
     $getMode     = 'csv';
-	$charset      = 'iso-8859-1';
+	$charset     = 'iso-8859-1';
 }
 else if($getMode == 'csv-oo')
 {
-    $separator    = ',';   // fuer CSV-Dateien
-    $value_quotes = '"';   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
+    $separator   = ',';   // fuer CSV-Dateien
+    $valueQuotes = '"';   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
     $getMode     = 'csv';
-	$charset      = 'utf-8';
+	$charset     = 'utf-8';
 }
 else
 {
-    $separator    = ',';    // fuer CSV-Dateien
-    $value_quotes = '';
+    $separator   = ',';    // fuer CSV-Dateien
+    $valueQuotes = '';
 }
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
@@ -347,9 +347,9 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
             if($column_number == 1)
             {
                 // die Laufende Nummer noch davorsetzen
-                $str_csv = $str_csv. $value_quotes. $gL10n->get('SYS_ABR_NO'). $value_quotes;
+                $str_csv = $str_csv. $valueQuotes. $gL10n->get('SYS_ABR_NO'). $valueQuotes;
             }
-            $str_csv = $str_csv. $separator. $value_quotes. $col_name. $value_quotes;
+            $str_csv = $str_csv. $separator. $valueQuotes. $col_name. $valueQuotes;
         }
         else
         {                
@@ -481,34 +481,32 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                     if($column_number == 1)
                     {
                         // erste Spalte zeigt lfd. Nummer an
-                        $str_csv = $str_csv. $value_quotes. $irow. $value_quotes;
+                        $str_csv = $str_csv. $valueQuotes. $irow. $valueQuotes;
                     }
                 }
     
                 $content  = '';
-                $usf_type = '';
-    
-                // Feldtyp bei Spezialfeldern setzen
-                if($column->getValue('lsc_special_field') == 'mem_begin' 
-                || $column->getValue('lsc_special_field') == 'mem_end')
-                {
-                    $usf_type = 'DATE';
-                }
-                elseif($column->getValue('lsc_special_field') == 'usr_login_name')
-                {
-                    $usf_type = 'TEXT';
-                }
-                elseif($usf_id > 0)
-                {
-                    $usf_type = $gProfileFields->getPropertyById($usf_id, 'usf_type');
-                }
                             
                 // Ausgabe je nach Feldtyp aufbereiten
+
+                if(strlen($row[$sql_column_number]) > 0
+				&& (  $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
+				   || $column->getValue('lsc_special_field') == 'mem_begin'
+				   || $column->getValue('lsc_special_field') == 'mem_end'))
+				{
+					// get date in correct format
+					$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
+					$row[$sql_column_number] = $date->format($gPreferences['system_date']);
+				}
 
 				if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
 				{
 					$content = $gL10n->getCountryByCode($row[$sql_column_number]);
 				}
+                elseif($column->getValue('lsc_special_field') == 'usr_login_name')
+                {
+                    $content = $row[$sql_column_number];
+                }
                 elseif($column->getValue('lsc_special_field') == 'usr_photo')
                 {
                     // Benutzerfoto anzeigen
@@ -543,107 +541,57 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                 }
                 else
                 {
-                    switch($usf_type)
-                    {
-                        case 'CHECKBOX':
-                            // Checkboxen werden durch ein Bildchen dargestellt
-                            if($row[$sql_column_number] == 1)
-                            {
-                                if($getMode == 'csv')
-                                {
-                                    $content = $gL10n->get('SYS_YES');
-                                }
-                                else
-                                {
-                                    $content = '<img src="'. THEME_PATH. '/icons/checkbox_checked.gif" style="vertical-align: middle;" alt="on" />';
-                                }
-                            }
-                            else
-                            {
-                                if($getMode == 'csv')
-                                {
-                                    $content = $gL10n->get('SYS_NO');
-                                }
-                                else
-                                {
-                                    $content = '<img src="'. THEME_PATH. '/icons/checkbox.gif" style="vertical-align: middle;" alt="off" />';
-                                }
-                            }
-                            break;
-    
-                        case 'DATE':
-							if(strlen($row[$sql_column_number]) > 0)
-							{
-								// Datum muss noch formatiert werden
-								$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
-								$content = $date->format($gPreferences['system_date']);
-							}
-                            break;
-
-                        case 'DROPDOWN':
-                        case 'RADIO_BUTTON':
-							if(strlen($row[$sql_column_number]) > 0)
-							{
-								// show selected text of optionfield or combobox
-								if($getMode == 'csv')
+					// get value in html layout
+					if($getMode != 'csv')
+					{
+						$content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $row[$sql_column_number]);
+					}
+					// get plain text for csv
+					else
+					{
+						switch($gProfileFields->getPropertyById($usf_id, 'usf_type'))
+						{
+							case 'CHECKBOX':
+								// Checkboxen werden durch ein Bildchen dargestellt
+								if($row[$sql_column_number] == 1)
 								{
-									$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
+									$content = $gL10n->get('SYS_YES');
 								}
 								else
 								{
-									$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list');
+									$content = $gL10n->get('SYS_NO');
 								}
-								$content = $arrListValues[$row[$sql_column_number]-1];
-							}
-                            break;
-    
-                        case 'EMAIL':
-                            // E-Mail als Link darstellen
-                            if(strlen($row[$sql_column_number]) > 0)
-                            {
-                                if($getMode == 'html')
-                                {
-                                    if($gPreferences['enable_mail_module'] == 1 
-                                    && $gProfileFields->getPropertyById($usf_id, 'usf_name_intern') == 'EMAIL')
-                                    {
-                                        $content = '<a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id']. '">'. $row[$sql_column_number]. '</a>';
-                                    }
-                                    else
-                                    {
-                                        $content = '<a href="mailto:'. $row[$sql_column_number]. '">'. $row[$sql_column_number]. '</a>';
-                                    }
-                                }
-                                else
-                                {
-                                    $content = $row[$sql_column_number];
-                                }
-                            }
-                            break;
-    
-                        case 'URL':
-                            // Homepage als Link darstellen
-                            if(strlen($row[$sql_column_number]) > 0)
-                            {
-                                if($getMode == 'html')
-                                {
-                                    $content = '<a href="'.$row[$sql_column_number].'" target="_blank">'.$row[$sql_column_number].'</a>';
-                                }
-                                else
-                                {
-                                    $content = $row[$sql_column_number];
-                                }
-                            }
-                            break;
-    
-                        default:
-                            $content = $row[$sql_column_number];
-                            break;                            
-                    }
+								break;
+		
+							case 'DATE':
+								if(strlen($row[$sql_column_number]) > 0)
+								{
+									// Datum muss noch formatiert werden
+									$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
+									$content = $date->format($gPreferences['system_date']);
+								}
+								break;
+
+							case 'DROPDOWN':
+							case 'RADIO_BUTTON':
+								if(strlen($row[$sql_column_number]) > 0)
+								{
+									// show selected text of optionfield or combobox
+									$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
+									$content = $arrListValues[$row[$sql_column_number]-1];
+								}
+								break;
+		
+							default:
+								$content = $row[$sql_column_number];
+								break;                            
+						}
+					}
                 }
 
                 if($getMode == 'csv')
                 {
-                    $str_csv = $str_csv. $separator. $value_quotes. $content. $value_quotes;
+                    $str_csv = $str_csv. $separator. $valueQuotes. $content. $valueQuotes;
                 }
     
                 else

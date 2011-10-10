@@ -62,6 +62,7 @@ require_once(SERVER_PATH. '/adm_program/system/classes/form_elements.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
@@ -535,16 +536,16 @@ elseif($req_mode == 8)
     $usf_id_homepage = $db->insert_id();
 
     // Messenger anlegen
-    $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
-                                       VALUES ('.$cat_id_messenger.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \'INS_AOL_INSTANT_MESSENGER\', NULL, \'aim.png\', 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'FACEBOOK\',       \'INS_FACEBOOK\', NULL, \'facebook.png\', 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'GOOGLE_PLUS\',    \'INS_GOOGLE_PLUS\', NULL, \'google.png\', 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'ICQ\',            \'INS_ICQ\', NULL, \'icq.png\', 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'WINDOWS_LIVE\',   \'INS_WINDOWS_LIVE\', NULL, \'windows_live.png\', 0, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'SKYPE\',          \'INS_SKYPE\', NULL, \'skype.png\', 0, 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'TWITTER\',        \'INS_TWITTER\', NULL, \'twitter.png\', 0, 7, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'XING\',           \'INS_XING\', NULL, \'xing.png\', 0, 8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
-                                            , ('.$cat_id_messenger.', \'TEXT\', \'YAHOO_MESSENGER\',\'INS_YAHOO_MESSENGER\', NULL, \'yahoo.png\', 0, 9, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+    $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
+                                       VALUES ('.$cat_id_messenger.', \'TEXT\', \'AOL_INSTANT_MESSENGER\', \'INS_AOL_INSTANT_MESSENGER\', NULL, \'aim.png\', NULL, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'FACEBOOK\',       \'INS_FACEBOOK\', \''.$gL10n->get('INS_FACEBOOK_DESC').'\', \'facebook.png\', \'http://www.facebook.com/%user_content%\', 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'GOOGLE_PLUS\',    \'INS_GOOGLE_PLUS\', NULL, \'google.png\', NULL, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'ICQ\',            \'INS_ICQ\', NULL, \'icq.png\', NULL, 0, 4, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'WINDOWS_LIVE\',   \'INS_WINDOWS_LIVE\', NULL, \'windows_live.png\', NULL, 0, 5, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'SKYPE\',          \'INS_SKYPE\', NULL, \'skype.png\', NULL, 0, 6, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'TWITTER\',        \'INS_TWITTER\', \''.$gL10n->get('INS_TWITTER_DESC').'\', \'twitter.png\', \'http://twitter.com/#!/%user_content%\', 0, 7, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'XING\',           \'INS_XING\', \''.$gL10n->get('INS_XING_DESC').'\', \'xing.png\', \'https://www.xing.com/profile/%user_content%\', 0, 8, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
+                                            , ('.$cat_id_messenger.', \'TEXT\', \'YAHOO_MESSENGER\',\'INS_YAHOO_MESSENGER\', NULL, \'yahoo.png\', NULL, 0, 9, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
 
     // Organisationsobjekt erstellen
