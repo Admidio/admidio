@@ -50,7 +50,7 @@ class FormElements
 		}
 		
 		$sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-				 WHERE rol_valid   = \''.$active_roles.'\'
+				 WHERE rol_valid   = '.$active_roles.'
 				   AND rol_visible = 1
 				   AND rol_cat_id  = cat_id
 				   AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
@@ -80,26 +80,33 @@ class FormElements
 				$selectBoxHtml .= '>'.$gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')</option>';
 			}
 
-			while($row = $gDb->fetch_object($result_lst))
+			while($row = $gDb->fetch_array($result_lst))
 			{
-				if($gCurrentUser->viewRole($row->rol_id))
+				if($gCurrentUser->viewRole($row['rol_id']))
 				{
-					if($act_category != $row->cat_name)
+					// if text is a translation-id then translate it
+					if(strpos($row['cat_name'], '_') == 3)
+					{
+						$row['cat_name'] = $gL10n->get(admStrToUpper($row['cat_name']));
+					}
+
+					// if new category then show label with category name
+					if($act_category != $row['cat_name'])
 					{
 						if(strlen($act_category) > 0)
 						{
 							$selectBoxHtml .= '</optgroup>';
 						}
-						$selectBoxHtml .= '<optgroup label="'.$row->cat_name.'">';
-						$act_category = $row->cat_name;
+						$selectBoxHtml .= '<optgroup label="'.$row['cat_name'].'">';
+						$act_category = $row['cat_name'];
 					}
 					// wurde eine Rollen-Id uebergeben, dann Combobox mit dieser vorbelegen
 					$selected = "";
-					if($row->rol_id == $default_role)
+					if($row['rol_id'] == $default_role)
 					{
 						$selected = ' selected="selected" ';
 					}
-					$selectBoxHtml .= '<option '.$selected.' value="'.$row->rol_id.'">'.$row->rol_name.'</option>';
+					$selectBoxHtml .= '<option '.$selected.' value="'.$row['rol_id'].'">'.$row['rol_name'].'</option>';
 				}
 			}
 			$selectBoxHtml .= '</optgroup>

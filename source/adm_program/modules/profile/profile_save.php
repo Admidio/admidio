@@ -117,6 +117,17 @@ foreach($gProfileFields->mProfileFields as $field)
 			{
 				$gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
 			}
+			
+			// if social network then extract username from url
+			if($field->getValue('usf_name_intern') == 'FACEBOOK'
+			|| $field->getValue('usf_name_intern') == 'XING')
+			{
+				if(strValidCharacters($_POST[$post_id], 'url'))
+				{
+					$_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
+					$_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
+				}
+			}
 
 			// Wert aus Feld in das User-Klassenobjekt schreiben
 			$returnCode = $user->setValue($field->getValue('usf_name_intern'), $_POST[$post_id]);

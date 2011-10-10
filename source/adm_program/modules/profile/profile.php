@@ -41,83 +41,14 @@ function getFieldCode($fieldNameIntern, $User)
         return '';
     }
 
-    switch($gProfileFields->getProperty($fieldNameIntern, 'usf_type'))
-    {
-        case 'CHECKBOX':
-            if($User->getValue($fieldNameIntern) == 1)
-            {
-                $value = '<img src="'.THEME_PATH.'/icons/checkbox_checked.gif" alt="on" />';
-            }
-            else
-            {
-                $value = '<img src="'.THEME_PATH.'/icons/checkbox.gif" alt="off" />';
-            }
-            break;
+	// get value of field in html format
+	$value = $User->getValue($fieldNameIntern, 'html');
 
-        case 'DATE':
-            if(strlen($User->getValue($fieldNameIntern)) > 0)
-            {
-                $value = $gProfileFields->getProperty($fieldNameIntern, 'usd_value', $gPreferences['system_date']);
-                if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
-                {
-                    // Alter mit ausgeben
-                    $birthday = new DateTimeExtended($value, $gPreferences['system_date'], 'date');
-                    $value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
-                }
-            }
-            break;
-
-        case 'EMAIL':
-            // E-Mail als Link darstellen
-            if(strlen($User->getValue($fieldNameIntern)) > 0)
-            {
-                if($gPreferences['enable_mail_module'] != 1)
-                {
-                    $mail_link = 'mailto:'. $User->getValue($fieldNameIntern);
-                }
-                else
-                {
-                    $mail_link = $g_root_path. '/adm_program/modules/mail/mail.php?usr_id='. $User->getValue('usr_id');
-                }
-                if(strlen($User->getValue($fieldNameIntern)) > 25)
-                {
-                    $value = '<a href="'. $mail_link. '" title="'. $User->getValue($fieldNameIntern).'">'.substr($User->getValue($fieldNameIntern), 0, 25).'...</a>';
-                }
-                else
-                {
-                    $value = '<a href="'. $mail_link. '" style="overflow: visible; display: inline;" title="'.$User->getValue($fieldNameIntern).'">'. $User->getValue($fieldNameIntern). '</a>';;
-                }
-            }
-            break;
-
-        case 'URL':
-            // Homepage als Link darstellen
-            if(strlen($User->getValue($fieldNameIntern)) > 0)
-            {
-                if(strlen($User->getValue($fieldNameIntern)) > 25)
-                {
-                    $value = '<a href="'. $User->getValue($fieldNameIntern).'" target="_blank" title="'. $User->getValue($fieldNameIntern).'">'. substr($User->getValue($fieldNameIntern), strpos($User->getValue($fieldNameIntern), '//') + 2, 25). '...</a>';
-                }
-                else
-                {
-                    $value = '<a href="'. $User->getValue($fieldNameIntern).'" target="_blank" title="'. $User->getValue($fieldNameIntern).'">'. substr($User->getValue($fieldNameIntern), strpos($User->getValue($fieldNameIntern), '//') + 2). '</a>';
-                }
-            }
-            break;
-
-        case 'TEXT_BIG':
-            $value = nl2br($User->getValue($fieldNameIntern));
-            break;
-
-        default:
-            $value = $User->getValue($fieldNameIntern);
-            break;
-    }
-	
-	// if url is set then create the link
-	if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_url')) > 0)
+	// if birthday then show age
+	if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
 	{
-		$value = '<a href="'.$gProfileFields->getProperty($fieldNameIntern, 'usf_url').'">'.$value.'</a>';
+		$birthday = new DateTimeExtended($User->getValue($fieldNameIntern, $gPreferences['system_date']), $gPreferences['system_date'], 'date');
+		$value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
 	}
 
 	// Icons der Messenger anzeigen

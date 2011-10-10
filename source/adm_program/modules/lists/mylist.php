@@ -176,7 +176,7 @@ $gLayout['header'] = '
                 }
             }            
             var newCellConditions = newTableRow.insertCell(-1);
-            newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" size=\"25\" maxlength=\"50\" value=\"" + condition + "\" />";
+            newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
 
 			$(newTableRow).fadeIn("slow");
             fieldNumberIntern++;
@@ -550,10 +550,10 @@ echo '
         <table class="tableList" id="mylist_fields_table" style="width: 100%;" cellspacing="0">
             <thead>
                 <tr>
-                    <th style="width: 19%;">'.$gL10n->get('SYS_ABR_NO').'</th>
+                    <th style="width: 20%;">'.$gL10n->get('SYS_ABR_NO').'</th>
                     <th style="width: 37%;">'.$gL10n->get('SYS_CONTENT').'</th>
                     <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
-                    <th style="width: 26%;">'.$gL10n->get('SYS_CONDITION').'
+                    <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
                             class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_SHOW_HELP').'" title="'.$gL10n->get('SYS_SHOW_HELP').'" /></a>
                     </th>
