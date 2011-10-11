@@ -16,17 +16,13 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/ckeditor_special.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_weblink.php');
 
 // Initialize and check the parameters
 $getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
-
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    require_once('../../system/bbcode.php');
-}
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_weblinks_module'] == 0)
@@ -54,6 +50,9 @@ if(isset($_SESSION['links_request']))
     unset($_SESSION['links_request']);
 }
 
+// create an object of ckeditor and replace textarea-element
+$ckEditor = new CKEditorSpecial();
+
 // Html-Kopf ausgeben
 if($getLinkId > 0)
 {
@@ -64,14 +63,7 @@ else
     $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
 }
 
-//Script für BBCode laden
-$javascript = "";
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    $javascript = getBBcodeJS('lnk_description');
-}
-
-$gLayout['header'] = $javascript. '
+$gLayout['header'] = '
 	<script type="text/javascript"><!--
     	$(document).ready(function() 
 		{
@@ -96,56 +88,59 @@ echo '
 <div class="formLayout" id="edit_links_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt><label for="lnk_name">'.$gL10n->get('LNK_LINK_NAME').':</label></dt>
-                    <dd>
-                        <input type="text" id="lnk_name" name="lnk_name" style="width: 90%;" maxlength="250" value="'. $link->getValue('lnk_name'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="lnk_url">'.$gL10n->get('LNK_LINK_ADDRESS').':</label></dt>
-                    <dd>
-                        <input type="text" id="lnk_url" name="lnk_url" style="width: 90%;" maxlength="250" value="'. $link->getValue('lnk_url'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="lnk_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
-                    <dd>
-						'.FormElements::generateCategorySelectBox('LNK', $link->getValue('lnk_cat_id'), 'lnk_cat_id').'
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            ';
-         if ($gPreferences['enable_bbcode'] == 1)
-         {
-            printBBcodeIcons();
-         }
-         echo '
-            <li>
-                <dl>
-                    <dt><label for="lnk_description">'.$gL10n->get('SYS_DESCRIPTION').':</label>';
-                        if($gPreferences['enable_bbcode'] == 1)
-                        {
-                            printEmoticons();
-                        }
-                    echo '</dt>
-                    <dd>
-                        <textarea id="lnk_description" name="lnk_description" style="width: 90%;" rows="10" cols="40">'. $link->getValue('lnk_description'). '</textarea>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
+		<div class="groupBox" id="admProperties">
+			<div class="groupBoxHeadline" id="admPropertiesHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admPropertiesBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admPropertiesBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES').'
+			</div>
 
-        <hr />';
+			<div class="groupBoxBody" id="admPropertiesBody">
+				<ul class="formFieldList">
+					<li>
+						<dl>
+							<dt><label for="lnk_name">'.$gL10n->get('LNK_LINK_NAME').':</label></dt>
+							<dd>
+								<input type="text" id="lnk_name" name="lnk_name" style="width: 90%;" maxlength="250" value="'. $link->getValue('lnk_name'). '" />
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="lnk_url">'.$gL10n->get('LNK_LINK_ADDRESS').':</label></dt>
+							<dd>
+								<input type="text" id="lnk_url" name="lnk_url" style="width: 90%;" maxlength="250" value="'. $link->getValue('lnk_url'). '" />
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="lnk_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
+							<dd>
+								'.FormElements::generateCategorySelectBox('LNK', $link->getValue('lnk_cat_id'), 'lnk_cat_id').'
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="groupBox" id="admDescription">
+			<div class="groupBoxHeadline" id="admDescriptionHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_DESCRIPTION').'
+			</div>
+
+			<div class="groupBoxBody" id="admDescriptionBody">
+                <ul class="formFieldList">
+                    <li>
+                         '.$ckEditor->createEditor('lnk_description', $link->getValue('lnk_description'), 'AdmidioDefault', 150).'
+                    </li>
+                </ul>
+            </div>
+        </div>';
 
         if($link->getValue('lnk_usr_id_create') > 0)
         {

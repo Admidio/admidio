@@ -16,12 +16,8 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/ckeditor_special.php');
 require_once('../../system/classes/table_rooms.php'); 
-
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    require_once('../../system/bbcode.php');
-}
 
 // Initialize and check the parameters
 $getRoomId   = admFuncVariableIsValid($_GET, 'room_id', 'numeric', 0);
@@ -49,6 +45,9 @@ if(isset($_SESSION['rooms_request']))
     unset($_SESSION['rooms_request']);
 }
 
+// create an object of ckeditor and replace textarea-element
+$ckEditor = new CKEditorSpecial();
+
 // Html-Kopf ausgeben
 if($getRoomId > 0)
 {
@@ -59,14 +58,6 @@ else
     $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
 }
 
-//Script für BBCode laden
-$javascript = '';
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    $javascript = getBBcodeJS('room_description');
-}
-
-$gLayout['header'] = $javascript;
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
@@ -74,62 +65,66 @@ echo '
 <div class="formLayout" id="edit_dates_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt><label for="room_name">'.$gL10n->get('SYS_ROOM').':</label></dt>
-                    <dd>
-                        <input type="text" id="room_name" name="room_name" style="width: 90%;" maxlength="100" value="'. $room->getValue('room_name'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <hr/>
-            <li>
-                <dl>
-                    <dt><label for="room_capacity">'.$gL10n->get('ROO_CAPACITY').':</label></dt>
-                    <dd>
-                        <input type="text" id="room_capacity" name="room_capacity" style="width: 40px;" maxlength="5" value="'. $room->getValue('room_capacity'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                        &nbsp; '.$gL10n->get('ROO_SEATING').'
-                    </dd>
-                </dl>
-            </li>
-             <li>
-                <dl>
-                    <dt><label for="room_overhang">'.$gL10n->get('ROO_OVERHANG').':</label></dt>
-                    <dd>
-                        <input type="text" id="room_overhang" name="room_overhang" style="width: 40px;" maxlength="5" value="'. $room->getValue('room_overhang'). '" />';
-                        if($gPreferences['dates_show_map_link'])
-                        {
-                            echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_ROOM_OVERHANG&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_ROOM_OVERHANG\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
-                        }
-                        echo ' '.$gL10n->get('ROO_STANDING').' / '.$gL10n->get('ROO_SEATING').'
-                    </dd>
-                </dl>
-            </li><br/>';
-             if ($gPreferences['enable_bbcode'] == 1)
-            {
-               printBBcodeIcons();
-            }
-            echo'<li>
-                <dl>
-                    <dt><label for="room_description">'.$gL10n->get('SYS_DESCRIPTION').':</label>';
-                        if($gPreferences['enable_bbcode'] == 1)
-                        {
-                            printEmoticons();
-                        }
-                    echo '</dt>
-                    <dd>
-                        <textarea id="room_description" name="room_description" style="width: 90%;" rows="10" cols="40">'. $room->getValue('room_description'). '</textarea>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
+		<div class="groupBox" id="admProperties">
+			<div class="groupBoxHeadline" id="admPropertiesHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admPropertiesBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admPropertiesBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES').'
+			</div>
 
-        <hr />';
+			<div class="groupBoxBody" id="admPropertiesBody">
+				<ul class="formFieldList">
+					<li>
+						<dl>
+							<dt><label for="room_name">'.$gL10n->get('SYS_ROOM').':</label></dt>
+							<dd>
+								<input type="text" id="room_name" name="room_name" style="width: 90%;" maxlength="100" value="'. $room->getValue('room_name'). '" />
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="room_capacity">'.$gL10n->get('ROO_CAPACITY').':</label></dt>
+							<dd>
+								<input type="text" id="room_capacity" name="room_capacity" style="width: 40px;" maxlength="5" value="'. $room->getValue('room_capacity'). '" />
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+								&nbsp; '.$gL10n->get('ROO_SEATING').'
+							</dd>
+						</dl>
+					</li>
+					 <li>
+						<dl>
+							<dt><label for="room_overhang">'.$gL10n->get('ROO_OVERHANG').':</label></dt>
+							<dd>
+								<input type="text" id="room_overhang" name="room_overhang" style="width: 40px;" maxlength="5" value="'. $room->getValue('room_overhang'). '" />';
+								if($gPreferences['dates_show_map_link'])
+								{
+									echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_ROOM_OVERHANG&amp;inline=true"><img 
+										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_ROOM_OVERHANG\',this)" onmouseout="ajax_hideTooltip()"
+										class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
+								}
+								echo ' '.$gL10n->get('ROO_STANDING').' / '.$gL10n->get('ROO_SEATING').'
+							</dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<div class="groupBox" id="admDescription">
+			<div class="groupBoxHeadline" id="admDescriptionHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_DESCRIPTION').'
+			</div>
+
+			<div class="groupBoxBody" id="admDescriptionBody">
+                <ul class="formFieldList">
+                    <li>
+                         '.$ckEditor->createEditor('room_description', $room->getValue('room_description'), 'AdmidioDefault', 150).'
+                    </li>
+                </ul>
+            </div>
+        </div>';
 
         if($room->getValue('room_usr_id_create') > 0)
         {

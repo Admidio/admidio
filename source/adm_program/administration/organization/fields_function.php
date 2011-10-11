@@ -119,8 +119,7 @@ if($getMode == 1)
     }
 	
     // make html in description secure
-    $_POST['usf_description'] = stripslashes($_POST['usf_description']);
-    $_POST['usf_description'] = htmLawed($_POST['usf_description']);
+    $_POST['usf_description'] = htmLawed(stripslashes($_POST['usf_description']));
 
     // POST Variablen in das UserField-Objekt schreiben
     foreach($_POST as $key => $value)

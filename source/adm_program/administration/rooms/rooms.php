@@ -116,10 +116,10 @@ else
                                   </tr>';
                         }
                     echo '</table>';
-                    if($room->getValue('room_description')!=null)
+                    if(strlen($room->getValue('room_description')) > 0)
                     {
                        echo '<div class="date_description" style="clear: left;"><br/>'
-                            .$room->getDescription('HTML').'</div>';
+                            .$room->getValue('room_description').'</div>';
                     }
                     echo '<div class="editInformation">'.
                     $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create'));

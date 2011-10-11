@@ -217,9 +217,9 @@ else
 		}
 
 		// Beschreibung ausgeben, falls vorhanden
-		if(strlen($weblink->getValue('lnk_description'))>0)
+		if(strlen($weblink->getValue('lnk_description')) > 0)
 		{
-			echo '<div style="margin-top: 10px;">'.$weblink->getDescription('HTML').'</div>';
+			echo '<div style="margin-top: 10px;">'.$weblink->getValue('lnk_description').'</div>';
 		}
 		
 		echo '<div class="smallFontSize" style="text-align: right">'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</div>

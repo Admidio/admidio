@@ -20,47 +20,13 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableWeblink extends TableAccess
 {
-    protected $bbCode;
-
-    // Konstruktor
+    // constructor
     public function __construct(&$db, $lnk_id = 0)
     {
         parent::__construct($db, TBL_LINKS, 'lnk', $lnk_id);
-    }
-
-    // liefert die Beschreibung je nach Type zurueck
-    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
-    // type = 'HTML'   : BB-Code in HTML umgewandelt
-    // type = 'BBCODE' : Beschreibung mit BBCode-Tags
-    public function getDescription($type = 'HTML')
-    {
-        global $gPreferences;
-        $description = '';
-
-        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
-        {
-            if(is_object($this->bbCode) == false)
-            {
-                $this->bbCode = new ubbParser();
-            }
-
-            $description = $this->bbCode->parse($this->getValue('lnk_description'));
-
-            if($type == 'PLAIN')
-            {
-                $description = strStripTags($description);
-            }
-        }
-        else
-        {
-            $description = nl2br($this->getValue('lnk_description'));
-        }
-        return $description;
     }
 
 	// returns the value of database column $field_name
@@ -70,7 +36,14 @@ class TableWeblink extends TableAccess
     {
 		global $gL10n;
 
-        $value = parent::getValue($field_name, $format);
+        if($field_name == 'lnk_description')
+        {
+            $value = $this->dbColumns['lnk_description'];
+        }
+        else
+        {
+            $value = parent::getValue($field_name, $format);
+        }
 
 		if($field_name == 'cat_name' && $format != 'plain')
 		{
@@ -99,22 +72,23 @@ class TableWeblink extends TableAccess
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
     public function setValue($field_name, $field_value, $check_value = true)
     {
-        if(strlen($field_value) > 0)
+        if($field_name == 'lnk_url' && strlen($field_value) > 0)
         {
-            if($field_name == 'lnk_url')
-            {
-                // Homepage darf nur gueltige Zeichen enthalten
-                if (!strValidCharacters($field_value, 'url'))
-                {
-                    return false;
-                }
-                // Homepage noch mit http vorbelegen
-                if(strpos(admStrToLower($field_value), 'http://')  === false
-                && strpos(admStrToLower($field_value), 'https://') === false )
-                {
-                    $field_value = 'http://'. $field_value;
-                }
-            }
+			// Homepage darf nur gueltige Zeichen enthalten
+			if (!strValidCharacters($field_value, 'url'))
+			{
+				return false;
+			}
+			// Homepage noch mit http vorbelegen
+			if(strpos(admStrToLower($field_value), 'http://')  === false
+			&& strpos(admStrToLower($field_value), 'https://') === false )
+			{
+				$field_value = 'http://'. $field_value;
+			}
+        }
+        elseif($field_name == 'lnk_description')
+        {
+            return parent::setValue($field_name, $field_value, false);
         }
         return parent::setValue($field_name, $field_value);
     } 

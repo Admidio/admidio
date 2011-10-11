@@ -13,8 +13,9 @@
  *           2 - delete room
  *****************************************************************************/
 
-require('../../system/common.php');
-require('../../system/classes/table_rooms.php');
+require_once('../../system/common.php');
+require_once('../../system/classes/table_rooms.php');
+require_once('../../libs/htmlawed/htmlawed.php');
 
 // Initialize and check the parameters
 $getRoomId = admFuncVariableIsValid($_GET, 'room_id', 'numeric', 0);
@@ -45,6 +46,10 @@ if($getMode == 1)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ROO_CAPACITY')));
     }
+
+    // make html in description secure
+    $_POST['room_description'] = htmLawed(stripslashes($_POST['room_description']));
+
     // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)
     {

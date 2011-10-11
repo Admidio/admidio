@@ -69,8 +69,7 @@ if($getMode == 1)
     }
     
     // make html in description secure
-    $_POST['ann_description'] = stripslashes($_POST['ann_description']);
-    $_POST['ann_description'] = htmLawed($_POST['ann_description']);
+    $_POST['ann_description'] = htmLawed(stripslashes($_POST['ann_description']));
     
     // POST Variablen in das Ankuendigungs-Objekt schreiben
     foreach($_POST as $key => $value)
