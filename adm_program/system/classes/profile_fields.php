@@ -6,6 +6,11 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
+ * getHtmlValue($fieldNameIntern, $value)
+ *              - returns the value of that field in html format with consideration 
+ *                of all layout parameters
+ *              - 'value' must be commited so that layout is also possible for 
+ *                values that aren't stored in database
  * getProperty($fieldNameIntern, $column, $format = '')
  *              - returns for a fieldname intern (usf_name_intern) the value of 
  *				  the column from table adm_user_fields
@@ -83,7 +88,8 @@ class ProfileFields
         return null;
     }
 
-	
+	// returns the value of that field in html format with consideration of all layout parameters
+	// 'value' must be commited so that layout is also possible for values that aren't stored in database
 	public function getHtmlValue($fieldNameIntern, $value)
 	{
 		global $gPreferences, $g_root_path;

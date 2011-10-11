@@ -43,27 +43,31 @@ if(strlen($g_tbl_praefix) == 0)
     $g_tbl_praefix = 'adm';
 }
 
-// Default-DB-Type ist immer MySql
-if(!isset($gDbType))
-{
-    $gDbType = 'mysql';
-}
-
-require_once(SERVER_PATH. '/adm_program/system/db/'. $gDbType. '.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
+require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 
-// Verbindung zu Datenbank herstellen
-$gDb = new MySqlDB();
-$gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+// default database type is always MySQL
+if(!isset($gDbType))
+{
+    $gDbType = 'mysql';
+}
+
+// create database connection
+$gDb = Database::createDatabaseObject($gDbType);
+if($gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db) == false)
+{
+	showPage($gL10n->get('INS_DATABASE_NO_LOGIN'), 'new_organization.php?mode=2', 'back.png', $gL10n->get('SYS_BACK'));
+}
 
 // Daten der aktuellen Organisation einlesen
 $gCurrentOrganization = new Organization($gDb, $g_organization);
@@ -76,6 +80,9 @@ if($gCurrentOrganization->getValue('org_id') == 0)
 
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
 $gPreferences = $gCurrentOrganization->getPreferences();
+
+// create object with current user field structure
+$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
 
 // Sprachdateien einlesen
 $gL10n = new Language($gPreferences['system_language']);
@@ -93,15 +100,15 @@ if($req_mode == 1)
 elseif($req_mode == 2)
 {
     // Formular vorbelegen
-    if(isset($_SESSION['orga_name_short']))
+    if(isset($_SESSION['orgaShortName']))
     {
-        $orga_name_short = $_SESSION['orga_name_short'];
-        $orga_name_long  = $_SESSION['orga_name_long'];
+        $orgaShortName = $_SESSION['orgaShortName'];
+        $orgaLongName  = $_SESSION['orgaLongName'];
     }
     else
     {
-        $orga_name_short = '';
-        $orga_name_long  = '';
+        $orgaShortName = '';
+        $orgaLongName  = '';
     }
 
     $message = '<strong>'.$gL10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
@@ -113,14 +120,14 @@ elseif($req_mode == 2)
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_short">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
-                                    <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '" /></dd>
+                                    <dt><label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
+                                    <dd><input type="text" name="orgaShortName" id="orgaShortName" style="width: 80px;" maxlength="10" value="'. $orgaShortName. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_long">'.$gL10n->get('SYS_NAME').':</label></dt>
-                                    <dd><input type="text" name="orga_name_long" id="orga_name_long" style="width: 250px;" maxlength="60" value="'. $orga_name_long. '" /></dd>
+                                    <dt><label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></dt>
+                                    <dd><input type="text" name="orgaLongName" id="orgaLongName" style="width: 250px;" maxlength="60" value="'. $orgaLongName. '" /></dd>
                                 </dl>
                             </li>
                         </ul>
@@ -133,14 +140,14 @@ elseif($req_mode == 3)
 {
     // Daten des Administrator eingeben
 
-    if(isset($_POST['orga_name_short']))
+    if(isset($_POST['orgaShortName']))
     {
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-        $_SESSION['orga_name_short'] = strStripTags($_POST['orga_name_short']);
-        $_SESSION['orga_name_long']  = strStripTags($_POST['orga_name_long']);
+        $_SESSION['orgaShortName'] = strStripTags($_POST['orgaShortName']);
+        $_SESSION['orgaLongName']  = strStripTags($_POST['orgaLongName']);
 
-        if(strlen($_SESSION['orga_name_short']) == 0
-        || strlen($_SESSION['orga_name_long']) == 0 )
+        if(strlen($_SESSION['orgaShortName']) == 0
+        || strlen($_SESSION['orgaLongName']) == 0 )
         {
             showPage($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'new_organization.php?mode=2', 'back.png', $gL10n->get('SYS_BACK'));
         }
@@ -188,7 +195,6 @@ elseif($req_mode == 4)
     {
         // Daten des Administrators in Sessionvariablen gefiltert speichern
         $_SESSION['user_login'] = strStripTags($_POST['user_login']);
-        $md5_password           = md5(strStripTags($_POST['user_password']));
 
         if(strlen($_SESSION['user_login']) == 0
         || strlen($_POST['user_password']) == 0 )
@@ -196,15 +202,10 @@ elseif($req_mode == 4)
             showPage($gL10n->get('INS_LOGIN_WEBMASTER_NOT_COMPLETELY'), 'new_organization.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'), 3);
         }
 
-        // Verbindung zu Datenbank herstellen
-        $db = new MySqlDB();
-        $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
-
         // Logindaten pruefen
         $sql    = 'SELECT DISTINCT usr_id
                      FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. '
                     WHERE UPPER(usr_login_name) LIKE UPPER(\''. $_SESSION['user_login']. '\')
-                      AND usr_password = \''. $md5_password. '\'
                       AND usr_valid    = 1
                       AND mem_usr_id   = usr_id
                       AND mem_rol_id   = rol_id
@@ -212,18 +213,39 @@ elseif($req_mode == 4)
                       AND mem_end      > \''.DATE_NOW.'\'
                       AND rol_valid    = 1
                       AND rol_name     = \''.$gL10n->get('SYS_WEBMASTER').'\' ';
-        $result = $db->query($sql);
+        $result = $gDb->query($sql);
 
-        $user_found = $db->num_rows($result);
-        $user_row   = $db->fetch_array($result);
+        $user_found = $gDb->num_rows($result);
+        $user_row   = $gDb->fetch_array($result);
 
-        if($user_found != 1)
+        if($user_found == 1)
+		{
+			// create user object
+			$User = new User($gDb, $gProfileFields, $user_row['usr_id']);
+			
+			if($User->getValue('usr_number_invalid') >= 3)
+			{
+				// wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
+				if(time() - strtotime($User->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 900)
+				{
+					$User->clear();
+					showPage($gL10n->get('SYS_LOGIN_FAILED'), 'new_organization.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'), 3);
+				}
+			}
+
+			if($User->checkPassword($_POST['user_password']) == true)
+			{
+				$_SESSION['webmaster_id'] = $user_row['usr_id'];
+			}
+			else
+			{
+				showPage($gL10n->get('INS_LOGIN_WEBMASTER_NOT_VALID'), 'new_organization.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'), 3);
+			}
+
+		}
+		else
         {
             showPage($gL10n->get('INS_LOGIN_WEBMASTER_NOT_VALID'), 'new_organization.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'), 3);
-        }
-        else
-        {
-            $_SESSION['webmaster_id'] = $user_row['usr_id'];
         }
     }
 
@@ -266,7 +288,7 @@ elseif($req_mode == 5)
     $file_content = str_replace('%PASSWORD%',  $g_adm_pw,      $file_content);
     $file_content = str_replace('%DATABASE%',  $g_adm_db,      $file_content);
     $file_content = str_replace('%ROOT_PATH%', $root_path,     $file_content);
-    $file_content = str_replace('%ORGANIZATION%', $_SESSION['orga_name_short'], $file_content);
+    $file_content = str_replace('%ORGANIZATION%', $_SESSION['orgaShortName'], $file_content);
 
     // die erstellte Config-Datei an den User schicken
     $file_name   = 'config.php';
@@ -296,25 +318,22 @@ elseif($req_mode == 6)
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(120);
 
-     // Verbindung zu Datenbank herstellen
-    $db = new MySqlDB();
-    $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
-    $db->startTransaction();
+    $gDb->startTransaction();
 
     // Default-Daten anlegen
 
     // Organisationsobjekt erstellen
     $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname, org_homepage)
-                                         VALUES (\''.$_SESSION['orga_name_long'].'\', \''.$_SESSION['orga_name_short'].'\', \''.$_SERVER['HTTP_HOST'].'\')';
-    $db->query($sql);
+                                         VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\', \''.$_SERVER['HTTP_HOST'].'\')';
+    $gDb->query($sql);
 
-    $gCurrentOrganization = new Organization($db, $_SESSION['orga_name_short']);
+    $gCurrentOrganization = new Organization($gDb, $_SESSION['orgaShortName']);
 
 	// create object with current user field structure
-	$gProfileFields = new ProfileFields($db, $gCurrentOrganization);
+	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
 
     // Userobjekt anlegen
-    $gCurrentUser = new User($db, $gProfileFields, $_SESSION['webmaster_id']);
+    $gCurrentUser = new User($gDb, $gProfileFields, $_SESSION['webmaster_id']);
 
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include('db_scripts/preferences.php');
@@ -329,7 +348,7 @@ elseif($req_mode == 6)
                                'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
                                'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
                                'SYSMAIL_ACTIVATION_LINK' => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
-    $text = new TableText($db);
+    $text = new TableText($gDb);
 
     foreach($systemmails_texts as $key => $value)
     {
@@ -346,13 +365,13 @@ elseif($req_mode == 6)
     $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
                                        VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'db_version\',      \''. ADMIDIO_VERSION. '\') 
                                             , ('. $gCurrentOrganization->getValue('org_id'). ', \'db_version_beta\', \''. BETA_VERSION. '\')';
-    $db->query($sql);
+    $gDb->query($sql);
 
     // Default-Kategorie fuer Rollen und Links eintragen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                            VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
-    $db->query($sql);
-    $category_common = $db->insert_id();
+    $gDb->query($sql);
+    $category_common = $gDb->insert_id();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                      VALUES ('. $gCurrentOrganization->getValue('org_id').', \'ROL\', \'GROUPS\',  \'INS_GROUPS\', 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
@@ -363,19 +382,19 @@ elseif($req_mode == 6)
                                           , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'COMMON\',  \'SYS_COMMON\', 0, 0, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                                           , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'TRAINING\',  \'INS_TRAINING\', 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')
                                           , ('. $gCurrentOrganization->getValue('org_id').', \'DAT\', \'COURSES\',  \'INS_COURSES\', 0, 0, 3, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
-    $db->query($sql);
+    $gDb->query($sql);
 
     //DefaultOrdner fuer Downloadmodul in der DB anlegen:
     $sql = 'INSERT INTO '. TBL_FOLDERS. ' (fol_org_id, fol_type, fol_name, fol_path,
                                            fol_locked, fol_public, fol_timestamp)
                                     VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
                                             0,1,\''.DATETIME_NOW.'\')';
-    $db->query($sql);
+    $gDb->query($sql);
 
     // nun die Default-Rollen anlegen
 
     // Webmaster
-    $role_webmaster = new TableRoles($db);
+    $role_webmaster = new TableRoles($gDb);
     $role_webmaster->setValue('rol_cat_id', $category_common);
     $role_webmaster->setValue('rol_name', $gL10n->get('SYS_WEBMASTER'));
     $role_webmaster->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_WEBMASTER'));
@@ -397,7 +416,7 @@ elseif($req_mode == 6)
     $role_webmaster->save();
 
     // Mitglied
-    $role_member = new TableRoles($db);
+    $role_member = new TableRoles($gDb);
     $role_member->setValue('rol_cat_id', $category_common);
     $role_member->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
     $role_member->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
@@ -407,7 +426,7 @@ elseif($req_mode == 6)
     $role_member->save();
 
     // Vorstand
-    $role_management = new TableRoles($db);
+    $role_management = new TableRoles($gDb);
     $role_management->setValue('rol_cat_id', $category_common);
     $role_management->setValue('rol_name', $gL10n->get('INS_BOARD'));
     $role_management->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
@@ -424,16 +443,16 @@ elseif($req_mode == 6)
 
     // die Rolle Mitglied wird als Defaultrolle fuer neue User eingestellt
 	$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = '. $role_member->getValue('rol_id'). '
-			 WHERE prf_name = "profile_default_role" ';
-	$db->query($sql);
+			 WHERE prf_name = \'profile_default_role\' ';
+	$gDb->query($sql);
 
     // Mitgliedschaft bei Rolle 'Webmaster' anlegen
-    $member = new TableMembers($db);
+    $member = new TableMembers($gDb);
     $member->startMembership($role_webmaster->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
     $member->startMembership($role_member->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
 
     // Default-Listen-Konfigurationen anlegen
-    $address_list = new ListConfiguration($db);
+    $address_list = new ListConfiguration($gDb);
     $address_list->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
     $address_list->setValue('lst_global', 1);
     $address_list->setValue('lst_default', 1);
@@ -445,7 +464,7 @@ elseif($req_mode == 6)
     $address_list->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
     $address_list->save();
 
-    $phone_list = new ListConfiguration($db);
+    $phone_list = new ListConfiguration($gDb);
     $phone_list->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
     $phone_list->setValue('lst_global', 1);
     $phone_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
@@ -456,7 +475,7 @@ elseif($req_mode == 6)
     $phone_list->addColumn(6, $gProfileFields->getProperty('FAX', 'usf_id'));
     $phone_list->save();
 
-    $contact_list = new ListConfiguration($db);
+    $contact_list = new ListConfiguration($gDb);
     $contact_list->setValue('lst_name', $gL10n->get('INS_CONTACT_DETAILS'));
     $contact_list->setValue('lst_global', 1);
     $contact_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
@@ -470,7 +489,7 @@ elseif($req_mode == 6)
     $contact_list->addColumn(9, $gProfileFields->getProperty('EMAIL', 'usf_id'));
     $contact_list->save();
 
-    $former_list = new ListConfiguration($db);
+    $former_list = new ListConfiguration($gDb);
     $former_list->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
     $former_list->setValue('lst_global', 1);
     $former_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'));
@@ -480,17 +499,17 @@ elseif($req_mode == 6)
     $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();
 
-    $db->endTransaction();
-
-    // Daten der Session loeschen
-    session_unset();
+    $gDb->endTransaction();
 
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$gL10n->get('INS_SETUP_WAS_SUCCESSFUL').'</strong><br /><br />
-                '.$gL10n->get('INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL', $_SESSION['orga_name_long']);
+                '.$gL10n->get('INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL', $_SESSION['orgaLongName']);
     if(is_writeable('../adm_my_files') == false)
     {
         $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
+    // delete all session data
+    session_unset();
+	// show success note
     showPage($message, '../adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'));
 }
 

@@ -40,6 +40,14 @@ elseif($getCKEditor == 'dat_description')
 {
     $folderName = 'dates';
 }
+elseif($getCKEditor == 'lnk_description')
+{
+    $folderName = 'weblinks';
+}
+elseif($getCKEditor == 'room_description')
+{
+    $folderName = 'rooms';
+}
 elseif($getCKEditor == 'usf_description')
 {
     $folderName = 'user_fields';

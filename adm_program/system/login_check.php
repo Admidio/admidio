@@ -60,7 +60,7 @@ if(strlen($password) == 0)
 
 $sql    = 'SELECT usr_id
              FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-            WHERE usr_login_name LIKE \''. $loginname. '\'
+            WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginname.'\')
               AND usr_valid      = 1
               AND mem_usr_id     = usr_id
               AND mem_rol_id     = rol_id
@@ -76,7 +76,7 @@ $user_row   = $gDb->fetch_array($result);
 
 if ($user_found >= 1)
 {
-    // Userobjekt anlegen
+    // create user object
     $gCurrentUser = new User($gDb, $gProfileFields, $user_row['usr_id']);
     
     if($gCurrentUser->getValue('usr_number_invalid') >= 3)

@@ -48,7 +48,7 @@ create table %PREFIX%_announcements
    ann_usr_id_create              integer       unsigned,
    ann_timestamp_create           timestamp     not null,
    ann_usr_id_change              integer       unsigned,
-   ann_timestamp_change           timestamp,
+   ann_timestamp_change           timestamp 	null default null,
    primary key (ann_id)
 )
 engine = InnoDB
@@ -92,7 +92,7 @@ create table %PREFIX%_categories
    cat_usr_id_create              integer       unsigned,
    cat_timestamp_create           timestamp     not null,
    cat_usr_id_change              integer       unsigned,
-   cat_timestamp_change           timestamp,
+   cat_timestamp_change           timestamp 	null default null,
    primary key (cat_id)
 )
 engine = InnoDB
@@ -154,7 +154,7 @@ create table %PREFIX%_dates
    dat_usr_id_create              integer       unsigned,
    dat_timestamp_create           timestamp     not null,
    dat_usr_id_change              integer       unsigned,
-   dat_timestamp_change           timestamp,
+   dat_timestamp_change           timestamp 	null default null,
    dat_rol_id                     integer       unsigned,
    dat_room_id                    integer       unsigned,
    dat_max_members                integer       not null default 0,                      
@@ -240,7 +240,7 @@ create table %PREFIX%_guestbook
    gbo_usr_id_create              integer       unsigned,
    gbo_timestamp_create           timestamp     not null,
    gbo_usr_id_change              integer       unsigned,
-   gbo_timestamp_change           timestamp,
+   gbo_timestamp_change           timestamp 	null default null,
    primary key (gbo_id)
 )
 engine = InnoDB
@@ -264,7 +264,7 @@ create table %PREFIX%_guestbook_comments
    gbc_usr_id_create              integer       unsigned,
    gbc_timestamp_create           timestamp     not null,
    gbc_usr_id_change              integer       unsigned,
-   gbc_timestamp_change           timestamp,
+   gbc_timestamp_change           timestamp 	null default null,
    primary key (gbc_id)
 )
 engine = InnoDB
@@ -287,7 +287,7 @@ create table %PREFIX%_links
    lnk_usr_id_create              integer       unsigned,
    lnk_timestamp_create           timestamp     not null,
    lnk_usr_id_change              integer       unsigned,
-   lnk_timestamp_change           timestamp,
+   lnk_timestamp_change           timestamp 	null default null,
    primary key (lnk_id)
 )
 engine = InnoDB
@@ -373,7 +373,7 @@ create table %PREFIX%_photos
    pho_usr_id_create              integer       unsigned,
    pho_timestamp_create           timestamp     not null,
    pho_usr_id_change              integer       unsigned,
-   pho_timestamp_change           timestamp,
+   pho_timestamp_change           timestamp 	null default null,
    primary key (pho_id)
 )
 engine = InnoDB
@@ -454,7 +454,7 @@ create table %PREFIX%_roles
    rol_usr_id_create              integer       unsigned,
    rol_timestamp_create           timestamp     not null,
    rol_usr_id_change              integer       unsigned,
-   rol_timestamp_change           timestamp,
+   rol_timestamp_change           timestamp 	null default null,
    rol_valid                      boolean       not null default '1',
    rol_system                     boolean       not null default '0',
    rol_visible                    boolean       not null default '1',
@@ -474,13 +474,13 @@ create table %PREFIX%_rooms
 (
     room_id                       integer       unsigned not null AUTO_INCREMENT,
     room_name                     varchar(50)   not null,
-    room_description              varchar(255),
+    room_description              text,
     room_capacity                 integer       not null,
     room_overhang                 integer,
     room_usr_id_create            integer       unsigned,
     room_timestamp_create         timestamp     not null,
     room_usr_id_change            integer       unsigned,
-    room_timestamp_change         timestamp,
+    room_timestamp_change         timestamp 	null default null,
     primary key (room_id)                                                                       
 )
 engine = InnoDB
@@ -552,7 +552,7 @@ create table %PREFIX%_user_fields
    usf_usr_id_create              integer       unsigned,
    usf_timestamp_create           timestamp     not null,
    usf_usr_id_change              integer       unsigned,
-   usf_timestamp_change           timestamp,
+   usf_timestamp_change           timestamp 	null default null,
    primary key (usf_id),
    unique (usf_name_intern)
 )

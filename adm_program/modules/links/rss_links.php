@@ -82,7 +82,7 @@ while ($row = $gDb->fetch_object($result))
     $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank"><b>'.$weblink->getValue('lnk_name').'</b></a>';
 
     // Beschreibung und Link zur Homepage ausgeben
-    $description = $description. '<br /><br />'. $weblink->getDescription('HTML'). 
+    $description = $description. '<br /><br />'. $weblink->getValue('lnk_description'). 
                    '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben

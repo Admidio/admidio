@@ -10,65 +10,38 @@
  * adm_rooms zu erstellen. 
  *
  *****************************************************************************/ 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
+
+ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableRooms extends TableAccess
 {
-	protected $bbCode;
-    
-    // Konstruktor
-    public function __construct(&$db, $room = '')
+	// constructor
+    public function __construct(&$db, $room_id = 0)
     {
-        parent::__construct($db, TBL_ROOMS, 'room', $room);
+        parent::__construct($db, TBL_ROOMS, 'room', $room_id);
     }
-    
-    // liefert die Beschreibung je nach Type zurueck
-    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
-    // type = 'HTML'   : BB-Code in HTML umgewandelt
-    // type = 'BBCODE' : Beschreibung mit BBCode-Tags
-    public function getDescription($type = 'HTML')
+
+    public function getValue($field_name, $format = '')
     {
-        global $gPreferences;
-        $description = '';
-
-        // wenn BBCode aktiviert ist, die Beschreibung noch parsen, ansonsten direkt ausgeben
-        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        if($field_name == 'room_description')
         {
-            if(is_object($this->bbCode) == false)
-            {
-                $this->bbCode = new ubbParser();
-            }
-
-            $description = $this->bbCode->parse($this->getValue('room_description'));
-
-            if($type == 'PLAIN')
-            {
-                $description = strStripTags($description);
-            }
+            $value = $this->dbColumns['room_description'];
         }
         else
         {
-            $description = nl2br($this->getValue('room_description'));
+            $value = parent::getValue($field_name, $format);
         }
-        return $description;
+ 
+        return $value;
     }
-
-    // Raum mit der uebergebenen ID oder dem Raumnamen aus der Datenbank auslesen
-    public function readData($room, $sql_where_condition = '', $sql_additional_tables = '')
+ 
+    public function setValue($field_name, $field_value, $check_value = true)
     {
-        global $gCurrentOrganization;
-
-        if(is_numeric($room))
+        if($field_name == 'room_description')
         {
-            $sql_where_condition .= ' room_id = '.$room;
+            return parent::setValue($field_name, $field_value, false);
         }
-        else
-        {
-            $room = addslashes($room);
-            $sql_where_condition .= ' room_name LIKE \''.$room.'\' ';
-        }
-        return parent::readData($room, $sql_where_condition, $sql_additional_tables);
+        return parent::setValue($field_name, $field_value);
     }
 }
 ?>

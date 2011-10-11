@@ -18,6 +18,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_weblink.php');
+require_once('../../libs/htmlawed/htmlawed.php');
 
 // Initialize and check the parameters
 $getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
@@ -55,7 +56,10 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0) )
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
     }
-   
+
+    // make html in description secure
+    $_POST['lnk_description'] = htmLawed(stripslashes($_POST['lnk_description']));
+
     // POST Variablen in das Ankuendigungs-Objekt schreiben
     foreach($_POST as $key => $value)
     {

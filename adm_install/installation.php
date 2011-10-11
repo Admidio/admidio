@@ -69,7 +69,7 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 
-// Default-DB-Type ist immer MySql
+// default database type is always MySQL
 if(!isset($gDbType))
 {
     $gDbType = 'mysql';
@@ -257,15 +257,15 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
     }
 
     // Formular vorbelegen
-    if(isset($_SESSION['orga_name_short']))
+    if(isset($_SESSION['orgaShortName']))
     {
-        $orga_name_short = $_SESSION['orga_name_short'];
-        $orga_name_long  = $_SESSION['orga_name_long'];
+        $orgaShortName = $_SESSION['orgaShortName'];
+        $orgaLongName  = $_SESSION['orgaLongName'];
     }
     else
     {
-        $orga_name_short = '';
-        $orga_name_long  = '';
+        $orgaShortName = '';
+        $orgaLongName  = '';
     }
 
     $message = $message.'<strong>'.$gL10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
@@ -276,14 +276,14 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
                         <ul class="formFieldList">
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_short">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
-                                    <dd><input type="text" name="orga_name_short" id="orga_name_short" style="width: 80px;" maxlength="10" value="'. $orga_name_short. '" /></dd>
+                                    <dt><label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
+                                    <dd><input type="text" name="orgaShortName" id="orgaShortName" style="width: 80px;" maxlength="10" value="'. $orgaShortName. '" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
-                                    <dt><label for="orga_name_long">'.$gL10n->get('SYS_NAME').':</label></dt>
-                                    <dd><input type="text" name="orga_name_long" id="orga_name_long" style="width: 250px;" maxlength="60" value="'. $orga_name_long. '" /></dd>
+                                    <dt><label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></dt>
+                                    <dd><input type="text" name="orgaLongName" id="orgaLongName" style="width: 250px;" maxlength="60" value="'. $orgaLongName. '" /></dd>
                                 </dl>
                             </li>
                         </ul>
@@ -294,14 +294,14 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
 }
 elseif($req_mode == 5)  // Daten des Administrator eingeben
 {
-    if(isset($_POST['orga_name_short']))
+    if(isset($_POST['orgaShortName']))
     {
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-        $_SESSION['orga_name_short'] = strStripTags($_POST['orga_name_short']);
-        $_SESSION['orga_name_long']  = strStripTags($_POST['orga_name_long']);
+        $_SESSION['orgaShortName'] = strStripTags($_POST['orgaShortName']);
+        $_SESSION['orgaLongName']  = strStripTags($_POST['orgaLongName']);
 
-        if(strlen($_SESSION['orga_name_short']) == 0
-        || strlen($_SESSION['orga_name_long']) == 0 )
+        if(strlen($_SESSION['orgaShortName']) == 0
+        || strlen($_SESSION['orgaLongName']) == 0 )
         {
             showPage($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', 'back.png', $gL10n->get('SYS_BACK'));
         }
@@ -438,7 +438,7 @@ elseif($req_mode == 7)
     $file_content = str_replace('%PASSWORD%',$_SESSION['password'],$file_content);
     $file_content = str_replace('%DATABASE%',$_SESSION['database'],$file_content);
     $file_content = str_replace('%ROOT_PATH%', $root_path, $file_content);
-    $file_content = str_replace('%ORGANIZATION%', $_SESSION['orga_name_short'], $file_content);
+    $file_content = str_replace('%ORGANIZATION%', $_SESSION['orgaShortName'], $file_content);
 
     // die erstellte Config-Datei an den User schicken
     $file_name   = 'config.php';
@@ -471,7 +471,7 @@ elseif($req_mode == 8)
     || $g_adm_usr     != $_SESSION['user']
     || $g_adm_pw      != $_SESSION['password']
     || $g_adm_db      != $_SESSION['database']
-    || $g_organization!= $_SESSION['orga_name_short'])
+    || $g_organization!= $_SESSION['orgaShortName'])
     {
         showPage($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
     }
@@ -550,10 +550,10 @@ elseif($req_mode == 8)
 
     // Organisationsobjekt erstellen
     $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname, org_homepage)
-                                         VALUES (\''.$_SESSION['orga_name_long'].'\', \''.$_SESSION['orga_name_short'].'\', \''.$_SERVER['HTTP_HOST'].'\')';
+                                         VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\', \''.$_SERVER['HTTP_HOST'].'\')';
     $db->query($sql);
 
-    $gCurrentOrganization = new Organization($db, $_SESSION['orga_name_short']);
+    $gCurrentOrganization = new Organization($db, $_SESSION['orgaShortName']);
 
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include('db_scripts/preferences.php');

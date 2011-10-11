@@ -46,6 +46,8 @@ function admStrStripTagsSpecial($srcArray)
     {
         if($key != 'ann_description' // ckeditor-variable
         && $key != 'dat_description'
+        && $key != 'lnk_description'
+        && $key != 'room_description'
         && $key != 'usf_description')
         {
             $srcArray[$key] = strStripTags($value);

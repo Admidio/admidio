@@ -95,8 +95,7 @@ switch ($getMessageId)
     case 'room_detail':
         if(is_numeric($getMessageVar1))
         {
-            $room = new TableRooms($gDb);
-            $room->readData($getMessageVar1);
+            $room = new TableRooms($gDb, $getMessageVar1);
             echo '
             <table>
                 <tr>
@@ -113,7 +112,7 @@ switch ($getMessageId)
                 </tr>
                 <tr>
                     <td><strong>'.$gL10n->get('SYS_DESCRIPTION').':</strong></td>
-                    <td>'.$room->getDescription('HTML').'</td>
+                    <td>'.$room->getValue('room_description').'</td>
                 </tr>
             </table>';
         }
