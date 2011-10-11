@@ -206,8 +206,8 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         {
             $sql = 'SELECT COUNT(dat_id) AS is_reserved 
                       FROM '.TBL_DATES.' 
-                     WHERE dat_begin <= "'.$endDateTime->getDateTimeEnglish().'"
-                       AND dat_end   >= "'.$startDateTime->getDateTimeEnglish().'"
+                     WHERE dat_begin  <= \''.$endDateTime->getDateTimeEnglish().'\'
+                       AND dat_end    >= \''.$startDateTime->getDateTimeEnglish().'\'
                        AND dat_room_id = '.$_POST['dat_room_id'].' 
                        AND dat_id     <> '.$getDateId;
             $result = $gDb->query($sql);
