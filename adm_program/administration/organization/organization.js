@@ -38,9 +38,16 @@ function organizationClass()
 			autoHeight: false,
 			collapsible: true,
 			change: function(event, ui) {
-				var selectedItem = $("#accordion-common .ui-state-active");
-				if( selectedItem != null || selectedItem != undefined )
-					$.scrollTo(selectedItem,800,{axis:'y'});
+				var selItem;
+				var posNew = ui.newHeader.position();
+				var posOld = ui.oldHeader.position();
+				if( posNew != null ) {
+					selItem = ui.newHeader;
+				}
+				else if( posOld != null ) {
+					selItem = ui.oldHeader;
+				}
+				$.scrollTo(selItem,800,{axis:'y'});
 			}
 		});
 		$("#accordion-modules").accordion({
@@ -48,9 +55,16 @@ function organizationClass()
 			autoHeight: false,
 			collapsible: true,
 			change: function(event, ui) {
-				var selectedItem = $("#accordion-modules .ui-state-active");
-				if( selectedItem != null || selectedItem != undefined )
-					$.scrollTo(selectedItem,800,{axis:'y'});
+				var selItem;
+				var posNew = ui.newHeader.position();
+				var posOld = ui.oldHeader.position();
+				if( posNew != null ) {
+					selItem = ui.newHeader;
+				}
+				else if( posOld != null ) {
+					selItem = ui.oldHeader;
+				}
+				$.scrollTo(selItem,800,{axis:'y'});
 			}
 		});
 		$("#org_longname").focus();

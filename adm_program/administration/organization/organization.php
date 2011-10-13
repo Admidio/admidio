@@ -13,6 +13,10 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_text.php');
 
+// Übergabeparameter prüfen und setzen
+$showOptionGenJs = '';
+$showOption = admFuncVariableIsValid($_GET, 'showOption', 'string');
+
 // nur Webmaster duerfen Organisationen bearbeiten
 if($gCurrentUser->isWebmaster() == false)
 {
@@ -53,9 +57,8 @@ else
     $form_values['forum_pw'] = '0000';
 }
 
-$showOptionGenJs = '';
-$showOption = admFuncVariableIsValid($_GET, 'showOption', 'string');
-
+// Je nach übergebenen string werden die Tabs gewechselt
+// und die jeweilige Sektion des Accordion automatisch aufgeklappt 
 if( strlen($showOption) > 0 )
 {
 	switch((string)$showOption)
@@ -66,6 +69,7 @@ if( strlen($showOption) > 0 )
 		case "SYS_CAPTCHA":
 		case "ORG_SYSTEM_INFORMATIONS":
 		{
+			// Erstes Tab für Allgemeine Einstellungen + Sektion aufklappen
 			$showOptionGenJs .= "$(\"#tabs\").bind( \"tabscreate\", function(event, ui) {
 				$(\"#tabs\").tabs(\"select\" , 0 );
 				$(\"#accordion-common\").accordion(\"activate\", $(\"#".$showOption."\"));
@@ -83,6 +87,7 @@ if( strlen($showOption) > 0 )
 		case "DAT_DATES":
 		case "LNK_WEBLINKS":
 		{
+			// Zweites Tab für Modul Einstellungen + Sektion aufklappen
 			$showOptionGenJs .= "$(\"#tabs\").bind( \"tabscreate\", function(event, ui) {
 				$(\"#tabs\").tabs(\"select\" , 1 );
 				$(\"#accordion-modules\").accordion(\"activate\", $(\"#".$showOption."\"));
@@ -90,7 +95,6 @@ if( strlen($showOption) > 0 )
 		} break;
 	}
 }
-
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
 $gLayout['title']  = $gL10n->get('ORG_ORGANIZATION_PROPERTIES');
