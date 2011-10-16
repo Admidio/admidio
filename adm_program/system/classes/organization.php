@@ -70,6 +70,7 @@ class Organization extends TableOrganizations
     // $update : bestimmt, ob vorhandene Werte aktualisiert werden
     public function setPreferences($preferences, $update = true)
     {
+		$this->db->startTransaction();
         $db_preferences = $this->getPreferences();
 
         foreach($preferences as $key => $value)
@@ -94,6 +95,7 @@ class Organization extends TableOrganizations
                 $this->db->query($sql);
             }
         }
+		$this->db->endTransaction();
     }
     
     // gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck

@@ -71,6 +71,7 @@ class TableLists extends TableAccess
     public function setDefault()
     {
         global $gCurrentOrganization;
+		$this->db->startTransaction();
         
         // erst die bisherige Default-Liste zuruecksetzen
         $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 0
@@ -82,6 +83,8 @@ class TableLists extends TableAccess
         $sql = 'UPDATE '. TBL_LISTS. ' SET lst_default = 1
                  WHERE lst_id = '. $this->getValue('lst_id');
         $this->db->query($sql);
+		
+		$this->db->endTransaction();
     }
 }
 ?>

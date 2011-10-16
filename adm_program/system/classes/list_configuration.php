@@ -325,6 +325,8 @@ class ListConfiguration extends TableLists
 
     public function save($updateFingerPrint = true)
     {
+		$this->db->startTransaction();
+		
         parent::save($updateFingerPrint);
         
         // jetzt noch die einzelnen Spalten sichern
@@ -336,6 +338,8 @@ class ListConfiguration extends TableLists
             }
             $list_column->save($updateFingerPrint);
         }
+		
+		$this->db->endTransaction();
     }
     
     public function delete()
