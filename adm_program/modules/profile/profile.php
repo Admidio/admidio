@@ -160,7 +160,7 @@ echo '
                             if(strlen($user->getValue('GENDER')) > 0
                             && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0 ))
                             {
-                                echo $user->getValue('GENDER');
+                                echo ' '.$user->getValue('GENDER');
                             }
                         echo '</div>
                         <div style="text-align: right;">

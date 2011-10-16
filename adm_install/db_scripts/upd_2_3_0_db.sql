@@ -222,7 +222,7 @@ alter table %PREFIX%_sessions add constraint %PREFIX%_FK_SES_ORG foreign key (se
 alter table %PREFIX%_texts add constraint %PREFIX%_FK_TXT_ORG foreign key (txt_org_id)
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
       
-UPDATE %PREFIX%_user_fields SET usf_system = 0, usf_name = 'SYS_GENDER', usf_type = 'RADIO_BUTTON', usf_value_list = 'female.png|SYS_FEMALE\r\nmale.png|SYS_MALE'
+UPDATE %PREFIX%_user_fields SET usf_system = 0, usf_name = 'SYS_GENDER', usf_type = 'RADIO_BUTTON', usf_value_list = 'male.png|SYS_MALE\r\nfemale.png|SYS_FEMALE'
  WHERE usf_name_intern LIKE 'GENDER';
 UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_LASTNAME' WHERE usf_name_intern LIKE 'LAST_NAME';
 UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_FIRSTNAME' WHERE usf_name_intern LIKE 'FIRST_NAME';
