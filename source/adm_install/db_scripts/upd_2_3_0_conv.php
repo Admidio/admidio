@@ -58,7 +58,8 @@ if($gDb->num_rows() > 0)
 
 	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_ICQ\'
 	                                     , usf_icon = \'icq.png\'
-										 , usf_description = null
+										 , usf_description = \''.$gL10n->get('INS_ICQ_DESC').'\'
+										 , usf_url = \'http://www.icq.com/people/%user_content%\'
 			 WHERE usf_id = '.$rowProfileField[0];
 	$gDb->query($sql);
 
