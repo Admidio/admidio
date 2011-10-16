@@ -230,6 +230,7 @@ class TableCategory extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
+		$this->db->startTransaction();
 
         if($this->new_record)
         {
@@ -277,6 +278,8 @@ class TableCategory extends TableAccess
             // da Aenderungen in den Profilfeldern vorgenommen wurden
             $gCurrentSession->renewUserObject();
         }
+		
+		$this->db->endTransaction();
     }
 
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor

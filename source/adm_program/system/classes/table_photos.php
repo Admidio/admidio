@@ -103,6 +103,7 @@ class TablePhotos extends TableAccess
     public function deleteInDatabase($photo_id)
     {
         $return_code = true;
+		$this->db->startTransaction();
     
         // erst einmal rekursiv zur tiefsten Tochterveranstaltung gehen
         $sql     = 'SELECT pho_id FROM '. TBL_PHOTOS. '
@@ -141,6 +142,7 @@ class TablePhotos extends TableAccess
             }
         }
         
+		$this->db->endTransaction();
         return $return_code;
     }
     

@@ -384,7 +384,6 @@ class TableFolder extends TableAccess
             $folderId = $this->getValue('fol_id');
             $parentId = $this->getValue('fol_fol_id_parent');
 
-
             if ($parentId) {
 
                 //wenn der Ordner einen Mutterordner hat muss der Rootordner ermittelt werden
@@ -404,15 +403,12 @@ class TableFolder extends TableAccess
                                           <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '">Downloads</a>';
 
                 $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
-
             }
             else {
 
                 //Wenn es keinen Elternordner gibt, wird auch keine Navigationsleite benoetigt
-                return "";
-
+                return '';
             }
-
         }
         else
         {
@@ -423,36 +419,27 @@ class TableFolder extends TableAccess
             $result_currentFolder = $this->db->query($sql_currentFolder);
             $currentFolderRow = $this->db->fetch_object($result_currentFolder);
 
-            if ($currentFolderRow->fol_fol_id_parent) {
-
+            if ($currentFolderRow->fol_fol_id_parent) 
+			{
                 $currentNavigation = ' &gt; <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.
                                        $currentFolderRow->fol_id. '">'. $currentFolderRow->fol_name. '</a>'. $currentNavigation;
 
 
                 //naechster Aufruf mit ParentFolder
                 return $this->getNavigationForDownload($currentFolderRow->fol_fol_id_parent, $currentNavigation);
-
             }
-            else {
-
+            else 
+			{
                 return $currentNavigation;
-
             }
-
         }
 
-
-
-
-
-        if ($originalCall) {
+        if ($originalCall) 
+		{
             $link = '<div class="navigationPath">'.$navigationPrefix.' '.$currentNavigation.' &gt; '. $this->getValue('fol_name'). '</div>';
 
             return $link;
-
         }
-
-
     }
 
 
@@ -521,6 +508,8 @@ class TableFolder extends TableAccess
             $folder_id = $this->getValue('fol_id');
         }
 
+		$this->db->startTransaction();
+	
         //Alle Unterordner auslesen, die im uebergebenen Ordner enthalten sind
         $sql_subfolders = 'SELECT *
                               FROM '. TBL_FOLDERS. '
@@ -547,7 +536,7 @@ class TableFolder extends TableAccess
             }
         }
 
-
+		$this->db->endTransaction();
     }
 
 
@@ -560,6 +549,8 @@ class TableFolder extends TableAccess
             $folder_id = $this->getValue('fol_id');
             $this->setValue('fol_locked', $locked_flag);
         }
+		
+		$this->db->startTransaction();
 
         //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
@@ -584,6 +575,8 @@ class TableFolder extends TableAccess
                           SET fil_locked = \''.$locked_flag.'\'
                         WHERE fil_fol_id = '.$folder_id;
         $this->db->query($sql_update);
+		
+		$this->db->endTransaction();
     }
 
     // Legt einen neuen Ordner im Dateisystem an
@@ -607,12 +600,14 @@ class TableFolder extends TableAccess
     //und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
     public function rename($newName, $newPath, $folder_id = 0)
     {
-        if ($folder_id == 0)
-        {
-            $folder_id = $this->getValue('fol_id');
-            $this->setValue('fol_name', $newName);
-            $this->save();
-         }
+		if ($folder_id == 0)
+		{
+			$folder_id = $this->getValue('fol_id');
+			$this->setValue('fol_name', $newName);
+			$this->save();
+		}
+
+		$this->db->startTransaction();
 
         //Den neuen Pfad in der DB setzen fuer die aktuelle folder_id...
         $sql_update = 'UPDATE '. TBL_FOLDERS. '
@@ -633,6 +628,7 @@ class TableFolder extends TableAccess
             $this->rename($row_subfolders->fol_name, $newPath. '/'. $newName, $row_subfolders->fol_id);
         }
 
+		$this->db->endTransaction();
     }
 
 
@@ -651,6 +647,8 @@ class TableFolder extends TableAccess
             $folderPath = $this->getCompletePathOfFolder();
 
         }
+		
+		$this->db->startTransaction();
 
         //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
@@ -690,9 +688,10 @@ class TableFolder extends TableAccess
         //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
 
         if ($folder_id == $this->getValue('fol_id')) {
-            return parent::delete();
+            parent::delete();
         }
 
+		$this->db->endTransaction();
     }
 
     public function getValue($field_name, $format = '')

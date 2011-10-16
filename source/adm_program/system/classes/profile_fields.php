@@ -305,7 +305,7 @@ class ProfileFields
 	// userId : id is neccessary if new user, that id was not known before
 	public function saveUserData($userId)
 	{
-		global $gDb;
+		$this->mDb->startTransaction();
 
 		foreach($this->mUserData as $key => $value)
 		{
@@ -328,6 +328,7 @@ class ProfileFields
 		}
 
 		$this->mUserId = $userId;
+		$this->mDb->endTransaction();
 	}
 	
 	// set value for column usd_value of field

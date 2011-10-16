@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Allgemeine Funktionen
+ * Common functions 
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -388,5 +388,55 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 	}
 	
 	return $defaultValue;
+}
+
+// check version of database against version of file system
+// show notice if version is different
+function admFuncCheckDatabaseVersion($dbVersion, $dbVersionBeta, $webmaster, $emailAdministrator)
+{
+	global $gMessage, $gL10n, $g_root_path;
+
+	if(version_compare($dbVersion, ADMIDIO_VERSION) != 0 || version_compare($dbVersionBeta, BETA_VERSION) != 0)
+	{
+		$arrDbVersion = explode('.', $dbVersion.'.'.$dbVersionBeta);
+		$arrFileSystemVersion = explode('.', ADMIDIO_VERSION.'.'.BETA_VERSION);
+		
+		if($webmaster == true)
+		{
+			// if webmaster and db version is less than file system version then show notice
+			if($arrDbVersion[0] < $arrFileSystemVersion[0]
+			|| $arrDbVersion[1] < $arrFileSystemVersion[1]
+			|| $arrDbVersion[2] < $arrFileSystemVersion[2]
+			|| $arrDbVersion[3] < $arrFileSystemVersion[3])
+			{
+				$gMessage->show($gL10n->get('SYS_WEBMASTER_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION, '<a href="'.$g_root_path.'/adm_install/update.php">', '</a>'));
+			}
+			// if webmaster and file system version is less than db version then show notice
+			elseif($arrDbVersion[0] > $arrFileSystemVersion[0]
+			    || $arrDbVersion[1] > $arrFileSystemVersion[1]
+			    || $arrDbVersion[2] > $arrFileSystemVersion[2]
+			    || $arrDbVersion[3] > $arrFileSystemVersion[3])
+			{
+				$gMessage->show($gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>'));
+			}
+		}
+		else
+		{
+			// if main version and subversion not equal then show notice
+			if($arrDbVersion[0] != $arrFileSystemVersion[0]
+			|| $arrDbVersion[1] != $arrFileSystemVersion[1])
+			{
+				$gMessage->show($gL10n->get('SYS_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION, '<a href="mailto:'.$emailAdministrator.'">', '</a>'));
+			}
+			// if main version and subversion are equal 
+			// but subsub db version is less then subsub file version show notice
+			elseif($arrDbVersion[0] == $arrFileSystemVersion[0]
+			&&     $arrDbVersion[1] == $arrFileSystemVersion[1]
+			&&     $arrDbVersion[2]  < $arrFileSystemVersion[2])
+			{
+				$gMessage->show($gL10n->get('SYS_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION, '<a href="mailto:'.$emailAdministrator.'">', '</a>'));
+			}
+		}
+	}
 }
 ?>

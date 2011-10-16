@@ -209,6 +209,8 @@ class User extends TableUsers
     // delete all user data of profile fields; user record will not be deleted
     public function deleteUserFieldData()
     {
+		$this->db->startTransaction();
+		
         // delete every entry from adm_users_data
         foreach($this->mProfileFieldsData->mUserData as $field)
         {
@@ -216,6 +218,7 @@ class User extends TableUsers
         }
         
 		$this->mProfileFieldsData->mUserData = array();
+		$this->db->endTransaction();
     }
     
     // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf

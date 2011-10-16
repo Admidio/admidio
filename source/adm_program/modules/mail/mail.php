@@ -376,10 +376,10 @@ echo '
                             }
                             else
                             {
-                               echo '<input type="text" id="name" name="name" style="width: 200px;" maxlength="50" value="'. $form_values['name']. '" />';
+                               echo '<input type="text" id="name" name="name" style="width: 200px;" maxlength="50" value="'. $form_values['name']. '" />
+							   <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                        </dd>
+                        echo '</dd>
                     </dl>
                 </li>
                 <li>
@@ -392,10 +392,10 @@ echo '
                             }
                             else
                             {
-                               echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 90%;" maxlength="50" value="'. $form_values['mailfrom']. '" />';
+                               echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 90%;" maxlength="50" value="'. $form_values['mailfrom']. '" />
+							   <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                        </dd>
+                        echo '</dd>
                     </dl>
                 </li>
                 <li>
@@ -411,10 +411,10 @@ echo '
                             }
                             else
                             {
-                               echo '<input type="text" id="subject" name="subject" style="width: 90%;" maxlength="50" value="'. $form_values['subject']. '" />';
+                               echo '<input type="text" id="subject" name="subject" style="width: 90%;" maxlength="50" value="'. $form_values['subject']. '" />
+							   <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                             }
-                            echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                        </dd>
+                        echo '</dd>
                     </dl>
                 </li>
                 <li>

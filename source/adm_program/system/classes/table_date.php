@@ -214,6 +214,8 @@ class TableDate extends TableAccess
 
     public function save($updateFingerPrint = true)
     {
+		$this->db->startTransaction();
+
         parent::save($updateFingerPrint);
 
         if($this->changeVisibleRoles == true)
@@ -245,6 +247,7 @@ class TableDate extends TableAccess
         }
 
         $this->changeVisibleRoles = false;
+		$this->db->endTransaction();
     }
 
     // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor

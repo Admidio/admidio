@@ -25,11 +25,15 @@ class TableInventory extends TableAccess
     // die Methode wird innerhalb von delete() aufgerufen
     public function delete()
     {
+		$this->db->startTransaction();
+
         //erst einmal alle vorhanden Leihvorgaenge zu diesem Inventareintrag loeschen...
         $sql = "DELETE FROM ". TBL_RENTAL_OVERVIEW. " WHERE rnt_inv_id = ". $this->getValue("inv_id");
         $result = $this->db->query($sql);
 
-        return parent::delete();
+        $returnCode = parent::delete();
+		$this->db->startTransaction();
+		return $returnCode;
     }
 
     //Gibt alle Inventargegenstaende, die der Benutzer sehen darf zurueck

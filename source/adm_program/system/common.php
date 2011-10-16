@@ -173,16 +173,6 @@ if(isset($_SESSION['navigation']) == false)
     $_SESSION['navigation'] = new Navigation();
 }
 
-// pruefen, ob Datenbank-Version zu den Scripten passt
-if(isset($gPreferences['db_version']) == false
-|| isset($gPreferences['db_version_beta']) == false
-|| version_compare($gPreferences['db_version'], ADMIDIO_VERSION) != 0
-|| version_compare($gPreferences['db_version_beta'], BETA_VERSION) != 0)
-{
-    unset($_SESSION['gCurrentOrganization']);
-    $gMessage->show($gL10n->get('SYS_DATABASE_INVALID', $gPreferences['db_version'], ADMIDIO_VERSION, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
-}
-
 /*********************************************************************************
 Session auf Gueltigkeit pruefen bzw. anlegen
 /********************************************************************************/
@@ -191,12 +181,11 @@ $gCurrentSession = new TableSession($gDb, $gSessionId);
 
 // erst einmal pruefen, ob evtl. frueher ein Autologin-Cookie gesetzt wurde
 // dann diese Session wiederherstellen
-
 $autoLogin = false;
 if($gPreferences['enable_auto_login'] == 1 && isset($_COOKIE[$gCookiePraefix. '_DATA']))
 {
     $admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
-    
+
     if($admidio_data[0] == true         // autologin
     && is_numeric($admidio_data[1]))    // user_id 
     {   
@@ -304,6 +293,9 @@ else
     // Alle alten Session loeschen
     $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
 }
+
+// check version of database against version of file system and show notice if not equal
+admFuncCheckDatabaseVersion($gPreferences['db_version'], $gPreferences['db_version_beta'], $gCurrentUser->isWebmaster(), $gPreferences['email_administrator']);
 
 // Homepageseite festlegen
 if($gValidLogin)
