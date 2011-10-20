@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Profilfelder anlegen und bearbeiten
+ * Create and edit profile fields
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * usf_id: ID des Feldes, das bearbeitet werden soll
+ * usf_id : profile field id that should be edited
  *
  ****************************************************************************/
  
@@ -18,27 +18,27 @@ require_once('../../system/classes/ckeditor_special.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_user_field.php');
 
+// Initialize and check the parameters
+$getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
+
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Initialize and check the parameters
-$getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
-
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // benutzerdefiniertes Feldobjekt anlegen
-$user_field = new TableUserField($gDb);
+$userField = new TableUserField($gDb);
 
 if($getUsfId > 0)
 {
-    $user_field->readData($getUsfId);
+    $userField->readData($getUsfId);
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
-    if($user_field->getValue('cat_org_id') >  0
-    && $user_field->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+    if($userField->getValue('cat_org_id') >  0
+    && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -58,13 +58,13 @@ if(isset($_SESSION['fields_request']))
 
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-	$user_field->setArray($_SESSION['fields_request']);
+	$userField->setArray($_SESSION['fields_request']);
     unset($_SESSION['fields_request']);
 }
 
 $html_disabled = '';
 $field_focus   = 'usf_name';
-if($user_field->getValue('usf_system') == 1)
+if($userField->getValue('usf_system') == 1)
 {
     $html_disabled = ' disabled="disabled" ';
     $field_focus   = 'usf_description';
@@ -126,7 +126,7 @@ echo '
 						<dl>
 							<dt><label for="usf_name">'.$gL10n->get('SYS_NAME').':</label></dt>
 							<dd><input type="text" name="usf_name" id="usf_name" '.$html_disabled.' style="width: 90%;" maxlength="100"
-								value="'. $user_field->getValue('usf_name', 'plain'). '" />
+								value="'. $userField->getValue('usf_name', 'plain'). '" />
 								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 							</dd>
 						</dl>
@@ -138,7 +138,7 @@ echo '
 							<dl>
 								<dt><label for="usf_name">'.$gL10n->get('SYS_INTERNAL_NAME').':</label></dt>
 								<dd><input type="text" name="usf_name_intern" id="usf_name_intern" disabled="disabled" style="width: 90%;" maxlength="100"
-									value="'. $user_field->getValue('usf_name_intern'). '" />
+									value="'. $userField->getValue('usf_name_intern'). '" />
 									<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC&amp;inline=true"><img 
 										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_INTERNAL_NAME_DESC\',this)" onmouseout="ajax_hideTooltip()"
 										class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -151,15 +151,15 @@ echo '
 						<dl>
 							<dt><label for="usf_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
 							<dd>';
-								if($user_field->getValue('usf_system') == 1)
+								if($userField->getValue('usf_system') == 1)
 								{
 									// bei Systemfeldern darf die Kategorie nicht mehr veraendert werden
 									echo '<input type="text" name="usf_cat_id" id="usf_cat_id" disabled="disabled" style="width: 150px;" 
-										maxlength="30" value="'. $user_field->getValue('cat_name'). '" />';
+										maxlength="30" value="'. $userField->getValue('cat_name'). '" />';
 								}
 								else
 								{
-									echo FormElements::generateCategorySelectBox('USF', $user_field->getValue('usf_cat_id'), 'usf_cat_id');
+									echo FormElements::generateCategorySelectBox('USF', $userField->getValue('usf_cat_id'), 'usf_cat_id');
 								}
 								echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 							</dd>
@@ -191,11 +191,11 @@ echo '
 													   'URL'      => $gL10n->get('ORG_URL'),
 													   'NUMERIC'  => $gL10n->get('SYS_NUMBER'));
 
-								if($user_field->getValue('usf_system') == 1)
+								if($userField->getValue('usf_system') == 1)
 								{
 									// bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
 									echo '<input type="text" name="usf_type" id="usf_type" disabled="disabled" style="width: 150px;" 
-										maxlength="30" value="'. $userFieldText[$user_field->getValue('usf_type')]. '" />';
+										maxlength="30" value="'. $userFieldText[$userField->getValue('usf_type')]. '" />';
 								}
 								else
 								{
@@ -204,7 +204,7 @@ echo '
 										foreach($userFieldText as $key => $value)
 										{
 											echo '<option value="'.$key.'" '; 
-											if($user_field->getValue('usf_type') == $key) 
+											if($userField->getValue('usf_type') == $key) 
 											{
 												echo ' selected="selected"';
 											}
@@ -220,7 +220,7 @@ echo '
 						<dl>
 							<dt><label for="usf_value_list">'.$gL10n->get('ORG_VALUE_LIST').':</label></dt>
 							<dd><textarea name="usf_value_list" id="usf_value_list" style="width: 90%;" rows="6" cols="40">'.
-								$user_field->getValue('usf_value_list', 'plain'). '</textarea>
+								$userField->getValue('usf_value_list', 'plain'). '</textarea>
 								<span class="mandatoryFieldMarker" style="margin: 0px;" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_VALUE_LIST_DESC&amp;inline=true"><img 
 									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
@@ -231,16 +231,16 @@ echo '
 					<li>
 						<dl>
 							<dt><label for="usf_icon">'.$gL10n->get('SYS_ICON').':</label></dt>
-							<dd><input type="text" name="usf_icon" id="usf_icon" '.$html_disabled.' style="width: 90%;" maxlength="100"
-								value="'. $user_field->getValue('usf_icon', 'plain'). '" />
+							<dd><input type="text" name="usf_icon" id="usf_icon" style="width: 90%;" maxlength="100"
+								value="'. $userField->getValue('usf_icon', 'plain'). '" />
 							</dd>
 						</dl>
 					</li>
 					<li>
 						<dl>
 							<dt><label for="usf_url">'.$gL10n->get('ORG_URL').':</label></dt>
-							<dd><input type="text" name="usf_url" id="usf_url" '.$html_disabled.' style="width: 90%;" maxlength="100"
-								value="'. $user_field->getValue('usf_url'). '" />
+							<dd><input type="text" name="usf_url" id="usf_url" style="width: 90%;" maxlength="100"
+								value="'. $userField->getValue('usf_url'). '" />
 								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_URL_DESC&amp;inline=true"><img 
 									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_URL_DESC\',this)" onmouseout="ajax_hideTooltip()"
 									class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" style="margin: 0px;" alt="Help" title="" /></a>
@@ -267,7 +267,7 @@ echo '
 							</dt>
 							<dd>
 								<input type="checkbox" name="usf_hidden" id="usf_hidden" ';
-								if($user_field->getValue('usf_hidden') == 0)
+								if($userField->getValue('usf_hidden') == 0)
 								{
 									echo ' checked="checked" ';
 								}
@@ -288,7 +288,7 @@ echo '
 							</dt>
 							<dd>
 								<input type="checkbox" name="usf_disabled" id="usf_disabled" ';
-								if($user_field->getValue('usf_disabled') == 1)
+								if($userField->getValue('usf_disabled') == 1)
 								{
 									echo ' checked="checked" ';
 								}
@@ -309,12 +309,12 @@ echo '
 							</dt>
 							<dd>
 								<input type="checkbox" name="usf_mandatory" id="usf_mandatory" ';
-								if($user_field->getValue('usf_mandatory') == 1)
+								if($userField->getValue('usf_mandatory') == 1)
 								{
 									echo ' checked="checked" ';
 								}
-								if($user_field->getValue('usf_name_intern') == 'LAST_NAME'
-								|| $user_field->getValue('usf_name_intern') == 'FIRST_NAME')
+								if($userField->getValue('usf_name_intern') == 'LAST_NAME'
+								|| $userField->getValue('usf_name_intern') == 'FIRST_NAME')
 								{
 									echo ' disabled="disabled" ';
 								}
@@ -337,22 +337,22 @@ echo '
 
 			<div class="groupBoxBody" id="admDescriptionBody">
                 <ul class="formFieldList">
-                    <li>'.$ckEditor->createEditor('usf_description', $user_field->getValue('usf_description'), 'AdmidioDefault', 200).'</li>
+                    <li>'.$ckEditor->createEditor('usf_description', $userField->getValue('usf_description'), 'AdmidioDefault', 200).'</li>
                 </ul>
 			</div>
 		</div>';
 
-        if($user_field->getValue('usf_usr_id_create') > 0)
+        if($userField->getValue('usf_usr_id_create') > 0)
         {
             // Infos der Benutzer, die diesen DS erstellt und geaendert haben
             echo '<div class="editInformation">';
-                $user_create = new User($gDb, $gProfileFields, $user_field->getValue('usf_usr_id_create'));
-                echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_create'));
+                $user_create = new User($gDb, $gProfileFields, $userField->getValue('usf_usr_id_create'));
+                echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $userField->getValue('usf_timestamp_create'));
 
-                if($user_field->getValue('usf_usr_id_change') > 0)
+                if($userField->getValue('usf_usr_id_change') > 0)
                 {
-                    $user_change = new User($gDb, $gProfileFields, $user_field->getValue('usf_usr_id_change'));
-                    echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $user_field->getValue('usf_timestamp_change'));
+                    $user_change = new User($gDb, $gProfileFields, $userField->getValue('usf_usr_id_change'));
+                    echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $userField->getValue('usf_timestamp_change'));
                 }
             echo '</div>';
         }

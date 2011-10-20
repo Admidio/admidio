@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer Kategorien
+ * Various functions for categories
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -50,23 +50,29 @@ elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Kategorie-Objekt anlegen
+// create category object
 $category = new TableCategory($gDb);
 
 if($getCatId > 0)
 {
     $category->readData($getCatId);
 
-    // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
+    // check if category belongs to actual organization
     if($category->getValue('cat_org_id') >  0
     && $category->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
+	
+	// if system category then set cat_name to default
+	if($category->getValue('cat_system') == 1)
+	{
+		$_POST['cat_name'] = $category->getValue('cat_name');
+	}
 }
 else
 {
-    // es wird eine neue Kategorie angelegt
+    // create a new category
     $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
     $category->setValue('cat_type', $getType);
 }
@@ -82,7 +88,7 @@ if($getMode == 1)
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_NAME')));
     }
 
-    $search_orga = '';
+    $sqlSearchOrga = '';
     
     // Profilfelderkategorien bei einer Orga oder wenn Haekchen gesetzt, immer Orgaunabhaengig anlegen
     // Terminbestaetigungskategorie bleibt auch Orgaunabhaengig
@@ -91,13 +97,13 @@ if($getMode == 1)
     || ($getType == 'ROL' && $category->getValue('cat_name_intern') == 'CONFIRMATION_OF_PARTICIPATION'))
     {
         $category->setValue('cat_org_id', '0');
-        $search_orga = ' AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+        $sqlSearchOrga = ' AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
                              OR cat_org_id IS NULL )';
     }
     else
     {
         $category->setValue('cat_org_id', $gCurrentOrganization->getValue('org_id'));
-        $search_orga = ' AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id');
+        $sqlSearchOrga = ' AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id');
     }
 
     if($category->getValue('cat_name') != $_POST['cat_name'])
@@ -108,7 +114,7 @@ if($getMode == 1)
                     WHERE cat_type    = \''. $getType. '\'
                       AND cat_name LIKE \''. $_POST['cat_name']. '\'
                       AND cat_id     <> '.$getCatId. 
-                          $search_orga;
+                          $sqlSearchOrga;
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);
 
@@ -142,9 +148,9 @@ if($getMode == 1)
     $cat_org_merker = $category->getValue('cat_org_id');
 
     // Daten in Datenbank schreiben
-    $return_code = $category->save();
+    $returnCode = $category->save();
 
-    if($return_code < 0)
+    if($returnCode < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
@@ -153,7 +159,7 @@ if($getMode == 1)
     // dann muss die Sequenz fuer den alle Kategorien dieses Typs neu gesetzt werden
     if(isset($_POST['cat_org_id']) && $_POST['cat_org_id'] <> $cat_org_merker)
     {
-        $sequence_category = new TableCategory($gDb);
+        $sequenceCategory = new TableCategory($gDb);
         $sequence = 0;
 
         $sql    = 'SELECT *
@@ -167,11 +173,11 @@ if($getMode == 1)
         while($row = $gDb->fetch_array($result))
         {
             $sequence++;
-            $sequence_category->clear();
-            $sequence_category->setArray($row);
+            $sequenceCategory->clear();
+            $sequenceCategory->setArray($row);
 
-            $sequence_category->setValue('cat_sequence', $sequence);
-            $sequence_category->save();
+            $sequenceCategory->setValue('cat_sequence', $sequence);
+            $sequenceCategory->save();
         }
     }
 
@@ -193,9 +199,9 @@ elseif($getMode == 2)
 		exit();
     }
 
-	$ret_code = $category->delete();
+	$returnCode = $category->delete();
 
-	if($ret_code)
+	if($returnCode)
 	{
 		echo 'done';
 	}

@@ -204,7 +204,7 @@ class ProfileFields
 					$dateFormat = $format;
 				}
 				
-				// ist das Feld ein Datumsfeld, dann das Datum formatieren
+				// if date field then the current date format must be used
 				$date = new DateTimeExtended($value, 'Y-m-d', 'date');
 				if($date->valid() == false)
 				{
@@ -225,7 +225,7 @@ class ProfileFields
 			}
 			elseif($fieldNameIntern == 'COUNTRY' && strlen($value) > 0)
 			{
-				// beim Land die sprachabhaengige Bezeichnung auslesen
+				// read the language name of the country
 				$value = $gL10n->getCountryByCode($value);
 			}
 		}

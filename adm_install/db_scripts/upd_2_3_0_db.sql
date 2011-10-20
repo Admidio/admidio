@@ -237,9 +237,9 @@ UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_BIRTHDAY' WHERE usf_name_intern 
 UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_EMAIL' WHERE usf_name_intern LIKE 'EMAIL';
 UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_WEBSITE' WHERE usf_name_intern LIKE 'WEBSITE';
  
-UPDATE %PREFIX%_preferences SET prf_value = 'da'
- WHERE prf_name like 'system_language'
-   AND prf_value like 'dk';
+UPDATE %PREFIX%_preferences SET prf_value = 'da' WHERE prf_name like 'system_language' AND prf_value like 'dk';
+DELETE FROM %PREFIX%_preferences WHERE prf_name like 'captcha_font_size';
+UPDATE %PREFIX%_preferences SET prf_name = 'captcha_font_size' WHERE prf_name like 'captcha_text_size';
 
 -- replace category name with translation id   
 UPDATE %PREFIX%_categories SET cat_name = 'SYS_MASTER_DATA' WHERE cat_name_intern = 'MASTER_DATA';

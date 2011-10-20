@@ -121,7 +121,7 @@ function organizationClass()
 			
 			$("#" + "forum_access_data").empty();
 			$("#" + "forum_access_data").css("display","none");
-			var li = "";
+			//var li = "";
 			var dl = "";
 			var dt = "";
 			var dd = "";
@@ -129,7 +129,7 @@ function organizationClass()
 			var input = "";
 			for(var i = 0; i < ElementsArray.length;i++)
 			{
-					li = document.createElement("LI");
+					//li = document.createElement("LI");
 					dl = document.createElement("DL");
 					dt = document.createElement("DT");
 					dd = document.createElement("DD");
@@ -142,12 +142,12 @@ function organizationClass()
 					input.maxlength = ValuesArray[i][2];
 					input.width = ValuesArray[i][3];
 					input.value = ValuesArray[i][4];
-					li.appendChild(dl);
+					//li.appendChild(dl);
 					dl.appendChild(dt);
 					dl.appendChild(dd);
 					dd.appendChild(input);
 					dt.appendChild(label);
-					$("#" + "forum_access_data").append(li);
+					$("#" + "forum_access_data").append(dl);
 			}
 			$("#" + "forum_access_data").show("slow",function(){
 				$("#" + "forum_access_data_text").show("slow");
