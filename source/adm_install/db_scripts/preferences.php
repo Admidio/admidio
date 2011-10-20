@@ -136,7 +136,7 @@ $orga_preferences = array(
 	
 	// Captcha
     'captcha_background_color'	=> '#FFEFC4',
-    'captcha_text_size' 		=> '20',
+    'captcha_font_size' 		=> '20',
 	'captcha_fonts'				=> 'Theme',
 	'captcha_width'				=> '250',
     'captcha_height'			=> '60',

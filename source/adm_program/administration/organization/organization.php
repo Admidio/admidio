@@ -1,10 +1,15 @@
 <?php
 /******************************************************************************
- * Organisationseinstellungen
+ * Organization preferences
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Parameters:
+ *
+ * show_option : show preferences of module with this text id
+ *               Example: SYS_COMMON or 
  *
  *****************************************************************************/
 
@@ -13,9 +18,9 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_text.php');
 
-// Übergabeparameter prüfen und setzen
+// Initialize and check the parameters
+$showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 $showOptionGenJs = '';
-$showOption = admFuncVariableIsValid($_GET, 'showOption', 'string');
 
 // nur Webmaster duerfen Organisationen bearbeiten
 if($gCurrentUser->isWebmaster() == false)
@@ -63,35 +68,36 @@ if( strlen($showOption) > 0 )
 {
 	switch((string)$showOption)
 	{
-		case "SYS_COMMON":
-		case "SYS_REGISTRATION":
-		case "SYS_SYSTEM_MAILS":
-		case "SYS_CAPTCHA":
-		case "ORG_SYSTEM_INFORMATIONS":
+		case 'SYS_COMMON':
+		case 'ORG_ORGANIZATION_REGIONAL_SETTINGS':
+		case 'SYS_REGISTRATION':
+		case 'SYS_SYSTEM_MAILS':
+		case 'SYS_CAPTCHA':
+		case 'ORG_SYSTEM_INFORMATIONS':
 		{
 			// Erstes Tab für Allgemeine Einstellungen + Sektion aufklappen
-			$showOptionGenJs .= "$(\"#tabs\").bind( \"tabscreate\", function(event, ui) {
-				$(\"#tabs\").tabs(\"select\" , 0 );
-				$(\"#accordion-common\").accordion(\"activate\", $(\"#".$showOption."\"));
-			});";			
+			$showOptionGenJs .= '$("#tabs").bind("tabscreate", function(event, ui) {
+				$("#tabs").tabs("select" , 0 );
+				$("#accordion-common").accordion("activate", $("#'.$showOption.'"));
+			});';			
 		} break;
-		case "ANN_ANNOUNCEMENTS":
-		case "DOW_DOWNLOADS":
-		case "PHO_PHOTOS":
-		case "SYS_FORUM":
-		case "GBO_GUESTBOOK":
-		case "LST_LISTS":
-		case "MAI_EMAILS":
-		case "ECA_GREETING_CARDS":
-		case "PRO_PROFILE":
-		case "DAT_DATES":
-		case "LNK_WEBLINKS":
+		case 'ANN_ANNOUNCEMENTS':
+		case 'DOW_DOWNLOADS':
+		case 'PHO_PHOTOS':
+		case 'SYS_FORUM':
+		case 'GBO_GUESTBOOK':
+		case 'LST_LISTS':
+		case 'MAI_EMAILS':
+		case 'ECA_GREETING_CARDS':
+		case 'PRO_PROFILE':
+		case 'DAT_DATES':
+		case 'LNK_WEBLINKS':
 		{
 			// Zweites Tab für Modul Einstellungen + Sektion aufklappen
-			$showOptionGenJs .= "$(\"#tabs\").bind( \"tabscreate\", function(event, ui) {
-				$(\"#tabs\").tabs(\"select\" , 1 );
-				$(\"#accordion-modules\").accordion(\"activate\", $(\"#".$showOption."\"));
-			});";
+			$showOptionGenJs .= '$("#tabs").bind("tabscreate", function(event, ui) {
+				$("#tabs").tabs("select" , 1 );
+				$("#accordion-modules").accordion("activate", $("#'.$showOption.'"));
+			});';
 		} break;
 	}
 }
@@ -135,7 +141,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '
 <h1 class="moduleHeadline">'.$gLayout['title'].'</h1>
 
-<div class="formLayout" id="organization_menu">
+<div class="formLayout" id="admOrganizationMenu">
 	<div class="formBody">
 	<form action="'.$g_root_path.'/adm_program/administration/organization/organization_function.php" method="post">
 	<div id="tabs">
@@ -155,30 +161,6 @@ echo '
 			</h3>
 			<div class="groupBoxBody" style="display: none;">
 				<ul class="formFieldList">
-					<li>
-						<dl>
-							<dt><label for="org_shortname">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
-							<dd><input type="text" id="org_shortname" name="org_shortname" disabled="disabled" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="org_longname">'.$gL10n->get('SYS_NAME').':</label></dt>
-							<dd><input type="text" id="org_longname" name="org_longname" style="width: 200px;" maxlength="60" value="'. $form_values['org_longname']. '" /></dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="org_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
-							<dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
-							<dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language', $form_values['system_language']).'</dd>
-						</dl>
-					</li>
 					<li>
 						<dl>
 							<dt><label for="theme">'.$gL10n->get('ORG_ADMIDIO_THEME').':</label></dt>
@@ -206,27 +188,6 @@ echo '
 						</dl>
 					</li>
 					<li class="smallFontSize">'.$gL10n->get('ORG_ADMIDIO_THEME_DESC').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_date">'.$gL10n->get('ORG_DATE_FORMAT').':</label></dt>
-							<dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_time">'.$gL10n->get('ORG_TIME_FORMAT').':</label></dt>
-							<dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_time">'.$gL10n->get('ORG_CURRENCY').':</label></dt>
-							<dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_CURRENCY_DESC').'</li>
 					<li>
 						<dl>
 							<dt><label for="homepage_logout">'.$gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('SYS_VISITORS').'):</label></dt>
@@ -385,6 +346,68 @@ echo '
 						</dl>
 					</li>
 					<li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
+				</ul>
+				<br />
+				<div class="formSubmit">	
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+                </div>
+			</div>';
+			
+			/**************************************************************************************/
+        	// Organization and regional settings
+        	/**************************************************************************************/
+			
+			echo '<h3 id="ORG_ORGANIZATION_REGIONAL_SETTINGS" class="iconTextLink" >
+				<a href="#"><img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" /></a>
+				<a href="#">'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'</a>
+			</h3>
+			<div class="groupBoxBody" style="display: none;">
+				<ul class="formFieldList">
+					<li>
+						<dl>
+							<dt><label for="org_shortname">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
+							<dd><input type="text" id="org_shortname" name="org_shortname" disabled="disabled" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="org_longname">'.$gL10n->get('SYS_NAME').':</label></dt>
+							<dd><input type="text" id="org_longname" name="org_longname" style="width: 200px;" maxlength="60" value="'. $form_values['org_longname']. '" /></dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="org_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
+							<dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
+							<dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language', $form_values['system_language']).'</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="system_date">'.$gL10n->get('ORG_DATE_FORMAT').':</label></dt>
+							<dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$gL10n->get('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
+					<li>
+						<dl>
+							<dt><label for="system_time">'.$gL10n->get('ORG_TIME_FORMAT').':</label></dt>
+							<dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$gL10n->get('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
+					<li>
+						<dl>
+							<dt><label for="system_time">'.$gL10n->get('ORG_CURRENCY').':</label></dt>
+							<dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$gL10n->get('ORG_CURRENCY_DESC').'</li>
 				</ul>
 				<br />
 				<div class="formSubmit">	
@@ -629,13 +652,13 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$gL10n->get("ORG_CAPTCHA_FONT").'
+                        '.$gL10n->get('ORG_CAPTCHA_FONT').'
                     </li>					
                     <li>
                         <dl>
-                            <dt><label for="captcha_font_size">'.$gL10n->get("SYS_FONT_SIZE").':</label></dt>
+                            <dt><label for="captcha_font_size">'.$gL10n->get('SYS_FONT_SIZE').':</label></dt>
                             <dd>';
-                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'captcha_font_size',$form_values['captcha_font_size'],'120','false','false');
+                                echo getMenueSettings(array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30'),'captcha_font_size',$form_values['captcha_font_size'],'120','false','false');
                              echo '</dd>
                         </dl>
                     </li>
@@ -646,7 +669,7 @@ echo '
                         <dl>
                             <dt><label for="captcha_background_color">'.$gL10n->get("ORG_CAPTCHA_BACKGROUND_COLOR").':</label></dt>
                             <dd>
-								<input type="text" id="captcha_background_color" name="captcha_background_color" style="width: 60px;" maxlength="7" value="'.$form_values["captcha_background_color"].'" />                            
+								<input type="text" id="captcha_background_color" name="captcha_background_color" style="width: 60px;" maxlength="7" value="'.$form_values['captcha_background_color'].'" />
 							</dd>
                         </dl>
                     </li>
@@ -656,9 +679,9 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="captcha_width">'.$gL10n->get("ORG_CAPTCHA_SCALING").':</label></dt>
-                            <dd><input type="text" id="captcha_width" name="captcha_width" style="width: 50px;" maxlength="4" value="'.$form_values["captcha_width"].'" />
+                            <dd><input type="text" id="captcha_width" name="captcha_width" style="width: 50px;" maxlength="4" value="'.$form_values['captcha_width'].'" />
                                 x
-                                <input type="text" id="captcha_height" name="captcha_height" style="width: 50px;" maxlength="4" value="'.$form_values["captcha_height"].'" />
+                                <input type="text" id="captcha_height" name="captcha_height" style="width: 50px;" maxlength="4" value="'.$form_values['captcha_height'].'" />
                                 '.$gL10n->get('ORG_PIXEL').'
                             </dd>
                         </dl>

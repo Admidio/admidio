@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen des Benutzers speichern
+ * Functions to save user memberships of roles
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,7 +8,8 @@
  *
  * Parameters:
  *
- * rol_id : Rolle zu denen die Zuordnug geaendert werden soll
+ * rol_id : edit the membership of this role id
+ * usr_id : edit the membership of this user id
  *
  *****************************************************************************/
 require_once('../../system/common.php');
@@ -43,11 +44,12 @@ if( (!$gCurrentUser->assignRoles()
 //POST Daten übernehmen
 $membership = 0;
 $leadership = 0;
-if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId]=='true')
+
+if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId]=='checked')
 {
     $membership = 1;
 }
-if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId]=='true')
+if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId]=='checked')
 {
     $membership = 1;    
     $leadership = 1;

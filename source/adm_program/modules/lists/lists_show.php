@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Listen anzeigen
+ * Show lists
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -486,27 +486,15 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                 }
     
                 $content  = '';
-                            
-                // Ausgabe je nach Feldtyp aufbereiten
 
-                if(strlen($row[$sql_column_number]) > 0
-				&& (  $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
-				   || $column->getValue('lsc_special_field') == 'mem_begin'
-				   || $column->getValue('lsc_special_field') == 'mem_end'))
-				{
-					// get date in correct format
-					$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
-					$row[$sql_column_number] = $date->format($gPreferences['system_date']);
-				}
+				/*****************************************************************/
+                // create field content for each field type and output format
+				/*****************************************************************/
 
 				if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
 				{
 					$content = $gL10n->getCountryByCode($row[$sql_column_number]);
 				}
-                elseif($column->getValue('lsc_special_field') == 'usr_login_name')
-                {
-                    $content = $row[$sql_column_number];
-                }
                 elseif($column->getValue('lsc_special_field') == 'usr_photo')
                 {
                     // Benutzerfoto anzeigen
@@ -539,65 +527,62 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                         $content = $gL10n->get('LST_USER_PHOTO');
                     }
                 }
-                else
-                {
-					// get value in html layout
-					if($getMode != 'csv')
+                elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX') 
+				{
+					// Checkboxen werden durch ein Bildchen dargestellt
+					if($row[$sql_column_number] == 1)
 					{
-						$content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $row[$sql_column_number]);
+						$content = $gL10n->get('SYS_YES');
 					}
-					// get plain text for csv
 					else
 					{
-						switch($gProfileFields->getPropertyById($usf_id, 'usf_type'))
-						{
-							case 'CHECKBOX':
-								// Checkboxen werden durch ein Bildchen dargestellt
-								if($row[$sql_column_number] == 1)
-								{
-									$content = $gL10n->get('SYS_YES');
-								}
-								else
-								{
-									$content = $gL10n->get('SYS_NO');
-								}
-								break;
-		
-							case 'DATE':
-								if(strlen($row[$sql_column_number]) > 0)
-								{
-									// Datum muss noch formatiert werden
-									$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
-									$content = $date->format($gPreferences['system_date']);
-								}
-								break;
-
-							case 'DROPDOWN':
-							case 'RADIO_BUTTON':
-								if(strlen($row[$sql_column_number]) > 0)
-								{
-									// show selected text of optionfield or combobox
-									$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
-									$content = $arrListValues[$row[$sql_column_number]-1];
-								}
-								break;
-		
-							default:
-								$content = $row[$sql_column_number];
-								break;                            
-						}
+						$content = $gL10n->get('SYS_NO');
 					}
-                }
+				}
+				elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
+				||     $column->getValue('lsc_special_field') == 'mem_begin'
+				||     $column->getValue('lsc_special_field') == 'mem_end') 
+				{
+					if(strlen($row[$sql_column_number]) > 0)
+					{
+						// Datum muss noch formatiert werden
+						$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
+						$content = $date->format($gPreferences['system_date']);
+					}
+				}
+				elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
+				||     $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') 
+				{
+					if(strlen($row[$sql_column_number]) > 0)
+					{
+						// show selected text of optionfield or combobox
+						if($getMode != 'csv')
+						{
+							$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'html');
+						}
+						else
+						{
+							$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
+						}
+						$content = $arrListValues[$row[$sql_column_number]-1];
+					}
+				}
+				else 
+				{
+					$content = $row[$sql_column_number];
+				}
 
+				// format value for csv export
                 if($getMode == 'csv')
                 {
                     $str_csv = $str_csv. $separator. $valueQuotes. $content. $valueQuotes;
                 }
-    
-                else
-                {
-                    echo $content. '</td>';
-                }
+				// create output in html layout
+				else
+				{
+					$content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content);
+					echo $content.'</td>';
+				}
             }
         }
 

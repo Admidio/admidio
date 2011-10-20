@@ -151,7 +151,7 @@ $gLayout['header'] ='
                                  
             //Datenbank schreiben
             $.ajax({
-                    url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$getRoleId.'&ur_id="+userid,
+                    url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$getRoleId.'&usr_id="+userid,
                     type: "POST",
                     data: "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
                     async: false,

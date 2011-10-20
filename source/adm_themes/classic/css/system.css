@@ -448,13 +448,13 @@ ul.autosuggest li.highlight a:visited  {
 }
 
 /* spezielle Anpassung fuer die Organisationsseite */
-#organization_form .formFieldList li dl {
+#admOrganizationMenu .formFieldList li dl {
     margin-top:         15px;
     margin-bottom:      5px;
 }
 
-#organization_form .formFieldList li dl dd {
-    margin-left:        55%;
+#admOrganizationMenu .formFieldList li dl dd {
+    margin-left:        50%;
 }
 
 /* spezielle Anpassung fuer das Gaestebuch */

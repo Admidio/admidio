@@ -27,6 +27,15 @@ require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
 unset($_SESSION['dates_request']);
 
+// Initialize and check the parameters
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old'));
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
+$getDateId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
+$getCalendar = admFuncVariableIsValid($_GET, 'calendar', 'string');
+$getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
+
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if($gPreferences['enable_dates_module'] == 0)
 {
@@ -38,15 +47,6 @@ elseif($gPreferences['enable_dates_module'] == 2)
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
 }
-
-// Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old'));
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
-$getDateId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
-$getCalendar = admFuncVariableIsValid($_GET, 'calendar', 'string');
-$getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
 
 if(strlen($getDate) > 0)
 {

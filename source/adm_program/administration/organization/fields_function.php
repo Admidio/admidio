@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer Profilfelder
+ * Various functions for profile fields
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,11 +8,11 @@
  *
  * Parameters:
  *
- * usf_id: ID des Feldes
- * mode:   1 - Feld anlegen oder updaten
- *         2 - Feld loeschen
- *         4 - Reihenfolge fuer die uebergebene usf_id anpassen
- * sequence: neue Reihenfolge fuer die uebergebene usf_id
+ * usf_id   : profile field id
+ * mode     : 1 - create or edit profile field
+ *            2 - delete profile field
+ *            4 - change sequence of profile field
+ * sequence : new sequence für profile field
  *
  *****************************************************************************/
  
@@ -21,30 +21,36 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_user_field.php');
 require_once('../../libs/htmlawed/htmlawed.php');
 
+// Initialize and check the parameters
+$getUsfId    = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));
+
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Initialize and check the parameters
-$getUsfId    = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));
-
-// UserField-objekt anlegen
-$user_field = new TableUserField($gDb);
+// create user field object
+$userField = new TableUserField($gDb);
 
 if($getUsfId > 0)
 {
-    $user_field->readData($getUsfId);
+    $userField->readData($getUsfId);
     
-    // Pruefung, ob das Feld zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
-    if($user_field->getValue('cat_org_id') >  0
-    && $user_field->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
+	// check if profile field belongs to actual organization
+    if($userField->getValue('cat_org_id') >  0
+    && $userField->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id'))
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
+	
+	// if system profile field then set usf_type to default
+	if($userField->getValue('usf_system') == 1)
+	{
+		$_POST['usf_type'] = $userField->getValue('usf_type');
+	}
 }
 
 if($getMode == 1)
@@ -55,17 +61,17 @@ if($getMode == 1)
     
     // pruefen, ob Pflichtfelder gefuellt sind
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)
-    if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_name']) == 0)
+    if($userField->getValue('usf_system') == 0 && strlen($_POST['usf_name']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }    
 
-    if($user_field->getValue('usf_system') == 0 && strlen($_POST['usf_type']) == 0)
+    if($userField->getValue('usf_system') == 0 && strlen($_POST['usf_type']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATATYPE')));
     }    
 
-    if($user_field->getValue('usf_system') == 0 && $_POST['usf_cat_id'] == 0)
+    if($userField->getValue('usf_system') == 0 && $_POST['usf_cat_id'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_CATEGORY')));
     }
@@ -77,13 +83,13 @@ if($getMode == 1)
     }
     
     // Nachname und Vorname sollen immer Pflichtfeld bleiben
-    if($user_field->getValue('usf_name_intern') == 'LAST_NAME'
-    || $user_field->getValue('usf_name_intern') == 'FIRST_NAME')
+    if($userField->getValue('usf_name_intern') == 'LAST_NAME'
+    || $userField->getValue('usf_name_intern') == 'FIRST_NAME')
     {
         $_POST['usf_mandatory'] = 1;
     }
     
-    if(isset($_POST['usf_name']) && $user_field->getValue('usf_name') != $_POST['usf_name'])
+    if(isset($_POST['usf_name']) && $userField->getValue('usf_name') != $_POST['usf_name'])
     {
         // Schauen, ob das Feld bereits existiert
         $sql    = 'SELECT COUNT(*) as count 
@@ -126,7 +132,7 @@ if($getMode == 1)
     {
         if(strpos($key, 'usf_') === 0)
         {
-            if($user_field->setValue($key, $value) == false)
+            if($userField->setValue($key, $value) == false)
 			{
 				// Daten wurden nicht uebernommen, Hinweis ausgeben
 				if($key == 'usf_url')
@@ -138,7 +144,7 @@ if($getMode == 1)
     }
     
     // Daten in Datenbank schreiben
-    $return_code = $user_field->save();
+    $return_code = $userField->save();
 
     if($return_code < 0)
     {
@@ -154,14 +160,14 @@ if($getMode == 1)
 }
 elseif($getMode == 2)
 {
-    if($user_field->getValue('usf_system') == 1)
+    if($userField->getValue('usf_system') == 1)
     {
         // Systemfelder duerfen nicht geloescht werden
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
     // Feld loeschen
-    if($user_field->delete())
+    if($userField->delete())
     {
         // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
         echo 'done';
@@ -171,7 +177,7 @@ elseif($getMode == 2)
 elseif($getMode == 4)
 {
     // Feldreihenfolge aktualisieren
-    $user_field->moveSequence($getSequence);
+    $userField->moveSequence($getSequence);
     exit();
 }
          

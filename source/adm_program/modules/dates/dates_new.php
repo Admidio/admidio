@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Termine anlegen und bearbeiten
+ * Create and edit dates
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -226,6 +226,7 @@ $gLayout['header'] = '
     {
         $("#"+id).hide("slow");
         $("#"+id).remove();
+		numberRoleSelect = numberRoleSelect - 1;
     }
 	
 	function setLocationCountry()
