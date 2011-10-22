@@ -248,6 +248,11 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
             $width     = '300px';
             $maxlength = '255';
         }
+        elseif($gProfileFields->getProperty($fieldNameIntern, 'cat_name_intern') == 'SOCIAL_NETWORKS')
+        {
+            $width = '200px';
+            $maxlength = '255';
+        }
         else
         {
             $width = '200px';
