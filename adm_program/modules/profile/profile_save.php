@@ -120,12 +120,21 @@ foreach($gProfileFields->mProfileFields as $field)
 			
 			// if social network then extract username from url
 			if($field->getValue('usf_name_intern') == 'FACEBOOK'
+			|| $field->getValue('usf_name_intern') == 'GOOGLE_PLUS'
+			|| $field->getValue('usf_name_intern') == 'TWITTER'
 			|| $field->getValue('usf_name_intern') == 'XING')
 			{
 				if(strValidCharacters($_POST[$post_id], 'url'))
 				{
+					if(strrpos($_POST[$post_id], '/posts') > 0)
+					{
+    					$_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '/posts'));
+    				}
 					$_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
-					$_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
+					if(strrpos($_POST[$post_id], '?') > 0)
+					{
+					   $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
+				    }
 				}
 			}
 

@@ -46,7 +46,8 @@ if($gDb->num_rows() > 0)
 	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_GOOGLE_PLUS\'
 	                                     , usf_name_intern = \'GOOGLE_PLUS\'
 	                                     , usf_icon = \'google.png\'
-										 , usf_description = null
+										 , usf_description = \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\'
+										 , usf_url = \'https://plus.google.com/%user_content%/posts\'
 			 WHERE usf_id = '.$rowProfileField[0];
 	$gDb->query($sql);
 
@@ -84,7 +85,7 @@ if($gDb->num_rows() > 0)
 
 	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_SKYPE\'
 	                                     , usf_icon = \'skype.png\'
-										 , usf_description = null
+										 , usf_description = \''.$gL10n->get('INS_SKYPE_DESC').'\'
 			 WHERE usf_id = '.$rowProfileField[0];
 	$gDb->query($sql);
 
