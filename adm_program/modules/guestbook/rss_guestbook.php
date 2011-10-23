@@ -65,7 +65,7 @@ while ($row = $gDb->fetch_object($result))
     $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. $guestbook->getValue('gbo_timestamp_create').'</b>';
 
     // Beschreibung und Link zur Homepage ausgeben
-    $description = $description. '<br /><br />'. $guestbook->getText('HTML'). 
+    $description = $description. '<br /><br />'. $guestbook->getValue('gbo_text'). 
                    '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
 
     $pubDate = date('r', strtotime($guestbook->getValue('gbo_timestamp_create')));

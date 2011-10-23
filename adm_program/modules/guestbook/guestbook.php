@@ -298,7 +298,7 @@ else
             </div>
 
             <div class="boxBody">'.
-                $guestbook->getText('HTML');
+                $guestbook->getValue('gbo_text');
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
                 if($getModeration == 1 && $guestbook->getValue('gbo_locked') == 1)

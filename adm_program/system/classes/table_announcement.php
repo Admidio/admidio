@@ -17,7 +17,6 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableAnnouncement extends TableAccess
 {

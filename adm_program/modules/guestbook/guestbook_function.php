@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer das Gaestebuch
+ * Various functions for guestbook module
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -25,6 +25,12 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_guestbook.php');
 require_once('../../system/classes/table_guestbook_comment.php');
+require_once('../../libs/htmlawed/htmlawed.php');
+
+// Initialize and check the parameters
+$getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_guestbook_module'] == 0)
@@ -37,11 +43,6 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
 }
-
-// Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
 // Erst einmal pruefen ob die noetigen Berechtigungen vorhanden sind
 if ($getMode == 2 || $getMode == 3 || $getMode == 4 || $getMode == 5 || $getMode == 8 )
@@ -136,6 +137,8 @@ if ($getMode == 1 || $getMode == 3)
         }
     }
 
+    // make html in description secure
+    $_POST['gbo_text'] = htmLawed(stripslashes($_POST['gbo_text']));
 
     // POST Variablen in das Gaestebuchobjekt schreiben
     foreach($_POST as $key => $value)

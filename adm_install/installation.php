@@ -724,7 +724,7 @@ elseif($req_mode == 8)
     $phone_list->save();
 
     $contact_list = new ListConfiguration($db);
-    $contact_list->setValue('lst_name', $gL10n->get('INS_CONTACT_DETAILS'));
+    $contact_list->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
     $contact_list->setValue('lst_global', 1);
     $contact_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
     $contact_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');

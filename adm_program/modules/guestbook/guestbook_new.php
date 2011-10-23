@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Gaestebucheintraege anlegen und bearbeiten
+ * Create and edit guestbook entries
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -15,18 +15,18 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/ckeditor_special.php');
 require_once('../../system/classes/table_guestbook.php');
+
+// Initialize and check the parameters
+$getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
 // Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
 if (!$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1 && $gPreferences['captcha_type']=='calc')
 {
 	require_once('../../system/classes/captcha.php');
-}
-
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    require_once('../../system/bbcode.php');
 }
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -40,10 +40,6 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
 }
-
-// Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
@@ -96,7 +92,7 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     $sql = 'SELECT count(*) FROM '. TBL_GUESTBOOK. '
              WHERE unix_timestamp(gbo_timestamp_create) > unix_timestamp()-'. $gPreferences['flooding_protection_time']. '
                AND gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-               AND gbo_ip_address = "'. $guestbook->getValue('gbo_ip_address'). '"';
+               AND gbo_ip_address = \''. $guestbook->getValue('gbo_ip_address'). '\'';
     $result = $gDb->query($sql);
     $row = $gDb->fetch_array($result);
     if($row[0] > 0)
@@ -105,6 +101,9 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
           $gMessage->show($gL10n->get('GBO_FLOODING_PROTECTION', $gPreferences['flooding_protection_time']));
     }
 }
+
+// create an object of ckeditor and replace textarea-element
+$ckEditor = new CKEditorSpecial();
 
 // Html-Kopf ausgeben
 if ($getGboId > 0)
@@ -116,13 +115,6 @@ else
     $gLayout['title'] = $gL10n->get('GBO_CREATE_VAR_ENTRY', $getHeadline);
 }
 
-//Script für BBCode laden
-$javascript = '';
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    $javascript = getBBcodeJS('gbo_text');
-}
-
 if ($gCurrentUser->getValue('usr_id') == 0)
 {
     $focusField = 'gbo_name';
@@ -132,7 +124,7 @@ else
     $focusField = 'gbo_text';
 }
 
-$gLayout['header'] = $javascript. '
+$gLayout['header'] = '
 	<script type="text/javascript"><!--
     	$(document).ready(function() 
 		{
@@ -157,104 +149,114 @@ echo '
 <div class="formLayout" id="edit_guestbook_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt><label for="gbo_name">'.$gL10n->get('SYS_NAME').':</label></dt>
-                    <dd>';
-                        if ($gCurrentUser->getValue('usr_id') > 0)
-                        {
-                            // Eingeloggte User sollen ihren Namen nicht aendern duerfen
-                            echo '<input type="text" id="gbo_name" name="gbo_name" disabled="disabled" style="width: 90%;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />';
-                        }
-                        else
-                        {
-                            echo '<input type="text" id="gbo_name" name="gbo_name" style="width: 90%;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />
-                            <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-                        }
-                    echo '</dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="gbo_email">'.$gL10n->get('SYS_EMAIL').':</label></dt>
-                    <dd>
-                        <input type="text" id="gbo_email" name="gbo_email" style="width: 90%;" maxlength="50" value="'. $guestbook->getValue('gbo_email'). '" />
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="gbo_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
-                    <dd>
-                        <input type="text" id="gbo_homepage" name="gbo_homepage" style="width: 90%;" maxlength="50" value="'. $guestbook->getValue('gbo_homepage'). '" />
-                    </dd>
-                </dl>
-            </li>';
-         //BBCode
-         if ($gPreferences['enable_bbcode'] == 1)
-         {
-            printBBcodeIcons();
-         }
-         echo '
-            <li>
-                <dl>
-                    <dt><label for="gbo_text">'.$gL10n->get('SYS_TEXT').':</label>';
-                        //Einfügen der Smilies
-                        if($gPreferences['enable_bbcode'] == 1)
-                        {
-                            printEmoticons();
-                        }
-                    echo '</dt>
-                    <dd>
-                        <textarea id="gbo_text" name="gbo_text" style="width: 90%;" rows="10" cols="40">'. $guestbook->getValue('gbo_text'). '</textarea>
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>';
+		<div class="groupBox" id="admContactDetails">
+			<div class="groupBoxHeadline" id="admContactDetailsHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admContactDetailsBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admContactDetailsBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_CONTACT_DETAILS').'
+			</div>
 
-            // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
-            // falls es in den Orgaeinstellungen aktiviert wurde...
-            if (!$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>&nbsp;</dt>
-                        <dd>
-                            ';			
-				if($gPreferences['captcha_type']=='pic')
-				{
-					echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
-					$captcha_label = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-					$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
-				}
-				else if($gPreferences['captcha_type']=='calc')
-				{
-					$captcha = new Captcha();
-					$captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
-					$captcha_label = $gL10n->get('SYS_CAPTCHA_CALC');
-					$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
-				}
-				echo '
-                        </dd>
-                    </dl>
+			<div class="groupBoxBody" id="admContactDetailsBody">
+                <ul class="formFieldList">
+                    <li>
+                        <dl>
+                            <dt><label for="gbo_name">'.$gL10n->get('SYS_NAME').':</label></dt>
+                            <dd>';
+                                if ($gCurrentUser->getValue('usr_id') > 0)
+                                {
+                                    // Eingeloggte User sollen ihren Namen nicht aendern duerfen
+                                    echo '<input type="text" id="gbo_name" name="gbo_name" disabled="disabled" style="width: 90%;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />';
+                                }
+                                else
+                                {
+                                    echo '<input type="text" id="gbo_name" name="gbo_name" style="width: 90%;" maxlength="60" value="'. $guestbook->getValue('gbo_name'). '" />
+                                    <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
+                                }
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="gbo_email">'.$gL10n->get('SYS_EMAIL').':</label></dt>
+                            <dd>
+                                <input type="text" id="gbo_email" name="gbo_email" style="width: 90%;" maxlength="50" value="'. $guestbook->getValue('gbo_email'). '" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="gbo_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
+                            <dd>
+                                <input type="text" id="gbo_homepage" name="gbo_homepage" style="width: 90%;" maxlength="50" value="'. $guestbook->getValue('gbo_homepage'). '" />
+                            </dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="groupBox" id="admMessage">
+			<div class="groupBoxHeadline" id="admMessageHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admMessageBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admMessageBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_MESSAGE').'
+			</div>
 
-                    <dl>
-                       <dt><label for="captcha">'.$captcha_label.':</label></dt>
-                       <dd>
-                           <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-                           <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                           <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
-				               onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
-				               class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                       </dd>
-                    </dl>
-                </li>';
-            }
-        echo '</ul>
+			<div class="groupBoxBody" id="admMessageBody">
+                <ul class="formFieldList">
+                    <li>
+                         '.$ckEditor->createEditor('gbo_text', $guestbook->getValue('gbo_text'), 'AdmidioGuestbook').'
+                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                    </li>
+                </ul>
+            </div>
+        </div>';
 
-        <hr />';
+
+        // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
+        // falls es in den Orgaeinstellungen aktiviert wurde...
+        if (!$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
+        {
+            echo '<div class="groupBox" id="admConfirmationOfEntry">
+    			<div class="groupBoxHeadline" id="admConfirmationOfEntryHead">
+    				<a class="iconShowHide" href="javascript:showHideBlock(\'admConfirmationOfEntryBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+    				id="admConfirmationOfEntryBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('GBO_CONFIRMATION_OF_ENTRY').'
+    			</div>
+    
+    			<div class="groupBoxBody" id="admConfirmationOfEntryBody">
+                    <ul class="formFieldList">
+                        <li>
+                            <dl>
+                                <dt>&nbsp;</dt>
+                                <dd>';
+                    				if($gPreferences['captcha_type']=='pic')
+                    				{
+                    					echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
+                    					$captcha_label = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
+                    					$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
+                    				}
+                    				else if($gPreferences['captcha_type']=='calc')
+                    				{
+                    					$captcha = new Captcha();
+                    					$captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
+                    					$captcha_label = $gL10n->get('SYS_CAPTCHA_CALC');
+                    					$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
+                    				}
+        				        echo '</dd>
+                            </dl>
+        
+                            <dl>
+                               <dt><label for="captcha">'.$captcha_label.':</label></dt>
+                               <dd>
+                                   <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
+                                   <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+                                   <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
+        				               onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
+        				               class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+                               </dd>
+                            </dl>
+                        </li>
+                    </ul>
+                </div>
+            </div>';
+        }
 
         if($guestbook->getValue('gbo_usr_id_create') > 0)
         {
