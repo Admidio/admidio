@@ -90,7 +90,7 @@ class Captcha
 		$this->backgroundColourB = hexdec($b);
         
         // Hier wird die Schriftgroesse des CaptchaCodes festgelegt.
-        $this->codeSize = $gPreferences['captcha_text_size'];
+        $this->codeSize = $gPreferences['captcha_font_size'];
 
         // Hier wird der Untertitel festgelegt.
         $this->backgroundWriting = $gPreferences['captcha_signature'];

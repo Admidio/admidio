@@ -6,6 +6,8 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
+    <text id="GBO_CONFIRMATION_OF_ENTRY" development="new" translation="todo">Bestätigung des Eintrags</text>
+    <text id="INS_CONTACT_DETAILS" development="deleted" translation="todo">Kontaktdaten</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
     <text id="INS_FACEBOOK" development="new" translation="todo">Facebook</text>
@@ -22,7 +24,7 @@
     <text id="INS_XING" development="new" translation="todo">Xing</text>
     <text id="INS_XING_DESC" development="new" translation="todo">Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Xing-Profil aufrufen.</text>
     <text id="LST_PERIOD" development="deleted" translation="todo">Zeitraum</text>
-    <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
+    <text id="MAI_MESSAGE" development="deleted" translation="todo">Nachricht</text>
     <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
     <text id="ORG_FIELD_DISABLED" development="changed" translation="todo">Feld nur für Benutzer mit dem Recht %VAR1_BOLD% editierbar</text>
     <text id="ORG_FIELD_URL_DESC" development="new" translation="todo">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter %user_content% in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: http://www.google.de/search?q=%user_content%\nFeldinhalt: Admidio\nLink im Profil: http://www.google.de/search?q=Admidio</text>
@@ -34,14 +36,17 @@
     <text id="ORG_VALUE_LIST_DESC" development="new" translation="todo">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: http://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</text>
     <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="todo">Organisations- and Regionaleinstellungen</text>
     <text id="SYS_CHECKBOX" development="new" translation="todo">Checkbox</text>
+    <text id="SYS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
     <text id="SYS_DATABASE_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt %VAR1% oder höher</text>
     <text id="SYS_DESIGNATION" development="new" translation="todo">Bezeichnung</text>
     <text id="SYS_DROPDOWN_LISTBOX" development="new" translation="todo">Dropdown-Listenfeld</text>
     <text id="SYS_ICON" development="new" translation="todo">Icon</text>
     <text id="SYS_INTERNAL_NAME" development="new" translation="todo">Interner Name</text>
     <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="todo">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</text>
+    <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="SYS_MYSQL_VERSION" development="deleted" translation="todo">MySQL-Version</text>
     <text id="SYS_MYSQL_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt 4.1 oder höher</text>
+    <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
 	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>    	
 	<text id="SYS_PRESENTATION" development="new" translation="todo">Darstellung</text>
     <text id="SYS_RADIO_BUTTON" development="new" translation="todo">Optionsfeld</text>
@@ -336,7 +341,6 @@
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="todo">Wähle bitte eine Sprache aus</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="todo">Besprechnungsraum</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="todo">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</text>
-    <text id="INS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
     <text id="INS_COURSES" development="new" translation="todo">Kurse</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Administrator anlegen</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="todo">Konfigurationsdatei erzeugen</text>
@@ -534,7 +538,6 @@
     <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
-    <text id="MAI_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="MAI_ROLE_NO_EMAILS" development="new" translation="todo">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mailadressen, an die eine E-Mail versendet werden kann!</text>
     <text id="MAI_SEND_COPY" development="new" translation="todo">Kopie der E-Mail an mich senden</text>
     <text id="MAI_SEND_EMAIL" development="new" translation="todo">E-Mail senden</text>

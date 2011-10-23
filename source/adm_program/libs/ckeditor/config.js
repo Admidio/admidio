@@ -9,11 +9,17 @@ CKEDITOR.editorConfig = function( config )
 	// config.language = 'fr';
 	// config.uiColor = '#AADC6E';
 	
-    // config.toolbar = 'Admidio';
+    // config.toolbar = 'Full';
      
     config.toolbar_AdmidioDefault =
     [
         ['Font','FontSize', 'Preview', '-', 'Bold', 'Italic', 'TextColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight','JustifyBlock', '-', 
         'NumberedList', 'BulletedList', '-', 'Image', 'Link', 'Unlink', 'Table']
+    ];
+
+    config.toolbar_AdmidioGuestbook =
+    [
+        ['Font','FontSize', 'Preview', '-', 'Bold', 'Italic', 'TextColor', 'BGColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight', '-', 
+        'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList']
     ];
 };

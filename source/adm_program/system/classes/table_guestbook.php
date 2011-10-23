@@ -20,13 +20,10 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableGuestbook extends TableAccess
 {
-    protected $bbCode;
-
-    // Konstruktor
+    // Construktor
     public function __construct(&$db, $gbo_id = 0)
     {
         parent::__construct($db, TBL_GUESTBOOK, 'gbo', $gbo_id);
@@ -46,36 +43,19 @@ class TableGuestbook extends TableAccess
 		$this->db->endTransaction();
 		return $return;
     }
-
-    // liefert den Text je nach Type zurueck
-    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
-    // type = 'HTML'   : BB-Code in HTML umgewandelt
-    // type = 'BBCODE' : Text mit BBCode-Tags
-    public function getText($type = 'HTML')
+    
+    public function getValue($field_name, $format = '')
     {
-        global $gPreferences;
-        $description = '';
-
-        // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        if($field_name == 'gbo_text')
         {
-            if(is_object($this->bbCode) == false)
-            {
-                $this->bbCode = new ubbParser();
-            }
-
-            $description = $this->bbCode->parse($this->getValue('gbo_text'));
-
-            if($type == 'PLAIN')
-            {
-                $description = strStripTags($description);
-            }
+            $value = $this->dbColumns['gbo_text'];
         }
         else
         {
-            $description = nl2br($this->getValue('gbo_text'));
+            $value = parent::getValue($field_name, $format);
         }
-        return $description;
+ 
+        return $value;
     }
     
     // die Methode moderiert den Gaestebucheintrag 
@@ -129,6 +109,12 @@ class TableGuestbook extends TableAccess
                 }
             }
         }
+
+        if($field_name == 'gbo_text')
+        {
+            return parent::setValue($field_name, $field_value, false);
+        }
+
         return parent::setValue($field_name, $field_value);
     } 
 }
