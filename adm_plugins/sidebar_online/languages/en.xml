@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+	<version id="1.3.1">
+		<text id="PLG_ONLINE_NO_VISITORS_ON_WEBSITE" development="new" translation="todo">No visitors are on the website..</text>
+	</version>
 	<version id="1.3.0">
-		<text id="PLG_ONLINE_SHOW_PROFILE" development="new" translation="todo">Show profile</text>
 		<text id="PLG_ONLINE_VAR_NUM_VISITORS" development="new" translation="todo">%VAR1% Visitors</text>
 	</version>
 </language>
