@@ -323,6 +323,9 @@ elseif($getMode == 4 || $getMode == 8)
 			else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
         }
     }
+	
+    // make html in description secure
+    $_POST['gbc_text'] = htmLawed(stripslashes($_POST['gbc_text']));
 
     // POST Variablen in das Gaestebuchkommentarobjekt schreiben
     foreach($_POST as $key => $value)

@@ -336,15 +336,42 @@ echo '
 							<dt><label for="org_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
 							<dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
 						</dl>
-					</li>';
+					</li>
+					<li>
+						<dl>
+							<dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
+							<dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language', $form_values['system_language']).'</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="system_date">'.$gL10n->get('ORG_DATE_FORMAT').':</label></dt>
+							<dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$gL10n->get('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
+					<li>
+						<dl>
+							<dt><label for="system_time">'.$gL10n->get('ORG_TIME_FORMAT').':</label></dt>
+							<dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$gL10n->get('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
+					<li>
+						<dl>
+							<dt><label for="system_currency">'.$gL10n->get('ORG_CURRENCY').':</label></dt>
+							<dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$gL10n->get('ORG_CURRENCY_DESC').'</li>';
 
 					//Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
 					if($gCurrentOrganization->hasChildOrganizations() == false)
 					{
-						$sql = "SELECT * FROM ". TBL_ORGANIZATIONS. "
-								 WHERE org_id <> ". $gCurrentOrganization->getValue("org_id"). "
+						$sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. '
+								 WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
 								   AND org_org_id_parent is NULL
-								 ORDER BY org_longname ASC, org_shortname ASC ";
+								 ORDER BY org_longname ASC, org_shortname ASC ';
 						$result = $gDb->query($sql);
 
 						if($gDb->num_rows($result) > 0)
@@ -379,36 +406,25 @@ echo '
 							<li class="smallFontSize">'.$gL10n->get('ORG_PARENT_ORGANIZATION_DESC').'</li>';
 						}
 					}
-
-					echo '
-					<li>
-						<dl>
-							<dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
-							<dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language', $form_values['system_language']).'</dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="system_date">'.$gL10n->get('ORG_DATE_FORMAT').':</label></dt>
-							<dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_time">'.$gL10n->get('ORG_TIME_FORMAT').':</label></dt>
-							<dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_time">'.$gL10n->get('ORG_CURRENCY').':</label></dt>
-							<dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_CURRENCY_DESC').'</li>
-				</ul>
+					
+					if($gCurrentOrganization->countAllRecords() > 1)
+					{
+						echo '<li>
+							<dl>
+								<dt><label for="system_organization_select">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT').':</label></dt>
+								<dd>
+									<input type="checkbox" id="system_organization_select" name="system_organization_select" ';
+									if(isset($form_values['system_organization_select']) && $form_values['system_organization_select'] == 1)
+									{
+										echo ' checked="checked" ';
+									}
+									echo ' value="1" />
+								</dd>
+							</dl>
+						</li>
+						<li class="smallFontSize">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT_DESC').'</li>';
+					}
+				echo '</ul>
 				<br />
 				<div class="formSubmit">	
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Class handle database access to table adm_users
+ * Class manages access to database table adm_users
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org

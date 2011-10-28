@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer den Zugriff auf die Datenbanktabelle adm_auto_login
+ * Class manages access to database table adm_auto_login
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -30,7 +30,7 @@ class TableAutoLogin extends TableAccess
     // Auto-Login mit der uebergebenen Session-ID aufrufen
     public function readData($session, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        // wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
+        // wurde session uebergeben, dann die SQL-Bedingung anpassen
         if(is_numeric($session) == false)
         {
             $session = addslashes($session);

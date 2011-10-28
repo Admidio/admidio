@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer den Zugriff auf die Datenbanktabelle adm_user_fields
+ * Class manages access to database table adm_user_fields
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -243,7 +243,7 @@ class TableUserField extends TableAccess
     // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
     public function readData($usf_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        if(is_numeric($usf_id))
+        if(is_numeric($usf_id) && $usf_id > 0)
         {
             $sql_additional_tables .= TBL_CATEGORIES;
             $sql_where_condition   .= '    usf_cat_id = cat_id
