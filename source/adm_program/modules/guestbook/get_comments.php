@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Script mit HTML-Code fuer die Kommentare eines Gaestebucheintrages
+ * Script creates html output for guestbook comments
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -18,7 +18,7 @@ require_once('../../system/common.php');
 require_once('../../system/classes/table_guestbook_comment.php');
 
 // Initialize and check the parameters
-$getGbcId     = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
+$getGbcId      = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
 $getModeration = admFuncVariableIsValid($_GET, 'moderation', 'boolean', 0);
 
 if ($getGbcId > 0)
@@ -92,7 +92,7 @@ if (isset($comment_result))
             </div>
 
             <div class="groupBoxBody">'.
-                $gbComment->getText('HTML');
+                $gbComment->getValue('gbc_text');
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
                 if($getModeration == 1)

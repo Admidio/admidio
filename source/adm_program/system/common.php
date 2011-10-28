@@ -106,41 +106,78 @@ else
     $gSessionId = session_id();
 }
 
-// globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
-// damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
+// save global classes in session
 if(isset($_SESSION['gCurrentOrganization']) 
-&& isset($_SESSION['gPreferences'])
-&& $g_organization == $_SESSION['gCurrentOrganization']->getValue('org_shortname'))
+&& isset($_SESSION['gPreferences']))
 {
     $gCurrentOrganization     =& $_SESSION['gCurrentOrganization'];
     $gCurrentOrganization->db =& $gDb;
     $gPreferences             =& $_SESSION['gPreferences'];
-	$gProfileFields              =& $_SESSION['gProfileFields'];
-    $gProfileFields->mDb         =& $gDb;
+	$gProfileFields           =& $_SESSION['gProfileFields'];
+    $gProfileFields->mDb      =& $gDb;
+    $gCurrentUser             =& $_SESSION['gCurrentUser'];
+    $gCurrentUser->db         =& $gDb;
+	$gCurrentSession           = new TableSession($gDb, $gSessionId);
 }
 else
 {
+	// read organization of config file with their preferences
     $gCurrentOrganization = new Organization($gDb, $g_organization);
     
     if($gCurrentOrganization->getValue('org_id') == 0)
     {
-        // Organisation wurde nicht gefunden
+        // organization not found
         die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
-    
-    // organisationsspezifische Einstellungen aus adm_preferences auslesen
     $gPreferences = $gCurrentOrganization->getPreferences();
 	
-	// create object with current user field structure
+	// create object with current user field structure und user object
 	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
+	$gCurrentUser   = new User($gDb, $gProfileFields, 0);
+	
+	// no php session then create new admidio session
+	$gCurrentSession = new TableSession($gDb, $gSessionId);
+
+	// check if auto login exists and create a valid session
+	if($gPreferences['enable_auto_login'] == 1 && isset($_COOKIE[$gCookiePraefix. '_DATA']))
+	{
+		$admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
+
+		if($admidio_data[0] == true         // autologin
+		&& is_numeric($admidio_data[1]))    // user_id 
+		{   
+			// restore user from auto login session
+			require_once(SERVER_PATH. '/adm_program/system/classes/table_auto_login.php');
+			$auto_login = new TableAutoLogin($gDb, $gSessionId);
+			
+			// restore user if saved database user id == cookie user id
+			if($auto_login->getValue('atl_usr_id') == $admidio_data[1])
+			{
+				$gCurrentUser->readData($auto_login->getValue('atl_usr_id'));
+				// count logins and save login date
+				$gCurrentUser->updateLoginData();
+			}
+			else
+			{
+				// something is wrong -> for security reasons delete that auto login
+				$auto_login->delete();
+			}
+
+			// auto login successful then create a valid session
+			$gCurrentSession->setValue('ses_session_id', $gSessionId);
+			$gCurrentSession->setValue('ses_usr_id',  $gCurrentUser->getValue('usr_id'));
+			$gCurrentSession->save();
+		}
+	}
     
-    // Daten in Session-Variablen sichern
+	// save all data in session variables
     $_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
     $_SESSION['gPreferences']         =& $gPreferences;
-    $_SESSION['gProfileFields']          =& $gProfileFields;
+    $_SESSION['gProfileFields']       =& $gProfileFields;
+	$_SESSION['gCurrentUser']         =& $gCurrentUser;
 }
 
-// Sprachdateien einlesen
+// read language file
 $gL10n = new Language($gPreferences['system_language']);
 
 // Pfad zum gewaehlten Theme zusammensetzen
@@ -150,18 +187,6 @@ if(isset($gPreferences['theme']) == false)
 }
 define('THEME_SERVER_PATH', SERVER_PATH. '/adm_themes/'. $gPreferences['theme']);
 define('THEME_PATH', $g_root_path. '/adm_themes/'. $gPreferences['theme']);
-
-// Daten des angemeldeten Users auch in Session speichern
-if(isset($_SESSION['gCurrentUser']))
-{
-    $gCurrentUser =& $_SESSION['gCurrentUser'];
-    $gCurrentUser->db =& $gDb;
-}
-else
-{
-    $gCurrentUser = new User($gDb, $gProfileFields, 0);
-    $_SESSION['gCurrentUser'] =& $gCurrentUser;
-}
 
 // Nachrichtenklasse anlegen
 $gMessage = new Message();
@@ -176,53 +201,6 @@ if(isset($_SESSION['navigation']) == false)
 /*********************************************************************************
 Session auf Gueltigkeit pruefen bzw. anlegen
 /********************************************************************************/
-
-$gCurrentSession = new TableSession($gDb, $gSessionId);
-
-// erst einmal pruefen, ob evtl. frueher ein Autologin-Cookie gesetzt wurde
-// dann diese Session wiederherstellen
-$autoLogin = false;
-if($gPreferences['enable_auto_login'] == 1 && isset($_COOKIE[$gCookiePraefix. '_DATA']))
-{
-    $admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
-
-    if($admidio_data[0] == true         // autologin
-    && is_numeric($admidio_data[1]))    // user_id 
-    {   
-        if($gCurrentUser->getValue('usr_id') != $admidio_data[1])
-        {
-            // User aus der Autologin-Session wiederherstellen
-            require_once(SERVER_PATH. '/adm_program/system/classes/table_auto_login.php');
-            $auto_login = new TableAutoLogin($gDb, $gSessionId);
-            
-            // User nur herstellen, wenn Cookie-User-Id == gespeicherte DB-User-Id
-            if($auto_login->getValue('atl_usr_id') == $admidio_data[1])
-            {
-                $gCurrentUser->readData($auto_login->getValue('atl_usr_id'));
-                // Logins zaehlen und aktuelles Login-Datum aktualisieren
-                $gCurrentUser->updateLoginData();            
-                $autoLogin = true;
-            }
-            else
-            {
-                // irgendwas stimmt nicht -> sicherheitshalber den Auto-Login-Eintrag loeschen
-                $auto_login->delete();
-            }
-        }
-        else
-        {
-            $autoLogin = true;
-        }
-        
-        if($gCurrentSession->getValue('ses_id') == 0)
-        {
-            $gCurrentSession->setValue('ses_session_id', $gSessionId);
-            $gCurrentSession->setValue('ses_usr_id',  $gCurrentUser->getValue('usr_id'));
-            $gCurrentSession->save();
-        }
-    }
-}
-
 if($gCurrentSession->getValue('ses_id') > 0)
 {
     // erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
@@ -253,14 +231,8 @@ if($gCurrentSession->getValue('ses_id') > 0)
             $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
             
             // wenn laenger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
-            if($time_gap < $gPreferences['logout_minutes'] * 60 || $autoLogin == true) 
+            if($time_gap < $gPreferences['logout_minutes'] * 60) 
             {
-                // bei Autologin ggf. den Beginn aktualisieren, wenn die Luecke zu gross geworden ist
-                if($time_gap > $gPreferences['logout_minutes'] * 60 && $autoLogin == true)
-                {
-                    $gCurrentSession->setValue('ses_begin', DATETIME_NOW);
-                }
-
                 // User-Login ist gueltig
                 $gValidLogin = true;
                 $gCurrentSession->setValue('ses_timestamp', DATETIME_NOW);

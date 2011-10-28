@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer den Zugriff auf die Datenbanktabelle adm_links
+ * Class manages access to database table adm_links
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org

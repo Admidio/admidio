@@ -350,6 +350,7 @@ class User extends TableUsers
     {
         global $gCurrentSession;
         $fields_changed = $this->columnsValueChanged;
+		$this->db->startTransaction();
 
         parent::save($updateFingerPrint);
 		
@@ -362,6 +363,7 @@ class User extends TableUsers
             // eine Rechteaenderung vorgenommen wurde
             $gCurrentSession->renewUserObject($this->getValue('usr_id'));
         }
+		$this->db->endTransaction();
     }
 
     // interne Methode, die bei setValue den uebergebenen Wert prueft

@@ -23,13 +23,14 @@ $orga_preferences = array(
     'homepage_login'                => 'adm_program/index.php',
     'theme'                         => 'modern',
     'enable_password_recovery'      => '1',
-    'system_language'               => 'de',
-    'system_date'                   => 'd.m.Y',
-    'system_time'                   => 'H:i',
     'system_currency'               => '€',
-    'system_search_similar'         => '1',
+    'system_date'                   => 'd.m.Y',
     'system_js_editor_enabled'      => '1',
     'system_js_editor_color'        => '#96c4cb',
+    'system_language'               => 'de',
+    'system_organization_select'    => '0',
+    'system_search_similar'         => '1',
+    'system_time'                   => 'H:i',
 
     // Registrierung
     'registration_mode'              => '1',

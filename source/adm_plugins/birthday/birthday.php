@@ -27,7 +27,7 @@ if(!defined('PLUGIN_PATH'))
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
-// Sprachdatei des Plugins einbinden
+// integrate language file of plugin
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
  
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -199,13 +199,13 @@ if($anz_geb > 0)
 				if($gValidLogin == false
 				&& $plg_show_alter_anrede <= $row['age'])
 				{
-					if (($row->gender) > 1)
+					if (($row['gender']) > 1)
 					{
-						$plg_show_name = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row->last_name);
+						$plg_show_name = $gL10n->get('PLG_BIRTHDAY_WOMAN_VAR', $row['last_name']);
 					}
 					else
 					{
-						$plg_show_name = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', $row->last_name);
+						$plg_show_name = $gL10n->get('PLG_BIRTHDAY_MAN_VAR', $row['last_name']);
 					}
 				}
 

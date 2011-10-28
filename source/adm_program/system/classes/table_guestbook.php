@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer den Zugriff auf die Datenbanktabelle adm_guestbook
+ * Class manages access to database table adm_guestbook
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,10 +12,7 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * getText($type = 'HTML') - liefert den Text je nach Type zurueck
- *          type = 'PLAIN'  : reiner Text ohne Html oder BBCode
- *          type = 'HTML'   : BB-Code in HTML umgewandelt
- *          type = 'BBCODE' : Text mit BBCode-Tags
+ * moderate()       - guestbook entry will be published, if moderate mode is set
  *
  *****************************************************************************/
 
@@ -23,7 +20,7 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableGuestbook extends TableAccess
 {
-    // Construktor
+    // Constructor
     public function __construct(&$db, $gbo_id = 0)
     {
         parent::__construct($db, TBL_GUESTBOOK, 'gbo', $gbo_id);
@@ -58,10 +55,10 @@ class TableGuestbook extends TableAccess
         return $value;
     }
     
-    // die Methode moderiert den Gaestebucheintrag 
+    // guestbook entry will be published, if moderate mode is set
     function moderate()
     {
-        //Eintrag freischalten...
+        // unlock entry
         $this->setValue('gbo_locked', '0');
         $this->save();
     }  

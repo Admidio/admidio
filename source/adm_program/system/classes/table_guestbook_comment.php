@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse fuer den Zugriff auf die Datenbanktabelle adm_guestbook_comments
+ * Class manages access to database table adm_guestbook_comments
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,61 +12,38 @@
  * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
  * folgende Methoden zur Verfuegung:
  *
- * getText($type = 'HTML') - liefert den Text je nach Type zurueck
- *          type = 'PLAIN'  : reiner Text ohne Html oder BBCode
- *          type = 'HTML'   : BB-Code in HTML umgewandelt
- *          type = 'BBCODE' : Text mit BBCode-Tags
+ * moderate()       - guestbook entry will be published, if moderate mode is set
  *
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/ubb_parser.php');
 
 class TableGuestbookComment extends TableAccess
 {
-    protected $bbCode;
-
-    // Konstruktor
+    // Constructor
     public function __construct(&$db, $gbc_id = 0)
     {
         parent::__construct($db, TBL_GUESTBOOK_COMMENTS, 'gbc', $gbc_id);
     }
-
-    // liefert den Text je nach Type zurueck
-    // type = 'PLAIN'  : reiner Text ohne Html oder BBCode
-    // type = 'HTML'   : BB-Code in HTML umgewandelt
-    // type = 'BBCODE' : Text mit BBCode-Tags
-    public function getText($type = 'HTML')
+	
+    public function getValue($field_name, $format = '')
     {
-        global $gPreferences;
-        $description = '';
-
-        // wenn BBCode aktiviert ist, den Text noch parsen, ansonsten direkt ausgeben
-        if($gPreferences['enable_bbcode'] == 1 && $type != 'BBCODE')
+        if($field_name == 'gbc_text')
         {
-            if(is_object($this->bbCode) == false)
-            {
-                $this->bbCode = new ubbParser();
-            }
-
-            $description = $this->bbCode->parse($this->getValue('gbc_text'));
-
-            if($type == 'PLAIN')
-            {
-                $description = strStripTags($description);
-            }
+            $value = $this->dbColumns['gbc_text'];
         }
         else
         {
-            $description = nl2br($this->getValue('gbc_text'));
+            $value = parent::getValue($field_name, $format);
         }
-        return $description;
+ 
+        return $value;
     }
     
-    // die Methode moderiert den Gaestebucheintrag 
+    // guestbook entry will be published, if moderate mode is set
     function moderate()
     {
-        //Eintrag freischalten...
+        // unlock entry
         $this->setValue('gbc_locked', '0');
         $this->save();
     }  
@@ -109,6 +86,12 @@ class TableGuestbookComment extends TableAccess
                 }
             }
         }
+		
+        if($field_name == 'gbc_text')
+        {
+            return parent::setValue($field_name, $field_value, false);
+        }
+		
         return parent::setValue($field_name, $field_value);
     } 
 }
