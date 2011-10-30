@@ -197,9 +197,6 @@ class User extends TableUsers
 
         $this->webmaster = 0;
 
-        // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
-        $this->setValue('usr_valid', 1);
-
         // Arrays initialisieren
         $this->roles_rights = array();
         $this->list_view_rights = array();
@@ -337,7 +334,7 @@ class User extends TableUsers
         parent::readData($usr_id, $sql_where_condition, $sql_additional_tables);
 
 		// read data of all user fields from current user
-		$this->mProfileFieldsData->readUserData($this->getValue('usr_id'));//MFA
+		$this->mProfileFieldsData->readUserData($this->getValue('usr_id'));
     }
     
     // bei setValue werden die Werte nicht auf Gueltigkeit geprueft

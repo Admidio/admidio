@@ -316,7 +316,7 @@ echo '
                 </dt>
                 <dd>';
                     $first_value_array = array();
-                    echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:350px;"  border="0px">
+                    echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:100%;"  border="0px">
                         <tr>
                           <td>'.$gL10n->get("ECA_TEMPLATE").':</td>
                           <td>'.$gL10n->get("SYS_FONT").':</td>

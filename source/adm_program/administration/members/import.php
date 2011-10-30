@@ -51,7 +51,7 @@ echo '
             <li>
                 <dl>
                     <dt><label for="userfile">'.$gL10n->get('MEM_CHOOSE_FILE').':</label></dt>
-                    <dd><input id="userfile" name="userfile" size="30" type="file" /></dd>
+                    <dd><input id="userfile" name="userfile" style="width: 90%" type="file" /></dd>
                 </dl>
             </li>
             <li>

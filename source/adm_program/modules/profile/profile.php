@@ -104,7 +104,7 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 
 unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken
-if($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id'))
+if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 {
     $_SESSION['navigation']->clear();
 }
