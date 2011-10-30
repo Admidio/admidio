@@ -37,7 +37,7 @@ class TableAccess
     public    $db;					// db object must public because of session handling
     
     protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    protected $columnsValueChanged; // Merker ob an den dbColumns Daten was geaendert wurde
+    public $columnsValueChanged; // Merker ob an den dbColumns Daten was geaendert wurde
     public $dbColumns = array();    // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
     public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
     

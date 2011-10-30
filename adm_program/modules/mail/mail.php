@@ -195,7 +195,7 @@ $gLayout['header'] =  '
         $(new_attachment).attr("type", "file");
         $(new_attachment).attr("name", "userfile[]");
         $(new_attachment).css("display", "block");
-        $(new_attachment).css("width", "350px");
+        $(new_attachment).css("width", "90%");
         $(new_attachment).css("margin-bottom", "5px");
         $(new_attachment).hide();
         $("#add_attachment").before(new_attachment);

@@ -46,8 +46,9 @@ class TableUsers extends TableAccess
     {
         parent::clear();
 
-        // neue User sollten i.d.R. auf valid stehen (Ausnahme Registrierung)
+        // new user should be valid (except registration)
         $this->setValue('usr_valid', 1);
+        $this->columnsValueChanged = false;
     }
 
     // Referenzen zum aktuellen Benutzer loeschen

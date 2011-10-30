@@ -29,89 +29,87 @@ if(!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Pflichtfelder prüfen
-
-foreach($gProfileFields->mProfileFields as $field)
+// Lastname und firstname are mandatory fields
+if(strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) == 0
+|| strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) == 0)
 {
-    if($field->getValue('usf_mandatory') == 1
-    && strlen($_POST['usf-'. $field->getValue('usf_id')]) == 0)
-    {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $field->getValue('usf_name')));
-    }
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gProfileFields->getProperty('LAST_NAME', 'usf_name')));
 }
 
 if(array_key_exists('first_row', $_POST))
 {
-    $first_row_title = true;
+    $firstRowTitle = true;
 }
 else
 {
-    $first_row_title = false;
+    $firstRowTitle = false;
 }
 
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
 $line = reset($_SESSION['file_lines']);
 $user = new User($gDb, $gProfileFields);
-$member = new TableMembers($gDb);
-$start_row    = 0;
-$count_import = 0;
-$imported_fields = array();
+$member   = new TableMembers($gDb);
+$startRow = 0;
+$countImportNewUser  = 0;
+$countImportEditUser = 0;
+$countImportEditRole = 0;
+$importedFields = array();
 $depRoles = array();
 
 // Abhängige Rollen ermitteln
 $depRoles = RoleDependency::getParentRoles($gDb,$_SESSION['rol_id']);
 
-if($first_row_title == true)
+if($firstRowTitle == true)
 {
     // erste Zeile ueberspringen, da hier die Spaltenbezeichnungen stehen
     $line = next($_SESSION['file_lines']);
-    $start_row = 1;
+    $startRow = 1;
 }
 
 
-for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
+for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
 {
     $user->clear();
-    $arr_columns = explode($_SESSION['value_separator'], $line);
+    $columnArray = explode($_SESSION['value_separator'], $line);
 
-    foreach($arr_columns as $col_key => $col_value)
+    foreach($columnArray as $columnKey => $columnValue)
     {
         // Hochkomma und Spaces entfernen
-        $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
-        $col_value_to_lower = admStrToLower($col_value);
+        $columnValue = trim(strip_tags(str_replace('"', '', $columnValue)));
+        $columnValueToLower = admStrToLower($columnValue);
 
         // nun alle Userfelder durchgehen und schauen, bei welchem
         // die entsprechende Dateispalte ausgewaehlt wurde
         // dieser dann den Wert zuordnen
         foreach($gProfileFields->mProfileFields as $field)
         {
-            if(strlen($_POST['usf-'. $field->getValue('usf_id')]) > 0 && $col_key == $_POST['usf-'. $field->getValue('usf_id')])
+            if(strlen($_POST['usf-'. $field->getValue('usf_id')]) > 0 && $columnKey == $_POST['usf-'. $field->getValue('usf_id')])
             {
                 // importiertes Feld merken
-                if(!isset($imported_fields[$field->getValue('usf_id')]))
+                if(!isset($importedFields[$field->getValue('usf_id')]))
                 {
-                    $imported_fields[$field->getValue('usf_id')] = $field->getValue('usf_name_intern');
+                    $importedFields[$field->getValue('usf_id')] = $field->getValue('usf_name_intern');
                 }
 
 				if($field->getValue('usf_name_intern') == 'COUNTRY')
 				{
-					$user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($col_value));
+					$user->setValue($field->getValue('usf_name_intern'), $gL10n->getCountryByName($columnValue));
 				}
                 elseif($field->getValue('usf_type') == 'CHECKBOX')
                 {
-                    if($col_value_to_lower == 'j'
-                    || $col_value_to_lower == admStrToLower($gL10n->get('SYS_YES'))
-                    || $col_value_to_lower == 'y'
-                    || $col_value_to_lower == 'yes'
-                    || $col_value_to_lower == '1')
+                    if($columnValueToLower == 'j'
+                    || $columnValueToLower == admStrToLower($gL10n->get('SYS_YES'))
+                    || $columnValueToLower == 'y'
+                    || $columnValueToLower == 'yes'
+                    || $columnValueToLower == '1')
                     {
                         $user->setValue($field->getValue('usf_name_intern'), '1');
                     }
-                    if($col_value_to_lower == 'n'
-                    || $col_value_to_lower == admStrToLower($gL10n->get('SYS_NO'))
-                    || $col_value_to_lower == 'no'
-                    || $col_value_to_lower  == '0'
-                    || strlen($col_value) == 0)
+                    if($columnValueToLower == 'n'
+                    || $columnValueToLower == admStrToLower($gL10n->get('SYS_NO'))
+                    || $columnValueToLower == 'no'
+                    || $columnValueToLower  == '0'
+                    || strlen($columnValue) == 0)
                     {
                         $user->setValue($field->getValue('usf_name_intern'), '0');
                     }
@@ -125,42 +123,42 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
 
 					foreach($arrListValues as $key => $value)
 					{
-						if(strcmp($col_value, trim($arrListValues[$position])) == 0)
+						if(strcmp($columnValue, trim($arrListValues[$position])) == 0)
 						{
 							// if col_value is text than save position if text is equal to text of position
 							$user->setValue($field->getValue('usf_name_intern'), $position+1);
 						}
-						elseif(is_numeric($col_value) && !is_numeric($arrListValues[$position]) && $col_value > 0 && $col_value < 1000)
+						elseif(is_numeric($columnValue) && !is_numeric($arrListValues[$position]) && $columnValue > 0 && $columnValue < 1000)
 						{
 							// if col_value is numeric than save position if col_value is equal to position
-							$user->setValue($field->getValue('usf_name_intern'), $col_value);
+							$user->setValue($field->getValue('usf_name_intern'), $columnValue);
 						}
 						$position++;
 					}
                 }
                 elseif($field->getValue('usf_type') == 'EMAIL')
                 {
-                    $col_value = admStrToLower($col_value);
-                    if(strValidCharacters($col_value, 'email'))
+                    $columnValue = admStrToLower($columnValue);
+                    if(strValidCharacters($columnValue, 'email'))
                     {
-                        $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
+                        $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
                     }
                 }
                 elseif($field->getValue('usf_type') == 'INTEGER')
                 {
                     // Zahl darf Punkt und Komma enthalten
-                    if(is_numeric(strtr($col_value, ',.', '00')) == true)
+                    if(is_numeric(strtr($columnValue, ',.', '00')) == true)
                     {
-                        $user->setValue($field->getValue('usf_name_intern'), $col_value);
+                        $user->setValue($field->getValue('usf_name_intern'), $columnValue);
                     }
                 }
                 elseif($field->getValue('usf_type') == 'TEXT')
                 {
-                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 50));
+                    $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 50));
                 }
                 else
                 {
-                    $user->setValue($field->getValue('usf_name_intern'), substr($col_value, 0, 255));
+                    $user->setValue($field->getValue('usf_name_intern'), substr($columnValue, 0, 255));
                 }
             }
         }
@@ -182,13 +180,13 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
                    AND first_name.usd_value  = \''. $user->getValue('FIRST_NAME'). '\'
                  WHERE usr_valid = 1 ';
         $result = $gDb->query($sql);
-        $row_duplicate_user = $gDb->fetch_array($result);
-        if($row_duplicate_user['usr_id'] > 0)
+        $rowDuplicateUser = $gDb->fetch_array($result);
+        if($rowDuplicateUser['usr_id'] > 0)
         {
-            $duplicate_user = new User($gDb, $gProfileFields, $row_duplicate_user['usr_id']);
+            $duplicate_user = new User($gDb, $gProfileFields, $rowDuplicateUser['usr_id']);
         }
     
-        if($row_duplicate_user['usr_id'] > 0)
+        if($rowDuplicateUser['usr_id'] > 0)
         {
             if($_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
@@ -200,7 +198,7 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
             || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
                 // Daten des Nutzers werden angepasst
-                foreach($imported_fields as $key => $field_name_intern)
+                foreach($importedFields as $key => $field_name_intern)
                 {
                     if($duplicate_user->getValue($field_name_intern) != $user->getValue($field_name_intern))
                     {
@@ -224,16 +222,28 @@ for($i = $start_row; $i < count($_SESSION['file_lines']); $i++)
             }
         }
     
-        if( $row_duplicate_user['usr_id'] == 0
-        || ($row_duplicate_user['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT) )
+        if( $rowDuplicateUser['usr_id'] == 0
+        || ($rowDuplicateUser['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT) )
         {
-            // Usersatz anlegen
-            $user->save();
-            $count_import++;
-            // Rollenmitgliedschaft zuordnen
-            $member->startMembership($_SESSION['rol_id'], $user->getValue('usr_id'));
+            if($rowDuplicateUser['usr_id'] == 0)
+            {
+                $countImportNewUser++;
+            }
+            elseif($rowDuplicateUser['usr_id']  > 0 && $user->columnsValueChanged)
+            {
+                $countImportEditUser++;
+            }
+        
+            // save user data
+            $user->save();            
+
+            // assign role membership to user
+            if($member->startMembership($_SESSION['rol_id'], $user->getValue('usr_id')))
+            {
+                $countImportEditRole++;
+            }
             
-            //abhängige Rollen zuordnen
+            // assign dependent role memberships to user
             foreach($depRoles as $depRole)
             {
                 $member->startMembership($depRole, $user->getValue('usr_id'));
@@ -253,5 +263,5 @@ $_SESSION['file_lines']       = '';
 $_SESSION['value_separator']  = '';
 
 $gMessage->setForwardUrl($g_root_path.'/adm_program/administration/members/members.php');
-$gMessage->show($gL10n->get('MEM_IMPORT_SUCCESSFUL', $count_import));
+$gMessage->show($gL10n->get('MEM_IMPORT_SUCCESSFUL', $countImportNewUser, $countImportEditUser, $countImportEditRole));
 ?>

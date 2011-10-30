@@ -83,10 +83,12 @@ class TableMembers extends TableAccess
         }
 
         // Beginn nicht ueberschreiben, wenn schon existiert
-        if(strlen($this->getValue('mem_begin')) == 0)
+        if(strcmp($this->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0
+        || $this->new_record)
         {
             $this->setValue('mem_begin', DATE_NOW);
         }
+
         // Leiter sollte nicht ueberschrieben werden, wenn nicht uebergeben wird
         if(strlen($leader) == 0)
         {
@@ -101,7 +103,13 @@ class TableMembers extends TableAccess
         }
 
         $this->setValue('mem_end', '9999-12-31');
-        $this->save();
+        
+        if($this->columnsValueChanged)
+        {
+            $this->save();
+            return true;
+        }
+        return false;
     }
 
     // Methode setzt alle notwendigen Daten um eine Mitgliedschaft zu beenden
@@ -117,17 +125,25 @@ class TableMembers extends TableAccess
         {
             // einen Tag abziehen, damit User direkt aus der Rolle entfernt werden
             $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));
-            $this->setValue('mem_end', $newEndDate);
             
-            //ggf. Leiterschaftbeenden
-            if($this->getValue('mem_leader')==1)
+            // only stop membership if there is an actual membership
+            if(strcmp($newEndDate, $this->getValue('mem_begin', 'Y-m-d')) > 0
+            && strcmp($this->getValue('mem_end', 'Y-m-d'), $newEndDate) > 0)
             {
-            	$this->setValue('mem_leader', 0);
-            }
+                $this->setValue('mem_end', $newEndDate);
             
-            //speichern
-            $this->save();
+                // stop leader
+                if($this->getValue('mem_leader')==1)
+                {
+                	$this->setValue('mem_leader', 0);
+                }
+                
+                //speichern
+                $this->save();
+                return true;
+            }
         }
+        return false;
     }
 }
 ?>

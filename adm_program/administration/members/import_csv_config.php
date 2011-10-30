@@ -123,8 +123,9 @@ echo '
                                 echo '<option value="'.$col_key.'">'.$col_value.'</option>';
                             }
                         echo '</select>';
-                        // Nachname und Vorname als Pflichtfelder kennzeichnen
-                        if($field->getValue('usf_mandatory') == 1)
+
+                        // Lastname und first name are mandatory fields
+                        if($field->getValue('usf_name_intern') == 'LAST_NAME' || $field->getValue('usf_name_intern') == 'FIRST_NAME')
                         {
                             echo '&nbsp;<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         }
