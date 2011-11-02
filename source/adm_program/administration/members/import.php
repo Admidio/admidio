@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Import-Assistent fuer Benutzerdaten
+ * Import assistant for user data
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -22,6 +22,20 @@ if(!$gCurrentUser->editUsers())
 if (ini_get('file_uploads') != '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
+}
+
+if(isset($_SESSION['import_request']))
+{
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    $form = $_SESSION['import_request'];
+    unset($_SESSION['import_request']);
+}
+else
+{
+	$form['user_import_mode'] = 1;
+	$form['import_coding']    = 'iso-8859-1';
+	$form['import_role_id']   = 0;
 }
 
 // Html-Kopf ausgeben
@@ -51,25 +65,35 @@ echo '
             <li>
                 <dl>
                     <dt><label for="userfile">'.$gL10n->get('MEM_CHOOSE_FILE').':</label></dt>
-                    <dd><input id="userfile" name="userfile" style="width: 90%" type="file" /></dd>
+                    <dd><input type="file" id="userfile" name="userfile" style="width: 90%" /></dd>
                 </dl>
             </li>
             <li>
                 <dl>
                     <dt><label for="coding">'.$gL10n->get('MEM_CODING').':</label></dt>
-                <dd><select size="1" name="coding">
-                        <option value="iso-8859-1" selected="selected">'.$gL10n->get('SYS_ISO_8859_1').'</option>
-                        <option value="utf-8">'.$gL10n->get('SYS_UTF8').'</option>
+                <dd><select size="1" name="import_coding">';
+                    	if($form['import_coding'] == 'utf-8')
+                    	{
+                    		$utf8Selected    = ' selected="selected" ';
+                    		$iso8859Selected = '';
+                   		}
+                   		else
+                   		{
+                   			$utf8Selected    = '';
+                   			$iso8859Selected = ' selected="selected" ';
+                   		}
+                        echo '<option value="iso-8859-1" '.$iso8859Selected.'>'.$gL10n->get('SYS_ISO_8859_1').'</option>
+                        <option value="utf-8" '.$utf8Selected.'>'.$gL10n->get('SYS_UTF8').'</option>
                     </select></dd>
                 </dl>
             </li>
             <li>
                 <dl>
-                    <dt><label for="rol_id">'.$gL10n->get('MEM_ASSIGN_ROLE').':</label></dt>
+                    <dt><label for="import_role_id">'.$gL10n->get('MEM_ASSIGN_ROLE').':</label></dt>
                     <dd>';
                         // Combobox mit allen Rollen ausgeben, die der Benutzer sehen darf
                         // Rollen mit der Rollenzuordnungsberechtigung werden nur angezeigt, wenn der User die Rechte schon hat
-                        echo FormElements::generateRoleSelectBox(0,'',1);
+                        echo FormElements::generateRoleSelectBox($form['import_role_id'],'import_role_id',1);
 
                         echo '&nbsp;
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_ASSIGN_ROLE_FOR_IMPORT&amp;inline=true"><img 
@@ -81,12 +105,20 @@ echo '
             <li>
                 <dl>
                     <dt><label for="user_import_mode">'.$gL10n->get('MEM_EXISTING_USERS').':</label>&nbsp;</dt>
-                    <dd><select size="1" id="user_import_mode" name="user_import_mode">
-                        <option value="1" selected="selected">'.$gL10n->get('MEM_NOT_EDIT').'</option>
-                        <option value="2">'.$gL10n->get('MEM_DUPLICATE').'</option>
-                        <option value="3">'.$gL10n->get('MEM_REPLACE').'</option>
-                        <option value="4">'.$gL10n->get('MEM_COMPLEMENT').'</option>
-                    </select>&nbsp;
+                    <dd><select size="1" id="user_import_mode" name="user_import_mode">';
+                    	$importModeDesc = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
+                    	for($count = 1; $count <= 4; $count++)
+                    	{
+                    		if($count == $form['user_import_mode'])
+                    		{
+                    			echo '<option value="'.$count.'" selected="selected">'.$importModeDesc[$count].'</option>';
+                    		}
+                    		else
+                    		{
+                    			echo '<option value="'.$count.'">'.$importModeDesc[$count].'</option>';
+                    		}
+                    	}
+                    echo '</select>&nbsp;
                     <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS&amp;inline=true"><img 
                         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS\',this)" onmouseout="ajax_hideTooltip()"
                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a></dd>

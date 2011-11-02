@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Spalten einer CSV-Datei werden Datenbankfeldern zugeordnet
+ * Prepare values of import form for further processing
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,16 +12,12 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_roles.php');
 
-// Uebergabevariablen pruefen
-if(isset($_POST['rol_id']) == false || is_numeric($_POST['rol_id']) == false)
-{
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
+// Initialize and check the parameters
+$postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding', 'string', null, true, array('iso-8859-1', 'utf-8'));
+$postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id', 'numeric', null, true);
+$postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'numeric', null, true);
 
-if(isset($_POST['user_import_mode']) == false || is_numeric($_POST['user_import_mode']) == false)
-{
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
+$_SESSION['import_request'] = $_REQUEST;
 
 // nur berechtigte User duerfen User importieren
 if(!$gCurrentUser->editUsers())
@@ -38,14 +34,14 @@ else if($_FILES['userfile']['error'] == 1)
     //Dateigroesse ueberpruefen Servereinstellungen
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', $gPreferences['max_file_upload_size']));
 }
-else if($_POST['rol_id'] == 0)
+else if($postRoleId == 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_ROLE')));
 }
 
 // Rolle einlesen und pruefen, ob der User diese selektieren kann und dadurch nicht
 // evtl. ein Rollenzuordnungsrecht bekommt, wenn er es vorher nicht hatte
-$role = new TableRoles($gDb, $_POST['rol_id']);
+$role = new TableRoles($gDb, $postRoleId);
 
 if($gCurrentUser->viewRole($role->getValue('rol_id')) == false
 || ($gCurrentUser->assignRoles() == false && $role->getValue('rol_assign_roles') == false))
@@ -57,9 +53,9 @@ if($gCurrentUser->viewRole($role->getValue('rol_id')) == false
 ini_set('auto_detect_line_endings', 1);
 $_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name']);
 $_SESSION['rol_id']           = $role->getValue('rol_id');
-$_SESSION['user_import_mode'] = $_POST['user_import_mode'];
+$_SESSION['user_import_mode'] = $postUserImportMode;
 
-if($_POST['coding'] == 'iso-8859-1')
+if($postImportCoding == 'iso-8859-1')
 {
     // Daten der Datei erst einmal in UTF8 konvertieren, damit es damit spaeter keine Probleme gibt
     foreach($_SESSION['file_lines'] as $key => $value)

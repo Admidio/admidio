@@ -18,6 +18,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+unset($_SESSION['import_request']);
 
 // wurde der Suchstring ueber das Formular als POST uebergeben, dann an GET weiterleiten
 if (isset($_POST['admSearchMembers']) && strlen($_POST['admSearchMembers']) > 0)
