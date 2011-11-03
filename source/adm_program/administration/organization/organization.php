@@ -947,7 +947,16 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PHO_DISPLAY_PHOTOS_DESC').'</li>
-                     <li>
+                    <li>
+                        <dl>
+                            <dt><label for="photo_slideshow_speed">'.$gL10n->get('PHO_SLIDESHOW_SPEED').':</label></dt>
+                            <dd>
+                                <input type="text" id="photo_slideshow_speed" name="photo_slideshow_speed" style="width: 50px;" maxlength="10" value="'. $form_values['photo_slideshow_speed']. '" /> '.$gL10n->get('ORG_SECONDS').'
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('PHO_SLIDESHOW_SPEED_DESC').'</li>
+                    <li>
                         <dl>
                             <dt><label for="photo_upload_mode">'.$gL10n->get('PHO_MULTIUPLOAD').':</label></dt>
                             <dd>

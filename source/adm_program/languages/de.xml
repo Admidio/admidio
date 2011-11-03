@@ -706,6 +706,7 @@
     <text id="ORG_REGISTRATION_MODE" development="new" translation="todo">Hier kann die Art der Registrierung festgelegt bzw. ganz abgeschaltet werden. Mit der schnellen Registrierung kann der Benutzer nur die Pflichtfelder eingeben, bei der erweiterten Registrierung stehen ihm alle Felder des Profils zur Verfügung.  (Standard: Schnelle Registrierung)</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES" development="new" translation="todo">Ähnliche Namen finden</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES_DESC" development="new" translation="todo">Beim Anlegen neuer Benutzer oder bei der Zuordnung von Registrierungen sucht Admidio nach existierenden Benutzern, die einen ähnlichen Vor- und Nachnamen haben, um doppelte Datensätze zu vermeiden. Wird diese Funktion abgeschaltet, dann wird nur nach identischen Namen gesucht. (Standard: ja)</text>
+    <text id="ORG_SECONDS" development="new" translation="todo">Sekunden</text>
     <text id="ORG_SEND_PASSWORD" development="new" translation="todo">Passwort zusenden</text>
     <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="todo">Hat der Benutzer sein Passwort vergessen, kann er es sich ein neu generiertes Passwort automatisch zuschicken lassen. Ist diese Option deaktiviert, kann der Benutzer nur eine Anfrage an den Administrator stellen. (Standard: ja)</text>
     <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="todo">Neues Passwort zuschicken</text>
@@ -804,6 +805,8 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="todo">Bildtext einblenden</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="todo">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="todo">Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</text>
+    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
+    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wievielen Sekunden bei einer Diashau das nächste Bild geladen werden soll.</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="todo">Thumbnails pro Seite (Spalten x Zeilen)</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="todo">Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="todo">Auf den Button %VAR1_BOLD% klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</text>

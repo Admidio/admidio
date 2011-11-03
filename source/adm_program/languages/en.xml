@@ -662,6 +662,7 @@
     <text id="ORG_REGISTRATION_MODE" development="new" translation="edited">Define character of registration or deactivate it. Quick registration allows users to register by filling in mandatory fields only. The full registration provides all fields of the profile.  (default: quick registration)</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES" development="new" translation="edited">Search for similar names</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES_DESC" development="new" translation="edited">At registration and assigning registrations Admidio is searching for similar surnames and first names in order to avoid double entries. Deactivation results search for identical names only. (default: yes)</text>
+    <text id="ORG_SECONDS" development="new" translation="todo">seconds</text>
     <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Send password</text>
     <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Forgotten and regenerated password can be requested by the users to be sent automatically to the own e-mail address. In case of deactivation, users are able to make this request to the administrator only. . (default: yes)</text>
     <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Send new password</text>
@@ -759,6 +760,8 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Show watermark</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Text will be shown in all photos with a long edge larger than 200 pixels. (default: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Photos have been successfully added to album if they appear on this page.</text>
+    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">slideshow speed</text>
+    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Seconds before slideshow switches to next picture.</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Thumbnails per page (rows x columns)</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Values define number of rows and columns of thumbnails on one page. (default: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Press button %VAR1_BOLD% in order to select photo files on harddrive for upload.</text>
