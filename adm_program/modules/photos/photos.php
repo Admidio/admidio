@@ -140,6 +140,7 @@ if($gPreferences['photo_show_mode']==1)
             $(document).ready(function(){
                 $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
                                                            slideshowAuto:false,
+                                                           slideshowSpeed:'.($gPreferences['photo_slideshow_speed']*1000).',
                                                            preloading:true,
                                                            close:\''.$gL10n->get('SYS_CLOSE').'\',
                                                            slideshowStart:\''.$gL10n->get('SYS_SLIDESHOW_START').'\',
