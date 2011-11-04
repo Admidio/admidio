@@ -154,7 +154,7 @@ class Language
 		// no text found then write #undefined text#
 		if($this->defaultL10nObject == true && strlen($text) == 0)
 		{
-			$text = '#undefined text#';
+			$text = '#'.$text_id.'#';
 		}
 
         return $text;
