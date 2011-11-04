@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * User werden aus einer CSV-Datei importiert
+ * Import users from a csv file
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,6 +12,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/role_dependency.php');
+
+$_SESSION['import_csv_request'] = $_REQUEST;
 
 // setzt die Ausfuehrungszeit des Scripts auf 8 Min., falls viele Daten importiert werden
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
@@ -30,10 +32,13 @@ if(!$gCurrentUser->editUsers())
 }
 
 // Lastname und firstname are mandatory fields
-if(strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) == 0
-|| strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) == 0)
+if(strlen($_POST['usf-'.$gProfileFields->getProperty('LAST_NAME', 'usf_id')]) == 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gProfileFields->getProperty('LAST_NAME', 'usf_name')));
+}
+if(strlen($_POST['usf-'.$gProfileFields->getProperty('FIRST_NAME', 'usf_id')]) == 0)
+{
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gProfileFields->getProperty('FIRST_NAME', 'usf_name')));
 }
 
 if(array_key_exists('first_row', $_POST))

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Organisationseinstellungen speichern
+ * Save organization preferences
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -165,19 +165,23 @@ foreach($_POST as $key => $value)
             $text->setValue('txt_text', $value);
             $text->save();
         }
-        else
+        elseif($key == 'forum_pw' && $value == '0000')
         {
             // Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
             // 0000 bedeutet, dass das PW sich nicht veraendert hat
-            if($key == 'forum_pw' && $value == '0000')
-            {
-                $gPreferences[$key] = $gPreferences[$key];
-            }
-            else
-            {
-                $gPreferences[$key] = $value;
-            }
-        }
+			$gPreferences[$key] = $gPreferences[$key];
+		}
+		elseif($key == 'enable_auto_login' && $value == 0 && $gPreferences['enable_auto_login'] == 1)
+		{
+			// if deactivate auto login than delete all saved logins
+			$sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
+			$gDb->query($sql);
+			$gPreferences[$key] = $value;
+		}
+		else
+		{
+			$gPreferences[$key] = $value;
+		}
     }
 }
 

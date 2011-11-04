@@ -7,7 +7,7 @@
 * Plugin das die aktuellsten X Downloads auflistet 
 * 
 * 
-* Kompatible ab Admidio-Versions 2.2.0 
+* Compatible with Admidio version 2.3.0
 * 
 * Copyright : (c) 2004 - 2008 The Admidio Team 
 * Homepage : http://www.admidio.org 
@@ -15,7 +15,7 @@
 * 
 *****************************************************************************/ 
 
-// Pfad des Plugins ermitteln 
+// create path to plugin 
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11; 
 $plugin_file_pos = strpos(__FILE__, 'sidebar_downloads.php'); 
 $plugin_folder = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2); 
@@ -48,10 +48,8 @@ else
     $plg_link_class_downl = ''; 
 } 
 
-
-// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen 
+// set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB(); 
-
 
 // pruefen ob das Modul ueberhaupt aktiviert ist 
 if ($gPreferences['enable_download_module'] == 1) 

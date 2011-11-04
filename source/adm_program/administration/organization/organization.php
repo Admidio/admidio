@@ -368,39 +368,16 @@ echo '
 					//Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
 					if($gCurrentOrganization->hasChildOrganizations() == false)
 					{
-						$sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. '
-								 WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
-								   AND org_org_id_parent is NULL
-								 ORDER BY org_longname ASC, org_shortname ASC ';
-						$result = $gDb->query($sql);
+						$organizationSelectBox = FormElements::generateOrganizationSelectBox($form_values['org_org_id_parent'], 'org_org_id_parent', 1);
 
-						if($gDb->num_rows($result) > 0)
+						if(strlen($organizationSelectBox) > 0)
 						{
 							// Auswahlfeld fuer die uebergeordnete Organisation
 							echo '
 							<li>
 								<dl>
 									<dt><label for="org_org_id_parent">'.$gL10n->get('ORG_PARENT_ORGANIZATION').':</label></dt>
-									<dd>
-										<select size="1" id="org_org_id_parent" name="org_org_id_parent">
-											<option value="0" ';
-											if(strlen($form_values['org_org_id_parent']) == 0)
-											{
-												echo ' selected="selected" ';
-											}
-											echo '>keine</option>';
-
-											while($row = $gDb->fetch_object($result))
-											{
-												echo '<option value="'.$row->org_id.'" ';
-													if($form_values['org_org_id_parent'] == $row->org_id)
-													{
-														echo ' selected="selected" ';
-													}
-													echo '>'.$row->org_longname.'</option>';
-											}
-										echo '</select>
-									</dd>
+									<dd>'.$organizationSelectBox.'</dd>
 								</dl>
 							</li>
 							<li class="smallFontSize">'.$gL10n->get('ORG_PARENT_ORGANIZATION_DESC').'</li>';

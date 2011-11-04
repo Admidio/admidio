@@ -103,6 +103,7 @@ public function setSender($address, $name='')
 {
     global $gPreferences;
     $address = admStrToLower($address);
+	$name    = admEncodeMimeheader(stripslashes($name));
     
     if (strValidCharacters($address, 'email'))
     {
@@ -147,7 +148,7 @@ public function setSubject($subject)
 {
     if (strlen($subject) > 0)
     {
-        $this->headerOptions['Subject'] = $subject;
+        $this->headerOptions['Subject'] = admEncodeMimeheader(stripslashes($subject));
         return true;
     }
     return false;
@@ -157,6 +158,7 @@ public function setSubject($subject)
 public function addRecipient($address, $name='')
 {
     $address = admStrToLower($address);
+	$name    = admEncodeMimeheader(stripslashes($name));
     if (strValidCharacters($address, 'email'))
     {
         if (!isset($this->headerOptions['To']))
@@ -165,7 +167,7 @@ public function addRecipient($address, $name='')
         }
         else
         {
-        $this->headerOptions['To'] = $this->headerOptions['To']. ", ". $name. " <". $address. ">";
+			$this->headerOptions['To'] = $this->headerOptions['To']. ", ". $name. " <". $address. ">";
         }
         $this->addresses = $this->addresses. $name. " <". $address. ">\n";
         return true;
@@ -177,6 +179,7 @@ public function addRecipient($address, $name='')
 public function addCopy($address, $name='')
 {
     $address = admStrToLower($address);
+	$name    = admEncodeMimeheader(stripslashes($name));
     if (strValidCharacters($address, 'email'))
     {
         if (!isset($this->headerOptions['Cc']))
@@ -197,6 +200,7 @@ public function addCopy($address, $name='')
 public function addBlindCopy($address, $name='')
 {
     $address = admStrToLower($address);
+	$name    = admEncodeMimeheader(stripslashes($name));
     if (strValidCharacters($address, 'email'))
     {
         $this->bccArray[] = $name. " <". $address. ">";
@@ -452,8 +456,7 @@ public function sendEmail()
 
                 // Mail wird jetzt versendet...
                 // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-                if (!mail(utf8_decode(stripslashes($recipient)), utf8_decode(stripslashes($subject)),
-                          utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
+                if (!mail($recipient, $subject, utf8_decode($this->mail_body), $this->mail_properties))
                 {
                      return false;
                 }
@@ -477,8 +480,7 @@ public function sendEmail()
 
         // Mail wird jetzt versendet...
         // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-        if (!mail(utf8_decode(stripslashes($recipient)), utf8_decode(stripslashes($subject)),
-                  utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
+        if (!mail($recipient, $subject, utf8_decode($this->mail_body), $this->mail_properties))
         {
              return false;
         }
@@ -521,8 +523,7 @@ public function sendEmail()
         }
         // Kopie versenden an den originalen Absender...
          // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-         if (!mail(utf8_decode(stripslashes($mailto)), utf8_decode(stripslashes($subject)),
-                   utf8_decode(stripslashes($this->mail_body)), utf8_decode(stripslashes($this->mail_properties))))
+         if (!mail($mailto, $subject, utf8_decode($this->mail_body), $this->mail_properties))
          {
              return false;
          }

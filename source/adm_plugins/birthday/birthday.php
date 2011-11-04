@@ -7,7 +7,7 @@
  * Das Plugin listet alle Benutzer auf, die an dem aktuellen Tag Geburtstag haben.
  * Auf Wunsch koennen auch Geburtstagskinder vor X Tagen angezeigt werden.
  *
- * Kompatible ab Admidio-Versions 2.3.0
+ * Compatible with Admidio version 2.3.0
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -15,7 +15,7 @@
  *
  *****************************************************************************/
 
-// Pfad des Plugins ermitteln
+// create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos   = strpos(__FILE__, 'birthday.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
@@ -103,7 +103,7 @@ if($plg_show_names_extern == 0 && $gValidLogin == 0)
     $plg_show_future = 0;
 }
 
-// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
+// set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
 $sql    = 'SELECT DISTINCT usr_id, usr_login_name, 

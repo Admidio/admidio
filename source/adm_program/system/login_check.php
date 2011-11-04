@@ -1,7 +1,6 @@
 <?php
 /******************************************************************************
- * Meldet den User bei Admidio an, wenn sich dieser einloggen darf
- * Cookies setzen
+ * Validate login data, create cookie and sign in the user to Admidio
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,15 +11,15 @@
 require_once('common.php');
 require_once('classes/table_auto_login.php');
 
-// Variablen initialisieren
-$user_found   = 0;
+// Initialize parameters
+$userFound  = 0;
 $bAutoLogin = false;
-$loginname    = '';
-$password     = '';
+$loginname  = '';
+$password   = '';
+$organizationId = $gCurrentOrganization->getValue('org_id');
 
-// Uebergabevariablen filtern
-// hierbei muss beruecksichtigt werden, dass diese evtl. von dem Loginplugin
-// oder vom Standarddialog kommen
+// Filter parameters
+// parameters could be from login dialog or login plugin !!!
 if(isset($_POST['usr_login_name']) && strlen($_POST['usr_login_name']) > 0)
 {
     $loginname = $_POST['usr_login_name'];
@@ -31,6 +30,12 @@ if(isset($_POST['usr_login_name']) && strlen($_POST['usr_login_name']) > 0)
     {
         $bAutoLogin = true;
     }
+	
+	// if user can choose organization then save the selection
+	if(isset($_POST['org_id']) && is_numeric($_POST['org_id']) && $_POST['org_id'] > 0)
+	{
+		$organizationId = $_POST['org_id'];
+	}
 }
 
 if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) > 0)
@@ -43,6 +48,12 @@ if(isset($_POST['plg_usr_login_name']) && strlen($_POST['plg_usr_login_name']) >
     {
         $bAutoLogin = true;
     }
+
+	// if user can choose organization then save the selection
+	if(isset($_POST['plg_org_id']) && is_numeric($_POST['plg_org_id']) && $_POST['plg_org_id'] > 0)
+	{
+		$organizationId = $_POST['plg_org_id'];
+	}
 }
 
 if(strlen($loginname) == 0)
@@ -55,8 +66,8 @@ if(strlen($password) == 0)
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_PASSWORD')));
 }
 
-// Name und Passwort pruefen
-// Rolle muss mind. Mitglied sein
+// check name and password
+// user must have membership of one role of the organization
 
 $sql    = 'SELECT usr_id
              FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
@@ -68,16 +79,32 @@ $sql    = 'SELECT usr_id
               AND mem_end        > \''.DATE_NOW.'\'
               AND rol_valid      = 1
               AND rol_cat_id     = cat_id
-              AND cat_org_id     = '. $gCurrentOrganization->getValue('org_id');
+              AND cat_org_id     = '.$organizationId;
 $result = $gDb->query($sql);
 
-$user_found = $gDb->num_rows($result);
-$user_row   = $gDb->fetch_array($result);
+$userFound = $gDb->num_rows($result);
+$userRow   = $gDb->fetch_array($result);
 
-if ($user_found >= 1)
+if ($userFound >= 1)
 {
+	// if login organization is different to organization of config file then create new session variables
+	if($organizationId != $gCurrentOrganization->getValue('org_id'))
+	{
+		// read organization of config file with their preferences
+		$gCurrentOrganization->readData($organizationId);
+		$gPreferences = $gCurrentOrganization->getPreferences();
+		
+		// create object with current user field structure und user object
+		$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
+		
+		// save all data in session variables
+		$_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
+		$_SESSION['gPreferences']         =& $gPreferences;
+		$_SESSION['gProfileFields']       =& $gProfileFields;
+	}
+
     // create user object
-    $gCurrentUser = new User($gDb, $gProfileFields, $user_row['usr_id']);
+    $gCurrentUser = new User($gDb, $gProfileFields, $userRow['usr_id']);
     
     if($gCurrentUser->getValue('usr_number_invalid') >= 3)
     {
@@ -96,8 +123,9 @@ if ($user_found >= 1)
 
         // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
         $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
+
         // soll der Besucher automatisch eingeloggt bleiben, dann verfaellt das Cookie erst nach einem Jahr
-        if($bAutoLogin == true)
+        if($bAutoLogin == true && $gPreferences['enable_auto_login'] == 1)
         {
             $timestamp_expired = time() + 60*60*24*365;
             $auto_login = new TableAutoLogin($gDb, $gSessionId);
@@ -107,7 +135,7 @@ if ($user_found >= 1)
             if(strlen($auto_login->getValue('atl_usr_id')) == 0)
             {
                 $auto_login->setValue('atl_session_id', $gSessionId);
-                $auto_login->setValue('atl_usr_id', $user_row['usr_id']);            
+                $auto_login->setValue('atl_usr_id', $userRow['usr_id']);            
                 $auto_login->save();
             }
         }

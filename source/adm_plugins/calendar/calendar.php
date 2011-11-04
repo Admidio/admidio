@@ -7,7 +7,7 @@
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatibel ab Admidio-Versions 2.2.0
+ * Compatible with Admidio version 2.3.0
  *
  * Übergaben: date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
  *            ajax_change (ist gesetzt bei Monatswechsel per Ajax)
@@ -17,7 +17,7 @@
  *
  *****************************************************************************/
  
-// Pfad des Plugins ermitteln
+// create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos   = strpos(__FILE__, 'calendar.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
@@ -162,7 +162,7 @@ else
 }
 $sql_dat = $jahr. '-'. $monat;
 
-// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
+// set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
 // Abfrage der Termine

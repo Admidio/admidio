@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Spalten einer CSV-Datei werden Datenbankfeldern zugeordnet
+ * Assign columns of csv file to database fields
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -53,6 +53,24 @@ else
     $_SESSION['value_separator'] = ",";
 }
 
+if(isset($_SESSION['import_csv_request']))
+{
+    // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
+    // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+    $form = $_SESSION['import_csv_request'];
+    unset($_SESSION['import_csv_request']);
+	if(isset($form['first_row']) == false)
+	{
+		$form['first_row'] = 0;
+	}
+}
+else
+{
+	$form['first_row'] = 1;
+	$form['import_coding']    = 'iso-8859-1';
+	$form['import_role_id']   = 0;
+}
+
 // Html-Kopf ausgeben
 $gLayout['title']  = $gL10n->get('MEM_ASSIGN_FIELDS');
 $gLayout['header'] = '
@@ -71,7 +89,12 @@ echo '
     <div class="formHead">'.$gLayout['title'].'</div>
     <div class="formBody"><p>'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>
         <p style="margin-bottom: 10px;">
-            <input type="checkbox" id="first_row" name="first_row" style="vertical-align: middle;" checked="checked" value="1" />&nbsp;
+            <input type="checkbox" id="first_row" name="first_row" style="vertical-align: middle;" ';
+			if($form['first_row'] == 1)
+			{
+				echo ' checked="checked" ';
+			}
+			echo 'value="1" />&nbsp;
             <label for="first_row">'.$gL10n->get('MEM_FIRST_LINE_COLUMN_NAME').'</label>
         </p>
 
@@ -84,7 +107,7 @@ echo '
             </thead>';
 
             $line = reset($_SESSION['file_lines']);
-            $arr_columns = explode($_SESSION['value_separator'], $line);
+            $arrayCsvColumns = explode($_SESSION['value_separator'], $line);
             $category = '';
 
             // jedes Benutzerfeld aus der Datenbank auflisten
@@ -113,14 +136,31 @@ echo '
                 echo '<tr>
                     <td><label for="usf-'. $field->getValue('usf_id'). '">'. $field->getValue('usf_name'). ':</label></td>
                     <td>
-                        <select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 90%;">
-                            <option value="" selected="selected"></option>';
+                        <select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 90%;">';
+							if(isset($form['usf-'.$field->getValue('usf_id')]) && $form['usf-'. $field->getValue('usf_id')] > 0)
+							{
+								echo '<option value=""></option>';
+							}
+							else
+							{
+								echo '<option value="" selected="selected"></option>';
+							}
 
                             // Alle Spalten aus der Datei in Combobox auflisten
-                            foreach($arr_columns as $col_key => $col_value)
+                            foreach($arrayCsvColumns as $col_key => $col_value)
                             {
                                 $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
-                                echo '<option value="'.$col_key.'">'.$col_value.'</option>';
+
+								if(isset($form['usf-'. $field->getValue('usf_id')]) 
+								&& strlen($form['usf-'. $field->getValue('usf_id')]) > 0
+								&& $form['usf-'. $field->getValue('usf_id')] == $col_key)
+								{
+									echo '<option value="'.$col_key.'" selected="selected">'.$col_value.'</option>';
+								}
+								else
+								{
+									echo '<option value="'.$col_key.'">'.$col_value.'</option>';
+								}
                             }
                         echo '</select>';
 
