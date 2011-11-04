@@ -9,7 +9,7 @@
  * werden an der Stelle der Felder nun nützliche Informationen des Benutzers
  * angezeigt.
  *
- * Kompatible ab Admidio-Versions 2.2.0
+ * Compatible with Admidio version 2.3.0
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -17,7 +17,7 @@
  *
  *****************************************************************************/
 
-// Pfad des Plugins ermitteln
+// create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos   = strpos(__FILE__, 'login_form.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
@@ -27,6 +27,7 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/form_elements.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 
 // Sprachdatei des Plugins einbinden
@@ -70,7 +71,7 @@ if(isset($plg_rank) == false)
     $plg_rank = array();
 }
 
-// DB auf Admidio setzen, da evtl. noch andere DBs beim User laufen
+// set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
 $plg_icon_code = '';
@@ -195,7 +196,18 @@ else
                     <dd><input type="password" id="plg_usr_password" name="plg_usr_password" size="10" maxlength="25" /></dd>
                 </dl>
             </li>';
-            
+
+			// show selectbox with all organizations of database
+			if($gPreferences['system_organization_select'] == 1)
+			{
+				echo '<li>
+					<dl>
+						<dt><label for="org_id">'.$gL10n->get('SYS_ORGANIZATION').':</label></dt>
+						<dd>'.FormElements::generateOrganizationSelectBox($g_organization, 'plg_org_id').'</dd>
+					</dl>
+				</li>';
+			}
+
             if($gPreferences['enable_auto_login'] == 1)
             {
                 echo '

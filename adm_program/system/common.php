@@ -120,26 +120,13 @@ if(isset($_SESSION['gCurrentOrganization'])
 	$gCurrentSession           = new TableSession($gDb, $gSessionId);
 }
 else
-{
-	// read organization of config file with their preferences
-    $gCurrentOrganization = new Organization($gDb, $g_organization);
-    
-    if($gCurrentOrganization->getValue('org_id') == 0)
-    {
-        // organization not found
-        die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
-    }
-    $gPreferences = $gCurrentOrganization->getPreferences();
-	
-	// create object with current user field structure und user object
-	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
-	$gCurrentUser   = new User($gDb, $gProfileFields, 0);
-	
+{	
 	// no php session then create new admidio session
 	$gCurrentSession = new TableSession($gDb, $gSessionId);
 
+	$userIdAutoLogin = 0;
 	// check if auto login exists and create a valid session
-	if($gPreferences['enable_auto_login'] == 1 && isset($_COOKIE[$gCookiePraefix. '_DATA']))
+	if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
 	{
 		$admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
 
@@ -153,9 +140,7 @@ else
 			// restore user if saved database user id == cookie user id
 			if($auto_login->getValue('atl_usr_id') == $admidio_data[1])
 			{
-				$gCurrentUser->readData($auto_login->getValue('atl_usr_id'));
-				// count logins and save login date
-				$gCurrentUser->updateLoginData();
+				$userIdAutoLogin = $auto_login->getValue('atl_usr_id');
 			}
 			else
 			{
@@ -165,9 +150,28 @@ else
 
 			// auto login successful then create a valid session
 			$gCurrentSession->setValue('ses_session_id', $gSessionId);
-			$gCurrentSession->setValue('ses_usr_id',  $gCurrentUser->getValue('usr_id'));
+			$gCurrentSession->setValue('ses_usr_id',  $userIdAutoLogin);
 			$gCurrentSession->save();
 		}
+	}
+
+	// read organization of config file with their preferences
+    $gCurrentOrganization = new Organization($gDb, $g_organization);
+    
+    if($gCurrentOrganization->getValue('org_id') == 0)
+    {
+        // organization not found
+        die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
+    }
+    $gPreferences = $gCurrentOrganization->getPreferences();
+	
+	// create object with current user field structure und user object
+	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
+	$gCurrentUser   = new User($gDb, $gProfileFields, $userIdAutoLogin);
+	if($userIdAutoLogin > 0)
+	{
+		// count logins and save login date
+		$gCurrentUser->updateLoginData();
 	}
     
 	// save all data in session variables

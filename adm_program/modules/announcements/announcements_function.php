@@ -54,6 +54,11 @@ $_SESSION['announcements_request'] = $_REQUEST;
 
 if($getMode == 1)
 {
+    if(isset($_POST['ann_global']) == false)
+    {
+        $_POST['ann_global'] = 0;
+    }
+
     if(strlen($_POST['ann_headline']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_HEADLINE')));
@@ -61,11 +66,6 @@ if($getMode == 1)
     if(strlen($_POST['ann_description']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_TEXT')));
-    }
-
-    if(isset($_POST['ann_global']) == false)
-    {
-        $_POST['ann_global'] = 0;
     }
     
     // make html in description secure

@@ -93,6 +93,7 @@ $orga_preferences = array(
 	'mail_bcc_count'			=> '50',
     'enable_mail_captcha'       => '1',
     'mail_sendmail_address'     => '',
+	'mail_character_encoding'   => 'utf-8',
 
     // Systemmail
     'enable_system_mails'       => '1',

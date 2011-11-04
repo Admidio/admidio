@@ -17,7 +17,7 @@
 // Header kodieren
 header('Content-Type: text/html; charset=UTF-8');
 
-// Pfad des Plugins ermitteln
+// create path to plugin
 $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos   = strpos(__FILE__, 'calendar_msg.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);

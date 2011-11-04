@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Factory-Klasse welches das relevante Forumobjekt erstellt
+ * Factory class that creates elements for html forms
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -13,7 +13,7 @@ class FormElements
 	// Diese Funktion erzeugt eine Combobox mit allen Rollen, die der Benutzer sehen darf
 	// Die Rollen werden dabei nach Kategorie gruppiert
 	//
-	// Uebergaben:
+	// Parameters:
 	// default_role : Id der Rolle die markiert wird
 	// field_id     : Id und Name der Select-Box
 	// show_mode    : Modus der bestimmt, welche Rollen angezeigt werden
@@ -116,7 +116,7 @@ class FormElements
 
 	// Diese Funktion erzeugt eine Combobox mit allen Kategorien zu einem Typ (Rollen, Termine, Links ...)
 	//
-	// Uebergaben:
+	// Parameters:
 	// category_type  : Typ der Kategorien ('ROL', 'DAT', 'LNK',...) die angezeigt werden sollen
 	// default_category : Id der Kategorie die markiert wird
 	// field_id       : Id und Name der Select-Box
@@ -169,7 +169,7 @@ class FormElements
 	
 	// Diese Funktion erzeugt eine Combobox mit allen Eintraegen aus einer XML-Datei
 	//
-	// Uebergaben:
+	// Parameters:
 	// xmlFile      : Serverpfad zur XML-Datei
 	// xmlValueTag  : Name des XML-Tags der den jeweiligen Wert des Comboboxeintrags beinhaltet
 	// xmlViewTag   : Name des XML-Tags der den jeweiligen angezeigten Wert des Comboboxeintrags beinhaltet
@@ -199,6 +199,70 @@ class FormElements
 				$selectBoxHtml .= '<option '.$selected.' value="'.$vals[$index[$xmlValueTag][$i]]['value'].'">'.$vals[$index[$xmlViewTag][$i]]['value'].'</option>';
 			}
 		$selectBoxHtml .= '</select>';
+		return $selectBoxHtml;
+	}
+	
+	// this function creates a combobox with all organizations in database
+	//
+	// Parameters:
+	// defaultOrganization : shortname of default organization that is preselected
+	// fieldId       : Id and name der selectbox
+	// presentation  : 0 = show all organizations of database
+	//                 1 = show organizations that of no parent orga and not the current orga
+	public static function generateOrganizationSelectBox($defaultOrganization = '', $fieldId = '', $presentation = 0)
+	{
+		global $gCurrentOrganization, $gDb, $gL10n;
+
+		if(strlen($fieldId) == 0)
+		{
+			$fieldId = 'admOrganization';
+		}
+
+		$sqlConditions = '';
+		$selectBoxHtml = '';
+
+		if($presentation == 0)
+		{
+			$firstEntry = '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -';
+		}
+		elseif($presentation == 1)
+		{
+			$firstEntry = $gL10n->get('SYS_NONE');
+			$sqlConditions = ' WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
+				                 AND org_org_id_parent is NULL ';
+		}
+
+		$sql = 'SELECT * FROM '. TBL_ORGANIZATIONS.
+				         $sqlConditions.'
+				 ORDER BY org_longname ASC, org_shortname ASC ';
+		$result = $gDb->query($sql);
+
+		if($gDb->num_rows($result) > 0)
+		{
+			// Auswahlfeld fuer die uebergeordnete Organisation
+			$selectBoxHtml = '<select size="1" id="'.$fieldId.'" name="'.$fieldId.'">
+				<option value="0" ';
+				if(strlen($defaultOrganization) == 0)
+				{
+					$selectBoxHtml .= ' selected="selected" ';
+				}
+				$selectBoxHtml .= '>'.$firstEntry.'</option>';
+
+				while($row = $gDb->fetch_array($result))
+				{
+					$selectBoxHtml .= '<option value="'.$row['org_id'].'" ';
+					if(is_numeric($defaultOrganization) == true && $defaultOrganization == $row['org_id'])
+					{
+						$selectBoxHtml .= ' selected="selected" ';
+					}
+					elseif(is_numeric($defaultOrganization) == false && $defaultOrganization == $row['org_shortname'])
+					{
+						$selectBoxHtml .= ' selected="selected" ';
+					}
+					$selectBoxHtml .= '>'.$row['org_longname'].'</option>';
+				}
+			$selectBoxHtml .= '</select>';
+		}
 		return $selectBoxHtml;
 	}
 }

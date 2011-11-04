@@ -38,6 +38,21 @@ function admStrToUpper($string)
     }
 }
 
+// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
+// stehen, wird hier eine Fallunterscheidung gemacht
+// WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
+function admEncodeMimeheader($string)
+{
+    if(function_exists('mb_encode_mimeheader'))
+    {
+        return mb_encode_mimeheader(stripslashes($string), 'UTF-8', 'Q');
+    }
+    else
+    {
+        return utf8_decode(stripslashes($string));
+    }
+}
+
 // removes html, php code and blancs at beginning and end 
 // of string or all elements of array without ckeditor variables !!!
 function admStrStripTagsSpecial($srcArray)

@@ -28,6 +28,22 @@ if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
     $auto_login->delete(); 
 }
 
+// if login organization is different to organization of config file then create new session variables
+if($g_organization != $gCurrentOrganization->getValue('org_shortname'))
+{
+	// read organization of config file with their preferences
+    $gCurrentOrganization->readData($g_organization);
+    $gPreferences = $gCurrentOrganization->getPreferences();
+	
+	// create object with current user field structure und user object
+	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
+	
+	// save all data in session variables
+    $_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
+    $_SESSION['gPreferences']         =& $gPreferences;
+    $_SESSION['gProfileFields']       =& $gProfileFields;
+}
+
 // clear data from object of current user
 $gCurrentUser->clear();
 

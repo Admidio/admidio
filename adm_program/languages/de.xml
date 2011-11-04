@@ -24,6 +24,8 @@
     <text id="INS_XING" development="new" translation="todo">Xing</text>
     <text id="INS_XING_DESC" development="new" translation="todo">Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Xing-Profil aufrufen.</text>
     <text id="LST_PERIOD" development="deleted" translation="todo">Zeitraum</text>
+    <text id="MAI_CHARACTER_ENCODING" development="new" translation="todo">Zeichenkodierung</text>
+    <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="todo">Angabe der Zeichenkodierung in der eine E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</text>
     <text id="MAI_MESSAGE" development="deleted" translation="todo">Nachricht</text>
     <text id="MEM_IMPORT_SUCCESSFUL" development="changed" translation="todo">Der Import ist erfolgreich verlaufen.\n\n%VAR1% neue Benutzer wurden angelegt.\n%VAR2% Benutzer wurden bearbeitet.\n%VAR3% Rollenmitgliedschaften wurden zugeordnet.</text>
     <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
@@ -38,6 +40,8 @@
     <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="todo">Organisationsauswahl anzeigen</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="todo">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</text>
     <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="todo">Organisations- and Regionaleinstellungen</text>
+    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
+    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wievielen Sekunden bei einer Diashau das nächste Bild geladen werden soll.</text>
     <text id="SYS_CHECKBOX" development="new" translation="todo">Checkbox</text>
     <text id="SYS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
     <text id="SYS_DATABASE_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt %VAR1% oder höher</text>
@@ -49,6 +53,7 @@
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="SYS_MYSQL_VERSION" development="deleted" translation="todo">MySQL-Version</text>
     <text id="SYS_MYSQL_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt 4.1 oder höher</text>
+    <text id="SYS_ORGANIZATION" development="new" translation="todo">Organisation</text>
     <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
 	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>    	
 	<text id="SYS_PRESENTATION" development="new" translation="todo">Darstellung</text>
@@ -58,7 +63,6 @@
     <text id="SYS_VERSION" development="new" translation="todo">Version</text>
     <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="todo">Die Datenbankversion %VAR1% ist niedriger als die Version der Admidio-Scripte %VAR2%.\n\nFühre bitte %VAR3%das Datenbankupdate%VAR4% auf die Version durch.</text>
     <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="todo">Die Datenbankversion %VAR1% ist höher als die Version der Admidio-Scripte %VAR2%.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server %VAR3%mit der aktuelleren Admidio-Version%VAR4%.</text>
-
 </version>
 <version id="2.2.6">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="todo">Neueste Ankündigungen der Organisation %VAR1%</text>
@@ -805,8 +809,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="todo">Bildtext einblenden</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="todo">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="todo">Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</text>
-    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wievielen Sekunden bei einer Diashau das nächste Bild geladen werden soll.</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="todo">Thumbnails pro Seite (Spalten x Zeilen)</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="todo">Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="todo">Auf den Button %VAR1_BOLD% klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</text>

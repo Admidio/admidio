@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Loginseite
+ * Login page
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,14 +8,15 @@
  *
  *****************************************************************************/
 
-require('common.php');
-require('classes/table_roles.php');
+require_once('common.php');
+require_once('classes/form_elements.php');
+require_once('classes/table_roles.php');
 
 // Url merken (wird in cookie_check wieder entfernt)
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Rollenobjekt fuer 'Webmaster' anlegen
-$role_webmaster = new TableRoles($gDb, $gL10n->get('SYS_WEBMASTER'));
+$roleWebmaster = new TableRoles($gDb, $gL10n->get('SYS_WEBMASTER'));
 
 // Html-Kopf ausgeben
 $gLayout['title']  = $gL10n->get('SYS_LOGIN');
@@ -47,6 +48,17 @@ echo '
                     <dd><input type="password" id="usr_password" name="usr_password" style="width: 120px;" maxlength="20" /></dd>
                 </dl>
             </li>';
+
+			// show selectbox with all organizations of database
+			if($gPreferences['system_organization_select'] == 1)
+			{
+				echo '<li>
+					<dl>
+						<dt><label for="org_id">'.$gL10n->get('SYS_ORGANIZATION').':</label></dt>
+						<dd>'.FormElements::generateOrganizationSelectBox($g_organization, 'org_id').'</dd>
+					</dl>
+				</li>';
+			}
             
             if($gPreferences['enable_auto_login'] == 1)
             {
@@ -79,10 +91,10 @@ echo '
             $mail_link = $g_root_path.'/adm_program/system/lost_password.php';
         }
         elseif($gPreferences['enable_mail_module'] == 1 
-        && $role_webmaster->getValue('rol_mail_this_role') == 3)
+        && $roleWebmaster->getValue('rol_mail_this_role') == 3)
         {
             // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-            $mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?rol_id='. $role_webmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+            $mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
         }
         else
         {
