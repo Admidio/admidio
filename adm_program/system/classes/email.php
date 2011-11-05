@@ -103,6 +103,7 @@ public function setSender($address, $name='')
 {
     global $gPreferences;
     $address = admStrToLower($address);
+    // Sender must be Ascii-US formated, so encode in MimeHeader
 	$name    = admEncodeMimeheader(stripslashes($name));
     
     if (strValidCharacters($address, 'email'))
@@ -158,6 +159,7 @@ public function setSubject($subject)
 public function addRecipient($address, $name='')
 {
     $address = admStrToLower($address);
+    // Recipient must be Ascii-US formated, so encode in MimeHeader
 	$name    = admEncodeMimeheader(stripslashes($name));
     if (strValidCharacters($address, 'email'))
     {
@@ -179,6 +181,7 @@ public function addRecipient($address, $name='')
 public function addCopy($address, $name='')
 {
     $address = admStrToLower($address);
+    // Copy must be Ascii-US formated, so encode in MimeHeader
 	$name    = admEncodeMimeheader(stripslashes($name));
     if (strValidCharacters($address, 'email'))
     {
@@ -200,6 +203,7 @@ public function addCopy($address, $name='')
 public function addBlindCopy($address, $name='')
 {
     $address = admStrToLower($address);
+    // Blindcopy must be Ascii-US formated, so encode in MimeHeader
 	$name    = admEncodeMimeheader(stripslashes($name));
     if (strValidCharacters($address, 'email'))
     {
