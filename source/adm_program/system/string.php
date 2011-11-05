@@ -45,6 +45,7 @@ function admEncodeMimeheader($string)
 {
     if(function_exists('mb_encode_mimeheader'))
     {
+    	mb_internal_encoding('UTF-8');
         return mb_encode_mimeheader(stripslashes($string), 'UTF-8', 'Q');
     }
     else
