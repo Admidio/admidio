@@ -117,14 +117,7 @@ class FunctionClass
 	{
 		foreach($first_value_array as $item)
 		{
-			if( $item[0] != "")
-			{
-				echo $item[0];
-			}
-			else
-			{
-				echo '<input type="hidden" name="'.$item[2].'" value="" />';
-			}
+			echo '<input type="hidden" name="'.$item.'" value="" />';
 		}
 	}
 
