@@ -470,26 +470,9 @@ function ecardJSClass()
 		var schrift_size = $("#" + this.ecardformid + " input[name='ecard[schrift_size]']").val();
 		var schrift = $("#" + this.ecardformid + " input[name='ecard[schriftart_name]']").val();
 		var schrift_farbe = $("#" + this.ecardformid + " input[name='ecard[schrift_farbe]']").val();
-		var schrift_bold = "";
-		var schrift_italic = "";
-		if($("#" + this.ecardformid + " input[name='Bold']").attr('checked') == true)
-		{
-			schrift_bold = "bold";
-			$("#" + this.ecardformid + " input[name='ecard[schrift_style_bold]']").val("bold");
-		}
-		else
-		{
-			$("#" + this.ecardformid + " input[name='ecard[schrift_style_bold]']").val("");
-		}
-		if($("#" + this.ecardformid + " input[name='Italic']").attr('checked') == true)
-		{
-			schrift_italic = "italic";
-			$("#" + this.ecardformid + " input[name='ecard[schrift_style_italic]']").val("italic");
-		}
-		else
-		{
-			$("#" + this.ecardformid + " input[name='ecard[schrift_style_italic]']").val("");
-		}
+		var schrift_bold = $("#" + this.ecardformid + " input[name='ecard[schrift_style_bold]']").val();
+		var schrift_italic = $("#" + this.ecardformid + " input[name='ecard[schrift_style_italic]']").val();
+
 		var schrift_farbe = $("#" + this.ecardformid + " input[name='ecard[schrift_farbe]']").val();
 		$("#" + textdiv).css("font",schrift_bold + ' '+ schrift_italic + ' '+ schrift_size + 'px '+schrift);
 		$("#" + textdiv).css("color",schrift_farbe);
