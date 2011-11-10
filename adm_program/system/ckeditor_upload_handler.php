@@ -44,6 +44,10 @@ elseif($getCKEditor == 'lnk_description')
 {
     $folderName = 'weblinks';
 }
+elseif($getCKEditor == 'mail_body')
+{
+    $folderName = 'mail';
+}
 elseif($getCKEditor == 'room_description')
 {
     $folderName = 'rooms';

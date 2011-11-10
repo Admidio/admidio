@@ -158,7 +158,7 @@ else
     $form_values['name']         = '';
     $form_values['mailfrom']     = '';
     $form_values['subject']      = $getSubject;
-    $form_values['body']         = $getBody;
+    $form_values['mail_body']    = $getBody;
     $form_values['rol_id']       = '';
 }
 
@@ -479,11 +479,11 @@ echo '
 							<div>';
 									if($gValidLogin == true && $gPreferences['mail_editor_registered_users'] == 1)
 									{
-										echo $ckEditor->createEditor('body', $form_values['body']);
+										echo $ckEditor->createEditor('mail_body', $form_values['mail_body']);
 									}
 									else
 									{
-									   echo '<textarea id="body" name="body" style="width: 99%;" rows="10" cols="45">'. $form_values['body']. '</textarea>';
+									   echo '<textarea id="mail_body" name="mail_body" style="width: 99%;" rows="10" cols="45">'. $form_values['mail_body']. '</textarea>';
 									}
 							echo '</div>
 						</li>

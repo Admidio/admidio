@@ -352,7 +352,7 @@ class FunctionClass
 		}
 		
 		$email->setText($ecard_html_data);
-		$email->setDataAsHtml();
+		$email->sendDataAsHtml();
 		$return_code = $email->sendEmail();
 	
 		// nun noch das von der Groesse angepasste Bild loeschen
