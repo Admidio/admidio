@@ -151,7 +151,6 @@ else
 			// auto login successful then create a valid session
 			$gCurrentSession->setValue('ses_session_id', $gSessionId);
 			$gCurrentSession->setValue('ses_usr_id',  $userIdAutoLogin);
-			$gCurrentSession->save();
 		}
 	}
 
@@ -164,6 +163,9 @@ else
         die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     $gPreferences = $gCurrentOrganization->getPreferences();
+	
+	// after successful initialization of organization object save session
+	$gCurrentSession->save();
 	
 	// create object with current user field structure und user object
 	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);

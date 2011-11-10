@@ -79,10 +79,6 @@ public function __construct()
     //Wichtig ist das die MimeVersion das erste Element im Header ist...
     $this->headerOptions['MIME-Version'] = '1.0';
 
-    //Jetzt wird noch der ContentType der Mail gesetzt.
-    //Dieser wird im Falle eines Attachments oder HTML spaeter ersetzt.
-    $this->headerOptions['Content-Type'] = 'text/plain; charset=iso-8859-1';
-
     $this->headerOptions['Return-Path'] = $gPreferences['email_administrator'];
     $this->headerOptions['Sender']      = $gPreferences['email_administrator'];
 
@@ -91,6 +87,11 @@ public function __construct()
     $this->copyToSender        = false;
     $this->listRecipients      = false;
     $this->sendAsHTML          = false;
+	$this->charset             = $gPreferences['mail_character_encoding'];
+
+    //Jetzt wird noch der ContentType der Mail gesetzt.
+    //Dieser wird im Falle eines Attachments oder HTML spaeter ersetzt.
+    $this->headerOptions['Content-Type'] = 'text/plain; charset='.$this->charset;
 
     //Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
     //fuer den Fall das eine Kopie der Mail angefordert wird...
@@ -308,7 +309,7 @@ private function prepareBody()
     if($this->sendAsHTML || isset($this->attachments))
     {
 	  	$this->mail_body = $this->mail_body. "--". $this->mailBoundary.
-	    				   "\nContent-Type: text/plain; charset=iso-8859-1\nContent-Transfer-Encoding: 7bit\n\n";
+	    				   "\nContent-Type: text/plain; charset=".$this->charset."\nContent-Transfer-Encoding: 7bit\n\n";
     }
 
     // nun den Mailtext als Text-Format hinzufuegen
@@ -325,7 +326,7 @@ private function prepareBody()
 						   	   "\nContent-Type: multipart/related;\n\tboundary=\"". $this->mailBoundaryRelated. "\"\n\n";
 		}
 		$this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. 
-					   	   "\nContent-Type: text/html; charset=iso-8859-1\nContent-Transfer-Encoding: 7bit\n\n";
+					   	   "\nContent-Type: text/html; charset=".$this->charset."\nContent-Transfer-Encoding: 7bit\n\n";
         $this->mail_body = $this->mail_body. $this->text."\n\n";
     }
 
@@ -394,6 +395,11 @@ private function prepareBody()
         $this->mail_body = $this->mail_body. "--". $this->mailBoundary. "--";
     }
 
+	// if character encoding is iso-8859-1 than decode our utf-8 string to iso-8859-1
+	if($this->charset == 'iso-8859-1')
+	{
+		utf8_decode($this->mail_body);
+	}
 }
 
 // Funktion um die Email endgueltig zu versenden...
@@ -460,7 +466,7 @@ public function sendEmail()
 
                 // Mail wird jetzt versendet...
                 // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-                if (!mail($recipient, $subject, utf8_decode($this->mail_body), $this->mail_properties))
+                if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
                 {
                      return false;
                 }
@@ -484,7 +490,7 @@ public function sendEmail()
 
         // Mail wird jetzt versendet...
         // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-        if (!mail($recipient, $subject, utf8_decode($this->mail_body), $this->mail_properties))
+        if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
         {
              return false;
         }
@@ -527,7 +533,7 @@ public function sendEmail()
         }
         // Kopie versenden an den originalen Absender...
          // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-         if (!mail($mailto, $subject, utf8_decode($this->mail_body), $this->mail_properties))
+         if (!mail($mailto, $subject, $this->mail_body, $this->mail_properties))
          {
              return false;
          }
