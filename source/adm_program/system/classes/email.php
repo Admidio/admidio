@@ -33,7 +33,7 @@
  * Parameters: $subject - Der Text des Betreffs
  *
  * Der Email einen Text geben:
- * function setText($text)
+ * function setText($text. )
  * Parameters: $text - Der Text der Mail
  *
  * Nun kann man ein Attachment hinzufuegen:
@@ -60,7 +60,7 @@
  *
  * Soll die Nachricht als HTML Code interpretiert und versendet werden,
  * muss folgende Funktion auch noch aufgerufen werden (optional):
- * function setDataAsHtml()
+ * function sendDataAsHtml()
  *
  * Am Ende muss die Mail natuerlich noch gesendet werden:
  * function sendEmail();
@@ -255,8 +255,8 @@ public function setListRecipientsFlag()
     $this->listRecipients = true;
 }
 
-// Funktion um die zu sendenden Daten als HTML Code zu inerpretieren zu lassen.
-public function setDataAsHtml()
+// method change email header so that client will interpret mail as html mail
+public function sendDataAsHtml()
 {
     $this->sendAsHTML = true;
 	$this->headerOptions['Content-Type'] = "multipart/alternative;\n\tboundary=\"". $this->mailBoundary. '"';

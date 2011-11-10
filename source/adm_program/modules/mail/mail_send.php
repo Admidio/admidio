@@ -16,6 +16,7 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/email.php');
 require_once('../../system/classes/table_roles.php');
+require_once('../../libs/htmlawed/htmlawed.php');
 
 // Initialize and check the parameters
 $postRoleId = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
@@ -313,11 +314,22 @@ if (!$gValidLogin)
 {
     $mail_body = $mail_body. "\n".$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
 }
-$mail_body = $mail_body. "\n\n\n". $_POST['body'];
 
-//Den Text an das Mailobjekt uebergeben
-$email->setText($mail_body);
+// make html in mail body secure
+$_POST['mail_body'] = htmLawed(stripslashes($_POST['mail_body']));
 
+$mail_body = $mail_body. "\n\n\n". $_POST['mail_body'];
+
+// commit mail body to mail object
+if($gValidLogin == true && $gPreferences['mail_editor_registered_users'] == 1)
+{
+    $email->sendDataAsHtml();
+    $email->setText($mail_body);
+}
+else
+{
+    $email->setText($mail_body);
+}
 
 //Nun kann die Mail endgueltig versendet werden...
 if ($email->sendEmail())
