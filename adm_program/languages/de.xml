@@ -6,7 +6,6 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
-    <text id="GBO_CONFIRMATION_OF_ENTRY" development="new" translation="todo">Bestätigung des Eintrags</text>
     <text id="INS_CONTACT_DETAILS" development="deleted" translation="todo">Kontaktdaten</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
@@ -24,9 +23,13 @@
     <text id="INS_XING" development="new" translation="todo">Xing</text>
     <text id="INS_XING_DESC" development="new" translation="todo">Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Xing-Profil aufrufen.</text>
     <text id="LST_PERIOD" development="deleted" translation="todo">Zeitraum</text>
+    <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="todo">Betreff &amp; Anhang</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="todo">Zeichenkodierung</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="todo">Angabe der Zeichenkodierung in der eine E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</text>
-    <text id="MAI_MESSAGE" development="deleted" translation="todo">Nachricht</text>
+    <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="todo">HTML-Mails</text>
+    <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="todo">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</text>
+    <text id="MAI_YOUR_EMAIL" development="new" translation="todo">Deine E-Mail</text>
+    <text id="MAI_YOUR_NAME" development="new" translation="todo">Dein Name</text>
     <text id="MEM_IMPORT_SUCCESSFUL" development="changed" translation="todo">Der Import ist erfolgreich verlaufen.\n\n%VAR1% neue Benutzer wurden angelegt.\n%VAR2% Benutzer wurden bearbeitet.\n%VAR3% Rollenmitgliedschaften wurden zugeordnet.</text>
     <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
     <text id="ORG_FIELD_DISABLED" development="changed" translation="todo">Feld nur für Benutzer mit dem Recht %VAR1_BOLD% editierbar</text>
@@ -43,6 +46,7 @@
     <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
     <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wievielen Sekunden bei einer Diashau das nächste Bild geladen werden soll.</text>
     <text id="SYS_CHECKBOX" development="new" translation="todo">Checkbox</text>
+    <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="todo">Bestätigung der Eingaben</text>
     <text id="SYS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
     <text id="SYS_DATABASE_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt %VAR1% oder höher</text>
     <text id="SYS_DESIGNATION" development="new" translation="todo">Bezeichnung</text>

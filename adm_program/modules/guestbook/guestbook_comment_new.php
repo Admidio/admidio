@@ -223,7 +223,7 @@ echo '
             echo '<div class="groupBox" id="admConfirmationOfEntry">
     			<div class="groupBoxHeadline" id="admConfirmationOfEntryHead">
     				<a class="iconShowHide" href="javascript:showHideBlock(\'admConfirmationOfEntryBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-    				id="admConfirmationOfEntryBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('GBO_CONFIRMATION_OF_ENTRY').'
+    				id="admConfirmationOfEntryBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_CONFIRMATION_OF_INPUT').'
     			</div>
     
     			<div class="groupBoxBody" id="admConfirmationOfEntryBody">

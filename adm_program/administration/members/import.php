@@ -71,20 +71,10 @@ echo '
             <li>
                 <dl>
                     <dt><label for="coding">'.$gL10n->get('MEM_CODING').':</label></dt>
-                <dd><select size="1" name="import_coding">';
-                    	if($form['import_coding'] == 'utf-8')
-                    	{
-                    		$utf8Selected    = ' selected="selected" ';
-                    		$iso8859Selected = '';
-                   		}
-                   		else
-                   		{
-                   			$utf8Selected    = '';
-                   			$iso8859Selected = ' selected="selected" ';
-                   		}
-                        echo '<option value="iso-8859-1" '.$iso8859Selected.'>'.$gL10n->get('SYS_ISO_8859_1').'</option>
-                        <option value="utf-8" '.$utf8Selected.'>'.$gL10n->get('SYS_UTF8').'</option>
-                    </select></dd>
+					<dd>';
+						$selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
+						echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form['import_coding'], 'import_coding');
+					echo '</dd>
                 </dl>
             </li>
             <li>
@@ -105,23 +95,14 @@ echo '
             <li>
                 <dl>
                     <dt><label for="user_import_mode">'.$gL10n->get('MEM_EXISTING_USERS').':</label>&nbsp;</dt>
-                    <dd><select size="1" id="user_import_mode" name="user_import_mode">';
-                    	$importModeDesc = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
-                    	for($count = 1; $count <= 4; $count++)
-                    	{
-                    		if($count == $form['user_import_mode'])
-                    		{
-                    			echo '<option value="'.$count.'" selected="selected">'.$importModeDesc[$count].'</option>';
-                    		}
-                    		else
-                    		{
-                    			echo '<option value="'.$count.'">'.$importModeDesc[$count].'</option>';
-                    		}
-                    	}
-                    echo '</select>&nbsp;
-                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS&amp;inline=true"><img 
-                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS\',this)" onmouseout="ajax_hideTooltip()"
-                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a></dd>
+                    <dd>';
+                    	$selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
+						echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form['user_import_mode'], 'user_import_mode');
+						echo '&nbsp;
+						<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS&amp;inline=true"><img 
+							onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS\',this)" onmouseout="ajax_hideTooltip()"
+							class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
+					</dd>
                 </dl>
             </li>
         </ul>

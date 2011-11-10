@@ -10,41 +10,77 @@
 
 class FormElements
 {
+	// creates a html select box with all entries that are stored in the parameter array
+	// entryArray   : Array with all entries of the select box; 
+	//                Array key will be the internal value of the entry
+	//                Array value will be the visual value of the entry
+	// defaultEntry : internal value of the entry that should be default selected
+	// fieldId      : Id and name of the select box
+	// createFirstEntry : First entry of select box will be "Please choose"
+	public static function generateDynamicSelectBox($entryArray, $defaultEntry = '', $fieldId = 'admSelectBox', $createFirstEntry = false)
+	{
+		$selectBoxHtml = '<select size="1" id="'.$fieldId.'" name="'.$fieldId.'">';
+			if($createFirstEntry == true)
+			{
+				$selectBoxHtml .= '<option value=" "';
+				if(strlen($defaultEntry) == 0)
+				{
+					$selectBoxHtml .= ' selected="selected" ';
+				}
+				$selectBoxHtml .= '>- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+			}
+
+			$value = reset($entryArray);
+			for($arrayCount = 0; $arrayCount < count($entryArray); $arrayCount++)
+			{
+				// create entry in html
+				$selectBoxHtml .= '<option value="'.key($entryArray).'"';
+					if(key($entryArray) == $defaultEntry)
+					{
+						$selectBoxHtml .= ' selected="selected" ';
+					}
+				$selectBoxHtml .= '>'.$value.'</option>';
+				$value = next($entryArray);
+			}
+		$selectBoxHtml .= '</select>';
+		return $selectBoxHtml;
+	}
+
 	// Diese Funktion erzeugt eine Combobox mit allen Rollen, die der Benutzer sehen darf
 	// Die Rollen werden dabei nach Kategorie gruppiert
 	//
 	// Parameters:
-	// default_role : Id der Rolle die markiert wird
-	// field_id     : Id und Name der Select-Box
-	// show_mode    : Modus der bestimmt, welche Rollen angezeigt werden
+	// defaultRole : Id der Rolle die markiert wird
+	// fieldId     : Id und Name der Select-Box
+	// showMode    : Modus der bestimmt, welche Rollen angezeigt werden
 	//          = 0 : Alle Rollen, die der Benutzer sehen darf
 	//          = 1 : Alle sicheren Rollen, so dass der Benutzer sich kein "Rollenzuordnungsrecht" 
 	//                dazuholen kann, wenn er es nicht schon besitzt
 	//          = 2 : Alle nicht aktiven Rollen auflisten
 	// visitors = 1 : weiterer Eintrag um auch Besucher auswaehlen zu koennen
-	 public static function generateRoleSelectBox($default_role = 0, $field_id = '', $show_mode = 0, $visitors = 0)
+	 public static function generateRoleSelectBox($defaultRole = 0, $fieldId = '', $showMode = 0, $visitors = 0)
 	{
 		global $gCurrentUser, $gCurrentOrganization, $gDb, $gL10n;
 		
-		if(strlen($field_id) == 0)
+		if(strlen($fieldId) == 0)
 		{
-			$field_id = 'rol_id';
+			$fieldId = 'rol_id';
 		}
 
 		// SQL-Statement entsprechend dem Modus zusammensetzen
 		$condition = '';
 		$active_roles = 1;
-		if($show_mode == 1 && $gCurrentUser->assignRoles() == false)
+		if($showMode == 1 && $gCurrentUser->assignRoles() == false)
 		{
 			// keine Rollen mit Rollenzuordnungsrecht anzeigen
 			$condition .= ' AND rol_assign_roles = 0 ';
 		}
-		elseif($show_mode == 1 && $gCurrentUser->isWebmaster() == false)
+		elseif($showMode == 1 && $gCurrentUser->isWebmaster() == false)
 		{
 			// Webmasterrolle nicht anzeigen
 			$condition .= ' AND rol_name <> \''.$gL10n->get('SYS_WEBMASTER').'\' ';
 		}
-		elseif($show_mode == 2)
+		elseif($showMode == 2)
 		{
 			$active_roles = 0;
 		}
@@ -62,9 +98,9 @@ class FormElements
 		// Selectbox mit allen selektierten Rollen zusammensetzen
 		$act_category = '';
 		$selectBoxHtml = '
-		<select size="1" id="'.$field_id.'" name="'.$field_id.'">
+		<select size="1" id="'.$fieldId.'" name="'.$fieldId.'">
 			<option value="0" ';
-			if($default_role == 0)
+			if($defaultRole == 0)
 			{
 				$selectBoxHtml .= ' selected="selected" ';
 			}
@@ -73,7 +109,7 @@ class FormElements
 			if($visitors == 1)
 			{
 				$selectBoxHtml .= '<option value="-1" ';
-				if($default_role == -1)
+				if($defaultRole == -1)
 				{
 					$selectBoxHtml .= ' selected="selected" ';
 				}
@@ -102,7 +138,7 @@ class FormElements
 					}
 					// wurde eine Rollen-Id uebergeben, dann Combobox mit dieser vorbelegen
 					$selected = "";
-					if($row['rol_id'] == $default_role)
+					if($row['rol_id'] == $defaultRole)
 					{
 						$selected = ' selected="selected" ';
 					}
@@ -117,30 +153,30 @@ class FormElements
 	// Diese Funktion erzeugt eine Combobox mit allen Kategorien zu einem Typ (Rollen, Termine, Links ...)
 	//
 	// Parameters:
-	// category_type  : Typ der Kategorien ('ROL', 'DAT', 'LNK',...) die angezeigt werden sollen
-	// default_category : Id der Kategorie die markiert wird
-	// field_id       : Id und Name der Select-Box
-	public static function generateCategorySelectBox($category_type, $default_category = 0, $field_id = '')
+	// categoryType    : Typ der Kategorien ('ROL', 'DAT', 'LNK',...) die angezeigt werden sollen
+	// defaultCategory : Id der Kategorie die markiert wird
+	// field_id        : Id und Name der Select-Box
+	public static function generateCategorySelectBox($categoryType, $defaultCategory = 0, $fieldId = '')
 	{
 		global $gCurrentOrganization, $gDb, $gL10n;
 
-		if(strlen($field_id) == 0)
+		if(strlen($fieldId) == 0)
 		{
-			$field_id = 'cat_id';
+			$fieldId = 'cat_id';
 		}
 		
 		$sql = 'SELECT cat_id, cat_default, cat_name 
 		          FROM '. TBL_CATEGORIES. '
 				 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )
-				   AND cat_type   = \''.$category_type.'\'
+				   AND cat_type   = \''.$categoryType.'\'
 				 ORDER BY cat_sequence ASC ';
 		$result = $gDb->query($sql);
 
 		$selectBoxHtml = '
-		<select size="1" id="'.$field_id.'" name="'.$field_id.'">
+		<select size="1" id="'.$fieldId.'" name="'.$fieldId.'">
 			<option value=" "';
-				if($default_category == 0)
+				if($defaultCategory == 0)
 				{
 					$selectBoxHtml .= ' selected="selected" ';
 				}
@@ -156,8 +192,8 @@ class FormElements
 				
 				// create entry in html
 				$selectBoxHtml .= '<option value="'.$row['cat_id'].'"';
-					if($default_category == $row['cat_id']
-					|| ($default_category == 0 && $row['cat_default'] == 1))
+					if($defaultCategory == $row['cat_id']
+					|| ($defaultCategory == 0 && $row['cat_default'] == 1))
 					{
 						$selectBoxHtml .= ' selected="selected" ';
 					}

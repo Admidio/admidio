@@ -294,14 +294,14 @@ echo '
 							</dd>
 						</dl>
 					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE_DESC', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
+					<li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE_DESC').'</li>
 					<li>
 						<dl>
 							<dt><label for="system_js_editor_color">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR').':</label></dt>
 							<dd><input type="text" id="system_js_editor_color" name="system_js_editor_color" style="width: 100px;" maxlength="10" value="'. $form_values['system_js_editor_color']. '" /></dd>
 						</dl>
 					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
+					<li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR_DESC').'</li>
 				</ul>
 				<br />
 				<div class="formSubmit">	
@@ -421,28 +421,10 @@ echo '
 					<li>
 						<dl>
 							<dt><label for="registration_mode">'.$gL10n->get('SYS_REGISTRATION').':</label></dt>
-							<dd>
-								<select size="1" id="registration_mode" name="registration_mode">
-									<option value="0" ';
-									if($form_values['registration_mode'] == 0)
-									{
-										echo ' selected="selected" ';
-									}
-									echo '>'.$gL10n->get('SYS_DEACTIVATED').'</option>
-									<option value="1" ';
-									if($form_values['registration_mode'] == 1)
-									{
-										echo ' selected="selected" ';
-									}
-									echo '>'.$gL10n->get('ORG_FAST_REGISTRATION').'</option>
-									<option value="2" ';
-									if($form_values['registration_mode'] == 2)
-									{
-										echo ' selected="selected" ';
-									}
-									echo '>'.$gL10n->get('ORG_ADVANCED_REGISTRATION').'</option>
-								</select>
-							</dd>
+							<dd>';
+								$selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['registration_mode'], 'registration_mode');
+							echo '</dd>
 						</dl>
 					</li>
 					<li class="smallFontSize">'.$gL10n->get('ORG_REGISTRATION_MODE').'</li>
@@ -596,22 +578,10 @@ echo '
 					<li>
                         <dl>
                             <dt><label for="captcha_type">'.$gL10n->get('ORG_CAPTCHA_TYPE').':</label></dt>
-                            <dd>
-                                <select size="1" id="captcha_type" name="captcha_type">
-                                    <option value="pic" ';
-                                    if($form_values['captcha_type'] == 'pic')
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('ORG_CAPTCHA_TYPE_PIC').'</option>
-                                    <option value="calc" ';
-                                    if($form_values['captcha_type'] == 'calc')
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('ORG_CAPTCHA_TYPE_CALC').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['captcha_type'], 'captcha_type');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">
@@ -1385,6 +1355,30 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
+					<li>
+                        <dl>
+                            <dt><label for="mail_character_encoding">'.$gL10n->get('MAI_CHARACTER_ENCODING').':</label></dt>
+                            <dd>';
+								$selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_character_encoding'], 'mail_character_encoding');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_CHARACTER_ENCODING_DESC').'</li>
+					<li>
+						<dl>
+							<dt><label for="mail_editor_registered_users">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS').':</label></dt>
+							<dd>
+								<input type="checkbox" id="mail_editor_registered_users" name="mail_editor_registered_users" ';
+								if(isset($form_values['mail_editor_registered_users']) && $form_values['mail_editor_registered_users'] == 1)
+								{
+									echo ' checked="checked" ';
+								}
+								echo ' value="1" />
+							</dd>
+						</dl>
+					</li>
+					<li class="smallFontSize">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS_DESC').'</li>
                 </ul>
 				<br />
 				<div class="formSubmit">	
@@ -1937,15 +1931,15 @@ function getElementsFromFile($filepath)
 
 // gibt ein Menue fuer die Einstellungen des Grußkartenmoduls aus
 // Uebergabe:
-//             $data_array            .. Daten fuer die Einstellungen in einem Array
-//            $name                .. Name des Drop down Menues
-//            $first_value        .. der Standart Wert oder eingestellte Wert vom Benutzer
-//            $width                .. die Groeße des Menues
-//            $schowfont            .. wenn gesetzt werden   die Menue Eintraege mit der übergebenen Schriftart dargestellt   (Darstellung der Schriftarten)
-//            $showcolor            .. wenn gesetzt bekommen die Menue Eintraege einen farbigen Hintergrund (Darstellung der Farben)
-function getMenueSettings($data_array,$name,$first_value,$width,$schowfont,$showcolor)
+//             $data_array     .. Daten fuer die Einstellungen in einem Array
+//            $name            .. Name des Drop down Menues
+//            $first_value     .. der Standart Wert oder eingestellte Wert vom Benutzer
+//            $width           .. die Groeße des Menues
+//            $showFont        .. wenn gesetzt werden   die Menue Eintraege mit der übergebenen Schriftart dargestellt   (Darstellung der Schriftarten)
+//            $showColor       .. wenn gesetzt bekommen die Menue Eintraege einen farbigen Hintergrund (Darstellung der Farben)
+function getMenueSettings($data_array,$name,$first_value,$width,$showFont,$showColor)
 {
-	$temp_data = "";
+	$temp_data = '';
 	$temp_data .=  '<select size="1" id="'.$name.'" name="'.$name.'" style="width:'.$width.'px;">';
 	for($i=0; $i<count($data_array);$i++)
 	{
@@ -1962,21 +1956,21 @@ function getMenueSettings($data_array,$name,$first_value,$width,$schowfont,$show
 		{
 			$name = $data_array[$i];
 		}
-		if($name != "")
+		if($name != '')
 		{
-			if (strcmp($data_array[$i],$first_value) == 0 && $schowfont != "true" && $showcolor != "true")
+			if (strcmp($data_array[$i],$first_value) == 0 && $showFont != "true" && $showColor != "true")
 			{
 				$temp_data .= '<option value="'.$data_array[$i].'" selected="selected">'.$name.'</option>';
 			}
-			else if($schowfont != "true" && $showcolor != "true")
+			else if($showFont != "true" && $showColor != "true")
 			{
 				$temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
 			}
-			else if (strcmp($data_array[$i],$first_value) == 0 && $showcolor != "true")
+			else if (strcmp($data_array[$i],$first_value) == 0 && $showColor != 'true')
 			{
 				$temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="font-family:'.$name.';">'.$name.'</option>';
 			}
-			else if($showcolor != "true")
+			else if($showColor != "true")
 			{
 				$temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
 			}
