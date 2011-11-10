@@ -117,7 +117,7 @@ class FunctionClass
 	{
 		foreach($first_value_array as $item)
 		{
-			echo '<input type="hidden" name="'.$item.'" value="" />';
+			echo '<input type="hidden" name="'.$item[0].'" value="'.$item[1].'" />';
 		}
 	}
 

@@ -325,15 +325,15 @@ echo '
                         <tr>
                             <td>';
 								echo $funcClass->getMenueSettings($templates,"ecard[template_name]",$gPreferences['ecard_template'],"120","false");
-                                array_push($first_value_array,"ecard[template_name]");
+                                array_push($first_value_array,array("ecard[template_name]",$gPreferences['ecard_template']));
                             echo '</td>
                             <td>';
 								echo $funcClass->getMenueSettings($fonts,"ecard[schriftart_name]",$gPreferences['ecard_text_font'],"120","true");
-                                array_push($first_value_array,"ecard[schriftart_name]");
+                                array_push($first_value_array,array("ecard[schriftart_name]",$gPreferences['ecard_text_font']));
                             echo '</td>
                             <td>';
 								echo $funcClass->getMenueSettings($font_sizes,"ecard[schrift_size]",$gPreferences['ecard_text_size'],"50","false");
-                                array_push($first_value_array,"ecard[schrift_size]");
+                                array_push($first_value_array,array("ecard[schrift_size]",$gPreferences['ecard_text_size']));
                             echo  '</td>
                         </tr>
                         <tr>
@@ -344,14 +344,14 @@ echo '
                         <tr>
                             <td>';
 								echo $funcClass->getColorSettings($font_colors,"ecard[schrift_farbe]","8",$gPreferences['ecard_text_color']);
-                                array_push($first_value_array,"ecard[schrift_farbe]");
+                                array_push($first_value_array,array("ecard[schrift_farbe]",$gPreferences['ecard_text_color']));
                             echo '</td>
                             <td colspan="2" style="padding-left:40px;">
                                 <b>'.$gL10n->get("SYS_BOLD").': </b><input name="Bold" value="bold" onclick="javascript: ecardJS.getSetting(\'ecard[schrift_style_bold]\',$(this).attr(\'checked\') ? this.value : \'\');" type="checkbox" />
                                 <i>'.$gL10n->get("SYS_ITALIC").': </i><input name="Italic" value="italic" onclick="javascript: ecardJS.getSetting(\'ecard[schrift_style_italic]\',$(this).attr(\'checked\') ? this.value : \'\');" type="checkbox" />
                             </td>';
-							array_push($first_value_array,"ecard[schrift_style_bold]");
-							array_push($first_value_array,"ecard[schrift_style_italic]");
+							array_push($first_value_array,array("ecard[schrift_style_bold]",""));
+							array_push($first_value_array,array("ecard[schrift_style_italic]",""));
                         echo '</tr>
                     </table>';
                     $funcClass->getFirstSettings($first_value_array);                    
