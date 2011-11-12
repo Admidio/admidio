@@ -93,7 +93,7 @@ $orga_preferences = array(
     'max_email_attachment_size'    => '1024',
 	'mail_bcc_count'			   => '50',
 	'mail_character_encoding'      => 'utf-8',
-	'mail_editor_registered_users' => '1',
+	'mail_html_registered_users' => '1',
     'mail_sendmail_address'        => '',
 
     // Systemmail

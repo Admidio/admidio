@@ -1367,10 +1367,10 @@ echo '
                     <li class="smallFontSize">'.$gL10n->get('MAI_CHARACTER_ENCODING_DESC').'</li>
 					<li>
 						<dl>
-							<dt><label for="mail_editor_registered_users">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS').':</label></dt>
+							<dt><label for="mail_html_registered_users">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS').':</label></dt>
 							<dd>
-								<input type="checkbox" id="mail_editor_registered_users" name="mail_editor_registered_users" ';
-								if(isset($form_values['mail_editor_registered_users']) && $form_values['mail_editor_registered_users'] == 1)
+								<input type="checkbox" id="mail_html_registered_users" name="mail_html_registered_users" ';
+								if(isset($form_values['mail_html_registered_users']) && $form_values['mail_html_registered_users'] == 1)
 								{
 									echo ' checked="checked" ';
 								}

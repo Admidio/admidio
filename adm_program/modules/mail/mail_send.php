@@ -21,7 +21,7 @@ require_once('../../libs/htmlawed/htmlawed.php');
 // Initialize and check the parameters
 $postRoleId = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$_POST['subject'] = admFuncVariableIsValid($_GET, 'subject', 'string', '');
+$_POST['subject'] = admFuncVariableIsValid($_GET, 'subject', 'string', $_POST['subject']);
 
 if ($gPreferences['enable_mail_module'] != 1)
 {
@@ -35,6 +35,8 @@ if ($gCurrentUser->getValue('usr_id') > 0)
 	$_POST['name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
 	$_POST['mailfrom'] = $gCurrentUser->getValue('EMAIL');
 }
+
+$_SESSION['mail_request'] = $_REQUEST;
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 
@@ -178,7 +180,7 @@ else
     $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')));
 }
 
-if ($getUserId > 0)
+if ($getUserId == 0)
 {
 	// wurde kein Benutzer uebergeben, dann muss Rolle uebergeben werden
     if ($postRoleId == 0)
@@ -225,18 +227,18 @@ else
     if(isset($_POST['show_members']) && $_POST['show_members'] == 1)
     {
         // Ehemalige
-        $sqlConditions = ' AND mem_end < "'.DATE_NOW.'" ';
+        $sqlConditions = ' AND mem_end < \''.DATE_NOW.'\' ';
     }
     if(isset($_POST['show_members']) && $_POST['show_members'] == 2)
     {
         // Ehemalige und Aktive
-        $sqlConditions = ' AND mem_begin > "'.DATE_NOW.'" ';
+        $sqlConditions = ' AND mem_begin > \''.DATE_NOW.'\' ';
     }
     else
     {
         // Aktive
-        $sqlConditions = ' AND mem_begin  <= "'.DATE_NOW.'"
-                           AND mem_end     > "'.DATE_NOW.'" ';
+        $sqlConditions = ' AND mem_begin  <= \''.DATE_NOW.'\'
+                           AND mem_end     > \''.DATE_NOW.'\' ';
     }
     
     $sql   = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, 
@@ -247,7 +249,7 @@ else
                  AND LENGTH(email.usd_value) > 0
 				JOIN '.TBL_USER_FIELDS.' as field
 				  ON field.usf_id = email.usd_usf_id
-				 AND field.usf_type = "EMAIL"
+				 AND field.usf_type = \'EMAIL\'
                 LEFT JOIN '. TBL_USER_DATA. ' as last_name
                   ON last_name.usd_usr_id = usr_id
                  AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
@@ -300,14 +302,23 @@ if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
     }
 }
 
-//Den Text fuer die Mail aufbereiten
-if ($role->getValue('rol_id') > 0)
+// prepare body of email with note of sender and homepage
+if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 {
-    $mail_body = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE', $_POST['name'], $gCurrentOrganization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
+    $senderName = '<a href="mailto:'.$_POST['mailfrom'].'">'.$_POST['name'].'</a>';
 }
 else
 {
-    $mail_body = $gL10n->get('MAI_EMAIL_SEND_TO_USER', $_POST['name'], $gCurrentOrganization->getValue('org_homepage'), $_POST['mailfrom'], $role->getValue('rol_name'));
+    $senderName = $_POST['name'].' ('.$_POST['mailfrom'].')';
+}
+
+if ($role->getValue('rol_id') > 0)
+{
+    $mail_body = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE', $senderName, $gCurrentOrganization->getValue('org_homepage'), $role->getValue('rol_name'));
+}
+else
+{
+    $mail_body = $gL10n->get('MAI_EMAIL_SEND_TO_USER', $senderName, $gCurrentOrganization->getValue('org_homepage'));
 }
 
 if (!$gValidLogin)
@@ -315,13 +326,15 @@ if (!$gValidLogin)
     $mail_body = $mail_body. "\n".$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
 }
 
+$mail_body = $mail_body. "\n*********************************************************************************************\n\n";
+
 // make html in mail body secure
 $_POST['mail_body'] = htmLawed(stripslashes($_POST['mail_body']));
 
-$mail_body = $mail_body. "\n\n\n". $_POST['mail_body'];
+$mail_body = $mail_body. $_POST['mail_body'];
 
 // commit mail body to mail object
-if($gValidLogin == true && $gPreferences['mail_editor_registered_users'] == 1)
+if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 {
     $email->sendDataAsHtml();
     $email->setText($mail_body);
