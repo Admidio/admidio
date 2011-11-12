@@ -16,13 +16,17 @@
  * body      - Inhalt der E-Mail
  * carbon_copy - 1 (Default) Checkbox "Kopie an mich senden" ist gesetzt
  *             - 0 Checkbox "Kopie an mich senden" ist NICHT gesetzt
+ * show_members : 0 - (Default) show active members of role
+ *                1 - show former members of role
+ *                2 - show active and former members of role
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/classes/email.php');
+require_once('../../system/classes/form_elements.php');
 
-if($gValidLogin == true && $gPreferences['mail_editor_registered_users'] == 1)
+if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 {
 	// create an object of ckeditor and replace textarea-element
 	require_once('../../system/classes/ckeditor_special.php');
@@ -32,13 +36,14 @@ if($gValidLogin == true && $gPreferences['mail_editor_registered_users'] == 1)
 $formerMembers = 0;
 
 // Initialize and check the parameters
-$getRoleId     = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
-$getUserId     = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getRoleName   = admFuncVariableIsValid($_GET, 'role_name', 'string', '');
-$getCategory   = admFuncVariableIsValid($_GET, 'cat', 'string', '');
-$getSubject    = admFuncVariableIsValid($_GET, 'subject', 'string', '');
-$getBody       = admFuncVariableIsValid($_GET, 'body', 'string', '');
-$getCarbonCopy = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', 1);
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
+$getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
+$getRoleName    = admFuncVariableIsValid($_GET, 'role_name', 'string', '');
+$getCategory    = admFuncVariableIsValid($_GET, 'cat', 'string', '');
+$getSubject     = admFuncVariableIsValid($_GET, 'subject', 'string', '');
+$getBody        = admFuncVariableIsValid($_GET, 'body', 'string', '');
+$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', 1);
+$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
 // Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
@@ -160,6 +165,8 @@ else
     $form_values['subject']      = $getSubject;
     $form_values['mail_body']    = $getBody;
     $form_values['rol_id']       = '';
+    $form_values['carbon_copy']  = $getCarbonCopy;
+    $form_values['show_members'] = $getShowMembers;
 }
 
 // Seiten fuer Zuruecknavigation merken
@@ -372,13 +379,10 @@ echo '
 							<li>
 								<dl id="admShowMembers">
 									<dt>&nbsp;</dt>
-									<dd>
-										<select size="1" id="show_members" name="show_members">
-											<option selected="selected" value="0">'.$gL10n->get('LST_ACTIVE_MEMBERS').'</option>
-											<option value="1">'.$gL10n->get('LST_FORMER_MEMBERS').'</option>
-											<option value="2">'.$gL10n->get('LST_ACTIVE_FORMER_MEMBERS').'</option>
-										</select>
-									</dd>
+									<dd>';
+        								$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+        								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['show_members'], 'show_members');
+									echo '</dd>
 								</dl>
 							</li>';
 						}
@@ -423,7 +427,7 @@ echo '
 								<dt>&nbsp;</dt>
 								<dd>
 									<input type="checkbox" id="carbon_copy" name="carbon_copy" value="1" ';
-									if ($getCarbonCopy == 1)
+									if (isset($form_values['carbon_copy']) && $form_values['carbon_copy'] == 1)
 									{
 										echo ' checked="checked" ';
 									}
@@ -477,7 +481,7 @@ echo '
 						echo '
 						<li>
 							<div>';
-									if($gValidLogin == true && $gPreferences['mail_editor_registered_users'] == 1)
+									if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 									{
 										echo $ckEditor->createEditor('mail_body', $form_values['mail_body']);
 									}

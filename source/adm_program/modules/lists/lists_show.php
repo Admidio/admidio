@@ -13,9 +13,9 @@
  *          Wird keine ID uebergeben, wird die Default-Konfiguration angezeigt
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
  * start  : Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen 
- * show_members : 0 - (Default) aktive Mitglieder der Rolle anzeigen
- *                1 - Ehemalige Mitglieder der Rolle anzeigen
- *                2 - Aktive und ehemalige Mitglieder der Rolle anzeigen
+ * show_members : 0 - (Default) show active members of role
+ *                1 - show former members of role
+ *                2 - show active and former members of role
  *
  *****************************************************************************/
 
@@ -253,9 +253,9 @@ if($getMode != 'csv')
             {
                 echo '<li>
                     <span class="iconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$getRoleId.'"><img
+                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$getRoleId.'&show_members='.$getShowMembers.'"><img
                         src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"  title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$getRoleId.'">'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'</a>
+                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$getRoleId.'&show_members='.$getShowMembers.'">'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'</a>
                     </span>
                 </li>';
             }

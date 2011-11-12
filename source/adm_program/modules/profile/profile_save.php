@@ -124,7 +124,8 @@ foreach($gProfileFields->mProfileFields as $field)
 			|| $field->getValue('usf_name_intern') == 'TWITTER'
 			|| $field->getValue('usf_name_intern') == 'XING')
 			{
-				if(strValidCharacters($_POST[$post_id], 'url'))
+				if(strValidCharacters($_POST[$post_id], 'url')
+    			&& strpos($_POST[$post_id], '/') !== false)
 				{
 					if(strrpos($_POST[$post_id], '/posts') > 0)
 					{

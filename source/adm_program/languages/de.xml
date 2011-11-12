@@ -26,6 +26,8 @@
     <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="todo">Betreff &amp; Anhang</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="todo">Zeichenkodierung</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="todo">Angabe der Zeichenkodierung in der eine E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE" development="changed" translation="todo">%VAR1% hat an die Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
+    <text id="MAI_EMAIL_SEND_TO_USER" development="changed" translation="todo">%VAR1% hat Dir von %VAR2% folgende E-Mail geschickt:</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="todo">HTML-Mails</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="todo">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</text>
     <text id="MAI_YOUR_EMAIL" development="new" translation="todo">Deine E-Mail</text>
@@ -544,8 +546,6 @@
     <text id="MAI_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="todo">Anzahl der BCC Empfänger</text>
     <text id="MAI_COUNT_BCC_DESC" development="new" translation="todo">Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="todo">%VAR1% hat an die Rolle %VAR4% von %VAR2% folgende E-Mail geschickt:\nEine Antwort kannst Du an %VAR3% schicken.</text>
-    <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="todo">%VAR1% hat Dir von %VAR2% folgende E-Mail geschickt:\nEine Antwort kannst Du an %VAR3% schicken.</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>

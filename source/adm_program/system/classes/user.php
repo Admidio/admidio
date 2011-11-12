@@ -349,6 +349,12 @@ class User extends TableUsers
         $fields_changed = $this->columnsValueChanged;
 		$this->db->startTransaction();
 
+		// if value of a field changed then update timestamp of user object
+		if($this->mProfileFieldsData->columnsValueChanged)
+		{
+            $this->columnsValueChanged = true;
+		}
+
         parent::save($updateFingerPrint);
 		
 		// save data of all user fields

@@ -268,7 +268,7 @@ private function prepareHeader()
     $this->mail_properties = '';
     foreach ($this->headerOptions as $key => $value)
     {
-        $this->mail_properties = $this->mail_properties. $key. ": ". $value. "\n";
+        $this->mail_properties = $this->mail_properties. $key. ': '. $value. "\n";
     }
     //Den letzten Zeilenumbruch im Header entsorgen.
     $this->mail_properties = substr($this->mail_properties,0,strlen($this->mail_properties)-1);
@@ -308,7 +308,7 @@ private function prepareBody()
     // bei multipart-Mails muss auch der Content-Type fuer Text explizit gesetzt werden
     if($this->sendAsHTML || isset($this->attachments))
     {
-	  	$this->mail_body = $this->mail_body. "--". $this->mailBoundary.
+	  	$this->mail_body = $this->mail_body."--". $this->mailBoundary.
 	    				   "\nContent-Type: text/plain; charset=".$this->charset."\nContent-Transfer-Encoding: 7bit\n\n";
     }
 
@@ -327,7 +327,7 @@ private function prepareBody()
 		}
 		$this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. 
 					   	   "\nContent-Type: text/html; charset=".$this->charset."\nContent-Transfer-Encoding: 7bit\n\n";
-        $this->mail_body = $this->mail_body. $this->text."\n\n";
+        $this->mail_body = $this->mail_body. nl2br($this->text)."\n\n";
     }
 
     // Jetzt die Attachments hinzufuegen...
@@ -390,9 +390,9 @@ private function prepareBody()
         // Das Ende der Mail mit der Boundary kennzeichnen...
         if($this->mailBoundary != $this->mailBoundaryRelated)
         {
-        	$this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. "--\n\n";
+        	$this->mail_body = $this->mail_body. '--'. $this->mailBoundaryRelated. "--\n\n";
         }
-        $this->mail_body = $this->mail_body. "--". $this->mailBoundary. "--";
+        $this->mail_body = $this->mail_body. '--'. $this->mailBoundary. '--';
     }
 
 	// if character encoding is iso-8859-1 than decode our utf-8 string to iso-8859-1
@@ -500,7 +500,7 @@ public function sendEmail()
     // Eventuell noch eine Kopie an den Absender verschicken:
     if ($this->copyToSender)
     {
-        $this->text = "*******************************************************************\n\n". $this->text;
+        $this->text = "********************************************************************************\n\n". $this->text;
         $this->text = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL').":\n". $this->text;
 
          //Falls das listRecipientsFlag gesetzt ist werden in der Kopie

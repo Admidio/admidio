@@ -42,6 +42,7 @@ class ProfileFields
 	protected $mUserId;					// UserId of the current user of this object
 	public 	  $mDb;						// db object must public because of session handling
     protected $noValueCheck;    		// if true, than no value will be checked if method setValue is called
+    public    $columnsValueChanged;     // flag if a value of one field had changed
 
     // Constructor
     public function __construct(&$db, &$organization)
@@ -51,12 +52,14 @@ class ProfileFields
 		$this->readProfileFields();
 		$this->mUserId = 0;
 		$this->noValueCheck = false;
+		$this->columnsValueChanged = false;
     }
 	
 	public function clearUserData()
 	{
 		$this->mUserData = array();
 		$this->mUserId = 0;
+		$this->columnsValueChanged = false;
 	}
 	
 	// returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
@@ -327,6 +330,7 @@ class ProfileFields
 			}
 		}
 
+        $this->columnsValueChanged = false;
 		$this->mUserId = $userId;
 		$this->mDb->endTransaction();
 	}
@@ -335,6 +339,7 @@ class ProfileFields
     public function setValue($fieldNameIntern, $fieldValue)
     {
         global $gPreferences;
+        $returnCode = false;
 
         if(strlen($fieldValue) > 0)
         {
@@ -399,17 +404,22 @@ class ProfileFields
 		// first check if user has a data object for this field and then set value of this user field
 		if(array_key_exists($this->mProfileFields[$fieldNameIntern]->getValue('usf_id'), $this->mUserData))
 		{
-			return $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_value', $fieldValue);
+			$returnCode = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_value', $fieldValue);
 		}
 		elseif(isset($this->mProfileFields[$fieldNameIntern]) == true && strlen($fieldValue) > 0)
 		{
 			$this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')] = new TableAccess($this->mDb, TBL_USER_DATA, 'usd');
 			$this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_usf_id', $this->mProfileFields[$fieldNameIntern]->getValue('usf_id'));
 			$this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_usr_id', $this->mUserId);
-			return $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_value', $fieldValue);
+			$returnCode = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_value', $fieldValue);
+		}
+		
+		if($returnCode && $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->columnsValueChanged)
+		{
+            $this->columnsValueChanged = true;
 		}
 
-		return false;
+		return $returnCode;
     }
 }
 ?>
