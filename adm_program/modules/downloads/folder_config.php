@@ -185,8 +185,8 @@ echo '
                 echo ' style="display: none;" ';
             }
             echo '>
-            <div class="groupBoxHeadline">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC').'</div>
-            <div class="groupBoxBody" ><p>'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS').'</p>
+            <div class="groupBoxHeadline">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS').'</div>
+            <div class="groupBoxBody" ><p>'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC').'</p>
                 <div style="text-align: left; float: left;">
                     <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</div>
                     <div>

@@ -745,28 +745,10 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="enable_announcements_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>
-                                <select size="1" id="enable_announcements_module" name="enable_announcements_module">
-                                    <option value="0" ';
-                                    if($form_values['enable_announcements_module'] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_DEACTIVATED').'</option>
-                                    <option value="1" ';
-                                    if($form_values['enable_announcements_module'] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_ACTIVATED').'</option>
-                                    <option value="2" ';
-                                    if($form_values['enable_announcements_module'] == 2)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_announcements_module'], 'enable_announcements_module');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
@@ -841,56 +823,20 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="enable_photo_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>
-                                <select size="1" id="enable_photo_module" name="enable_photo_module">
-                                    <option value="0" ';
-                                    if($form_values['enable_photo_module'] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_DEACTIVATED').'</option>
-                                    <option value="1" ';
-                                    if($form_values['enable_photo_module'] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_ACTIVATED').'</option>
-                                    <option value="2" ';
-                                    if($form_values['enable_photo_module'] == 2)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_photo_module'], 'enable_photo_module');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="photo_show_mode">'.$gL10n->get('PHO_DISPLAY_PHOTOS').':</label></dt>
-                            <dd>
-                                <select size="1" id="photo_show_mode" name="photo_show_mode">
-                                    <option value="0" ';
-                                    if($form_values['photo_show_mode'] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('PHO_POPUP_WINDOW').'</option>
-                                    <option value="1" ';
-                                    if($form_values['photo_show_mode'] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('PHO_COLORBOX').'</option>
-                                    <option value="2" ';
-                                    if($form_values['photo_show_mode'] == 2)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('PHO_SAME_WINDOW').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('0' => $gL10n->get('PHO_POPUP_WINDOW'), '1' => $gL10n->get('PHO_COLORBOX'), '2' => $gL10n->get('PHO_SAME_WINDOW'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['photo_show_mode'], 'photo_show_mode');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PHO_DISPLAY_PHOTOS_DESC').'</li>
@@ -1118,28 +1064,10 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="enable_guestbook_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>
-                                <select size="1" id="enable_guestbook_module" name="enable_guestbook_module">
-                                    <option value="0" ';
-                                    if($form_values['enable_guestbook_module'] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_DEACTIVATED').'</option>
-                                    <option value="1" ';
-                                    if($form_values['enable_guestbook_module'] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_ACTIVATED').'</option>
-                                    <option value="2" ';
-                                    if($form_values['enable_guestbook_module'] == 2)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_guestbook_module'], 'enable_guestbook_module');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
@@ -1170,28 +1098,10 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="enable_guestbook_moderation">'.$gL10n->get('GBO_GUESTBOOK_MODERATION').':</label></dt>
-                            <dd>
-                                <select size="1" id="enable_guestbook_moderation" name="enable_guestbook_moderation">
-                                    <option value="0" ';
-                                    if($form_values['enable_guestbook_moderation'] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_NOBODY').'</option>
-                                    <option value="1" ';
-                                    if($form_values['enable_guestbook_moderation'] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('GBO_ONLY_VISITORS').'</option>
-                                    <option value="2" ';
-                                    if($form_values['enable_guestbook_moderation'] == 2)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_ALL').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('0' => $gL10n->get('SYS_NOBODY'), '1' => $gL10n->get('GBO_ONLY_VISITORS'), '2' => $gL10n->get('SYS_ALL'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_guestbook_moderation'], 'enable_guestbook_moderation');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('GBO_GUESTBOOK_MODERATION_DESC').'</li>
@@ -1657,25 +1567,10 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="profile_photo_storage">'.$gL10n->get('PRO_LOCATION_PROFILE_PICTURES').':</label></dt>
-                            <dd>
-                                <select size="1" id="profile_photo_storage" name="profile_photo_storage">
-                                    <option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>
-                                    <option value="0" ';
-                                            if($form_values['profile_photo_storage'] == 0)
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                            echo '>'.$gL10n->get('SYS_DATABASE').'
-                                    </option>
-                                    <option value="1" ';
-                                            if($form_values['profile_photo_storage'] == 1)
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                            echo '>'.$gL10n->get('SYS_FOLDER').'
-                                    </option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['profile_photo_storage'], 'profile_photo_storage', true);
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PRO_LOCATION_PROFILE_PICTURES_DESC').'</li>
@@ -1708,28 +1603,10 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="enable_dates_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>
-                                <select size="1" id="enable_dates_module" name="enable_dates_module">
-                                    <option value="0" ';
-                                    if($form_values['enable_dates_module'] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_DEACTIVATED').'</option>
-                                    <option value="1" ';
-                                    if($form_values['enable_dates_module'] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_ACTIVATED').'</option>
-                                    <option value="2" ';
-                                    if($form_values['enable_dates_module'] == 2)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_dates_module'], 'enable_dates_module');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
@@ -1818,28 +1695,10 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="enable_weblinks_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>
-                                <select size="1" id="enable_weblinks_module" name="enable_weblinks_module">
-                                    <option value="0" ';
-                                    if($form_values['enable_weblinks_module'] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_DEACTIVATED').'</option>
-                                    <option value="1" ';
-                                    if($form_values['enable_weblinks_module'] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('SYS_ACTIVATED').'</option>
-                                    <option value="2" ';
-                                    if($form_values['enable_weblinks_module'] == 2)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('ORG_ONLY_FOR_REGISTERED_USER').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_weblinks_module'], 'enable_weblinks_module');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
@@ -1856,22 +1715,10 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="weblinks_target">'.$gL10n->get('LNK_LINK_TARGET').':</label></dt>
-                            <dd>
-                                <select size="1" id="weblinks_target" name="weblinks_target">
-                                    <option value="_self"';
-                                    if($form_values['weblinks_target'] == "_self")
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('LNK_SAME_WINDOW').'</option>
-                                    <option value="_blank"';
-                                    if($form_values['weblinks_target'] == '_blank')
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get('LNK_NEW_WINDOW').'</option>
-                                </select>
-                            </dd>
+                            <dd>';
+								$selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['weblinks_target'], 'weblinks_target');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('LNK_LINK_TARGET_DESC').'</li>
