@@ -19,6 +19,8 @@ class FormElements
 	// createFirstEntry : First entry of select box will be "Please choose"
 	public static function generateDynamicSelectBox($entryArray, $defaultEntry = '', $fieldId = 'admSelectBox', $createFirstEntry = false)
 	{
+		global $gL10n;
+
 		$selectBoxHtml = '<select size="1" id="'.$fieldId.'" name="'.$fieldId.'">';
 			if($createFirstEntry == true)
 			{
