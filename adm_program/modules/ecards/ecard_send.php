@@ -40,9 +40,10 @@ if(!$gValidLogin)
 // ruf die Funktion auf die alle Post und Get Variablen parsed
 $funcClass->getVars();
 $ecard['email_recipient'] = admStrToLower($ecard['email_recipient']);
-$ecard['email_sender']    = admStrToLower($ecard['email_sender']);
+$ecard['name_sender']	  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+$ecard['email_sender']	  = admStrToLower($gCurrentUser->getValue('EMAIL'));
 $ecard_send = false;
-// Wenn versucht wird die Grußkarte zu versenden werden die notwendigen FElder geprüft und wenn alles okay ist wird das Template geparsed und die Grußkarte weggeschickt
+// Wenn versucht wird die Grußkarte zu versenden werden die notwendigen Felder geprüft und wenn alles okay ist wird das Template geparsed und die Grußkarte weggeschickt
 
 // Wenn die Felder Name E-mail von dem Empaenger und Sender nicht leer und gültig sind
 if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacters($ecard['email_sender'], 'email')
@@ -64,9 +65,9 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 	else
 	{
 		// Es wird geprüft ob der Benutzer der ganzen Rolle eine Grußkarte schicken will
-		$rolle = str_replace(array('Rolle_','@rolle.com'),'',$ecard['email_recipient']);
+		$rolId = $ecard['email_rolId'];
 		// Wenn nicht dann Name und Email des Empfaengers zur versand Liste hinzufügen
-		if(!is_numeric($rolle))
+		if(!is_numeric($rolId))
 		{
 			array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
 			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
@@ -86,6 +87,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 		// Wenn schon dann alle Namen und die duzugehörigen Emails auslesen und in die versand Liste hinzufügen
 		else
 		{
+			list($rol,$homepage) = split("[\@]",$ecard['email_recipient']);
 			$sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
 						   email.usd_value as email, rol_name
 					  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
@@ -99,7 +101,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 					  LEFT JOIN '. TBL_USER_DATA. ' as first_name
 						ON first_name.usd_usr_id = usr_id
 					   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-					 WHERE rol_id           = '. $rolle. '
+					 WHERE rol_id           = '. $rolId. '
 					   AND rol_cat_id       = cat_id
 					   AND cat_org_id       = '. $gCurrentOrganization->getValue('org_id'). '
 					   AND mem_rol_id       = rol_id
@@ -119,7 +121,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 				if($i<1)
 				{
 					$firstvalue_name  = 'Rolle: '.$row->rol_name;
-					$firstvalue_email = '-';
+					$firstvalue_email = '@'.$homepage;
 
 				}
 				if($row->first_name != '' && $row->last_name != '' && $row->email !='')
