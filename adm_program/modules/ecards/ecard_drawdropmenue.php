@@ -167,14 +167,21 @@ elseif($gValidLogin && strlen($getUserId) > 0)
         }
     }
     elseif($getUserId != 'bw')
-    {		
-		$parseUrl = parse_url(trim($gCurrentOrganization->getValue('org_homepage'))); 
-		$newUrl = trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2)));
-		$newUrlArray = split("[\.]",$newUrl);
-		$count = count($newUrlArray);
-		$homepage = "localhost.com";
-		if( $count >= 2 )
-			$homepage = $newUrlArray[$count-2].".".$newUrlArray[$count-1];
+    {
+		// Rollen Domain von der angegebenen Hompage parsen oder falls nicht vorhanden standard nehmen
+		$orgHP = trim($gCurrentOrganization->getValue('org_homepage'));
+		$rolDomain = "organisation.com";
+		if( $orgHP != "" )
+		{
+			$parseUrl = parse_url($orgHP); 
+			$newUrl = trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2)));
+			$newUrlArray = split("[\.]",$newUrl);
+			$count = count($newUrlArray);
+			
+			if( $count >= 2 )
+				$rolDomain = $newUrlArray[$count-2].".".$newUrlArray[$count-1];
+		}
+		
 		list ($rolName, $rolId) = split("[\_]", $getUserId);
 		if( $rolId != "" )
 		{
@@ -192,7 +199,7 @@ elseif($gValidLogin && strlen($getUserId) > 0)
 			$getUserId = $row->rol_name;
 		}
         echo '<input type="hidden" name="ecard[name_recipient]" value="die gesamte Rolle" />
-			  <input type="hidden" name="ecard[email_recipient]" value="'.$getUserId.'@'.$homepage.'" />
+			  <input type="hidden" name="ecard[email_recipient]" value="'.$getUserId.'@'.$rolDomain.'" />
 			  <input type="hidden" name="ecard[email_rolId]" value="'.$rolId.'" />';
     }
 }
