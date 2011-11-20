@@ -290,10 +290,10 @@ class FunctionClass
 	// Uebergabe:
 	//      $ecard              .. array mit allen Informationen die in den inputs der Form gespeichert sind
 	//      $ecard_html_data    .. geparste Daten vom Template
-	//      $sender_name        .. der Name des Senders
-	//      $sender_email       .. die Email des Senders
 	//      $empfaenger_name    .. der Name des Empfaengers
 	//      $empfaenger_email   .. die Email des Empfaengers
+	//		$cc_emfaenger		.. eine Liste der CC-Empfaenger
+	//		$photo_server_path  .. der Pfad wo die Bilder in der Grußkarte am Server liegen
 	function sendEcard($ecard,$ecard_html_data,$empfaenger_name,$empfaenger_email,$cc_empfaenger, $photo_server_path) 
 	{
 		global $gPreferences;

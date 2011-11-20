@@ -167,8 +167,33 @@ elseif($gValidLogin && strlen($getUserId) > 0)
         }
     }
     elseif($getUserId != 'bw')
-    {
-        echo '<input type="hidden" name="ecard[name_recipient]" value="die gesamte Rolle" /><input type="hidden" name="ecard[email_recipient]" value="'.$getUserId.'@rolle.com" />';
+    {		
+		$parseUrl = parse_url(trim($gCurrentOrganization->getValue('org_homepage'))); 
+		$newUrl = trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2)));
+		$newUrlArray = split("[\.]",$newUrl);
+		$count = count($newUrlArray);
+		$homepage = "localhost.com";
+		if( $count >= 2 )
+			$homepage = $newUrlArray[$count-2].".".$newUrlArray[$count-1];
+		list ($rolName, $rolId) = split("[\_]", $getUserId);
+		if( $rolId != "" )
+		{
+			$sql = 'SELECT rol_name 
+					 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+					WHERE rol_mail_this_role > 0
+					  AND rol_valid  = 1
+					  AND rol_cat_id = cat_id
+					  AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+					  AND rol_id = '.$rolId.'
+					ORDER BY cat_sequence, rol_name ';
+			
+			$result = $gDb->query($sql);
+			$row = $gDb->fetch_object($result);
+			$getUserId = $row->rol_name;
+		}
+        echo '<input type="hidden" name="ecard[name_recipient]" value="die gesamte Rolle" />
+			  <input type="hidden" name="ecard[email_recipient]" value="'.$getUserId.'@'.$homepage.'" />
+			  <input type="hidden" name="ecard[email_rolId]" value="'.$rolId.'" />';
     }
 }
 // Wenn der User sich entschliesst diese Grusskarte an einen Empfaenger zu senden der nicht
