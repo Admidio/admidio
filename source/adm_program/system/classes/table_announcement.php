@@ -52,7 +52,7 @@ class TableAnnouncement extends TableAccess
         {
 			if($format == 'plain')
 			{
-				$value = html_entity_decode(strStripTags($this->dbColumns['ann_description']));
+				$value = html_entity_decode(strStripTags($this->dbColumns['ann_description']), ENT_QUOTES, 'UTF-8');
 			}
 			else
 			{

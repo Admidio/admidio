@@ -50,7 +50,8 @@ class TableAccess
         $this->column_praefix = $columnPraefix;
 
         // wurde eine ID uebergeben, dann Daten aus DB einlesen
-        if(strlen($id) > 0 || (is_numeric($id) && $id > 0))
+        if((is_numeric($id) == false && strlen($id) > 0) 
+        || (is_numeric($id) == true  && $id > 0))
         {
             $this->readData($id);
         }
