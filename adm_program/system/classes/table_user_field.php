@@ -103,7 +103,7 @@ class TableUserField extends TableAccess
         {
 			if($format == 'plain')
 			{
-				$value = html_entity_decode(strStripTags($this->dbColumns['usf_description']));
+				$value = html_entity_decode(strStripTags($this->dbColumns['usf_description']), ENT_QUOTES, 'UTF-8');
 			}
 			else
 			{

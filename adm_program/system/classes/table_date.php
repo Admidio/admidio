@@ -143,7 +143,7 @@ class TableDate extends TableAccess
         {
 			if($format == 'plain')
 			{
-				$value = html_entity_decode(strStripTags($this->dbColumns['dat_description']));
+				$value = html_entity_decode(strStripTags($this->dbColumns['dat_description']), ENT_QUOTES, 'UTF-8');
 			}
 			else
 			{

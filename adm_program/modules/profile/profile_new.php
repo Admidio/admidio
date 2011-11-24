@@ -208,25 +208,25 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
 
         if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 0)
         {
-	        $checkedPosition = 0;
+	        $htmlChecked = '';
 	        if(strlen($user->getValue($fieldNameIntern)) == 0)
 	        {
-	            $checkedPosition = ' checked="checked" ';
+	            $htmlChecked = ' checked="checked" ';
 	        }
-	        $value .= '<input type="radio" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-0" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" value="" '.$checkedPosition.' '.$disabled.' />
+	        $value .= '<input type="radio" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-0" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" value="" '.$htmlChecked.' '.$disabled.' />
 	            <label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-0">---</label>&nbsp;&nbsp;';
         }
 
 		// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
 		foreach($arrListValues as $key => $valueList)
 		{
-	        $checkedPosition = 0;
+	        $htmlChecked = '';
 	        if($user->getValue($fieldNameIntern) == $valueList)
 	        {
-	            $checkedPosition = ' checked="checked" ';
+	            $htmlChecked = ' checked="checked" ';
 	        }
 	        
-	        $value .= '<input type="radio" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-'.$position.'" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" value="'.$position.'" '.$checkedPosition.' '.$disabled.' />
+	        $value .= '<input type="radio" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-'.$position.'" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" value="'.$position.'" '.$htmlChecked.' '.$disabled.' />
 	            <label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-'.$position.'">'.$valueList.'</label>&nbsp;&nbsp;';
 			$position++;
 		}
