@@ -32,7 +32,7 @@ if($gValidLogin && $getMode == 1)
     if (isset($form_values['rol_id']) == '')
     {
         echo '<option value="" selected="selected" disabled="disabled">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>
-        <optgroup label="'.$gL10n->get("ECA_OTHER_RECIPIENT").'">
+        <optgroup label="'.$gL10n->get('ECA_OTHER_RECIPIENT').'">
         <option value="externMail" >'.$gL10n->get("ECA_EXTERNAL_RECIPIENT").'</option>';
     }
     
@@ -62,25 +62,31 @@ if($gValidLogin && $getMode == 1)
     $result = $gDb->query($sql);
     $act_category = '';
     
-    while ($row = $gDb->fetch_object($result))
+    while ($row = $gDb->fetch_array($result))
     {
-        if($act_category != $row->cat_name)
+		// if text is a translation-id then translate it
+		if(strpos($row['cat_name'], '_') == 3)
+		{
+			$row['cat_name'] = $gL10n->get(admStrToUpper($row['cat_name']));
+		}
+
+        if($act_category != $row['cat_name'])
         {
             if(strlen($act_category) > 0)
             {
                 echo '</optgroup>';
             }
-            echo '<optgroup label="'.$row->cat_name.'">';
-            $act_category = $row->cat_name;
+            echo '<optgroup label="'.$row['cat_name'].'">';
+            $act_category = $row['cat_name'];
         }
-        if($gCurrentUser->mailRole($row->rol_id))
+        if($gCurrentUser->mailRole($row['rol_id']))
         {
-            echo '<option value='.$row->rol_id.' ';
-            if ($row->rol_id == isset($form_values['rol_id']))
+            echo '<option value='.$row['rol_id'].' ';
+            if ($row['rol_id'] == isset($form_values['rol_id']))
             {
                 echo 'selected="selected"';
             }
-            echo '>'.$row->rol_name.'</option>';
+            echo '>'.$row['rol_name'].'</option>';
         }
     }
     
@@ -120,7 +126,7 @@ elseif($gValidLogin && $getRoleId > 0 && $getMode == 0 && $getUserId == '0')
 	$menubody     = '</select>';
 	if($gDb->num_rows($result)>0)
 	{
-		$menudata     = '<option value="Rolle_'.$getRoleId.'" style="font-weight:bold;"><b>'.$gL10n->get("ECA_TO_ALL_MEMBERS_FROM_A_ROLE").'</b></option>';
+		$menudata     = '<option value="Rolle_'.$getRoleId.'" style="font-weight:bold;"><b>'.$gL10n->get('ECA_TO_ALL_MEMBERS_FROM_A_ROLE').'</b></option>';
 	}
 	while ($row = $gDb->fetch_object($result))
 	{
@@ -170,8 +176,8 @@ elseif($gValidLogin && strlen($getUserId) > 0)
     {
 		// Rollen Domain von der angegebenen Hompage parsen oder falls nicht vorhanden standard nehmen
 		$orgHP = trim($gCurrentOrganization->getValue('org_homepage'));
-		$rolDomain = "organisation.com";
-		if( $orgHP != "" )
+		$rolDomain = 'organisation.com';
+		if( $orgHP != '' )
 		{
 			$parseUrl = parse_url($orgHP); 
 			$newUrl = trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2)));
