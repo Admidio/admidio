@@ -1,19 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>Gru&szlig;karte</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title><%ecard_greeting_card_string%></title>
 <style type="text/css">
-    *{
-        font-family:<%ecard_font%>; 
-    }
-    #Message{  
-        color: <%ecard_font_color%>;
-        font:<%ecard_font%>;
-        font-weight:<%ecard_font_bold%>;
-        font-style:<%ecard_font_italic%>;
-        font-size:<%ecard_font_size%>px;
-    }
+	*{ font-family:<%ecard_font%>; }
 </style>
 </head>
 <body>
@@ -26,10 +17,10 @@
 	  <table  border="0" cellpadding="0" cellspacing="2">
 	   <tbody>
        <tr>
-	    <td>Eine Gru&szlig;karte von: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
+	    <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
 	   </tr>
 	   <tr>
-	    <td align="center"><img src="<%ecard_image_name%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="Gru&szlig;karte"></td>
+	    <td align="center"><img src="<%ecard_image_name%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="<%ecard_greeting_card_string%>"></td>
 	   </tr>
        <tr>
 	    <td align="center"><div style="vertical-align:middle; margin-left:10px; margin-right:10px;" id="Message"><%ecard_message%></div></td>
@@ -47,7 +38,7 @@
                <tr style="vertical-align:top; margin:5px 5px 5px 5px;">
                 <td>
                       <div align="right">
-                        <img src="<%theme_root_path%>/images/stamp.png" alt="Briefmarke"  border="0" height="129" width="150">
+                        <img src="<%theme_root_path%>/images/stamp.png" alt="stamp"  border="0" height="129" width="150">
                       </div>
                 </td>
                </tr>
@@ -58,7 +49,7 @@
                    <td style="height:90%; vertical-align:middle; padding:5px; width:300px;">
                      <table cellpadding="0" cellspacing="0" rules="none" border="0" width="300px">
                          <tr>
-                             <td><b>An:</b></td>
+                             <td><b><%ecard_to_string%>:</b></td>
                              <td style="padding-left:5px;"><%ecard_reciepient_name%></td>
                          </tr>
                          <tr style="height:1px;">
@@ -66,7 +57,7 @@
                          	<td><hr style="border: 1px solid black;"></td>
                          </tr>
                          <tr>
-                             <td><b>E-Mail:</b></td>
+                             <td><b><%ecard_email_string%>:</b></td>
                              <td  style="padding-left:5px;"><%ecard_reciepient_email%></td>
                          </tr>
                          <tr style="height:1px;">

@@ -60,7 +60,8 @@ function admStrStripTagsSpecial($srcArray)
 {
     foreach($srcArray as $key => $value)
     {
-        if($key != 'ann_description' // ckeditor-variable
+        if($key != 'admEcardMessage' // ckeditor-variable
+        && $key != 'ann_description'
         && $key != 'dat_description'
         && $key != 'gbc_text'
         && $key != 'gbo_text'

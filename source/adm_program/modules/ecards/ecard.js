@@ -12,7 +12,7 @@ function ecardJSClass()
 	this.dropDiv_id				= "dropdownmenu";
 	this.externDiv_id			= "extern";
 	this.switchDiv_id			= "externSwitch";
-	this.textInput_id			= "Nachricht";
+	this.textInput_id			= "admEcardMessage";
 	this.counterDiv_id			= "counter";
 	this.menueDiv_id			= "Menue";
 	this.wrongDiv_id			= "wrong";
@@ -70,11 +70,11 @@ function ecardJSClass()
 			error = true;
 			error_message += "- "+ this.emailOfRecipient_Text.replace('[VAR1]'," ") +" \n";
 		}
-		if (jQuery.trim($("#" + this.ecardformid + " textarea[name='ecard[message]']").val()) == "")
+		/*if (jQuery.trim($("#" + this.ecardformid + " textarea[name='admEcardMessage']").val()) == "")
 		{
 			error = true;
 			error_message += "- "+ this.message_Text +" \n";
-		}
+		}*/
 		for(var i=1; i <= this.now_recipients; i++)
 		{
 			var namedoc		= $("#" + this.ecardformid + " input[name='ecard[name_ccrecipient_"+[i]+"]']");
@@ -439,7 +439,7 @@ function ecardJSClass()
 	}
 	this.countMax = function()
 	{
-		var text = $("#" + this.ecardformid + " textarea[name='ecard[message]']").val();
+		var text = $("#" + this.ecardformid + " textarea[name='admEcardMessage']").val();
 		for(var i=0;i<bbcodes.length;i++)
 		{
 			text = text.replace(/\[.*?\]/gi,"").replace (/^\s+/,"").replace (/\s+$/,"");
@@ -448,14 +448,14 @@ function ecardJSClass()
 		wert = this.max_ecardTextLength - textlenght;
 		if(textlenght > this.max_ecardTextLength)
 		{
-			var txtvalue = $("#" + this.ecardformid + " textarea[name='ecard[message]']").val();
-			$("#" + this.ecardformid + " textarea[name='ecard[message]']").val(txtvalue.substr(0, this.max_ecardTextLength));
+			var txtvalue = $("#" + this.ecardformid + " textarea[name='admEcardMessage']").val();
+			$("#" + this.ecardformid + " textarea[name='admEcardMessage']").val(txtvalue.substr(0, this.max_ecardTextLength));
 		}
 		if (wert < 0)
 		{
 			jQueryAlert("ECA_MESSAGE_TOO_LONG", this.max_ecardTextLength);
 			wert = 0;
-			$("#" + this.ecardformid + " textarea[name='ecard[message]']").val($("#" + this.ecardformid + " textarea[name='ecard[message]']").val().substring(0,this.max_ecardTextLength));
+			$("#" + this.ecardformid + " textarea[name='admEcardMessage']").val($("#" + this.ecardformid + " textarea[name='admEcardMessage']").val().substring(0,this.max_ecardTextLength));
 			$("#" + this.counterDiv_id).html('<b>' + wert + '<\/b>');
 			wert = 0;
 		}

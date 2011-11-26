@@ -10,25 +10,27 @@
 require_once('../../system/classes/email.php');
 require_once('../../system/classes/image.php');
 require_once('../../system/classes/ubb_parser.php');
+require_once('../../libs/htmlawed/htmlawed.php');
 
 class FunctionClass
 {
-	public $nameRecipientString 		= "";
-	public $emailRecipientString 		= "";
-	public $yourMessageString 			= "";
-	public $newMessageReceivedString 	= "";
-	public $greetingCardFrom			= "";
-	public $greetingCardString			= "";
+	public $nameRecipientString 		= '';
+	public $emailRecipientString 		= '';
+	public $yourMessageString 			= '';
+	public $newMessageReceivedString 	= '';
+	public $greetingCardFrom			= '';
+	public $greetingCardString			= '';
+
 	function __construct($gL10n)
 	{
-		$this->nameRecipientString 			= $gL10n->get("ECA_RECIPIENT_NAME");
-		$this->emailRecipientString 		= $gL10n->get("ECA_RECIPIENT_EMAIL");
-		$this->yourMessageString 			= $gL10n->get("SYS_MESSAGE");
-		$this->newMessageReceivedString 	= $gL10n->get("ECA_NEW_MESSAGE_RECEIVED");
-		$this->greetingCardFrom				= $gL10n->get("ECA_A_ECARD_FROM");
-		$this->greetingCardString			= $gL10n->get("ECA_GREETING_CARD");
-		$this->sendToString					= $gL10n->get("SYS_TO");	
-		$this->emailString					= $gL10n->get("SYS_EMAIL");	
+		$this->nameRecipientString 			= $gL10n->get('ECA_RECIPIENT_NAME');
+		$this->emailRecipientString 		= $gL10n->get('ECA_RECIPIENT_EMAIL');
+		$this->yourMessageString 			= $gL10n->get('SYS_MESSAGE');
+		$this->newMessageReceivedString 	= $gL10n->get('ECA_NEW_MESSAGE_RECEIVED');
+		$this->greetingCardFrom				= $gL10n->get('ECA_A_ECARD_FROM');
+		$this->greetingCardString			= $gL10n->get('ECA_GREETING_CARD');
+		$this->sendToString					= $gL10n->get('SYS_TO');	
+		$this->emailString					= $gL10n->get('SYS_EMAIL');	
 	}
 
 	// gibt ein Menue fuer die Einstellungen des Template aus
@@ -46,7 +48,7 @@ class FunctionClass
 			$name = '';
 			if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
 			{
-				$name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
+				$name = ucfirst(preg_replace("/[_-]/"," ",str_replace('.tpl','',$data_array[$i])));
 			}
 			elseif(is_integer($data_array[$i]))
 			{
@@ -58,7 +60,7 @@ class FunctionClass
 			}
 			if($name != '')
 			{
-				if (strcmp($data_array[$i],$first_value) == 0 && $show_font != "true")
+				if (strcmp($data_array[$i],$first_value) == 0 && $show_font != 'true')
 				{
 					$htmlOutput .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
 				}
@@ -228,7 +230,7 @@ class FunctionClass
 	//      Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
 	//      Nachricht:              <%ecard_message%>
 	*/
-	function parseEcardTemplate($ecard,$ecard_data,$root_path,&$user,$empfaenger_name,$empfaenger_email,$bbcode_enable) 
+	function parseEcardTemplate($ecard,$ecardMessage,$ecard_data,$root_path,&$user,$empfaenger_name,$empfaenger_email) 
 	{
         global $gCurrentUser;
 
@@ -243,9 +245,9 @@ class FunctionClass
 		  $empfaenger_email = '< '.$this->emailRecipientString.' >';
 		}
 		// Falls die Nachricht nicht vorhanden ist wird sie fuer die Vorschau ersetzt
-		if(trim($ecard['message']) == '')
+		if(trim($ecardMessage) == '')
 		{
-		  $ecard['message']         = '< '.$this->yourMessageString.' >';
+		  $ecardMessage = '< '.$this->yourMessageString.' >';
 		}
 		// Hier wird der Pfad zum Admidio Verzeichnis ersetzt
 		$ecard_data = preg_replace ('/<%g_root_path%>/',            $root_path, $ecard_data);
@@ -254,9 +256,9 @@ class FunctionClass
 		// Hier wird die Style Eigenschaften ersetzt
 		$ecard_data = preg_replace ('/<%ecard_font%>/',             $ecard['schriftart_name'], $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_font_size%>/',        $ecard['schrift_size'], $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_font_color%>/',       $ecard['schrift_farbe'], $ecard_data);
+/*		$ecard_data = preg_replace ('/<%ecard_font_color%>/',       $ecard['schrift_farbe'], $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_font_bold%>/',        $ecard['schrift_style_bold'], $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_font_italic%>/',      $ecard['schrift_style_italic'], $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_font_italic%>/',      $ecard['schrift_style_italic'], $ecard_data);*/
 		// Hier wird der Sender Name, Email und Id ersetzt
 		$ecard_data = preg_replace ('/<%ecard_sender_id%>/',        $user->getValue('usr_id'), $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_sender_email%>/',     $user->getValue('EMAIL'), $ecard_data);
@@ -271,19 +273,13 @@ class FunctionClass
 		$ecard_data = preg_replace ('/<%ecard_greeting_card_string%>/'	, htmlentities(utf8_decode($this->greetingCardString)), $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_to_string%>/'				, htmlentities(utf8_decode($this->sendToString)), $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_email_string%>/'			, htmlentities(utf8_decode($this->emailString)), $ecard_data); 
-		
-	
+			
+		// make html in description secure
+		$ecardMessage = htmLawed(stripslashes($ecardMessage));
+
 		// Hier wird die Nachricht ersetzt
-		if ($bbcode_enable)
-		{
-			$bbcode = new ubbParser();
-			// BBCode wird geparsed, Zeilenumbrueche werden mit XBRX kodiert, um nach der htmlentities wieder zu Zeilenumbruechen decodiert zu werden
-			$ecard_data =  preg_replace ('/<%ecard_message%>/',$bbcode->parse(nl2br(htmlentities(utf8_decode(preg_replace ("/\r?\n/", "\n",$ecard['message']))))), $ecard_data);
-		}
-		else
-		{
-			$ecard_data = preg_replace ('/<%ecard_message%>/',  nl2br(htmlentities(utf8_decode(preg_replace ("/\r?\n/", "\n", $ecard['message'])))), $ecard_data);
-		}
+		$ecard_data = preg_replace ('/<%ecard_message%>/',  $ecardMessage, $ecard_data);
+
 		return $ecard_data;
 	}
 	// Diese Funktion ruft die Mail Klasse auf und uebergibt ihr die zu sendenden Daten

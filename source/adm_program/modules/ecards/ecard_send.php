@@ -9,10 +9,6 @@
  *****************************************************************************/
 require_once('../../system/common.php');
 require_once('ecard_function.php');
-if ($gPreferences['enable_bbcode'] == 1)
-{
-    require('../../system/bbcode.php');
-}
 
 $funcClass 					= new FunctionClass($gL10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
@@ -50,10 +46,10 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 && ($ecard['email_recipient'] != '') && ($ecard['name_sender'] != '') && empty($error_msg))
 {
 	// Wenn die Nachricht grˆﬂer ist als die maximal Laenge wird sie zur¸ckgestutzt
-	if (strlen($ecard['message']) > $gPreferences['ecard_text_length'])
+	/*if (strlen($ecard['message']) > $gPreferences['ecard_text_length'])
 	{
-		$ecard['message'] = substr($ecard['message'],0,$gPreferences['ecard_text_length']-1);
-	}
+		$ecard['message'] = substr($_POST['admEcardMessage'],0,$gPreferences['ecard_text_length']-1);
+	}*/
 	// Template wird geholt
 	list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($ecard['template_name'],$template);
 	// Wenn es einen Error gibt ihn ausgeben
@@ -65,27 +61,17 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 	else
 	{
 		// Es wird gepr¸ft ob der Benutzer der ganzen Rolle eine Gruﬂkarte schicken will
-		$rolId = $ecard['email_rolId'];
-		// Wenn nicht dann Name und Email des Empfaengers zur versand Liste hinzuf¸gen
-		if(!is_numeric($rolId))
+		if(isset($ecard['email_rolId']))
 		{
-			array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
-			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
-			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$gCurrentUser,$ecard['name_recipient'],$ecard['email_recipient'],$gPreferences['enable_bbcode']);
-			$result = $funcClass->sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $ecard['image_serverPath']);
-			// Wenn die Gruﬂkarte erfolgreich gesendet wurde
-			if ($result)
-			{
-				$ecard_send = true;
-			}
-			// Wenn nicht dann die dementsprechende Error Nachricht ausgeben
-			else
-			{
-				$error_msg = $msg_send_error;
-			}
+			$rolId = $ecard['email_rolId'];
 		}
-		// Wenn schon dann alle Namen und die duzugehˆrigen Emails auslesen und in die versand Liste hinzuf¸gen
 		else
+		{
+			$rolId = 0;
+		}
+
+		if($rolId > 0 && is_numeric($rolId))
+		// Wenn schon dann alle Namen und die duzugehˆrigen Emails auslesen und in die versand Liste hinzuf¸gen
 		{
 			list($rol,$homepage) = split("[\@]",$ecard['email_recipient']);
 			$sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
@@ -131,7 +117,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 				$i++;
 			}
 			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
-			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$ecard_data_to_parse,$g_root_path,$gCurrentUser,$firstvalue_name,$firstvalue_email,$gPreferences['enable_bbcode']);
+			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$firstvalue_name,$firstvalue_email,$gPreferences['enable_bbcode']);
 			$b=0;
 			foreach($email_versand_liste as $item)
 			{                       
@@ -156,6 +142,24 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 				$b++;               
 			}
 
+		}
+		else
+		{
+			// Wenn nicht dann Name und Email des Empfaengers zur versand Liste hinzuf¸gen
+			array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
+			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
+			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$ecard['name_recipient'],$ecard['email_recipient'],$gPreferences['enable_bbcode']);
+			$result = $funcClass->sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $ecard['image_serverPath']);
+			// Wenn die Gruﬂkarte erfolgreich gesendet wurde
+			if ($result)
+			{
+				$ecard_send = true;
+			}
+			// Wenn nicht dann die dementsprechende Error Nachricht ausgeben
+			else
+			{
+				$error_msg = $msg_send_error;
+			}
 		}
    }
 }
