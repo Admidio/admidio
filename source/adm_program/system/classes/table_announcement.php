@@ -50,7 +50,12 @@ class TableAnnouncement extends TableAccess
     {
         if($field_name == 'ann_description')
         {
-			if($format == 'plain')
+			if(isset($this->dbColumns['ann_description']) == false)
+			{
+				$value = '';
+			}
+
+			elseif($format == 'plain')
 			{
 				$value = html_entity_decode(strStripTags($this->dbColumns['ann_description']), ENT_QUOTES, 'UTF-8');
 			}

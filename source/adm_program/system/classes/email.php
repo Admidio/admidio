@@ -104,8 +104,15 @@ public function setSender($address, $name='')
 {
     global $gPreferences;
     $address = admStrToLower($address);
-    // Sender must be Ascii-US formated, so encode in MimeHeader
-	$name    = admEncodeMimeheader(stripslashes($name));
+	if(strlen($name) == 0)
+	{
+		$name = $address;
+	}
+	else
+	{
+		// Sender must be Ascii-US formated, so encode in MimeHeader
+		$name = admEncodeMimeheader(stripslashes($name));
+	}
     
     if (strValidCharacters($address, 'email'))
     {
@@ -113,32 +120,17 @@ public function setSender($address, $name='')
         if($gPreferences['mail_sendmail_address'] != '' && $address != $gPreferences['email_administrator'])
         {
             //hier wird die Absenderadresse gesetzt
-            $this->headerOptions['From'] = " <". $gPreferences['mail_sendmail_address']. ">";    
+            $this->headerOptions['From'] = '"'. $name. '" <'. $gPreferences['mail_sendmail_address']. '>';
+			
             //wenn der Empfänger dann auf anworten klickt soll die natürlich an den wirklichen Absender gehen
-            if (strlen($name) > 0)
-            {
-                //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
-                $this->headerOptions['Reply-To'] = '"'. $name. '" <'. $address. '>';
-            }
-            else
-            {
-                //Kein Name gesetzt...
-                $this->headerOptions['Reply-To'] = " <". $address. ">";
-            }              
+			//Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
+			$this->headerOptions['Reply-To'] = '"'. $name. '" <'. $address. '>';
         }
         //Im Normalfall wird aber versucht von der Adresse des schreibenden aus zu schicken
         else
         {
-            if (strlen($name) > 0)
-            {
-                //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
-                $this->headerOptions['From'] = '"'. $name. '" <'. $address. '>';
-            }
-            else
-            {
-                //Kein Name gesetzt...
-                $this->headerOptions['From'] = " <". $address. ">";
-            }
+			//Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
+			$this->headerOptions['From'] = '"'. $name. '" <'. $address. '>';
         }
         return true;
     }
@@ -166,13 +158,13 @@ public function addRecipient($address, $name='')
     {
         if (!isset($this->headerOptions['To']))
         {
-            $this->headerOptions['To'] = $name. " <". $address. ">";
+            $this->headerOptions['To'] = '"'. $name. '" <'. $address. '>';
         }
         else
         {
 			$this->headerOptions['To'] = $this->headerOptions['To']. ", ". $name. " <". $address. ">";
         }
-        $this->addresses = $this->addresses. $name. " <". $address. ">\n";
+        $this->addresses = $this->addresses. $name. ' <'. $address. ">\n";
         return true;
     }
     return false;
@@ -188,13 +180,13 @@ public function addCopy($address, $name='')
     {
         if (!isset($this->headerOptions['Cc']))
         {
-            $this->headerOptions['Cc'] = $name. " <". $address. ">";
+            $this->headerOptions['Cc'] = '"'. $name. '" <'. $address. '>';
         }
         else
         {
-        $this->headerOptions['Cc'] = $this->headerOptions['Cc']. ", ". $name. " <". $address. ">";
+        $this->headerOptions['Cc'] = $this->headerOptions['Cc']. ', '. $name. ' <'. $address. '>';
         }
-        $this->addresses = $this->addresses. $name. " <". $address. ">\n";
+        $this->addresses = $this->addresses. $name. ' <'. $address. ">\n";
         return true;
     }
     return false;
@@ -208,8 +200,8 @@ public function addBlindCopy($address, $name='')
 	$name    = admEncodeMimeheader(stripslashes($name));
     if (strValidCharacters($address, 'email'))
     {
-        $this->bccArray[] = $name. " <". $address. ">";
-        $this->addresses = $this->addresses. $name. " <". $address. ">\n";
+        $this->bccArray[] = '"'. $name. '" <'. $address. '>';
+        $this->addresses = $this->addresses. $name. ' <'. $address. ">\n";
         return true;
     }
     return false;
@@ -327,7 +319,7 @@ private function prepareBody()
 		}
 		$this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. 
 					   	   "\nContent-Type: text/html; charset=".$this->charset."\nContent-Transfer-Encoding: 7bit\n\n";
-        $this->mail_body = $this->mail_body. nl2br($this->text)."\n\n";
+        $this->mail_body = $this->mail_body. $this->text."\n\n";
     }
 
     // Jetzt die Attachments hinzufuegen...

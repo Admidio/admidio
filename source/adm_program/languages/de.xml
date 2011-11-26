@@ -6,6 +6,7 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
+    <text id="ECA_NEED_JAVASCRIPT" development="deleted" translation="todo">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
     <text id="INS_CONTACT_DETAILS" development="deleted" translation="todo">Kontaktdaten</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
@@ -286,7 +287,6 @@
     <text id="ECA_MORE_RECIPIENTS" development="new" translation="todo">Weitere Empfänger</text>
     <text id="ECA_NAME_OF_SENDER" development="new" translation="todo">Name des Absenders</text>
     <text id="ECA_NAME_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="new" translation="todo">Name des%VAR1%Empfängers</text>
-    <text id="ECA_NEED_JAVASCRIPT" development="new" translation="todo">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="todo">Neue Nachricht erhalten</text>
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="todo">Kein User vorhanden der eine gültige E-mail besitzt!</text>
     <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="todo">Keine weiteren Empfänger</text>

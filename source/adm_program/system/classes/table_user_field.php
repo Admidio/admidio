@@ -101,7 +101,11 @@ class TableUserField extends TableAccess
 
 		if($field_name == 'usf_description')
         {
-			if($format == 'plain')
+			if(isset($this->dbColumns['usf_description']) == false)
+			{
+				$value = '';
+			}
+			elseif($format == 'plain')
 			{
 				$value = html_entity_decode(strStripTags($this->dbColumns['usf_description']), ENT_QUOTES, 'UTF-8');
 			}
@@ -114,7 +118,7 @@ class TableUserField extends TableAccess
         {
             $value = parent::getValue($field_name, $format);
         }
-
+		
 		if(($field_name == 'usf_name' || $field_name == 'cat_name')
 		&& $format != 'plain')
 		{

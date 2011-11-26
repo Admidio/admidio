@@ -30,7 +30,18 @@ class TableGuestbookComment extends TableAccess
     {
         if($field_name == 'gbc_text')
         {
-            $value = $this->dbColumns['gbc_text'];
+			if(isset($this->dbColumns['gbc_text']) == false)
+			{
+				$value = '';
+			}
+			elseif($format == 'plain')
+			{
+				$value = html_entity_decode(strStripTags($this->dbColumns['gbc_text']));
+			}
+			else
+			{
+				$value = $this->dbColumns['gbc_text'];
+			}
         }
         else
         {

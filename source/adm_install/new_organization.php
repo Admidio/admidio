@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Einrichtung einer weiteren Organisation
+ * Installation of a new organization
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,41 +8,38 @@
  *
  * Parameters:
  *
- * mode     = 1 : (Default) Willkommen zur Installation
- *            2 : Organisationsnamen eingeben
- *            3 : Administrator anlegen
- *            4 : Konfigurationsdatei erzeugen
- *            5 : Konfigurationsdatei herunterladen
- *            6 : Installation starten
+ * mode     = 1 : (Default) Welcome to installation
+ *            2 : Enter organization name
+ *            3 : create administrator
+ *            4 : create configuration file
+ *            5 : downlaod configuration file
+ *            6 : start installation
  *
  *****************************************************************************/
 
-require_once('install_functions.php');
-
-// Uebergabevariablen pruefen
-
-if(isset($_GET['mode']) && is_numeric($_GET['mode']))
-{
-   $req_mode = $_GET['mode'];
-}
-else
-{
-    $req_mode = 1;
-}
-
-session_name('admidio_php_session_id');
-session_start();
-
-// Konstanten und Konfigurationsdatei einbinden
+// integrate constants and configuration file
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/config.php');
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
 
- // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
+// detect cookie praefix and remove special char
+$gCookiePraefix = 'ADMIDIO_'. $g_organization;
+if($gDebug)
+{
+	$gCookiePraefix .= '_'. ADMIDIO_VERSION. '_'. BETA_VERSION;
+}
+$gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
+
+// start php session and initialize global parameters
+session_name($gCookiePraefix. '_PHP_ID');
+session_start();
+
+// default praefix is "adm" because of compatibility to older versions
 if(strlen($g_tbl_praefix) == 0)
 {
     $g_tbl_praefix = 'adm';
 }
 
+require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
@@ -55,6 +52,9 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
+
+// Initialize and check the parameters
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
 
 // default database type is always MySQL
 if(!isset($gDbType))
@@ -89,7 +89,7 @@ $gL10n = new Language($gPreferences['system_language']);
 
 $message  = '';
 
-if($req_mode == 1)
+if($getMode == 1)
 {
     // Willkommen zur Installation
     session_destroy();
@@ -97,7 +97,7 @@ if($req_mode == 1)
                 '.$gL10n->get('INS_NECESSARY_INFORMATION');
     showPage($message, 'new_organization.php?mode=2', 'forward.png', $gL10n->get('INS_SET_ORGANIZATION'), 3);
 }
-elseif($req_mode == 2)
+elseif($getMode == 2)
 {
     // Formular vorbelegen
     if(isset($_SESSION['orgaShortName']))
@@ -136,7 +136,7 @@ elseif($req_mode == 2)
                 <br />';
     showPage($message, 'new_organization.php?mode=3', 'forward.png', $gL10n->get('INS_SET_ADMINISTRATOR'), 3);
 }
-elseif($req_mode == 3)
+elseif($getMode == 3)
 {
     // Daten des Administrator eingeben
 
@@ -187,7 +187,7 @@ elseif($req_mode == 3)
                 <br />';
     showPage($message, 'new_organization.php?mode=4', 'forward.png', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'), 3);
 }
-elseif($req_mode == 4)
+elseif($getMode == 4)
 {
     // Konfigurationsdatei erzeugen
 
@@ -260,7 +260,7 @@ elseif($req_mode == 4)
                 <br />';
     showPage($message, 'new_organization.php?mode=6', 'database_in.png', $gL10n->get('INS_SET_UP_ORGANIZATION'), 3);
 }
-elseif($req_mode == 5)
+elseif($getMode == 5)
 {
 	if(isset($_SESSION['webmaster_id']) == false || $_SESSION['webmaster_id'] == 0)
 	{
@@ -300,7 +300,7 @@ elseif($req_mode == 5)
     echo $file_content;
     exit();
 }
-elseif($req_mode == 6)
+elseif($getMode == 6)
 {
     // Installation starten
 
@@ -499,6 +499,14 @@ elseif($req_mode == 6)
     $former_list->addColumn(5, 'mem_end', 'DESC');
     $former_list->save();
 
+	// if installation of second organization than show organization select at login
+	if($gCurrentOrganization->countAllRecords() == 2)
+	{
+		$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = 1
+				 WHERE prf_name = \'system_organization_select\' ';
+		$gDb->query($sql);
+	}
+
     $gDb->endTransaction();
 
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$gL10n->get('INS_SETUP_WAS_SUCCESSFUL').'</strong><br /><br />
@@ -508,7 +516,7 @@ elseif($req_mode == 6)
         $message = $message. '<br /><br /><img src="layout/warning.png" alt="Warnung" /> '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
     // delete all session data
-    session_unset();
+    unset($_SESSION['g_current_organisation'], $_SESSION['gPreferences'], $_SESSION['gCurrentUser']);
 	// show success note
     showPage($message, '../adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'));
 }

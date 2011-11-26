@@ -25,7 +25,18 @@ class TableRooms extends TableAccess
     {
         if($field_name == 'room_description')
         {
-            $value = $this->dbColumns['room_description'];
+			if(isset($this->dbColumns['room_description']) == false)
+			{
+				$value = '';
+			}
+			elseif($format == 'plain')
+			{
+				$value = html_entity_decode(strStripTags($this->dbColumns['room_description']));
+			}
+			else
+			{
+				$value = $this->dbColumns['room_description'];
+			}
         }
         else
         {

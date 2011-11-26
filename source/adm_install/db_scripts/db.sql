@@ -8,31 +8,31 @@
  ******************************************************************************/
 
 
-drop table if exists %PREFIX%_announcements;
-drop table if exists %PREFIX%_auto_login;
-drop table if exists %PREFIX%_date_role;
-drop table if exists %PREFIX%_dates;
-drop table if exists %PREFIX%_files;
-drop table if exists %PREFIX%_folder_roles;
-drop table if exists %PREFIX%_folders;
-drop table if exists %PREFIX%_guestbook_comments;
-drop table if exists %PREFIX%_guestbook;
-drop table if exists %PREFIX%_links;
-drop table if exists %PREFIX%_list_columns;
-drop table if exists %PREFIX%_lists;
-drop table if exists %PREFIX%_members;
-drop table if exists %PREFIX%_photos;
-drop table if exists %PREFIX%_preferences;
-drop table if exists %PREFIX%_role_dependencies;
-drop table if exists %PREFIX%_roles;
-drop table if exists %PREFIX%_rooms;
-drop table if exists %PREFIX%_sessions;
-drop table if exists %PREFIX%_texts;
-drop table if exists %PREFIX%_user_data;
-drop table if exists %PREFIX%_user_fields;
-drop table if exists %PREFIX%_categories;
-drop table if exists %PREFIX%_users;
-drop table if exists %PREFIX%_organizations;
+drop table if exists %PREFIX%_announcements cascade;
+drop table if exists %PREFIX%_auto_login cascade;
+drop table if exists %PREFIX%_date_role cascade;
+drop table if exists %PREFIX%_dates cascade;
+drop table if exists %PREFIX%_files cascade;
+drop table if exists %PREFIX%_folder_roles cascade;
+drop table if exists %PREFIX%_folders cascade;
+drop table if exists %PREFIX%_guestbook_comments cascade;
+drop table if exists %PREFIX%_guestbook cascade;
+drop table if exists %PREFIX%_links cascade;
+drop table if exists %PREFIX%_list_columns cascade;
+drop table if exists %PREFIX%_lists cascade;
+drop table if exists %PREFIX%_members cascade;
+drop table if exists %PREFIX%_photos cascade;
+drop table if exists %PREFIX%_preferences cascade;
+drop table if exists %PREFIX%_role_dependencies cascade;
+drop table if exists %PREFIX%_roles cascade;
+drop table if exists %PREFIX%_rooms cascade;
+drop table if exists %PREFIX%_sessions cascade;
+drop table if exists %PREFIX%_texts cascade;
+drop table if exists %PREFIX%_user_data cascade;
+drop table if exists %PREFIX%_user_fields cascade;
+drop table if exists %PREFIX%_categories cascade;
+drop table if exists %PREFIX%_users cascade;
+drop table if exists %PREFIX%_organizations cascade;
 
 
 /*==============================================================*/

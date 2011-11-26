@@ -331,16 +331,16 @@ $mail_body = $mail_body. "\n****************************************************
 // make html in mail body secure
 $_POST['mail_body'] = htmLawed(stripslashes($_POST['mail_body']));
 
-$mail_body = $mail_body. $_POST['mail_body'];
-
 // commit mail body to mail object
 if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 {
+	$mail_body = nl2br($mail_body). $_POST['mail_body'];
     $email->sendDataAsHtml();
     $email->setText($mail_body);
 }
 else
 {
+	$mail_body = $mail_body. $_POST['mail_body'];
     $email->setText($mail_body);
 }
 

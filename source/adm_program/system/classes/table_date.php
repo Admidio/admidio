@@ -141,7 +141,11 @@ class TableDate extends TableAccess
         }
         elseif($field_name == 'dat_description')
         {
-			if($format == 'plain')
+			if(isset($this->dbColumns['dat_description']) == false)
+			{
+				$value = '';
+			}
+			elseif($format == 'plain')
 			{
 				$value = html_entity_decode(strStripTags($this->dbColumns['dat_description']), ENT_QUOTES, 'UTF-8');
 			}
