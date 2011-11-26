@@ -38,7 +38,18 @@ class TableWeblink extends TableAccess
 
         if($field_name == 'lnk_description')
         {
-            $value = $this->dbColumns['lnk_description'];
+			if(isset($this->dbColumns['lnk_description']) == false)
+			{
+				$value = '';
+			}
+			elseif($format == 'plain')
+			{
+				$value = html_entity_decode(strStripTags($this->dbColumns['lnk_description']));
+			}
+			else
+			{
+				$value = $this->dbColumns['lnk_description'];
+			}
         }
         else
         {

@@ -123,6 +123,7 @@ else
 {	
 	// no php session then create new admidio session
 	$gCurrentSession = new TableSession($gDb, $gSessionId);
+	$gCurrentSession->setValue('ses_session_id', $gSessionId);
 
 	$userIdAutoLogin = 0;
 	// check if auto login exists and create a valid session
@@ -149,7 +150,6 @@ else
 			}
 
 			// auto login successful then create a valid session
-			$gCurrentSession->setValue('ses_session_id', $gSessionId);
 			$gCurrentSession->setValue('ses_usr_id',  $userIdAutoLogin);
 		}
 	}

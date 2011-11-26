@@ -31,7 +31,7 @@ else
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/config.php');
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
 
- // Standard-Praefix ist adm auch wegen Kompatibilitaet zu alten Versionen
+// default praefix is "adm" because of compatibility to older versions
 if(strlen($g_tbl_praefix) == 0)
 {
     $g_tbl_praefix = 'adm';
@@ -263,7 +263,7 @@ elseif($req_mode == 2)
     // globale Objekte aus einer evtl. vorhandenen Session entfernen, 
     // damit diese nach dem Update neu eingelesen werden muessen
     
-    // Cookie-Praefix ermitteln und Sonderzeichen entfernen
+	// detect cookie praefix and remove special char
     $gCookiePraefix = 'ADMIDIO_'. $g_organization;
     if($gDebug)
     {
@@ -271,7 +271,7 @@ elseif($req_mode == 2)
     }
     $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
     
-    // PHP-Session starten und Variablen zuruecksetzen
+	// start php session and initialize global parameters
     session_name($gCookiePraefix. '_PHP_ID');
     session_start();
     unset($_SESSION['g_current_organisation'], $_SESSION['gPreferences'], $_SESSION['gCurrentUser']);

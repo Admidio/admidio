@@ -316,7 +316,7 @@ echo '
 						<dl>
 							<dt><label for="dat_location">'.$gL10n->get('DAT_LOCATION').':</label></dt>
 							<dd>
-								<input type="text" id="dat_location" name="dat_location" style="width: 90%;" maxlength="50" value="'. $date->getValue('dat_location').$date->getValue('dat_country'). '" />';
+								<input type="text" id="dat_location" name="dat_location" style="width: 90%;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
 								if($gPreferences['dates_show_map_link'])
 								{
 									echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK&amp;inline=true"><img 

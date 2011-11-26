@@ -491,7 +491,7 @@ else
                     {
                         $sql = 'SELECT DISTINCT mem_usr_id 
                                   FROM '.TBL_MEMBERS.' 
-                                 WHERE mem_rol_id="'.$date->getValue('dat_rol_id').'"';
+                                 WHERE mem_rol_id = '.$date->getValue('dat_rol_id');
                         $result = $gDb->query($sql);
                         $row_count = $gDb->num_rows($result);
                                     
@@ -554,7 +554,7 @@ else
                             {
                                 // Teilnehmerbegrenzung allgemein
                                 $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
-                                         WHERE mem_rol_id = \''.$date->getValue('dat_rol_id').'\' 
+                                         WHERE mem_rol_id = '.$date->getValue('dat_rol_id').' 
 										   AND mem_leader = 0';
                                 $res_num = $gDb->query($sql);
                                 $row_num = $gDb->num_rows($res_num);
