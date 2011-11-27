@@ -6,6 +6,7 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
+    <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf %VAR1_BOLD%.</text>
     <text id="ECA_NEED_JAVASCRIPT" development="deleted" translation="todo">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
     <text id="INS_CONTACT_DETAILS" development="deleted" translation="todo">Kontaktdaten</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
@@ -268,7 +269,6 @@
     <text id="ECA_EMAIL_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="new" translation="todo">E-Mail des%VAR1%Empfängers</text>
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="todo">E-Mail des Absenders</text>
     <text id="ECA_FIELD_ERROR" development="new" translation="todo">Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf "Abschicken".</text>
     <text id="ECA_FONT" development="new" translation="todo">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
     <text id="ECA_FONT_SIZE" development="new" translation="todo">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
     <text id="ECA_FONT_COLOR" development="new" translation="todo">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
