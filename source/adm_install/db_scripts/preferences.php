@@ -16,7 +16,6 @@ $orga_preferences = array(
 
     // System
     'enable_rss'                    => '1',
-    'enable_bbcode'                 => '1',
     'enable_auto_login'             => '1',
     'logout_minutes'                => '20',
     'homepage_logout'               => 'adm_program/index.php',

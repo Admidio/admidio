@@ -158,6 +158,7 @@ class TableUsers extends TableAccess
         return $return;
     }
 
+    // validates the value and adapts it if necessary
     public function setValue($field_name, $field_value, $check_value = true)
     {
         // encode Passwort with phpAss

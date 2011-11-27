@@ -34,12 +34,27 @@ class TableOrganizations extends TableAccess
         return parent::readData($organization, $sql_where_condition, $sql_additional_tables);
     }
 	
+    // validates the value and adapts it if necessary
     public function setValue($field_name, $field_value, $check_value = true)
     {
         // org_shortname shouldn't be edited
         if($field_name == 'org_shortname')
         {
             return false;
+        }
+        elseif($field_name == 'org_homepage' && strlen($field_value) > 0)
+        {
+			// Homepage darf nur gueltige Zeichen enthalten
+			if (!strValidCharacters($field_value, 'url'))
+			{
+				return false;
+			}
+			// Homepage noch mit http vorbelegen
+			if(strpos(admStrToLower($field_value), 'http://')  === false
+			&& strpos(admStrToLower($field_value), 'https://') === false )
+			{
+				$field_value = 'http://'. $field_value;
+			}
         }
         return parent::setValue($field_name, $field_value);
     }

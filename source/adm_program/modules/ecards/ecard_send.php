@@ -117,7 +117,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 				$i++;
 			}
 			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
-			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$firstvalue_name,$firstvalue_email,$gPreferences['enable_bbcode']);
+			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$firstvalue_name,$firstvalue_email);
 			$b=0;
 			foreach($email_versand_liste as $item)
 			{                       
@@ -148,7 +148,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 			// Wenn nicht dann Name und Email des Empfaengers zur versand Liste hinzufügen
 			array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
 			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
-			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$ecard['name_recipient'],$ecard['email_recipient'],$gPreferences['enable_bbcode']);
+			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$ecard['name_recipient'],$ecard['email_recipient']);
 			$result = $funcClass->sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $ecard['image_serverPath']);
 			// Wenn die Grußkarte erfolgreich gesendet wurde
 			if ($result)

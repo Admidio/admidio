@@ -280,9 +280,7 @@ class TableUserField extends TableAccess
     }
 
 
-    // interne Funktion, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    // die Funktion wird innerhalb von setValue() aufgerufen
+    // validates the value and adapts it if necessary
     public function setValue($field_name, $field_value, $check_value = true)
     {
         // name, category and type couldn't be edited if it's a system field

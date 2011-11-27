@@ -46,6 +46,7 @@ class TableRooms extends TableAccess
         return $value;
     }
  
+    // validates the value and adapts it if necessary
     public function setValue($field_name, $field_value, $check_value = true)
     {
         if($field_name == 'room_description')

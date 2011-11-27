@@ -220,7 +220,6 @@
 	<text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Flere modtagere</text>
 	<text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Afsenders navn</text> 
     <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by name">Navn på modtager: %VAR1%</text>
-    <text id="ECA_NEED_JAVASCRIPT" development="new" translation="edited">For at det er muligt at sende postkort skal javascript være aktiveret!\nVenligst slå javascript til for at kunne sende postkort!</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">Ny besked modtaget</text>    
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">Ingen bruger med en gyldig e-mail adresse!</text>
     <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">Ingen yderligere modtagere</text>
@@ -288,7 +287,6 @@
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="edited">Vælg sprog</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="edited">Konference lokale</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="edited">Fil %VAR1_BOLD% kan ikke findes i hoved folderen for Admidio!\n\nVenligst download filen igen og kopier den til den oplyste folder.</text>
-    <text id="INS_CONTACT_DETAILS" development="new" translation="edited">Kontakt detaljer</text>
     <text id="INS_COURSES" development="new" translation="edited">Kurser</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="edited">Opretter administrator</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="edited">Opretter konfigurations fil</text>
@@ -313,7 +311,6 @@
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Indtast database adgangs information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Filen %VAR1_BOLD% kunne ikke åbnes.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folderen %VAR1_BOLD% er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne uploade billeder og filer til fil modulet.</text>
-    <text id="INS_GOOGLE_TALK" development="new1" translation="edited">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="edited">Grupper</text>
     <text id="INS_ICQ" development="new1" translation="edited">ICQ</text>
     <text id="INS_INSTALL_ADMIDIO" development="new" translation="edited">Installer Admidio</text>
@@ -330,7 +327,6 @@
 	<text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Medlemskab</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
-    <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Ikke alle MySQL database adgangs informationer er blevet oplyst!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organisations navn</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Skriv officiel forkortelse af organisationens navn her, til brug i Admidio.</text>
@@ -441,7 +437,6 @@
     <text id="LST_NO_RIGHTS_VIEW_LIST" development="new" translation="edited">Du har ikke tilladelse til at få vist en liste over definerede roller.</text>
     <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="edited">Konfigurationen vil blive brugt som standard konfiguration</text>
 	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Antal roller pr. side.</text>
-    <text id="LST_PERIOD" development="new" translation="edited">Periode</text>
     <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Standard konfiguration</text>
     <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Som webmaster kan du definere en standard konfiguration for alle brugere. Konfigurer rækker og kolonner og gem konfigurationen ved at navngive konfigurations sættet. Vælg en ny forud defineret liste konfiguration og klik: %VAR1%</text>
     <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Vis print eksempel</text>
@@ -552,7 +547,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="edited">Tildeler medlemskab og login information til valgte bruger.</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="edited">Tildeler registrering</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="edited">Sletter registrering</text>
-    <text id="NWU_REGISTRATION" development="new" translation="edited">Registrering</text>
 	<text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="edited">Administrer nye registreringer</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="edited">Nye registreringer af brugere kan listes, godkendes eller afvist her.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="edited">Nye registreringer</text>
@@ -582,8 +576,6 @@
     <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Admidio-Tema</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Vælg layout for Admidio. Alle temaer gemt i folderen adm_themes bliver vist. (Standard: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="edited">Avanceret registrering</text>
-    <text id="ORG_ALLOW_BBCODE" development="new" translation="edited">Tillad BBCode</text>
-    <text id="ORG_ALLOW_BBCODE_DESC" development="new" translation="edited">Brugere kan bruge %VAR1% i tekst felter såsom (f.eks. møde beskrivelser, gæstebogs indlæg) for at få en pænere formatering. (Standard: Ja)</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="edited">Automatisk logoff efter</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="edited">Sæt tid før systemet automatisk logger en inaktiv bruger af. En bruger er inaktiv når der ikke er hentet sider i en bestemt periode. Dette bliver ignoreret hvis brugeren vælger %VAR1_BOLD%. (Standard: 20 minutter)</text>
 	<text id="ORG_CAPTCHA" development="new" translation="edited">Brug disse indstillinger for captcha.</text>
@@ -922,9 +914,6 @@
     <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_ACTIVE" development="new" translation="edited">Aktiv</text>
     <text id="SYS_ACTIVATED" development="new" translation="edited">Aktiveret</text>
-    <text id="SYS_ADD_EMAIL" development="new" translation="edited">Tilføj e-mail adresse</text>
-    <text id="SYS_ADD_IMAGE" development="new" translation="edited">Tilføj billede</text>
-    <text id="SYS_ADD_LINK" development="new" translation="edited">Tilføj hyperlink</text>
     <text id="SYS_ADD_ROLE" development="new" translation="edited">Tilføj Rolle</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="edited">Tilføj modtager</text>
 	<text id="SYS_ADDRESS" development="new" translation="edited">Adresse</text>
@@ -941,12 +930,8 @@
 	<text id="SYS_AUTHORIZATION" development="new" translation="edited">Godkendelse</text>
     <text id="SYS_BACK" development="new" translation="edited">Tilbage</text>
 	<text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Tilbage til modul oversigten</text>
-    <text id="SYS_BBCODE" development="new" translation="edited">BBCode</text>
-    <text id="SYS_BBCODE_DESC" development="new" translation="edited">Beskriveslses tekster for enkelte moduler (meddelelser, møder, gæstebogen og weblinks) kan formateres med tags (BBCode). Derfor kan du bruge de viste tags i beskrivelses teksten.</text>
     <text id="SYS_BETA_VERSION" development="new" translation="edited">Du bruger en BETA version af Admidio.\n\nStabilitets problemer og tab af data er en mulighed. Brug venligst KUN denne version til tests!</text>
 	<text id="SYS_BIRTHDAY" development="new" translation="edited">Fødselsdag</text>
-    <text id="SYS_BOLD" development="new" translation="edited">Fed</text>
-    <text id="SYS_BOLD_TEXT_REPRESENT" development="new" translation="edited">Vis tekst %VAR1%bold%VAR2%</text>
     <text id="SYS_BROWSE" development="new" translation="edited">Gennemse</text>
     <text id="SYS_BROWSE_ERROR" development="new" translation="edited">Fil søgning kunne ikke gennemføres.</text>
     <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
@@ -964,15 +949,12 @@
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Godkendelses kode</text>
 	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">Godkendelses kode er en del af captcha. En captcha bliver brugt for at forhindre elektronisk misbrug (spam). Billedet bliver brugt til at afgøre om det var et menneske eller et script (eller en spambot) der udfyldte formularen.\nUdfyld venligst rubrikken med teksten på billedet.</text>	
     <text id="SYS_CATEGORY" development="new" translation="edited">Kategori</text>
-    <text id="SYS_CENTERED" development="new" translation="edited">Centreret</text>
-    <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="edited">Vis tekst centreret</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Skift kodeord</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">Kig efter opdatering</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox'enes status bliver automatisk gemt når de markeres.</text>
     <text id="SYS_CITY" development="new" translation="edited">By</text>
     <text id="SYS_CLOCK" development="new" translation="edited">idag</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Luk</text>
-    <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="edited">Luk alle tags</text>
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="edited">Luk vindue</text>
     <text id="SYS_COMMENT" development="new" translation="edited">Kommentar</text>
     <text id="SYS_COMMON" development="new" translation="edited">Generel</text>
@@ -1004,7 +986,6 @@
     <text id="SYS_DATE_TO" development="new" translation="edited">til</text>
     <text id="SYS_DEACTIVATED" development="new" translation="edited">Inaktiv</text>
     <text id="SYS_DEBUG_MODUS" development="new" translation="todo">debug modus</text>
-    <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="edited">Reducer font størrelse</text>
     <text id="SYS_DELETE" development="new" translation="edited">Slet</text>
     <text id="SYS_DELETE_DATA" development="new" translation="edited">Data er blevet slettet.</text>
     <text id="SYS_DELETE_ENTRY" development="new" translation="edited">Vil du slette %VAR1_BOLD%?</text>
@@ -1070,14 +1051,12 @@
     <text id="SYS_HOMEPAGE" development="new" translation="edited">Hjemmeside</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP error (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="edited">Inaktiv</text>
-    <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="edited">Forstør font størrelse</text>
 	<text id="SYS_INFO" development="new" translation="edited">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installations biblioteket 'adm_install' eksisterer stadig på serveren. Af sikkerhedshensyn skal det slettes!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Ugyldig side visning</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Usynlig</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O fejl</text>
     <text id="SYS_ISO_8859_1" development="new" translation="todo">ISO-8859-1</text>
-    <text id="SYS_ITALIC" development="new" translation="edited">Italic</text>
     <text id="SYS_LANGUAGE" development="new" translation="edited">Sprog</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="edited">Sidst redigeret af %VAR1% den %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="edited">Efternavn</text>
@@ -1118,8 +1097,6 @@
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">Dette modul er deaktiveret.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Moduler</text>
     <text id="SYS_MONDAY" development="new" translation="todo">Mandag</text>
-    <text id="SYS_MYSQL_VERSION" development="new" translation="todo">MySQL version</text>
-    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="todo">Admidio kræver 4.1 eller højere</text>
     <text id="SYS_NAME" development="new" translation="edited">Navn</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Kort navn</text>
     <text id="SYS_NEXT" development="new" translation="edited">Næste</text>
@@ -1174,8 +1151,6 @@
     <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Fjern rolle</text>
 	<text id="SYS_REPEAT" development="new" translation="edited">Gentag</text>
 	<text id="SYS_REPORT" development="new" translation="edited">Rapport</text>
-    <text id="SYS_REPRESENT_LARGE_TEXT" development="new" translation="edited">Tekst visning: %VAR1%stor%VAR2%</text>
-    <text id="SYS_REPRESENT_SMALL_TEXT" development="new" translation="edited">Tekst visning: %VAR1%lille%VAR2%</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="edited">Begrænsninger</text>
     <text id="SYS_ROLE" development="new" translation="edited">Rolle</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Det var ikke muligt at gemme. Maximum antal medlemmer af rollen %VAR1_BOLD% ville overskride den forud definerede begrænsning.</text>
@@ -1196,11 +1171,9 @@
     <text id="SYS_SERVER" development="new" translation="edited">Server</text>
     <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="edited">Server indstillinger tillader ikke fil uploads.</text>
     <text id="SYS_SET_BY" development="new" translation="edited">Sat af</text>
-    <text id="SYS_SET_LINK" development="new" translation="edited">Sæt %VAR1%link%VAR2% </text>
     <text id="SYS_SETTINGS" development="new" translation="edited">Indstillinger</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Vis kalender</text>
     <text id="SYS_SHOW_HELP" development="new" translation="edited">Vis hjælp</text>
-    <text id="SYS_SHOW_IMAGE" development="new" translation="edited">Vis billede %VAR1%</text>
 	<text id="SYS_SHOW_PROFILE" development="new" translation="todo">Vis profil</text>
 	<text id="SYS_SHOW_ROUTE" development="new" translation="edited">Vis rute</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">Mindst én bruger med lignende navn (%VAR1_BOLD% ) blev fundet i databasen.</text>
@@ -1210,7 +1183,6 @@
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{nuværende} af {total}</text>
 	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start slideshow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">Stop slideshow</text>
-    <text id="SYS_SPECIFY_EMAIL_ADDRESS" development="new" translation="edited">Specificer %VAR1%e-mail adresse%VAR2%</text>
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
@@ -1221,7 +1193,6 @@
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# Ny registrering på %organization_short_name%'s hjemmeside\n#content# En ny bruger har registreret sig selv på %organization_homepage%.\n\nEfternavn: %user_last_name%\nFornavn:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDenne mail blev genereret automatisk.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System Beskeder</text>
     <text id="SYS_TEXT" development="new" translation="edited">Tekst</text>
-    <text id="SYS_TEXT_ITALIC" development="new" translation="edited">Vis tekst i %VAR1%italic%VAR2%</text>
     <text id="SYS_THURSDAY" development="new" translation="todo">Torsdag</text>
     <text id="SYS_TIME" development="new" translation="edited">Tid</text>
     <text id="SYS_TIME_FROM" development="new" translation="edited">Tid fra</text>
@@ -1233,8 +1204,6 @@
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="edited">Fil %0 af %1 overført</text>
     <text id="SYS_TUESDAY" development="new" translation="todo">Tirsdag</text>
     <text id="SYS_TYPE" development="new" translation="edited">Type</text>
-    <text id="SYS_UNDERLINE" development="new" translation="edited">Understreg</text>
-    <text id="SYS_UNDERLINE_TEXT" development="new" translation="edited">%VAR1%understreg%VAR2% tekst</text>
     <text id="SYS_UNKNOWN" development="new" translation="edited">Uidentificeret</text>
     <text id="SYS_UNLIMITED" development="new" translation="edited">Ubegrænset</text>
     <text id="SYS_UNLOCK" development="new" translation="edited">Lås op</text>

@@ -253,7 +253,7 @@ class TableDate extends TableAccess
 		$this->db->endTransaction();
     }
 
-    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
+    // validates the value and adapts it if necessary
     public function setValue($field_name, $field_value, $check_value = true)
     {
         if($field_name == 'dat_end' && $this->getValue('dat_all_day') == 1)

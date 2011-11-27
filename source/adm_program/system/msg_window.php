@@ -32,52 +32,6 @@ if($getInlineView)
 
 switch ($getMessageId)
 {
-    case 'bbcode':
-        echo $gL10n->get('SYS_BBCODE_DESC').'<br /><br />
-              <table class="tableList" style="width: auto;" cellspacing="0">
-                 <tr>
-                    <th style="width: 155px;">'.$gL10n->get('SYS_EXAMPLE').'</th>
-                    <th>'.$gL10n->get('SYS_BBCODE').'</th>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_BOLD_TEXT_REPRESENT', '<b>', '</b>').'</td>
-                    <td>'.$gL10n->get('SYS_BOLD_TEXT_REPRESENT', '<b>[b]</b>', '<b>[/b]</b>').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_UNDERLINE_TEXT', '<u>', '</u>').'</td>
-                    <td>'.$gL10n->get('SYS_UNDERLINE_TEXT', '<b>[u]</b>', '<b>[/u]</b>').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_TEXT_ITALIC', '<i>', '</i>').'</td>
-                    <td>'.$gL10n->get('SYS_TEXT_ITALIC', '<b>[i]</b>', '<b>[/i]</b>').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_REPRESENT_LARGE_TEXT', '<span style="font-size: 14pt;">', '</span>').'</td>
-                    <td>'.$gL10n->get('SYS_REPRESENT_LARGE_TEXT', '<b>[big]</b>', '<b>[/big]</b>').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_REPRESENT_SMALL_TEXT', '<span style="font-size: 8pt;">', '</span>').'</td>
-                    <td>'.$gL10n->get('SYS_REPRESENT_SMALL_TEXT', '<b>[small]</b>', '<b>[/small]</b>').'</td>
-                 </tr>
-                 <tr>
-                    <td style="text-align: center;">'.$gL10n->get('SYS_CENTERED_TEXT_REPRESENT').'</td>
-                    <td><b>[center]</b>'.$gL10n->get('SYS_CENTERED_TEXT_REPRESENT').'<b>[/center]</b></td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_SET_LINK', '<a href="http://www.admidio.org">', '</a>').'</td>
-                    <td>'.$gL10n->get('SYS_SET_LINK', '<b>[url=</b>http://www.admidio.org<b>]</b>', '<b>[/url]</b>').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_SPECIFY_EMAIL_ADDRESS', '<a href="mailto:webmaster@admidio.org">', '</a>').'</td>
-                    <td>'.$gL10n->get('SYS_SPECIFY_EMAIL_ADDRESS', '<b>[email=</b>webmaster@admidio.org<b>]</b>', '<b>[/email]</b>').'</td>
-                 </tr>
-                 <tr>
-                    <td>'.$gL10n->get('SYS_SHOW_IMAGE', '<img src="'.THEME_PATH.'/images/admidio_logo_20.png" alt="logo" />').'</td>
-                    <td>'.$gL10n->get('SYS_SHOW_IMAGE', '<b>[img]</b>http://www.admidio.org/bild.jpg<b>[/img]</b>').'</td>
-                 </tr>
-              </table>';
-        break;
-
     case 'CAT_CATEGORY_GLOBAL':
         // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
         $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';

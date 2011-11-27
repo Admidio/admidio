@@ -9,7 +9,6 @@
 
 require_once('../../system/classes/email.php');
 require_once('../../system/classes/image.php');
-require_once('../../system/classes/ubb_parser.php');
 require_once('../../libs/htmlawed/htmlawed.php');
 
 class FunctionClass

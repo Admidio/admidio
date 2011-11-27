@@ -6,16 +6,8 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse dient dazu ein Linkobjekt zu erstellen. 
- * Eine Weblink kann ueber diese Klasse in der Datenbank verwaltet werden
- *
- * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
- *
- * getDescription($type = 'HTML') - liefert die Beschreibung je nach Type zurueck
- *                 type = 'PLAIN'  : reiner Text ohne Html oder BBCode
- *                 type = 'HTML'   : BB-Code in HTML umgewandelt
- *                 type = 'BBCODE' : Beschreibung mit BBCode-Tags
+ * This class creates objects of the database table links. 
+ * You can read, change and create weblinks in the database.
  *
  *****************************************************************************/
 
@@ -80,7 +72,7 @@ class TableWeblink extends TableAccess
         return parent::readData($lnk_id, $sql_where_condition, $sql_additional_tables);
     }
     
-    // prueft die Gueltigkeit der uebergebenen Werte und nimmt ggf. Anpassungen vor
+    // validates the value and adapts it if necessary
     public function setValue($field_name, $field_value, $check_value = true)
     {
         if($field_name == 'lnk_url' && strlen($field_value) > 0)

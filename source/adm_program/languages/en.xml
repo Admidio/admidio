@@ -221,7 +221,6 @@
 	<text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">More recipients</text>
 	<text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Sender's name</text> 
     <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">Name of recipient: %VAR1%</text>
-    <text id="ECA_NEED_JAVASCRIPT" development="new" translation="edited">For sending greeting cards, javascript has to be enabled!\nPlease enable Javascript in order to send your greeting card!</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">New message received</text>    
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">No user with valid e-mail address!</text>
     <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">No further recipients</text>
@@ -289,7 +288,6 @@
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="edited">Choose language</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="edited">Conference room</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="edited">File %VAR1_BOLD% can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</text>
-    <text id="INS_CONTACT_DETAILS" development="new" translation="edited">Contact details</text>
     <text id="INS_COURSES" development="new" translation="edited">Courses</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="edited">Creating administrator</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="edited">Creating configuration file</text>
@@ -314,7 +312,6 @@
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Enter database access information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">File %VAR1_BOLD% could not be opened.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download module.</text>
-    <text id="INS_GOOGLE_TALK" development="new1" translation="edited">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="edited">Groups</text>
     <text id="INS_ICQ" development="new1" translation="edited">ICQ</text>
     <text id="INS_INSTALL_ADMIDIO" development="new" translation="edited">Install Admidio</text>
@@ -331,7 +328,6 @@
 	<text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Membership</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
-    <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Not all MySQL database access information has been provided!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organization name</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Please provide official abbreviation of the organization's name here for use in Admidio.</text>
@@ -442,7 +438,6 @@
     <text id="LST_NO_RIGHTS_VIEW_LIST" development="new" translation="edited">You are not permitted to display a list of defined roles.</text>
     <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="edited">Configuration will be defined as default configuration</text>
 	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Number of roles per page</text>
-    <text id="LST_PERIOD" development="new" translation="edited">Period</text>
     <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Default configuration</text>
     <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">As webmaster you are able to define the default configuration for all users. Configure rows and columns and save it by naming the configuration set. Select new predefined list configuration and hit this: %VAR1%</text>
     <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Print preview</text>
@@ -553,7 +548,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="edited">Assigning membership and login information to selected user.</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="edited">Assigning registration</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="edited">Deleting registration</text>
-    <text id="NWU_REGISTRATION" development="new" translation="edited">Registration</text>
 	<text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="edited">Managing new registrations</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="edited">New registrations of visitors can be listed, approved or refused here.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="edited">New registrations</text>
@@ -583,8 +577,6 @@
     <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="edited">Advanced registration</text>
-    <text id="ORG_ALLOW_BBCODE" development="new" translation="edited">Allow BBCode</text>
-    <text id="ORG_ALLOW_BBCODE_DESC" development="new" translation="edited">Users can use %VAR1% in text fields (e.g. appointment description, guestbook entry) in order to allow prettier text formating. (default: yes)</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="edited">Auto log off after</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="edited">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected %VAR1_BOLD%. (default: 20 minutes)</text>    
 	<text id="ORG_CAPTCHA" development="new" translation="edited">Use this preferences for the captcha.</text>
@@ -926,9 +918,6 @@
     <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">No.</text>
     <text id="SYS_ACTIVE" development="new" translation="edited">Active</text>
     <text id="SYS_ACTIVATED" development="new" translation="edited">Active</text>
-    <text id="SYS_ADD_EMAIL" development="new" translation="edited">Add e-mail address</text>
-    <text id="SYS_ADD_IMAGE" development="new" translation="edited">Add picture</text>
-    <text id="SYS_ADD_LINK" development="new" translation="edited">Add hyperlink</text>
     <text id="SYS_ADD_ROLE" development="new" translation="edited">Add Role</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="edited">Add recipient</text>
 	<text id="SYS_ADDRESS" development="new" translation="edited">Address</text>
@@ -945,12 +934,8 @@
 	<text id="SYS_AUTHORIZATION" development="new" translation="edited">Authorization</text>
     <text id="SYS_BACK" development="new" translation="edited">Back</text>
 	<text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Back to module overview</text>
-    <text id="SYS_BBCODE" development="new" translation="edited">BBCode</text>
-    <text id="SYS_BBCODE_DESC" development="new" translation="edited">Description texts of certain modules (announcements, appointments, guestbook and weblinks) can be formated by tags (BBCode). Therefor you will have to use the listed tags within the text.</text>
     <text id="SYS_BETA_VERSION" development="new" translation="edited">You are using a BETA version of Admidio.\n\nStability issues and data loss might occur. Please use this version for testing purposes only!</text>
 	<text id="SYS_BIRTHDAY" development="new" translation="edited">Birthday</text>
-    <text id="SYS_BOLD" development="new" translation="edited">Bold</text>
-    <text id="SYS_BOLD_TEXT_REPRESENT" development="new" translation="edited">Display text %VAR1%bold%VAR2%</text>
     <text id="SYS_BROWSE" development="new" translation="edited">Browse</text>
     <text id="SYS_BROWSE_ERROR" development="new" translation="edited">Files searching could not be performed.</text>
     <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
@@ -968,15 +953,12 @@
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Authentication code</text>
 	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">The authentication code is part of a captcha. A captcha is used for spam detection. The picture is used to detect if a user or a script (or spambot) filled the form.\nPlease fill the result of the authentication code into the form.</text>	
     <text id="SYS_CATEGORY" development="new" translation="edited">Category</text>
-    <text id="SYS_CENTERED" development="new" translation="edited">Centered</text>
-    <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="edited">Display text centered</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Change password</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="edited">Check for update</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox status is saved automatically after marking.</text>
     <text id="SYS_CITY" development="new" translation="edited">Place</text>
     <text id="SYS_CLOCK" development="new" translation="edited">o'clock</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Close</text>
-    <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="edited">Close all tags</text>
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="edited">Close window</text>
     <text id="SYS_COMMENT" development="new" translation="edited">Comment</text>
     <text id="SYS_COMMON" development="new" translation="edited">General</text>
@@ -1008,7 +990,6 @@
     <text id="SYS_DATE_TO" development="new" translation="edited">to</text>
     <text id="SYS_DEACTIVATED" development="new" translation="edited">Inactive</text>
     <text id="SYS_DEBUG_MODUS" development="new" translation="edited">Debug modus</text>
-    <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="edited">Reduce font size</text>
     <text id="SYS_DELETE" development="new" translation="edited">Delete</text>
     <text id="SYS_DELETE_DATA" development="new" translation="edited">Data has been deleted.</text>
     <text id="SYS_DELETE_ENTRY" development="new" translation="edited">Would you like to delete entry %VAR1_BOLD%?</text>
@@ -1074,14 +1055,12 @@
     <text id="SYS_HOMEPAGE" development="new" translation="edited">Homepage</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP error (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="edited">Inactive</text>
-    <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="edited">Increase font size</text>
 	<text id="SYS_INFO" development="new" translation="edited">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installation directory 'adm_install' still exists on the server. Due to security reasons it has to be deleted!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Invalid page view</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Invisible</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O error</text>
     <text id="SYS_ISO_8859_1" development="new" translation="edited">ISO-8859-1</text>
-    <text id="SYS_ITALIC" development="new" translation="edited">Italic</text>
     <text id="SYS_LANGUAGE" development="new" translation="edited">Language</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="edited">Last edited by %VAR1% on %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="edited">Surname</text>
@@ -1122,8 +1101,6 @@
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">This module is disabled.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Modules</text>
     <text id="SYS_MONDAY" development="new" translation="edited">Monday</text>
-    <text id="SYS_MYSQL_VERSION" development="new" translation="edited">MySQL version</text>
-    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="edited">Admidio requires 4.1 or higher</text>
     <text id="SYS_NAME" development="new" translation="edited">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Short name</text>
     <text id="SYS_NEXT" development="new" translation="edited">Next</text>
@@ -1178,8 +1155,6 @@
     <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Remove role</text>
 	<text id="SYS_REPEAT" development="new" translation="edited">Repeat</text>
 	<text id="SYS_REPORT" development="new" translation="edited">Report</text>
-    <text id="SYS_REPRESENT_LARGE_TEXT" development="new" translation="edited">Display text: %VAR1%large%VAR2%</text>
-    <text id="SYS_REPRESENT_SMALL_TEXT" development="new" translation="edited">Display text: %VAR1%small%VAR2%</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="edited">Resctrictions</text>
     <text id="SYS_ROLE" development="new" translation="edited">Role</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Saving not possible. Maximum number of role members in role %VAR1_BOLD% would exceed predefined limit.</text>
@@ -1200,11 +1175,9 @@
     <text id="SYS_SERVER" development="new" translation="edited">Server</text>
     <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="edited">Server settings do not allow files uploads.</text>
     <text id="SYS_SET_BY" development="new" translation="edited">Set by</text>
-    <text id="SYS_SET_LINK" development="new" translation="edited">Set %VAR1%ink%VAR2% </text>
     <text id="SYS_SETTINGS" development="new" translation="edited">Preferences</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Display calendar</text>
     <text id="SYS_SHOW_HELP" development="new" translation="edited">Display help</text>
-    <text id="SYS_SHOW_IMAGE" development="new" translation="edited">Display picture %VAR1%</text>
 	<text id="SYS_SHOW_PROFILE" development="new" translation="edited">Show profile</text>
 	<text id="SYS_SHOW_ROUTE" development="new" translation="edited">Show route</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">At least one user with similar name (%VAR1_BOLD% ) was found in the database.</text>
@@ -1214,7 +1187,6 @@
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{current} of {total}</text>
 	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start slideshow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">End slideshow</text>
-    <text id="SYS_SPECIFY_EMAIL_ADDRESS" development="new" translation="edited">Specify %VAR1%e-mail address%VAR2%</text>
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
@@ -1225,7 +1197,6 @@
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="edited">#subject# New registration at %organization_short_name% website\n#content# A new user registered himself on %organization_homepage%.\n\nSurname: %user_last_name%\nFirst Name:  %user_first_name%\nE-Mail:   %user_email%\n\n\nThis message was generated automatically.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System message</text>
     <text id="SYS_TEXT" development="new" translation="edited">Text</text>
-    <text id="SYS_TEXT_ITALIC" development="new" translation="edited">Display text in %VAR1%italic%VAR2%</text>
     <text id="SYS_THURSDAY" development="new" translation="edited">Thursday</text>
     <text id="SYS_TIME" development="new" translation="edited">Time</text>
     <text id="SYS_TIME_FROM" development="new" translation="edited">Time from</text>
@@ -1237,8 +1208,6 @@
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="edited">File %0 of %1 transfered</text>
     <text id="SYS_TUESDAY" development="new" translation="edited">Tuesday</text>
     <text id="SYS_TYPE" development="new" translation="edited">Type</text>
-    <text id="SYS_UNDERLINE" development="new" translation="edited">Underline</text>
-    <text id="SYS_UNDERLINE_TEXT" development="new" translation="edited">%VAR1%underline%VAR2% text</text>
     <text id="SYS_UNKNOWN" development="new" translation="edited">Unidentified</text>
     <text id="SYS_UNLIMITED" development="new" translation="edited">Unlimited</text>
     <text id="SYS_UNLOCK" development="new" translation="edited">Unlock</text>

@@ -71,7 +71,7 @@ $photo_album = new TablePhotos($gDb);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed('http://'. $gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline, 
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline, 
 		$gL10n->get('PHO_RECENT_ALBUMS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen

@@ -7,24 +7,19 @@
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf %VAR1_BOLD%.</text>
-    <text id="ECA_NEED_JAVASCRIPT" development="deleted" translation="todo">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktiviere Javascript um eine Grußkarte versenden zu können!</text>
-    <text id="INS_CONTACT_DETAILS" development="deleted" translation="todo">Kontaktdaten</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
     <text id="INS_FACEBOOK" development="new" translation="todo">Facebook</text>
     <text id="INS_FACEBOOK_DESC" development="new" translation="todo">Willst du dein Facebook-Profil hier verlinken? Dazu benötigst du deinen Nutzernamen bei Facebook. Melde dich bei Facebook an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Facebook-Profil aufrufen.</text>
-    <text id="INS_GOOGLE_TALK" development="deleted" translation="todo">Google Talk</text>
     <text id="INS_GOOGLE_PLUS" development="new" translation="todo">Google+</text>
     <text id="INS_GOOGLE_PLUS_DESC" development="new" translation="todo">Willst du dein Google+ Profil hier verlinken? Dazu benötigst du momentan noch die etwas kryptische Profilnummer von Google+. Melde dich bei Google+ an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Google+ Profil aufrufen.</text>
     <text id="INS_ICQ_DESC" development="new" translation="todo">Gib hier deine ICQ-Nummer ein. Hast du in Skype deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</text>
-    <text id="INS_MSN_MESSENGER" development="deleted" translation="todo">MSN Messenger</text>
     <text id="INS_SKYPE_DESC" development="new" translation="todo">Gib hier deinen eindeutigen Skype-Namen ein. Hast du in ICQ deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</text>
     <text id="INS_TWITTER" development="new" translation="todo">Twitter</text>
     <text id="INS_TWITTER_DESC" development="new" translation="todo">Willst du dein Twitter-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Twitter. Melde dich bei Twitter an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Twitter-Profil aufrufen.</text>
     <text id="INS_WINDOWS_LIVE" development="new" translation="todo">Windows Live</text>
     <text id="INS_XING" development="new" translation="todo">Xing</text>
     <text id="INS_XING_DESC" development="new" translation="todo">Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Xing-Profil aufrufen.</text>
-    <text id="LST_PERIOD" development="deleted" translation="todo">Zeitraum</text>
     <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="todo">Betreff &amp; Anhang</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="todo">Zeichenkodierung</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="todo">Angabe der Zeichenkodierung in der eine E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</text>
@@ -35,7 +30,6 @@
     <text id="MAI_YOUR_EMAIL" development="new" translation="todo">Deine E-Mail</text>
     <text id="MAI_YOUR_NAME" development="new" translation="todo">Dein Name</text>
     <text id="MEM_IMPORT_SUCCESSFUL" development="changed" translation="todo">Der Import ist erfolgreich verlaufen.\n\n%VAR1% neue Benutzer wurden angelegt.\n%VAR2% Benutzer wurden bearbeitet.\n%VAR3% Rollenmitgliedschaften wurden zugeordnet.</text>
-    <text id="NWU_REGISTRATION" development="deleted" translation="todo">Anmeldung</text>
     <text id="ORG_FIELD_DISABLED" development="changed" translation="todo">Feld nur für Benutzer mit dem Recht %VAR1_BOLD% editierbar</text>
     <text id="ORG_FIELD_URL_DESC" development="new" translation="todo">Die eingegebene URL verlinkt später im Profil den Inhalt, den der Benutzer in dieses Feld eingegeben hat. Optional kann noch der Platzhalter %user_content% in die URL eingebaut werden. Dies ist dann der Inhalt, den der Benutzer im Feld eingegeben hat.\n\nBeispiel:\nUrl: http://www.google.de/search?q=%user_content%\nFeldinhalt: Admidio\nLink im Profil: http://www.google.de/search?q=Admidio</text>
     <text id="ORG_JAVASCRIPT_EDITOR_COLOR" development="changed" translation="todo">Farbe Javascript-Editor</text>
@@ -59,8 +53,6 @@
     <text id="SYS_INTERNAL_NAME" development="new" translation="todo">Interner Name</text>
     <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="todo">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</text>
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
-    <text id="SYS_MYSQL_VERSION" development="deleted" translation="todo">MySQL-Version</text>
-    <text id="SYS_MYSQL_VERSION_REQUIRED" development="deleted" translation="todo">Admidio benötigt 4.1 oder höher</text>
     <text id="SYS_ORGANIZATION" development="new" translation="todo">Organisation</text>
     <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
 	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>    	
@@ -637,8 +629,6 @@
     <text id="ORG_ADMIDIO_THEME" development="new" translation="todo">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="todo">Erweiterte Registrierung</text>
-    <text id="ORG_ALLOW_BBCODE" development="new" translation="todo">BBCode zulassen</text>
-    <text id="ORG_ALLOW_BBCODE_DESC" development="new" translation="todo">Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) %VAR1% nutzen um den Text besser zu formatieren. (Standard: ja)</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Automatischer Logout nach</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>    
 	<text id="ORG_CAPTCHA" development="new" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
@@ -976,9 +966,6 @@
     <text id="SYS_ABR_NO" development="new" translation="todo" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_ACTIVE" development="new" translation="todo">Aktiv</text>
     <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiviert</text>
-    <text id="SYS_ADD_EMAIL" development="new" translation="todo">E-Mail-Adresse einfügen</text>
-    <text id="SYS_ADD_IMAGE" development="new" translation="todo">Bild einfügen</text>
-    <text id="SYS_ADD_LINK" development="new" translation="todo">Link einfügen</text>
     <text id="SYS_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
 	<text id="SYS_ADDRESS" development="new" translation="todo">Adresse</text>
@@ -995,12 +982,8 @@
 	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
     <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="todo">Zurück zur Modulübersicht</text>
-    <text id="SYS_BBCODE" development="new" translation="todo">BBCode</text>
-    <text id="SYS_BBCODE_DESC" development="new" translation="todo">Die Beschreibung bei einigen Modulen (Ankündigungen, Terminen, Gästebuch und Weblinks) können mit verschiedenen Tags (BBCode) formatiert werden. Dafür müssen die hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.</text>
     <text id="SYS_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</text>
 	<text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
-    <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
-    <text id="SYS_BOLD_TEXT_REPRESENT" development="new" translation="todo">Text %VAR1%fett%VAR2% darstellen</text>
     <text id="SYS_BROWSE" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
@@ -1016,15 +999,12 @@
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
 	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="todo">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</text>
     <text id="SYS_CATEGORY" development="new" translation="todo">Kategorie</text>
-    <text id="SYS_CENTERED" development="new" translation="todo">Zentriert</text>
-    <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="todo">Text zentriert darstellen</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">nach Update suchen</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
     <text id="SYS_CITY" development="new" translation="todo">Ort</text>
     <text id="SYS_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
-    <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="todo">Alle Tags schließen</text>
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="todo">Fenster schließen</text>
     <text id="SYS_COMMENT" development="new" translation="todo">Kommentar</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
@@ -1056,7 +1036,6 @@
     <text id="SYS_DATE_TO" development="new" translation="todo">bis</text>
     <text id="SYS_DEACTIVATED" >Deaktiviert</text>
     <text id="SYS_DEBUG_MODUS" development="new" translation="todo">Debugmodus</text>
-    <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad veringern</text>
     <text id="SYS_DELETE" development="new" translation="todo">Löschen</text>
     <text id="SYS_DELETE_DATA" development="new" translation="todo">Die Daten wurden gelöscht.</text>
     <text id="SYS_DELETE_ENTRY" development="new" translation="todo">Willst du den Eintrag %VAR1_BOLD% löschen?</text>
@@ -1122,14 +1101,12 @@
     <text id="SYS_HOMEPAGE" development="new" translation="todo">Startseite</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
-    <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad erhöhen</text>
 	<text id="SYS_INFO" development="new" translation="todo">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
     <text id="SYS_ISO_8859_1" development="new" translation="todo">ISO-8859-1</text>
-    <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="todo">Nachname</text>
@@ -1223,8 +1200,6 @@
     <text id="SYS_REMOVE_ROLE" development="new" translation="todo">Rolle entfernen</text>
 	<text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
 	<text id="SYS_REPORT" development="new" translation="todo">Bericht</text>
-    <text id="SYS_REPRESENT_LARGE_TEXT" development="new" translation="todo">Text %VAR1%groß%VAR2% darstellen</text>
-    <text id="SYS_REPRESENT_SMALL_TEXT" development="new" translation="todo">Text %VAR1%klein%VAR2% darstellen</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="todo">Einschränkungen</text>
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="todo">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
@@ -1245,11 +1220,9 @@
     <text id="SYS_SERVER" development="new" translation="todo">Server</text>
     <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="todo">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
     <text id="SYS_SET_BY" development="new" translation="todo">Gesetzt durch</text>
-    <text id="SYS_SET_LINK" development="new" translation="todo">Einen %VAR1%Link%VAR2% setzen</text>
     <text id="SYS_SETTINGS" development="new" translation="todo">Einstellungen</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
     <text id="SYS_SHOW_HELP" development="new" translation="todo">Hilfe anzeigen</text>
-    <text id="SYS_SHOW_IMAGE" development="new" translation="todo">Ein Bild %VAR1% anzeigen</text>
 	<text id="SYS_SHOW_PROFILE" development="new" translation="todo">Profil anzeigen</text>
 	<text id="SYS_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="todo">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</text>
@@ -1259,7 +1232,6 @@
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} von {total}</text>
 	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">Starte Diashow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Stoppe Diashow</text>
-    <text id="SYS_SPECIFY_EMAIL_ADDRESS" development="new" translation="todo">Eine %VAR1%Mailadresse%VAR2% angeben</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
     <text id="SYS_STOP" development="new" translation="todo">Stop</text>
@@ -1270,7 +1242,6 @@
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# Neue Registrierung bei %organization_long_name%\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\n\nNachname: %user_last_name%\nVorname:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDiese Nachricht wurde automatisch erzeugt.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
-    <text id="SYS_TEXT_ITALIC" development="new" translation="todo">Text %VAR1%kursiv%VAR2% darstellen</text>
     <text id="SYS_THURSDAY" development="new" translation="todo">Donnerstag</text>
     <text id="SYS_TIME" development="new" translation="todo">Uhrzeit</text>
     <text id="SYS_TIME_FROM" development="new" translation="todo">Uhrzeit von</text>
@@ -1282,8 +1253,6 @@
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
     <text id="SYS_TUESDAY" development="new" translation="todo">Dienstag</text>
     <text id="SYS_TYPE" development="new" translation="todo">Typ</text>
-    <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
-    <text id="SYS_UNDERLINE_TEXT" development="new" translation="todo">Text %VAR1%unterstreichen%VAR2%</text>
     <text id="SYS_UNKNOWN" development="new" translation="todo">Unbekannt</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
