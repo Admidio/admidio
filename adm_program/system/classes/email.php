@@ -117,7 +117,7 @@ public function setSender($address, $name='')
     if (strValidCharacters($address, 'email'))
     {
         //Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
-        if($gPreferences['mail_sendmail_address'] != '' && $address != $gPreferences['email_administrator'])
+        if(strlen($gPreferences['mail_sendmail_address']) > 0) // && $address != $gPreferences['email_administrator'])
         {
             //hier wird die Absenderadresse gesetzt
             $this->headerOptions['From'] = '"'. $name. '" <'. $gPreferences['mail_sendmail_address']. '>';
@@ -482,7 +482,9 @@ public function sendEmail()
 
         // Mail wird jetzt versendet...
         // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
+        error_log('rec::'.$recipient.'::sub::'.$subject.'::bod::'.$this->mail_body.'::prog::'.$this->mail_properties);
         if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
+//        if (!mail(utf8_decode($recipient), utf8_decode($subject),  $this->mail_body, utf8_decode($this->mail_properties)))
         {
              return false;
         }

@@ -121,7 +121,7 @@ $javascript = '
             ecardJS.recipient_Text			= "'.$gL10n->get('SYS_RECIPIENT').'";
             ecardJS.recipientName_Text		= "'.$gL10n->get('ECA_RECIPIENT_NAME').'";
             ecardJS.recipientEmail_Text		= "'.$gL10n->get('ECA_RECIPIENT_EMAIL').'";
-            ecardJS.errMsg_End_Text			= "'.str_replace('<br />','\n',$gL10n->get('ECA_FILL_INPUTS')).'";
+            ecardJS.errMsg_End_Text			= "'.str_replace('<br />','\n',$gL10n->get('ECA_FILL_INPUTS', $gL10n->get('SYS_SEND'))).'";
             ecardJS.ecardPreview_Text		= "'.$gL10n->get('ECA_GREETING_CARD_PREVIEW').'";
             ecardJS.emailLookInvalid_Text	= "'.$gL10n->get('ECA_EMAIL_LOOKS_INVALID').'";
             ecardJS.contentIsLoading_Text	= "'.$gL10n->get('ECA_CONTENT_LOADING').'";
@@ -132,7 +132,7 @@ $javascript = '
             ecardJS.blendOutSettings_Text	= "'.$gL10n->get('ECA_BLEND_OUT_SETTINGS').'";
             ecardJS.internalRecipient_Text	= "'.$gL10n->get('ECA_INTERNAL_RECIPIENT').'";
             ecardJS.messageTooLong			= "'.$gL10n->get('ECA_MESSAGE_TOO_LONG',$var1='[MAX]').'";
-            ecardJS.loading_Text			= "'.$gL10n->get('SYS_LOADING').'";
+            ecardJS.loading_Text			= "'.$gL10n->get('SYS_LOADING_CONTENT').'";
             ecardJS.send_Text				= "'.$gL10n->get('SYS_SEND').'";
             
             $(document).ready(function() {
@@ -328,9 +328,9 @@ echo '
 
 			<div class="formSubmit">
 				<button id="btnPreview" onclick="javascript:ecardJS.makePreview();" type="button"><img 
-					src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get("SYS_PREVIEW").'" />&nbsp;'.$gL10n->get("SYS_PREVIEW").'</button>&nbsp;&nbsp;&nbsp;&nbsp;
+					src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />&nbsp;'.$gL10n->get('SYS_PREVIEW').'</button>&nbsp;&nbsp;&nbsp;&nbsp;
 				<button id="ecardSubmit" onclick="javascript:ecardJS.sendEcard();" type="button"><img 
-					src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get("SYS_SEND").'" />&nbsp;'.$gL10n->get("SYS_SEND").'</button>
+					src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_SEND').'" />&nbsp;'.$gL10n->get('SYS_SEND').'</button>
 			</div>
 		</form>
 	</div>
