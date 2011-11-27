@@ -11,6 +11,8 @@
         <div id="sidebar" class="content">
             <?php
             include(SERVER_PATH. '/adm_plugins/login_form/login_form.php');
+            include(SERVER_PATH. '/adm_plugins/calendar/calendar.php');
+            include(SERVER_PATH. '/adm_plugins/sidebar_online/sidebar_online.php');
 
             echo '<br/>
             <h3>'.$gL10n->get('SYS_MODULES').'</h3>

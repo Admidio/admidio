@@ -1079,7 +1079,6 @@
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
     <text id="SYS_FONT_COLOR" development="new" translation="todo">Schriftfarbe</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
-    <text id="SYS_FONT_STYLE" development="new" translation="todo">Schrifttyp</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="todo">Ich habe mein Passwort vergessen!</text>
     <text id="SYS_FORUM" development="new" translation="todo">Forum</text>
     <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="todo">Du bist als %VAR1_BOLD% im Forum %VAR2_BOLD% angemeldet und hast %VAR3_BOLD% neue Nachrichten.</text>

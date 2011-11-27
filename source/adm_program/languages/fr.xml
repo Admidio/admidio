@@ -982,7 +982,6 @@
 	<text id="SYS_FONT" development="new" translation="edited">Police</text> 
  	<text id="SYS_FONT_COLOR" development="new" translation="edited">Couleurs de la police</text>
 	<text id="SYS_FONT_SIZE" development="new" translation="edited">Taille de la police</text>
-	<text id="SYS_FONT_STYLE" development="new" translation="edited">Style de la police</text>
 	<text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">J'ai oublié mon mot de passe!</text>
 	<text id="SYS_FORUM" development="new" translation="edited">Forum</text>
 	<text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">Vous êtes connecté en tant que %VAR1_BOLD% au système de forum %VAR2_BOLD%. Vous avez %VAR3_BOLD% de nouveaux messages.</text>

@@ -45,7 +45,7 @@ if($gDb->num_rows() > 0)
 
 	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_GOOGLE_PLUS\'
 	                                     , usf_name_intern = \'GOOGLE_PLUS\'
-	                                     , usf_icon = \'google.png\'
+	                                     , usf_icon = \'google_plus.png\'
 										 , usf_description = \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\'
 										 , usf_url = \'https://plus.google.com/%user_content%/posts\'
 			 WHERE usf_id = '.$rowProfileField[0];

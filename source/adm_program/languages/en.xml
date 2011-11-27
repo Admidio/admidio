@@ -1033,7 +1033,6 @@
     <text id="SYS_FONT" development="new" translation="edited">Font</text>
   	<text id="SYS_FONT_COLOR" development="new" translation="edited">Font-color</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-size</text>
-    <text id="SYS_FONT_STYLE" development="new" translation="edited">Font-style</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">I forgot my password!</text>
     <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
 	<text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">You are logged as %VAR1_BOLD% in forum system %VAR2_BOLD%. You have %VAR3_BOLD% new messages.</text>
