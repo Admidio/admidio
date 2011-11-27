@@ -1029,7 +1029,6 @@
     <text id="SYS_FONT" development="new" translation="edited">Font</text>
   	<text id="SYS_FONT_COLOR" development="new" translation="edited">Font-farve</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-størrelse</text>
-    <text id="SYS_FONT_STYLE" development="new" translation="edited">Font-stil</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">Jeg har glemt mit kodeord!</text>
     <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
 	<text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">Du er logget ind som %VAR1_BOLD% i forum systemet %VAR2_BOLD%. Du har %VAR3_BOLD% nye beskeder.</text>
