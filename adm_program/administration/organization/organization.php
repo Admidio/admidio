@@ -204,20 +204,6 @@ echo '
 					<li class="smallFontSize">'.$gL10n->get('ORG_HOMEPAGE_REGISTERED_USERS').'</li>
 					<li>
 						<dl>
-							<dt><label for="enable_bbcode">'.$gL10n->get('ORG_ALLOW_BBCODE').':</label></dt>
-							<dd>
-								<input type="checkbox" id="enable_bbcode" name="enable_bbcode" ';
-								if(isset($form_values['enable_bbcode']) && $form_values['enable_bbcode'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_ALLOW_BBCODE_DESC', '<a href="http://de.wikipedia.org/wiki/BBCode">BB-Code</a>').'</li>
-					<li>
-						<dl>
 							<dt><label for="enable_rss">'.$gL10n->get('ORG_ENABLE_RSS_FEEDS').':</label></dt>
 							<dd>
 								<input type="checkbox" id="enable_rss" name="enable_rss" ';

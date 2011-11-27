@@ -322,12 +322,13 @@ elseif($getMode == 6)
 
     // Default-Daten anlegen
 
-    // Organisationsobjekt erstellen
-    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname, org_homepage)
-                                         VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\', \''.$_SERVER['HTTP_HOST'].'\')';
+    // create database object for organization
+    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname) VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\')';
     $gDb->query($sql);
 
     $gCurrentOrganization = new Organization($gDb, $_SESSION['orgaShortName']);
+    $gCurrentOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
+    $gCurrentOrganization->save();
 
 	// create object with current user field structure
 	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);

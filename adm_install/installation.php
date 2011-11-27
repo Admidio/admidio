@@ -549,11 +549,12 @@ elseif($req_mode == 8)
     $db->query($sql);
 
     // Organisationsobjekt erstellen
-    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname, org_homepage)
-                                         VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\', \''.$_SERVER['HTTP_HOST'].'\')';
+    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname) VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\')';
     $db->query($sql);
 
     $gCurrentOrganization = new Organization($db, $_SESSION['orgaShortName']);
+    $gCurrentOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
+    $gCurrentOrganization->save();
 
     // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
     include('db_scripts/preferences.php');

@@ -219,7 +219,6 @@
     <text id="ECA_MORE_RECIPIENTS" development="new" translation="todo">Weitere Empfänger</text>
     <text id="ECA_NAME_OF_SENDER" development="new" translation="todo">Name des Absenders</text>
     <text id="ECA_NAME_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="new" translation="todo">Name des%VAR1%Empfängers</text>
-    <text id="ECA_NEED_JAVASCRIPT" development="new" translation="todo">Um eine Grußkarte versenden zu können wird Javascript benötigt!\nBitte aktivieren Sie Javascript um eine Grußkarte versenden zu können!</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="todo">Neue Nachricht erhalten</text>
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="todo">Kein User vorhanden der eine gültige E-mail besitzt!</text>
     <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="todo">Keine weiteren Empfänger</text>
@@ -287,7 +286,6 @@
     <text id="INS_CHOOSE_LANGUAGE" development="new" translation="todo">Bitte wählen Sie eine Sprache aus</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="todo">Besprechnungsraum</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="todo">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis!\n\nLaden Sie die Datei gegebenenfalls erneut herunter und kopieren Sie diese in das entsprechende Verzeichnis.</text>
-    <text id="INS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
     <text id="INS_COURSES" development="new" translation="todo">Kurse</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Administrator anlegen</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="todo">Konfigurationsdatei erzeugen</text>
@@ -312,7 +310,6 @@
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank eingeben</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="todo">Die Datei %VAR1_BOLD% konnte nicht geöffnet werden.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="todo">Der Ordner %VAR1_BOLD% besitzt noch keine Schreibrechte. Diese sollten Sie noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</text>
-    <text id="INS_GOOGLE_TALK" development="new" translation="todo">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="todo">Gruppen</text>
     <text id="INS_ICQ" development="new" translation="todo">ICQ</text>
     <text id="INS_INSTALL_ADMIDIO" development="new" translation="todo">Admidio installieren</text>
@@ -328,7 +325,6 @@
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="todo">Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation!</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
-    <text id="INS_MSN_MESSENGER" development="new" translation="todo">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="todo">Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, für die Sie Admidio nutzen möchten.</text>
@@ -438,7 +434,6 @@
     <text id="LST_NO_RIGHTS_VIEW_LIST" development="new" translation="todo">Sie besitzen keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
     <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="todo">Konfiguration wird zur neuen Standardkonfiguration</text>
 	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
-    <text id="LST_PERIOD" development="new" translation="todo">Zeitraum</text>
     <text id="LST_PRESET_CONFIGURATION" development="new" translation="todo">Vorgegebene Konfigurationen</text>
     <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="todo">Als Webmaster können Sie Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfigurieren Sie die entsprechende Spalten und Bedingungen und speichern Sie diese unter dem gewünschten Namen. Wählen Sie nun die neu erstellte Liste aus und klickn Sie auf dieses Symbol: %VAR1%</text>
     <text id="LST_PRINT_PREVIEW" development="new" translation="todo">Druckvorschau</text>
@@ -549,7 +544,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="todo">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="todo">Anmeldung zuordnen</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="todo">Anmeldung löschen</text>
-    <text id="NWU_REGISTRATION" development="new" translation="todo">Anmeldung</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen verwalten.</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="todo">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen</text>
@@ -579,8 +573,6 @@
     <text id="ORG_ADMIDIO_THEME" development="new" translation="todo">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="todo">Erweiterte Registrierung</text>
-    <text id="ORG_ALLOW_BBCODE" development="new" translation="todo">BBCode zulassen</text>
-    <text id="ORG_ALLOW_BBCODE_DESC" development="new" translation="todo">Die Benutzer können in Textboxen (z.B. Terminbeschreibungen, Gästebucheinträgen) %VAR1% nutzen um den Text besser zu formatieren. (Standard: ja)</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Automatischer Logout nach</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>    
 	<text id="ORG_CAPTCHA" development="new" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
@@ -921,9 +913,6 @@
     <text id="SYS_ABR_NO" development="new" translation="todo" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_ACTIVE" development="new" translation="todo">Aktiv</text>
     <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiviert</text>
-    <text id="SYS_ADD_EMAIL" development="new" translation="todo">E-Mail-Adresse einfügen</text>
-    <text id="SYS_ADD_IMAGE" development="new" translation="todo">Bild einfügen</text>
-    <text id="SYS_ADD_LINK" development="new" translation="todo">Link einfügen</text>
     <text id="SYS_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
 	<text id="SYS_ADDRESS" development="new" translation="todo">Adresse</text>
@@ -940,12 +929,8 @@
 	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
     <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="todo">Zurück zur Modulübersicht</text>
-    <text id="SYS_BBCODE" development="new" translation="todo">BBCode</text>
-    <text id="SYS_BBCODE_DESC" development="new" translation="todo">Die Beschreibung bei einigen Modulen (Ankündigungen, Terminen, Gästebuch und Weblinks) können mit verschiedenen Tags (BBCode) formatiert werden. Dafür müssen die hier aufgelisteten Tags um den entsprechenden Textabschnitt gesetzt werden.</text>
     <text id="SYS_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</text>
 	<text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
-    <text id="SYS_BOLD" development="new" translation="todo">Fett</text>
-    <text id="SYS_BOLD_TEXT_REPRESENT" development="new" translation="todo">Text %VAR1%fett%VAR2% darstellen</text>
     <text id="SYS_BROWSE" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
@@ -961,15 +946,12 @@
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
 	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="todo">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</text>
     <text id="SYS_CATEGORY" development="new" translation="todo">Kategorie</text>
-    <text id="SYS_CENTERED" development="new" translation="todo">Zentriert</text>
-    <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="todo">Text zentriert darstellen</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">nach Update suchen</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
     <text id="SYS_CITY" development="new" translation="todo">Ort</text>
     <text id="SYS_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
-    <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="todo">Alle Tags schließen</text>
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="todo">Fenster schließen</text>
     <text id="SYS_COMMENT" development="new" translation="todo">Kommentar</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
@@ -1001,7 +983,6 @@
     <text id="SYS_DATE_TO" development="new" translation="todo">bis</text>
     <text id="SYS_DEACTIVATED" >Deaktiviert</text>
     <text id="SYS_DEBUG_MODUS" development="new" translation="todo">Debugmodus</text>
-    <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad veringern</text>
     <text id="SYS_DELETE" development="new" translation="todo">Löschen</text>
     <text id="SYS_DELETE_DATA" development="new" translation="todo">Die Daten wurden gelöscht.</text>
     <text id="SYS_DELETE_ENTRY" development="new" translation="todo">Wollen Sie den Eintrag %VAR1_BOLD% löschen?</text>
@@ -1067,14 +1048,12 @@
     <text id="SYS_HOMEPAGE" development="new" translation="todo">Startseite</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
-    <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="todo">Schriftgrad erhöhen</text>
 	<text id="SYS_INFO" development="new" translation="todo">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
     <text id="SYS_ISO_8859_1" development="new" translation="todo">ISO-8859-1</text>
-    <text id="SYS_ITALIC" development="new" translation="todo">Kursiv</text>
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="todo">Nachname</text>
@@ -1115,8 +1094,6 @@
     <text id="SYS_MODULE_DISABLED" development="new" translation="todo">Dieses Modul ist nicht freigegeben.</text>
     <text id="SYS_MODULES" development="new" translation="todo">Module</text>
     <text id="SYS_MONDAY" development="new" translation="todo">Montag</text>
-    <text id="SYS_MYSQL_VERSION" development="new" translation="todo">MySQL-Version</text>
-    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt 4.1 oder höher</text>
     <text id="SYS_NAME" development="new" translation="todo">Name</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="todo">Name (Abkürzung)</text>
     <text id="SYS_NEXT" development="new" translation="todo">Weiter</text>
@@ -1171,8 +1148,6 @@
     <text id="SYS_REMOVE_ROLE" development="new" translation="todo">Rolle entfernen</text>
 	<text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
 	<text id="SYS_REPORT" development="new" translation="todo">Bericht</text>
-    <text id="SYS_REPRESENT_LARGE_TEXT" development="new" translation="todo">Text %VAR1%groß%VAR2% darstellen</text>
-    <text id="SYS_REPRESENT_SMALL_TEXT" development="new" translation="todo">Text %VAR1%klein%VAR2% darstellen</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="todo">Einschränkungen</text>
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="todo">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
@@ -1193,11 +1168,9 @@
     <text id="SYS_SERVER" development="new" translation="todo">Server</text>
     <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="todo">Die Servereinstellungen lassen leider keine Dateiuploads zu.</text>
     <text id="SYS_SET_BY" development="new" translation="todo">Gesetzt durch</text>
-    <text id="SYS_SET_LINK" development="new" translation="todo">Einen %VAR1%Link%VAR2% setzen</text>
     <text id="SYS_SETTINGS" development="new" translation="todo">Einstellungen</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
     <text id="SYS_SHOW_HELP" development="new" translation="todo">Hilfe anzeigen</text>
-    <text id="SYS_SHOW_IMAGE" development="new" translation="todo">Ein Bild %VAR1% anzeigen</text>
 	<text id="SYS_SHOW_PROFILE" development="new" translation="todo">Profil anzeigen</text>
 	<text id="SYS_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="todo">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</text>
@@ -1207,7 +1180,6 @@
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} von {total}</text>
 	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">Starte Diashow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Stoppe Diashow</text>
-    <text id="SYS_SPECIFY_EMAIL_ADDRESS" development="new" translation="todo">Eine %VAR1%Mailadresse%VAR2% angeben</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
     <text id="SYS_STOP" development="new" translation="todo">Stop</text>
@@ -1218,7 +1190,6 @@
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# Neue Registrierung bei %organization_long_name%\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\n\nNachname: %user_last_name%\nVorname:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDiese Nachricht wurde automatisch erzeugt.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
-    <text id="SYS_TEXT_ITALIC" development="new" translation="todo">Text %VAR1%kursiv%VAR2% darstellen</text>
     <text id="SYS_THURSDAY" development="new" translation="todo">Donnerstag</text>
     <text id="SYS_TIME" development="new" translation="todo">Uhrzeit</text>
     <text id="SYS_TIME_FROM" development="new" translation="todo">Uhrzeit von</text>
@@ -1230,8 +1201,6 @@
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="todo">übertrage Datei %0 von %1</text>
     <text id="SYS_TUESDAY" development="new" translation="todo">Dienstag</text>
     <text id="SYS_TYPE" development="new" translation="todo">Typ</text>
-    <text id="SYS_UNDERLINE" development="new" translation="todo">Unterstrichen</text>
-    <text id="SYS_UNDERLINE_TEXT" development="new" translation="todo">Text %VAR1%unterstreichen%VAR2%</text>
     <text id="SYS_UNKNOWN" development="new" translation="todo">Unbekannt</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>

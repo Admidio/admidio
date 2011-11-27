@@ -174,7 +174,7 @@ elseif($gValidLogin && strlen($getUserId) > 0)
     }
     elseif($getUserId != 'bw')
     {
-		// Rollen Domain von der angegebenen Hompage parsen oder falls nicht vorhanden standard nehmen
+		// Rollen Domain von der angegebenen Homepage parsen oder falls nicht vorhanden standard nehmen
 		$orgHP = trim($gCurrentOrganization->getValue('org_homepage'));
 		$rolDomain = 'organisation.com';
 		if( $orgHP != '' )
@@ -185,11 +185,13 @@ elseif($gValidLogin && strlen($getUserId) > 0)
 			$count = count($newUrlArray);
 			
 			if( $count >= 2 )
-				$rolDomain = $newUrlArray[$count-2].".".$newUrlArray[$count-1];
+			{
+				$rolDomain = $newUrlArray[$count-2].'.'.$newUrlArray[$count-1];
+            }
 		}
 		
 		list ($rolName, $rolId) = split("[\_]", $getUserId);
-		if( $rolId != "" )
+		if( $rolId != '' )
 		{
 			$sql = 'SELECT rol_name 
 					 FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '

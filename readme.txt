@@ -127,7 +127,11 @@ Tango Desktop Project
 jQuery
     http://www.jquery.com
 	JavaScript-Library
-	
+
+CKEditor
+    http://www.ckeditor.com
+    Javascript-Editor
+
 James Heinrich
 	http://www.silisoftware.com
 	backupDB
@@ -151,11 +155,15 @@ Matt Kruse
 Timothy Groves
 	http://www.brandspankingnew.net
 	BSN.AutoSuggest
-	
-Roönaän Webdevelopment
-	http://www.roonaan.nl
-	quickerUbb Klasse
-	
+
+htmLawed
+    http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/
+    PHP code to purify & filter HTML
+
+phpass
+    http://www.openwall.com/phpass/
+    Portable PHP password hashing framework
+
 phpBB bulletin board
 	http://www.phpbb.com
 	Diverse Funktionen

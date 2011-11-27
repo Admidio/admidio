@@ -49,7 +49,7 @@ $member_found = $gDb->num_rows($usr_result);
 if ($member_found == 0)
 {
     $gMessage->setForwardUrl($gHomepage);
-    $gMessage->show($gL10n->get('NWU_NO_REGISTRATIONS'), $gL10n->get('NWU_REGISTRATION'));
+    $gMessage->show($gL10n->get('NWU_NO_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
 }
 
 // Html-Kopf ausgeben
