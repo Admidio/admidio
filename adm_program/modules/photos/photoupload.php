@@ -83,7 +83,7 @@ else
 }
 
 // Html-Kopf ausgeben
-$gLayout['title']  = 'Fotos hochladen';
+$gLayout['title'] = $gL10n->get('PHO_UPLOAD_PHOTOS');
 $gLayout['header'] = '
 <script type="text/javascript"><!--
 	function flashInstalled()
@@ -138,28 +138,29 @@ echo '
 	        <p>
 	            '.$gL10n->get('PHO_PHOTO_DESTINATION', $photo_album->getValue('pho_name')).'<br />
 	            ('.$gL10n->get('SYS_DATE').': '. $photo_album->getValue('pho_begin', $gPreferences['system_date']). ')
-	        </p>
-	
+	        </p>';
+	        //Der Name "Filedata" wird so vom Flexuploader verwendet und darf deswegen nicht geändert werden
+            echo '
 	        <ul class="formFieldList">
 	            <li><dl>
 	                <dt><label for="admPhotoFile1">'.$gL10n->get('PHO_PHOTO').' 1:</label></dt>
-	                <dd><input type="file" id="admPhotoFile1" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile1" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile2">'.$gL10n->get('PHO_PHOTO').' 2:</label></dt>
-	                <dd><input type="file" id="admPhotoFile2" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile2" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile3">'.$gL10n->get('PHO_PHOTO').' 3:</label></dt>
-	                <dd><input type="file" id="admPhotoFile3" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile3" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile4">'.$gL10n->get('PHO_PHOTO').' 4:</label></dt>
-	                <dd><input type="file" id="admPhotoFile4" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile4" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile5">'.$gL10n->get('PHO_PHOTO').' 5:</label></dt>
-	                <dd><input type="file" id="admPhotoFile5" name="userfile[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile5" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
 	            </dl></li>
 	        </ul>
 	        <hr />
