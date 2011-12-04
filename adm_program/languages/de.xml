@@ -13,8 +13,8 @@
     <text id="INS_FACEBOOK_DESC" development="new" translation="todo">Willst du dein Facebook-Profil hier verlinken? Dazu benötigst du deinen Nutzernamen bei Facebook. Melde dich bei Facebook an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Facebook-Profil aufrufen.</text>
     <text id="INS_GOOGLE_PLUS" development="new" translation="todo">Google+</text>
     <text id="INS_GOOGLE_PLUS_DESC" development="new" translation="todo">Willst du dein Google+ Profil hier verlinken? Dazu benötigst du momentan noch die etwas kryptische Profilnummer von Google+. Melde dich bei Google+ an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Google+ Profil aufrufen.</text>
-    <text id="INS_ICQ_DESC" development="new" translation="todo">Gib hier deine ICQ-Nummer ein. Hast du in Skype deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</text>
-    <text id="INS_SKYPE_DESC" development="new" translation="todo">Gib hier deinen eindeutigen Skype-Namen ein. Hast du in ICQ deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</text>
+    <text id="INS_ICQ_DESC" development="new" translation="todo">Gib hier deine ICQ-Nummer ein. Hast du in ICQ deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</text>
+    <text id="INS_SKYPE_DESC" development="new" translation="todo">Gib hier deinen eindeutigen Skype-Namen ein. Hast du in Skype deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.</text>
     <text id="INS_TWITTER" development="new" translation="todo">Twitter</text>
     <text id="INS_TWITTER_DESC" development="new" translation="todo">Willst du dein Twitter-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Twitter. Melde dich bei Twitter an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Twitter-Profil aufrufen.</text>
     <text id="INS_WINDOWS_LIVE" development="new" translation="todo">Windows Live</text>
@@ -42,7 +42,7 @@
     <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="todo">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</text>
     <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="todo">Organisations- and Regionaleinstellungen</text>
     <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wievielen Sekunden bei einer Diashau das nächste Bild geladen werden soll.</text>
+    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wie vielen Sekunden bei einer Diaschau das nächste Bild geladen werden soll.</text>
     <text id="SYS_CHECKBOX" development="new" translation="todo">Checkbox</text>
     <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="todo">Bestätigung der Eingaben</text>
     <text id="SYS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>

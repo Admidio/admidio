@@ -1,4 +1,16 @@
 
+-- create new indices
+ALTER TABLE %PREFIX%_preferences DROP INDEX ak_org_id_name ;
+ALTER TABLE %PREFIX%_users DROP INDEX ak_usr_login_name ;
+ALTER TABLE %PREFIX%_user_data DROP INDEX ak_usr_usf_id ;
+ALTER TABLE %PREFIX%_user_fields DROP INDEX ak_name_intern ;
+ALTER TABLE %PREFIX%_members DROP INDEX ak_rol_usr_id ;
+create unique index IDX_PRF_ORG_ID_NAME on %PREFIX%_preferences (prf_org_id, prf_name);
+create unique index IDX_USR_LOGIN_NAME on %PREFIX%_users (usr_login_name);
+create unique index IDX_USD_USR_USF_ID on %PREFIX%_user_data (usd_usr_id, usd_usf_id);
+create unique index IDX_USF_NAME_INTERN on %PREFIX%_user_fields (usf_name_intern);
+create unique index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
+
 -- Tabellen erweitern
 ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_default` tinyint (1) unsigned not null default 0 AFTER cat_system;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_value_list` text AFTER usf_description;
@@ -131,6 +143,7 @@ ALTER TABLE %PREFIX%_role_dependencies CHANGE COLUMN `rld_usr_id` `rld_usr_id` i
 ALTER TABLE %PREFIX%_role_dependencies CHANGE COLUMN `rld_timestamp` `rld_timestamp` timestamp not null;
 
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_id` `rol_id` integer unsigned not null AUTO_INCREMENT;
+ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_name` `rol_name` varchar(50) not null;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_cat_id` `rol_cat_id` integer unsigned;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_mail_this_role` `rol_mail_this_role` smallint not null default 0;
 ALTER TABLE %PREFIX%_roles CHANGE COLUMN `rol_this_list_view` `rol_this_list_view` smallint not null default 0;

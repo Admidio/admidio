@@ -102,25 +102,6 @@ collate = utf8_unicode_ci;
 
 
 /*==============================================================*/
-/* Table: adm_organizations                                     */
-/*==============================================================*/
-create table %PREFIX%_organizations
-(
-   org_id                         integer       unsigned not null AUTO_INCREMENT,
-   org_longname                   varchar(60)   not null,
-   org_shortname                  varchar(10)   not null,
-   org_org_id_parent              integer       unsigned,
-   org_homepage                   varchar(60)   not null,
-   primary key (org_id),
-   unique (org_shortname)
-)
-engine = InnoDB
-auto_increment = 1
-default character set = utf8
-collate = utf8_unicode_ci;
-
-
-/*==============================================================*/
 /* Table: adm_date_role                                         */
 /*==============================================================*/
 
@@ -143,6 +124,8 @@ create table %PREFIX%_dates
 (
    dat_id                         integer       unsigned not null AUTO_INCREMENT,
    dat_cat_id                     integer       unsigned not null,
+   dat_rol_id                     integer       unsigned,
+   dat_room_id                    integer       unsigned,
    dat_global                     boolean       not null default '0',
    dat_begin                      timestamp     not null,
    dat_end                        timestamp     not null,
@@ -151,13 +134,11 @@ create table %PREFIX%_dates
    dat_location                   varchar(100),
    dat_country                    varchar(100),
    dat_headline                   varchar(100)  not null,
+   dat_max_members                integer       not null default 0,                      
    dat_usr_id_create              integer       unsigned,
    dat_timestamp_create           timestamp     not null,
    dat_usr_id_change              integer       unsigned,
    dat_timestamp_change           timestamp 	null default null,
-   dat_rol_id                     integer       unsigned,
-   dat_room_id                    integer       unsigned,
-   dat_max_members                integer       not null default 0,                      
    primary key (dat_id)
 )
 engine = InnoDB
@@ -355,6 +336,26 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
+
+/*==============================================================*/
+/* Table: adm_organizations                                     */
+/*==============================================================*/
+create table %PREFIX%_organizations
+(
+   org_id                         integer       unsigned not null AUTO_INCREMENT,
+   org_longname                   varchar(60)   not null,
+   org_shortname                  varchar(10)   not null,
+   org_org_id_parent              integer       unsigned,
+   org_homepage                   varchar(60)   not null,
+   primary key (org_id)
+)
+engine = InnoDB
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
+
+create unique index ak_shortname on %PREFIX%_organizations (org_shortname);
+
 	  
 /*==============================================================*/
 /* Table: adm_photos                                            */
@@ -424,7 +425,7 @@ create table %PREFIX%_roles
 (
    rol_id                         integer       unsigned not null AUTO_INCREMENT,
    rol_cat_id                     integer       unsigned not null,
-   rol_name                       varchar(30)   not null,
+   rol_name                       varchar(50)   not null,
    rol_description                varchar(255),
    rol_assign_roles               boolean       not null default '0',
    rol_approve_users              boolean       not null default '0',
