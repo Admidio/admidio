@@ -82,38 +82,69 @@ class TableDate extends TableAccess
         return false;
     }
 
-    // gibt einen Termin im iCal-Format zurueck
+    //gibt einen Termin im iCal-Format zurueck
     public function getIcal($domain)
     {
         $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
+        
+        $ical = $this->getIcalHeader().
+                $this->getIcalVEvent($domain).
+                $this->getIcalFooter();
+        return $ical;
+    }
+    
+    //gibt den Kopf eines iCalCalenders aus
+    public function getIcalHeader()
+    {
+        $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
+        
+        $icalHeader =   "BEGIN:VCALENDAR\n".
+                        "METHOD:PUBLISH\n".
+                        "PRODID:". $prodid. "\n".
+                        "VERSION:2.0\n";
+        return $icalHeader;
+    }
+    
+    //gibt den Fuß eines iCalCalenders aus
+    public function getIcalFooter()
+    {      
+        $icalFooter = "END:VCALENDAR";
+        
+        return $icalFooter;
+    }
+    
+    //gibt einen einzelnen Termin im iCal-Format zurück 
+    public function getIcalVEvent($domain)
+    {
         $uid = $this->getValue('dat_timestamp_create', 'ymdThis') . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
         
-        $ical = "BEGIN:VCALENDAR\n".
-                "METHOD:PUBLISH\n".
-                "PRODID:". $prodid. "\n".
-                "VERSION:2.0\n".
-                "BEGIN:VEVENT\n".
-                "UID:". $uid. "\n".
-                "SUMMARY:". $this->getValue('dat_headline'). "\n".
-                "DESCRIPTION:". str_replace("\r\n", "\n", $this->getValue('dat_description', 'plain')). "\n".
-                "DTSTAMP:". $this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')."\n".
-                "LOCATION:". $this->getValue('dat_location'). "\n";
+        $icalVEevent =  "BEGIN:VEVENT\n".
+                        "CREATED:". $this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')."\n";
+        if($this->getValue('dat_timestamp_change') != NULL)
+        {
+            $icalVEevent .= "LAST-MODIFIED:". $this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His')."\n";
+        }
+                    
+        $icalVEevent =  "UID:". $uid. "\n".
+                        "SUMMARY:". $this->getValue('dat_headline'). "\n".
+                        "DESCRIPTION:". str_replace("\r\n", "\n", $this->getValue('dat_description', 'plain')). "\n".
+                        "DTSTAMP:".date('Ymd').'T'.date('His')."\n".
+                        "LOCATION:". $this->getValue('dat_location'). "\n";
         if($this->getValue('dat_all_day') == 1)
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $ical .= "DTSTART;VALUE=DATE:". $this->getValue('dat_begin', 'ymd'). "\n".
+            $icalVEevent .= "DTSTART;VALUE=DATE:". $this->getValue('dat_begin', 'ymd'). "\n".
                      "DTEND;VALUE=DATE:". $this->getValue('dat_end', 'ymd'). "\n";
         }
         else
         {
-            $ical .= "DTSTART:". $this->getValue('dat_begin', 'Ymd')."T".$this->getValue('dat_begin', 'His')."\n".
+            $icalVEevent .= "DTSTART:". $this->getValue('dat_begin', 'Ymd')."T".$this->getValue('dat_begin', 'His')."\n".
                      "DTEND:". $this->getValue('dat_end', 'Ymd')."T".$this->getValue('dat_end', 'His')."\n";
         }
-        $ical .= "END:VEVENT\n".
-                 "END:VCALENDAR";
-
-        return $ical;
+        $icalVEevent .= "END:VEVENT\n";
+        
+        return $icalVEevent;
     }
     
     // gibt die Anzahl der maximalen Teilnehmer einer Rolle zurueck
