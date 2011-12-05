@@ -1099,6 +1099,7 @@
     <text id="SYS_HIDE" development="new" translation="todo">Ausblenden</text>
     <text id="SYS_HOMEPAGE" development="new" translation="todo">Startseite</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
+    <text id="SYS_ICAL_DISABLED" development="new" translation="todo">Die iCal-Funktion wurde vom Webmaster deaktiviert.</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
 	<text id="SYS_INFO" development="new" translation="todo">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
