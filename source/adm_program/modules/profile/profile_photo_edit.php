@@ -21,7 +21,7 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/image.php');
 require_once('../../system/classes/my_files.php');
 
-//pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
+// checks if the server settings for file_upload are set to ON
 if (ini_get('file_uploads') != '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));

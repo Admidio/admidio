@@ -463,6 +463,10 @@ ul.autosuggest li.highlight a:visited  {
 }
 
 /* spezielle Anpassung fuer die Profilseite */
+#admProfileMasterData {
+	min-height: 200px;
+}
+
 #profile_form .formFieldList li dl {
     margin:             3px 0px 3px 0px;
 }

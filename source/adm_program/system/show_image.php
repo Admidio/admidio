@@ -20,7 +20,7 @@ $getModule = admFuncVariableIsValid($_GET, 'module', 'file', null, true, null, t
 $getFile   = admFuncVariableIsValid($_GET, 'file', 'file', null, true, null, true);
 
 // lokale Variablen initialisieren
-$imageServerPath = SERVER_PATH. '/adm_my_files/'.$getModule.'/'.$getFile;
+$imageServerPath = SERVER_PATH. '/adm_my_files/'.$getModule.'/images/'.$getFile;
 
 // falls das Bild existiert, dann ausgeben
 if(file_exists($imageServerPath))

@@ -152,7 +152,7 @@ echo '
 
             echo '
             <div style="width: 65%; float: left;">
-                <div class="groupBox">
+                <div id="admProfileMasterData" class="groupBox">
                     <div class="groupBoxHeadline">
                         <div style="float: left;">'. $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
 
@@ -324,11 +324,11 @@ echo '
             echo '<div style="width: 28%; float: right">';
 
                 // *******************************************************************************
-                // Bild-Block
+                // Profile photo
                 // *******************************************************************************
 
                 echo '
-                <div class="groupBox">
+                <div id="admProfilePhoto" class="groupBox">
                     <div class="groupBoxBody" style="text-align: center;">
                         <table width="100%" summary="Profilfoto" border="0" style="border:0px;" cellpadding="0" cellspacing="0" rules="none">
                             <tr>

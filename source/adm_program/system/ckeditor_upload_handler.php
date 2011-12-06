@@ -25,13 +25,13 @@ $getlangCode        = admFuncVariableIsValid($_GET, 'langCode', 'string', '', fa
 
 $message = '';
 
-//pruefen ob in den aktuellen Servereinstellungen file_uploads auf ON gesetzt ist...
+// checks if the server settings for file_upload are set to ON
 if (ini_get('file_uploads') != '1')
 {
     $message = $gL10n->get('SYS_SERVER_NO_UPLOAD');
 }
 
-// ggf. Ordner für Uploads in adm_my_files anlegen
+// if necessary create the module folders in adm_my_files
 if($getCKEditor == 'ann_description')
 {
     $folderName = 'announcements';
@@ -57,15 +57,28 @@ elseif($getCKEditor == 'usf_description')
     $folderName = 'user_fields';
 }
 
+// set path to module folder in adm_my_files
 $myFilesProfilePhotos = new MyFiles($folderName);
 if($myFilesProfilePhotos->checkSettings() == false)
 {
-    $message = $gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>');
+    $message = strStripTags($$gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
 }
 
+// upload photo to images folder of module folder
+if($myFilesProfilePhotos->setSubFolder('images') == false)
+{
+    $message = strStripTags($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
+}
 
-$localFile = $_FILES['upload']['name'];
-$serverUrl = SERVER_PATH.'/adm_my_files/'.$folderName.'/'.$localFile;
+// create a filename with the unix timestamp, 
+// so we have a scheme for the filenames and the risk of duplicates is low
+$localFile = time(). substr($_FILES['upload']['name'], strrpos($_FILES['upload']['name'], '.'));
+$serverUrl = $myFilesProfilePhotos->getServerPath().'/'.$localFile;
+if(file_exists($serverUrl))
+{
+	// if file exists than create a random number and append it to the filename
+	$serverUrl = $myFilesProfilePhotos->getServerPath().'/'.substr($localFile, 0, strrpos($localFile, '.')).'_'.rand().substr($localFile, strrpos($localFile, '.'));
+}
 $htmlUrl   = $g_root_path.'/adm_program/system/show_image.php?module='.$folderName.'&file='.$localFile;
 move_uploaded_file($_FILES['upload']['tmp_name'], $serverUrl);
 

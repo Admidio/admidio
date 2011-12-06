@@ -228,40 +228,49 @@ echo '
 <div class="formLayout" id="edit_roles_form">
     <div class="formHead">'.$gLayout['title'].'</div>
     <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt><label for="rol_name">'.$gL10n->get('SYS_NAME').':</label></dt>
-                    <dd>
-                        <input type="text" id="rol_name" name="rol_name" ';
-                        // bei bestimmte Rollen darf der Name nicht geaendert werden
-                        if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
-                        {
-                            echo ' readonly="readonly" ';
-                        }
-                        echo ' style="width: 320px;" maxlength="50" value="'. $role->getValue('rol_name'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="rol_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
-                    <dd>
-                        <input type="text" id="rol_description" name="rol_description" style="width: 320px;" maxlength="255" value="'. $role->getValue('rol_description'). '" />
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="rol_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
-                    <dd>
-						'.FormElements::generateCategorySelectBox('ROL', $role->getValue('rol_cat_id'), 'rol_cat_id').'
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
+		<div class="groupBox" id="admNameCategory">
+			<div class="groupBoxHeadline" id="admNameCategoryHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admNameCategoryBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admNameCategoryBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY').'
+			</div>
+
+			<div class="groupBoxBody" id="admNameCategoryBody">
+				<ul class="formFieldList">
+					<li>
+						<dl>
+							<dt><label for="rol_name">'.$gL10n->get('SYS_NAME').':</label></dt>
+							<dd>
+								<input type="text" id="rol_name" name="rol_name" ';
+								// bei bestimmte Rollen darf der Name nicht geaendert werden
+								if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
+								{
+									echo ' readonly="readonly" ';
+								}
+								echo ' style="width: 320px;" maxlength="50" value="'. $role->getValue('rol_name'). '" />
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="rol_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
+							<dd>
+								<input type="text" id="rol_description" name="rol_description" style="width: 320px;" maxlength="255" value="'. $role->getValue('rol_description'). '" />
+							</dd>
+						</dl>
+					</li>
+					<li>
+						<dl>
+							<dt><label for="rol_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
+							<dd>
+								'.FormElements::generateCategorySelectBox('ROL', $role->getValue('rol_cat_id'), 'rol_cat_id').'
+								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+							</dd>
+						</dl>
+					</li>
+				</ul>
+			</div>
+		</div>
 
         <div class="groupBox" id="admPropertiesBox">
             <div class="groupBoxHeadline" id="admPropertiesHead">

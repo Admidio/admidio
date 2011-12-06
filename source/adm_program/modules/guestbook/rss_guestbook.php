@@ -1,19 +1,19 @@
 <?php
 /******************************************************************************
- * RSS - Feed fuer das Gaestebuch
+ * RSS feed for the guestbook
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer Gaestebucheintraege
+ * Creates a RSS 2.0 feed for guestbook entries with help of the RSS class
  *
- * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
+ * Spezification of RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * Parameters:
  *
- * headline  - Ueberschrift fuer den RSS-Feed
- *             (Default) Gaestebuch
+ * headline - Headline of RSS feed
+ *            (Default) Guestbook
  *
  *****************************************************************************/
 
@@ -38,17 +38,10 @@ if ($gPreferences['enable_guestbook_module'] != 1)
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
 
-//Einschränkung für moderierte Beiträge
-$conditions = '';
-if ($g_preferences['enable_guestbook_moderation'] > 0)
-{
-    $conditions .= ' AND gbo_locked = 0 ';
-}
-
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
-        WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id')
-        .$conditions. '
+        WHERE gbo_org_id = '. $g_current_organization->getValue('org_id').'
+          AND gbo_locked = 0 
         ORDER BY gbo_timestamp_create DESC
         LIMIT 10 ';
 $result = $gDb->query($sql);

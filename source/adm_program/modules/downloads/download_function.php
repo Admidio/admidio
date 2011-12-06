@@ -104,7 +104,7 @@ if ($getMode == 1)
     // pruefen, ob der Dateiname gueltig ist
     $ret_code = isValidFileName($file_name, true);
 
-    if($ret_code != 0)
+    if($ret_code < 0)
     {
         if($ret_code == -1)
         {
@@ -217,7 +217,7 @@ elseif ($getMode == 3)
     {
         $ret_code = isValidFileName($_POST['new_folder']);
 
-        if ($ret_code == 0)
+        if ($ret_code == 1)
         {
             $newFolderName = $_POST['new_folder'];
         }
@@ -310,7 +310,7 @@ elseif ($getMode == 4)
         {
             $ret_code = isValidFileName($_POST['new_name'], true);
 
-            if($ret_code != 0)
+            if($ret_code < 0)
             {
                 if($ret_code == -1)
                 {
@@ -382,7 +382,7 @@ elseif ($getMode == 4)
         {
             $ret_code = isValidFileName($_POST['new_name']);
 
-            if ($ret_code == 0)
+            if ($ret_code == 1)
             {
                 $newFolder = $_POST['new_name'];
             }
@@ -474,7 +474,7 @@ elseif ($getMode == 6)
     if(strlen($getName) > 0)
     {
         $ret_code = isValidFileName(urldecode($getName), true);
-        if($ret_code == 0)
+        if($ret_code == 1)
         {
             $getName = urldecode($getName);
         }
