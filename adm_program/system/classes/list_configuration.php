@@ -1,13 +1,14 @@
 <?php
 /******************************************************************************
- * Klasse zum Verwalten von Listenkonfigurationen
+ * Class manages the list configuration
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse dient dazu ein Listenkonfigurationsobjekt zu erstellen. 
- * Eine Konfiguration kann ueber diese Klasse in der Datenbank verwaltet werden
+ * This class creates a list configuration object. With this object it's possible
+ * to manage the configuration in the database. You can easily create new lists,
+ * add new columns or remove columns.
  *
  * Beside the methods of the parent class there are the following additional methods:
  *
@@ -19,7 +20,7 @@
  * countColumns()        - Anzahl der Spalten der Liste zurueckgeben
  * getColumnObject($number)
  *                       - liefert das entsprechende TableListColumns-Objekt zurueck
- * getSQL($role_ids, $member_status = 0)
+ * getSQL($roleIds, $memberStatus = 0)
  *                       - gibt das passende SQL-Statement zu der Liste zurueck
  *
  *****************************************************************************/
@@ -139,68 +140,68 @@ class ListConfiguration extends TableLists
     // member_status : 0 - Nur aktive Rollenmitglieder
     //                 1 - Nur ehemalige Rollenmitglieder
     //                 2 - Aktive und ehemalige Rollenmitglieder
-    public function getSQL($role_ids, $member_status = 0)
+    public function getSQL($roleIds, $memberStatus = 0)
     {
-        global $gCurrentUser, $gCurrentOrganization;
+        global $gProfileFields, $gCurrentOrganization;
         $sql = '';
-        $sql_select   = '';
-        $sql_join     = '';
-        $sql_where    = '';
-        $sql_orderby  = '';
-        $sql_role_ids = '';
-        $sql_member_status = '';
+        $sqlSelect  = '';
+        $sqlJoin    = '';
+        $sqlWhere   = '';
+        $sqlOrderBy = '';
+        $sqlRoleIds = '';
+        $sqlMemberStatus = '';
     
-        foreach($this->columns as $number => $list_column)
+        foreach($this->columns as $number => $listColumn)
         {
             // Spalte anhaengen
-            if(strlen($sql_select) > 0) 
+            if(strlen($sqlSelect) > 0) 
             {
-                $sql_select = $sql_select. ', ';
+                $sqlSelect = $sqlSelect. ', ';
             }
             
-            if($list_column->getValue('lsc_usf_id') > 0)
+            if($listColumn->getValue('lsc_usf_id') > 0)
             {
                 // dynamisches Profilfeld
-                $table_alias = 'row'. $list_column->getValue('lsc_number'). 'id'. $list_column->getValue('lsc_usf_id');
+                $tableAlias = 'row'. $listColumn->getValue('lsc_number'). 'id'. $listColumn->getValue('lsc_usf_id');
                 
                 // JOIN - Syntax erstellen
-                $sql_join = $sql_join. ' LEFT JOIN '. TBL_USER_DATA .' '.$table_alias.'
-                                           ON '.$table_alias.'.usd_usr_id = usr_id
-                                          AND '.$table_alias.'.usd_usf_id = '.$list_column->getValue('lsc_usf_id');
+                $sqlJoin = $sqlJoin. ' LEFT JOIN '. TBL_USER_DATA .' '.$tableAlias.'
+                                           ON '.$tableAlias.'.usd_usr_id = usr_id
+                                          AND '.$tableAlias.'.usd_usf_id = '.$listColumn->getValue('lsc_usf_id');
                 
                 // hierbei wird die usf_id als Tabellen-Alias benutzt und vorangestellt
-                $act_field = $table_alias.'.usd_value';
+                $currentField = $tableAlias.'.usd_value';
             }
             else
             {
                 // Spezialfelder z.B. usr_photo, mem_begin ...
-                $act_field = $list_column->getValue('lsc_special_field');
+                $currentField = $listColumn->getValue('lsc_special_field');
             }
 
-            $sql_select = $sql_select. $act_field;
+            $sqlSelect = $sqlSelect. $currentField;
 
 
             // Sortierung einbauen
-            if(strlen($list_column->getValue('lsc_sort')) > 0)
+            if(strlen($listColumn->getValue('lsc_sort')) > 0)
             {
-                if(strlen($sql_orderby) > 0) 
+                if(strlen($sqlOrderBy) > 0) 
                 {  
-                    $sql_orderby = $sql_orderby. ', ';
+                    $sqlOrderBy = $sqlOrderBy. ', ';
                 }
-                $sql_orderby = $sql_orderby. $act_field. ' '. $list_column->getValue('lsc_sort');
+                $sqlOrderBy = $sqlOrderBy. $currentField. ' '. $listColumn->getValue('lsc_sort');
             }
 
 
             // Bedingungen fuer die Spalte verarbeiten
-            if(strlen($list_column->getValue('lsc_filter')) > 0)
+            if(strlen($listColumn->getValue('lsc_filter')) > 0)
             {
-                $value = $list_column->getValue('lsc_filter');
+                $value = $listColumn->getValue('lsc_filter');
 
-                if($list_column->getValue('lsc_usf_id') > 0)
+                if($listColumn->getValue('lsc_usf_id') > 0)
                 {
                     // ein benutzerdefiniertes Feld
                     
-                    if($gProfileFields->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
+                    if($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
                     {
                         $type = 'checkbox';
                         $value = admStrToLower($value);
@@ -215,10 +216,10 @@ class ListConfiguration extends TableLists
                             $value = '0';
                         }
                     }
-                    elseif($gProfileFields->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
+                    elseif($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
                     {
                         $type = 'int';
-                        if($gProfileFields->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_name_intern') == 'GENDER')
+                        if($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern') == 'GENDER')
                         {
                             // bastwe: allow user to search for gender  M W U maennlich weiblich unbekannt
                             $value = admStrToLower($value);
@@ -236,7 +237,7 @@ class ListConfiguration extends TableLists
                             }
                         }
                     }
-                    elseif($gProfileFields->getPropertyById($list_column->getValue('lsc_usf_id'), 'usf_type') == 'DATE')
+                    elseif($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'DATE')
                     {
                         $type = 'date';
                     }
@@ -245,71 +246,71 @@ class ListConfiguration extends TableLists
                         $type = 'string';
                     }
                 }
-                elseif($list_column->getValue('lsc_special_field') == 'mem_begin' 
-                || $list_column->getValue('lsc_special_field') == 'mem_begin')
+                elseif($listColumn->getValue('lsc_special_field') == 'mem_begin' 
+                || $listColumn->getValue('lsc_special_field') == 'mem_begin')
                 {
                     $type = 'date';
                 }
-                elseif($list_column->getValue('lsc_special_field') == 'usr_login_name')
+                elseif($listColumn->getValue('lsc_special_field') == 'usr_login_name')
                 {
                     $type = 'string';
                 }
-                elseif($list_column->getValue('lsc_special_field') == 'usr_photo')
+                elseif($listColumn->getValue('lsc_special_field') == 'usr_photo')
                 {
                     $type = '';
                 }
                 
                 // Bedingungen aus dem Bedingungsfeld als SQL darstellen
                 $parser    = new ConditionParser;
-                $condition = $parser->makeSqlStatement($value, $act_field, $type);
+                $condition = $parser->makeSqlStatement($value, $currentField, $type);
                 if($parser->error() == 0)
                 {
-                    $sql_where = $sql_where. $condition;
+                    $sqlWhere = $sqlWhere. $condition;
                 }
             }        
         }
 
         // Rollen-IDs zusammensetzen
-        foreach($role_ids as $key => $value)
+        foreach($roleIds as $key => $value)
         {
             if(is_numeric($key))
             {
-                if(strlen($sql_role_ids) > 0) 
+                if(strlen($sqlRoleIds) > 0) 
                 {  
-                    $sql_role_ids = $sql_role_ids. ', ';
+                    $sqlRoleIds = $sqlRoleIds. ', ';
                 }
-                $sql_role_ids = $sql_role_ids. $value;
+                $sqlRoleIds = $sqlRoleIds. $value;
             }
         }
 
         // Status der Mitgliedschaft setzen
-        if($member_status == 0)
+        if($memberStatus == 0)
         {
-            $sql_member_status = ' AND mem_begin <= \''.DATE_NOW.'\'
+            $sqlMemberStatus = ' AND mem_begin <= \''.DATE_NOW.'\'
                                    AND mem_end   >= \''.DATE_NOW.'\' ';
         }
-        elseif($member_status == 1)
+        elseif($memberStatus == 1)
         {
-            $sql_member_status = ' AND mem_end < \''.DATE_NOW.'\' ';
+            $sqlMemberStatus = ' AND mem_end < \''.DATE_NOW.'\' ';
         }
 
         // SQL-Statement zusammenbasteln
-        $sql = 'SELECT mem_leader, usr_id, '.$sql_select.'
+        $sql = 'SELECT mem_leader, usr_id, '.$sqlSelect.'
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-                       '.$sql_join.'
-                 WHERE rol_id    IN ('.$sql_role_ids.')
+                       '.$sqlJoin.'
+                 WHERE rol_id    IN ('.$sqlRoleIds.')
                    AND rol_cat_id = cat_id
                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        OR cat_org_id IS NULL )
                    AND mem_rol_id = rol_id
-                       '.$sql_member_status.'
+                       '.$sqlMemberStatus.'
                    AND mem_usr_id = usr_id
                    AND usr_valid  = 1
-                       '.$sql_where.' 
+                       '.$sqlWhere.' 
                  ORDER BY mem_leader DESC ';
-        if(strlen($sql_orderby) > 0)
+        if(strlen($sqlOrderBy) > 0)
         {
-            $sql = $sql. ', '. $sql_orderby;
+            $sql = $sql. ', '. $sqlOrderBy;
         }
         
         return $sql;
@@ -329,13 +330,13 @@ class ListConfiguration extends TableLists
         parent::save($updateFingerPrint);
         
         // jetzt noch die einzelnen Spalten sichern
-        foreach($this->columns as $number => $list_column)
+        foreach($this->columns as $number => $listColumn)
         {
-            if($list_column->getValue('lsc_lst_id') == 0)
+            if($listColumn->getValue('lsc_lst_id') == 0)
             {
-                $list_column->setValue('lsc_lst_id', $this->getValue('lst_id'));
+                $listColumn->setValue('lsc_lst_id', $this->getValue('lst_id'));
             }
-            $list_column->save($updateFingerPrint);
+            $listColumn->save($updateFingerPrint);
         }
 		
 		$this->db->endTransaction();
@@ -346,9 +347,9 @@ class ListConfiguration extends TableLists
 		$this->db->startTransaction();
 		
         // first delete all columns
-        foreach($this->columns as $number => $list_column)
+        foreach($this->columns as $number => $listColumn)
         {
-            $list_column->delete();
+            $listColumn->delete();
         }
     
         $return = parent::delete();

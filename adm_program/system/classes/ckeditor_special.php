@@ -29,6 +29,7 @@ class CKEditorSpecial extends CKEditor
         $this->config['resize_maxWidth']  = '100%';
         $this->config['uiColor']  = $gPreferences['system_js_editor_color'];
         $this->config['height']   = $height;
+        //$this->config['toolbar']  = 'Full';
         $this->config['toolbar']  = $toolbar;
         $this->config['language'] = $gPreferences['system_language'];
         $this->config['contentsCss'] = 'body {font-family: Arial, Verdana, sans-serif; font-size: 11pt; }';

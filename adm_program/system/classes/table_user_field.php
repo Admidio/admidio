@@ -175,7 +175,7 @@ class TableUserField extends TableAccess
 							else
 							{
 								// create html for optionbox entry
-								if(isValidFileName($listValueImage, true) == 0)
+								if(isValidFileName($listValueImage, true))
 								{
 									$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
 								}
@@ -202,7 +202,7 @@ class TableUserField extends TableAccess
 			if(strpos(admStrToLower($value), '.png') > 0 || strpos(admStrToLower($value), '.jpg') > 0)
 			{
 				// create html for icon
-				if(isValidFileName($value, true) == 0)
+				if(isValidFileName($value, true))
 				{
 					$value = '<img src="'.THEME_PATH.'/icons/'.$value.'" style="vertical-align: middle;" title="'.$this->getValue('usf_name').'" alt="'.$this->getValue('usf_name').'" />';
 				}

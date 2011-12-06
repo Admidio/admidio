@@ -1,19 +1,21 @@
 <?php
 /******************************************************************************
- * Klasse zum Verwalten des AdmMyFiles-Ordners
+ * Class manages the AdmMyFiles folder
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse unterstuetzt bei der Rechtevergabe der einzelnen Ordner des 
- * adm_my_files - Ordners.
+ * This class supports the assignment of rights to every folder of adm_my_files
+ * It's easy to create new folders and get detailed error messages if there are
+ * problems with folder rights
  *
- * Neben den Methoden der Elternklasse Folder, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
- * checkSettings() - Methode prueft, ob der adm_my_files-Ordner des Modules 
- *                   die notwendigen Rechte hat
+ * checkSettings()       - method checks if adm_my_files folder has all necessary rights
+ * getServerPath()       - returns the current path
+ * setSubFolder($folder) - open a folder in the current selected folder
+ *                         if that folder doesn't exists than it will be created
  *
  *****************************************************************************/
 
@@ -23,21 +25,26 @@ require_once($absolute_path. '/adm_program/system/classes/htaccess.php');
 
 class MyFiles extends Folder
 {
-    protected $module, $modulePath;
+    protected $module;		// name of the module and name of the folder in adm_my_files
+	protected $modulePath;	// absolute path of the module
+	protected $currentPath;	// absolute path that is set with setSubFolder
+	protected $webPath;		// the path starts with adm_my_file
     public $errorText, $errorPath;
 
-    // als Modulname sollte der gewuenschte Basisordner in adm_my_files angegeben werden
-    // Bsp: 'PHOTOS' , 'BACKUP', 'DOWNLOAD'
+	// module name should be the folder name in adm_my_files for this module
+    // Example: 'PHOTOS' , 'BACKUP', 'DOWNLOAD'
     public function __construct($module)
     {
+		global $g_root_path;
         $this->module = $module;
-        $this->modulePath = SERVER_PATH. '/adm_my_files/'. strtolower($module);
+        $this->modulePath   = SERVER_PATH. '/adm_my_files/'. strtolower($module);
+        $this->currentPath  = SERVER_PATH. '/adm_my_files/'. strtolower($module);
+		$this->webPath      = $g_root_path. '/adm_my_files';
     }
-     
-    // Methode prueft, ob der adm_my_files-Ordner des Modules die notwendigen Rechte hat
-    // dieser Teil ist so aufgebaut, dass im Idealfall so wenig Pruefungen
-    // als moeglich erfolgen.
-    // Rueckgabe: true/false - bei false sind die Klassenvariablen $errorText, $errorPath belegt
+
+	// method checks if adm_my_files folder has all necessary rights
+	// the method is designed to make as little as possible checks
+    // Return: true/false - if false than check the parameters $errorText, $errorPath
     public function checkSettings()
     { 
         if(is_writeable($this->modulePath) == false)
@@ -48,31 +55,31 @@ class MyFiles extends Folder
                 {
                     if(file_exists(SERVER_PATH. '/adm_my_files') == false)
                     {
-                        // Ordner adm_my_files anlegen
+                        // create folder adm_my_files
                         if(@mkdir(SERVER_PATH. '/adm_my_files', 0777) == false)
                         {
                             $this->errorText = 'SYS_FOLDER_NOT_CREATED';
-                            $this->errorPath = SERVER_PATH. '/adm_my_files';
+                            $this->errorPath = $this->webPath;
                             return 0;
                         }
                     }
 
                     if(is_writeable(SERVER_PATH. '/adm_my_files') == false)
                     {
-                        // Schreibrechte fuer adm_my_files setzen
+                        // set adm_my_files writable
                         if(@chmod(SERVER_PATH. '/adm_my_files', 0777) == false)
                         {
                             $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
-                            $this->errorPath = SERVER_PATH. '/adm_my_files';
+                            $this->errorPath = $this->webPath;
                             return 0;
                         }
                     }
                 }
 
-                // Module-Ordner anlegen
+                // create module folder
                 if(@mkdir($this->modulePath, 0777))
                 {
-                    // ist der my_files-Ordner noch nicht mit htAccess gesichert, so muss diese Datei erst angelegt werden
+					// create htaccess file for folder adm_my_files if necessary
                     if (file_exists(SERVER_PATH. '/adm_my_files/.htaccess') == false)
                     {
                         $protection = new Htaccess(SERVER_PATH. '/adm_my_files');
@@ -82,18 +89,18 @@ class MyFiles extends Folder
                 else
                 {
                     $this->errorText = 'SYS_FOLDER_NOT_CREATED';
-                    $this->errorPath = $this->modulePath;
+                    $this->errorPath = $this->webPath;
                     return 0;
                 }
             }
 
             if(is_writeable($this->modulePath) == false)
             {
-                // Schreibrechte fuer Module-Ordner setzen
+                // set module folder writable
                 if(@chmod($this->folderWithPath, 0777) == false)
                 {
                     $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
-                    $this->errorPath = $this->modulePath;
+                    $this->errorPath = $this->webPath;
                     return 0;
                 }
             }
@@ -102,9 +109,48 @@ class MyFiles extends Folder
         $this->setFolder($this->modulePath);
         return true;      
     }
-    
-    public function createFolderFromPath($folderPath)
+	
+	// returns the current path
+	public function getServerPath()
+	{
+		return $this->currentPath;
+	}
+
+	// open a folder in the current selected folder
+	// if that folder doesn't exists than it will be created
+    public function setSubFolder($folder)
     {
+		if(isValidFileName($folder))
+		{
+			$tempPath = $this->currentPath. '/'. $folder;
+			if(is_writeable($tempPath) == false)
+			{
+				if(file_exists($tempPath) == false)
+				{
+					// create folder
+					if(@mkdir($tempPath, 0777) == false)
+					{
+						$this->errorText = 'SYS_FOLDER_NOT_CREATED';
+						$this->errorPath = $this->webPath.'/'.$folder;
+						return 0;
+					}
+				}
+			}
+
+            if(is_writeable($tempPath) == false)
+            {
+                // set folder writable
+                if(@chmod($tempPath, 0777) == false)
+                {
+                    $this->errorText = 'SYS_FOLDER_WRITE_ACCESS';
+                    $this->errorPath = $this->webPath.'/'.$folder;
+                    return 0;
+                }
+            }
+			$this->currentPath = $tempPath;
+			$this->webPath     = $this->webPath.'/'.$folder;
+			return 1;
+		}
     }
 }
 ?>

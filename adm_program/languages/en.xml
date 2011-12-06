@@ -757,7 +757,7 @@
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Thumbnails per page (rows x columns)</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Values define number of rows and columns of thumbnails on one page. (default: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Press button %VAR1_BOLD% in order to select photo files on harddrive for upload.</text>
-    <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">When using single photo upload selection process has to bee repeated up to five times, until all upload field are in use.</text>
+    <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">When using single photo upload the selection process has to be repeated up to five times, until all upload fields are in use.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Press then %VAR1_BOLD% and be patient.</text>
     <text id="PHO_UPLOAD_MORE" development="new" translation="edited">Upload more photos</text>
     <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Upload photos</text>
