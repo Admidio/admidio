@@ -9,8 +9,7 @@
  * Diese Klasse dient dazu ein Fileobjekt zu erstellen.
  * Eine Datei kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * getFileForDownload($file_id)
  *                         - File mit der uebergebenen ID aus der Datenbank auslesen fuer 

@@ -16,7 +16,7 @@
  *
  *
  *
- * Folgende Funktionen stehen zur Verfuegung:
+ * The following functions are available:
  *
  * protectFolder()      - Platziert ein htaccess-File im übergebenen Ordner
  * unprotectFolder()    - Löscht das htaccess-File im übergebenen Ordner

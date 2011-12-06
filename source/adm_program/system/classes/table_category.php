@@ -9,7 +9,13 @@
  * Diese Klasse dient dazu einen Kategorieobjekt zu erstellen.
  * Eine Kategorieobjekt kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Es stehen die Methoden der Elternklasse TableAccess zur Verfuegung.
+ * Beside the methods of the parent class there are the following additional methods:
+ *
+ * getNewNameIntern($name, $index) - diese rekursive Methode ermittelt fuer den 
+ *                       uebergebenen Namen einen eindeutigen Namen dieser bildet sich 
+ *                       aus dem Namen in Grossbuchstaben und der naechsten freien Nummer
+ * getNumberElements() - number of child recordsets
+ * moveSequence($mode) - Kategorie wird um eine Position in der Reihenfolge verschoben
  *
  *****************************************************************************/
 

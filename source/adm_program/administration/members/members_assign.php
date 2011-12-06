@@ -131,7 +131,7 @@ echo '
                         if(isMember($row['usr_id']) == false)
                         {
                             // gefundene User ist noch KEIN Mitglied dieser Organisation
-                            $link = $g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$row['usr_id'];
+                            $link = $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$row['usr_id'];
 
                             // KEINE Logindaten vorhanden
                             echo '<br />'.$gL10n->get('MEM_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'<br />

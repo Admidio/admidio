@@ -9,8 +9,7 @@
  * Diese Klasse dient dazu ein Listenkonfigurationsobjekt zu erstellen. 
  * Eine Konfiguration kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Neben den Methoden der Elternklasse TableLists, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * readColumns()         - Daten der zugehoerigen Spalten einlesen und in Objekten speichern
  * addColumn($number, $field, $sort = "", $condition = "")

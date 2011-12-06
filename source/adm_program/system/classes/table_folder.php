@@ -9,8 +9,7 @@
  * Diese Klasse dient dazu ein Folderobjekt zu erstellen.
  * Ein Ordner kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * getFolderForDownload($folder_id)
  *                         - Folder mit der uebergebenen ID aus der Datenbank

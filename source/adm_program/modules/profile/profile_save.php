@@ -377,7 +377,7 @@ elseif($getNewUser == 3 || $getUserId == 0)
     // neuer User -> Rollen zuordnen
     if($gCurrentUser->assignRoles())
     {
-        header('Location: roles.php?user_id='. $user->getValue('usr_id'). '&new_user=1');
+        header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user=1');
         exit();
     }
     else

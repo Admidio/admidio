@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * user_id     - Funktionen der uebergebenen user_id aendern
+ * usr_id      - Funktionen der uebergebenen user_id aendern
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
  *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
  * inline:   0 - (Default) wird als eigene Seite angezeigt
@@ -21,7 +21,7 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_roles.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
@@ -39,12 +39,12 @@ if($getInline == 0)
 //Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))
 {
-    $set_rol_id = $_SESSION['set_rol_id'];
+    $setRoleId = $_SESSION['set_rol_id'];
     unset($_SESSION['set_rol_id']);
 }
 else
 {
-    $set_rol_id = NULL;
+    $setRoleId = NULL;
 }
 
 // Html-Kopf ausgeben
@@ -62,7 +62,7 @@ if($getInline == 0)
 echo '
 <h1 class="moduleHeadline">'. $gLayout['title']. '</h1>
 
-<form id="rolesForm" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">
+<form id="rolesForm" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">
     <table class="tableList" cellspacing="0">
         <thead>
             <tr>
@@ -122,7 +122,7 @@ echo '
                           AND rol_visible    = 1
                           AND rol_cat_id     = cat_id
                           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                              OR cat_org_id IS NULL
+                              OR cat_org_id IS NULL )
                         ORDER BY cat_sequence, cat_id, rol_name';
         }
         $result   = $gDb->query($sql);
@@ -155,31 +155,27 @@ echo '
                     $category = $role->getValue('cat_id');
                 }
                 echo '
-                <tr class="tableMouseOver">
-                   <td style="text-align: center;">
-                      <input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" ';
-                         if($row['mem_usr_id'] > 0)
-                         {
-                            echo ' checked="checked" ';
-                         }
+				<tr class="tableMouseOver">
+					<td style="text-align: center;">
+						<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" ';
+
+						// if user is assigned to this role 
+						// or if user is created in members.php of list module than assign that role
+						if($row['mem_usr_id'] > 0 || $role->getValue('rol_id') == $setRoleId)
+						{
+							echo ' checked="checked" ';
+						}
+
+						// if role is webmaster than only webmaster can add new user, 
+						// but don't change their own membership, because there must be at least one webmaster
+						if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER')
+						&& (  !$gCurrentUser->isWebmaster()
+						   || ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue('usr_id'))))
+						{
+							echo ' disabled="disabled" ';
+						}
     
-                         // wenn der User aus der Mitgliederzuordnung heraus neu angelegt wurde
-                         // entsprechende Rolle sofort hinzufuegen
-                         if($role->getValue('rol_id') == $set_rol_id)
-                         {
-                            echo ' checked="checked" ';
-                         }
-    
-                         // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
-                         if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && (!$gCurrentUser->isWebmaster()
-                            ||  // man darf sich selbst an dieser Stelle aber nicht aus der Rolle Webmaster entfernen
-                            ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue('usr_id')))
-                           )
-                         {
-                           echo ' disabled="disabled" ';
-                         }
-    
-                         echo ' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />
+						echo ' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />
                    </td>
                    <td><label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label></td>
                    <td>'.$role->getValue('rol_description').'</td>
@@ -190,7 +186,7 @@ echo '
                                 echo ' checked="checked" ';
                             }
     
-                            // die Funktion Webmaster darf nur von einem Webmaster vergeben werden
+                            // the leader of webmaster role can only be set by a webmaster
                             if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && !$gCurrentUser->isWebmaster())
                             {
                                 echo ' disabled="disabled" ';

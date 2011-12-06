@@ -14,7 +14,7 @@
  * $forum = Forum::createForumObject("phpBB2");
  *
  *
- * Folgende Funktionen stehen nun zur Verfuegung:
+ * The following functions are available:
  *
  * connect()              - Stellt die Verbindung zur Datenbank her
  * userClear()            - Userdaten und Session_Valid loeschen

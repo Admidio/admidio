@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * user_id: UserId of the user to be edited
+ * usr_id: UserId of the user to be edited
  * rol_id : RoleId of the role to be edited
  * action :  0 ... reload Role Memberships
  *           1 ... former reload Role Memberships
@@ -21,7 +21,7 @@ require_once('../../system/classes/table_members.php');
 require_once('roles_functions.php');
 
 // Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', null, true);
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
 $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getAction = admFuncVariableIsValid($_GET, 'action', 'numeric', 0);
 

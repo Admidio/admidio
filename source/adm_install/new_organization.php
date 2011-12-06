@@ -323,7 +323,8 @@ elseif($getMode == 6)
     // Default-Daten anlegen
 
     // create database object for organization
-    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname) VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\')';
+    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname, org_homepage) 
+	                                     VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\', \'http://www.admidio.org\')';
     $gDb->query($sql);
 
     $gCurrentOrganization = new Organization($gDb, $_SESSION['orgaShortName']);

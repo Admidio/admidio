@@ -549,7 +549,8 @@ elseif($req_mode == 8)
     $db->query($sql);
 
     // Organisationsobjekt erstellen
-    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname) VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\')';
+    $sql = 'INSERT INTO '. TBL_ORGANIZATIONS. ' (org_longname, org_shortname, org_homepage) 
+	                                     VALUES (\''.$_SESSION['orgaLongName'].'\', \''.$_SESSION['orgaShortName'].'\', \'http://www.admidio.org\')';
     $db->query($sql);
 
     $gCurrentOrganization = new Organization($db, $_SESSION['orgaShortName']);
