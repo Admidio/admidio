@@ -6,8 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  * 
- * Neben den Methoden der Elternklasse Email, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * getMailText($sysmail_id, &$user)
  *                  - diese Methode liest den Mailtext aus der DB und ersetzt 

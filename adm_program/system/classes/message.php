@@ -9,7 +9,7 @@
  * Die Klasse stellt auf einer eigenen HTML-Seite einen übergebenen Hinweis dar.
  * Die anzuzeigenden Buttons, sowie die weitere Navigation kann eingestellt werden.
  *
- * Folgende Funktionen stehen zur Verfuegung:
+ * The following functions are available:
  *
  * setForwardUrl($url, $timer = 0) - auf die uebergebene URL wird danach automatisch weitergeleitet
  * setForwardYesNo($url)   - es werden dann 2 Buttons angezeigt, klickt der User auf "Ja", so 

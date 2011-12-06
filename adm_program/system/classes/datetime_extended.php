@@ -10,7 +10,7 @@
  * PHP 5.3.0 zur Verfuegung stehen. So kann ein beliebig formatiertes Datum
  * im Konstruktor uebergeben werden und daraus wird ein Datetime-Objekt erzeugt.
  *
- * Folgende Funktionen stehen zur Verfuegung:
+ * The following functions are available:
  *
  * getAge() - berechnet aus dem Datum das Alter einer Person
  * getDateTimeEnglish()

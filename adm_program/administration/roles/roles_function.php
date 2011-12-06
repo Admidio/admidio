@@ -149,7 +149,6 @@ elseif($getMode == 2)
                        ,'rol_download'
                        ,'rol_guestbook'
                        ,'rol_guestbook_comments'
-                       ,'rol_inventory'
                        ,'rol_edit_user'
                        ,'rol_weblinks'
                        ,'rol_all_lists_view'

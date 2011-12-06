@@ -11,8 +11,7 @@
  * Dazu werden die Informationen der Rolle sowie der zugehoerigen Kategorie
  * ausgelesen. Geschrieben werden aber nur die Rollendaten
  *
- * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
  *                    dies ist interessant, wenn rol_max_members gesetzt wurde

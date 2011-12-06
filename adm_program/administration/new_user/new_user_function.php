@@ -68,7 +68,7 @@ if($getMode == 2)
     // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
     // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
     $_SESSION['navigation']->addUrl($g_root_path.'/adm_program/administration/new_user/new_user_function.php?mode=3&user_id='.$getUserId.'&new_user_id='.$getNewUserId);
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/roles.php?user_id='.$getUserId);
+    header('Location: '.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$getUserId);
     exit();
 }
 

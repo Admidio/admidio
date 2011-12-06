@@ -9,8 +9,7 @@
  * Diese Klasse dient dazu ein Memberobjekt zu erstellen. 
  * Eine Mitgliedschaft kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * startMembership($rol_id, $usr_id, $leader = "")
  *                      - Methode setzt alle notwendigen Daten um eine 
@@ -120,15 +119,16 @@ class TableMembers extends TableAccess
         {
             $this->readData(array('rol_id' => $rol_id, 'usr_id' => $usr_id));
         }
-
         if($this->new_record == false)
         {
             // einen Tag abziehen, damit User direkt aus der Rolle entfernt werden
             $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));
-            
+
             // only stop membership if there is an actual membership
-            if(strcmp($newEndDate, $this->getValue('mem_begin', 'Y-m-d')) > 0
-            && strcmp($this->getValue('mem_end', 'Y-m-d'), $newEndDate) > 0)
+			// the actual date must be after the beginning 
+			// and the actual date must be before the end date
+            if(strcmp(date('Y-m-d', time()), $this->getValue('mem_begin', 'Y-m-d')) >= 0
+            && strcmp($this->getValue('mem_end', 'Y-m-d'), $newEndDate) >= 0)
             {
                 $this->setValue('mem_end', $newEndDate);
             
@@ -138,7 +138,6 @@ class TableMembers extends TableAccess
                 	$this->setValue('mem_leader', 0);
                 }
                 
-                //speichern
                 $this->save();
                 return true;
             }

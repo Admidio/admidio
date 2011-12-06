@@ -10,7 +10,7 @@
  * Es stehen diverse Methoden zur Verfuegung, welche in den abgeleiteten Klassen
  * durch vordefinierte Methoden angepasst werden koennen
  *
- * Folgende Funktionen stehen zur Verfuegung:
+ * The following functions are available:
  *
  * readData($id, $sql_where_condition = "", $sql_additional_tables = "")
  *                  - Liest den Datensatz zur uebergebenen ID ($key_value) ein

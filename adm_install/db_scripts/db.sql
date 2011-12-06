@@ -328,14 +328,14 @@ create table %PREFIX%_members
    mem_begin                      date          not null,
    mem_end                        date          not null default '9999-12-31',
    mem_leader                     boolean       not null default '0',
-   primary key (mem_id),
-   unique (mem_rol_id, mem_usr_id)
+   primary key (mem_id)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
+create unique index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
@@ -392,13 +392,14 @@ create table %PREFIX%_preferences
    prf_org_id                     integer       unsigned not null,
    prf_name                       varchar(30)   not null,
    prf_value                      varchar(255),
-   primary key (prf_id),
-   unique (prf_org_id, prf_name)
+   primary key (prf_id)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
+
+create unique index IDX_PRF_ORG_ID_NAME on %PREFIX%_preferences (prf_org_id, prf_name);
 
 
 /*==============================================================*/
@@ -435,7 +436,6 @@ create table %PREFIX%_roles
    rol_edit_user                  boolean       not null default '0',
    rol_guestbook                  boolean       not null default '0',
    rol_guestbook_comments         boolean       not null default '0',
-   rol_inventory				  boolean       not null default '0',
    rol_mail_to_all                boolean       not null default '0',
    rol_mail_this_role             smallint      not null default 0,
    rol_photo                      boolean       not null default '0',
@@ -554,13 +554,14 @@ create table %PREFIX%_user_fields
    usf_timestamp_create           timestamp     not null,
    usf_usr_id_change              integer       unsigned,
    usf_timestamp_change           timestamp 	null default null,
-   primary key (usf_id),
-   unique (usf_name_intern)
+   primary key (usf_id)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
+
+create unique index IDX_USF_NAME_INTERN on %PREFIX%_user_fields (usf_name_intern);
 
 
 /*==============================================================*/
@@ -572,13 +573,14 @@ create table %PREFIX%_user_data
    usd_usr_id                     integer       unsigned not null,
    usd_usf_id                     integer       unsigned not null,
    usd_value                      varchar(255),
-   primary key (usd_id),
-   unique (usd_usr_id, usd_usf_id)
+   primary key (usd_id)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
+
+create unique index IDX_USD_USR_USF_ID on %PREFIX%_user_data (usd_usr_id, usd_usf_id);
 
 
 /*==============================================================*/
@@ -604,13 +606,14 @@ create table %PREFIX%_users
    usr_timestamp_change           timestamp 	null default null,
    usr_valid                      boolean       not null default '0',
    usr_reg_org_shortname          varchar(10),
-   primary key (usr_id),
-   unique (usr_login_name)
+   primary key (usr_id)
 )
 engine = InnoDB
 auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
+
+create unique index IDX_USR_LOGIN_NAME on %PREFIX%_users (usr_login_name);
 
 
 /*==============================================================*/

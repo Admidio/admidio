@@ -9,8 +9,7 @@
  * Diese Klasse dient dazu ein Terminobjekt zu erstellen. 
  * Ein Termin kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * getIcal($domain)  - gibt String mit dem Termin im iCal-Format zurueck
  * editRight()       - prueft, ob der Termin von der aktuellen Orga bearbeitet werden darf

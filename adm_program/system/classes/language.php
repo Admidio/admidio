@@ -10,7 +10,7 @@
  * SimpleXMLElement ein und bietet Zugriffsmethoden um auf einfache Weise
  * zu bestimmten IDs die sprachabhaengigen Texte auszugeben.
  *
- * Folgende Funktionen stehen zur Verfuegung:
+ * The following functions are available:
  *
  * addLanguagePath($path)
  *         - gibt einen weiteren Ordner an, der Sprachdateien enthaelt

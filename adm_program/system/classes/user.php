@@ -9,8 +9,7 @@
  * Diese Klasse dient dazu ein Userobjekt zu erstellen.
  * Ein User kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * checkPassword($password) - check password against stored hash    
  * deleteUserFieldData()    - delete all user data of profile fields; 
@@ -82,7 +81,6 @@ class User extends TableUsers
                                            'rol_announcements' => '0', 'rol_dates' => '0',
                                            'rol_download'      => '0', 'rol_edit_user' => '0',
                                            'rol_guestbook'     => '0', 'rol_guestbook_comments' => '0',
-                                           'rol_inventory'     => '0',
                                            'rol_mail_to_all'   => '0',
                                            'rol_photo'         => '0', 'rol_profile' => '0',
                                            'rol_weblinks'      => '0', 'rol_all_lists_view' => '0');
@@ -500,12 +498,6 @@ class User extends TableUsers
     public function commentGuestbookRight()
     {
         return $this->checkRolesRight('rol_guestbook_comments');
-    }
-
-	// Funktion prueft, ob der angemeldete User Inventargegenstaende verwalten darf
-    public function editInventoryRight()
-    {
-        return $this->checkRolesRight('rol_inventory');
     }
 
     // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf

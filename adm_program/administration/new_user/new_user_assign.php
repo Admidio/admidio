@@ -112,7 +112,7 @@ if($member_found == 0)
         if($gCurrentUser->assignRoles())
         {
             // neuer User -> Rollen zuordnen
-            header('Location: roles.php?new_user=1&user_id='. $new_user->getValue('usr_id'));
+            header('Location: roles.php?new_user=1&usr_id='. $new_user->getValue('usr_id'));
             exit();
         }
         else

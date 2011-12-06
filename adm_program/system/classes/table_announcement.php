@@ -9,8 +9,7 @@
  * Diese Klasse dient dazu ein Ankuendigungsobjekt zu erstellen. 
  * Eine Ankuendigung kann ueber diese Klasse in der Datenbank verwaltet werden
  *
- * Neben den Methoden der Elternklasse TableAccess, stehen noch zusaetzlich
- * folgende Methoden zur Verfuegung:
+ * Beside the methods of the parent class there are the following additional methods:
  *
  * editRight()       - prueft, ob die Ankuendigung von der aktuellen Orga bearbeitet werden darf
  *

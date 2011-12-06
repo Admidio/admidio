@@ -111,27 +111,28 @@ else if($getMode == 'print')
     $class_sub_header_font = 'tableSubHeaderFontPrint';
 }
 
-$main_sql  = '';   // enthaelt das Haupt-Sql-Statement fuer die Liste
-$str_csv   = '';   // enthaelt die komplette CSV-Datei als String
-$leiter    = 0;    // Gruppe besitzt Leiter
+$mainSql      = '';   // enthaelt das Haupt-Sql-Statement fuer die Liste
+$str_csv      = '';   // enthaelt die komplette CSV-Datei als String
+$leiter       = 0;    // Gruppe besitzt Leiter
+$memberStatus = '';
 
 // Listenkonfigurationsobjekt erzeugen und entsprechendes SQL-Statement erstellen
 $list = new ListConfiguration($gDb, $getListId);
-$main_sql = $list->getSQL($role_ids, $getShowMembers);
-//echo $main_sql; exit();
+$mainSql = $list->getSQL($role_ids, $getShowMembers);
+//echo $mainSql; exit();
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
-$result_list = $gDb->query($main_sql);
+$resultList = $gDb->query($mainSql);
 
-$num_members = $gDb->num_rows($result_list);
+$numMembers = $gDb->num_rows($resultList);
 
-if($num_members == 0)
+if($numMembers == 0)
 {
     // Es sind keine Daten vorhanden !
     $gMessage->show($gL10n->get('LST_NO_USER_FOUND'));
 }
 
-if($num_members < $getStart)
+if($numMembers < $getStart)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -194,15 +195,15 @@ if($getMode != 'csv')
 
     if($getShowMembers == 0)
     {
-    	$member_status = $gL10n->get('LST_ACTIVE_MEMBERS');
+    	$memberStatus = $gL10n->get('LST_ACTIVE_MEMBERS');
     }
     elseif($getShowMembers == 1)
     {
-    	$member_status = $gL10n->get('LST_FORMER_MEMBERS');
+    	$memberStatus = $gL10n->get('LST_FORMER_MEMBERS');
     }
     elseif($getShowMembers == 2)
     {
-    	$member_status = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+    	$memberStatus = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
     echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>
@@ -214,7 +215,7 @@ if($getMode != 'csv')
         echo $role->getValue('rol_description'). ' - ';
     }
     
-    echo $member_status.'</h3>';
+    echo $memberStatus.'</h3>';
 
     if($getMode == 'html')
     {
@@ -372,33 +373,33 @@ else
     echo '</tr></thead><tbody>';
 }
 
-$irow        = $getStart + 1;  // Zahler fuer die jeweilige Zeile
-$leader_head = -1;              // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
+$listRowNumber        = $getStart + 1;  // Zahler fuer die jeweilige Zeile
+$lastGroupHead = -1;             // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
 if($getMode == 'html' && $gPreferences['lists_members_per_page'] > 0)
 {
     $members_per_page = $gPreferences['lists_members_per_page'];     // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
 }
 else
 {
-    $members_per_page = $num_members;
+    $members_per_page = $numMembers;
 }
 
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
-if(!$gDb->data_seek($result_list, $getStart))
+if(!$gDb->data_seek($resultList, $getStart))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
+for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 {
-    if($row = $gDb->fetch_array($result_list))
+    if($row = $gDb->fetch_array($resultList))
     {
         if($getMode != 'csv')
         {
             // erst einmal pruefen, ob es ein Leiter ist, falls es Leiter in der Gruppe gibt, 
             // dann muss noch jeweils ein Gruppenkopf eingefuegt werden
-            if($leader_head != $row['mem_leader']
-            && ($row['mem_leader'] != 0 || $leader_head != -1))
+            if($lastGroupHead != $row['mem_leader']
+            && ($row['mem_leader'] != 0 || $lastGroupHead != -1))
             {
                 if($row['mem_leader'] == 1)
                 {
@@ -406,6 +407,8 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                 }
                 else
                 {
+					// if list has leaders then initialize row number for members
+					$listRowNumber = 1;
                     $title = $gL10n->get('SYS_PARTICIPANTS');
                 }
                 echo '<tr>
@@ -413,7 +416,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                         <div class="'.$class_sub_header_font.'" style="float: left;">&nbsp;'.$title.'</div>
                     </td>
                 </tr>';
-                $leader_head = $row['mem_leader'];
+                $lastGroupHead = $row['mem_leader'];
             }
         }
 
@@ -472,7 +475,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                     if($column_number == 1)
                     {
                         // die Laufende Nummer noch davorsetzen
-                        echo '<td style="text-align: '.$align.';">'.$irow.'</td>';
+                        echo '<td style="text-align: '.$align.';">'.$listRowNumber.'</td>';
                     }
                     echo '<td style="text-align: '.$align.';">';
                 }
@@ -481,7 +484,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
                     if($column_number == 1)
                     {
                         // erste Spalte zeigt lfd. Nummer an
-                        $str_csv = $str_csv. $valueQuotes. $irow. $valueQuotes;
+                        $str_csv = $str_csv. $valueQuotes. $listRowNumber. $valueQuotes;
                     }
                 }
     
@@ -595,7 +598,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $num_members; $j++)
             echo '</tr>';
         }
 
-        $irow++;
+        $listRowNumber++;
     }
 }  // End-While (jeder gefundene User)
 
@@ -626,7 +629,7 @@ else
     {
         // Navigation mit Vor- und Zurueck-Buttons
         $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode='.$getMode.'&rol_id='.$getRoleId.'&show_members='.$getShowMembers;
-        echo admFuncGeneratePagination($base_url, $num_members, $members_per_page, $getStart, TRUE);
+        echo admFuncGeneratePagination($base_url, $numMembers, $members_per_page, $getStart, TRUE);
     }
 
     //INFOBOX zur Gruppe

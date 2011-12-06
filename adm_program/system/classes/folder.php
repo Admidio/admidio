@@ -9,7 +9,7 @@
  * Mit dieser Klasse koennen Ordner leichter verwaltet werden. Das rekursive Verschieben, 
  * Kopieren, Loeschen uvw. wird unterstuetzt.
  *
- * Folgende Funktionen stehen zur Verfuegung:
+ * The following functions are available:
  *
  * setFolder($folderWithPath = '') - Ordner mit zugehoerigem Pfad setzen
  * getFolder()           - Ordner zurueckgeben

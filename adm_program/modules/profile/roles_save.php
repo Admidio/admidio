@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * user_id     - Funktionen der uebergebenen ID aendern
+ * usr_id      - Funktionen der uebergebenen ID aendern
  * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
  *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
  * inline: 	 0 - Ausgaben werden als eigene Seite angezeigt
@@ -29,7 +29,7 @@ if(!$gCurrentUser->assignRoles() && !isGroupLeader($gCurrentUser->getValue('usr_
 }
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
@@ -157,25 +157,28 @@ $member = new TableMembers($gDb);
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = $gDb->fetch_array($result_rol))
 {
-    // der Webmaster-Rolle duerfen nur Webmaster neue Mitglieder zuweisen
-    if($row['rol_name'] != $gL10n->get('SYS_WEBMASTER') || $gCurrentUser->isWebmaster())
+	// if role is webmaster than only webmaster can add new user, 
+	// but don't change their own membership, because there must be at least one webmaster
+    if($row['rol_name'] != $gL10n->get('SYS_WEBMASTER')
+	|| (  $row['rol_name'] == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->isWebmaster() 
+	   && $getUserId != $gCurrentUser->getValue('usr_id')))
     {
-        $role_assign = 0;
+        $roleAssign = 0;
         if(isset($_POST['role-'.$row['rol_id']]) && $_POST['role-'.$row['rol_id']] == 1)
         {
-            $role_assign = 1;
+            $roleAssign = 1;
         }
 
-        $role_leader = 0;
+        $roleLeader = 0;
         if(isset($_POST['leader-'.$row['rol_id']]) && $_POST['leader-'.$row['rol_id']] == 1)
         {
-            $role_leader = 1;
+            $roleLeader = 1;
         }
 
         // Rollenmitgliedschaften aktualisieren
-        if($role_assign == 1)
+        if($roleAssign == 1)
         {
-            $member->startMembership($row['rol_id'], $getUserId, $role_leader);
+            $member->startMembership($row['rol_id'], $getUserId, $roleLeader);
             $count_assigned++;
         }
         else
@@ -184,7 +187,7 @@ while($row = $gDb->fetch_array($result_rol))
         }
 
         // find the parent roles
-        if($role_assign == 1)
+        if($roleAssign == 1)
         {
             $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);
             foreach($tmpRoles as $tmpRole)

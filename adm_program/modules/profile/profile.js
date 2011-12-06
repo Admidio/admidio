@@ -28,7 +28,7 @@ function profileJSClass()
 	{
 		$.ajax({
 			type: "GET",
-			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=0&user_id=" + this.usr_id,
+			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=0&usr_id=" + this.usr_id,
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_roles_box_body").html(responseText);
@@ -40,7 +40,7 @@ function profileJSClass()
 	{
 		$.ajax({
 			type: "GET",
-			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=1&user_id=" + this.usr_id,
+			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=1&usr_id=" + this.usr_id,
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_former_roles_box_body").html(responseText);

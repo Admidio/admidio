@@ -16,6 +16,7 @@ ALTER TABLE %PREFIX%_categories ADD COLUMN `cat_default` tinyint (1) unsigned no
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_value_list` text AFTER usf_description;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_icon` varchar(255) AFTER usf_value_list;
 ALTER TABLE %PREFIX%_user_fields ADD COLUMN `usf_url` varchar(255) AFTER usf_icon;
+ALTER TABLE %PREFIX%_roles DROP COLUMN `rol_inventory`;
 
 ALTER TABLE %PREFIX%_rooms CHANGE COLUMN `room_description` `room_description_old` varchar(255);
 ALTER TABLE %PREFIX%_rooms ADD COLUMN `room_description` text AFTER room_name;
@@ -255,7 +256,6 @@ UPDATE %PREFIX%_preferences SET prf_value = 'da' WHERE prf_name like 'system_lan
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'captcha_font_size';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'enable_bbcode';
 UPDATE %PREFIX%_preferences SET prf_name = 'captcha_font_size' WHERE prf_name like 'captcha_text_size';
-UPDATE %PREFIX%_preferences SET prf_value = 'iso-8859-1' WHERE prf_name like 'mail_character_encoding';
 UPDATE adm_organizations SET org_homepage = 'http://' || org_homepage WHERE lower( substring( org_homepage, 1, 4 ) ) NOT LIKE 'http';
 
 -- replace category name with translation id   
