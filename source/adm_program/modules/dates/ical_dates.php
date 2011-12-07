@@ -39,7 +39,7 @@ if ($gPreferences['enable_dates_module'] != 1)
 
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1, true);
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 2);
 
 // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
@@ -57,6 +57,11 @@ if ($gValidLogin == false)
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
     $hidden = ' AND cat_hidden = 0 ';
 }
+
+//Rückwertige Tage
+$days_past = date('Y-m-d H:i:s',time()-$gPreferences['dates_ical_dates_past']*86400);
+//Tage in Zukunft
+$days_future = date('Y-m-d H:i:s',time()+$gPreferences['dates_ical_dates_future']*86400);
 
 // aktuelle Termine aus DB holen die zur Orga passen
 $sql = 'SELECT cat.*, dat.*, 
@@ -79,8 +84,10 @@ $sql = 'SELECT cat.*, dat.*,
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR (   dat_global  = 1
                   AND cat_org_id IN ('.$organizations.') ))
-           AND (  dat_begin >= \''.DATETIME_NOW.'\' 
-               OR dat_end   >= \''.DATETIME_NOW.'\' )
+           AND (  dat_begin >= \''.$days_past.'\' 
+               OR dat_end   >= \''.$days_past.'\' )
+           AND (  dat_begin <= \''.$days_future.'\' 
+               OR dat_end   <= \''.$days_future.'\' )
                '.$hidden.'
          ORDER BY dat_begin ASC';
 $result = $gDb->query($sql);
@@ -101,7 +108,7 @@ while ($row = $gDb->fetch_array($result))
 }
 $iCal .= $date->getIcalFooter();
 
-if($mode == 2)
+if($getMode == 2)
 {
     header('Content-Type: text/calendar');
     header('Content-Disposition: attachment; filename='. urlencode($getHeadline). '.ics');

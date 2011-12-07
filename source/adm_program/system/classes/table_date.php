@@ -124,7 +124,7 @@ class TableDate extends TableAccess
             $icalVEevent .= "LAST-MODIFIED:". $this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His')."\n";
         }
                     
-        $icalVEevent =  "UID:". $uid. "\n".
+        $icalVEevent .=  "UID:". $uid. "\n".
                         "SUMMARY:". $this->getValue('dat_headline'). "\n".
                         "DESCRIPTION:". str_replace("\r\n", "\n", $this->getValue('dat_description', 'plain')). "\n".
                         "DTSTAMP:".date('Ymd').'T'.date('His')."\n".
