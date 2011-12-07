@@ -3,6 +3,12 @@
 <version id="2.3.0">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Soll die Kategorie %VAR1_BOLD% wirklich gelöscht werden?\n\nDiese Kategorie besitzt %VAR2% abhängige Einträge, die ebenfalls gelöscht werden.</text>
+    <text id="DAT_ENABLE_ICAL" development="new" translation="todo">iCal-Funktion aktivieren</text>
+    <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="todo">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Standard: ja)</text>
+    <text id="DAT_ICAL_DAYS_FUTURE" development="changed" translation="todo">Anzahl iCal Tage Zukunft</text>
+    <text id="DAT_ICAL_DAYS_FUTURE_DESC" development="changed" translation="todo">Gibt an, wie viele Tage in die Zukunft in einem iCal-Download oder -Abbo einbezogen werden. (Standard: 365)</text>
+    <text id="DAT_ICAL_DAYS_PAST" development="changed" translation="todo">Anzahl iCal Tage Zukunft</text>
+    <text id="DAT_ICAL_DAYS_PAST_DESC" development="changed" translation="todo">Gibt an, wie viele Tage aus der Vergangenheit in einem iCal-Download oder -Abbo einbezogen werden.  (Standard: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
@@ -49,6 +55,7 @@
     <text id="SYS_DATABASE_VERSION_REQUIRED" development="new" translation="todo">Admidio benötigt %VAR1% oder höher</text>
     <text id="SYS_DESIGNATION" development="new" translation="todo">Bezeichnung</text>
     <text id="SYS_DROPDOWN_LISTBOX" development="new" translation="todo">Dropdown-Listenfeld</text>
+    <text id="SYS_ICAL_DISABLED" development="new" translation="todo">Die iCal-Funktion wurde vom Webmaster deaktiviert.</text>
     <text id="SYS_ICON" development="new" translation="todo">Icon</text>
     <text id="SYS_INTERNAL_NAME" development="new" translation="todo">Interner Name</text>
     <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="todo">Der interne Name wird für den eindeutigen Zugriff auf ein Feld benutzt. Dieser ist für die Programmbenutzung nicht relevant. Bei der Entwicklung muss allerdings immer dieser Name benutzt werden, um das Feld z.B. mit getValue() anzusprechen. Der interne Name wird beim Anlegen eines Feldes automatisch gefüllt.</text>
@@ -1099,7 +1106,6 @@
     <text id="SYS_HIDE" development="new" translation="todo">Ausblenden</text>
     <text id="SYS_HOMEPAGE" development="new" translation="todo">Startseite</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
-    <text id="SYS_ICAL_DISABLED" development="new" translation="todo">Die iCal-Funktion wurde vom Webmaster deaktiviert.</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
 	<text id="SYS_INFO" development="new" translation="todo">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>

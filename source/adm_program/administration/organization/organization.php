@@ -1605,7 +1605,41 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>                    
+                    <li>
+                        <dl>
+                            <dt><label for="enable_dates_ical">'.$gL10n->get('DAT_ENABLE_ICAL').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_dates_ical" name="enable_dates_ical" ';
+                                if(isset($form_values['enable_dates_ical']) && $form_values['enable_dates_ical'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('DAT_ENABLE_ICAL_DESC').'</li>                    
+                    <li>
+                        <dl>
+                            <dt><label for="dates_ical_days_past">'.$gL10n->get('DAT_ICAL_DAYS_PAST').':</label></dt>
+                            <dd>
+                                <input type="text" id="dates_ical_days_past" name="dates_ical_days_past"
+                                     style="width: 50px;" maxlength="4" value="'. $form_values['dates_ical_days_past']. '" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('DAT_ICAL_DAYS_PAST_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="dates_ical_days_future">'.$gL10n->get('DAT_ICAL_DAYS_FUTURE').':</label></dt>
+                            <dd>
+                                <input type="text" id="dates_ical_days_future" name="dates_ical_days_future"
+                                     style="width: 50px;" maxlength="4" value="'. $form_values['dates_ical_days_future']. '" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('DAT_ICAL_DAYS_FUTURE_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="dates_show_map_link">'.$gL10n->get('DAT_SHOW_MAP_LINK').':</label></dt>

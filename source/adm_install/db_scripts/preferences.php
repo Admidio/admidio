@@ -131,8 +131,8 @@ $orga_preferences = array(
     'dates_show_calendar_select' => '1',
     'dates_show_rooms'           => '0',
     'enable_dates_ical'          => '1',
-    'dates_ical_dates_past'      => '60',
-    'dates_ical_dates_future'    => '365',       
+    'dates_ical_days_past'      => '60',
+    'dates_ical_days_future'    => '365',       
 
     // Weblinks
     'enable_weblinks_module'    => '1',
