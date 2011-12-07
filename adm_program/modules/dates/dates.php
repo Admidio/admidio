@@ -138,7 +138,7 @@ else
     if(strlen($getDate) > 0)
     {
         $sqlConditions .= ' AND dat_begin <= \''.$getDate.'\'
-                            AND dat_end   >  \''.$getDate.' 00:00:00\'';;
+                            AND dat_end   >  \''.$getDate.' 00:00:00\'';
         $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
     }
     //fuer alte Termine...
@@ -363,10 +363,14 @@ else
                     }
                     echo ' ' . $date->getValue('dat_headline'). '
                 </div>
-                <div class="boxHeadRight">
-                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
+                <div class="boxHeadRight">';
+                    //ical Download
+                    if($gPreferences['enable_dates_ical'] == 1)
+                    {
+                        echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
                         src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
-
+                    }
+                    
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($gCurrentUser->editDates())
                     {
