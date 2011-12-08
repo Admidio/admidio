@@ -317,6 +317,17 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
                 <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'">'.$gL10n->get('DAT_MANAGE_CALENDARS').'</a>
             </span></li>';
         }
+        //ical Download
+        if($gPreferences['enable_dates_ical'] == 1)
+        {
+            $ical_attributes = '?headline='.$getHeadline;
+            if(strlen($getCalendar)!=0)
+            {
+                $ical_attributes .= '&amp;calendar='.$getCalendar;
+            }
+            $topNavigation .= '<li class="iconLink"><a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php'.$ical_attributes.'"><img
+            src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a></li>';
+        }
     }
     
     if(strlen($topNavigation) > 0)
