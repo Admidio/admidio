@@ -20,9 +20,9 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/rss.php');
 require_once('../../system/classes/table_date.php');
-
+require_once('../../system/classes/table_rooms.php');
+unset($_SESSION['dates_request']);
 
 // prüfen ob das Modul überhaupt aktiviert ist
 if($gPreferences['enable_dates_module'] == 0)
@@ -48,30 +48,26 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 2);
 $getCalendar = admFuncVariableIsValid($_GET, 'calendar', 'string');
 
-// alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
 $organizations = '';
-$arr_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
+$sqlConditions = '';
+$sqlConditionCalendar = '';
+$sqlConditionLogin = '';
+$sqlOrderBy = '';
+$arr_ref_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
 
-foreach($arr_orgas as $org_id => $value)
+foreach($arr_ref_orgas as $org_id => $value)
 {
     $organizations = $organizations. $org_id. ', ';
 }
 $organizations = $organizations. $gCurrentOrganization->getValue('org_id');
 
-//Einschränkungen
-$sqlConditions = '';
-$sqlConditionCalendar = '';
-$sqlConditionLogin = '';
-$sqlOrderBy = ' ORDER BY dat_begin ASC ';
-
-//Geschützte Termine
 if ($gValidLogin == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
     $sqlConditions .= ' AND cat_hidden = 0 ';
 }
 
-//Bestimmter Kalender
+//...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 if (strlen($getCalendar) > 0)
 {
     // alle Termine zu einer Kategorie anzeigen
@@ -88,7 +84,7 @@ $date_future = date('Y-m-d H:i:s',time()+$gPreferences['dates_ical_days_future']
 $sqlConditions .='  AND (  dat_begin <= \''.$date_future.'\' 
                     OR dat_end   <= \''.$date_future.'\' ) ';
 
-// Bedingungen für die Rollenfreigabe hinzufügen
+// Bedingungen fuer die Rollenfreigabe hinzufuegen
 if($gCurrentUser->getValue('usr_id') > 0)
 {
     $sqlConditionLogin = '
@@ -104,7 +100,7 @@ else
     $sqlConditionLogin = ' AND dtr_rol_id IS NULL ';
 }
 
-// Gucken wieviele Datensätze die Abfrage ermittelt kann...
+// Gucken wieviele Datensaetze die Abfrage ermittelt kann...
 $sql = 'SELECT COUNT(DISTINCT dat_id) as count
           FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
          WHERE dat_cat_id = cat_id
@@ -120,7 +116,8 @@ $result = $gDb->query($sql);
 $row    = $gDb->fetch_array($result);
 $num_dates = $row['count'];
 
-// aktuelle Termine aus DB holen die zur Orga passen
+
+// nun die Termine auslesen, die angezeigt werden sollen
 $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
@@ -137,7 +134,7 @@ $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.me
           LEFT JOIN '. TBL_USER_DATA .' cha_firstname
             ON cha_firstname.usd_usr_id = dat_usr_id_change
            AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_MEMBERS. ' men
+          LEFT JOIN '. TBL_MEMBERS. ' mem
             ON mem.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
            AND mem.mem_rol_id = dat_rol_id
            AND mem_begin <= \''.DATE_NOW.'\'
