@@ -188,13 +188,6 @@ class Language
 			{
 				$this->countries[$vals[$index['ISOCODE'][$i]]['value']] = $vals[$index['NAME'][$i]]['value'];
 			}
-			
-			// now sort the array in current language settings 
-			// (note that this won't work on windows, there's a windows bug with utf8 locales)
-			//$currentLocale = setLocale(LC_COLLATE,'0');
-			//setLocale(LC_COLLATE, substr($this->language, 0, 2).'_'.strtoupper(substr($this->language, 0, 2)).'.utf8');
-			//usort($this->countries, 'strcoll');
-			//setLocale(LC_COLLATE, $currentLocale);
 		}
 		return $this->countries;
 	}

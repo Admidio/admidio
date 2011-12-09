@@ -2,7 +2,8 @@
 <language id="de_sie">
 <version id="2.3.0">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
-    <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Soll die Kategorie %VAR1_BOLD% wirklich gelöscht werden?\n\nDiese Kategorie besitzt %VAR2% abhängige Einträge, die ebenfalls gelöscht werden.</text>        <text id="DAT_ENABLE_ICAL" development="new" translation="todo">iCal-Funktion aktivieren</text>
+    <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Soll die Kategorie %VAR1_BOLD% wirklich gelöscht werden?\n\nDiese Kategorie besitzt %VAR2% abhängige Einträge, die ebenfalls gelöscht werden.</text>    
+    <text id="DAT_ENABLE_ICAL" development="new" translation="todo">iCal-Funktion aktivieren</text>
     <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="todo">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Standard: ja)</text>
     <text id="DAT_ICAL_DAYS_FUTURE" development="changed" translation="todo">Anzahl iCal Tage Zukunft</text>
     <text id="DAT_ICAL_DAYS_FUTURE_DESC" development="changed" translation="todo">Gibt an, wie viele Tage in die Zukunft in einem iCal-Download oder -Abbo einbezogen werden. (Standard: 365)</text>

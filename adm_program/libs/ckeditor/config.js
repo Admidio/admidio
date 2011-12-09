@@ -27,7 +27,7 @@ CKEDITOR.editorConfig = function( config )
 	
 	config.toolbar_AdmidioEcard =
     [
-        ['EcardTemplate','Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight', '-', 
+        ['EcardTemplate','Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 
         'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList', '-', 'Maximize']
     ];
 };
