@@ -47,7 +47,7 @@ class CKEditorSpecial extends CKEditor
 
     // creates the editor with 1 line of buttons
     // use the default settings of ecards
-    public function createEcardEditor($elementName, $value = '', $toolbar = 'AdmidioGuestbook', $height = '300px')
+    public function createEcardEditor($elementName, $value = '', $toolbar = 'AdmidioEcard', $height = '300px')
     {
         global $gPreferences;
         

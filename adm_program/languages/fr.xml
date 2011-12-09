@@ -156,7 +156,7 @@
    	<text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">Adresse courriel de %VAR1% destinataire</text>
    	<text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Adresse courriel de l'expéditeur</text>
    	<text id="ECA_FIELD_ERROR" development="new" translation="edited">Certains champs ne sont pas remplies ou ne sont pas conformes.</text>
-   	<text id="ECA_FILL_INPUTS" development="new" translation="edited">S'il vous plaît remplir \ntous les champs puis \nappuyer sur 'envoyer'.</text>
+   	<text id="ECA_FILL_INPUTS" development="new" translation="edited">S'il vous plaît remplir \ntous les champs puis \nappuyer sur 'envoyer'.\n\n %VAR1%</text>
    	<text id="ECA_FONT" development="new" translation="edited">Préférence des caractères. (par défaut: Comic Sans MS)</text>
    	<text id="ECA_FONT_SIZE" development="new" translation="edited">Préférence de la taille. (par défaut: 20)</text>
    	<text id="ECA_FONT_COLOR" development="new" translation="edited">Préférence de la couleur. (par défaut: noir)</text>

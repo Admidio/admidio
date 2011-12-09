@@ -19,26 +19,17 @@ function ecardJSClass()
 	this.moreRecipientDiv_id	= "moreRecipient";
 	this.getmoreRecipientDiv_id = "getmoreRecipient";
 	this.ccrecipientConDiv_id	= "ccrecipientContainer";
-	this.max_ecardTextLength	= 500;
 	this.max_recipients			= 5;
 	this.now_recipients			= 0;
 	this.ecardformid			= "ecard_form";
-	this.currentURL				= "";
-	this.ecardSend_Text			= "";
-	this.errMsg_Start_Text		= "";
-	this.errMsg_End_Text		= "";
 	this.recipient_Text			= "";
-	this.nameOfSender_Text		= "";
-	this.emailOfSender_Text		= "";
 	this.nameOfRecipient_Text	= "";
 	this.emailOfRecipient_Text	= "";
 	this.recipientName_Text		= "";
 	this.recipientEmail_Text	= "";
 	this.message_Text			= "";
-	this.ecardPreview_Text		= "";
 	this.emailLookInvalid_Text	= "";
 	this.contentIsLoading_Text	= "";
-	this.ajaxExecution_ErrorText = "";
 	this.moreRecipients_Text	= "";
 	this.noMoreRecipients_Text	= "";
 	this.blendInSettings_Text	= "";
@@ -47,34 +38,45 @@ function ecardJSClass()
 	this.messageTooLong			= "";
 	this.loading_Text			= "";
 	this.send_Text				= "";
+	this.template_Text			= "";
+	this.templates				= new Array();
 
 	this.ccSaveDataArray		= new Array();
 	
+	this.init = function()
+	{
+		$(document).ready(function() {
+			$("a[rel=\'colorboxImage\']").colorbox({photo:true});
+			ecardJS.getMenu();
+		});
+	}
+
 	this.popup_win = function(theURL,winName,winOptions)
 	{
 		 win = window.open(theURL,winName,winOptions);
 		 win.focus();
 	}
+	
 	this.validateForm = function()
 	{
 		var error         = false;
-		var error_message = this.errMsg_Start_Text;
+		var error_message = '';
 	
 		if ($("#" + this.ecardformid + " input[name='ecard[name_recipient]']").val() == "" || $("#" + this.ecardformid+ "input[name='ecard[name_recipient]']").val() == "< "+ this.recipientName_Text +" >")
 		{
 			error = true;
-			error_message += "- "+ this.nameOfRecipient_Text.replace('[VAR1]'," ") +"\n";
+			error_message += "- " + this.nameOfRecipient_Text.replace('[VAR1]'," ") + "\n";
 		}
 		if ($("#" + this.ecardformid + " input[name='ecard[email_recipient]']").val() == "" || this.emailValidation( $("#" + this.ecardformid + " input[name='ecard[email_recipient]']").val() ) == false)
 		{
 			error = true;
-			error_message += "- "+ this.emailOfRecipient_Text.replace('[VAR1]'," ") +" \n";
+			error_message += "- " + this.emailOfRecipient_Text.replace('[VAR1]'," ") + "\n";
 		}
-		/*if (jQuery.trim($("#" + this.ecardformid + " textarea[name='admEcardMessage']").val()) == "")
+		if (CKEDITOR.instances.admEcardMessage.getData() == '')
 		{
 			error = true;
-			error_message += "- "+ this.message_Text +" \n";
-		}*/
+			error_message += "- " + this.message_Text + "\n";
+		}
 		for(var i=1; i <= this.now_recipients; i++)
 		{
 			var namedoc		= $("#" + this.ecardformid + " input[name='ecard[name_ccrecipient_"+[i]+"]']");
@@ -85,7 +87,7 @@ function ecardJSClass()
 			{
 				if(namedoc.val() == "")
 				{
-					message += " - "+ this.nameOfRecipient_Text.replace('[VAR1]'," "+ i +". CC - ") +" \n";
+					message += " - "+ this.nameOfRecipient_Text.replace('[VAR1]'," "+ i +". CC - ") +"\n";
 					error = true;
 					goterror = true;
 				}
@@ -94,7 +96,7 @@ function ecardJSClass()
 			{
 				if(emaildoc.val() == "" || !this.emailValidation(emaildoc.val()))
 				{
-					message += " - "+ this.emailOfRecipient_Text.replace('[VAR1]'," "+ i +". CC - ") +" \n";
+					message += " - "+ this.emailOfRecipient_Text.replace('[VAR1]'," "+ i +". CC - ") +"\n";
 					error = true;
 					goterror = true;
 				}
@@ -110,8 +112,7 @@ function ecardJSClass()
 		}
 		if (error)
 		{
-			error_message += "\n\n" + this.errMsg_End_Text;
-			jQueryAlert("ECA_FILL_INPUTS");
+			jQueryAlert("ECA_FILL_INPUTS", error_message);
 			return false;  // Formular wird nicht abgeschickt.
 		}
 		else
@@ -120,6 +121,7 @@ function ecardJSClass()
 		}
 		return false;
 	} // Ende function validateForm()
+	
 	this.emailValidation = function(str)
 	{
 		var zeichen=Array("<",">")
@@ -166,29 +168,32 @@ function ecardJSClass()
 	
 		return true
 	}
+	
 	this.makePreview = function()
 	{
 		$.fn.colorbox.init();
-		$("#" + this.ecardformid + " input[name=submit_action]").attr("value","preview");
+		$("#" + this.ecardformid + " input[name='ecard[submit_action]']").attr("value","preview");
 		$("#" + this.ecardformid).attr("action","ecard_preview.php");
 		$.fn.colorbox({href:"ecard_preview.php",width:"70%",height:"70%",iframe:true,fastIframe:false,onComplete:function(){
 								$("#" + ecardJS.ecardformid).attr("target",$("#cboxLoadedContent iframe").attr("name"));
 								$("#" + ecardJS.ecardformid).submit();}});		
 	}
+	
 	this.sendEcard = function()
 	{
 		if (this.validateForm())
 		{
-			$("#" + this.ecardformid + " input[name=submit_action]").attr("value","send");
+			$("#" + this.ecardformid + " input[name='ecard[submit_action]']").attr("value","send");
 			this.jQueryAjaxLoadRolesAppend();
 			jQuery.fn.SubmitEcard();
 		}
 		else
 		{
 			$("#" + this.ecardformid).attr("onsubmit","");
-			$("#" + this.ecardformid + " input[name=submit_action]").attr("value","");
+			$("#" + this.ecardformid + " input[name='ecard[submit_action]']").attr("value","");
 		}
 	}
+	
 	this.blendout = function(id)
 	{
 		if($("#" + id).val() == "< "+ this.recipientName_Text +" >" || $("#" + id).val() == "< "+ this.recipientEmail_Text +" >")
@@ -196,6 +201,7 @@ function ecardJSClass()
 			$("#" + id).val("");
 		}
 	}
+	
 	this.blendin = function(id,type)
 	{
 		if($("#" + id).val() == "" && type == 1)
@@ -229,9 +235,10 @@ function ecardJSClass()
 			}
 		}
 	}
+	
 	this.jQueryAjaxLoadRolesAppend = function()
 	{
-		if($("#" + ecardJS.ecardformid + " input[name=submit_action]").attr("value") == "send")
+		if($("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value") == "send")
 		{
 			var options = { 
 				target:        '#cboxLoadedContent',  							 // target element(s) to be updated with server response
@@ -246,7 +253,7 @@ function ecardJSClass()
 			}; 
 			jQuery.fn.SubmitEcard = function(){
 				$.fn.colorbox.init()
-				if($("#" + ecardJS.ecardformid + " input[name=submit_action]").attr("value") == "send")
+				if($("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value") == "send")
 					$("#" + ecardJS.ecardformid).ajaxSubmit(options);
 			};
 		}
@@ -271,10 +278,12 @@ function ecardJSClass()
 			}
 		});
 	}
+	
 	this.getMenu = function()
 	{
 		this.makeAjaxRequest(gRootPath + "/adm_program/modules/ecards/ecard_drawdropmenue.php?mode=1" ,this.baseDropDiv_id,function(){$("a[rel='colorboxHelp']").colorbox({preloading:false,photo:false,speed:300,rel:'nofollow'});});
 	}
+	
 	this.getMenuRecepientName = function()
 	{
 		if($("#" + this.ecardformid + " #rol_id").val() != "externMail")
@@ -286,6 +295,7 @@ function ecardJSClass()
 			this.getExtern()
 		}
 	}
+	
 	this.getMenuRecepientNameEmail = function(usr_id)
 	{
 		if(usr_id != "bw")
@@ -297,6 +307,7 @@ function ecardJSClass()
 			$("#" + this.externDiv_id).html('<input type="hidden" name="ecard[email_recipient]" value="" \/><input type="hidden" name="ecard[name_recipient]"  value="" \/>');
 		}
 	}
+	
 	this.saveData = function()
 	{
 		for(var i=0; i <= this.now_recipients; i++)
@@ -309,6 +320,7 @@ function ecardJSClass()
 			}
 		}
 	}
+	
 	this.restoreSavedData = function()
 	{
 		if(this.ccSaveDataArray)
@@ -323,6 +335,7 @@ function ecardJSClass()
 			}
 		}
 	}
+	
 	this.addRecipient = function()
 	{
 		if (this.now_recipients < this.max_recipients && this.now_recipients >= 0)
@@ -344,6 +357,7 @@ function ecardJSClass()
 		else
 			this.now_recipients = this.max_recipients;
 	}
+	
 	this.delRecipient = function(id)
 	{
 		var olddiv = "";
@@ -371,16 +385,13 @@ function ecardJSClass()
 			$("#" + this.getmoreRecipientDiv_id +" a").html(this.moreRecipients_Text);
 		}
 	}
+	
 	this.delAllRecipients = function()
 	{
 		this.now_recipients = 0;
 		$("#" + this.ccrecipientConDiv_id).empty();
 	}
-	this.getSetting = function(name,input_value)
-	{
-		$("#" + this.ecardformid + " input[name='"+ name +"']").val(input_value);
-		this.getTextStyle(this.textInput_id);
-	}
+
 	this.showHideMoreRecipient = function(divLayer,divMenu)
 	{
 		if($("#" + divLayer).css("display") == "none")
@@ -396,6 +407,7 @@ function ecardJSClass()
 			this.delAllRecipients();
 		}
 	}
+	
 	this.showHideMoreSettings = function(divLayerSetting,divMenuSetting)
 	{
 		if($("#" + divLayerSetting).css("display") == "none")
@@ -409,6 +421,7 @@ function ecardJSClass()
 			$("#" + divMenuSetting +" a").html(this.blendInSettings_Text);
 		}
 	}
+	
 	this.getExtern = function()
 	{
 		if($("#" + this.baseDropDiv_id).css("display") == "none")
@@ -436,45 +449,5 @@ function ecardJSClass()
 		$("#" + this.wrongDiv_id).css("display","none");
 		$("#" + this.wrongDiv_id).empty();
 		$("#" + this.menueDiv_id).css("height","49px");
-	}
-	this.countMax = function()
-	{
-		var text = $("#" + this.ecardformid + " textarea[name='admEcardMessage']").val();
-		for(var i=0;i<bbcodes.length;i++)
-		{
-			text = text.replace(/\[.*?\]/gi,"").replace (/^\s+/,"").replace (/\s+$/,"");
-		}
-		var textlenght = text.length;
-		wert = this.max_ecardTextLength - textlenght;
-		if(textlenght > this.max_ecardTextLength)
-		{
-			var txtvalue = $("#" + this.ecardformid + " textarea[name='admEcardMessage']").val();
-			$("#" + this.ecardformid + " textarea[name='admEcardMessage']").val(txtvalue.substr(0, this.max_ecardTextLength));
-		}
-		if (wert < 0)
-		{
-			jQueryAlert("ECA_MESSAGE_TOO_LONG", this.max_ecardTextLength);
-			wert = 0;
-			$("#" + this.ecardformid + " textarea[name='admEcardMessage']").val($("#" + this.ecardformid + " textarea[name='admEcardMessage']").val().substring(0,this.max_ecardTextLength));
-			$("#" + this.counterDiv_id).html('<b>' + wert + '<\/b>');
-			wert = 0;
-		}
-		else
-		{
-			var zwprodukt = this.max_ecardTextLength - textlenght;
-			$("#" + this.counterDiv_id).html('<b>' + zwprodukt + '<\/b>');
-		}
-	} // Ende function countMax()
-	this.getTextStyle = function(textdiv)
-	{
-		var schrift_size = $("#" + this.ecardformid + " input[name='ecard[schrift_size]']").val();
-		var schrift = $("#" + this.ecardformid + " input[name='ecard[schriftart_name]']").val();
-		var schrift_farbe = $("#" + this.ecardformid + " input[name='ecard[schrift_farbe]']").val();
-		var schrift_bold = $("#" + this.ecardformid + " input[name='ecard[schrift_style_bold]']").val();
-		var schrift_italic = $("#" + this.ecardformid + " input[name='ecard[schrift_style_italic]']").val();
-
-		var schrift_farbe = $("#" + this.ecardformid + " input[name='ecard[schrift_farbe]']").val();
-		$("#" + textdiv).css("font",schrift_bold + ' '+ schrift_italic + ' '+ schrift_size + 'px '+schrift);
-		$("#" + textdiv).css("color",schrift_farbe);
 	}
 }

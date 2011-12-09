@@ -107,38 +107,28 @@ $javascript = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js" ></script>
     <script type="text/javascript">
     <!--
-            var ecardJS = new ecardJSClass();
-            ecardJS.max_recipients 			= '.$gPreferences['ecard_cc_recipients'].';
-            ecardJS.max_ecardTextLength		= '.$gPreferences['ecard_text_length'].';
-            ecardJS.ecardSend_Text			= "'.$gL10n->get('ECA_GREETING_CARD_SEND').'";
-            ecardJS.currentURL 				= "'.CURRENT_URL.'";
-            ecardJS.errMsg_Start_Text 		= "'.str_replace('<br />','\n',$gL10n->get('ECA_INPUT_INCORRECT')).'\n\n";
-            ecardJS.nameOfSender_Text 		= "'.$gL10n->get('ECA_NAME_OF_SENDER').'";
-            ecardJS.emailOfSender_Text		= "'.$gL10n->get('ECA_EMAIL_OF_SENDER').'";
-            ecardJS.nameOfRecipient_Text	= "'.$gL10n->get('ECA_NAME_OF_RECIPIENT', $var1='[VAR1]').'";
-            ecardJS.emailOfRecipient_Text	= "'.$gL10n->get('ECA_EMAIL_OF_RECIPIENT', $var1='[VAR1]').'";
-            ecardJS.message_Text			= "'.$gL10n->get('ECA_THE_MESSAGE').'";
-            ecardJS.recipient_Text			= "'.$gL10n->get('SYS_RECIPIENT').'";
-            ecardJS.recipientName_Text		= "'.$gL10n->get('ECA_RECIPIENT_NAME').'";
-            ecardJS.recipientEmail_Text		= "'.$gL10n->get('ECA_RECIPIENT_EMAIL').'";
-            ecardJS.errMsg_End_Text			= "'.str_replace('<br />','\n',$gL10n->get('ECA_FILL_INPUTS', $gL10n->get('SYS_SEND'))).'";
-            ecardJS.ecardPreview_Text		= "'.$gL10n->get('ECA_GREETING_CARD_PREVIEW').'";
-            ecardJS.emailLookInvalid_Text	= "'.$gL10n->get('ECA_EMAIL_LOOKS_INVALID').'";
-            ecardJS.contentIsLoading_Text	= "'.$gL10n->get('ECA_CONTENT_LOADING').'";
-            ecardJS.ajaxExecution_ErrorText = "'.str_replace('<br />','\n',$gL10n->get('SYS_AJAX_REQUEST_ERROR', $var1='[ERROR]')).'";
-            ecardJS.moreRecipients_Text		= "'.$gL10n->get('ECA_MORE_RECIPIENTS').'";
-            ecardJS.noMoreRecipients_Text	= "'.$gL10n->get('ECA_NO_MORE_RECIPIENTS').'";
-            ecardJS.blendInSettings_Text	= "'.$gL10n->get('ECA_BLEND_IN_SETTINGS').'";
-            ecardJS.blendOutSettings_Text	= "'.$gL10n->get('ECA_BLEND_OUT_SETTINGS').'";
-            ecardJS.internalRecipient_Text	= "'.$gL10n->get('ECA_INTERNAL_RECIPIENT').'";
-            ecardJS.messageTooLong			= "'.$gL10n->get('ECA_MESSAGE_TOO_LONG',$var1='[MAX]').'";
-            ecardJS.loading_Text			= "'.$gL10n->get('SYS_LOADING_CONTENT').'";
-            ecardJS.send_Text				= "'.$gL10n->get('SYS_SEND').'";
-            
-            $(document).ready(function() {
-                $("a[rel=\'colorboxImage\']").colorbox({photo:true});
-                ecardJS.getMenu();
-            });
+			var ecardJS = new ecardJSClass();
+			ecardJS.max_recipients			= '.$gPreferences['ecard_cc_recipients'].';
+			ecardJS.nameOfRecipient_Text	= "'.$gL10n->get('ECA_NAME_OF_RECIPIENT', $var1='[VAR1]').'";
+			ecardJS.emailOfRecipient_Text	= "'.$gL10n->get('ECA_EMAIL_OF_RECIPIENT', $var1='[VAR1]').'";
+			ecardJS.message_Text			= "'.$gL10n->get('ECA_THE_MESSAGE').'";
+			ecardJS.recipient_Text			= "'.$gL10n->get('SYS_RECIPIENT').'";
+			ecardJS.recipientName_Text		= "'.$gL10n->get('ECA_RECIPIENT_NAME').'";
+			ecardJS.recipientEmail_Text		= "'.$gL10n->get('ECA_RECIPIENT_EMAIL').'";
+			ecardJS.emailLookInvalid_Text	= "'.$gL10n->get('ECA_EMAIL_LOOKS_INVALID').'";
+			ecardJS.contentIsLoading_Text	= "'.$gL10n->get('ECA_CONTENT_LOADING').'";
+			ecardJS.moreRecipients_Text		= "'.$gL10n->get('ECA_MORE_RECIPIENTS').'";
+			ecardJS.noMoreRecipients_Text	= "'.$gL10n->get('ECA_NO_MORE_RECIPIENTS').'";
+			ecardJS.blendInSettings_Text	= "'.$gL10n->get('ECA_BLEND_IN_SETTINGS').'";
+			ecardJS.blendOutSettings_Text	= "'.$gL10n->get('ECA_BLEND_OUT_SETTINGS').'";
+			ecardJS.internalRecipient_Text	= "'.$gL10n->get('ECA_INTERNAL_RECIPIENT').'";
+			ecardJS.messageTooLong			= "'.$gL10n->get('ECA_MESSAGE_TOO_LONG',$var1='[MAX]').'";
+			ecardJS.loading_Text			= "'.$gL10n->get('SYS_LOADING_CONTENT').'";
+			ecardJS.send_Text				= "'.$gL10n->get('SYS_SEND').'";
+			ecardJS.template_Text			= "'.$gL10n->get('ECA_TEMPLATE').'";
+			ecardJS.templates				= '.$funcClass->createJSTemplateArray($templates).';
+			
+			ecardJS.init();
     -->
     </script>';
 
@@ -175,7 +165,8 @@ echo '
 		<form id="ecard_form" action="javascript:ecardJS.makePreview();" method="post">
 			<input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'].'" />
 			<input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$getPhotoNr.'.jpg" />
-			<input type="hidden" name="submit_action" value="" />
+			<input type="hidden" name="ecard[submit_action]" value="" />
+			<input type="hidden" name="ecard[template_name]" value="'.$gPreferences['ecard_template'].'" />
 
 			<div class="groupBox" id="admMailContactDetails">
 				<div class="groupBoxHeadline" id="admMailContactDetailsHead">
@@ -275,52 +266,8 @@ echo '
 				<div class="groupBoxBody" id="admMessageBody">
 					<ul class="formFieldList">
 						<li>
-							 '.$ckEditor->createEcardEditor('admEcardMessage', '', 'AdmidioGuestbook').'
+							 '.$ckEditor->createEcardEditor('admEcardMessage', '', 'AdmidioEcard').'
 							 <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-						</li>
-					</ul>
-				</div>
-			</div>
-
-			<div class="groupBox" id="admSettings">
-				<div class="groupBoxHeadline" id="admSettingsHead">
-					<a class="iconShowHide" href="javascript:showHideBlock(\'admSettingsBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-					id="admSettingsBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_SETTINGS').'
-				</div>
-
-				<div class="groupBoxBody" id="admSettingsBody">
-					<ul class="formFieldList">
-						<li>
-							<dl>
-								<dt>
-									<label>'.$gL10n->get("SYS_SETTINGS").':</label>
-								</dt>
-								<dd>';
-									$first_value_array = array();
-									echo'<table cellpadding="5" cellspacing="0" summary="Einstellungen" style="width:100%;"  border="0px">
-										<tr>
-										  <td>'.$gL10n->get("ECA_TEMPLATE").':</td>
-										  <td>'.$gL10n->get("SYS_FONT").':</td>
-										  <td>'.$gL10n->get("SYS_FONT_SIZE").':</td>
-										</tr>
-										<tr>
-											<td>';
-												echo $funcClass->getMenueSettings($templates,"ecard[template_name]",$gPreferences['ecard_template'],"120","false");
-												array_push($first_value_array,array("ecard[template_name]",$gPreferences['ecard_template']));
-											echo '</td>
-											<td>';
-												echo $funcClass->getMenueSettings($fonts,"ecard[schriftart_name]",$gPreferences['ecard_text_font'],"120","true");
-												array_push($first_value_array,array("ecard[schriftart_name]",$gPreferences['ecard_text_font']));
-											echo '</td>
-											<td>';
-												echo $funcClass->getMenueSettings($font_sizes,"ecard[schrift_size]",$gPreferences['ecard_text_size'],"50","false");
-												array_push($first_value_array,array("ecard[schrift_size]",$gPreferences['ecard_text_size']));
-											echo  '</td>
-										</tr>
-									</table>';
-									$funcClass->getFirstSettings($first_value_array);                    
-								echo '</dd>
-							</dl>
 						</li>
 					</ul>
 				</div>

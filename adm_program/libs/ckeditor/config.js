@@ -10,6 +10,8 @@ CKEDITOR.editorConfig = function( config )
 	// config.uiColor = '#AADC6E';
 	
     // config.toolbar = 'Full';
+	
+	config.extraPlugins = "EcardTemplate";
      
     config.toolbar_AdmidioDefault =
     [
@@ -20,6 +22,12 @@ CKEDITOR.editorConfig = function( config )
     config.toolbar_AdmidioGuestbook =
     [
         ['Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight', '-', 
+        'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList', '-', 'Maximize']
+    ];
+	
+	config.toolbar_AdmidioEcard =
+    [
+        ['EcardTemplate','Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight', '-', 
         'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList', '-', 'Maximize']
     ];
 };

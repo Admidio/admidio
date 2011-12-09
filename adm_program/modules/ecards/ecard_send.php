@@ -46,7 +46,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 && ($ecard['email_recipient'] != '') && ($ecard['name_sender'] != '') && empty($error_msg))
 {
 	// Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
-	/*if (strlen($ecard['message']) > $gPreferences['ecard_text_length'])
+	/*if (strlen($_POST['admEcardMessage']) > $gPreferences['ecard_text_length'])
 	{
 		$ecard['message'] = substr($_POST['admEcardMessage'],0,$gPreferences['ecard_text_length']-1);
 	}*/
