@@ -31,18 +31,16 @@ class FunctionClass
 		$this->sendToString					= $gL10n->get('SYS_TO');	
 		$this->emailString					= $gL10n->get('SYS_EMAIL');	
 	}
-
-	// gibt ein Menue fuer die Einstellungen des Template aus
-	// Uebergabe: 
-	//          $data_array         .. Daten fuer die Einstellungen in einem Array
-	//          $name_ecard_input   .. Name des Ecards inputs
-	//          $width              .. die Groeße des Menues
-	//          $first_value        .. der Standart Wert oder eingestellte Wert vom Benutzer
-	//          $show_font          .. wenn gesetzt bekommen die Menue Eintraege einen universellen font-style
-	function getMenueSettings($data_array,$name_ecard_input,$first_value,$width,$show_font)
+	
+	// erstellt ein Javascript Template Array aus einem php Array 
+	function createJSTemplateArray($data_array)
 	{
-        $htmlOutput = '<select id="'.$name_ecard_input.'" size="1" onchange="ecardJS.getSetting(\''.$name_ecard_input.'\',this.value)" style="width:'.$width.'px;">';
-		for($i=0; $i<count($data_array);$i++)
+		if( gettype($data_array) != "array")
+			return '';
+			
+		$output = '[';
+		$count = count($data_array);
+		for($i = 0; $i < $count; ++$i)
 		{
 			$name = '';
 			if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
@@ -59,67 +57,13 @@ class FunctionClass
 			}
 			if($name != '')
 			{
-				if (strcmp($data_array[$i],$first_value) == 0 && $show_font != 'true')
-				{
-					$htmlOutput .= '<option value="'.$data_array[$i].'" selected=\'selected\'>'.$name.'</option>';
-				}
-				else if($show_font != 'true')
-				{
-					$htmlOutput .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
-				}
-				else if (strcmp($data_array[$i],$first_value) == 0)
-				{
-					$htmlOutput .= '<option value="'.$data_array[$i].'" selected=\'selected\' style="font-family:'.$name.';">'.$name.'</option>';
-				}
-				else
-				{
-					$htmlOutput .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
-				}
+				//{'value', 'drop_text', 'drop_label'}
+				$output .= ' ["'. $data_array[$i] .'","'. $name .'","'. $name.'"]';
+				if( $i + 1 < $count )
+					$output .= ',';
 			}
-			
 		}
-		$htmlOutput .= '</select>
-            <input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
-        return $htmlOutput;
-	}
-
-	// gibt ein Menue fuer die Einstellungen des Template aus
-	// Uebergabe: 
-	//          $data_array         .. Daten fuer die Einstellungen in einem Array
-	//          $name_ecard_input   .. Name des Ecards inputs
-	function getColorSettings($data_array,$name_ecard_input,$anz,$first_value)
-	{
-		$htmlOutput =  '<table border="0" cellpadding="1" cellspacing="1" summary="colorTable"><tr>';
-		for($i=0; $i<count($data_array);$i++)
-		{   
-			if (!is_integer(($i+1)/$anz))
-			{
-				$htmlOutput .= '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" 
-				    onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
-			}
-			else
-			{
-				$htmlOutput .= '<td style="height:20px; width:17px; background-color: '.$data_array[$i].'; cursor:pointer;" 
-				    onclick="javascript: ecardJS.getSetting(\''.$name_ecard_input.'\',\''.$data_array[$i].'\');"></td>';
-				if($i<count($data_array)-1)
-				{
-					$htmlOutput .= '</tr><tr>';
-				}
-			}       
-		}
-		$htmlOutput .=  '</tr></table>
-            <input type="hidden" name="'.$name_ecard_input.'" value="'.$first_value.'" />';
-        return $htmlOutput;
-	}
-	// gibt die ersten Einstellungen des Template aus
-	// Uebergabe: 
-	//          $first_value_array          .. Daten fuer die Einstellungen in einem Array
-	function getFirstSettings($first_value_array)
-	{
-		foreach($first_value_array as $item)
-		{
-			echo '<input type="hidden" name="'.$item[0].'" value="'.$item[1].'" />';
-		}
+		return $output. ' ]';
 	}
 
 	function getCCRecipients($ecard,$max_cc_recipients)
@@ -166,8 +110,7 @@ class FunctionClass
 		}
 		closedir($curdir);
 		return $array_files;
-	}
-	
+	}	
 	 
 	/** Funktionen fuers sammeln,parsen und versenden der Informationen von der ecard_form **/
 	
@@ -252,18 +195,12 @@ class FunctionClass
 		$ecard_data = preg_replace ('/<%g_root_path%>/',            $root_path, $ecard_data);
 		// Hier wird der Pfad zum aktuellen Template Verzeichnis ersetzt
 		$ecard_data = preg_replace ('/<%theme_root_path%>/',        THEME_PATH, $ecard_data);
-		// Hier wird die Style Eigenschaften ersetzt
-		$ecard_data = preg_replace ('/<%ecard_font%>/',             $ecard['schriftart_name'], $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_font_size%>/',        $ecard['schrift_size'], $ecard_data);
-/*		$ecard_data = preg_replace ('/<%ecard_font_color%>/',       $ecard['schrift_farbe'], $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_font_bold%>/',        $ecard['schrift_style_bold'], $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_font_italic%>/',      $ecard['schrift_style_italic'], $ecard_data);*/
 		// Hier wird der Sender Name, Email und Id ersetzt
 		$ecard_data = preg_replace ('/<%ecard_sender_id%>/',        $user->getValue('usr_id'), $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_sender_email%>/',     $user->getValue('EMAIL'), $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_sender_name%>/',      $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $ecard_data);
 		// Hier wird der Empfaenger Name und Email ersetzt
-		$ecard_data = preg_replace ('/<%ecard_reciepient_email%>/', utf8_decode($empfaenger_email), $ecard_data);
+		$ecard_data = preg_replace ('/<%ecard_reciepient_email%>/', htmlentities(utf8_decode($empfaenger_email)), $ecard_data);
 		$ecard_data = preg_replace ('/<%ecard_reciepient_name%>/',  htmlentities(utf8_decode($empfaenger_name)), $ecard_data);
 		// Hier wird der Bildname ersetzt
 		$ecard_data = preg_replace ('/<%ecard_image_name%>/',       $ecard['image_name'], $ecard_data);
@@ -369,21 +306,6 @@ class FunctionClass
 		}
 	
 		return $new_array;
-	}
-	// Diese Funktion ueberprueft den uebergebenen String auf eine gueltige E-mail Addresse und gibt True oder False zurueck
-	// Uebergabe
-	//      $email  .. Die Email die geprueft werden soll
-	function checkEmail($email) 
-	{
-		if (preg_match ("/(@.*@)|(\.\.)|(@\.)|(\.@)|(^\.)/", $email) || !preg_match ("/^.+\@(\[?)[a-zA-Z0-9\-\.]+\.([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/", $email)) 
-		{
-			$mail_ok = false;
-		} 
-		else 
-		{
-			$mail_ok = true;
-		}
-		return $mail_ok;
 	}
 }
 ?>

@@ -202,7 +202,7 @@
     <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Senders e-mail address</text>
     <text id="ECA_FIELD_ERROR" development="new" translation="edited">Some fields are not filled in or do not comply. Please filled them in or check them for consistency.</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Please fill in \nall data fields and \npress 'send'.</text>
+    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Please fill in \nall data fields and \npress 'send'.\n\n %VAR1%</text>
     <text id="ECA_FONT" development="new" translation="edited">Font type preferences. (default: Comic Sans MS)</text>
     <text id="ECA_FONT_SIZE" development="new" translation="edited">Font size preference. (default: 20) </text>
     <text id="ECA_FONT_COLOR" development="new" translation="edited">Font color preference. (default: black)</text>
