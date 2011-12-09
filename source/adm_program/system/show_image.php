@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Ein Bild aus adm_my_files anzeigen 
+ * Show an image of a module from adm_my_files folder
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,8 +8,8 @@
  *
  * Parameters:
  *
- * module : Name des Moduls (Unterverzeichnisses) in dem das Bild in adm_my_files liegt
- * file   : Name der Bilddatei die angezeigt werden soll (ohne Pfadangaben)
+ * module : Name of module (Foldername) in adm_my_files where the image lies
+ * file   : Name of image file that should be shown (without path)
  *
  *****************************************************************************/
 require('common.php');
@@ -19,10 +19,10 @@ require('classes/image.php');
 $getModule = admFuncVariableIsValid($_GET, 'module', 'file', null, true, null, true);
 $getFile   = admFuncVariableIsValid($_GET, 'file', 'file', null, true, null, true);
 
-// lokale Variablen initialisieren
+// Initialize locale parameters
 $imageServerPath = SERVER_PATH. '/adm_my_files/'.$getModule.'/images/'.$getFile;
 
-// falls das Bild existiert, dann ausgeben
+// check if image exists
 if(file_exists($imageServerPath))
 {
     $image = new Image($imageServerPath);

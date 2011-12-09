@@ -14,7 +14,7 @@
  *
  * checkSettings()       - method checks if adm_my_files folder has all necessary rights
  * getServerPath()       - returns the current path
- * setSubFolder($folder) - open a folder in the current selected folder
+ * setSubFolder($folder) - open a folder in the current module folder
  *                         if that folder doesn't exists than it will be created
  *
  *****************************************************************************/
@@ -116,13 +116,13 @@ class MyFiles extends Folder
 		return $this->currentPath;
 	}
 
-	// open a folder in the current selected folder
+	// open a folder in the current module folder
 	// if that folder doesn't exists than it will be created
     public function setSubFolder($folder)
     {
 		if(isValidFileName($folder))
 		{
-			$tempPath = $this->currentPath. '/'. $folder;
+			$tempPath = $this->modulePath. '/'. $folder;
 			if(is_writeable($tempPath) == false)
 			{
 				if(file_exists($tempPath) == false)
