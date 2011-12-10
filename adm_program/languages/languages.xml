@@ -20,4 +20,8 @@
     <isocode>fr</isocode>
     <name>Français</name>
 </language>
+<language>
+    <isocode>nl</isocode>
+    <name>Nederlands</name>
+</language>
 </languagelist>
