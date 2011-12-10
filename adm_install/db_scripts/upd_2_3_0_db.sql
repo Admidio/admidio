@@ -256,7 +256,7 @@ UPDATE %PREFIX%_preferences SET prf_value = 'da' WHERE prf_name like 'system_lan
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'captcha_font_size';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'enable_bbcode';
 UPDATE %PREFIX%_preferences SET prf_name = 'captcha_font_size' WHERE prf_name like 'captcha_text_size';
-UPDATE adm_organizations SET org_homepage = 'http://' || org_homepage WHERE lower( substring( org_homepage, 1, 4 ) ) NOT LIKE 'http';
+UPDATE %PREFIX%_organizations SET org_homepage = 'http://' || org_homepage WHERE lower( substring( org_homepage, 1, 4 ) ) NOT LIKE 'http';
 
 -- replace category name with translation id   
 UPDATE %PREFIX%_categories SET cat_name = 'SYS_MASTER_DATA' WHERE cat_name_intern = 'MASTER_DATA';
