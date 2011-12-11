@@ -325,8 +325,11 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
             {
                 $ical_attributes .= '&amp;calendar='.$getCalendar;
             }
-            $topNavigation .= '<li class="iconLink"><a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php'.$ical_attributes.'"><img
-            src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a></li>';
+            $topNavigation .= '<li class="iconTextLink">
+                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php'.$ical_attributes.'"><img
+                    src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"/></a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php'.$ical_attributes.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
+            </li>';
         }
     }
     
@@ -470,8 +473,8 @@ else
                                 $route_url .= ',%20'. $date->getValue('dat_country');
                             }
                             $locationHtml .= '
-                                <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank">
-                                    <img src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>
+                                <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img 
+                                    src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>
                                 </span>';
                         }
 

@@ -1,13 +1,13 @@
 CKEDITOR.plugins.add( 'EcardTemplate',
 {   
-   requires : ['richcombo'], //, 'styles' ],
-   init : function( editor )
-   {
-	  var config = editor.config,
-		 lang = editor.lang.format;
+    requires : ['richcombo'], //, 'styles' ],
+    init : function( editor )
+    {
+        var config = editor.config,
+		lang = editor.lang.format;
 		 
-	  editor.ui.addRichCombo( 'EcardTemplate',
-		 {
+        editor.ui.addRichCombo( 'EcardTemplate',
+		{
 			label : ecardJS.template_Text,
 			title : ecardJS.template_Text,
 			voiceLabel : ecardJS.template_Text,
