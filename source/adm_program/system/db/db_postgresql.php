@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Datenbankschnittstelle zu einer PostgreSQL-Datenbank
+ * Database interface to PostgreSQL database
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,39 +12,39 @@ require_once(SERVER_PATH. '/adm_program/system/db/db_common.php');
  
 class DBPostgreSQL extends DBCommon
 {
-    // Verbindung zur Datenbank aufbauen    
-    public function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_connection = false)
+    // create database connection
+    public function connect($sql_server, $sql_user, $sql_password, $sql_dbName, $new_connection = false)
     {
-        $this->db_type    = 'postgresql';
+        $this->dbType    = 'postgresql';
         $this->server     = $sql_server;
         $this->user       = $sql_user;
         $this->password   = $sql_password;
-        $this->dbname     = $sql_dbname;	
-		$connectionString = 'host='.$this->server.' port=5432 dbname='.$this->dbname.' user='.$this->user.' password='.$this->password;
+        $this->dbName     = $sql_dbName;	
+		$connectionString = 'host='.$this->server.' port=5432 dbName='.$this->dbName.' user='.$this->user.' password='.$this->password;
 		
 		if($new_connection == true)
 		{
-			$this->connect_id = @pg_connect($connectionString, PGSQL_CONNECT_FORCE_NEW);
+			$this->connectId = @pg_connect($connectionString, PGSQL_CONNECT_FORCE_NEW);
 		}
 		else
 		{
-			$this->connect_id = @pg_connect($connectionString);
+			$this->connectId = @pg_connect($connectionString);
 		}
         
-        if($this->connect_id)
+        if($this->connectId)
         {
 			// Verbindung zur DB in UTF8 aufbauen
-			@pg_query('SET bytea_output = \'escape\'', $this->connect_id);
+			@pg_query('SET bytea_output = \'escape\'', $this->connectId);
 
-            return $this->connect_id;
+            return $this->connectId;
         }
         return false;
     }
 
     // Bewegt den internen Ergebnis-Zeiger
-    public function data_seek($result, $row_number)
+    public function data_seek($result, $rowNumber)
     {
-        return pg_result_seek($result, $row_number);
+        return pg_result_seek($result, $rowNumber);
     }   
     
     // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
@@ -52,13 +52,13 @@ class DBPostgreSQL extends DBCommon
     {
         if($code == 0)
         {
-            if (!$this->connect_id)
+            if (!$this->connectId)
             {
                 parent::db_error(0, @pg_last_error());
             }
             else
             {
-                parent::db_error(0, @pg_result_error($this->connect_id));
+                parent::db_error(0, @pg_result_error($this->connectId));
             }
         }
         else
@@ -78,29 +78,29 @@ class DBPostgreSQL extends DBCommon
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         return pg_fetch_assoc($result);
     }
 
     // result : Ergebniskennung
-    // result_type : MYSQL_ASSOC fuer assoziatives Array, MYSQL_NUM fuer numerisches
+    // resultType : MYSQL_ASSOC fuer assoziatives Array, MYSQL_NUM fuer numerisches
     //               oder MYSQL_BOTH fuer beides
-    public function fetch_array($result = false, $result_type = PGSQL_BOTH)
+    public function fetch_array($result = false, $resultType = PGSQL_BOTH)
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         
-        return pg_fetch_array($result, null, $result_type);
+        return pg_fetch_array($result, null, $resultType);
     }
 
     public function fetch_object($result = false)
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         
         return pg_fetch_object($result);
@@ -131,7 +131,7 @@ class DBPostgreSQL extends DBCommon
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         
         return pg_num_fields($result);
@@ -142,13 +142,16 @@ class DBPostgreSQL extends DBCommon
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         
         return pg_num_rows($result);
     }    
     
-    public function query($sql)
+	// send sql to database server 
+	// sql        : sql statement that should be executed
+	// throwError : show error of sql statement and stop current script
+    public function query($sql, $throwError = true)
     {
         global $gDebug;
 
@@ -175,20 +178,20 @@ class DBPostgreSQL extends DBCommon
 			}
 		}
 		
-        // im Debug-Modus werden alle SQL-Statements mitgeloggt
+        // if debug mode then log all sql statements
         if($gDebug == 1)
         {
             error_log($sql);
         }
 		
-        $this->query_result = pg_query($this->connect_id, $sql);
+        $this->queryResult = pg_query($this->connectId, $sql);
 
-        if(!$this->query_result)
+        if($this->queryResult == false && $throwError == true)
         {
             return $this->db_error();
         }
 
-        return $this->query_result;
+        return $this->queryResult;
     }
 
 	// PostgreSQL baut eine Verbdingung immer direkt zu einer einzelnen Datenbank auf
@@ -197,9 +200,9 @@ class DBPostgreSQL extends DBCommon
     {
         if(strlen($database) == 0)
         {
-            $database = $this->dbname;
+            $database = $this->dbName;
         }
-        return $this->connect_id;
+        return $this->connectId;
     }
 
     // returns the PostgreSQL version of the database
@@ -217,7 +220,7 @@ class DBPostgreSQL extends DBCommon
     // setzt die urspruengliche DB wieder auf aktiv
     public function setCurrentDB()
     {
-        return $this->select_db($this->dbname);
+        return $this->select_db($this->dbName);
     }
 	
 	// this method sets db specific properties of admidio
@@ -229,12 +232,12 @@ class DBPostgreSQL extends DBCommon
 			// soundex is not a default function in PostgreSQL
 			$sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
 					 WHERE prf_name LIKE \'system_search_similar\'';
-			$this->query($sql, $this->connect_id);
+			$this->query($sql, $this->connectId);
 
 			// there are problems to store images in bytea fields
 			$sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'1\'
 					 WHERE prf_name LIKE \'profile_photo_storage\'';
-			$this->query($sql, $this->connect_id);
+			$this->query($sql, $this->connectId);
 		}
 	}
 
@@ -244,7 +247,7 @@ class DBPostgreSQL extends DBCommon
 	//       'Fieldname2' => ...)
     public function showColumns($table)
     {
-		if(isset($this->db_structure[$table]) == false)
+		if(isset($this->dbStructure[$table]) == false)
 		{
 			$columnProperties = array();
 
@@ -286,10 +289,10 @@ class DBPostgreSQL extends DBCommon
 			}
 			
 			// safe array with table structure in class array
-			$this->db_structure[$table] = $columnProperties;
+			$this->dbStructure[$table] = $columnProperties;
 		}
 		
-		return $this->db_structure[$table];
+		return $this->dbStructure[$table];
     }
 }
  

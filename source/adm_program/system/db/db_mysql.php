@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Datenbankschnittstelle zu einer MySql-Datenbank
+ * Database interface to MySQL database
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,40 +12,40 @@ require_once(SERVER_PATH. '/adm_program/system/db/db_common.php');
  
 class DBMySQL extends DBCommon
 {
-    // Verbindung zur Datenbank aufbauen    
-    public function connect($sql_server, $sql_user, $sql_password, $sql_dbname, $new_connection = false)
+    // create database connection  
+    public function connect($sql_server, $sql_user, $sql_password, $sql_dbName, $new_connection = false)
     {
-        $this->db_type   = 'mysql';
+        $this->dbType   = 'mysql';
         $this->server    = $sql_server;
         $this->user      = $sql_user;
         $this->password  = $sql_password;
-        $this->dbname    = $sql_dbname;
+        $this->dbName    = $sql_dbName;
         
-        $this->connect_id = @mysql_connect($this->server, $this->user, $this->password, $new_connection);
+        $this->connectId = @mysql_connect($this->server, $this->user, $this->password, $new_connection);
         
-        if($this->connect_id)
+        if($this->connectId)
         {
-            if (@mysql_select_db($this->dbname, $this->connect_id))
+            if (@mysql_select_db($this->dbName, $this->connectId))
             {
 				// Verbindung zur DB in UTF8 aufbauen
-				@mysql_query('SET NAMES \'utf8\'', $this->connect_id);
+				@mysql_query('SET NAMES \'utf8\'', $this->connectId);
 
                 // ANSI Modus setzen, damit SQL kompatibler zu anderen DBs werden kann
-                @mysql_query('SET SQL_MODE = \'ANSI\'', $this->connect_id);
+                @mysql_query('SET SQL_MODE = \'ANSI\'', $this->connectId);
                 
                 // falls der Server die Joins begrenzt hat, kann dies mit diesem Statement aufgehoben werden
-                @mysql_query('SET SQL_BIG_SELECTS = 1', $this->connect_id);
+                @mysql_query('SET SQL_BIG_SELECTS = 1', $this->connectId);
 
-                return $this->connect_id;
+                return $this->connectId;
             }
         }
         return false;
     }
 
     // Bewegt den internen Ergebnis-Zeiger
-    public function data_seek($result, $row_number)
+    public function data_seek($result, $rowNumber)
     {
-        return mysql_data_seek($result, $row_number);
+        return mysql_data_seek($result, $rowNumber);
     }   
     
     // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
@@ -53,13 +53,13 @@ class DBMySQL extends DBCommon
     {
         if($code == 0)
         {
-            if (!$this->connect_id)
+            if (!$this->connectId)
             {
                 parent::db_error(@mysql_errno(), @mysql_error());
             }
             else
             {
-                parent::db_error(@mysql_errno($this->connect_id), @mysql_error($this->connect_id));
+                parent::db_error(@mysql_errno($this->connectId), @mysql_error($this->connectId));
             }
         }
         else
@@ -79,29 +79,29 @@ class DBMySQL extends DBCommon
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         return mysql_fetch_assoc($result);
     }
 
     // result : Ergebniskennung
-    // result_type : MYSQL_ASSOC fuer assoziatives Array, MYSQL_NUM fuer numerisches
+    // resultType : MYSQL_ASSOC fuer assoziatives Array, MYSQL_NUM fuer numerisches
     //               oder MYSQL_BOTH fuer beides
-    public function fetch_array($result = false, $result_type = MYSQL_BOTH)
+    public function fetch_array($result = false, $resultType = MYSQL_BOTH)
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         
-        return mysql_fetch_array($result, $result_type);
+        return mysql_fetch_array($result, $resultType);
     }
 
     public function fetch_object($result = false)
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         
         return mysql_fetch_object($result);
@@ -122,7 +122,7 @@ class DBMySQL extends DBCommon
     // Liefert die ID einer vorherigen INSERT-Operation
     public function insert_id()
     {
-        return mysql_insert_id($this->connect_id);
+        return mysql_insert_id($this->connectId);
     }
     
     // Liefert die Anzahl der Felder in einem Ergebnis
@@ -130,7 +130,7 @@ class DBMySQL extends DBCommon
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         
         return mysql_num_fields($result);
@@ -141,30 +141,33 @@ class DBMySQL extends DBCommon
     {
         if($result === false)
         {
-            $result = $this->query_result;
+            $result = $this->queryResult;
         }
         
         return mysql_num_rows($result);
     }    
     
-    public function query($sql)
+	// send sql to database server 
+	// sql        : sql statement that should be executed
+	// throwError : show error of sql statement and stop current script
+    public function query($sql, $throwError = true)
     {
         global $gDebug;
         
-        // im Debug-Modus werden alle SQL-Statements mitgeloggt
+        // if debug mode then log all sql statements
         if($gDebug == 1)
         {
             error_log($sql);
         }
 
-        $this->query_result = mysql_query($sql, $this->connect_id);
+        $this->queryResult = mysql_query($sql, $this->connectId);
 
-        if(!$this->query_result)
+        if($this->queryResult == false && $throwError == true)
         {
             return $this->db_error();
         }
 
-        return $this->query_result;
+        return $this->queryResult;
     }
 
     // setzt die urspruengliche DB wieder auf aktiv
@@ -173,9 +176,9 @@ class DBMySQL extends DBCommon
     {
         if(strlen($database) == 0)
         {
-            $database = $this->dbname;
+            $database = $this->dbName;
         }
-        return mysql_select_db($database, $this->connect_id);
+        return mysql_select_db($database, $this->connectId);
     }
 
     // returns the MySQL version of the database
@@ -187,7 +190,7 @@ class DBMySQL extends DBCommon
     // setzt die urspruengliche DB wieder auf aktiv
     public function setCurrentDB()
     {
-        return $this->select_db($this->dbname);
+        return $this->select_db($this->dbName);
     }  
 
 	// this method sets db specific properties of admidio
@@ -203,7 +206,7 @@ class DBMySQL extends DBCommon
 	//       'Fieldname2' => ...)
     public function showColumns($table)
     {
-		if(isset($this->db_structure[$table]) == false)
+		if(isset($this->dbStructure[$table]) == false)
 		{
 			$columnProperties = array();
 
@@ -248,10 +251,10 @@ class DBMySQL extends DBCommon
 			}
 			
 			// safe array with table structure in class array
-			$this->db_structure[$table] = $columnProperties;
+			$this->dbStructure[$table] = $columnProperties;
 		}
 		
-		return $this->db_structure[$table];
+		return $this->dbStructure[$table];
     }  
 }
  

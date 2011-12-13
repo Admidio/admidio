@@ -97,7 +97,7 @@ $gLayout['header'] = '
             var newTableRow = table.insertRow(fieldNumberIntern);
             //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
             var newCellCount = newTableRow.insertCell(-1);
-            newCellCount.innerHTML = (fieldNumberShow) + ". '.$gL10n->get('LST_COLUMN').' :";
+            newCellCount.innerHTML = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
             
             // neue Spalte zur Auswahl des Profilfeldes
             var newCellField = newTableRow.insertCell(-1);

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Allgemeine Datenbankschnittstelle
+ * Common database interface
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -10,20 +10,20 @@
  
 class DBCommon
 {
-    public $db_type;
+    public $dbType;
     public $user;
     public $password;
-    public $dbname;
+    public $dbName;
     public $server;
 
     protected $name;		// Name of database system like "MySQL"
     protected $version;    
     protected $minVersion;    
-    protected $connect_id;
-    protected $query_result;
+    protected $connectId;
+    protected $queryResult;
     protected $sql;
     protected $transactions = 0;
-	protected $db_structure;	// array with arrays of every table with their structure
+	protected $dbStructure;	// array with arrays of every table with their structure
     
     // Ausgabe der Datenbank-Fehlermeldung
     public function db_error($code = 0, $message = '')
@@ -160,7 +160,7 @@ class DBCommon
 		if(strlen($this->name) == 0)
 		{
 			$xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/db/databases.xml', 0, true);
-			$node = $xmlDatabases->xpath("/databases/database[@id='".$this->db_type."']/name");
+			$node = $xmlDatabases->xpath("/databases/database[@id='".$this->dbType."']/name");
 			$this->name = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
 		}
 		return $this->name;		
@@ -172,7 +172,7 @@ class DBCommon
 		if(strlen($this->minVersion) == 0)
 		{
 			$xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/db/databases.xml', 0, true);
-			$node = $xmlDatabases->xpath("/databases/database[@id='".$this->db_type."']/minversion");
+			$node = $xmlDatabases->xpath("/databases/database[@id='".$this->dbType."']/minversion");
 			$this->minversion = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
 		}
 		return $this->minVersion;		

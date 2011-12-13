@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Factory-Klasse welches das relevante Forumobjekt erstellt
+ * Factory class that creates the relevant forum object
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -13,31 +13,31 @@ class Forum
     public static function includeForumScript($db)
     {
         global $g_organization;
-        $forum_enable  = 0;
-        $forum_version = 0;
+        $forumEnable  = 0;
+        $forumVersion = 0;
         
         $sql    = 'SELECT prf_name, prf_value 
                      FROM '. TBL_PREFERENCES. ', '. TBL_ORGANIZATIONS. '
                     WHERE org_shortname = \''.$g_organization.'\'
                       AND prf_org_id = org_id 
-                      AND prf_name IN (\'forum_version\',\'enable_forum_interface\')';
+                      AND prf_name IN (\'forumVersion\',\'enable_forum_interface\')';
         $result = $db->query($sql);
         
         while($row = $db->fetch_array($result))
         {
-            if($row['prf_name'] == 'forum_version')
+            if($row['prf_name'] == 'forumVersion')
             {
-                $forum_version = $row['prf_value'];
+                $forumVersion = $row['prf_value'];
             }
             else
             {
-                $forum_enable = $row['prf_value'];
+                $forumEnable = $row['prf_value'];
             }
         }
         
-        if($forum_enable)
+        if($forumEnable)
         {
-            switch ($forum_version)
+            switch ($forumVersion)
             {
                 case 'phpBB2':
                     require_once(SERVER_PATH. '/adm_program/system/forum/phpbb2.php');
@@ -48,12 +48,10 @@ class Forum
         }
     }
 
-
-    // Funktion erstellt die Schnittstelle zum entsprechenden Forum
-
-    public static function createForumObject($forum_type)
+	// method creates the interface to the relevant forum
+    public static function createForumObject($forumType)
     {
-        switch ($forum_type)
+        switch ($forumType)
         {
             case "phpBB2":
                 require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
