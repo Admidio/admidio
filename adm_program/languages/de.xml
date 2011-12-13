@@ -294,12 +294,12 @@
     <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="todo">Bitte wähle eine gültige Rolle aus!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="todo">Empfänger Email</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="todo">Empfänger Name</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
     <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe)</text>
     <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel) </text>
     <text id="ECA_SCALING_PREVIEW" development="new" translation="todo">Skalierung Vorschaubild (Breite x Höhe)</text>
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel)</text>
     <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="todo">Deine Grußkarte wird an die Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nUnter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.</text>
+    <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde erfolgreich versendet.</text>
     <text id="ECA_TEMPLATE" development="new" translation="todo">Template</text>
@@ -1266,7 +1266,7 @@
     <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Die Datei(en) konnten nicht hochgeladen werden.</text>
 	<text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. Uploadgröße</text>
-	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" sein!</text>
+	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" heißen.</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>

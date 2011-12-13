@@ -297,7 +297,7 @@ if($gPreferences['enable_forum_interface'])
         $gPreferences['forum_srv'] = $gDb->server;
         $gPreferences['forum_usr'] = $gDb->user;
         $gPreferences['forum_pw']  = $gDb->password;
-        $gPreferences['forum_db']  = $gDb->dbname;
+        $gPreferences['forum_db']  = $gDb->dbName;
     }
     
     // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 

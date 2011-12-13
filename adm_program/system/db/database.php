@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Factory-Klasse welches das relevante Datenbankobjekt erstellt
+ * Factory class that creates the relevant database object
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -10,11 +10,10 @@
 
 class Database
 {
-    // Funktion erstellt die Schnittstelle zur entsprechenden Datenbank
-
-    public static function createDatabaseObject($db_type)
+	// method creates the interface to the relevant database
+    public static function createDatabaseObject($dbType)
     {
-        switch ($db_type)
+        switch ($dbType)
         {
 			case 'mysql':
 				require_once(SERVER_PATH. '/adm_program/system/db/db_mysql.php');

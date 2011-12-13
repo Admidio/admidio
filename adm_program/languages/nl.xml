@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<language id="en">
+<language id="nl">
 <version id="2.2.6">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Latest announcements of organisation %VAR1%</text>
     <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="edited">Current appointments of organisations %VAR1%</text>
@@ -78,7 +78,6 @@
     <text id="CAT_CATEGORY_EXIST" development="new" translation="edited">Category name already exists in selected organization.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="edited">When option activated, profile fields of category will appear and can be edited in profile view of following organizations:\n\n%VAR1_BOLD%\n\n Please deactivate if fields should be shown in your organization only.</text>
     <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="edited">You can not delete all categories of a module.\nPlease create first new category for selected module.</text>
-    <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Would you like to delete following category: %VAR1% \n\nAll data of selected category will be deleted (fields, roles, links, events).</text>
     <text id="CAT_MOVE_DOWN" development="new" translation="edited">Plaats %VAR1% omlaag</text>
     <text id="CAT_MOVE_UP" development="new" translation="edited">Plaats %VAR1% omhoog</text>
 
@@ -92,7 +91,6 @@
     <text id="DAT_CALENDAR" development="new" translation="edited">Kalender</text>
     <text id="DAT_CANCEL" development="new" translation="edited">Cancel</text>
     <text id="DAT_CANCEL_DATE" development="new" translation="edited">U heeft uw deelname geannuleerd voor %VAR1_BOLD% op %VAR2%.</text>
-	<text id="DAT_CREATE_DATE" development="new" translation="edited">Create date</text>
     <text id="DAT_DATE" development="new" translation="edited">Evenement</text>
     <text id="DAT_DATES" development="new" translation="edited">Evenementen</text>
 	<text id="DAT_DATES_DESC" development="new" translation="edited">Hier kunt u evenementen maken en bewerken. Gebruikers kunnen zich opgeven hiervoor.</text>
@@ -110,12 +108,9 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="edited">Beperk aantal deelnemers aan dit evenement. Laat veld leeg voor onbeperkt aantal deelnemers.</text>
     <text id="DAT_ORGANIZER" development="new" translation="edited" description="The Person">Organizer</text>
     <text id="DAT_ORGANIZERS" development="new" translation="edited" description="The Persons">Organizers</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="new" translation="edited">Bevestiging deelname</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">U doet mee aan dit evenement als leider en u kunt andere deelnemers toevoegen.</text>
-	<text id="DAT_PARTICIPANTS" development="new" translation="edited">Participants</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Beperk aantal deelnemers</text>
    	<text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Eerdere %VAR1%</text>
-    <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="edited">Registratie ingeschakeld</text>
     <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="edited">Registration is closed.</text>
     <text id="DAT_REMOVE_APPLICATION" development="new" translation="edited">Would you like to remove this event? All participants will be removed.</text>
     <text id="DAT_ROOM_INFORMATIONS" development="new" translation="edited">Room information</text>
@@ -202,7 +197,6 @@
     <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Senders e-mail address</text>
     <text id="ECA_FIELD_ERROR" development="new" translation="edited">Some fields are not filled in or do not comply. Please filled them in or check them for consistency.</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Graag alle velden invullen\nen klik op 'Verstuur'.</text>
     <text id="ECA_FONT" development="new" translation="edited">Font type preferences. (default: Comic Sans MS)</text>
     <text id="ECA_FONT_SIZE" development="new" translation="edited">Font size preference. (default: 20) </text>
     <text id="ECA_FONT_COLOR" development="new" translation="edited">Font color preference. (default: black)</text>
@@ -221,7 +215,6 @@
 	<text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Meer ontvangers</text>
 	<text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Sender's name</text> 
     <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">Name of recipient: %VAR1%</text>
-    <text id="ECA_NEED_JAVASCRIPT" development="new" translation="edited">For sending greeting cards, javascript has to be enabled!\nPlease enable Javascript in order to send your greeting card!</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">New message received</text>    
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">Geen gebruiker met geldig e-mail adres!</text>
     <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">Geen extra ontvangers</text>
@@ -234,8 +227,8 @@
     <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="edited">This can be set to the value of the width and height of the greeting card image to be scaled. (default: 400 x 250 pixels)</text>
     <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Image preview preference (width x height)</text>
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">This can be set to the value of the width and height of the preview image to be scaled. (default: 250 x 250 pixels)</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="edited">Foutmelding tijdens het verzenden. Probeer het svp later nog eens.</text>    
     <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Uw ansichtkaart wordt gestuurd naar leden van de geselecteerde rol als ze een e-mail adres hebben.\n\nSelecteer een lid van een rol of alle leden van de rol.</text>
+    <text id="ECA_SEND_ERROR" development="new" translation="edited">Foutmelding tijdens het verzenden. Probeer het svp later nog eens.</text>    
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% karakters over</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Uw ansichtkaart is verzonden.</text>
     <text id="ECA_TEMPLATE" development="new" translation="edited">Template</text>
@@ -291,7 +284,6 @@
     <text id="INS_CITY" development="new" translation="edited">Plaats</text>
     <text id="INS_CONFERENCE_ROOM" development="new" translation="edited">Conference room</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="edited">File %VAR1_BOLD% can not be found in main directory of Admidio!\n\nPlease download file again and copy it to the mentioned directory.</text>
-    <text id="INS_CONTACT_DETAILS" development="new" translation="edited">Contact gegevens</text>
     <text id="INS_COURSES" development="new" translation="edited">Courses</text>
     <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="edited">Creating administrator</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="edited">Creating configuration file</text>
@@ -315,9 +307,7 @@
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Enter database access information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">File %VAR1_BOLD% could not be opened.</text>
-    <text id="INS_FAX" development="new" translation="edited">Fax</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folder %VAR1_BOLD% is not write enabled. Please grant write access in order to upload photos and files to download module.</text>
-    <text id="INS_GOOGLE_TALK" development="new1" translation="edited">Google Talk</text>
     <text id="INS_GROUPS" development="new" translation="edited">Groups</text>
     <text id="INS_ICQ" development="new1" translation="edited">ICQ</text>
     <text id="INS_INSTALL_ADMIDIO" development="new" translation="edited">Install Admidio</text>
@@ -331,24 +321,19 @@
     <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Provide access information of a webmaster of an existing organization. Use his/her access information later in order to log in to new organization.</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="edited">Access information of webmaster is not complete!</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="edited">Incorrect log in. Provided access information does not exist or can not be found in previous organizations!</text> 
-	<text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Lidmaatschap</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
-    <text id="INS_MOBILE" development="new" translation="edited">Mobiel</text>
-    <text id="INS_MSN_MESSENGER" development="new1" translation="edited">MSN Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Not all MySQL database access information has been provided!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organization name</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Please provide official abbreviation of the organization's name here for use in Admidio.</text>
     <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="edited">Please provide official abbreviations of the organizations' name here for use in Admidio.</text>
     <text id="INS_NECESSARY_INFORMATION" development="new" translation="edited">Please provide on the following pages essential information about the new organization.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="edited">Provided organization name is not complete!</text>
-    <text id="INS_OVERVIEW" development="new" translation="edited">Overzicht</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Provided passwords do not match.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Telefoonlijst</text>
     <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
-    <text id="INS_POSTCODE" development="new" translation="edited">Postcode</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Previous Admidio version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Set administrator</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Creating organization</text>
@@ -492,12 +477,9 @@
     <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Please select a role as recipient of the e-mail!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="edited">Number if BCC recipients</text>
     <text id="MAI_COUNT_BCC_DESC" development="new" translation="edited">Define here how many BCC recipients per mail can be added. (default: 50)</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="edited">%VAR1% has sent to role %VAR4% of %VAR2% following message:\nPlease reply to %VAR3%.</text>
-    <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% has sent you from %VAR2% following message:\nPlease reply to %VAR3%.</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="edited">Er kunnen e-mails gestuurd worden naar verschillende rollen, personen, groepen of afdelingen. </text>
     <text id="MAI_EMAILS" development="new" translation="edited">E-mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Unlimited number of recipients can be added. Total size of all attachments together must not exceed %VAR1% MB.</text>
-    <text id="MAI_MESSAGE" development="new" translation="edited">Bericht</text>
     <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Selected role does not have any member with valid e-mail address!</text>
     <text id="MAI_SEND_COPY" development="new" translation="edited">Stuur kopie naar mijn e-mailadres</text>
     <text id="MAI_SEND_EMAIL" development="new" translation="edited">Stuur e-mail</text>
@@ -527,7 +509,6 @@
     <text id="MEM_FORMAT" development="new" translation="edited">Format</text>
     <text id="MEM_IDENTIFY_USERS" development="new" translation="edited">Identification of existing users is made by means of first name and surname.</text>
     <text id="MEM_IMPORT" development="new" translation="edited">Import</text>
-    <text id="MEM_IMPORT_SUCCESSFUL" development="new" translation="edited">Importing of %VAR1% data record(s) successful!</text>
     <text id="MEM_IMPORT_USERS" development="new" translation="edited">Import user(s)</text>
     <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="edited">Please provide first name and surname of the new user. A database check will be performed if same user with same or similar name already exists.</text>
     <text id="MEM_MAKE_FORMER" development="new" translation="edited">A user can be changed to status former member. This will preserve all user information including role memberships for later use.</text>
@@ -558,7 +539,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="edited">Assigning membership and login information to selected user.</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="edited">Assigning registration</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="edited">Deleting registration</text>
-    <text id="NWU_REGISTRATION" development="new" translation="edited">Registration</text>
 	<text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="edited">Beheer nieuwe registraties</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="edited">Hier kunt u nieuwe registraties beheren, goedkeuren of afkeuren.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="edited">New registrations</text>
@@ -588,8 +568,6 @@
     <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="edited">Advanced registration</text>
-    <text id="ORG_ALLOW_BBCODE" development="new" translation="edited">Allow BBCode</text>
-    <text id="ORG_ALLOW_BBCODE_DESC" development="new" translation="edited">Users can use %VAR1% in text fields (e.g. appointment description, guestbook entry) in order to allow prettier text formating. (default: yes)</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="edited">Auto log off after</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="edited">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected %VAR1_BOLD%. (default: 20 minutes)</text>    
 	<text id="ORG_CAPTCHA" development="new" translation="edited">Use this preferences for the captcha.</text>
@@ -600,7 +578,6 @@
 	<text id="ORG_CAPTCHA_PREVIEW" development="new" translation="edited">Captcha preview</text>
 	<text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Display preview of the captcha. Please note that only saved values are considered!</text>
 	<text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">After activation a picture with a captcha code or a simple calculation will be displayed to new users. It's necessary to fill in the correct code or result to save presently edited entry. The captcha is part of anti-spam solution in Admidio. (default: yes)</text>
-	<text id="ORG_CAPTCHA_SIZE" development="new" translation="edited">Define captcha size.</text>
 	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">Captcha signature</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Select font size for the captcha signature. (default: 9)</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Fill in your preferred signature for the captcha. Default font type of the current theme will be used.</text>
@@ -630,7 +607,6 @@
     <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="new" translation="edited">Existing Admidio webmaster will automatically be registered in the forum system as forum administrator. (default: yes)</text>
     <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">Quick registration</text>
     <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Define unlimited additional fields. Fields will be displayed and can be edited in user's profile. These fields will be available in own list, too.</text>
-    <text id="ORG_FIELD_DISABLED" development="new" translation="edited">Field for users permitted to 'edited all users' is editable.</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Locked fields in own profile can not be edited by users. Editing is possible only by users with permission to 'edit all users'.</text>
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Move profile field down</text>
     <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="edited">Veld %VAR1_BOLD% in %VAR2_BOLD% is leeg.</text>
@@ -667,6 +643,7 @@
     <text id="ORG_REGISTRATION_MODE" development="new" translation="edited">Define character of registration or deactivate it. Quick registration allows users to register by filling in mandatory fields only. The full registration provides all fields of the profile.  (default: quick registration)</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES" development="new" translation="edited">Search for similar names</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES_DESC" development="new" translation="edited">At registration and assigning registrations Admidio is searching for similar surnames and first names in order to avoid double entries. Deactivation results search for identical names only. (default: yes)</text>
+    <text id="ORG_SECONDS" development="new" translation="todo">Sekunden</text>
     <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Send password</text>
     <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Forgotten and regenerated password can be requested by the users to be sent automatically to the own e-mail address. In case of deactivation, users are able to make this request to the administrator only. . (default: yes)</text>
     <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Send new password</text>
@@ -914,7 +891,6 @@
     <text id="ROL_VISIBLE_ROLES" development="new" translation="edited">Visible roles</text>
     <text id="ROL_WEEKDAY" development="new" translation="edited">Weekday</text>
     <text id="ROL_WITHOUT_LEADER" development="new" translation="edited">No leader</text>
-
     
     <!-- Phrases only in Roommodule -->
     <text id="ROO_CAPACITY" development="new" translation="edited">Capacity</text>
@@ -925,11 +901,9 @@
 
     <!-- System-Phrases for use in every module -->
     <text id="SYS_ABORT" development="new" translation="edited">Cancel</text>
+    <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_ACTIVE" development="new" translation="edited">Active</text>
     <text id="SYS_ACTIVATED" development="new" translation="edited">Active</text>
-    <text id="SYS_ADD_EMAIL" development="new" translation="edited">Add e-mail address</text>
-    <text id="SYS_ADD_IMAGE" development="new" translation="edited">Add picture</text>
-    <text id="SYS_ADD_LINK" development="new" translation="edited">Add hyperlink</text>
     <text id="SYS_ADD_ROLE" development="new" translation="edited">Add Role</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="edited">Ontvanger toevoegen</text>
 	<text id="SYS_ADDRESS" development="new" translation="edited">Adres</text>
@@ -946,37 +920,29 @@
 	<text id="SYS_AUTHORIZATION" development="new" translation="edited">Rechten</text>
     <text id="SYS_BACK" development="new" translation="edited">Terug</text>
 	<text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="edited">Terug naar beginpagina</text>
-    <text id="SYS_BBCODE" development="new" translation="edited">BBCode</text>
-    <text id="SYS_BBCODE_DESC" development="new" translation="edited">Description texts of certain modules (announcements, appointments, guestbook and weblinks) can be formated by tags (BBCode). Therefor you will have to use the listed tags within the text.</text>
     <text id="SYS_BETA_VERSION" development="new" translation="edited">You are using a BETA version of Admidio.\n\nStability issues and data loss might occur. Please use this version for testing purposes only!</text>
 	<text id="SYS_BIRTHDAY" development="new" translation="edited">Geboortedatum</text>
-    <text id="SYS_BOLD" development="new" translation="edited">Bold</text>
-    <text id="SYS_BOLD_TEXT_REPRESENT" development="new" translation="edited">Display text %VAR1%bold%VAR2%</text>
     <text id="SYS_BROWSE" development="new" translation="edited">Bladeren</text>
     <text id="SYS_BROWSE_ERROR" development="new" translation="edited">Files searching could not be performed.</text>
     <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
 	<text id="SYS_CAPTCHA_CALC" development="new" translation="edited">Result of the calculation</text>
-	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Captcha code result invalid.Try again!</text>
+	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">The result of the calculation is not correct.</text>
 	<text id="SYS_CAPTCHA_CALC_DESCRIPTION" development="new" translation="edited">The calculation is part of a captcha. A captcha is used for spam prevention. The calculation is used to detect if a user or a script (or spambot) filled in the form.\nPlease fill in the result of the calculation in the form.</text>
 	<text id="SYS_CAPTCHA_CALC_PART1" development="new" translation="edited">Please calculate</text>
 	<text id="SYS_CAPTCHA_CALC_PART2" development="new" translation="edited">and add</text>
 	<text id="SYS_CAPTCHA_CALC_PART3_THIRD" development="new" translation="edited">a third of</text>
 	<text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="edited">the half of</text>
 	<text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="edited">.</text>
-	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">The result of the calculation is not correct.</text>
-	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Neem code over</text>
 	<text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="edited">De identificatiecode is ongeldig.</text>
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Authentication code</text>
 	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="edited">Deze code is onderdeel van captcha. Een captcha wordt gebruikt tegen spam. De afbeelding wordt gebruikt om te bepalen of een mens of script (spambot) het formulier ingevuld heeft.</text>	
     <text id="SYS_CATEGORY" development="new" translation="edited">Categorie</text>
-    <text id="SYS_CENTERED" development="new" translation="edited">Centered</text>
-    <text id="SYS_CENTERED_TEXT_REPRESENT" development="new" translation="edited">Display text centered</text>
 	<text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Nieuw wachtwoord</text>
 	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="edited">Check for update</text>
 	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Checkbox status is saved automatically after marking.</text>
+    <text id="SYS_CITY" development="new" translation="todo">City</text>
     <text id="SYS_CLOCK" development="new" translation="edited">uur</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Close</text>
-    <text id="SYS_CLOSE_ALL_TAGS" development="new" translation="edited">Close all tags</text>
 	<text id="SYS_CLOSE_WINDOW" development="new" translation="edited">Close window</text>
     <text id="SYS_COMMENT" development="new" translation="edited">Reactie</text>
     <text id="SYS_COMMON" development="new" translation="edited">General</text>
@@ -1008,7 +974,6 @@
     <text id="SYS_DATE_TO" development="new" translation="edited">to</text>
     <text id="SYS_DEACTIVATED" development="new" translation="edited">Inactive</text>
     <text id="SYS_DEBUG_MODUS" development="new" translation="edited">Debug modus</text>
-    <text id="SYS_DECREASE_FONT_SIZE" development="new" translation="edited">Reduce font size</text>
     <text id="SYS_DELETE" development="new" translation="edited">Verwijder</text>
     <text id="SYS_DELETE_DATA" development="new" translation="edited">Data has been deleted.</text>
     <text id="SYS_DELETE_ENTRY" development="new" translation="edited">Wilt u %VAR1_BOLD% verwijderen?</text>
@@ -1030,6 +995,7 @@
     <text id="SYS_EXAMPLE" development="new" translation="edited">Example</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Voorbeelden</text>
     <text id="SYS_FADE_IN" development="new" translation="edited">Fade in</text>
+    <text id="SYS_FAX" development="new" translation="todo">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="edited">Opties</text>
     <text id="SYS_FEMALE" development="new" translation="edited">Vrouw</text>
     <text id="SYS_FIELD" development="new" translation="edited">Veld</text>
@@ -1051,7 +1017,6 @@
     <text id="SYS_FONT" development="new" translation="edited">Font</text>
   	<text id="SYS_FONT_COLOR" development="new" translation="edited">Font-color</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-size</text>
-    <text id="SYS_FONT_STYLE" development="new" translation="edited">Font-style</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">Wachtwoord vergeten!</text>
     <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
 	<text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">You are logged as %VAR1_BOLD% in forum system %VAR2_BOLD%. You have %VAR3_BOLD% new messages.</text>
@@ -1073,14 +1038,12 @@
     <text id="SYS_HOMEPAGE" development="new" translation="edited">Homepage</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP error (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="edited">Inactive</text>
-    <text id="SYS_INCREASE_FONT_SIZE" development="new" translation="edited">Increase font size</text>
 	<text id="SYS_INFO" development="new" translation="edited">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installation directory 'adm_install' still exists on the server. Due to security reasons it has to be deleted!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Invalid page view</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Invisible</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O error</text>
     <text id="SYS_ISO_8859_1" development="new" translation="edited">ISO-8859-1</text>
-    <text id="SYS_ITALIC" development="new" translation="edited">Italic</text>
     <text id="SYS_LANGUAGE" development="new" translation="edited">Language</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="edited">Last edited by %VAR1% on %VAR2%</text>
 	<text id="SYS_LASTNAME" development="new" translation="edited">Achternaam</text>
@@ -1117,15 +1080,13 @@
  	<text id="SYS_MEMORY_LIMIT" development="new" translation="edited">Memory limit</text>
     <text id="SYS_MESSAGE" development="new" translation="edited">Bericht</text>
     <text id="SYS_MINUTES" development="new" translation="edited">Minutes</text>
+    <text id="SYS_MOBILE" development="new" translation="todo">Mobiel</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">This module is disabled.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Modules</text>
     <text id="SYS_MONDAY" development="new" translation="edited">Monday</text>
-    <text id="SYS_MYSQL_VERSION" development="new" translation="edited">MySQL version</text>
-    <text id="SYS_MYSQL_VERSION_REQUIRED" development="new" translation="edited">Admidio requires 4.1 or higher</text>
     <text id="SYS_NAME" development="new" translation="edited">Naam</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Short name</text>
     <text id="SYS_NEXT" development="new" translation="edited">Volgende</text>
-    <text id="SYS_ABR_NO" development="new" translation="edited" description="Abbreviation for Number">Nr.</text>
     <text id="SYS_NO" development="new" translation="edited">Nee</text>
     <text id="SYS_NO_ENTRY" development="new" translation="edited">Requested entry does not exist in the database.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="edited">Niets gevonden.</text>
@@ -1157,10 +1118,10 @@
 	<text id="SYS_PHOTOS" development="new" translation="edited">Foto's</text>
 	<text id="SYS_PHP_INFO" development="new" translation="edited">All PHP settings</text>
 	<text id="SYS_PHP_VERSION" development="new" translation="edited">PHP version</text>
-	<text id="SYS_PHP_VERSION_REQUIRED" development="new" translation="edited">Admidio requires 5.2 or higher</text>   	
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="edited">Selecteer</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="edited">Een moment geduld</text>
     <text id="SYS_POST_MAX_SIZE" development="new" translation="edited">Max. POST size</text>
+    <text id="SYS_POSTCODE" development="new" translation="edited">Postal code</text>
     <text id="SYS_PREVIEW" development="new" translation="edited">Preview</text>
     <text id="SYS_PREVIOUS" development="new" translation="edited">Previous</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="edited">Process canceled.</text>
@@ -1176,8 +1137,6 @@
     <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Remove role</text>
 	<text id="SYS_REPEAT" development="new" translation="edited">Herhaal</text>
 	<text id="SYS_REPORT" development="new" translation="edited">Bericht</text>
-    <text id="SYS_REPRESENT_LARGE_TEXT" development="new" translation="edited">Display text: %VAR1%large%VAR2%</text>
-    <text id="SYS_REPRESENT_SMALL_TEXT" development="new" translation="edited">Display text: %VAR1%small%VAR2%</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="edited">Voorwaarden</text>
     <text id="SYS_ROLE" development="new" translation="edited">Rol</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Saving not possible. Maximum number of role members in role %VAR1_BOLD% would exceed predefined limit.</text>
@@ -1198,11 +1157,9 @@
     <text id="SYS_SERVER" development="new" translation="edited">Server</text>
     <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="edited">Server settings do not allow files uploads.</text>
     <text id="SYS_SET_BY" development="new" translation="edited">Ingesteld door</text>
-    <text id="SYS_SET_LINK" development="new" translation="edited">Set %VAR1%ink%VAR2% </text>
     <text id="SYS_SETTINGS" development="new" translation="edited">Voorkeuren</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Toon kalender</text>
     <text id="SYS_SHOW_HELP" development="new" translation="edited">Toon help</text>
-    <text id="SYS_SHOW_IMAGE" development="new" translation="edited">Display picture %VAR1%</text>
 	<text id="SYS_SHOW_PROFILE" development="new" translation="edited">Show profile</text>
 	<text id="SYS_SHOW_ROUTE" development="new" translation="edited">Toon route</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">At least one user with similar name (%VAR1_BOLD% ) was found in the database.</text>
@@ -1212,7 +1169,6 @@
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{current} of {total}</text>
 	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start slideshow</text>
 	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">End slideshow</text>
-    <text id="SYS_SPECIFY_EMAIL_ADDRESS" development="new" translation="edited">Specify %VAR1%e-mail address%VAR2%</text>
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Vanaf</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
@@ -1223,7 +1179,6 @@
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="edited">#subject# Nieuwe registratie voor website %organization_short_name%\n#content# Een nieuwe gebruiker heeft zich geregistreerd via de website %organization_homepage%.\n\nAchternaam: %user_last_name%\nVoornaam: %user_first_name%\nE-Mail: %user_email%\n\nDit bericht is automatisch gegenereerd.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System message</text>
     <text id="SYS_TEXT" development="new" translation="edited">Tekst</text>
-    <text id="SYS_TEXT_ITALIC" development="new" translation="edited">Display text in %VAR1%italic%VAR2%</text>
     <text id="SYS_THURSDAY" development="new" translation="edited">Thursday</text>
     <text id="SYS_TIME" development="new" translation="edited">Time</text>
     <text id="SYS_TIME_FROM" development="new" translation="edited">Time from</text>
@@ -1235,8 +1190,6 @@
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="edited">File %0 of %1 transfered</text>
     <text id="SYS_TUESDAY" development="new" translation="edited">Tuesday</text>
     <text id="SYS_TYPE" development="new" translation="edited">Type</text>
-    <text id="SYS_UNDERLINE" development="new" translation="edited">Underline</text>
-    <text id="SYS_UNDERLINE_TEXT" development="new" translation="edited">%VAR1%underline%VAR2% text</text>
     <text id="SYS_UNKNOWN" development="new" translation="edited">Onbekend</text>
     <text id="SYS_UNLIMITED" development="new" translation="edited">Onbeperkt</text>
     <text id="SYS_UNLOCK" development="new" translation="edited">Unlock</text>
@@ -1244,6 +1197,7 @@
     <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">File(s) couldn't be uploaded.</text>
     <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="edited">Max. file upload size</text>
+	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">The file name can not be named "Submit".</text>
     <text id="SYS_USER" development="new" translation="edited">User</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">No user could be found with this ID!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="edited">User %VAR1_BOLD% has no valid e-mail address in personal information!</text>

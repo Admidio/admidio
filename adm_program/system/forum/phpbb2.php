@@ -109,7 +109,7 @@ class PhpBB2
         && $admidio_db->server   == $this->forum_db->server
         && $admidio_db->user     == $this->forum_db->user
         && $admidio_db->password == $this->forum_db->password
-        && $admidio_db->dbname   == $this->forum_db->dbname)
+        && $admidio_db->dbName   == $this->forum_db->dbName)
         {
             $new_db_connection = false;
         }

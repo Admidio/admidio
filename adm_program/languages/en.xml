@@ -233,8 +233,8 @@
     <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="edited">This can be set to the value of the width and height of the greeting card image to be scaled. (default: 400 x 250 pixels)</text>
     <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Image preview preference (width x height)</text>
     <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">This can be set to the value of the width and height of the preview image to be scaled. (default: 250 x 250 pixels)</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="edited">An error occurred while sending the greeting card. Please try again later.</text>    
     <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Your greeting card will be sent to members of the selected role if members provided e-mail address.\n\nSelect a member of a role or entire role.</text>
+    <text id="ECA_SEND_ERROR" development="new" translation="edited">An error occurred while sending the greeting card. Please try again later.</text>    
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% characters left</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card was send.</text>
     <text id="ECA_TEMPLATE" development="new" translation="edited">Template</text>
@@ -940,14 +940,13 @@
     <text id="SYS_BROWSE_ERROR" development="new" translation="edited">Files searching could not be performed.</text>
     <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
 	<text id="SYS_CAPTCHA_CALC" development="new" translation="edited">Result of the calculation</text>
-	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Captcha code result invalid.Try again!</text>
+	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">The result of the calculation is not correct.</text>
 	<text id="SYS_CAPTCHA_CALC_DESCRIPTION" development="new" translation="edited">The calculation is part of a captcha. A captcha is used for spam prevention. The calculation is used to detect if a user or a script (or spambot) filled in the form.\nPlease fill in the result of the calculation in the form.</text>
 	<text id="SYS_CAPTCHA_CALC_PART1" development="new" translation="edited">Please calculate</text>
 	<text id="SYS_CAPTCHA_CALC_PART2" development="new" translation="edited">and add</text>
 	<text id="SYS_CAPTCHA_CALC_PART3_THIRD" development="new" translation="edited">a third of</text>
 	<text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="edited">the half of</text>
 	<text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="edited">.</text>
-	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">The result of the calculation is not correct.</text>
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Turing code</text>
 	<text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="edited">The authentication code was invalid.</text>
 	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="edited">Authentication code</text>
@@ -1214,6 +1213,7 @@
     <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">File(s) couldn't be uploaded.</text>
     <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="edited">Max. file upload size</text>
+	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">The file name can not be named "Submit".</text>
     <text id="SYS_USER" development="new" translation="edited">User</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">No user could be found with this ID!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="edited">User %VAR1_BOLD% has no valid e-mail address in personal information!</text>

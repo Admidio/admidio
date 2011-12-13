@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Show lists
+ * Show role members list
  *
  * Copyright    : (c) 2004 - 2011 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -500,7 +500,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 				}
                 elseif($column->getValue('lsc_special_field') == 'usr_photo')
                 {
-                    // Benutzerfoto anzeigen
+                    // show user photo
                     if($getMode == 'html' || $getMode == 'print')
                     {
                         $imgSource = 'photo_show.php?usr_id='.$row['usr_id'];
@@ -513,7 +513,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                         }
                         else
                         {
-                            // Profilbild aus dem Filesystem einlesen bzw. Default-Bild anzeigen
+                            // read profile photo from file system or show default photo
                             if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$row['usr_id'].'.jpg'))
                             {
                                 $imgSource = $g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$row['usr_id'];
@@ -530,25 +530,13 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                         $content = $gL10n->get('LST_USER_PHOTO');
                     }
                 }
-                elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX') 
-				{
-					// Checkboxen werden durch ein Bildchen dargestellt
-					if($row[$sql_column_number] == 1)
-					{
-						$content = $gL10n->get('SYS_YES');
-					}
-					else
-					{
-						$content = $gL10n->get('SYS_NO');
-					}
-				}
 				elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
 				||     $column->getValue('lsc_special_field') == 'mem_begin'
 				||     $column->getValue('lsc_special_field') == 'mem_end') 
 				{
 					if(strlen($row[$sql_column_number]) > 0)
 					{
-						// Datum muss noch formatiert werden
+						// date must be formated
 						$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
 						$content = $date->format($gPreferences['system_date']);
 					}

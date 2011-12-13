@@ -1278,7 +1278,7 @@
     <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Die Datei(en) konnten nicht hochgeladen werden.</text>
     <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. Uploadgröße</text>
-	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" sein!</text>
+	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" heißen.</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>

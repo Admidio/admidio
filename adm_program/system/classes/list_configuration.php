@@ -142,7 +142,7 @@ class ListConfiguration extends TableLists
     //                 2 - Aktive und ehemalige Rollenmitglieder
     public function getSQL($roleIds, $memberStatus = 0)
     {
-        global $gProfileFields, $gCurrentOrganization;
+        global $gL10n, $gProfileFields, $gCurrentOrganization;
         $sql = '';
         $sqlSelect  = '';
         $sqlJoin    = '';
@@ -192,21 +192,20 @@ class ListConfiguration extends TableLists
             }
 
 
-            // Bedingungen fuer die Spalte verarbeiten
+			// Handle the conditions for the columns
             if(strlen($listColumn->getValue('lsc_filter')) > 0)
             {
                 $value = $listColumn->getValue('lsc_filter');
 
+				// custom profile field
                 if($listColumn->getValue('lsc_usf_id') > 0)
                 {
-                    // ein benutzerdefiniertes Feld
-                    
                     if($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
                     {
                         $type = 'checkbox';
                         $value = admStrToLower($value);
                         
-                        // Ja bzw. Nein werden durch 1 bzw. 0 ersetzt, damit Vergleich in DB gemacht werden kann
+						// 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
                         if($value == admStrToLower($gL10n->get('SYS_YES')) || $value == '1' || $value == 'true')
                         {
                             $value = '1';
@@ -216,6 +215,11 @@ class ListConfiguration extends TableLists
                             $value = '0';
                         }
                     }
+                    /*elseif($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'DROPDOWN'
+					||     $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'RADIO_BUTTON')
+					{
+						// replace all field values with their internal numbers
+					}*/
                     elseif($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
                     {
                         $type = 'int';
