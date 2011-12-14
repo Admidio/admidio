@@ -1,5 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+<version id="2.3.0">
+	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
+    <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Should category %VAR_BOLD% be deleted?\n\nThis category has %VAR2% depending entries, which will be deleted, too.</text>
+    <text id="DAT_ENABLE_ICAL" development="new" translation="edited">Enabling iCal</text>
+    <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="edited">If iCal is enabled, appointments (individual or all) within a given time frame can be downloaded. Also, users will be able to subscribe to appointments by using their own calendar client software . (default: yes)</text>
+    <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Number of iCal days in the future</text>
+    <text id="DAT_ICAL_DAYS_FUTURE_DESC" development="new" translation="edited">This value defines, how many days in the future should be included into an iCal download or subscription. (default: 365)</text>
+    <text id="DAT_ICAL_DAYS_PAST" development="new" translation="edited">Number of iCal days in the past</text>
+    <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">This value defines, how many days in the past should be included into an iCal download or subscription. (default: 30)</text>
+    <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Enable registration to this appointment.</text>
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Agree on this appointment</text>
+    <text id="DAT_VISIBILITY" development="new" translation="edited">Visibility</text>
+    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Please fill in all entry fields\n\nand click again %VAR1_BOLD%.</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Your database version is %VAR1%.\nUpdate to version %VAR2% is required</text>
+    <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database system</text>
+    <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
+    <text id="INS_FACEBOOK_DESC" development="new" translation="edited">Would you like to set a link to your Facebook profile? Your Facebook login name is required. Log in to your Facebook account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Facebook profile directly.</text>
+    <text id="INS_GOOGLE_PLUS" development="new" translation="edited">Google+</text>
+    <text id="INS_GOOGLE_PLUS_DESC" development="new" translation="edited">Would you like to set a link to your Google+ profile? In order to do this, you will need your profile Google+ profile number. Log in to your Google+ account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Google+ profile directly.</text>
+    <text id="INS_ICQ_DESC" development="new" translation="edited">Enter your ICQ number here. If your status can be shown on the web (enabled in Skype), it will be displayed in your profile.</text>
+    <text id="INS_SKYPE_DESC" development="new" translation="edited">Enter your exact Skype name here. If your status can be shown on the web (enabled in ICQ), it will be displayed in your profile.</text>
+    <text id="INS_TWITTER" development="new" translation="edited">Twitter</text>
+    <text id="INS_TWITTER_DESC" development="new" translation="edited">Would you like to set a link to your Twitter profile? Your Twitter login name is required. Log in to your Twitter account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Twitter profile directly.</text>
+    <text id="INS_WINDOWS_LIVE" development="new" translation="edited">Windows Live</text>
+    <text id="INS_XING" development="new" translation="edited">Xing</text>
+    <text id="INS_XING_DESC" development="new" translation="edited">Would you like to set a link to your Xing profile? Your Xing login name is required. Log in to your Xing account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Xing profile directly.</text>
+    <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="edited">Subject &amp; Attachment</text>
+    <text id="MAI_CHARACTER_ENCODING" development="new" translation="edited">Character encoding</text>
+    <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="edited">Character encoding used in e-mails sent by Admidio. Not all e-mail clients are able to process UTF-8. Hence ISO-8859-1 can be set here alternatively.</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE" development="changed" translation="edited">%VAR1% has sent to role %VAR3% of %VAR2% following e-mail:</text>
+    <text id="MAI_EMAIL_SEND_TO_USER" development="changed" translation="edited">%VAR1% from %VAR2% has sent to you following e-mail:</text>
+    <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="edited">HTML e-mail</text>
+    <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="edited">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</text>
+    <text id="MAI_YOUR_EMAIL" development="new" translation="edited">Your e-mail</text>
+    <text id="MAI_YOUR_NAME" development="new" translation="edited">Your name</text>
+    <text id="MEM_IMPORT_SUCCESSFUL" development="changed" translation="edited">Import was successful..\n\n%VAR1% new users have been created.\n%VAR2% users have been edited.\n%VAR3% role memberships have been assigned.</text>
+    <text id="ORG_FIELD_DISABLED" development="changed" translation="edited">Field editable only for user with permission %VAR1_BOLD%</text>
+    <text id="ORG_FIELD_URL_DESC" development="new" translation="edited">This URL will link the content with the profile, provided by the user in this field. Placeholder %user_content% can be integrated into the URL if needed. This content has been provided by the user.\n\nExample:\nURL: http://www.google.de/search?q=%user_content%\nContent: Admidio\nLink in the profil: http://www.google.de/search?q=Admidio</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_COLOR" development="changed" translation="edited">Colour of the JavaScript editor</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_COLOR_DESC" development="changed" translation="edited">Define background colour of the JavaScript editor here. The value can be a hexadecimal colour value like #ffa500 or RGB value like (255, 185, 0).</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_ENABLE" development="changed" translation="edited">Using the JavaScript editor</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC" development="changed" translation="edited">A full-featured JavaScript editor is being used in many modules of Admidio. Appointments, Announcements etc. can be edited in a comfortable way by the user. In case the editor has been activated, a simple multi-lin text box is being displayed.</text>
+    <text id="ORG_VALUE_LIST" development="new" translation="edited">Value list</text>
+    <text id="ORG_VALUE_LIST_DESC" development="new" translation="edited">Define the items of the drop-down menu or the option boxes here.  Provide one drop-down or radio button item per line.\n\nInstead of the text, the selected position in the list will be stored in the profile. If text in a line should change, all assigned users will be able to see the new text in their profiles right away. If a menu item is being moved to another line, another entry might be shown in the user&apos;s profile.\n\nIn case of a radio button, an icon can be displayed instead of a text element, too. In order to do this, the name of an icon in the theme folder can be provided (e.g. ok.png) or the external URL of a picture files (e.g. http://www.example.com/example.jpg). By using a pipe, additional tool tip can be used with the icon set (e.g. female.png|female)</text>
+    <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="edited">Display organisation selection</text>
+    <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="edited">Should be several organisations stored in the database, the log-in screen is able to display a selection box with all available organisations. The user is then able at log-in to select another organisation (other than defined in the config.php). However, the user must be a registered member of the selected organisation.</text>
+    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="edited">Organisation and regional preferences</text>
+    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="edited">Slide show speed</text>
+    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Define the delay in seconds before the next picture is being loaded during a slide show.</text>
+    <text id="SYS_CHECKBOX" development="new" translation="edited">Check-box</text>
+    <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="edited">Confirm value</text>
+    <text id="SYS_CONTACT_DETAILS" development="new" translation="edited">Contact information</text>
+    <text id="SYS_DATABASE_VERSION_REQUIRED" development="new" translation="edited">Admidio requires %VAR1% or higher</text>
+    <text id="SYS_DESIGNATION" development="new" translation="edited">Name</text>
+    <text id="SYS_DROPDOWN_LISTBOX" development="new" translation="edited">Drop-down list box</text>
+    <text id="SYS_ICAL_DISABLED" development="new" translation="edited">iCal has been disabled by the system administrator.</text>
+    <text id="SYS_ICON" development="new" translation="edited">Icon</text>
+    <text id="SYS_INTERNAL_NAME" development="new" translation="edited">Internal name</text>
+    <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="edited">The internal name is being used as a specific identifier of a field. In terms of the program usage, however, it is irrelevant. During software development this name has to be taken in order to be able to use the getValue method. The internal name will be filled in automatically during creation of a field.</text>
+    <text id="SYS_MESSAGE" development="new" translation="edited">Message</text>
+    <text id="SYS_ORGANIZATION" development="new" translation="edited">Organisation</text>
+    <text id="SYS_PERIOD" development="new" translation="edited">Time frame</text>
+	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="edited">Admidio requires %VAR1% or higher</text>    	
+	<text id="SYS_PRESENTATION" development="new" translation="edited">Display</text>
+    <text id="SYS_RADIO_BUTTON" development="new" translation="edited">Radio button</text>
+    <text id="SYS_SOCIAL_NETWORKS" development="new" translation="edited">Social media</text>
+    <text id="SYS_URL_INVALID_CHAR" development="changed" translation="edited">The URL in field %VAR1_BOLD% has invalid characters.\n\nOnly alphabetic characters, umlauts, numbers from 0 to 9 and special characters .-_:/#?=% are free to use.</text>
+    <text id="SYS_VERSION" development="new" translation="edited">Version</text>
+    <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="edited">The database version %VAR1% is lower than the version of the Admidio scripts %VAR2%.\n\nPlease perform %VAR3% database update to version %VAR4%.</text>
+    <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="edited">The database version %VAR1% is higher than the version of the Admidio scripts %VAR2%.\n\nPlease update your Admidio files on the server %VAR3% by using a later version of Admidio (%VAR4%).</text>
+</version>
 <version id="2.2.6">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Latest announcements of organisation %VAR1%</text>
     <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="edited">Current appointments of organisations %VAR1%</text>
@@ -202,7 +273,6 @@
     <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Senders e-mail address</text>
     <text id="ECA_FIELD_ERROR" development="new" translation="edited">Some fields are not filled in or do not comply. Please filled them in or check them for consistency.</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Please fill in \nall data fields and \npress 'send'.\n\n %VAR1%</text>
     <text id="ECA_FONT" development="new" translation="edited">Font type preferences. (default: Comic Sans MS)</text>
     <text id="ECA_FONT_SIZE" development="new" translation="edited">Font size preference. (default: 20) </text>
     <text id="ECA_FONT_COLOR" development="new" translation="edited">Font color preference. (default: black)</text>
@@ -654,7 +724,7 @@
     <text id="ORG_REGISTRATION_MODE" development="new" translation="edited">Define character of registration or deactivate it. Quick registration allows users to register by filling in mandatory fields only. The full registration provides all fields of the profile.  (default: quick registration)</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES" development="new" translation="edited">Search for similar names</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES_DESC" development="new" translation="edited">At registration and assigning registrations Admidio is searching for similar surnames and first names in order to avoid double entries. Deactivation results search for identical names only. (default: yes)</text>
-    <text id="ORG_SECONDS" development="new" translation="todo">seconds</text>
+    <text id="ORG_SECONDS" development="new" translation="edited">seconds</text>
     <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Send password</text>
     <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Forgotten and regenerated password can be requested by the users to be sent automatically to the own e-mail address. In case of deactivation, users are able to make this request to the administrator only. . (default: yes)</text>
     <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Send new password</text>
@@ -752,8 +822,8 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Show watermark</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Text will be shown in all photos with a long edge larger than 200 pixels. (default: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Photos have been successfully added to album if they appear on this page.</text>
-    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">slideshow speed</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Seconds before slideshow switches to next picture.</text>
+    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="edited">slideshow speed</text>
+    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Seconds before slideshow switches to next picture.</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Thumbnails per page (rows x columns)</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Values define number of rows and columns of thumbnails on one page. (default: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Press button %VAR1_BOLD% in order to select photo files on harddrive for upload.</text>
