@@ -13,7 +13,7 @@
  * start              - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
  * headline           - Ueberschrift, die ueber den Terminen steht
  *                      (Default) Termine
- * calendar           - Angabe der Kategorie damit auch nur eine angezeigt werden kann.
+ * cal_id             - show all dates of calendar with this id
  * id                 - Nur einen einzigen Termin anzeigen lassen.
  * date               - Alle Termine zu einem Datum werden aufgelistet
  *                      Uebergabeformat: YYYYMMDD
@@ -23,6 +23,8 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/form_elements.php');
+require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
 unset($_SESSION['dates_request']);
@@ -33,7 +35,7 @@ $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
 $getDateId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 $getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
-$getCalendar = admFuncVariableIsValid($_GET, 'calendar', 'string');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -53,14 +55,19 @@ if(strlen($getDate) > 0)
 	$getDate = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
 }
 
+if($getCatId > 0)
+{
+    $calendar = new TableCategory($gDb, $getCatId);
+}
+
 // Navigation faengt hier im Modul an
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
-if(strlen($getCalendar) > 0)
+if($getCatId > 0)
 {
-    $gLayout['title'] = $getHeadline. ' - '. $getCalendar;
+    $gLayout['title'] = $getHeadline. ' - '. $calendar->getValue('cat_name');
 }
 else
 {
@@ -85,17 +92,17 @@ echo '
     $(document).ready(function() 
     {
         $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+        
+        $("#admCalendar").change(function () {
+            var calendarId = "";
+            if (document.getElementById("admCalendar").selectedIndex != 0)
+            {
+                var calendarId = document.getElementById("admCalendar").value;
+            } 
+            self.location.href = "dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id=" + calendarId;
+        });
     }); 
 
-    function showCalendar()
-    {
-        var calendar = "";
-        if (document.getElementById("calendar").selectedIndex != 0)
-        {
-            var calendar = document.getElementById("calendar").value;
-        } 
-        self.location.href = "dates.php?mode='.$getMode.'&headline='.$getHeadline.'&calendar=" + calendar;
-    }
 //--></script>
 <h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';
 
@@ -128,10 +135,10 @@ if($getDateId > 0)
 //...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
 else
 {
-    if (strlen($getCalendar) > 0)
+    if ($getCatId > 0)
     {
         // alle Termine zu einer Kategorie anzeigen
-        $sqlConditionCalendar .= ' AND cat_name   = \''. $getCalendar. '\' ';
+        $sqlConditionCalendar .= ' AND cat_id  = '.$getCatId;
     }
 	
     // Termine an einem Tag suchen
@@ -256,51 +263,17 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
             </span>
         </li>';
     }
+
     if(($getCalendarSelection == 1) && ($getDateId == 0))   
     {
-        // Combobox mit allen Kalendern anzeigen, denen auch Termine zugeordnet sind
-        $sql = 'SELECT DISTINCT cat_name, cat_sequence
-                FROM '. TBL_CATEGORIES. ', '. TBL_DATES. ' dat
-                WHERE cat_type   = \'DAT\'
-                    AND dat_cat_id = cat_id 
-                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                        OR (   dat_global   = 1
-                            AND cat_org_id IN ('.$organizations.')
-                        )
-                    )
-                    '.$sqlConditions;
-        if($gValidLogin == false)
-        {
-          $sql .= ' AND cat_hidden = 0 ';
-        }
-        $sql .= ' ORDER BY cat_sequence ASC ';
-        $result = $gDb->query($sql);
-        
-        if($gDb->num_rows($result) > 1)
-        {
-            $topNavigation .= '<li>'.$gL10n->get('DAT_CALENDAR').':&nbsp;&nbsp;
-            <select size="1" id="calendar" onchange="showCalendar()">
-                <option value="0" ';
-                if(strlen($getCalendar) == 0)
-                {
-                    $topNavigation .= ' selected="selected" ';
-                }
-                $topNavigation .= '>'.$gL10n->get('SYS_ALL').'</option>';
-				
-				$date = new TableDate($gDb);
-        
-                while($row = $gDb->fetch_array($result))
-                {
-					$date->setArray($row);
+        // create select box with all calendars that have dates
+        $calendarSelectBox = FormElements::generateCategorySelectBox('DAT', $getCatId, 'admCalendar', $gL10n->get('SYS_ALL'), true);
 
-                    $topNavigation .= '<option value="'. urlencode($date->getValue('cat_name')). '"';
-                    if($getCalendar == $date->getValue('cat_name'))
-                    {
-                        $topNavigation .= ' selected="selected" ';
-                    }
-                    $topNavigation .= '>'.$date->getValue('cat_name').'</option>';
-                }
-            $topNavigation .=  '</select>';
+        if(strlen($calendarSelectBox) > 0)
+        {
+            // show calendar select box with link to calendar preferences
+            $topNavigation .= '<li>'.$gL10n->get('DAT_CALENDAR').':&nbsp;&nbsp;'.$calendarSelectBox;
+
             if($gCurrentUser->editDates())
             {
                 $topNavigation .= '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
@@ -310,6 +283,7 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
         }
         elseif($gCurrentUser->editDates())
         {
+            // show link to calendar preferences
             $topNavigation .= '
             <li><span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
@@ -320,15 +294,10 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
         //ical Download
         if($gPreferences['enable_dates_ical'] == 1)
         {
-            $ical_attributes = '?headline='.$getHeadline;
-            if(strlen($getCalendar)!=0)
-            {
-                $ical_attributes .= '&amp;calendar='.$getCalendar;
-            }
             $topNavigation .= '<li class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php'.$ical_attributes.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cal_id='.$getCatId.'"><img
                     src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"/></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php'.$ical_attributes.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cal_id='.$getCatId.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
             </li>';
         }
     }
@@ -638,7 +607,7 @@ else
 }
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&calendar='.$getCalendar;
+$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId;
 echo admFuncGeneratePagination($base_url, $num_dates, $dates_per_page, $getStart, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');

@@ -9,8 +9,7 @@
  * Parameters:
  *
  * start    : Angabe, ab welchem Datensatz Links angezeigt werden sollen
- * category : Kategorie der Rollen, die angezeigt werden sollen
- *            Wird keine Kategorie uebergeben, werden alle Rollen angezeigt
+ * cat_id   : show only roles of this category id, if id is not set than show all roles
  * category-selection: 1 - (Default) Anzeige der Combobox mit den verschiedenen Rollen-Kategorien
  *                     0 - Combobox nicht anzeigen
  * active_role : 1 - (Default) aktive Rollen auflisten
@@ -19,12 +18,14 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/form_elements.php');
+require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_roles.php');
 unset($_SESSION['mylist_request']);
 
 // Initialize and check the parameters
 $getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getCategory   = admFuncVariableIsValid($_GET, 'category', 'string', '');
+$getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getCategorySelection = admFuncVariableIsValid($_GET, 'category-selection', 'boolean', 1);
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
 
@@ -79,11 +80,10 @@ if($gValidLogin == false)
 {
     $sql .= ' AND cat_hidden = 0 ';
 }
-if(strlen($getCategory) > 0 && $getCategory != $gL10n->get('SYS_ALL'))
+if($getCatId > 0)
 {
-    // wenn eine Kategorie uebergeben wurde, dann nur Rollen dieser anzeigen
-    $sql .= ' AND cat_type   = \'ROL\'
-              AND cat_name   = \''. $getCategory. '\' ';
+    // if category is set then only show roles of this category
+    $sql .= ' AND cat_id  = '.$getCatId;
 }
 $sql .= ' ORDER BY cat_sequence, rol_name ';
 
@@ -120,13 +120,22 @@ else
 {
     $gLayout['title']  = $gL10n->get('LST_INACTIVE_ROLES');
 }
+
+if($getCatId > 0)
+{
+    $category = new TableCategory($gDb, $getCatId);
+    $gLayout['title'] .= ' - '.$category->getValue('cat_name');
+}
+
 $gLayout['header'] = '
     <script type="text/javascript"><!--
-        function showCategory()
+        $(document).ready(function() 
         {
-            var category = document.getElementById("category").value;
-            self.location.href = "lists.php?category=" + category + "&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole.'";
-        }
+            $("#admCategory").change(function () {
+                var categoryId = document.getElementById("admCategory").value;
+                self.location.href = "lists.php?cat_id=" + categoryId + "&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole.'";
+            });
+        });
 
         function showList(element, rol_id)
         {
@@ -168,56 +177,24 @@ if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
 
     if($getCategorySelection == 1)
     {
-        // Combobox mit allen Kategorien anzeigen, denen auch Rollen zugeordnet sind
-        $sql = 'SELECT DISTINCT cat_name, cat_sequence 
-                  FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                       OR cat_org_id IS NULL )
-                   AND cat_type    = \'ROL\' 
-                   AND rol_cat_id  = cat_id
-                   AND rol_visible = 1
-                       '.$roleIdList;
-        if($gValidLogin == false)
+        // create select box with all categories that have roles
+        $calendarSelectBox = FormElements::generateCategorySelectBox('ROL', $getCatId, 'admCategory', $gL10n->get('SYS_ALL'), true);
+        
+        if(strlen($calendarSelectBox) > 0)
         {
-            $sql .= ' AND cat_hidden = 0 ';
-        }
-        $sql .= ' ORDER BY cat_sequence ASC ';
-        $result = $gDb->query($sql);
-		
-        if($gDb->num_rows($result) > 1)
-        {
-            echo '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;
-            <select size="1" id="category" onchange="showCategory()">
-                <option value="'.$gL10n->get('SYS_ALL').'" ';
-                if(strlen($getCategory) == 0)
+            // show category select box with link to calendar preferences
+            echo '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;'.$calendarSelectBox;
+
+                if($gCurrentUser->assignRoles())
                 {
-                    echo ' selected="selected" ';
+                    echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
+                     src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
                 }
-                echo '>'.$gL10n->get('SYS_ALL').'</option>';
-
-				$role = new TableRoles($gDb);
-
-                while($row = $gDb->fetch_array($result))
-                {
-					$role->setArray($row);
-
-                    echo '<option value="'. urlencode($role->getValue('cat_name')). '"';
-                    if($getCategory == $role->getValue('cat_name'))
-                    {
-                        echo ' selected="selected" ';
-                    }
-                    echo '>'.$role->getValue('cat_name').'</option>';
-                }
-            echo '</select>';
-            if($gCurrentUser->assignRoles())
-            {
-                echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
-                 src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
-            }
             echo '</li>';
-        }
+        }            
         elseif($gCurrentUser->assignRoles())
         {
+            // show link to calendar preferences
             echo '
             <li><span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
@@ -537,7 +514,7 @@ if($count_cat_entries == 0)
 echo '</div></div>';
 
 // Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?category='. $getCategory. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;
+$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $getCatId. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;
 echo admFuncGeneratePagination($base_url, $num_roles, $roles_per_page, $getStart, TRUE);
 
 echo '</div>';

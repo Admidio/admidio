@@ -307,8 +307,8 @@ function admFuncEmailNotification($receiptian, $reference, $message, $sender_nam
 	//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
 }
 
-// prueft ob der Array-Eintrag existiert und dem Datentyp entspricht, andernfalls wird ein Hinweis ausgegeben
-// Dokumentation: http://www.admidio.org/dokuwiki/doku.php?id=de:entwickler:uebergabevariablen_pruefen
+// checks if an array entry exists and has the expected datatype, if not show error
+// documentation: http://www.admidio.org/dokuwiki/doku.php?id=de:entwickler:uebergabevariablen_pruefen
 function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
 {
 	global $gL10n, $gMessage;
@@ -316,7 +316,8 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 	$errorMessage = '';
 	$type = admStrToLower($type);
 
-	if(isset($array[$variableName]))
+    // only check if array entry exists and has a value
+	if(isset($array[$variableName]) && strlen($array[$variableName]) > 0)
 	{
 		if($type == 'boolean')
 		{
@@ -374,6 +375,7 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 		// Array-Eintrag existiert nicht, soll aber Pflicht sein
         $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
 	}
+
 	if(strlen($errorMessage) > 0)
 	{
 	   if($directOutput == true)
