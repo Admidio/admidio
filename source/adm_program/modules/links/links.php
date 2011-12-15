@@ -9,19 +9,21 @@
  * start     : Angabe, ab welchem Datensatz Links angezeigt werden sollen
  * headline  : Ueberschrift, die ueber den Links steht
  *             (Default) Links
- * category  : Angabe der Kategorie damit auch nur eine angezeigt werden kann.
+ * cat_id    : show only links of this category id, if id is not set than show all links
  * id        : Nur einen einzigen Link anzeigen lassen.
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/form_elements.php');
+require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_weblink.php');
 unset($_SESSION['links_request']);
 
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
-$getCategory = admFuncVariableIsValid($_GET, 'category', 'string', '');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getLinkId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -42,11 +44,22 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $gLayout['title']  = $getHeadline;
+if($getCatId > 0)
+{
+    $category = new TableCategory($gDb, $getCatId);
+    $gLayout['title'] .= ' - '.$category->getValue('cat_name');
+}
+
 $gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+
+            $("#admCategory").change(function () {
+                var categoryId = document.getElementById("admCategory").value;
+                self.location.href = "links.php?cat_id=" + categoryId + "&headline='.$getHeadline.'";
+            });
         }); 
     //--></script>';
 
@@ -67,18 +80,18 @@ echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>
 $condition = '';
 $hidden    = '';
 
-if ($getLinkId > 0)
+if($getLinkId > 0)
 {
     // falls eine id fuer einen bestimmten Link uebergeben worden ist...
     $condition = ' AND lnk_id = '. $getLinkId;
 }
-else if (strlen($getCategory) > 0)
+else if($getCatId > 0)
 {
     // alle Links zu einer Kategorie anzeigen
-    $condition = ' AND cat_name   = \''. $getCategory. '\'';
+    $condition = ' AND cat_id = '.$getCatId;
 }
 
-if ($gValidLogin == false)
+if($gValidLogin == false)
 {
     // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
     $hidden = ' AND cat_hidden = 0 ';
@@ -135,16 +148,33 @@ if ($getLinkId == 0 && ($gCurrentUser->editWeblinksRight() || $gPreferences['ena
                     <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline. '">'.$gL10n->get('LNK_CREATE_LINK').'</a>
                 </span>
             </li>';
-       //Kategorie pflegen
-        echo'
-            <li>
-                <span class="iconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK">
-                        <img src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
+
+            // create select box with all categories that have links
+            $calendarSelectBox = FormElements::generateCategorySelectBox('LNK', $getCatId, 'admCategory', $gL10n->get('SYS_ALL'), true);
+            
+            if(strlen($calendarSelectBox) > 0)
+            {
+                // show category select box with link to calendar preferences
+                echo '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;'.$calendarSelectBox;
+    
+                    if($gCurrentUser->assignRoles())
+                    {
+                        echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
+                         src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
+                    }
+                echo '</li>';
+            }            
+            elseif($gCurrentUser->assignRoles())
+            {
+                // show link to calendar preferences
+                echo '
+                <li><span class="iconTextLink">
+                    <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK"><img
+                        src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
                     <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK">'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
-                </span>
-            </li>
-        </ul>';
+                </span></li>';
+            }                
+        echo'</ul>';
     }
 
     // Navigation mit Vor- und Zurueck-Buttons

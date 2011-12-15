@@ -152,56 +152,91 @@ class FormElements
 		return $selectBoxHtml;
 	}
 
-	// Diese Funktion erzeugt eine Combobox mit allen Kategorien zu einem Typ (Rollen, Termine, Links ...)
+    // method creates a select box with all categories of a type (roles, dates, links ...)
 	//
 	// Parameters:
-	// categoryType    : Typ der Kategorien ('ROL', 'DAT', 'LNK',...) die angezeigt werden sollen
-	// defaultCategory : Id der Kategorie die markiert wird
-	// field_id        : Id und Name der Select-Box
-	public static function generateCategorySelectBox($categoryType, $defaultCategory = 0, $fieldId = '')
+	// categoryType    : Type of category ('ROL', 'DAT', 'LNK',...) that should be shown
+	// defaultCategory : Name or id of selected category
+	// field_id        : Id and name of select box
+	// firstEntry      : value for the first entry of the select box
+	// showCatWithChilds : only show categories that have elements in their category
+	public static function generateCategorySelectBox($categoryType, $defaultCategory = 0, $fieldId = '', $firstEntry = '', $showCatWithChilds = false)
 	{
 		global $gCurrentOrganization, $gDb, $gL10n;
+
+        $sqlTables      = TBL_CATEGORIES;
+        $sqlCondidtions = '';
+        $selectBoxHtml  = '';
 
 		if(strlen($fieldId) == 0)
 		{
 			$fieldId = 'cat_id';
 		}
+		if(strlen($firstEntry) == 0)
+		{
+			$firstEntry = '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -';
+		}
 		
-		$sql = 'SELECT cat_id, cat_default, cat_name 
-		          FROM '. TBL_CATEGORIES. '
+		// create sql conditions if category must have child elements
+		if($showCatWithChilds)
+		{
+            if($categoryType == 'DAT')
+            {
+                $sqlTables = TBL_CATEGORIES.', '.TBL_DATES;
+                $sqlCondidtions = ' AND cat_id = dat_cat_id ';
+            }
+            elseif($categoryType == 'LNK')
+            {
+                $sqlTables = TBL_CATEGORIES.', '.TBL_LINKS;
+                $sqlCondidtions = ' AND cat_id = lnk_cat_id ';
+            }
+            elseif($categoryType == 'ROL')
+            {
+                $sqlTables = TBL_CATEGORIES.', '.TBL_ROLES;
+                $sqlCondidtions = ' AND cat_id = rol_cat_id 
+                                    AND rol_visible = 1 ';
+            }
+		}
+		
+		$sql = 'SELECT DISTINCT cat_id, cat_default, cat_name 
+		          FROM '.$sqlTables.'
 				 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )
 				   AND cat_type   = \''.$categoryType.'\'
+				       '.$sqlCondidtions.'
 				 ORDER BY cat_sequence ASC ';
 		$result = $gDb->query($sql);
 
-		$selectBoxHtml = '
-		<select size="1" id="'.$fieldId.'" name="'.$fieldId.'">
-			<option value=" "';
-				if($defaultCategory == 0)
-				{
-					$selectBoxHtml .= ' selected="selected" ';
-				}
-				$selectBoxHtml .= '>- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-
-			while($row = $gDb->fetch_array($result))
-			{
-				// if text is a translation-id then translate it
-				if(strpos($row['cat_name'], '_') == 3)
-				{
-					$row['cat_name'] = $gL10n->get(admStrToUpper($row['cat_name']));
-				}
-				
-				// create entry in html
-				$selectBoxHtml .= '<option value="'.$row['cat_id'].'"';
-					if($defaultCategory == $row['cat_id']
-					|| ($defaultCategory == 0 && $row['cat_default'] == 1))
-					{
-						$selectBoxHtml .= ' selected="selected" ';
-					}
-				$selectBoxHtml .= '>'.$row['cat_name'].'</option>';
-			}
-		$selectBoxHtml .= '</select>';
+        if($gDb->num_rows($result) > 1)
+        {
+    		$selectBoxHtml = '
+    		<select size="1" id="'.$fieldId.'" name="'.$fieldId.'">
+    			<option value=" "';
+    				if($defaultCategory == 0 || strlen($defaultCategory) == 0)
+    				{
+    					$selectBoxHtml .= ' selected="selected" ';
+    				}
+    				$selectBoxHtml .= '>'.$firstEntry.'</option>';
+    
+    			while($row = $gDb->fetch_array($result))
+    			{
+    				// if text is a translation-id then translate it
+    				if(strpos($row['cat_name'], '_') == 3)
+    				{
+    					$row['cat_name'] = $gL10n->get(admStrToUpper($row['cat_name']));
+    				}
+    								
+    				// create entry in html
+    				$selectBoxHtml .= '<option value="'.$row['cat_id'].'"';
+    					if($defaultCategory == $row['cat_id']
+    					|| ($defaultCategory == 0 && $row['cat_default'] == 1))
+    					{
+    						$selectBoxHtml .= ' selected="selected" ';
+    					}
+    				$selectBoxHtml .= '>'.$row['cat_name'].'</option>';
+    			}
+    		$selectBoxHtml .= '</select>';
+        }
 		return $selectBoxHtml;
 	}
 	
