@@ -75,14 +75,20 @@ if (strlen($getCalendar) > 0)
 }
 
 //Rückwertige Tage die angezeigt werden sollen
-$date_past = date('Y-m-d H:i:s',time()-$gPreferences['dates_ical_days_past']*86400);
-$sqlConditions .= ' AND (  dat_begin >= \''.$date_past.'\' 
-                    OR dat_end   >= \''.$date_past.'\' ) ';
+if($gPreferences['dates_ical_days_past']>0)
+{
+    $date_past = date('Y-m-d H:i:s',time()-$gPreferences['dates_ical_days_past']*86400);
+    $sqlConditions .= ' AND (  dat_begin >= \''.$date_past.'\' 
+                        OR dat_end   >= \''.$date_past.'\' ) ';
+}
 
 //Tage in Zukunft die angezeigt werden sollen
-$date_future = date('Y-m-d H:i:s',time()+$gPreferences['dates_ical_days_future']*86400);
-$sqlConditions .='  AND (  dat_begin <= \''.$date_future.'\' 
+if($gPreferences['dates_ical_days_future']>0)
+{
+    $date_future = date('Y-m-d H:i:s',time()+$gPreferences['dates_ical_days_future']*86400);
+    $sqlConditions .='  AND (  dat_begin <= \''.$date_future.'\' 
                     OR dat_end   <= \''.$date_future.'\' ) ';
+}
 
 // Bedingungen fuer die Rollenfreigabe hinzufuegen
 if($gCurrentUser->getValue('usr_id') > 0)
