@@ -13,7 +13,7 @@
  * start              - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
  * headline           - Ueberschrift, die ueber den Terminen steht
  *                      (Default) Termine
- * cal_id             - show all dates of calendar with this id
+ * cat_id             - show all dates of calendar with this id
  * id                 - Nur einen einzigen Termin anzeigen lassen.
  * date               - Alle Termine zu einem Datum werden aufgelistet
  *                      Uebergabeformat: YYYYMMDD
@@ -140,7 +140,7 @@ else
         // alle Termine zu einer Kategorie anzeigen
         $sqlConditionCalendar .= ' AND cat_id  = '.$getCatId;
     }
-	
+    
     // Termine an einem Tag suchen
     if(strlen($getDate) > 0)
     {
@@ -295,9 +295,9 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
         if($gPreferences['enable_dates_ical'] == 1)
         {
             $topNavigation .= '<li class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cal_id='.$getCatId.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId.'"><img
                     src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"/></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cal_id='.$getCatId.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
             </li>';
         }
     }
