@@ -16,11 +16,13 @@
  *             (Default) Termine
  * mode:     1 - Textausgabe
  *           2 - Download
+ * cat_id    - show all dates of calendar with this id
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_date.php');
+require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_rooms.php');
 unset($_SESSION['dates_request']);
 
@@ -46,7 +48,15 @@ if ($gPreferences['enable_dates_ical'] != 1)
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 2);
-$getCalendar = admFuncVariableIsValid($_GET, 'calendar', 'string');
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
+
+//Headline für Dateinamen
+$headline = $getHeadline;
+if($getCatId > 0)
+{
+    $calendar = new TableCategory($gDb, $getCatId);
+    $headline.= '_'. $calendar->getValue('cat_name');
+}
 
 $organizations = '';
 $sqlConditions = '';
@@ -67,11 +77,10 @@ if ($gValidLogin == false)
     $sqlConditions .= ' AND cat_hidden = 0 ';
 }
 
-//...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
-if (strlen($getCalendar) > 0)
+if ($getCatId > 0)
 {
     // alle Termine zu einer Kategorie anzeigen
-    $sqlConditionCalendar .= ' AND cat_name   = \''. $getCalendar. '\' ';
+    $sqlConditionCalendar .= ' AND cat_id  = '.$getCatId;
 }
 
 //Rückwertige Tage die angezeigt werden sollen
@@ -174,7 +183,7 @@ $iCal .= $date->getIcalFooter();
 if($getMode == 2)
 {
     header('Content-Type: text/calendar');
-    header('Content-Disposition: attachment; filename='. urlencode($getHeadline). '.ics');
+    header('Content-Disposition: attachment; filename='. urlencode($headline). '.ics');
     // noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
     header('Cache-Control: private');
     header('Pragma: public');
