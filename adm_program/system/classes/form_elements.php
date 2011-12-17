@@ -156,11 +156,13 @@ class FormElements
 	//
 	// Parameters:
 	// categoryType    : Type of category ('ROL', 'DAT', 'LNK',...) that should be shown
-	// defaultCategory : Name or id of selected category
+	// defaultCategory : Id of selected category (if id = -1 then no default category will be selected)
 	// field_id        : Id and name of select box
 	// firstEntry      : value for the first entry of the select box
-	// showCatWithChilds : only show categories that have elements in their category
-	public static function generateCategorySelectBox($categoryType, $defaultCategory = 0, $fieldId = '', $firstEntry = '', $showCatWithChilds = false)
+	// showCategoryChoice : this mode shows categories with childs and so default category will be selected
+	//                      there must be at least more then one category to select
+	public static function generateCategorySelectBox($categoryType, $defaultCategory = 0, $fieldId = '', 
+	                           $firstEntry = '', $showCategoryChoice = false)
 	{
 		global $gCurrentOrganization, $gDb, $gL10n;
 
@@ -178,7 +180,7 @@ class FormElements
 		}
 		
 		// create sql conditions if category must have child elements
-		if($showCatWithChilds)
+		if($showCategoryChoice)
 		{
             if($categoryType == 'DAT')
             {
@@ -206,8 +208,10 @@ class FormElements
 				       '.$sqlCondidtions.'
 				 ORDER BY cat_sequence ASC ';
 		$result = $gDb->query($sql);
+		$countCategories = $gDb->num_rows($result);
 
-        if($gDb->num_rows($result) > 1)
+        if($countCategories > 1 
+        || ($countCategories > 0 && $showCategoryChoice == false ) )
         {
     		$selectBoxHtml = '
     		<select size="1" id="'.$fieldId.'" name="'.$fieldId.'">
@@ -228,8 +232,11 @@ class FormElements
     								
     				// create entry in html
     				$selectBoxHtml .= '<option value="'.$row['cat_id'].'"';
+    				    // set selected if category id is the same as in parameters 
+    				    // or it's system category and no category choice mode
     					if($defaultCategory == $row['cat_id']
-    					|| ($defaultCategory == 0 && $row['cat_default'] == 1))
+    					|| ($defaultCategory == 0 && $row['cat_default'] == 1 && $showCategoryChoice == false)
+    					|| $countCategories == 1 )
     					{
     						$selectBoxHtml .= ' selected="selected" ';
     					}
