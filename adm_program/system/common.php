@@ -70,7 +70,7 @@ if(get_magic_quotes_gpc() == false)
 $gValidLogin = false;
 $gLayout     = array();
 
- // Datenbankobjekt anlegen und Verbindung zu Datenbank herstellen
+ // create database object and establish connection to database
 if(!isset($gDbType))
 {
     $gDbType = 'mysql';
@@ -78,10 +78,10 @@ if(!isset($gDbType))
 $gDb = Database::createDatabaseObject($gDbType);
 $gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
-// Script fuer das Forum ermitteln und includen, bevor die Session erstellt wird
+// determine forum script and include it bevor session is created
 Forum::includeForumScript($gDb);
 
-// Cookie-Praefix ermitteln und Sonderzeichen entfernen
+// determine cookie prefix and remove special characters
 $gCookiePraefix = 'ADMIDIO_'. $g_organization;
 if($gDebug)
 {
@@ -89,14 +89,18 @@ if($gDebug)
 }
 $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
 
-// PHP-Session starten
+/*********************************************************************************
+ Create and validate sessions, check auto login, read session variables
+/********************************************************************************/
+
+// start PHP session
 if(headers_sent() == false)
 {
     session_name($gCookiePraefix. '_PHP_ID');
     session_start();
 }
 
-// Session-ID ermitteln
+// determine session id
 if(isset($_COOKIE[$gCookiePraefix. '_ID']))
 {
     $gSessionId = $_COOKIE[$gCookiePraefix. '_ID'];
@@ -106,55 +110,27 @@ else
     $gSessionId = session_id();
 }
 
-// save global classes in session
+// create session object and read auto login data if available
+$gCurrentSession = new TableSession($gDb, $gSessionId);
+
+if($gCurrentSession->getValue('ses_id') == 0)
+{
+	$gCurrentSession->setValue('ses_session_id', $gSessionId);
+    // maintain the session table and delete old sessions
+    $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
+}
+
+// read global organization class for system preferences
 if(isset($_SESSION['gCurrentOrganization']) 
 && isset($_SESSION['gPreferences']))
 {
     $gCurrentOrganization     =& $_SESSION['gCurrentOrganization'];
     $gCurrentOrganization->db =& $gDb;
     $gPreferences             =& $_SESSION['gPreferences'];
-	$gProfileFields           =& $_SESSION['gProfileFields'];
-    $gProfileFields->mDb      =& $gDb;
-    $gCurrentUser             =& $_SESSION['gCurrentUser'];
-    $gCurrentUser->db         =& $gDb;
-	$gCurrentSession           = new TableSession($gDb, $gSessionId);
 }
 else
 {	
-	// no php session then create new admidio session
-	$gCurrentSession = new TableSession($gDb, $gSessionId);
-	$gCurrentSession->setValue('ses_session_id', $gSessionId);
-
-	$userIdAutoLogin = 0;
-	// check if auto login exists and create a valid session
-	if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
-	{
-		$admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
-
-		if($admidio_data[0] == true         // autologin
-		&& is_numeric($admidio_data[1]))    // user_id 
-		{   
-			// restore user from auto login session
-			require_once(SERVER_PATH. '/adm_program/system/classes/table_auto_login.php');
-			$auto_login = new TableAutoLogin($gDb, $gSessionId);
-			
-			// restore user if saved database user id == cookie user id
-			if($auto_login->getValue('atl_usr_id') == $admidio_data[1])
-			{
-				$userIdAutoLogin = $auto_login->getValue('atl_usr_id');
-			}
-			else
-			{
-				// something is wrong -> for security reasons delete that auto login
-				$auto_login->delete();
-			}
-
-			// auto login successful then create a valid session
-			$gCurrentSession->setValue('ses_usr_id',  $userIdAutoLogin);
-		}
-	}
-
-	// read organization of config file with their preferences
+	// no php session then read organization of config file with their preferences
     $gCurrentOrganization = new Organization($gDb, $g_organization);
     
     if($gCurrentOrganization->getValue('org_id') == 0)
@@ -163,25 +139,134 @@ else
         die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     $gPreferences = $gCurrentOrganization->getPreferences();
-	
-	// after successful initialization of organization object save session
-	$gCurrentSession->save();
-	
+ 
+    // save all data in session variables
+    $_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
+    $_SESSION['gPreferences']         =& $gPreferences;
+}
+
+// if auto login is set and session is new or a user assigned then check then create valid login
+$userIdAutoLogin = 0;
+
+if(isset($_COOKIE[$gCookiePraefix. '_DATA'])
+&& ($gCurrentSession->getValue('ses_id') == 0 || $gCurrentSession->getValue('ses_usr_id') > 0))
+{
+	$admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
+
+	if($admidio_data[0] == true         // autologin
+	&& is_numeric($admidio_data[1]))    // user_id 
+	{   
+		// restore user from auto login session
+		require_once(SERVER_PATH. '/adm_program/system/classes/table_auto_login.php');
+		$auto_login = new TableAutoLogin($gDb, $gSessionId);
+		
+		// restore user if saved database user id == cookie user id
+		// if session is inactive than set it to an active session
+		if($auto_login->getValue('atl_usr_id') == $admidio_data[1])
+		{
+			$userIdAutoLogin = $auto_login->getValue('atl_usr_id');
+			$gCurrentSession->setValue('ses_timestamp', DATETIME_NOW);
+		}
+		else
+		{
+			// something is wrong -> for security reasons delete that auto login
+			$auto_login->delete();
+		}
+
+		// auto login successful then create a valid session
+		$gCurrentSession->setValue('ses_usr_id',  $userIdAutoLogin);
+	}
+}
+
+// now if auto login is done, read global user data
+if(isset($_SESSION['gProfileFields']) 
+&& isset($_SESSION['gCurrentUser']))
+{
+	$gProfileFields           =& $_SESSION['gProfileFields'];
+    $gProfileFields->mDb      =& $gDb;
+    $gCurrentUser             =& $_SESSION['gCurrentUser'];
+    $gCurrentUser->db         =& $gDb;
+
+	// checks if user in database session is the same as in php session
+	if($gCurrentUser->getValue('usr_id') != $gCurrentSession->getValue('ses_usr_id'))
+	{
+		$gCurrentUser->clear();
+		$gCurrentSession->setValue('ses_usr_id', '');
+	}
+}
+else
+{	
 	// create object with current user field structure und user object
 	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
 	$gCurrentUser   = new User($gDb, $gProfileFields, $userIdAutoLogin);
-	if($userIdAutoLogin > 0)
-	{
-		// count logins and save login date
-		$gCurrentUser->updateLoginData();
-	}
     
 	// save all data in session variables
-    $_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
-    $_SESSION['gPreferences']         =& $gPreferences;
     $_SESSION['gProfileFields']       =& $gProfileFields;
 	$_SESSION['gCurrentUser']         =& $gCurrentUser;
 }
+
+// erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
+// da die Daten evtl. von anderen Usern in der DB geaendert wurden
+if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('ses_renew') == 3)
+{
+	// read new field structure in object and than create new user object with new field structure
+	$gProfileFields->readProfileFields();
+	$userID = $gCurrentUser->getValue('usr_id');
+	$gCurrentUser = new User($gDb, $gProfileFields, $userID);
+	$_SESSION['gCurrentUser'] =& $gCurrentUser;
+	$gCurrentSession->setValue('ses_renew', 0);
+}
+if($gCurrentSession->getValue('ses_renew') == 2 || $gCurrentSession->getValue('ses_renew') == 3)
+{
+	// Organisationsobjekt neu einlesen
+	$gCurrentOrganization->readData($g_organization);
+	$gPreferences = $gCurrentOrganization->getPreferences();
+	$gCurrentSession->setValue('ses_renew', 0);
+}
+
+// nun die Session pruefen
+if($gCurrentSession->getValue('ses_usr_id') > 0)
+{
+	if($gCurrentSession->getValue('ses_usr_id') == $gCurrentUser->getValue('usr_id'))
+	{
+		// Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
+		$time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
+		
+		// wenn laenger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
+		if($time_gap < $gPreferences['logout_minutes'] * 60) 
+		{
+			// User-Login ist gueltig
+			$gValidLogin = true;
+			$gCurrentSession->setValue('ses_timestamp', DATETIME_NOW);
+		}
+		else
+		{
+			// User war zu lange inaktiv -> User aus Session entfernen
+			$gCurrentUser->clear();
+			$gCurrentSession->setValue('ses_usr_id', '');
+		}
+	}
+	else
+	{
+		// irgendwas stimmt nicht, also alles zuruecksetzen
+		$gCurrentUser->clear();
+		$gCurrentSession->setValue('ses_usr_id', '');
+	}
+}
+
+// Update auf Sessionsatz machen (u.a. timestamp aktualisieren)
+$gCurrentSession->save();
+
+// if session is created with auto login then update user login data
+if($userIdAutoLogin > 0 && $gCurrentUser->getValue('usr_id'))
+{
+	// count logins and save login date
+	$gCurrentUser->updateLoginData();
+}
+
+/*********************************************************************************
+ create necessary objects and parameters
+/********************************************************************************/
 
 // read language file
 $gL10n = new Language($gPreferences['system_language']);
@@ -202,74 +287,6 @@ $gMessage = new Message();
 if(isset($_SESSION['navigation']) == false)
 {
     $_SESSION['navigation'] = new Navigation();
-}
-
-/*********************************************************************************
-Session auf Gueltigkeit pruefen bzw. anlegen
-/********************************************************************************/
-if($gCurrentSession->getValue('ses_id') > 0)
-{
-    // erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
-    // da die Daten evtl. von anderen Usern in der DB geaendert wurden
-    if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('ses_renew') == 3)
-    {
-        // read new field structure in object and than create new user object with new field structure
-		$gProfileFields->readProfileFields();
-		$userID = $gCurrentUser->getValue('usr_id');
-		$gCurrentUser = new User($gDb, $gProfileFields, $userID);
-		$_SESSION['gCurrentUser'] =& $gCurrentUser;
-        $gCurrentSession->setValue('ses_renew', 0);
-    }
-    if($gCurrentSession->getValue('ses_renew') == 2 || $gCurrentSession->getValue('ses_renew') == 3)
-    {
-        // Organisationsobjekt neu einlesen
-        $gCurrentOrganization->readData($g_organization);
-        $gPreferences = $gCurrentOrganization->getPreferences();
-        $gCurrentSession->setValue('ses_renew', 0);
-    }
-
-    // nun die Session pruefen
-    if($gCurrentSession->getValue('ses_usr_id') > 0)
-    {
-        if($gCurrentSession->getValue('ses_usr_id') == $gCurrentUser->getValue('usr_id'))
-        {
-            // Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
-            $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
-            
-            // wenn laenger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
-            if($time_gap < $gPreferences['logout_minutes'] * 60) 
-            {
-                // User-Login ist gueltig
-                $gValidLogin = true;
-                $gCurrentSession->setValue('ses_timestamp', DATETIME_NOW);
-            }
-            else
-            {
-                // User war zu lange inaktiv -> User aus Session entfernen
-                $gCurrentUser->clear();
-                $gCurrentSession->setValue('ses_usr_id', '');
-            }
-        }
-        else
-        {
-            // irgendwas stimmt nicht, also alles zuruecksetzen
-            $gCurrentUser->clear();
-            $gCurrentSession->setValue('ses_usr_id', '');
-        }
-    }
-    
-    // Update auf Sessionsatz machen (u.a. timestamp aktualisieren)
-    $gCurrentSession->save();
-}
-else
-{
-    // Session existierte noch nicht, dann neu anlegen
-    $gCurrentUser->clear();
-    $gCurrentSession->setValue('ses_session_id', $gSessionId);
-    $gCurrentSession->save();
-    
-    // Alle alten Session loeschen
-    $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
 }
 
 // check version of database against version of file system and show notice if not equal
