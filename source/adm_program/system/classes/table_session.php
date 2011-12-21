@@ -16,8 +16,7 @@
  * renewOrganizationObject() 
  *                        - diese Funktion stoesst ein Neueinlesen des Organisations-Objekts an
  * tableCleanup($max_inactive_time)         
- *                        - Funktion loescht Datensaetze aus der Session-Tabelle 
- *                          die nicht mehr gebraucht werden
+ *                        - method deletes records out of session table, if they are to old
  *
  *****************************************************************************/
 
@@ -85,17 +84,17 @@ class TableSession extends TableAccess
         parent::save($updateFingerPrint);
     }  
     
-    // diese Funktion loescht Datensaetze aus der Session-Tabelle die nicht mehr gebraucht werden
+	// method deletes records out of session table, if they are to old
     public function tableCleanup($max_inactive_time)
     {
-        // Zeitpunkt bestimmen, ab dem die Sessions geloescht werden, mind. 1 Stunde
-        if($max_inactive_time > 60)
+		// determine time when sessions should be deleted (min. 30 minutes)
+        if($max_inactive_time > 30)
         {
             $date_session_delete = time() - $max_inactive_time * 60;
         }
         else
         {
-            $date_session_delete = time() - 60 * 60;
+            $date_session_delete = time() - 30 * 60;
         }
             
         $sql    = 'DELETE FROM '. TBL_SESSIONS. ' 
