@@ -42,21 +42,6 @@ class ListConfiguration extends TableLists
             $this->readColumns();
         }
     }
-        
-    // Daten der zugehoerigen Spalten einlesen und in Objekten speichern
-    public function readColumns()
-    {
-        $sql = 'SELECT * FROM '. TBL_LIST_COLUMNS. '
-                 WHERE lsc_lst_id = '. $this->getValue('lst_id'). '
-                 ORDER BY lsc_number ASC ';
-        $lsc_result   = $this->db->query($sql);
-        
-        while($lsc_row = $this->db->fetch_array($lsc_result))
-        {
-            $this->columns[$lsc_row['lsc_number']] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
-            $this->columns[$lsc_row['lsc_number']]->setArray($lsc_row);
-        }
-    }
     
     // fuegt eine neue Spalte dem Spaltenarray hinzu
     public function addColumn($number, $field, $sort = '', $filter = '')
@@ -90,7 +75,36 @@ class ListConfiguration extends TableLists
         }
         return false;
     }
+	
+    public function clear()
+    {
+        $this->columns = array();
     
+        parent::clear();
+    }
+
+    // Anzahl der Spalten der Liste zurueckgeben
+    public function countColumns()
+    {
+        return count($this->columns);
+    }
+
+    public function delete()
+    {
+		$this->db->startTransaction();
+		
+        // first delete all columns
+        foreach($this->columns as $number => $listColumn)
+        {
+            $listColumn->delete();
+        }
+    
+        $return = parent::delete();
+		
+		$this->db->endTransaction();
+		return $return;
+    }
+
     // entfernt die entsprechende Spalte aus der Konfiguration
     // all : gibt an, ob alle folgenden Spalten auch geloescht werden sollen
     public function deleteColumn($number, $all = false)
@@ -121,12 +135,6 @@ class ListConfiguration extends TableLists
                 array_pop($this->columns);
             }
         }
-    }
-    
-    // Anzahl der Spalten der Liste zurueckgeben
-    public function countColumns()
-    {
-        return count($this->columns);
     }
     
     // liefert das entsprechende TableListColumns-Objekt zurueck
@@ -196,52 +204,34 @@ class ListConfiguration extends TableLists
             if(strlen($listColumn->getValue('lsc_filter')) > 0)
             {
                 $value = $listColumn->getValue('lsc_filter');
+				$userFieldType = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type');
 
 				// custom profile field
                 if($listColumn->getValue('lsc_usf_id') > 0)
                 {
-                    if($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'CHECKBOX')
+                    if($userFieldType == 'CHECKBOX')
                     {
                         $type = 'checkbox';
-                        $value = admStrToLower($value);
-                        
+
 						// 'yes' or 'no' will be replaced with 1 or 0, so that you can compare it with the database value
-                        if($value == admStrToLower($gL10n->get('SYS_YES')) || $value == '1' || $value == 'true')
-                        {
-                            $value = '1';
-                        }
-                        elseif($value == admStrToLower($gL10n->get('SYS_NO')) || $value == '0' || $value == 'false')
-                        {
-                            $value = '0';
-                        }
+						$arrCheckboxValues = array($gL10n->get('SYS_YES'), $gL10n->get('SYS_NO'), 'true', 'false');
+						$arrCheckboxKeys   = array(1, 0, 1, 0);
+						$value = str_replace(array_map('admStrToLower',$arrCheckboxValues), $arrCheckboxKeys, admStrToLower($value));
                     }
-                    /*elseif($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'DROPDOWN'
-					||     $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'RADIO_BUTTON')
+                    elseif($userFieldType == 'DROPDOWN'
+					||     $userFieldType == 'RADIO_BUTTON')
 					{
+						$type = 'int';
+
 						// replace all field values with their internal numbers
-					}*/
-                    elseif($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'NUMERIC')
+						$arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
+						$value = str_replace(array_map('admStrToLower',$arrListValues), array_keys($arrListValues), admStrToLower($value));
+					}
+                    elseif($userFieldType == 'NUMERIC')
                     {
                         $type = 'int';
-                        if($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name_intern') == 'GENDER')
-                        {
-                            // bastwe: allow user to search for gender  M W U maennlich weiblich unbekannt
-                            $value = admStrToLower($value);
-                            if($value == 'u' || $value == 'unbekannt')
-                            {
-                                $value = '0';
-                            }
-                            elseif($value == 'm' || $value == 'männlich')
-                            {
-                                $value = '1';
-                            }
-                            elseif($value == 'w' || $value == 'weiblich')
-                            {
-                                $value = '2';
-                            }
-                        }
                     }
-                    elseif($gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type') == 'DATE')
+                    elseif($userFieldType == 'DATE')
                     {
                         $type = 'date';
                     }
@@ -319,12 +309,20 @@ class ListConfiguration extends TableLists
         
         return $sql;
     }
-    
-    public function clear()
+
+    // Daten der zugehoerigen Spalten einlesen und in Objekten speichern
+    public function readColumns()
     {
-        $this->columns = array();
-    
-        parent::clear();
+        $sql = 'SELECT * FROM '. TBL_LIST_COLUMNS. '
+                 WHERE lsc_lst_id = '. $this->getValue('lst_id'). '
+                 ORDER BY lsc_number ASC ';
+        $lsc_result   = $this->db->query($sql);
+        
+        while($lsc_row = $this->db->fetch_array($lsc_result))
+        {
+            $this->columns[$lsc_row['lsc_number']] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
+            $this->columns[$lsc_row['lsc_number']]->setArray($lsc_row);
+        }
     }
 
     public function save($updateFingerPrint = true)
@@ -344,22 +342,6 @@ class ListConfiguration extends TableLists
         }
 		
 		$this->db->endTransaction();
-    }
-    
-    public function delete()
-    {
-		$this->db->startTransaction();
-		
-        // first delete all columns
-        foreach($this->columns as $number => $listColumn)
-        {
-            $listColumn->delete();
-        }
-    
-        $return = parent::delete();
-		
-		$this->db->endTransaction();
-		return $return;
     }
 }
 ?>

@@ -26,6 +26,7 @@
     <text id="INS_WINDOWS_LIVE" development="new" translation="todo">Windows Live</text>
     <text id="INS_XING" development="new" translation="todo">Xing</text>
     <text id="INS_XING_DESC" development="new" translation="todo">Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Xing-Profil aufrufen.</text>
+    <text id="LST_SEARCH_GENDER_DESC" development="changed" translation="todo">Sucht alle männlichen Benutzer</text>
     <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="todo">Betreff &amp; Anhang</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="todo">Zeichenkodierung</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="todo">Angabe der Zeichenkodierung in der eine E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</text>
@@ -511,8 +512,6 @@
     <text id="LST_SEARCH_AGE_DESC" development="new" translation="todo">Sucht alle Benutzer, die älter als 18 Jahre sind</text>
     <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="todo">01.03.1986</text>
     <text id="LST_SEARCH_DATE_DESC" development="new" translation="todo">Sucht alle Benutzer, die nach dem 01.03.1986 geboren wurden</text>
-    <text id="LST_SEARCH_GENDER_EXAMPLE" development="new" translation="todo">M/W/U</text>
-    <text id="LST_SEARCH_GENDER_DESC" development="new" translation="todo">Sucht nach Männlich, Weiblich, Unbekannt</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="todo">Mei*</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="todo">Sucht alle Benutzer deren Namen mit Mei anfängt</text>
     <text id="LST_SEARCH_LASTNAME_EXAMPLE" development="new" translation="todo">Schmitz</text>

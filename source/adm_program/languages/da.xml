@@ -447,7 +447,6 @@
     <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Søgning efter alle brugere ældre end 18 år</text>
     <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
     <text id="LST_SEARCH_DATE_DESC" development="new" translation="edited">Søgning efter alle brugere født efter 1st Januar 1986</text>
-    <text id="LST_SEARCH_GENDER_EXAMPLE" development="new" translation="edited">M/K/U</text>
     <text id="LST_SEARCH_GENDER_DESC" development="new" translation="edited">Søgning efter mand, kvinde og uidentificeret køn</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="edited">Mei*</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="edited">Søgning efter alle brugere med navne der begynder med 'Mei'</text>

@@ -400,7 +400,6 @@
    	<text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Recherche des utilisateurs de moins de 18 ans</text>
    	<text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
    	<text id="LST_SEARCH_DATE_DESC" development="new" translation="edited">Recherche des utilisateurs nés avant le 1er janvier 1986Searching for all users born after 1st January 1986</text>
-   	<text id="LST_SEARCH_GENDER_EXAMPLE" development="new" translation="edited">M/F/N-S</text>
    	<text id="LST_SEARCH_GENDER_DESC" development="new" translation="edited">Recherche d'un homme, femme and sexe non spécifié</text>
    	<text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="edited">Mei*</text>
    	<text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="edited">Recherche des utilisateurs avec un nom commençant par 'Mei'</text>

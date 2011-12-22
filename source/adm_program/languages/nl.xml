@@ -443,7 +443,6 @@
     <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Leden zoeken die ouder zijn dan 18 jaar</text>
     <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
     <text id="LST_SEARCH_DATE_DESC" development="new" translation="edited">Leden zoeken die geboren zijn na 1 maart 1986</text>
-    <text id="LST_SEARCH_GENDER_EXAMPLE" development="new" translation="edited">M/F/U</text>
     <text id="LST_SEARCH_GENDER_DESC" development="new" translation="edited">Zoeken naar man, vrouw en niet opgegeven</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="edited">Mei*</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="edited">Leden zoeken waarbij achternaam begint met 'Mei'</text>

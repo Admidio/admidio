@@ -186,6 +186,7 @@ if(isset($_SESSION['gProfileFields'])
     $gProfileFields->mDb      =& $gDb;
     $gCurrentUser             =& $_SESSION['gCurrentUser'];
     $gCurrentUser->db         =& $gDb;
+	$gCurrentUser->mProfileFieldsData->mDb =& $gDb;
 
 	// checks if user in database session is the same as in php session
 	if($gCurrentUser->getValue('usr_id') != $gCurrentSession->getValue('ses_usr_id'))

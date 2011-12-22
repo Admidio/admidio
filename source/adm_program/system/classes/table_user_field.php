@@ -134,6 +134,7 @@ class TableUserField extends TableAccess
 			|| $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
 			{
 				$arrListValues = explode("\r\n", $value);
+				$arrListValuesWithKeys = array(); 	// array with list values and keys that represents the internal value
 
 				foreach($arrListValues as $key => &$listValue)
 				{
@@ -192,8 +193,11 @@ class TableUserField extends TableAccess
 					{
 						$listValue = $gL10n->get(admStrToUpper($listValue));
 					}
+
+					// save values in new array that starts with key = 1
+					$arrListValuesWithKeys[++$key] = $listValue;
 				}
-				$value = $arrListValues;
+				$value = $arrListValuesWithKeys;
 			}
 		}
 		elseif($field_name == 'usf_icon' && $format != 'plain')

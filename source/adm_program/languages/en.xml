@@ -26,6 +26,7 @@
     <text id="INS_WINDOWS_LIVE" development="new" translation="edited">Windows Live</text>
     <text id="INS_XING" development="new" translation="edited">Xing</text>
     <text id="INS_XING_DESC" development="new" translation="edited">Would you like to set a link to your Xing profile? Your Xing login name is required. Log in to your Xing account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Xing profile directly.</text>
+    <text id="LST_SEARCH_GENDER_DESC" development="changed" translation="edited">Searching for all male users</text>
     <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="edited">Subject &amp; Attachment</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="edited">Character encoding</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="edited">Character encoding used in e-mails sent by Admidio. Not all e-mail clients are able to process UTF-8. Hence ISO-8859-1 can be set here alternatively.</text>
@@ -518,8 +519,6 @@
     <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Searching for all users older than 18 years</text>
     <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
     <text id="LST_SEARCH_DATE_DESC" development="new" translation="edited">Searching for all users born after 1st January 1986</text>
-    <text id="LST_SEARCH_GENDER_EXAMPLE" development="new" translation="edited">M/F/U</text>
-    <text id="LST_SEARCH_GENDER_DESC" development="new" translation="edited">Searching for male, female and unidentified gender</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="edited">Mei*</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="edited">Searching for all users with name beginning with 'Mei'</text>
     <text id="LST_SEARCH_LASTNAME_EXAMPLE" development="new" translation="edited">Schmitz</text>
