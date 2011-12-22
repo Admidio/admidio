@@ -109,7 +109,7 @@ switch ($getMessageId)
                  </tr>
                  <tr>
                     <td>'.$gL10n->get('SYS_GENDER').'</td>
-                    <td><b>'.$gL10n->get('LST_SEARCH_GENDER_EXAMPLE').'</b></td>
+                    <td><b>'.$gL10n->get('SYS_MALE').'</b></td>
                     <td>'.$gL10n->get('LST_SEARCH_GENDER_DESC').'</td>
                  </tr>
                  <tr>

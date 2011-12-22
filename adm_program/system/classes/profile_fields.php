@@ -222,7 +222,7 @@ class ProfileFields
 				if($value > 0)
 				{
 					$arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
-					$value = $arrListValues[$value-1];
+					$value = $arrListValues[$value];
 					
 				}
 			}

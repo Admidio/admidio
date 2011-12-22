@@ -555,7 +555,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 						{
 							$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
 						}
-						$content = $arrListValues[$row[$sql_column_number]-1];
+						$content = $arrListValues[$row[$sql_column_number]];
 					}
 				}
 				else 
