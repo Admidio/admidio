@@ -197,9 +197,6 @@
     <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Senders e-mail address</text>
     <text id="ECA_FIELD_ERROR" development="new" translation="edited">Some fields are not filled in or do not comply. Please filled them in or check them for consistency.</text>
-    <text id="ECA_FONT" development="new" translation="edited">Font type preferences. (default: Comic Sans MS)</text>
-    <text id="ECA_FONT_SIZE" development="new" translation="edited">Font size preference. (default: 20) </text>
-    <text id="ECA_FONT_COLOR" development="new" translation="edited">Font color preference. (default: black)</text>
     <text id="ECA_GREETING_CARD" development="new" translation="edited">Greeting card </text>
     <text id="ECA_GREETING_CARDS" development="new" translation="edited">Greeting card</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Bewerk ansichtkaart</text>
@@ -209,8 +206,6 @@
     <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">interne ontvanger</text>
     <text id="ECA_MAX_CC" development="new" translation="edited">Max. additional recipients</text>
     <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deactivate and set maximum number of additional recipients if necessary. (default: 10)</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="edited">Max. number of characters in a message</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="edited">Deactivate option here and define maximum length of message if necessary. (default: 500 characters)</text>
 	<text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Maximum of %VAR1% characters is allowed!</text>
 	<text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Meer ontvangers</text>
 	<text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Sender's name</text> 
@@ -1014,7 +1009,6 @@
     <text id="SYS_FORMER" development="new" translation="edited">Voormalig</text>
     <text id="SYS_FORMER_PL" development="new" translation="edited">Former</text>
     <text id="SYS_FONT" development="new" translation="edited">Font</text>
-  	<text id="SYS_FONT_COLOR" development="new" translation="edited">Font-color</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-size</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">Wachtwoord vergeten!</text>
     <text id="SYS_FORUM" development="new" translation="edited">Forum</text>

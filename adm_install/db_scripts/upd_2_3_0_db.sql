@@ -243,6 +243,14 @@ UPDATE %PREFIX%_user_fields SET usf_name = 'SYS_WEBSITE' WHERE usf_name_intern L
 UPDATE %PREFIX%_preferences SET prf_value = 'da' WHERE prf_name like 'system_language' AND prf_value like 'dk';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'captcha_font_size';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'enable_bbcode';
+DELETE FROM %PREFIX%_preferences WHERE prf_name like 'enable_ecard_text_length';
+DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_length';
+DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_font';
+DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_size';
+DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_color';
+UPDATE %PREFIX%_preferences SET prf_name = 'postcard.tpl' WHERE prf_name like 'brief_standard.tpl';
+UPDATE %PREFIX%_preferences SET prf_name = 'postcard_separate_photo.tpl' WHERE prf_name like 'brief_grosses_foto.tpl';
+UPDATE %PREFIX%_preferences SET prf_name = 'greeting_card.tpl' WHERE prf_name like 'grusskarte.tpl';
 UPDATE %PREFIX%_preferences SET prf_name = 'captcha_font_size' WHERE prf_name like 'captcha_text_size';
 UPDATE %PREFIX%_organizations SET org_homepage = 'http://' || org_homepage WHERE lower( substring( org_homepage, 1, 4 ) ) NOT LIKE 'http';
 

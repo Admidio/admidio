@@ -157,9 +157,6 @@
    	<text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Adresse courriel de l'expéditeur</text>
    	<text id="ECA_FIELD_ERROR" development="new" translation="edited">Certains champs ne sont pas remplies ou ne sont pas conformes.</text>
    	<text id="ECA_FILL_INPUTS" development="new" translation="edited">S'il vous plaît remplir \ntous les champs puis \nappuyer sur 'envoyer'.\n\n %VAR1%</text>
-   	<text id="ECA_FONT" development="new" translation="edited">Préférence des caractères. (par défaut: Comic Sans MS)</text>
-   	<text id="ECA_FONT_SIZE" development="new" translation="edited">Préférence de la taille. (par défaut: 20)</text>
-   	<text id="ECA_FONT_COLOR" development="new" translation="edited">Préférence de la couleur. (par défaut: noir)</text>
    	<text id="ECA_GREETING_CARD" development="new" translation="edited">Carte de voeux</text>
    	<text id="ECA_GREETING_CARDS" development="new" translation="edited">Carte de voeux</text>
    	<text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Éditer la carte de voeux</text>
@@ -169,8 +166,6 @@
    	<text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">destinataire interne</text>
    	<text id="ECA_MAX_CC" development="new" translation="edited">Destinataires additionnels maximum</text>
    	<text id="ECA_MAX_CC_DESC" development="new" translation="edited">Désactiver et définir le nombre maximal de destinataires supplémentaires si nécessaire. (par défaut: 10)</text>
-   	<text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="edited">Nombre de caractères maximum des messages</text>
-   	<text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="edited">Désactivez l'option ici et définir la longueur maximale du message si nécessaire. (par défaut: 500 caractères)</text>
 	<text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Un maximum de %VAR1% caractères est alloué!</text>
 	<text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Plus de destinataire</text>
 	<text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Nom de l'expéditeur</text> 
@@ -979,7 +974,6 @@
 	<text id="SYS_FORMER" development="new" translation="edited">Ancien</text>
 	<text id="SYS_FORMER_PL" development="new" translation="edited">Ancien</text>
 	<text id="SYS_FONT" development="new" translation="edited">Police</text> 
- 	<text id="SYS_FONT_COLOR" development="new" translation="edited">Couleurs de la police</text>
 	<text id="SYS_FONT_SIZE" development="new" translation="edited">Taille de la police</text>
 	<text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">J'ai oublié mon mot de passe!</text>
 	<text id="SYS_FORUM" development="new" translation="edited">Forum</text>

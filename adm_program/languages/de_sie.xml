@@ -273,9 +273,6 @@
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="todo">E-Mail des Absenders</text>
     <text id="ECA_FIELD_ERROR" development="new" translation="todo">Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füllen Sie sie aus, bzw. korrigiern Sie diese.</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füllen Sie die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf "Abschicken".</text>
-    <text id="ECA_FONT" development="new" translation="todo">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
-    <text id="ECA_FONT_SIZE" development="new" translation="todo">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
-    <text id="ECA_FONT_COLOR" development="new" translation="todo">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
     <text id="ECA_GREETING_CARD" development="new" translation="todo">Grußkarte</text>
     <text id="ECA_GREETING_CARDS" development="new" translation="todo">Grußkarten</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="todo">Grußkarte bearbeiten</text>
@@ -285,8 +282,6 @@
     <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="todo">interner Empfänger</text>
     <text id="ECA_MAX_CC" development="new" translation="todo">Max. weitere Empfänger</text>
     <text id="ECA_MAX_CC_DESC" development="new" translation="todo">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="todo">Max. Länge des Mitteilungstextes:</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="todo">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Zeichenlänge des Mitteilungstextes festgelegt werden. (Standard: 500)</text>
     <text id="ECA_MESSAGE_TOO_LONG" description="%VAR1% wird durch die max. Länge ersetzt" development="new" translation="todo">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
     <text id="ECA_MORE_RECIPIENTS" development="new" translation="todo">Weitere Empfänger</text>
     <text id="ECA_NAME_OF_SENDER" development="new" translation="todo">Name des Absenders</text>
@@ -1094,7 +1089,6 @@
     <text id="SYS_FORMER" development="new" translation="todo">Ehemaliger</text>
     <text id="SYS_FORMER_PL" development="new" translation="todo">Ehemalige</text>
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
-    <text id="SYS_FONT_COLOR" development="new" translation="todo">Schriftfarbe</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="todo">Ich habe mein Passwort vergessen!</text>
     <text id="SYS_FORUM" development="new" translation="todo">Forum</text>

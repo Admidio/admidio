@@ -60,8 +60,7 @@ class CKEditorSpecial extends CKEditor
         $this->config['height']   = $height;
         $this->config['toolbar']  = $toolbar;
         $this->config['language'] = $gPreferences['system_language'];
-        $this->config['font_defaultLabel'] = $gPreferences['ecard_text_font'];
-        $this->config['contentsCss'] = 'body {font-family: '.$gPreferences['ecard_text_font'].', Arial, Verdana, sans-serif; font-size: '.$gPreferences['ecard_text_size'].'pt; color: '.$gPreferences['ecard_text_color'].'; }';
+        $this->config['contentsCss'] = 'body {font-family: Arial, Verdana, sans-serif; font-size: 11pt; }';
 
         if($gPreferences['system_js_editor_enabled'] == 0)
         {

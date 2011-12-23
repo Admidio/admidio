@@ -13,9 +13,6 @@ require_once('ecard_function.php');
 $funcClass 					= new FunctionClass($gL10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_cc     = array(); // Array wo alle CC Empfaenger aufgelistet werden;
-$font_sizes                 = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
-$font_colors                = $funcClass->getElementsFromFile('../../system/schriftfarben.txt');
-$fonts                      = $funcClass->getElementsFromFile('../../system/schriftarten.txt');
 $templates                  = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
 $template                   = THEME_SERVER_PATH. '/ecard_templates/';
 $error_msg                  = "";
@@ -45,11 +42,6 @@ $ecard_send = false;
 if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacters($ecard['email_sender'], 'email')
 && ($ecard['email_recipient'] != '') && ($ecard['name_sender'] != '') && empty($error_msg))
 {
-	// Wenn die Nachricht größer ist als die maximal Laenge wird sie zurückgestutzt
-	/*if (strlen($_POST['admEcardMessage']) > $gPreferences['ecard_text_length'])
-	{
-		$ecard['message'] = substr($_POST['admEcardMessage'],0,$gPreferences['ecard_text_length']-1);
-	}*/
 	// Template wird geholt
 	list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($ecard['template_name'],$template);
 	// Wenn es einen Error gibt ihn ausgeben
