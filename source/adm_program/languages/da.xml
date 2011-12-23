@@ -202,9 +202,6 @@
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Afsenders e-mail adresse</text>
     <text id="ECA_FIELD_ERROR" development="new" translation="edited">Nogen felter er ikke udfyldt eller er udfyldt forkert. Venligst check dem igen.</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Venligst udfyld \nalle data felter og \nklik på 'send'.</text>
-    <text id="ECA_FONT" development="new" translation="edited">Font type indstilinger. (Standard: Comic Sans MS)</text>
-    <text id="ECA_FONT_SIZE" development="new" translation="edited">Font størrelse indstilinger. (Standard: 20) </text>
-    <text id="ECA_FONT_COLOR" development="new" translation="edited">Font farve indstilinger. (Standard: Sort)</text>
     <text id="ECA_GREETING_CARD" development="new" translation="edited">Postkort</text>
     <text id="ECA_GREETING_CARDS" development="new" translation="edited">Postkort</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Rediger postkort</text>
@@ -214,8 +211,6 @@
     <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">intern modtager</text>
     <text id="ECA_MAX_CC" development="new" translation="edited">Max. yderligere modtagere</text>
     <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deaktiver og sæt maximum antal yderligere modtagere om nødvendigt. (Standard: 10)</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="edited">Max. antal karakterer i en besked</text>
-    <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="edited">Deaktiver muligheden her og definer max. længde af besked om nødvendigt. (Standard: 500 karakterer)</text>
 	<text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Et maximum på %VAR1% karakterer er tilladt!</text>
 	<text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Flere modtagere</text>
 	<text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Afsenders navn</text> 
@@ -1026,7 +1021,6 @@
     <text id="SYS_FORMER" development="new" translation="edited">Tidligere medlem</text>
     <text id="SYS_FORMER_PL" development="new" translation="edited">Tidligere medlem</text>
     <text id="SYS_FONT" development="new" translation="edited">Font</text>
-  	<text id="SYS_FONT_COLOR" development="new" translation="edited">Font-farve</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-størrelse</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">Jeg har glemt mit kodeord!</text>
     <text id="SYS_FORUM" development="new" translation="edited">Forum</text>

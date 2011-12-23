@@ -117,7 +117,6 @@ $gLayout['header'] =  '
                     "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
                     "dates-module", "links-module", "systeminfo", "captcha");
         organizationJS.ecard_CCRecipients = "'.$form_values["ecard_cc_recipients"].'";
-        organizationJS.ecard_textLength = "'.$form_values["ecard_text_length"].'";
         organizationJS.forum_Server = "'.$form_values["forum_srv"].'";
         organizationJS.forum_User = "'.$form_values["forum_usr"].'";
         organizationJS.forum_PW = "'.$form_values["forum_pw"].'";
@@ -1365,77 +1364,14 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="ecard_text_length">'.$gL10n->get("ECA_MAX_MESSAGE_LENGTH").':</label></dt>
-                            <dd>
-                             <select size="1" id="enable_ecard_text_length" name="enable_ecard_text_length" style="margin-right:20px;" onchange="javascript:organizationJS.showHideMoreSettings(\'text_length_count\',\'enable_ecard_text_length\',\'ecard_text_length\',1);">
-                                    <option value="0" ';
-                                    if($form_values["enable_ecard_text_length"] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get("SYS_DEACTIVATED").'</option>
-                                    <option value="1" ';
-                                    if($form_values["enable_ecard_text_length"] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get("SYS_ACTIVATED").'</option>
-                                </select>
-                                <div id="text_length_count" style="display:inline;">';
-                                if($form_values["enable_ecard_text_length"] == 1)
-                                {
-                               		echo '<input type="text" id="ecard_text_length" name="ecard_text_length" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_text_length"].'" />';
-                                }
-                            	echo '</div>
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ECA_MAX_MESSAGE_LENGTH_DESC").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="ecard_text_length">'.$gL10n->get("ECA_TEMPLATE").':</label></dt>
+                            <dt><label for="ecard_template">'.$gL10n->get('ECA_TEMPLATE').':</label></dt>
                             <dd>';
-                                echo getMenueSettings(getfilenames(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values["ecard_template"],'180','false','false');
+                                echo getMenueSettings(getfilenames(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
                              echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">
-                        '.$gL10n->get("ECA_TEMPLATE_DESC").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="ecard_text_length">'.$gL10n->get("SYS_FONT").':</label></dt>
-                            <dd>';
-                                echo getMenueSettings(getElementsFromFile('../../system/schriftarten.txt'),'ecard_text_font',$form_values["ecard_text_font"],'120','true','false');
-                             echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ECA_FONT").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="ecard_text_length">'.$gL10n->get("SYS_FONT_SIZE").':</label></dt>
-                            <dd>';
-                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'ecard_text_size',$form_values["ecard_text_size"],'120','false','false');
-                             echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                       '.$gL10n->get("ECA_FONT_SIZE").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="ecard_text_color">'.$gL10n->get("SYS_FONT_COLOR").':</label></dt>
-                            <dd>';
-                             echo getMenueSettings(getElementsFromFile('../../system/schriftfarben.txt'),'ecard_text_color',$form_values["ecard_text_color"],'120','false','true');
-                             echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ECA_FONT_COLOR").'
+                        '.$gL10n->get('ECA_TEMPLATE_DESC').'
                     </li>
                 </ul>
 				<br />

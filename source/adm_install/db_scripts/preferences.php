@@ -102,18 +102,13 @@ $orga_preferences = array(
 
     // Grußkartenmodul
     'enable_ecard_module'           => '1',
-    'enable_ecard_text_length'      => '1',
     'enable_ecard_cc_recipients'    => '1',
     'ecard_view_width'              => '250',
     'ecard_view_height'             => '250',
     'ecard_card_picture_width'      => '400',
     'ecard_card_picture_height'     => '250',
     'ecard_cc_recipients'           => '5',
-    'ecard_text_length'             => '500',
-    'ecard_text_font'               => 'Comic Sans MS',
-    'ecard_text_size'               => '20',
-    'ecard_text_color'              => 'black',
-    'ecard_template'                => 'brief_standard.tpl',
+    'ecard_template'                => 'postcard.tpl',
 
     // Profil
     'default_country'           => 'DEU',

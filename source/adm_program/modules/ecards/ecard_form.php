@@ -27,9 +27,6 @@ $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
 
 // Initialisierung lokaler Variablen
 $funcClass 	 = new FunctionClass($gL10n);
-$font_sizes  = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
-$font_colors = $funcClass->getElementsFromFile('../../system/schriftfarben.txt');
-$fonts       = $funcClass->getElementsFromFile('../../system/schriftarten.txt');
 $templates   = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
 $template    = THEME_SERVER_PATH. '/ecard_templates/';
 
@@ -143,12 +140,12 @@ echo '
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
 		<div class="groupBox" id="admEcardPhoto">
-			<div class="groupBoxHeadline" id="admEcardPhotHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admEcardPhotBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admEcardPhotBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_PHOTO').'
+			<div class="groupBoxHeadline" id="admEcardPhotoHead">
+				<a class="iconShowHide" href="javascript:showHideBlock(\'admEcardPhotoBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
+				id="admEcardPhotoBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_PHOTO').'
 			</div>
 
-			<div class="groupBoxBody" id="admEcardPhotBody">
+			<div class="groupBoxBody" id="admEcardPhotoBody">
 				<ul class="formFieldList">
 					<li>
 						<div>
@@ -166,7 +163,7 @@ echo '
 			<input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'].'" />
 			<input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$getPhotoNr.'.jpg" />
 			<input type="hidden" name="ecard[submit_action]" value="" />
-			<input type="hidden" name="ecard[template_name]" value="'.$gPreferences['ecard_template'].'" />
+			<input type="hidden" name="ecard_template_name" value="'.$gPreferences['ecard_template'].'" />
 
 			<div class="groupBox" id="admMailContactDetails">
 				<div class="groupBoxHeadline" id="admMailContactDetailsHead">

@@ -124,14 +124,14 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 {
 					// Position aus der Auswahlbox speichern
 					$arrListValues = $field->getValue('usf_value_list', 'text');
-					$position = 0;
+					$position = 1;
 
 					foreach($arrListValues as $key => $value)
 					{
 						if(strcmp($columnValue, trim($arrListValues[$position])) == 0)
 						{
 							// if col_value is text than save position if text is equal to text of position
-							$user->setValue($field->getValue('usf_name_intern'), $position+1);
+							$user->setValue($field->getValue('usf_name_intern'), $position);
 						}
 						elseif(is_numeric($columnValue) && !is_numeric($arrListValues[$position]) && $columnValue > 0 && $columnValue < 1000)
 						{
