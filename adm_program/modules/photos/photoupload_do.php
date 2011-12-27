@@ -124,7 +124,8 @@ if($getUploadmethod == 1)
         '.$gL10n->get('PHO_SHOWN_ON_READY').'<strong>('.$photo_album->getValue('pho_name').')</strong>
     </p>';
 }
-
+
+
 //Bildverarbeitung
 $new_quantity = $photo_album->getValue('pho_quantity');
 //Anzahl der Durchläufe
@@ -173,7 +174,7 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
     	$image_dimensions = $image_properties[0]*$image_properties[1];
     	if($image_dimensions > admFuncProcessableImageSize())
     	{
-        	echo $gL10n->get('PHP_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
+        	echo $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
     	}
     	
     	//Typkontrolle

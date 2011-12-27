@@ -91,39 +91,58 @@ foreach($plg_arr_orgas as $key => $value)
 }
 $plg_organizations = $plg_organizations. $gCurrentOrganization->getValue('org_id');
 
+$plgSqlConditions = '';
+$plgSqlConditionCalendar = '';
+$plgSqlConditionLogin = '';
+
 // Wenn User nicht eingeloggt ist, Kalender, die hidden sind, aussortieren
-$hidden = '';
 if ($gValidLogin == false)
 {
-	$hidden = ' AND cat_hidden = 0 ';
+	$plgSqlConditions .= ' AND cat_hidden = 0 ';
 }
 
 // Ermitteln, welche Kalender angezeigt werden sollen
 if(in_array('all',$plg_kal_cat))
 {
 	// alle Kalender anzeigen
-    $sql_syntax = ' AND (cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                     OR (   dat_global  = 1
-                        AND cat_org_id IN ('.$plg_organizations.') ) ) ';
+    $plgSqlConditionCalendar .= ' AND (cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                            OR (   dat_global  = 1
+                               AND cat_org_id IN ('.$plg_organizations.') ) ) ';
 }
 else
 {
     // nur bestimmte Kalender anzeigen
-    $sql_syntax = ' AND cat_type = \'DAT\' AND ( ';
+    $plgSqlConditionCalendar .= ' AND cat_type = \'DAT\' AND ( ';
     for($i=0;$i<count($plg_kal_cat);$i++)
     {
-        $sql_syntax = $sql_syntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
+        $plgSqlConditionCalendar .= 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
     }
-    $sql_syntax = substr($sql_syntax,0,-4). ') ';
+    $plgSqlConditionCalendar = substr($plgSqlConditionCalendar,0,-4). ') ';
+}
+
+// Bedingungen fuer die Rollenfreigabe hinzufuegen
+if($gCurrentUser->getValue('usr_id') > 0)
+{
+    $plgSqlConditionLogin = '
+    AND (  dtr_rol_id IS NULL 
+        OR dtr_rol_id IN (SELECT mem_rol_id 
+                            FROM '.TBL_MEMBERS.' mem2
+                           WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                             AND mem2.mem_begin  <= dat_begin
+                             AND mem2.mem_end    >= dat_end) ) ';
+}
+else
+{
+    $plgSqlConditionLogin = ' AND dtr_rol_id IS NULL ';
 }
 
 // nun alle relevanten Termine finden
-$sql    = 'SELECT * FROM '. TBL_DATES. ', '. TBL_CATEGORIES. '
+$sql    = 'SELECT * FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
             WHERE dat_cat_id = cat_id
               AND (  dat_begin >= \''.DATE_NOW.'\'
                   OR dat_end   >  \''.DATE_NOW.' 00:00:00\' )
               AND dat_id = dtr_dat_id '.
-                  $sql_syntax. $hidden. $login_sql.'
+                  $plgSqlConditionLogin. $plgSqlConditions. $plgSqlConditionCalendar.'
 			ORDER BY dat_begin ASC
 			LIMIT '.$plg_dates_count;
 $plg_result = $gDb->query($sql);
