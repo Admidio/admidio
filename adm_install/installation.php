@@ -135,22 +135,24 @@ elseif($req_mode == 2)  // Willkommen zur Installation
     }
     showPage($message, 'installation.php?mode=3', 'forward.png', $gL10n->get('INS_DATABASE_LOGIN'));
 }
-elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
+elseif($req_mode == 3)  // Enter database access information
 {
-    // Formular vorbelegen
+    // initialize form data
     if(isset($_SESSION['server']))
     {
+        $dbType   = $_SESSION['db_type'];
         $server   = $_SESSION['server'];
         $user     = $_SESSION['user'];
         $database = $_SESSION['database'];
-        $prefix  = $_SESSION['prefix'];
+        $prefix   = $_SESSION['prefix'];
     }
     else
     {
+		$dbType   = 'mysql';
         $server   = '';
         $user     = '';
         $database = '';
-        $prefix  = 'adm';
+        $prefix   = 'adm';
     }
 
     $message = '<strong>'.$gL10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</strong><br /><br />'.$gL10n->get('INS_DATABASE_LOGIN_DESC').'
@@ -161,7 +163,7 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                             <li>
                                 <dl>
                                     <dt><label for="db_type">'.$gL10n->get('INS_DATABASE_SYSTEM').':</label></dt>
-                                    <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/db/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', 'mysql').'</dd>
+                                    <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/db/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', $dbType).'</dd>
                                 </dl>
                             </li>
                             <li>
@@ -198,7 +200,7 @@ elseif($req_mode == 3)  // Zugangsdaten zur Datenbank eingeben
                     </div>
                 </div>
                 <br />
-                <img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
+                <img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
     showPage($message, 'installation.php?mode=4', 'forward.png', $gL10n->get('INS_SET_ORGANIZATION'));
 }
 elseif($req_mode == 4)  // Organisationsnamen eingeben

@@ -20,7 +20,7 @@ class DBPostgreSQL extends DBCommon
         $this->user       = $sql_user;
         $this->password   = $sql_password;
         $this->dbName     = $sql_dbName;	
-		$connectionString = 'host='.$this->server.' port=5432 dbName='.$this->dbName.' user='.$this->user.' password='.$this->password;
+		$connectionString = 'host='.$this->server.' port=5432 dbname='.$this->dbName.' user='.$this->user.' password='.$this->password;
 		
 		if($new_connection == true)
 		{
@@ -33,8 +33,9 @@ class DBPostgreSQL extends DBCommon
         
         if($this->connectId)
         {
-			// Verbindung zur DB in UTF8 aufbauen
-			@pg_query('SET bytea_output = \'escape\'', $this->connectId);
+			// create connection to database in UTF8
+			@pg_query('SET client_encoding = \'utf-8\'', $this->connectId);
+			//@pg_query('SET bytea_output = \'escape\'', $this->connectId);
 
             return $this->connectId;
         }
