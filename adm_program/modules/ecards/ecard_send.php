@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Grußkarte Form Bearbeitung
+ * Send ecard to users and show status message
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -10,12 +10,15 @@
 require_once('../../system/common.php');
 require_once('ecard_function.php');
 
+// Initialize and check the parameters
+$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template_name', 'file', null, true);
+
 $funcClass 					= new FunctionClass($gL10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_cc     = array(); // Array wo alle CC Empfaenger aufgelistet werden;
 $templates                  = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
 $template                   = THEME_SERVER_PATH. '/ecard_templates/';
-$error_msg                  = "";
+$error_msg                  = '';
 $msg_send_error             = $gL10n->get('ECA_SEND_ERROR');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -43,7 +46,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 && ($ecard['email_recipient'] != '') && ($ecard['name_sender'] != '') && empty($error_msg))
 {
 	// Template wird geholt
-	list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($ecard['template_name'],$template);
+	list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($postTemplateName, $template);
 	// Wenn es einen Error gibt ihn ausgeben
 	if ($error)
 	{
