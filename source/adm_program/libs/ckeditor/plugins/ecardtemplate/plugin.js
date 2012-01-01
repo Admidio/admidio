@@ -1,4 +1,4 @@
-CKEDITOR.plugins.add( 'EcardTemplate',
+CKEDITOR.plugins.add( 'ecardtemplate',
 {   
     requires : ['richcombo'], //, 'styles' ],
     init : function( editor )
