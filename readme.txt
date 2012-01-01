@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------
                                 Admidio 
-     	        Copyright (c) 2004 - 2011 The Admidio Team
+     	        Copyright (c) 2004 - 2012 The Admidio Team
             Admidio is a open source user management software
 -------------------------------------------------------------------------
 
@@ -169,6 +169,6 @@ phpBB bulletin board
 	Diverse Funktionen
 
 -------------------------------------------------------------------------
-       	        Copyright (c) 2004 - 2011 The Admidio Team
+       	        Copyright (c) 2004 - 2012 The Admidio Team
             Admidio is a open source user management software
 -------------------------------------------------------------------------
