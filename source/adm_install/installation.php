@@ -69,7 +69,7 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 
-// default database type is always MySQL
+// default database type is always MySQL and must be set because of old config files
 if(!isset($gDbType))
 {
     $gDbType = 'mysql';
@@ -467,6 +467,7 @@ elseif($req_mode == 8)
 
     // Verbindung zu Datenbank herstellen
     require_once(SERVER_PATH. '/config.php');
+
     if($g_tbl_praefix != $_SESSION['prefix']
     || $gDbType     != $_SESSION['db_type']
     || $g_adm_srv     != $_SESSION['server']

@@ -173,9 +173,12 @@ elseif($req_mode == 2)
     $micro_version     = $micro_version + 1;
     $flag_next_version = true;
 
-    // Pruefungen auf Referenzen in anderen Tabellen beim Update ausschalten
-    $sql = 'SET foreign_key_checks = 0 ';
-    $gDb->query($sql);
+	if($gDbType == 'mysql')
+	{
+	    // Pruefungen auf Referenzen in anderen Tabellen beim Update ausschalten
+	    $sql = 'SET foreign_key_checks = 0 ';
+	    $gDb->query($sql);
+	}
 
     // nun in einer Schleife die Update-Scripte fuer alle Versionen zwischen der Alten und Neuen einspielen
     while($flag_next_version)
@@ -243,9 +246,12 @@ elseif($req_mode == 2)
         }
     }
 
-    // Pruefungen auf Referenzen in anderen Tabellen wieder aktivieren
-    $sql = 'SET foreign_key_checks = 1 ';
-    $gDb->query($sql);
+	if($gDbType == 'mysql')
+	{
+	    // Pruefungen auf Referenzen in anderen Tabellen wieder aktivieren
+	    $sql = 'SET foreign_key_checks = 1 ';
+	    $gDb->query($sql);
+	}
 
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 ';
