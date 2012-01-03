@@ -248,7 +248,6 @@ elseif($getJob=='upload')
         $user_image_data = fread(fopen($_FILES['foto_upload_file']['tmp_name'], 'r'), $_FILES['foto_upload_file']['size']);
         
         // Zwischenspeichern des neuen Fotos in der Session
-        //$gCurrentSession->setValue('ses_binary', bin2hex($user_image_data));
         $gCurrentSession->setValue('ses_binary', $user_image_data);
         $gCurrentSession->save();
     }

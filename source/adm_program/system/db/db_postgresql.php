@@ -234,11 +234,6 @@ class DBPostgreSQL extends DBCommon
 			$sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'0\'
 					 WHERE prf_name LIKE \'system_search_similar\'';
 			$this->query($sql, $this->connectId);
-
-			// there are problems to store images in bytea fields
-			$sql = 'UPDATE '.TBL_PREFERENCES.' SET prf_value = \'1\'
-					 WHERE prf_name LIKE \'profile_photo_storage\'';
-			$this->query($sql, $this->connectId);
 		}
 	}
 

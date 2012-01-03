@@ -66,12 +66,10 @@ class Image
 
     // Methode liest das Bild aus einem String ein und wird intern als PNG-Bild
     // weiter verarbeitet und ausgegeben
-    // imageData : String mit den Bilddaten, dieser sollte vorher mit addslashes 
-    //             bearbeitet werden, da ansonsten bei der Verarbeitung Daten
-    //             verloren gehen und es zu Fehlern kommt
+    // imageData : String with binary image data
     public function setImageFromData($imageData)
     {
-        $this->imageResource = imagecreatefromstring(stripslashes($imageData));
+        $this->imageResource = imagecreatefromstring($imageData);
         if($this->imageResource !== false)
         {        
             $this->imageWidth    = imagesx($this->imageResource);
