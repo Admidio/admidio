@@ -47,7 +47,7 @@ elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 	if(strlen($user->getValue('usr_photo')) != NULL)
     {
         $image = new Image();
-        $image->setImageFromData(addslashes($user->getValue('usr_photo')));
+        $image->setImageFromData($user->getValue('usr_photo'));
     }
     else
     {
@@ -64,8 +64,7 @@ elseif($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 1)
 elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 1)
 {
    	$image = new Image();
-    //$image->setImageFromData(addslashes(pack('H*', $gCurrentSession->getValue('ses_binary'))));
-    $image->setImageFromData(addslashes($gCurrentSession->getValue('ses_binary')));   
+    $image->setImageFromData($gCurrentSession->getValue('ses_binary'));
 }
 
 header('Content-Type: '. $image->getMimeType());

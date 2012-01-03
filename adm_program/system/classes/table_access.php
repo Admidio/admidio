@@ -153,7 +153,14 @@ class TableAccess
         {
             return htmlspecialchars($field_value, ENT_QUOTES);
         }
-        // Datum in dem uebergebenen Format bzw. Systemformat zurueckgeben
+        // in PostgreSQL we must encode the stored hex value back to binary
+        elseif(isset($this->columnsInfos[$field_name]['type'])
+        && strpos($this->columnsInfos[$field_name]['type'], 'bytea') !== false)
+        {
+            $field_value = substr($field_value, 2);
+			$field_value = pack('H*', $field_value);
+			return pack('H*', $field_value);
+        }        // Datum in dem uebergebenen Format bzw. Systemformat zurueckgeben
         elseif(isset($this->columnsInfos[$field_name]['type'])
         &&  (  strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false
             || strpos($this->columnsInfos[$field_name]['type'], 'date') !== false
@@ -397,8 +404,8 @@ class TableAccess
             if(strlen($field_value) > 0 && $check_value == true)
             {
                 // Numerische Felder
-                if(strpos($this->columnsInfos[$field_name]['type'], 'integer')  !== false
-				|| strpos($this->columnsInfos[$field_name]['type'], 'smallint') !== false)
+                if($this->columnsInfos[$field_name]['type'] == 'integer'
+				|| $this->columnsInfos[$field_name]['type'] == 'smallint')
                 {
                     if(is_numeric($field_value) == false)
                     {
@@ -420,10 +427,15 @@ class TableAccess
                     $field_value = strStripTags($field_value);
                 }
 
-                // Daten
-                elseif(strpos($this->columnsInfos[$field_name]['type'], 'blob') !== false
-				||     strpos($this->columnsInfos[$field_name]['type'], 'bytea') !== false)
+                elseif($this->columnsInfos[$field_name]['type'] == 'blob'
+                ||     $this->columnsInfos[$field_name]['type'] == 'bytea' )
                 {
+	                // PostgreSQL can only store hex values in bytea, so we must decode binary in hex
+                	if($this->columnsInfos[$field_name]['type'] == 'bytea')
+                	{
+	                    $field_value = bin2hex($field_value);
+                	}
+    	            // we must add slashes to binary data of blob fields so that the default stripslashes don't remove necessary slashes
                     $field_value = addslashes($field_value);
                 }
             }
