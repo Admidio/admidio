@@ -1,6 +1,6 @@
 <?php
-   /******************************************************************************
- * Profilphotoausgabe 
+/******************************************************************************
+ * Show current profile photo or uploaded session photo
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,9 +8,9 @@
  *
  * Parameters:
  *
- * usr_id : die ID des Users dessen Foto angezeigt werden soll
- * new_photo : 0 (Default) es wird das aktuelle Foto angezeigt
- *             1 es wird das temporaere grade hochgeladene Foto angezeigt
+ * usr_id    : id of user whose photo should be changed
+ * new_photo : 0 (Default) show current stored user photo
+ *             1 show uploaded photo of current session
  *
  *****************************************************************************/
 require('../../system/common.php');
@@ -24,6 +24,14 @@ $getNewPhoto = admFuncVariableIsValid($_GET, 'new_photo', 'boolean', 0);
 // lokale Variablen der Uebergabevariablen initialisieren
 $image         = null;
 $picpath       = THEME_SERVER_PATH. '/images/no_profile_pic.png';
+
+// read user data and show error if user doesn't exists
+$user = new User($gDb, $gProfileFields, $getUserId);
+
+if($user->getValue('usr_id') == 0)
+{
+	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+}
 
 //Testen ob Recht besteht Profil einzusehn
 if(!$gCurrentUser->viewProfile($getUserId))
@@ -43,7 +51,6 @@ if($gPreferences['profile_photo_storage'] == 1 && $getNewPhoto == 0)
 //Foto aus der Datenbank
 elseif($gPreferences['profile_photo_storage'] == 0 && $getNewPhoto == 0)
 {
-	$user = new User($gDb, $gProfileFields, $getUserId);
 	if(strlen($user->getValue('usr_photo')) != NULL)
     {
         $image = new Image();
