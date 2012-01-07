@@ -158,7 +158,7 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
     	
     	if($getUploadmethod == 1)
     	{
-    		echo '<br /><br />'.$gL10n->get('PHO_PHOTO').$new_quantity.':<br />';
+    		echo '<br /><br />'.$gL10n->get('PHO_PHOTO').' '.$new_quantity.':<br />';
     	}
     	
     	// Sonderzeichen aus Dateinamen entfernen

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Profil bearbeiten
+ * Upload and save new user photo
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,11 +8,12 @@
  *
  * Parameters:
  *
- * usr_id: id des Users dessen Foto geaendert werden soll
- * job - save :   Welcher Teil des Skriptes soll ausgeführt werden
- *     - dont_save :
- *     - upload :
- *     - delete : das Profilfoto wird geloescht
+ * usr_id   : id of user whose photo should be changed
+ * job      : the current mode of this script
+ *   - save      : save new photo in user recordset
+ *   - dont_save : delete photo in session and show message
+ *   - upload    : save new photo in session and show dialog with old and new photo
+ *   - delete    : delete current photo in database
  *
  *****************************************************************************/
 
@@ -28,8 +29,8 @@ if (ini_get('file_uploads') != '1')
 }
 
 // Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', $gCurrentUser->getValue('usr_id'));
-$getJob    = admFuncVariableIsValid($_GET, 'job', 'string', null, null, array('save', 'dont_save', 'upload', 'delete'));
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
+$getJob    = admFuncVariableIsValid($_GET, 'job', 'string', '', false, array('save', 'dont_save', 'upload', 'delete'));
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
 if($gCurrentUser->editProfile($getUserId) == false)
@@ -48,8 +49,13 @@ if($gPreferences['profile_photo_storage'] == 1)
     }
 }
 
-// User auslesen
+// read user data and show error if user doesn't exists
 $user = new User($gDb, $gProfileFields, $getUserId);
+
+if($user->getValue('usr_id') == 0)
+{
+	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+}
 
 if($getJob=='save')
 {
@@ -135,39 +141,9 @@ elseif($getJob=='delete')
     exit();
 }
 
-/*********************** Kontrollmechanismen *********************************/
-elseif( isset($_POST['upload']))
-{
-    //Dateigroesse
-    if ($_FILES['foto_upload_file']['error']==1)
-    {
-        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
-    }
-
-    //Kontrolle ob Fotos ausgewaehlt wurden
-    if(file_exists($_FILES['foto_upload_file']['tmp_name']) == false)
-    {
-        $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
-    }
-
-    //Dateiendung
-    $image_properties = getimagesize($_FILES['foto_upload_file']['tmp_name']);
-    if ($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
-    {
-        $gMessage->show($gL10n->get('PRO_PHOTO_INVALID_FORMAT'));
-    }
-
-    //Auflösungskontrolle
-    $image_dimensions = $image_properties[0]*$image_properties[1];
-    if($image_dimensions > admFuncProcessableImageSize())
-    {
-    	$gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
-    }
-}//Kontrollmechanismen
-
 
 /*****************************Foto hochladen*************************************/    
-if($getJob==NULL)
+if(strlen($getJob) == 0)
 {
     $_SESSION['navigation']->addUrl(CURRENT_URL);
 
@@ -225,10 +201,36 @@ if($getJob==NULL)
         </li>
     </ul>';    
 }
-elseif($getJob=='upload')
+elseif($getJob == 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
     
+    //Dateigroesse
+    if ($_FILES['foto_upload_file']['error']==1)
+    {
+        $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
+    }
+
+    //Kontrolle ob Fotos ausgewaehlt wurden
+    if(file_exists($_FILES['foto_upload_file']['tmp_name']) == false)
+    {
+        $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
+    }
+
+    //Dateiendung
+    $image_properties = getimagesize($_FILES['foto_upload_file']['tmp_name']);
+    if ($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
+    {
+        $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
+    }
+
+    //Auflösungskontrolle
+    $image_dimensions = $image_properties[0]*$image_properties[1];
+    if($image_dimensions > admFuncProcessableImageSize())
+    {
+    	$gMessage->show($gL10n->get('PRO_PHOTO_RESOLUTION_TO_LARGE', round(admFuncProcessableImageSize()/1000000, 2)));
+    }
+	
     // Foto auf entsprechende Groesse anpassen
     $user_image = new Image($_FILES['foto_upload_file']['tmp_name']);
     $user_image->setImageType('jpeg');
