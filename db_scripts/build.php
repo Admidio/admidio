@@ -3,10 +3,9 @@
 // Demo-DB neu erstellen
 
 include('../config.php');
+include('../adm_program/system/constants.php');
 include('../adm_program/system/db/database.php');
 include('../adm_program/system/classes/folder.php');
-
-define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'db_scripts')-1));
 
 // Default-DB-Type ist immer MySql
 if(!isset($gDbType))
@@ -80,7 +79,7 @@ function getBacktrace()
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
 @set_time_limit(300); 
 
-echo 'Beginne mit der Installation ...<br />';
+echo 'Start with installation ...<br />';
 
 // Inhalt des Ordner adm_my_files in den Produktivordner kopieren
 $srcFolder = SERVER_PATH. '/db_scripts/adm_my_files';
@@ -93,11 +92,11 @@ $b_return = $myFilesFolder->delete($newFolder.'/photos');
 $b_return = $myFilesFolder->copy($newFolder);
 if($b_return == false)
 {
-    echo 'Der Ordner <strong>adm_my_files</strong> besitzt wahrscheinlich keine Schreibrechte.<br />
-    Es konnten keine Dateien in diesen kopiert werden.';
+    echo 'Folder <strong>adm_my_files</strong> is not writeable.<br />
+    No files could be copied to that folder.';
     exit();
 }
-echo 'Der Ordner <strong>adm_my_files</strong> wurde kopiert<br />';
+echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 
  // Verbindung zu Datenbank herstellen
 $db = Database::createDatabaseObject($gDbType);
@@ -105,12 +104,12 @@ $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
-			or showPage('Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.', 'installation.php?mode=5', 'back.png', 'Zurück');
+			or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_install/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
 
-echo 'Datei db.sql einlesen ...<br />';
+echo 'Read file db.sql ...<br />';
 
 foreach($sql_arr as $sql)
 {
@@ -125,12 +124,12 @@ foreach($sql_arr as $sql)
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')
-            or showPage('Die Datei <strong>db.sql</strong> konnte nicht im Verzeichnis <strong>adm_install/db_scripts</strong> gefunden werden.', 'installation.php?mode=5', 'back.png', 'Zurück');
+            or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_install/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
 
-echo 'Datei data.sql einlesen ...<br />';
+echo 'Read file data.sql ...<br />';
 
 foreach($sql_arr as $sql)
 {
@@ -141,6 +140,10 @@ foreach($sql_arr as $sql)
         $db->query($sql);
     }
 }
+
+// manipulate some dates so that it's suitable to the current date
+echo 'Edit data of database ...<br />';
+include('data_edit.php');
 
 
 // falls dies der Admidio-Demo-bereich ist, dann das Theme auf demo setzen
@@ -153,6 +156,6 @@ if(strpos(__FILE__, 'demo') > 0)
 }
 
 
-echo 'Installation erfolgreich !<br />';
+echo 'Installation successful !<br />';
 
 ?>
