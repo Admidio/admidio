@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
-<version id="2.3.0">
+<version id="2.3.0" translator="Markus Faßbender">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Soll die Kategorie %VAR1_BOLD% wirklich gelöscht werden?\n\nDiese Kategorie besitzt %VAR2% abhängige Einträge, die ebenfalls gelöscht werden.</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="todo">iCal-Funktion aktivieren</text>
@@ -72,7 +72,7 @@
     <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="todo">Die Datenbankversion %VAR1% ist niedriger als die Version der Admidio-Scripte %VAR2%.\n\nFühre bitte %VAR3%das Datenbankupdate%VAR4% auf die Version durch.</text>
     <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="todo">Die Datenbankversion %VAR1% ist höher als die Version der Admidio-Scripte %VAR2%.\n\nAktualisiere bitte deine Admidio-Dateien auf dem FTP-Server %VAR3%mit der aktuelleren Admidio-Version%VAR4%.</text>
 </version>
-<version id="2.2.6">
+<version id="2.2.6" translator="Markus Faßbender">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="todo">Neueste Ankündigungen der Organisation %VAR1%</text>
     <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="todo">Aktuelle Termine der Organisation %VAR1%</text>
     <text id="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA" development="new" translation="todo">Neueste Gästebucheinträge der Organisation %VAR1%</text>
@@ -117,7 +117,7 @@
     <text id="SYS_SUN" development="new" translation="todo" description="Abbr. for Monday">So</text>
     <text id="SYS_TODAY" development="new" translation="todo">Heute</text>
 </version>
-<version id="2.2.0">
+<version id="2.2.0" translator="Markus Faßbender">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Ankündigung</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen</text>

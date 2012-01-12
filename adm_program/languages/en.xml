@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
-<version id="2.3.0">
+<version id="2.3.0" translator="Szabolcs Lami">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Should category %VAR_BOLD% be deleted?\n\nThis category has %VAR2% depending entries, which will be deleted, too.</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="edited">Enabling iCal</text>
@@ -72,7 +72,7 @@
     <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="edited">The database version %VAR1% is lower than the version of the Admidio scripts %VAR2%.\n\nPlease perform %VAR3% database update to version %VAR4%.</text>
     <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="edited">The database version %VAR1% is higher than the version of the Admidio scripts %VAR2%.\n\nPlease update your Admidio files on the server %VAR3% by using a later version of Admidio (%VAR4%).</text>
 </version>
-<version id="2.2.6">
+<version id="2.2.6" translator="Szabolcs Lami">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Latest announcements of organisation %VAR1%</text>
     <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="edited">Current appointments of organisations %VAR1%</text>
     <text id="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA" development="new" translation="edited">Latest guestbook entries of organisation %VAR1%</text>
@@ -117,7 +117,7 @@
     <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Sun</text>
     <text id="SYS_TODAY" development="new" translation="edited">Today</text>
 </version>
-<version id="2.2.0">
+<version id="2.2.0" translator="Szabolcs Lami">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Announcement</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="edited">Announcements</text>
