@@ -33,9 +33,9 @@ class TableMembers extends TableAccess
 
     // liest den Datensatz mit den ids rol_id und usr_id ein
     // die Methode gibt true zurueck, wenn ein DS gefunden wurde, andernfalls false
-    // ids : Array mit den Schl�sseln rol_id und usr_id  Bsp.: array('rol_id'=>xy, 'usr_id'=>yx)
+    // ids : Array mit den Schluesseln rol_id und usr_id  Bsp.: array('rol_id'=>xy, 'usr_id'=>yx)
     // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
-    // sql_additioinal_tables : wird nicht verwendet (ben�tigt wegen Vererbung)
+    // sql_additioinal_tables : wird nicht verwendet (benoetigt wegen Vererbung)
     public function readData($ids, $sql_where_condition = '', $sql_additional_tables = '')
     {
         $returnCode = false;

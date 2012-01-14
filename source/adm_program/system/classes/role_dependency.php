@@ -234,7 +234,7 @@ class RoleDependency
         return -1;
     }
 
-    public function removeChildRoles(&$db, $parentId)
+    static public function removeChildRoles(&$db, $parentId)
     {
         if($parentId > 0 && is_numeric($parentId))
         {
