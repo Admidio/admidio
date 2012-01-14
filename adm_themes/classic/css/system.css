@@ -309,6 +309,8 @@ ul.autosuggest li.highlight a:visited  {
     border:             none;
     vertical-align:     middle;
     padding-right:      1px;
+    width:              16px;
+    height:             16px;
 }
 
 /* Iconlinks um Funktionen aufzurufen (ohne Text) */
@@ -341,6 +343,8 @@ ul.autosuggest li.highlight a:visited  {
     border:             none;
     vertical-align:     top;
     margin:             4px 5px 2px 3px;
+    width:              11px;
+    height:             11px;
 }
 
 /* Icon um Informationen anzuzeigen (ohne Text und Link)*/
@@ -349,6 +353,8 @@ ul.autosuggest li.highlight a:visited  {
     vertical-align:     top;
     margin-left:        2px;
     margin-right:       2px;
+    width:              16px;
+    height:             16px;
 }
 
 /* Hilfeicon, bei dem ein kleines Fenster mit entsprechender Hilfe aufgerufen wird */
@@ -357,6 +363,8 @@ ul.autosuggest li.highlight a:visited  {
     cursor:             pointer;
     vertical-align:     middle;
     margin-left:        3px;
+    width:              16px;
+    height:             16px;
 }
 
 /* Elemente fuer Navigationsklasse */

@@ -175,26 +175,26 @@ while($row = $gDb->fetch_array($result_rol))
             $roleLeader = 1;
         }
 
-        // Rollenmitgliedschaften aktualisieren
+        // update role membership
         if($roleAssign == 1)
         {
             $member->startMembership($row['rol_id'], $getUserId, $roleLeader);
             $count_assigned++;
-        }
-        else
-        {
-            $member->stopMembership($row['rol_id'], $getUserId);
-        }
 
-        // find the parent roles
-        if($roleAssign == 1)
-        {
+            // find the parent roles and assign user to parent roles
             $tmpRoles = RoleDependency::getParentRoles($gDb, $row['rol_id']);
             foreach($tmpRoles as $tmpRole)
             {
                 if(!in_array($tmpRole,$parentRoles))
-                $parentRoles[] = $tmpRole;
+                {
+                    $parentRoles[] = $tmpRole;
+                    $member->startMembership($tmpRole, $getUserId);
+                }
             }
+        }
+        else
+        {
+            $member->stopMembership($row['rol_id'], $getUserId);
         }
     }
 }
@@ -205,21 +205,6 @@ $_SESSION['navigation']->deleteLastUrl();
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden
 $gCurrentSession->renewUserObject();
 
-if(count($parentRoles) > 0 )
-{
-    $sql = 'REPLACE INTO '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ';
-
-    // alle einzufuegenden Rollen anhaengen
-    foreach($parentRoles as $actRole)
-    {
-        $sql .= ' ('.$actRole.', '.$getUserId.', "'.DATE_NOW.'", "9999-12-31", 0),';
-    }
-
-    // Das letzte Komma wieder wegschneiden
-    $sql = substr($sql,0,-1);
-
-    $gDb->query($sql);
-}
 
 if($getNewUser == 1 && $count_assigned == 0)
 {
