@@ -17,7 +17,7 @@ $gCurrentSession->save();
 
 // delete content of cookie
 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-setcookie($gCookiePraefix. '_ID', '' , time() - 1000, '/', $domain, 0);
+//setcookie($gCookiePraefix. '_ID', '' , time() - 1000, '/', $domain, 0);
 
 // remove auto login
 if(isset($_COOKIE[$gCookiePraefix. '_DATA']))

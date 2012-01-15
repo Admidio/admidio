@@ -188,7 +188,6 @@ while($row = $gDb->fetch_array($result_rol))
                 if(!in_array($tmpRole,$parentRoles))
                 {
                     $parentRoles[] = $tmpRole;
-                    $member->startMembership($tmpRole, $getUserId);
                 }
             }
         }
@@ -199,12 +198,21 @@ while($row = $gDb->fetch_array($result_rol))
     }
 }
 
+// assign all memberships of parent roles
+// this must be done after all roles are assigned so that there aren't overlapping udpates
+if(count($parentRoles) > 0 )
+{
+    foreach($parentRoles as $actRole)
+    {
+        $member->startMembership($actRole, $getUserId);
+    }
+}
+
 $_SESSION['navigation']->deleteLastUrl();
 
 // falls Rollen dem eingeloggten User neu zugewiesen wurden,
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden
 $gCurrentSession->renewUserObject();
-
 
 if($getNewUser == 1 && $count_assigned == 0)
 {
