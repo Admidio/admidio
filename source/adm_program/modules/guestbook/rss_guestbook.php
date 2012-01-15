@@ -40,7 +40,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('
 
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '
-        WHERE gbo_org_id = '. $g_current_organization->getValue('org_id').'
+        WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id').'
           AND gbo_locked = 0 
         ORDER BY gbo_timestamp_create DESC
         LIMIT 10 ';

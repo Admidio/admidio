@@ -147,9 +147,13 @@ else
 
 // if auto login is set and session is new or a user assigned then check then create valid login
 $userIdAutoLogin = 0;
+// compute time in ms from last activity in session until now
+$time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
 
+// if no user object or user activity is long ago, then create auto login if possible
 if(isset($_COOKIE[$gCookiePraefix. '_DATA'])
-&& ($gCurrentSession->getValue('ses_id') == 0 || $gCurrentSession->getValue('ses_usr_id') > 0))
+&& (  isset($_SESSION['gCurrentUser']) == false 
+   || (isset($_SESSION['gCurrentUser']) && $time_gap > $gPreferences['logout_minutes'] * 60)))
 {
 	$admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
 
