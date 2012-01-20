@@ -18,9 +18,13 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 }
 
 /* Einstellung fuer die Thumbnailtabellenzeilen */
-.photoThumbnailRow{
+.photoThumbnailRows{
     padding: 0px;
     list-style-type: none;
+}
+
+.photoThumbnailRow{
+    clear: left;
 }
 
 /*Einstellung fuer die Thumbnailtabellenspalte, z.B. Breite oder Ausrichtung des enthaltenen Textes*/
