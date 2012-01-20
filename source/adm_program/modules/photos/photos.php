@@ -297,10 +297,10 @@ echo '<div class="photoModuleContainer">';
         }
                   
         //Thumbnailtabelle
-        $photoThumbnailTable = '<ul class="photoThumbnailRow">';
+        $photoThumbnailTable = '<ul class="photoThumbnailRows">';
             for($zeile=1;$zeile<=$gPreferences['photo_thumbs_row'];$zeile++)//durchlaufen der Tabellenzeilen
             {
-                $photoThumbnailTable .= '<li><ul class="photoThumbnailColumn">';
+                $photoThumbnailTable .= '<li class="photoThumbnailRow"><ul class="photoThumbnailColumn">';
                 for($spalte=1;$spalte<=$gPreferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
                 {
                     //Errechnug welches Bild ausgegeben wird
