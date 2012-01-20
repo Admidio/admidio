@@ -71,6 +71,9 @@
     <text id="SYS_VERSION" development="new" translation="edited">Version</text>
     <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="edited">The database version %VAR1% is lower than the version of the Admidio scripts %VAR2%.\n\nPlease perform %VAR3% database update to version %VAR4%.</text>
     <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="edited">The database version %VAR1% is higher than the version of the Admidio scripts %VAR2%.\n\nPlease update your Admidio files on the server %VAR3% by using a later version of Admidio (%VAR4%).</text>
+    <text id="UPD_BETA_VERSION" development="changed" translation="todo">Available Beta</text>
+    <text id="UPD_CURRENT_VERSION" development="changed" translation="todo">Installed</text>  
+    <text id="UPD_STABLE_VERSION" development="changed" translation="todo">Available</text>
 </version>
 <version id="2.2.6" translator="Szabolcs Lami">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Latest announcements of organisation %VAR1%</text>
@@ -747,16 +750,13 @@
     <text id="ORG_WHICH_FORUM_USED" development="new" translation="edited">Which forum to be used?</text>
 	
 	<!-- Phrases only in Updatecheck -->
-	<text id="UPD_ADMIDIO" development="new" translation="edited">Go to Admidio update page</text>
-	<text id="UPD_BETA_VERSION" development="new" translation="edited">Current beta version</text>
-	<text id="UPD_CONNECTION_ERROR" development="new" translation="edited">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the %VAR1% website for manual update.</text>
-	<text id="UPD_CURRENT_VERSION" development="new" translation="edited">Installed version</text>
-	<text id="UPD_NEW" development="new" translation="edited">A new stable version is available!</text>
-	<text id="UPD_NEW_BETA" development="new" translation="edited">A new beta version is available!</text>
-	<text id="UPD_NEW_BOTH" development="new" translation="edited">A new stable version and a new beta version are available!</text>
-	<text id="UPD_NO_NEW" development="new" translation="edited">You are using a current %VAR1%version of Admidio!</text>
-	<text id="UPD_STABLE_VERSION" development="new" translation="edited">Current stable Admidio version</text>
-	<text id="UPD_TITLE" development="new" translation="edited">Update check</text>
+    <text id="UPD_ADMIDIO" development="new" translation="edited">Go to Admidio update page</text>
+    <text id="UPD_CONNECTION_ERROR" development="new" translation="edited">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the %VAR1% website for manual update.</text>
+    <text id="UPD_NEW" development="new" translation="edited">A new stable version is available!</text>
+    <text id="UPD_NEW_BETA" development="new" translation="edited">A new beta version is available!</text>
+    <text id="UPD_NEW_BOTH" development="new" translation="edited">A new stable version and a new beta version are available!</text>
+    <text id="UPD_NO_NEW" development="new" translation="edited">You are using a current %VAR1%version of Admidio!</text>
+    <text id="UPD_TITLE" development="new" translation="edited">Update check</text>
 
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="edited">Album</text>
