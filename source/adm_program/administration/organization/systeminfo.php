@@ -19,19 +19,36 @@ $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
 // nur Webmaster duerfen Organisationen bearbeiten
 if($gCurrentUser->isWebmaster() == false)
 {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('UPD_CONNECTION_ERROR'));
 }
 
 /************Systeminformationen********/
 if($getMode == 1)
 {
     echo'
+    <script type="text/javascript">
+        $(document).ready(function()
+        {           
+            $("#linkCheckForUpdate").live("click", function()
+            {
+                $("#admVersion").empty();
+                $("#admVersion").prepend("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
+                $.get("'.$g_root_path.'/adm_program/system/update_check.php", {mode:"2"}, function(htmlVersion){
+                    $("#admVersion").empty();
+                    $("#admVersion").append(htmlVersion);               
+                });
+                return false;
+            });
+        });
+    </script>';    
+        
+    echo'
     <ul class="formFieldList">
         <li>
             <dl>
                 <dt>'.$gL10n->get('SYS_ADMIDIO_VERSION').':</dt>
-                <dd>'. ADMIDIO_VERSION. BETA_VERSION_TEXT.'&nbsp;
-                    <a rel="colorboxHelp" href="'.$g_root_path.'/adm_program/system/update_check.php?mode=2&amp;inline=true" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
+                <dd id="admVersion">'. ADMIDIO_VERSION. BETA_VERSION_TEXT.'
+                    <a href="#" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'" id="linkCheckForUpdate">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
                 </dd>
             </dl>
         </li>';
@@ -41,7 +58,7 @@ if($getMode == 1)
         <li>
             <dl>
                 <dt>'.$gL10n->get('SYS_PHP_VERSION').':</dt><dd><span class="';
-				if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
+                if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
                 {
                     echo 'systeminfoBad">'.phpversion().'</span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
                 }
@@ -59,7 +76,7 @@ if($getMode == 1)
         <li>
             <dl>
                 <dt>'.$gDb->getName().'-'.$gL10n->get('SYS_VERSION').':</dt><dd><span class="';
-				if(version_compare($gDb->getVersion(), $gDb->getMinVersion()) == -1)
+                if(version_compare($gDb->getVersion(), $gDb->getMinVersion()) == -1)
                 {
                     echo 'systeminfoBad">'.$gDb->getVersion().'</span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinVersion());
                 }

@@ -71,6 +71,9 @@
     <text id="SYS_VERSION" development="new" translation="todo">Version</text>
     <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="todo">Die Datenbankversion %VAR1% ist niedriger als die Version der Admidio-Scripte %VAR2%.\n\nFühren Sie bitte %VAR3%das Datenbankupdate%VAR4% auf die Version durch.</text>
     <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="todo">Die Datenbankversion %VAR1% ist höher als die Version der Admidio-Scripte %VAR2%.\n\nAktualisieren Sie bitte Ihre Admidio-Dateien auf dem FTP-Server %VAR3%mit der aktuelleren Admidio-Version%VAR4%.</text>
+    <text id="UPD_BETA_VERSION" development="changed" translation="todo">Verfügbare Beta</text>
+    <text id="UPD_CURRENT_VERSION" development="changed" translation="todo">Installiert</text>  
+    <text id="UPD_STABLE_VERSION" development="changed" translation="todo">Verfügbar</text>
 </version>
 <version id="2.2.6">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="todo">Neueste Ankündigungen der Organisation %VAR1%</text>
@@ -743,16 +746,13 @@
     <text id="ORG_WHICH_FORUM_USED" development="new" translation="todo">Welches Forum soll genutzt werden?</text>
 	
 	<!-- Phrases only in Updatecheck -->
-	<text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
-	<text id="UPD_BETA_VERSION" development="new" translation="todo">Aktuelle Beta Version</text>
-	<text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchn Sie es zu einem späteren Zeitpunkt nocheinmal. Alternativ können Sie auch manuell auf der Webseite von %VAR1% prüfen ob ein Update vorliegt.</text>
-	<text id="UPD_CURRENT_VERSION" development="new" translation="todo">Installierte Version</text>
-	<text id="UPD_NEW" development="new" translation="todo">Eine neue stabile Version ist verfügbar!</text>
-	<text id="UPD_NEW_BETA" development="new" translation="todo">Eine neue Beta Version ist verfügbar!</text>
-	<text id="UPD_NEW_BOTH" development="new" translation="todo">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</text>
-	<text id="UPD_NO_NEW" development="new" translation="todo">Sie benutzen eine aktuelle %VAR1%Version von Admidio!</text>
-	<text id="UPD_STABLE_VERSION" development="new" translation="todo">Aktuelle stabile Version</text>
-	<text id="UPD_TITLE" development="new" translation="todo">Update Prüfung</text>
+    <text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
+    <text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchn Sie es zu einem späteren Zeitpunkt nocheinmal. Alternativ können Sie auch manuell auf der Webseite von %VAR1% prüfen ob ein Update vorliegt.</text>
+    <text id="UPD_NEW" development="new" translation="todo">Eine neue stabile Version ist verfügbar!</text>
+    <text id="UPD_NEW_BETA" development="new" translation="todo">Eine neue Beta Version ist verfügbar!</text>
+    <text id="UPD_NEW_BOTH" development="new" translation="todo">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</text>
+    <text id="UPD_NO_NEW" development="new" translation="todo">Sie benutzen eine aktuelle %VAR1%Version von Admidio!</text>
+    <text id="UPD_TITLE" development="new" translation="todo">Update Prüfung</text>
 	
 
     <!-- Phrases only in Photomodule -->
