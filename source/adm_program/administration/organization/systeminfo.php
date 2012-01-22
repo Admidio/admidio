@@ -33,7 +33,7 @@ if($getMode == 1)
             {
                 $("#admVersion").empty();
                 $("#admVersion").prepend("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
-                $.get("'.$g_root_path.'/adm_program/system/update_check.php", {mode:"2"}, function(htmlVersion){
+                $.get("'.$g_root_path.'/adm_program/administration/organization/update_check.php", {mode:"2"}, function(htmlVersion){
                     $("#admVersion").empty();
                     $("#admVersion").append(htmlVersion);               
                 });

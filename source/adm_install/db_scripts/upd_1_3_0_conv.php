@@ -31,7 +31,7 @@ while($dat_row = mysql_fetch_object($dat_result))
     $endDate = new DateTimeExtended($dat_row->dat_end, 'Y-m-d H:i:s');
     $datetime = $endDate->format('Y-m-d').' '.$startDate->format('H:i:s');
     
-    $sql = 'UPDATE '. TBL_DATES. ' SET dat_end = "'.$datetime.'"
+    $sql = 'UPDATE '. TBL_DATES. ' SET dat_end = \''.$datetime.'\'
              WHERE dat_id = '.$dat_row->dat_id;
     $result = mysql_query($sql, $connection);
     if(!$result) showError(mysql_error());
