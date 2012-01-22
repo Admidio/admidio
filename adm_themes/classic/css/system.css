@@ -529,9 +529,3 @@ ul.autosuggest li.highlight a:visited  {
 .systeminfoBad{
     color: #e5000d;
 }
-/*Liste ohne besondere Abstände und Bullets*/
-.noStyleList{
-    margin:             0px;
-    padding:            0px;
-    list-style-type:    none;
-}
