@@ -40,7 +40,7 @@ if($getRemoveUrl == 1)
 }
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
-// Rechenaufgabe eingestellt wurde, muss die Klasse für neue Registrierungen geladen werden
+// Rechenaufgabe eingestellt wurde, muss die Klasse fï¿½r neue Registrierungen geladen werden
 if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1 && $gPreferences['captcha_type']=='calc')
 {
 	require_once('../../system/classes/captcha.php');
@@ -234,7 +234,17 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
     }
     elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'TEXT_BIG')
     {
-        $value = '<textarea name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" '.$disabled.' style="width: 300px;" rows="2" cols="40">'. $user->getValue($fieldNameIntern). '</textarea>';
+        $usfId = 'usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id');
+        $value = '<script type="text/javascript">
+                    $(document).ready(function(){
+                        $(\'#'.$usfId.'\').NobleCount(\'#'.$usfId.'_counter\',{
+                            max_chars: 255,
+                            block_negative: true
+                        });
+                    });
+                 </script>         
+        <textarea  name="'.$usfId.'" id="'.$usfId.'" '.$disabled.' style="width: 300px;" rows="2" cols="40">'. $user->getValue($fieldNameIntern).'</textarea>
+        (<span id="'.$usfId.'_counter" class="">255</span>)';
     }
     else
     {
