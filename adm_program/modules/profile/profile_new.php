@@ -358,6 +358,7 @@ else
 }
 
 $gLayout['header'] = '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
