@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
-<version id="2.2.6">
+<version id="2.3.0" translator="Henrik Troels-Hansen">
+	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
+    <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Skal kategorien %VAR_BOLD% slettes?\n\n>Denne kategori har %VAR2% afhængige indlæg, som vil også vil blive slettet.</text>
+    <text id="DAT_ENABLE_ICAL" development="new" translation="edited">Aktiver iCal</text>
+    <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="edited">Hvis iCal er aktiveret, kan aftaler (individuelle eller alle) inden for et givent tidspunkt downloades. Og brugerne kan abonnere på aftaler ved at bruge deres egen kalender software. (Standard: Ja)</text>
+    <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Antal iCal dage i ud i fremtiden</text>
+    <text id="DAT_ICAL_DAYS_FUTURE_DESC" development="new" translation="edited">Denne værdi definerer hvor mange dage ud i fremtiden der skal inkluderes i iCal downloadet eller abonnementet. (Standard: 365)</text>
+    <text id="DAT_ICAL_DAYS_PAST" development="new" translation="edited">Antal iCal dage tilbage i tiden</text>
+    <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">Denne værdi definerer hvor mange dage bag ud i tiden der skal inkluderes i iCal downloadedt eller abonnementet. (Standard: 30)</text>
+    <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Aktiver registrering til denne aftale.</text>
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Tilslut dig denne aftale</text>
+    <text id="DAT_VISIBILITY" development="new" translation="edited">Synlighed</text>
+    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Venligst udfyld alle felter\n\nog klik igen %VAR1_BOLD%.</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Din database version er %VAR1%.\nEn opdatering til version %VAR2% er påkrævet</text>
+    <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database system</text>
+    <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
+    <text id="INS_FACEBOOK_DESC" development="new" translation="edited">Kunne du tænke dig at linke til din Facebook profil? Dit Facebook login navn er påkrævet. Log ind i din Facebook konto og vis din profil. Kopier Facebook URL'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Facebook profil.</text>
+    <text id="INS_GOOGLE_PLUS" development="new" translation="edited">Google+</text>
+    <text id="INS_GOOGLE_PLUS_DESC" development="new" translation="edited">Kunne du tænke dig at linke til din Google+ profil? For at gøre dette har du brug for dit Google+ profil nummer. Log ind i din Google+ konto og vis din profil. Kopier Google+ URL'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Google+ profil.</text>
+    <text id="INS_ICQ_DESC" development="new" translation="edited">Indtast dit ICQ nummer her. Hvis din status kan vises på web (aktiveret i Skype), så vil din status blive vist i din profil.</text>
+    <text id="INS_SKYPE_DESC" development="new" translation="edited">Indtast dit præcise Skype navn her. Hvis din status kan vises på web (aktiveret i ICQ), så vil din status blive vist i din profil.</text>
+    <text id="INS_TWITTER" development="new" translation="edited">Twitter</text>
+    <text id="INS_TWITTER_DESC" development="new" translation="edited">Kunne du tænke dig at linke til din Twitter profil? For at gøre dette har du brug for dit Twitter login navn. Log ind i din Twitter konto og vis din profil. Kopier Twitter URL'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Twitter profil.</text>
+    <text id="INS_WINDOWS_LIVE" development="new" translation="edited">Windows Live</text>
+    <text id="INS_XING" development="new" translation="edited">Xing</text>
+    <text id="INS_XING_DESC" development="new" translation="edited">Kunne du tænke dig at linke til din Xing profil? For at gøre dette har du brug for dit Xing login navn. Log ind i din Xing konto og vis din profil. Kopier Xing URL'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Xing profil.</text>
+    <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="edited">Emne &amp; Vedhæftning</text>
+    <text id="MAI_CHARACTER_ENCODING" development="new" translation="edited">Karakter kodning</text>
+    <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="edited">Karakter kodningen brugt i e-mails sendt af Admidio. Ikke alle e-mail klienter kan håndtere UTF-8. Derfor kan du sætte den til ISO-8859-1 som alternativ.</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE" development="changed" translation="edited">%VAR1% har sendt til rolle %VAR3% af %VAR2% følgende e-mail:</text>
+    <text id="MAI_EMAIL_SEND_TO_USER" development="changed" translation="edited">%VAR1% fra %VAR2% har sendt dig følgende e-mail:</text>
+    <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="edited">HTML e-mail</text>
+    <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="edited">Oprettelse og afsendelse af HTML formaterede e-mails kan tillades for registrerede brugere. En JavaScript editor vil blive vist, istedet for standard tekstfeltet. Af sikkerheds årsager er dette ikke tilladt for gæster.</text>
+    <text id="MAI_YOUR_EMAIL" development="new" translation="edited">Din e-mail</text>
+    <text id="MAI_YOUR_NAME" development="new" translation="edited">Dit navn</text>
+    <text id="MEM_IMPORT_SUCCESSFUL" development="changed" translation="edited">Importen forløb succesfuldt..\n\n%VAR1% nye brugere er blevet oprettet.\n%VAR2% Brugere er blevet rettet.\n%VAR3% rolle medlemskaber er blevet tildelt.</text>
+    <text id="ORG_FIELD_DISABLED" development="changed" translation="edited">Feltet kan kun redigeres af brugere med følgende rettigheder %VAR1_BOLD%</text>
+    <text id="ORG_FIELD_URL_DESC" development="new" translation="edited">Denne URL vil linke indholdet med profilen, leveret af brugeren i dette felt. En pladsholder %user_content% kan integreres ind i URLen om nødvendigt. Dette indhold er blevet leveret af brugeren.\n\nEksempel:\nURL: http://www.google.de/search?q=%user_content%\nContent: Admidio\nLink i profil: http://www.google.de/search?q=Admidio</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_COLOR" development="changed" translation="edited">Baggrunds farve på JavaScript editoren</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_COLOR_DESC" development="changed" translation="edited">Definer baggrunds farven på JavaScript editoreren. Værdien kan være en hexadecimal farve værdi som #ffa500 eller en RGB værdi som (255, 185, 0).</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_ENABLE" development="changed" translation="edited">Brug af JavaScript editoren</text>
+    <text id="ORG_JAVASCRIPT_EDITOR_ENABLE_DESC" development="changed" translation="edited">En fuldt udstyret JavaScript editor bliver brugt i mange moduler i Admidio. Møder, Meddelelser osv. kan redigeres komfortabelt af brugeren. I tilfælde af at editoren er blevet deaktiveret, så vil en simpel multi-linie editor blive vist istedet.</text>
+    <text id="ORG_VALUE_LIST" development="new" translation="edited">Værdi liste</text>
+    <text id="ORG_VALUE_LIST_DESC" development="new" translation="edited">Definer indholdet af drop-down menuer eller valg bokse.  Angiv EN drop-down eller radio button værdi pr. linie.\n\nIstedet for tekst så vil den valgte position på listen blive gemt i profilen. Hvis teksten i en linie skulle ændre sig så vil alle brugere med denne værdi se den nye værdi med det samme. Hvis en menu værdi bliver flyttet til en anden linie, så kan der dukke en anden tekst på i brugerens profil.\n\nHvis det er en radio button, kan en ikon blive vist istedet for et tekst element. For at gøre dette skal du indtaste navnet på en ikon fil i tema folderen (f.eks ok.png) eller du kan bruge en ekstern billede URL (f.eks http://www.example.com/example.jpg). Ved at bruge en lodret streg, kan du tilføje yderligere hjælpsom information sammen med ikonen(f.eks. kvinde.png|kvinde)</text>
+    <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="edited">Vis organisations vælger</text>
+    <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="edited">Hvis der er flere organisationer gemt i den samme database, så kan Log ind skærmen vise en valg boks med alle tilgængelige organisationer. Brugeren kan så på login skærmen vælge en anden organisation (en anden organisation end den der er defineret i config.php). Brugeren skal selvfølgelig være registreret medlem af den valgte organisation.</text>
+    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="edited">Organisations og regionale indstillinger</text>
+    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="edited">Slide show hastighed</text>
+    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Definer forsinkelsen i sekunder før næste billede bliver hentet.</text>
+    <text id="SYS_CHECKBOX" development="new" translation="edited">Check-boks</text>
+    <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="edited">Bekræft værdi</text>
+    <text id="SYS_CONTACT_DETAILS" development="new" translation="edited">Kontakt information</text>
+    <text id="SYS_DATABASE_VERSION_REQUIRED" development="new" translation="edited">Admidio kræver %VAR1% eller højere</text>
+    <text id="SYS_DESIGNATION" development="new" translation="edited">Navn</text>
+    <text id="SYS_DROPDOWN_LISTBOX" development="new" translation="edited">Drop-down liste boks</text>
+    <text id="SYS_ICAL_DISABLED" development="new" translation="edited">iCal er blevet deaktiveret af system administartoren.</text>
+    <text id="SYS_ICON" development="new" translation="edited">Ikon</text>
+    <text id="SYS_INTERNAL_NAME" development="new" translation="edited">Internt navn</text>
+    <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="edited">Det interne navn bliver brugt som en specifik identifikation for et felt. Når Admidio kører og bliver brugt er det irrelevant. Men under udviklingen af Admidio skal dette navn tages med for at kunne bruge getValue metoden. Det interne navn bliver automatisk udfyldt ved oprettelsen af et felt.</text>
+    <text id="SYS_MESSAGE" development="new" translation="edited">Besked</text>
+    <text id="SYS_ORGANIZATION" development="new" translation="edited">Organisation</text>
+    <text id="SYS_PERIOD" development="new" translation="edited">Periode</text>
+	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="edited">Admidio kræver %VAR1% eller højere</text>    	
+	<text id="SYS_PRESENTATION" development="new" translation="edited">Vis</text>
+    <text id="SYS_RADIO_BUTTON" development="new" translation="edited">Radio button</text>
+    <text id="SYS_SOCIAL_NETWORKS" development="new" translation="edited">Sociale medier</text>
+    <text id="SYS_URL_INVALID_CHAR" development="changed" translation="edited">URLen i felt %VAR1_BOLD% har invalide karakterer.\n\nBrug kun alfabetiske karakterer, nummre fra 0 til 9 og special karaktererne .-_:/#?=% kan frit anvendes, undgå Æ Ø Å.</text>
+    <text id="SYS_VERSION" development="new" translation="edited">Version</text>
+    <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="edited">Database versionen %VAR1% er lavere end versionerne af Admidios scripts %VAR2%.\n\nVenligst udfør %VAR3% database opdatering til version %VAR4%.</text>
+    <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="edited">Database versionen %VAR1% er højere end versionen af Admidios scripts %VAR2%.\n\nVenligst opdater dine Admidio filer på på serveren %VAR3% ved at bruge en nyere version af Admidio (%VAR4%).</text>
+</version>
+<version id="2.2.6" translator="Henrik Troels-Hansen">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Sidste nye meddelelse fra organisationen %VAR1%</text>
     <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="edited">Nuværende møder i organisation %VAR1%</text>
     <text id="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA" development="new" translation="edited">Sidste gæstebogs indlæg for organisation %VAR1%</text>
@@ -45,7 +116,7 @@
     <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Søn.</text>
     <text id="SYS_TODAY" development="new" translation="edited">Idag</text>
 </version>
-<version id="2.2.0">
+<version id="2.2.0" translator="Henrik Troels-Hansen">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Meddelelse</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="edited">Meddelelser</text>
@@ -202,6 +273,9 @@
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Afsenders e-mail adresse</text>
     <text id="ECA_FIELD_ERROR" development="new" translation="edited">Nogen felter er ikke udfyldt eller er udfyldt forkert. Venligst check dem igen.</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Venligst udfyld \nalle data felter og \nklik på 'send'.</text>
+    <text id="ECA_FONT" development="new" translation="edited">Font type indstilinger. (Standard: Comic Sans MS)</text>
+    <text id="ECA_FONT_SIZE" development="new" translation="edited">Font størrelse indstilinger. (Standard: 20) </text>
+    <text id="ECA_FONT_COLOR" development="new" translation="edited">Font farve indstilinger. (Standard: Sort)</text>
     <text id="ECA_GREETING_CARD" development="new" translation="edited">Postkort</text>
     <text id="ECA_GREETING_CARDS" development="new" translation="edited">Postkort</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Rediger postkort</text>
@@ -211,6 +285,8 @@
     <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">intern modtager</text>
     <text id="ECA_MAX_CC" development="new" translation="edited">Max. yderligere modtagere</text>
     <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deaktiver og sæt maximum antal yderligere modtagere om nødvendigt. (Standard: 10)</text>
+    <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="edited">Max. antal karakterer i en besked</text>
+    <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="edited">Deaktiver muligheden her og definer max. længde af besked om nødvendigt. (Standard: 500 karakterer)</text>
 	<text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Et maximum på %VAR1% karakterer er tilladt!</text>
 	<text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Flere modtagere</text>
 	<text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Afsenders navn</text> 
@@ -442,6 +518,7 @@
     <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Søgning efter alle brugere ældre end 18 år</text>
     <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
     <text id="LST_SEARCH_DATE_DESC" development="new" translation="edited">Søgning efter alle brugere født efter 1st Januar 1986</text>
+    <text id="LST_SEARCH_GENDER_EXAMPLE" development="new" translation="edited">M/K/U</text>
     <text id="LST_SEARCH_GENDER_DESC" development="new" translation="edited">Søgning efter mand, kvinde og uidentificeret køn</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_EXAMPLE" development="new" translation="edited">Mei*</text>
     <text id="LST_SEARCH_LASTNAME_BEGINS_DESC" development="new" translation="edited">Søgning efter alle brugere med navne der begynder med 'Mei'</text>
@@ -1021,6 +1098,7 @@
     <text id="SYS_FORMER" development="new" translation="edited">Tidligere medlem</text>
     <text id="SYS_FORMER_PL" development="new" translation="edited">Tidligere medlem</text>
     <text id="SYS_FONT" development="new" translation="edited">Font</text>
+  	<text id="SYS_FONT_COLOR" development="new" translation="edited">Font-farve</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-størrelse</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">Jeg har glemt mit kodeord!</text>
     <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
@@ -1041,7 +1119,7 @@
     <text id="SYS_HELP" development="new" translation="edited">Hjælp</text>
 	<text id="SYS_HIDE" development="new" translation="edited">Gem</text>
     <text id="SYS_HOMEPAGE" development="new" translation="edited">Hjemmeside</text>
-    <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP error (%1)</text>
+    <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP fejl (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="edited">Inaktiv</text>
 	<text id="SYS_INFO" development="new" translation="edited">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installations biblioteket 'adm_install' eksisterer stadig på serveren. Af sikkerhedshensyn skal det slettes!</text>
