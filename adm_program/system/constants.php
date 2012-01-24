@@ -14,8 +14,8 @@ if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
 }
 
 // !!! Please do not edit these version numbers !!!
-define('ADMIDIO_VERSION', '2.3.0');
-define('BETA_VERSION', '2');
+define('ADMIDIO_VERSION', '2.4.0');
+define('BETA_VERSION', '1');
 define('MIN_PHP_VERSION', '5.2.0');
 
 if(BETA_VERSION > 0)
@@ -33,7 +33,7 @@ define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1));
 if(strpos($_SERVER['SCRIPT_FILENAME'], "/adm_") !== false && isset($g_root_path) == true)
 {
     // aktuelle aufgerufene Url (klappt nur so, da SSL-Proxies nicht ueber _SERVER ausgelesen werden koennen)
-    define('CURRENT_URL',$g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strpos($_SERVER['SCRIPT_FILENAME'], "/adm_")). "?". $_SERVER['QUERY_STRING']);
+    define('CURRENT_URL',$g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strpos($_SERVER['SCRIPT_FILENAME'], "/adm_")). '?'. $_SERVER['QUERY_STRING']);
 }
 else
 {
