@@ -239,6 +239,7 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
                     $(document).ready(function(){
                         $(\'#'.$usfId.'\').NobleCount(\'#'.$usfId.'_counter\',{
                             max_chars: 255,
+                            on_negative: \'systeminfoBad\',
                             block_negative: true
                         });
                     });
