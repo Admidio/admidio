@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer Rollen
+ * Check email form and send email
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,8 +8,8 @@
  *
  * Parameters:
  *
- * usr_id  - E-Mail an den entsprechenden Benutzer schreiben
- * subject - Betreff der Mail kann unabhaengig vom Formular vorgegeben werden
+ * usr_id  - Send email to this user
+ * subject - set email subject independent of the form
  *
  *****************************************************************************/
 
@@ -306,10 +306,12 @@ if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
 if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 {
     $senderName = '<a href="mailto:'.$_POST['mailfrom'].'">'.$_POST['name'].'</a>';
+	$lineBreak  = '<br />';
 }
 else
 {
     $senderName = $_POST['name'].' ('.$_POST['mailfrom'].')';
+	$lineBreak  = "\n";
 }
 
 if ($role->getValue('rol_id') > 0)
@@ -323,10 +325,10 @@ else
 
 if (!$gValidLogin)
 {
-    $mail_body = $mail_body. "\n".$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
+    $mail_body = $mail_body.$lineBreak.$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
 }
 
-$mail_body = $mail_body. "\n*********************************************************************************************\n\n";
+$mail_body = $mail_body.$lineBreak'*********************************************************************************************'.$lineBreak.$lineBreak;
 
 // make html in mail body secure
 $_POST['mail_body'] = htmLawed(stripslashes($_POST['mail_body']));
