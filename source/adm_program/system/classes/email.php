@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Email - Klasse
+ * Create and send a text or html email with attachments
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -67,11 +67,10 @@
  *
  *****************************************************************************/
 
-// Email - Klasse
 class Email
 {
 
-//Konstruktor der Klasse.
+// constructor of class
 public function __construct()
 {
     global $gPreferences;
@@ -87,6 +86,7 @@ public function __construct()
     $this->copyToSender        = false;
     $this->listRecipients      = false;
     $this->sendAsHTML          = false;
+    $this->lineBreak           = "\n";
 	$this->charset             = $gPreferences['mail_character_encoding'];
 
     //Jetzt wird noch der ContentType der Mail gesetzt.
@@ -251,6 +251,7 @@ public function setListRecipientsFlag()
 public function sendDataAsHtml()
 {
     $this->sendAsHTML = true;
+	$this->lineBreak  = '<br />';
 	$this->headerOptions['Content-Type'] = "multipart/alternative;\n\tboundary=\"". $this->mailBoundary. '"';
 }
 
@@ -482,7 +483,6 @@ public function sendEmail()
 
         // Mail wird jetzt versendet...
         // das Versenden in UTF8 funktioniert noch nicht bei allen Mailclients (Outlook, GMX)
-        error_log('rec::'.$recipient.'::sub::'.$subject.'::bod::'.$this->mail_body.'::prog::'.$this->mail_properties);
         if (!mail($recipient, $subject, $this->mail_body, $this->mail_properties))
 //        if (!mail(utf8_decode($recipient), utf8_decode($subject),  $this->mail_body, utf8_decode($this->mail_properties)))
         {
@@ -494,15 +494,15 @@ public function sendEmail()
     // Eventuell noch eine Kopie an den Absender verschicken:
     if ($this->copyToSender)
     {
-        $this->text = "********************************************************************************\n\n". $this->text;
-        $this->text = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL').":\n". $this->text;
+        $this->text = '********************************************************************************'.$this->lineBreak.$this->lineBreak.$this->text;
+        $this->text = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL').':'.$this->lineBreak.$this->text;
 
          //Falls das listRecipientsFlag gesetzt ist werden in der Kopie
          //die einzelnen Empfaenger aufgelistet:
          if ($this->listRecipients)
          {
-             $this->text = $this->addresses. "\n". $this->text;
-             $this->text = $gL10n->get('MAI_MESSAGE_WENT_TO').":\n\n". $this->text;
+             $this->text = $this->addresses.$this->lineBreak. $this->text;
+             $this->text = $gL10n->get('MAI_MESSAGE_WENT_TO').':'.$this->lineBreak.$this->lineBreak.$this->text;
          }
 
          unset($this->headerOptions['To']);
@@ -533,6 +533,6 @@ public function sendEmail()
          }
     }
     return true;
-}// Ende der Klasse
+}
 }
 ?>
