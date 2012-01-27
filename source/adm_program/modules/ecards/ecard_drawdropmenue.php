@@ -204,7 +204,8 @@ elseif($gValidLogin && strlen($getUserId) > 0)
 			
 			$result = $gDb->query($sql);
 			$row = $gDb->fetch_object($result);
-			$getUserId = $row->rol_name;
+			// replace all special chars that make problems in option value field from role name
+			$getUserId = strtr($row->rol_name, ' =', '--');
 		}
         echo '<input type="hidden" name="ecard[name_recipient]" value="die gesamte Rolle" />
 			  <input type="hidden" name="ecard[email_recipient]" value="'.$getUserId.'@'.$rolDomain.'" />

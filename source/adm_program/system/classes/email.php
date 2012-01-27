@@ -75,7 +75,7 @@ public function __construct()
 {
     global $gPreferences;
 
-    //Wichtig ist das die MimeVersion das erste Element im Header ist...
+    // Important: MimeVersion should be first element of header
     $this->headerOptions['MIME-Version'] = '1.0';
 
     $this->headerOptions['Return-Path'] = $gPreferences['email_administrator'];
@@ -86,7 +86,9 @@ public function __construct()
     $this->copyToSender        = false;
     $this->listRecipients      = false;
     $this->sendAsHTML          = false;
-    $this->lineBreak           = "\n";
+    $this->lineBreak           = "\r\n";
+    $this->text                = '';    // content of text part
+    $this->htmlText            = '';    // content of html part
 	$this->charset             = $gPreferences['mail_character_encoding'];
 
     //Jetzt wird noch der ContentType der Mail gesetzt.
@@ -137,7 +139,43 @@ public function setSender($address, $name='')
     return false;
 }
 
-// Funktion um den Betreff zu setzen
+// write a short text with sender informations in text of email
+public function setSenderInText($senderName, $senderEmail, $roleName)
+{
+    global $gL10n, $gValidLogin, $gCurrentOrganization;
+    
+    if($this->sendAsHTML)
+    {
+        $senderCode = '<a href="mailto:'.$senderEmail.'">'.$senderName.'</a>';
+    }
+    else
+    {
+        $senderCode = $senderName.' ('.$senderEmail.')';
+    }
+    
+    if(strlen($roleName) > 0)
+    {
+        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $roleName);
+    }
+    else
+    {
+        $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_USER', $senderCode, $gCurrentOrganization->getValue('org_homepage'));
+    }
+    
+    if($gValidLogin == false)
+    {
+        $senderText = $senderText."\r\n".$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
+    }
+
+    $senderText = $senderText."\r\n".
+    '*****************************************************************************************************************************'.
+    "\r\n"."\r\n";
+    
+    $this->text = $this->text.$senderText;
+    $this->htmlText = $this->htmlText.nl2br($senderText);
+}
+
+// set subject in email
 public function setSubject($subject)
 {
     if (strlen($subject) > 0)
@@ -201,7 +239,7 @@ public function addBlindCopy($address, $name='')
     if (strValidCharacters($address, 'email'))
     {
         $this->bccArray[] = '"'. $name. '" <'. $address. '>';
-        $this->addresses = $this->addresses. $name. ' <'. $address. ">\n";
+        $this->addresses = $this->addresses. $name. ', '.$address."\r\n";
         return true;
     }
     return false;
@@ -215,7 +253,8 @@ public function setText($text)
     $text = str_replace('\r\n', '\n', $text);
     $text = str_replace('\r', '\n', $text);
 
-    $this->text = $text;
+    $this->text = $this->text.$text;
+    $this->htmlText = $this->htmlText.$text;
 }
 
 // Funktion um ein Attachment an die Mail zu uebergeben...
@@ -308,10 +347,10 @@ private function prepareBody()
     // nun den Mailtext als Text-Format hinzufuegen
     $this->mail_body = $this->mail_body. strip_tags($this->text). "\n\n";
 
-	// wenn gewuenscht, nun den Inhalt als HTML einsetzen
+	// if html mail then add html text to email
     if($this->sendAsHTML)
     {
-    	// Html mit eingebetteten Bildern bekommt eine eigene Boundary
+    	// html mail with embedded pictures get own boundary
     	if(isset($this->attachments))
     	{
     		$this->mailBoundaryRelated = '--NextPart_AdmidioMailSystem_'. md5(uniqid(rand()));
@@ -320,7 +359,7 @@ private function prepareBody()
 		}
 		$this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. 
 					   	   "\nContent-Type: text/html; charset=".$this->charset."\nContent-Transfer-Encoding: 7bit\n\n";
-        $this->mail_body = $this->mail_body. $this->text."\n\n";
+        $this->mail_body = $this->mail_body. $this->htmlText."\n\n";
     }
 
     // Jetzt die Attachments hinzufuegen...
@@ -494,25 +533,29 @@ public function sendEmail()
     // Eventuell noch eine Kopie an den Absender verschicken:
     if ($this->copyToSender)
     {
-        $this->text = '********************************************************************************'.$this->lineBreak.$this->lineBreak.$this->text;
-        $this->text = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL').':'.$this->lineBreak.$this->text;
+        $copyHeader = '*****************************************************************************************************************************'.
+                      "\r\n"."\r\n";
+        $copyHeader = $gL10n->get('MAI_COPY_OF_YOUR_EMAIL').':'."\r\n".$copyHeader;
 
-         //Falls das listRecipientsFlag gesetzt ist werden in der Kopie
-         //die einzelnen Empfaenger aufgelistet:
-         if ($this->listRecipients)
-         {
-             $this->text = $this->addresses.$this->lineBreak. $this->text;
-             $this->text = $gL10n->get('MAI_MESSAGE_WENT_TO').':'.$this->lineBreak.$this->lineBreak.$this->text;
-         }
+        //Falls das listRecipientsFlag gesetzt ist werden in der Kopie
+        //die einzelnen Empfaenger aufgelistet:
+        if ($this->listRecipients)
+        {
+             $copyHeader = $this->addresses."\r\n".$copyHeader;
+             $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':'."\r\n"."\r\n".$copyHeader;
+        }
+         
+        $this->text = $copyHeader.$this->text;
+        $this->htmlText = nl2br($copyHeader).$this->htmlText;
 
-         unset($this->headerOptions['To']);
-         unset($this->headerOptions['Cc']);
-         unset($this->headerOptions['Bcc']);
+        unset($this->headerOptions['To']);
+        unset($this->headerOptions['Cc']);
+        unset($this->headerOptions['Bcc']);
 
-         // Header fuer die Kopie aufbereiten...
-         $this->prepareHeader();
+        // Header fuer die Kopie aufbereiten...
+        $this->prepareHeader();
 
-         // Body fuer die Kopie aufbereiten...
+        // Body fuer die Kopie aufbereiten...
         $this->prepareBody();
 
         //Das Subject modifizieren

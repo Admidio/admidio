@@ -213,6 +213,12 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     }
 }
 
+// if possible send html mail
+if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
+{
+    $email->sendDataAsHtml();
+}
+
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
 if ($getUserId > 0)
 {
@@ -303,48 +309,11 @@ if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
 }
 
 // prepare body of email with note of sender and homepage
-if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
-{
-    $senderName = '<a href="mailto:'.$_POST['mailfrom'].'">'.$_POST['name'].'</a>';
-	$lineBreak  = '<br />';
-}
-else
-{
-    $senderName = $_POST['name'].' ('.$_POST['mailfrom'].')';
-	$lineBreak  = "\n";
-}
+$email->setSenderInText($_POST['name'], $_POST['mailfrom'], $role->getValue('rol_name'));
 
-if ($role->getValue('rol_id') > 0)
-{
-    $mail_body = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE', $senderName, $gCurrentOrganization->getValue('org_homepage'), $role->getValue('rol_name'));
-}
-else
-{
-    $mail_body = $gL10n->get('MAI_EMAIL_SEND_TO_USER', $senderName, $gCurrentOrganization->getValue('org_homepage'));
-}
+// make html in mail body secure and commit mail body to mail object
+$email->setText(htmLawed(stripslashes($_POST['mail_body'])));
 
-if (!$gValidLogin)
-{
-    $mail_body = $mail_body.$lineBreak.$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
-}
-
-$mail_body = $mail_body.$lineBreak'*********************************************************************************************'.$lineBreak.$lineBreak;
-
-// make html in mail body secure
-$_POST['mail_body'] = htmLawed(stripslashes($_POST['mail_body']));
-
-// commit mail body to mail object
-if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
-{
-	$mail_body = nl2br($mail_body). $_POST['mail_body'];
-    $email->sendDataAsHtml();
-    $email->setText($mail_body);
-}
-else
-{
-	$mail_body = $mail_body. $_POST['mail_body'];
-    $email->setText($mail_body);
-}
 
 //Nun kann die Mail endgueltig versendet werden...
 if ($email->sendEmail())
