@@ -69,7 +69,8 @@ if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_
 // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
 // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
 
-$checkboxes = array('dates_show_map_link'
+$checkboxes = array('dates_show_calendar_select'
+                   ,'dates_show_map_link'
                    ,'dates_show_rooms'
                    ,'enable_system_mails'
 				   ,'enable_email_notification'
@@ -91,13 +92,13 @@ $checkboxes = array('dates_show_map_link'
                    ,'forum_export_user'
                    ,'forum_sqldata_from_admidio'
                    ,'forum_link_intern'
+                   ,'lists_hide_overview_details'
+                   ,'mail_html_registered_users'
                    ,'photo_upload_mode'
                    ,'profile_show_map_link'
                    ,'profile_show_roles'
                    ,'profile_show_former_roles'
                    ,'profile_show_extern_roles'
-                   ,'lists_hide_overview_details'
-                   ,'dates_show_calendar_select'
 				   ,'system_organization_select'
                    ,'system_search_similar'
                    );
