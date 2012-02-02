@@ -257,19 +257,26 @@ public function setText($text)
     $this->htmlText = $this->htmlText.$text;
 }
 
-// Funktion um ein Attachment an die Mail zu uebergeben...
-public function addAttachment($tmp_filename, $orig_filename = '', $file_type='application/octet-stream' ,
-					   $file_disposition = 'attachment',$file_id = '')
+// method adds an attachement to the mail
+// tempFilename     : filename of the local server path where admidio is installed
+// originalFilename : original filename that will be shown in the email
+// fileType         : content type of the file in the email
+// fileDisposition  : how the file should be shown in email : 'attachement' or 'inline'
+// fileId           : a unique id for the file, so that it could be identified in the email
+public function addAttachment($tempFilename, $originalFilename = '', $fileType='application/octet-stream' ,
+					   $fileDisposition = 'attachment',$fileId = '')
 {
     $this->attachments[] = array(
-            'orig_filename' => $orig_filename,
-            'tmp_filename'  => $tmp_filename,
-            'file_type'     => $file_type,
-            'file_disposition' => $file_disposition,
-            'file_id'       => $file_id);
+            'orig_filename' => $originalFilename,
+            'tmp_filename'  => $tempFilename,
+            'file_type'     => $fileType,
+            'file_disposition' => $fileDisposition,
+            'file_id'       => $fileId);
+
     if($this->sendAsHTML == false)
     {
 	    // HTML-Mails mit Anhang behalten ihren Type, Textmails bekommen einen Speziellen
+	    // text mail with attachement should get a new content type, html mail get that later
 		$this->headerOptions['Content-Type'] = "multipart/mixed;\n\tboundary=\"". $this->mailBoundary. '"';
 	}
 }
@@ -354,8 +361,19 @@ private function prepareBody()
     	if(isset($this->attachments))
     	{
     		$this->mailBoundaryRelated = '--NextPart_AdmidioMailSystem_'. md5(uniqid(rand()));
-			$this->mail_body = $this->mail_body. "--". $this->mailBoundary. 
+
+    		if($this->attachments[0]['file_disposition'] == 'inline')
+    		{
+                // inline attachements should only be shown in html part and not as attachement
+                $this->mail_body = $this->mail_body. "--". $this->mailBoundary. 
 						   	   "\nContent-Type: multipart/related;\n\tboundary=\"". $this->mailBoundaryRelated. "\"\n\n";
+            }
+            else
+            {
+                // set content type 'mixed' for html attachement if they should not be shown inline
+                $this->mail_body = $this->mail_body. "--". $this->mailBoundary. 
+						   	   "\nContent-Type: multipart/mixed;\n\tboundary=\"". $this->mailBoundaryRelated. "\"\n\n";
+            }
 		}
 		$this->mail_body = $this->mail_body. "--". $this->mailBoundaryRelated. 
 					   	   "\nContent-Type: text/html; charset=".$this->charset."\nContent-Transfer-Encoding: 7bit\n\n";
