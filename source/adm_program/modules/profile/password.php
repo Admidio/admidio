@@ -52,10 +52,9 @@ if($getMode == 1)
             {
                 // pruefen, ob altes Passwort korrekt eingegeben wurde              
                 $user = new User($gDb, $gProfileFields, $getUserId);
-                $old_password_crypt = md5($_POST['old_password']);
 
                 // Webmaster duerfen fremde Passwörter so aendern
-                if($user->getValue('usr_password') == $old_password_crypt || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId )
+                if($user->checkPassword($_POST['old_password']) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId )
                 {
                     $user->setValue('usr_password', $_POST['new_password']);
                     $user->save();
