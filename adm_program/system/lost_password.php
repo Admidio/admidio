@@ -78,7 +78,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
     
     $sysmail = new SystemMail($gDb);
     $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-    $sysmail->setVariable(1, $user->real_password);
+    $sysmail->setVariable(1, $new_password);
     $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activation_id);
     if($sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user) == true)
     {

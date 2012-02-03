@@ -21,8 +21,6 @@ require_once(SERVER_PATH. '/adm_program/libs/phpass/passwordhash.php');
 
 class TableUsers extends TableAccess
 {
-    public $real_password;     // Unverschluesseltes Passwort. Ist nur gefuellt, wenn gerade das Passwort gesetzt wurde
-
     // Konstruktor
     public function __construct(&$db, $usr_id = 0)
     {
