@@ -298,6 +298,16 @@ UPDATE %PREFIX%_guestbook SET gbo_text = REPLACE(REPLACE(gbo_text, '[/img]', '" 
 UPDATE %PREFIX%_guestbook SET gbo_text = REPLACE(REPLACE(gbo_text, '[/url]', '</a>'), '[url=', '<a href="');
 UPDATE %PREFIX%_guestbook SET gbo_text = REPLACE(REPLACE(gbo_text, '[/email]', '</a>'), '[email=', '<a href="mailto:');
 UPDATE %PREFIX%_guestbook SET gbo_text = REPLACE(gbo_text, ']', '">');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/b]', '</b>'), '[b]', '<b>');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/i]', '</i>'), '[i]', '<i>');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/u]', '</u>'), '[u]', '<u>');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/big]', '</span>'), '[big]', '<span style="font-size:14pt">');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/small]', '</span>'), '[small]', '<span style="font-size:9pt">');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/center]', '</p>'), '[center]', '<p style="text-align: center">');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/img]', '" />'), '[img]', '<img src="');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/url]', '</a>'), '[url=', '<a href="');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(REPLACE(gbc_text, '[/email]', '</a>'), '[email=', '<a href="mailto:');
+UPDATE %PREFIX%_guestbook_comments SET gbc_text = REPLACE(gbc_text, ']', '">');
 
 UPDATE %PREFIX%_links SET lnk_description = REPLACE(REPLACE(lnk_description, '[/b]', '</b>'), '[b]', '<b>');
 UPDATE %PREFIX%_links SET lnk_description = REPLACE(REPLACE(lnk_description, '[/i]', '</i>'), '[i]', '<i>');
