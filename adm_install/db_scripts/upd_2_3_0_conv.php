@@ -7,8 +7,7 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-
- // create new indices
+// create new indices
 $sql = 'ALTER TABLE '.TBL_PREFERENCES.' DROP INDEX ak_org_id_name';
 $gDb->query($sql, false);
 $sql = 'ALTER TABLE '.TBL_USERS.' DROP INDEX ak_usr_login_name';
