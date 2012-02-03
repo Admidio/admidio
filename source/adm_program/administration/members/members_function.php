@@ -192,7 +192,7 @@ elseif($getMode == 4)
         // Mail an den User mit den Loginaten schicken
         $sysmail = new SystemMail($gDb);
         $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-        $sysmail->setVariable(1, $user->real_password);
+        $sysmail->setVariable(1, $password);
         if($sysmail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user) == true)
         {
             $phrase = $gL10n->get('SYS_EMAIL_SEND', $user->getValue('EMAIL'));
