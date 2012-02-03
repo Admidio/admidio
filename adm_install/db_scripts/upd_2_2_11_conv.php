@@ -60,4 +60,24 @@ validate_bbc(TBL_GUESTBOOK_COMMENTS, 'gbc_id', 'gbc_text');
 validate_bbc(TBL_LINKS, 'lnk_id', 'lnk_description');
 validate_bbc(TBL_ROOMS, 'room_id', 'room_description');
 
+
+// check internal fieldname if name is unique, if not add suffix to name
+$sql = 'SELECT usf_id, usf_name_intern FROM '.TBL_USER_FIELDS.' ORDER by usf_name_intern ';
+$result = $gDb->query($sql);
+$lastNameIntern = '';
+$i = 0;
+
+while($row = mysql_fetch_array($result))
+{
+	$i++;
+	if($row['usf_name_intern'] == $lastNameIntern)
+	{
+		$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name_intern = \''.$row['usf_name_intern'].'_0'.$i.'\'
+		         WHERE usf_id = '.$row['usf_id'];
+		$gDb->query($sql);
+	}
+
+	$lastNameIntern = $row['usf_name_intern'];
+}
+
 ?>
