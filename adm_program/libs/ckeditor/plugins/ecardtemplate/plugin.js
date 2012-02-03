@@ -32,7 +32,7 @@ CKEDITOR.plugins.add( 'ecardtemplate',
 			onClick : function( value )
 			{
 				editor.fire( 'saveSnapshot' );
-				$("#" + ecardJS.ecardformid + " input[name='ecard_template_name']").val(value);
+				$("#" + ecardJS.ecardformid + " input[name='ecard[template_name]']").val(value);
 			}
 		 });
    }

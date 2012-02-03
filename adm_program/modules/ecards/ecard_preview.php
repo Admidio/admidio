@@ -9,13 +9,13 @@
 
 // preview will be called before form is send, so there are now POST parameters available 
 // then show nothing. Second call is with POST parameters then show preview
-if(isset($_POST['ecard_template_name']))
+if(isset($_POST['ecard']['template_name']))
 {
 	require_once('../../system/common.php');
 	require_once('ecard_function.php');
 
 	// Initialize and check the parameters
-	$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template_name', 'file', null, true);
+	$postTemplateName = admFuncVariableIsValid($_POST['ecard'], 'template_name', 'file', null, true);
 
 	$funcClass = new FunctionClass($gL10n);
 	$funcClass->getVars();

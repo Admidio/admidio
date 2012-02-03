@@ -11,7 +11,7 @@ require_once('../../system/common.php');
 require_once('ecard_function.php');
 
 // Initialize and check the parameters
-$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template_name', 'file', null, true);
+$postTemplateName = admFuncVariableIsValid($_POST['ecard'], 'template_name', 'file', null, true);
 
 $funcClass 					= new FunctionClass($gL10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);

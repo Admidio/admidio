@@ -163,7 +163,7 @@ echo '
 			<input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'].'" />
 			<input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$getPhotoNr.'.jpg" />
 			<input type="hidden" name="ecard[submit_action]" value="" />
-			<input type="hidden" name="ecard_template_name" value="'.$gPreferences['ecard_template'].'" />
+			<input type="hidden" name="ecard[template_name]" value="'.$gPreferences['ecard_template'].'" />
 
 			<div class="groupBox" id="admMailContactDetails">
 				<div class="groupBoxHeadline" id="admMailContactDetailsHead">

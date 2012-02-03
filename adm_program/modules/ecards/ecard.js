@@ -12,7 +12,6 @@ function ecardJSClass()
 	this.dropDiv_id				= "dropdownmenu";
 	this.externDiv_id			= "extern";
 	this.switchDiv_id			= "externSwitch";
-	this.textInput_id			= "admEcardMessage";
 	this.counterDiv_id			= "counter";
 	this.menueDiv_id			= "Menue";
 	this.wrongDiv_id			= "wrong";
@@ -184,7 +183,7 @@ function ecardJSClass()
 		if (this.validateForm())
 		{
 			$("#" + this.ecardformid + " input[name='ecard[submit_action]']").attr("value","send");
-			this.jQueryAjaxLoadRolesAppend();
+			this.setJQuerySubmitOptions();
 			jQuery.fn.SubmitEcard();
 		}
 		else
@@ -236,7 +235,7 @@ function ecardJSClass()
 		}
 	}
 	
-	this.jQueryAjaxLoadRolesAppend = function()
+	this.setJQuerySubmitOptions = function()
 	{
 		if($("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value") == "send")
 		{
@@ -252,7 +251,8 @@ function ecardJSClass()
 				}	 
 			}; 
 			jQuery.fn.SubmitEcard = function(){
-				$.fn.colorbox.init()
+				$.fn.colorbox.init();
+				$("#" + ecardJS.ecardformid + " textarea[name='admEcardMessage']").text( CKEDITOR.instances.admEcardMessage.getData() );
 				if($("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value") == "send")
 					$("#" + ecardJS.ecardformid).ajaxSubmit(options);
 			};
