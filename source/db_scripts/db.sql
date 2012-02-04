@@ -46,7 +46,7 @@ create table %PREFIX%_announcements
    ann_headline                   varchar(100)  not null,
    ann_description                text,
    ann_usr_id_create              integer       unsigned,
-   ann_timestamp_create           timestamp     not null,
+   ann_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    ann_usr_id_change              integer       unsigned,
    ann_timestamp_change           timestamp 	null default null,
    primary key (ann_id)
@@ -66,7 +66,7 @@ create table %PREFIX%_auto_login
    atl_session_id                 varchar(35)   not null,
    atl_org_id                     integer       unsigned not null,
    atl_usr_id                     integer       unsigned not null,
-   atl_last_login                 timestamp     not null,
+   atl_last_login                 timestamp		null default null,
    atl_ip_address                 varchar(15)   not null,
    primary key (atl_id)
 )
@@ -90,7 +90,7 @@ create table %PREFIX%_categories
    cat_default                    boolean       not null default '0',
    cat_sequence                   smallint      not null,
    cat_usr_id_create              integer       unsigned,
-   cat_timestamp_create           timestamp     not null,
+   cat_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    cat_usr_id_change              integer       unsigned,
    cat_timestamp_change           timestamp 	null default null,
    primary key (cat_id)
@@ -127,8 +127,8 @@ create table %PREFIX%_dates
    dat_rol_id                     integer       unsigned,
    dat_room_id                    integer       unsigned,
    dat_global                     boolean       not null default '0',
-   dat_begin                      timestamp     not null,
-   dat_end                        timestamp     not null,
+   dat_begin                      timestamp 	null default null,
+   dat_end                        timestamp 	null default null,
    dat_all_day                    boolean       not null default '0',
    dat_description                text,
    dat_location                   varchar(100),
@@ -136,7 +136,7 @@ create table %PREFIX%_dates
    dat_headline                   varchar(100)  not null,
    dat_max_members                integer       not null default 0,                      
    dat_usr_id_create              integer       unsigned,
-   dat_timestamp_create           timestamp     not null,
+   dat_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    dat_usr_id_change              integer       unsigned,
    dat_timestamp_change           timestamp 	null default null,
    primary key (dat_id)
@@ -158,7 +158,7 @@ create table %PREFIX%_files
    fil_locked                     boolean       not null default '0',
    fil_counter                    integer,
    fil_usr_id                     integer       unsigned,
-   fil_timestamp                  timestamp     not null,
+   fil_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
    primary key (fil_id)
 )
 engine = InnoDB
@@ -196,7 +196,7 @@ create table %PREFIX%_folders
    fol_locked                     boolean       not null default '0',
    fol_public                     boolean       not null default '0',
    fol_usr_id                     integer       unsigned,
-   fol_timestamp                  timestamp     not null,
+   fol_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
    primary key (fol_id)
 )
 engine = InnoDB
@@ -219,7 +219,7 @@ create table %PREFIX%_guestbook
    gbo_ip_address                 varchar(15)   not null,
    gbo_locked                     boolean       not null default '0',
    gbo_usr_id_create              integer       unsigned,
-   gbo_timestamp_create           timestamp     not null,
+   gbo_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    gbo_usr_id_change              integer       unsigned,
    gbo_timestamp_change           timestamp 	null default null,
    primary key (gbo_id)
@@ -243,7 +243,7 @@ create table %PREFIX%_guestbook_comments
    gbc_ip_address                 varchar(15)   not null,
    gbc_locked                     boolean       not null default '0',
    gbc_usr_id_create              integer       unsigned,
-   gbc_timestamp_create           timestamp     not null,
+   gbc_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    gbc_usr_id_change              integer       unsigned,
    gbc_timestamp_change           timestamp 	null default null,
    primary key (gbc_id)
@@ -266,7 +266,7 @@ create table %PREFIX%_links
    lnk_url                        varchar(255)  not null,
    lnk_counter                    integer       not null default 0,
    lnk_usr_id_create              integer       unsigned,
-   lnk_timestamp_create           timestamp     not null,
+   lnk_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    lnk_usr_id_change              integer       unsigned,
    lnk_timestamp_change           timestamp 	null default null,
    primary key (lnk_id)
@@ -286,7 +286,7 @@ create table %PREFIX%_lists
    lst_org_id                     integer       unsigned not null,
    lst_usr_id                     integer       unsigned not null,
    lst_name                       varchar(255),
-   lst_timestamp                  timestamp     not null,
+   lst_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
    lst_global                     boolean       not null default '0',
    lst_default                    boolean       not null default '0',
    primary key (lst_id)
@@ -372,7 +372,7 @@ create table %PREFIX%_photos
    pho_locked                     boolean       not null default '0',
    pho_pho_id_parent              integer       unsigned,
    pho_usr_id_create              integer       unsigned,
-   pho_timestamp_create           timestamp     not null,
+   pho_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    pho_usr_id_change              integer       unsigned,
    pho_timestamp_change           timestamp 	null default null,
    primary key (pho_id)
@@ -411,7 +411,7 @@ create table %PREFIX%_role_dependencies
    rld_rol_id_child               integer       unsigned not null,
    rld_comment                    text,
    rld_usr_id                     integer       unsigned,
-   rld_timestamp                  timestamp     not null,
+   rld_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
    primary key (rld_rol_id_parent, rld_rol_id_child)
 )
 engine = InnoDB
@@ -453,7 +453,7 @@ create table %PREFIX%_roles
    rol_cost                       float         unsigned,
    rol_cost_period				  smallint,
    rol_usr_id_create              integer       unsigned,
-   rol_timestamp_create           timestamp     not null,
+   rol_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    rol_usr_id_change              integer       unsigned,
    rol_timestamp_change           timestamp 	null default null,
    rol_valid                      boolean       not null default '1',
@@ -479,7 +479,7 @@ create table %PREFIX%_rooms
     room_capacity                 integer       not null,
     room_overhang                 integer,
     room_usr_id_create            integer       unsigned,
-    room_timestamp_create         timestamp     not null,
+    room_timestamp_create         timestamp     not null default CURRENT_TIMESTAMP,
     room_usr_id_change            integer       unsigned,
     room_timestamp_change         timestamp 	null default null,
     primary key (room_id)                                                                       
@@ -499,8 +499,8 @@ create table %PREFIX%_sessions
    ses_usr_id                     integer       unsigned default NULL,
    ses_org_id                     integer       unsigned not null,
    ses_session_id                 varchar(35)   not null,
-   ses_begin                      timestamp     not null,
-   ses_timestamp                  timestamp     not null,
+   ses_begin                      timestamp		null default null,
+   ses_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
    ses_ip_address                 varchar(15)   not null,
    ses_binary                     blob,
    ses_renew                      smallint      not null default 0,
@@ -551,7 +551,7 @@ create table %PREFIX%_user_fields
    usf_mandatory                  boolean       not null default '0',
    usf_sequence                   smallint      not null,
    usf_usr_id_create              integer       unsigned,
-   usf_timestamp_create           timestamp     not null,
+   usf_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    usf_usr_id_change              integer       unsigned,
    usf_timestamp_change           timestamp 	null default null,
    primary key (usf_id)
@@ -601,7 +601,7 @@ create table %PREFIX%_users
    usr_date_invalid               timestamp 	null default null,
    usr_number_invalid             smallint      not null default 0,
    usr_usr_id_create              integer       unsigned,
-   usr_timestamp_create           timestamp     not null,
+   usr_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    usr_usr_id_change              integer       unsigned,
    usr_timestamp_change           timestamp 	null default null,
    usr_valid                      boolean       not null default '0',
