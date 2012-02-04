@@ -31,7 +31,7 @@ function hasRole($role_name, $user_id = 0)
                   AND mem_begin <= \''.DATE_NOW.'\'
                   AND mem_end    > \''.DATE_NOW.'\'
                   AND mem_rol_id = rol_id
-                  AND rol_name   = \''.$role_name.'"
+                  AND rol_name   = \''.$role_name.'\'
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
