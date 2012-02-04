@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Data conversion for version 2.2.8
+ * Data conversion for version 2.2.11
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
