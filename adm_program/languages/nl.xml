@@ -71,6 +71,9 @@
     <text id="SYS_VERSION" development="new" translation="edited">Versie</text>
     <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="edited">De database versie %VAR1% is lager dan de versie van Admidio scripts %VAR2%.\n\nMaak svp een %VAR3% database update naar versie %VAR4%.</text>
     <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="edited">De database versie %VAR1% is hoger dan de versie van Admidio scripts %VAR2%.\n\nMaak svp een update van uw Admidio bestanden op de server %VAR3% door een nieuwere versie te gebruiken van Admidio (%VAR4%).</text>
+    <text id="UPD_BETA_VERSION" development="changed" translation="todo">Beschikbaar Beta</text>
+    <text id="UPD_CURRENT_VERSION" development="changed" translation="todo">Geïnstalleerd</text>  
+    <text id="UPD_STABLE_VERSION" development="changed" translation="todo">Beschikbaar</text>
 </version>
 
 <version id="2.2.6" translator="Guido vd Leest">
@@ -747,14 +750,11 @@
 	
 	<!-- Phrases only in Updatecheck -->
 	<text id="UPD_ADMIDIO" development="new" translation="edited">Ga naar Admidio update pagina</text>
-	<text id="UPD_BETA_VERSION" development="new" translation="edited">Huidige beta versie</text>
 	<text id="UPD_CONNECTION_ERROR" development="new" translation="edited">Verbinding met Admidio update pagina niet gelukt. Check svp uw internet verbinding of probeer het later opnieuw. U kunt ook de %VAR1% website bezoeken voor een update.</text>
-	<text id="UPD_CURRENT_VERSION" development="new" translation="edited">Geinstalleerde versie</text>
 	<text id="UPD_NEW" development="new" translation="edited">Een nieuwe stabiele versie is beschikbaar!</text>
 	<text id="UPD_NEW_BETA" development="new" translation="edited">Een nieuwe beta versie is beschikbaar!</text>
 	<text id="UPD_NEW_BOTH" development="new" translation="edited">Een nieuwe stabiele versie en beta versie zijn beschikbaar!</text>
 	<text id="UPD_NO_NEW" development="new" translation="edited">U gebruikt momenteel een %VAR1%versie van Admidio!</text>
-	<text id="UPD_STABLE_VERSION" development="new" translation="edited">Huidige stabiele versie van Admidio</text>
 	<text id="UPD_TITLE" development="new" translation="edited">Update check</text>
 
     <!-- Phrases only in Photomodule -->
