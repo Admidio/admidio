@@ -70,6 +70,9 @@
     <text id="SYS_VERSION" development="new" translation="edited">Version</text>
     <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="edited">Database versionen %VAR1% er lavere end versionerne af Admidios scripts %VAR2%.\n\nVenligst udfør %VAR3% database opdatering til version %VAR4%.</text>
     <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="edited">Database versionen %VAR1% er højere end versionen af Admidios scripts %VAR2%.\n\nVenligst opdater dine Admidio filer på på serveren %VAR3% ved at bruge en nyere version af Admidio (%VAR4%).</text>
+    <text id="UPD_BETA_VERSION" development="changed" translation="todo">Tilgængelig Beta</text>
+    <text id="UPD_CURRENT_VERSION" development="changed" translation="todo">Installeret</text>  
+    <text id="UPD_STABLE_VERSION" development="changed" translation="todo">Tilgængelig</text>
 </version>
 <version id="2.2.6" translator="Henrik Troels-Hansen">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Sidste nye meddelelse fra organisationen %VAR1%</text>
@@ -753,14 +756,11 @@
 	
 	<!-- Phrases only in Updatecheck -->
 	<text id="UPD_ADMIDIO" development="new" translation="edited">Gå til Admidio Opdaterings side</text>
-	<text id="UPD_BETA_VERSION" development="new" translation="edited">Nuværende beta version</text>
 	<text id="UPD_CONNECTION_ERROR" development="new" translation="edited">Forbindelse til Admidio opdaterings side kunne ikke etableres. Check din internetforbindelse og prøv igen senere. Du kan også checke %VAR1% hjemmesiden for manuelle opdateringer.</text>
-	<text id="UPD_CURRENT_VERSION" development="new" translation="edited">Installeret version</text>
 	<text id="UPD_NEW" development="new" translation="edited">En ny stabil version er tilgængelig!</text>
 	<text id="UPD_NEW_BETA" development="new" translation="edited">En ny beta version er tilgængelig!</text>
 	<text id="UPD_NEW_BOTH" development="new" translation="edited">En ny stabil version og en ny beta version er tilgængelig!</text>
 	<text id="UPD_NO_NEW" development="new" translation="edited">Du bruger lige nu %VAR1%version af Admidio!</text>
-	<text id="UPD_STABLE_VERSION" development="new" translation="edited">Nuværende stabile version af Admidio</text>
 	<text id="UPD_TITLE" development="new" translation="edited">Opdaterings check</text>
 
     <!-- Phrases only in Photomodule -->
