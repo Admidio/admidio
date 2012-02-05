@@ -3,7 +3,7 @@
 -- Daten für Tabelle adm_organizations
 --
 
-INSERT INTO adm_organizations (org_id, org_longname, org_shortname, org_org_id_parent, org_homepage) VALUES
+INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org_id_parent, org_homepage) VALUES
 (1, 'Demo-Organisation', 'DEMO', NULL, 'http://demo.admidio.org'),
 (2, 'Test-Organisation', 'TEST', 1, 'http://demo.admidio.org');
 
@@ -11,7 +11,7 @@ INSERT INTO adm_organizations (org_id, org_longname, org_shortname, org_org_id_p
 -- Daten für Tabelle adm_preferences
 --
 
-INSERT INTO adm_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
+INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
 (1000, 1, 'announcements_per_page', '10'),
 (1100, 1, 'ecard_view_width', '250'),
 (1200, 1, 'ecard_view_height', '250'),
@@ -44,7 +44,7 @@ INSERT INTO adm_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
 (4500, 1, 'dates_show_calendar_select', '1'),
 (4600, 1, 'dates_show_map_link', '1'),
 (4700, 1, 'db_version', '2.3.0'),
-(4800, 1, 'db_version_beta', '2'),
+(4800, 1, 'db_version_beta', '0'),
 (4900, 1, 'default_country', 'DEU'),
 (5000, 1, 'flooding_protection_time', '60'),
 (5100, 1, 'forum_version', 'phpBB2'),
@@ -138,7 +138,7 @@ INSERT INTO adm_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
 (45001, 2, 'dates_show_calendar_select', '1'),
 (46001, 2, 'dates_show_map_link', '1'),
 (47001, 2, 'db_version', '2.3.0'),
-(48001, 2, 'db_version_beta', '2'),
+(48001, 2, 'db_version_beta', '0'),
 (49001, 2, 'default_country', 'DEU'),
 (50001, 2, 'flooding_protection_time', '60'),
 (51001, 2, 'forum_version', 'phpBB2'),
@@ -224,7 +224,7 @@ INSERT INTO adm_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
 -- Daten für Tabelle adm_users
 --
 
-INSERT INTO adm_users (usr_id, usr_login_name, usr_password, usr_new_password, usr_photo, usr_text, usr_activation_code, usr_last_login, usr_actual_login, usr_number_login, usr_date_invalid, usr_number_invalid, usr_usr_id_create, usr_timestamp_create, usr_usr_id_change, usr_timestamp_change, usr_valid, usr_reg_org_shortname) VALUES
+INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_password, usr_photo, usr_text, usr_activation_code, usr_last_login, usr_actual_login, usr_number_login, usr_date_invalid, usr_number_invalid, usr_usr_id_create, usr_timestamp_create, usr_usr_id_change, usr_timestamp_change, usr_valid, usr_reg_org_shortname) VALUES
 (1, 'admin', '50a9c7dbf0fa09e8969978317dca12e8', NULL, NULL, NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 1, '2008-05-03 09:43:02', 1, '2008-05-03 09:43:02', 1, NULL),
 (202, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', 1, NULL),
 (203, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', 1, NULL),
@@ -386,7 +386,7 @@ INSERT INTO adm_users (usr_id, usr_login_name, usr_password, usr_new_password, u
 -- Daten für Tabelle adm_categories
 --
 
-INSERT INTO adm_categories (cat_id, cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create, cat_usr_id_change, cat_timestamp_change) VALUES
+INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create, cat_usr_id_change, cat_timestamp_change) VALUES
 (1, NULL, 'USF', 'MASTER_DATA', 'SYS_MASTER_DATA', 0, 1, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (2, NULL, 'USF', 'SOCIAL_NETWORKS', 'SYS_SOCIAL_NETWORKS', 0, 0, 0, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
 (3, 1, 'ROL', 'COMMON', 'SYS_COMMON', 0, 0, 0, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
@@ -415,7 +415,7 @@ INSERT INTO adm_categories (cat_id, cat_org_id, cat_type, cat_name_intern, cat_n
 -- Daten für Tabelle adm_roles
 --
 
-INSERT INTO adm_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_visible) VALUES
+INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_visible) VALUES
 (1, 3, 'Webmaster', 'Gruppe der Administratoren des Systems', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1),
 (2, 3, 'Mitglied', 'Alle Mitglieder der Organisation', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', 1, 0, 1),
 (3, 3, 'Vorstand', 'Vorstand des Vereins', 0, 0, 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 2, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', 1, 0, 1),
@@ -430,7 +430,7 @@ INSERT INTO adm_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign
 -- Daten für Tabelle adm_user_fields
 --
 
-INSERT INTO adm_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_icon, usf_url, usf_system, usf_disabled, usf_hidden, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create, usf_usr_id_change, usf_timestamp_change) VALUES
+INSERT INTO %PREFIX%_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_icon, usf_url, usf_system, usf_disabled, usf_hidden, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create, usf_usr_id_change, usf_timestamp_change) VALUES
 (1, 1, 'TEXT', 'LAST_NAME', 'SYS_LASTNAME', NULL, NULL, NULL, NULL, 1, 1, 0, 1, 1, 1, '2012-01-08 11:12:05', NULL, NULL),
 (2, 1, 'TEXT', 'FIRST_NAME', 'SYS_FIRSTNAME', NULL, NULL, NULL, NULL, 1, 1, 0, 1, 2, 1, '2012-01-08 11:12:05', NULL, NULL),
 (3, 1, 'TEXT', 'ADDRESS', 'SYS_ADDRESS', NULL, NULL, NULL, NULL, 1, 0, 0, 0, 3, 1, '2012-01-08 11:12:05', NULL, NULL),
@@ -461,7 +461,7 @@ INSERT INTO adm_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern, usf_
 -- Daten für Tabelle adm_announcements
 --
 
-INSERT INTO adm_announcements (ann_id, ann_org_shortname, ann_global, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
+INSERT INTO %PREFIX%_announcements (ann_id, ann_org_shortname, ann_global, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
 (1, 'DEMO', '0', 'Neue Trikots', 'Ab der kommenden Saison gibt es neue Trikots für alle aktiven Spieler. Diese können vor dem ersten Training beim Trainer abgeholt werden.', 1, '2012-01-01 00:00:00', NULL, NULL),
 (2, 'DEMO', '0', 'Aerobik-Kurs', 'Während der Schulferien bieten wir einen <i>Aerobic-Kurs</i> für alle interessierten Mitglieder an.\r\n\r\nAnmeldungen werden auf der <b>Homepage</b> oder in der <b>Geschäftsstelle</b> entgegen genommen.', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53');
 
@@ -470,7 +470,7 @@ INSERT INTO adm_announcements (ann_id, ann_org_shortname, ann_global, ann_headli
 -- Daten für Tabelle adm_dates
 --
 
-INSERT INTO adm_dates (dat_id, dat_cat_id, dat_global, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members) VALUES
+INSERT INTO %PREFIX%_dates (dat_id, dat_cat_id, dat_global, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members) VALUES
 (3, 12, 0, '2012-01-22 16:00:00', '2012-01-22 18:00:00', 0, 'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!', 'Sportplatz Solingen', 'DEU', 'Training Jugend 1', 1, '2008-07-06 17:38:26', NULL, NULL, NULL, NULL, 0),
 (4, 10, 0, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'Heute findet unser Grillfest statt. Neben knackigen Würstchen gibt es auch noch Kottelets und ein bischen Bauchspeck.', NULL, NULL, 'Grillfest', 1, '2008-07-06 17:41:18', NULL, NULL, 8, NULL, 0),
 (5, 10, 0, '2012-02-07 00:00:00', '2012-02-12 00:00:00', 1, 'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)', 'Jugendherberge Esens', 'DEU', 'Trainerlehrgang', 1, '2008-07-06 17:49:13', NULL, NULL, NULL, NULL, 0),
@@ -482,7 +482,7 @@ INSERT INTO adm_dates (dat_id, dat_cat_id, dat_global, dat_begin, dat_end, dat_a
 -- Daten für Tabelle adm_date_role
 --
 
-INSERT INTO adm_date_role (dtr_id, dtr_dat_id, dtr_rol_id) VALUES
+INSERT INTO %PREFIX%_date_role (dtr_id, dtr_dat_id, dtr_rol_id) VALUES
 (1, 3, NULL),
 (2, 4, NULL),
 (3, 5, NULL),
@@ -493,7 +493,7 @@ INSERT INTO adm_date_role (dtr_id, dtr_dat_id, dtr_rol_id) VALUES
 -- Daten für Tabelle adm_folders
 --
 
-INSERT INTO adm_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, fol_name, fol_description, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp) VALUES
+INSERT INTO %PREFIX%_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, fol_name, fol_description, fol_path, fol_locked, fol_public, fol_usr_id, fol_timestamp) VALUES
 (1, 1, NULL, 'DOWNLOAD', 'download', NULL, '/adm_my_files', 0, 1, NULL, '2012-01-01 22:35:07');
 
 
@@ -501,7 +501,7 @@ INSERT INTO adm_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, fol_na
 -- Daten für Tabelle adm_guestbook
 --
 
-INSERT INTO adm_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
+INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
 (1, 1, 'Heinz Webmaster', 'Willkommen im Gästebuch des Demo-Bereichs. \r\n\r\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\r\n\r\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.', 'webmaster@admidio.org', 'http://www.admidio.org', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
 (2, 1, 'Sepp Mayerchen', 'Dann werde ich mir das Programm mal anschauen.', NULL, NULL, '84.63.38.55', 0, NULL, '2012-01-03 20:16:42', NULL, NULL);
 
@@ -509,14 +509,14 @@ INSERT INTO adm_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gb
 -- Daten für Tabelle adm_guestbook_comments
 --
 
-INSERT INTO adm_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
+INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
 (1, 2, 'Heinz Webmaster', 'Weitere Infos zu dem Programm gibt es in der Dokumentation [url=http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index]Dokumentation[/url].\r\n\r\nBei Fragen und Anregungen einfach mal ins [url=http://forum.admidio.org]Forum[/url] schauen.', 'webmaster@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
 
 --
 -- Daten für Tabelle adm_links
 --
 
-INSERT INTO adm_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_url, lnk_counter, lnk_usr_id_create, lnk_timestamp_create, lnk_usr_id_change, lnk_timestamp_change) VALUES
+INSERT INTO %PREFIX%_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_url, lnk_counter, lnk_usr_id_create, lnk_timestamp_create, lnk_usr_id_change, lnk_timestamp_change) VALUES
 (1, 7, 'Beispielseite', 'Auf dieser Seite gibt es nicht viele Neuigkeiten :(', 'http://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
 (2, 9, 'Admidio', 'Die Homepage der <b>besten</b> Open Source Mitgliederverwaltung im Netz.', 'http://www.admidio.org', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
 (3, 9, 'Admidio-Forum', 'Das Forum zur Online-Mitgliederverwaltung. Hier wird jedem geholfen, der auf ein Problem bei der Installation oder Einrichtung von Admidio gestoßen ist. Aber auch Verbesserungen können hier gepostet werden.', 'http://forum.admidio.org', 46, 1, '2012-01-04 21:15:44', NULL, NULL);
@@ -525,7 +525,7 @@ INSERT INTO adm_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_url, l
 -- Daten für Tabelle adm_lists
 --
 
-INSERT INTO adm_lists (lst_id, lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default) VALUES
+INSERT INTO %PREFIX%_lists (lst_id, lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default) VALUES
 (1, 1, 1, 'Adressliste', '2009-02-27 21:50:57', 1, 1),
 (2, 1, 1, 'Telefonliste', '2009-02-27 21:50:57', 1, 0),
 (3, 1, 1, 'Kontaktdaten', '2009-02-27 21:50:57', 1, 0),
@@ -539,7 +539,7 @@ INSERT INTO adm_lists (lst_id, lst_org_id, lst_usr_id, lst_name, lst_timestamp, 
 -- Daten für Tabelle adm_list_columns
 --
 
-INSERT INTO adm_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter) VALUES
+INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, lsc_special_field, lsc_sort, lsc_filter) VALUES
 (1, 1, 1, 1, NULL, 'ASC', NULL),
 (2, 1, 2, 2, NULL, 'ASC', NULL),
 (3, 1, 3, 10, NULL, NULL, NULL),
@@ -590,7 +590,7 @@ INSERT INTO adm_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, lsc_sp
 -- Daten für Tabelle adm_members
 --
 
-INSERT INTO adm_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES
+INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES
 (1, 1, 1, '2008-04-20', '9999-12-31', 0),
 (2, 4, 1, '2008-04-20', '2009-10-31', 0),
 (3, 6, 1, '2009-04-20', '9999-12-31', 0),
@@ -792,7 +792,7 @@ INSERT INTO adm_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end, mem
 -- Daten für Tabelle adm_photos
 --
 
-INSERT INTO adm_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
+INSERT INTO %PREFIX%_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
 (1, 'DEMO', 0, 'Kroatien', '2009-10-05', '2009-10-11', 'Karl Müller und andere', 0, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
 (2, 'DEMO', 3, 'Plitwitzer Seen', '2009-10-05', '2009-10-07', 'Karl Müller und andere', 0, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
 (3, 'DEMO', 3, 'Krka', '2009-10-08', '2009-10-11', 'Karl Müller und andere', 0, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
@@ -803,21 +803,21 @@ INSERT INTO adm_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_b
 -- Daten für Tabelle adm_rooms
 --
 
-INSERT INTO adm_rooms (room_id, room_name, room_description, room_capacity, room_overhang, room_usr_id_create, room_timestamp_create, room_usr_id_change, room_timestamp_change) VALUES
+INSERT INTO %PREFIX%_rooms (room_id, room_name, room_description, room_capacity, room_overhang, room_usr_id_create, room_timestamp_create, room_usr_id_change, room_timestamp_change) VALUES
 (1, 'Besprechnungsraum', 'Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Ein Beamer steht zur Verfügung.', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL);
 
 --
 -- Daten für Tabelle adm_sessions
 --
 
-INSERT INTO adm_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, ses_begin, ses_timestamp, ses_ip_address, ses_binary, ses_renew) VALUES
+INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, ses_begin, ses_timestamp, ses_ip_address, ses_binary, ses_renew) VALUES
 (1, NULL, 1, 'a8c1eedddd38a6806c81a775da97a16b', '2012-01-08 11:14:25', '2012-01-08 11:14:25', '127.0.0.1', NULL, 0);
 
 --
 -- Daten für Tabelle adm_texts
 --
 
-INSERT INTO adm_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
+INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 (1, 1, 'SYSMAIL_REGISTRATION_USER', '#subject# Anmeldung bei %organization_long_name%\r\n#content# Hallo %user_first_name%,\r\n\r\ndeine Anmeldung auf %organization_homepage% wurde bestätigt.\r\n\r\nNun kannst du dich mit deinem Benutzernamen : %user_login_name%\r\nund dem Passwort auf der Homepage einloggen.\r\n\r\nSollten noch Fragen bestehen, schreib eine E-Mail an %webmaster_email% .\r\n\r\nViele Grüße\r\nDie Webmaster'),
 (2, 1, 'SYSMAIL_REGISTRATION_WEBMASTER', '#subject# Neue Registrierung bei %organization_long_name%\r\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\r\n\r\nNachname: %user_last_name%\r\nVorname:  %user_first_name%\r\nE-Mail:   %user_email%\r\n\r\n\r\nDiese Nachricht wurde automatisch erzeugt.'),
 (3, 1, 'SYSMAIL_NEW_PASSWORD', '#subject# Logindaten für %organization_homepage%\r\n#content# Hallo %user_first_name%,\r\n\r\ndu erhälst deine Logindaten für %organization_homepage% .\r\nBenutzername: %user_login_name%\r\nPasswort: %variable1%\r\n\r\nDas Passwort wurde automatisch generiert.\r\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\r\n\r\nViele Grüße\r\nDie Webmaster'),
@@ -828,7 +828,7 @@ INSERT INTO adm_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 -- Daten für Tabelle adm_user_data
 --
 
-INSERT INTO adm_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUES
+INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUES
 (1, 1, 1, 'Webmaster'),
 (2, 1, 2, 'Heinz'),
 (3, 1, 3, 'Königsallee 13'),
