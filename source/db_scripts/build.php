@@ -147,13 +147,13 @@ include('data_edit.php');
 
 
 // falls dies der Admidio-Demo-bereich ist, dann das Theme auf demo setzen
-if(strpos(__FILE__, 'demo') > 0)
+/*if(strpos(__FILE__, 'demo') > 0)
 {
-    $sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = "demo"
-             WHERE prf_name   = "theme" 
+    $sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = 'demo'
+             WHERE prf_name   = 'theme' 
                AND prf_org_id = 1 ';
     $db->query($sql);
-}
+}*/
 
 
 echo 'Installation successful !<br />';
