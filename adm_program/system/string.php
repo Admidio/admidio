@@ -183,7 +183,7 @@ function strValidCharacters($string, $checkType)
 				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789.-_+@';
 				break;
 			case 'url':
-				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß.-_:/#?=%';
+				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß.-_:/#?=%&';
 				break;
 		}
 		
