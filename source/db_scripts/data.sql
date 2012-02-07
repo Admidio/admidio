@@ -202,7 +202,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (92171, 2, 'captcha_type', 'pic'),
 (92172, 1, 'system_js_editor_enabled', '1'),
 (92173, 1, 'system_js_editor_color', '#96c4cb'),
-(92174, 1, 'system_organization_select', '0'),
+(92174, 1, 'system_organization_select', '1'),
 (92175, 1, 'photo_slideshow_speed', '5'),
 (92176, 1, 'mail_character_encoding', 'utf-8'),
 (92177, 1, 'mail_html_registered_users', '1'),
@@ -211,7 +211,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (92180, 1, 'dates_ical_days_future', '365'),
 (92182, 2, 'system_js_editor_enabled', '1'),
 (92183, 2, 'system_js_editor_color', '#96c4cb'),
-(92184, 2, 'system_organization_select', '0'),
+(92184, 2, 'system_organization_select', '1'),
 (92185, 2, 'photo_slideshow_speed', '5'),
 (92186, 2, 'mail_character_encoding', 'utf-8'),
 (92187, 2, 'mail_html_registered_users', '1'),
@@ -533,7 +533,11 @@ INSERT INTO %PREFIX%_lists (lst_id, lst_org_id, lst_usr_id, lst_name, lst_timest
 (5, 1, 1, 'Messenger', '2009-02-27 21:56:52', 0, 0),
 (6, 1, 1, 'Geburtstag', '2009-02-27 21:57:38', 0, 0),
 (7, 1, 351, 'Homepage', '2009-02-27 22:34:28', 0, 0),
-(8, 1, 351, NULL, '2009-02-27 22:34:47', 0, 0);
+(8, 1, 351, NULL, '2009-02-27 22:34:47', 0, 0),
+(9, 2, 1, 'Adressliste', '2012-02-27 21:50:57', 1, 1),
+(10, 2, 1, 'Telefonliste', '2012-02-27 21:50:57', 1, 0),
+(11, 2, 1, 'Kontaktdaten', '2012-02-27 21:50:57', 1, 0),
+(12, 2, 1, 'Mitgliedschaft', '2012-02-27 21:50:57', 1, 0);
 
 --
 -- Daten für Tabelle adm_list_columns
@@ -584,7 +588,33 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (42, 8, 1, 1, NULL, NULL, NULL),
 (43, 8, 2, 2, NULL, 'ASC', NULL),
 (44, 8, 3, 13, NULL, NULL, NULL),
-(45, 8, 4, 11, NULL, NULL, NULL);
+(45, 8, 4, 11, NULL, NULL, NULL),
+(101, 9, 1, 1, NULL, 'ASC', NULL),
+(102, 9, 2, 2, NULL, 'ASC', NULL),
+(103, 9, 3, 10, NULL, NULL, NULL),
+(104, 9, 4, 3, NULL, NULL, NULL),
+(105, 9, 5, 4, NULL, NULL, NULL),
+(106, 9, 6, 5, NULL, NULL, NULL),
+(107, 10, 1, 1, NULL, 'ASC', NULL),
+(108, 10, 2, 2, NULL, 'ASC', NULL),
+(109, 10, 3, 7, NULL, NULL, NULL),
+(110, 10, 4, 8, NULL, NULL, NULL),
+(111, 10, 5, 12, NULL, NULL, NULL),
+(112, 10, 6, 9, NULL, NULL, NULL),
+(113, 11, 1, 1, NULL, 'ASC', NULL),
+(114, 11, 2, 2, NULL, 'ASC', NULL),
+(115, 11, 3, 10, NULL, NULL, NULL),
+(116, 11, 4, 3, NULL, NULL, NULL),
+(117, 11, 5, 4, NULL, NULL, NULL),
+(118, 11, 6, 5, NULL, NULL, NULL),
+(119, 11, 7, 7, NULL, NULL, NULL),
+(120, 11, 8, 8, NULL, NULL, NULL),
+(121, 11, 9, 12, NULL, NULL, NULL),
+(122, 12, 1, 1, NULL, NULL, NULL),
+(123, 12, 2, 2, NULL, NULL, NULL),
+(124, 12, 3, 10, NULL, NULL, NULL),
+(125, 12, 4, NULL, 'mem_begin', NULL, NULL),
+(126, 12, 5, NULL, 'mem_end', 'DESC', NULL);
 
 --
 -- Daten für Tabelle adm_members
@@ -779,7 +809,7 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 (404, 7, 292, '2010-04-26', '9999-12-31', 0),
 (405, 7, 293, '2010-04-26', '9999-12-31', 0),
 (406, 7, 345, '2010-04-26', '9999-12-31', 0),
-(407, 7, 346, '2010-04-26', '9999-12-31', 0),
+(407, 7, 351, '2010-04-26', '9999-12-31', 0),
 (500, 8, 1, '2012-01-04', '9999-12-31', 1),
 (501, 8, 223, '2012-01-06', '9999-12-31', 0),
 (502, 8, 255, '2012-01-06', '9999-12-31', 0),
