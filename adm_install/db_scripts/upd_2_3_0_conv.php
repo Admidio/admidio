@@ -7,7 +7,8 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-// create new indices
+
+ // create new indices
 $sql = 'ALTER TABLE '.TBL_PREFERENCES.' DROP INDEX ak_org_id_name';
 $gDb->query($sql, false);
 $sql = 'ALTER TABLE '.TBL_USERS.' DROP INDEX ak_usr_login_name';
@@ -53,11 +54,14 @@ if($gDb->num_rows() > 0)
 	$gDb->query($sql);
 	$rowProfileField = $gDb->fetch_array();
 
-	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_AOL_INSTANT_MESSENGER\'
-	                                     , usf_icon = \'aim.png\'
-										 , usf_description = null
-			 WHERE usf_id = '.$rowProfileField[0];
-	$gDb->query($sql);
+	if($rowProfileField[0] > 0)
+	{
+		$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_AOL_INSTANT_MESSENGER\'
+											 , usf_icon = \'aim.png\'
+											 , usf_description = null
+				 WHERE usf_id = '.$rowProfileField[0];
+		$gDb->query($sql);
+	}
 
 	$sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.' 
 			 WHERE usf_cat_id = '.$rowCategory[0].' 
@@ -65,26 +69,32 @@ if($gDb->num_rows() > 0)
 	$gDb->query($sql);
 	$rowProfileField = $gDb->fetch_array();
 
-	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_GOOGLE_PLUS\'
-	                                     , usf_name_intern = \'GOOGLE_PLUS\'
-	                                     , usf_icon = \'google_plus.png\'
-										 , usf_description = \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\'
-										 , usf_url = \'https://plus.google.com/%user_content%/posts\'
-			 WHERE usf_id = '.$rowProfileField[0];
-	$gDb->query($sql);
-
+	if($rowProfileField[0] > 0)
+	{
+		$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_GOOGLE_PLUS\'
+											 , usf_name_intern = \'GOOGLE_PLUS\'
+											 , usf_icon = \'google_plus.png\'
+											 , usf_description = \''.$gL10n->get('INS_GOOGLE_PLUS_DESC').'\'
+											 , usf_url = \'https://plus.google.com/%user_content%/posts\'
+				 WHERE usf_id = '.$rowProfileField[0];
+		$gDb->query($sql);
+	}
+		
 	$sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.' 
 			 WHERE usf_cat_id = '.$rowCategory[0].' 
 			   AND usf_name_intern = \'ICQ\' ';
 	$gDb->query($sql);
 	$rowProfileField = $gDb->fetch_array();
 
-	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_ICQ\'
-	                                     , usf_icon = \'icq.png\'
-										 , usf_description = \''.$gL10n->get('INS_ICQ_DESC').'\'
-										 , usf_url = \'http://www.icq.com/people/%user_content%\'
-			 WHERE usf_id = '.$rowProfileField[0];
-	$gDb->query($sql);
+	if($rowProfileField[0] > 0)
+	{
+		$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_ICQ\'
+											 , usf_icon = \'icq.png\'
+											 , usf_description = \''.$gL10n->get('INS_ICQ_DESC').'\'
+											 , usf_url = \'http://www.icq.com/people/%user_content%\'
+				 WHERE usf_id = '.$rowProfileField[0];
+		$gDb->query($sql);
+	}
 
 	$sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.' 
 			 WHERE usf_cat_id = '.$rowCategory[0].' 
@@ -92,12 +102,15 @@ if($gDb->num_rows() > 0)
 	$gDb->query($sql);
 	$rowProfileField = $gDb->fetch_array();
 
-	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_WINDOWS_LIVE\'
-	                                     , usf_name_intern = \'WINDOWS_LIVE\'
-	                                     , usf_icon = \'windows_live.png\'
-										 , usf_description = null
-			 WHERE usf_id = '.$rowProfileField[0];
-	$gDb->query($sql);
+	if($rowProfileField[0] > 0)
+	{
+		$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_WINDOWS_LIVE\'
+											 , usf_name_intern = \'WINDOWS_LIVE\'
+											 , usf_icon = \'windows_live.png\'
+											 , usf_description = null
+				 WHERE usf_id = '.$rowProfileField[0];
+		$gDb->query($sql);
+	}
 
 	$sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.' 
 			 WHERE usf_cat_id = '.$rowCategory[0].' 
@@ -105,11 +118,14 @@ if($gDb->num_rows() > 0)
 	$gDb->query($sql);
 	$rowProfileField = $gDb->fetch_array();
 
-	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_SKYPE\'
-	                                     , usf_icon = \'skype.png\'
-										 , usf_description = \''.$gL10n->get('INS_SKYPE_DESC').'\'
-			 WHERE usf_id = '.$rowProfileField[0];
-	$gDb->query($sql);
+	if($rowProfileField[0] > 0)
+	{
+		$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_SKYPE\'
+											 , usf_icon = \'skype.png\'
+											 , usf_description = \''.$gL10n->get('INS_SKYPE_DESC').'\'
+				 WHERE usf_id = '.$rowProfileField[0];
+		$gDb->query($sql);
+	}
 
 	$sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS.' 
 			 WHERE usf_cat_id = '.$rowCategory[0].' 
@@ -117,12 +133,14 @@ if($gDb->num_rows() > 0)
 	$gDb->query($sql);
 	$rowProfileField = $gDb->fetch_array();
 
-	$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_YAHOO_MESSENGER\'
-	                                     , usf_icon = \'yahoo.png\'
-										 , usf_description = null
-			 WHERE usf_id = '.$rowProfileField[0];
-	$gDb->query($sql);
-	
+	if($rowProfileField[0] > 0)
+	{
+		$sql = 'UPDATE '.TBL_USER_FIELDS.' SET usf_name = \'INS_YAHOO_MESSENGER\'
+											 , usf_icon = \'yahoo.png\'
+											 , usf_description = null
+				 WHERE usf_id = '.$rowProfileField[0];
+		$gDb->query($sql);
+	}
 
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_icon, usf_url, usf_system, usf_sequence, usf_usr_id_create, usf_timestamp_create)
                                        VALUES ('.$rowCategory[0].', \'TEXT\', \'FACEBOOK\', \'INS_FACEBOOK\', \''.$gL10n->get('INS_FACEBOOK_DESC').'\', \'facebook.png\', \'http://www.facebook.com/%user_content%\', 0, 7, '.$rowWebmaster[0].',\''. DATETIME_NOW.'\')
