@@ -248,9 +248,6 @@ DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_length';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_font';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_size';
 DELETE FROM %PREFIX%_preferences WHERE prf_name like 'ecard_text_color';
-UPDATE %PREFIX%_preferences SET prf_name = 'postcard.tpl' WHERE prf_name like 'brief_standard.tpl';
-UPDATE %PREFIX%_preferences SET prf_name = 'postcard_separate_photo.tpl' WHERE prf_name like 'brief_grosses_foto.tpl';
-UPDATE %PREFIX%_preferences SET prf_name = 'greeting_card.tpl' WHERE prf_name like 'grusskarte.tpl';
 UPDATE %PREFIX%_preferences SET prf_name = 'captcha_font_size' WHERE prf_name like 'captcha_text_size';
 UPDATE %PREFIX%_organizations SET org_homepage = 'http://' || org_homepage WHERE lower( substring( org_homepage, 1, 4 ) ) NOT LIKE 'http';
 
