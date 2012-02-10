@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
+<version id="2.3.1" translator="Markus Faßbender">
+	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="todo">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wählen Sie bitte einen anderen Namen aus.</text>
+</version>
 <version id="2.3.0">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Soll die Kategorie %VAR1_BOLD% wirklich gelöscht werden?\n\nDiese Kategorie besitzt %VAR2% abhängige Einträge, die ebenfalls gelöscht werden.</text>    
@@ -746,13 +749,13 @@
     <text id="ORG_WHICH_FORUM_USED" development="new" translation="todo">Welches Forum soll genutzt werden?</text>
 	
 	<!-- Phrases only in Updatecheck -->
-    <text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
-    <text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchn Sie es zu einem späteren Zeitpunkt nocheinmal. Alternativ können Sie auch manuell auf der Webseite von %VAR1% prüfen ob ein Update vorliegt.</text>
-    <text id="UPD_NEW" development="new" translation="todo">Eine neue stabile Version ist verfügbar!</text>
-    <text id="UPD_NEW_BETA" development="new" translation="todo">Eine neue Beta Version ist verfügbar!</text>
-    <text id="UPD_NEW_BOTH" development="new" translation="todo">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</text>
-    <text id="UPD_NO_NEW" development="new" translation="todo">Sie benutzen eine aktuelle %VAR1%Version von Admidio!</text>
-    <text id="UPD_TITLE" development="new" translation="todo">Update Prüfung</text>
+	<text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
+	<text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfen Sie Ihre Internetverbindung oder versuchn Sie es zu einem späteren Zeitpunkt nocheinmal. Alternativ können Sie auch manuell auf der Webseite von %VAR1% prüfen ob ein Update vorliegt.</text>
+	<text id="UPD_NEW" development="new" translation="todo">Eine neue stabile Version ist verfügbar!</text>
+	<text id="UPD_NEW_BETA" development="new" translation="todo">Eine neue Beta Version ist verfügbar!</text>
+	<text id="UPD_NEW_BOTH" development="new" translation="todo">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</text>
+	<text id="UPD_NO_NEW" development="new" translation="todo">Sie benutzen eine aktuelle %VAR1%Version von Admidio!</text>
+	<text id="UPD_TITLE" development="new" translation="todo">Update Prüfung</text>
 	
 
     <!-- Phrases only in Photomodule -->
