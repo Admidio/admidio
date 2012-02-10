@@ -73,7 +73,6 @@ else
 }
 
 $gLayout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/ckeditor/ckeditor.js"></script>
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {

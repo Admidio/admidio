@@ -91,7 +91,7 @@ $message  = '';
 
 if($getMode == 1)
 {
-    // Willkommen zur Installation
+	// welcome to installation
     session_destroy();
     $message = '<strong>'.$gL10n->get('INS_WELCOME_INSTALLATION_NEW_ORGANIZATION').'</strong><br /><br />
                 '.$gL10n->get('INS_NECESSARY_INFORMATION');
@@ -99,7 +99,9 @@ if($getMode == 1)
 }
 elseif($getMode == 2)
 {
-    // Formular vorbelegen
+	// form with name of new organization
+	
+    // initialize form data
     if(isset($_SESSION['orgaShortName']))
     {
         $orgaShortName = $_SESSION['orgaShortName'];
@@ -138,22 +140,30 @@ elseif($getMode == 2)
 }
 elseif($getMode == 3)
 {
-    // Daten des Administrator eingeben
+    // login form for administrator
 
     if(isset($_POST['orgaShortName']))
     {
-        // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
+        // save orga names in session
         $_SESSION['orgaShortName'] = strStripTags($_POST['orgaShortName']);
         $_SESSION['orgaLongName']  = strStripTags($_POST['orgaLongName']);
 
+		// form fields are not filled
         if(strlen($_SESSION['orgaShortName']) == 0
         || strlen($_SESSION['orgaLongName']) == 0 )
         {
             showPage($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'new_organization.php?mode=2', 'back.png', $gL10n->get('SYS_BACK'));
         }
+
+		// check if orga shortname exists
+		$organization = new Organization($gDb, $_SESSION['orgaShortName']);
+		if($organization->getValue('org_id') > 0)
+		{
+            showPage($gL10n->get('INS_ORGA_SHORTNAME_EXISTS', $_SESSION['orgaShortName']), 'new_organization.php?mode=2', 'back.png', $gL10n->get('SYS_BACK'));
+		}
     }
 
-    // Formular vorbelegen
+    // initialize form data
     if(isset($_SESSION['user_login']))
     {
         $user_login = $_SESSION['user_login'];

@@ -258,7 +258,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
         }
     }
 
-    // Formular vorbelegen
+    // initialize form data
     if(isset($_SESSION['orgaShortName']))
     {
         $orgaShortName = $_SESSION['orgaShortName'];
@@ -309,7 +309,7 @@ elseif($req_mode == 5)  // Daten des Administrator eingeben
         }
     }
 
-    // Formular vorbelegen
+    // initialize form data
     if(isset($_SESSION['user_last_name']))
     {
         $user_last_name  = $_SESSION['user_last_name'];
