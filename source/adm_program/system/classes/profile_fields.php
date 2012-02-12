@@ -184,6 +184,7 @@ class ProfileFields
 
 	// returns the user value for this field
 	// format = 'html' : returns the value in html-format if this is necessary for that field type
+	// format = 'intern' : returns the value that is stored in database with no format applied
 	public function getValue($fieldNameIntern, $format = '')
 	{
 		global $gL10n, $gPreferences;
@@ -196,40 +197,43 @@ class ProfileFields
 		{
 			$value = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->getValue('usd_value', $format);
 
-			if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($value) > 0)
+			if($format != 'intern')
 			{
-				if(strlen($format) == 0 || $format == 'html')
+				if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($value) > 0)
 				{
-					$dateFormat = $gPreferences['system_date'];
-				}
-				else
-				{
-					$dateFormat = $format;
-				}
-				
-				// if date field then the current date format must be used
-				$date = new DateTimeExtended($value, 'Y-m-d', 'date');
-				if($date->valid() == false)
-				{
-					return $value;
-				}
-				$value = $date->format($dateFormat);
-			}
-			elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DROPDOWN'
-				|| $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
-			{
-				// the value in db is only the position, now search for the text
-				if($value > 0)
-				{
-					$arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
-					$value = $arrListValues[$value];
+					if(strlen($format) == 0 || $format == 'html')
+					{
+						$dateFormat = $gPreferences['system_date'];
+					}
+					else
+					{
+						$dateFormat = $format;
+					}
 					
+					// if date field then the current date format must be used
+					$date = new DateTimeExtended($value, 'Y-m-d', 'date');
+					if($date->valid() == false)
+					{
+						return $value;
+					}
+					$value = $date->format($dateFormat);
 				}
-			}
-			elseif($fieldNameIntern == 'COUNTRY' && strlen($value) > 0)
-			{
-				// read the language name of the country
-				$value = $gL10n->getCountryByCode($value);
+				elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DROPDOWN'
+					|| $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
+				{
+					// the value in db is only the position, now search for the text
+					if($value > 0)
+					{
+						$arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
+						$value = $arrListValues[$value];
+						
+					}
+				}
+				elseif($fieldNameIntern == 'COUNTRY' && strlen($value) > 0)
+				{
+					// read the language name of the country
+					$value = $gL10n->getCountryByCode($value);
+				}
 			}
 		}
 		

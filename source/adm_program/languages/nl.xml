@@ -9,7 +9,7 @@
     <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Aantal toekomstige iCal dagen</text>
     <text id="DAT_ICAL_DAYS_FUTURE_DESC" development="new" translation="edited">Deze waarde bepaalt hoeveel dagen in de toekomst een iCal download of abonnement moet bevatten. (standaard: 365)</text>
     <text id="DAT_ICAL_DAYS_PAST" development="new" translation="edited">Aantal iCal dagen in het verleden</text>
-    <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">Deze waarde bepaalt hoeveel dagen in het verleden een iCal download of abonnement moet bevatten. (standaard: 30)</text>
+    <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">Deze waarde bepaalt hoeveel dagen in het verleden een iCal download of abonnement moet bevatten. (standaard: 60)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Registreren voor deze afspraak inschakelen.</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Afspraak goedkeuren</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Zichtbaarheid</text>
@@ -38,7 +38,7 @@
     <text id="MAI_YOUR_NAME" development="new" translation="edited">Uw naam</text>
     <text id="MEM_IMPORT_SUCCESSFUL" development="changed" translation="edited">Importeren is gelukt..\n\n%VAR1% nieuwe gebruikers zijn gemaakt.\n%VAR2% gebruikers zijn bewerkt.\n%VAR3% rol lidmaatschappen zijn toegewezen.</text>
     <text id="ORG_FIELD_DISABLED" development="changed" translation="edited">Veld is alleen te bewerken door gebruiker met recht %VAR1_BOLD%</text>
-    <text id="ORG_FIELD_URL_DESC" development="new" translation="edited">Deze URL linkt de inhoud aan het profiel die door de gebruiker in dit veld is doorgegeven. Eventueel kan de tijdelijke aanduiding %user_content% in de URL geintegreerd worden. Deze inhoud is doorgegeven door de gebruiker.\n\nVoorbeeld:\nURL: http://www.google.de/search?q=%user_content%\nContent: Admidio\nLink in het profiel: http://www.google.de/search?q=Admidio</text>
+    <text id="ORG_FIELD_URL_DESC" development="new" translation="edited">Hier kan een URL opgegeven worden. Eventueel kan de aanduiding %user_content% in deze URL vermeld worden. Selecteer dan wel veldtype 'Tekst'. \n\nVoorbeeld:\nURL: http://www.google.nl/search?q=%user_content%\nGebruiker vult in op profielpagina: Admidio\nLink die in profiel gebruiker komt te staan: http://www.google.nl/search?q=Admidio</text>
     <text id="ORG_JAVASCRIPT_EDITOR_COLOR" development="changed" translation="edited">Kleur van de JavaScript editor</text>
     <text id="ORG_JAVASCRIPT_EDITOR_COLOR_DESC" development="changed" translation="edited">Bepaal hier de achtergrond kleur van de JavaScript editor. Deze waarde kan een hexadecimale kleur zijn zoals #ffa500 of een RGB waarde zoals (255, 185, 0).</text>
     <text id="ORG_JAVASCRIPT_EDITOR_ENABLE" development="changed" translation="edited">JavaScript editor gebruiken</text>
@@ -46,10 +46,10 @@
     <text id="ORG_VALUE_LIST" development="new" translation="edited">Lijst met waarden</text>
     <text id="ORG_VALUE_LIST_DESC" development="new" translation="edited">Bepaal hier de items van de drop-down of selectieboxen. Per regel kan 1 drop-down box of selectiebox opgegeven worden.\n\nIn plaats van de tekst wordt de geselecteerde positie in de lijst in het profiel opgeslagen. Als in de tekst een regel veranderd, zullen alle gebruikers deze nieuwe tekst direct in hun profiel kunnen zien. Als een menu item naar een andere regel wordt verplaatst, kan een ander item worden getoond in het gebruikersprofiel.\n\nBij een selectiebox kan ook een icoon weergegeven worden. Om dit te doen kan de naam van de icoon opgegeven worden (b.v. ok.png) of de externe URL van een afbeelding (v.b. http://www.example.com/example.jpg). Door verticale scheidslijn te gebruiken kan een extra tekstbaloon aan het icoon gekoppeld worden (v.b. vrouw.png|vrouw)</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="edited">Toon selectie van organisatie</text>
-    <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="edited">Als er meerdere organisaties in de database staan, zal in het inlog scherm een selectiebox getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (een andere die staat in het config.php bestand). Echter, de gebruiker mmoet een geregistreerd gebruiker zijn van de geselecteerde organisatie.</text>
+    <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="edited">Als er meerdere organisaties in de database staan, zal in het inlog scherm een selectiebox getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (een andere die staat in het config.php bestand). Echter, de gebruiker moet een geregistreerd gebruiker zijn van de geselecteerde organisatie.</text>
     <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="edited">Voorkeuren organisatie en regio</text>
     <text id="PHO_SLIDESHOW_SPEED" development="new" translation="edited">Snelheid slide show</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Bepaal de vertraging in seceonden totdat de volgende afbeelding wordt geladen.</text>
+    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Bepaal de vertraging in seconden totdat de volgende afbeelding wordt geladen.</text>
     <text id="SYS_CHECKBOX" development="new" translation="edited">Selectiebox</text>
     <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="edited">Bevestig waarde</text>
     <text id="SYS_CONTACT_DETAILS" development="new" translation="edited">Contact informatie</text>
@@ -191,7 +191,7 @@
     <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="edited">Registratie is gesloten.</text>
     <text id="DAT_REMOVE_APPLICATION" development="new" translation="edited">Wilt u dit evenement verwijderen? Alle deelnemers zullen verwijderd worden.</text>
     <text id="DAT_ROOM_INFORMATIONS" development="new" translation="edited">Zaal informatie</text>
-    <text id="DAT_ROOM_OVERHANG" development="new" translation="edited">Als er verder nog ruimte beschikbaar is (b.v. extra stoelen, staanplaaten), kunnen deze extra plaatsen hier worden opgegeven.</text>
+    <text id="DAT_ROOM_OVERHANG" development="new" translation="edited">Als er verder nog ruimte beschikbaar is (b.v. extra stoelen of staanplaaten), kunnen deze extra plaatsen hier worden opgegeven.</text>
     <text id="DAT_ROOM_RESERVED" development="new" translation="edited">Geselecteerde zaal is in dit tijdvlak al in gebruik.</text>
     <text id="DAT_ROOM_SELECTABLE" development="new" translation="edited">Zaal is beschikbaar</text>
     <text id="DAT_ROOM_SELECTABLE_DESC" development="new" translation="edited">Selectiebox beschikbaar voor beschikbare vergaderzalen. Selecteer zaal en maak evenement voor deze zaal. (standaard: nee)</text>
@@ -225,7 +225,7 @@
     <text id="DOW_FILE_EXIST" development="new" translation="edited">Bestand %VAR1% bestaat al!\n\nKies svp andere bestandsnaam.</text>
     <text id="DOW_FILE_EXTENSION_INVALID" development="new" translation="edited">Type bestand is niet toegestaan op deze server.</text>
     <text id="DOW_FILE_NAME_INVALID" development="new" translation="edited">Geselecteerde bestandsnaam bevat onjuiste karakters!\n\nKies svp andere bestandsnaam.</text>
-    <text id="DOW_FILE_NAME_RULES" development="new" translation="edited">Bestandsnaam moet indicatie van inhoud geven. Bestandsnaam is van invloed op volgorde in overzicht. Bestanden in b.v. mappen met procedures moeten beginnen met datum (jr-mnd-dg).</text>
+    <text id="DOW_FILE_NAME_RULES" development="new" translation="edited">Bestandsnaam moet indicatie van inhoud geven. Bestandsnaam is van invloed op volgorde in overzicht. Bestanden in b.v. mappen met procedures moeten beginnen met datum (jaar-maand-dag).</text>
     <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Bestand is niet meer beschikbaar op de server. Het is verwijderd uit de database.</text>
     <text id="DOW_FILE_RENAME" development="new" translation="edited">Bestand %VAR1% is hernoemd.</text>
     <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Foutmelding tijdens hernoemen van bestand %VAR1%.</text>
@@ -265,7 +265,7 @@
     <!-- Phrases only in Ecardsmodule -->
 	<text id="ECA_A_ECARD_FROM" development="new" translation="edited">Ecard gestuurd door</text>
 	<text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="edited">Ecard module activeren</text>
-    <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="edited">Ecard module kan gedeactiveerd en geactiveerd worden via deze instellingen. Als de server geen e-mails kan sturen, svp deze module deactiveren. Alleen ingelogde gebruikers hebben toegang tot deze module. (standaard: ja)</text>
+    <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="edited">De Ecard module kan gedeactiveerd en geactiveerd worden via deze instellingen. Als de server geen e-mails kan sturen, svp deze module deactiveren. Alleen ingelogde gebruikers hebben toegang tot deze module. (standaard: ja)</text>
     <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="edited">Toon voorkeuren</text>
     <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="edited">Verberg voorkeuren</text>
     <text id="ECA_CONTENT_LOADING" development="new" translation="edited">Gegevens laden - svp wachten!</text>
@@ -285,7 +285,7 @@
     <text id="ECA_INPUT_INCORRECT" development="new" translation="edited">De volgende verplichte velden voor verzending \nEcard zijn niet ingevuld of zijn onjuist:</text>
     <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">interne ontvanger</text>
     <text id="ECA_MAX_CC" development="new" translation="edited">Totaal extra ontvangers</text>
-    <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deactiveer en bepaal maximaal aantal extra ontvangers, indien nodig. (standaard: 10)</text>
+    <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deactiveer en bepaal maximaal aantal extra ontvangers, indien nodig. (standaard: 5)</text>
     <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="edited">Totaal aantal karakters in bericht</text>
     <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="edited">Deactiveer optie hier en bepaal maximale lengte van bericht, indien nodig. (standaard: 500 karakters)</text>
 	<text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Maximaal %VAR1% karakters is toegestaan!</text>
@@ -309,7 +309,7 @@
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% karakters over</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Uw Ecard is verzonden.</text>
     <text id="ECA_TEMPLATE" development="new" translation="edited">Template</text>
-    <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Stel standaard template in. (standaard: standard letter) </text>
+    <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Stel standaard template in. (standaard: Postcard)</text>
     <text id="ECA_THE_MESSAGE" development="new" translation="edited">1 bericht</text>
     <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="edited">Alle leden met deze rol</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Toon volledige grootte</text>
@@ -371,13 +371,13 @@
     <text id="INS_DATABASE_FILE_NOT_FOUND" development="new" translation="edited">Bestand %VAR1_BOLD% is niet gevonden in map %VAR2_BOLD%.</text>
     <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="edited">Admidio's database is up to date</text>
     <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
-    <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Database informatie vermelden</text>
+    <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Database informatie doorgeven</text>
     <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Geef hier uw database informatie op. Table prefix kan aangepast worden, indien nodig. Aanpassing is niet nodig als meerdere Admidio installaties dezelfde database gebruiken.</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="edited">Database update is nodig</text>
     <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Opgegeven database toegangsinformatie is onjuist!\n\nCheck en update toegangsinformatie. Of check of database online is en of u toegang heeft.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Database maken</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Bestuur van de organisatie</text>
-    <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Hier kunnen vergaderingen plaatsvinden. Zaal moet vantevoren gereserveerd worden. Gebruik van beamer is gratis.</text>
+    <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Hier kunnen vergaderingen plaatsvinden. Zaal moet vantevoren gereserveerd worden.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">Alle leden</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Groep beheerders</text>
     <text id="INS_DOWNLOAD" development="new" translation="edited">Download %VAR1%</text>
@@ -477,7 +477,7 @@
     <text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Maak eigen lijst</text>
     <text id="LST_CSV_FILE" development="new" translation="edited">CSV bestand</text>
     <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Standaard instellingen</text>
-    <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Maak van bepaalde instellingen de standaard instellingen. Selecteer de instellingen van uw keuze en klik op: %VAR1%. Geselecteerde instellingen worden actief voor alle leden.</text>
+    <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Maak een keuze voor de standaard instellingen. Selecteer de instellingen van uw keuze en klik op: %VAR1%. Geselecteerde instellingen worden actief voor alle leden.</text>
     <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Geen standaard lijst-instellingen gedefinieerd door beheerder!\n\nNeem voor hulp contact met beheerder op.</text>
     <text id="LST_DELETE_CONFIGURATION" development="new" translation="edited">Verwijder instellingen</text>
     <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="edited">E-mail leden</text>
@@ -511,7 +511,7 @@
 	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Aantal rollen per pagina</text>
     <text id="LST_PERIOD" development="new" translation="edited">Periode</text>
     <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Vooraf bepaalde instellingen</text>
-    <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Als beheerder kunt u de standaard instellingen voor alle leden bepalen. Maak rijen en kolommen en sla het op door het een naam te geven. Selecteer de nieuwe instellingen en klik op: %VAR1%</text>
+    <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Als beheerder kunt u de standaard instellingen voor alle leden bepalen. Maak rijen en kolommen en sla dit op door het een naam te geven. Selecteer de nieuwe instellingen en klik op: %VAR1%</text>
     <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Print</text>
     <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Rol informatie</text>
     <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Instellingen opslaan</text>
@@ -544,7 +544,7 @@
 
     <!-- Phrases only in Mailmodule -->
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">E-mail module activeren</text>
-    <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">E-mail module kan gedeactiveerd worden door deze selectiebox uit te vinkem. Na deactivatie is de module niet beschikbaar in het module overzicht. Als de server geen e-mails ondersteund, deactiveer de module dan svp. (standaard: actief)</text>
+    <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">E-mail module kan gedeactiveerd worden door deze selectiebox uit te vinken. Na deactivatie is de module niet beschikbaar in het module overzicht. Als de server geen e-mails ondersteund, deactiveer de module dan svp. (standaard: actief)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Attach bestand</text>
     <text id="MAI_ATTACHEMENT" development="new" translation="edited">Attachment:</text>
 	<text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Max. grootte e-mail attachments</text>
@@ -638,7 +638,7 @@
     <text id="ORG_ACTIVATE_FORUM" development="new" translation="edited">Activeer forum</text>
     <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="edited">%VAR1% Admidio beschikt niet over een eigen forum. U kunt software van derden integreren (momenteel phpBB 2.0). (standaard: nee)</text>
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="edited">Intern forum activeren</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="edited">Actief: forum wordt getoond in layout van Admidio. (standaard)\nInactief: Forum wordt getoond in nieuw venster.</text>
+    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="edited">Actief: forum wordt getoond in layout van Admidio. (standaard)\nInactief: forum wordt getoond in nieuw venster.</text>
     <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="edited">Activeer systeem berichten</text>
     <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="edited">Admidio systeemberichten in- of uitschakelen. Systeemberichten worden gemaakt bij nieuwe registraties van gebruikers of validatie van gebruikers. Deze optie moet uitgeschakeld worden als server geen e-mail ondersteund. Dit heeft geen invloed op de e-mail module. (standaard: ja)</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Extra variabelen</text>
@@ -669,7 +669,7 @@
 	<text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="edited">Maak profielveld</text>
     <text id="ORG_CURRENCY" development="new" translation="edited">Valuta</text>
     <text id="ORG_CURRENCY_DESC" development="new" translation="edited">Selecteer valuta. Type valuta zal na alle getoonde bedragen vermeld worden.</text>
-    <text id="ORG_DATATYPE" development="new" translation="edited">Type gegevens</text>
+    <text id="ORG_DATATYPE" development="new" translation="edited">Type</text>
     <text id="ORG_DATE_FORMAT" development="new" translation="edited">Datum formaat</text>
     <text id="ORG_DATE_FORMAT_DESC" development="new" translation="edited">Formaat voldoet aan PHP functie %VAR1%. (standaard: d.m.Y)</text>
     <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="edited"> Bewerk pofielveld</text>
@@ -683,7 +683,7 @@
     <text id="ORG_EXPORT_WEBMASTER_STATUS" development="new" translation="edited">Draag status beheerder over naar forum systeem</text>
     <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="new" translation="edited">De bestaande Admidio beheerder zal automatisch geregistreerd worden in forum als forum beheerder. (standaard: ja)</text>
     <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">Snelle registratie</text>
-    <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Bepaal onbeperkt aantal extra velden. Velden worden getoond en kunnen worden bewerkt in profiel van gebruiker. Deze velden zijn ook beschikbaar in eigen lijst.</text>
+    <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Maak onbeperkt aantal extra velden. Velden worden getoond en kunnen worden bewerkt in profiel van gebruiker. Deze velden zijn ook beschikbaar in eigen lijst.</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Geblokkeerde velden in eigen profiel kunnen niet worden bewerkt door gebruikers. Bewerken is alleen mogelijk door gebruikers met rechten om alle gebruikers te bewerken.</text>
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Verplaats profielveld naar beneden</text>
     <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="edited">Veld %VAR1_BOLD% in %VAR2_BOLD% is leeg.</text>
@@ -693,7 +693,7 @@
     <text id="ORG_FIELD_MANDATORY" development="new" translation="edited">Verplichte velden moeten altijd ingevuld worden.</text>
     <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="edited">Aangevinkte (verplichte) velden moeten altijd ingevuld worden. Dit geldt voor registratie en wijzigingen van het profiel door gebruiker.</text>
     <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="edited">Veld kan door gebruiker zelf bewerkt worden.</text>
-    <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Veld is zichtbaar voor alle grbuikers.</text>
+    <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Veld is zichtbaar voor alle gebruikers.</text>
     <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Veld is verplicht. Het moet ingevuld worden.</text>
     <text id="ORG_FIELD_UP" development="new" translation="edited">Verplaats profielveld naar boven</text>
     <text id="ORG_FORUM_TABLE_PREFIX" development="new" translation="edited">Forum table prefix</text>
@@ -740,8 +740,8 @@
     <text id="ORG_VARIABLE_EMAIL" development="new" translation="edited">E-mail adres gebruiker</text>
     <text id="ORG_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="edited">Systeem e-mail adres van organisatie</text>
     <text id="ORG_VARIABLE_FIRST_NAME" development="new" translation="edited">Voornaam van gebruiker</text>
-    <text id="ORG_VARIABLE_LAST_NAME" development="new" translation="edited">Achternaam van gebruikers</text>
-    <text id="ORG_VARIABLE_NAME_ORGANIZATION" development="new" translation="edited">Naam ven de organisatie</text>
+    <text id="ORG_VARIABLE_LAST_NAME" development="new" translation="edited">Achternaam van gebruiker</text>
+    <text id="ORG_VARIABLE_NAME_ORGANIZATION" development="new" translation="edited">Naam van de organisatie</text>
     <text id="ORG_VARIABLE_NEW_PASSWORD" development="new" translation="edited">Nieuw wachtwoord gebruiker</text>
     <text id="ORG_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="edited">Afkorting van organisatie</text>
     <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="edited">Website URL van de organisatie</text>
@@ -798,7 +798,7 @@
     <text id="PHO_PHOTOGRAPHER" development="new" translation="edited">Foto's van</text>
     <text id="PHO_PHOTOS" development="new" translation="edited">Foto's</text>
     <text id="PHO_PHOTOS_DESC" development="new" translation="edited">Hier kunnen foto's geupload en getoond worden. Deze foto's kunnen in mappen verdeeld worden. </text>
-    <text id="PHO_POPUP_WINDOW" development="new" translation="edited">popup venster</text>
+    <text id="PHO_POPUP_WINDOW" development="new" translation="edited">Popup venster</text>
 	<text id="PHO_PREVIOUS_PHOTO" development="new" translation="edited">vorige foto</text>
 	<text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="edited">Resolutie groter dan</text>
     <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="edited">Foto's moeten als JPG of PNG opgeslagen worden.</text>
@@ -812,7 +812,7 @@
     <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Foto's worden herschaald tijdens upload. Opgegeven pixels betreft de lange zijde van de foto. De korte zijde blijft in verhouding gelijk aan de lange zijde. (standaard: 640 pixels)</text>
     <text id="PHO_SCALE_THUMBNAILS" development="new" translation="edited">Thumbnail schalen</text>
     <text id="PHO_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Bepaal grootte van de lange zijde van thumbnails. Attentie: maak breedte niet te groot om problemen met thumbnail kolommen te voorkomen. Of probeer thumbnail instellingen (rij en kolom) aan te passen. (standaard: 160 pixels)</text>
-    <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Toon watermark</text>
+    <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Toon watermerk</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Tekst wordt getoond in alle foto's die breder zijn dan 200 pixels. (standaard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Foto's zijn succesvol toegevoegd aan album als ze op deze pagina getoond worden. </text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Thumbnails per pagina (rij x kolom)</text>
@@ -834,7 +834,7 @@
 	<text id="PRO_CURRENT_PASSWORD" development="new" translation="edited">Huidig wachtwoord</text>
 	<text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Huidige profielfoto</text>
 	<text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Standaard land</text>
-	<text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Standaard land wordt automatisch geselecteerd tijdens registratie van gebruiker. (standaard: Germany)</text>
+	<text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Standaard land wordt automatisch geselecteerd tijdens registratie van gebruiker. (standaard: Duitsland)</text>
 	<text id="PRO_DEFAULT_ROLE" development="new" translation="edited">Standaad rol</text>
 	<text id="PRO_DEFAULT_ROLE_DESC" development="new" translation="edited">Rol wordt automatisch bepaald als persoon, die de nieuwe gebruiker maakt, geen nieuwe rollen kan toewijzen.</text>
 	<text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Verwijder profielfoto</text>
@@ -846,7 +846,7 @@
 	<text id="PRO_EXPORT_VCARD_FROM_VAR" development="new" translation="edited">Exporteer vCard van %VAR1%</text>
 	<text id="PRO_FIELD_NUMERIC" development="new" translation="edited">In veld %VAR1_BOLD% zijn alleen nummers toegestaan.\nPas svp uw gegevens aan.</text>
 	<text id="PRO_FORMER_ROLE_MEMBERSHIP" development="new" translation="edited">Eerder lid van rol</text>
-	<text id="PRO_LOCATION_PROFILE_PICTURES" development="new" translation="edited">Locatie waar profielfoto's opgeslagen worden.</text>
+	<text id="PRO_LOCATION_PROFILE_PICTURES" development="new" translation="edited">Locatie waar profielfoto's opgeslagen worden</text>
 	<text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="edited">Kies svp de locatie waar profielfoto's opgeslagen worden (in database of in map adm_my_files). Wanneer dit wijzigt, zullen huidige foto's niet verplaatst worden naar de nieuwe locatie. (standaard: database)</text>
 	<text id="PRO_LOGIN_NAME_EXIST" development="new" translation="edited">Deze gebruikersnaam bestaat al.\n\nKies svp een andere gebruikersnaam.</text>
 	<text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Beheer profielvelden</text>
@@ -881,7 +881,7 @@
 	<text id="PRO_SHOW_MAP_LINK" development="new" translation="edited">Show map link</text>
 	<text id="PRO_SHOW_MAP_LINK_DESC" development="new" translation="edited">Als adres informatie volledig is, wordt er een link naar Google Maps gemaakt om locatie en route te tonen. (standaard: ja)</text>
 	<text id="PRO_SHOW_ROLE_MEMBERSHIP" development="new" translation="edited">Toon rol lidmaatschappen</text>
-	<text id="PRO_SHOW_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">Een box wordt getoond met allen rollen van gebruiker in guidige organisatie. Rechten en registratie data worden ook getoond. (standaard: ja)</text>
+	<text id="PRO_SHOW_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">Een box wordt getoond met allen rollen van gebruiker in huidige organisatie. Rechten en registratie data worden ook getoond. (standaard: ja)</text>
 	<text id="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS" development="new" translation="edited">Toon rol van andere organisaties</text>
 	<text id="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC" development="new" translation="edited">Als gebruiker een rol in een andere organisatie heeft, wordt een box getoond met alle rollen en registratie data. (standaard: ja)</text>
 	<text id="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">ga naar profiel voorkeuren</text>
@@ -942,7 +942,7 @@
     <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="edited">Verdeling rollen "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="edited">Rol verwijderen</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="edited">Wilt u rol %VAR1% verwijderen?\n\nAlle lidmaatschappen worden dan ook verwijderd.</text>
-    <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="edited">Een lid van een afhankelijke rol zal automatisch lid worden van %VAR1%!\n\nAls deze afhankelijkheid is ingesteld zullen alle bestaande leden met deze rol lid worden van %VAR1%. Als de afhankelijkheid verwijderd wordt, zullen lidmaatschappen hetzelfde blijven!</text>
+    <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="edited">Een lid van een afhankelijke rol zal automatisch lid worden van %VAR1%.\n\nAls deze afhankelijkheid is ingesteld zullen alle bestaande leden met deze rol lid worden van %VAR1%. Als de afhankelijkheid verwijderd wordt, zullen lidmaatschappen hetzelfde blijven.</text>
     <text id="ROL_ROLE_MEMBERSHIPS" development="new" translation="edited">Lid van rol</text>
     <text id="ROL_ROLE_MEMBERSHIPS_CHANGE" development="new" translation="edited">Verander lidmaatschap</text>
     <text id="ROL_ROLE_NAME_EXISTS" development="new" translation="edited">Rol met dezelfde naam bestaat al in deze categorie.</text>

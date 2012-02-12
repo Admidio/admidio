@@ -201,6 +201,18 @@ class User extends TableUsers
         $this->role_mail_rights = array();
     }
     
+    // returns true if a column of user table or profile fields has changed
+    public function columnsValueChanged()
+    {
+    	if($this->columnsValueChanged == true
+    	|| $this->mProfileFieldsData->columnsValueChanged == true)
+    	{
+    		return true;
+    	}
+    
+    	return false;
+    }
+    
     // delete all user data of profile fields; user record will not be deleted
     public function deleteUserFieldData()
     {
