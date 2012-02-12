@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="en">
+	<version id="1.4.1">
+		<text id="PLG_LOGIN_LAST_LOGIN" development="new" translation="todo">Laatst ingelogd</text>
+	</version>
+	<version id="1.4.0">
+	    <text id="PLG_LOGIN_ACTIVE_SINCE" development="new" translation="edited">Actief sinds</text>
+		<text id="PLG_LOGIN_NEW_ONLINE_MEMBER" development="new" translation="todo">Nieuw lid online</text>
+		<text id="PLG_LOGIN_NUMBER_OF_LOGINS" development="new" translation="edited">Aantal keer</text>
+		<text id="PLG_LOGIN_ONLINE_MEMBER" development="new" translation="todo">Online lid</text>
+		<text id="PLG_LOGIN_SENIOR_ONLINE_MEMBER" development="new" translation="todo">Online senior lid</text>
+		<text id="PLG_LOGIN_HONORARY_MEMBER" development="new" translation="todo">Erelid</text>
+	</version>
+</language>

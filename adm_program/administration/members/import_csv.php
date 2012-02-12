@@ -122,7 +122,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 elseif($field->getValue('usf_type') == 'DROPDOWN'
                     || $field->getValue('usf_type') == 'RADIO_BUTTON')
                 {
-					// Position aus der Auswahlbox speichern
+					// save position of combobox
 					$arrListValues = $field->getValue('usf_value_list', 'text');
 					$position = 1;
 
@@ -151,7 +151,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
                 }
                 elseif($field->getValue('usf_type') == 'INTEGER')
                 {
-                    // Zahl darf Punkt und Komma enthalten
+                    // number could contain dot and comma
                     if(is_numeric(strtr($columnValue, ',.', '00')) == true)
                     {
                         $user->setValue($field->getValue('usf_name_intern'), $columnValue);
@@ -169,10 +169,10 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
         }
     }
 
-    // nur Benutzer anlegen, wenn Vor- und Nachname vorhanden sind
+    // create new user only if firstname and lastname are filled
     if(strlen($user->getValue('LAST_NAME')) > 0 && strlen($user->getValue('FIRST_NAME')) > 0)
     {
-        // schauen, ob schon User mit dem Namen existieren und Daten einlesen
+        // search for existing user with same name and read user data
         $sql = 'SELECT MAX(usr_id) AS usr_id
                   FROM '. TBL_USERS. '
                   JOIN '. TBL_USER_DATA. ' last_name
@@ -202,7 +202,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             if($_SESSION['user_import_mode'] == USER_IMPORT_COMPLETE
             || $_SESSION['user_import_mode'] == USER_IMPORT_DISPLACE)
             {
-                // Daten des Nutzers werden angepasst
+                // edit data of user, if user already exists
                 foreach($importedFields as $key => $field_name_intern)
                 {
                     if($duplicate_user->getValue($field_name_intern) != $user->getValue($field_name_intern))
@@ -217,6 +217,12 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
 							// we need the iso-code and not the name of the country
 							$duplicate_user->setValue($field_name_intern, $gL10n->getCountryByName($user->getValue($field_name_intern)));
 						}
+		                elseif($gProfileFields->getProperty($field_name_intern, 'usf_type') == 'DROPDOWN'
+		                    || $gProfileFields->getProperty($field_name_intern, 'usf_type') == 'RADIO_BUTTON')
+		                {
+		                	// get number and not value of entry
+							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, 'intern'));
+		                }
 						else
 						{
 							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern));
@@ -234,7 +240,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             {
                 $countImportNewUser++;
             }
-            elseif($rowDuplicateUser['usr_id']  > 0 && $user->columnsValueChanged)
+            elseif($rowDuplicateUser['usr_id']  > 0 && $user->columnsValueChanged())
             {
                 $countImportEditUser++;
             }
@@ -261,7 +267,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
     $line = next($_SESSION['file_lines']);
 }
 
-// Session-Variablen wieder initialisieren
+// initialize session parameters
 $_SESSION['role']             = '';
 $_SESSION['user_import_mode'] = '';
 $_SESSION['file_lines']       = '';
