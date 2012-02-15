@@ -101,12 +101,12 @@ $gLayout['header'] ='
                 $(".letterBlockHead").show();
             }
             else{
-	            $(".letterBlockBody[block_body_id!="+letter+"]").hide();
-	            $(".letterBlockHead[block_head_id!="+letter+"]").hide();
-	            $(".letterBlockBody[block_body_id="+letter+"]").show();
-	            $(".letterBlockHead[block_head_id="+letter+"]").show();
-	        }
-	        return false;
+                $(".letterBlockBody[block_body_id!="+letter+"]").hide();
+                $(".letterBlockHead[block_head_id!="+letter+"]").hide();
+                $(".letterBlockBody[block_body_id="+letter+"]").show();
+                $(".letterBlockHead[block_head_id="+letter+"]").show();
+            }
+            return false;
         });
         
         //beim anklicken einer Checkbox
@@ -117,31 +117,31 @@ $gLayout['header'] ='
             var checkbox_id = $(this).attr("id");
             var userid = $(this).parent().parent().attr("user_id");
 
-            var member_checked = $("input[type=checkbox]#member_"+userid).attr("checked");
-            var leader_checked = $("input[type=checkbox]#leader_"+userid).attr("checked");
-              
+            var member_checked = $("input[type=checkbox]#member_"+userid).prop("checked");
+            var leader_checked = $("input[type=checkbox]#leader_"+userid).prop("checked");
+
             //Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
             if(checkboxtype=="leader" && leader_checked){                
-                $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
+                $("input[type=checkbox]#member_"+userid).prop("checked", true);
                 member_checked = true;
             }
             
             //Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
             if(checkboxtype=="member" && member_checked==false){                
-                $("input[type=checkbox]#leader_"+userid).removeAttr("checked");
+                $("input[type=checkbox]#leader_"+userid).prop("checked", false);
                 leader_checked = false;
             }';
             
             //Bei der Rolle Webmaster muss konrolliert werden ob noch mindestend ein User Mitglied bleibt
             if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
             {
-            	$gLayout['header'] .='
-            	if($("input[name^=\'member_\'].memlist_checkbox:checked").size()<1){
+                $gLayout['header'] .='
+                if($("input[name^=\'member_\'].memlist_checkbox:checked").size()<1){
                    //Checkbox wieder setzen. 
-            	   $("input[type=checkbox]#member_"+userid).attr("checked", "checked");
-            	   //Alarm schlagen
-				   jQueryAlert("LST_MUST_HAVE_WEBMASTER");
-            	   return false;
+                   $("input[type=checkbox]#member_"+userid).prop("checked", true);
+                   //Alarm schlagen
+                   jQueryAlert("LST_MUST_HAVE_WEBMASTER");
+                   return false;
                 }';
             }                
             
@@ -162,19 +162,19 @@ $gLayout['header'] ='
                        if(result=="max_mem_reached")
                        {
                             //Bei Leiter Checkbox deaktiviert, muss Member und Leiter wieder gesetzt werden                            
-                            if(checkboxtype=="leader" && $("input[type=checkbox]#leader_"+userid).attr("checked")==false){                
-                                $("input[type=checkbox]#leader_"+userid).attr("checked", "checked");
+                            if(checkboxtype=="leader" && $("input[type=checkbox]#leader_"+userid).prop("checked")==false){                
+                                $("input[type=checkbox]#leader_"+userid).prop("checked", true);
                             }
                             else{
-                                $("input[type=checkbox]#member_"+userid).removeAttr("checked");
+                                $("input[type=checkbox]#member_"+userid).prop("checked", false);
                             }                           
-						   jQueryAlert("SYS_ROLE_MAX_MEMBERS", "'.$role->getValue('rol_name').'");
+                           jQueryAlert("SYS_ROLE_MAX_MEMBERS", "'.$role->getValue('rol_name').'");
                        }
                        else if(result=="success")
                        {}                    
                        else
                        {
-						   jQueryAlert("SYS_INVALID_PAGE_VIEW");
+                           jQueryAlert("SYS_INVALID_PAGE_VIEW");
                        }
                        return false;
                     }

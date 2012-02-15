@@ -45,11 +45,11 @@ if( (!$gCurrentUser->assignRoles()
 $membership = 0;
 $leadership = 0;
 
-if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId]=='checked')
+if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId]=='true')
 {
     $membership = 1;
 }
-if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId]=='checked')
+if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId]=='true')
 {
     $membership = 1;    
     $leadership = 1;
