@@ -2,6 +2,8 @@
 <language id="de_sie">
 <version id="2.3.1" translator="Markus Faßbender">
 	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="todo">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wählen Sie bitte einen anderen Namen aus.</text>
+    <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="todo">Zu der E-Mail-Adresse %VAR1_BOLD% konnte im System keine gültige Anmeldung gefunden werden!</text>
+    <text id="SYS_LOSTPW_SEVERAL_EMAIL" development="new" translation="todo">Die E-Mail-Adresse %VAR1_BOLD% wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</text>
 </version>
 <version id="2.3.0">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
@@ -273,7 +275,7 @@
     <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="todo">Einstellungen einblenden</text>
     <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="todo">Einstellungen ausblenden</text>
     <text id="ECA_CONTENT_LOADING" development="new" translation="todo">Inhalt wird geladen - Bitte warten!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="todo">E-mail Adresse scheint falsch zu sein!</text>
+    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="todo">E-Mail-Adresse scheint falsch zu sein!</text>
     <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="todo">externer Empfänger</text>
     <text id="ECA_EMAIL_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="new" translation="todo">E-Mail des%VAR1%Empfängers</text>
     <text id="ECA_EMAIL_OF_SENDER" development="new" translation="todo">E-Mail des Absenders</text>
@@ -555,7 +557,7 @@
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Sie können beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
     <text id="MAI_MESSAGE" development="new" translation="todo">Nachricht</text>
-    <text id="MAI_ROLE_NO_EMAILS" development="new" translation="todo">Die von Ihnen ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mailadressen, an die eine E-Mail versendet werden kann!</text>
+    <text id="MAI_ROLE_NO_EMAILS" development="new" translation="todo">Die von Ihnen ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mail-Adressen, an die eine E-Mail versendet werden kann!</text>
     <text id="MAI_SEND_COPY" development="new" translation="todo">Kopie der E-Mail an mich senden</text>
     <text id="MAI_SEND_EMAIL" development="new" translation="todo">E-Mail senden</text>
     <text id="MAI_SEND_MAIL_TO_ROLE" development="new" translation="todo">Ihre E-Mail wird an alle Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nWenn Sie eingeloggt sind stehen Ihnen weitere Rollen zur Verfügung, an die Sie E-Mails schreiben können.</text>
@@ -1038,7 +1040,7 @@
     <text id="SYS_CREATE_NOT_FOUND_USER" development="new" translation="todo">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, können Sie diesen neu anlegen.</text>
 	<text id="SYS_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
     <text id="SYS_CREATED_BY" development="new" translation="todo">Angelegt von %VAR1% am %VAR2%</text>
-    <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="todo">Sie haben keine gültige E-Mailadresse hinterlegt!\n\nTragen Sie bitte in Ihrem %VAR1%Profil%VAR1% eine E-Mailadresse ein.</text>
+    <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="todo">Sie haben keine gültige E-Mail-Adresse hinterlegt!\n\nTragen Sie bitte in Ihrem %VAR1%Profil%VAR1% eine E-Mail-Adresse ein.</text>
     <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
     <text id="SYS_DATABASE_ERROR" development="new" translation="todo">Datenbankfehler</text>
     <text id="SYS_DATABASE_INVALID" description="Var3 und Var4 erzeugen den MailTo-Link" development="new" translation="todo">Die Datenbankversion %VAR1% stimmt nicht mit der Version der Admidio-Scripte %VAR2% überein.\n\nWenden Sie sich bitte an den %VAR3%Webmaster%VAR4% dieser Webseite.</text>
@@ -1139,9 +1141,8 @@
     <text id="SYS_LOGOUT" development="new" translation="todo">Abmelden</text>
     <text id="SYS_LOGOUT_SUCCESSFUL" development="new" translation="todo">Sie wurden erfolgreich abgemeldet.</text>
     <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="todo">Sie sind am System angemeldet, folglich kennen Sie Ihr Passwort!</text>
-    <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="todo">Es konnte die E-Mail Addresse: %VAR1% im System nicht gefunden werden!</text>
-    <text id="SYS_LOSTPW_SEND" development="new" translation="todo">Das neue Passwort wurde an die Email Addresse %VAR1% geschickt!</text>
-    <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler beim Senden an die Email Addresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
+    <text id="SYS_LOSTPW_SEND" development="new" translation="todo">Das neue Passwort wurde an die Email Adresse %VAR1% geschickt!</text>
+    <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler beim Senden an die Email Adresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
 	<text id="SYS_MAP" development="new" translation="todo">Karte</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MALE" development="new" translation="todo">Männlich</text>
@@ -1187,7 +1188,7 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
     <text id="SYS_PASSWORD" development="new" translation="todo">Passwort</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Passwort vergessen</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn Sie Phr Passwort vergessen haben, kann das System ein neues Passwort erstellen und an Ihre E-Mail Adresse senden.\nGeben Sie dazu Ihre E-Mail-Adresse in das untenstehende Formular ein und klicken Sie auf die Schaltfläche "Neues Passwort zusenden".</text>
+    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn Sie Phr Passwort vergessen haben, kann das System ein neues Passwort erstellen und an Ihre E-Mail-Adresse senden.\nGeben Sie dazu Ihre E-Mail-Adresse in das untenstehende Formular ein und klicken Sie auf die Schaltfläche "Neues Passwort zusenden".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="todo">Sie haben ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfen Sie bitte Ihr Passwort und geben Sie dieses dann erneut ein.</text>
     <text id="SYS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>
@@ -1277,7 +1278,7 @@
 	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" heißen.</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
-    <text id="SYS_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mailadresse in seinem Profil hinterlegt!</text>
+    <text id="SYS_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</text>
     <text id="SYS_USERNAME" development="new" translation="todo">Benutzername</text>
     <text id="SYS_USERS_FOUND" development="new" translation="todo">Gefundene Benutzer</text>
     <text id="SYS_UTF8" development="new" translation="todo">UTF-8</text>

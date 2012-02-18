@@ -101,7 +101,7 @@ public function __construct()
 
 }
 
-// Funktion um den Absender zu setzen
+// method adds sender to mail
 public function setSender($address, $name='')
 {
     global $gPreferences;
@@ -186,59 +186,62 @@ public function setSubject($subject)
     return false;
 }
 
-// Funktion um Hauptempfaenger hinzuzufuegen
+// method adds main recipients to mail
 public function addRecipient($address, $name='')
 {
     $address = admStrToLower($address);
     // Recipient must be Ascii-US formated, so encode in MimeHeader
-	$name    = admEncodeMimeheader(stripslashes($name));
+	$asciiName = admEncodeMimeheader(stripslashes($name));
+
     if (strValidCharacters($address, 'email'))
     {
         if (!isset($this->headerOptions['To']))
         {
-            $this->headerOptions['To'] = '"'. $name. '" <'. $address. '>';
+            $this->headerOptions['To'] = '"'. $asciiName. '" <'. $address. '>';
         }
         else
         {
-			$this->headerOptions['To'] = $this->headerOptions['To']. ", ". $name. " <". $address. ">";
+			$this->headerOptions['To'] = $this->headerOptions['To']. ', "'. $asciiName. '" <'. $address. '>';
         }
-        $this->addresses = $this->addresses. $name. ' <'. $address. ">\n";
+        $this->addresses = $this->addresses. $name. ', '. $address. "\r\n";
         return true;
     }
     return false;
 }
 
-// Funktion um Ccs hinzuzufuegen
+// method adds CC recipients to mail
 public function addCopy($address, $name='')
 {
     $address = admStrToLower($address);
     // Copy must be Ascii-US formated, so encode in MimeHeader
-	$name    = admEncodeMimeheader(stripslashes($name));
+	$asciiName = admEncodeMimeheader(stripslashes($name));
+
     if (strValidCharacters($address, 'email'))
     {
         if (!isset($this->headerOptions['Cc']))
         {
-            $this->headerOptions['Cc'] = '"'. $name. '" <'. $address. '>';
+            $this->headerOptions['Cc'] = '"'. $asciiName. '" <'. $address. '>';
         }
         else
         {
-        $this->headerOptions['Cc'] = $this->headerOptions['Cc']. ', '. $name. ' <'. $address. '>';
+			$this->headerOptions['Cc'] = $this->headerOptions['Cc']. ', "'. $asciiName. '" <'. $address. '>';
         }
-        $this->addresses = $this->addresses. $name. ' <'. $address. ">\n";
+        $this->addresses = $this->addresses. $name. ', '. $address. "\r\n";
         return true;
     }
     return false;
 }
 
-// Funktion um Bccs hinzuzufuegen
+// method adds BCC recipients to mail
 public function addBlindCopy($address, $name='')
 {
     $address = admStrToLower($address);
     // Blindcopy must be Ascii-US formated, so encode in MimeHeader
-	$name    = admEncodeMimeheader(stripslashes($name));
+	$asciiName = admEncodeMimeheader(stripslashes($name));
+
     if (strValidCharacters($address, 'email'))
     {
-        $this->bccArray[] = '"'. $name. '" <'. $address. '>';
+        $this->bccArray[] = '"'. $asciiName. '" <'. $address. '>';
         $this->addresses = $this->addresses. $name. ', '.$address."\r\n";
         return true;
     }
