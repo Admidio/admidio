@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Passwort vergessen
+ * Show form where user can request a new password and handle the request
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -17,10 +17,10 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && $gPreferences[
 	require_once('classes/captcha.php');
 }
 
-//URL auf Navigationstack ablegen
+// save url to navigation stack
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// Systemmails und Passwort zusenden muessen aktiviert sein
+// 'systemmail' and 'request password' must be activated
 if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -44,9 +44,10 @@ if($gValidLogin)
 
 if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
 {
-    $sql = 'SELECT MAX(usr_id) as usr_id
+	// search for user with the email address that have a valid login and membership to a role
+    $sql = 'SELECT usr_id
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-              LEFT JOIN '. TBL_USER_DATA. ' as email
+              JOIN '. TBL_USER_DATA. ' as email
                 ON email.usd_usr_id = usr_id
                AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
                AND email.usd_value  = \''.$_POST['recipient_email'].'\'
@@ -59,18 +60,25 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
                AND mem_end    > \''.DATE_NOW.'\'
                AND mem_usr_id = usr_id
                AND usr_valid  = 1
-               AND email.usd_value = \''.$_POST['recipient_email'].'\'';   
+			   AND LENGTH(usr_login_name) > 0 
+			 GROUP BY usr_id';   
     $result = $gDb->query($sql);
-    $row    = $gDb->fetch_array($result);
-    
-    if(strlen($row['usr_id']) == 0)
-    {
-        $gMessage->show($gL10n->get('SYS_LOSTPW_EMAIL_ERROR',$_POST['recipient_email']));    
-    }
+	$count  = $gDb->num_rows();
 
+	// show error if no user found or more than one user found
+    if($count == 0)
+    {
+        $gMessage->show($gL10n->get('SYS_LOSTPW_EMAIL_ERROR', $_POST['recipient_email']));    
+    }
+	elseif($count > 1)
+	{
+        $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));    
+	}
+
+    $row  = $gDb->fetch_array($result);
     $user = new User($gDb, $gProfileFields, $row['usr_id']);
 
-    // Passwort und Aktivierungs-ID erzeugen und speichern
+	// create and save new password and activation id
     $new_password  = generatePassword();
     $activation_id = generateActivationId($user->getValue('EMAIL'));
     $user->setValue('usr_new_password', $new_password);
