@@ -477,6 +477,11 @@ class CKEditor
 	 */
 	private function ckeditorPath()
 	{
+		// MFA: because there are problems with several installations, we create the path with the Admidio parameter g_root_path
+		global $g_root_path;
+		$ckeditorUrl = $g_root_path.'/adm_program/libs/ckeditor/';
+		return $ckeditorUrl;
+		
 		if (!empty($this->basePath)) {
 			return $this->basePath;
 		}

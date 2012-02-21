@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Konstanten die innerhalb Admidios benoetigt werden
+ * Constants that will be used within Admidio
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -28,11 +28,11 @@ else
 }
 
 
-// verschiedene Pfade
+// different paths
 define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1));
 if(strpos($_SERVER['SCRIPT_FILENAME'], "/adm_") !== false && isset($g_root_path) == true)
 {
-    // aktuelle aufgerufene Url (klappt nur so, da SSL-Proxies nicht ueber _SERVER ausgelesen werden koennen)
+    // current called url (only this way possible, because SSL-Proxies couldn't be read with _SERVER parameter)
     define('CURRENT_URL',$g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strpos($_SERVER['SCRIPT_FILENAME'], "/adm_")). '?'. $_SERVER['QUERY_STRING']);
 }
 else
@@ -40,11 +40,13 @@ else
     define('CURRENT_URL', "http://". $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI']);
 }
 
+// default timezone so that there are no errors in php5 until Admidio supports timezones
 date_default_timezone_set('Europe/Berlin');
+// date and time for use in scripts
 define('DATE_NOW', date('Y-m-d', time()));
 define('DATETIME_NOW', date('Y-m-d H:i:s', time()));
 
-// Defines fuer alle Datenbanktabellen
+// Defines for all database tables
 define('TBL_ANNOUNCEMENTS',     $g_tbl_praefix. '_announcements');
 define('TBL_AUTO_LOGIN',        $g_tbl_praefix. '_auto_login');
 define('TBL_CATEGORIES',        $g_tbl_praefix. '_categories');
