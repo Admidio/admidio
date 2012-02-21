@@ -99,6 +99,7 @@ $checkboxes = array('dates_show_calendar_select'
                    ,'profile_show_roles'
                    ,'profile_show_former_roles'
                    ,'profile_show_extern_roles'
+                   ,'system_js_editor_enabled'
 				   ,'system_organization_select'
                    ,'system_search_similar'
                    );
