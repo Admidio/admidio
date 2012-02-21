@@ -232,17 +232,17 @@ else
     
     if(isset($_POST['show_members']) && $_POST['show_members'] == 1)
     {
-        // Ehemalige
+        // only former members
         $sqlConditions = ' AND mem_end < \''.DATE_NOW.'\' ';
     }
     if(isset($_POST['show_members']) && $_POST['show_members'] == 2)
     {
-        // Ehemalige und Aktive
-        $sqlConditions = ' AND mem_begin > \''.DATE_NOW.'\' ';
+        // former members and active members
+        $sqlConditions = ' AND mem_begin < \''.DATE_NOW.'\' ';
     }
     else
     {
-        // Aktive
+        // only active members
         $sqlConditions = ' AND mem_begin  <= \''.DATE_NOW.'\'
                            AND mem_end     > \''.DATE_NOW.'\' ';
     }
