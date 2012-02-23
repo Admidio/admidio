@@ -76,10 +76,10 @@ $gLayout['header'] ='
             $("#list_load_animation").show();
             $("form#memlist_form").hide().empty();
             $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$getRoleId.'", $("#memsearch_form").serialize(), function(result){
-                $("form#memlist_form").append(result).show();
-                $("#list_load_animation").hide();               
-                return false;
+                $("form#memlist_form").empty().append(result).show();
+                $("#list_load_animation").hide();                               
             });
+            return false;
         });
     
         //Enter abfangen
