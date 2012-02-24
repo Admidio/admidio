@@ -144,21 +144,21 @@ else
     // Termine an einem Tag suchen
     if(strlen($getDate) > 0)
     {
-        $sqlConditions .= ' AND dat_begin <= \''.$getDate.'\'
+        $sqlConditions .= ' AND dat_begin <= \''.$getDate.' 23:59:59\'
                             AND dat_end   >  \''.$getDate.' 00:00:00\'';
         $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
     }
     //fuer alte Termine...
     elseif($getMode == 'old')
     {
-        $sqlConditions .= ' AND dat_begin <  \''.DATE_NOW.'\'
+        $sqlConditions .= ' AND dat_begin <  \''.DATE_NOW.' 00:00:00\'
                             AND dat_end   <= \''.DATE_NOW.' 00:00:00\'';
         $sqlOrderBy .= ' ORDER BY dat_begin DESC ';
     }
     //... ansonsten fuer kommende Termine
     else
     {
-        $sqlConditions .= ' AND (  dat_begin >= \''.DATE_NOW.'\'
+        $sqlConditions .= ' AND (  dat_begin >= \''.DATE_NOW.' 00:00:00\'
                                 OR dat_end   >  \''.DATE_NOW.' 00:00:00\' )';
         $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
     }
