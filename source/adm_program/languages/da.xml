@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
+<version id="2.3.1" translator="Henrik Troels-Hansen">
+	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="edited">Organisationen %VAR1_BOLD% eksisterer allerede. Venligst vælg et andet navn.</text>
+    <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="edited">Der blev ikke fundet login data der passer til e-mail adresse %VAR1_BOLD%! </text>
+    <text id="SYS_LOSTPW_SEVERAL_EMAIL" development="new" translation="edited">E-mail adressen %VAR1_BOLD% er blevet tildelt til flere registreringer. En unik bruger registrering kunne identificeres.</text>
+</version>
 <version id="2.3.0" translator="Henrik Troels-Hansen">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Skal kategorien %VAR_BOLD% slettes?\n\n>Denne kategori har %VAR2% afhængige indlæg, som vil også vil blive slettet.</text>
@@ -64,7 +69,7 @@
     <text id="SYS_PERIOD" development="new" translation="edited">Periode</text>
 	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="edited">Admidio kræver %VAR1% eller højere</text>    	
 	<text id="SYS_PRESENTATION" development="new" translation="edited">Vis</text>
-    <text id="SYS_RADIO_BUTTON" development="new" translation="edited">Radio button</text>
+    <text id="SYS_RADIO_BUTTON" development="new" translation="edited">Radio knap</text>
     <text id="SYS_SOCIAL_NETWORKS" development="new" translation="edited">Sociale medier</text>
     <text id="SYS_URL_INVALID_CHAR" development="changed" translation="edited">URLen i felt %VAR1_BOLD% har invalide karakterer.\n\nBrug kun alfabetiske karakterer, nummre fra 0 til 9 og special karaktererne .-_:/#?=% kan frit anvendes, undgå Æ Ø Å.</text>
     <text id="SYS_VERSION" development="new" translation="edited">Version</text>
@@ -219,8 +224,8 @@
 	<text id="DOW_CREATE_FOLDER_DESC" development="new" translation="edited">Opret folder i %VAR1_BOLD%.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="edited">Filer</text>
 	<text id="DOW_DOWNLOADS_DESC" development="new" translation="edited">Forskellige data filer og filtyper kan gøres tilgængelige via download. Disse filer kan kategoriseres i foldere med forskellige adgangs rettigheder.</text>
-	<text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">En ny fil blev uploaded</text>
-	<text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">En ny fil blev uploaded til %VAR1%\n\nFil: %VAR2%\nUploaded af: %VAR3%\nUploaded den: %VAR4%</text>
+	<text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">En ny fil blev overført</text>
+	<text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">En ny fil blev overført til %VAR1%\n\nFil: %VAR2%\nOverført af: %VAR3%\nOverført den: %VAR4%</text>
     <text id="DOW_ENABLE_DOWNLOAD_MODULE" development="new" translation="edited">Aktiver Fil/Folder modul</text>
     <text id="DOW_ENABLE_DOWNLOAD_MODULE_DESC" development="new" translation="edited">Fil/Folder modulet kan deaktiveres her. Efter deaktivering vil det ikke længere vises som modul i oversigten. (standard: ja)</text>
     <text id="DOW_FILE_EXIST" development="new" translation="edited">Filen %VAR1% eksisterer allerede!\n\nVælg en anden fil.</text>
@@ -230,10 +235,10 @@
     <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Filen er ikke længere fysisk til stede på serveren. Den bør slettes fra databasen.</text>
     <text id="DOW_FILE_RENAME" development="new" translation="edited">Fil %VAR1% blev omdøbt.</text>
     <text id="DOW_FILE_RENAME_ERROR" development="new" translation="edited">Der opstod en fejl da filen %VAR1% skulle omdøbes.</text>
-    <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Uploaded fil størrelse er større end tilladt (maximum fil størrelse: %VAR1% KB).</text>
+    <text id="DOW_FILE_TO_LARGE" development="new" translation="edited">Den overførte fil størrelse er større end det tilladte maximum.(maximum fil størrelse: %VAR1% KB).</text>
 	<text id="DOW_FILE_TYPE" development="new" translation="edited">Fil type</text>
-    <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Uidentificeret fejl opstod imens filen %VAR1% blev uploaded.</text>
-    <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Filen %VAR1_BOLD% blev uploaded.</text>
+    <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="edited">Uidentificeret fejl opstod imens filen %VAR1% blev forsøgt overført.</text>
+    <text id="DOW_FILE_UPLOADED" development="new" translation="edited">Filen %VAR1_BOLD% blev overført.</text>
     <text id="DOW_FOLDER_CREATED" development="new" translation="edited">Folderen %VAR1_BOLD% blev oprettet.</text>
     <text id="DOW_FOLDER_EXISTS" development="new" translation="edited">Folderen %VAR1% eksisterer allerede!\n\nVenligst vælg et andet navn til folderen.</text>
     <text id="DOW_FOLDER_NAME_INVALID" development="new" translation="edited">Folder navnet indeholder ulovlige karakterer!\n\nVenligst skriv et andet folder navn (ikke ÆØÅ)</text>
@@ -243,7 +248,7 @@
     <text id="DOW_FOLDER_RENAME" development="new" translation="edited">Folderen %VAR1% blev omdøbt.</text>
     <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="edited">En fejl opstod imens folderen %VAR1% blev omdøbt.</text>
     <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="edited">Maximum fil størrelse</text>
-    <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Brugere må kun uploade filer mindre end det her viste. Hvis du skriver 0 deaktiveres upload. (Standard:3072 KB)</text>
+    <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="edited">Brugere må kun overføre filer mindre end det her viste. Hvis du skriver 0 deaktiveres overførsler. (Standard:3072 KB)</text>
 	<text id="DOW_NEW_FILE_NAME" development="new" translation="edited">Nyt fil navn</text>
 	<text id="DOW_NEW_NAME" development="new" translation="edited">Nyt navn</text>
     <text id="DOW_NO_ACCESS" development="new" translation="edited">Adgang nægtet</text>
@@ -254,13 +259,13 @@
 	<text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Sæt folder rettigheder</text>
 	<text id="DOW_SET_PERMISSIONS" development="new" translation="edited">Sæt rettigheder</text>
 	<text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Filer uden ejer</text>
-	<text id="DOW_UPLOAD_FILE" development="new" translation="edited">Upload fil</text>
+	<text id="DOW_UPLOAD_FILE" development="new" translation="edited">Overfør fil</text>
     <text id="DOW_EDIT_FILE" development="new" translation="edited">Rediger fil</text>
     <text id="DOW_EDIT_FOLDER" development="new" translation="edited">Rediger folder</text>
     <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Tidligere navn</text>
-    <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Uploader fil</text>
-    <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Upload fil til folder %VAR1_BOLD%</text>
-    <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke uploades.\nFil størrelsen har muligvis overskredet den tilladte server definere størrelse på %VAR1%B!</text>
+    <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Overfører fil</text>
+    <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Overfør fil til folder %VAR1_BOLD%</text>
+    <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke overføres.\nFil størrelsen har muligvis overskredet den tilladte server definerede størrelse på %VAR1%B!</text>
 
 
     <!-- Phrases only in Ecardsmodule -->
@@ -384,7 +389,7 @@
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download konfigurations fil %VAR1_BOLD% og kopier den til Admidio's rod folder. Du kan også finde %VAR2_BOLD% her.\n\nFortsæt installationen når du har kopieret filen på plads.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Indtast database adgangs information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Filen %VAR1_BOLD% kunne ikke åbnes.</text>
-    <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folderen %VAR1_BOLD% er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne uploade billeder og filer til fil modulet.</text>
+    <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="edited">Folderen %VAR1_BOLD% er ikke skrivbar. Venligst sæt skrive rettigheder for at kunne overføre billeder og filer til fil modulet.</text>
     <text id="INS_GROUPS" development="new" translation="edited">Grupper</text>
     <text id="INS_ICQ" development="new1" translation="edited">ICQ</text>
     <text id="INS_INSTALL_ADMIDIO" development="new" translation="edited">Installer Admidio</text>
@@ -433,7 +438,7 @@
     <text id="INS_UPDATE_VERSION" development="new" translation="edited">Opdater til version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="edited">Opdaterings proces afsluttet succesfuldt</text>
     <text id="INS_WARNING_BETA_VERSION" development="new" translation="edited">Dette er en beta version af Admidio.\n\nProduktions brug kan være forbundet med risiko på grund af mulig instabilit og kan resultere i datatab. Bør kun bruges som testmiljø!</text>
-    <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Safe mode er aktiveret på serveren. Dette kan give problemer med visse funktioner såsom fil upload.</text>
+    <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Safe mode er aktiveret på serveren. Dette kan give problemer med visse funktioner såsom fil overførsler.</text>
     <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="edited">Velkommen! Opret din nye organisation her!</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="edited">Velkommen til installationen af Admidio</text>
     <text id="INS_WELCOME_TEXT" development="new" translation="edited">På de følgende sider vil du blive bedt om at oplyse nødvendig information for at kunne oprette et nyt Admidio system. Du vil blive bedt om at specificere database adgangs informationer til din Admidio installation.</text>
@@ -467,21 +472,21 @@
     <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Oversigt over aktive roller</text>
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Tilføj kolonne</text>
     <text id="LST_CATEGORY_NO_LISTS" development="new" translation="edited">Ingen aktiverede lister tilgængelige.</text>
-    <text id="LST_CHANGE_LIST" development="new" translation="edited">Vil du hente og ændre standard liste konfiguration eller oprette en ny liste konfiguration?</text>
+    <text id="LST_CHANGE_LIST" development="new" translation="edited">Vil du hente og ændre standard liste eller oprette en ny liste?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Vælg en rolle for den valgte liste.</text>
-    <text id="LST_CONFIGURATION" development="new" translation="edited">Konfiguration</text>
-    <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="edited">Tilladelse til at bruge konfigurationen for alle medlemer</text>
-    <text id="LST_CONFIGURATION_DEFAULT" development="new" translation="edited">Vil du markere den valgte konfiguration som standard for denne organisation?</text>
-    <text id="LST_CONFIGURATION_DELETE" development="new" translation="edited">Vil du slette valgte liste konfiguration?</text>
-    <text id="LST_CONFIGURATION_LIST" development="new" translation="edited">Liste Konfiguration</text>
-    <text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Vælg et navn til konfigurations sættet?</text>
-    <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Opret ny konfiguration</text>
+    <text id="LST_CONFIGURATION" development="new" translation="edited">Liste indstilling</text>
+    <text id="LST_CONFIGURATION_ALL_USERS" development="new" translation="edited">Tilladelse til at bruge listen for alle medlemer</text>
+    <text id="LST_CONFIGURATION_DEFAULT" development="new" translation="edited">Vil du markere den valgte liste indstilling som standard for denne organisation?</text>
+    <text id="LST_CONFIGURATION_DELETE" development="new" translation="edited">Vil du slette den valgte liste?</text>
+    <text id="LST_CONFIGURATION_LIST" development="new" translation="edited">Liste indstilling</text>
+    <text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Vælg et navn til listen sættet?</text>
+    <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Opret ny liste</text>
     <text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Opret egen liste</text>
     <text id="LST_CSV_FILE" development="new" translation="edited">CSV fil</text>
-    <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Standard konfiguration</text>
-    <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Gør et konfigurations sæt til organisationens standard liste konfiguration. Vælg et konfigurations sæt og klik på følgende symbol: %VAR1%. Den valgte konfiguration vil blive aktiv for alle medlemmers rolle lister. Medlemmer vil ikke kunne bruge egen konfigurations sæt.</text>
-    <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Der er ikke defineret et standard konfigurations sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</text>
-    <text id="LST_DELETE_CONFIGURATION" development="new" translation="edited">Slet konfiguration</text>
+    <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Standard liste indstilling</text>
+    <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Gør et liste indstillings sæt til organisationens standard liste konfiguration. Vælg et liste indstillings sæt og klik på følgende symbol: %VAR1%. Den valgte indstilling vil blive aktiv for alle medlemmers rolle lister. Medlemmer vil ikke kunne bruge deres egne liste indstillinger.</text>
+    <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Der er ikke defineret et standard liste indstillings sæt af administratoren!\n\nKontakt systemadministratoren for at få hjælp.</text>
+    <text id="LST_DELETE_CONFIGURATION" development="new" translation="edited">Slet liste indstillingen</text>
     <text id="LST_EMAIL_TO_MEMBERS" development="new" translation="edited">E-mail til medlemmer</text>
     <text id="LST_EXPORT_TO" development="new" translation="edited">Eksport til</text>
     <text id="LST_FORMER_MEMBERS" development="new" translation="edited">Tidligere medlemmer</text>
@@ -509,14 +514,14 @@
 	<text id="LST_NO_USER_FOUND" development="new" translation="edited">Intet medlem af dine kriterier kunne findes.</text>
     <text id="LST_NO_ROLES_REMOVED" development="new" translation="edited">Ingen rolle er blevet slettet endnu.\n\nSlettede roller bliver først vist her efter de er slettet i rolle administations panelet.</text>
     <text id="LST_NO_RIGHTS_VIEW_LIST" development="new" translation="edited">Du har ikke tilladelse til at få vist en liste over definerede roller.</text>
-    <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="edited">Konfigurationen vil blive brugt som standard konfiguration</text>
+    <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="edited">Liste indstillingen vil blive brugt som standard.</text>
 	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="edited">Antal roller pr. side.</text>
-    <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Standard konfiguration</text>
-    <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Som webmaster kan du definere en standard konfiguration for alle brugere. Konfigurer rækker og kolonner og gem konfigurationen ved at navngive konfigurations sættet. Vælg en ny forud defineret liste konfiguration og klik: %VAR1%</text>
+    <text id="LST_PRESET_CONFIGURATION" development="new" translation="edited">Standard liste indstillinger</text>
+    <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="edited">Som webmaster kan du definere en standard liste indstilling for alle brugere. Konfigurer rækker og kolonner og gem indstillingerne ved at navngive konfigurations sættet. Vælg en ny forud defineret liste indstilling og klik: %VAR1%</text>
     <text id="LST_PRINT_PREVIEW" development="new" translation="edited">Vis print eksempel</text>
     <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Rolle information</text>
-    <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">gem konfiguration</text>
-    <text id="LST_SAVE_CONFIGURATION_OTHER_NAME" development="new" translation="edited">Gem konfiguration med andet navn</text>
+    <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Gem indstilling</text>
+    <text id="LST_SAVE_CONFIGURATION_OTHER_NAME" development="new" translation="edited">Gem indstillingen med andet navn</text>
     <text id="LST_SEARCH_AGE_EXAMPLE" development="new" translation="edited">18 år</text>
     <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Søgning efter alle brugere ældre end 18 år</text>
     <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
@@ -550,7 +555,7 @@
 	<text id="MAI_ATTACHEMENT" development="new" translation="todo">Vedhæftet:</text>
     <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum størrelse af vedhæftede filer (tilsammen)</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Brugere kan vedhæfte filer som er mindre end værdien der er defineret her. Hvis værdien er 0, kan vedhæftede filer ikke sendes. (Standard: 1024KB)</text>
-    <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Filerne vedhæftet e-mailen kunne ikke uploades.\nFilen er sikkert for stor!</text>
+    <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Filerne vedhæftet e-mailen kunne ikke overføres.\nFilen er sikkert for stor!</text>
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Hvis indstillingen er aktiv, kan brugere der er logget ind se et billede med en captcha kode eller et simpelt regnestykke. Det er nødvendigt at skrive den rigtige kode eller den rigtige løsning for at kunne sende e-mailen. Captcha er en del af antispam løsningen i Admidio. (Standard: Ja)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Venligst vælg en rolle som modtager af denne mail!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="edited">Antal BCC modtagere</text>
@@ -593,7 +598,7 @@
     <text id="MEM_IMPORT_SUCCESSFUL" development="new" translation="edited">Import af %VAR1% datapost(r) afsluttede successfuldt!</text>
     <text id="MEM_IMPORT_USERS" development="new" translation="edited">Importer bruger(e)</text>
     <text id="MEM_INPUT_FIRSTNAME_LASTNAME" development="new" translation="edited">Skriv fornavn og efternavn på den nye bruger. Et database check vil sikre at der ikke er en bruger med samme eller lignene navn.</text>
-    <text id="MEM_MAKE_FORMER" development="new" translation="edited">En brugers status kan ændres til tidligere medlem. Dette vil This will bevare all bruger information inklusivt rolle medlemskab til senere brug.</text>
+    <text id="MEM_MAKE_FORMER" development="new" translation="edited">En brugers status kan ændres til tidligere medlem. Dette vil bevare al bruger information inklusivt rolle medlemskab til senere brug.</text>
     <text id="MEM_NO_MEMBERSHIP" development="new" translation="edited">Denne bruger er ikke medlem af organisationen %VAR1% endnu.</text>
     <text id="MEM_NOT_EDIT" development="new" translation="edited">Rediger ikke</text>
     <text id="MEM_PROFILE_FIELD" development="new" translation="edited">Profil felt</text>
@@ -663,7 +668,7 @@
 	<text id="ORG_CAPTCHA_SIZE" development="new" translation="edited">Definér captcha størrelse.</text>
 	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">Captcha signatur</text>
 	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Vælg font størrelse til captcha signaturen. (Standard: 9)</text>
-	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Udfyld din fortrukne signatur til captcha. Standard font type som i den nuværende tema vil blive benyttet.</text>
+	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Udfyld din foretrukne signatur til captcha. Standard fonten i det valgte tema vil blive benyttet.</text>
 	<text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Accepterede karakterer</text>
 	<text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Udfyld de accepterede karakterer som denne captcha skal anvende.</text>
 	<text id="ORG_CAPTCHA_SCALING" development="new" translation="edited">Captcha størrelse (Bredde x højde)</text>
@@ -760,13 +765,13 @@
 	<text id="UPD_NEW" development="new" translation="edited">En ny stabil version er tilgængelig!</text>
 	<text id="UPD_NEW_BETA" development="new" translation="edited">En ny beta version er tilgængelig!</text>
 	<text id="UPD_NEW_BOTH" development="new" translation="edited">En ny stabil version og en ny beta version er tilgængelig!</text>
-	<text id="UPD_NO_NEW" development="new" translation="edited">Du bruger lige nu %VAR1%version af Admidio!</text>
+	<text id="UPD_NO_NEW" development="new" translation="edited">Du bruger lige nu %VAR1% versionen af Admidio!</text>
 	<text id="UPD_TITLE" development="new" translation="edited">Opdaterings check</text>
 
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="edited">Album</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Slet album</text>
-    <text id="PHO_ALBUM_HELP_DESC" development="new" translation="edited">Venligst udfyld alle krævede felter. Felterne 'album' og 'start' er påkrævede felter.\nHvis det er nødvendigt kan du vælge en forældre folder f.eks. 'dag 3' i 'Tunering 2011'. Det er anbefalet at splitte albummet op hvis det indeholder mange billeder.\nGæster vil kun kunne se aktiverede albums. Visnings rettigheder kan sættes og redigeres både før og efter upload.\nKlik på 'Gem' når du er færdig.</text>
+    <text id="PHO_ALBUM_HELP_DESC" development="new" translation="edited">Venligst udfyld alle krævede felter. Felterne 'album' og 'start' er påkrævede felter.\nHvis det er nødvendigt kan du vælge en forældre folder f.eks. 'dag 3' i 'Tunering 2011'. Det er anbefalet at splitte albummet op hvis det indeholder mange billeder.\nGæster vil kun kunne se aktiverede albums. Visnings rettigheder kan sættes og redigeres både før og efter overførslen.\nKlik på 'Gem' når du er færdig.</text>
     <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Albummet er blokeret og gæsterne kan ikke få det vist. Du kan aktivere det ved at klikke på nøgle symbolet i redigerings feltet.</text>
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">Albummet er blevet oprettet / redigeret.</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Album Administration</text>
@@ -781,11 +786,11 @@
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="edited">Folderen kunne ikke findes. Blev folderen slettet med FTP eller skal den være utilgængelig, venligst slet folderen i Admidio.\nGæster uden billede administrations rettigheder kan ikke få vist det valgte album.</text>
     <text id="PHO_MAX_PHOTO_SIZE" development="new" translation="edited">Max. billede størrelse (bredde x højde)</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">Værdien definerer max. størrelse på et billede som kan ses af en bruger. Størrelsen af popup og ColorBox vinduer bliver automatisk justeret. Ideel størrelse bør følge original billede størrelse for at undgå skalering. (Standard: 640 x 400 pixels)</text>
-    <text id="PHO_MULTIUPLOAD" development="new" translation="edited">Masseupload</text>
-    <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="edited">Masseupload gør det muligt at uploade adskillige billeder på en gang. For at masseupload skal fungere så skal Adobe Flash (mindst version 9+) være installeret. Uden flash eller med masseupload deaktiveret, så vil en-til-en HTML upload blive benyttet automatisk. (Standard: Ja)</text>
+    <text id="PHO_MULTIUPLOAD" development="new" translation="edited">Masse overførsel</text>
+    <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="edited">Masse overførsel gør det muligt at overføre adskillige billeder på en gang. For at masse overførsler skal fungere så skal Adobe Flash (mindst version 9+) være installeret. Uden flash eller med masse overførsel deaktiveret, så vil en-til-en HTML overførsel blive benyttet automatisk. (Standard: Ja)</text>
 	<text id="PHO_NEXT_PHOTO" development="new" translation="edited">Næste billede</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="edited">Albummet indeholder ingen billeder.</text>
-    <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke uploades.\nFormodentlig på grund af at størrelsen overstiger det definere maximum på %VAR1%B!</text>
+    <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Ulovlig side visning eller også så kunne filen ikke overføres.\nFormodentlig på grund af at størrelsen overstiger det definere maximum på %VAR1%B!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="edited">Der er ikke valgt nogen billeder som skal tilføjes.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="edited">Du har ikke rettigheder nok til at udføre denne handling.\n\nKun brugere som er logget ind med billede administrations rettigheder har mulighed for at administrere billedes.</text>
     <text id="PHO_NUMBER_OF_billedeS" development="new" translation="edited">Antal billeder</text>
@@ -793,29 +798,29 @@
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="edited">Billede albums</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="edited">slet billede</text>
     <text id="PHO_PHOTO_DESTINATION" development="new" translation="edited">Billeder vil blive tilføjet til albummet: %VAR1_BOLD%.</text>
-    <text id="PHO_PHOTO_FILES_TO_LARGE" development="new" translation="edited">Den totale fil størrelse for et eller flere billeder overskrider muligvis den max tilladte server definerede upload størrelse på %VAR1% MB.</text>
+    <text id="PHO_PHOTO_FILES_TO_LARGE" development="new" translation="edited">Den totale fil størrelse for et eller flere billeder overskrider muligvis den max tilladte server definerede overførsels størrelse på %VAR1% MB.</text>
     <text id="PHO_PHOTO_FORMAT_INVALID" development="new" translation="edited">Kun JPG og PNG billeder er tilladt.</text>
     <text id="PHO_PHOTO_PROCESSING_ERROR" development="new" translation="edited">Billede behandlings fejl</text>
     <text id="PHO_PHOTO_ROTATE_LEFT" development="new" translation="edited">Rotér billede mod venstre</text>
     <text id="PHO_PHOTO_ROTATE_RIGHT" development="new" translation="edited">Rotér billede mod højre</text>
     <text id="PHO_PHOTO_SEND_ECARD" development="new" translation="edited">Send billede som postkort</text>
-    <text id="PHO_PHOTO_UPLOAD_SUCCESS" development="new" translation="edited">Billede upload successfuldt</text>
-    <text id="PHO_PHOTO" development="new" translation="edited">Bbillede</text>
+    <text id="PHO_PHOTO_UPLOAD_SUCCESS" development="new" translation="edited">Billedet blev overført</text>
+    <text id="PHO_PHOTO" development="new" translation="edited">Billede</text>
     <text id="PHO_PHOTOGRAPHER" development="new" translation="edited">Billeder af</text>
     <text id="PHO_PHOTOS" development="new" translation="edited">Billeder</text>
-    <text id="PHO_PHOTOS_DESC" development="new" translation="edited">Billeder fra events kan uploades og vises. Billederne kan organiseres i albums som kan være internt forbundet.</text>
+    <text id="PHO_PHOTOS_DESC" development="new" translation="edited">Billeder fra events kan overføres og vises. Billederne kan organiseres i albums som kan være internt forbundet.</text>
     <text id="PHO_POPUP_WINDOW" development="new" translation="edited">popup vindue</text>
 	<text id="PHO_PREVIOUS_PHOTO" development="new" translation="edited">Forrige billede</text>
 	<text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="edited">Opløsning større end</text>
     <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="edited">Billeder skal gemmes som enten JPG eller PNG.</text>
     <text id="PHO_RESTRICTIONS_HELP_2" development="new" translation="edited">Serveren kan kun behandle billeder med en max størrelse på %VAR1% megapixels.</text>
-    <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="edited">Uploaded fil må ikke være større end %VAR1% MB.</text>
+    <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="edited">Den overførte fil må ikke være større end %VAR1% MB.</text>
     <text id="PHO_RESTRICTIONS_HELP_4" development="new" translation="edited">Billeder bliver automatisk scaleret til %VAR1% pixels på den lange kant (og proprotionelt på den anden side) før de bliver gemt.</text>
     <text id="PHO_RESTRICTIONS_HELP_5" development="new" translation="edited">Navnet på filen er irrelevant da alle filer bliver omdøbt fortløbende.</text>
-    <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="edited">Fil upload kan godt tage lang tid selv om man har en hurtig internet forbindelse. Før et upload er det anbefalet at man kopierer alle filer til en folder, og ændrer størrelsen på dem til %VAR1% pixels (lang side). JPG kvalitet skal være mindst 90% (lav kompression) for at få et godt resultat.</text>
+    <text id="PHO_RESTRICTIONS_HELP_6" development="new" translation="edited">Fil overførsler kan godt tage lang tid selv om man har en hurtig internet forbindelse. Før en overførsel er det anbefalet at man kopierer alle filer til en folder, og ændrer størrelsen på dem til %VAR1% pixels (lang side). JPG kvalitet skal være mindst 90% (lav kompression) for at få et godt resultat.</text>
     <text id="PHO_SAME_WINDOW" development="new" translation="edited">Samme vindue</text>
-    <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="edited">Upload skalering</text>
-    <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Billeder vil blive skaleret under upload. Pixel værdien definerer den lange kant på portrætter og landskab billeder. Den korte side bliver proportionel til den lange. (Standard: 640 pixels)</text>
+    <text id="PHO_SCALE_AT_UPLOAD" development="new" translation="edited">Overførsels skalering</text>
+    <text id="PHO_SCALE_AT_UPLOAD_DESC" development="new" translation="edited">Billeder vil blive skaleret imens de overføres. Pixel værdien definerer den lange kant på portrætter og landskab billeder. Den korte side bliver proportionel til den lange. (Standard: 640 pixels)</text>
     <text id="PHO_SCALE_THUMBNAILS" development="new" translation="edited">Minibillede skalering</text>
     <text id="PHO_SCALE_THUMBNAILS_DESC" development="new" translation="edited">Sæt lang side på minibillede. BEMÆRK: Lad være med at skaler for stort for at undgå konflikt med minibillede række og kolonne indstillinger. Ellers skal du justere minibillede række og kolonne indstillinger. (Standard: 160 pixels)</text>
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Vis vandmærke</text>
@@ -823,11 +828,11 @@
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Billeder er blevet tilføjet til albummet hvis de vises på denne side.</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Minibilleder pr. side (rækker x kolonner)</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Værdien definerer antallet af rækker og kolonner af minibilleder på en side. (Standard: 3 x 5)</text>
-    <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Klik på knappen %VAR1_BOLD% for at vælge billede filer fra harddisken til upload.</text>
-    <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Når du bruger enkelt billede upload processen så skal du gentage den op til 5 gange, indtil alle felterne er i brug.</text>
+    <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Klik på knappen %VAR1_BOLD% for at vælge billede filer fra harddisken til overførsel.</text>
+    <text id="PHO_UPLOAD_HELP_2" development="new" translation="edited">Når du bruger processen med at overføre enkelt billeder, så skal du gentage den op til 5 gange, indtil alle felterne er i brug.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="edited">Klik så på %VAR1_BOLD% og hav lidt tålmodighed.</text>
-    <text id="PHO_UPLOAD_MORE" development="new" translation="edited">Upload flere billeder</text>
-    <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Upload billede</text>
+    <text id="PHO_UPLOAD_MORE" development="new" translation="edited">Overfør flere billeder</text>
+    <text id="PHO_UPLOAD_PHOTOS" development="new" translation="edited">Overfør billede</text>
     <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="edited">Det valgte billede bliver slettet. Er du sikker?</text>
 
     <!-- Phrases only in Profilemodule -->
@@ -868,17 +873,17 @@
 	<text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="edited">Det gamle kodeord er ikke korrekt.</text>
     <text id="PRO_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Det originale og det genindtastede kodeord er ikke ens.</text>
     <text id="PRO_PHOTO_DELETED" development="new" translation="edited">Profil billede er blevet slettet.</text>
-    <text id="PRO_PHOTO_FILE_TO_LARGE" development="new" translation="edited">Størrelsen af det uploadede billede overskrider den filstørrelse der er tilladt her som er %VAR1% B.</text>
+    <text id="PRO_PHOTO_FILE_TO_LARGE" development="new" translation="edited">Størrelsen af det overførte billede overskrider den filstørrelse der er tilladt her som er %VAR1% B.</text>
     <text id="PRO_PHOTO_FORMAT_INVALID" development="new" translation="edited">Kun JPG og PNG billedeformater er tilladt.</text>
     <text id="PRO_PHOTO_NOT_CHOOSEN" development="new" translation="edited">Ingen billed fil valgt.</text>
-    <text id="PRO_PHOTO_RESOLUTION_TO_LARGE" development="new" translation="edited">Det uploadede billede overskrider den opløsning som er tilladt her som er %VAR1% megapixels.</text>
+    <text id="PRO_PHOTO_RESOLUTION_TO_LARGE" development="new" translation="edited">Det overførte billede overskrider den opløsning som er tilladt her som er %VAR1% megapixels.</text>
     <text id="PRO_PHOTO_SAVED" development="new" translation="edited">Nyt profil billede er blevet gemt.</text>   
     <text id="PRO_PROFILE" development="new" translation="edited">Profil</text>
 	<text id="PRO_PROFILE_FROM" development="new" translation="edited">Profil for %VAR1% %VAR2%</text>
 	<text id="PRO_RESTRICTIONS_HELP_1" development="new" translation="edited">Du skulle være her i billedet.</text>
 	<text id="PRO_RESTRICTIONS_HELP_2" development="new" translation="edited">Billede skal gemmes som JPG eller PNG.</text>
 	<text id="PRO_RESTRICTIONS_HELP_3" development="new" translation="edited">Serveren kan kun håndtere billeder med en max. opløsning på %VAR1% megapixels.</text>
-	<text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="edited">De uploadede filer må ikke overskride størrelsen på %VAR1% MB.</text>
+	<text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="edited">De overførte filer må ikke overskride størrelsen på %VAR1% MB.</text>
 	<text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="edited">Rolle medlemskaber i andre organisationer</text>
 	<text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="edited">Data kan ikke gemmes.\nIngen rolle tildelt brugeren.</text>
     <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="edited">Venligst vælg nyt profil billede her</text>
@@ -890,11 +895,11 @@
 	<text id="PRO_SHOW_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">En boks vil blive vist med alle roller som brugeren er tildelt i den nuværende organisation. >Tilladelser og registrerings dato vil blive vist. (Standard: Ja)</text>
 	<text id="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS" development="new" translation="edited">Vis rolle for andre organisationer</text>
 	<text id="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC" development="new" translation="edited">Hvis en bruger har rolle medlemskab i en anden organisation, vil en boks blive vist med alle roller og registrerings datoen. (Standard: Ja)</text>
-	<text id="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">gå til profil indstillinger</text>
+	<text id="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS" development="new" translation="edited">Gå til profil indstillinger</text>
 	<text id="PRO_TO_ADD" development="new" translation="edited">Tilføj %VAR1% til %VAR2%</text>
-	<text id="PRO_UPLOAD_HELP_1" development="new" translation="edited">Klik på kanppen %VAR1_BOLD% for at vælge de billed filer fra harddisken der skal uploades.</text>
+	<text id="PRO_UPLOAD_HELP_1" development="new" translation="edited">Klik på knappen %VAR1_BOLD% for at vælge billede filer der skal overføres.</text>
     <text id="PRO_UPLOAD_HELP_2" development="new" translation="edited">Klik så på %VAR1_BOLD% og vent tålmodigt.</text>
-    <text id="PRO_UPLOAD_PHOTO" development="new" translation="edited">Upload billede</text>
+    <text id="PRO_UPLOAD_PHOTO" development="new" translation="edited">Overfør billede</text>
     <text id="PRO_USERNAME_DESCRIPTION" development="new" translation="edited">Dette er det brugernavn som du kan logge ind med.\n\nDette skal være vel overvejet. Hvis det valgte navn ikke er til rådighed mere, så prøv med kombinationer såsom Andi78 eller SteveT.</text>
 	<text id="PRO_WANT_DELETE_PHOTO" development="new" translation="edited">Vil du slette det valgte billede?</text>
 	<text id="PRO_YEARS" development="new" translation="todo">År</text>
@@ -931,14 +936,14 @@
     <text id="ROL_RIGHT_ASSIGN_ROLES" development="new" translation="edited">Organiser og tildel roller</text>
     <text id="ROL_RIGHT_ASSIGN_ROLES_DESC" development="new" translation="edited">Brugere af nuværende rolle har tilladelse til at administrere, oprette roller og tildele brugere til disse roller.</text>
     <text id="ROL_RIGHT_DATES" development="new" translation="edited">Opret og rediger en event</text>
-    <text id="ROL_RIGHT_DOWNLOAD" development="new" translation="edited">Upload og rediger filer</text>
+    <text id="ROL_RIGHT_DOWNLOAD" development="new" translation="edited">Overfør og rediger filer</text>
     <text id="ROL_RIGHT_EDIT_USER" development="new" translation="edited">Rediger profil for alle brugere</text>
     <text id="ROL_RIGHT_EDIT_USER_DESC" development="new" translation="edited">Roller med denne tilladelse aktiveret har tilladelse til at administrere al bruger information (undtaget kodeord) for andre medlemmer.\nDe kan ydermere tilgå administrations panelet og oprette nye brugere eller slette eksisterende.</text>
     <text id="ROL_RIGHT_GUESTBOOK" development="new" translation="edited">Rediger og slet gæstebogs indlæg</text>
     <text id="ROL_RIGHT_GUESTBOOK_COMMENTS" development="new" translation="edited">Opret kommentarer til gæstebogs indlæg</text>
     <text id="ROL_RIGHT_MAIL_THIS_ROLE_DESC" development="new" translation="edited">Definer hvem der skal have ret til at sende beskeder til denne rolle ved at bruge mail modulet. Rolle rettigheden %VAR1_BOLD% er forældre konfiguration for det nuværende rettigheds niveau.</text>
     <text id="ROL_RIGHT_MAIL_TO_ALL" development="new" translation="edited">Send e-mails til alle roller</text>
-    <text id="ROL_RIGHT_PHOTO" development="new" translation="edited">Upload og rediger billeder</text>
+    <text id="ROL_RIGHT_PHOTO" development="new" translation="edited">Overfør og rediger billeder</text>
     <text id="ROL_RIGHT_PROFILE" development="new" translation="edited">Rediger egen profil</text>
     <text id="ROL_RIGHT_THIS_LIST_VIEW_DESC" development="new" translation="edited">Definer hvilke brugere der skal kunne se adskildelige lister og bestemte bruger profiler for medlemmer af den nuværende rolle. Rolle rettigheden %VAR1_BOLD% er forældre konfiguration for det nuværende rettigheds niveau.</text>
     <text id="ROL_RIGHT_WEBLINKS" development="new" translation="edited">Opret og rediger web links</text>
@@ -988,7 +993,7 @@
     <text id="SYS_ADD_ROLE" development="new" translation="edited">Tilføj Rolle</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="edited">Tilføj modtager</text>
 	<text id="SYS_ADDRESS" development="new" translation="edited">Adresse</text>
-	<text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="edited">The Online Management System for Associations, Groups and Organizations</text>
+	<text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="edited">Online medlems styring for grupper, foreninger og organisationer</text>
 	<text id="SYS_ADMIDIO_TEAM" development="new" translation="edited">Admidio Team</text>
 	<text id="SYS_ADMIDIO_VERSION" development="new" translation="todo">Admidio version</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administration</text>
@@ -1088,8 +1093,8 @@
     <text id="SYS_FILE_NOT_EXIST" development="new" translation="edited">Den valgte fil findes ikke på serveren.</text>
     <text id="SYS_FILE_PROGRESS" development="new" translation="edited">%0 af %1 overført</text>
     <text id="SYS_FILE_TO_LARGE" development="new" translation="edited">Filen er for stor.</text>
-    <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Størrelsen på den fil du har forsøgt at uploade overskrider den tilladte størrelse som er, %VAR1%.</text>
-    <text id="SYS_FILE_UPLOADS" development="new" translation="todo">fil uploads</text>
+    <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="edited">Størrelsen på den fil du har forsøgt at overføre, overskrider den tilladte størrelse som er, %VAR1%.</text>
+    <text id="SYS_FILE_UPLOADS" development="new" translation="todo">fil overførsler</text>
 	<text id="SYS_FIRSTNAME" development="new" translation="edited">Fornavn</text>
 	<text id="SYS_FROM_TO" development="new" translation="edited">fra %VAR1% til %VAR2%</text>
 	<text id="SYS_FOLDER" development="new" translation="edited">Folder</text>
@@ -1113,7 +1118,7 @@
     <text id="SYS_FORUM_LOGOUT" development="new" translation="edited">Du er nu logget ud af Admidio og forum systemet..</text>
     <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Det valgte bruger navn er blevet slettet i forum og Admidio.</text>
     <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Det valgte bruger navn eksisterer allerede i forum.\n\nVenligst vælg et andet navn.</text>  
-    <text id="SYS_FRIDAY" development="new" translation="todo">Fredag</text>
+    <text id="SYS_FRIDAY" development="new" translation="todo">fredag</text>
     <text id="SYS_GENDER" development="new" translation="edited">Køn</text>
 	<text id="SYS_HEADLINE" development="new" translation="edited">Overskrift</text>
     <text id="SYS_HELP" development="new" translation="edited">Hjælp</text>
@@ -1146,7 +1151,6 @@
     <text id="SYS_LOGOUT" development="new" translation="edited">Log ud</text>
     <text id="SYS_LOGOUT_SUCCESSFUL" development="new" translation="edited">Logud lykkedes.</text>
     <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="edited">Du er allerede logget ind. Derfor må du være i besidelse af det korrekte kodeord!</text>
-    <text id="SYS_LOSTPW_EMAIL_ERROR" development="new" translation="edited">E-mail adresse %VAR1% kunne ikke findes i systemet!</text>
     <text id="SYS_LOSTPW_SEND" development="new" translation="edited">Et nyt kodeord er blevet sendt til e-mail adressen %VAR1%!</text>
     <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="edited">Der opstod en fejl ved afsendelse af e-mail til modtager(ne) %VAR1%!\nPrøv igen senere!</text>
 	<text id="SYS_MAP" development="new" translation="edited">Kort</text>
@@ -1166,12 +1170,12 @@
     <text id="SYS_MOBILE" development="new" translation="edited">Mobil</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">Dette modul er deaktiveret.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Moduler</text>
-    <text id="SYS_MONDAY" development="new" translation="todo">Mandag</text>
+    <text id="SYS_MONDAY" development="new" translation="todo">mandag</text>
     <text id="SYS_NAME" development="new" translation="edited">Navn</text>
     <text id="SYS_NAME_ABBREVIATION" development="new" translation="edited">Kort navn</text>
     <text id="SYS_NEXT" development="new" translation="edited">Næste</text>
     <text id="SYS_NO" development="new" translation="edited">Nej</text>
-    <text id="SYS_NO_ENTRY" development="new" translation="edited">Det efterspurgte post eksisterer ikke i databasen.</text>
+    <text id="SYS_NO_ENTRY" development="new" translation="edited">Den efterspurgte post eksisterer ikke i databasen.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="edited">Ingen poster tilgængelige.</text>
 	<text id="SYS_NO_ENTRIES_FOUND" development="new" translation="edited">Ingen poster fundet.</text>
     <text id="SYS_NO_RIGHTS" development="new" translation="edited">Du har ikke rettigheder til at udføre denne handling.</text>
@@ -1227,8 +1231,8 @@
     <text id="SYS_ROOM" development="new" translation="edited">Lokale</text>
     <text id="SYS_RSS_DISABLED" development="new" translation="edited">RSS slået fra af system administratoren.</text>
     <text id="SYS_SAFE_MODE" development="new" translation="todo">Safe Mode</text>
-    <text id="SYS_SAFE_MODE_PROBLEM" development="new" translation="todo">problematisk med fil uploads</text>
-    <text id="SYS_SATURDAY" development="new" translation="todo">Lørdag</text>
+    <text id="SYS_SAFE_MODE_PROBLEM" development="new" translation="todo">problematisk med fil overførsler</text>
+    <text id="SYS_SATURDAY" development="new" translation="todo">lørdag</text>
     <text id="SYS_SAVE" development="new" translation="edited">Gem</text>
     <text id="SYS_SAVE_DATA" development="new" translation="edited">Data er blevet gemt.</text>
     <text id="SYS_SECONDS" development="new" translation="edited">Sekunder</text>
@@ -1239,7 +1243,7 @@
     <text id="SYS_SEND_NEW_PW" development="new" translation="edited">Send nyt kodeord</text>
     <text id="SYS_SENDER" development="new" translation="edited">Afsender</text>
     <text id="SYS_SERVER" development="new" translation="edited">Server</text>
-    <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="edited">Server indstillinger tillader ikke fil uploads.</text>
+    <text id="SYS_SERVER_NO_UPLOAD" development="new" translation="edited">Server indstillinger tillader ikke fil overførsler.</text>
     <text id="SYS_SET_BY" development="new" translation="edited">Sat af</text>
     <text id="SYS_SETTINGS" development="new" translation="edited">Indstillinger</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Vis kalender</text>
@@ -1249,21 +1253,21 @@
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">Mindst én bruger med lignende navn (%VAR1_BOLD% ) blev fundet i databasen.</text>
     <text id="SYS_SINCE" development="new" translation="edited">siden %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="edited">fra %VAR1% til %VAR2%</text>
-	<text id="SYS_SIZE" development="new" translation="edited">Størelse</text>
-	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{nuværende} af {total}</text>
-	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start slideshow</text>
-	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">Stop slideshow</text>
+	<text id="SYS_SIZE" development="new" translation="edited">Størrelse</text>
+	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{current} af {total}</text>
+	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start lysbillede show</text>
+	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">Stop lysbillede show</text>
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
-    <text id="SYS_SUNDAY" development="new" translation="todo">Søndag</text>
+    <text id="SYS_SUNDAY" development="new" translation="todo">søndag</text>
     <text id="SYS_SYSMAIL_ACTIVATION_LINK" development="new" translation="todo">#subject# Det ønskede kodeord til %organization_short_name% hjemmesiden.\n#content# Hej %user_first_name%,\n\nDu har bedt om et nyt kodeord!\n\nDine login oplysninger er nu:\nBrugernavn: %user_login_name%\nKodeord: %variable1%\n\nFor at aktivere dit nye kodeord, venligst følg dette link:\n\n%variable2%\n\nKodeordet du lige har modtaget er genereret automatisk,\nderfor bør du logge ind på %organization_homepage% og så ændre det under "Min profil".\n\nMed venlig hilsen,\nWebmaster</text>
     <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="todo">#subject# Login detaljer for organisationen %organization_short_name%'s hjemmeside\n#content# Hej %user_first_name%,\n\nDine nye login detaljer til %organization_long_name%'s hjemmeside er:\nBrugernavn: %user_login_name%\nKodeord: %variable1%\n\nKodeordet du lige har modtaget er genereret automatisk,\nderfor bør du logge ind på %organization_homepage% og så ændre det under "Min profil".\n\nMed venlig hilsen,\nWebmaster</text>
     <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="todo">#subject# Registreringen på %organization_short_name%'s hjemmeside er godkendt\n#content# Hej %user_first_name%,\n\nDin registrering på %organization_homepage% er blevet godkendt.\n\nDu kan nu logge ind med dit bruger navn: %user_login_name%\nog dit valgte kodeord.\n\nHvis du har nogen spørgsmål, så tøv ikke med at skrive til webmaster via %webmaster_email% .\n\nTak for registreringen,\nWebmaster</text>
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# Ny registrering på %organization_short_name%'s hjemmeside\n#content# En ny bruger har registreret sig selv på %organization_homepage%.\n\nEfternavn: %user_last_name%\nFornavn:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDenne mail blev genereret automatisk.</text>
     <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System Beskeder</text>
     <text id="SYS_TEXT" development="new" translation="edited">Tekst</text>
-    <text id="SYS_THURSDAY" development="new" translation="todo">Torsdag</text>
+    <text id="SYS_THURSDAY" development="new" translation="todo">torsdag</text>
     <text id="SYS_TIME" development="new" translation="edited">Tid</text>
     <text id="SYS_TIME_FROM" development="new" translation="edited">Tid fra</text>
     <text id="SYS_TIME_INVALID" development="new" translation="edited">Fejl i tids angivelsen i feltet %VAR1_BOLD%.\n\nFormater tids værdien ifølge denne standard: %VAR2_BOLD%.</text>
@@ -1272,17 +1276,17 @@
     <text id="SYS_TO" development="new" translation="edited">Til</text>
     <text id="SYS_TO_MANY_FILES" development="new" translation="edited">Maximum antal vedhæftede filer: %0.</text>
     <text id="SYS_TOTAL_PROGRESS" development="new" translation="edited">Fil %0 af %1 overført</text>
-    <text id="SYS_TUESDAY" development="new" translation="todo">Tirsdag</text>
+    <text id="SYS_TUESDAY" development="new" translation="todo">tirsdag</text>
     <text id="SYS_TYPE" development="new" translation="edited">Type</text>
     <text id="SYS_UNKNOWN" development="new" translation="edited">Uidentificeret</text>
     <text id="SYS_UNLIMITED" development="new" translation="edited">Ubegrænset</text>
     <text id="SYS_UNLOCK" development="new" translation="edited">Lås op</text>
 	<text id="SYS_UPDATE" development="new" translation="edited">Opdater</text>
-    <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
-    <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Fil(er) kunne ikke uploades.</text>
-    <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. upload filstørrelse</text>
+    <text id="SYS_UPLOAD" development="new" translation="edited">Overfør</text>
+    <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Fil(er) kunne ikke overføres.</text>
+    <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. overførsels filstørrelse</text>
     <text id="SYS_USER" development="new" translation="edited">Bruger</text>
-    <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">Ingen bruger kunne findes med dette ID!</text>
+    <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">Der kunne ikke findes nogen bruger med dette ID!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="edited">Brugeren %VAR1_BOLD% har ikke nogen gyldig e-mail adresse i sin personlige information!</text>
     <text id="SYS_USERNAME" development="new" translation="edited">Bruger navn</text>
     <text id="SYS_USERS_FOUND" development="new" translation="edited">Bruger fundet</text>
@@ -1294,7 +1298,7 @@
     <text id="SYS_WARNING" development="new" translation="edited">Advarsel</text>
     <text id="SYS_WEBMASTER" development="new" translation="edited">Webmaster</text>
     <text id="SYS_WEBSITE" development="new" translation="edited">Hjemmeside</text>
-    <text id="SYS_WEDNESDAY" development="new" translation="todo">Onsdag</text>
+    <text id="SYS_WEDNESDAY" development="new" translation="todo">onsdag</text>
     <text id="SYS_WHAT_TO_DO" development="new" translation="edited">Hvad skal jeg gøre?</text>
     <text id="SYS_YES" development="new" translation="edited">Ja</text>
     </version>

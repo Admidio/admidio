@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+<version id="2.3.1" translator="Szabolcs Lami">
+	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="edited">Organisation %VAR1_BOLD% already exists. Please select another name.</text>
+    <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="edited">For e-mail address %VAR1_BOLD% there is no corresponding login data available!</text>
+    <text id="SYS_LOSTPW_SEVERAL_EMAIL" development="new" translation="edited">E-mail address %VAR1_BOLD% has been assigned to multiple registrations. A unique user registration could be identified.</text>
+</version>
 <version id="2.3.0" translator="Szabolcs Lami">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Should category %VAR_BOLD% be deleted?\n\nThis category has %VAR2% depending entries, which will be deleted, too.</text>
@@ -750,13 +755,13 @@
     <text id="ORG_WHICH_FORUM_USED" development="new" translation="edited">Which forum to be used?</text>
 	
 	<!-- Phrases only in Updatecheck -->
-    <text id="UPD_ADMIDIO" development="new" translation="edited">Go to Admidio update page</text>
-    <text id="UPD_CONNECTION_ERROR" development="new" translation="edited">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the %VAR1% website for manual update.</text>
-    <text id="UPD_NEW" development="new" translation="edited">A new stable version is available!</text>
-    <text id="UPD_NEW_BETA" development="new" translation="edited">A new beta version is available!</text>
-    <text id="UPD_NEW_BOTH" development="new" translation="edited">A new stable version and a new beta version are available!</text>
-    <text id="UPD_NO_NEW" development="new" translation="edited">You are using a current %VAR1%version of Admidio!</text>
-    <text id="UPD_TITLE" development="new" translation="edited">Update check</text>
+	<text id="UPD_ADMIDIO" development="new" translation="edited">Go to Admidio update page</text>
+	<text id="UPD_CONNECTION_ERROR" development="new" translation="edited">Connection to the Admidio update page could not be established. Please check your internet connection or try again later. You can also check the %VAR1% website for manual update.</text>
+	<text id="UPD_NEW" development="new" translation="edited">A new stable version is available!</text>
+	<text id="UPD_NEW_BETA" development="new" translation="edited">A new beta version is available!</text>
+	<text id="UPD_NEW_BOTH" development="new" translation="edited">A new stable version and a new beta version are available!</text>
+	<text id="UPD_NO_NEW" development="new" translation="edited">You are using a current %VAR1%version of Admidio!</text>
+	<text id="UPD_TITLE" development="new" translation="edited">Update check</text>
 
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="edited">Album</text>
