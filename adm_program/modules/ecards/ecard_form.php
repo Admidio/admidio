@@ -177,16 +177,8 @@ echo '
 							<dl>
 								<dt>
 									<label>'.$gL10n->get("SYS_TO").':</label>
-									';
-									if($gPreferences['enable_ecard_cc_recipients'])
-									{
-										echo '<div id="getmoreRecipient" style="padding-top:20px; height:1px;">
-										<a href="javascript:ecardJS.showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">'.$gL10n->get("ECA_MORE_RECIPIENTS").'</a>
-										</div>';
-									}
-								   echo'
 								</dt>
-								<dd id="Menue" style="height:49px; width:370px;">';
+								<dd id="Menue">';
 									if ($getUserId > 0)
 									{
 										// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
@@ -194,7 +186,7 @@ echo '
 												<input type="text" readonly="readonly" name="ecard[name_recipient]" style="display: none;" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'">
 												<input type="text" disabled="disabled" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'"><span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 												<input type="text" readonly="readonly" name="ecard[email_recipient]" style="display: none;" value="'.$user->getValue('EMAIL').'">
-												<input type="text" disabled="disabled" style="width: 90%;" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
+												<input type="text" disabled="disabled" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 											 </div>';
 
 									}
@@ -212,6 +204,15 @@ echo '
 									echo '
 								</dd>
 							</dl>
+						</li>
+						<li>';
+                        if($gPreferences['enable_ecard_cc_recipients'])
+                        {
+                            echo '<div id="getmoreRecipient">
+                            <a href="javascript:ecardJS.showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">'.$gL10n->get("ECA_MORE_RECIPIENTS").'</a>
+                            </div>';
+                        }
+                        echo'
 						</li>
 						<li>
 							<div id="moreRecipient" style="display:none;">
