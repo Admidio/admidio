@@ -1,13 +1,13 @@
 <?php
 /******************************************************************************
- * Backup
+ * Create the backup
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * 
- * Based on backupDB Version 1.2.5a-200806190803 
+ * Based on backupDB Version 1.2.7-201104261502 
  * by James Heinrich <info@silisoftware.com>  
  * available at http://www.silisoftware.com
  *
@@ -15,6 +15,16 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('backup.functions.php');
+
+// only webmaster are allowed to start backup
+if($gCurrentUser->isWebmaster() == false)
+{
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
+// set db in non-strict mode so that table names and field names get a single quote
+// in ANSI mode they get double quote and than some dbs got errors during import
+$gDb->query('SET SQL_MODE = \'\'');
 
 // Some Defines
 define('ADMIN_EMAIL', $gPreferences['email_administrator']); // eg: admin@example.com
@@ -52,12 +62,6 @@ $CloseWindowOnFinish = false;
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// nur Webmaster duerfen ein Backup starten
-if($gCurrentUser->isWebmaster() == false)
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
-
 $gLayout['title'] = $gL10n->get('BAC_DATABASE_BACKUP');
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -87,7 +91,7 @@ $newfullfilename = $backupabsolutepath.$fullbackupfilename;
 unset($SelectedTables);
 unset($tables);
 
-// Liste der Tabellen aus den Tabellen Defines ermitteln
+// create a list with all tables out of the "table defines"
 foreach (get_defined_constants() as $key => $value)
 {
 	if (substr($key,0,strlen('TBL_'))=='TBL_')

@@ -12,6 +12,8 @@ INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org
 --
 
 INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
+(4700, 1, 'db_version', '2.3.1'),
+(47001, 2, 'db_version', '2.3.1'),
 (1000, 1, 'announcements_per_page', '10'),
 (1100, 1, 'ecard_view_width', '250'),
 (1200, 1, 'ecard_view_height', '250'),
@@ -43,7 +45,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (4400, 1, 'dates_per_page', '10'),
 (4500, 1, 'dates_show_calendar_select', '1'),
 (4600, 1, 'dates_show_map_link', '1'),
-(4700, 1, 'db_version', '2.3.0'),
 (4800, 1, 'db_version_beta', '0'),
 (4900, 1, 'default_country', 'DEU'),
 (5000, 1, 'flooding_protection_time', '60'),
@@ -137,7 +138,6 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (44001, 2, 'dates_per_page', '10'),
 (45001, 2, 'dates_show_calendar_select', '1'),
 (46001, 2, 'dates_show_map_link', '1'),
-(47001, 2, 'db_version', '2.3.0'),
 (48001, 2, 'db_version_beta', '0'),
 (49001, 2, 'default_country', 'DEU'),
 (50001, 2, 'flooding_protection_time', '60'),
@@ -445,16 +445,16 @@ INSERT INTO %PREFIX%_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern,
 (12, 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', 'Es muss eine gültige E-Mail-Adresse angegeben werden.\r\nOhne diese kann das Programm nicht genutzt werden.', NULL, NULL, NULL, 1, 0, 0, 1, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, 1, 0, 0, 0, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (14, 2, 'TEXT', 'AOL_INSTANT_MESSENGER', 'INS_AOL_INSTANT_MESSENGER', NULL, NULL, 'aim.png', NULL, 0, 0, 0, 0, 1, 1, '2012-01-08 11:12:07', NULL, NULL),
-(15, 2, 'TEXT', 'GOOGLE_PLUS', 'INS_GOOGLE_PLUS', 'Willst du dein Google+ Profil hier verlinken? Dazu benötigst du momentan noch die etwas kryptische Profilnummer von Google+. Melde dich bei Google+ an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Google+ Profil aufrufen.', NULL, 'google_plus.png', 'https://plus.google.com/%user_content%/posts', 0, 0, 0, 0, 2, 1, '2012-01-08 11:12:07', NULL, NULL),
-(16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'Gib hier deine ICQ-Nummer ein. Hast du in ICQ deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.', NULL, 'icq.png', 'http://www.icq.com/people/%user_content%', 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
-(17, 2, 'TEXT', 'WINDOWS_LIVE', 'INS_WINDOWS_LIVE', NULL, NULL, 'windows_live.png', NULL, 0, 0, 0, 0, 4, 1, '2012-01-08 11:12:07', NULL, NULL),
+(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'Willst du dein Facebook-Profil hier verlinken? Dazu benötigst du deinen Nutzernamen bei Facebook. Melde dich bei Facebook an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Facebook-Profil aufrufen.', NULL, 'facebook.png', 'http://www.facebook.com/%user_content%', 0, 0, 0, 0, 2, 1, '2012-01-08 11:11:40', NULL, NULL),
+(15, 2, 'TEXT', 'GOOGLE_PLUS', 'INS_GOOGLE_PLUS', 'Willst du dein Google+ Profil hier verlinken? Dazu benötigst du momentan noch die etwas kryptische Profilnummer von Google+. Melde dich bei Google+ an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Google+ Profil aufrufen.', NULL, 'google_plus.png', 'https://plus.google.com/%user_content%/posts', 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
+(16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'Gib hier deine ICQ-Nummer ein. Hast du in ICQ deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.', NULL, 'icq.png', 'http://www.icq.com/people/%user_content%', 0, 0, 0, 0, 4, 1, '2012-01-08 11:12:07', NULL, NULL),
 (18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'Gib hier deinen eindeutigen Skype-Namen ein. Hast du in Skype deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.', NULL, 'skype.png', NULL, 0, 0, 0, 0, 5, 1, '2012-01-08 11:12:07', NULL, NULL),
-(19, 2, 'TEXT', 'YAHOO_MESSENGER', 'INS_YAHOO_MESSENGER', NULL, NULL, 'yahoo.png', NULL, 0, 0, 0, 0, 6, 1, '2012-01-08 11:12:07', NULL, NULL),
+(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'Willst du dein Twitter-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Twitter. Melde dich bei Twitter an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Twitter-Profil aufrufen.', NULL, 'twitter.png', 'http://twitter.com/#!/%user_content%', 0, 0, 0, 0, 6, 1, '2012-01-08 11:11:40', NULL, NULL),
+(17, 2, 'TEXT', 'WINDOWS_LIVE', 'INS_WINDOWS_LIVE', NULL, NULL, 'windows_live.png', NULL, 0, 0, 0, 0, 7, 1, '2012-01-08 11:12:07', NULL, NULL),
+(24, 2, 'TEXT', 'XING', 'INS_XING', 'Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Xing-Profil aufrufen.', NULL, 'xing.png', 'https://www.xing.com/profile/%user_content%', 0, 0, 0, 0, 8, 1, '2012-01-08 11:11:40', NULL, NULL),
+(19, 2, 'TEXT', 'YAHOO_MESSENGER', 'INS_YAHOO_MESSENGER', NULL, NULL, 'yahoo.png', NULL, 0, 0, 0, 0, 9, 1, '2012-01-08 11:12:07', NULL, NULL),
 (20, 8, 'NUMERIC', 'MITGLIEDSNUMMER', 'Mitgliedsnummer', NULL, NULL, NULL, NULL, 0, 1, 0, 0, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
-(21, 8, 'TEXT', 'LIEBLINGSFARBE', 'Lieblingsfarbe', 'Hier kann jedes Mitglied seine Lieblingsfarbe eintragen', NULL, NULL, NULL, 0, 0, 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL),
-(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'Willst du dein Facebook-Profil hier verlinken? Dazu benötigst du deinen Nutzernamen bei Facebook. Melde dich bei Facebook an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Facebook-Profil aufrufen.', NULL, 'facebook.png', 'http://www.facebook.com/%user_content%', 0, 0, 0, 0, 7, 1, '2012-01-08 11:11:40', NULL, NULL),
-(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'Willst du dein Twitter-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Twitter. Melde dich bei Twitter an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Twitter-Profil aufrufen.', NULL, 'twitter.png', 'http://twitter.com/#!/%user_content%', 0, 0, 0, 0, 8, 1, '2012-01-08 11:11:40', NULL, NULL),
-(24, 2, 'TEXT', 'XING', 'INS_XING', 'Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Xing-Profil aufrufen.', NULL, 'xing.png', 'https://www.xing.com/profile/%user_content%', 0, 0, 0, 0, 9, 1, '2012-01-08 11:11:40', NULL, NULL);
+(21, 8, 'TEXT', 'LIEBLINGSFARBE', 'Lieblingsfarbe', 'Hier kann jedes Mitglied seine Lieblingsfarbe eintragen', NULL, NULL, NULL, 0, 0, 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 
 
 --
