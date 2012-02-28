@@ -1,13 +1,13 @@
 <?php
 /******************************************************************************
- * Backup
+ * Show list with avaiable backup files and button to create a new backup
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * 
- * Based uppon backupDB Version 1.2.5a-200806190803 
+ * Based uppon backupDB Version 1.2.7-201104261502
  * by James Heinrich <info@silisoftware.com>  
  * available at http://www.silisoftware.com
  *
@@ -18,13 +18,13 @@ require_once('../../system/classes/my_files.php');
 require_once('backup.functions.php');
 
 
-// nur Webmaster duerfen ein Backup starten
+// only webmaster are allowed to start backup
 if($gCurrentUser->isWebmaster() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Pfad in adm_my_files pruefen und ggf. anlegen
+// check backup path in adm_my_files and create it if neccessary
 $myFilesBackup = new MyFiles('BACKUP');
 if($myFilesBackup->checkSettings() == false)
 {
