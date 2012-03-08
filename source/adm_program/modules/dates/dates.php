@@ -123,7 +123,7 @@ $organizations = $organizations. $gCurrentOrganization->getValue('org_id');
 
 if ($gValidLogin == false)
 {
-    // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
+    // if user isn't logged in, then don't show hidden categories
     $sqlConditions .= ' AND cat_hidden = 0 ';
 }
 
@@ -304,9 +304,7 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
     
     if(strlen($topNavigation) > 0)
     {
-        echo '<ul class="iconTextLinkList">';
-        echo $topNavigation;
-        echo '</ul>';
+        echo '<ul class="iconTextLinkList">'.$topNavigation.'</ul>';
     }
 }
 
