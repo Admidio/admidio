@@ -235,7 +235,7 @@ else
         // only former members
         $sqlConditions = ' AND mem_end < \''.DATE_NOW.'\' ';
     }
-    if(isset($_POST['show_members']) && $_POST['show_members'] == 2)
+    elseif(isset($_POST['show_members']) && $_POST['show_members'] == 2)
     {
         // former members and active members
         $sqlConditions = ' AND mem_begin < \''.DATE_NOW.'\' ';

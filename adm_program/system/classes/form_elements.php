@@ -164,7 +164,7 @@ class FormElements
 	public static function generateCategorySelectBox($categoryType, $defaultCategory = 0, $fieldId = '', 
 	                           $firstEntry = '', $showCategoryChoice = false)
 	{
-		global $gCurrentOrganization, $gDb, $gL10n;
+		global $gCurrentOrganization, $gDb, $gL10n, $gValidLogin;
 
         $sqlTables      = TBL_CATEGORIES;
         $sqlCondidtions = '';
@@ -199,6 +199,12 @@ class FormElements
                                     AND rol_visible = 1 ';
             }
 		}
+		
+        // if user isn't logged in, then don't show hidden categories
+        if($gValidLogin == false)
+        {
+            $sqlCondidtions .= ' AND cat_hidden = 0 ';
+        }		
 		
 		$sql = 'SELECT DISTINCT cat_id, cat_default, cat_name 
 		          FROM '.$sqlTables.'

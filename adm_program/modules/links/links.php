@@ -77,24 +77,23 @@ echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>
 
 // SQL-Statement zusammenbasteln
 
-$condition = '';
-$hidden    = '';
+$sqlCondidtions = '';
 
 if($getLinkId > 0)
 {
     // falls eine id fuer einen bestimmten Link uebergeben worden ist...
-    $condition = ' AND lnk_id = '. $getLinkId;
+    $sqlCondidtions .= ' AND lnk_id = '. $getLinkId;
 }
 else if($getCatId > 0)
 {
     // alle Links zu einer Kategorie anzeigen
-    $condition = ' AND cat_id = '.$getCatId;
+    $sqlCondidtions .= ' AND cat_id = '.$getCatId;
 }
 
 if($gValidLogin == false)
 {
-    // Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-    $hidden = ' AND cat_hidden = 0 ';
+    // if user isn't logged in, then don't show hidden categories
+    $sqlCondidtions .= ' AND cat_hidden = 0 ';
 }
 
 // Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
@@ -104,8 +103,7 @@ $sql = 'SELECT COUNT(*) FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
         WHERE lnk_cat_id = cat_id
         AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
         AND cat_type = \'LNK\'
-        '.$condition.'
-        '.$hidden;
+        '.$sqlCondidtions;
 $cat_result = $gDb->query($sql);
 $row = $gDb->fetch_array($cat_result);
 $numLinks = $row[0];
@@ -126,55 +124,59 @@ $sql = 'SELECT cat.*, lnk.*
          WHERE lnk_cat_id = cat_id
            AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
            AND cat_type = \'LNK\'
-           '.$condition.'
-           '.$hidden.'
+           '.$sqlCondidtions.'
          ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
          LIMIT '.$weblinks_per_page.' OFFSET '.$getStart;
 $links_result = $gDb->query($sql);
 
-// Icon-Links und Navigation anzeigen
+// show icon links and navigation
 
-if ($getLinkId == 0 && ($gCurrentUser->editWeblinksRight() || $gPreferences['enable_rss'] == true))
+if($getLinkId == 0)
 {
+    $topNavigation = '';
+
     if ($gCurrentUser->editWeblinksRight())
     {
-        // Neuen Link anlegen
-        echo '
-        <ul class="iconTextLinkList">
-            <li>
-                <span class="iconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline. '">
-                        <img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('LNK_CREATE_LINK').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline. '">'.$gL10n->get('LNK_CREATE_LINK').'</a>
-                </span>
-            </li>';
+        // show link to create new weblink
+        $topNavigation .= '
+        <li>
+            <span class="iconTextLink">
+                <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline. '">
+                    <img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('LNK_CREATE_LINK').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline. '">'.$gL10n->get('LNK_CREATE_LINK').'</a>
+            </span>
+        </li>';
+    }
 
-            // create select box with all categories that have links
-            $calendarSelectBox = FormElements::generateCategorySelectBox('LNK', $getCatId, 'admCategory', $gL10n->get('SYS_ALL'), true);
+    // create select box with all categories that have links
+    $calendarSelectBox = FormElements::generateCategorySelectBox('LNK', $getCatId, 'admCategory', $gL10n->get('SYS_ALL'), true);
             
-            if(strlen($calendarSelectBox) > 0)
+    if(strlen($calendarSelectBox) > 0)
+    {
+        // show category select box with link to calendar preferences
+       $topNavigation .= '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;'.$calendarSelectBox;
+
+            if($gCurrentUser->editWeblinksRight())
             {
-                // show category select box with link to calendar preferences
-                echo '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;'.$calendarSelectBox;
+                $topNavigation .= '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK"><img
+                    src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
+            }
+        $topNavigation .= '</li>';
+    }            
+    elseif($gCurrentUser->editWeblinksRight())
+    {
+        // show link to category preferences
+        $topNavigation .= '
+        <li><span class="iconTextLink">
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK"><img
+                src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK">'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
+        </span></li>';
+    }                
     
-                    if($gCurrentUser->assignRoles())
-                    {
-                        echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
-                         src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
-                    }
-                echo '</li>';
-            }            
-            elseif($gCurrentUser->assignRoles())
-            {
-                // show link to calendar preferences
-                echo '
-                <li><span class="iconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK"><img
-                        src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK">'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
-                </span></li>';
-            }                
-        echo'</ul>';
+    if(strlen($topNavigation) > 0)
+    {
+        echo '<ul class="iconTextLinkList">'.$topNavigation.'</ul>';
     }
 
     // Navigation mit Vor- und Zurueck-Buttons
