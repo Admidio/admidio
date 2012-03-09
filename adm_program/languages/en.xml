@@ -518,7 +518,7 @@
     <text id="LST_ROLE_INFORMATION" development="new" translation="edited">Role information</text>
     <text id="LST_SAVE_CONFIGURATION" development="new" translation="edited">Save configuration</text>
     <text id="LST_SAVE_CONFIGURATION_OTHER_NAME" development="new" translation="edited">Save configuration with different name</text>
-    <text id="LST_SEARCH_AGE_EXAMPLE" development="new" translation="edited">18 years</text>
+    <text id="LST_SEARCH_AGE_EXAMPLE" development="new" translation="edited">18y</text>
     <text id="LST_SEARCH_AGE_DESC" development="new" translation="edited">Searching for all users older than 18 years</text>
     <text id="LST_SEARCH_DATE_EXAMPLE" development="new" translation="edited">01.03.1986</text>
     <text id="LST_SEARCH_DATE_DESC" development="new" translation="edited">Searching for all users born after 1st January 1986</text>
