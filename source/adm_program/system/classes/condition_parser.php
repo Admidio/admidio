@@ -12,33 +12,33 @@ require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
  
 class ConditionParser
 {
-    private $m_src;
-    private $m_dest;
-    private $m_str_arr;   // m_src aufgesplittet in ein Array
-    private $m_count;     // aktueller interne Position in m_str_arr -Array
-    private $m_error;     // enthaelt den Fehlercode, ansonsten 0
+    private $mSrcCond;
+    private $mDestCond;
+    private $mSrcCondArray;   // mSrcCond aufgesplittet in ein Array
+    private $mCount;     // aktueller interne Position in mSrcCondArray -Array
+    private $mError;     // enthaelt den Fehlercode, ansonsten 0
 
     public function error()
     {
-        return $this->m_error;
+        return $this->mError;
     }
 
     // liefert das Datum fertig formatiert fuer das SQL-Statement 'YYYY-MM-DD'
     private function getFormatDate($date)
     {
         global $gPreferences;
-        $format_date = '';
+        $formatDate = '';
 
         // bastwe: check if user searches for age
         $last = substr($date, -1);
         $last = admStrToUpper($last);
-        if( $last == 'J' ) 
+        if( $last == 'J' || $last == 'Y') 
         {
             $age = substr($date, 0, -1);
-            $now_year= date('Y');
-            $now_day = date('d');
-            $now_month = date('m');
-            $ret = date('Y-m-d', mktime(0,0,0, $now_month, $now_day, $now_year - $age));
+            $nowYear= date('Y');
+            $nowDay = date('d');
+            $nowMonth = date('m');
+            $ret = date('Y-m-d', mktime(0,0,0, $nowMonth, $nowDay, $nowYear - $age));
             return '\''. $ret. '\'';
         }
         
@@ -48,290 +48,295 @@ class ConditionParser
             $date = new DateTimeExtended($date, $gPreferences['system_date'], 'date');
             if($date->valid())
             {
-                $format_date = $date->format('Y-m-d');
+                $formatDate = $date->format('Y-m-d');
             }
         }
-        return '\''. $format_date. '\'';
+        return '\''. $formatDate. '\'';
     }
 
     // Ersetzt alle Bedingungen der User-Eingabe durch eine Standardbedingung
     // str_src = String mit der Bedingung, die der User eingegeben hat
 
-    private function makeStandardSrc($str_src)
+    private function makeStandardCondition($sourceCondition)
     {
-        $this->m_src = admStrToUpper(trim($str_src));
-        $this->m_src = strtr($this->m_src, '*', '%');
+        $this->mSrcCond = admStrToUpper(trim($sourceCondition));
+        $this->mSrcCond = strtr($this->mSrcCond, '*', '%');
 
         // gueltiges 'ungleich' ist '!'
-        $this->m_src = str_replace('{}', ' ! ', $this->m_src);
-        $this->m_src = str_replace('!=', ' ! ', $this->m_src);
+        $this->mSrcCond = str_replace('{}', ' ! ', $this->mSrcCond);
+        $this->mSrcCond = str_replace('!=', ' ! ', $this->mSrcCond);
 
         // gueltiges 'gleich' ist '='
-        $this->m_src = str_replace('==',     ' = ',   $this->m_src);
-        $this->m_src = str_replace(' LIKE ', ' = ', $this->m_src);
-        $this->m_src = str_replace(' IS ',   ' = ', $this->m_src);
-        $this->m_src = str_replace(' IST ',  ' = ', $this->m_src);
+        $this->mSrcCond = str_replace('==',     ' = ', $this->mSrcCond);
+        $this->mSrcCond = str_replace(' LIKE ', ' = ', $this->mSrcCond);
+        $this->mSrcCond = str_replace(' IS ',   ' = ', $this->mSrcCond);
+        $this->mSrcCond = str_replace(' IST ',  ' = ', $this->mSrcCond);
 
         // gueltiges 'nicht' ist '/'
-        $this->m_src = str_replace(' NOT ',   ' # ', $this->m_src);
-        $this->m_src = str_replace(' NICHT ', ' # ', $this->m_src);
+        $this->mSrcCond = str_replace(' NOT ',   ' # ', $this->mSrcCond);
+        $this->mSrcCond = str_replace(' NICHT ', ' # ', $this->mSrcCond);
 
         // gueltiges 'kleiner gleich' is '['
-        $this->m_src = str_replace('{=',   ' [ ', $this->m_src);
-        $this->m_src = str_replace('={',   ' [ ', $this->m_src);
+        $this->mSrcCond = str_replace('{=',   ' [ ', $this->mSrcCond);
+        $this->mSrcCond = str_replace('={',   ' [ ', $this->mSrcCond);
 
         // gueltiges 'groesser gleich' is ']'
-        $this->m_src = str_replace('}=',   ' ] ', $this->m_src);
-        $this->m_src = str_replace('=}',   ' ] ', $this->m_src);
+        $this->mSrcCond = str_replace('}=',   ' ] ', $this->mSrcCond);
+        $this->mSrcCond = str_replace('=}',   ' ] ', $this->mSrcCond);
 
         // gueltiges 'und' ist '&'
-        $this->m_src = str_replace(' AND ', ' & ', $this->m_src);
-        $this->m_src = str_replace(' UND ', ' & ', $this->m_src);
-        $this->m_src = str_replace('&&',    ' & ',   $this->m_src);
-        $this->m_src = str_replace('+',     ' & ',   $this->m_src);
+        $this->mSrcCond = str_replace(' AND ', ' & ', $this->mSrcCond);
+        $this->mSrcCond = str_replace(' UND ', ' & ', $this->mSrcCond);
+        $this->mSrcCond = str_replace('&&',    ' & ', $this->mSrcCond);
+        $this->mSrcCond = str_replace('+',     ' & ', $this->mSrcCond);
 
         // gueltiges 'oder' ist '|'
-        $this->m_src = str_replace(' OR ',   ' | ', $this->m_src);
-        $this->m_src = str_replace(' ODER ', ' | ', $this->m_src);
-        $this->m_src = str_replace('||',     ' | ',   $this->m_src);
+        $this->mSrcCond = str_replace(' OR ',   ' | ', $this->mSrcCond);
+        $this->mSrcCond = str_replace(' ODER ', ' | ', $this->mSrcCond);
+        $this->mSrcCond = str_replace('||',     ' | ', $this->mSrcCond);
 
-        return $this->m_src;
+        return $this->mSrcCond;
     }
    
     // Erstellt aus der User-Bedingung ein SQL-Statement
     // str_src = String mit der Bedingung, die der User eingegeben hat
     // field_type = Typ des Feldes, auf die sich die Bedingung bezieht (string, int, date)
 
-    public function makeSqlStatement($str_src, $field_name, $field_type)
+    public function makeSqlStatement($sourceCondition, $fieldName, $fieldType)
     {
-        $b_cond_start = true;   // gibt an, dass eine neue Bedingung angefangen wurde
-        $b_new_cond   = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
-        $b_math_start = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
-        $date         = '';     // Variable speichert bei Datumsfeldern das gesamte Datum
-        $m_error      = 0;
-        $this->m_dest = '';
+        $bStartCondition = true;   // gibt an, dass eine neue Bedingung angefangen wurde
+        $bNewCondition   = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
+        $bStartOperand   = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
+        $date            = '';     // Variable speichert bei Datumsfeldern das gesamte Datum
+        $this->mError   = 0;
+        $this->mDestCond    = '';
 
-        if(strlen($str_src) > 0 && strlen($field_name) > 0 && strlen($field_type) > 0)
+        if(strlen($sourceCondition) > 0 && strlen($fieldName) > 0 && strlen($fieldType) > 0)
         {
-            $this->m_src     = $this->makeStandardSrc($str_src);
-            $this->m_str_arr = str_split($this->m_src);
+            $this->mSrcCond     = $this->makeStandardCondition($sourceCondition);
+            $this->mSrcCondArray = str_split($this->mSrcCond);
     
             // Bedingungen fuer das Feld immer mit UND starten
-            if($field_type == 'string')
+            if($fieldType == 'string')
             {
-                $this->m_dest = ' AND ( UPPER('.$field_name.') LIKE \'';
+                $this->mDestCond = ' AND ( UPPER('.$fieldName.') LIKE \'';
             }
-            elseif($field_type == 'checkbox')
+            elseif($fieldType == 'checkbox')
             {
                 // Sonderfall !!!
                 // bei einer Checkbox kann es nur 1 oder 0 geben und keine komplizierten Verknuepfungen
-                if($str_src == 1)
+                if($sourceCondition == 1)
                 {
-                    $this->m_dest = ' AND '.$field_name.' = 1 ';
+                    $this->mDestCond = ' AND '.$fieldName.' = 1 ';
                 }
                 else
                 {
-                    $this->m_dest = ' AND ('.$field_name.' IS NULL OR '.$field_name.' = 0) ';
+                    $this->mDestCond = ' AND ('.$fieldName.' IS NULL OR '.$fieldName.' = 0) ';
                 }
-                return $this->m_dest;
+                return $this->mDestCond;
             }
             else
             {
-                $this->m_dest = ' AND ( '.$field_name.' ';
+                $this->mDestCond = ' AND ( '.$fieldName.' ';
             }
     
             // Zeichen fuer Zeichen aus dem Bedingungsstring wird hier verarbeitet
-            for($this->m_count = 0; $this->m_count < strlen($this->m_src); $this->m_count++)
+            for($this->mCount = 0; $this->mCount < strlen($this->mSrcCond); $this->mCount++)
             {
-                if($this->m_str_arr[$this->m_count] == '&'
-                || $this->m_str_arr[$this->m_count] == '|' )
+                if($this->mSrcCondArray[$this->mCount] == '&'
+                || $this->mSrcCondArray[$this->mCount] == '|' )
                 {
-                    if($b_new_cond)
+                    if($bNewCondition)
                     {
                         // neue Bedingung, also Verknuepfen
-                        if($this->m_str_arr[$this->m_count] == '&')
+                        if($this->mSrcCondArray[$this->mCount] == '&')
                         {
-                            $this->m_dest = $this->m_dest. ' AND ';
+                            $this->mDestCond = $this->mDestCond. ' AND ';
                         }
-                        elseif($this->m_str_arr[$this->m_count] == '|')
+                        elseif($this->mSrcCondArray[$this->mCount] == '|')
                         {
-                            $this->m_dest = $this->m_dest. ' OR ';
+                            $this->mDestCond = $this->mDestCond. ' OR ';
                         }
     
                         // Feldname noch dahinter
-                        if($field_type == 'string')
+                        if($fieldType == 'string')
                         {
-                            $this->m_dest = $this->m_dest. ' UPPER('.$field_name.') LIKE \'';
+                            $this->mDestCond = $this->mDestCond. ' UPPER('.$fieldName.') LIKE \'';
                         }
                         else
                         {
-                            $this->m_dest = $this->m_dest. ' '.$field_name.' ';
+                            $this->mDestCond = $this->mDestCond. ' '.$fieldName.' ';
                         }
     
-                        $b_cond_start = true;
+                        $bStartCondition = true;
                     }
                 }
                 else
                 {
                     // Verleich der Werte wird hier verarbeitet
-                    if($this->m_str_arr[$this->m_count] == '!'
-                    || $this->m_str_arr[$this->m_count] == '='
-                    || $this->m_str_arr[$this->m_count] == '{'
-                    || $this->m_str_arr[$this->m_count] == '}'
-                    || $this->m_str_arr[$this->m_count] == '['
-                    || $this->m_str_arr[$this->m_count] == ']' )
+                    if($this->mSrcCondArray[$this->mCount] == '!'
+                    || $this->mSrcCondArray[$this->mCount] == '='
+                    || $this->mSrcCondArray[$this->mCount] == '{'
+                    || $this->mSrcCondArray[$this->mCount] == '}'
+                    || $this->mSrcCondArray[$this->mCount] == '['
+                    || $this->mSrcCondArray[$this->mCount] == ']' )
                     {
-                        if(!$b_cond_start)
+                        if(!$bStartCondition)
                         {
-                            $this->m_dest = $this->m_dest. ' AND '.$field_name.' ';
-                            $b_cond_start = true;
+                            $this->mDestCond = $this->mDestCond. ' AND '.$fieldName.' ';
+                            $bStartCondition = true;
                         }
     
-                        if($this->m_str_arr[$this->m_count] == '!')
+                        if($this->mSrcCondArray[$this->mCount] == '!')
                         {
-                            $this->m_dest = $this->m_dest. ' <> ';
+                            $this->mDestCond = $this->mDestCond. ' <> ';
                         }
-                        elseif($this->m_str_arr[$this->m_count] == '{')
+                        elseif($this->mSrcCondArray[$this->mCount] == '{')
                         {
                             // bastwe: invert condition on age search
-                            if( $field_type == 'date' && strstr(admStrToUpper($str_src), 'J') != FALSE )
+                            if( $fieldType == 'date' && strstr(admStrToUpper($sourceCondition), 'J') != FALSE )
                             {
-                                $this->m_dest = $this->m_dest. ' > ';
+                                $this->mDestCond = $this->mDestCond. ' > ';
                             } 
                             else 
                             { 
-                                $this->m_dest = $this->m_dest. ' < ';
+                                $this->mDestCond = $this->mDestCond. ' < ';
                             }
                         }
-                        elseif($this->m_str_arr[$this->m_count] == '}')
+                        elseif($this->mSrcCondArray[$this->mCount] == '}')
                         {
                             // bastwe: invert condition on age search
-                            if( $field_type == 'date' && strstr(admStrToUpper($str_src), 'J') != FALSE ) 
+                            if( $fieldType == 'date' && strstr(admStrToUpper($sourceCondition), 'J') != FALSE ) 
                             {
-                                $this->m_dest = $this->m_dest. ' < ';
+                                $this->mDestCond = $this->mDestCond. ' < ';
                             } 
                             else 
                             { 
-                                $this->m_dest = $this->m_dest. ' > ';
+                                $this->mDestCond = $this->mDestCond. ' > ';
                             }
                         }
-                        elseif($this->m_str_arr[$this->m_count] == '[')
+                        elseif($this->mSrcCondArray[$this->mCount] == '[')
                         {
                             // bastwe: invert condition on age search
-                            if( $field_type == 'date' && strstr(admStrToUpper($str_src), 'J') != FALSE ) 
+                            if( $fieldType == 'date' && strstr(admStrToUpper($sourceCondition), 'J') != FALSE ) 
                             {
-                                $this->m_dest = $this->m_dest. ' >= ';
+                                $this->mDestCond = $this->mDestCond. ' >= ';
                             } 
                             else 
                             {
-                                $this->m_dest = $this->m_dest. ' <= ';
+                                $this->mDestCond = $this->mDestCond. ' <= ';
                             }
                         }
-                        elseif($this->m_str_arr[$this->m_count] == ']')
+                        elseif($this->mSrcCondArray[$this->mCount] == ']')
                         {
                             // bastwe: invert condition on age search
-                            if( $field_type == 'date' && strstr(admStrToUpper($str_src), 'J') != FALSE ) 
+                            if( $fieldType == 'date' && strstr(admStrToUpper($sourceCondition), 'J') != FALSE ) 
                             {
-                                $this->m_dest = $this->m_dest. ' <= ';
+                                $this->mDestCond = $this->mDestCond. ' <= ';
                             } 
                             else 
                             {
-                                $this->m_dest = $this->m_dest. ' >= ';
+                                $this->mDestCond = $this->mDestCond. ' >= ';
                             }
                         }
                         else
                         {
-                            $this->m_dest = $this->m_dest. $this->m_str_arr[$this->m_count];
+                            $this->mDestCond = $this->mDestCond. $this->mSrcCondArray[$this->mCount];
                         }
     
-                        $b_math_start = true;
+                        $bStartOperand = true;
                     }
                     else
                     {
                         // pruefen, ob ein neues Wort anfaengt
-                        if($this->m_str_arr[$this->m_count] == ' '
-                        && $b_new_cond == false )
+                        if($this->mSrcCondArray[$this->mCount] == ' '
+                        && $bNewCondition == false )
                         {
-                            if($field_type == 'string')
+                            if($fieldType == 'string')
                             {
-                                $this->m_dest = $this->m_dest. '\' ';
+                                $this->mDestCond = $this->mDestCond. '\' ';
                             }
-                            elseif($field_type == 'date')
+                            elseif($fieldType == 'date')
                             {
                                 if(strlen($this->getFormatDate($date)) > 0)
                                 {
-                                    $this->m_dest = $this->m_dest. $this->getFormatDate($date);
+                                    $this->mDestCond = $this->mDestCond. $this->getFormatDate($date);
                                 }
                                 else
                                 {
-                                    $this->m_error = -1;
+                                    $this->mError = -1;
                                 }
                                 $date = '';
                             }
-                            $b_new_cond = true;
+                            $bNewCondition = true;
                         }
-                        elseif($this->m_str_arr[$this->m_count] != ' ')
+                        elseif($this->mSrcCondArray[$this->mCount] != ' ')
                         {
                             // neues Suchwort, aber noch keine Bedingung
-                            if($b_new_cond && !$b_cond_start)
+                            if($bNewCondition && !$bStartCondition)
                             {
-                                if($field_type == 'string')
+                                if($fieldType == 'string')
                                 {
-                                    $this->m_dest = $this->m_dest. ' AND UPPER('.$field_name.') LIKE \'';
+                                    $this->mDestCond = $this->mDestCond. ' AND UPPER('.$fieldName.') LIKE \'';
                                 }
                                 else
                                 {
-                                    $this->m_dest = $this->m_dest. ' AND '.$field_name.' = ';
+                                    $this->mDestCond = $this->mDestCond. ' AND '.$fieldName.' = ';
                                 }
                             }
-                            elseif($b_new_cond && !$b_math_start && $field_type != 'string')
+                            elseif($bNewCondition && !$bStartOperand && $fieldType != 'string')
                             {
                                 // erste Bedingung bei numerischem Feld
-                                $this->m_dest = $this->m_dest. ' = ';
+                                $this->mDestCond = $this->mDestCond. ' = ';
                             }
     
                             // Zeichen an Zielstring dranhaengen
-                            if($field_type == 'date')
+                            if($fieldType == 'date')
                             {
-                                $date = $date. $this->m_str_arr[$this->m_count];
+                                $date = $date. $this->mSrcCondArray[$this->mCount];
                             }
+							elseif($fieldType == 'int' && is_numeric($this->mSrcCondArray[$this->mCount]) == false)
+							{
+								// if numeric field than only numeric characters are allowed
+								$this->mError = -1;
+							}
                             else
                             {
-                                $this->m_dest = $this->m_dest. $this->m_str_arr[$this->m_count];
+                                $this->mDestCond = $this->mDestCond. $this->mSrcCondArray[$this->mCount];
                             }
     
-                            // $this->m_str_arr[$this->m_count] hat keine besonderen Zeichen mehr
-                            $b_new_cond   = false;
-                            $b_cond_start = false;
+                            // $this->mSrcCondArray[$this->mCount] hat keine besonderen Zeichen mehr
+                            $bNewCondition   = false;
+                            $bStartCondition = false;
                         }
                     }
                 }
             }
     
             // Falls als letztes ein Datum verglichen wurde, dann dieses noch einbauen
-            if($field_type == 'date')
+            if($fieldType == 'date')
             {
                 if(strlen($this->getFormatDate($date)) > 0)
                 {
-                    $this->m_dest = $this->m_dest. $this->getFormatDate($date);
+                    $this->mDestCond = $this->mDestCond. $this->getFormatDate($date);
                 }
                 else
                 {
-                    $this->m_error = -1;
+                    $this->mError = -1;
                 }
             }
-            //echo $this->m_dest; exit();
+            //echo $this->mDestCond; exit();
     
-            if($field_type == 'string')
+            if($fieldType == 'string')
             {
-                $this->m_dest = $this->m_dest. '\' ';
+                $this->mDestCond = $this->mDestCond. '\' ';
             }
     
             // Anfangsklammer wieder schliessen
-            $this->m_dest = $this->m_dest. ') ';
+            $this->mDestCond = $this->mDestCond. ') ';
         }
 
-        return $this->m_dest;
+        return $this->mDestCond;
     }
 }
 ?>

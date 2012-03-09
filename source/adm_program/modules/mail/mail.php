@@ -450,7 +450,7 @@ echo '
 						<li>
 							<dl>
 								<dt><label for="subject">'.$gL10n->get('MAI_SUBJECT').':</label></dt>
-								<dd><input type="text" id="subject" name="subject" style="width: 90%;" maxlength="50" value="'. $form_values['subject']. '" />
+								<dd><input type="text" id="subject" name="subject" style="width: 90%;" maxlength="77" value="'. $form_values['subject']. '" />
 									<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 								</dd>
 							</dl>

@@ -208,9 +208,15 @@ echo'
             src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('MEM_IMPORT_USERS').'" /></a>
             <a href="'.$g_root_path.'/adm_program/administration/members/import.php">'.$gL10n->get('MEM_IMPORT_USERS').'</a>
         </span>
-    </li>';
-    
-echo '</ul>';
+    </li>
+    <li>
+        <span class="iconTextLink">
+            <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
+            src="'. THEME_PATH. '/icons/application_form.png" alt="'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS').'" /></a>
+            <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS').'</a>
+        </span>
+    </li>    
+</ul>';
 
 //Hier gibt es jetzt noch die Suchbox...
 echo '

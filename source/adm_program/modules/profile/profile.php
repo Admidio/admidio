@@ -218,14 +218,16 @@ echo '
                                         case 'LAST_NAME':
                                         case 'FIRST_NAME':
                                         case 'GENDER':
-                                            // diese Felder werden nicht einzeln dargestellt
+											// don't show these fields in default profile list
                                             break;
 
                                         case 'ADDRESS':
                                         case 'POSTCODE':
                                         case 'CITY':
                                         case 'COUNTRY':
-                                            if($bAddressOutput == false)   // nur 1x bei Adresse schreiben
+                                            if($bAddressOutput == false // output of address only once
+											&& (  strlen($user->getValue('ADDRESS')) > 0 || strlen($user->getValue('POSTCODE')) > 0 
+											   || strlen($user->getValue('CITY')) > 0 || strlen($user->getValue('COUNTRY')) > 0 ))   
                                             {
                                                 $bAddressOutput = true;
 												echo '<li>
@@ -289,18 +291,19 @@ echo '
 
                                                             echo $address;
 
-                                                            if($gPreferences['profile_show_map_link'])
+															// show route or address link if function is enabled and user has filled address or city
+                                                            if($gPreferences['profile_show_map_link'] && strlen($user->getValue('ADDRESS')) > 0 
+															&& (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                                             {
-                                                                // Button mit Karte anzeigen
                                                                 echo '<span class="iconTextLink">
                                                                     <a href="'. $map_url. '" target="_blank"><img
                                                                         src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_MAP').'" /></a>
                                                                     <a href="'. $map_url. '" target="_blank">'.$gL10n->get('SYS_MAP').'</a>
                                                                 </span>';
 
+																// show route link if its not the profile of CurrentUser
                                                                 if($gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
                                                                 {
-                                                                    // Link fuer die Routenplanung
                                                                     echo ' - <a href="'.$route_url.'" target="_blank">'.$gL10n->get('SYS_SHOW_ROUTE').'</a>';
                                                                 }
                                                             }
