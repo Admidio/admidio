@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Show a list of all dates
+ * Show a list of all events
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,17 +8,22 @@
  *
  * Parameters:
  *
- * mode: actual       - (Default) Alle aktuellen und zukuenftige Termine anzeigen
- *       old          - Alle bereits erledigten
- * start              - Angabe, ab welchem Datensatz Termine angezeigt werden sollen
- * headline           - Ueberschrift, die ueber den Terminen steht
- *                      (Default) Termine
- * cat_id             - show all dates of calendar with this id
- * id                 - Nur einen einzigen Termin anzeigen lassen.
- * date               - Alle Termine zu einem Datum werden aufgelistet
- *                      Uebergabeformat: YYYYMMDD
- * calendar-selection - 1: Es wird die Box angezeigt
- *                      0: Es wird keine Box angezeigt
+ * mode: actual       - (Default) show actual dates and all events in future
+ *       old          - show events in the past
+ * start              - Informatiobn about the start of shown data records
+ * headline           - Headline shown over events
+ *                      (Default) Dates
+ * cat_id             - show all events of calendar with this id
+ * id                 - Show only one event
+ * date               - All events for a date are listet
+ *                      Format: YYYYMMDD
+ * calendar-selection - 1: The box is shown
+ *                      0: The box is not shown
+ *
+ * date_from          - is set to actual date, 
+ *                      if no date information is delivered
+ * date_to            - is set to 31.12.9999, 
+ *                      if no date information is delivered
  *
  *****************************************************************************/
 
@@ -37,16 +42,105 @@ $getDateId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 $getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
+$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'string', DATE_NOW, false);
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'string', '9999-12-31', false);
+    
+// check if old events are required
+// then read all events in the past
+if($getMode == 'old')
+{
+	$getDateFrom = '1970-01-01';
+	$getDateTo     = date('Y-m-d', time() - (24 * 60 * 60));
+}
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if date has english format
+$objDateFrom = new DateTimeExtended($getDateFrom, 'Y-m-d', 'date'); 
+
+if($objDateFrom->valid())
+{
+	$dateFromEnglishFormat = $getDateFrom;
+	$dateFromSystemFormat = $objDateFrom->format($gPreferences['system_date']);
+}
+else
+{
+	// check if date has system format
+	$objDateFrom = new DateTimeExtended($getDateFrom, $gPreferences['system_date'], 'date');
+    $objDateFrom->setDateTime($getDateFrom, $gPreferences['system_date']);
+	if($objDateFrom->valid())
+	{
+		$dateFromEnglishFormat = substr($objDateFrom->getDateTimeEnglish(), 0, 10);
+		$dateFromSystemFormat = $objDateFrom->format($gPreferences['system_date']);
+	}
+    else
+    {
+        $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+    }
+}
+
+// The same checks for the enddate
+$objDateTo = new DateTimeExtended($getDateTo, 'Y-m-d', 'date');
+
+if($objDateTo->valid())
+{
+	$dateToEnglishFormat = $getDateTo;
+	$dateToSystemFormat = $objDateTo->format($gPreferences['system_date']);
+}
+else
+{
+    $objDateTo = new DateTimeExtended($getDateTo, $gPreferences['system_date'], 'date');
+    $objDateTo->setDateTime($getDateTo, $gPreferences['system_date']);
+	if($objDateTo->valid())
+	{
+		$dateToEnglishFormat = substr($objDateTo->getDateTimeEnglish(), 0, 10);
+		$dateToSystemFormat = $objDateTo->format($gPreferences['system_date']);
+		// Set mode to 'old' if nescessary
+        if($getDateTo < date($gPreferences['system_date']))
+        {
+            $getMode = 'old';
+        }
+
+        else
+        {
+            $getMode = 'actual';
+        }
+
+		
+	}
+    else
+    {
+        $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+    }
+}
+
+// Fill input fields only if User requests exists
+if ($getDateFrom == '1970-01-01')
+{
+    $dateFromHtmlOutput = '';
+    $dateToHtmlOutput  = '';
+}
+elseif ($getDateTo == '9999-12-31') 
+{
+    $dateFromHtmlOutput = '';
+    $dateToHtmlOutput  = '';
+}
+else
+{
+    $dateFromHtmlOutput = $dateFromSystemFormat;
+    $dateToHtmlOutput  = $dateToSystemFormat;
+}
+
+
+
+  
+// check if module is active
 if($gPreferences['enable_dates_module'] == 0)
 {
-    // das Modul ist deaktiviert
+    // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($gPreferences['enable_dates_module'] == 2)
 {
-    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    // module only for valid Useres
     require_once('../../system/login_valid.php');
 }
 
@@ -60,11 +154,11 @@ if($getCatId > 0)
     $calendar = new TableCategory($gDb, $getCatId);
 }
 
-// Navigation faengt hier im Modul an
+// Navigation starts here
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// Html-Kopf ausgeben
+// Html-Head output
 if($getCatId > 0)
 {
     $gLayout['title'] = $getHeadline. ' - '. $calendar->getValue('cat_name');
@@ -84,9 +178,14 @@ if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1
         href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$getHeadline.'" />';
 };
 
+$gLayout['header'] .= '
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
+    <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />';
+
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-// Html des Modules ausgeben
+// Html Output
 echo ' 
 <script type="text/javascript"><!--
     $(document).ready(function() 
@@ -99,14 +198,36 @@ echo '
             {
                 var calendarId = document.getElementById("admCalendar").value;
             } 
-            self.location.href = "dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id=" + calendarId;
+            self.location.href = "dates.php?mode='.$getMode.'&headline='.$getHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=" + calendarId;
         });
-    }); 
+    });
+    
+function Datefilter () 
+{ 
+    if (document.Formular.date_from.value == "") 
+    {
+        alert("Bitte Startdatum eingeben!");
+        document.Formular.date_from.focus();
+        return false;
+    }
+        
+    if (document.Formular.date_to.value == "") 
+    {
+        alert("Bitte Enddatum eingeben!");
+        document.Formular.date_to.focus();
+        return false;
+    }
+  
+}
+        var calPopup = new CalendarPopup("calendardiv");
+        calPopup.setCssPrefix("calendar"); 
 
 //--></script>
-<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';
 
-// alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
+<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';  
+
+     
+// find all groups, where organisation is head or sub organisatiob
 $topNavigation = '';
 $organizations = '';
 $sqlConditions = '';
@@ -127,46 +248,40 @@ if ($gValidLogin == false)
     $sqlConditions .= ' AND cat_hidden = 0 ';
 }
 
-// falls eine id fuer ein bestimmtes Datum uebergeben worden ist...(Aber nur, wenn der User die Berechtigung hat
+// In case ID was permitted and user has rights
 if($getDateId > 0)
 {
     $sqlConditions .= ' AND dat_id = '.$getDateId;
 }
-//...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
+//...otherwise get all additional events for a group
 else
 {
     if ($getCatId > 0)
     {
-        // alle Termine zu einer Kategorie anzeigen
+        // show all events from category
         $sqlConditionCalendar .= ' AND cat_id  = '.$getCatId;
     }
     
-    // Termine an einem Tag suchen
+    //check event each day
     if(strlen($getDate) > 0)
     {
-        $sqlConditions .= ' AND dat_begin <= \''.$getDate.' 23:59:59\'
-                            AND dat_end   >  \''.$getDate.' 00:00:00\'';
+        $sqlConditions .= ' AND dat_begin <= \''.$dateFromEnglishFormat.'\'
+                            AND dat_end   >  \''.$dateFromEnglishFormat.' 00:00:00\'';
         $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
     }
-    //fuer alte Termine...
-    elseif($getMode == 'old')
-    {
-        $sqlConditions .= ' AND dat_begin <  \''.DATE_NOW.' 00:00:00\'
-                            AND dat_end   <= \''.DATE_NOW.' 00:00:00\'';
-        $sqlOrderBy .= ' ORDER BY dat_begin DESC ';
-    }
-    //... ansonsten fuer kommende Termine
+    
+    // other events
     else
     {
-        $sqlConditions .= ' AND (  dat_begin >= \''.DATE_NOW.' 00:00:00\'
-                                OR dat_end   >  \''.DATE_NOW.' 00:00:00\' )';
+        $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$dateFromEnglishFormat.'\' AND \''.$dateToEnglishFormat.'\'
+                                OR dat_end   BETWEEN  \''.$dateFromEnglishFormat.'\' AND \''.$dateToEnglishFormat.' 23:59:00\')';
         $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
     }
 }
 
 if($getDateId == 0)
 {
-    // Bedingungen fuer die Rollenfreigabe hinzufuegen
+    // add conditions for role permission
     if($gCurrentUser->getValue('usr_id') > 0)
     {
         $sqlConditionLogin = '
@@ -182,7 +297,7 @@ if($getDateId == 0)
         $sqlConditionLogin = ' AND dtr_rol_id IS NULL ';
     }
     
-    // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
+    // Check how many data records are found
     $sql = 'SELECT COUNT(DISTINCT dat_id) as count
               FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
              WHERE dat_cat_id = cat_id
@@ -203,7 +318,7 @@ else
     $num_dates = 1;
 }
 
-// Anzahl Termine pro Seite
+// Number of events each page
 if($gPreferences['dates_per_page'] > 0)
 {
     $dates_per_page = $gPreferences['dates_per_page'];
@@ -213,7 +328,7 @@ else
     $dates_per_page = $num_dates;
 }
 
-// nun die Termine auslesen, die angezeigt werden sollen
+// read the events for output
 $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,
                cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
@@ -246,12 +361,12 @@ $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.me
 $dates_result = $gDb->query($sql);
 
 
-//Abfrage ob die Box angezeigt werden soll, falls nicht nur ein Termin gewählt wurde
+//Check if box must be shown, when more dates avaiable
 if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDates())
 {
     $topNavigation = '';
 
-    //Neue Termine anlegen
+    //Add new event
     if($gCurrentUser->editDates())
     {
         $topNavigation .= '
@@ -302,6 +417,38 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
         }
     }
     
+     //Input for Startdate and Enddate
+        
+       $topNavigation .= '
+
+            <li>
+                <dl> 
+                    <dt><br />
+                            <span>
+                                <form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php"onsubmit="return Datefilter()">
+                                    <label for="date_from">'.$gL10n->get('SYS_START').':</label>
+                                        <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$dateFromHtmlOutput.'" />
+                                        <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
+                                        src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
+                                        <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
+
+                                        &nbsp;&nbsp;
+
+                                    <label for="date_to">'.$gL10n->get('SYS_END').':</label>
+
+                                        <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$dateToHtmlOutput.'" />
+                                        <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
+                                        src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
+                                        
+                                        &nbsp;&nbsp;
+                                        
+                                    <input type="submit" value="OK"> 
+                                </form> 
+                            </span>
+                    </dt>
+                </dl>
+            </li>'; 
+           
     if(strlen($topNavigation) > 0)
     {
         echo '<ul class="iconTextLinkList">'.$topNavigation.'</ul>';
@@ -310,7 +457,7 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
 
 if($gDb->num_rows($dates_result) == 0)
 {
-    // Keine Termine gefunden
+    // No events found
     if($getDateId > 0)
     {
         echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
@@ -324,10 +471,10 @@ else
 {
     $date = new TableDate($gDb);
 
-    // Termine auflisten
+    // List events
     while($row = $gDb->fetch_array($dates_result))
     {
-        // GB-Objekt initialisieren und neuen DS uebergeben
+        // Initialize object and write new data
         //$date->clear();
         //$date->setArray($row);
         $date->readData($row['dat_id']);
@@ -352,7 +499,7 @@ else
                         src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
                     }
                     
-                    // aendern & loeschen duerfen nur User mit den gesetzten Rechten
+                    // change and delete is only for useres with additional rights
                     if ($gCurrentUser->editDates())
                     {
                         if($date->editRight() == true)
@@ -364,7 +511,7 @@ else
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                         }
 
-                        // Loeschen darf man nur Termine der eigenen Gliedgemeinschaft
+                        // Deleting events is only allowed for group members
                         if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
                         {
                             echo '
@@ -382,18 +529,18 @@ else
 
                 if ($date->getValue('dat_all_day') == 0)
                 {
-                    // Beginn in Ausgabe-Array schreiben
+                    // Write start in array
                     $dateElements[] = array($gL10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
-                    // Ende in Ausgabe-Array schreiben
+                    // Write end in array
                     $dateElements[] = array($gL10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
                 }
-                // Kalender in Ausgabe-Array schreiben
+                // write calendar in output array
                 $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
 
                 if (strlen($date->getValue('dat_location')) > 0)
                 {
-                    // Karte- und Routenlink anzeigen, sobald 2 Woerter vorhanden sind,
-                    // die jeweils laenger als 3 Zeichen sind
+                    // Show map link, when at leastt 2 words avaiable 
+                    // having more then 3 characters each
                     $map_info_count = 0;
                     foreach(preg_split('/[,; ]/', $date->getValue('dat_location')) as $key => $value)
                     {
@@ -406,16 +553,16 @@ else
                     if($gPreferences['dates_show_map_link'] == true
                         && $map_info_count > 1)
                     {
-                        // Google-Maps-Link fuer den Ort zusammenbauen
+                        // Create Google-Maps-Link for location
                         $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
                         if(strlen($date->getValue('dat_country')) > 0)
                         {
-                            // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
+                            // Better results with additional country information
                             $location_url .= ',%20'. $date->getValue('dat_country');
                         }
                         $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
-                        // bei gueltigem Login und genuegend Adressdaten auch noch Route anbieten
+                        // if valid login and enough information about adress exists - calculate the route
                         if($gValidLogin && strlen($gCurrentUser->getValue('ADDRESS')) > 0
                         && (  strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0 ))
                         {
@@ -436,7 +583,7 @@ else
                             $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
                             if(strlen($date->getValue('dat_country')) > 0)
                             {
-                                // Zusammen mit dem Land koennen Orte von Google besser gefunden werden
+                                // With information about country Google finds  the location much better
                                 $route_url .= ',%20'. $date->getValue('dat_country');
                             }
                             $locationHtml .= '
@@ -444,8 +591,7 @@ else
                                     src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>
                                 </span>';
                         }
-
-                        // falls eingestellt noch den entsprechenden Raum ausgeben
+                        // if active, then show room information
                         if($date->getValue('dat_room_id') > 0)
                         {
                             $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
@@ -462,14 +608,14 @@ else
                 }
                 elseif($date->getValue('dat_room_id') > 0)
                 {
-                    // falls eingestellt noch den entsprechenden Raum ausgeben
+                    // if active, then show room information
                     $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
                     $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
                     $locationHtml = '<strong><a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
                     $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
                 }
 
-                // Teilnehmeranzeige in Ausgabe-Array schreiben
+                // write participients in array
                 if($date->getValue('dat_rol_id') > 0)
                 {
                     if($date->getValue('dat_max_members')!=0)
@@ -489,8 +635,8 @@ else
                     $dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), $participantsHtml);
                 }
 
-                // Ausgabe der einzelnen Elemente 
-                // immer 2 nebeneinander und dann ein Zeilenwechsel
+                // Output of elements 
+                // always 2 then line break
                 echo '<table style="width: 100%; border-width: 0px;">';
                 foreach($dateElements as $element)
                 {
@@ -514,12 +660,12 @@ else
                 }
                 echo '</table>';
 
-                // Beschreibung anzeigen
+                // Show discription
                 echo '<div class="date_description" style="clear: left;">'.$date->getValue('dat_description').'</div>';
 
                 if($date->getValue('dat_rol_id') > 0)
                 {
-                    // Link zum An- und Abmelden zu Terminen in Ausgabe-Array schreiben
+                    // Link for the Agreement in Array
                     
                     if($date->getValue('dat_rol_id') > 0)
                     {
@@ -537,7 +683,7 @@ else
                             $non_available_rols = array();
                             if($date->getValue('dat_max_members'))
                             {
-                                // Teilnehmerbegrenzung allgemein
+                                // Limit for participiants
                                 $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
                                          WHERE mem_rol_id = '.$date->getValue('dat_rol_id').' 
 										   AND mem_leader = 0';
@@ -564,7 +710,7 @@ else
                             }
                         }
                         
-						// Link mit Teilnehmerliste anzeigen
+						// Link to participiants list
                         if($gValidLogin)
                         {
                             $registrationHtml .= '&nbsp;
@@ -575,7 +721,7 @@ else
                             </span>';
                         }
 
-						// Link mit Zuordnung neuer Teilnehmer
+						// Link for managing new participiants
                         if($row['mem_leader'] == 1)
                         {
                             $registrationHtml .= '&nbsp;
@@ -590,7 +736,7 @@ else
                     }
                 }
 
-                // Erstell-/ Änderungsdaten anzeigen
+                // Show date of create and changes
                 echo '<div class="editInformation">'.
                     $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
 
@@ -601,13 +747,12 @@ else
                 echo '</div>
             </div>
         </div>';
-    }  // Ende While-Schleife
+    }  // End While-Schleife
 }
 
-// Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId;
+// Navigation with forward and backwards buttons
+$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat;
 echo admFuncGeneratePagination($base_url, $num_dates, $dates_per_page, $getStart, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-
 ?>
