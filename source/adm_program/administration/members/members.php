@@ -165,11 +165,19 @@ $gLayout['header'] = '
             };
             var as = new AutoSuggest("admSearchMembers", options);         
             
-            //Checkbox alle Benutzer anzeigen
+            // code for checkbox to show all members
             $("input[type=checkbox]#mem_show_all").live("click", function(){
                 window.location.href = $("#mem_show_all").attr("link");
             });
             
+            if($("#mem_show_all").is(":checked")){
+                $("#mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_USERS').'");
+                $("#lbl_mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_USERS').'");
+            }
+            else{
+                $("#mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_MEMBERS').'");
+                $("#lbl_mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_MEMBERS').'");
+            }
         }); 
     //--></script>';
 
@@ -228,7 +236,7 @@ echo '
         </li>
         <li>    
             <input type="checkbox" name="mem_show_all" id="mem_show_all" 
-                link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$getLetter.'&amp;search='.$getSearch.'" title="'.$gL10n->get('MEM_SHOW_USERS').'" '.$show_all_checked.'/><label for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label>
+                link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$getLetter.'&amp;search='.$getSearch.'" '.$show_all_checked.'/><label id="lbl_mem_show_all" for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label>
         </li>
     </ul>
 </form>
