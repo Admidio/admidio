@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
+	<version id="1.4.1">
+        <text id="PLG_DATES_HEADLINE" development="new" translation="todo">Events</text>
+    </version>
 	<version id="1.3.0">
 		<text id="PLG_DATES_ALL_EVENTS" development="new" translation="todo">All events</text>
 	</version>

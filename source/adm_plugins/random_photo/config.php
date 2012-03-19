@@ -40,4 +40,8 @@ $plg_link_class = '';
 // Hier koennen die ueblichen targets (_self, _top ...) oder Framenamen angegeben werden
 $plg_link_target = '_self';
 
+// Soll die Überschrift des Plugins angezeigt werden
+// 1 = (Default) Überschrift wird angezeigt
+// 0 = Überschrift wird nicht angezeigt
+$plg_show_headline = 1;
 ?>

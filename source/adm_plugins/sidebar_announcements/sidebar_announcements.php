@@ -57,14 +57,8 @@ else
     $plg_link_target = '_self';
 }
 
-if(isset($plg_headline))
-{
-    $plg_headline = strip_tags($plg_headline);
-}
-else
-{
-    $plg_headline = $gL10n->get('ANN_ANNOUNCEMENTS');
-}
+// Sprachdatei des Plugins einbinden
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
@@ -89,9 +83,12 @@ $sql    = 'SELECT * FROM '. TBL_ANNOUNCEMENTS. '
 $plg_result = $gDb->query($sql);
 $plg_announcement = new TableAnnouncement($gDb);
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$gL10n->get('ANN_ANNOUNCEMENTS').'</h3></div>
-<div class="admPluginBody">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+if($plg_show_headline==1)
+{
+    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_HEADLINE').'</h3></div>';
+}
+echo '<div class="admPluginBody">';
 
 if($gDb->num_rows($plg_result) > 0)
 {
@@ -100,7 +97,7 @@ if($gDb->num_rows($plg_result) > 0)
         $plg_announcement->clear();
         $plg_announcement->setArray($plg_row);
         
-        echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $plg_headline. '" target="'. $plg_link_target. '">';
+        echo '<a class="'. $plg_link_class. '" href="'. $g_root_path. '/adm_program/modules/announcements/announcements.php?id='. $plg_announcement->getValue("ann_id"). '&amp;headline='. $gL10n->get('PLG_ANNOUNCEMENTS_HEADLINE'). '" target="'. $plg_link_target. '">';
         
         if($plg_max_char_per_word > 0)
         {
@@ -132,7 +129,7 @@ if($gDb->num_rows($plg_result) > 0)
         echo '(&nbsp;'. $plg_announcement->getValue('ann_timestamp_create', $gPreferences['system_date']). '&nbsp;)<hr />';
     }
     
-    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$plg_headline.'" target="'.$plg_link_target.'">'.$gL10n->get('SYS_ALL').' '.$plg_headline.'</a>';
+    echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS').'</a>';
 }
 else
 {

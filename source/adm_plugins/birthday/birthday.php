@@ -75,7 +75,6 @@ if(isset($plg_show_future) == false || is_numeric($plg_show_names_extern) == fal
 {
     $plg_show_future = 10;
 }
-
 // Prüfen, ob die Rollenbedingung gesetzt wurde            //
 if(isset($plg_rolle_sql) == false || ($plg_rolle_sql) == '')
 {
@@ -165,9 +164,12 @@ $result = $gDb->query($sql);
 
 $anz_geb = $gDb->num_rows($result);
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$gL10n->get('SYS_BIRTHDAY').'</h3></div>
-<div class="admPluginBody">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+if($plg_show_headline==1)
+{
+    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_BIRTHDAY_HEADLINE').'</h3></div>';
+}
+echo '<div class="admPluginBody">';
 
 if($anz_geb > 0)
 {

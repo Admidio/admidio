@@ -48,15 +48,21 @@ else
     $plg_link_class_downl = ''; 
 } 
 
+// Sprachdatei des Plugins einbinden
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB(); 
 
 // pruefen ob das Modul ueberhaupt aktiviert ist 
 if ($gPreferences['enable_download_module'] == 1) 
 { 
-    echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-    <div class="admPluginHeader"><h3>'.$gL10n->get('DOW_DOWNLOADS').'</h3></div>
-    <div class="admPluginBody">';
+    echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+    if($plg_show_headline==1)
+    {
+        echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_DOWNLOADS_HEADLINE').'</h3></div>';
+    }
+    echo '<div class="admPluginBody">';
 
 	// erst pruefen, ob der User auch die entsprechenden Rechte hat 
 	// nun alle relevanten Downloads finden 
@@ -110,12 +116,12 @@ if ($gPreferences['enable_download_module'] == 1)
 
      	if ($anzahl == 0) 
         { 
-        	echo $gL10n->get('PLG_DOWNLAODS_NO_DOWNLOADS_AVAILABLE');           
+        	echo $gL10n->get('PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE');           
         } 
     }
     else 
     { 
-        echo $gL10n->get('PLG_DOWNLAODS_NO_DOWNLOADS_AVAILABLE');
+        echo $gL10n->get('PLG_DOWNLOADS_NO_DOWNLOADS_AVAILABLE');
     } 
     echo '</div></div>';
 } 

@@ -71,7 +71,7 @@ if(isset($plg_kal_cat) == false)
     $plg_kal_cat = array('all');
 }
 
-// Prüfen ob the Link-URL gesetzt wurde oder leer ist
+// Prï¿½fen ob the Link-URL gesetzt wurde oder leer ist
 // wenn leer, dann Standardpfad zum Admidio-Modul
 if(isset($plg_link_url) == false || ($plg_link_url) =="")
 {
@@ -148,9 +148,12 @@ $sql    = 'SELECT * FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. 
 $plg_result = $gDb->query($sql);
 $plg_date = new TableDate($gDb);
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$gL10n->get('DAT_DATES').'</h3></div>
-<div class="admPluginBody">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+if($plg_show_headline==1)
+{
+    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_DATES_HEADLINE').'</h3></div>';
+}
+echo '<div class="admPluginBody">';
 
 if($gDb->num_rows($plg_result) > 0)
 {
@@ -184,7 +187,7 @@ if($gDb->num_rows($plg_result) > 0)
             }
         }
 
-        // Über $plg_link_url wird die Verbindung zum Date-Modul hergestellt.
+        // ï¿½ber $plg_link_url wird die Verbindung zum Date-Modul hergestellt.
         echo $plg_html_end_date. '<br /><a class="'. $plg_link_class. '" href="'. $plg_link_url. '?id='. $plg_date->getValue("dat_id"). '" target="'. $plg_link_target. '">';
 
         if($plg_max_char_per_word > 0)
@@ -215,7 +218,7 @@ if($gDb->num_rows($plg_result) > 0)
         }
     }
 
-    // WEiterleitung über $plg_link_url ohne weiteren Übergabeparameter
+    // WEiterleitung ï¿½ber $plg_link_url ohne weiteren ï¿½bergabeparameter
     echo '<a class="'. $plg_link_class. '" href="'. $plg_link_url. '" target="'. $plg_link_target. '">'.$gL10n->get('PLG_DATES_ALL_EVENTS').'</a>';
 }
 else

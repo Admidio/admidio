@@ -15,4 +15,8 @@ $plg_downloads_count = 10;
 // Nur noetig, falls die Links ein anderes Aussehen bekommen sollen
 $plg_link_class_downl = '';
 
+// Soll die Überschrift des Plugins angezeigt werden
+// 1 = (Default) Überschrift wird angezeigt
+// 0 = Überschrift wird nicht angezeigt
+$plg_show_headline = 1;
 ?>

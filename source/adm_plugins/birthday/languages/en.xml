@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
-	<version id="1.6.0">
+    <version id="1.2.3">
+        <text id="PLG_BIRTHDAY_HEADLINE" development="new" translation="todo">Birthdays</text>
+    </version>
+	<version id="1.1.0">
 		<text id="PLG_BIRTHDAY_FUTURE" development="new" translation="edited">%VAR1% will be %VAR3% years old in %VAR2% days, on the %VAR4%</text>
 		<text id="PLG_BIRTHDAY_MAN_VAR" development="new" translation="edited">Mr. %VAR1%</text>
 		<text id="PLG_BIRTHDAY_MORE_USERS" development="new" translation="edited">Number of users with birthday today: %VAR1%</text>

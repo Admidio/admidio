@@ -53,15 +53,6 @@ else
     $plg_link_target = '_self';
 }
 
-if(isset($plg_headline))
-{
-    $plg_headline = strip_tags($plg_headline);
-}
-else
-{
-    $plg_headline = $gL10n->get('PHO_PHOTOS');
-}
-
 if(!isset($plg_photos_max_width) || !is_numeric($plg_photos_max_width))
 {
     $plg_photos_max_width = 150;
@@ -84,12 +75,18 @@ if(!isset($plg_photos_show_link))
     $plg_photos_show_link = true;
 }
 
+// Sprachdatei des Plugins einbinden
+$gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
+
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$gL10n->get('SYS_PHOTOS').'</h3></div>
-<div class="admPluginBody">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+if($plg_show_headline==1)
+{
+    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_RANDOM_PHOTOS_HEADLINE').'</h3></div>';
+}
+echo '<div class="admPluginBody">';
 
 // Fotoalben Aufrufen
 // Bedingungen: freigegeben,Anzahllimit, Bilder enthalten 
