@@ -92,9 +92,12 @@ if($plg_show_self == 0 && $gValidLogin)
 $sql = $sql. " ORDER BY ses_usr_id ";
 $result = $gDb->query($sql);
 
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$gL10n->get('SYS_VISITORS').'</h3></div>
-<div class="admPluginBody">';
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+if($plg_show_headline==1)
+{
+    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_ONLINE_HEADLINE').'</h3></div>';
+}
+echo '<div class="admPluginBody">';
 
 if($gDb->num_rows($result) > 0)
 {

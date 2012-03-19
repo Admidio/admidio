@@ -23,7 +23,9 @@ $plg_link_target = '_self';
 // bevor ein Zeilenumbruch kommt (Default = 0 (deaktiviert)) 
 $plg_max_char_per_word = 0;
 
-// Wahlweise kann hier ein anderer Titel fuer die Ankuendigungen angegeben werden
-$plg_headline = 'Ank&uuml;ndigungen';
+// Soll die Überschrift des Plugins angezeigt werden
+// 1 = (Default) Überschrift wird angezeigt
+// 0 = Überschrift wird nicht angezeigt
+$plg_show_headline = 1;
 
 ?>

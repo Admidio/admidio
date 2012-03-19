@@ -65,4 +65,9 @@ $plg_link_class_date = 'date';
 // Welche CSS-Linkklasse soll bei Daten mit Geburtstagen und Terminen verwendet werden
 $plg_link_class_merge = 'merge';
 
+// Soll die Überschrift des Plugins angezeigt werden
+// 1 = (Default) Überschrift wird angezeigt
+// 0 = Überschrift wird nicht angezeigt
+$plg_show_headline = 1;
+
 ?>

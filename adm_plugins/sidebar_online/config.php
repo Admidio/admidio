@@ -37,4 +37,8 @@ $plg_link_target = '_self';
 //Text der über den angezeigten Benutzern steht (Default = "Online sind:<br />"
 $plg_online_text = "Online sind:<br />";
 
+// Soll die Überschrift des Plugins angezeigt werden
+// 1 = (Default) Überschrift wird angezeigt
+// 0 = Überschrift wird nicht angezeigt
+$plg_show_headline = 1;
 ?>

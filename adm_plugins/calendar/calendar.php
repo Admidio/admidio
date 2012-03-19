@@ -284,9 +284,12 @@ if($erster == 0)
 {
     $erster = 7;
 }
-echo '<div id="plgCalendarContent" class="admPluginContent">
-<div class="admPluginHeader"><h3>'.$gL10n->get('DAT_CALENDAR').'</h3></div>
-<div class="admPluginBody">
+echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
+if($plg_show_headline==1)
+{
+    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_CALENDAR_HEADLINE').'</h3></div>';
+}
+echo '<div class="admPluginBody">
 
 <script type="text/javascript"><!-- 
     if ( typeof gTranslations == "undefined") 

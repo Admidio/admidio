@@ -36,4 +36,9 @@ $plg_link_url = $g_root_path. '/adm_program/modules/dates/dates.php';
 // Mehrere Einträge: $plg_kal_cat = array('abc','cdf')
 $plg_kal_cat =  array('all');
 
+// Soll die Überschrift des Plugins angezeigt werden
+// 1 = (Default) Überschrift wird angezeigt
+// 0 = Überschrift wird nicht angezeigt
+$plg_show_headline = 1;
+
 ?>
