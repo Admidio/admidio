@@ -16,12 +16,6 @@ class ConditionParser
     private $mDestCond;
     private $mSrcCondArray;   // mSrcCond aufgesplittet in ein Array
     private $mCount;     // aktueller interne Position in mSrcCondArray -Array
-    private $mError;     // enthaelt den Fehlercode, ansonsten 0
-
-    public function error()
-    {
-        return $this->mError;
-    }
 
     // liefert das Datum fertig formatiert fuer das SQL-Statement 'YYYY-MM-DD'
     private function getFormatDate($date)
@@ -108,7 +102,6 @@ class ConditionParser
         $bNewCondition   = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
         $bStartOperand   = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
         $date            = '';     // Variable speichert bei Datumsfeldern das gesamte Datum
-        $this->mError   = 0;
         $this->mDestCond    = '';
 
         if(strlen($sourceCondition) > 0 && strlen($fieldName) > 0 && strlen($fieldType) > 0)
@@ -264,7 +257,7 @@ class ConditionParser
                                 }
                                 else
                                 {
-                                    $this->mError = -1;
+									throw new AdmException('LST_NOT_VALID_DATE_FORMAT');
                                 }
                                 $date = '';
                             }
@@ -298,7 +291,7 @@ class ConditionParser
 							elseif($fieldType == 'int' && is_numeric($this->mSrcCondArray[$this->mCount]) == false)
 							{
 								// if numeric field than only numeric characters are allowed
-								$this->mError = -1;
+								throw new AdmException('LST_NOT_NUMERIC');
 							}
                             else
                             {
@@ -322,7 +315,7 @@ class ConditionParser
                 }
                 else
                 {
-                    $this->mError = -1;
+					throw new AdmException('LST_NOT_VALID_DATE_FORMAT');
                 }
             }
             //echo $this->mDestCond; exit();

@@ -53,28 +53,28 @@ $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDat
 $db->query($sql);
 
 // set dates of events
-$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(14).'\'
-                               , dat_end = \''.addDaysToDate(14).'\'
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(14).' 16:00:00\'
+                               , dat_end = \''.addDaysToDate(14).' 18:00:00\'
 		 WHERE dat_id = 3 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(4).'\'
-                               , dat_end = \''.addDaysToDate(4).'\'
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(4).' 19:00:00\'
+                               , dat_end = \''.addDaysToDate(4).' 23:30:00\'
 		 WHERE dat_id = 4 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(30).'\'
-                               , dat_end = \''.addDaysToDate(35).'\'
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(30).' 00:00:00\'
+                               , dat_end = \''.addDaysToDate(35).' 00:00:00\'
 		 WHERE dat_id = 5 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(10).'\'
-                               , dat_end = \''.addDaysToDate(10).'\'
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(10).' 15:00:00\'
+                               , dat_end = \''.addDaysToDate(10).' 19:00:00\'
 		 WHERE dat_id = 6 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(-1).'\'
-                               , dat_end = \''.addDaysToDate(0).'\'
+$sql = 'UPDATE '.TBL_DATES.' SET dat_begin = \''.addDaysToDate(-1).' 00:00:00\'
+                               , dat_end = \''.addDaysToDate(0).' 00:00:00\'
 		 WHERE dat_id = 7 ';
 $db->query($sql);
 
@@ -84,16 +84,16 @@ $sql = 'UPDATE '.TBL_FOLDERS.' SET fol_timestamp = \''.addDaysToDate(-7).'\'
 $db->query($sql);
 
 
-$sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_timestamp_create = \''.addDaysToDate(-14).'\'
+$sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_timestamp_create = \''.addDaysToDate(-14).' 12:14:42\'
 		 WHERE gbo_id = 1 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_timestamp_create = \''.addDaysToDate(-5).'\'
+$sql = 'UPDATE '.TBL_GUESTBOOK.' SET gbo_timestamp_create = \''.addDaysToDate(-5).' 20:16:42\'
 		 WHERE gbo_id = 2 ';
 $db->query($sql);
 
 
-$sql = 'UPDATE '.TBL_GUESTBOOK_COMMENTS.' SET gbc_timestamp_create = \''.addDaysToDate(-4).'\'
+$sql = 'UPDATE '.TBL_GUESTBOOK_COMMENTS.' SET gbc_timestamp_create = \''.addDaysToDate(-4).' 16:23:12\'
 		 WHERE gbc_id = 1 ';
 $db->query($sql);
 

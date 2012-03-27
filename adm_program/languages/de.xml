@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
+<version id="2.4.0" translator="Markus Faßbender">
+	<text id="ROL_NO_ADDITIONAL_RIGHTS" development="new" translation="todo">Keine zusätzlichen Rechte</text>
+	<text id="SYS_EDIT_MEMBERS" development="new" translation="todo">Mitglieder bearbeiten</text>
+	<text id="ROL_ASSIGN_EDIT_MEMBERS" development="new" translation="todo">Mitglieder zuordnen und bearbeiten</text>
+	<text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Du hast für ein Datumsfeld ein ungültiges Datumsformat angegeben.</text>
+    <text id="LST_NOT_NUMERIC" development="new" translation="todo">Du hast in für ein numerisches Feld eine nicht numerische Bedingung angegeben.</text>
+</version>
 <version id="2.3.1" translator="Markus Faßbender">
 	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="todo">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wähle bitte einen anderen Namen aus.</text>
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="todo">Zu der E-Mail-Adresse %VAR1_BOLD% konnte im System keine gültige Anmeldung gefunden werden!</text>

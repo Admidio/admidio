@@ -441,6 +441,7 @@ create table %PREFIX%_roles
    rol_photo                      boolean       not null default '0',
    rol_profile                    boolean       not null default '0',
    rol_weblinks                   boolean       not null default '0',
+   rol_leader             		  smallint      not null default 0,
    rol_this_list_view             smallint      not null default 0,
    rol_all_lists_view             boolean       not null default '0',
    rol_start_date                 date,

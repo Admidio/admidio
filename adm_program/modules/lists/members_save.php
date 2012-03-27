@@ -28,17 +28,30 @@ $member = new TableMembers($gDb);
 // Objekt der uebergeben Rollen-ID erstellen
 $role = new TableRoles($gDb, $getRoleId);
 
-// nur Moderatoren duerfen Rollen zuweisen
-// nur Webmaster duerfen die Rolle Webmaster zuweisen
-// beide muessen mitglied der richtigen Gliedgemeinschaft sein
-if( (!$gCurrentUser->assignRoles()
-     && !isGroupLeader($gCurrentUser->getValue('usr_id'), $role->getValue('rol_id')))
-     || (  !$gCurrentUser->isWebmaster()
-     && $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
-    || ($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 ))
+// roles of other organizations can't be edited
+// webmaster role can only be edited by webmasters
+if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 )
+|| (  $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER')
+   && $gCurrentUser->isWebmaster() == false))
 {
-   echo 'SYS_NO_RIGHTS';
-   exit(); 
+	echo 'SYS_NO_RIGHTS';
+	exit(); 
+}
+else
+{
+	// if user is allowed to assign roles or is leader with the right to assign members
+	if($gCurrentUser->assignRoles()
+	|| (  isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId)
+	   && ($role->getValue('rol_leader') == 1 || $role->getValue('rol_leader') == 3)))
+	{
+		// do nothing, but the if structure is much safer than to it the other way
+		1 = 1;
+	}
+	else
+	{
+		echo 'SYS_NO_RIGHTS';
+		exit(); 
+	}
 }
 
 //POST Daten übernehmen

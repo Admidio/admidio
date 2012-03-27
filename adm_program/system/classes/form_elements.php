@@ -206,7 +206,7 @@ class FormElements
             $sqlCondidtions .= ' AND cat_hidden = 0 ';
         }		
 		
-		$sql = 'SELECT DISTINCT cat_id, cat_default, cat_name 
+		$sql = 'SELECT DISTINCT cat_sequence, cat_id, cat_default, cat_name 
 		          FROM '.$sqlTables.'
 				 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 					   OR cat_org_id IS NULL )

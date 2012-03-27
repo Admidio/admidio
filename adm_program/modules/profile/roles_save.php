@@ -21,17 +21,16 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/role_dependency.php');
 
-
-// nur Webmaster & Moderatoren duerfen Rollen zuweisen
-if(!$gCurrentUser->assignRoles() && !isGroupLeader($gCurrentUser->getValue('usr_id')))
-{
-   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
-
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
+
+// if user is allowed to assign roles or is leader with the right to assign members
+if(!$gCurrentUser->assignRoles() && !isGroupLeader($gCurrentUser->getValue('usr_id')))
+{
+   $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
 
 // detect number of selected roles
 $roleCount = 0;

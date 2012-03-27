@@ -53,6 +53,13 @@ if($getMode == 'old')
 	$getDateTo     = date('Y-m-d', time() - (24 * 60 * 60));
 }
 
+// if exact date is set than convert it to our new syntax with dateFrom and dateTo
+if(strlen($getDate) > 0)
+{
+	$getDateFrom = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
+	$getDateTo   = $getDateFrom;
+}
+
 // check if date has english format
 $objDateFrom = new DateTimeExtended($getDateFrom, 'Y-m-d', 'date'); 
 
@@ -128,9 +135,6 @@ else
     $dateFromHtmlOutput = $dateFromSystemFormat;
     $dateToHtmlOutput  = $dateToSystemFormat;
 }
-
-
-
   
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -142,11 +146,6 @@ elseif($gPreferences['enable_dates_module'] == 2)
 {
     // module only for valid Useres
     require_once('../../system/login_valid.php');
-}
-
-if(strlen($getDate) > 0)
-{
-	$getDate = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
 }
 
 if($getCatId > 0)
@@ -261,20 +260,12 @@ else
         // show all events from category
         $sqlConditionCalendar .= ' AND cat_id  = '.$getCatId;
     }
-    
-    //check event each day
-    if(strlen($getDate) > 0)
-    {
-        $sqlConditions .= ' AND dat_begin <= \''.$dateFromEnglishFormat.'\'
-                            AND dat_end   >  \''.$dateFromEnglishFormat.' 00:00:00\'';
-        $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
-    }
-    
     // other events
     else
     {
-        $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$dateFromEnglishFormat.'\' AND \''.$dateToEnglishFormat.'\'
-                                OR dat_end   BETWEEN  \''.$dateFromEnglishFormat.'\' AND \''.$dateToEnglishFormat.' 23:59:00\')';
+		// add 1 second to end date because full time events to until next day
+        $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$dateFromEnglishFormat.' 00:00:00\' AND \''.$dateToEnglishFormat.' 23:59:59\'
+                                OR dat_end   BETWEEN \''.$dateFromEnglishFormat.' 00:00:01\' AND \''.$dateToEnglishFormat.' 23:59:59\')';
         $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
     }
 }
@@ -303,7 +294,7 @@ if($getDateId == 0)
              WHERE dat_cat_id = cat_id
                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                    OR (   dat_global   = 1
-                      AND cat_org_id IN (\''.$organizations.'\') 
+                      AND cat_org_id IN ('.$organizations.') 
                       )
                    )
                AND dat_id = dtr_dat_id
