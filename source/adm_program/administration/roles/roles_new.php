@@ -286,34 +286,10 @@ echo '
                         <li>
                             <dl>
                                 <dt><label for="rol_mail_this_role">'.$gL10n->get('ROL_SEND_MAILS').':</label></dt>
-                                <dd>
-                                    <select size="1" id="rol_mail_this_role" name="rol_mail_this_role">
-                                        <option value="0" ';
-                                            if($role->getValue('rol_mail_this_role') == 0)
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                            echo '>'.$gL10n->get('SYS_NOBODY').'</option>
-                                        <option value="1" ';
-                                            if($role->getValue('rol_mail_this_role') == 1)
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                            echo '>'.$gL10n->get('ROL_ONLY_ROLE_MEMBERS').'</option>
-                                        <option value="2" ';
-                                            if($role->getValue('rol_mail_this_role') == 2)
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                            echo '>'.$gL10n->get('ROL_ALL_MEMBERS').'</option>
-                                        <option value="3" ';
-                                            if($role->getValue('rol_mail_this_role') == 3)
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                            echo '>'.$gL10n->get('ROL_ALL_GUESTS').'</option>
-                                    </select>
-                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_RIGHT_MAIL_TO_ALL&amp;inline=true"><img 
+                                <dd>';
+									$selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'), 3 => $gL10n->get('ROL_ALL_GUESTS'));
+									echo FormElements::generateDynamicSelectBox($selectBoxEntries, $role->getValue('rol_mail_this_role'), 'rol_mail_this_role');
+                                    echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_RIGHT_MAIL_TO_ALL&amp;inline=true"><img 
                                         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_RIGHT_MAIL_THIS_ROLE_DESC&amp;message_var1=ROL_RIGHT_MAIL_TO_ALL\',this)" onmouseout="ajax_hideTooltip()"
                                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>	                                
                                 </dd>
@@ -324,31 +300,22 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="rol_this_list_view">'.$gL10n->get('ROL_SEE_ROLE_MEMBERSHIP').':</label></dt>
-                            <dd>
-                                <select size="1" id="rol_this_list_view" name="rol_this_list_view">
-                                    <option value="0" ';
-                                        if($role->getValue('rol_this_list_view') == 0)
-                                        {
-                                            echo ' selected="selected" ';
-                                        }
-                                        echo '>'.$gL10n->get('SYS_NOBODY').'</option>
-                                    <option value="1" ';
-                                        if($role->getValue('rol_this_list_view') == 1)
-                                        {
-                                            echo ' selected="selected" ';
-                                        }
-                                        echo '>'.$gL10n->get('ROL_ONLY_ROLE_MEMBERS').'</option>
-                                    <option value="2" ';
-                                        if($role->getValue('rol_this_list_view') == 2)
-                                        {
-                                            echo ' selected="selected" ';
-                                        }
-                                        echo '>'.$gL10n->get('ROL_ALL_MEMBERS').'</option>
-                                </select>
-                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_RIGHT_ALL_LISTS_VIEW&amp;inline=true"><img 
+                            <dd>';
+								$selectBoxEntries = array(0 => $gL10n->get('SYS_NOBODY'), 1 => $gL10n->get('ROL_ONLY_ROLE_MEMBERS'), 2 => $gL10n->get('ROL_ALL_MEMBERS'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $role->getValue('rol_this_list_view'), 'rol_this_list_view');
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_RIGHT_ALL_LISTS_VIEW&amp;inline=true"><img 
                                     onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_RIGHT_THIS_LIST_VIEW_DESC&amp;message_var1=ROL_RIGHT_ALL_LISTS_VIEW\',this)" onmouseout="ajax_hideTooltip()"
                                     class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                             </dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="rol_leader">'.$gL10n->get('SYS_LEADER').':</label></dt>
+                            <dd>';
+								$selectBoxEntries = array(0 => $gL10n->get('ROL_NO_ADDITIONAL_RIGHTS'), 1 => $gL10n->get('SYS_ASSIGN_MEMBERS'), 2 => $gL10n->get('SYS_EDIT_MEMBERS'), 3 => $gL10n->get('ROL_ASSIGN_EDIT_MEMBERS'));
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $role->getValue('rol_leader'), 'rol_leader');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li>

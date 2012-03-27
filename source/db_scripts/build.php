@@ -98,7 +98,7 @@ if($b_return == false)
 }
 echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 
- // Verbindung zu Datenbank herstellen
+ // connect to database
 $db = Database::createDatabaseObject($gDbType);
 $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
@@ -115,7 +115,7 @@ foreach($sql_arr as $sql)
 {
     if(strlen(trim($sql)) > 0)
     {
-        // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+		// set prefix for all tables and execute sql statement
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
         $db->query($sql);
     }
@@ -135,7 +135,7 @@ foreach($sql_arr as $sql)
 {
     if(strlen(trim($sql)) > 0)
     {
-        // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+		// set prefix for all tables and execute sql statement
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
         $db->query($sql);
     }
@@ -145,6 +145,18 @@ foreach($sql_arr as $sql)
 echo 'Edit data of database ...<br />';
 include('data_edit.php');
 
+// in postgresql all sequences must get a new start value because our inserts have given ids
+if($gDbType == 'postgresql')
+{
+	$sql = 'SELECT c.relname FROM pg_class c WHERE c.relkind = \'S\' ';
+	$sqlResult = $db->query($sql);
+	
+	while($row = $db->fetch_array($sqlResult))
+	{
+		$sql = 'SELECT setval(\''.$row['relname'].'\', 1000000)';
+		$db->query($sql);
+	}
+}
 
 // falls dies der Admidio-Demo-bereich ist, dann das Theme auf demo setzen
 /*if(strpos(__FILE__, 'demo') > 0)

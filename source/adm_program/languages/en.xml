@@ -7,7 +7,7 @@
 </version>
 <version id="2.3.0" translator="Szabolcs Lami">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
-    <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Should category %VAR_BOLD% be deleted?\n\nThis category has %VAR2% depending entries, which will be deleted, too.</text>
+    <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Should category %VAR1_BOLD% be deleted?\n\nThis category has %VAR2% depending entries, which will be deleted, too.</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="edited">Enabling iCal</text>
     <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="edited">If iCal is enabled, appointments (individual or all) within a given time frame can be downloaded. Also, users will be able to subscribe to appointments by using their own calendar client software . (default: yes)</text>
     <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Number of iCal days in the future</text>

@@ -27,16 +27,28 @@ $postMembersSearch  = admFuncVariableIsValid($_POST, 'mem_search', 'string');
 // Objekt der uebergeben Rollen-ID erstellen
 $role = new TableRoles($gDb, $getRoleId);
 
-// nur Moderatoren duerfen Rollen zuweisen
-// nur Webmaster duerfen die Rolle Webmaster zuweisen
-// beide muessen Mitglied der richtigen Gliedgemeinschaft sein
-if(  (!$gCurrentUser->assignRoles()
-   && !isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId))
-|| (  !$gCurrentUser->isWebmaster()
-   && $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
-|| ($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 ))
+// roles of other organizations can't be edited
+// webmaster role can only be edited by webmasters
+if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 )
+|| (  $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER')
+   && $gCurrentUser->isWebmaster() == false))
 {
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+else
+{
+	// if user is allowed to assign roles or is leader with the right to assign members
+	if($gCurrentUser->assignRoles()
+	|| (  isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId)
+	   && ($role->getValue('rol_leader') == 1 || $role->getValue('rol_leader') == 3)))
+	{
+		// do nothing, but the if structure is much safer than to it the other way
+		1 = 1;
+	}
+	else
+	{
+		$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+	}
 }
 
 $condition = '';
@@ -154,8 +166,7 @@ if($gDb->num_rows($result_user)>0)
                            AND usd_usr_id = usr_id
                            AND usd_value LIKE \''.$letter_menu.'%\'
                            AND '.$member_condition.'
-                         GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))
-                         ORDER BY usd_value ';
+                         GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))';
                 $result      = $gDb->query($sql);
                 $letter_row  = $gDb->fetch_array($result);
 

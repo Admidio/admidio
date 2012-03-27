@@ -192,6 +192,11 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['date_login'] = 0;
     }
+	
+	if(is_numeric($_POST['dat_max_members']) == false)
+	{
+		$_POST['dat_max_members'] = 0;
+	}
     
     // make html in description secure
     $_POST['dat_description'] = htmLawed(stripslashes($_POST['dat_description']));
@@ -229,10 +234,6 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 			// Raumname für Benachrichtigung
 			$raum = $room->getValue('room_name');
         }
-    }
-    else
-    {
-        $date->setValue('dat_max_members', $_POST['dat_max_members']);
     }
 
     // -----------------------------------

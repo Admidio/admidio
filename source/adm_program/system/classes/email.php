@@ -379,7 +379,8 @@ private function prepareHeader()
     $this->mail_properties = '';
     foreach ($this->headerOptions as $key => $value)
     {
-        $this->mail_properties = $this->mail_properties. $key. ': '. $value. "\n";
+		// mail headers should be separated with \r\n see PHP doku and RFC 2822
+        $this->mail_properties = $this->mail_properties. $key. ': '. $value. "\r\n";
     }
     // removes last line feed from header
     $this->mail_properties = substr($this->mail_properties,0,strlen($this->mail_properties)-1);
@@ -400,7 +401,7 @@ public function setNewBoundary($contentType)
         }
         else
         {
-            $this->headerOptions['Content-Type'] = $contentType.";\n\tboundary=\"". $this->arrayBoundaries[$this->countBoundaries]. "\"\n\n";
+            $this->headerOptions['Content-Type'] = $contentType.";\n\tboundary=\"". $this->arrayBoundaries[$this->countBoundaries]. '"';
         }
     }
     else

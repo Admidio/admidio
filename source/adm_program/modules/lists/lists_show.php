@@ -116,10 +116,17 @@ $str_csv      = '';   // enthaelt die komplette CSV-Datei als String
 $leiter       = 0;    // Gruppe besitzt Leiter
 $memberStatus = '';
 
-// Listenkonfigurationsobjekt erzeugen und entsprechendes SQL-Statement erstellen
-$list = new ListConfiguration($gDb, $getListId);
-$mainSql = $list->getSQL($role_ids, $getShowMembers);
-//echo $mainSql; exit();
+try
+{
+	// create list configuration object and create a sql statement out of it
+	$list = new ListConfiguration($gDb, $getListId);
+	$mainSql = $list->getSQL($role_ids, $getShowMembers);
+	//echo $mainSql; exit();
+}
+catch(AdmException $e)
+{
+	$e->show();
+}
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
 $resultList = $gDb->query($mainSql);

@@ -257,10 +257,7 @@ class ListConfiguration extends TableLists
                 // Bedingungen aus dem Bedingungsfeld als SQL darstellen
                 $parser    = new ConditionParser;
                 $condition = $parser->makeSqlStatement($value, $currentField, $type);
-                if($parser->error() == 0)
-                {
-                    $sqlWhere = $sqlWhere. $condition;
-                }
+				$sqlWhere = $sqlWhere. $condition;
             }        
         }
 

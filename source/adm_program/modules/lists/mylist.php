@@ -186,37 +186,25 @@ $gLayout['header'] = '
         { 
             var user_fields = new Array(); ';
         
-            // Mehrdimensionales Array fuer alle anzuzeigenden Spalten mit den noetigen Daten erstellen
+			// create a multidimensional array for all columns with the necessary data
             $i = 1;
-            $old_cat_name = '';
-            $old_cat_name_intern = '';
-            $old_cat_id   = 0;
+            $oldCategoryName = '';
+            $oldCategoryNameIntern = '';
+            $oldCategoryId   = 0;
+			$posEndOfMasterData = 0;
 
             foreach($gProfileFields->mProfileFields as $field)
             {    
-                // bei den Stammdaten noch Foto und Loginname anhaengen
-                if($old_cat_name_intern == 'MASTER_DATA'
+				// at the end of category master data save positions for loginname and username
+				// they will be added after profile fields loop
+                if($oldCategoryNameIntern == 'MASTER_DATA'
                 && $field->getValue('cat_name_intern') != 'MASTER_DATA')
                 {
-                    $gLayout['header'] .= '
-                    user_fields['. $i. '] = new Object();
-                    user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
-                    user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
-                    user_fields['. $i. ']["usf_id"]   = "usr_login_name";
-                    user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('SYS_USERNAME').'";
-                    user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('SYS_USERNAME').'";';
-                    $i++;
-                    
-                    $gLayout['header'] .= '
-                    user_fields['. $i. '] = new Object();
-                    user_fields['. $i. ']["cat_id"]   = '. $old_cat_id. ';
-                    user_fields['. $i. ']["cat_name"] = "'. $old_cat_name. '";
-                    user_fields['. $i. ']["usf_id"]   = "usr_photo";
-                    user_fields['. $i. ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
-                    user_fields['. $i. ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";';
-                    $i++;
+					$posEndOfMasterData = $i;
+					$i = $i + 2;
                 }
                 
+				// add profile field to user field array
                 if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
                 {
                     $gLayout['header'] .= '
@@ -227,15 +215,35 @@ $gLayout['header'] = '
                     user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
                     user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";';
                 
-                    $old_cat_id   = $field->getValue('cat_id');
-                    $old_cat_name = $field->getValue('cat_name');
-                    $old_cat_name_intern = $field->getValue('cat_name_intern');
+                    $oldCategoryId   = $field->getValue('cat_id');
+                    $oldCategoryName = $field->getValue('cat_name');
+                    $oldCategoryNameIntern = $field->getValue('cat_name_intern');
                     $i++;
                 }
             }       
 
-            // Anfangs- und Enddatum der Rollenmitgliedschaft als Inhalte noch anhaengen
+			// Add loginname and photo at the end of category master data
+			// add new category with start and end date of role membership
+			if($posEndOfMasterData == 0)
+			{
+				$posEndOfMasterData = $i;
+				$i = $i + 2;
+			}
             $gLayout['header'] .= '
+			user_fields['. $posEndOfMasterData. '] = new Object();
+			user_fields['. $posEndOfMasterData. ']["cat_id"]   = '. $oldCategoryId. ';
+			user_fields['. $posEndOfMasterData. ']["cat_name"] = "'. $oldCategoryName. '";
+			user_fields['. $posEndOfMasterData. ']["usf_id"]   = "usr_login_name";
+			user_fields['. $posEndOfMasterData. ']["usf_name"] = "'.$gL10n->get('SYS_USERNAME').'";
+			user_fields['. $posEndOfMasterData. ']["usf_name_intern"] = "'.$gL10n->get('SYS_USERNAME').'";
+
+			user_fields['. ($posEndOfMasterData+1). '] = new Object();
+			user_fields['. ($posEndOfMasterData+1). ']["cat_id"]   = '. $oldCategoryId. ';
+			user_fields['. ($posEndOfMasterData+1). ']["cat_name"] = "'. $oldCategoryName. '";
+			user_fields['. ($posEndOfMasterData+1). ']["usf_id"]   = "usr_photo";
+			user_fields['. ($posEndOfMasterData+1). ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
+			user_fields['. ($posEndOfMasterData+1). ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";
+					
             user_fields['. $i. '] = new Object();
             user_fields['. $i. ']["cat_id"]   = -1;
             user_fields['. $i. ']["cat_name"] = "'.$gL10n->get('LST_ROLE_INFORMATION').'";

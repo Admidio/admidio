@@ -120,7 +120,7 @@ else
     // Html des Modules ausgeben
     echo '
     <form id="passwordForm" action="'. $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $getUserId. '&amp;mode=1&amp;inline=1" method="post">
-    <div class="formLayout" id="password_form" style="width: 300px">
+    <div class="formLayout" id="password_form" style="width: 320px">
         <div class="formHead">'. $gLayout['title']. '</div>
         <div class="formBody">
             <ul class="formFieldList">';

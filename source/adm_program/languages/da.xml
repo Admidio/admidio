@@ -7,7 +7,7 @@
 </version>
 <version id="2.3.0" translator="Henrik Troels-Hansen">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
-    <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Skal kategorien %VAR_BOLD% slettes?\n\n>Denne kategori har %VAR2% afhængige indlæg, som vil også vil blive slettet.</text>
+    <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Skal kategorien %VAR1_BOLD% slettes?\n\n>Denne kategori har %VAR2% afhængige indlæg, som vil også vil blive slettet.</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="edited">Aktiver iCal</text>
     <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="edited">Hvis iCal er aktiveret, kan aftaler (individuelle eller alle) inden for et givent tidspunkt downloades. Og brugerne kan abonnere på aftaler ved at bruge deres egen kalender software. (Standard: Ja)</text>
     <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Antal iCal dage i ud i fremtiden</text>
