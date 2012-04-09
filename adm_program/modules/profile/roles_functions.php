@@ -200,7 +200,7 @@ function getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_r
                         $role->getValue('cat_name');
                         if($gCurrentUser->viewRole($member->getValue('mem_rol_id')))
                         {
-                            $formerRoleMemHTML .= ' - <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '">'. $role->getValue('rol_name'). '</a>';
+                            $formerRoleMemHTML .= ' - <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
                         }
                         else
                         {
