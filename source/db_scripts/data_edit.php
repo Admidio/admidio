@@ -25,7 +25,7 @@ $sql = 'UPDATE '.TBL_USER_DATA.' SET usd_value = \''.$year.'-'.$month.'-'.$day.'
 $db->query($sql);
 
 // set name of role to 4 days in future
-$sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \'Termin '.addDaysToDate(4).' 19:00 - 4\'
+$sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \''.$gL10n->get('DAT_DATE').' '.addDaysToDate(4).' 19:00 - 4\'
 		 WHERE rol_id = 8 ';
 $db->query($sql);
 
@@ -110,6 +110,5 @@ $db->query($sql);
 $sql = 'UPDATE '.TBL_LINKS.' SET lnk_timestamp_create = \''.addDaysToDate(-4).'\'
 		 WHERE lnk_id = 3 ';
 $db->query($sql);
-
 
 ?>

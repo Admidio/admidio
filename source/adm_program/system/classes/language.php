@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Klasse zum Einlesen der sprachabhaengigen Texte
+ * Read text out of a xml language file
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -120,7 +120,7 @@ class Language
 
         if(strlen($text) > 0)
         {
-            // Variablenplatzhalter ersetzen
+            // replace placeholder for parameters
             if(strlen($var1) > 0)
             {
                 $text = str_replace('%VAR1%', $var1, $text);
@@ -144,6 +144,9 @@ class Language
                     }
                 }
             }
+            
+            // replace square brackets with html tags
+            $text = strtr($text, '[]', '<>');
         }
         // no text found then search in reference language for a string
         elseif($this->referenceLanguage != $this->language)

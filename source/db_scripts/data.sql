@@ -12,8 +12,8 @@ INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org
 --
 
 INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
-(4700, 1, 'db_version', '2.3.1'),
-(47001, 2, 'db_version', '2.3.1'),
+(4700, 1, 'db_version', '2.3.3'),
+(47001, 2, 'db_version', '2.3.3'),
 (1000, 1, 'announcements_per_page', '10'),
 (1100, 1, 'ecard_view_width', '250'),
 (1200, 1, 'ecard_view_height', '250'),
@@ -32,7 +32,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (3100, 1, 'enable_gbook_comments4all', '0'),
 (3200, 1, 'enable_guestbook_module', '1'),
 (3300, 1, 'enable_guestbook_captcha', '1'),
-(3400, 1, 'enable_intial_comments_loading', '0'),
+(3400, 1, 'enable_intial_comments_loading', '1'),
 (3500, 1, 'enable_mail_captcha', '1'),
 (3600, 1, 'enable_mail_module', '1'),
 (3700, 1, 'enable_password_recovery', '1'),
@@ -225,7 +225,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 --
 
 INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_password, usr_photo, usr_text, usr_activation_code, usr_last_login, usr_actual_login, usr_number_login, usr_date_invalid, usr_number_invalid, usr_usr_id_create, usr_timestamp_create, usr_usr_id_change, usr_timestamp_change, usr_valid, usr_reg_org_shortname) VALUES
-(1, 'admin', '50a9c7dbf0fa09e8969978317dca12e8', NULL, NULL, NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 1, '2008-05-03 09:43:02', 1, '2008-05-03 09:43:02', 1, NULL),
+(1, 'admin', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 1, '2008-05-03 09:43:02', 1, '2008-05-03 09:43:02', 1, NULL),
 (202, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', 1, NULL),
 (203, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', 1, NULL),
 (204, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:00', 1, '2009-02-14 20:45:00', 1, NULL),
@@ -378,8 +378,8 @@ INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_passwo
 (351, 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 351, '2008-05-12 20:29:33', 1, NULL),
 (352, 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, 0, 'DEMO'),
 (353, 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, 0, 'DEMO'),
-(354, 'Vorstand', '1c528426b3fd0be73592ebba16e77cee', NULL, NULL, NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', 1, NULL),
-(355, 'Mitglied', '7c1878b1fc9d7bb0b9462238bb7d78da', NULL, NULL, NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', 1, NULL);
+(354, 'DEMO_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', 1, NULL),
+(355, 'SYS_MEMBER', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2010-01-12 18:29:15', '2010-02-27 12:34:09', 2, NULL, 0, 1, '2009-07-12 20:29:33', 355, '2010-05-12 20:29:33', 1, NULL);
 
 
 --
@@ -416,14 +416,14 @@ INSERT INTO %PREFIX%_categories (cat_id, cat_org_id, cat_type, cat_name_intern, 
 --
 
 INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_assign_roles, rol_approve_users, rol_announcements, rol_dates, rol_download, rol_edit_user, rol_guestbook, rol_guestbook_comments, rol_mail_to_all, rol_mail_this_role, rol_photo, rol_profile, rol_weblinks, rol_this_list_view, rol_all_lists_view, rol_start_date, rol_start_time, rol_end_date, rol_end_time, rol_weekday, rol_location, rol_max_members, rol_cost, rol_cost_period, rol_usr_id_create, rol_timestamp_create, rol_usr_id_change, rol_timestamp_change, rol_valid, rol_system, rol_visible) VALUES
-(1, 3, 'Webmaster', 'Gruppe der Administratoren des Systems', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1),
-(2, 3, 'Mitglied', 'Alle Mitglieder der Organisation', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', 1, 0, 1),
-(3, 3, 'Vorstand', 'Vorstand des Vereins', 0, 0, 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 2, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', 1, 0, 1),
-(4, 6, '1. Jugendmannschaft', 'Jugendliche zwischen 12 und 15 Jahren', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', 1, 0, 1),
-(5, 6, '2. Jugendmannschaft', 'Jugendliche zwischen 16 und 18 Jahren', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', 1, 0, 1),
-(6, 13, 'Webmaster', 'Gruppe der Administratoren des Systems', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', 1, 0, 1),
-(7, 13, 'Mitglied', 'Alle Mitglieder der Organisation', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', 1, 0, 1),
-(8, 23, 'Termin 2012-05-13 19:00 - 4', 'Grillfest', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0);
+(1, 3, 'SYS_WEBMASTER', 'INS_DESCRIPTION_WEBMASTER', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1),
+(2, 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', 1, 0, 1),
+(3, 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD', 0, 0, 1, 1, 0, 1, 0, 0, 0, 3, 0, 1, 1, 2, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', 1, 0, 1),
+(4, 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', 1, 0, 1),
+(5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', 1, 0, 1),
+(6, 13, 'SYS_WEBMASTER', 'INS_DESCRIPTION_WEBMASTER', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', 1, 0, 1),
+(7, 13, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', 1, 0, 1),
+(8, 23, 'DAT_DATE 2012-05-13 19:00 - 4', 'DEMO_DAT_BARBECUE', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0);
 
 
 --
@@ -442,19 +442,19 @@ INSERT INTO %PREFIX%_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern,
 (9, 1, 'TEXT', 'FAX', 'SYS_FAX', NULL, NULL, NULL, NULL, 0, 0, 0, 0, 9, 1, '2012-01-08 11:12:05', NULL, NULL),
 (10, 1, 'DATE', 'BIRTHDAY', 'SYS_BIRTHDAY', NULL, NULL, NULL, NULL, 1, 0, 0, 0, 10, 1, '2012-01-08 11:12:05', NULL, NULL),
 (11, 1, 'RADIO_BUTTON', 'GENDER', 'SYS_GENDER', NULL, 'male.png|SYS_MALE\r\nfemale.png|SYS_FEMALE', NULL, NULL, 0, 0, 0, 0, 11, 1, '2012-01-08 11:12:05', NULL, NULL),
-(12, 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', 'Es muss eine gültige E-Mail-Adresse angegeben werden.\r\nOhne diese kann das Programm nicht genutzt werden.', NULL, NULL, NULL, 1, 0, 0, 1, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
+(12, 1, 'EMAIL', 'EMAIL', 'SYS_EMAIL', NULL, NULL, NULL, NULL, 1, 0, 0, 1, 12, 1, '2012-01-08 11:12:05', NULL, NULL),
 (13, 1, 'URL', 'WEBSITE', 'SYS_WEBSITE', NULL, NULL, NULL, NULL, 1, 0, 0, 0, 13, 1, '2012-01-08 11:12:05', NULL, NULL),
 (14, 2, 'TEXT', 'AOL_INSTANT_MESSENGER', 'INS_AOL_INSTANT_MESSENGER', NULL, NULL, 'aim.png', NULL, 0, 0, 0, 0, 1, 1, '2012-01-08 11:12:07', NULL, NULL),
-(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'Willst du dein Facebook-Profil hier verlinken? Dazu benötigst du deinen Nutzernamen bei Facebook. Melde dich bei Facebook an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Facebook-Profil aufrufen.', NULL, 'facebook.png', 'http://www.facebook.com/%user_content%', 0, 0, 0, 0, 2, 1, '2012-01-08 11:11:40', NULL, NULL),
-(15, 2, 'TEXT', 'GOOGLE_PLUS', 'INS_GOOGLE_PLUS', 'Willst du dein Google+ Profil hier verlinken? Dazu benötigst du momentan noch die etwas kryptische Profilnummer von Google+. Melde dich bei Google+ an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Google+ Profil aufrufen.', NULL, 'google_plus.png', 'https://plus.google.com/%user_content%/posts', 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
-(16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'Gib hier deine ICQ-Nummer ein. Hast du in ICQ deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.', NULL, 'icq.png', 'http://www.icq.com/people/%user_content%', 0, 0, 0, 0, 4, 1, '2012-01-08 11:12:07', NULL, NULL),
-(18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'Gib hier deinen eindeutigen Skype-Namen ein. Hast du in Skype deinen Online-Status freigegeben, so wird dieser später in deinem Profil angezeigt.', NULL, 'skype.png', NULL, 0, 0, 0, 0, 5, 1, '2012-01-08 11:12:07', NULL, NULL),
-(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'Willst du dein Twitter-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Twitter. Melde dich bei Twitter an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Twitter-Profil aufrufen.', NULL, 'twitter.png', 'http://twitter.com/#!/%user_content%', 0, 0, 0, 0, 6, 1, '2012-01-08 11:11:40', NULL, NULL),
+(22, 2, 'TEXT', 'FACEBOOK', 'INS_FACEBOOK', 'INS_FACEBOOK_DESC', NULL, 'facebook.png', 'http://www.facebook.com/%user_content%', 0, 0, 0, 0, 2, 1, '2012-01-08 11:11:40', NULL, NULL),
+(15, 2, 'TEXT', 'GOOGLE_PLUS', 'INS_GOOGLE_PLUS', 'INS_GOOGLE_PLUS_DESC', NULL, 'google_plus.png', 'https://plus.google.com/%user_content%/posts', 0, 0, 0, 0, 3, 1, '2012-01-08 11:12:07', NULL, NULL),
+(16, 2, 'TEXT', 'ICQ', 'INS_ICQ', 'INS_ICQ_DESC', NULL, 'icq.png', 'http://www.icq.com/people/%user_content%', 0, 0, 0, 0, 4, 1, '2012-01-08 11:12:07', NULL, NULL),
+(18, 2, 'TEXT', 'SKYPE', 'INS_SKYPE', 'INS_SKYPE_DESC', NULL, 'skype.png', NULL, 0, 0, 0, 0, 5, 1, '2012-01-08 11:12:07', NULL, NULL),
+(23, 2, 'TEXT', 'TWITTER', 'INS_TWITTER', 'INS_TWITTER_DESC', NULL, 'twitter.png', 'http://twitter.com/#!/%user_content%', 0, 0, 0, 0, 6, 1, '2012-01-08 11:11:40', NULL, NULL),
 (17, 2, 'TEXT', 'WINDOWS_LIVE', 'INS_WINDOWS_LIVE', NULL, NULL, 'windows_live.png', NULL, 0, 0, 0, 0, 7, 1, '2012-01-08 11:12:07', NULL, NULL),
-(24, 2, 'TEXT', 'XING', 'INS_XING', 'Willst du dein Xing-Profil hier verlinken? Dazu benötigst du deinen eindeutigen Namen bei Xing. Melde dich bei Xing an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Xing-Profil aufrufen.', NULL, 'xing.png', 'https://www.xing.com/profile/%user_content%', 0, 0, 0, 0, 8, 1, '2012-01-08 11:11:40', NULL, NULL),
+(24, 2, 'TEXT', 'XING', 'INS_XING', 'INS_XING_DESC', NULL, 'xing.png', 'https://www.xing.com/profile/%user_content%', 0, 0, 0, 0, 8, 1, '2012-01-08 11:11:40', NULL, NULL),
 (19, 2, 'TEXT', 'YAHOO_MESSENGER', 'INS_YAHOO_MESSENGER', NULL, NULL, 'yahoo.png', NULL, 0, 0, 0, 0, 9, 1, '2012-01-08 11:12:07', NULL, NULL),
-(20, 8, 'NUMERIC', 'MITGLIEDSNUMMER', 'Mitgliedsnummer', NULL, NULL, NULL, NULL, 0, 1, 0, 0, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
-(21, 8, 'TEXT', 'LIEBLINGSFARBE', 'Lieblingsfarbe', 'Hier kann jedes Mitglied seine Lieblingsfarbe eintragen', NULL, NULL, NULL, 0, 0, 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
+(20, 8, 'NUMERIC', 'MEMBERSHIP_NUMBER', 'DEMO_PRO_MEMBERSHIP_NUMBER', NULL, NULL, NULL, NULL, 0, 1, 0, 0, 1, 1, '2011-04-06 22:05:20', NULL, NULL),
+(21, 8, 'TEXT', 'FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR', 'DEMO_PRO_FAVORITE_COLOR_CONTENT', NULL, NULL, NULL, 0, 0, 0, 0, 2, 1, '2011-04-06 22:05:20', NULL, NULL);
 
 
 --
@@ -462,8 +462,8 @@ INSERT INTO %PREFIX%_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern,
 --
 
 INSERT INTO %PREFIX%_announcements (ann_id, ann_org_shortname, ann_global, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
-(1, 'DEMO', '0', 'Neue Trikots', 'Ab der kommenden Saison gibt es neue Trikots für alle aktiven Spieler. Diese können vor dem ersten Training beim Trainer abgeholt werden.', 1, '2012-01-01 00:00:00', NULL, NULL),
-(2, 'DEMO', '0', 'Aerobik-Kurs', 'Während der Schulferien bieten wir einen <i>Aerobic-Kurs</i> für alle interessierten Mitglieder an.\r\n\r\nAnmeldungen werden auf der <b>Homepage</b> oder in der <b>Geschäftsstelle</b> entgegen genommen.', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53');
+(1, 'DEMO', '0', 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
+(2, 'DEMO', '0', 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53');
 
 
 --
@@ -471,11 +471,11 @@ INSERT INTO %PREFIX%_announcements (ann_id, ann_org_shortname, ann_global, ann_h
 --
 
 INSERT INTO %PREFIX%_dates (dat_id, dat_cat_id, dat_global, dat_begin, dat_end, dat_all_day, dat_description, dat_location, dat_country, dat_headline, dat_usr_id_create, dat_timestamp_create, dat_usr_id_change, dat_timestamp_change, dat_rol_id, dat_room_id, dat_max_members) VALUES
-(3, 12, 0, '2012-01-22 16:00:00', '2012-01-22 18:00:00', 0, 'Heute werden wir den Schwerpunkt auf Kondition und Ausdauer legen.\r\n\r\nBitte erscheint alle pünktlich mit Laufschuhen auf dem Sportplatz!', 'Sportplatz Solingen', 'DEU', 'Training Jugend 1', 1, '2008-07-06 17:38:26', NULL, NULL, NULL, NULL, 0),
-(4, 10, 0, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'Heute findet unser Grillfest statt. Neben knackigen Würstchen gibt es auch noch Kottelets und ein bischen Bauchspeck.', NULL, NULL, 'Grillfest', 1, '2008-07-06 17:41:18', NULL, NULL, 8, NULL, 0),
-(5, 10, 0, '2012-02-07 00:00:00', '2012-02-12 00:00:00', 1, 'Ein viertägiger Lehrgang für alle Jugendtrainer aus der Tennisabteilung :)', 'Jugendherberge Esens', 'DEU', 'Trainerlehrgang', 1, '2008-07-06 17:49:13', NULL, NULL, NULL, NULL, 0),
-(6, 21, 1, '2012-01-18 15:00:00', '2012-01-18 19:00:00', 0, 'Der Schwerpunkt liegt dieses Mal bei Office-Produkten.', 'München Marienplatz', 'DEU', 'EDV-Kurs', 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
-(7, 10, 1, '2012-01-07 00:00:00', '2012-01-08 00:00:00', 1, 'An diesem sonnigen Tag geht es nach Amsterdam.\r\n\r\nEine Grachtenfahrt, sowie ein Einkaufsbummel sind mit eingeplant.', 'Amsterdam Gracht', 'NLD', 'Ausflug nach Amsterdam', 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0);
+(3, 12, 0, '2012-01-22 16:00:00', '2012-01-22 18:00:00', 0, 'DEMO_DAT_YOUTH_TRAINING_CONTENT', 'DEMO_DAT_YOUTH_TRAINING_LOCATION', 'GBR', 'DEMO_DAT_YOUTH_TRAINING', 1, '2008-07-06 17:38:26', NULL, NULL, NULL, NULL, 0),
+(4, 10, 0, '2012-01-12 19:00:00', '2012-01-12 23:30:00', 0, 'DEMO_DAT_BARBECUE_CONTENT', NULL, NULL, 'DEMO_DAT_BARBECUE', 1, '2008-07-06 17:41:18', NULL, NULL, 8, NULL, 0),
+(5, 10, 0, '2012-02-07 00:00:00', '2012-02-12 00:00:00', 1, 'DEMO_DAT_TRAINER_COURSE_CONTENT', 'DEMO_DAT_TRAINER_COURSE_LOCATION', 'FRA', 'DEMO_DAT_TRAINER_COURSE', 1, '2008-07-06 17:49:13', NULL, NULL, NULL, NULL, 0),
+(6, 21, 1, '2012-01-18 15:00:00', '2012-01-18 19:00:00', 0, 'DEMO_DAT_COMPUTER_COURSE_CONTENT', 'DEMO_DAT_COMPUTER_COURSE_LOCATION', 'DEU', 'DEMO_DAT_COMPUTER_COURSE', 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0),
+(7, 10, 1, '2012-01-07 00:00:00', '2012-01-08 00:00:00', 1, 'DEMO_DAT_TRIP_AMSTERDAM_CONTENT', 'DEMO_DAT_TRIP_AMSTERDAM_LOCATION', 'NLD', 'DEMO_DAT_TRIP_AMSTERDAM', 1, '2010-01-06 11:25:13', NULL, NULL, NULL, NULL, 0);
 
 
 --
@@ -502,42 +502,43 @@ INSERT INTO %PREFIX%_folders (fol_id, fol_org_id, fol_fol_id_parent, fol_type, f
 --
 
 INSERT INTO %PREFIX%_guestbook (gbo_id, gbo_org_id, gbo_name, gbo_text, gbo_email, gbo_homepage, gbo_ip_address, gbo_locked, gbo_usr_id_create, gbo_timestamp_create, gbo_usr_id_change, gbo_timestamp_change) VALUES
-(1, 1, 'Heinz Webmaster', 'Willkommen im Gästebuch des Demo-Bereichs. \r\n\r\nHier könnt ihr euch austoben und die Funktionen von Admidio einmal testen.\r\n\r\nWir wünschen euch viel Spaß dabei und hoffen, dass wir euch von diesem tollen Programm überzeugen können.', 'webmaster@admidio.org', 'http://www.admidio.org', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
-(2, 1, 'Sepp Mayerchen', 'Dann werde ich mir das Programm mal anschauen.', NULL, NULL, '84.63.38.55', 0, NULL, '2012-01-03 20:16:42', NULL, NULL);
+(1, 1, 'Paul Webmaster', 'DEMO_GBO_WEBMASTER_WELCOME', 'webmaster@admidio.org', 'http://www.admidio.org', '84.63.38.55', 0, 1, '2011-12-25 12:14:42', NULL, NULL),
+(2, 1, 'Sepp Mayerchen', 'DEMO_GBO_GUEST_ENTRY1', NULL, NULL, '84.63.38.55', 0, NULL, '2012-01-03 20:16:42', NULL, NULL);
 
 --
 -- Daten für Tabelle adm_guestbook_comments
 --
 
 INSERT INTO %PREFIX%_guestbook_comments (gbc_id, gbc_gbo_id, gbc_name, gbc_text, gbc_email, gbc_ip_address, gbc_locked, gbc_usr_id_create, gbc_timestamp_create, gbc_usr_id_change, gbc_timestamp_change) VALUES
-(1, 2, 'Heinz Webmaster', 'Weitere Infos zu dem Programm gibt es in der Dokumentation [url=http://www.admidio.org/dokuwiki/doku.php?id=de:2.0:index]Dokumentation[/url].\r\n\r\nBei Fragen und Anregungen einfach mal ins [url=http://forum.admidio.org]Forum[/url] schauen.', 'webmaster@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
+(1, 2, 'Paul Webmaster', 'DEMO_GBO_WEBMASTER_COMMENT1', 'webmaster@admidio.org', '84.63.38.55', 0, 1, '2012-01-04 16:23:12', NULL, NULL);
 
 --
 -- Daten für Tabelle adm_links
 --
 
 INSERT INTO %PREFIX%_links (lnk_id, lnk_cat_id, lnk_name, lnk_description, lnk_url, lnk_counter, lnk_usr_id_create, lnk_timestamp_create, lnk_usr_id_change, lnk_timestamp_change) VALUES
-(1, 7, 'Beispielseite', 'Auf dieser Seite gibt es nicht viele Neuigkeiten :(', 'http://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
-(2, 9, 'Admidio', 'Die Homepage der <b>besten</b> Open Source Mitgliederverwaltung im Netz.', 'http://www.admidio.org', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
-(3, 9, 'Admidio-Forum', 'Das Forum zur Online-Mitgliederverwaltung. Hier wird jedem geholfen, der auf ein Problem bei der Installation oder Einrichtung von Admidio gestoßen ist. Aber auch Verbesserungen können hier gepostet werden.', 'http://forum.admidio.org', 46, 1, '2012-01-04 21:15:44', NULL, NULL);
+(1, 7, 'DEMO_LNK_SAMPLE_PAGE', 'DEMO_LNK_SAMPLE_PAGE_CONTENT', 'http://www.example.com', 6, 1, '2012-01-04 22:13:26', 1, '2012-01-05 21:16:32'),
+(2, 9, 'Admidio', 'DEMO_LNK_ADMIDIO_CONTENT', 'http://www.admidio.org', 157, 1, '2012-01-08 11:12:05', NULL, NULL),
+(3, 9, 'SYS_FORUM', 'DEMO_LNK_FORUM_CONTENT', 'http://forum.admidio.org', 46, 1, '2012-01-04 21:15:44', NULL, NULL),
+(4, 9, 'DEMO_LNK_DOCUMENTATION', 'DEMO_LNK_DOCUMENTATION_CONTENT', 'http://www.admidio.org/dokuwiki', 21, 1, '2012-04-05 14:13:23', NULL, NULL);
 
 --
 -- Daten für Tabelle adm_lists
 --
 
 INSERT INTO %PREFIX%_lists (lst_id, lst_org_id, lst_usr_id, lst_name, lst_timestamp, lst_global, lst_default) VALUES
-(1, 1, 1, 'Adressliste', '2009-02-27 21:50:57', 1, 1),
-(2, 1, 1, 'Telefonliste', '2009-02-27 21:50:57', 1, 0),
-(3, 1, 1, 'Kontaktdaten', '2009-02-27 21:50:57', 1, 0),
-(4, 1, 1, 'Mitgliedschaft', '2009-02-27 21:50:57', 1, 0),
-(5, 1, 1, 'Messenger', '2009-02-27 21:56:52', 0, 0),
-(6, 1, 1, 'Geburtstag', '2009-02-27 21:57:38', 0, 0),
-(7, 1, 351, 'Homepage', '2009-02-27 22:34:28', 0, 0),
+(1, 1, 1, 'INS_ADDRESS_LIST', '2009-02-27 21:50:57', 1, 1),
+(2, 1, 1, 'INS_PHONE_LIST', '2009-02-27 21:50:57', 1, 0),
+(3, 1, 1, 'SYS_CONTACT_DETAILS', '2009-02-27 21:50:57', 1, 0),
+(4, 1, 1, 'INS_MEMBERSHIP', '2009-02-27 21:50:57', 1, 0),
+(5, 1, 1, 'SYS_SOCIAL_NETWORKS', '2009-02-27 21:56:52', 0, 0),
+(6, 1, 1, 'SYS_BIRTHDAY', '2009-02-27 21:57:38', 0, 0),
+(7, 1, 351, 'SYS_WEBSITE', '2009-02-27 22:34:28', 0, 0),
 (8, 1, 351, NULL, '2009-02-27 22:34:47', 0, 0),
-(9, 2, 1, 'Adressliste', '2012-02-27 21:50:57', 1, 1),
-(10, 2, 1, 'Telefonliste', '2012-02-27 21:50:57', 1, 0),
-(11, 2, 1, 'Kontaktdaten', '2012-02-27 21:50:57', 1, 0),
-(12, 2, 1, 'Mitgliedschaft', '2012-02-27 21:50:57', 1, 0);
+(9, 2, 1, 'INS_ADDRESS_LIST', '2012-02-27 21:50:57', 1, 1),
+(10, 2, 1, 'INS_PHONE_LIST', '2012-02-27 21:50:57', 1, 0),
+(11, 2, 1, 'SYS_CONTACT_DETAILS', '2012-02-27 21:50:57', 1, 0),
+(12, 2, 1, 'INS_MEMBERSHIP', '2012-02-27 21:50:57', 1, 0);
 
 --
 -- Daten für Tabelle adm_list_columns
@@ -550,45 +551,48 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (4, 1, 4, 3, NULL, NULL, NULL),
 (5, 1, 5, 4, NULL, NULL, NULL),
 (6, 1, 6, 5, NULL, NULL, NULL),
-(7, 2, 1, 1, NULL, 'ASC', NULL),
-(8, 2, 2, 2, NULL, 'ASC', NULL),
-(9, 2, 3, 7, NULL, NULL, NULL),
-(10, 2, 4, 8, NULL, NULL, NULL),
-(11, 2, 5, 12, NULL, NULL, NULL),
-(12, 2, 6, 9, NULL, NULL, NULL),
-(13, 3, 1, 1, NULL, 'ASC', NULL),
-(14, 3, 2, 2, NULL, 'ASC', NULL),
-(15, 3, 3, 10, NULL, NULL, NULL),
-(16, 3, 4, 3, NULL, NULL, NULL),
-(17, 3, 5, 4, NULL, NULL, NULL),
-(18, 3, 6, 5, NULL, NULL, NULL),
-(19, 3, 7, 7, NULL, NULL, NULL),
-(20, 3, 8, 8, NULL, NULL, NULL),
-(21, 3, 9, 12, NULL, NULL, NULL),
-(22, 4, 1, 1, NULL, NULL, NULL),
-(23, 4, 2, 2, NULL, NULL, NULL),
-(24, 4, 3, 10, NULL, NULL, NULL),
-(25, 4, 4, NULL, 'mem_begin', NULL, NULL),
-(26, 4, 5, NULL, 'mem_end', 'DESC', NULL),
-(27, 5, 1, 1, NULL, 'ASC', NULL),
-(28, 5, 2, 2, NULL, NULL, NULL),
-(29, 5, 3, 14, NULL, NULL, NULL),
-(30, 5, 4, 15, NULL, NULL, NULL),
-(31, 5, 5, 16, NULL, NULL, NULL),
-(32, 5, 6, 17, NULL, NULL, NULL),
-(33, 5, 7, 18, NULL, NULL, NULL),
-(34, 5, 8, 19, NULL, NULL, NULL),
-(35, 6, 1, 1, NULL, NULL, NULL),
-(36, 6, 2, 2, NULL, NULL, NULL),
-(37, 6, 3, 10, NULL, 'DESC', NULL),
-(38, 7, 1, 1, NULL, NULL, NULL),
-(39, 7, 2, 2, NULL, NULL, NULL),
-(40, 7, 3, 13, NULL, 'DESC', NULL),
-(41, 7, 4, 12, NULL, NULL, NULL),
-(42, 8, 1, 1, NULL, NULL, NULL),
-(43, 8, 2, 2, NULL, 'ASC', NULL),
-(44, 8, 3, 13, NULL, NULL, NULL),
-(45, 8, 4, 11, NULL, NULL, NULL),
+(10, 2, 1, 1, NULL, 'ASC', NULL),
+(11, 2, 2, 2, NULL, 'ASC', NULL),
+(12, 2, 3, 7, NULL, NULL, NULL),
+(13, 2, 4, 8, NULL, NULL, NULL),
+(14, 2, 5, 12, NULL, NULL, NULL),
+(15, 2, 6, 9, NULL, NULL, NULL),
+(20, 3, 1, 1, NULL, 'ASC', NULL),
+(21, 3, 2, 2, NULL, 'ASC', NULL),
+(22, 3, 3, 10, NULL, NULL, NULL),
+(23, 3, 4, 3, NULL, NULL, NULL),
+(24, 3, 5, 4, NULL, NULL, NULL),
+(25, 3, 6, 5, NULL, NULL, NULL),
+(26, 3, 7, 7, NULL, NULL, NULL),
+(27, 3, 8, 8, NULL, NULL, NULL),
+(28, 3, 9, 12, NULL, NULL, NULL),
+(30, 4, 1, 1, NULL, NULL, NULL),
+(31, 4, 2, 2, NULL, NULL, NULL),
+(32, 4, 3, 10, NULL, NULL, NULL),
+(33, 4, 4, NULL, 'mem_begin', NULL, NULL),
+(34, 4, 5, NULL, 'mem_end', 'DESC', NULL),
+(40, 5, 1, 1, NULL, 'ASC', NULL),
+(41, 5, 2, 2, NULL, NULL, NULL),
+(42, 5, 3, 14, NULL, NULL, NULL),
+(43, 5, 4, 22, NULL, NULL, NULL),
+(44, 5, 5, 15, NULL, NULL, NULL),
+(45, 5, 6, 16, NULL, NULL, NULL),
+(46, 5, 7, 18, NULL, NULL, NULL),
+(47, 5, 8, 23, NULL, NULL, NULL),
+(48, 5, 9, 17, NULL, NULL, NULL),
+(49, 5, 10, 24, NULL, NULL, NULL),
+(50, 5, 11, 19, NULL, NULL, NULL),
+(60, 6, 1, 1, NULL, NULL, NULL),
+(61, 6, 2, 2, NULL, NULL, NULL),
+(62, 6, 3, 10, NULL, 'DESC', NULL),
+(70, 7, 1, 1, NULL, NULL, NULL),
+(71, 7, 2, 2, NULL, NULL, NULL),
+(72, 7, 3, 13, NULL, 'DESC', NULL),
+(73, 7, 4, 12, NULL, NULL, NULL),
+(80, 8, 1, 1, NULL, NULL, NULL),
+(81, 8, 2, 2, NULL, 'ASC', NULL),
+(82, 8, 3, 13, NULL, NULL, NULL),
+(83, 8, 4, 11, NULL, NULL, NULL),
 (101, 9, 1, 1, NULL, 'ASC', NULL),
 (102, 9, 2, 2, NULL, 'ASC', NULL),
 (103, 9, 3, 10, NULL, NULL, NULL),
@@ -823,9 +827,9 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 --
 
 INSERT INTO %PREFIX%_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, pho_begin, pho_end, pho_photographers, pho_locked, pho_pho_id_parent, pho_usr_id_create, pho_timestamp_create, pho_usr_id_change, pho_timestamp_change) VALUES
-(1, 'DEMO', 0, 'Kroatien', '2009-10-05', '2009-10-11', 'Karl Müller und andere', 0, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
-(2, 'DEMO', 3, 'Plitwitzer Seen', '2009-10-05', '2009-10-07', 'Karl Müller und andere', 0, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
-(3, 'DEMO', 3, 'Krka', '2009-10-08', '2009-10-11', 'Karl Müller und andere', 0, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
+(1, 'DEMO', 0, 'DEMO_PHO_CROATIA', '2009-10-05', '2009-10-11', 'DEMO_PHO_STEVEN_SMITH', 0, NULL, 1, '2009-10-23 18:15:37', NULL, NULL),
+(2, 'DEMO', 3, 'DEMO_PHO_PLITVICE_LAKES', '2009-10-05', '2009-10-07', 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:17:44', NULL, NULL),
+(3, 'DEMO', 3, 'Krka', '2009-10-08', '2009-10-11', 'DEMO_PHO_STEVEN_SMITH', 0, 1, 1, '2009-10-23 18:18:44', NULL, NULL),
 (4, 'DEMO', 5, 'Machu Picchu', '2009-09-14', '2009-09-17', 'Admin', 0, NULL, 1, '2009-10-23 18:20:50', NULL, NULL);
 
 
@@ -834,7 +838,8 @@ INSERT INTO %PREFIX%_photos (pho_id, pho_org_shortname, pho_quantity, pho_name, 
 --
 
 INSERT INTO %PREFIX%_rooms (room_id, room_name, room_description, room_capacity, room_overhang, room_usr_id_create, room_timestamp_create, room_usr_id_change, room_timestamp_change) VALUES
-(1, 'Besprechnungsraum', 'Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Ein Beamer steht zur Verfügung.', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL);
+(1, 'DEMO_ROOM_MEETING_ROOM', 'DEMO_ROOM_MEETING_ROOM_CONTENT', 15, NULL, 1, '2011-04-07 19:15:08', NULL, NULL),
+(2, 'DEMO_ROOM_FUNCTION_ROOM', 'DEMO_ROOM_FUNCTION_ROOM_CONTENT', 65, 15, 1, '2012-01-015 10:03:38', NULL, NULL);
 
 --
 -- Daten für Tabelle adm_sessions
@@ -848,10 +853,10 @@ INSERT INTO %PREFIX%_sessions (ses_id, ses_usr_id, ses_org_id, ses_session_id, s
 --
 
 INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
-(1, 1, 'SYSMAIL_REGISTRATION_USER', '#subject# Anmeldung bei %organization_long_name%\r\n#content# Hallo %user_first_name%,\r\n\r\ndeine Anmeldung auf %organization_homepage% wurde bestätigt.\r\n\r\nNun kannst du dich mit deinem Benutzernamen : %user_login_name%\r\nund dem Passwort auf der Homepage einloggen.\r\n\r\nSollten noch Fragen bestehen, schreib eine E-Mail an %webmaster_email% .\r\n\r\nViele Grüße\r\nDie Webmaster'),
-(2, 1, 'SYSMAIL_REGISTRATION_WEBMASTER', '#subject# Neue Registrierung bei %organization_long_name%\r\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\r\n\r\nNachname: %user_last_name%\r\nVorname:  %user_first_name%\r\nE-Mail:   %user_email%\r\n\r\n\r\nDiese Nachricht wurde automatisch erzeugt.'),
-(3, 1, 'SYSMAIL_NEW_PASSWORD', '#subject# Logindaten für %organization_homepage%\r\n#content# Hallo %user_first_name%,\r\n\r\ndu erhälst deine Logindaten für %organization_homepage% .\r\nBenutzername: %user_login_name%\r\nPasswort: %variable1%\r\n\r\nDas Passwort wurde automatisch generiert.\r\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\r\n\r\nViele Grüße\r\nDie Webmaster'),
-(4, 1, 'SYSMAIL_ACTIVATION_LINK', '#subject# Dein angefordertes Passwort\r\n#content# Hallo %user_first_name%,\r\n\r\ndu hast ein neues Passwort angefordert!\r\n\r\nHier sind deine Daten:\r\nBenutzername: %user_login_name%\r\nPasswort: %variable1%\r\n\r\nDamit du dein neues Passwort benutzen kannst, musst du es über den folgenden Link freischalten:\r\n\r\n%variable2%\r\n\r\nDas Passwort wurde automatisch generiert.\r\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\r\n\r\nViele Grüße\r\nDie Webmaster');
+(1, 1, 'SYSMAIL_REGISTRATION_USER', 'SYS_SYSMAIL_REGISTRATION_USER'),
+(2, 1, 'SYSMAIL_REGISTRATION_WEBMASTER', 'SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
+(3, 1, 'SYSMAIL_NEW_PASSWORD', 'SYS_SYSMAIL_NEW_PASSWORD'),
+(4, 1, 'SYSMAIL_ACTIVATION_LINK', 'SYS_SYSMAIL_ACTIVATION_LINK');
 
 
 --
@@ -860,10 +865,10 @@ INSERT INTO %PREFIX%_texts (txt_id, txt_org_id, txt_name, txt_text) VALUES
 
 INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUES
 (1, 1, 1, 'Webmaster'),
-(2, 1, 2, 'Heinz'),
-(3, 1, 3, 'Königsallee 13'),
-(4, 1, 4, '40212'),
-(5, 1, 5, 'Düsseldorf'),
+(2, 1, 2, 'Paul'),
+(3, 1, 3, 'Unter den Linden 45'),
+(4, 1, 4, '10117'),
+(5, 1, 5, 'Berlin'),
 (6, 1, 6, 'DEU'),
 (7, 1, 7, '0211-85858585'),
 (8, 1, 10, '1968-04-16'),
@@ -872,6 +877,9 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (11, 1, 13, 'http://www.admidio.org'),
 (12, 1, 20, '001'),
 (13, 1, 21, 'blau'),
+(13000, 1, 22, 'Admidio'),
+(13001, 1, 23, 'Admidio'),
+(13002, 1, 15, '105834545043497778794'),
 (14, 202, 1, 'Ahrends'),
 (15, 202, 2, 'Dagmar'),
 (16, 202, 3, 'Blumenwiese 23'),
@@ -2667,14 +2675,16 @@ INSERT INTO %PREFIX%_user_data (usd_id, usd_usr_id, usd_usf_id, usd_value) VALUE
 (1806, 353, 6, 'DEU'),
 (1807, 353, 11, '2'),
 (1808, 353, 12, 'dina@example.com'),
-(1809, 354, 1, 'Vorstand'),
-(1810, 354, 2, 'Vorstand'),
+(1809, 354, 1, 'DEMO_CHAIRMAN'),
+(1810, 354, 2, 'Eric'),
 (1811, 354, 6, 'DEU'),
 (1812, 354, 11, '1'),
-(1813, 354, 12, 'vorstand@example.com'),
-(1814, 355, 1, 'Mitglied'),
-(1815, 355, 2, 'Mitglied'),
+(1813, 354, 12, 'DEMO_CHAIRMAN@example.com'),
+(18131, 354, 22, 'Admidio'),
+(1814, 355, 1, 'SYS_MEMBER'),
+(1815, 355, 2, 'Jennifer'),
 (1816, 355, 6, 'DEU'),
 (1817, 355, 11, '2'),
-(1818, 355, 12, 'mitglied@example.com');
+(1818, 355, 12, 'SYS_MEMBER@example.com'),
+(18181, 355, 23, 'Admidio');
 

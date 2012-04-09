@@ -1,25 +1,36 @@
 <?php
-
-// Demo-DB neu erstellen
+/******************************************************************************
+ * This script imports a bunch of data into a demo database
+ *
+ * Copyright    : © 2004 - 2012 The Admidio Team
+ * Homepage     : http://www.admidio.org
+ * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ * Parameters:
+ *
+ * lang : de (default) the language for the demo db
+ *
+ *****************************************************************************/
 
 include('../config.php');
 include('../adm_program/system/constants.php');
+include('../adm_program/system/function.php');
+include('../adm_program/system/string.php');
 include('../adm_program/system/db/database.php');
 include('../adm_program/system/classes/folder.php');
+include('../adm_program/system/classes/language.php');
 
-// Default-DB-Type ist immer MySql
+// default database type should be MySQL
 if(!isset($gDbType))
 {
     $gDbType = 'mysql';
 }
 
-// Teile dieser Funktion sind von get_backtrace aus phpBB3
+// parts of this funtion are from get_backtrace out of phpBB3
 // Return a nicely formatted backtrace (parts from the php manual by diz at ysagoon dot com)
 
 function getBacktrace()
 {
-    //global $phpbb_root_path;
-
     $output = '<div style="font-family: monospace;">';
     $backtrace = debug_backtrace();
     $path = SERVER_PATH;
@@ -74,14 +85,20 @@ function getBacktrace()
     return $output;
 }
 
+// Initialize and check the parameters
+$getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', 'de');
 
-// setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
-// allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
+// set runtime of script to 2 minutes because of the many work to do
+// but no output of error message because of safe mode
 @set_time_limit(300); 
 
 echo 'Start with installation ...<br />';
 
-// Inhalt des Ordner adm_my_files in den Produktivordner kopieren
+// read language file
+$gL10n = new Language($getLanguage);
+$gL10n->addLanguagePath(SERVER_PATH. '/db_scripts/languages');
+
+// copy content of folder adm_my_files to productive folder
 $srcFolder = SERVER_PATH. '/db_scripts/adm_my_files';
 $newFolder = SERVER_PATH. '/adm_my_files';
 
@@ -116,7 +133,7 @@ foreach($sql_arr as $sql)
     if(strlen(trim($sql)) > 0)
     {
 		// set prefix for all tables and execute sql statement
-        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);        
         $db->query($sql);
     }
 }
@@ -137,6 +154,16 @@ foreach($sql_arr as $sql)
     {
 		// set prefix for all tables and execute sql statement
         $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+
+        // search for translation strings with the prefix DEMO or SYS and try replace them
+		preg_match_all('/(DEMO_\w*)|(SYS_\w*)|(INS_\w*)|(DAT_\w*)/' , $sql, $results);
+		
+		foreach($results[0] as $key => $value)
+		{
+			// search for the exact value as a separate word and replace it with the translation
+			$sql = preg_replace('/\b'.$value.'\b/', $gL10n->get($value), $sql);
+		}
+
         $db->query($sql);
     }
 }
@@ -167,7 +194,23 @@ if($gDbType == 'postgresql')
     $db->query($sql);
 }*/
 
+// set parameter lang to default language for this installation
+$sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = \''.$getLanguage.'\'
+         WHERE prf_name   = \'system_language\' ';
+$db->query($sql);
 
 echo 'Installation successful !<br />';
+
+// read installed version
+$sql = 'SELECT prf_value FROM '.$g_tbl_praefix.'_preferences
+         WHERE prf_name   = \'db_version\' 
+           AND prf_org_id = 1';
+$db->query($sql);
+$row  = $db->fetch_array();
+
+echo '<p>Database and testdata have the Admidio version '.$row['prf_value'].'.<br />
+ Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
+ Please make a <a href="../adm_install/update.php">update of your database</a>.</p>
+ <p style="font-size: 9pt;">&copy; 2004 - 2012&nbsp;&nbsp;The Admidio team</p>';
 
 ?>
