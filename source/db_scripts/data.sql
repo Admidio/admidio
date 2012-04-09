@@ -60,7 +60,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (6000, 1, 'forum_link_intern', '1'),
 (6100, 1, 'forum_width', '570'),
 (6200, 1, 'guestbook_entries_per_page', '10'),
-(6300, 1, 'homepage_logout', 'adm_program/index.php'),
+(6300, 1, 'homepage_logout', 'adm_program/modules/announcements/announcements.php'),
 (6400, 1, 'homepage_login', 'adm_program/index.php'),
 (6500, 1, 'lists_hide_overview_details', '0'),
 (6600, 1, 'lists_members_per_page', '20'),
@@ -153,7 +153,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (60001, 2, 'forum_link_intern', '1'),
 (61001, 2, 'forum_width', '570'),
 (62001, 2, 'guestbook_entries_per_page', '10'),
-(63001, 2, 'homepage_logout', 'adm_program/index.php'),
+(63001, 2, 'homepage_logout', 'adm_program/modules/announcements/announcements.php'),
 (64001, 2, 'homepage_login', 'adm_program/index.php'),
 (65001, 2, 'lists_hide_overview_details', '0'),
 (66001, 2, 'lists_members_per_page', '20'),
@@ -463,7 +463,8 @@ INSERT INTO %PREFIX%_user_fields (usf_id, usf_cat_id, usf_type, usf_name_intern,
 
 INSERT INTO %PREFIX%_announcements (ann_id, ann_org_shortname, ann_global, ann_headline, ann_description, ann_usr_id_create, ann_timestamp_create, ann_usr_id_change, ann_timestamp_change) VALUES
 (1, 'DEMO', '0', 'DEMO_ANN_NEW_JERSEYS', 'DEMO_ANN_NEW_JERSEYS_CONTENT', 1, '2012-01-01 00:00:00', NULL, NULL),
-(2, 'DEMO', '0', 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53');
+(2, 'DEMO', '0', 'DEMO_ANN_AEROBICS_COURSE', 'DEMO_ANN_AEROBICS_COURSE_CONTENT', 1, '2012-01-08 11:12:05', 1, '2012-01-06 17:33:53'),
+(3, 'DEMO', '1', 'DEMO_ANN_WELCOME', 'DEMO_ANN_WELCOME_CONTENT', 1, '2012-01-08 11:12:05', NULL, NULL);
 
 
 --

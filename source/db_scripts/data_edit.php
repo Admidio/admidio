@@ -43,13 +43,17 @@ $sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(1).'\'
 $db->query($sql);
 
 // set date of announcements
-$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(7).'\'
+$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(-7).'\'
 		 WHERE ann_id = 1 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(3).'\'
-                                       , ann_timestamp_change = \''.addDaysToDate(2).'\'
+$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(-3).'\'
+                                       , ann_timestamp_change = \''.addDaysToDate(-2).'\'
 		 WHERE ann_id = 2 ';
+$db->query($sql);
+
+$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(0).'\'
+		 WHERE ann_id = 3 ';
 $db->query($sql);
 
 // set dates of events
