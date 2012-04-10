@@ -30,7 +30,7 @@ $role = new TableRoles($gDb, $getRoleId);
 
 // roles of other organizations can't be edited
 // webmaster role can only be edited by webmasters
-if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 )
+if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0
 || (  $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER')
    && $gCurrentUser->isWebmaster() == false))
 {
@@ -45,7 +45,7 @@ else
 	   && ($role->getValue('rol_leader') == 1 || $role->getValue('rol_leader') == 3)))
 	{
 		// do nothing, but the if structure is much safer than to it the other way
-		1 = 1;
+		$dummy = 1;
 	}
 	else
 	{

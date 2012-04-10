@@ -307,10 +307,7 @@ if($getMode != 'csv')
             </li>   
         </ul>';
     }
-}
 
-if($getMode != 'csv')
-{
     // Tabellenkopf schreiben
     echo '<table class="'.$class_table.'" style="width: 100%;" cellspacing="0">
         <thead><tr>';

@@ -37,6 +37,8 @@ class User extends TableUsers
     public $roles_rights = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
     protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $role_mail_rights = array(); // Array ueber Mailrechte einzelner Rollen
+    protected $rolesMembership  = array(); // Array with all roles who the user is assigned
+    protected $rolesMembershipLeader = array(); // Array with all roles who the user is assigned and is leader
 
     // Konstruktor
     public function __construct(&$db, $userFields, $usr_id = 0)
@@ -101,6 +103,15 @@ class User extends TableUsers
 
                 while($row = $this->db->fetch_array())
                 {
+					// add role to membership array
+					$this->rolesMembership[] = $row['rol_id'];
+					
+					if($row['mem_leader'])
+					{
+						// if user is leader in this role than add role to array
+						$this->rolesMembershipLeader[] = $row['rol_id'];
+					}
+					
                     // Rechte nur beruecksichtigen, wenn auch Rollenmitglied
                     if($row['mem_usr_id'] > 0)
                     {
@@ -338,6 +349,32 @@ class User extends TableUsers
         $vcard .= (string) "END:VCARD\r\n";
         return $vcard;
     }
+	
+	// check if user is leader of a role
+	public function isLeaderOfRole($roleId)
+	{
+		if(in_array($roleId, $this->rolesMembershipLeader))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	// check if user is member of a role
+	public function isMemberOfRole($roleId)
+	{
+		if(in_array($roleId, $this->rolesMembership))
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
 
     public function readData($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
@@ -466,15 +503,15 @@ class User extends TableUsers
     }
 
     // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
-    public function editProfile($profileID = NULL)
+    public function editProfile($userId = 0)
     {
-        if($profileID == NULL)
+        if($userId == 0)
         {
-            $profileID = $this->getValue('usr_id');
+            $userId = $this->getValue('usr_id');
         }
 
         //soll das eigene Profil bearbeitet werden?
-        if($profileID == $this->getValue('usr_id') && $this->getValue('usr_id') > 0)
+        if($userId == $this->getValue('usr_id') && $this->getValue('usr_id') > 0)
         {
             $edit_profile = $this->checkRolesRight('rol_profile');
 
@@ -490,8 +527,12 @@ class User extends TableUsers
         }
         else
         {
-            return $this->editUsers();
+            if($this->editUsers())
+			{
+				return true;
+			}
         }
+		return false;
     }
 
     // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
