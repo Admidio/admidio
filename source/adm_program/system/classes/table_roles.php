@@ -51,7 +51,7 @@ class TableRoles extends TableAccess
 			if($user->isLeaderOfRole($this->getValue('rol_id'))
 			&& $this->getValue('rol_leader_assign_users') > 0)
 			{
-				return true
+				return true;
 			}
 		}
 		else
@@ -76,7 +76,7 @@ class TableRoles extends TableAccess
 			if($user->isMemberOfRole($this->getValue('rol_id'))
 			&& $this->getValue('rol_leader_edit_users') > 0)
 			{
-				return true
+				return true;
 			}
 		}
 		else
