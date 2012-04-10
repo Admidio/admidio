@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Mitglieder einer Rolle zuordnen
+ * Assign or remove members to role
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * rol_id   : Rolle der Mitglieder hinzugefuegt oder entfernt werden sollen
+ * rol_id   : role to which members should be assigned or removed
  *
  *****************************************************************************/
 
@@ -24,33 +24,22 @@ $_SESSION['set_rol_id'] = $getRoleId;
 //URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// Objekt der uebergeben Rollen-ID erstellen
+// create object of the commited role
 $role = new TableRoles($gDb, $getRoleId);
 
 // roles of other organizations can't be edited
-// webmaster role can only be edited by webmasters
-if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 )
-|| (  $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER')
-   && $gCurrentUser->isWebmaster() == false))
+if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-else
+
+// check if user is allowed to assign members to this role
+if($role->allowedToAssignMembers($gCurrentUser) == false)
 {
-	// if user is allowed to assign roles or is leader with the right to assign members
-	if($gCurrentUser->assignRoles()
-	|| (  isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId)
-	   && ($role->getValue('rol_leader') == 1 || $role->getValue('rol_leader') == 3)))
-	{
-		// do nothing, but the if structure is much safer than to it the other way
-		1 = 1;
-	}
-	else
-	{
-		$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-	}
+	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
+/*
 // nur Moderatoren duerfen Rollen zuweisen
 // nur Webmaster duerfen die Rolle Webmaster zuweisen
 // beide muessen Mitglied der richtigen Gliedgemeinschaft sein
@@ -63,9 +52,9 @@ if(  (!$gCurrentUser->assignRoles()
    && ($role->getValue('rol_leader') == 0 || $role->getValue('rol_leader') == 2)))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}
+}*/
 
-// result-Kopf ausgeben
+// output of html header
 $gLayout['title']  = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
 $gLayout['header'] ='

@@ -188,9 +188,7 @@ $gLayout['header'] = '
         
 			// create a multidimensional array for all columns with the necessary data
             $i = 1;
-            $oldCategoryName = '';
             $oldCategoryNameIntern = '';
-            $oldCategoryId   = 0;
 			$posEndOfMasterData = 0;
 
             foreach($gProfileFields->mProfileFields as $field)
@@ -215,8 +213,6 @@ $gLayout['header'] = '
                     user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
                     user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";';
                 
-                    $oldCategoryId   = $field->getValue('cat_id');
-                    $oldCategoryName = $field->getValue('cat_name');
                     $oldCategoryNameIntern = $field->getValue('cat_name_intern');
                     $i++;
                 }
@@ -231,15 +227,15 @@ $gLayout['header'] = '
 			}
             $gLayout['header'] .= '
 			user_fields['. $posEndOfMasterData. '] = new Object();
-			user_fields['. $posEndOfMasterData. ']["cat_id"]   = '. $oldCategoryId. ';
-			user_fields['. $posEndOfMasterData. ']["cat_name"] = "'. $oldCategoryName. '";
+			user_fields['. $posEndOfMasterData. ']["cat_id"]   = user_fields[1]["cat_id"];
+			user_fields['. $posEndOfMasterData. ']["cat_name"] = user_fields[1]["cat_name"];
 			user_fields['. $posEndOfMasterData. ']["usf_id"]   = "usr_login_name";
 			user_fields['. $posEndOfMasterData. ']["usf_name"] = "'.$gL10n->get('SYS_USERNAME').'";
 			user_fields['. $posEndOfMasterData. ']["usf_name_intern"] = "'.$gL10n->get('SYS_USERNAME').'";
 
 			user_fields['. ($posEndOfMasterData+1). '] = new Object();
-			user_fields['. ($posEndOfMasterData+1). ']["cat_id"]   = '. $oldCategoryId. ';
-			user_fields['. ($posEndOfMasterData+1). ']["cat_name"] = "'. $oldCategoryName. '";
+			user_fields['. ($posEndOfMasterData+1). ']["cat_id"]   = user_fields[1]["cat_id"];;
+			user_fields['. ($posEndOfMasterData+1). ']["cat_name"] = user_fields[1]["cat_name"];
 			user_fields['. ($posEndOfMasterData+1). ']["usf_id"]   = "usr_photo";
 			user_fields['. ($posEndOfMasterData+1). ']["usf_name"] = "'.$gL10n->get('PHO_PHOTO').'";
 			user_fields['. ($posEndOfMasterData+1). ']["usf_name_intern"] = "'.$gL10n->get('PHO_PHOTO').'";

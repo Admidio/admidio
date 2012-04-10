@@ -33,12 +33,59 @@ class TableRoles extends TableAccess
     protected $role_cost_periods = array(-1,1,2,4,12);
     protected $role_weekdays = array(1,2,3,4,5,6,7);
 
-    // Konstruktor
+    // Constructor
     public function __construct(&$db, $role = '')
     {
         parent::__construct($db, TBL_ROLES, 'rol', $role);
     }
 
+	// checks if user is allowed to assign members to this role
+	// requires userObject
+	public function allowedToAssignMembers(&$user)
+	{
+		global $gL10n;
+		
+		if($user->assignRoles() == false)
+		{
+			// leader are allowed to assign members if it's configured in the role
+			if($user->isLeaderOfRole($this->getValue('rol_id'))
+			&& $this->getValue('rol_leader_assign_users') > 0)
+			{
+				return true
+			}
+		}
+		else
+		{
+			// only webmasters are allowed to assign new members to webmaster role
+			if($this->getValue('rol_name') != $gL10n->get('SYS_WEBMASTER')
+			|| ($this->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $user->isWebmaster()))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	// checks if user is allowed to edit members of this role
+	// requires userObject
+	public function allowedToEditMembers(&$user)
+	{
+		if($user->editUsers() == false)
+		{
+			// leader are allowed to assign members if it's configured in the role
+			if($user->isMemberOfRole($this->getValue('rol_id'))
+			&& $this->getValue('rol_leader_edit_users') > 0)
+			{
+				return true
+			}
+		}
+		else
+		{
+			return true;
+		}
+		return false;
+	}
+	
     // die Funktion gibt die Anzahl freier Plaetze zurueck
     // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
     public function countVacancies($count_leaders = false)
@@ -94,7 +141,7 @@ class TableRoles extends TableAccess
             return false;
         }
     }
-    
+
     public function getCostPeriode()
     {
         return $this->role_cost_periods;
