@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
-	<version id="1.7.0">
+	<version id="1.8.1">
 	    <text id="PLG_CALENDAR_MONTH" development="new" translation="todo">Januar,Februar,Marts,April,Maj,Juni,Juli,August,September,Oktober,November,December</text>
 		<text id="PLG_CALENDAR_MONDAY_SHORT" development="new" translation="todo">Ma</text>
 		<text id="PLG_CALENDAR_TUESDAY_SHORT" development="new" translation="todo">Ti</text>
