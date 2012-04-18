@@ -2,12 +2,12 @@
 /******************************************************************************
  * Konfigurationsdatei fuer Sidebar-Kalender
  *
- * Version 1.6.3
+ * Version 1.8.1
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatibel ab Admidio-Versions 2.2.0
+ * Compatible with Admidio version 2.3
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
@@ -43,6 +43,8 @@ $plg_geb_icon = 1;
 
 // Welche Kalender sollen ausgegeben werden: Alle (all), Kalender xyz (xyz)
 // Mehrere Einträge: $plg_kal_cat = array('abc','cdf')
+// Achtung: Seit Admidio 2.2 und dermit verbundenen Mehrsprachigkeit haben die Standardkalender
+// folgende interne Bezeichnungen: "Allgemein" = "SYS_COMMON", "Training" = "INS_TRAINING", "Kurse" = "INS_COURSES"
 $plg_kal_cat =  array('all');
 
 // Soll die Kategorie des Kalenders mit ausgegeben werden (1) Ja oder (0) Nein
@@ -64,10 +66,5 @@ $plg_link_class_date = 'date';
 
 // Welche CSS-Linkklasse soll bei Daten mit Geburtstagen und Terminen verwendet werden
 $plg_link_class_merge = 'merge';
-
-// Soll die Überschrift des Plugins angezeigt werden
-// 1 = (Default) Überschrift wird angezeigt
-// 0 = Überschrift wird nicht angezeigt
-$plg_show_headline = 1;
 
 ?>

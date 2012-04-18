@@ -2,12 +2,12 @@
 /******************************************************************************
  * Sidebar-Kalender
  * Ausgabe der Termine und Geburtstage für Ajax Tooltip
- * Version 1.6.3
+ * Version 1.8.1
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Kompatibel ab Admidio-Versions 2.2.0
+ * Compatible with Admidio version 2.3
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html

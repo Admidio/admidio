@@ -2,12 +2,12 @@
 /******************************************************************************
  * Calendar
  *
- * Version 1.8.0
+ * Version 1.8.1
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Compatible with Admidio version 2.3.0
+ * Compatible with Admidio version 2.3
  *
  * Übergaben: date_id (Format MMJJJJ Beispiel: 052011 = Mai 2011)
  *            ajax_change (ist gesetzt bei Monatswechsel per Ajax)
@@ -182,20 +182,19 @@ if($plg_ter_aktiv == 1)
     if(in_array('all',$plg_kal_cat))
     {
 		// alle Kalender anzeigen
-        $sql_syntax = ' AND (cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                         OR (   dat_global  = 1
-                            AND cat_org_id IN ('.$plg_organizations.') ) ) ';
+		$sql_syntax = '';
     }
     else
     {
-        // nur bestimmte Kalender anzeigen
+		// nur bestimmte Kalender anzeigen
         $sql_syntax = ' AND cat_type = \'DAT\' AND ( ';
         for($i=0;$i<count($plg_kal_cat);$i++)
         {
-            $sql_syntax = $sql_syntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
+			$sql_syntax = $sql_syntax. 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
         }
         $sql_syntax = substr($sql_syntax,0,-4). ') ';
     }
+	
     
     // Dummy-Zähler für Schleifen definieren
     $ter = 1;
@@ -211,13 +210,14 @@ if($plg_ter_aktiv == 1)
     {
         $login_sql = 'AND dtr_rol_id IS NULL';
     }
-    $sql = 'SELECT DISTINCT dat_id, dat_cat_id, dat_begin, dat_all_day, dat_location, dat_headline 
+    $sql = 'SELECT DISTINCT dat_id, dat_cat_id, cat_name, dat_begin, dat_all_day, dat_location, dat_headline 
             FROM '. TBL_DATE_ROLE.', '. TBL_DATES. ', '.TBL_CATEGORIES.'
             WHERE dat_id = dtr_dat_id
                 '.$login_sql.'
                 AND DATE_FORMAT(dat_begin, \'%Y-%m\') = \''.$sql_dat.'\'
                 '.$sql_syntax.'
-            ORDER BY dat_begin ASC';
+            AND dat_cat_id = cat_id
+			ORDER BY dat_begin ASC';
     $result = $gDb->query($sql);
 
     while($row = $gDb->fetch_array($result))
@@ -229,6 +229,17 @@ if($plg_ter_aktiv == 1)
         $termin_ganztags[$ter] = $row['dat_all_day'];
         $termin_ort[$ter]      = $row['dat_location'];
         $termin_titel[$ter]    = $row['dat_headline'];
+		
+		// Name der Standardkalender umsetzen, sonst Name lt. Datenbank
+		if($plg_kal_cat_show == 1)
+		{
+			if(substr($row['cat_name'],3,1)=='_')
+			{$calendar_name = $gL10n->get($row['cat_name']);}
+			else
+			{$calendar_name = $row['cat_name'];}
+			$termin_titel[$ter]= $calendar_name. ': '. $termin_titel[$ter];
+		}
+		
         $ter++;
     }
 }
@@ -284,12 +295,9 @@ if($erster == 0)
 {
     $erster = 7;
 }
-echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
-if($plg_show_headline==1)
-{
-    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_CALENDAR_HEADLINE').'</h3></div>';
-}
-echo '<div class="admPluginBody">
+echo '<div id="plgCalendarContent" class="admPluginContent">
+<div class="admPluginHeader"><h3>'.$gL10n->get('DAT_CALENDAR').'</h3></div>
+<div class="admPluginBody">
 
 <script type="text/javascript"><!-- 
     if ( typeof gTranslations == "undefined") 
