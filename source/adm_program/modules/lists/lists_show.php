@@ -256,8 +256,8 @@ if($getMode != 'csv')
             echo '</span>
             </li>';
 
-            // Aufruf des Mailmoduls mit dieser Rolle
-            if($gCurrentUser->mailRole($role->getValue("rol_id")) && $gPreferences['enable_mail_module'] == 1)
+			// link to mail module with this role and members status
+            if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
             {
                 echo '<li>
                     <span class="iconTextLink">
@@ -268,25 +268,17 @@ if($getMode != 'csv')
                 </li>';
             }
 
-            // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
-            if((  $gCurrentUser->assignRoles() 
-               || isGroupLeader($gCurrentUser->getValue('usr_id'), $role->getValue('rol_id')))
-            && $role->getValue('rol_valid') == 1)
-            {
-                // der Webmasterrolle darf nur von Webmastern neue User zugeordnet werden
-                if($role->getValue('rol_name')  != $gL10n->get('SYS_WEBMASTER')
-                || ($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->isWebmaster()))
-                {
-                    echo '
-                    <li>
-                        <span class="iconTextLink">
-                            <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '"><img 
-                                src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>
-                            <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">'.$gL10n->get('SYS_ASSIGN_MEMBERS').'</a>
-                        </span>
-                    </li>';
-                }
-            }
+			// link to assign or remove members if you are allowed to do it
+			if($role->allowedToAssignMembers($gCurrentUser))
+			{
+				echo '<li>
+					<span class="iconTextLink">
+						<a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '"><img 
+							src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>
+						<a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">'.$gL10n->get('SYS_ASSIGN_MEMBERS').'</a>
+					</span>
+				</li>';
+			}
 
             echo '<li>
                 <span class="iconTextLink">
@@ -308,12 +300,12 @@ if($getMode != 'csv')
         </ul>';
     }
 
-    // Tabellenkopf schreiben
+    // write table header
     echo '<table class="'.$class_table.'" style="width: 100%;" cellspacing="0">
         <thead><tr>';
 }
 
-// Spalten-Ueberschriften
+// headlines for columns
 for($column_number = 1; $column_number <= $list->countColumns(); $column_number++)
 {
     $column = $list->getColumnObject($column_number);

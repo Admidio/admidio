@@ -27,7 +27,7 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
 
 if($getMode == 1)
 {
-    // Userdaten aus Datenbank holen
+	// create user object
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
@@ -36,7 +36,8 @@ if($getMode == 1)
 	header('Cache-Control: private');
 	header('Pragma: public');
 
-    echo $user->getVCard();
+	// create vcard and check if user is allowed to edit profile, so he can see more data
+    echo $user->getVCard($gCurrentUser->editProfile($user));
 }
 elseif($getMode == 2)
 {

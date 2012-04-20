@@ -161,7 +161,8 @@ foreach($sql_arr as $sql)
 		foreach($results[0] as $key => $value)
 		{
 			// search for the exact value as a separate word and replace it with the translation
-			$sql = preg_replace('/\b'.$value.'\b/', $gL10n->get($value), $sql);
+			// in l10n the single quote is transformed in html entity, but we need the original sql escaped
+			$sql = preg_replace('/\b'.$value.'\b/', $db->escape_string(str_replace('&rsquo;', '\'', $gL10n->get($value))), $sql);
 		}
 
         $db->query($sql);
@@ -184,15 +185,6 @@ if($gDbType == 'postgresql')
 		$db->query($sql);
 	}
 }
-
-// falls dies der Admidio-Demo-bereich ist, dann das Theme auf demo setzen
-/*if(strpos(__FILE__, 'demo') > 0)
-{
-    $sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = 'demo'
-             WHERE prf_name   = 'theme' 
-               AND prf_org_id = 1 ';
-    $db->query($sql);
-}*/
 
 // set parameter lang to default language for this installation
 $sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = \''.$getLanguage.'\'

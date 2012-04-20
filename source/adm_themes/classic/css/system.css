@@ -479,9 +479,7 @@ ul.autosuggest li.highlight a:visited  {
     margin:             3px 0px 3px 0px;
 }
 
-#profile_roles_box ul li dl dd,
-#profile_roles_box_other_orga ul li dl dd,
-#profile_former_roles_box ul li dl dd {
+.profileRolesBox ul li dl dd {
     margin-left:        50%;
     text-align:         right;
 }

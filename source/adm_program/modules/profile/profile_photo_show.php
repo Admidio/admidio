@@ -34,7 +34,7 @@ if($user->getValue('usr_id') == 0)
 }
 
 //Testen ob Recht besteht Profil einzusehn
-if(!$gCurrentUser->viewProfile($getUserId))
+if(!$gCurrentUser->viewProfile($user))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

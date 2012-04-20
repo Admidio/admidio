@@ -52,7 +52,7 @@ if($getUserId > 0 && $getNewUser != 0 && $getNewUser != 3)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-// User auslesen
+// read user data
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // pruefen, ob Modul aufgerufen werden darf
@@ -60,7 +60,7 @@ switch($getNewUser)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentUser->editProfile($getUserId) == false)
+        if($gCurrentUser->editProfile($user) == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -422,7 +422,7 @@ echo '
                 $show_field = true;
             }
             elseif($getNewUser != 2 
-            && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->editUsers()))
+            && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->editProfile($user)))
             {
                 // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
                 // Leiter duerfen dies nicht !!!

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen des Benutzers speichern
+ * Assign or remove membership of roles in profile
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -85,6 +85,7 @@ else
                   AND bm.mem_end     > \''.DATE_NOW.'\'
                   AND bm.mem_leader  = 1
                   AND rol_id         = bm.mem_rol_id
+				  AND rol_leader_rights IN (1,3)
                   AND rol_valid      = 1
                   AND rol_visible    = 1
                   AND rol_cat_id     = cat_id

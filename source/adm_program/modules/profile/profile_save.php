@@ -30,12 +30,15 @@ if($gValidLogin == false)
 $getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 
+// read user data
+$user = new User($gDb, $gProfileFields, $getUserId);
+
 // pruefen, ob Modul aufgerufen werden darf
 switch($getNewUser)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentUser->editProfile($getUserId) == false)
+        if($gCurrentUser->editProfile($user) == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -65,10 +68,6 @@ if(!isset($_POST['usr_login_name']))
 {
     $_POST['usr_login_name'] = '';
 }
-
-// User auslesen
-$user = new User($gDb, $gProfileFields, $getUserId);
-
 
 /*------------------------------------------------------------*/
 // Feldinhalte pruefen der User-Klasse zuordnen

@@ -32,16 +32,17 @@ switch($getAction)
 {
     case 0: // reload Role Memberships
         $count_show_roles 	= 0;
-        $result_role 		= getRolesFromDatabase($gDb,$getUserId,$gCurrentOrganization);
+        $result_role 		= getRolesFromDatabase($getUserId);
         $count_role  		= $gDb->num_rows($result_role);
-        getRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,true,$gL10n);
+        getRoleMemberships('role_list',$user,$result_role,$count_role,true);
     break;
 
     case 1: // former reload Role Memberships
         $count_show_roles 	= 0;
-        $result_role 		= getFormerRolesFromDatabase($gDb,$getUserId,$gCurrentOrganization);
+        $result_role 		= getFormerRolesFromDatabase($getUserId);
         $count_role  		= $gDb->num_rows($result_role);
-        getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,true,$gL10n);
+        getRoleMemberships('former_role_list',$user,$result_role,$count_role,true);
+
         if($count_role == 0)
         {
             echo '<script type="text/javascript">$("#profile_former_roles_box").css({ \'display\':\'none\' })</script>';
