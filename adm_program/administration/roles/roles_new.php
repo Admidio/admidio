@@ -311,11 +311,14 @@ echo '
                     </li>
                     <li>
                         <dl>
-                            <dt><label for="rol_leader">'.$gL10n->get('SYS_LEADER').':</label></dt>
+                            <dt><label for="rol_leader_rights">'.$gL10n->get('SYS_LEADER').':</label></dt>
                             <dd>';
 								$selectBoxEntries = array(0 => $gL10n->get('ROL_NO_ADDITIONAL_RIGHTS'), 1 => $gL10n->get('SYS_ASSIGN_MEMBERS'), 2 => $gL10n->get('SYS_EDIT_MEMBERS'), 3 => $gL10n->get('ROL_ASSIGN_EDIT_MEMBERS'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $role->getValue('rol_leader'), 'rol_leader');
-                            echo '</dd>
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $role->getValue('rol_leader_rights'), 'rol_leader_rights');
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_LEADER_RIGHTS_DESC&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_LEADER_RIGHTS_DESC&amp;\',this)" onmouseout="ajax_hideTooltip()"
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+                            </dd>
                         </dl>
                     </li>
                     <li>

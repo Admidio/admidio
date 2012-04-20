@@ -39,21 +39,6 @@ if($role->allowedToAssignMembers($gCurrentUser) == false)
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-/*
-// nur Moderatoren duerfen Rollen zuweisen
-// nur Webmaster duerfen die Rolle Webmaster zuweisen
-// beide muessen Mitglied der richtigen Gliedgemeinschaft sein
-if(  (!$gCurrentUser->assignRoles()
-   && !isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId))
-|| (  !$gCurrentUser->isWebmaster()
-   && $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
-|| ($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0 )
-|| (  isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId) 
-   && ($role->getValue('rol_leader') == 0 || $role->getValue('rol_leader') == 2)))
-{
-    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-}*/
-
 // output of html header
 $gLayout['title']  = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 

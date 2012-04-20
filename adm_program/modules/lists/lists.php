@@ -303,31 +303,22 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$role->getValue('rol_id').'"><img
                                 src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>';
                         }
-                        
-                        if($gCurrentUser->assignRoles() 
-                        || isGroupLeader($gCurrentUser->getValue('usr_id'), $role->getValue('rol_id')))
-                        {
-                            // die Webmasterrolle darf nur von Webmastern bearbeitet werden
-                            if($role->getValue('rol_name')  != $gL10n->get('SYS_WEBMASTER')
-                            || ($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->isWebmaster()))
-                            {
-                                if($gCurrentUser->assignRoles())
-                                {
-                                    // nur Moderatoren duerfen Rollen editieren
-                                    echo '
-                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
-                                        src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_SETTINGS').'" title="'.$gL10n->get('SYS_SETTINGS').'" /></a>';
-                                }
-        
-                                // Gruppenleiter und Moderatoren duerfen Mitglieder zuordnen oder entfernen (nicht bei Ehemaligen Rollen)
-                                if($role->getValue("rol_valid") == 1)
-                                {
-                                    echo '
-                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img 
-                                        src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
-                                }
-                            }
-                        }
+
+						// edit roles of you are allowed to assign roles
+						if($gCurrentUser->assignRoles())
+						{
+							echo '
+							<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
+								src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_SETTINGS').'" title="'.$gL10n->get('SYS_SETTINGS').'" /></a>';
+						}
+
+						// link to assign or remove members if you are allowed to do it
+						if($role->allowedToAssignMembers($gCurrentUser))
+						{
+							echo '
+							<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img 
+								src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
+						}
                     echo '</div>
                     <div style="text-align: right;">';
                         // Kombobox mit Listen nur anzeigen, wenn die Rolle Mitglieder hat

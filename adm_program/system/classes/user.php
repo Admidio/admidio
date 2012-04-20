@@ -38,7 +38,7 @@ class User extends TableUsers
     protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
     protected $role_mail_rights = array(); // Array ueber Mailrechte einzelner Rollen
     protected $rolesMembership  = array(); // Array with all roles who the user is assigned
-    protected $rolesMembershipLeader = array(); // Array with all roles who the user is assigned and is leader
+    protected $rolesMembershipLeader = array(); // Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
 
     // Konstruktor
     public function __construct(&$db, $userFields, $usr_id = 0)
@@ -103,18 +103,18 @@ class User extends TableUsers
 
                 while($row = $this->db->fetch_array())
                 {
-					// add role to membership array
-					$this->rolesMembership[] = $row['rol_id'];
-					
-					if($row['mem_leader'])
+					if($row['mem_leader'] == 1)
 					{
-						// if user is leader in this role than add role to array
-						$this->rolesMembershipLeader[] = $row['rol_id'];
+						// if user is leader in this role than add role id and leader rights to array
+						$this->rolesMembershipLeader[$row['rol_id']] = $row['rol_leader_rights'];
 					}
 					
                     // Rechte nur beruecksichtigen, wenn auch Rollenmitglied
                     if($row['mem_usr_id'] > 0)
                     {
+						// add role to membership array
+						$this->rolesMembership[] = $row['rol_id'];
+
                         // Rechte der Rollen in das Array uebertragen,
                         // falls diese noch nicht durch andere Rollen gesetzt wurden
                         foreach($tmp_roles_rights as $key => $value)
@@ -245,6 +245,13 @@ class User extends TableUsers
         $this->checkRolesRight();
         return $this->list_view_rights;
     }
+	
+	// returns an array with all role ids where the user is a member
+	public function getRoleMemberships()
+	{
+		$this->checkRolesRight();
+		return $this->rolesMembership;
+	}
 
     // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
     // angefordert wurde und gibt diesen zurueck
@@ -260,21 +267,20 @@ class User extends TableUsers
         }
     }
 
-    // gibt die Userdaten als VCard zurueck
-    // da das Windows-Adressbuch einschliesslich XP kein UTF8 verarbeiten kann, alles in ISO-8859-1 ausgeben
-    public function getVCard()
+	// creates a vcard with all user data
+	// allowedToEditProfile : false (default) user is allowed to edit profile so he can see more data
+	// windows xp address book can't process utf8, so vcard output is iso-8859-1
+    public function getVCard($allowedToEditProfile = false)
     {
-        global $gCurrentUser, $gPreferences;
-
-        $editAllUsers = $gCurrentUser->editProfile($this->getValue('usr_id'));
+        global $gPreferences;
 
         $vcard  = (string) "BEGIN:VCARD\r\n";
         $vcard .= (string) "VERSION:2.1\r\n";
-        if($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
+        if($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_hidden') == 0))
         {
             $vcard .= (string) "N;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue('LAST_NAME')). ";". utf8_decode($this->getValue('FIRST_NAME')) . ";;;\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
+        if($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_hidden') == 0))
         {
             $vcard .= (string) "FN;CHARSET=ISO-8859-1:". utf8_decode($this->getValue('FIRST_NAME')) . " ". utf8_decode($this->getValue('LAST_NAME')) . "\r\n";
         }
@@ -283,37 +289,37 @@ class User extends TableUsers
             $vcard .= (string) "NICKNAME;CHARSET=ISO-8859-1:" . utf8_decode($this->getValue("usr_login_name")). "\r\n";
         }
         if (strlen($this->getValue('PHONE')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('PHONE', 'usf_hidden') == 0)))
+        && ($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('PHONE', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "TEL;HOME;VOICE:" . $this->getValue('PHONE'). "\r\n";
         }
         if (strlen($this->getValue('MOBILE')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('MOBILE', 'usf_hidden') == 0)))
+        && ($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('MOBILE', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "TEL;CELL;VOICE:" . $this->getValue('MOBILE'). "\r\n";
         }
         if (strlen($this->getValue('FAX')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('FAX', 'usf_hidden') == 0)))
+        && ($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('FAX', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "TEL;HOME;FAX:" . $this->getValue('FAX'). "\r\n";
         }
-        if($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
+        if($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('ADDRESS', 'usf_hidden') == 0 && $this->mProfileFieldsData->getProperty('CITY', 'usf_hidden') == 0
         && $this->mProfileFieldsData->getProperty('POSTCODE', 'usf_hidden') == 0  && $this->mProfileFieldsData->getProperty('COUNTRY', 'usf_hidden') == 0))
         {
             $vcard .= (string) "ADR;CHARSET=ISO-8859-1;HOME:;;" . utf8_decode($this->getValue('ADDRESS')). ";" . utf8_decode($this->getValue('CITY')). ";;" . utf8_decode($this->getValue('POSTCODE')). ";" . utf8_decode($this->getValue('COUNTRY')). "\r\n";
         }
         if (strlen($this->getValue('WEBSITE')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('WEBSITE', 'usf_hidden') == 0)))
+        && ($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('WEBSITE', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "URL;HOME:" . $this->getValue('WEBSITE'). "\r\n";
         }
         if (strlen($this->getValue('BIRTHDAY')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('BIRTHDAY', 'usf_hidden') == 0)))
+        && ($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('BIRTHDAY', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "BDAY:" . $this->getValue('BIRTHDAY', 'Ymd') . "\r\n";
         }
         if (strlen($this->getValue('EMAIL')) > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('EMAIL', 'usf_hidden') == 0)))
+        && ($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('EMAIL', 'usf_hidden') == 0)))
         {
             $vcard .= (string) "EMAIL;PREF;INTERNET:" . $this->getValue('EMAIL'). "\r\n";
         }
@@ -329,7 +335,7 @@ class User extends TableUsers
         }
         // Geschlecht ist nicht in vCard 2.1 enthalten, wird hier fuer das Windows-Adressbuch uebergeben
         if ($this->getValue('GENDER') > 0
-        && ($editAllUsers || ($editAllUsers == false && $this->mProfileFieldsData->getProperty('GENDER', 'usf_hidden') == 0)))
+        && ($allowedToEditProfile || ($allowedToEditProfile == false && $this->mProfileFieldsData->getProperty('GENDER', 'usf_hidden') == 0)))
         {
             if($this->getValue('GENDER') == 1)
             {
@@ -353,7 +359,7 @@ class User extends TableUsers
 	// check if user is leader of a role
 	public function isLeaderOfRole($roleId)
 	{
-		if(in_array($roleId, $this->rolesMembershipLeader))
+		if(array_key_exists($roleId, $this->rolesMembershipLeader))
 		{
 			return true;
 		}
@@ -502,38 +508,45 @@ class User extends TableUsers
         return $this->checkRolesRight('rol_download');
     }
 
-    // Funktion prueft, ob der angemeldete User das entsprechende Profil bearbeiten darf
-    public function editProfile($userId = 0)
-    {
-        if($userId == 0)
-        {
-            $userId = $this->getValue('usr_id');
-        }
-
-        //soll das eigene Profil bearbeitet werden?
-        if($userId == $this->getValue('usr_id') && $this->getValue('usr_id') > 0)
-        {
+	// checks if the current user is allowed to edit the profile of the user
+	public function editProfile($user)
+	{
+		// edit own profile ?
+		if($user->getValue('usr_id') == $this->getValue('usr_id') 
+		&& $this->getValue('usr_id') > 0)
+		{
             $edit_profile = $this->checkRolesRight('rol_profile');
 
             if($edit_profile == 1)
             {
                 return true;
             }
-            else
-            {
-                return $this->editUsers();
-            }
-
-        }
-        else
-        {
-            if($this->editUsers())
+		}
+		
+		if($this->editUsers())
+		{
+			return true;
+		}
+		else
+		{
+			if(count($this->rolesMembershipLeader) > 0)
 			{
-				return true;
+				// check if current user is a group leader of a role where $user is a member
+				$rolesMembership = $user->getRoleMemberships();
+				foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
+				{
+					// is group leader of role and has the right to edit users ?
+					if(array_search($roleId, $rolesMembership) != false
+					&& $leaderRights > 1)
+					{
+						return true;
+					}
+				}
 			}
-        }
+		}
+
 		return false;
-    }
+	}
 
     // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
     public function editUsers()
@@ -566,13 +579,14 @@ class User extends TableUsers
     }
 
     // Funktion prueft, ob der User ein Profil einsehen darf
-    public function viewProfile($usr_id)
+	// check if current user object is allowed to read user of parameter
+    public function viewProfile($user)
     {
         global $gCurrentOrganization;
         $view_profile = false;
 
         //Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
-        if($this->editProfile($usr_id))
+        if($this->editProfile($user))
         {
             $view_profile = true;
         }
@@ -587,7 +601,7 @@ class User extends TableUsers
             {
                 $sql    = 'SELECT rol_id, rol_this_list_view
                              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                            WHERE mem_usr_id = '.$usr_id. '
+                            WHERE mem_usr_id = '.$user->getValue('usr_id'). '
                               AND mem_begin <= \''.DATE_NOW.'\'
                               AND mem_end    > \''.DATE_NOW.'\'
                               AND mem_rol_id = rol_id

@@ -29,29 +29,17 @@ $member = new TableMembers($gDb);
 $role = new TableRoles($gDb, $getRoleId);
 
 // roles of other organizations can't be edited
-// webmaster role can only be edited by webmasters
-if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0
-|| (  $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER')
-   && $gCurrentUser->isWebmaster() == false))
+if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
 	echo 'SYS_NO_RIGHTS';
 	exit(); 
 }
-else
+
+// check if user is allowed to assign members to this role
+if($role->allowedToAssignMembers($gCurrentUser) == false)
 {
-	// if user is allowed to assign roles or is leader with the right to assign members
-	if($gCurrentUser->assignRoles()
-	|| (  isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId)
-	   && ($role->getValue('rol_leader') == 1 || $role->getValue('rol_leader') == 3)))
-	{
-		// do nothing, but the if structure is much safer than to it the other way
-		$dummy = 1;
-	}
-	else
-	{
-		echo 'SYS_NO_RIGHTS';
-		exit(); 
-	}
+	echo 'SYS_NO_RIGHTS';
+	exit(); 
 }
 
 //POST Daten übernehmen

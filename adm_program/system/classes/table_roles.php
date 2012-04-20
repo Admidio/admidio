@@ -13,6 +13,10 @@
  *
  * Beside the methods of the parent class there are the following additional methods:
  *
+ * allowedToAssignMembers - checks if user is allowed to assign members to this role
+ *                          requires userObject of user for this should be checked 
+ * allowedToEditMembers - checks if user is allowed to edit members of this role
+ *                        requires userObject of user for this should be checked 
  * countVacancies($count_leaders = false) - gibt die freien Plaetze der Rolle zurueck
  *                    dies ist interessant, wenn rol_max_members gesetzt wurde
  * hasFormerMembers() - Methode gibt true zurueck, wenn die Rolle ehemalige Mitglieder besitzt
@@ -26,6 +30,13 @@
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
+// constants for column rol_leader_rights
+define('ROLE_LEADER_NO_RIGHTS', 0);
+define('ROLE_LEADER_MEMBERS_ASSIGN', 1);
+define('ROLE_LEADER_MEMBERS_EDIT', 2);
+define('ROLE_LEADER_MEMBERS_ASSIGN_EDIT', 3);
+
+// class definition
 class TableRoles extends TableAccess
 {
     // Alle konfigurierbare Werte für die Bezahlzeitraeume
@@ -40,48 +51,60 @@ class TableRoles extends TableAccess
     }
 
 	// checks if user is allowed to assign members to this role
-	// requires userObject
-	public function allowedToAssignMembers(&$user)
+	// requires userObject of user for this should be checked 
+	public function allowedToAssignMembers($user)
 	{
 		global $gL10n;
 		
-		if($user->assignRoles() == false)
+		// you aren't allowed to change membership of not active roles
+		if($this->getValue('rol_valid'))
 		{
-			// leader are allowed to assign members if it's configured in the role
-			if($user->isLeaderOfRole($this->getValue('rol_id'))
-			&& $this->getValue('rol_leader_assign_users') > 0)
+			if($user->assignRoles() == false)
 			{
+				// leader are allowed to assign members if it's configured in the role
 				return true;
+				if($user->isLeaderOfRole($this->getValue('rol_id'))
+				&& (  $this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
+				   || $this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
+				{
+					return true;
+				}
 			}
-		}
-		else
-		{
-			// only webmasters are allowed to assign new members to webmaster role
-			if($this->getValue('rol_name') != $gL10n->get('SYS_WEBMASTER')
-			|| ($this->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $user->isWebmaster()))
+			else
 			{
-				return true;
+				// only webmasters are allowed to assign new members to webmaster role
+				if($this->getValue('rol_name') != $gL10n->get('SYS_WEBMASTER')
+				|| ($this->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $user->isWebmaster()))
+				{
+					return true;
+				}
 			}
 		}
 		return false;
 	}
 
 	// checks if user is allowed to edit members of this role
-	// requires userObject
-	public function allowedToEditMembers(&$user)
+	// requires userObject of user for this should be checked 
+	public function allowedToEditMembers($user)
 	{
-		if($user->editUsers() == false)
+		// you aren't allowed to edit users of not active roles
+		if($this->getValue('rol_valid'))
 		{
-			// leader are allowed to assign members if it's configured in the role
-			if($user->isMemberOfRole($this->getValue('rol_id'))
-			&& $this->getValue('rol_leader_edit_users') > 0)
+			if($user->editUsers() == false)
+			{
+				// leader are allowed to assign members if it's configured in the role
+				if($user->isMemberOfRole($this->getValue('rol_id'))
+				&& (  $this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
+				   || $this->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
+				{
+					return true;
+				}
+				return true;
+			}
+			else
 			{
 				return true;
 			}
-		}
-		else
-		{
-			return true;
 		}
 		return false;
 	}

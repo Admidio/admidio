@@ -32,8 +32,11 @@ if (ini_get('file_uploads') != '1')
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
 $getJob    = admFuncVariableIsValid($_GET, 'job', 'string', '', false, array('save', 'dont_save', 'upload', 'delete'));
 
+// read user data and show error if user doesn't exists
+$user = new User($gDb, $gProfileFields, $getUserId);
+
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if($gCurrentUser->editProfile($getUserId) == false)
+if($gCurrentUser->editProfile($user) == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -48,9 +51,6 @@ if($gPreferences['profile_photo_storage'] == 1)
         $gMessage->show($gL10n->get($myFilesProfilePhotos->errorText, $myFilesProfilePhotos->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
     }
 }
-
-// read user data and show error if user doesn't exists
-$user = new User($gDb, $gProfileFields, $getUserId);
 
 if($user->getValue('usr_id') == 0)
 {

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Mitglieder einer Rolle zuordnen
+ * Show list with members of a role
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -18,6 +18,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_roles.php');
 
+$gMessage->setExcludeThemeBody();
 
 // Initialize and check the parameters
 $getRoleId          = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true);
@@ -28,41 +29,29 @@ $postMembersSearch  = admFuncVariableIsValid($_POST, 'mem_search', 'string');
 $role = new TableRoles($gDb, $getRoleId);
 
 // roles of other organizations can't be edited
-// webmaster role can only be edited by webmasters
-if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0
-|| (  $role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER')
-   && $gCurrentUser->isWebmaster() == false))
+if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-else
+
+// check if user is allowed to assign members to this role
+if($role->allowedToAssignMembers($gCurrentUser) == false)
 {
-	// if user is allowed to assign roles or is leader with the right to assign members
-	if($gCurrentUser->assignRoles()
-	|| (  isGroupLeader($gCurrentUser->getValue('usr_id'), $getRoleId)
-	   && ($role->getValue('rol_leader') == 1 || $role->getValue('rol_leader') == 3)))
-	{
-		// do nothing, but the if structure is much safer than to it the other way
-		$dummy = 1;
-	}
-	else
-	{
-		$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-	}
+	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$condition = '';
+$memberCondition = '';
 $limit = '';
 
 if($postMembersShowAll == 'on')
 {
     // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
-    $member_condition = ' usr_valid = 1 ';
+    $memberCondition = ' usr_valid = 1 ';
 }
 else
 {
     // Falls gefordert, nur Aufruf von aktiven Mitgliedern der Organisation
-    $member_condition = ' EXISTS 
+    $memberCondition = ' EXISTS 
         (SELECT 1
            FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
           WHERE mem_usr_id = usr_id
@@ -86,7 +75,7 @@ if(strlen($postMembersSearch) > 0)
     	//in Condition einbinden
 	    foreach($search_therms as $search_therm)
 	    {
-	    	$member_condition .= ' AND (  (UPPER(last_name.usd_value)  LIKE UPPER(\''.$search_therm.'%\')) 
+	    	$memberCondition .= ' AND (  (UPPER(last_name.usd_value)  LIKE UPPER(\''.$search_therm.'%\')) 
 									   OR (UPPER(first_name.usd_value) LIKE UPPER(\''.$search_therm.'%\'))) ';
 	    }
     }
@@ -139,20 +128,20 @@ $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd
          AND mem.mem_begin  <= \''.DATE_NOW.'\'
          AND mem.mem_end     > \''.DATE_NOW.'\'
          AND mem.mem_usr_id  = usr_id
-        WHERE '. $member_condition. '
+        WHERE '. $memberCondition. '
         ORDER BY last_name, first_name '.$limit;
-$result_user = $gDb->query($sql);
+$resultUser = $gDb->query($sql);
 
-if($gDb->num_rows($result_user)>0)
+if($gDb->num_rows($resultUser)>0)
 {
     //Buchstaben Navigation bei mehr als 50 personen
-    if($gDb->num_rows($result_user) >= 50)
+    if($gDb->num_rows($resultUser) >= 50)
     {
         echo '<div class="pageNavigation">
             <a href="#" letter="all" class="pageNavigationLink">'.$gL10n->get('SYS_ALL').'</a>&nbsp;&nbsp;';
         
             // Nun alle Buchstaben mit evtl. vorhandenen Links im Buchstabenmenue anzeigen
-            $letter_menu = 'A';
+            $letterMenu = 'A';
             
             for($i = 0; $i < 26;$i++)
             {
@@ -164,29 +153,29 @@ if($gDb->num_rows($result_user)>0)
                            AND usf_name_intern = \'LAST_NAME\'
                            AND usd_usf_id = usf_id
                            AND usd_usr_id = usr_id
-                           AND usd_value LIKE \''.$letter_menu.'%\'
-                           AND '.$member_condition.'
+                           AND usd_value LIKE \''.$letterMenu.'%\'
+                           AND '.$memberCondition.'
                          GROUP BY UPPER(SUBSTRING(usd_value, 1, 1))';
                 $result      = $gDb->query($sql);
-                $letter_row  = $gDb->fetch_array($result);
+                $letterRow  = $gDb->fetch_array($result);
 
-                if($letter_row['count'] > 0)
+                if($letterRow['count'] > 0)
                 {
-                    echo '<a href="#" letter="'.$letter_menu.'" class="pageNavigationLink">'.$letter_menu.'</a>';
+                    echo '<a href="#" letter="'.$letterMenu.'" class="pageNavigationLink">'.$letterMenu.'</a>';
                 }
                 else
                 {
-                    echo $letter_menu;
+                    echo $letterMenu;
                 }
         
                 echo '&nbsp;&nbsp;';
         
-                $letter_menu = strNextLetter($letter_menu);
+                $letterMenu = strNextLetter($letterMenu);
             }
         echo '</div>';    
     }
     
-    //Tabelle anlegen
+    // create table header
     echo '
     <table class="tableList" cellspacing="0">
         <thead>
@@ -200,9 +189,31 @@ if($gDb->num_rows($result_user)>0)
                 <th><img class="iconInformation" src="'. THEME_PATH. '/icons/map.png" 
                     alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" /></th>
                 <th>'.$gL10n->get('SYS_BIRTHDAY').'</th>
-                <th style="text-align: center;">'.$gL10n->get('SYS_LEADER').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION&amp;inline=true"><img 
-	                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-	                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a></th>
+                <th style="text-align: center;">'.$gL10n->get('SYS_LEADER');
+
+					// show icon that leaders have no additional rights
+					if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
+					{
+						echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/info.png"
+						alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
+					}
+
+					// show icon with edit user right if leader has this right
+					if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
+					|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+					{
+						echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
+						alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+					}
+
+					// show icon with assign role right if leader has this right
+					if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
+					|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+					{
+						echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
+						alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+					}
+				echo '</th>
             </tr>
         </thead>';
         
@@ -221,9 +232,9 @@ if($gDb->num_rows($result_user)>0)
     }
 
     //Zeilen ausgeben
-    while($user = $gDb->fetch_array($result_user))
+    while($user = $gDb->fetch_array($resultUser))
     {
-    	if($gDb->num_rows($result_user) >= 50)
+    	if($gDb->num_rows($resultUser) >= 50)
     	{
             // Buchstaben auslesen
             $this_letter = admstrtoupper(substr($user['last_name'], 0, 1));

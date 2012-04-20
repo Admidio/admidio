@@ -21,63 +21,66 @@ require_once('roles_functions.php');
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $gCurrentUser->getValue('usr_id'));
 
+// create user object
+$user = new User($gDb, $gProfileFields, $getUserId);
+
 //Testen ob Recht besteht Profil einzusehn
-if(!$gCurrentUser->viewProfile($getUserId))
+if(!$gCurrentUser->viewProfile($user))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
 // dabei wird der Inhalt richtig formatiert
-function getFieldCode($fieldNameIntern, $User)
+function getFieldCode($fieldNameIntern, $user)
 {
     global $gPreferences, $g_root_path, $gCurrentUser, $gProfileFields, $gL10n;
     $html      = '';
     $value     = '';
     $msg_image = '';
 
-    if($gCurrentUser->editProfile($User->getValue('usr_id')) == false && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
+    if($gCurrentUser->editProfile($user) == false && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
     {
         return '';
     }
 
 	// get value of field in html format
-	$value = $User->getValue($fieldNameIntern, 'html');
+	$value = $user->getValue($fieldNameIntern, 'html');
 
 	// if birthday then show age
 	if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
 	{
-		$birthday = new DateTimeExtended($User->getValue($fieldNameIntern, $gPreferences['system_date']), $gPreferences['system_date'], 'date');
+		$birthday = new DateTimeExtended($user->getValue($fieldNameIntern, $gPreferences['system_date']), $gPreferences['system_date'], 'date');
 		$value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
 	}
 
 	// Icons der Messenger anzeigen
 	if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'ICQ')
 	{
-		if(strlen($User->getValue($fieldNameIntern)) > 0)
+		if(strlen($user->getValue($fieldNameIntern)) > 0)
 		{
 			// Sonderzeichen aus der ICQ-Nummer entfernen (damit kommt www.icq.com nicht zurecht)
-			preg_match_all('/\d+/', $User->getValue($fieldNameIntern), $matches);
+			preg_match_all('/\d+/', $user->getValue($fieldNameIntern), $matches);
 			$icq_number = implode("", reset($matches));
 
 			// ICQ Onlinestatus anzeigen
 			$value = '
 			<a class="iconLink" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
 				src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
-				alt="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
-				title="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
+				alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
+				title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
 		}
 	}
 	elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'SKYPE')
 	{
-		if(strlen($User->getValue($fieldNameIntern)) > 0)
+		if(strlen($user->getValue($fieldNameIntern)) > 0)
 		{
 			// Skype Onlinestatus anzeigen
 			$value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
-			<a class="iconLink" href="skype:'.$User->getValue($fieldNameIntern).'?add"><img
-				src="http://mystatus.skype.com/smallicon/'.$User->getValue($fieldNameIntern).'"
-				title="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
-				alt="'.$gL10n->get('PRO_TO_ADD', $User->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
+			<a class="iconLink" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
+				src="http://mystatus.skype.com/smallicon/'.$user->getValue($fieldNameIntern).'"
+				title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
+				alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
 		}
 	}
 	elseif(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
@@ -86,7 +89,7 @@ function getFieldCode($fieldNameIntern, $User)
 	}
 
 	// show html of field, if user has a value for that field or it's a checkbox field
-    if(strlen($User->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'CHECKBOX')
+    if(strlen($user->getValue($fieldNameIntern)) > 0 || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'CHECKBOX')
     {
         $html = '<li>
                     <dl>
@@ -98,9 +101,6 @@ function getFieldCode($fieldNameIntern, $User)
 
     return $html;
 }
-
-// User auslesen
-$user = new User($gDb, $gProfileFields, $getUserId);
 
 unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken
@@ -158,7 +158,7 @@ echo '
 
                             // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
                             if(strlen($user->getValue('GENDER')) > 0
-                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0 ))
+                            && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0 ))
                             {
                                 echo ' '.$user->getValue('GENDER');
                             }
@@ -177,7 +177,7 @@ echo '
                                     src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
                             }
                             // Nur berechtigte User duerfen ein Profil editieren
-                            if($gCurrentUser->editProfile($user->getValue('usr_id')) == true)
+							if($gCurrentUser->editProfile($user))
                             {
                                 echo '
                                 <a class="iconLink" href="'. $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='. $user->getValue('usr_id'). '"><img
@@ -211,7 +211,7 @@ echo '
                             {
                                 // nur Felder der Stammdaten anzeigen
                                 if($field->getValue('cat_name_intern') == 'MASTER_DATA'
-                                && (  $gCurrentUser->editProfile($user->getValue('usr_id')) == true || $field->getValue('usf_hidden') == 0 ))
+                                && ($gCurrentUser->editProfile($user) == true || $field->getValue('usf_hidden') == 0 ))
                                 {
                                     switch($field->getValue('usf_name_intern'))
                                     {
@@ -244,7 +244,7 @@ echo '
                                                                 '&amp;daddr=';
 
                                                             if(strlen($user->getValue('ADDRESS')) > 0
-                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
                                                             {
                                                                 $address   .= '<div>'.$user->getValue('ADDRESS'). '</div>';
                                                                 $map_url   .= urlencode($user->getValue('ADDRESS'));
@@ -252,7 +252,7 @@ echo '
                                                             }
 
                                                             if(strlen($user->getValue('POSTCODE')) > 0
-                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
                                                             {
                                                                 $address   .= '<div>'.$user->getValue('POSTCODE');
                                                                 $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
@@ -260,18 +260,18 @@ echo '
 
 																// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
 	                                                            if(strlen($user->getValue('CITY')) == 0
-	                                                            || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
+	                                                            || ($gCurrentUser->editProfile($user) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
 	                                                            {
 	                                                                $address   .= '</div>';
 	                                                            }
                                                             }
 
                                                             if(strlen($user->getValue('CITY')) > 0
-                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                                             {
                                                             	// Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
 	                                                            if(strlen($user->getValue('POSTCODE')) == 0
-	                                                            || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 1))
+	                                                            || ($gCurrentUser->editProfile($user) == false && $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 1))
 	                                                            {
 	                                                                $address   .= '<div>';
 	                                                            }
@@ -281,7 +281,7 @@ echo '
                                                             }
 
                                                             if(strlen($user->getValue('COUNTRY')) > 0
-                                                            && ($gCurrentUser->editProfile($user->getValue('usr_id')) == true || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
+                                                            && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
                                                             {
 																$country    = $user->getValue('COUNTRY');
                                                                 $address   .= '<div>'.$country. '</div>';
@@ -340,7 +340,7 @@ echo '
                                 </td>
                             </tr>';
                              // Nur berechtigte User duerfen das Profilfoto editieren
-                            if($gCurrentUser->editProfile($user->getValue('usr_id')) == true)
+                            if($gCurrentUser->editProfile($user) == true)
                             {
                                 echo '
                                 <tr>
@@ -376,8 +376,8 @@ echo '
             // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
             // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
             if($field->getValue('cat_name_intern') != 'MASTER_DATA'
-            && (  $gCurrentUser->editProfile($user->getValue('usr_id')) == true
-               || ($gCurrentUser->editProfile($user->getValue('usr_id')) == false && $field->getValue('usf_hidden') == 0 )))
+            && (  $gCurrentUser->editProfile($user) == true
+               || ($gCurrentUser->editProfile($user) == false && $field->getValue('usf_hidden') == 0 )))
             {
                 // show new category header if new category and field has value or is a checkbox field
                 if($category != $field->getValue('cat_name')
@@ -394,7 +394,7 @@ echo '
                         <div class="groupBoxHeadline">
                             <div style="float: left;">'.$field->getValue('cat_name').'</div>';
                             // Nur berechtigte User duerfen ein Profil editieren
-                            if($gCurrentUser->editProfile($user->getValue('usr_id')) == true)
+                            if($gCurrentUser->editProfile($user) == true)
                             {
                                 echo '
                                 <div style="text-align: right;">
@@ -538,16 +538,15 @@ echo '
 
             // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
             $count_show_roles = 0;
-            $result_role = getRolesFromDatabase($gDb,$user->getValue('usr_id'),$gCurrentOrganization);
+            $result_role = getRolesFromDatabase($user->getValue('usr_id'));
             $count_role  = $gDb->num_rows($result_role);
 
             //Ausgabe
-            echo '<div class="groupBox" id="profile_roles_box">
+            echo '<div class="groupBox profileRolesBox" id="profile_roles_box">
                 <div class="groupBoxHeadline">
                     <div style="float: left;">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'&nbsp;</div>';
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                        if(($gCurrentUser->assignRoles() || isGroupLeader($gCurrentUser->getValue('usr_id')))
-                        && $user->getValue('usr_reg_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
+                        if($gCurrentUser->assignRoles() || isGroupLeader($gCurrentUser->getValue('usr_id')))
                         {
                             echo '
                             <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
@@ -562,10 +561,34 @@ echo '
                             </div>';
                         }
                 echo '</div>
-                    <div id="profile_roles_box_body" class="groupBoxBody">
-                        '.getRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,false,$gL10n).'
-                    </div>
-                </div>';
+				<div id="profile_roles_box_body" class="groupBoxBody">
+					'.getRoleMemberships('role_list', $user, $result_role, $count_role, false).'
+				</div>
+			</div>';
+			
+            // *******************************************************************************
+            // block with future memberships
+            // *******************************************************************************
+
+            $count_show_roles = 0;
+            $result_role = getFutureRolesFromDatabase($user->getValue('usr_id'));
+            $count_role  = $gDb->num_rows($result_role);
+            $visible     = "";
+
+            if($count_role == 0)
+            {
+                $visible = ' style="display: none;" ';
+            }
+            /*else
+            {
+                echo '<script type="text/javascript">profileJS.futureRoleCount="'.$count_role.'";</script>';	
+            }*/
+            echo '<div class="groupBox profileRolesBox" id="profile_future_roles_box" '.$visible.'>
+                <div class="groupBoxHeadline">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'&nbsp;</div>
+                <div id="profile_future_roles_box_body" class="groupBoxBody">
+                    '.getRoleMemberships('future_role_list',$user,$result_role,$count_role,false).'
+				</div>
+			</div>';
         }
 
         if($gPreferences['profile_show_former_roles'] == 1)
@@ -577,7 +600,7 @@ echo '
             // Alle Rollen auflisten, die dem Mitglied zugeordnet waren
 
             $count_show_roles = 0;
-            $result_role = getFormerRolesFromDatabase($gDb,$user->getValue('usr_id'),$gCurrentOrganization);
+            $result_role = getFormerRolesFromDatabase($user->getValue('usr_id'));
             $count_role  = $gDb->num_rows($result_role);
             $visible     = "";
 
@@ -589,14 +612,13 @@ echo '
             {
                 echo '<script type="text/javascript">profileJS.formerRoleCount="'.$count_role.'";</script>';	
             }
-            echo '<div class="groupBox" id="profile_former_roles_box" '.$visible.'>
-                  <div class="groupBoxHeadline">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'&nbsp;</div>
-                    <div id="profile_former_roles_box_body" class="groupBoxBody">
-                    '.getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,false,$gL10n).'
-                    </div>
-                  </div>';
-
-            
+            echo '<div class="groupBox profileRolesBox" id="profile_former_roles_box" '.$visible.'>
+				<div class="groupBoxHeadline">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'&nbsp;</div>
+                <div id="profile_former_roles_box_body" class="groupBoxBody">
+                    './*getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,false,$gL10n).*/'
+                    '.getRoleMemberships('former_role_list',$user,$result_role,$count_role,false).'
+				</div>
+			</div>';
         }
 
         if($gPreferences['profile_show_extern_roles'] == 1
@@ -624,7 +646,7 @@ echo '
 
             if($gDb->num_rows($result_role) > 0)
             {
-                echo '<div class="groupBox" id="profile_roles_box_other_orga">
+                echo '<div class="groupBox profileRolesBox" id="profile_roles_box_other_orga">
                     <div class="groupBoxHeadline">'.$gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'&nbsp;</div>
                     <div class="groupBoxBody">
                         <ul class="formFieldList">';

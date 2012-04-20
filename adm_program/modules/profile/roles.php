@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Funktionen zuordnen
+ * Show a list with all roles where the user can assign or remove membership
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -69,26 +69,15 @@ echo '
                 <th>&nbsp;</th>
                 <th>'.$gL10n->get('ROL_ROLE').'</th>
                 <th>'.$gL10n->get('SYS_DESCRIPTION').'</th>
-                <th style="text-align: center; width: 80px;">'.$gL10n->get('SYS_LEADER');
-				if($getInline == 0)
-				{
-					echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION&amp;inline=true"><img 
-		            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>';
-				}
-				else
-				{
-					echo '<img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_LEADER_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-		            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" />';
-				}
-                echo'</th>
+                <th>'.$gL10n->get('SYS_LEADER').'</th>
             </tr>
         </thead>';
 
         if($gCurrentUser->assignRoles())
         {
             // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-            $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, mem_usr_id, mem_leader
+            $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights, 
+			                  mem_usr_id, mem_leader
                          FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                          LEFT JOIN '. TBL_MEMBERS. '
                            ON rol_id      = mem_rol_id
@@ -105,7 +94,7 @@ echo '
         else
         {
             // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-            $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible,
+            $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
                               mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
                          FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                          LEFT JOIN '. TBL_MEMBERS. ' mgl
@@ -118,6 +107,7 @@ echo '
                           AND bm.mem_end     > \''.DATE_NOW.'\'
                           AND bm.mem_leader  = 1
                           AND rol_id         = bm.mem_rol_id
+						  AND rol_leader_rights IN ('.ROLE_LEADER_MEMBERS_ASSIGN.','.ROLE_LEADER_MEMBERS_ASSIGN_EDIT.')
                           AND rol_valid      = 1
                           AND rol_visible    = 1
                           AND rol_cat_id     = cat_id
@@ -179,7 +169,7 @@ echo '
                    </td>
                    <td><label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label></td>
                    <td>'.$role->getValue('rol_description').'</td>
-                   <td style="text-align: center;">
+                   <td>
                             <input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" ';
                             if($row['mem_leader'] > 0)
                             {
@@ -192,8 +182,38 @@ echo '
                                 echo ' disabled="disabled" ';
                             }
     
-                            echo ' onclick="javascript:profileJS.markLeader(this);" value="1" />
-                   </td>
+                            echo ' onclick="javascript:profileJS.markLeader(this);" value="1" />';
+
+							// show icon that leaders have no additional rights
+							if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
+							{
+								echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/info.png"
+								alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
+								<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+							}
+
+							// show icon with edit user right if leader has this right
+							if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
+							|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+							{
+								echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
+								alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+							}
+
+							// show icon with assign role right if leader has this right
+							if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
+							|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+							{
+								echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
+								alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+							}
+							
+							// show dummy icon if leader has not all rights
+							if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+							{
+								echo '<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+							}
+                   echo '</td>
                 </tr>';
             }
         }
