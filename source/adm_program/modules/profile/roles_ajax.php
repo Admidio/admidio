@@ -30,14 +30,14 @@ $user = new User($gDb, $gProfileFields, $getUserId);
 
 switch($getAction)
 {
-    case 0: // reload Role Memberships
+    case 0: // reload role memberships
         $count_show_roles 	= 0;
         $result_role 		= getRolesFromDatabase($getUserId);
         $count_role  		= $gDb->num_rows($result_role);
         getRoleMemberships('role_list',$user,$result_role,$count_role,true);
     break;
 
-    case 1: // former reload Role Memberships
+    case 1: // reload former role memberships
         $count_show_roles 	= 0;
         $result_role 		= getFormerRolesFromDatabase($getUserId);
         $count_role  		= $gDb->num_rows($result_role);
@@ -53,7 +53,23 @@ switch($getAction)
         }
     break;
 
-    case 2: // save Date changes
+    case 2: // reload future role memberships
+        $count_show_roles 	= 0;
+        $result_role 		= getFutureRolesFromDatabase($getUserId);
+        $count_role  		= $gDb->num_rows($result_role);
+        getRoleMemberships('future_role_list',$user,$result_role,$count_role,true);
+
+        if($count_role == 0)
+        {
+            echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'none\' })</script>';
+        }
+        else
+        {
+            echo '<script type="text/javascript">$("#profile_future_roles_box").css({ \'display\':\'block\' })</script>';
+        }
+    break;
+
+    case 3: // save Date changes
         if(!$gCurrentUser->assignRoles())
         {
             die($gL10n->get('SYS_NO_RIGHTS'));

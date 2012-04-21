@@ -1,5 +1,5 @@
 /******************************************************************************
- * Profil Javascript Funktionen
+ * Javascript functions for profile module
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -32,6 +32,18 @@ function profileJSClass()
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_roles_box_body").html(responseText);
+                $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});
+			}
+		});
+	}
+	this.reloadFutureRoleMemberships = function()
+	{
+		$.ajax({
+			type: "GET",
+			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=2&usr_id=" + this.usr_id,
+			dataType: "html",
+			success: function(responseText, statusText){
+				$("#profile_future_roles_box_body").html(responseText);
                 $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});
 			}
 		});
@@ -92,7 +104,7 @@ function profileJSClass()
 	{
 		$.ajax({
 				type: "GET",
-				url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=2&usr_id="+this.usr_id+"&mode=1&rol_id="+role_id+"&rol_begin="+document.getElementById("admRoleStart"+role_id).value+"&rol_end="+document.getElementById("admRoleEnd"+role_id).value,
+				url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=3&usr_id="+this.usr_id+"&mode=1&rol_id="+role_id+"&rol_begin="+document.getElementById("admRoleStart"+role_id).value+"&rol_end="+document.getElementById("admRoleEnd"+role_id).value,
 				dataType: "html",
 				success: function(responseText, statusText){
 					if(responseText.match(/<SAVED\/>/gi))
@@ -102,6 +114,7 @@ function profileJSClass()
 						setTimeout('$("#mem_rol_" + role_id).fadeOut("slow")',500);
 						setTimeout('profileJS.reloadRoleMemberships();',500);
 						setTimeout('profileJS.reloadFormerRoleMemberships();',500);
+						setTimeout('profileJS.reloadFutureRoleMemberships();',500);
 					}
 					else
 					{
@@ -132,6 +145,7 @@ function profileJSClass()
 				{
 						profileJS.reloadRoleMemberships();
 						profileJS.reloadFormerRoleMemberships();
+						profileJS.reloadFutureRoleMemberships();
 						setTimeout("$.fn.colorbox.close()",1000);	
 				}
 			}	 

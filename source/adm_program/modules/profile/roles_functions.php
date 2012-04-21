@@ -87,8 +87,10 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
     {
         if($gCurrentUser->viewRole($row['mem_rol_id']) && $row['rol_visible']==1)
         {
-            $showRoleEndDate = false;
+            $formerMembership = false;
             $futureMembership = false;
+            $showRoleEndDate  = false;
+            $deleteMode = 'pro_role';
 
             $member->clear();
             $member->setArray($row);
@@ -98,13 +100,21 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
 			// if membership will not end, then don't show end date
 			if(strcmp($member->getValue('mem_end', 'Y-m-d'), '9999-12-31') != 0)
             {
-               $showRoleEndDate = true;
+               	$showRoleEndDate = true;
+            }
+
+			// check if membership ends in the past
+			if(strcmp(DATE_NOW, $member->getValue('mem_end', 'Y-m-d')) > 0)
+            {
+               	$formerMembership = true;
+    	        $deleteMode = 'pro_former';
             }
 
 			// check if membership starts in the future
 			if(strcmp($member->getValue('mem_begin', 'Y-m-d'), DATE_NOW) > 0)
 			{
 				$futureMembership = true;
+	            $deleteMode = 'pro_future';
 			}
 
 			// create list entry for one role
@@ -145,7 +155,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                             if (($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id')) || ($role->getValue('rol_name') != $gL10n->get('SYS_WEBMASTER')))
                             {
                                 $roleMemHTML .= '
-                                <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_role&amp;element_id=role_'.
+                                <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
                                     $role->getValue('rol_id'). '&amp;database_id='.$role->getValue('rol_id').'&amp;database_id_2='.$user->getValue('usr_id').'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
                             }
@@ -154,7 +164,8 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                                 $roleMemHTML .= '
                                 <a class="iconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
                             }
-                            // Bearbeiten des Datums nicht bei Webmastern möglich
+
+                            // do not edit webmaster role
                             if ($row['rol_name'] != $gL10n->get('SYS_WEBMASTER'))
                             {
                                 $roleMemHTML .= '<a class="iconLink" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$row['rol_id'].')"><img
