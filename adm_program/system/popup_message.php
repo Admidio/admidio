@@ -102,6 +102,16 @@ switch ($get_type)
 					};';
         $text = 'ROL_MEMBERSHIP_DEL';
         break;
+    case 'pro_future':
+        $url = 'profile_function.php?mode=3&user_id='.$get_database_id_2.'&rol_id='.$get_database_id;
+        $callbackSuccess = 'if(profileJS) {
+						profileJS.futureRoleCount--;
+						if(profileJS.futureRoleCount == 0) {
+							$("#profile_future_roles_box").fadeOut("slow");
+						}
+					};';
+        $text = 'ROL_LINK_MEMBERSHIP_DEL';
+        break;
     case 'pro_former':
         $url = 'profile_function.php?mode=3&user_id='.$get_database_id_2.'&rol_id='.$get_database_id;
         $callbackSuccess = 'if(profileJS) {
