@@ -146,3 +146,7 @@ html.* #right_block span {
     border: 1px dashed #d7d7d7;
     text-align: left;
 }
+
+#sidebar #smenu_modules_overview {
+	margin-bottom: 10px;
+}

@@ -78,63 +78,63 @@ $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
 if( $gPreferences['enable_announcements_module'] == 1
 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
 {
-	$moduleMenu->addItem('announcements', $g_root_path. '/adm_program/modules/announcements/announcements.php',
-						$gL10n->get('ANN_ANNOUNCEMENTS'), THEME_PATH. '/icons/announcements.png',
-						THEME_PATH.'/icons/announcements_big.png', $gL10n->get('ANN_ANNOUNCEMENTS_DESC'));
+	$moduleMenu->addItem('announcements', '/adm_program/modules/announcements/announcements.php',
+						$gL10n->get('ANN_ANNOUNCEMENTS'), '/icons/announcements_big.png',
+						$gL10n->get('ANN_ANNOUNCEMENTS_DESC'));
 }
 if($gPreferences['enable_download_module'] == 1)
 {
-	$moduleMenu->addItem('download', $g_root_path. '/adm_program/modules/downloads/downloads.php',
-						$gL10n->get('DOW_DOWNLOADS'), THEME_PATH. '/icons/download.png',
-						THEME_PATH. '/icons/download_big.png', $gL10n->get('DOW_DOWNLOADS_DESC'));
+	$moduleMenu->addItem('download', '/adm_program/modules/downloads/downloads.php',
+						$gL10n->get('DOW_DOWNLOADS'), '/icons/download_big.png',
+						$gL10n->get('DOW_DOWNLOADS_DESC'));
 }
 if($gPreferences['enable_mail_module'] == 1)
 {
-	$moduleMenu->addItem('email', $g_root_path. '/adm_program/modules/mail/mail.php',
-						$gL10n->get('SYS_EMAIL'), THEME_PATH. '/icons/email.png',
-						THEME_PATH. '/icons/email_big.png', $gL10n->get('MAI_EMAIL_DESC'));
+	$moduleMenu->addItem('email', '/adm_program/modules/mail/mail.php',
+						$gL10n->get('SYS_EMAIL'), '/icons/email_big.png',
+						$gL10n->get('MAI_EMAIL_DESC'));
 }
 if($gPreferences['enable_photo_module'] == 1 
 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
 {
-	$moduleMenu->addItem('photo', $g_root_path. '/adm_program/modules/photos/photos.php',
-						$gL10n->get('PHO_PHOTOS'), THEME_PATH. '/icons/photo.png',
-						THEME_PATH. '/icons/photo_big.png', $gL10n->get('PHO_PHOTOS_DESC'));
+	$moduleMenu->addItem('photo', '/adm_program/modules/photos/photos.php',
+						$gL10n->get('PHO_PHOTOS'), '/icons/photo_big.png',
+						$gL10n->get('PHO_PHOTOS_DESC'));
 }
 if( $gPreferences['enable_guestbook_module'] == 1
 || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
 {
-	$moduleMenu->addItem('guestbk', $g_root_path. '/adm_program/modules/guestbook/guestbook.php',
-						$gL10n->get('GBO_GUESTBOOK'), THEME_PATH. '/icons/guestbook.png',
-						THEME_PATH. '/icons/guestbook_big.png', $gL10n->get('GBO_GUESTBOOK_DESC'));
+	$moduleMenu->addItem('guestbk', '/adm_program/modules/guestbook/guestbook.php',
+						$gL10n->get('GBO_GUESTBOOK'), '/icons/guestbook_big.png',
+						$gL10n->get('GBO_GUESTBOOK_DESC'));
 }
-$moduleMenu->addItem('lists', $g_root_path. '/adm_program/modules/lists/lists.php',
-					$gL10n->get('LST_LISTS'), THEME_PATH. '/icons/lists.png',
-					THEME_PATH. '/icons/lists_big.png', $gL10n->get('LST_LISTS_DESC'));
-$moduleMenu->addSubItem('lists', 'mylist', $g_root_path.'/adm_program/modules/lists/mylist.php',
+$moduleMenu->addItem('lists', '/adm_program/modules/lists/lists.php',
+					$gL10n->get('LST_LISTS'), '/icons/lists_big.png',
+					$gL10n->get('LST_LISTS_DESC'));
+$moduleMenu->addSubItem('lists', 'mylist', '/adm_program/modules/lists/mylist.php',
 						$gL10n->get('LST_MY_LIST'));
-$moduleMenu->addSubItem('lists', 'rolinac', $g_root_path.'/adm_program/modules/lists/lists.php?active_role=0',
+$moduleMenu->addSubItem('lists', 'rolinac', '/adm_program/modules/lists/lists.php?active_role=0',
 						$gL10n->get('ROL_INACTIV_ROLE'));
-$moduleMenu->addItem('profile', $g_root_path. '/adm_program/modules/profile/profile.php',
-					$gL10n->get('PRO_MY_PROFILE'), THEME_PATH. '/icons/profile.png',
-					THEME_PATH. '/icons/profile_big.png', $gL10n->get('PRO_MY_PROFILE_DESC'));
-$moduleMenu->addSubItem('profile', 'editprof', $g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$gCurrentUser->getValue('usr_id'),
+$moduleMenu->addItem('profile', '/adm_program/modules/profile/profile.php',
+					$gL10n->get('PRO_MY_PROFILE'), '/icons/profile_big.png',
+					$gL10n->get('PRO_MY_PROFILE_DESC'));
+$moduleMenu->addSubItem('profile', 'editprof', '/adm_program/modules/profile/profile_new.php?user_id='.$gCurrentUser->getValue('usr_id'),
 						$gL10n->get('PRO_EDIT_MY_PROFILE'));
 if( $gPreferences['enable_dates_module'] == 1
 || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
 {
 	$moduleMenu->addItem('dates', $g_root_path.'/adm_program/modules/dates/dates.php',
-						$gL10n->get('DAT_DATES'), THEME_PATH. '/icons/dates.png',
-						THEME_PATH. '/icons/dates_big.png', $gL10n->get('DAT_DATES_DESC'));
-	$moduleMenu->addSubItem('dates', 'olddates', $g_root_path.'/adm_program/modules/dates/dates.php?mode=old',
+						$gL10n->get('DAT_DATES'), '/icons/dates_big.png',
+						$gL10n->get('DAT_DATES_DESC'));
+	$moduleMenu->addSubItem('dates', 'olddates', '/adm_program/modules/dates/dates.php?mode=old',
 						$gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES')));
 }
 if( $gPreferences['enable_weblinks_module'] == 1
 || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
 {
 	$moduleMenu->addItem('links', $g_root_path.'/adm_program/modules/links/links.php',
-						$gL10n->get('LNK_WEBLINKS'), THEME_PATH. '/icons/weblinks.png',
-						THEME_PATH. '/icons/weblinks_big.png', $gL10n->get('LNK_WEBLINKS_DESC'));
+						$gL10n->get('LNK_WEBLINKS'), '/icons/weblinks_big.png',
+						$gL10n->get('LNK_WEBLINKS_DESC'));
 }
 // Wenn das Forum aktiv ist, dieses auch in der Uebersicht anzeigen.
 if($gPreferences['enable_forum_interface'])
@@ -148,8 +148,8 @@ if($gPreferences['enable_forum_interface'])
 		$forumstext = $gL10n->get('SYS_FORUM_DESC');
 	}
 	$moduleMenu->addItem('forum', $gForum->url,
-						$gL10n->get('SYS_FORUM'), THEME_PATH. '/icons/forum.png',
-						THEME_PATH. '/icons/forum_big.png', $forumstext);
+						$gL10n->get('SYS_FORUM'), '/icons/forum_big.png',
+						$forumstext);
 }
 $moduleMenu->show('long');
 
@@ -159,33 +159,33 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->assignRoles() || $gCurrentUser
 	$adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 	if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
 	{
-		$adminMenu->addItem('newreg', $g_root_path. '/adm_program/administration/new_user/new_user.php',
-							$gL10n->get('NWU_NEW_REGISTRATIONS'), THEME_PATH. '/icons/new_registrations.png',
-							THEME_PATH. '/icons/new_registrations_big.png', $gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS'));
+		$adminMenu->addItem('newreg', '/adm_program/administration/new_user/new_user.php',
+							$gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations_big.png',
+							$gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS'));
 	}
 
 	if($gCurrentUser->editUsers())
 	{
-		$adminMenu->addItem('usrmgt', $g_root_path. '/adm_program/administration/members/members.php',
-							$gL10n->get('MEM_USER_MANAGEMENT'), THEME_PATH. '/icons/user_administration.png',
-							THEME_PATH. '/icons/user_administration_big.png', $gL10n->get('MEM_USER_MANAGEMENT_DESC'));
+		$adminMenu->addItem('usrmgt', '/adm_program/administration/members/members.php',
+							$gL10n->get('MEM_USER_MANAGEMENT'), '/icons/user_administration_big.png',
+							$gL10n->get('MEM_USER_MANAGEMENT_DESC'));
 	}
 
 	if($gCurrentUser->assignRoles())
 	{
-		$adminMenu->addItem('roladm', $g_root_path. '/adm_program/administration/roles/roles.php',
-							$gL10n->get('ROL_ROLE_ADMINISTRATION'), THEME_PATH. '/icons/roles.png',
-							THEME_PATH. '/icons/roles_big.png', $gL10n->get('ROL_ROLE_ADMINISTRATION_DESC'));
+		$adminMenu->addItem('roladm', '/adm_program/administration/roles/roles.php',
+							$gL10n->get('ROL_ROLE_ADMINISTRATION'), '/icons/roles_big.png',
+							$gL10n->get('ROL_ROLE_ADMINISTRATION_DESC'));
 	}
 	
 	if($gCurrentUser->isWebmaster())
 	{
-		$adminMenu->addItem('dbback', $g_root_path. '/adm_program/administration/backup/backup.php',
-							$gL10n->get('BAC_DATABASE_BACKUP'), THEME_PATH. '/icons/backup.png',
-							THEME_PATH. '/icons/backup_big.png', $gL10n->get('BAC_DATABASE_BACKUP_DESC'));
-		$adminMenu->addItem('orgprop', $g_root_path. '/adm_program/administration/organization/organization.php',
-							$gL10n->get('ORG_ORGANIZATION_PROPERTIES'), THEME_PATH. '/icons/options.png',
-							THEME_PATH. '/icons/options_big.png', $gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
+		$adminMenu->addItem('dbback', '/adm_program/administration/backup/backup.php',
+							$gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup_big.png',
+							$gL10n->get('BAC_DATABASE_BACKUP_DESC'));
+		$adminMenu->addItem('orgprop', '/adm_program/administration/organization/organization.php',
+							$gL10n->get('ORG_ORGANIZATION_PROPERTIES'), '/icons/options_big.png',
+							$gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
 	}
 	$adminMenu->show('long');
 }

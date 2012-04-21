@@ -5,32 +5,56 @@
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ * Description  : Create, modify and display menus. Each menu item is defined by
+ *      - $id   : identifier of the menu item
+ *      - $link : URL, relative to the admidio root directory, starting with a /
+ *                or full URL with http or https protocol
+ *      - $text : menu text
+ *      - $icon : URL, relative to the theme plugin, starting with a /
+ *              : or full URL with http or https protocol
+ *      - $desc : (optional) long description of the menu item
  *
  *****************************************************************************/ 
 
 class Menu
 {
 	// constructor
-    public function __construct($id, $title)
-    {
-        $this->id		= $id;
+	public function __construct($id, $title)
+	{
+		global $g_root_path;
+		$this->id		= $id;
 		$this->title	= $title;
 		$this->items	= array();
-    }
+		$this->root_path= $g_root_path;
+	}
 	
-	private function mkItem($link, $text, $smallIcon, $bigIcon='', $longDesc='')
+	private function mkItem($id, $link, $text, $icon, $desc='')
 	{
-		$bigIcon = ($bigIcon == '')? $smallIcon : $bigIcon;
-        return array('link'=>$link, 'text'=>$text, 'smallIcon'=>$smallIcon, 'bigIcon'=>$bigIcon, 'longDesc'=>$longDesc, 'subitems'=>array());
+		// add root path to link unless the full URL is given
+		if (preg_match('/^http(s?):\/\//', $link)==0)
+		{
+			$link = $this->root_path . $link;
+		}
+		// add THEME_PATH to images unless the full URL is given
+		if (preg_match('/^http(s?):\/\//', $icon)==0)
+		{
+			$icon = THEME_PATH . $icon;
+		}
+		return array('id'=>$id, 'link'=>$link, 'text'=>$text, 'icon'=>$icon, 'desc'=>$desc, 'subitems'=>array());
 	}
 
-    public function addItem($id, $link, $text, $smallIcon, $bigIcon='', $longDesc='')
-    {
-		$this->items[$id] = $this->mkItem($link, $text, $smallIcon, $bigIcon, $longDesc);
-    }
+	public function addItem($id, $link, $text, $icon, $desc='')
+	{
+		$this->items[$id] = $this->mkItem($id, $link, $text, $icon, $desc);
+	}
 	
 	public function addSubItem($parentId, $id, $link, $text)
 	{
+		// add root path to link unless the full URL is given
+		if (preg_match('/^http(s?):\/\//', $link)==0)
+		{
+			$link = $this->root_path . $link;
+		}
 		$this->items[$parentId]['subitems'][$id] = array('link'=>$link, 'text'=>$text);
 	}
 	
@@ -50,7 +74,7 @@ class Menu
 	}
 	
 	// inserts a new menu entry before the named position
-	public function insertItem($position, $id, $link, $text, $smallIcon, $bigIcon='', $longDesc='')
+	public function insertItem($position, $id, $link, $text, $icon, $desc='')
 	{
 		if (!is_numeric($position))
 		{
@@ -59,7 +83,7 @@ class Menu
 		else
 		{
 			$head = array_slice($this->items, 0, $position);
-			$insert=array($id=>$this->mkItem($link, $text, $smallIcon, $bigIcon, $longDesc));
+			$insert=array($id=>$this->mkItem($id, $link, $text, $icon, $desc));
 			$tail = array_slice($this->items, $position);
 			$this->items = array_merge($head, $insert, $tail);
 			return true;
@@ -86,9 +110,10 @@ class Menu
 		{
 			if ($type == 'long')
 			{
-				$html .= '<li><dl>';											// Wraps each item
+				$html .= '<li id="lmenu_'.$this->id.'_' .
+				          $this->items[$key]['id'].'"><dl>';					// Wraps each item
 				
-				$html .= '<dt><a href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['bigIcon'].'" alt="'.$this->items[$key]['text'].'"
+				$html .= '<dt><a href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'" alt="'.$this->items[$key]['text'].'"
 						  title="'.$this->items[$key]['text'].'"></a></dt>
 						  <dd><span class="veryBigFontSize"><a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a></span>';
 						  
@@ -105,15 +130,16 @@ class Menu
 					$html .= ' &#93;';
 				}
 				
-				$html .= '<br><span class="smallFontSize">'.$this->items[$key]['longDesc'].'</span></dd>';
+				$html .= '<br><span class="smallFontSize">'.$this->items[$key]['desc'].'</span></dd>';
 				
 				$html .= '</dl></li>';											// End Wraps each item
 			}
 			else
 			{
-				$html .= '<span class="menu">';									// Wraps each item
+				$html .= '<span id="smenu_'.$this->id.'_' .
+						  $this->items[$key]['id'].'" class="menu">';			// Wraps each item
 				
-				$html .= '<a href="'.$this->items[$key]['link'].'"><img style="vertical-align: middle;" src="'.$this->items[$key]['smallIcon'].'"
+				$html .= '<a href="'.$this->items[$key]['link'].'"><img style="vertical-align: middle;" src="'.$this->items[$key]['icon'].'"
 						  alt="'.$this->items[$key]['text'].'" title="'.$this->items[$key]['text'].'"></a>
 						  <a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a>';
 				
