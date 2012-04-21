@@ -72,301 +72,122 @@ echo '
             </li>';
         }
     }
-echo '</ul>
+echo '</ul>';
 
-<div class="formLayout" id="modules_list_form">
-    <div class="formHead">'.$gL10n->get('SYS_MODULES').'</div>
-    <div class="formBody">
-        <ul class="formFieldList">';
-            if( $gPreferences['enable_announcements_module'] == 1
-            || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php"><img
-                            src="'.THEME_PATH.'/icons/announcements_big.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" title="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php">'.$gL10n->get('ANN_ANNOUNCEMENTS').'</a></span><br />
-                            <span class="smallFontSize">'.$gL10n->get('ANN_ANNOUNCEMENTS_DESC').'</span>
-                        </dd>
-                    </dl>
-                </li>';
-            }
+$moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
+if( $gPreferences['enable_announcements_module'] == 1
+|| ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
+{
+	$moduleMenu->addItem('announcements', $g_root_path. '/adm_program/modules/announcements/announcements.php',
+						$gL10n->get('ANN_ANNOUNCEMENTS'), THEME_PATH. '/icons/announcements.png',
+						THEME_PATH.'/icons/announcements_big.png', $gL10n->get('ANN_ANNOUNCEMENTS_DESC'));
+}
+if($gPreferences['enable_download_module'] == 1)
+{
+	$moduleMenu->addItem('download', $g_root_path. '/adm_program/modules/downloads/downloads.php',
+						$gL10n->get('DOW_DOWNLOADS'), THEME_PATH. '/icons/download.png',
+						THEME_PATH. '/icons/download_big.png', $gL10n->get('DOW_DOWNLOADS_DESC'));
+}
+if($gPreferences['enable_mail_module'] == 1)
+{
+	$moduleMenu->addItem('email', $g_root_path. '/adm_program/modules/mail/mail.php',
+						$gL10n->get('SYS_EMAIL'), THEME_PATH. '/icons/email.png',
+						THEME_PATH. '/icons/email_big.png', $gL10n->get('MAI_EMAIL_DESC'));
+}
+if($gPreferences['enable_photo_module'] == 1 
+|| ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
+{
+	$moduleMenu->addItem('photo', $g_root_path. '/adm_program/modules/photos/photos.php',
+						$gL10n->get('PHO_PHOTOS'), THEME_PATH. '/icons/photo.png',
+						THEME_PATH. '/icons/photo_big.png', $gL10n->get('PHO_PHOTOS_DESC'));
+}
+if( $gPreferences['enable_guestbook_module'] == 1
+|| ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
+{
+	$moduleMenu->addItem('guestbk', $g_root_path. '/adm_program/modules/guestbook/guestbook.php',
+						$gL10n->get('GBO_GUESTBOOK'), THEME_PATH. '/icons/guestbook.png',
+						THEME_PATH. '/icons/guestbook_big.png', $gL10n->get('GBO_GUESTBOOK_DESC'));
+}
+$moduleMenu->addItem('lists', $g_root_path. '/adm_program/modules/lists/lists.php',
+					$gL10n->get('LST_LISTS'), THEME_PATH. '/icons/lists.png',
+					THEME_PATH. '/icons/lists_big.png', $gL10n->get('LST_LISTS_DESC'));
+$moduleMenu->addSubItem('lists', 'mylist', $g_root_path.'/adm_program/modules/lists/mylist.php',
+						$gL10n->get('LST_MY_LIST'));
+$moduleMenu->addSubItem('lists', 'rolinac', $g_root_path.'/adm_program/modules/lists/lists.php?active_role=0',
+						$gL10n->get('ROL_INACTIV_ROLE'));
+$moduleMenu->addItem('profile', $g_root_path. '/adm_program/modules/profile/profile.php',
+					$gL10n->get('PRO_MY_PROFILE'), THEME_PATH. '/icons/profile.png',
+					THEME_PATH. '/icons/profile_big.png', $gL10n->get('PRO_MY_PROFILE_DESC'));
+$moduleMenu->addSubItem('profile', 'editprof', $g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$gCurrentUser->getValue('usr_id'),
+						$gL10n->get('PRO_EDIT_MY_PROFILE'));
+if( $gPreferences['enable_dates_module'] == 1
+|| ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
+{
+	$moduleMenu->addItem('dates', $g_root_path.'/adm_program/modules/dates/dates.php',
+						$gL10n->get('DAT_DATES'), THEME_PATH. '/icons/dates.png',
+						THEME_PATH. '/icons/dates_big.png', $gL10n->get('DAT_DATES_DESC'));
+	$moduleMenu->addSubItem('dates', 'olddates', $g_root_path.'/adm_program/modules/dates/dates.php?mode=old',
+						$gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES')));
+}
+if( $gPreferences['enable_weblinks_module'] == 1
+|| ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
+{
+	$moduleMenu->addItem('links', $g_root_path.'/adm_program/modules/links/links.php',
+						$gL10n->get('LNK_WEBLINKS'), THEME_PATH. '/icons/weblinks.png',
+						THEME_PATH. '/icons/weblinks_big.png', $gL10n->get('LNK_WEBLINKS_DESC'));
+}
+// Wenn das Forum aktiv ist, dieses auch in der Uebersicht anzeigen.
+if($gPreferences['enable_forum_interface'])
+{
+	if($gForum->session_valid)
+	{
+		$forumstext = $gL10n->get('SYS_FORUM_LOGIN_DESC', $gForum->user, $gForum->sitename, $gForum->getUserPM($gCurrentUser->getValue('usr_login_name')));
+	}
+	else
+	{
+		$forumstext = $gL10n->get('SYS_FORUM_DESC');
+	}
+	$moduleMenu->addItem('forum', $gForum->url,
+						$gL10n->get('SYS_FORUM'), THEME_PATH. '/icons/forum.png',
+						THEME_PATH. '/icons/forum_big.png', $forumstext);
+}
+$moduleMenu->show('long');
 
-            if($gPreferences['enable_download_module'] == 1)
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php"><img
-                            src="'.THEME_PATH.'/icons/download_big.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" title="'.$gL10n->get('DOW_DOWNLOADS').'" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php">'.$gL10n->get('DOW_DOWNLOADS').'</a></span><br />
-                            <span class="smallFontSize">'.$gL10n->get('DOW_DOWNLOADS_DESC').'</span>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-
-            if($gPreferences['enable_mail_module'] == 1)
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php"><img
-                            src="'.THEME_PATH.'/icons/email_big.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/mail/mail.php">'.$gL10n->get('SYS_EMAIL').'</a></span><br />
-                            <span class="smallFontSize">'.$gL10n->get('MAI_EMAIL_DESC').'</span>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-
-            if($gPreferences['enable_photo_module'] == 1 
-            || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img
-                            src="'.THEME_PATH.'/icons/photo_big.png" alt="'.$gL10n->get('PHO_PHOTOS').'" title="'.$gL10n->get('PHO_PHOTOS').'" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$gL10n->get('PHO_PHOTOS').'</a></span><br />
-                            <span class="smallFontSize">'.$gL10n->get('PHO_PHOTOS_DESC').'</span>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-
-            if( $gPreferences['enable_guestbook_module'] == 1
-            || ($gPreferences['enable_guestbook_module'] == 2 && $gValidLogin))
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php"><img
-                            src="'.THEME_PATH.'/icons/guestbook_big.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" title="'.$gL10n->get('GBO_GUESTBOOK').'" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php">'.$gL10n->get('GBO_GUESTBOOK').'</a></span><br />
-                            <span class="smallFontSize">'.$gL10n->get('GBO_GUESTBOOK_DESC').'</span>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-
-            echo '
-            <li>
-                <dl>
-                    <dt>
-                        <a href="'.$g_root_path.'/adm_program/modules/lists/lists.php"><img
-                        src="'.THEME_PATH.'/icons/lists_big.png" alt="'.$gL10n->get('LST_LISTS').'" title="'.$gL10n->get('LST_LISTS').'" /></a>
-                    </dt>
-                    <dd>
-                        <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/lists/lists.php">'.$gL10n->get('LST_LISTS').'</a></span>&nbsp;&nbsp;
-                        &#91; <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php">'.$gL10n->get('LST_MY_LIST').'</a>&nbsp;|
-                        <a href="'.$g_root_path.'/adm_program/modules/lists/lists.php?active_role=0">'.$gL10n->get('ROL_INACTIV_ROLE').'</a> &#93;<br />
-                        <span class="smallFontSize">'.$gL10n->get('LST_LISTS_DESC').'</span>
-                    </dd>
-                </dl>
-            </li>';
-
-            echo '
-            <li>
-                <dl>
-                    <dt>
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile.php"><img
-                        src="'.THEME_PATH.'/icons/profile_big.png" alt="'.$gL10n->get('PRO_MY_PROFILE').'" title="'.$gL10n->get('PRO_MY_PROFILE').'" /></a>
-                    </dt>
-                    <dd>
-                        <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php">'.$gL10n->get('PRO_MY_PROFILE').'</a></span>';
-                        if($gValidLogin)
-                        {
-                            echo '&nbsp;&nbsp;
-                            &#91; <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$gCurrentUser->getValue('usr_id').'">'.$gL10n->get('PRO_EDIT_MY_PROFILE').'</a> &#93;';
-                        }
-                        echo '<br />
-                        <span class="smallFontSize">'.$gL10n->get('PRO_MY_PROFILE_DESC').'</span>
-                    </dd>
-                </dl>
-            </li>';
-
-
-            if( $gPreferences['enable_dates_module'] == 1
-            || ($gPreferences['enable_dates_module'] == 2 && $gValidLogin))
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'.$g_root_path.'/adm_program/modules/dates/dates.php"><img
-                            src="'.THEME_PATH.'/icons/dates_big.png" alt="'.$gL10n->get('DAT_DATES').'" title="'.$gL10n->get('DAT_DATES').'" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php">'.$gL10n->get('DAT_DATES').'</a></span>&nbsp;&nbsp;
-                            &#91; <a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?mode=old">'.$gL10n->get('DAT_PREVIOUS_DATES', $gL10n->get('DAT_DATES')).'</a> &#93;<br />
-                            <span class="smallFontSize">'.$gL10n->get('DAT_DATES_DESC').'</span>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-
-
-            if( $gPreferences['enable_weblinks_module'] == 1
-            || ($gPreferences['enable_weblinks_module'] == 2 && $gValidLogin))
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'.$g_root_path.'/adm_program/modules/links/links.php"><img
-                            src="'.THEME_PATH.'/icons/weblinks_big.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" title="'.$gL10n->get('LNK_WEBLINKS').'" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/modules/links/links.php">'.$gL10n->get('LNK_WEBLINKS').'</a></span><br />
-                            <span class="smallFontSize">'.$gL10n->get('LNK_WEBLINKS_DESC').'</span>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-            
-
-            // Wenn das Forum aktiv ist, dieses auch in der Uebersicht anzeigen.
-            if($gPreferences['enable_forum_interface'])
-            {
-                if($gForum->session_valid)
-                {
-                    $forumstext = $gL10n->get('SYS_FORUM_LOGIN_DESC', $gForum->user, $gForum->sitename, $gForum->getUserPM($gCurrentUser->getValue('usr_login_name')));
-                }
-                else
-                {
-                    $forumstext = $gL10n->get('SYS_FORUM_DESC');
-                }
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <a href="'. $gForum->url. '"><img src="'. THEME_PATH. '/icons/forum_big.png" alt="'.$gL10n->get('SYS_FORUM').'" title="'.$gL10n->get('SYS_FORUM').'" /></a>
-                        </dt>
-                        <dd>
-                            <span class="veryBigFontSize"><a href="'. $gForum->url. '">'.$gL10n->get('SYS_FORUM').'</a></span><br />
-                            <span class="smallFontSize">'.$forumstext.'</span>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-        echo '
-        </ul>
-    </div>
-</div>';
 
 if($gCurrentUser->isWebmaster() || $gCurrentUser->assignRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
 {
-    echo '
-    <div class="formLayout" id="administration_list_form">
-        <div class="formHead">'.$gL10n->get('SYS_ADMINISTRATION').'</div>
-        <div class="formBody">
-            <ul class="formFieldList">';
-                if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>
-                                <a href="'.$g_root_path.'/adm_program/administration/new_user/new_user.php"><img
-                                src="'.THEME_PATH.'/icons/new_registrations_big.png" alt="'.$gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS').'" title="'.$gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS').'" /></a>
-                            </dt>
-                            <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/new_user/new_user.php">'.$gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS').'</a></span><br />
-                                <span class="smallFontSize">'.$gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS_DESC').'</span>
-                            </dd>
-                        </dl>
-                    </li>';
-                }
+	$adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
+	if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
+	{
+		$adminMenu->addItem('newreg', $g_root_path. '/adm_program/administration/new_user/new_user.php',
+							$gL10n->get('NWU_NEW_REGISTRATIONS'), THEME_PATH. '/icons/new_registrations.png',
+							THEME_PATH. '/icons/new_registrations_big.png', $gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS'));
+	}
 
-                if($gCurrentUser->editUsers())
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>
-                                <a href="'.$g_root_path.'/adm_program/administration/members/members.php"><img
-                                src="'.THEME_PATH.'/icons/user_administration_big.png" alt="'.$gL10n->get('MEM_USER_MANAGEMENT').'" title="'.$gL10n->get('MEM_USER_MANAGEMENT').'" /></a>
-                            </dt>
-                            <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/members/members.php">'.$gL10n->get('MEM_USER_MANAGEMENT').'</a></span><br />
-                                <span class="smallFontSize">'.$gL10n->get('MEM_USER_MANAGEMENT_DESC').'</span>
-                            </dd>
-                        </dl>
-                    </li>';
-                }
+	if($gCurrentUser->editUsers())
+	{
+		$adminMenu->addItem('usrmgt', $g_root_path. '/adm_program/administration/members/members.php',
+							$gL10n->get('MEM_USER_MANAGEMENT'), THEME_PATH. '/icons/user_administration.png',
+							THEME_PATH. '/icons/user_administration_big.png', $gL10n->get('MEM_USER_MANAGEMENT_DESC'));
+	}
 
-                if($gCurrentUser->assignRoles())
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>
-                                <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php"><img
-                                src="'.THEME_PATH.'/icons/roles_big.png" alt="'.$gL10n->get('ROL_ROLE_ADMINISTRATION').'" title="'.$gL10n->get('ROL_ROLE_ADMINISTRATION').'" /></a>
-                            </dt>
-                            <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/roles/roles.php">'.$gL10n->get('ROL_ROLE_ADMINISTRATION').'</a></span><br />
-                                <span class="smallFontSize">'.$gL10n->get('ROL_ROLE_ADMINISTRATION_DESC').'</span>
-                            </dd>
-                        </dl>
-                    </li>';
-                }
-                
-                if($gCurrentUser->isWebmaster())
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>
-                                <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php"><img
-                                src="'.THEME_PATH.'/icons/backup_big.png" alt="'.$gL10n->get('BAC_DATABASE_BACKUP').'" title="'.$gL10n->get('BAC_DATABASE_BACKUP').'" /></a>
-                            </dt>
-                            <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">'.$gL10n->get('BAC_DATABASE_BACKUP').'</a></span><br />
-                                <span class="smallFontSize">'.$gL10n->get('BAC_DATABASE_BACKUP_DESC').'</span>
-                            </dd>
-                        </dl>
-                    </li>';
-                }
-
-                if($gCurrentUser->isWebmaster())
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>
-                                <a href="'.$g_root_path.'/adm_program/administration/organization/organization.php"><img
-                                src="'. THEME_PATH. '/icons/options_big.png" alt="'.$gL10n->get('ORG_ORGANIZATION_PROPERTIES').'" title="'.$gL10n->get('ORG_ORGANIZATION_PROPERTIES').'" /></a>
-                            </dt>
-                            <dd>
-                                <span class="veryBigFontSize"><a href="'.$g_root_path.'/adm_program/administration/organization/organization.php">'.$gL10n->get('ORG_ORGANIZATION_PROPERTIES').'</a></span><br />
-                                <span class="smallFontSize">'.$gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC').'</span>
-                            </dd>
-                        </dl>
-                    </li>';
-                }
-
-            echo '
-            </ul>
-        </div>
-    </div>';
+	if($gCurrentUser->assignRoles())
+	{
+		$adminMenu->addItem('roladm', $g_root_path. '/adm_program/administration/roles/roles.php',
+							$gL10n->get('ROL_ROLE_ADMINISTRATION'), THEME_PATH. '/icons/roles.png',
+							THEME_PATH. '/icons/roles_big.png', $gL10n->get('ROL_ROLE_ADMINISTRATION_DESC'));
+	}
+	
+	if($gCurrentUser->isWebmaster())
+	{
+		$adminMenu->addItem('dbback', $g_root_path. '/adm_program/administration/backup/backup.php',
+							$gL10n->get('BAC_DATABASE_BACKUP'), THEME_PATH. '/icons/backup.png',
+							THEME_PATH. '/icons/backup_big.png', $gL10n->get('BAC_DATABASE_BACKUP_DESC'));
+		$adminMenu->addItem('orgprop', $g_root_path. '/adm_program/administration/organization/organization.php',
+							$gL10n->get('ORG_ORGANIZATION_PROPERTIES'), THEME_PATH. '/icons/options.png',
+							THEME_PATH. '/icons/options_big.png', $gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
+	}
+	$adminMenu->show('long');
 }
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');

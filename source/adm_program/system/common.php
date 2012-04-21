@@ -44,6 +44,7 @@ require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/exception.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/menu.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
