@@ -1,10 +1,10 @@
 
-<!-- Hier koennen Sie Ihren HTML-Code einbauen, der am Ende des <body> Bereichs
-     einer Admidio-Modul-Seite erscheinen soll.
+<!-- Here you can add your html code. this code will be applied at the end of the <body> area
+     and after the Admidio module code
 -->
 
 <?php
-// Link zur Moduluebersicht
+// link to module overall view
 if(strpos($_SERVER['REQUEST_URI'], 'index.php') === false)
 {
     echo '<div style="text-align: center; margin-top: 5px;">
