@@ -606,14 +606,16 @@ else
                     $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
                 }
 
-                // write participients in array
+                // write participants in array
                 if($date->getValue('dat_rol_id') > 0)
                 {
                     if($date->getValue('dat_max_members')!=0)
                     {
                         $sql = 'SELECT DISTINCT mem_usr_id 
                                   FROM '.TBL_MEMBERS.' 
-                                 WHERE mem_rol_id = '.$date->getValue('dat_rol_id');
+                                 WHERE mem_rol_id = '.$date->getValue('dat_rol_id').'
+                                   AND mem_begin <= \''.DATE_NOW.'\'
+                                   AND mem_end    > \''.DATE_NOW.'\'';
                         $result = $gDb->query($sql);
                         $row_count = $gDb->num_rows($result);
                                     
