@@ -18,7 +18,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/role_dependency.php');
 
 // Initialize and check the parameters
@@ -58,11 +57,13 @@ if($roleCount == 0)
 if($gCurrentUser->assignRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    $sql    = 'SELECT rol_id, rol_name, rol_max_members
+    $sql    = 'SELECT rol_id, rol_name, rol_max_members, mem_begin, mem_end
                  FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. '
                    ON rol_id      = mem_rol_id
                   AND mem_usr_id  = '.$getUserId.'
+                  AND mem_begin <= \''.DATE_NOW.'\'
+                  AND mem_end    > \''.DATE_NOW.'\'
                 WHERE rol_valid   = 1
                   AND rol_visible = 1
                   AND rol_cat_id  = cat_id
@@ -73,7 +74,7 @@ if($gCurrentUser->assignRoles())
 else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql    = 'SELECT rol_id, rol_name, rol_max_members
+    $sql    = 'SELECT rol_id, rol_name, rol_max_members, mgl.mem_begin, mgl.mem_end
                  FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. ' mgl
                    ON rol_id         = mgl.mem_rol_id
@@ -152,7 +153,7 @@ if($gDb->num_rows($result_rol)>0)
     $gDb->data_seek($result_rol, 0);
 }
 
-$member = new TableMembers($gDb);
+$user = new User($gDb, $gProfileFields, $getUserId);
 
 // Ergebnisse durchlaufen und Datenbankupdate durchfuehren
 while($row = $gDb->fetch_array($result_rol))
@@ -178,7 +179,7 @@ while($row = $gDb->fetch_array($result_rol))
         // update role membership
         if($roleAssign == 1)
         {
-            $member->startMembership($row['rol_id'], $getUserId, $roleLeader);
+			$user->setRoleMembership($row['rol_id'], DATE_NOW, '9999-12-31', $roleLeader);
             $count_assigned++;
 
             // find the parent roles and assign user to parent roles
@@ -193,7 +194,9 @@ while($row = $gDb->fetch_array($result_rol))
         }
         else
         {
-            $member->stopMembership($row['rol_id'], $getUserId);
+			// subtract one day, so that user leaves role immediately
+            $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));
+            $user->setRoleMembership($row['rol_id'], $row['mem_begin'], $newEndDate, $roleLeader);
         }
     }
 }
@@ -204,7 +207,7 @@ if(count($parentRoles) > 0 )
 {
     foreach($parentRoles as $actRole)
     {
-        $member->startMembership($actRole, $getUserId);
+		$user->setRoleMembership($actRole, DATE_NOW, '9999-12-31');
     }
 }
 

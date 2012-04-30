@@ -356,8 +356,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 		if(isset($_POST['date_assign_yourself']) && $_POST['date_assign_yourself'] == 1)
 		{
 			//Termin-Ersteller als Member und Leader eintragen
-			$member = new TableMembers($gDb);
-			$member->startMembership($role->getValue('rol_id'), $_SESSION['gCurrentUser']->getValue('usr_id'), 1);
+			$gCurrentUser->setRoleMembership($role->getValue('rol_id'), DATE_NOW, '9999-12-31', 1);
 		}
     }
     elseif($_POST['date_login'] == 0 && $date->getValue('dat_rol_id') > 0)
@@ -391,7 +390,7 @@ elseif($getMode == 2)  // Termin loeschen
 elseif($getMode == 3)  // Benutzer zum Termin anmelden
 {
     $member = new TableMembers($gDb);
-    $member->startMembership($date->getValue('dat_rol_id'),$gCurrentUser->getValue('usr_id'));
+	$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));

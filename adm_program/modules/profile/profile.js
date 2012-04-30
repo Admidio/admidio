@@ -10,6 +10,7 @@
 function profileJSClass()
 {
 	this.formerRoleCount 			= 0;
+	this.futureRoleCount 			= 0;
 	this.usr_id 					= 0;
 	this.deleteRole_ConfirmText		= "";
 	this.deleteFRole_ConfirmText 	= "";
@@ -28,7 +29,7 @@ function profileJSClass()
 	{
 		$.ajax({
 			type: "GET",
-			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=0&usr_id=" + this.usr_id,
+			url: gRootPath + "/adm_program/modules/profile/profile_function.php?mode=4&user_id=" + this.usr_id,
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_roles_box_body").html(responseText);
@@ -40,7 +41,7 @@ function profileJSClass()
 	{
 		$.ajax({
 			type: "GET",
-			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=2&usr_id=" + this.usr_id,
+			url: gRootPath + "/adm_program/modules/profile/profile_function.php?mode=6&user_id=" + this.usr_id,
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_future_roles_box_body").html(responseText);
@@ -52,7 +53,7 @@ function profileJSClass()
 	{
 		$.ajax({
 			type: "GET",
-			url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=1&usr_id=" + this.usr_id,
+			url: gRootPath + "/adm_program/modules/profile/profile_function.php?mode=5&user_id=" + this.usr_id,
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_former_roles_box_body").html(responseText);
@@ -92,26 +93,26 @@ function profileJSClass()
 	{
 		$("#anzeige:first-child").text(this.setBy_Text + ": ");
 	}
-	this.toggleDetailsOn = function(role_id)
+	this.toggleDetailsOn = function(member_id)
 	{
-		$("#mem_rol_" + role_id).css({"visibility":"visible","display":"block"});
+		$("#admMemberId_" + member_id).css({"visibility":"visible","display":"block"});
 	}
-	this.toggleDetailsOff = function(role_id)
+	this.toggleDetailsOff = function(member_id)
 	{
-		$("#mem_rol_" + role_id).css({"visibility":"hidden","display":"none"});
+		$("#admMemberId_" + member_id).css({"visibility":"hidden","display":"none"});
 	}
-	this.changeRoleDates = function(role_id)
+	this.changeRoleDates = function(member_id)
 	{
 		$.ajax({
 				type: "GET",
-				url: gRootPath + "/adm_program/modules/profile/roles_ajax.php?action=3&usr_id="+this.usr_id+"&mode=1&rol_id="+role_id+"&rol_begin="+document.getElementById("admRoleStart"+role_id).value+"&rol_end="+document.getElementById("admRoleEnd"+role_id).value,
+				url: gRootPath + "/adm_program/modules/profile/profile_function.php?mode=7&user_id="+this.usr_id+"&mem_id="+member_id+"&rol_begin="+document.getElementById("admMemberStartDate"+member_id).value+"&rol_end="+document.getElementById("admMemberEndDate"+member_id).value,
 				dataType: "html",
 				success: function(responseText, statusText){
 					if(responseText.match(/<SAVED\/>/gi))
 					{
 						responseText = responseText.replace(/<SAVED\/>/gi,"");
-						$("#mem_rol_" + role_id).text(responseText);
-						setTimeout('$("#mem_rol_" + role_id).fadeOut("slow")',500);
+						$("#admMemberId_" + member_id).text(responseText);
+						setTimeout('$("#admMemberId_" + member_id).fadeOut("slow")',500);
 						setTimeout('profileJS.reloadRoleMemberships();',500);
 						setTimeout('profileJS.reloadFormerRoleMemberships();',500);
 						setTimeout('profileJS.reloadFutureRoleMemberships();',500);
@@ -119,7 +120,7 @@ function profileJSClass()
 					else
 					{
 						profileJS.errorID++;
-						$("#mem_rol_" + role_id).append('<div id="errorAccured'+profileJS.errorID+'" style="border:1px solid red; padding:5px; margin:2px 0px 2px 0px; text-align:left;">'+ responseText +'</div>');
+						$("#admMemberId_" + member_id).append('<div id="errorAccured'+profileJS.errorID+'" style="border:1px solid red; padding:5px; margin:2px 0px 2px 0px; text-align:left;">'+ responseText +'</div>');
 						setTimeout('$("#errorAccured'+profileJS.errorID+'").fadeOut("slow")',4250);
 					}
 				},

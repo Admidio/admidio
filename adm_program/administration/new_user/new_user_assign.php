@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Zeigt eine Liste mit moeglichen Zuordnungen an
+ * Search for existing user names and show users with similar names
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,13 +8,12 @@
  *
  * Parameters:
  *
- * new_user_id: ID des Users, der angezeigt werden soll
+ * new_user_id : ID of user who should be assigned
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_members.php');
 
 // Initialize and check the parameters
 $getNewUserId = admFuncVariableIsValid($_GET, 'new_user_id', 'numeric', null, true);
@@ -31,11 +30,11 @@ if($gPreferences['registration_mode'] == 0)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// neuen User erst einmal als Objekt erzeugen
+// create user object for new user
 $new_user = new User($gDb, $gProfileFields, $getNewUserId);
 
-// sollen Benutzer mit aehnlichen Namen gefunden werden ?
-if($gPreferences['system_search_similar'] == 1)
+// search for users with similar names (SQL function SOUNDEX only available in MySQL)
+if($gPreferences['system_search_similar'] == 1 && $gDbType == 'mysql')
 {
     $sql_similar_name = 
     '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $new_user->getValue('LAST_NAME').'\'), 1, 4)
@@ -123,8 +122,7 @@ if($member_found == 0)
             {
                 $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
             }
-            $member = new TableMembers($gDb);
-            $member->startMembership($gPreferences['profile_default_role'], $new_user->getValue('usr_id'));
+			$new_user->setRoleMembership($gPreferences['profile_default_role']);
             
             $gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
             $gMessage->show($gL10n->get('SYS_SAVE'));

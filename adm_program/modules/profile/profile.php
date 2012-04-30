@@ -579,10 +579,10 @@ echo '
             {
                 $visible = ' style="display: none;" ';
             }
-            /*else
+            else
             {
                 echo '<script type="text/javascript">profileJS.futureRoleCount="'.$count_role.'";</script>';	
-            }*/
+            }
             echo '<div class="groupBox profileRolesBox" id="profile_future_roles_box" '.$visible.'>
                 <div class="groupBoxHeadline">'.$gL10n->get('PRO_FUTURE_ROLE_MEMBERSHIP').'&nbsp;</div>
                 <div id="profile_future_roles_box_body" class="groupBoxBody">
@@ -615,7 +615,6 @@ echo '
             echo '<div class="groupBox profileRolesBox" id="profile_former_roles_box" '.$visible.'>
 				<div class="groupBoxHeadline">'.$gL10n->get('PRO_FORMER_ROLE_MEMBERSHIP').'&nbsp;</div>
                 <div id="profile_former_roles_box_body" class="groupBoxBody">
-                    './*getFormerRoleMemberships($gDb,$gCurrentUser,$user,$result_role,$count_role,false,$gL10n).*/'
                     '.getRoleMemberships('former_role_list',$user,$result_role,$count_role,false).'
 				</div>
 			</div>';

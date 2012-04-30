@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Zeigt eine Liste mit moeglichen Zuordnungen an
+ * Search for existing user names and show users with similar names
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,8 +8,8 @@
  *
  * Parameters:
  *
- * lastname  : Der Nachname kann uebergeben und bei neuen Benutzern vorbelegt werden
- * firstname : Der Vorname kann uebergeben und bei neuen Benutzern vorbelegt werden
+ * lastname  : (Optional) Last name of new user (Script will search for existing names)
+ * firstname : (Optional) First name of new user (Script will search for existing names)
  *
  *****************************************************************************/
 
@@ -25,8 +25,8 @@ if (!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// sollen Benutzer mit aehnlichen Namen gefunden werden ?
-if($gPreferences['system_search_similar'] == 1)
+// search for users with similar names (SQL function SOUNDEX only available in MySQL)
+if($gPreferences['system_search_similar'] == 1 && $gDbType == 'mysql')
 {
     $sql_similar_name = 
     '(  (   SUBSTRING(SOUNDEX(last_name.usd_value),  1, 4) LIKE SUBSTRING(SOUNDEX(\''. $getLastname.'\'), 1, 4)
