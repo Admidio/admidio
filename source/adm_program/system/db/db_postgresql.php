@@ -156,10 +156,14 @@ class DBPostgreSQL extends DBCommon
     {
         global $gDebug;
 
-		if(strpos(trim(strtolower($sql)), 'create table') !== false)
+		if(strpos(strtolower($sql), 'create table') !== false
+		|| strpos(strtolower($sql), 'alter table') !== false)
 		{
-			// bei einem Create-Table-Statement ggf. vorhandene Tabellenoptionen von MySQL abgeschnitten werden
-			$sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
+			if(strpos(strtolower($sql), 'create table') !== false)
+			{
+				// bei einem Create-Table-Statement ggf. vorhandene Tabellenoptionen von MySQL abgeschnitten werden
+				$sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
+			}
 
 			// PostgreSQL kennt unsigned nicht
 			$sql = str_replace('unsigned', '', $sql);

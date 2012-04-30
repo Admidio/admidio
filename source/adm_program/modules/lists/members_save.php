@@ -73,16 +73,16 @@ if($role->getValue('rol_max_members') > 0)
     $result_mem_count = $gDb->query($sql);
     $mem_count = $gDb->fetch_array($result_mem_count);
 }
-//echo $membership.' - '.$leadership.' - '.$mem_count['mem_count'].' - '.$role->getValue('rol_max_members');exit();
+
 //Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
 if($leadership==1 || ($leadership==0 && $membership==1 && ($role->getValue('rol_max_members') > $mem_count['mem_count'] || $role->getValue('rol_max_members')==0)))
 {
-    $member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
+	$member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
     echo 'success';
 }
 elseif($leadership==0 && $membership==0)
 {
-    $member->stopMembership($role->getValue('rol_id'), $getUserId);
+	$member->stopMembership($role->getValue('rol_id'), $getUserId);
     echo 'success';
 }
 else

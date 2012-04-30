@@ -95,7 +95,7 @@ switch ($get_type)
         $text = 'PRO_WANT_DELETE_PHOTO';
         break;
     case 'pro_role':
-        $url = 'profile_function.php?mode=2&user_id='.$get_database_id_2.'&rol_id='.$get_database_id;
+        $url = 'profile_function.php?mode=2&mem_id='.$get_database_id;
         $callbackSuccess = 'if(profileJS) {
 						profileJS.formerRoleCount++;
 						profileJS.reloadFormerRoleMemberships();
@@ -103,7 +103,7 @@ switch ($get_type)
         $text = 'ROL_MEMBERSHIP_DEL';
         break;
     case 'pro_future':
-        $url = 'profile_function.php?mode=3&user_id='.$get_database_id_2.'&rol_id='.$get_database_id;
+        $url = 'profile_function.php?mode=3&mem_id='.$get_database_id;
         $callbackSuccess = 'if(profileJS) {
 						profileJS.futureRoleCount--;
 						if(profileJS.futureRoleCount == 0) {
@@ -113,7 +113,7 @@ switch ($get_type)
         $text = 'ROL_LINK_MEMBERSHIP_DEL';
         break;
     case 'pro_former':
-        $url = 'profile_function.php?mode=3&user_id='.$get_database_id_2.'&rol_id='.$get_database_id;
+        $url = 'profile_function.php?mode=3&mem_id='.$get_database_id;
         $callbackSuccess = 'if(profileJS) {
 						profileJS.formerRoleCount--;
 						if(profileJS.formerRoleCount == 0) {
@@ -153,12 +153,12 @@ function deleteEntry()
         {
             $.colorbox.close();
             $(entryDeleted).fadeOut("slow");
+			'.$callbackSuccess.'
         }
         else
         {
             $("#admMessageText").html("'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'<br /><br />" + data);
         }
-        '.$callbackSuccess.'
     });
 }
 //--></script>

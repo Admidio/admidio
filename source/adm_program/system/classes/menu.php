@@ -114,7 +114,7 @@ class Menu
 				          $this->items[$key]['id'].'"><dl>';					// Wraps each item
 				
 				$html .= '<dt><a href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'" alt="'.$this->items[$key]['text'].'"
-						  title="'.$this->items[$key]['text'].'"></a></dt>
+						  title="'.$this->items[$key]['text'].'" /></a></dt>
 						  <dd><span class="veryBigFontSize"><a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a></span>';
 						  
 				// adding submenus if any
@@ -140,7 +140,7 @@ class Menu
 						  $this->items[$key]['id'].'" class="menu">';			// Wraps each item
 				
 				$html .= '<a href="'.$this->items[$key]['link'].'"><img style="vertical-align: middle;" src="'.$this->items[$key]['icon'].'"
-						  alt="'.$this->items[$key]['text'].'" title="'.$this->items[$key]['text'].'"></a>
+						  alt="'.$this->items[$key]['text'].'" title="'.$this->items[$key]['text'].'" /></a>
 						  <a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a>';
 				
 				$html .= '</span>';												// End Wraps each item

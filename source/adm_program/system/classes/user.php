@@ -18,6 +18,9 @@
  *                        Berechtigung, ob der User die Liste einsehen darf
  *                      - aehnlich getProperty, allerdings suche ueber usf_id
  * getVCard()           - Es wird eine vCard des Users als String zurueckgegeben
+ * setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
+ *                      - set a role membership for the current user
+ *                        if memberships to this user and role exists within the period than merge them to one new membership
  * viewProfile          - Ueberprueft ob der User das Profil eines uebrgebenen
  *                        Users einsehen darf
  * viewRole             - Ueberprueft ob der User eine uebergebene Rolle(Liste)
@@ -422,6 +425,201 @@ class User extends TableUsers
 		$this->db->endTransaction();
     }
 
+	// edit an existing role membership for the current user
+	// if additional memberships to this user and role exists within the period 
+	// than merge them to the current membership
+	public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
+	{
+		require_once('../../system/classes/table_members.php');
+		$minStartDate = $startDate;
+		$maxEndDate   = $endDate;
+		
+		$member = new TableMembers($this->db, $memberId);
+		
+		if(strlen($startDate) == 0 || strlen($startDate) == 0)
+		{
+			return false;
+		}
+		$this->db->startTransaction();
+	
+		// search for membership with same role and user and overlapping dates
+		$sql = 'SELECT * FROM '.TBL_MEMBERS.' 
+		         WHERE mem_id    <> '.$memberId.'
+				   AND mem_rol_id = '.$member->getValue('mem_rol_id').'
+				   AND mem_usr_id = '.$this->getValue('usr_id').'
+				   AND mem_begin <= \''.$endDate.'\'
+				   AND mem_end   >= \''.$startDate.'\'
+				 ORDER BY mem_begin ASC ';
+		$this->db->query($sql);
+
+		if($this->db->num_rows() == 1)
+		{
+			// one record found than update this record
+			$row = $this->db->fetch_array();
+            $member->setArray($row);
+
+			// save new start date if an earlier date exists
+			if(strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
+			{
+				$minStartDate = $member->getValue('mem_begin', 'Y-m-d');
+			}
+
+			// save new end date if an later date exists
+			if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+			{
+				$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+			}
+		}
+		elseif($this->db->num_rows() > 1)
+		{
+			// several records found then read min and max date and delete all records
+			while($row = $this->db->fetch_array())
+			{
+				$member->clear();
+				$member->setArray($row);
+
+				// save new start date if an earlier date exists
+				if(strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
+				{
+					$minStartDate = $member->getValue('mem_begin', 'Y-m-d');
+				}
+
+				// save new end date if an later date exists
+				if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+				{
+					$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+				}
+				
+				// delete existing entry because a new overlapping entry will be created
+				$member->delete();
+			}
+			$member->clear();
+		}
+
+		if(strcmp($minStartDate, $maxEndDate) > 0)
+		{
+			// if start date is greater than end date than delete membership
+			if($member->getValue('mem_id') > 0)
+			{
+				$member->delete();
+			}
+		}
+		else
+		{
+			// save membership to database
+			$member->setValue('mem_begin', $minStartDate);
+			$member->setValue('mem_end', $maxEndDate);
+			if(strlen($leader) > 0)
+			{
+				$member->setValue('mem_leader', $leader);
+			}
+			$member->save();
+		}
+
+		$this->db->endTransaction();
+		return true;
+	}
+
+	// set a role membership for the current user
+	// if memberships to this user and role exists within the period than merge them to one new membership
+	public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
+	{
+		require_once('../../system/classes/table_members.php');
+		$minStartDate = $startDate;
+		$maxEndDate   = $endDate;
+		
+		$member = new TableMembers($this->db);
+		
+		if(strlen($startDate) == 0 || strlen($startDate) == 0)
+		{
+			return false;
+		}
+		$this->db->startTransaction();
+		
+		// subtract 1 day from start date so that we find memberships that ends yesterday
+		// these memberships can be continued with new date
+		$dtStartDate = new DateTimeExtended($startDate, 'Y-m-d', 'date');
+        $startDate = date('Y-m-d', $dtStartDate->getTimestamp() - (24 * 60 * 60));
+	
+		// search for membership with same role and user and overlapping dates
+		$sql = 'SELECT * FROM '.TBL_MEMBERS.' 
+		         WHERE mem_rol_id = '.$roleId.'
+				   AND mem_usr_id = '.$this->getValue('usr_id').'
+				   AND mem_begin <= \''.$endDate.'\'
+				   AND mem_end   >= \''.$startDate.'\'
+				 ORDER BY mem_begin ASC ';
+		$this->db->query($sql);
+
+		if($this->db->num_rows() == 1)
+		{
+			// one record found than update this record
+			$row = $this->db->fetch_array();
+            $member->setArray($row);
+
+			// save new start date if an earlier date exists
+			if(strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
+			{
+				$minStartDate = $member->getValue('mem_begin', 'Y-m-d');
+			}
+
+			// save new end date if an later date exists
+			if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+			{
+				$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+			}
+		}
+		elseif($this->db->num_rows() > 1)
+		{
+			// several records found then read min and max date and delete all records
+			while($row = $this->db->fetch_array())
+			{
+				$member->clear();
+				$member->setArray($row);
+
+				// save new start date if an earlier date exists
+				if(strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
+				{
+					$minStartDate = $member->getValue('mem_begin', 'Y-m-d');
+				}
+
+				// save new end date if an later date exists
+				if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+				{
+					$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+				}
+				
+				// delete existing entry because a new overlapping entry will be created
+				$member->delete();
+			}
+			$member->clear();
+		}
+
+		if(strcmp($minStartDate, $maxEndDate) > 0)
+		{
+			// if start date is greater than end date than delete membership
+			if($member->getValue('mem_id') > 0)
+			{
+				$member->delete();
+			}
+		}
+		else
+		{
+			// save membership to database
+			$member->setValue('mem_rol_id', $roleId);
+			$member->setValue('mem_usr_id', $this->getValue('usr_id'));
+			$member->setValue('mem_begin', $minStartDate);
+			$member->setValue('mem_end', $maxEndDate);
+			if(strlen($leader) > 0)
+			{
+				$member->setValue('mem_leader', $leader);
+			}
+			$member->save();
+		}
+
+		$this->db->endTransaction();
+		return true;
+	}
+	
     // interne Methode, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
     public function setValue($field_name, $field_value, $check_value = true)

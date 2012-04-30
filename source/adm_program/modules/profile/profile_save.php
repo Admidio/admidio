@@ -18,7 +18,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/system_mail.php');
-require_once('../../system/classes/table_members.php');
 
 // im ausgeloggten Zustand koennen nur Registrierungen gespeichert werden
 if($gValidLogin == false)
@@ -387,8 +386,8 @@ elseif($getNewUser == 3 || $getUserId == 0)
         {
             $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
         }
-        $member = new TableMembers($gDb);
-        $member->startMembership($gPreferences['profile_default_role'], $user->getValue('usr_id'));
+		// starts a membership for default role from now
+		$user->setRoleMembership($gPreferences['profile_default_role']);
         
         $gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
         $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
