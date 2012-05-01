@@ -8,11 +8,17 @@
  *
  *****************************************************************************/
 
- // create new indices
-//$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
-//$gDb->query($sql, false);
-$sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
-$gDb->query($sql, false);
+// create new indices
+if($gDbType == 'mysql')
+{ 
+	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
+	$gDb->query($sql, false);
+}
+else
+{
+	$sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
+	$gDb->query($sql, false);
+}
 
 $sql = 'create index IDX_MEM_ROL_USR_ID on '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id)';
 $gDb->query($sql);
