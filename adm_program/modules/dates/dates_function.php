@@ -348,7 +348,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $date->setValue('dat_rol_id', $role->getValue('rol_id'));
         $return_code = $date->save();
         if($return_code < 0)
-        {
+        { 
             $role->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -361,12 +361,11 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     }
     elseif($_POST['date_login'] == 0 && $date->getValue('dat_rol_id') > 0)
     {
-        // die Anmeldungsmoeglichkeit wurde wieder abgewaehlt -> Rolle loeschen
+    	// date participation was deselected -> delete flag in event and than delete role
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
-        $role->delete();
-        
         $date->setValue('dat_rol_id', '');
         $date->save();
+        $role->delete();
     }
 
     unset($_SESSION['dates_request']);
