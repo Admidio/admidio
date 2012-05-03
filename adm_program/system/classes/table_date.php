@@ -143,6 +143,9 @@ class TableDate extends TableAccess
         }
         $icalVEevent .= "END:VEVENT\n";
         
+        //ICAL Events dürfen kein Semikolon enthalten
+        $icalVEevent = str_replace(';', '.', $icalVEevent);
+        
         return $icalVEevent;
     }
     
