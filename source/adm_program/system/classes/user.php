@@ -31,6 +31,7 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_users.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_user_log.php');
 
 class User extends TableUsers
 {
@@ -38,7 +39,7 @@ class User extends TableUsers
 
     public $mProfileFieldsData; 		// object with current user field structure
     public $roles_rights = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
-    protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
+    protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur Ã¼ber getListViewRights()
     protected $role_mail_rights = array(); // Array ueber Mailrechte einzelner Rollen
     protected $rolesMembership  = array(); // Array with all roles who the user is assigned
     protected $rolesMembershipLeader = array(); // Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
@@ -628,6 +629,7 @@ class User extends TableUsers
         $return_code  = true;
         $update_field = false;
 
+        $old_field_value = $this->mProfileFieldsData->getValue($field_name);
         if(strpos($field_name, 'usr_') !== 0)
         {
             // Daten fuer User-Fields-Tabelle
@@ -652,7 +654,7 @@ class User extends TableUsers
 
             // nur Updaten, wenn sich auch der Wert geaendert hat
             if($update_field == true
-            && $field_value  != $this->mProfileFieldsData->getValue($field_name))
+            && $field_value  != $old_field_value)
             {
 				$return_code = $this->mProfileFieldsData->setValue($field_name, $field_value);
             }
@@ -660,6 +662,23 @@ class User extends TableUsers
         else
         {
             $return_code = parent::setValue($field_name, $field_value);
+        }
+
+        $new_field_value = $this->mProfileFieldsData->getValue($field_name);
+        /* 
+         * Nicht alle Aenderungen werden geloggt. Ausnahmen:
+         *  usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
+         *  Felder, die mit usr_ beginnen, werden nicht geloggt
+         *  Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt 
+         */
+        if($this->getValue('usr_id') != 0 && strpos($field_name,"usr_") === false && $new_field_value != $old_field_value)
+        {
+           $logEntry = new TableUserLog($this->db);
+           $logEntry->newLogEntry($this->getValue('usr_id'),
+               $this->mProfileFieldsData->getProperty($field_name, 'usf_id'),
+               $old_field_value,
+               $new_field_value,
+               ""); 
         }
         return $return_code;
     }

@@ -14,7 +14,7 @@ if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
 }
 
 // !!! Please do not edit these version numbers !!!
-define('ADMIDIO_VERSION', '2.4.0');
+define('ADMIDIO_VERSION', '2.4.1');
 define('BETA_VERSION', '1');
 define('MIN_PHP_VERSION', '5.2.0');
 
@@ -72,4 +72,5 @@ define('TBL_TEXTS',             $g_tbl_praefix. '_texts');
 define('TBL_USERS',             $g_tbl_praefix. '_users');
 define('TBL_USER_DATA',         $g_tbl_praefix. '_user_data');
 define('TBL_USER_FIELDS',       $g_tbl_praefix. '_user_fields');
+define('TBL_USER_LOG',          $g_tbl_praefix. '_user_log');
 ?>
