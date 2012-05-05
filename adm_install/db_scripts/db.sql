@@ -583,6 +583,24 @@ collate = utf8_unicode_ci;
 
 create unique index IDX_USD_USR_USF_ID on %PREFIX%_user_data (usd_usr_id, usd_usf_id);
 
+/*==============================================================*/
+/* Table: adm_user_log                                             */
+/*==============================================================*/
+CREATE TABLE %PREFIX%_user_log (
+  usl_id                INTEGER                  NOT NULL AUTO_INCREMENT ,
+  usl_usr_id            INTEGER         unsigned NOT NULL ,
+  usl_usf_id            INTEGER         unsigned NOT NULL ,
+  usl_value_old         VARCHAR(255)             NULL ,
+  usl_value_new         VARCHAR(255)             NULL ,
+  usl_usr_id_create     INTEGER         unsigned NOT NULL ,
+  usl_timestamp_create  TIMESTAMP                NOT NULL DEFAULT CURRENT_TIMESTAMP ,
+  usl_comment           VARCHAR(255) NULL ,
+  PRIMARY KEY (usl_id) 
+)
+ENGINE = InnoDB
+auto_increment = 1
+DEFAULT CHARACTER SET = utf8
+COLLATE = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Table: adm_users                                             */
@@ -768,3 +786,26 @@ alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CREATE foreign key
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+alter table %PREFIX%_user_log add
+  CONSTRAINT %PREFIX%_FK_USER_LOG_1
+    FOREIGN KEY (usl_usr_id )
+    REFERENCES %PREFIX%_users (usr_id )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+
+alter table %PREFIX%_user_log add
+  CONSTRAINT %PREFIX%_FK_USER_LOG_2
+    FOREIGN KEY (usl_usr_id_create )
+    REFERENCES %PREFIX%_users (usr_id )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
+alter table %PREFIX%_user_log add
+  CONSTRAINT %PREFIX%_FK_USER_LOG_3
+    FOREIGN KEY (usl_usf_id )
+    REFERENCES %PREFIX%_user_fields (usf_id )
+    ON DELETE RESTRICT
+    ON UPDATE RESTRICT;
+
