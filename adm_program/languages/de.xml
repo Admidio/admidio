@@ -17,6 +17,11 @@
 	<text id="SYS_FROM" development="new" translation="todo">ab %VAR1%</text>
     <text id="SYS_LEADER_DESCRIPTION" development="deleted" translation="todo">Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen haben Leiter mehr Rechte als ein normales Rollenmitglied.\n\nLeiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.</text>
 </version>
+<version id="2.3.4" translator="Markus Faßbender">
+    <text id="MAI_COUNT_BCC_DESC" development="changed" translation="todo">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann vom Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Standard: 50)</text>
+	<text id="MAI_SENDER_INTO_TO" development="new" translation="todo">Absender als Adressat</text>
+	<text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld bleibt dann in der Regel leer. Manche Provider erlauben keine E-Mails ohne ein gefülltes Empfängerfeld (TO) oder stufen solche E-Mails als Spam ein. Mit dieser Einstellung wird das Empfängerfeld (TO) mit der Absenderadresse gefüllt und alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Aktiviert)</text>
+</version>
 <version id="2.3.1" translator="Markus Faßbender">
 	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="todo">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wähle bitte einen anderen Namen aus.</text>
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="todo">Zu der E-Mail-Adresse %VAR1_BOLD% konnte im System keine gültige Anmeldung gefunden werden!</text>
@@ -566,7 +571,6 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="todo">Anzahl der BCC Empfänger</text>
-    <text id="MAI_COUNT_BCC_DESC" development="new" translation="todo">Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>
     <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>

@@ -159,7 +159,16 @@ class ProfileFields
 			// if field has url then create a link
 			if(strlen($this->mProfileFields[$fieldNameIntern]->getValue('usf_url')))
 			{
-				$htmlValue = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$htmlValue.'</a>';
+				if($fieldNameIntern == 'FACEBOOK' && is_numeric($value))
+				{
+					// facebook has two different profile urls (id and facebook name), 
+					// we could only store one way in database (facebook name) and the other (id) is defined here :)
+					$htmlValue = '<a href="http://www.facebook.com/profile.php?id='.$value.'" target="_blank">'.$htmlValue.'</a>';
+				}
+				else
+				{
+					$htmlValue = '<a href="'.$this->mProfileFields[$fieldNameIntern]->getValue('usf_url').'" target="_blank">'.$htmlValue.'</a>';
+				}
 				
 				// replace a variable in url with user value
 				if(strpos($this->mProfileFields[$fieldNameIntern]->getValue('usf_url'), '%user_content%') !== false)

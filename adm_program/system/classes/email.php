@@ -580,14 +580,22 @@ public function sendEmail()
     {
         foreach ($this->bccArray as $key => $value)
         {
-            if (!isset($this->headerOptions['Bcc']))
-            {
-                $this->headerOptions['Bcc'] = $value;
-            }
-            else
-            {
-            $this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ', '. $value;
-            }
+			if($gPreferences['mail_bcc_count'] == 1)
+			{
+				// if BCC count is set to 1 than send as TO mail
+				$this->headerOptions['To'] = $value;
+			}
+			else
+			{
+				if (!isset($this->headerOptions['Bcc']))
+				{
+					$this->headerOptions['Bcc'] = $value;
+				}
+				else
+				{
+					$this->headerOptions['Bcc'] = $this->headerOptions['Bcc']. ', '. $value;
+				}
+			}
 
             $bccCounter++;
 

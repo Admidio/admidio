@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
+<version id="2.3.4" translator="Markus Faßbender">
+    <text id="MAI_COUNT_BCC_DESC" development="changed" translation="todo">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann vom Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Standard: 50)</text>
+	<text id="MAI_SENDER_INTO_TO" development="new" translation="todo">Absender als Adressat</text>
+	<text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld bleibt dann in der Regel leer. Manche Provider erlauben keine E-Mails ohne ein gefülltes Empfängerfeld (TO) oder stufen solche E-Mails als Spam ein. Mit dieser Einstellung wird das Empfängerfeld (TO) mit der Absenderadresse gefüllt und alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Aktiviert)</text>
+</version>
 <version id="2.3.1" translator="Markus Faßbender">
 	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="todo">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wählen Sie bitte einen anderen Namen aus.</text>
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="todo">Zu der E-Mail-Adresse %VAR1_BOLD% konnte im System keine gültige Anmeldung gefunden werden!</text>
     <text id="SYS_LOSTPW_SEVERAL_EMAIL" development="new" translation="todo">Die E-Mail-Adresse %VAR1_BOLD% wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</text>
 </version>
-<version id="2.3.0">
+<version id="2.3.0" translator="Markus Faßbender">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Soll die Kategorie %VAR1_BOLD% wirklich gelöscht werden?\n\nDiese Kategorie besitzt %VAR2% abhängige Einträge, die ebenfalls gelöscht werden.</text>    
     <text id="DAT_ENABLE_ICAL" development="new" translation="todo">iCal-Funktion aktivieren</text>
@@ -80,7 +85,7 @@
     <text id="UPD_CURRENT_VERSION" development="changed" translation="todo">Installiert</text>  
     <text id="UPD_STABLE_VERSION" development="changed" translation="todo">Verfügbar</text>
 </version>
-<version id="2.2.6">
+<version id="2.2.6" translator="Markus Faßbender">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="todo">Neueste Ankündigungen der Organisation %VAR1%</text>
     <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="todo">Aktuelle Termine der Organisation %VAR1%</text>
     <text id="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA" development="new" translation="todo">Neueste Gästebucheinträge der Organisation %VAR1%</text>
@@ -125,7 +130,7 @@
     <text id="SYS_SUN" development="new" translation="todo" description="Abbr. for Monday">So</text>
     <text id="SYS_TODAY" development="new" translation="todo">Heute</text>
 </version>
-<version id="2.2.0">
+<version id="2.2.0" translator="Jochen Erkens">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Ankündigung</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen</text>
@@ -550,7 +555,6 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="todo">Bitte wählen Sie eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="todo">Anzahl der BCC Empfänger</text>
-    <text id="MAI_COUNT_BCC_DESC" development="new" translation="todo">Hier kann eingestellt werden, wieviele max. BCC Empfänger pro Mail angehängt werden. (Standard: 50)</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="todo">%VAR1% hat an die Rolle %VAR4% von %VAR2% folgende E-Mail geschickt:\nEine Antwort können Sie an %VAR3% schicken.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="todo">%VAR1% hat Ihnen von %VAR2% folgende E-Mail geschickt:\nEine Antwort können Sie an %VAR3% schicken.</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>

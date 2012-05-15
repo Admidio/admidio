@@ -1222,6 +1222,21 @@ echo '
                     <li class="smallFontSize">'.$gL10n->get('MAI_COUNT_BCC_DESC').'</li>
                     <li>
                         <dl>
+                            <dt><label for="mail_sender_into_to">'.$gL10n->get('MAI_SENDER_INTO_TO').':</label>
+                            </dt>
+                            <dd>
+                                <input type="checkbox" id="mail_sender_into_to" name="mail_sender_into_to" ';
+                                if(isset($form_values['mail_sender_into_to']) && $form_values['mail_sender_into_to'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_INTO_TO_DESC').'</li>
+                    <li>
+                        <dl>
                             <dt><label for="enable_mail_captcha">'.$gL10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_mail_captcha" name="enable_mail_captcha" ';
