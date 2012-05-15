@@ -481,7 +481,7 @@ echo '
                     <li class="smallFontSize">'.$gL10n->get('ORG_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
                     <li>
                         <dl>
-                            <dt><label>'.$gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES').':</label></dt>
+                            <dt><label for="enable_email_notification">'.$gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="enable_email_notification" name="enable_email_notification" ';
                                 if(isset($form_values['enable_email_notification']) && $form_values['enable_email_notification'] == 1)

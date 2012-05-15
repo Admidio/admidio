@@ -283,8 +283,8 @@ else
     {
 		if($gPreferences['mail_sender_into_to'] == 1)
 		{
-			// always fill recepient if preference is set to prevent problems with provider
-			$email->addRecepient($_POST['mailfrom'],$_POST['name']);
+			// always fill recipient if preference is set to prevent problems with provider
+			$email->addRecipient($_POST['mailfrom'],$_POST['name']);
 		}
 		
         // all role members will be attached as BCC

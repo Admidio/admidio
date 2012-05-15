@@ -583,7 +583,7 @@ public function sendEmail()
 			if($gPreferences['mail_bcc_count'] == 1)
 			{
 				// if BCC count is set to 1 than send as TO mail
-				$this->headerOptions['To'] = $value;
+				$recipient = $value;
 			}
 			else
 			{
