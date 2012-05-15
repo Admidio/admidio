@@ -125,15 +125,24 @@ foreach($gProfileFields->mProfileFields as $field)
 				if(strValidCharacters($_POST[$post_id], 'url')
     			&& strpos($_POST[$post_id], '/') !== false)
 				{
-					if(strrpos($_POST[$post_id], '/posts') > 0)
+					if(strrpos($_POST[$post_id], '/profile.php?id=') > 0)
 					{
-    					$_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '/posts'));
-    				}
-					$_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
-					if(strrpos($_POST[$post_id], '?') > 0)
+						// extract facebook id (not facebook unique name) from url
+						$_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/profile.php?id=') + 16);
+					}
+					else
 					{
-					   $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
-				    }
+						if(strrpos($_POST[$post_id], '/posts') > 0)
+						{
+							$_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '/posts'));
+						}
+						
+						$_POST[$post_id] = substr($_POST[$post_id], strrpos($_POST[$post_id], '/') + 1);
+						if(strrpos($_POST[$post_id], '?') > 0)
+						{
+						   $_POST[$post_id] = substr($_POST[$post_id], 0, strrpos($_POST[$post_id], '?'));
+						}
+					}
 				}
 			}
 

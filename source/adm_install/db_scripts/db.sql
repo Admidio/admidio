@@ -328,6 +328,10 @@ create table %PREFIX%_members
    mem_begin                      date          not null,
    mem_end                        date          not null default '9999-12-31',
    mem_leader                     boolean       not null default '0',
+   mem_usr_id_create              integer       unsigned,
+   mem_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
+   mem_usr_id_change              integer       unsigned,
+   mem_timestamp_change           timestamp 	null default null,
    primary key (mem_id)
 )
 engine = InnoDB
@@ -725,6 +729,10 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_ROL foreign key (mem
       references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR foreign key (mem_usr_id)
       references %PREFIX%_users (usr_id) on delete restrict on update restrict;
+alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CREATE foreign key (mem_usr_id_create)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
+alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign key (mem_usr_id_change)
+      references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
 alter table %PREFIX%_organizations add constraint %PREFIX%_FK_ORG_ORG_PARENT foreign key (org_org_id_parent)
       references %PREFIX%_organizations (org_id) on delete set null on update restrict;

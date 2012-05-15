@@ -281,7 +281,13 @@ else
 
     if($gDb->num_rows($result) > 0)
     {
-        // alle Mitglieder als BCC an die Mail haengen
+		if($gPreferences['mail_sender_into_to'] == 1)
+		{
+			// always fill recepient if preference is set to prevent problems with provider
+			$email->addRecepient($_POST['mailfrom'],$_POST['name']);
+		}
+		
+        // all role members will be attached as BCC
         while ($row = $gDb->fetch_object($result))
         {
             $email->addBlindCopy($row->email, $row->first_name.' '.$row->last_name);

@@ -1,10 +1,10 @@
 <?php
 /******************************************************************************
- * Systemeinstellungen fuer eine Organisation
+ * Systempreferences for an organization
  *
- * WICHTIG: Sollen neue Einstellungen bei einem Update andere Werte erhalten,
- *          so muessen diese im Updatescript fuer jede Organisation
- *          eingetragen werden !!!
+ * IMPORTANT: If preferences should get other values with an update,
+ *            then you must set these values for every organization
+ *            in the update scripts
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -31,12 +31,12 @@ $orga_preferences = array(
     'system_search_similar'         => '1',
     'system_time'                   => 'H:i',
 
-    // Registrierung
+    // Registration
     'registration_mode'              => '1',
     'enable_registration_captcha'    => '1',
     'enable_registration_admin_mail' => '1',
 
-    // Ankuendigungen
+    // Announcements
     'enable_announcements_module' => '1',
     'announcements_per_page'      => '10',
 
@@ -44,7 +44,7 @@ $orga_preferences = array(
     'enable_download_module' => '1',
     'max_file_upload_size'   => '3072',
 
-    // Fotomodul
+    // Photos
     'enable_photo_module'   => '1',
     'photo_save_scale'      => '640',
     'photo_thumbs_column'   => '3',
@@ -72,7 +72,7 @@ $orga_preferences = array(
     'forum_link_intern'     => '1',
     'forum_width'           => '570',
 
-    // Gaestebuch
+    // Guestbook
     'enable_guestbook_module'           => '1',
     'guestbook_entries_per_page'        => '10',
     'enable_guestbook_captcha'          => '1',
@@ -81,26 +81,27 @@ $orga_preferences = array(
     'enable_intial_comments_loading'    => '0',
     'enable_guestbook_moderation'       => '0',
 
-    // Listen
+    // Lists
     'lists_roles_per_page'   => '10',
     'lists_members_per_page' => '20',
     'lists_hide_overview_details' => '0',
 
-    // Mailmodul
-    'enable_mail_module'           => '1',
-    'enable_mail_captcha'          => '1',
-    'max_email_attachment_size'    => '1024',
-	'mail_bcc_count'			   => '50',
-	'mail_character_encoding'      => 'utf-8',
+    // Mail
+    'enable_mail_module'         => '1',
+    'enable_mail_captcha'        => '1',
+    'max_email_attachment_size'  => '1024',
+	'mail_bcc_count'			 => '50',
+	'mail_character_encoding'    => 'utf-8',
 	'mail_html_registered_users' => '1',
-    'mail_sendmail_address'        => '',
+	'mail_sender_into_to'		 => '1',
+    'mail_sendmail_address'      => '',
 
-    // Systemmail
+    // Systemmails
     'enable_system_mails'       => '1',
     'email_administrator'       => 'webmaster@'. $_SERVER['HTTP_HOST'],
 	'enable_email_notification'	=> '0',
 
-    // Grußkartenmodul
+    // E-Cards
     'enable_ecard_module'           => '1',
     'enable_ecard_cc_recipients'    => '1',
     'ecard_view_width'              => '250',
@@ -110,7 +111,7 @@ $orga_preferences = array(
     'ecard_cc_recipients'           => '5',
     'ecard_template'                => 'postcard.tpl',
 
-    // Profil
+    // Profile
     'default_country'           => 'DEU',
     'profile_show_map_link'     => '1',
     'profile_show_roles'        => '1',
@@ -119,7 +120,7 @@ $orga_preferences = array(
     'profile_photo_storage'		=> '0',
     'profile_default_role'      => '0',
 
-    // Termine
+    // Events
     'enable_dates_module'        => '1',
     'dates_per_page'             => '10',
     'dates_show_map_link'        => '1',
