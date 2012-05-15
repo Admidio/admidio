@@ -304,11 +304,13 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 			$message_part2 = str_replace("<br />","\n", $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')));
 			$message_part3 = str_replace("<br />","\n", $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date('d.m.Y H:m', time())));
 
-			$sender_name = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+			$sender_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+			$sender_email = $gCurrentUser->getValue('EMAIL');
+			
 			if(strlen($gCurrentUser->getValue('EMAIL')) == 0)
 			{
 				$sender_email = $gPreferences['email_administrator'];
-				$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
+				$sender_name  = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
 			}
 			admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ': '.$gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message_part1.$message_part2.$message_part3, $sender_name, $sender_email);
 		}

@@ -93,11 +93,13 @@ if($getMode == 1)
 		if($gPreferences['enable_email_notification'] == 1 && $getAnnId == 0)
 		{
 			$message = str_replace("<br />","\n", $gL10n->get('ANN_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['ann_headline'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date("d.m.Y H:m", time())));
-			$sender_name = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+			$sender_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+            $sender_email = $gCurrentUser->getValue('EMAIL');
+            
 			if(strlen($gCurrentUser->getValue('EMAIL')) == 0)
 			{
 				$sender_email = $gPreferences['email_administrator'];
-				$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
+				$sender_name  = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
 			}
 			admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('ANN_EMAIL_NOTIFICATION_TITLE'), $message, $sender_name, $sender_email);
 		}

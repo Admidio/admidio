@@ -142,11 +142,13 @@ if ($getMode == 1)
 		// Benachrichtigungs-Email für neue Einträge
 		if($gPreferences['enable_email_notification'] == 1)
 		{
-			$sender_name = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+			$sender_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+			$sender_email = $gCurrentUser->getValue('EMAIL');
+
 			if(strlen($gCurrentUser->getValue('EMAIL')) == 0)
 			{
 				$sender_email = $gPreferences['email_administrator'];
-				$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
+				$sender_name  = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
 			}
 			admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $file_name. ' ('.$file_description.')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $sender_name, $sender_email);
 		}

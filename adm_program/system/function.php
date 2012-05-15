@@ -294,19 +294,21 @@ function admFuncProcessableImageSize()
 }
 
 // Funktion zur Versendung von Benachrichtigungs-Emails (bei neuen Einträgen)
-function admFuncEmailNotification($receiptian, $reference, $message, $sender_name, $sender_mail)
+function admFuncEmailNotification($recipient, $reference, $message, $senderName, $senderEmail)
 {
-	//Konfiguration Mail
-	$empfaenger = $receiptian;
-	$betreff = utf8_decode($reference);
-	$nachricht = utf8_decode($message);
-	$absender = utf8_decode($sender_name);
-	$absendermail = $sender_mail;
+    global $gPreferences;
+    
+	// if mail should be send in iso-8859-1 then convert the content from utf8 to iso
+	if($gPreferences['mail_character_encoding'] == 'iso-8859-1')
+	{
+	   $reference  = utf8_decode($reference);
+	   $message    = utf8_decode($message);
+	   $senderName = utf8_decode($senderName);
+    }
 
-	mail($empfaenger, $betreff, $nachricht, 'From: '.$absender.' <'.$absendermail.'>');
+	mail($recipient, $reference, $message, 'From: '.$senderName.' <'.$senderEmail.'>');
 	//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
 }
-
 // checks if an array entry exists and has the expected datatype, if not show error
 // documentation: http://www.admidio.org/dokuwiki/doku.php?id=de:entwickler:uebergabevariablen_pruefen
 function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
