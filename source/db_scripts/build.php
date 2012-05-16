@@ -119,6 +119,15 @@ echo 'Folder <strong>adm_my_files</strong> was successfully copied.<br />';
 $db = Database::createDatabaseObject($gDbType);
 $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
+
+if($gDbType == 'mysql')
+{
+    // disable foreign key checks for mysql, so tables can easily deleted
+    $sql = 'SET foreign_key_checks = 0 ';
+    $db->query($sql);
+}
+
+
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
 			or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_install/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
@@ -190,6 +199,13 @@ if($gDbType == 'postgresql')
 $sql = 'UPDATE '.$g_tbl_praefix.'_preferences SET prf_value = \''.$getLanguage.'\'
          WHERE prf_name   = \'system_language\' ';
 $db->query($sql);
+
+if($gDbType == 'mysql')
+{
+    // activate foreign key checks, so database is consistant
+    $sql = 'SET foreign_key_checks = 1 ';
+    $db->query($sql);
+}
 
 echo 'Installation successful !<br />';
 
