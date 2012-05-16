@@ -12,7 +12,6 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CREATE foreign k
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign key (mem_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
-ALTER TABLE %PREFIX%_members ADD COLUMN mem_timestamp_change timestamp null default null;
 
 -- -----------------------------------------------------
 -- Table %PREFIX%_user_log

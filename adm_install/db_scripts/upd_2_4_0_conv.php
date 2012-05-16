@@ -8,7 +8,14 @@
  *
  *****************************************************************************/
 
-// create new indices
+// drop foreign keys to delete index
+$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_ROL';
+$gDb->query($sql, false);
+$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_USR';
+$gDb->query($sql, false);
+
+
+// delete old index
 if($gDbType == 'mysql')
 { 
 	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
@@ -19,6 +26,14 @@ else
 	$sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
 	$gDb->query($sql, false);
 }
+
+// create foreign keys and new index
+$sql = 'alter table '.$g_tbl_praefix.'_members add constraint '.$g_tbl_praefix.'_FK_MEM_ROL foreign key (mem_rol_id)
+      references '.$g_tbl_praefix.'_roles (rol_id) on delete restrict on update restrict';
+$gDb->query($sql, false);
+$sql = 'alter table '.$g_tbl_praefix.'_members add constraint '.$g_tbl_praefix.'_FK_MEM_USR foreign key (mem_usr_id)
+      references '.$g_tbl_praefix.'_users (usr_id) on delete restrict on update restrict';
+$gDb->query($sql, false);
 
 $sql = 'create index IDX_MEM_ROL_USR_ID on '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id)';
 $gDb->query($sql);

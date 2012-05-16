@@ -175,7 +175,7 @@ elseif($req_mode == 2)
 
 	if($gDbType == 'mysql')
 	{
-	    // Pruefungen auf Referenzen in anderen Tabellen beim Update ausschalten
+        // disable foreign key checks for mysql, so tables can easily deleted
 	    $sql = 'SET foreign_key_checks = 0 ';
 	    $gDb->query($sql);
 	}
@@ -248,7 +248,7 @@ elseif($req_mode == 2)
 
 	if($gDbType == 'mysql')
 	{
-	    // Pruefungen auf Referenzen in anderen Tabellen wieder aktivieren
+        // activate foreign key checks, so database is consistant
 	    $sql = 'SET foreign_key_checks = 1 ';
 	    $gDb->query($sql);
 	}
