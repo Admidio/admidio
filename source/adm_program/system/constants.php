@@ -14,7 +14,7 @@ if ('constants.php' == basename($_SERVER['SCRIPT_FILENAME']))
 }
 
 // !!! Please do not edit these version numbers !!!
-define('ADMIDIO_VERSION', '2.4.1');
+define('ADMIDIO_VERSION', '2.4.0');
 define('BETA_VERSION', '1');
 define('MIN_PHP_VERSION', '5.2.0');
 
