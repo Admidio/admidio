@@ -400,11 +400,11 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
         //ical Download
         if($gPreferences['enable_dates_ical'] == 1)
         {
-            $topNavigation .= '<li class="iconTextLink">
+            $topNavigation .= '<li><span class="iconTextLink">
                 <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId.'"><img
                     src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"/></a>
                 <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
-            </li>';
+            </span></li>';
         }
     }
     
