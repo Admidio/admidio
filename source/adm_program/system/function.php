@@ -309,19 +309,39 @@ function admFuncEmailNotification($recipient, $reference, $message, $senderName,
 	mail($recipient, $reference, $message, 'From: '.$senderName.' <'.$senderEmail.'>');
 	//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
 }
-// checks if an array entry exists and has the expected datatype, if not show error
-// documentation: http://www.admidio.org/dokuwiki/doku.php?id=de:entwickler:uebergabevariablen_pruefen
-function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
+/// Verify the content of an array element if it's the expected datatype
+/** The function is designed to check the content of @b $_GET and @b $_POST elements and should be used at the beginning of a script.
+ *  But the function can also be used with every array and their elements. You can set several flags (like required value, datatype …) 
+ *  that should be checked.
+ *  @param $array The array with the element that should be checked
+ *  @param $variableName Name of the array element that should be checked
+ *  @param $datatype The datatype like @b string, @b numeric, @b boolean or @b file that is expected and which will be checked
+ *  @param $defaultValue A value that will be set if the variable has no value
+ *  @param $requireValue If set to @b true than a value is required otherwise the function returns an error
+ *  @param $validValues An array with all values that the variable could have. If another value is found than the function returns an error
+ *  @param $directOutput If set to @b true the function returns only the error string, if set to false a html message with the error will be returned
+ *  @return Returns the value of the element or the error message if a test failed 
+ *  @par Examples
+ *  @code   // numeric value that would get a default value 0 if not set
+ *  $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', 0);
+ *
+ *  // string that will be initialized with text of id DAT_DATES
+ *  $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
+ *
+ *  // string initialized with actual and the only allowed values are actual and old
+ *  $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old')); @endcode
+ */
+function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
 {
 	global $gL10n, $gMessage;
 	
 	$errorMessage = '';
-	$type = admStrToLower($type);
+	$datatype = admStrToLower($datatype);
 
     // only check if array entry exists and has a value
 	if(isset($array[$variableName]) && strlen($array[$variableName]) > 0)
 	{
-		if($type == 'boolean')
+		if($datatype == 'boolean')
 		{
 			// Boolean darf nur 2 Werte haben
 			$validValues = array(0, 1);
@@ -337,7 +357,7 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
 			}
 		}
 
-        if($type == 'file')
+        if($datatype == 'file')
         {
             $returnCode = isValidFileName($array[$variableName]);
             
@@ -353,7 +373,7 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
                 }
             }
         }
-		elseif($type == 'numeric')
+		elseif($datatype == 'numeric')
 		{
 			// Numerische Datentypen duerfen nur Zahlen beinhalten
 			if (is_numeric($array[$variableName]) == false)
@@ -361,7 +381,7 @@ function admFuncVariableIsValid($array, $variableName, $type, $defaultValue = nu
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
 			}
 		}
-		elseif($type == 'string')
+		elseif($datatype == 'string')
 		{
 			$array[$variableName] = strStripTags($array[$variableName]);
 		}
