@@ -1,33 +1,19 @@
 <?php
-/******************************************************************************
- * Class reads the user fields structure and give access to it
+/*****************************************************************************/
+/** @class ProfileFields
+ *  @brief Reads the user fields structure out of database and give access to it
  *
- * Copyright    : (c) 2004 - 2012 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *  When an object is created than the actual profile fields structure will
+ *  be read. In addition to this structure you can read the user values for
+ *  all fields if you call @c readUserData . If you read field values than
+ *  you will get the formated output. It's also possible to set user data and
+ *  save this data to the database
+ */
+/*****************************************************************************
  *
- * getHtmlValue($fieldNameIntern, $value)
- *              - returns the value of that field in html format with consideration 
- *                of all layout parameters
- *              - 'value' must be commited so that layout is also possible for 
- *                values that aren't stored in database
- * getProperty($fieldNameIntern, $column, $format = '')
- *              - returns for a fieldname intern (usf_name_intern) the value of 
- *				  the column from table adm_user_fields
- * getPropertyById($field_id, $column, $format = '')
- *              - returns for field id (usf_id) the value of the column from table adm_user_fields
- * getValue($fieldNameIntern, $format = '')
- *              - returns the value of column usd_value for fieldname intern
- * noValueCheck()
- *              - will not check any value if method setValue is called
- * readUserData($userId)
- *              - build an array with the data of all user fields
- * readProfileFields()
- *              - build an array with the structure of all user fields
- * saveUserData($userId)
- *              - save data of every user field
- * setValue($fieldNameIntern, $fieldValue)
- *              - set value for column usd_value of field
+ *  Copyright    : (c) 2004 - 2012 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -35,16 +21,19 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_user_field.php');
 
 class ProfileFields
 {
-    public    $mProfileFields = array();// Array with all user fields objects
-    public    $mUserData = array();		// Array with all user data objects
+    public    $mProfileFields = array();///< Array with all user fields objects
+    public    $mUserData = array();		///< Array with all user data objects
 
-	protected $mOrganization;
-	protected $mUserId;					// UserId of the current user of this object
-	public 	  $mDb;						// db object must public because of session handling
-    protected $noValueCheck;    		// if true, than no value will be checked if method setValue is called
-    public    $columnsValueChanged;     // flag if a value of one field had changed
+	protected $mOrganization;			///< organization object
+	protected $mUserId;					///< UserId of the current user of this object
+	public 	  $mDb;						///< db object must public because of session handling
+    protected $noValueCheck;    		///< if true, than no value will be checked if method setValue is called
+    public    $columnsValueChanged;     ///< flag if a value of one field had changed
 
-    // Constructor
+	/** constructor that will initialize variables and read the profile field structure
+	 *  @param $db Database object (should be @b $gDb)
+	 *  @param $organization Organization object (should be @b $gOrganization)
+	 */
     public function __construct(&$db, &$organization)
     {
 		$this->mDb =& $db;
@@ -55,6 +44,9 @@ class ProfileFields
 		$this->columnsValueChanged = false;
     }
 	
+	/** user data of all profile fields will be initialized
+	 *  the fields array will not be renewed
+	 */
 	public function clearUserData()
 	{
 		$this->mUserData = array();
@@ -62,7 +54,11 @@ class ProfileFields
 		$this->columnsValueChanged = false;
 	}
 	
-	// returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
+	/** returns for a fieldname intern (usf_name_intern) the value of the column from table adm_user_fields
+	 *  @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+	 *  @param $column The column name of @b adm_user_field for which you want the value
+	 *  @param $format Optional the format (is neccessary for timestamps)
+	 */
 	public function getProperty($fieldNameIntern, $column, $format = '')
 	{
 		if(array_key_exists($fieldNameIntern, $this->mProfileFields))
@@ -78,12 +74,16 @@ class ProfileFields
         return null;
 	}
 	
-    // returns for field id (usf_id) the value of the column from table adm_user_fields
-    public function getPropertyById($field_id, $column, $format = '')
+	/** returns for field id (usf_id) the value of the column from table adm_user_fields
+	 *  @param $fieldId Expects the @b usf_id of table @b adm_user_fields
+	 *  @param $column The column name of @b adm_user_field for which you want the value
+	 *  @param $format Optional the format (is neccessary for timestamps)
+	 */
+    public function getPropertyById($fieldId, $column, $format = '')
     {
         foreach($this->mProfileFields as $field)
         {
-            if($field->getValue('usf_id') == $field_id)
+            if($field->getValue('usf_id') == $fieldId)
             {
                 return $field->getValue($column, $format);
             }
@@ -91,8 +91,11 @@ class ProfileFields
         return null;
     }
 
-	// returns the value of that field in html format with consideration of all layout parameters
-	// 'value' must be commited so that layout is also possible for values that aren't stored in database
+	/** returns the value of that field in html format with consideration of all layout parameters
+	 *  @b value must be commited so that layout is also possible for values that aren't stored in database
+	 *  @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+	 *  @param $value Value that should be formated
+	 */
 	public function getHtmlValue($fieldNameIntern, $value)
 	{
 		global $gPreferences, $g_root_path;
@@ -191,9 +194,13 @@ class ProfileFields
 		return $value;
 	}
 
-	// returns the user value for this field
-	// format = 'html' : returns the value in html-format if this is necessary for that field type
-	// format = 'intern' : returns the value that is stored in database with no format applied
+	/** returns the user value for this field @n
+	 *  format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
+	 *  format = 'html'  : returns the value in html-format if this is necessary for that field type @n
+	 *  format = 'intern' : returns the value that is stored in database with no format applied
+	 *  @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
+	 *  @param $format Returns the field value in a special format @b text, @b html, @b intern or datetime (detailed description in method description)
+	 */
 	public function getValue($fieldNameIntern, $format = '')
 	{
 		global $gL10n, $gPreferences;
@@ -210,7 +217,7 @@ class ProfileFields
 			{
 				if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($value) > 0)
 				{
-					if(strlen($format) == 0 || $format == 'html')
+					if($format == 'html')
 					{
 						$dateFormat = $gPreferences['system_date'];
 					}

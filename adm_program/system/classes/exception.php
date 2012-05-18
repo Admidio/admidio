@@ -1,19 +1,41 @@
 <?php
-/******************************************************************************
- * Admidio specific enhancements of the exception class
+/*****************************************************************************/
+/** @class AdmException
+ *  @brief Admidio specific enhancements of the exception class
  *
- * Copyright    : (c) 2004 - 2012 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *  This class extends the default PHP exception class with an Admidio specific
+ *  output. The exception get's a language string as parameter and returns a 
+ *  html message with the translated error if an exception is thrown
  *
- * The following functions are available:
+ * @section sec Example
+ * @code try
+ * {
+ *    if($bla == 1)
+ *    {
+ *        throw new AdmException(LST_NOT_VALID_DATE_FORMAT);
+ *    }
+ *    ..
  *
- * show() - show message window with translated message
+ * }
+ * catch(AdmException $e)
+ * {
+ *    $e->show();
+ * } @endcode
+ */
+/*****************************************************************************
+ *
+ *  Copyright    : (c) 2004 - 2012 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
 class AdmException extends Exception
 {
+	/** constructor that will @b rollback an open database translation
+	 *  @param $message Translation id that should be shown when exception is catched
+	 *  @param $code Optional code for PHP exception constructor
+	 */
     public function __construct($message, $code = 0) 
 	{
         global $gDb;
@@ -25,7 +47,7 @@ class AdmException extends Exception
     }
 
 
-    // show message window with translated message
+    /** show message window with translated message */
     public function show()
 	{
 		global $gMessage, $gL10n;
