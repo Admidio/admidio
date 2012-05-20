@@ -427,7 +427,6 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Quand l'option est activé, les membres authentifiés recevrons une image avec un capcha ou un calcule simple. Il est important de remplir le champs demandé afin d'envoyer le courriel. (Par defaut: oui)</text>
    	<text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Veuillez sélectionner un rôle en tant que récipiendaire du courriel !</text>
    	<text id="MAI_COUNT_BCC" development="new" translation="edited">Nombre si BCC récipiendaires</text>
-   	<text id="MAI_COUNT_BCC_DESC" development="new" translation="edited">Définir ici combien de BCC récipiendaires peuvent être ajouté. (Par défaut: 50)</text>
    	<text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="edited">%VAR1% a envoyé au rôle %VAR4% de %VAR2% message suivant:\nVeuillez répondre à %VAR3%.</text>
    	<text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% a envoyé de %VAR2% message suivant:\nVeuillez répondre à %VAR3%.</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="edited">Système de courriel des membres.</text>
