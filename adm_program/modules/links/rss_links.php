@@ -57,28 +57,31 @@ $sql = 'SELECT cat.*, lnk.*,
            AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE lnk_cat_id = cat_id
            AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-           AND cat_type = "LNK"
+           AND cat_type = \'LNK\'
          ORDER BY lnk_timestamp_create DESC';
 $result = $gDb->query($sql);
 
 
 // ab hier wird der RSS-Feed zusammengestellt
 
-// Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline, 
-		$gL10n->get('LNK_LINKS_FROM', $gCurrentOrganization->getValue('org_longname')));
+// create RSS feed object with channel information
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
+            $gCurrentOrganization->getValue('org_homepage'), 
+            $gL10n->get('LNK_LINKS_FROM', $gCurrentOrganization->getValue('org_longname')),
+            $gCurrentOrganization->getValue('org_longname'));
 $weblink = new TableWeblink($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $gDb->fetch_object($result))
+while ($row = $gDb->fetch_array($result))
 {
     // ausgelesene Linkdaten in Weblink-Objekt schieben
     $weblink->clear();
     $weblink->setArray($row);
 
     // Die Attribute fuer das Item zusammenstellen
-    $title = $weblink->getValue('lnk_name');
-    $link  = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
+    $title  = $weblink->getValue('lnk_name');
+    $link   = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
+    $author = $row['create_firstname']. ' '. $row['create_surname'];
     $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank"><b>'.$weblink->getValue('lnk_name').'</b></a>';
 
     // Beschreibung und Link zur Homepage ausgeben
@@ -86,18 +89,17 @@ while ($row = $gDb->fetch_object($result))
                    '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
 
     // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$gL10n->get('SYS_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $weblink->getValue('lnk_timestamp_create')). '</i>';
+    $description = $description. '<br /><br /><i>'.$gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $weblink->getValue('lnk_timestamp_create')). '</i>';
 
     if($weblink->getValue('lnk_usr_id_change') > 0)
     {
-        $description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $weblink->getValue('lnk_timestamp_change')). '</i>';
+        $description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $weblink->getValue('lnk_timestamp_change')). '</i>';
     }
 
     $pubDate = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
 
-
-    // Item hinzufuegen
-    $rss->addItem($title, $description, $pubDate, $link);
+    // add entry to RSS feed
+    $rss->addItem($title, $description, $link, $author, $pubDate);
 }
 
 

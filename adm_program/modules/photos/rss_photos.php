@@ -70,9 +70,11 @@ $photo_album = new TablePhotos($gDb);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
-// Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline, 
-		$gL10n->get('PHO_RECENT_ALBUMS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
+// create RSS feed object with channel information
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
+            $gCurrentOrganization->getValue('org_homepage'), 
+            $gL10n->get('PHO_RECENT_ALBUMS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
+            $gCurrentOrganization->getValue('org_longname'));
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $gDb->fetch_array($result))
@@ -102,10 +104,10 @@ while ($row = $gDb->fetch_array($result))
         //Elternveranst
         $pho_parent_id=$adm_photo_parent['pho_pho_id_parent'];
     }
-    $title = $gL10n->get('PHO_PHOTO_ALBUMS').$parents.' > '.$photo_album->getValue('pho_name');
 
-    //Link
-    $link  = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
+    $title  = $gL10n->get('PHO_PHOTO_ALBUMS').$parents.' > '.$photo_album->getValue('pho_name');
+    $link   = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
+    $author = $row['create_firstname']. ' '. $row['create_surname'];
 
     //Inhalt zusammensetzen
     $description = $gL10n->get('PHO_PHOTO_ALBUMS').$parents.' > '. $photo_album->getValue('pho_name');
@@ -148,8 +150,8 @@ while ($row = $gDb->fetch_array($result))
 
     $pubDate = date('r',strtotime($photo_album->getValue('pho_timestamp_create')));
 
-    // Item hinzufuegen
-    $rss->addItem($title, $description, $pubDate, $link);
+    // add entry to RSS feed
+    $rss->addItem($title, $description, $link, $author, $pubDate);
 }
 
 // jetzt nur noch den Feed generieren lassen

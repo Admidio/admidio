@@ -29,24 +29,37 @@
  *****************************************************************************/
 
 
-// RSS-Klasse
+// RSS-Class
 class RSSfeed
 {
 
-//Konstruktor
-public function __construct($homepage, $title, $description)
+/** Constructor of the RSS class which needs all the information of the channel
+ *  @param $title       Headline of this channel
+ *  @param $link        Link to the website of this RSS feed
+ *  @param $description Short description of this channel
+ *  @param $copyright   Author of the channel; in our case the organization name
+ */
+public function __construct($title, $link, $description, $copyright)
 {
     $this->channel = array();
     $this->channel['title'] = $title;
-    $this->channel['link']  = $homepage;
+    $this->channel['link']  = $link;
     $this->channel['description'] = $description;
+    $this->channel['copyright'] = $copyright;
     $this->items=array();
     $this->feed='http://'. $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
 }
 
-public function addItem($title, $description, $date, $link)
+/** Add rss item to the current feed with all neccessary information about the item 
+ *  @param $title       Headline of this item
+ *  @param $description The main content of the item which can contain html
+ *  @param $link        Link to this entry on the homepage
+ *  @param $author      The name of the member who creates this entry
+ *  @param $date        Publication date of this entry
+ */
+public function addItem($title, $description, $link, $author, $date)
 {
-    $item=array('title' => $title, 'description' => $description, 'pubDate' => $date, 'link' => $link);
+    $item = array('title' => $title, 'description' => $description, 'author' => $author, 'pubDate' => $date, 'link' => $link);
     $this->items[]=$item;
 }
 
@@ -76,7 +89,7 @@ public function addChannelInfos()
 {
 	global $gPreferences;
 
-    foreach (array('title', 'link', 'description') as $field)
+    foreach (array('title', 'link', 'description', 'copyright') as $field)
     {
         if (isset($this->channel[$field]))
         {
@@ -94,7 +107,7 @@ public function buildItems()
     foreach ($this->items as $item)
     {
         echo "<item>\n";
-        foreach (array('title', 'description', 'link', 'pubDate') as $field)
+        foreach (array('title', 'description', 'link', 'author', 'pubDate') as $field)
         {
             if (isset($item[$field]))
             {

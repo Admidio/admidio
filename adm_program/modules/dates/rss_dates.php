@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * RSS - Feed fuer Termine
+ * RSS feed of events
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -85,9 +85,11 @@ $result = $gDb->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
-// Ein RSSfeed-Objekt erstellen
-$rss  = new RSSfeed($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline,
-		$gL10n->get('DAT_CURRENT_DATES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
+// create RSS feed object with channel information
+$rss  = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline, 
+            $gCurrentOrganization->getValue('org_homepage'), 
+            $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
+            $gCurrentOrganization->getValue('org_longname'));
 $date = new TableDate($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
@@ -103,8 +105,9 @@ while ($row = $gDb->fetch_array($result))
     {
         $title = $title. ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
     }
-    $title = $title. ' '. $date->getValue('dat_headline');
-    $link  = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
+    $title  = $title. ' '. $date->getValue('dat_headline');
+    $link   = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
+    $author = $row['create_firstname']. ' '. $row['create_surname'];
     $description = '<b>'.$date->getValue('dat_headline').'</b> <br />'. $date->getValue('dat_begin', $gPreferences['system_date']);
 
     if ($date->getValue('dat_all_day') == 0)
@@ -146,10 +149,8 @@ while ($row = $gDb->fetch_array($result))
 
     $pubDate = date('r',strtotime($date->getValue('dat_timestamp_create')));
 
-
-    //Item hinzufuegen
-    $rss->addItem($title, $description, $pubDate, $link);
-
+    // add entry to RSS feed
+    $rss->addItem($title, $description, $link, $author, $pubDate);
 }
 
 // jetzt nur noch den Feed generieren lassen
