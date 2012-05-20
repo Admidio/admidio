@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * RSS - Feed fuer Ankuendigungen
+ * RSS feed of announcements
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -50,8 +50,7 @@ $organizations = $organizations. '\''. $gCurrentOrganization->getValue('org_shor
 
 // die neuesten 10 Ankuendigungen aus der DB fischen...
 $sql = 'SELECT ann.*, 
-               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
-               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname
           FROM '. TBL_ANNOUNCEMENTS. ' ann
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = ann_usr_id_create
@@ -59,12 +58,6 @@ $sql = 'SELECT ann.*,
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = ann_usr_id_create
            AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_surname
-            ON cha_surname.usd_usr_id = ann_usr_id_change
-           AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-            ON cha_firstname.usd_usr_id = ann_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname').'\'
                OR ( ann_global = 1 AND ann_org_shortname IN ('.$organizations.') ))
          ORDER BY ann_timestamp_create DESC
@@ -73,22 +66,26 @@ $result = $gDb->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
-// Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline, 
-		$gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
+// create RSS feed object with channel information
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
+            $gCurrentOrganization->getValue('org_homepage'), 
+            $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
+            $gCurrentOrganization->getValue('org_longname'));
 $announcement = new TableAnnouncement($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $gDb->fetch_object($result))
+while ($row = $gDb->fetch_array($result))
 {
     // ausgelesene Ankuendigungsdaten in Announcement-Objekt schieben
     $announcement->clear();
     $announcement->setArray($row);
 
     // Die Attribute fuer das Item zusammenstellen
-    $title = $announcement->getValue('ann_headline');
-    $link  = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$getHeadline;
-    $description = '<b>'.$announcement->getValue('ann_headline').'</b>';
+    $title  = $announcement->getValue('ann_headline');
+    $link   = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$getHeadline;
+    $author = $row['create_firstname']. ' '. $row['create_surname'];
+    $description = $announcement->getValue('ann_description');
+/*    $description = '<b>'.$announcement->getValue('ann_headline').'</b>';
 
     // Beschreibung und Link zur Homepage ausgeben
     $description = $description. '<br /><br />'. $announcement->getValue('ann_description').
@@ -100,13 +97,12 @@ while ($row = $gDb->fetch_object($result))
     if($row->ann_usr_id_change > 0)
     {
 		$description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $announcement->getValue('ann_timestamp_change')). '</i>';
-    }
+    }*/
                 
     $pubDate = date('r',strtotime($announcement->getValue('ann_timestamp_create')));
 
-
-    // Item hinzufuegen
-    $rss->addItem($title, $description, $pubDate, $link);
+    // add entry to RSS feed
+    $rss->addItem($title, $description, $link, $author, $pubDate);
 }
 
 // jetzt nur noch den Feed generieren lassen

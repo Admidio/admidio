@@ -48,21 +48,24 @@ $result = $gDb->query($sql);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
-// Ein RSSfeed-Objekt erstellen
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_homepage'), $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline,
-		$gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')));
+// create RSS feed object with channel information
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline,
+            $gCurrentOrganization->getValue('org_homepage'), 
+		    $gL10n->get('GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
+		    $gCurrentOrganization->getValue('org_longname'));
 $guestbook = new TableGuestbook($gDb);
 
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-while ($row = $gDb->fetch_object($result))
+while ($row = $gDb->fetch_array($result))
 {
     // ausgelesene Gaestebuchdaten in Guestbook-Objekt schieben
     $guestbook->clear();
     $guestbook->setArray($row);
 
     // Die Attribute fuer das Item zusammenstellen
-    $title = $guestbook->getValue('gbo_name');
-    $link  = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
+    $title  = $guestbook->getValue('gbo_name');
+    $link   = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
+    $author = $guestbook->getValue('gbo_name');
     $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. $guestbook->getValue('gbo_timestamp_create').'</b>';
 
     // Beschreibung und Link zur Homepage ausgeben
@@ -71,9 +74,8 @@ while ($row = $gDb->fetch_object($result))
 
     $pubDate = date('r', strtotime($guestbook->getValue('gbo_timestamp_create')));
 
-
-    // Item hinzufuegen
-    $rss->addItem($title, $description, $pubDate, $link);
+    // add entry to RSS feed
+    $rss->addItem($title, $description, $link, $author, $pubDate);
 }
 
 
