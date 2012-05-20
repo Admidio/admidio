@@ -553,7 +553,6 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Als deze optie is geactiveerd zullen niet ingelogde bezoekers een afbeelding zien met captcha code of een simpele som. Het is noodzakelijk om de juiste code of oplossing in te vullen. Captcha is onderdeel van antispam oplossing van Admidio. (standaard: ja)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Selecteer svp rol als ontvanger van de e-mail!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="edited">Aantal BCC ontvangers</text>
-    <text id="MAI_COUNT_BCC_DESC" development="new" translation="edited">Bepaal hier hoe veel BCC ontvangers per e-mail toegevoegd kunnen worden. (standaard: 50)</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="edited">Er kunnen e-mails gestuurd worden naar verschillende rollen, personen, groepen of afdelingen. </text>
     <text id="MAI_EMAILS" development="new" translation="edited">E-mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Onbeperkt aantal ontvangers kan toegevoegd worden. Totale grootte van alle attachments mag niet meer zijn dan %VAR1% MB.</text>

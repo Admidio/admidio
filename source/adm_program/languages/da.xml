@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
+<version id="2.3.4" translator="Henrik Troels-Hansen">
+    <text id="MAI_COUNT_BCC_DESC" development="changed" translation="edited">E-Mails til roller med mange medlemmer, vil blive sendt som Blind Kopi (BCC - Blind Copy). På den måde, kan modtagerne ikke se hvem der ellers har modtaget den samme e-mail. Værdien angivet i feltet definerer maksimum antal modtagere af en given e-mail. Maximum antal modtagere kan også være begrænset af din internet udbyder. Hvis der er flere modtagere af en e-mail end tilladt, så bliver der genereret flere e-mails. Sætter du værdien til 1, vil hver enkelt modtager få en individuel e-mail. Antallet af udsendte e-mails inden for en nærmere bestemt periode kan også være begrænset af din internet udbyder. (Standard: 50)</text>
+	<text id="MAI_SENDER_INTO_TO" development="new" translation="edited">Afsender som modtager</text>
+	<text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="edited">Modtagere af e-mails sendt til roller vil blive sendt ved hjælp af (BCC - Blind Copy) feltet. Feltet TIL vil så, som regel være tomt. Nogen internet udbydere tillader ikke at afsende e-mail med et tomt TIL felt, det anses for at være SPAM mail og får en høj SPAM score. Denne indstilling sætter automatisk afsenderens e-mail adresse ind i TIL feltet, og alle andre modtagere sættes ind i BCC feltet. (Standard: Aktiv)</text>
+</version>
 <version id="2.3.1" translator="Henrik Troels-Hansen">
 	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="edited">Organisationen %VAR1_BOLD% eksisterer allerede. Venligst vælg et andet navn.</text>
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="edited">Der blev ikke fundet login data der passer til e-mail adresse %VAR1_BOLD%! </text>
@@ -559,7 +564,6 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Hvis indstillingen er aktiv, kan brugere der er logget ind se et billede med en captcha kode eller et simpelt regnestykke. Det er nødvendigt at skrive den rigtige kode eller den rigtige løsning for at kunne sende e-mailen. Captcha er en del af antispam løsningen i Admidio. (Standard: Ja)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Venligst vælg en rolle som modtager af denne mail!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="edited">Antal BCC modtagere</text>
-    <text id="MAI_COUNT_BCC_DESC" development="new" translation="edited">Definér her hvor mange BCC modtagere der kan tilføjes pr. e-mail. (Standard: 50)</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="edited">%VAR1% har sendt til rolle %VAR4% af %VAR2% følgende besked:\nVenligst svar til %VAR3%.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% har sendt dig fra %VAR2% følgende besked:\nVenligst svar til %VAR3%.</text>
 	<text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails kan sendes til forskellige roller såsom grupper, kurser, afdelinger.</text>
