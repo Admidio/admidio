@@ -9,9 +9,9 @@
  *****************************************************************************/
 
 // drop foreign keys to delete index
-$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_ROL';
+$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_ROL';
 $gDb->query($sql, false);
-$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_USR';
+$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR';
 $gDb->query($sql, false);
 
 

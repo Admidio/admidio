@@ -21,6 +21,9 @@ require_once('../../system/classes/table_roles.php');
 // Initialize and check the parameters
 $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 
+// Initialize local parameters
+$showHiddenCategory = false;
+
 // nur Moderatoren duerfen Rollen anlegen und verwalten
 if(!$gCurrentUser->assignRoles())
 {
@@ -49,6 +52,12 @@ if($getRoleId > 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
+
+	// hidden roles can also see hidden categories
+	if($role->getValue('rol_visible') == 0)
+	{
+		$showHiddenCategory = true;
+	}
 }
 
 if(isset($_SESSION['roles_request']))
@@ -263,7 +272,7 @@ echo '
 						<dl>
 							<dt><label for="rol_cat_id">'.$gL10n->get('SYS_CATEGORY').':</label></dt>
 							<dd>
-								'.FormElements::generateCategorySelectBox('ROL', $role->getValue('rol_cat_id'), 'rol_cat_id').'
+								'.FormElements::generateCategorySelectBox('ROL', $role->getValue('rol_cat_id'), 'rol_cat_id', '', false, $showHiddenCategory).'
 								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 							</dd>
 						</dl>

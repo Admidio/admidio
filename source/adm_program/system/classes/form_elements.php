@@ -152,17 +152,18 @@ class FormElements
 		return $selectBoxHtml;
 	}
 
-    // method creates a select box with all categories of a type (roles, dates, links ...)
-	//
-	// Parameters:
-	// categoryType    : Type of category ('ROL', 'DAT', 'LNK',...) that should be shown
-	// defaultCategory : Id of selected category (if id = -1 then no default category will be selected)
-	// field_id        : Id and name of select box
-	// firstEntry      : value for the first entry of the select box
-	// showCategoryChoice : this mode shows categories with childs and so default category will be selected
-	//                      there must be at least more then one category to select
+    /** Method creates a html select box with all visible categories of a type (roles, dates, links ...)
+	 *
+	 *  @param $categoryType		Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+	 *  @param $defaultCategory		Id of selected category (if id = -1 then no default category will be selected)
+	 *  @param $field_id			Id and name of select box
+	 *  @param $firstEntry			value for the first entry of the select box
+	 *  @param $showCategoryChoice	this mode shows only categories with elements and if default category will be selected there must be at least more then one category to select
+	 *  @param $showHiddenCategory	Show visible and hidden categories
+	 *  @return Html code string with a select box element
+	 */
 	public static function generateCategorySelectBox($categoryType, $defaultCategory = 0, $fieldId = '', 
-	                           $firstEntry = '', $showCategoryChoice = false)
+	                           $firstEntry = '', $showCategoryChoice = false, $showHiddenCategory = false)
 	{
 		global $gCurrentOrganization, $gDb, $gL10n, $gValidLogin;
 
@@ -200,11 +201,10 @@ class FormElements
             }
 		}
 		
-        // if user isn't logged in, then don't show hidden categories
-        if($gValidLogin == false)
-        {
-            $sqlCondidtions .= ' AND cat_hidden = 0 ';
-        }		
+		if($showHiddenCategory == false)
+		{
+			 $sqlCondidtions .= ' AND cat_hidden = 0 ';
+		}
 		
 		$sql = 'SELECT DISTINCT cat_sequence, cat_id, cat_default, cat_name 
 		          FROM '.$sqlTables.'
@@ -238,14 +238,15 @@ class FormElements
     								
     				// create entry in html
     				$selectBoxHtml .= '<option value="'.$row['cat_id'].'"';
-    				    // set selected if category id is the same as in parameters 
-    				    // or it's system category and no category choice mode
-    					if($defaultCategory == $row['cat_id']
-    					|| ($defaultCategory == 0 && $row['cat_default'] == 1 && $showCategoryChoice == false)
-    					|| $countCategories == 1 )
-    					{
-    						$selectBoxHtml .= ' selected="selected" ';
-    					}
+					
+					// set selected if category id is the same as in parameters 
+					// or it's system category and no category choice mode
+					if($defaultCategory  == $row['cat_id']
+					|| ($defaultCategory == 0 && $row['cat_default'] == 1 && $showCategoryChoice == false)
+					|| $countCategories  == 1 )
+					{
+						$selectBoxHtml .= ' selected="selected" ';
+					}
     				$selectBoxHtml .= '>'.$row['cat_name'].'</option>';
     			}
     		$selectBoxHtml .= '</select>';

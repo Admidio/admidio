@@ -57,8 +57,7 @@ if ($gValidLogin == false)
 
 // aktuelle Termine aus DB holen die zur Orga passen
 $sql = 'SELECT cat.*, dat.*, 
-               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
-               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname 
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname
           FROM '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = dat_usr_id_create
@@ -66,12 +65,6 @@ $sql = 'SELECT cat.*, dat.*,
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = dat_usr_id_create
            AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_surname
-            ON cha_surname.usd_usr_id = dat_usr_id_change
-           AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-            ON cha_firstname.usd_usr_id = dat_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE dat_cat_id = cat_id
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR (   dat_global  = 1
@@ -99,31 +92,37 @@ while ($row = $gDb->fetch_array($result))
     $date->clear();
     $date->setArray($row);
 
-    // Die Attribute fuer das Item zusammenstellen
+	// set data for attributes of this entry
     $title = $date->getValue('dat_begin', $gPreferences['system_date']);
     if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
     {
         $title = $title. ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
     }
-    $title  = $title. ' '. $date->getValue('dat_headline');
-    $link   = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
-    $author = $row['create_firstname']. ' '. $row['create_surname'];
-    $description = '<b>'.$date->getValue('dat_headline').'</b> <br />'. $date->getValue('dat_begin', $gPreferences['system_date']);
+    $title  	 = $title. ' '. $date->getValue('dat_headline');
+    $link   	 = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
+    $author 	 = $row['create_firstname']. ' '. $row['create_surname'];
+    $pubDate 	 = date('r',strtotime($date->getValue('dat_timestamp_create')));
+	
+	// add additional informations about the event to the description
+	$descDateTo   = '';
+	$descDateFrom = $date->getValue('dat_begin', $gPreferences['system_date']);
 
     if ($date->getValue('dat_all_day') == 0)
     {
-        $description = $description. ' von '. $date->getValue('dat_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK').' bis ';
+		$descDateFrom = $descDateFrom. ' '. $date->getValue('dat_begin', $gPreferences['system_time']).' '.$gL10n->get('SYS_CLOCK');
+        
         if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
         {
-            $description = $description. $date->getValue('dat_end', $gPreferences['system_date']). ' ';
+            $descDateTo = $date->getValue('dat_end', $gPreferences['system_date']). ' ';
         }
-        $description = $description. $date->getValue('dat_end', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK');
+        $descDateTo  = $descDateTo. ' '. $date->getValue('dat_end', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK');
+		$description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $descDateTo);
     }
     else
     {
         if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
         {
-            $description = $gL10n->get('SYS_DATE_FROM_TO', $description, $date->getValue('dat_end', $gPreferences['system_date']));
+            $description = $gL10n->get('SYS_DATE_FROM_TO', $descDateFrom, $date->getValue('dat_end', $gPreferences['system_date']));
         }
     }
 
@@ -132,22 +131,10 @@ while ($row = $gDb->fetch_array($result))
         $description = $description. '<br /><br />'.$gL10n->get('DAT_LOCATION').':&nbsp;'. $date->getValue('dat_location');
     }
 
-    // Beschreibung und Link zur Homepage ausgeben
-    $description = $description. '<br /><br />'. $date->getValue('dat_description'). 
-                   '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
+    $description = $description. '<br /><br />'. $date->getValue('dat_description');
 
     //i-cal downloadlink
     $description = $description. '<br /><br /><a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$date->getValue('dat_id').'&mode=6">'.$gL10n->get('DAT_ADD_DATE_TO_CALENDAR').'</a>';
-
-    // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create')). '</i>';
-
-    if($date->getValue('dat_usr_id_change') > 0)
-    {
-        $description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change')). '</i>';
-    }
-
-    $pubDate = date('r',strtotime($date->getValue('dat_timestamp_create')));
 
     // add entry to RSS feed
     $rss->addItem($title, $description, $link, $author, $pubDate);

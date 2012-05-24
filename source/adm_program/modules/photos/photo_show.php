@@ -9,7 +9,6 @@
  * Parameters:
  *
  * pho_id    : Id des Albums, aus dem das Bild kommen soll
- * pho_begin : Datum des Albums
  * photo_nr  : Nummer des Bildes, das angezeigt werden soll
  * max_width : maximale Breite auf die das Bild skaliert werden kann
  * max_height: maximale Hoehe auf die das Bild skaliert werden kann
@@ -23,7 +22,6 @@ require_once('../../system/classes/image.php');
 
 // Initialize and check the parameters
 $getPhotoId    = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$getAlbumBegin = admFuncVariableIsValid($_GET, 'pho_begin', 'string', null, true);
 $getPhotoNr    = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', 0);
 $getMaxWidth   = admFuncVariableIsValid($_GET, 'max_width', 'numeric', 0);
 $getMaxHeight  = admFuncVariableIsValid($_GET, 'max_height', 'numeric', 0);
@@ -42,17 +40,22 @@ elseif($gPreferences['enable_photo_module'] == 2)
 }
 
 // lokale Variablen initialisieren
-$image      = NULL;
+$image = NULL;
 
-// Pruefen, ob pho_begin ein gueltiges Datum besitzt
-$albumStartDate = new DateTimeExtended($getAlbumBegin, 'Y-m-d', 'date');
-if($albumStartDate->valid() == false)
+// read album data out of session or database
+if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
-	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    $photoAlbum =& $_SESSION['photo_album'];
+    $photoAlbum->db =& $gDb;
+}
+else
+{
+    $photoAlbum = new TablePhotos($gDb, $getPhotoId);
+    $_SESSION['photo_album'] =& $photoAlbum;
 }
 
 // Bildpfad zusammensetzten
-$ordner  = SERVER_PATH. '/adm_my_files/photos/'.$getAlbumBegin.'_'.$getPhotoId;
+$ordner  = SERVER_PATH. '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$getPhotoId;
 $picpath = $ordner.'/'.$getPhotoNr.'.jpg';
 
 // im Debug-Modus den ermittelten Bildpfad ausgeben

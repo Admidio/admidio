@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * RSS - Feed fuer Links
+ * RSS feed for weblinks
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -40,8 +40,7 @@ if ($gPreferences['enable_weblinks_module'] != 1)
 
 // alle Links aus der DB fischen...
 $sql = 'SELECT cat.*, lnk.*,
-               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
-               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
+               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname
           FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
           LEFT JOIN '. TBL_USER_DATA .' cre_surname
             ON cre_surname.usd_usr_id = lnk_usr_id_create
@@ -49,12 +48,6 @@ $sql = 'SELECT cat.*, lnk.*,
           LEFT JOIN '. TBL_USER_DATA .' cre_firstname
             ON cre_firstname.usd_usr_id = lnk_usr_id_create
            AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_surname
-            ON cha_surname.usd_usr_id = lnk_usr_id_change
-           AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-            ON cha_firstname.usd_usr_id = lnk_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
          WHERE lnk_cat_id = cat_id
            AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
            AND cat_type = \'LNK\'
@@ -78,25 +71,13 @@ while ($row = $gDb->fetch_array($result))
     $weblink->clear();
     $weblink->setArray($row);
 
-    // Die Attribute fuer das Item zusammenstellen
-    $title  = $weblink->getValue('lnk_name');
-    $link   = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
-    $author = $row['create_firstname']. ' '. $row['create_surname'];
-    $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank"><b>'.$weblink->getValue('lnk_name').'</b></a>';
-
-    // Beschreibung und Link zur Homepage ausgeben
-    $description = $description. '<br /><br />'. $weblink->getValue('lnk_description'). 
-                   '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
-
-    // Den Autor und letzten Bearbeiter des Links ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $weblink->getValue('lnk_timestamp_create')). '</i>';
-
-    if($weblink->getValue('lnk_usr_id_change') > 0)
-    {
-        $description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $weblink->getValue('lnk_timestamp_change')). '</i>';
-    }
-
-    $pubDate = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
+    // set data for attributes of this entry
+    $title  	 = $weblink->getValue('lnk_name');
+    $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank">'.$weblink->getValue('lnk_url').'</a>'.
+				   '<br /><br />'. $weblink->getValue('lnk_description');
+    $link   	 = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
+    $author 	 = $row['create_firstname']. ' '. $row['create_surname'];
+    $pubDate 	 = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
 
     // add entry to RSS feed
     $rss->addItem($title, $description, $link, $author, $pubDate);
