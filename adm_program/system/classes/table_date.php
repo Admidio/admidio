@@ -124,11 +124,12 @@ class TableDate extends TableAccess
             $icalVEevent .= "LAST-MODIFIED:". $this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His')."\n";
         }
                     
+        //Semicolons herausfiltern             
         $icalVEevent .=  "UID:". $uid. "\n".
-                        "SUMMARY:". $this->getValue('dat_headline'). "\n".
-                        "DESCRIPTION:". str_replace("\r\n", "\n", $this->getValue('dat_description', 'plain')). "\n".
+                        "SUMMARY:". str_replace(';', '.', $this->getValue('dat_headline')). "\n".
+                        "DESCRIPTION:". str_replace("\r\n", "\n", str_replace(';', '.', $this->getValue('dat_description', 'plain'))). "\n".
                         "DTSTAMP:".date('Ymd').'T'.date('His')."\n".
-                        "LOCATION:". $this->getValue('dat_location'). "\n";
+                        "LOCATION:". str_replace(';', '.',$this->getValue('dat_location')). "\n";
         if($this->getValue('dat_all_day') == 1)
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
