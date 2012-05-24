@@ -169,7 +169,7 @@ function deleteEntry()
     <div class="formBody">
         <table>
 			<tr>
-				<td style="width: 70px; text-align: center;"><br /><img src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></td>
+				<td style="width: 70px; text-align: center;"><br /><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></td>
 				<td id="admMessageText"><br />'.$gL10n->get($text, $textVariable, $textVariable2).'</td>
 			</tr>
 			<tr>

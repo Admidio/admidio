@@ -62,17 +62,12 @@ while ($row = $gDb->fetch_array($result))
     $guestbook->clear();
     $guestbook->setArray($row);
 
-    // Die Attribute fuer das Item zusammenstellen
-    $title  = $guestbook->getValue('gbo_name');
-    $link   = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
-    $author = $guestbook->getValue('gbo_name');
-    $description = '<b>'.$guestbook->getValue('gbo_name').' schrieb am '. $guestbook->getValue('gbo_timestamp_create').'</b>';
-
-    // Beschreibung und Link zur Homepage ausgeben
-    $description = $description. '<br /><br />'. $guestbook->getValue('gbo_text'). 
-                   '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
-
-    $pubDate = date('r', strtotime($guestbook->getValue('gbo_timestamp_create')));
+    // set data for attributes of this entry
+    $title  	 = $guestbook->getValue('gbo_name');
+    $description = $guestbook->getValue('gbo_text');
+    $link   	 = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?id='. $guestbook->getValue('gbo_id');
+    $author 	 = $guestbook->getValue('gbo_name');
+    $pubDate 	 = date('r', strtotime($guestbook->getValue('gbo_timestamp_create')));
 
     // add entry to RSS feed
     $rss->addItem($title, $description, $link, $author, $pubDate);

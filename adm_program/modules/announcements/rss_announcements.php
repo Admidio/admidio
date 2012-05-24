@@ -80,26 +80,12 @@ while ($row = $gDb->fetch_array($result))
     $announcement->clear();
     $announcement->setArray($row);
 
-    // Die Attribute fuer das Item zusammenstellen
-    $title  = $announcement->getValue('ann_headline');
-    $link   = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$getHeadline;
-    $author = $row['create_firstname']. ' '. $row['create_surname'];
+	// set data for attributes of this entry
+    $title  	 = $announcement->getValue('ann_headline');
     $description = $announcement->getValue('ann_description');
-/*    $description = '<b>'.$announcement->getValue('ann_headline').'</b>';
-
-    // Beschreibung und Link zur Homepage ausgeben
-    $description = $description. '<br /><br />'. $announcement->getValue('ann_description').
-                   '<br /><br /><a href="'.$link.'">'. $gL10n->get('SYS_LINK_TO', $gCurrentOrganization->getValue('org_homepage')). '</a>';
-
-    // Den Autor und letzten Bearbeiter der Ankuendigung ermitteln und ausgeben
-    $description = $description. '<br /><br /><i>'.$gL10n->get('SYS_CREATED_BY', $row->create_firstname. ' '. $row->create_surname, $announcement->getValue('ann_timestamp_create')). '</i>';
-
-    if($row->ann_usr_id_change > 0)
-    {
-		$description = $description. '<br /><i>'.$gL10n->get('SYS_LAST_EDITED_BY', $row->change_firstname. ' '. $row->change_surname, $announcement->getValue('ann_timestamp_change')). '</i>';
-    }*/
-                
-    $pubDate = date('r',strtotime($announcement->getValue('ann_timestamp_create')));
+    $link   	 = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$getHeadline;
+    $author 	 = $row['create_firstname']. ' '. $row['create_surname'];
+    $pubDate 	 = date('r',strtotime($announcement->getValue('ann_timestamp_create')));
 
     // add entry to RSS feed
     $rss->addItem($title, $description, $link, $author, $pubDate);

@@ -635,7 +635,8 @@ class TableFolder extends TableAccess
     // und loescht die Verzeichnisse auch physikalisch auf der Platte...
     public function delete($folder_id = 0)
     {
-
+		$returnCode = true;
+	
         if ($folder_id == 0)
         {
             $folder_id = $this->getValue('fol_id');
@@ -687,10 +688,11 @@ class TableFolder extends TableAccess
         //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
 
         if ($folder_id == $this->getValue('fol_id')) {
-            parent::delete();
+            $returnCode = parent::delete();
         }
 
 		$this->db->endTransaction();
+		return $returnCode;
     }
 
     public function getValue($field_name, $format = '')
