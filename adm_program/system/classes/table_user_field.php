@@ -114,6 +114,11 @@ class TableUserField extends TableAccess
 				$value = $this->dbColumns['usf_description'];
 			}
         }
+		elseif($field_name == 'usf_name_intern')
+		{
+			// internal name should be read with no conversion
+			$value = parent::getValue($field_name, 'plain');
+		}
         else
         {
             $value = parent::getValue($field_name, $format);

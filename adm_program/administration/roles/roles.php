@@ -43,12 +43,18 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
 
+// per default show active and visible roles
+$sqlRolesStatus   = ' AND rol_valid   = \'1\'
+					  AND rol_visible = \'1\' ';
+
 if($getInactive == true)
 {
     $activeRolesLinkDescription = $gL10n->get('ROL_ACTIV_ROLES');
     $listDescription  = $gL10n->get('ROL_INACTIV_ROLES');
     $activeRolesImage = 'roles.png';
 	$activeRolesFlag  = '0';
+	// in inactive mode show visible and invisible inactive roles
+	$sqlRolesStatus   = ' AND rol_valid   = \'0\' ';
 }
 else
 {
@@ -64,6 +70,8 @@ if($getInvisible == true)
     $listDescription   = $gL10n->get('ROL_INVISIBLE_ROLES');
     $visibleRolesImage = 'light_on.png';
 	$visibleRolesFlag  = '0';
+	// in invisible mode show active and inactive invisible roles
+	$sqlRolesStatus   = ' AND rol_visible = \'0\' ';
 }
 else
 {
@@ -115,12 +123,11 @@ echo '
     </thead>';
     $cat_id = '';
 
-    // alle Rollen gruppiert nach Kategorie auflisten
+	// list all roles group by category
     $sql    = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                WHERE rol_valid   = \''.$activeRolesFlag.'\'
-                  AND rol_visible = \''.$visibleRolesFlag.'\'
-                  AND rol_cat_id  = cat_id
+                WHERE rol_cat_id  = cat_id
                   AND cat_type    = \'ROL\'
+				      '.$sqlRolesStatus.'
                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                       OR cat_org_id IS NULL )
                 ORDER BY cat_sequence ASC, rol_name ASC ';

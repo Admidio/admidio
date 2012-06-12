@@ -33,27 +33,6 @@ $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
 $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
-// Alle Rollen-IDs ermitteln, die der User sehen darf
-$roleIdList = '';
-if($getActiveRole)
-{
-    foreach($gCurrentUser->getListViewRights() as $key => $value)
-    {
-        if($value == 1)
-        {
-            $roleIdList = $roleIdList. $key. ', ';
-        }
-    }
-    if(strlen($roleIdList) > 0)
-    {
-        $roleIdList = ' AND rol_id IN ('. substr($roleIdList, 0, strlen($roleIdList)-2). ') ';
-    }
-    else
-    {
-        $roleIdList = ' AND rol_id = 0 ';
-    }
-}
-
 // Listen-SQL-Statement zusammensetzen
 if($getActiveRole == 1)
 {
@@ -72,7 +51,6 @@ $sql = 'SELECT rol.*, cat.*,
           FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
          WHERE rol_valid   = '.$getActiveRole.'
            AND rol_visible = 1
-               '.$roleIdList.'
            AND rol_cat_id = cat_id 
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL ) ';
@@ -260,240 +238,242 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
                 $previous_cat_id = $role->getValue('cat_id');
                 $count_cat_entries = 0;
             }
-    
-            
-            //Nur anzeigen, wenn User auch die Liste einsehen darf
-            if($gCurrentUser->viewRole($role->getValue('rol_id')))
-            {
-                if($count_cat_entries > 0)
-                {
-                    echo '<hr />';
-                }
-                echo '
-                <div>
-                    <div style="float: left;">';
-                        //Dreieck zum ein und ausblenden der Details
-                        if($gPreferences['lists_hide_overview_details']==1)
-                        {
-                            $icon = THEME_PATH. '/icons/triangle_close.gif';
-                            $iconText = $gL10n->get('SYS_FADE_IN');
-                        }
-                        else
-                        {
-                            $icon = THEME_PATH. '/icons/triangle_open.gif';
-                            $iconText = $gL10n->get('SYS_HIDE');
-                        }
-                        echo '<a class="iconLink" href="javascript:showHideBlock(\'admRoleDetails'.$role->getValue('rol_id').'\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')">
-                            <img id="admRoleDetails'.$role->getValue('rol_id').'Image"  src="'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
-    
-                        // Link nur anzeigen, wenn Rolle auch Mitglieder hat
-                        if($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0)
-                        {
-                            echo '<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '">'. $role->getValue('rol_name'). '</a>';
-                        }
-                        else
-                        {
-                            echo '<strong>'. $role->getValue('rol_name'). '</strong>';
-                        }
-        
-                        //Mail an Rolle schicken
-                        if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
-                        {
-                            echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$role->getValue('rol_id').'"><img
-                                src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>';
-                        }
 
-						// edit roles of you are allowed to assign roles
-						if($gCurrentUser->assignRoles())
-						{
-							echo '
-							<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
-								src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_SETTINGS').'" title="'.$gL10n->get('SYS_SETTINGS').'" /></a>';
-						}
+			if($count_cat_entries > 0)
+			{
+				echo '<hr />';
+			}
+			echo '
+			<div>
+				<div style="float: left;">';
+					//Dreieck zum ein und ausblenden der Details
+					if($gPreferences['lists_hide_overview_details']==1)
+					{
+						$icon = THEME_PATH. '/icons/triangle_close.gif';
+						$iconText = $gL10n->get('SYS_FADE_IN');
+					}
+					else
+					{
+						$icon = THEME_PATH. '/icons/triangle_open.gif';
+						$iconText = $gL10n->get('SYS_HIDE');
+					}
+					echo '<a class="iconLink" href="javascript:showHideBlock(\'admRoleDetails'.$role->getValue('rol_id').'\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')">
+						<img id="admRoleDetails'.$role->getValue('rol_id').'Image"  src="'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
 
-						// link to assign or remove members if you are allowed to do it
-						if($role->allowedToAssignMembers($gCurrentUser))
-						{
-							echo '
-							<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img 
-								src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
-						}
-                    echo '</div>
-                    <div style="text-align: right;">';
-                        // Kombobox mit Listen nur anzeigen, wenn die Rolle Mitglieder hat
-                        if($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0)
-                        {
-                            echo '
-                            <select size="1" name="list'.$i.'" onchange="showList(this, '. $role->getValue('rol_id'). ')">
-                                <option value="" selected="selected">'.$gL10n->get('LST_SHOW_LISTS').' ...</option>';
-                                
-                                // alle globalen Listenkonfigurationen auflisten
-                                $gDb->data_seek($result_config, 0);
-                                $list_global_flag = '';
-                                
-                                while($row = $gDb->fetch_array($result_config))
-                                {
-                                    if($list_global_flag != $row['lst_global'])
-                                    {
-                                        if($row['lst_global'] == 0)
-                                        {
-                                            echo '<optgroup label="'.$gL10n->get('LST_YOUR_LISTS').'">';
-                                        }
-                                        else
-                                        {
-                                            if($list_global_flag > 0)
-                                            {
-                                                echo '</optgroup>';
-                                            }
-                                            echo '<optgroup label="'.$gL10n->get('LST_GENERAL_LISTS').'">';
-                                        }
-                                        $list_global_flag = $row['lst_global'];
-                                    }
-                                    echo '<option value="'.$row['lst_id'].'">'.$row['lst_name'].'</option>';
-                                }
-                                
-                                // Link zu den eigenen Listen setzen
-                                echo '</optgroup>
-                                <optgroup label="'.$gL10n->get('LST_CONFIGURATION').'">
-                                    <option value="mylist">'.$gL10n->get('LST_CREATE_OWN_LIST').'</option>
-                                </optgroup>
-                            </select>';
-                        }
-                        else
-                        {
-                            echo '&nbsp;';
-                        }
-                    echo '</div>
-                </div>
-                
-                <ul id="admRoleDetails'.$role->getValue('rol_id').'" ';
-                    if($gPreferences['lists_hide_overview_details']==1)
-                    {
-                        echo ' style="display: none;" '; 
-                    }
-                    echo ' class="formFieldList">';
-                    if(strlen($role->getValue('rol_description')) > 0)
-                    {
-                        echo '
-                        <li>
-                            <dl>
-                                <dt>'.$gL10n->get('SYS_DESCRIPTION').':</dt>
-                                <dd>'.$role->getValue('rol_description').'</dd>
-                            </dl>
-                        </li>';
-                    }
-        
-                    if(strlen($role->getValue('rol_start_date')) > 0)
-                    {
-                        echo '
-                        <li>
-                            <dl>
-                                <dt>'.$gL10n->get('SYS_PERIOD').':</dt>
-                                <dd>'.$gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])).'</dd>
-                            </dl>
-                        </li>';
-                    }
-                    if($role->getValue('rol_weekday') > 0
-                    || strlen($role->getValue('rol_start_time')) > 0 )
-                    {
-                        echo '
-                        <li>
-                            <dl>
-                                <dt>'.$gL10n->get('DAT_DATE').':</dt>
-                                <dd>'; 
-                                    if($role->getValue('rol_weekday') > 0)
-                                    {
-                                        echo TableRoles::getWeekdayDesc($role->getValue('rol_weekday')).' ';
-                                    }
-                                    if(strlen($role->getValue('rol_start_time')) > 0)
-                                    {
-                                        echo $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
-                                    }
-                                echo '</dd>
-                            </dl>
-                        </li>';
-                    }
-                    //Treffpunkt
-                    if(strlen($role->getValue('rol_location')) > 0)
-                    {
-                        echo '
-                        <li>
-                            <dl>
-                                <dt>'.$gL10n->get('SYS_LOCATION').':</dt>
-                                <dd>'.$role->getValue('rol_location').'</dd>
-                            </dl>
-                        </li>';
-                    }
-                    //Teinehmer
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>'.$gL10n->get('SYS_PARTICIPANTS').':</dt>
-                            <dd>'.$row_lst['num_members'];
-                                if($role->getValue('rol_max_members') > 0)
-                                {
-                                    echo '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
-                                }
-                                if($getActiveRole && $row_lst['num_former'] > 0)
-                                {
-                                    // Anzahl Ehemaliger anzeigen
-                                    if($row_lst['num_former'] == 1)
-                                    {
-                                        $text_former = $gL10n->get('SYS_FORMER');
-                                    }
-                                    else
-                                    {
-                                        $text_former = $gL10n->get('SYS_FORMER_PL');
-                                    }
-                                    echo '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row_lst['num_former'].' '.$text_former.'</a>) ';
-                                }
-                            echo '</dd>
-                        </dl>
-                    </li>';
-        
-                    //Leiter
-                    if($row_lst['num_leader']>0)
-                    {
-                        echo '
-                        <li>
-                            <dl>
-                                <dt>'.$gL10n->get('SYS_LEADER').':</dt>
-                                <dd>'.$row_lst['num_leader'].'</dd>
-                            </dl>
-                        </li>';
-                    }
-        
-                    //Beitrag
-                    if(strlen($role->getValue('rol_cost')) > 0)
-                    {
-                        echo '
-                        <li>
-                            <dl>
-                                <dt>'.$gL10n->get('SYS_CONTRIBUTION').':</dt>
-                                <dd>'.$role->getValue('rol_cost').' '.$gPreferences['system_currency'].'</dd>
-                            </dl>
-                        </li>';
-                    }
+					// show link if user is allowed to see members and the role has members
+					if($gCurrentUser->viewRole($role->getValue('rol_id'))
+					&& ($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0))
+					{
+						echo '<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '">'. $role->getValue('rol_name'). '</a>';
+					}
+					else
+					{
+						echo '<strong>'. $role->getValue('rol_name'). '</strong>';
+					}
+	
+					//Mail an Rolle schicken
+					if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
+					{
+						echo '
+						<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$role->getValue('rol_id').'"><img
+							src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>';
+					}
 
-                    //Beitragszeitraum
-                    if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
-                    {
-                        echo'<li>
-                            <dl>
-                                <dt>'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
-                                <dd>'.TableRoles::getCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
-                            </dl>
-                        </li>';
-                    }
+					// edit roles of you are allowed to assign roles
+					if($gCurrentUser->assignRoles())
+					{
+						echo '
+						<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
+							src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_SETTINGS').'" title="'.$gL10n->get('SYS_SETTINGS').'" /></a>';
+					}
 
-                echo '</ul>';
-                $count_cat_entries++;
-            }
-            else
-            {
-                $num_roles--;
-            }
+					// link to assign or remove members if you are allowed to do it
+					if($role->allowedToAssignMembers($gCurrentUser))
+					{
+						echo '
+						<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img 
+							src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
+					}
+				echo '</div>
+				<div style="text-align: right;">';
+					// show combobox with lists if user is allowed to see members and the role has members
+					if($gCurrentUser->viewRole($role->getValue('rol_id'))
+					&& ($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0))
+					{
+						echo '
+						<select size="1" name="list'.$i.'" onchange="showList(this, '. $role->getValue('rol_id'). ')">
+							<option value="" selected="selected">'.$gL10n->get('LST_SHOW_LISTS').' ...</option>';
+							
+							// alle globalen Listenkonfigurationen auflisten
+							$gDb->data_seek($result_config, 0);
+							$list_global_flag = '';
+							
+							while($row = $gDb->fetch_array($result_config))
+							{
+								if($list_global_flag != $row['lst_global'])
+								{
+									if($row['lst_global'] == 0)
+									{
+										echo '<optgroup label="'.$gL10n->get('LST_YOUR_LISTS').'">';
+									}
+									else
+									{
+										if($list_global_flag > 0)
+										{
+											echo '</optgroup>';
+										}
+										echo '<optgroup label="'.$gL10n->get('LST_GENERAL_LISTS').'">';
+									}
+									$list_global_flag = $row['lst_global'];
+								}
+								echo '<option value="'.$row['lst_id'].'">'.$row['lst_name'].'</option>';
+							}
+							
+							// Link zu den eigenen Listen setzen
+							echo '</optgroup>
+							<optgroup label="'.$gL10n->get('LST_CONFIGURATION').'">
+								<option value="mylist">'.$gL10n->get('LST_CREATE_OWN_LIST').'</option>
+							</optgroup>
+						</select>';
+					}
+					else
+					{
+						echo '&nbsp;';
+					}
+				echo '</div>
+			</div>
+			
+			<ul id="admRoleDetails'.$role->getValue('rol_id').'" ';
+				if($gPreferences['lists_hide_overview_details']==1)
+				{
+					echo ' style="display: none;" '; 
+				}
+				echo ' class="formFieldList">';
+				if(strlen($role->getValue('rol_description')) > 0)
+				{
+					echo '
+					<li>
+						<dl>
+							<dt>'.$gL10n->get('SYS_DESCRIPTION').':</dt>
+							<dd>'.$role->getValue('rol_description').'</dd>
+						</dl>
+					</li>';
+				}
+	
+				if(strlen($role->getValue('rol_start_date')) > 0)
+				{
+					echo '
+					<li>
+						<dl>
+							<dt>'.$gL10n->get('SYS_PERIOD').':</dt>
+							<dd>'.$gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])).'</dd>
+						</dl>
+					</li>';
+				}
+				if($role->getValue('rol_weekday') > 0
+				|| strlen($role->getValue('rol_start_time')) > 0 )
+				{
+					echo '
+					<li>
+						<dl>
+							<dt>'.$gL10n->get('DAT_DATE').':</dt>
+							<dd>'; 
+								if($role->getValue('rol_weekday') > 0)
+								{
+									echo TableRoles::getWeekdayDesc($role->getValue('rol_weekday')).' ';
+								}
+								if(strlen($role->getValue('rol_start_time')) > 0)
+								{
+									echo $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
+								}
+							echo '</dd>
+						</dl>
+					</li>';
+				}
+				//Treffpunkt
+				if(strlen($role->getValue('rol_location')) > 0)
+				{
+					echo '
+					<li>
+						<dl>
+							<dt>'.$gL10n->get('SYS_LOCATION').':</dt>
+							<dd>'.$role->getValue('rol_location').'</dd>
+						</dl>
+					</li>';
+				}
+				//Teinehmer
+				echo '
+				<li>
+					<dl>
+						<dt>'.$gL10n->get('SYS_PARTICIPANTS').':</dt>
+						<dd>'.$row_lst['num_members'];
+							if($role->getValue('rol_max_members') > 0)
+							{
+								echo '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
+							}
+							if($getActiveRole && $row_lst['num_former'] > 0)
+							{
+								// Anzahl Ehemaliger anzeigen
+								if($row_lst['num_former'] == 1)
+								{
+									$text_former = $gL10n->get('SYS_FORMER');
+								}
+								else
+								{
+									$text_former = $gL10n->get('SYS_FORMER_PL');
+								}
+								
+								// if user is allowed to see members then show link to former members
+								if($gCurrentUser->viewRole($role->getValue('rol_id')))
+								{
+									echo '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row_lst['num_former'].' '.$text_former.'</a>) ';
+								}
+								else
+								{
+									echo '&nbsp;&nbsp;('.$row_lst['num_former'].' '.$text_former.') ';
+								}
+							}
+						echo '</dd>
+					</dl>
+				</li>';
+	
+				//Leiter
+				if($row_lst['num_leader']>0)
+				{
+					echo '
+					<li>
+						<dl>
+							<dt>'.$gL10n->get('SYS_LEADER').':</dt>
+							<dd>'.$row_lst['num_leader'].'</dd>
+						</dl>
+					</li>';
+				}
+	
+				//Beitrag
+				if(strlen($role->getValue('rol_cost')) > 0)
+				{
+					echo '
+					<li>
+						<dl>
+							<dt>'.$gL10n->get('SYS_CONTRIBUTION').':</dt>
+							<dd>'.$role->getValue('rol_cost').' '.$gPreferences['system_currency'].'</dd>
+						</dl>
+					</li>';
+				}
+
+				//Beitragszeitraum
+				if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
+				{
+					echo'<li>
+						<dl>
+							<dt>'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
+							<dd>'.TableRoles::getCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
+						</dl>
+					</li>';
+				}
+
+			echo '</ul>';
+			$count_cat_entries++;
         }
     }
 }
