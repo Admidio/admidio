@@ -1,16 +1,17 @@
 <?php
 /******************************************************************************
- * Photogalerien
+ * Various functions for photo albums
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  * Parameters:
- * pho_id: id des Albums das bearbeitet werden soll
- * job:    - new    (neue eingaben speichern)
- *         - change (Aenderungen ausfuehren)
- *         - delete (Loeschen eines Albums)
+ *
+ * pho_id       : Id of photo album that should be edited
+ * job - new    : create a new photo album
+ *     - change : edit a photo album
+ *     - delete : delete a photo album
  *
  *****************************************************************************/
 
@@ -68,11 +69,11 @@ if($getJob == 'new' || $getJob == 'change')
     //Album
     if(strlen($_POST['pho_name']) == 0)
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', 'Album'));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('PHO_ALBUM')));
     }
 	
     //Beginn
-    if(strlen($_POST['pho_begin'] > 0))
+    if(strlen($_POST['pho_begin']) > 0)
     {
         $startDate = new DateTimeExtended($_POST['pho_begin'], $gPreferences['system_date'], 'date');
         
@@ -82,12 +83,12 @@ if($getJob == 'new' || $getJob == 'change')
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_DATE_INVALID', 'Beginn', $gPreferences['system_date']));
+            $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
         }
     }
     else
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('START')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_START')));
     }    
     
     //Ende
@@ -131,7 +132,7 @@ if($getJob == 'new' || $getJob == 'change')
     }
     
     /********************neuen Datensatz anlegen***********************************/
-    if ($getJob=='new')
+    if ($getJob == 'new')
     {
         // Album in Datenbank schreiben
         $photo_album->save();

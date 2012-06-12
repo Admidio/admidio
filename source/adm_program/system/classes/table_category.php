@@ -143,7 +143,15 @@ class TableCategory extends TableAccess
     {
 		global $gL10n;
 
-		$value = parent::getValue($field_name, $format);
+		if($field_name == 'cat_name_intern')
+		{
+			// internal name should be read with no conversion
+			$value = parent::getValue($field_name, 'plain');
+		}
+        else
+		{		
+			$value = parent::getValue($field_name, $format);
+		}
 
 		if($field_name == 'cat_name' && $format != 'plain')
 		{

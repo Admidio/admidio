@@ -19,7 +19,7 @@ $_SESSION['import_csv_request'] = $_REQUEST;
 // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
 @set_time_limit(500);
 
-// Importmodus in sprechenden Konstanten definieren
+// create readable constants for user import mode
 define('USER_IMPORT_NOT_EDIT', '1');
 define('USER_IMPORT_DUPLICATE', '2');
 define('USER_IMPORT_DISPLACE', '3');
@@ -236,10 +236,12 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
         if( $rowDuplicateUser['usr_id'] == 0
         || ($rowDuplicateUser['usr_id']  > 0 && $_SESSION['user_import_mode'] > USER_IMPORT_NOT_EDIT) )
         {
-            if($rowDuplicateUser['usr_id'] == 0)
+			// if user doesn't exists or should be duplicated then count as new user
+            if($rowDuplicateUser['usr_id'] == 0 || $_SESSION['user_import_mode'] == USER_IMPORT_DUPLICATE)
             {
                 $countImportNewUser++;
             }
+			// existing users count as edited if mode is displace or complete
             elseif($rowDuplicateUser['usr_id']  > 0 && $user->columnsValueChanged())
             {
                 $countImportEditUser++;
