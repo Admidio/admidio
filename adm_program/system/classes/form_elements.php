@@ -159,11 +159,11 @@ class FormElements
 	 *  @param $field_id			Id and name of select box
 	 *  @param $firstEntry			value for the first entry of the select box
 	 *  @param $showCategoryChoice	this mode shows only categories with elements and if default category will be selected there must be at least more then one category to select
-	 *  @param $showHiddenCategory	Show visible and hidden categories
+	 *  @param $showSystemCategory	Show user defined and system categories
 	 *  @return Html code string with a select box element
 	 */
 	public static function generateCategorySelectBox($categoryType, $defaultCategory = 0, $fieldId = '', 
-	                           $firstEntry = '', $showCategoryChoice = false, $showHiddenCategory = false)
+	                           $firstEntry = '', $showCategoryChoice = false, $showSystemCategory = true)
 	{
 		global $gCurrentOrganization, $gDb, $gL10n, $gValidLogin;
 
@@ -195,13 +195,19 @@ class FormElements
             }
             elseif($categoryType == 'ROL')
             {
+				// don't show system categories
                 $sqlTables = TBL_CATEGORIES.', '.TBL_ROLES;
                 $sqlCondidtions = ' AND cat_id = rol_cat_id 
                                     AND rol_visible = 1 ';
             }
 		}
 		
-		if($showHiddenCategory == false)
+		if($showSystemCategory == false)
+		{
+			 $sqlCondidtions .= ' AND cat_system = 0 ';
+		}
+		
+		if($gValidLogin == false)
 		{
 			 $sqlCondidtions .= ' AND cat_hidden = 0 ';
 		}

@@ -185,17 +185,16 @@ if($getMode != 'csv')
                     margin: 20px;
                 }
             </style>
-            <script type="text/javascript"><!--
-                function exportList(element)
-                {
-                    var sel_list = element.value;
 
-                    if(sel_list.length > 1)
-                    {
-                        self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-                            "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + sel_list + "&show_members='.$getShowMembers.'";
-                    }
-                }
+            <script type="text/javascript"><!--
+				$(document).ready(function() {
+					$("#admSelectExportMode").change(function () {
+						if($(this).val().length > 1) {
+							self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
+								"lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
+						}
+					})
+				});
             //--></script>';
         require(SERVER_PATH. '/adm_program/system/overall_header.php');
     }
@@ -290,7 +289,7 @@ if($getMode != 'csv')
             <li>
                 <span class="iconTextLink">
                     <img src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('LST_EXPORT_TO').'" />
-                    <select size="1" name="export_mode" onchange="exportList(this)">
+                    <select id="admSelectExportMode" size="1">
                         <option value="" selected="selected">'.$gL10n->get('LST_EXPORT_TO').' ...</option>
                         <option value="csv-ms">'.$gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')</option>
                         <option value="csv-oo">'.$gL10n->get('LST_CSV_FILE').' ('.$gL10n->get('SYS_UTF8').')</option>
