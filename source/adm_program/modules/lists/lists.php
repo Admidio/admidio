@@ -107,27 +107,23 @@ if($getCatId > 0)
 
 $gLayout['header'] = '
     <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
+        $(document).ready(function() {
             $("#admCategory").change(function () {
-                var categoryId = document.getElementById("admCategory").value;
-                self.location.href = "lists.php?cat_id=" + categoryId + "&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole.'";
+                self.location.href = "lists.php?cat_id=" + $(this).val() + "&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole.'";
             });
+			
+			$(".admSelectRoleList").change(function () {
+				elementId = $(this).attr("id");
+				roleId    = elementId.substr(elementId.search(/_/)+1);
+
+				if($(this).val() == "mylist") {
+					self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$getActiveRole.'";
+				}
+				else {
+					self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_id=" + roleId;
+				}
+			})
         });
-
-        function showList(element, rol_id)
-        {
-            var lst_id = element.value;
-
-            if(lst_id == "mylist")
-            {
-                self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + rol_id + "&active_role='.$getActiveRole.'";
-            }
-            else
-            {
-                self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + lst_id + "&rol_id=" + rol_id;
-            }
-        }
     //--></script>';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -301,7 +297,7 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
 					&& ($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0))
 					{
 						echo '
-						<select size="1" name="list'.$i.'" onchange="showList(this, '. $role->getValue('rol_id'). ')">
+						<select class="admSelectRoleList" id="admSelectRoleList_'.$role->getValue('rol_id').'">
 							<option value="" selected="selected">'.$gL10n->get('LST_SHOW_LISTS').' ...</option>';
 							
 							// alle globalen Listenkonfigurationen auflisten
