@@ -19,6 +19,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_announcement.php');
+require_once('../../system/classes/announcements.php');
 unset($_SESSION['announcements_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -69,88 +70,8 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$getHeadline.'</h1>';
 
-// alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-$organizations = '';
-$arr_ref_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
-
-foreach($arr_ref_orgas as $key => $value)
-{
-	$organizations = $organizations. '\''.$value.'\',';
-}
-$organizations = $organizations. '\''. $gCurrentOrganization->getValue('org_shortname'). '\'';
-
-// falls eine id fuer ein bestimmtes Datum uebergeben worden ist...
-if($getAnnId > 0)
-{
-    $conditions = 'AND ann_id ='. $getAnnId;
-}
-//...ansonsten alle fuer die Gruppierung passenden Termine aus der DB holen.
-else
-{
-    // Ankuendigungen an einem Tag suchen
-    if(strlen($getDate) > 0)
-    {
-        $conditions = ' AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$getDate.'\'';        
-    }
-    //...ansonsten alle fuer die Gruppierung passenden Ankuendigungen aus der DB holen.
-    else
-    {
-        $conditions = '';
-    }
-}
-
-if($getAnnId == 0)
-{
-    // Gucken wieviele Datensaetze die Abfrage ermittelt kann...
-    $sql = 'SELECT COUNT(1) as count 
-              FROM '. TBL_ANNOUNCEMENTS. '
-             WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
-                OR (   ann_global   = 1
-               AND ann_org_shortname IN ('.$organizations.') ))
-                   '.$conditions.'';
-    $result = $gDb->query($sql);
-    $row    = $gDb->fetch_array($result);
-    $num_announcements = $row['count'];
-}
-else
-{
-    $num_announcements = 1;
-}
-
-// Anzahl Ankuendigungen pro Seite
-if($gPreferences['announcements_per_page'] > 0)
-{
-    $announcements_per_page = $gPreferences['announcements_per_page'];
-}
-else
-{
-    $announcements_per_page = $num_announcements;
-}
-
-// nun die Ankuendigungen auslesen, die angezeigt werden sollen
-$sql = 'SELECT ann.*, 
-               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
-               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-          FROM '. TBL_ANNOUNCEMENTS. ' ann
-          LEFT JOIN '. TBL_USER_DATA .' cre_surname
-            ON cre_surname.usd_usr_id = ann_usr_id_create
-           AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-            ON cre_firstname.usd_usr_id = ann_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_surname
-            ON cha_surname.usd_usr_id = ann_usr_id_change
-           AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-            ON cha_firstname.usd_usr_id = ann_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-         WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
-            OR (   ann_global   = 1
-           AND ann_org_shortname IN ('.$organizations.') ))
-               '.$conditions.' 
-         ORDER BY ann_timestamp_create DESC
-         LIMIT '.$announcements_per_page.' OFFSET '.$getStart;
-$announcements_result = $gDb->query($sql);
+//Objekt anlegen
+$announcements = new Announcements($getAnnId, $getDate);
 
 // Neue Ankuendigung anlegen
 if($gCurrentUser->editAnnouncements())
@@ -167,7 +88,7 @@ if($gCurrentUser->editAnnouncements())
     </ul>';        
 }
 
-if ($gDb->num_rows($announcements_result) == 0)
+if($announcements->getAnnouncementsCount() == 0)
 {
     // Keine Ankuendigungen gefunden
     if($getAnnId > 0)
@@ -181,10 +102,11 @@ if ($gDb->num_rows($announcements_result) == 0)
 }
 else
 {
+    $getAnnouncements = $announcements->getAnnouncements($getStart);    
     $announcement = new TableAnnouncement($gDb);
 
     // Ankuendigungen auflisten
-    while($row = $gDb->fetch_array($announcements_result))
+    foreach($getAnnouncements['announcements'] as $row)
     {
         $announcement->clear();
         $announcement->setArray($row);
