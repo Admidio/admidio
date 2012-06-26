@@ -2,12 +2,12 @@
 /******************************************************************************
  * Sidebar Announcements
  *
- * Version 1.4.0
+ * Version 1.5.0
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
  *
- * Compatible with Admidio version 2.3.0
+ * Compatible with Admidio version 2.4.0
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -26,6 +26,7 @@ if(!defined('PLUGIN_PATH'))
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_announcement.php');
+require_once(PLUGIN_PATH. '/../adm_program/system/classes/announcements.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
@@ -63,25 +64,8 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
-// alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
-$plg_organizations = "";
-$plg_arr_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
-
-foreach($plg_arr_orgas as $key => $value)
-{
-	$plg_organizations = $plg_organizations. '\''.$value.'\', ';
-}
-$plg_organizations = $plg_organizations. '\''. $gCurrentOrganization->getValue('org_shortname'). '\'';
-
-// nun alle relevanten Ankuendigungen finden
-$sql    = 'SELECT * FROM '. TBL_ANNOUNCEMENTS. '
-			WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname').'\'
-				  OR (   ann_global   = 1
-					 AND ann_org_shortname IN ('.$plg_organizations.') ))
-			ORDER BY ann_timestamp_create DESC
-			LIMIT '.$plg_announcements_count;
-$plg_result = $gDb->query($sql);
-$plg_announcement = new TableAnnouncement($gDb);
+//Objekt anlegen
+$plg_announcements = new Announcements();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
 if($plg_show_headline==1)
@@ -90,9 +74,17 @@ if($plg_show_headline==1)
 }
 echo '<div class="admPluginBody">';
 
-if($gDb->num_rows($plg_result) > 0)
+if($plg_announcements->getAnnouncementsCount() == 0)
 {
-    while($plg_row = $gDb->fetch_object($plg_result))
+    echo $gL10n->get('SYS_NO_ENTRIES');
+}
+else
+{
+    //Daten holen
+    $plg_getAnnouncements = $plg_announcements->getAnnouncements(0, $plg_announcements_count);
+    $plg_announcement = new TableAnnouncement($gDb);
+
+    foreach($plg_getAnnouncements['announcements'] as $plg_row)
     {
         $plg_announcement->clear();
         $plg_announcement->setArray($plg_row);
@@ -131,11 +123,6 @@ if($gDb->num_rows($plg_result) > 0)
     
     echo '<a class="'.$plg_link_class.'" href="'.$g_root_path.'/adm_program/modules/announcements/announcements.php" target="'.$plg_link_target.'">'.$gL10n->get('PLG_SIDEBAR_ANNOUNCEMENTS_ALL_ANNOUNCEMENTS').'</a>';
 }
-else
-{
-    echo $gL10n->get('SYS_NO_ENTRIES');
-}
-
 echo '</div></div>';
 
 ?>

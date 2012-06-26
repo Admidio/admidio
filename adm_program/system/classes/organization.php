@@ -182,5 +182,20 @@ class Organization extends TableOrganizations
             return false;
         }
     }
+    
+    //gibt liste für mit Kindern und Eltern für SQL-Abfrage zurück
+    public function getFamilySQL()
+    {
+        // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
+        $organizations = '';
+        $arr_ref_orgas = $this->getReferenceOrganizations(true, true);
+
+        foreach($arr_ref_orgas as $key => $value)
+        {
+            $organizations .= '\''.$value.'\',';
+        }
+        $organizations .= '\''. $this->getValue('org_shortname'). '\'';
+        return $organizations;
+    }
 }
 ?>
