@@ -19,7 +19,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_announcement.php');
-require_once('../../system/classes/announcements.php');
+require_once('../../system/classes/module_announcements.php');
 unset($_SESSION['announcements_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist

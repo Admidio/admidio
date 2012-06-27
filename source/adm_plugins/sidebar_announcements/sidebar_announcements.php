@@ -26,7 +26,7 @@ if(!defined('PLUGIN_PATH'))
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_announcement.php');
-require_once(PLUGIN_PATH. '/../adm_program/system/classes/announcements.php');
+require_once(PLUGIN_PATH. '/../adm_program/system/classes/module_announcements.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // pruefen, ob alle Einstellungen in config.php gesetzt wurden
