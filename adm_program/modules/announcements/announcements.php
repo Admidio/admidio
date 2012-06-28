@@ -154,11 +154,13 @@ else
             </div>
         </div>';
     }  // Ende While-Schleife
+    
+    // Navigation mit Vor- und Zurueck-Buttons
+    $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
+    echo admFuncGeneratePagination($base_url, $getAnnouncements['totalCount'], $getAnnouncements['limit'], $getStart, TRUE);
 }
 
-// Navigation mit Vor- und Zurueck-Buttons
-$base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
-echo admFuncGeneratePagination($base_url, $num_announcements, $announcements_per_page, $getStart, TRUE);
+
         
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
