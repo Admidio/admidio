@@ -20,7 +20,7 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/rss.php');
 require_once('../../system/classes/table_announcement.php');
-require_once('../../system/classes/announcements.php');
+require_once('../../system/classes/module_announcements.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($gPreferences['enable_rss'] != 1)

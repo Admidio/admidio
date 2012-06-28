@@ -37,7 +37,7 @@ class Announcements
                  WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
                     OR (   ann_global   = 1
                    AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL().') ))
-                       '.$conditions.'';
+                       '.$this->getConditions.'';
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);             
         return $row['count'];
