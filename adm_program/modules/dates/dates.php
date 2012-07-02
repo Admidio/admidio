@@ -8,8 +8,11 @@
  *
  * Parameters:
  *
- * mode: actual       - (Default) show actual dates and all events in future
- *       old          - show events in the past
+ * mode: actual       - (Default) shows actual dates and all events in future
+ *       old          - shows events in the past
+ *       period       - shows all events in a specified period (date_from/date_to)
+ *       day          - shows all events of a specified day (date_from)
+ *       all          - shows all events in past and future
  * start              - Informatiobn about the start of shown data records
  * headline           - Headline shown over events
  *                      (Default) Dates
@@ -32,10 +35,27 @@ require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
+require_once('../../system/classes/module_dates.php');
 unset($_SESSION['dates_request']);
 
+
+// check if module is active
+if($gPreferences['enable_dates_module'] == 0)
+{
+    // Module is not active
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+}
+elseif($gPreferences['enable_dates_module'] == 2)
+{
+    // module only for valid Useres
+    require_once('../../system/login_valid.php');
+}
+
+//Object erzeugen
+$dates = new Dates();
+
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old'));
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, $dates->getModes());
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
 $getDateId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
@@ -44,80 +64,50 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'string', DATE_NOW, false);
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'string', '9999-12-31', false);
-    
-// check if old events are required
-// then read all events in the past
-if($getMode == 'old')
-{
-	$getDateFrom = '1970-01-01';
-	$getDateTo     = date('Y-m-d', time() - (24 * 60 * 60));
-}
 
+ 
 // if exact date is set than convert it to our new syntax with dateFrom and dateTo
 if(strlen($getDate) > 0)
 {
-	$getDateFrom = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
-	$getDateTo   = $getDateFrom;
+    $getDateFrom = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
+    $getDateTo   = $getDateFrom;
 }
 
-// check if date has english format
-$objDateFrom = new DateTimeExtended($getDateFrom, 'Y-m-d', 'date'); 
-
-if($objDateFrom->valid())
+//autoset mode
+if($getMode=='actual')
 {
-	$dateFromEnglishFormat = $getDateFrom;
-	$dateFromSystemFormat = $objDateFrom->format($gPreferences['system_date']);
-}
-else
-{
-	// check if date has system format
-	$objDateFrom = new DateTimeExtended($getDateFrom, $gPreferences['system_date'], 'date');
-    $objDateFrom->setDateTime($getDateFrom, $gPreferences['system_date']);
-	if($objDateFrom->valid())
-	{
-		$dateFromEnglishFormat = substr($objDateFrom->getDateTimeEnglish(), 0, 10);
-		$dateFromSystemFormat = $objDateFrom->format($gPreferences['system_date']);
-	}
-    else
+    if($getDateFrom==$getDateTo)
     {
-        $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
+        $getMode='day';
+    }
+    elseif($getDateFrom!=DATE_NOW && $getDateTo!='9999-12-31')
+    {
+        $getMode='period';
     }
 }
 
-// The same checks for the enddate
-$objDateTo = new DateTimeExtended($getDateTo, 'Y-m-d', 'date');
-
-if($objDateTo->valid())
+//select dates
+if($getDateId > 0)
 {
-	$dateToEnglishFormat = $getDateTo;
-	$dateToSystemFormat = $objDateTo->format($gPreferences['system_date']);
+    $dates->setDateId($getDateId);
 }
 else
 {
-    $objDateTo = new DateTimeExtended($getDateTo, $gPreferences['system_date'], 'date');
-    $objDateTo->setDateTime($getDateTo, $gPreferences['system_date']);
-	if($objDateTo->valid())
-	{
-		$dateToEnglishFormat = substr($objDateTo->getDateTimeEnglish(), 0, 10);
-		$dateToSystemFormat = $objDateTo->format($gPreferences['system_date']);
-		// Set mode to 'old' if nescessary
-        if($getDateTo < date($gPreferences['system_date']))
-        {
-            $getMode = 'old';
-        }
-
-        else
-        {
-            $getMode = 'actual';
-        }
-
-		
-	}
-    else
+    $dates->setMode($getMode, $getDateFrom, $getDateTo);
+    
+    if($getCatId > 0)
     {
-        $gMessage->show($gL10n->get('SYS_DATE_INVALID', $gL10n->get('SYS_START'), $gPreferences['system_date']));
-    }
+        $dates->setCatId($getCatId);
+    }   
 }
+
+//Convert dates to system format
+$objDate = new DateTimeExtended($dates->getDateFrom(), 'Y-m-d', 'date');
+$dateFromSystemFormat = date($gPreferences['system_date'], $objDate->getTimestamp());
+
+$objDate = new DateTimeExtended($dates->getDateTo(), 'Y-m-d', 'date');
+$dateToSystemFormat = date($gPreferences['system_date'], $objDate->getTimestamp());
+
 
 // Fill input fields only if User requests exists
 if ($getDateFrom == '1970-01-01')
@@ -136,17 +126,6 @@ else
     $dateToHtmlOutput  = $dateToSystemFormat;
 }
   
-// check if module is active
-if($gPreferences['enable_dates_module'] == 0)
-{
-    // Module is not active
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-}
-elseif($gPreferences['enable_dates_module'] == 2)
-{
-    // module only for valid Useres
-    require_once('../../system/login_valid.php');
-}
 
 if($getCatId > 0)
 {
@@ -225,90 +204,6 @@ function Datefilter ()
 
 <h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';  
 
-     
-// find all groups, where organisation is head or sub organisatiob
-$topNavigation = '';
-$organizations = '';
-$sqlConditions = '';
-$sqlConditionCalendar = '';
-$sqlConditionLogin = '';
-$sqlOrderBy = '';
-$arr_ref_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
-
-foreach($arr_ref_orgas as $org_id => $value)
-{
-    $organizations = $organizations. $org_id. ', ';
-}
-$organizations = $organizations. $gCurrentOrganization->getValue('org_id');
-
-if ($gValidLogin == false)
-{
-    // if user isn't logged in, then don't show hidden categories
-    $sqlConditions .= ' AND cat_hidden = 0 ';
-}
-
-// In case ID was permitted and user has rights
-if($getDateId > 0)
-{
-    $sqlConditions .= ' AND dat_id = '.$getDateId;
-}
-//...otherwise get all additional events for a group
-else
-{
-    if ($getCatId > 0)
-    {
-        // show all events from category
-        $sqlConditionCalendar .= ' AND cat_id  = '.$getCatId;
-    }
-    // other events
-    else
-    {
-		// add 1 second to end date because full time events to until next day
-        $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$dateFromEnglishFormat.' 00:00:00\' AND \''.$dateToEnglishFormat.' 23:59:59\'
-                                OR dat_end   BETWEEN \''.$dateFromEnglishFormat.' 00:00:01\' AND \''.$dateToEnglishFormat.' 23:59:59\')';
-        $sqlOrderBy .= ' ORDER BY dat_begin ASC ';
-    }
-}
-
-if($getDateId == 0)
-{
-    // add conditions for role permission
-    if($gCurrentUser->getValue('usr_id') > 0)
-    {
-        $sqlConditionLogin = '
-        AND (  dtr_rol_id IS NULL 
-            OR dtr_rol_id IN (SELECT mem_rol_id 
-                                FROM '.TBL_MEMBERS.' mem2
-                               WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                 AND mem2.mem_begin  <= dat_begin
-                                 AND mem2.mem_end    >= dat_end) ) ';
-    }
-    else
-    {
-        $sqlConditionLogin = ' AND dtr_rol_id IS NULL ';
-    }
-    
-    // Check how many data records are found
-    $sql = 'SELECT COUNT(DISTINCT dat_id) as count
-              FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
-             WHERE dat_cat_id = cat_id
-               AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                   OR (   dat_global   = 1
-                      AND cat_org_id IN ('.$organizations.') 
-                      )
-                   )
-               AND dat_id = dtr_dat_id
-                   '.$sqlConditionLogin. $sqlConditions. $sqlConditionCalendar;
-
-    $result = $gDb->query($sql);
-    $row    = $gDb->fetch_array($result);
-    $num_dates = $row['count'];
-}
-else
-{
-    $num_dates = 1;
-}
-
 // Number of events each page
 if($gPreferences['dates_per_page'] > 0)
 {
@@ -316,41 +211,11 @@ if($gPreferences['dates_per_page'] > 0)
 }
 else
 {
-    $dates_per_page = $num_dates;
+    $dates_per_page = $dates->getDatesCount();
 }
 
 // read the events for output
-$sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,
-               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
-               cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
-          FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
-          LEFT JOIN '. TBL_USER_DATA .' cre_surname 
-            ON cre_surname.usd_usr_id = dat_usr_id_create
-           AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cre_firstname 
-            ON cre_firstname.usd_usr_id = dat_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_surname
-            ON cha_surname.usd_usr_id = dat_usr_id_change
-           AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-            ON cha_firstname.usd_usr_id = dat_usr_id_change
-           AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_MEMBERS. ' mem
-            ON mem.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-           AND mem.mem_rol_id = dat_rol_id
-           AND mem_begin <= \''.DATE_NOW.'\'
-           AND mem_end    > \''.DATE_NOW.'\'
-         WHERE dat_cat_id = cat_id
-           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-               OR (   dat_global   = 1
-                  AND cat_org_id IN ('.$organizations.') ))
-           AND dat_id = dtr_dat_id
-               '.$sqlConditionLogin.'
-               '.$sqlConditions. $sqlConditionCalendar. $sqlOrderBy. '
-         LIMIT '.$dates_per_page.' OFFSET '.$getStart;
-$dates_result = $gDb->query($sql);
-
+$datesResult = $dates->getDates($getStart, $dates_per_page);
 
 //Check if box must be shown, when more dates avaiable
 if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDates())
@@ -416,7 +281,7 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
                 <dl> 
                     <dt><br />
                             <span>
-                                <form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php"onsubmit="return Datefilter()">
+                                <form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php" onsubmit="return Datefilter()">
                                     <label for="date_from">'.$gL10n->get('SYS_START').':</label>
                                         <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$dateFromHtmlOutput.'" />
                                         <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
@@ -446,7 +311,7 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
     }
 }
 
-if($gDb->num_rows($dates_result) == 0)
+if($datesResult['totalCount'] == 0)
 {
     // No events found
     if($getDateId > 0)
@@ -463,7 +328,7 @@ else
     $date = new TableDate($gDb);
 
     // List events
-    while($row = $gDb->fetch_array($dates_result))
+    foreach($datesResult['dates'] as $row)
     {
         // Initialize object and write new data
         //$date->clear();
@@ -679,7 +544,7 @@ else
                                 // Limit for participiants
                                 $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
                                          WHERE mem_rol_id = '.$date->getValue('dat_rol_id').' 
-										   AND mem_leader = 0';
+                                           AND mem_leader = 0';
                                 $res_num = $gDb->query($sql);
                                 $row_num = $gDb->num_rows($res_num);
                                 if($row_num >= $date->getValue('dat_max_members'))
@@ -703,7 +568,7 @@ else
                             }
                         }
                         
-						// Link to participiants list
+                        // Link to participiants list
                         if($gValidLogin)
                         {
                             $registrationHtml .= '&nbsp;
@@ -714,7 +579,7 @@ else
                             </span>';
                         }
 
-						// Link for managing new participiants
+                        // Link for managing new participiants
                         if($row['mem_leader'] == 1)
                         {
                             $registrationHtml .= '&nbsp;
@@ -744,8 +609,8 @@ else
 }
 
 // Navigation with forward and backwards buttons
-$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat;
-echo admFuncGeneratePagination($base_url, $num_dates, $dates_per_page, $getStart, TRUE);
+$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateTo().'&date_to='.$dates->getDateFrom();
+echo admFuncGeneratePagination($base_url, $datesResult['totalCount'], $datesResult['limit'], $getStart, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>
