@@ -26,6 +26,7 @@ if(!defined('PLUGIN_PATH'))
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
 require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_date.php');
+require_once(PLUGIN_PATH. '/../adm_program/system/classes/module_dates.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 
 // Sprachdatei des Plugins einbinden
@@ -81,71 +82,13 @@ $plg_link_url = $g_root_path.'/adm_program/modules/dates/dates.php';
 // set database to admidio, sometimes the user has other database connections at the same time
 $gDb->setCurrentDB();
 
-// alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
-$plg_organizations = '';
-$plg_arr_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
 
-foreach($plg_arr_orgas as $key => $value)
-{
-	$plg_organizations = $plg_organizations. $key. ', ';
-}
-$plg_organizations = $plg_organizations. $gCurrentOrganization->getValue('org_id');
+//create Object
+$plgDates = new Dates();
 
-$plgSqlConditions = '';
-$plgSqlConditionCalendar = '';
-$plgSqlConditionLogin = '';
+// read events for output
+$plgDatesResult = $plgDates->getDates(0, $plg_dates_count);
 
-// Wenn User nicht eingeloggt ist, Kalender, die hidden sind, aussortieren
-if ($gValidLogin == false)
-{
-	$plgSqlConditions .= ' AND cat_hidden = 0 ';
-}
-
-// Ermitteln, welche Kalender angezeigt werden sollen
-if(in_array('all',$plg_kal_cat))
-{
-	// alle Kalender anzeigen
-    $plgSqlConditionCalendar .= ' AND (cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                            OR (   dat_global  = 1
-                               AND cat_org_id IN ('.$plg_organizations.') ) ) ';
-}
-else
-{
-    // nur bestimmte Kalender anzeigen
-    $plgSqlConditionCalendar .= ' AND cat_type = \'DAT\' AND ( ';
-    for($i=0;$i<count($plg_kal_cat);$i++)
-    {
-        $plgSqlConditionCalendar .= 'cat_name = \''.$plg_kal_cat[$i].'\' OR ';
-    }
-    $plgSqlConditionCalendar = substr($plgSqlConditionCalendar,0,-4). ') ';
-}
-
-// Bedingungen fuer die Rollenfreigabe hinzufuegen
-if($gCurrentUser->getValue('usr_id') > 0)
-{
-    $plgSqlConditionLogin = '
-    AND (  dtr_rol_id IS NULL 
-        OR dtr_rol_id IN (SELECT mem_rol_id 
-                            FROM '.TBL_MEMBERS.' mem2
-                           WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                             AND mem2.mem_begin  <= dat_begin
-                             AND mem2.mem_end    >= dat_end) ) ';
-}
-else
-{
-    $plgSqlConditionLogin = ' AND dtr_rol_id IS NULL ';
-}
-
-// nun alle relevanten Termine finden
-$sql    = 'SELECT * FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
-            WHERE dat_cat_id = cat_id
-              AND (  dat_begin >= \''.DATE_NOW.'\'
-                  OR dat_end   >  \''.DATE_NOW.' 00:00:00\' )
-              AND dat_id = dtr_dat_id '.
-                  $plgSqlConditionLogin. $plgSqlConditions. $plgSqlConditionCalendar.'
-			ORDER BY dat_begin ASC
-			LIMIT '.$plg_dates_count;
-$plg_result = $gDb->query($sql);
 $plg_date = new TableDate($gDb);
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
@@ -155,9 +98,9 @@ if($plg_show_headline==1)
 }
 echo '<div class="admPluginBody">';
 
-if($gDb->num_rows($plg_result) > 0)
+if($plgDatesResult['numResults'] > 0)
 {
-    while($plg_row = $gDb->fetch_object($plg_result))
+    foreach($plgDatesResult['dates'] as $plg_row)
     {
         $plg_date->clear();
         $plg_date->setArray($plg_row);
