@@ -214,7 +214,7 @@ else
     $dates_per_page = $dates->getDatesCount();
 }
 
-// read the events for output
+// read events for output
 $datesResult = $dates->getDates($getStart, $dates_per_page);
 
 //Check if box must be shown, when more dates avaiable
@@ -328,284 +328,287 @@ else
     $date = new TableDate($gDb);
 
     // List events
-    foreach($datesResult['dates'] as $row)
+    if($datesResult['numResults'] > 0)
     {
-        // Initialize object and write new data
-        //$date->clear();
-        //$date->setArray($row);
-        $date->readData($row['dat_id']);
-
-        echo '
-        <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
-            <div class="boxHead">
-                <div class="boxHeadLeft">
-                    <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />'
-                    . $date->getValue('dat_begin', $gPreferences['system_date']);
-                    if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
-                    {
-                        echo ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
-                    }
-                    echo ' ' . $date->getValue('dat_headline'). '
+        foreach($datesResult['dates'] as $row)
+        {
+            // Initialize object and write new data
+            //$date->clear();
+            //$date->setArray($row);
+            $date->readData($row['dat_id']);
+        
+            echo '
+            <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
+                <div class="boxHead">
+                    <div class="boxHeadLeft">
+                        <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />'
+                        . $date->getValue('dat_begin', $gPreferences['system_date']);
+                        if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
+                        {
+                            echo ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
+                        }
+                        echo ' ' . $date->getValue('dat_headline'). '
+                    </div>
+                    <div class="boxHeadRight">';
+                        //ical Download
+                        if($gPreferences['enable_dates_ical'] == 1)
+                        {
+                            echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
+                            src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
+                        }
+                        
+                        // change and delete is only for useres with additional rights
+                        if ($gCurrentUser->editDates())
+                        {
+                            if($date->editRight() == true)
+                            {
+                                echo '
+                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
+                                    src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
+                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$getHeadline.'"><img
+                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+                            }
+        
+                            // Deleting events is only allowed for group members
+                            if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
+                            {
+                                echo '
+                                <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
+                                    $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img 
+                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                            }
+                        }
+                    echo'</div>
                 </div>
-                <div class="boxHeadRight">';
-                    //ical Download
-                    if($gPreferences['enable_dates_ical'] == 1)
+        
+                <div class="boxBody">';
+                    $dateElements = array();
+                    $firstElement = true;
+        
+                    if ($date->getValue('dat_all_day') == 0)
                     {
-                        echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
-                        src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
+                        // Write start in array
+                        $dateElements[] = array($gL10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
+                        // Write end in array
+                        $dateElements[] = array($gL10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
                     }
-                    
-                    // change and delete is only for useres with additional rights
-                    if ($gCurrentUser->editDates())
+                    // write calendar in output array
+                    $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
+        
+                    if (strlen($date->getValue('dat_location')) > 0)
                     {
-                        if($date->editRight() == true)
+                        // Show map link, when at leastt 2 words avaiable 
+                        // having more then 3 characters each
+                        $map_info_count = 0;
+                        foreach(preg_split('/[,; ]/', $date->getValue('dat_location')) as $key => $value)
                         {
-                            echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
-                                src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$getHeadline.'"><img
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
-                        }
-
-                        // Deleting events is only allowed for group members
-                        if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
-                        {
-                            echo '
-                            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
-                                $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
-                        }
-                    }
-                echo'</div>
-            </div>
-
-            <div class="boxBody">';
-                $dateElements = array();
-                $firstElement = true;
-
-                if ($date->getValue('dat_all_day') == 0)
-                {
-                    // Write start in array
-                    $dateElements[] = array($gL10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
-                    // Write end in array
-                    $dateElements[] = array($gL10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
-                }
-                // write calendar in output array
-                $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
-
-                if (strlen($date->getValue('dat_location')) > 0)
-                {
-                    // Show map link, when at leastt 2 words avaiable 
-                    // having more then 3 characters each
-                    $map_info_count = 0;
-                    foreach(preg_split('/[,; ]/', $date->getValue('dat_location')) as $key => $value)
-                    {
-                        if(strlen($value) > 3)
-                        {
-                            $map_info_count++;
-                        }
-                    }
-
-                    if($gPreferences['dates_show_map_link'] == true
-                        && $map_info_count > 1)
-                    {
-                        // Create Google-Maps-Link for location
-                        $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
-                        if(strlen($date->getValue('dat_country')) > 0)
-                        {
-                            // Better results with additional country information
-                            $location_url .= ',%20'. $date->getValue('dat_country');
-                        }
-                        $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
-
-                        // if valid login and enough information about adress exists - calculate the route
-                        if($gValidLogin && strlen($gCurrentUser->getValue('ADDRESS')) > 0
-                        && (  strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0 ))
-                        {
-                            $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($gCurrentUser->getValue('ADDRESS'));
-                            if(strlen($gCurrentUser->getValue('POSTCODE'))  > 0)
+                            if(strlen($value) > 3)
                             {
-                                $route_url .= ',%20'. urlencode($gCurrentUser->getValue('POSTCODE'));
+                                $map_info_count++;
                             }
-                            if(strlen($gCurrentUser->getValue('CITY'))  > 0)
-                            {
-                                $route_url .= ',%20'. urlencode($gCurrentUser->getValue('CITY'));
-                            }
-                            if(strlen($gCurrentUser->getValue('COUNTRY'))  > 0)
-                            {
-                                $route_url .= ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
-                            }
-
-                            $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
+                        }
+        
+                        if($gPreferences['dates_show_map_link'] == true
+                            && $map_info_count > 1)
+                        {
+                            // Create Google-Maps-Link for location
+                            $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
                             if(strlen($date->getValue('dat_country')) > 0)
                             {
-                                // With information about country Google finds  the location much better
-                                $route_url .= ',%20'. $date->getValue('dat_country');
+                                // Better results with additional country information
+                                $location_url .= ',%20'. $date->getValue('dat_country');
                             }
-                            $locationHtml .= '
-                                <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img 
-                                    src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>
-                                </span>';
-                        }
-                        // if active, then show room information
-                        if($date->getValue('dat_room_id') > 0)
+                            $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
+        
+                            // if valid login and enough information about adress exists - calculate the route
+                            if($gValidLogin && strlen($gCurrentUser->getValue('ADDRESS')) > 0
+                            && (  strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0 ))
+                            {
+                                $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($gCurrentUser->getValue('ADDRESS'));
+                                if(strlen($gCurrentUser->getValue('POSTCODE'))  > 0)
+                                {
+                                    $route_url .= ',%20'. urlencode($gCurrentUser->getValue('POSTCODE'));
+                                }
+                                if(strlen($gCurrentUser->getValue('CITY'))  > 0)
+                                {
+                                    $route_url .= ',%20'. urlencode($gCurrentUser->getValue('CITY'));
+                                }
+                                if(strlen($gCurrentUser->getValue('COUNTRY'))  > 0)
+                                {
+                                    $route_url .= ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
+                                }
+        
+                                $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
+                                if(strlen($date->getValue('dat_country')) > 0)
+                                {
+                                    // With information about country Google finds  the location much better
+                                    $route_url .= ',%20'. $date->getValue('dat_country');
+                                }
+                                $locationHtml .= '
+                                    <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img 
+                                        src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>
+                                    </span>';
+                            }
+                            // if active, then show room information
+                            if($date->getValue('dat_room_id') > 0)
+                            {
+                                $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
+                                $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                                $locationHtml .= ' <strong>(<a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a>)</strong>';
+                            }
+                        } 
+                        else
                         {
-                            $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
-                            $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
-                            $locationHtml .= ' <strong>(<a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a>)</strong>';
+                            $locationHtml = '<strong>'. $date->getValue('dat_location'). '</strong>';
                         }
-                    } 
-                    else
-                    {
-                        $locationHtml = '<strong>'. $date->getValue('dat_location'). '</strong>';
+        
+                        $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
                     }
-
-                    $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
-                }
-                elseif($date->getValue('dat_room_id') > 0)
-                {
-                    // if active, then show room information
-                    $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
-                    $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
-                    $locationHtml = '<strong><a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
-                    $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
-                }
-
-                // write participants in array
-                if($date->getValue('dat_rol_id') > 0)
-                {
-                    if($date->getValue('dat_max_members')!=0)
+                    elseif($date->getValue('dat_room_id') > 0)
                     {
-                        $sql = 'SELECT DISTINCT mem_usr_id 
-                                  FROM '.TBL_MEMBERS.' 
-                                 WHERE mem_rol_id = '.$date->getValue('dat_rol_id').'
-                                   AND mem_begin <= \''.DATE_NOW.'\'
-                                   AND mem_end    > \''.DATE_NOW.'\'';
-                        $result = $gDb->query($sql);
-                        $row_count = $gDb->num_rows($result);
-                                    
-                        $participantsHtml = '<strong>'.$row_count.'</strong>';
+                        // if active, then show room information
+                        $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
+                        $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                        $locationHtml = '<strong><a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
+                        $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
                     }
-                    else 
-                    {
-                        $participantsHtml = '<strong>'.$gL10n->get('SYS_UNLIMITED').'</strong>';
-                    }
-                    $dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), $participantsHtml);
-                }
-
-                // Output of elements 
-                // always 2 then line break
-                echo '<table style="width: 100%; border-width: 0px;">';
-                foreach($dateElements as $element)
-                {
-                    if($firstElement)
-                    {
-                        echo '<tr>';
-                    }
-                
-                    echo '<td style="width: 15%">'.$element[0].':</td>
-                    <td style="width: 35%">'.$element[1].'</td>';
-                
-                    if($firstElement)
-                    {
-                        $firstElement = false;
-                    }
-                    else
-                    {
-                        echo '</tr>';
-                        $firstElement = true;
-                    }
-                }
-                echo '</table>';
-
-                // Show discription
-                echo '<div class="date_description" style="clear: left;">'.$date->getValue('dat_description').'</div>';
-
-                if($date->getValue('dat_rol_id') > 0)
-                {
-                    // Link for the Agreement in Array
-                    
+        
+                    // write participants in array
                     if($date->getValue('dat_rol_id') > 0)
                     {
-                        if($row['member_date_role'] > 0)
+                        if($date->getValue('dat_max_members')!=0)
                         {
-                            $registrationHtml = '<span class="iconTextLink">
-                                    <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'"><img 
-                                        src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>
-                                    <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">'.$gL10n->get('DAT_CANCEL').'</a>
-                                </span>';
+                            $sql = 'SELECT DISTINCT mem_usr_id 
+                                      FROM '.TBL_MEMBERS.' 
+                                     WHERE mem_rol_id = '.$date->getValue('dat_rol_id').'
+                                       AND mem_begin <= \''.DATE_NOW.'\'
+                                       AND mem_end    > \''.DATE_NOW.'\'';
+                            $result = $gDb->query($sql);
+                            $row_count = $gDb->num_rows($result);
+                                        
+                            $participantsHtml = '<strong>'.$row_count.'</strong>';
+                        }
+                        else 
+                        {
+                            $participantsHtml = '<strong>'.$gL10n->get('SYS_UNLIMITED').'</strong>';
+                        }
+                        $dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), $participantsHtml);
+                    }
+        
+                    // Output of elements 
+                    // always 2 then line break
+                    echo '<table style="width: 100%; border-width: 0px;">';
+                    foreach($dateElements as $element)
+                    {
+                        if($firstElement)
+                        {
+                            echo '<tr>';
+                        }
+                    
+                        echo '<td style="width: 15%">'.$element[0].':</td>
+                        <td style="width: 35%">'.$element[1].'</td>';
+                    
+                        if($firstElement)
+                        {
+                            $firstElement = false;
                         }
                         else
                         {
-                            $available_signin = true;
-                            $non_available_rols = array();
-                            if($date->getValue('dat_max_members'))
+                            echo '</tr>';
+                            $firstElement = true;
+                        }
+                    }
+                    echo '</table>';
+        
+                    // Show discription
+                    echo '<div class="date_description" style="clear: left;">'.$date->getValue('dat_description').'</div>';
+        
+                    if($date->getValue('dat_rol_id') > 0)
+                    {
+                        // Link for the Agreement in Array
+                        
+                        if($date->getValue('dat_rol_id') > 0)
+                        {
+                            if($row['member_date_role'] > 0)
                             {
-                                // Limit for participiants
-                                $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
-                                         WHERE mem_rol_id = '.$date->getValue('dat_rol_id').' 
-                                           AND mem_leader = 0';
-                                $res_num = $gDb->query($sql);
-                                $row_num = $gDb->num_rows($res_num);
-                                if($row_num >= $date->getValue('dat_max_members'))
-                                {
-                                    $available_signin = false;
-                                }
-                            }
-
-                            if($available_signin)
-                            {
-                                $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
-
                                 $registrationHtml = '<span class="iconTextLink">
-                                    <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'" /></a>
-                                    <a href="'.$buttonURL.'">'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'</a>
-                                </span>';
+                                        <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'"><img 
+                                            src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>
+                                        <a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">'.$gL10n->get('DAT_CANCEL').'</a>
+                                    </span>';
                             }
                             else
                             {
-                                $registrationHtml = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                                $available_signin = true;
+                                $non_available_rols = array();
+                                if($date->getValue('dat_max_members'))
+                                {
+                                    // Limit for participiants
+                                    $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
+                                             WHERE mem_rol_id = '.$date->getValue('dat_rol_id').' 
+                                               AND mem_leader = 0';
+                                    $res_num = $gDb->query($sql);
+                                    $row_num = $gDb->num_rows($res_num);
+                                    if($row_num >= $date->getValue('dat_max_members'))
+                                    {
+                                        $available_signin = false;
+                                    }
+                                }
+        
+                                if($available_signin)
+                                {
+                                    $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
+        
+                                    $registrationHtml = '<span class="iconTextLink">
+                                        <a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'" /></a>
+                                        <a href="'.$buttonURL.'">'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'</a>
+                                    </span>';
+                                }
+                                else
+                                {
+                                    $registrationHtml = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                                }
                             }
+                            
+                            // Link to participiants list
+                            if($gValidLogin)
+                            {
+                                $registrationHtml .= '&nbsp;
+                                <span class="iconTextLink">
+                                    <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img 
+                                        src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>
+                                     <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>
+                                </span>';
+                            }
+        
+                            // Link for managing new participiants
+                            if($row['mem_leader'] == 1)
+                            {
+                                $registrationHtml .= '&nbsp;
+                                <span class="iconTextLink">
+                                    <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'"><img 
+                                        src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>
+                                     <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'">'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>
+                                </span>';
+                            }
+        
+                            echo '<div>'.$registrationHtml.'</div>';
                         }
-                        
-                        // Link to participiants list
-                        if($gValidLogin)
-                        {
-                            $registrationHtml .= '&nbsp;
-                            <span class="iconTextLink">
-                                <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img 
-                                    src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>
-                                 <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>
-                            </span>';
-                        }
-
-                        // Link for managing new participiants
-                        if($row['mem_leader'] == 1)
-                        {
-                            $registrationHtml .= '&nbsp;
-                            <span class="iconTextLink">
-                                <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'"><img 
-                                    src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>
-                                 <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'">'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>
-                            </span>';
-                        }
-
-                        echo '<div>'.$registrationHtml.'</div>';
                     }
-                }
-
-                // Show date of create and changes
-                echo '<div class="editInformation">'.
-                    $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
-
-                    if($date->getValue('dat_usr_id_change') > 0)
-                    {
-                        echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change'));
-                    }
-                echo '</div>
-            </div>
-        </div>';
-    }  // End While-Schleife
+        
+                    // Show date of create and changes
+                    echo '<div class="editInformation">'.
+                        $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
+        
+                        if($date->getValue('dat_usr_id_change') > 0)
+                        {
+                            echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change'));
+                        }
+                    echo '</div>
+                </div>
+            </div>';
+        }  // End foreach
+    }
 }
 
 // Navigation with forward and backwards buttons

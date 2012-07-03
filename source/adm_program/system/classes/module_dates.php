@@ -292,16 +292,9 @@ class dates
     {
         global $gCurrentOrganization;
         global $gCurrentUser;
-        global $gPreferences;
         global $gProfileFields;
         global $gDb;
-        
-        //Parameter        
-        if($limit == NULL)
-        {
-            $limit = $gPreferences['dates_per_page'];
-        }    
-                               
+                       
         //Ankuendigungen aus der DB fischen...
         $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,
                        cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
@@ -330,8 +323,17 @@ class dates
                           AND cat_org_id IN ('.$gCurrentOrganization->getFamilySQL().') ))
                    AND dat_id = dtr_dat_id
                        '.$this->sqlConditionsGet()
-                        . ' ORDER BY dat_begin '.$this->order.'  
-                 LIMIT '.$limit.' OFFSET '.$startElement;
+                        . ' ORDER BY dat_begin '.$this->order;
+         //Parameter        
+        if($limit != NULL)
+        {
+            $sql .= ' LIMIT '.$limit;
+        }               
+        if($startElement = 0)
+        {
+            $sql .= ' OFFSET '.$startElement;
+        }         
+        
         $result = $gDb->query($sql);
 
         //array für Ergbenisse       
