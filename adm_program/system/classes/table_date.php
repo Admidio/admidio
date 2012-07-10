@@ -134,8 +134,8 @@ class TableDate extends TableAccess
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $icalVEevent .= "DTSTART;VALUE=DATE:". $this->getValue('dat_begin', 'ymd'). "\n".
-                     "DTEND;VALUE=DATE:". $this->getValue('dat_end', 'ymd'). "\n";
+            $icalVEevent .= "DTSTART;VALUE=DATE:". $this->getValue('dat_begin', 'Ymd'). "\n".
+                     "DTEND;VALUE=DATE:". $this->getValue('dat_end', 'Ymd'). "\n";
         }
         else
         {
@@ -143,9 +143,6 @@ class TableDate extends TableAccess
                      "DTEND:". $this->getValue('dat_end', 'Ymd')."T".$this->getValue('dat_end', 'His')."\n";
         }
         $icalVEevent .= "END:VEVENT\n";
-        
-        //ICAL Events dürfen kein Semikolon enthalten
-        $icalVEevent = str_replace(';', '.', $icalVEevent);
         
         return $icalVEevent;
     }
