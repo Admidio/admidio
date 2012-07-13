@@ -305,7 +305,7 @@
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="todo">Ihre Grußkarte wurde leider nicht erfolgreich versendet!</text>
     <text id="ECA_OTHER_RECIPIENT" development="new" translation="todo">Anderer Empfänger</text>
     <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="todo">Bitte wählen Sie eine gültige Rolle aus!</text>
-    <text id="ECA_RECIPIENT_EMAIL" development="new" translation="todo">Empfänger Email</text>
+    <text id="ECA_RECIPIENT_EMAIL" development="new" translation="todo">Empfänger E-Mail</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="todo">Empfänger Name</text>
     <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Versuchen Sie es bitte zu einem späteren Zeitpunkt noch einmal.</text>
     <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe)</text>
@@ -735,7 +735,7 @@
     <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="todo">Systemmailadresse</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="todo">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systemnachrichten benutzt, z.B. bei der Registrierungsbestätigung. (Standard: webmaster@%VAR1%)</text>
 	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="todo">Benachrichtigung bei neuen Einträgen</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="todo">Hier kann die Email-Benachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per Email benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Benachrichtigungs-Email wird an die Systemmailadresse %VAR1% versendet. (standard: nein)</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="todo">Hier kann die E-Mail-Benachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Benachrichtigungs-E-Mail wird an die Systemmailadresse %VAR1% versendet. (standard: nein)</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="todo">Systemmail-Texte</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="todo">Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
@@ -939,8 +939,8 @@
     <text id="ROL_RIGHT_EDIT_USER_DESC" development="new" translation="todo">Rollen, die diese Option aktiviert haben, haben die Berechtigung alle Benutzerdaten (außer Passwörter) anderer Mitglieder zu bearbeiten.\nAußerdem haben sie Zugriff auf die Benutzerverwaltung und können dort neue Benutzer anlegen oder alte Benutzer löschen.</text>
     <text id="ROL_RIGHT_GUESTBOOK" development="new" translation="todo">Gästebucheinträge bearbeiten und löschen</text>
     <text id="ROL_RIGHT_GUESTBOOK_COMMENTS" development="new" translation="todo">Kommentare zu Gästebucheinträgen anlegen</text>
-    <text id="ROL_RIGHT_MAIL_THIS_ROLE_DESC" development="new" translation="todo">Diese Einstellung steuert, wer das Recht hat über das Mailmodul Emails an diese Rolle zu schicken. Das Rollenrecht %VAR1_BOLD% steht allerdings noch über dieser Einstellung.</text>
-    <text id="ROL_RIGHT_MAIL_TO_ALL" development="new" translation="todo">Emails an alle Rollen schreiben</text>
+    <text id="ROL_RIGHT_MAIL_THIS_ROLE_DESC" development="new" translation="todo">Diese Einstellung steuert, wer das Recht hat über das Mailmodul E-Mails an diese Rolle zu schicken. Das Rollenrecht %VAR1_BOLD% steht allerdings noch über dieser Einstellung.</text>
+    <text id="ROL_RIGHT_MAIL_TO_ALL" development="new" translation="todo">E-Mails an alle Rollen schreiben</text>
     <text id="ROL_RIGHT_PHOTO" development="new" translation="todo">Fotos hochladen und bearbeiten</text>
     <text id="ROL_RIGHT_PROFILE" development="new" translation="todo">Eigenes Profil bearbeiten</text>
     <text id="ROL_RIGHT_THIS_LIST_VIEW_DESC" development="new" translation="todo">Diese Einstellung steuert, welche Benutzer das Recht haben, diverse Listen und die einzelnen Benutzerprofile der Rollenmitglieder anzuschauen. Das Rollenrecht %VAR1_BOLD% steht allerdings noch über dieser Einstellung.</text>
@@ -1145,8 +1145,8 @@
     <text id="SYS_LOGOUT" development="new" translation="todo">Abmelden</text>
     <text id="SYS_LOGOUT_SUCCESSFUL" development="new" translation="todo">Sie wurden erfolgreich abgemeldet.</text>
     <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="todo">Sie sind am System angemeldet, folglich kennen Sie Ihr Passwort!</text>
-    <text id="SYS_LOSTPW_SEND" development="new" translation="todo">Das neue Passwort wurde an die Email Adresse %VAR1% geschickt!</text>
-    <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler beim Senden an die Email Adresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
+    <text id="SYS_LOSTPW_SEND" development="new" translation="todo">Das neue Passwort wurde an die E-Mail-Adresse %VAR1% geschickt!</text>
+    <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler beim Senden an die E-Mail-Adresse %VAR1% aufgetreten!\nBitte versuch es später wieder!</text>
 	<text id="SYS_MAP" development="new" translation="todo">Karte</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MALE" development="new" translation="todo">Männlich</text>
