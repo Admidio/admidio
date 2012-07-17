@@ -43,6 +43,8 @@ class TableRoles extends TableAccess
     // Null oder 0 ist auch erlaubt, bedeutet aber dass kein Zeitraum konfiguriert ist
     protected $role_cost_periods = array(-1,1,2,4,12);
     protected $role_weekdays = array(1,2,3,4,5,6,7);
+	protected $countLeaders;	///< number of leaders of this role
+	protected $countMembers;	///< number of members (without leaders) of this role
 
     // Constructor
     public function __construct(&$db, $role = '')
@@ -50,8 +52,9 @@ class TableRoles extends TableAccess
         parent::__construct($db, TBL_ROLES, 'rol', $role);
     }
 
-	// checks if user is allowed to assign members to this role
-	// requires userObject of user for this should be checked 
+	/** checks if user is allowed to assign members to this role
+	 *  @param $user UserObject of user who should be checked 
+	 */
 	public function allowedToAssignMembers($user)
 	{
 		global $gL10n;
@@ -82,8 +85,9 @@ class TableRoles extends TableAccess
 		return false;
 	}
 
-	// checks if user is allowed to edit members of this role
-	// requires userObject of user for this should be checked 
+	/** checks if user is allowed to edit members of this role
+	 *  @param UserObject of user who should be checked 
+	 */
 	public function allowedToEditMembers($user)
 	{
 		// you aren't allowed to edit users of not active roles
@@ -107,7 +111,37 @@ class TableRoles extends TableAccess
 		}
 		return false;
 	}
-	
+
+	/** Calls clear() Method of parent class and initialize child class specific parameters
+	 */
+    public function clear()
+    {
+        parent::clear();
+
+        // initialize class members
+        $this->countLeaders = -1;
+        $this->countMembers = -1;
+    }
+
+	/** Method determines the number of active leaders of this role
+	 *  @return Returns the number of leaders of this role
+	 */
+	public function countLeaders()
+	{
+		if($this->countLeaders == -1)
+		{
+            $sql    = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
+			            WHERE mem_rol_id = '.$this->getValue('rol_id').'
+						  AND mem_leader = 1 
+						  AND mem_begin <= \''.DATE_NOW.'\'
+                          AND mem_end    > \''.DATE_NOW.'\' ';
+            $this->db->query($sql);
+			$row = $this->db->fetch_array();
+			$this->countLeaders = $row[0];
+		}
+		return $this->countLeaders;
+	}
+
     // die Funktion gibt die Anzahl freier Plaetze zurueck
     // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
     public function countVacancies($count_leaders = false)

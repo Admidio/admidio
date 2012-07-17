@@ -154,49 +154,50 @@ else
     $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
 }
 
+if($date->getValue('dat_rol_id') > 0)
+{
+	$dateRoleID = $date->getValue('dat_rol_id');
+}
+else
+{
+	$dateRoleID = '0';
+}
+
 $gLayout['header'] = '
 <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
 <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
 <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
 <script type="text/javascript"><!--
     // Funktion blendet Zeitfelder ein/aus
-    function setAllDay()
-    {
-		if ($("#dat_all_day:checked").val() !== undefined)
-        {
+    function setAllDay() {
+		if ($("#dat_all_day:checked").val() !== undefined) {
 			$("#time_from").hide();
 			$("#time_to").hide();
         }
-        else
-        {
+        else {
 			$("#time_from").show("slow");
 			$("#time_to").show("slow");
         }
     }
 	
 	
-	function setDateParticipation()
-	{
-		if ($("#date_login:checked").val() !== undefined)
-		{
+	function setDateParticipation() {
+		if ($("#date_login:checked").val() !== undefined) {
 			$("#admAssignYourself").show("slow");
 			$("#admMaxMembers").show("slow");
 		}
-		else
-		{
+		else {
 			$("#admAssignYourself").hide();
 			$("#admMaxMembers").hide();
 		}
 	}
 
     // Funktion belegt das Datum-bis entsprechend dem Datum-Von
-    function setDateTo()
-    {
+    function setDateTo() {
         var dateFrom = Date.parseDate($("#date_from").val(), "'.$gPreferences['system_date'].'");
         var dateTo   = Date.parseDate($("#date_to").val(), "'.$gPreferences['system_date'].'");
 
-        if(dateFrom.getTime() > dateTo.getTime())
-        {
+        if(dateFrom.getTime() > dateTo.getTime()) {
             $("#date_to").val($("#date_from").val());
         }
     }
@@ -205,16 +206,13 @@ $gLayout['header'] = '
     calPopup.setCssPrefix("calendar");
     var numberRoleSelect = 1;
 
-    function addRoleSelection(roleID)
-    {
+    function addRoleSelection(roleID) {
         $.ajax({url: "dates_function.php?mode=5&number_role_select=" + numberRoleSelect + "&rol_id=" + roleID, type: "GET", async: false, 
             success: function(data){
-                if(numberRoleSelect == 1)
-                {
+                if(numberRoleSelect == 1) {
                     $("#liRoles").html($("#liRoles").html() + data);
                 }
-                else
-                {
+                else {
                     number = numberRoleSelect - 1;
                     $("#roleID_"+number).after(data);
                 }
@@ -222,27 +220,25 @@ $gLayout['header'] = '
         numberRoleSelect++;
     }
     
-    function removeRoleSelection(id)
-    {
+    function removeRoleSelection(id) {
         $("#"+id).hide("slow");
         $("#"+id).remove();
 		numberRoleSelect = numberRoleSelect - 1;
     }
 	
-	function setLocationCountry()
-	{
-		if($("#dat_location").val().length > 0)
-		{
+	function setLocationCountry() {
+		if($("#dat_location").val().length > 0) {
 			$("#admDateCountry").show("slow");
 		}
-		else
-		{
+		else {
 			$("#admDateCountry").hide();
 		}
 	}
 
     $(document).ready(function() 
     {
+		var dateRoleID = '.$dateRoleID.';
+		
         setAllDay();
 		setDateParticipation();
 		setLocationCountry();
@@ -258,33 +254,20 @@ $gLayout['header'] = '
             $gLayout['header'] .= 'addRoleSelection('.$roleID.');';
         }
 
-        if($date->getValue('dat_rol_id') > 0)
-        {
-            $dateRoleID = $date->getValue('dat_rol_id');
-        }
-        else
-        {
-            $dateRoleID = '0';
-        }
-    $gLayout['header'] .= '}); 
-
-    var dateRoleID = '.$dateRoleID.';
-    //öffnet Messagefenster
-    function submitForm()
-    {
-        if(dateRoleID > 0 && !document.getElementById("date_login").checked)
-        {
-            var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
-            if(msg_result)
-            {
-                $("#formDate").submit();
-            }
-        }
-        else
-        {
-            $("#formDate").submit();
-        }
-    }
+		$gLayout['header'] .= '
+		// if date participation should be removed than ask user
+		$("#admButtonSave").click(function () {
+			if(dateRoleID > 0 && $("#date_login").is(":checked") == false) {
+				var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
+				if(msg_result) {
+					$("#formDate").submit();
+				}
+			}
+			else {
+				$("#formDate").submit();
+			}
+		});
+	}); 
 //--></script>';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -582,7 +565,7 @@ echo '
         }
 
         echo '<div class="formSubmit">
-            <button id="btnSave" type="button" onclick="javascript:submitForm();"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+            <button id="admButtonSave" type="button"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
         </div>
     </div>
 </div>

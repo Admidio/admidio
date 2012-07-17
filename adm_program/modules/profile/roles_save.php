@@ -211,7 +211,11 @@ if(count($parentRoles) > 0 )
     }
 }
 
-$_SESSION['navigation']->deleteLastUrl();
+// if role selection was a separate page then delete this page from the navigation stack
+if($getInline == 0)
+{
+	$_SESSION['navigation']->deleteLastUrl();
+}
 
 // falls Rollen dem eingeloggten User neu zugewiesen wurden,
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden

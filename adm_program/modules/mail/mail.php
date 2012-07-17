@@ -202,55 +202,48 @@ else
 
 $gLayout['header'] =  '
 <script type="text/javascript"><!--
-    // neue Zeile mit Button zum Hinzufuegen von Dateipfaden einblenden
-    function addAttachment()
-    {
-        new_attachment = document.createElement("input");
-        $(new_attachment).attr("type", "file");
-        $(new_attachment).attr("name", "userfile[]");
-        $(new_attachment).css("display", "block");
-        $(new_attachment).css("width", "90%");
-        $(new_attachment).css("margin-bottom", "5px");
-        $(new_attachment).hide();
-        $("#add_attachment").before(new_attachment);
-        $(new_attachment).show("slow");
-    }
-    
-    function showMembers(initialize)
-    {
+	// if role has former members show select box where user can choose to write email also to former members
+    function showMembers(initialize) {
         fadeIn = "";
-        if(initialize == false)
-        {
+        if(initialize == false) {
             fadeIn = "slow";
         }
- 	    rolId = $("#rol_id").val();
  	    
- 	    if(rolId > 0)
- 	    {
-            // Schauen, ob die Rolle ehemalige Mitglieder besitzt
-            $.get("'.$g_root_path.'/adm_program/administration/roles/roles_function.php?mode=9&rol_id="+ rolId, function(data) {
-                if(data == "1")
-                {
+ 	    if($("#rol_id").val() > 0) {
+			// check if role has former members
+            $.get("'.$g_root_path.'/adm_program/administration/roles/roles_function.php?mode=9&rol_id="+ $("#rol_id").val(), function(data) {
+                if(data == "1") {
                     $("#admShowMembers").show(fadeIn);
-                }
-                else
-                {
+                } 
+				else {
                     $("#admShowMembers").hide(fadeIn);
                 }
             });
         }
-        else
-        {
+        else {
             $("#admShowMembers").hide(fadeIn);
         }
     }
 
-    $(document).ready(function() 
-	{
+    $(document).ready(function() {
         $("#'.$focusField.'").focus();
+		$(".admLinkAddAttachment").css("cursor", "pointer");
     
        	$("#rol_id").change(function() {showMembers(false)});    
         showMembers(true);
+		
+		// add new line to add new attachment to this mail
+		$(".admLinkAddAttachment").click(function () {
+			newAttachment = document.createElement("input");
+			$(newAttachment).attr("type", "file");
+			$(newAttachment).attr("name", "userfile[]");
+			$(newAttachment).css("display", "block");
+			$(newAttachment).css("width", "90%");
+			$(newAttachment).css("margin-bottom", "5px");
+			$(newAttachment).hide();
+			$("#admAddAttachment").before(newAttachment);
+			$(newAttachment).show("slow");
+		});
  	}); 	
 //--></script>';
 
@@ -462,13 +455,13 @@ echo '
 							echo '
 							<li>
 								<dl>
-									<dt><label for="add_attachment">'.$gL10n->get('MAI_ATTACHEMENT').'</label></dt>
+									<dt><label for="admAddAttachment">'.$gL10n->get('MAI_ATTACHEMENT').'</label></dt>
 									<dd id="attachments">
 										<input type="hidden" name="MAX_FILE_SIZE" value="' . ($gPreferences['max_email_attachment_size'] * 1024) . '" />
-										<span id="add_attachment" class="iconTextLink" style="display: block;">
-											<a href="javascript:addAttachment()"><img
+										<span id="admAddAttachment" class="iconTextLink" style="display: block;">
+											<a class="admLinkAddAttachment"><img
 											src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
-											<a href="javascript:addAttachment()">'.$gL10n->get('MAI_ADD_ATTACHEMENT').'</a>
+											<a class="admLinkAddAttachment">'.$gL10n->get('MAI_ADD_ATTACHEMENT').'</a>
 											<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
 												onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
 												class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
