@@ -172,9 +172,8 @@ echo '
         
         $("#admCalendar").change(function () {
             var calendarId = "";
-            if (document.getElementById("admCalendar").selectedIndex != 0)
-            {
-                var calendarId = document.getElementById("admCalendar").value;
+            if ($("#admCalendar").selectedIndex != 0) {
+                var calendarId = $("#admCalendar").val();
             } 
             self.location.href = "dates.php?mode='.$getMode.'&headline='.$getHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=" + calendarId;
         });

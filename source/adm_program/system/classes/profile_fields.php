@@ -91,12 +91,13 @@ class ProfileFields
         return null;
     }
 
-	/** returns the value of that field in html format with consideration of all layout parameters
-	 *  @b value must be commited so that layout is also possible for values that aren't stored in database
-	 *  @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-	 *  @param $value Value that should be formated
+	/** returns the value of the field in html format with consideration of all layout parameters
+	 *  @param $fieldNameIntern Internal profile field name of the field that should be html formated
+	 *  @param $value The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
+	 *  @param $value2 An optional parameter that is necessary for some special fields like email to commit the user id
+	 *  @return Returns an html formated string that considered the profile field settings
 	 */
-	public function getHtmlValue($fieldNameIntern, $value)
+	public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
 	{
 		global $gPreferences, $g_root_path;
 
@@ -128,7 +129,7 @@ class ProfileFields
 					}
 					else
 					{
-						$emailLink = $g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $this->mUserId;
+						$emailLink = $g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $value2;
 					}
 					if(strlen($value) > 30)
 					{
@@ -262,7 +263,9 @@ class ProfileFields
 		return $value;
 	}
 
-    // will not check any value if method setValue is called
+    /** If this method is called than all further calls of method @b setValue will not check the values.
+	 *  The values will be stored in database without any inspections !
+	 */
     public function noValueCheck()
     {
         $this->noValueCheck = true;

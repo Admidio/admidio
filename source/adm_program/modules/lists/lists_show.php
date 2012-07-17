@@ -368,8 +368,18 @@ else
     echo '</tr></thead><tbody>';
 }
 
-$listRowNumber        = $getStart + 1;  // Zahler fuer die jeweilige Zeile
+// set number of first member of this page (leaders are counted separately)
+if($getStart > $role->countLeaders())
+{
+	$listRowNumber = $getStart - $role->countLeaders() + 1;
+}
+else
+{
+	$listRowNumber = $getStart + 1;	
+}
+
 $lastGroupHead = -1;             // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
+
 if($getMode == 'html' && $gPreferences['lists_members_per_page'] > 0)
 {
     $members_per_page = $gPreferences['lists_members_per_page'];     // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
@@ -566,7 +576,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 				// create output in html layout
 				else
 				{
-					$content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content);
+					$content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
 					echo $content.'</td>';
 				}
             }
