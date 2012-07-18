@@ -103,10 +103,10 @@ else
 
 //Convert dates to system format
 $objDate = new DateTimeExtended($dates->getDateFrom(), 'Y-m-d', 'date');
-$dateFromSystemFormat = date($gPreferences['system_date'], $objDate->getTimestamp());
+$dateFromSystemFormat = $objDate->format($gPreferences['system_date']);
 
 $objDate = new DateTimeExtended($dates->getDateTo(), 'Y-m-d', 'date');
-$dateToSystemFormat = date($gPreferences['system_date'], $objDate->getTimestamp());
+$dateToSystemFormat = $objDate->format($gPreferences['system_date']);
 
 
 // Fill input fields only if User requests exists
