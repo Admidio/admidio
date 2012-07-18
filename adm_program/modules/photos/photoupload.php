@@ -144,7 +144,7 @@ echo '
 	        <ul class="formFieldList">
 	            <li><dl>
 	                <dt><label for="admPhotoFile1">'.$gL10n->get('PHO_PHOTO').' 1:</label></dt>
-	                <dd><input type="file" id="admPhotoFile1" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
+	                <dd><input type="file" id="admPhotoFile1" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" multiple /></dd>
 	            </dl></li>
 	            <li><dl>
 	                <dt><label for="admPhotoFile2">'.$gL10n->get('PHO_PHOTO').' 2:</label></dt>

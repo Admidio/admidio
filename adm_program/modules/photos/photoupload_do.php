@@ -54,7 +54,7 @@ if($getUploadmethod == 1)
     $counter=0;
     if(isset($_FILES['Filedata']))
     {
-        for($x=0; $x<=4; $x++)
+        for($x=0; $x<count($_FILES['Filedata']); $x++)
         {
             //Datei wurde hochgeladen
             if(isset($_FILES['Filedata']['name'][$x]) && $_FILES['Filedata']['size'][$x]!=0)
@@ -65,7 +65,7 @@ if($getUploadmethod == 1)
                 if($_FILES['Filedata']['error'][$x]==1)
                 {
                     $gMessage->show($gL10n->get('PHO_PHOTO_FILES_TO_LARGE', admFuncMaxUploadSize()));
-                    $x = 5;
+                    $x = count($_FILES['Filedata']);
                 }
             }
         }
