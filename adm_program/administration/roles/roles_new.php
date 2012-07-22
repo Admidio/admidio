@@ -353,22 +353,22 @@ echo '
                             <dt><label for="rol_cost_period">'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</label></dt>
                             <dd>
                                 <select size="1" id="rol_cost_period" name="rol_cost_period">';
-                                    // Zunaechst den unkonfigurierten Fall
+                                    // add a default entry to the combobox
                                     echo '<option value="0" ';
                                     if($role->getValue('rol_cost_period') == 0 || $role->getValue('rol_cost_period') == '')
                                     {
                                             echo ' selected="selected"';
                                     }
                                     echo '>--</option>';
-                                    // Anschliessend alle moeglichen Werte die in der Klasse konfiguriert sind
-                                    foreach ($role->getCostPeriode() as $role_cost_period) 
+                                    // now list all cost periods that are defined in the role class
+                                    foreach ($role->getCostPeriods() as $roleCostPeriod => $costPeriod) 
                                     {
-                                        echo '<option value="'.$role_cost_period.'" ';
-                                        if($role->getValue('rol_cost_period') == $role_cost_period)
+                                        echo '<option value="'.$roleCostPeriod.'" ';
+                                        if($role->getValue('rol_cost_period') == $roleCostPeriod)
                                         {
-                                            echo 'selected="selected"';
+                                            echo ' selected="selected" ';
                                         }
-                                        echo '>'.TableRoles::getCostPeriodDesc($role_cost_period).'</option>';
+                                        echo '>'.$role->getCostPeriods($roleCostPeriod).'</option>';
                                     }
                                     echo '
                                 </select>
@@ -633,23 +633,24 @@ echo '
                         <dl>
                             <dt><label for="rol_weekday">'.$gL10n->get('ROL_WEEKDAY').':</label></dt>
                             <dd>
-                                <select size="1" id="rol_weekday" name="rol_weekday">
-                                <option value="0"';
+                                <select size="1" id="rol_weekday" name="rol_weekday">';
+								// add a default entry to the combobox
+                                echo '<option value="0"';
                                 if($role->getValue('rol_weekday') == 0)
                                 {
                                     echo ' selected="selected" ';
                                 }
                                 echo '>--</option>';
                                 
-                                // Anschliessend alle moeglichen Werte die in der Klasse konfiguriert sind
-                                foreach ($role->getWeekdays() as $role_weekday) 
+                                // now list all weekdays that are defined in the datetime class
+                                foreach(DateTimeExtended::getWeekdays() as $roleWeekday => $dayName) 
                                 {
-                                    echo '<option value="'.$role_weekday.'" ';
-                                    if($role->getValue('rol_weekday') == $role_weekday)
+                                    echo '<option value="'.$roleWeekday.'" ';
+                                    if($role->getValue('rol_weekday') == $roleWeekday)
                                     {
                                         echo 'selected="selected"';
                                     }
-                                    echo '>'.TableRoles::getWeekdayDesc($role_weekday).'</option>';
+                                    echo '>'.DateTimeExtended::getWeekdays($roleWeekday).'</option>';
                                 }
                                 echo '</select>
                             </dd>

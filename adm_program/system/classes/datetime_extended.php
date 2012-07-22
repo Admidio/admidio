@@ -33,6 +33,7 @@ class DateTimeExtended extends DateTime
     // type   : 'datetime', 'date' oder 'time'
     public function __construct($date, $format, $type = 'datetime')
     {
+		$this->weekdays = array();
         $this->year   = 0;
         $this->month  = 0;
         $this->day    = 0;
@@ -53,6 +54,7 @@ class DateTimeExtended extends DateTime
         {
             $this->setDateTime($date, $format);
         }
+		
         parent::__construct($this->getDateTimeEnglish());
     }
     
@@ -96,6 +98,32 @@ class DateTimeExtended extends DateTime
     public function getTimestamp()
     {
         return $this->format('U');
+    }
+
+	/** Returns an array with all 7 weekdays with full name in the specific language.
+	 *  @param $weekday The number of the weekday for which the name should be returned (1 = Monday ...)
+	 *  @return Array with all 7 weekday or if param weekday is set than the full name of that weekday
+	 */
+    public static function getWeekdays($weekday = 0)
+    {
+		global $gL10n;
+		
+		$weekdays = array(1 => $gL10n->get('SYS_MONDAY'), 
+						  2 => $gL10n->get('SYS_TUESDAY'), 
+						  3 => $gL10n->get('SYS_WEDNESDAY'), 
+						  4 => $gL10n->get('SYS_THURSDAY'), 
+						  5 => $gL10n->get('SYS_FRIDAY'), 
+						  6 => $gL10n->get('SYS_SATURDAY'), 
+						  7 => $gL10n->get('SYS_SUNDAY') );
+		
+		if($weekday > 0)
+		{
+			return $weekdays[$weekday];
+		}
+		else
+		{
+			return $weekdays;
+		}
     }
 
     // setzt das Datum und die Uhrzeit fuer das aktuelle Objekt

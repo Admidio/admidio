@@ -20,7 +20,11 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableAutoLogin extends TableAccess
 {
-    // Konstruktor
+	/** Constuctor that will create an object of a recordset of the table adm_auto_login. 
+	 *  If the id is set than the specific auto login will be loaded.
+	 *  @param $db Object of the class database. This should be the default object $gDb.
+	 *  @param $session The recordset of the auto login with this session will be loaded. If session isn't set than an empty object of the table is created.
+	 */
     public function __construct(&$db, $session = 0)
     {
         parent::__construct($db, TBL_AUTO_LOGIN, 'atl', $session);

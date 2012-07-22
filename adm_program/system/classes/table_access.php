@@ -1,17 +1,33 @@
 <?php 
+/*****************************************************************************/
+/** @class TableAccess
+ *  @brief Controls read and write access to datbase tables
+ *
+ *  This class should help you to read and write records of database tables.
+ *  You create an object for a special table and than you are able to read
+ *  a special record, manipulate him and write him back. Also new records can
+ *  be created with this class. The advantage of this class is that you are
+ *  independent from SQL. You can use @c getValue, @c setValue, @c readData 
+ *  and @c save to handle the record.
+ *  @par Examples
+ *  @code   // create an object for table adm_roles of role 4711
+ *  $roleId = 4177;
+ *  $role = new TableAccess($gDb, TBL_ROLES, 'rol', $roleId);
+ *
+ *  // read max. Members and add 1 to the count
+ *  $maxMembers = $role->getValue('rol_max_members');
+ *  $maxMembers = $maxMembers + 1;
+ *  $role->setValue('rol_max_members', $maxMembers);
+ *  $role->save(); @endcode
+ */
+/*****************************************************************************
+ *
+ *  Copyright    : (c) 2004 - 2012 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
+ *****************************************************************************/
 /******************************************************************************
- * Abstrakte Klasse steuert den Zugriff auf die entsprechenden Datenbanktabellen
- *
- * Copyright    : (c) 2004 - 2012 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- *
- * Von dieser Klasse werden saemtliche Datenbankzugriffsklassen abgeleitet.
- * Es stehen diverse Methoden zur Verfuegung, welche in den abgeleiteten Klassen
- * durch vordefinierte Methoden angepasst werden koennen
- *
- * The following functions are available:
- *
  * readData($id, $sql_where_condition = "", $sql_additional_tables = "")
  *                  - Liest den Datensatz zur uebergebenen ID ($key_value) ein
  * clear()          - Die Klassenvariablen werden neu initialisiert
@@ -26,7 +42,6 @@
  * save()           - die aktuellen Daten werden in die Datenbank zurueckgeschrieben
  *                    Es wird automatisch ein Update oder Insert erstellt
  * delete()         - der aktuelle Datensatz wird aus der Tabelle geloescht
- *
  *****************************************************************************/
 
 class TableAccess
@@ -37,19 +52,24 @@ class TableAccess
     public    $db;					// db object must public because of session handling
     
     protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
-    public $columnsValueChanged; // Merker ob an den dbColumns Daten was geaendert wurde
+    public $columnsValueChanged; 	// Merker ob an den dbColumns Daten was geaendert wurde
     public $dbColumns = array();    // Array ueber alle Felder der entsprechenden Tabelle zu dem gewaehlten Datensatz
     public $columnsInfos = array(); // Array, welches weitere Informationen (geaendert ja/nein, Feldtyp) speichert
     
-    // wird diese Klasse nicht abgeleitet, so muss dem Konstruktor neben der DB-Objekt auch der Tabellenname,
-    // das Präfix der Spalten übergeben werden und optional noch die ID, die direkt eingelesen werden soll
+	/** Constuctor that will create an object of a recordset of the specified table. 
+	 *  If the id is set than this recordset will be loaded.
+	 *  @param $db Object of the class database. This should be the default object $gDb.
+	 *  @param $tableName The name of the database table. Because of specific praefixes this should be the define value e.g. TBL_USERS
+	 *  @param $columnPraefix The praefix of each column of that table. E.g. for table adm_roles this is 'rol'
+	 *  @param $id The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+	 */
     public function __construct(&$db, $tableName, $columnPraefix, $id = '')
     {
         $this->db            =& $db;
         $this->table_name     = $tableName;
         $this->column_praefix = $columnPraefix;
 
-        // wurde eine ID uebergeben, dann Daten aus DB einlesen
+        // if a id is commited, then read data out of database
         if((is_numeric($id) == false && strlen($id) > 0) 
         || (is_numeric($id) == true  && $id > 0))
         {

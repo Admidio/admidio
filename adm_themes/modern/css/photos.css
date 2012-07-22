@@ -53,6 +53,7 @@ hier koenne Einstellungen fuer diese vorgenommen werden*/
 /*Die Fotoalben werden in einer Definitionsliste angezeigt*/
 .photoAlbumList {
     list-style-type: none;
+	padding: 		 0px;
 }
 
 .photoAlbumList dl { 
