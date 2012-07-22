@@ -4,6 +4,8 @@
 	<text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Du hast für ein Datumsfeld ein ungültiges Datumsformat angegeben.</text>
     <text id="LST_NOT_NUMERIC" development="new" translation="todo">Du hast in für ein numerisches Feld eine nicht numerische Bedingung angegeben.</text>
 	<text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="todo">Zukünftige Rollenmitgliedschaften</text>
+	<text id="PRO_LOG_EDIT_FIELDS" development="new" translation="todo">Änderungen mitloggen</text>
+	<text id="PRO_LOG_EDIT_FIELDS_DESC" development="new" translation="todo">Änderungen in Profilfeldern werden für jeden Benutzer und jedes Feld mitgeschrieben. Dabei wird der bisherige und der neue Wert, sowie der Benutzer, der die Änderung durchgeführt hat, mit Zeitstempel gespeichert. (Standard: ja)</text>
     <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="todo">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</text>
     <text id="ROL_CANT_SHOW_FORMER_ROLES" development="deleted" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
 	<text id="ROL_LEADER_NO_ADDITIONAL_RIGHTS" development="new" translation="todo">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</text>

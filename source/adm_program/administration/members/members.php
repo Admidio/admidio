@@ -200,9 +200,8 @@ else
     $show_all_checked = 'checked';
 }
 
-
 echo'
-    <ul class="iconTextLinkList" style="margin-bottom: 0px;">
+<ul class="iconTextLinkList" style="margin-bottom: 0px;">
     <li>
         <span class="iconTextLink">
             <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img
@@ -223,9 +222,9 @@ echo'
             src="'. THEME_PATH. '/icons/application_form.png" alt="'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS').'" /></a>
             <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS').'</a>
         </span>
-    </li>    
+    </li>  
 </ul>';
-
+	
 //Hier gibt es jetzt noch die Suchbox...
 echo '
 <form id="autosuggest" action="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$getMembers.'" method="post">

@@ -24,7 +24,11 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableSession extends TableAccess
 {
-    // Konstruktor
+	/** Constuctor that will create an object of a recordset of the table adm_sessions. 
+	 *  If the id is set than the specific session will be loaded.
+	 *  @param $db Object of the class database. This should be the default object $gDb.
+	 *  @param $session The recordset of the session with this id will be loaded. If id isn't set than an empty object of the table is created.
+	 */
     public function __construct(&$db, $session = 0)
     {
         parent::__construct($db, TBL_SESSIONS, 'ses', $session);

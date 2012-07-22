@@ -31,7 +31,6 @@
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_users.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_user_log.php');
 
 class User extends TableUsers
 {
@@ -623,64 +622,69 @@ class User extends TableUsers
 	
     // interne Methode, die bei setValue den uebergebenen Wert prueft
     // und ungueltige Werte auf leer setzt
-    public function setValue($field_name, $field_value, $check_value = true)
+    public function setValue($fieldName, $fieldValue, $checkValue = true)
     {
-        global $gCurrentUser;
-        $return_code  = true;
-        $update_field = false;
+        global $gCurrentUser, $gPreferences;
 
-        $old_field_value = $this->mProfileFieldsData->getValue($field_name);
-        if(strpos($field_name, 'usr_') !== 0)
+        $returnCode    = true;
+        $updateField   = false;
+        $oldFieldValue = $this->mProfileFieldsData->getValue($fieldName);
+
+        if(strpos($fieldName, 'usr_') !== 0)
         {
             // Daten fuer User-Fields-Tabelle
 
             // gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
             // bei Registrierung muss die Eingabe auch erlaubt sein
-            if((  $this->mProfileFieldsData->getProperty($field_name, 'usf_disabled') == 1
+            if((  $this->mProfileFieldsData->getProperty($fieldName, 'usf_disabled') == 1
                && $gCurrentUser->editUsers() == true)
-            || $this->mProfileFieldsData->getProperty($field_name, 'usf_disabled') == 0
+            || $this->mProfileFieldsData->getProperty($fieldName, 'usf_disabled') == 0
             || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
             {
                 // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
                 // oder im eigenen Profil
-                if((  $this->mProfileFieldsData->getProperty($field_name, 'usf_hidden') == 1
+                if((  $this->mProfileFieldsData->getProperty($fieldName, 'usf_hidden') == 1
                    && $gCurrentUser->editUsers() == true)
-                || $this->mProfileFieldsData->getProperty($field_name, 'usf_hidden') == 0
+                || $this->mProfileFieldsData->getProperty($fieldName, 'usf_hidden') == 0
                 || $gCurrentUser->getValue('usr_id') == $this->getValue('usr_id'))
                 {
-                    $update_field = true;
+                    $updateField = true;
                 }
             }
 
             // nur Updaten, wenn sich auch der Wert geaendert hat
-            if($update_field == true
-            && $field_value  != $old_field_value)
+            if($updateField == true
+            && $fieldValue  != $oldFieldValue)
             {
-				$return_code = $this->mProfileFieldsData->setValue($field_name, $field_value);
+				$returnCode = $this->mProfileFieldsData->setValue($fieldName, $fieldValue);
             }
         }
         else
         {
-            $return_code = parent::setValue($field_name, $field_value);
+            $returnCode = parent::setValue($fieldName, $fieldValue);
         }
 
-        $new_field_value = $this->mProfileFieldsData->getValue($field_name);
-        /* 
-         * Nicht alle Aenderungen werden geloggt. Ausnahmen:
+        $newFieldValue = $this->mProfileFieldsData->getValue($fieldName);
+		
+        /*  Nicht alle Aenderungen werden geloggt. Ausnahmen:
          *  usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
          *  Felder, die mit usr_ beginnen, werden nicht geloggt
          *  Falls die Feldwerte sich nicht geaendert haben, wird natuerlich ebenfalls nicht geloggt 
          */
-        if($this->getValue('usr_id') != 0 && strpos($field_name,"usr_") === false && $new_field_value != $old_field_value)
+        if($gPreferences['profile_log_edit_fields'] == 1
+		&& $this->getValue('usr_id') != 0 
+		&& strpos($fieldName,'usr_') === false 
+		&& $newFieldValue != $oldFieldValue)
         {
-           $logEntry = new TableUserLog($this->db);
-           $logEntry->newLogEntry($this->getValue('usr_id'),
-               $this->mProfileFieldsData->getProperty($field_name, 'usf_id'),
-               $old_field_value,
-               $new_field_value,
-               ""); 
+			$logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
+			$logEntry->setValue('usl_usr_id', $this->getValue('usr_id'));
+			$logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($fieldName, 'usf_id'));
+			$logEntry->setValue('usl_value_old', $oldFieldValue);
+			$logEntry->setValue('usl_value_new', $newFieldValue);
+			$logEntry->setValue('usl_comm', '');
+			$logEntry->save();
         }
-        return $return_code;
+        return $returnCode;
     }
 
     // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf

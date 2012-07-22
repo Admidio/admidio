@@ -113,6 +113,7 @@ $orga_preferences = array(
 
     // Profile
     'default_country'           => 'DEU',
+    'profile_log_edit_fields'   => '0',
     'profile_show_map_link'     => '1',
     'profile_show_roles'        => '1',
     'profile_show_former_roles' => '1',

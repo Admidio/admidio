@@ -17,7 +17,11 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableText extends TableAccess
 {
-    // Konstruktor
+	/** Constuctor that will create an object of a recordset of the table adm_texts. 
+	 *  If the id is set than the specific text will be loaded.
+	 *  @param $db Object of the class database. This should be the default object $gDb.
+	 *  @param $name The recordset of the text with this name will be loaded. If name isn't set than an empty object of the table is created.
+	 */
     public function __construct(&$db, $name = '')
     {
         parent::__construct($db, TBL_TEXTS, 'txt', $name);

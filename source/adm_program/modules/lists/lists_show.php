@@ -679,7 +679,7 @@ else
                                     <dd>'; 
                                         if($role->getValue('rol_weekday') > 0)
                                         {
-                                            echo $role->getWeekdayDesc($role->getValue('rol_weekday')).' ';
+                                            echo DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
                                         }
                                         if(strlen($role->getValue('rol_start_time')) > 0)
                                         {
@@ -719,7 +719,7 @@ else
                             echo '<li>
                                 <dl>
                                     <dt>'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
-                                    <dd>'.$role->getCostPeriodDesc($role->getValue('rol_cost_period')).'</dd>
+                                    <dd>'.$role->getCostPeriods($role->getValue('rol_cost_period')).'</dd>
                                 </dl>
                             </li>';
                         }

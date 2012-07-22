@@ -39,14 +39,14 @@ define('ROLE_LEADER_MEMBERS_ASSIGN_EDIT', 3);
 // class definition
 class TableRoles extends TableAccess
 {
-    // Alle konfigurierbare Werte für die Bezahlzeitraeume
-    // Null oder 0 ist auch erlaubt, bedeutet aber dass kein Zeitraum konfiguriert ist
-    protected $role_cost_periods = array(-1,1,2,4,12);
-    protected $role_weekdays = array(1,2,3,4,5,6,7);
 	protected $countLeaders;	///< number of leaders of this role
 	protected $countMembers;	///< number of members (without leaders) of this role
 
-    // Constructor
+	/** Constuctor that will create an object of a recordset of the table adm_roles. 
+	 *  If the id is set than the specific role will be loaded.
+	 *  @param $db Object of the class database. This should be the default object $gDb.
+	 *  @param $rol_id The recordset of the role with this id will be loaded. If id isn't set than an empty object of the table is created.
+	 */
     public function __construct(&$db, $role = '')
     {
         parent::__construct($db, TBL_ROLES, 'rol', $role);
@@ -141,6 +141,25 @@ class TableRoles extends TableAccess
 		}
 		return $this->countLeaders;
 	}
+	
+	/** Method determines the number of active members (without leaders) of this role
+	 *  @return Returns the number of members of this role
+	 */
+	public function countMembers()
+	{
+		if($this->countMembers == -1)
+		{
+            $sql    = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
+			            WHERE mem_rol_id = '.$this->getValue('rol_id').'
+						  AND mem_leader = 0 
+						  AND mem_begin <= \''.DATE_NOW.'\'
+                          AND mem_end    > \''.DATE_NOW.'\' ';
+            $this->db->query($sql);
+			$row = $this->db->fetch_array();
+			$this->countMembers = $row[0];
+		}
+		return $this->countMembers;
+	}
 
     // die Funktion gibt die Anzahl freier Plaetze zurueck
     // ist rol_max_members nicht gesetzt so wird immer 999 zurueckgegeben
@@ -198,40 +217,28 @@ class TableRoles extends TableAccess
         }
     }
 
-    public function getCostPeriode()
+	/** Returns an array with all cost periods with full name in the specific language.
+	 *  @param $costPeriod The number of the cost period for which the name should be returned (-1 = unique, 1 = annually, 2 = semiyearly, 4 = quarterly, 12 = monthly)
+	 *  @return Array with all cost or if param costPeriod is set than the full name of that cost period
+	 */
+	public static function getCostPeriods($costPeriod = 0)
     {
-        return $this->role_cost_periods;
-    }
-
-    // die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
-    public static function getCostPeriodDesc($my_rol_cost_period)
-    {
-        global $gL10n;
-    
-        if($my_rol_cost_period == -1)
-        {
-            return $gL10n->get('ROL_UNIQUELY');
-        }
-        elseif($my_rol_cost_period == 1)
-        {
-            return $gL10n->get('ROL_ANNUALLY');
-        }
-        elseif($my_rol_cost_period == 2)
-        {
-            return $gL10n->get('ROL_SEMIYEARLY');
-        }
-        elseif($my_rol_cost_period == 4)
-        {
-            return $gL10n->get('ROL_QUARTERLY');
-        }
-        elseif($my_rol_cost_period == 12)
-        {
-            return $gL10n->get('ROL_MONTHLY');
-        }
-        else
-        {
-            return '--';
-        }
+		global $gL10n;
+		
+		$costPeriods = array(-1 => $gL10n->get('ROL_UNIQUELY'), 
+						     1  => $gL10n->get('ROL_ANNUALLY'), 
+						     2  => $gL10n->get('ROL_SEMIYEARLY'), 
+						     4  => $gL10n->get('ROL_QUARTERLY'), 
+						     12 => $gL10n->get('ROL_MONTHLY') );
+		
+		if($costPeriod != 0)
+		{
+			return $costPeriods[$costPeriod];
+		}
+		else
+		{
+			return $costPeriods;
+		}
     }
 	
 	// returns the value of database column $field_name
@@ -253,50 +260,6 @@ class TableRoles extends TableAccess
 		}
 
         return $value;
-    }
-    
-    public function getWeekdays()
-    {
-        return $this->role_weekdays;
-    }
-
-    // die Funktion gibt die deutsche Bezeichnung für die Beitragszeitraeume wieder
-    public static function getWeekdayDesc($weekday)
-    {
-        global $gL10n;
-    
-        if($weekday == 1)
-        {
-            return $gL10n->get('SYS_MONDAY');
-        }
-        elseif($weekday == 2)
-        {
-            return $gL10n->get('SYS_TUESDAY');
-        }
-        elseif($weekday == 3)
-        {
-            return $gL10n->get('SYS_WEDNESDAY');
-        }
-        elseif($weekday == 4)
-        {
-            return $gL10n->get('SYS_THURSDAY');
-        }
-        elseif($weekday == 5)
-        {
-            return $gL10n->get('SYS_FRIDAY');
-        }
-        elseif($weekday == 6)
-        {
-            return $gL10n->get('SYS_SATURDAY');
-        }
-        elseif($weekday == 7)
-        {
-            return $gL10n->get('SYS_SUNDAY');
-        }
-        else
-        {
-            return '--';
-        }
     }
     
     // Methode gibt true zurueck, wenn die Rolle ehemalige Mitglieder besitzt

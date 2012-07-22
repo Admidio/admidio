@@ -19,7 +19,11 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableLists extends TableAccess
 {
-    // Konstruktor
+	/** Constuctor that will create an object of a recordset of the table adm_lists. 
+	 *  If the id is set than the specific list will be loaded.
+	 *  @param $db Object of the class database. This should be the default object $gDb.
+	 *  @param $lst_id The recordset of the list with this id will be loaded. If id isn't set than an empty object of the table is created.
+	 */
     public function __construct(&$db, $lst_id = 0)
     {
         parent::__construct($db, TBL_LISTS, 'lst', $lst_id);

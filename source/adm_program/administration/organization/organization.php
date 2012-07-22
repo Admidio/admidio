@@ -1440,6 +1440,20 @@ echo '
                     <li class="smallFontSize">'.$gL10n->get('PRO_DEFAULT_COUNTRY_DESC').'</li>
                     <li>
                         <dl>
+                            <dt><label for="profile_log_edit_fields">'.$gL10n->get('PRO_LOG_EDIT_FIELDS').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="profile_log_edit_fields" name="profile_log_edit_fields" ';
+                                if(isset($form_values['profile_log_edit_fields']) && $form_values['profile_log_edit_fields'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('PRO_LOG_EDIT_FIELDS_DESC').'</li>
+                    <li>
+                        <dl>
                             <dt><label for="profile_show_map_link">'.$gL10n->get('PRO_SHOW_MAP_LINK').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="profile_show_map_link" name="profile_show_map_link" ';
