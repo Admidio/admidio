@@ -108,24 +108,9 @@ $dateFromSystemFormat = $objDate->format($gPreferences['system_date']);
 $objDate = new DateTimeExtended($dates->getDateTo(), 'Y-m-d', 'date');
 $dateToSystemFormat = $objDate->format($gPreferences['system_date']);
 
-
 // Fill input fields only if User requests exists
-if ($getDateFrom == '1970-01-01')
-{
-    $dateFromHtmlOutput = '';
-    $dateToHtmlOutput  = '';
-}
-elseif ($getDateTo == '9999-12-31') 
-{
-    $dateFromHtmlOutput = '';
-    $dateToHtmlOutput  = '';
-}
-else
-{
-    $dateFromHtmlOutput = $dateFromSystemFormat;
-    $dateToHtmlOutput  = $dateToSystemFormat;
-}
-  
+$dateFromHtmlOutput = $dates->getFormValue($getDateFrom, DATE_NOW);
+$dateToHtmlOutput = $dates->getFormValue($getDateTo, '9999-12-31');
 
 if($getCatId > 0)
 {
@@ -306,7 +291,7 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
            
     if(strlen($topNavigation) > 0)
     {
-        echo '<ul class="iconTextLinkList">'.$topNavigation.'</ul>';
+        echo '<ul class="iconTextLinkList">'.$topNavigation.'</ul>'; 
     }
 }
 

@@ -15,7 +15,7 @@ class dates
     private $dateFrom;
     private $dateTo;
     private $order;
-    
+
     public function __construct()
     {
         $this->setMode();
@@ -36,7 +36,7 @@ class dates
     
     //sets current mode
     public function setMode($mode='actual', $var1='', $var2='')
-    {
+    {    
         //check if mode is valid
         if(in_array($mode, $this->getModes()))
         {
@@ -84,7 +84,7 @@ class dates
                     $this->setDateTo($var1);
                     $this->setDateId();
                     $this->setOrder();
-                    break;             
+                    break;            
             }            
             return TRUE;  
         }
@@ -135,6 +135,37 @@ class dates
     public function getDateTo()
     {
         return $this->dateTo;
+    }
+    
+    /* check date value to reference and set html output   
+     * if value matches to reference, value is cleared
+     */
+    private function setFormValue ($date, $reference)
+    {
+        $checkedDate = $this->formatDate($date);
+        if($checkedDate == $reference || $checkedDate == '1970-01-01')
+        {
+            $date = '';
+        }
+        else
+        {
+            $this->date = $date;
+        }
+        return $date;
+    }
+
+    // return form field value
+    public function getFormValue($date, $reference)
+    {
+        if(!isset($date) || !isset($reference))
+        {
+            return FALSE;
+        }
+        else
+        {
+            $checkedDate = $this->setFormValue($date, $reference);
+            return $checkedDate;
+        }
     }
     
     //checks date
@@ -259,7 +290,7 @@ class dates
         
     }
 
-    //get number of available announcements
+    //get number of available dates
     public function getDatesCount()
     {            
         if($this->dateId == 0)
@@ -295,7 +326,7 @@ class dates
         global $gProfileFields;
         global $gDb;
                        
-        //Ankuendigungen aus der DB fischen...
+        //read dates from database
         $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,
                        cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname,
                        cha_surname.usd_value as change_surname, cha_firstname.usd_value as change_firstname
@@ -336,10 +367,10 @@ class dates
         
         $result = $gDb->query($sql);
 
-        //array für Ergbenisse       
-        $dates= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'stratElement'=>$startElement, 'totalCount'=>$this->getDatesCount(), 'dates'=>array());
+        //array for results       
+        $dates= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'startElement'=>$startElement, 'totalCount'=>$this->getDatesCount(), 'dates'=>array());
        
-        //Ergebnisse auf Array pushen
+        //push results to array
         while($row = $gDb->fetch_array($result))
         {           
             $dates['dates'][] = $row; 
