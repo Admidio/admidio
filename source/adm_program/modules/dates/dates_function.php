@@ -107,6 +107,11 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $_POST['time_to']   = '00:00'; // Ganztägig ist nur logisch bei 23:59 Uhr (rn)
         $date->setValue('dat_all_day', 1);
     }
+    else
+    {
+        $date->setValue('dat_all_day', 0);
+    }
+    
     if(isset($_POST['role_1']) == false || $_POST['role_1'] == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
