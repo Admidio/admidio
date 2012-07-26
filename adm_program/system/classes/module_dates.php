@@ -67,7 +67,6 @@ class dates
     private function setHeadline($dateFrom, $dateTo)
     {
         global $gL10n;
-        global $gLayout;
 
         If ($dateFrom < DATE_NOW && $dateTo < DATE_NOW)
         {
