@@ -15,11 +15,72 @@ class dates
     private $dateFrom;
     private $dateTo;
     private $order;
+    private $headline;
 
     public function __construct()
     {
         $this->setMode();
         $this->catId = '';
+        $this->headline = '';
+    }
+    
+    //return headline of dates
+    public function getHeadline($getHeadline, $dateFrom, $dateTo)
+    {   
+        if (!isset($dateFrom) || !isset($dateTo))
+        {
+            return FALSE;
+        } 
+        
+        if (strlen($getHeadline) == 0)
+        {
+            $checkedDate = $this->formatDate($dateFrom);
+            if($checkedDate != FALSE)
+            {
+                $this->dateFrom = $checkedDate;
+            }
+            else
+            {
+                return FALSE;
+            }
+            
+            $checkedDate = $this->formatDate($dateTo);
+            if($checkedDate != FALSE)
+            {
+                $this->dateTo = $checkedDate;
+            }
+            else
+            {
+                return FALSE;
+            }  
+            
+            $headline = $this->setHeadline($this->dateFrom, $this->dateTo);
+        }
+        else
+        {
+            $this->headline = $getHeadline;
+        }
+        return $this->headline;
+    }
+    
+    // set HTML headline relative to date period
+    private function setHeadline($dateFrom, $dateTo)
+    {
+        global $gL10n;
+        global $gLayout;
+
+        If ($dateFrom < DATE_NOW && $dateTo < DATE_NOW)
+        {
+            $getHeadline =  $gL10n->get('DAT_PREVIOUS_DATES',' ');
+            $getHeadline.= $gL10n->get('DAT_DATES');
+            $this->headline = $getHeadline;
+        }
+        else
+        {
+            $getHeadline =  $gL10n->get('DAT_DATES');
+            $this->headline = $getHeadline;
+        }
+        return $this;
     }
     
     //returns possible modes for dates
@@ -208,7 +269,7 @@ class dates
         }
     }
         
-    //sets current catId
+    //sets current DatId
     public function setDateId($id=0)
     {        
         if(is_numeric($id))
