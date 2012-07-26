@@ -57,7 +57,7 @@ $dates = new Dates();
 // Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, $dates->getModes());
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string');
 $getDateId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 $getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
@@ -108,7 +108,10 @@ $dateFromSystemFormat = $objDate->format($gPreferences['system_date']);
 $objDate = new DateTimeExtended($dates->getDateTo(), 'Y-m-d', 'date');
 $dateToSystemFormat = $objDate->format($gPreferences['system_date']);
 
-// Fill input fields only if User requests exists
+// get headline of dates relative to date values
+$htmlHeadline = $dates->getHeadline($getHeadline, $getDateFrom, $getDateTo);
+
+// Fill input fields only if user values exists
 $dateFromHtmlOutput = $dates->getFormValue($getDateFrom, DATE_NOW);
 $dateToHtmlOutput = $dates->getFormValue($getDateTo, '9999-12-31');
 
@@ -124,11 +127,11 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // Html-Head output
 if($getCatId > 0)
 {
-    $gLayout['title'] = $getHeadline. ' - '. $calendar->getValue('cat_name');
+    $gLayout['title'] = $htmlHeadline. ' - '. $calendar->getValue('cat_name');
 }
 else
 {
-    $gLayout['title'] = $getHeadline;
+    $gLayout['title'] = $htmlHeadline;
 }
 if($getMode == 'old')
 {
@@ -137,8 +140,8 @@ if($getMode == 'old')
 
 if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1)
 {
-    $gLayout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline).'"
-        href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$getHeadline.'" />';
+    $gLayout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$htmlHeadline).'"
+        href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$htmlHeadline.'" />';
 };
 
 $gLayout['header'] .= '
@@ -160,7 +163,7 @@ echo '
             if ($("#admCalendar").selectedIndex != 0) {
                 var calendarId = $("#admCalendar").val();
             } 
-            self.location.href = "dates.php?mode='.$getMode.'&headline='.$getHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=" + calendarId;
+            self.location.href = "dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=" + calendarId;
         });
     });
     
@@ -212,9 +215,9 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
         $topNavigation .= '
         <li>
             <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_VAR', $getHeadline).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline.'">'.$gL10n->get('SYS_CREATE_VAR', $getHeadline).'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline.'"><img
+                src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_VAR', $htmlHeadline).'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline.'">'.$gL10n->get('SYS_CREATE_VAR', $htmlHeadline).'</a>
             </span>
         </li>';
     }
@@ -250,9 +253,9 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
         if($gPreferences['enable_dates_ical'] == 1)
         {
             $topNavigation .= '<li><span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId.'"><img
+                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$htmlHeadline.'&amp;cat_id='.$getCatId.'"><img
                     src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"/></a>
-                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
+                <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$htmlHeadline.'&amp;cat_id='.$getCatId.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
             </span></li>';
         }
     }
@@ -265,7 +268,7 @@ if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDat
                 <dl> 
                     <dt><br />
                             <span>
-                                <form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php" onsubmit="return Datefilter()">
+                                <form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php"onsubmit="return Datefilter()">
                                     <label for="date_from">'.$gL10n->get('SYS_START').':</label>
                                         <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$dateFromHtmlOutput.'" />
                                         <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
@@ -347,9 +350,9 @@ else
                             if($date->editRight() == true)
                             {
                                 echo '
-                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
+                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$htmlHeadline.'"><img
                                     src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
-                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$getHeadline.'"><img
+                                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$htmlHeadline.'"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                             }
         
@@ -596,7 +599,7 @@ else
 }
 
 // Navigation with forward and backwards buttons
-$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateTo().'&date_to='.$dates->getDateFrom();
+$base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateTo().'&date_to='.$dates->getDateFrom();
 echo admFuncGeneratePagination($base_url, $datesResult['totalCount'], $datesResult['limit'], $getStart, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
