@@ -6,7 +6,22 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *****************************************************************************/
- 
+
+/// This class handles all parmeter required in date-module. 
+
+/**
+ *  This function is designed to handle transferd parameters and do all logical settings,
+ *  like output of headline, values for datefilter, input fields and also sql queries for the content.
+ *  It returns arrays for possible modes and viewmodes. Dates are checked to references and formated for sql and system format.
+ *  @param $mode Returns setting for "mode" regarding to date settings(actual,old,all,day,period are possible)
+ *  @param $CatId The current Category ID
+ *  @param $datId The current Date ID
+ *  @param $dateFrom The first date (startdate) is checked and formated to "Y-m-d" for SQL query 
+ *  @param $dateTo The second date (enddate) - same conditions like first date
+ *  @param $order optional sorting for SQL query (array: ASC,DESC  dafault:ASC)
+ *  @param $headline The headline is set to date, or old dates regarding to given date parameters. 
+ *         Optional user text can be set.
+ */ 
 class dates
 {
     private $mode;
@@ -17,6 +32,14 @@ class dates
     private $order;
     private $headline;
 
+    /**
+     *  setMode()
+     * 
+     *  Initialize parameters
+     * 
+     *  @param catID
+     *  @param headline
+     */
     public function __construct()
     {
         $this->setMode();
@@ -24,17 +47,25 @@ class dates
         $this->headline = '';
     }
     
-    //return headline of dates
-    public function getHeadline($getHeadline, $dateFrom, $dateTo)
+    /**
+     * Returns current headline. If no parameter is given, the headline is set by method regarding to given dates.
+     * Returns \b FALSE if one \b paramter is \b missing calling the method!
+     * @param $getHeadline Optinal headline for content else must be initialized !
+     * @param $start Value for the first date of period
+     * @param $end Value for the second date of period
+     * @par Example
+     * @code $dates->getHeadline($getHeadline, $start, $end); @endcode
+     */ 
+    public function getHeadline($getHeadline, $start, $end)
     {   
-        if (!isset($dateFrom) || !isset($dateTo))
+        if (!isset($start) || !isset($end))
         {
             return FALSE;
         } 
         
         if (strlen($getHeadline) == 0)
         {
-            $checkedDate = $this->formatDate($dateFrom);
+            $checkedDate = $this->formatDate($start);
             if($checkedDate != FALSE)
             {
                 $this->dateFrom = $checkedDate;
@@ -44,7 +75,7 @@ class dates
                 return FALSE;
             }
             
-            $checkedDate = $this->formatDate($dateTo);
+            $checkedDate = $this->formatDate($end);
             if($checkedDate != FALSE)
             {
                 $this->dateTo = $checkedDate;
@@ -63,12 +94,12 @@ class dates
         return $this->headline;
     }
     
-    // set HTML headline relative to date period
-    private function setHeadline($dateFrom, $dateTo)
+    /// Private method setting HTML headline relative to date period
+    private function setHeadline($start, $end)
     {
         global $gL10n;
 
-        If ($dateFrom < DATE_NOW && $dateTo < DATE_NOW)
+        If ($start < DATE_NOW && $end < DATE_NOW)
         {
             $getHeadline =  $gL10n->get('DAT_PREVIOUS_DATES',' ');
             $getHeadline.= $gL10n->get('DAT_DATES');
@@ -82,19 +113,41 @@ class dates
         return $this;
     }
     
-    //returns possible modes for dates
+    /**
+     *  Provides possible view modes for dates as array
+     *  @param html
+     *  @param print
+     */
+    public function getViewModes()
+    {
+        return array('html', 'print');
+    }
+    
+    /**
+     *  Provides possible modes for dates as array
+     *  @param actual
+     *  @param old
+     *  @param all
+     *  @param period
+     *  @param day
+     */ 
     public function getModes()
     {
         return array('actual', 'old', 'all', 'period', 'day');
     }
-    
-    //returns current mode
+        
+    /**
+     *  Returns current mode.
+     */ 
     public function getMode()
     {
         return $this->mode;
     }
     
-    //sets current mode
+    /**
+     *  Sets current mode. 
+     *  This method checks valid mode value and validates the date values if necessary.
+     */ 
     public function setMode($mode='actual', $var1='', $var2='')
     {    
         //check if mode is valid
@@ -170,7 +223,9 @@ class dates
         
     }
     
-    //returns date From
+    /**
+     *  Returns date From.
+     */ 
     public function getDateFrom()
     {
         return $this->dateFrom;
@@ -191,14 +246,17 @@ class dates
         }
     }
     
-    //returns date To
+    /**
+     *  Returns date To.
+     */
     public function getDateTo()
     {
         return $this->dateTo;
     }
     
-    /* check date value to reference and set html output   
-     * if value matches to reference, value is cleared
+    /** 
+     *  Check date value to reference and set html output.   
+     *  If value matches to reference, value is cleared.
      */
     private function setFormValue ($date, $reference)
     {
@@ -214,7 +272,11 @@ class dates
         return $date;
     }
 
-    // return form field value
+    /**
+     *  Returns value for form field. 
+     *  This method checks the date value to reference and set the html output.
+     *  If value matches the reference, the output value is cleared.
+     */ 
     public function getFormValue($date, $reference)
     {
         if(!isset($date) || !isset($reference))
@@ -254,7 +316,9 @@ class dates
         }
     }
         
-    //sets current catId
+    /**
+     *  Sets current catId.
+     */ 
     public function setCatId($id=0)
     {
         if(is_numeric($id))
@@ -268,7 +332,9 @@ class dates
         }
     }
         
-    //sets current DatId
+    /**
+     *  Sets current DatId.
+     */
     public function setDateId($id=0)
     {        
         if(is_numeric($id))
@@ -282,7 +348,10 @@ class dates
         }
     }
         
-    //sets current Order
+    /**
+     * Sets current Order.
+     * Default: ASC
+     */ 
     public function setOrder($order='ASC')
     {        
         if(in_array($order, array('ASC','DESC')))
@@ -350,7 +419,9 @@ class dates
         
     }
 
-    //get number of available dates
+    /**
+     *  get number of available dates.
+     */
     public function getDatesCount()
     {            
         if($this->dateId == 0)
@@ -378,7 +449,11 @@ class dates
         }
     }
     
-    //returns dates
+    /**
+     *  SQL query and returns array with avaible dates.
+     *  @param $startelement Defines the offset of the query (default: 0)
+     *  @param $limit Limit of query rows (default: 0) 
+     */ 
     public function getDates($startElement=0, $limit=NULL)
     {
         global $gCurrentOrganization;
