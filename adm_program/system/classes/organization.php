@@ -183,19 +183,34 @@ class Organization extends TableOrganizations
         }
     }
     
-    //gibt liste für mit Kindern und Eltern für SQL-Abfrage zurück
-    public function getFamilySQL()
+	/** Create a comma separated list with all organization ids of children, 
+	 *  parent and this organization that is prepared for use in SQL
+	 *  @param $shortname If set to true then a list of all shortnames will be returned
+	 *  @return Returns a string with a comma separated list of all organization ids that are parents or children and the own id
+	 */
+    public function getFamilySQL($shortname = false)
     {
-        // alle Gruppierungen finden, in denen die Orga entweder Mutter oder Tochter ist
-        $organizations = '';
+        $organizationsId = '';
+		$organizationsShortname = '';
         $arr_ref_orgas = $this->getReferenceOrganizations(true, true);
 
         foreach($arr_ref_orgas as $key => $value)
         {
-            $organizations .= '\''.$value.'\',';
+            $organizationsShortname .= '\''.$value.'\',';
+			$organizationsId .= $key.',';
         }
-        $organizations .= '\''. $this->getValue('org_shortname'). '\'';
-        return $organizations;
+
+        $organizationsShortname .= '\''. $this->getValue('org_shortname'). '\'';
+		$organizationsId .= $this->getValue('org_id');
+
+		if($shortname)
+		{
+			return $organizationsShortname;
+		}
+		else
+		{
+			return $organizationsId;
+		}
     }
 }
 ?>
