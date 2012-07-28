@@ -36,39 +36,60 @@ $_SESSION['navigation']->addUrl(CURRENT_URL);
 // Listen-SQL-Statement zusammensetzen
 if($getActiveRole == 1)
 {
-    $sql_member_status = ' AND mem_begin <= \''.DATE_NOW.'\'
+    $sqlMemberStatus = ' AND mem_begin <= \''.DATE_NOW.'\'
                            AND mem_end   >= \''.DATE_NOW.'\' ';
 }
 else
 {
-    $sql_member_status = ' AND mem_end < \''.DATE_NOW.'\' ';
+    $sqlMemberStatus = ' AND mem_end < \''.DATE_NOW.'\' ';
 }
 
+// create a string with sql conditions
+$sqlConditions = '';
+
+if($gValidLogin == false)
+{
+    $sqlConditions .= ' AND cat_hidden = 0 ';
+}
+
+if($getCatId > 0)
+{
+    // if category is set then only show roles of this category
+    $sqlConditions .= ' AND cat_id  = '.$getCatId;
+}
+
+// create a list with all rol_ids that the user is allowed to view
+$visibleRoles = implode(',', $gCurrentUser->getAllVisibleRoles());
+if(strlen($visibleRoles) > 0)
+{
+	$sqlConditions = ' AND rol_id IN ('.$visibleRoles.')';
+}
+else
+{
+	$sqlConditions = ' AND rol_id = 0 ';
+}
+
+// create the final sql statement to select all roles
 $sql = 'SELECT rol.*, cat.*, 
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id '.$sql_member_status.' AND mem_leader = 0) as num_members,
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id '.$sql_member_status.' AND mem_leader = 1) as num_leader,
-               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem WHERE mem.mem_rol_id = rol.rol_id AND mem_end < \''. DATE_NOW.'\') as num_former
+               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
+			     WHERE mem.mem_rol_id = rol.rol_id '.$sqlMemberStatus.' AND mem_leader = 0) as num_members,
+               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
+			     WHERE mem.mem_rol_id = rol.rol_id '.$sqlMemberStatus.' AND mem_leader = 1) as num_leader,
+               (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
+			     WHERE mem.mem_rol_id = rol.rol_id AND mem_end < \''. DATE_NOW.'\') as num_former
           FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
          WHERE rol_valid   = '.$getActiveRole.'
            AND rol_visible = 1
            AND rol_cat_id = cat_id 
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-               OR cat_org_id IS NULL ) ';
-if($gValidLogin == false)
-{
-    $sql .= ' AND cat_hidden = 0 ';
-}
-if($getCatId > 0)
-{
-    // if category is set then only show roles of this category
-    $sql .= ' AND cat_id  = '.$getCatId;
-}
-$sql .= ' ORDER BY cat_sequence, rol_name ';
+               OR cat_org_id IS NULL )
+			   '.$sqlConditions.'
+         ORDER BY cat_sequence, rol_name ';
 
 $result_lst = $gDb->query($sql);
-$num_roles  = $gDb->num_rows();
+$numberOfRoles  = $gDb->num_rows();
 
-if($num_roles == 0)
+if($numberOfRoles == 0)
 {
     if($gValidLogin == true)
     {
@@ -180,8 +201,8 @@ if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
     echo '</ul>';
 }
 
-$previous_cat_id   = 0;
-$count_cat_entries = 0;
+$previousCategoryId   = 0;
+$countCategoryEntries = 0;
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
 if(!$gDb->data_seek($result_lst, $getStart))
 {
@@ -200,17 +221,17 @@ $result_config = $gDb->query($sql);
 // Anzahl Rollen pro Seite
 if($gPreferences['lists_roles_per_page'] > 0)
 {
-    $roles_per_page = $gPreferences['lists_roles_per_page'];
+    $rolesPerPage = $gPreferences['lists_roles_per_page'];
 }
 else
 {
-    $roles_per_page = $num_roles;
+    $rolesPerPage = $numberOfRoles;
 }
 
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
 
-for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
+for($i = 0; $i < $rolesPerPage && $i + $getStart < $numberOfRoles; $i++)
 {
     if($row_lst = $gDb->fetch_array($result_lst))
     {
@@ -218,11 +239,11 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
         $role->setArray($row_lst);
         if($role->getValue('rol_visible') == 1)
         {    
-            if($previous_cat_id != $role->getValue('cat_id'))
+            if($previousCategoryId != $role->getValue('cat_id'))
             {
                 if($i > 0)
                 {
-                    if($count_cat_entries == 0)
+                    if($countCategoryEntries == 0)
                     {
                         echo $gL10n->get('LST_CATEGORY_NO_LISTS');
                     }
@@ -231,11 +252,11 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
                 echo '<div class="formLayout">
                     <div class="formHead">'. $role->getValue('cat_name'). '</div>
                     <div class="formBody">';
-                $previous_cat_id = $role->getValue('cat_id');
-                $count_cat_entries = 0;
+                $previousCategoryId = $role->getValue('cat_id');
+                $countCategoryEntries = 0;
             }
 
-			if($count_cat_entries > 0)
+			if($countCategoryEntries > 0)
 			{
 				echo '<hr />';
 			}
@@ -257,8 +278,7 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
 						<img id="admRoleDetails'.$role->getValue('rol_id').'Image"  src="'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>';
 
 					// show link if user is allowed to see members and the role has members
-					if($gCurrentUser->viewRole($role->getValue('rol_id'))
-					&& ($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0))
+					if($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0)
 					{
 						echo '<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '">'. $role->getValue('rol_name'). '</a>';
 					}
@@ -293,8 +313,7 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
 				echo '</div>
 				<div style="text-align: right;">';
 					// show combobox with lists if user is allowed to see members and the role has members
-					if($gCurrentUser->viewRole($role->getValue('rol_id'))
-					&& ($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0))
+					if($row_lst['num_members'] > 0 || $row_lst['num_leader'] > 0)
 					{
 						echo '
 						<select class="admSelectRoleList" id="admSelectRoleList_'.$role->getValue('rol_id').'">
@@ -412,22 +431,14 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
 								// Anzahl Ehemaliger anzeigen
 								if($row_lst['num_former'] == 1)
 								{
-									$text_former = $gL10n->get('SYS_FORMER');
+									$textFormerMembers = $gL10n->get('SYS_FORMER');
 								}
 								else
 								{
-									$text_former = $gL10n->get('SYS_FORMER_PL');
+									$textFormerMembers = $gL10n->get('SYS_FORMER_PL');
 								}
 								
-								// if user is allowed to see members then show link to former members
-								if($gCurrentUser->viewRole($role->getValue('rol_id')))
-								{
-									echo '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row_lst['num_former'].' '.$text_former.'</a>) ';
-								}
-								else
-								{
-									echo '&nbsp;&nbsp;('.$row_lst['num_former'].' '.$text_former.') ';
-								}
+								echo '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row_lst['num_former'].' '.$textFormerMembers.'</a>) ';
 							}
 						echo '</dd>
 					</dl>
@@ -469,12 +480,12 @@ for($i = 0; $i < $roles_per_page && $i + $getStart < $num_roles; $i++)
 				}
 
 			echo '</ul>';
-			$count_cat_entries++;
+			$countCategoryEntries++;
         }
     }
 }
 
-if($count_cat_entries == 0)
+if($countCategoryEntries == 0)
 {
     echo $gL10n->get('LST_CATEGORY_NO_LISTS');
 }
@@ -482,7 +493,7 @@ echo '</div></div>';
 
 // Navigation mit Vor- und Zurueck-Buttons
 $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $getCatId. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;
-echo admFuncGeneratePagination($base_url, $num_roles, $roles_per_page, $getStart, TRUE);
+echo admFuncGeneratePagination($base_url, $numberOfRoles, $rolesPerPage, $getStart, TRUE);
 
 echo '</div>';
 

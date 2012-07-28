@@ -242,11 +242,22 @@ class User extends TableUsers
 		$this->db->endTransaction();
     }
     
-    // Liefert ein Array mit allen Rollen und der Berechtigung, ob der User die Liste einsehen darf
-    public function getListViewRights()
+	/** Creates an array with all roles where the user has the right to view them
+	 *  @return Array with roles where user has the right to view them
+	 */
+    public function getAllVisibleRoles()
     {
+		$visibleRoles = array();
         $this->checkRolesRight();
-        return $this->list_view_rights;
+
+		foreach($this->list_view_rights as $role => $right)
+		{
+			if($right == 1)
+			{
+				$visibleRoles[] = $role;
+			}
+		}
+        return $visibleRoles;
     }
 	
 	// returns an array with all role ids where the user is a member

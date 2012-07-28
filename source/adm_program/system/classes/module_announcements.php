@@ -36,7 +36,7 @@ class Announcements
                   FROM '. TBL_ANNOUNCEMENTS. '
                  WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
                     OR (   ann_global   = 1
-                   AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL().') ))
+                   AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL(true).') ))
                        '.$this->getConditions.'';
         $result = $gDb->query($sql);
         $row    = $gDb->fetch_array($result);             
@@ -75,7 +75,7 @@ class Announcements
                    AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
                  WHERE (  ann_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
                     OR (   ann_global   = 1
-                   AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL().') ))
+                   AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL(true).') ))
                        '.$this->getConditions.' 
                  ORDER BY ann_timestamp_create DESC
                  LIMIT '.$limit.' OFFSET '.$startElement;
