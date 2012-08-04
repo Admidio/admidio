@@ -36,6 +36,7 @@ require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
 require_once('../../system/classes/module_dates.php');
+require_once('../../system/classes/participients.php');
 unset($_SESSION['dates_request']);
 
 
@@ -463,20 +464,13 @@ else
                         $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
                     }
         
-                    // write participants in array
+                    // count participients of the date
                     if($date->getValue('dat_rol_id') > 0)
                     {
                         if($date->getValue('dat_max_members')!=0)
                         {
-                            $sql = 'SELECT DISTINCT mem_usr_id 
-                                      FROM '.TBL_MEMBERS.' 
-                                     WHERE mem_rol_id = '.$date->getValue('dat_rol_id').'
-                                       AND mem_begin <= \''.DATE_NOW.'\'
-                                       AND mem_end    > \''.DATE_NOW.'\'';
-                            $result = $gDb->query($sql);
-                            $row_count = $gDb->num_rows($result);
-                                        
-                            $participantsHtml = '<strong>'.$row_count.'</strong>';
+                            $participients = new Participients ();
+                            $participantsHtml = '<strong>'.$participients->getCount($date->getValue('dat_rol_id')).'</strong>';
                         }
                         else 
                         {
@@ -533,13 +527,8 @@ else
                                 $non_available_rols = array();
                                 if($date->getValue('dat_max_members'))
                                 {
-                                    // Limit for participiants
-                                    $sql = 'SELECT DISTINCT mem_usr_id FROM '.TBL_MEMBERS.'
-                                             WHERE mem_rol_id = '.$date->getValue('dat_rol_id').' 
-                                               AND mem_leader = 0';
-                                    $res_num = $gDb->query($sql);
-                                    $row_num = $gDb->num_rows($res_num);
-                                    if($row_num >= $date->getValue('dat_max_members'))
+                                    // Check limit of participients
+                                    if($participients->getLimit($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
                                     {
                                         $available_signin = false;
                                     }
@@ -585,7 +574,7 @@ else
                             echo '<div>'.$registrationHtml.'</div>';
                         }
                     }
-        
+
                     // Show date of create and changes
                     echo '<div class="editInformation">'.
                         $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
