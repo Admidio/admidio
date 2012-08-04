@@ -9,9 +9,6 @@
  *
  * Beside the methods of the parent class there are the following additional methods:
  *
- * getMembership($roleId, $userId)
- *                      - search for an existing membership of roleId and userId
- *                        and fill the class with the result
  * startMembership($leader = "")
  *                      - starts a membership for the assigned role and user 
  *                        from now until 31.12.9999
@@ -32,36 +29,6 @@ class TableMembers extends TableAccess
     {
         parent::__construct($db, TBL_MEMBERS, 'mem', $mem_id);
     }
-	
-	// search for an existing membership of roleId and userId
-	// and fill the class with the result
-	public function getMembership($roleId, $userId)
-	{
-		if(is_numeric($roleId) && is_numeric($userId))
-		{
-			$this->clear();
-			
-			$sql = 'SELECT * FROM '.TBL_MEMBERS.'
-			         WHERE mem_rol_id = '.$roleId.'
-					   AND mem_usr_id = '.$userId.'
-					   AND mem_begin <= \''.DATE_NOW.'\'
-					   AND mem_end   >= \''.DATE_NOW.'\'';
-			$this->db->query($sql);
-			
-			if($row = $this->db->fetch_array())
-			{
-				$this->setArray($row);
-			
-				return true;
-			}
-			else
-			{
-				$this->setValue('mem_rol_id', $roleId);
-				$this->setValue('mem_usr_id', $userId);
-			}
-		}
-		return false;
-	}
 
     // Speichert die Mitgliedschaft und aktualisiert das
     public function save($updateFingerPrint = true)
@@ -85,7 +52,7 @@ class TableMembers extends TableAccess
 		// if role and user is set, than search for this membership and load data into class
 		if(is_numeric($roleId) && is_numeric($userId) && $roleId > 0 && $userId > 0)
 		{
-			$this->getMembership($roleId, $userId);
+			$this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
 		}
 		
 		if($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
@@ -127,7 +94,7 @@ class TableMembers extends TableAccess
 		// if role and user is set, than search for this membership and load data into class
 		if(is_numeric($roleId) && is_numeric($userId) && $roleId > 0 && $userId > 0)
 		{
-			$this->getMembership($roleId, $userId);
+			$this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
 		}
 
         if($this->new_record == false && $this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)

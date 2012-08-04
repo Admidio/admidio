@@ -36,8 +36,10 @@ class TableCategory extends TableAccess
         parent::__construct($db, TBL_CATEGORIES, 'cat', $cat_id);
     }
 
-    // Methode bearbeitet die Referenzen, wenn die Kategorie geloescht wird
-    // Rueckgabe ist true, wenn das Loeschen erfolgreich war und false, falls es nicht durchgefuehrt werden konnte
+	/** Deletes the selected record of the table and all references in other tables. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
         global $gCurrentSession;
@@ -215,29 +217,76 @@ class TableCategory extends TableAccess
         }
     }
 
-    public function readData($cat_id, $sql_where_condition = '', $sql_additional_tables = '')
+	/** Reads a category out of the table in database selected by the unique category id in the table.
+	 *  Per default all columns of adm_categories will be read and stored in the object.
+	 *  @param $id Unique cat_id
+	 *  @return Returns @b true if one record is found
+	 */
+    public function readDataById($cat_id)
     {
-        $returnValue = parent::readData($cat_id, $sql_where_condition, $sql_additional_tables);
+        $returnValue = parent::readDataById($cat_id);
 
-		if($this->getValue('cat_type') == 'ROL')
+		if($returnValue)
 		{
-			$this->elementTable = TBL_ROLES;
-			$this->elementColumn = 'rol_cat_id';
+			if($this->getValue('cat_type') == 'ROL')
+			{
+				$this->elementTable = TBL_ROLES;
+				$this->elementColumn = 'rol_cat_id';
+			}
+			elseif($this->getValue('cat_type') == 'LNK')
+			{
+				$this->elementTable = TBL_LINKS;
+				$this->elementColumn = 'lnk_cat_id';
+			}
+			elseif($this->getValue('cat_type') == 'USF')
+			{
+				$this->elementTable = TBL_USER_FIELDS;
+				$this->elementColumn = 'usf_cat_id';
+			}
+			elseif($this->getValue('cat_type') == 'DAT')
+			{
+				$this->elementTable = TBL_DATES;
+				$this->elementColumn = 'dat_cat_id';
+			}
 		}
-		elseif($this->getValue('cat_type') == 'LNK')
+		
+        return $returnValue;
+    }
+	
+	/** Reads a category out of the table in database selected by different columns in the table.
+	 *  The columns are commited with an array where every element index is the column name and the value is the column value.
+	 *  The columns and values must be selected so that they identify only one record. 
+	 *  If the sql will find more than one record the method returns @b false.
+	 *  Per default all columns of adm_categories will be read and stored in the object.
+	 *  @param $columnArray An array where every element index is the column name and the value is the column value
+	 *  @return Returns @b true if one record is found
+	 */
+	public function readDataByColumns($columnArray)
+    {
+        $returnValue = parent::readDataByColumns($columnArray);
+
+		if($returnValue)
 		{
-			$this->elementTable = TBL_LINKS;
-			$this->elementColumn = 'lnk_cat_id';
-		}
-		elseif($this->getValue('cat_type') == 'USF')
-		{
-			$this->elementTable = TBL_USER_FIELDS;
-			$this->elementColumn = 'usf_cat_id';
-		}
-		elseif($this->getValue('cat_type') == 'DAT')
-		{
-			$this->elementTable = TBL_DATES;
-			$this->elementColumn = 'dat_cat_id';
+			if($this->getValue('cat_type') == 'ROL')
+			{
+				$this->elementTable = TBL_ROLES;
+				$this->elementColumn = 'rol_cat_id';
+			}
+			elseif($this->getValue('cat_type') == 'LNK')
+			{
+				$this->elementTable = TBL_LINKS;
+				$this->elementColumn = 'lnk_cat_id';
+			}
+			elseif($this->getValue('cat_type') == 'USF')
+			{
+				$this->elementTable = TBL_USER_FIELDS;
+				$this->elementColumn = 'usf_cat_id';
+			}
+			elseif($this->getValue('cat_type') == 'DAT')
+			{
+				$this->elementTable = TBL_DATES;
+				$this->elementColumn = 'dat_cat_id';
+			}
 		}
 		
         return $returnValue;

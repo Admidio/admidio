@@ -27,23 +27,20 @@ class TableSession extends TableAccess
 	/** Constuctor that will create an object of a recordset of the table adm_sessions. 
 	 *  If the id is set than the specific session will be loaded.
 	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $session The recordset of the session with this id will be loaded. If id isn't set than an empty object of the table is created.
+	 *  @param $session The recordset of the session with this id will be loaded. The session can be the table id or the alphanumeric session id. If id isn't set than an empty object of the table is created.
 	 */
     public function __construct(&$db, $session = 0)
     {
-        parent::__construct($db, TBL_SESSIONS, 'ses', $session);
-    }
+        parent::__construct($db, TBL_SESSIONS, 'ses');
 
-    // Session mit der uebergebenen Session-ID aus der Datenbank auslesen
-    public function readData($session, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        // wurde ses_session_id uebergeben, dann die SQL-Bedingung anpassen
-        if(is_numeric($session) == false)
-        {
-            $sql_where_condition .= ' ses_session_id = \''.$session.'\' ';
-        }       
-        
-        return parent::readData($session, $sql_where_condition, $sql_additional_tables);
+		if(is_numeric($session))
+		{
+			$this->readDataById($session);
+		}
+		else
+		{
+			$this->readDataByColumns(array('ses_session_id' => $session));
+		}
     }
 
     // diese Funktion stoesst ein Neueinlesen des Organisations-Objekts bei allen angemeldeten

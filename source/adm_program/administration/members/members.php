@@ -18,6 +18,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/module_menu.php');
 unset($_SESSION['import_request']);
 
 // wurde der Suchstring ueber das Formular als POST uebergeben, dann an GET weiterleiten
@@ -155,7 +156,7 @@ $gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("a[rel=\'lnkNewUser\']").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+            $("#admMenuItemNewUser > span > a").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
             
             var options = {
                         script:"'.$g_root_path.'/adm_program/administration/members/query_suggestions.php?members='.$getMembers.'&",
@@ -200,30 +201,26 @@ else
     $show_all_checked = 'checked';
 }
 
-echo'
-<ul class="iconTextLinkList" style="margin-bottom: 0px;">
-    <li>
-        <span class="iconTextLink">
-            <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img
-            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MEM_CREATE_USER').'" /></a>
-            <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$gL10n->get('MEM_CREATE_USER').'</a>
-        </span>
-    </li>
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/members/import.php"><img
-            src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('MEM_IMPORT_USERS').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/members/import.php">'.$gL10n->get('MEM_IMPORT_USERS').'</a>
-        </span>
-    </li>
-    <li>
-        <span class="iconTextLink">
-            <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
-            src="'. THEME_PATH. '/icons/application_form.png" alt="'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS').'" /></a>
-            <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS').'</a>
-        </span>
-    </li>  
-</ul>';
+// create module menu
+$membersAdministrationMenu = new ModuleMenu('admMenuMembersAdministration');
+
+// show link to create new user
+$membersAdministrationMenu->addItem('admMenuItemNewUser', $g_root_path.'/adm_program/administration/members/members_new.php', 
+							$gL10n->get('MEM_CREATE_USER'), 'add.png');
+							
+// show link to import users
+$membersAdministrationMenu->addItem('admMenuItemImportUsers', $g_root_path.'/adm_program/administration/members/import.php', 
+							$gL10n->get('MEM_IMPORT_USERS'), 'database_in.png');
+
+if($gCurrentUser->isWebmaster())
+{
+	// show link to maintain profile fields
+	$membersAdministrationMenu->addItem('admMenuItemMaintainProfileFields', $g_root_path. '/adm_program/administration/organization/fields.php', 
+								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form.png');
+}
+
+$membersAdministrationMenu->show();
+
 	
 //Hier gibt es jetzt noch die Suchbox...
 echo '

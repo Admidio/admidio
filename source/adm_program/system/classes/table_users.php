@@ -31,29 +31,20 @@ class TableUsers extends TableAccess
         parent::__construct($db, TBL_USERS, 'usr', $usr_id);
     }
 
-    // Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen
-    public function updateLoginData()
-    {
-        $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
-        $this->setValue('usr_number_login', $this->getValue('usr_number_login') + 1);
-        $this->setValue('usr_actual_login', DATETIME_NOW);
-        $this->setValue('usr_date_invalid', NULL);
-        $this->setValue('usr_number_invalid', 0);
-        $this->save(false); // Zeitstempel nicht aktualisieren
-    }
-
-    // alle Klassenvariablen wieder zuruecksetzen
+    /** Additional to the parent method the user will be set @b valid per default.
+	 */
     public function clear()
     {
         parent::clear();
 
         // new user should be valid (except registration)
         $this->setValue('usr_valid', 1);
-        $this->columnsValueChanged = false;
     }
 
-    // Referenzen zum aktuellen Benutzer loeschen
-    // die Methode wird innerhalb von delete() aufgerufen
+	/** Deletes the selected user of the table and all the many references in other tables. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
         $this->db->startTransaction();
@@ -123,6 +114,10 @@ class TableUsers extends TableAccess
                     WHERE rld_usr_id = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
+        $sql    = 'UPDATE '. TBL_USER_LOG. ' SET usl_usr_id_create = NULL
+                    WHERE usl_usr_id_create = '. $this->getValue('usr_id');
+        $this->db->query($sql);
+
         $sql    = 'UPDATE '. TBL_USERS. ' SET usr_usr_id_create = NULL
                     WHERE usr_usr_id_create = '. $this->getValue('usr_id');
         $this->db->query($sql);
@@ -144,10 +139,16 @@ class TableUsers extends TableAccess
         $sql    = 'DELETE FROM '. TBL_MEMBERS. ' WHERE mem_usr_id = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
+        $sql    = 'DELETE FROM '. TBL_REGISTRATIONS. ' WHERE reg_usr_id = '. $this->getValue('usr_id');
+        $this->db->query($sql);
+
         $sql    = 'DELETE FROM '. TBL_AUTO_LOGIN. ' WHERE atl_usr_id = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_SESSIONS. ' WHERE ses_usr_id = '. $this->getValue('usr_id');
+        $this->db->query($sql);
+
+        $sql    = 'DELETE FROM '. TBL_USER_LOG. ' WHERE usl_usr_id = '. $this->getValue('usr_id');
         $this->db->query($sql);
 
         $sql    = 'DELETE FROM '. TBL_USER_DATA. ' WHERE usd_usr_id = '. $this->getValue('usr_id');
@@ -179,6 +180,17 @@ class TableUsers extends TableAccess
 		}
 
         return parent::setValue($field_name, $field_value);
+    }
+	
+    // Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen
+    public function updateLoginData()
+    {
+        $this->setValue('usr_last_login',   $this->getValue('usr_actual_login', 'Y-m-d H:i:s'));
+        $this->setValue('usr_number_login', $this->getValue('usr_number_login') + 1);
+        $this->setValue('usr_actual_login', DATETIME_NOW);
+        $this->setValue('usr_date_invalid', NULL);
+        $this->setValue('usr_number_invalid', 0);
+        $this->save(false); // Zeitstempel nicht aktualisieren
     }
 }
 ?>

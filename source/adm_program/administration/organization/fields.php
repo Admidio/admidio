@@ -10,6 +10,7 @@
  
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/table_user_field.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
@@ -92,25 +93,19 @@ $gLayout['header'] = '
 // Html-Kopf ausgeben
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-echo '
-<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>
+echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
 
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php"><img 
-            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('ORG_CREATE_PROFILE_FIELD').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php">'.$gL10n->get('ORG_CREATE_PROFILE_FIELD').'</a>
-        </span>
-    </li>
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=USF"><img
-            src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=USF">'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
-        </span>
-    </li>
-</ul>';
+// create module menu
+$fieldsMenu = new ModuleMenu('admMenuFields');
+
+// show link to create new profile field
+$fieldsMenu->addItem('admMenuItemNewField', $g_root_path.'/adm_program/administration/organization/fields_new.php', 
+							$gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png');
+// show link to maintain categories
+$fieldsMenu->addItem('admMenuItemMaintainCategory', $g_root_path.'/adm_program/administration/categories/categories.php?type=USF', 
+							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
+$fieldsMenu->show();
+
 
 $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
          WHERE cat_type   = \'USF\'

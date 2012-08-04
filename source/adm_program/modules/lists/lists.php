@@ -18,7 +18,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/form_elements.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_roles.php');
 unset($_SESSION['mylist_request']);
@@ -62,11 +62,11 @@ if($getCatId > 0)
 $visibleRoles = implode(',', $gCurrentUser->getAllVisibleRoles());
 if(strlen($visibleRoles) > 0)
 {
-	$sqlConditions = ' AND rol_id IN ('.$visibleRoles.')';
+	$sqlConditions .= ' AND rol_id IN ('.$visibleRoles.')';
 }
 else
 {
-	$sqlConditions = ' AND rol_id = 0 ';
+	$sqlConditions .= ' AND rol_id = 0 ';
 }
 
 // create the final sql statement to select all roles
@@ -129,10 +129,6 @@ if($getCatId > 0)
 $gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() {
-            $("#admCategory").change(function () {
-                self.location.href = "lists.php?cat_id=" + $(this).val() + "&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole.'";
-            });
-			
 			$(".admSelectRoleList").change(function () {
 				elementId = $(this).attr("id");
 				roleId    = elementId.substr(elementId.search(/_/)+1);
@@ -156,49 +152,28 @@ echo '<div id="lists_overview">
 // Kategorienauswahlbox soll angezeigt werden oder der User darf neue Rollen anlegen
 if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
 {
-    echo '<ul class="iconTextLinkList">';
-    //Neue Termine anlegen
-    if($gCurrentUser->editDates())
-    {
-        echo '
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php"><img
-                    src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_ROLE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">'.$gL10n->get('SYS_CREATE_ROLE').'</a>
-            </span>
-        </li>';
-    }
+	// create module menu
+	$ListsMenu = new ModuleMenu('admMenuLists');
 
-    if($getCategorySelection == 1)
-    {
-        // create select box with all categories that have roles
-        $calendarSelectBox = FormElements::generateCategorySelectBox('ROL', $getCatId, 'admCategory', $gL10n->get('SYS_ALL'), true);
-        
-        if(strlen($calendarSelectBox) > 0)
-        {
-            // show category select box with link to calendar preferences
-            echo '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;'.$calendarSelectBox;
+	if($gCurrentUser->assignRoles())
+	{
+		// show link to create new role
+		$ListsMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administration/roles/roles_new.php', 
+							$gL10n->get('SYS_CREATE_ROLE'), 'add.png');
+	}
+	
+	// show selectbox with all roles categories
+	$ListsMenu->addCategoryItem('admMenuItemCategory', 'ROL', $getCatId, 'lists.php?category-selection='. $getCategorySelection. '&active_role='.$getActiveRole.'&cat_id=', 
+								$gL10n->get('SYS_CATEGORY'), $gCurrentUser->assignRoles());
 
-                if($gCurrentUser->assignRoles())
-                {
-                    echo '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
-                     src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
-                }
-            echo '</li>';
-        }            
-        elseif($gCurrentUser->assignRoles())
-        {
-            // show link to calendar preferences
-            echo '
-            <li><span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
-                    src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL">'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
-            </span></li>';
-        }    
-    }
-    echo '</ul>';
+	if($gCurrentUser->isWebmaster())
+	{
+		// show link to system preferences of roles
+		$ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=LST_LISTS', 
+							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+	}
+
+	$ListsMenu->show();
 }
 
 $previousCategoryId   = 0;

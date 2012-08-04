@@ -101,7 +101,7 @@ elseif($getMode == 4)
     // Registrierung loeschen    
     // im Forum muss er nicht geloescht werden, da der User erst nach der vollstaendigen 
     // Registrierung im Forum angelegt wird.
-    $new_user->delete();
+    $new_user->removeRegistration($gCurrentOrganization->getValue('org_id'));
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';

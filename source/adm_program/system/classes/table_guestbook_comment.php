@@ -26,6 +26,9 @@ class TableGuestbookComment extends TableAccess
 	 */
     public function __construct(&$db, $gbc_id = 0)
     {
+		// read also data of assigned guestbook entry
+		$this->connectAdditionalTable(TBL_GUESTBOOK, 'gbo_id', 'gbc_gbo_id');
+
         parent::__construct($db, TBL_GUESTBOOK_COMMENTS, 'gbc', $gbc_id);
     }
 	
@@ -61,16 +64,7 @@ class TableGuestbookComment extends TableAccess
         $this->setValue('gbc_locked', '0');
         $this->save();
     }  
-
-    // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($gbc_id, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        $sql_additional_tables .= TBL_GUESTBOOK;
-        $sql_where_condition   .= '    gbc_gbo_id = gbo_id 
-                                   AND gbc_id     = '.$gbc_id;
-        return parent::readData($gbc_id, $sql_where_condition, $sql_additional_tables);
-    }
-
+	
     // Methode, die Defaultdaten fur Insert und Update vorbelegt
     public function save($updateFingerPrint = true)
     {

@@ -14,6 +14,7 @@
  *****************************************************************************/
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/my_files.php');
 require_once('backup.functions.php');
 
@@ -59,24 +60,22 @@ sort($old_backup_files);
 $gLayout['title']  = $gL10n->get('BAC_DATABASE_BACKUP');
 $gLayout['header'] = '
     <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
+        $(document).ready(function() {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
-echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>
+echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
 
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup_script.php"><img
-            src="'. THEME_PATH. '/icons/database_save.png" alt="'.$gL10n->get('BAC_START_BACKUP').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup_script.php">'.$gL10n->get('BAC_START_BACKUP').'</a>
-        </span>
-    </li>
-</ul>';
+// create module menu
+$backupMenu = new ModuleMenu('admMenuBackup');
+
+// show link to create new backup
+$backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/administration/backup/backup_script.php', 
+							$gL10n->get('BAC_START_BACKUP'), 'database_save.png');
+$backupMenu->show();
+
 
 //Anlegen der Tabelle
 echo '

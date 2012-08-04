@@ -88,7 +88,7 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 3 || $getMode == 9)
     
     if($getGboId > 0)
     {
-        $guestbook->readData($getGboId);
+        $guestbook->readDataById($getGboId);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))
@@ -104,7 +104,7 @@ else
     
     if($getGboId > 0 && $getMode != 4)
     {
-        $guestbook_comment->readData($getGboId);
+        $guestbook_comment->readDataById($getGboId);
         
         // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
         if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))

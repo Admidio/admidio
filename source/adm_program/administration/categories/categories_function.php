@@ -55,7 +55,7 @@ $category = new TableCategory($gDb);
 
 if($getCatId > 0)
 {
-    $category->readData($getCatId);
+    $category->readDataById($getCatId);
 
     // check if category belongs to actual organization
     if($category->getValue('cat_org_id') >  0

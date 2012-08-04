@@ -25,11 +25,16 @@ class TableUserField extends TableAccess
 	 */
     public function __construct(&$db, $usf_id = 0)
     {
+		// read also data of assigned category
+		$this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'usf_cat_id');
+
         parent::__construct($db, TBL_USER_FIELDS, 'usf', $usf_id);
     }
     
-    // interne Funktion, die die Referenzen bearbeitet, wenn die Kategorie geloescht wird
-    // die Funktion wird innerhalb von delete() aufgerufen
+	/** Deletes the selected fieldand all references in other tables. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
         global $gCurrentSession;
@@ -255,19 +260,6 @@ class TableUserField extends TableAccess
             $this->setValue('usf_sequence', $this->getValue('usf_sequence')+1);
             $this->save();
         }
-    }    
-
-    // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($usf_id, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        if(is_numeric($usf_id) && $usf_id > 0)
-        {
-            $sql_additional_tables .= TBL_CATEGORIES;
-            $sql_where_condition   .= '    usf_cat_id = cat_id
-                                       AND usf_id     = '.$usf_id;
-            return parent::readData($usf_id, $sql_where_condition, $sql_additional_tables);
-        }
-        return false;
     }
 
     // Methode wird erst nach dem Speichern der Profilfelder aufgerufen

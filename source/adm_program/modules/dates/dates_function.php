@@ -59,7 +59,7 @@ $date = new TableDate($gDb);
 
 if($getDateId > 0)
 {
-    $date->readData($getDateId);
+    $date->readDataById($getDateId);
 
     // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
     if($date->editRight() == false )
@@ -229,7 +229,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
             
             $date->setValue('dat_room_id',$_POST['dat_room_id']);
             $room = new TableRooms($gDb);
-            $room->readData($_POST['dat_room_id']);
+            $room->readDataById($_POST['dat_room_id']);
             $number = intval($room->getValue('room_capacity')) + intval($room->getValue('room_overhang'));
             $date->setValue('dat_max_members', $number);
             if($_POST['dat_max_members']<$number && $_POST['dat_max_members']>0)

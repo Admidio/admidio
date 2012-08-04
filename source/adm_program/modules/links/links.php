@@ -15,7 +15,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/form_elements.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_weblink.php');
 unset($_SESSION['links_request']);
@@ -55,11 +55,6 @@ $gLayout['header'] = '
         $(document).ready(function() 
         {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-
-            $("#admCategory").change(function () {
-                var categoryId = document.getElementById("admCategory").value;
-                self.location.href = "links.php?cat_id=" + categoryId + "&headline='.$getHeadline.'";
-            });
         }); 
     //--></script>';
 
@@ -132,52 +127,29 @@ $links_result = $gDb->query($sql);
 // show icon links and navigation
 
 if($getLinkId == 0)
-{
-    $topNavigation = '';
+{	
+	// create module menu
+	$LinksMenu = new ModuleMenu('admMenuLinks');
 
-    if ($gCurrentUser->editWeblinksRight())
-    {
-        // show link to create new weblink
-        $topNavigation .= '
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline. '">
-                    <img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('LNK_CREATE_LINK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline. '">'.$gL10n->get('LNK_CREATE_LINK').'</a>
-            </span>
-        </li>';
-    }
+	if($gCurrentUser->editWeblinksRight())
+	{
+		// show link to create new announcement
+		$LinksMenu->addItem('admMenuItemNewLink', $g_root_path.'/adm_program/modules/links/links_new.php?headline='. $getHeadline, 
+							$gL10n->get('LNK_CREATE_LINK'), 'add.png');
+	}
+	
+	// show selectbox with all link categories
+	$LinksMenu->addCategoryItem('admMenuItemCategory', 'LNK', $getCatId, 'links.php?headline='.$getHeadline.'&cat_id=', 
+								$gL10n->get('SYS_CATEGORY'), $gCurrentUser->editWeblinksRight());
 
-    // create select box with all categories that have links
-    $calendarSelectBox = FormElements::generateCategorySelectBox('LNK', $getCatId, 'admCategory', $gL10n->get('SYS_ALL'), true);
-            
-    if(strlen($calendarSelectBox) > 0)
-    {
-        // show category select box with link to calendar preferences
-       $topNavigation .= '<li>'.$gL10n->get('SYS_CATEGORY').':&nbsp;&nbsp;'.$calendarSelectBox;
+	if($gCurrentUser->isWebmaster())
+	{
+		// show link to system preferences of weblinks
+		$LinksMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=LNK_WEBLINKS', 
+							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+	}
 
-            if($gCurrentUser->editWeblinksRight())
-            {
-                $topNavigation .= '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK"><img
-                    src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
-            }
-        $topNavigation .= '</li>';
-    }            
-    elseif($gCurrentUser->editWeblinksRight())
-    {
-        // show link to category preferences
-        $topNavigation .= '
-        <li><span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK"><img
-                src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=LNK">'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
-        </span></li>';
-    }                
-    
-    if(strlen($topNavigation) > 0)
-    {
-        echo '<ul class="iconTextLinkList">'.$topNavigation.'</ul>';
-    }
+	$LinksMenu->show();
 
     // Navigation mit Vor- und Zurueck-Buttons
     $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline;

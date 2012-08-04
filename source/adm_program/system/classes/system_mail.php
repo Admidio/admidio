@@ -48,7 +48,7 @@ class SystemMail extends Email
     
         if($this->textObject->getValue('txt_name') != $sysmail_id)
         {
-            $this->textObject->readData($sysmail_id);
+            $this->textObject->readDataById($sysmail_id);
         }
         
         $mailSrcText = $this->textObject->getValue('txt_text');

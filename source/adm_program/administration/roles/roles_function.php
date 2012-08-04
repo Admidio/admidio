@@ -41,7 +41,7 @@ $role = new TableRoles($gDb);
 
 if($getRoleId > 0)
 {
-    $role->readData($getRoleId);
+    $role->readDataById($getRoleId);
 
     // Pruefung, ob die Rolle zur aktuellen Organisation gehoert
     if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id')

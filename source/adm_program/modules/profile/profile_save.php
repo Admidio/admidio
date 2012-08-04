@@ -244,8 +244,6 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 // falls Registrierung, dann die entsprechenden Felder noch besetzen
 if($getNewUser == 2)
 {
-    $user->setValue('usr_valid', 0);
-    $user->setValue('usr_reg_org_shortname', $gCurrentOrganization->getValue('org_shortname'));
     $user->setValue('usr_password', $_POST['usr_password']);
 }
 
@@ -264,14 +262,21 @@ if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 /*------------------------------------------------------------*/
 // Benutzerdaten in Datenbank schreiben
 /*------------------------------------------------------------*/
+$gDb->startTransaction();
 
 if($user->getValue('usr_id') == 0)
 {
     // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
     $user->save();
+
     if($getNewUser == 1)
     {
         $user->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
+    }
+    elseif($getNewUser == 2)
+    {
+		// insert record in registration table
+		$user->insertRegistration($gCurrentOrganization->getValue('org_id'));
     }
     else
     {
@@ -293,6 +298,8 @@ if($gPreferences['enable_forum_interface'] && ($login_name_changed || $getNewUse
     }
     $gForum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('EMAIL'), $forum_old_username, $getNewUser, $set_admin);
 }
+
+$gDb->endTransaction();
 
 // wenn Daten des eingeloggten Users geaendert werden, dann Session-Variablen aktualisieren
 if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
@@ -364,9 +371,7 @@ elseif($getNewUser == 3 || $getUserId == 0)
     if($getUserId > 0) // Webanmeldung
     {
         // User auf aktiv setzen
-        $user->setValue('usr_valid', 1);
-        $user->setValue('usr_reg_org_shortname', '');
-        $user->save();
+		$user->acceptRegistration($gCurrentOrganization->getValue('org_id'));
 
         // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
         if($gPreferences['enable_system_mails'] == 1)

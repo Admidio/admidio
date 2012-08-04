@@ -30,23 +30,11 @@ class TableFile extends TableAccess
 	 */
     public function __construct(&$db, $fil_id = 0)
     {
+		// read also data of assigned folder
+		$this->connectAdditionalTable(TBL_FOLDERS, 'fol_id', 'fil_fol_id');
+	
         parent::__construct($db, TBL_FILES, 'fil', $fil_id);
     }
-
-
-    // File mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($file_id, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        global $gCurrentOrganization;
-
-        $sql_additional_tables .= TBL_FOLDERS;
-        $sql_where_condition   .= '    fil_id     = '.$file_id.'
-                                   AND fil_fol_id = fol_id
-                                   AND fol_type   = \'DOWNLOAD\'
-                                   AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
-        return parent::readData($file_id, $sql_where_condition, $sql_additional_tables);
-    }
-
 
     // File mit der uebergebenen ID aus der Datenbank auslesen fuer das Downloadmodul
     // Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
@@ -54,7 +42,7 @@ class TableFile extends TableAccess
     {
         global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
-        $this->readData($file_id);
+        $this->readDataById($file_id);
 
         //Pruefen ob der aktuelle Benutzer Rechte an der Datei hat
         //Gucken ob ueberhaupt ein Datensatz gefunden wurde...
@@ -110,8 +98,10 @@ class TableFile extends TableAccess
     }
 
 
-    // die Methode wird innerhalb von delete() aufgerufen
-    //und loescht das File physikalisch von der Platte bevor es aus der DB geloescht wird
+	/** Deletes the selected record of the table and the assiciated file in the file system. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
         @chmod($this->getCompletePathOfFile(), 0777);

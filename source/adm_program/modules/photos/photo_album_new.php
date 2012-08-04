@@ -42,7 +42,7 @@ $photo_album = new TablePhotos($gDb);
 // nur Daten holen, wenn Album editiert werden soll
 if ($getJob == 'change')
 {
-    $photo_album->readData($getPhotoId);
+    $photo_album->readDataById($getPhotoId);
 
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))

@@ -29,7 +29,10 @@ class TableLists extends TableAccess
         parent::__construct($db, TBL_LISTS, 'lst', $lst_id);
     }
 
-    // Liste samt Abhaengigkeiten loeschen
+	/** Deletes the selected list with all associated fields. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
 		$this->db->startTransaction();

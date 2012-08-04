@@ -17,6 +17,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/table_roles.php');
 
 // Initialize and check the parameters
@@ -80,38 +81,25 @@ else
 	$visibleRolesFlag  = '1';
 }
 
-echo '
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php"><img
-            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_ROLE').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php">'.$gL10n->get('SYS_CREATE_ROLE').'</a>
-        </span>
-    </li>
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$activeRolesFlag.'"><img
-            src="'. THEME_PATH. '/icons/'.$activeRolesImage.'" alt="'.$activeRolesLinkDescription.'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$activeRolesFlag.'">'.$activeRolesLinkDescription.'</a>
-        </span>
-    </li>
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?invisible='.$visibleRolesFlag.'"><img
-            src="'. THEME_PATH. '/icons/'.$visibleRolesImage.'" alt="'.$visibleRolesLinkDescription.'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/roles/roles.php?invisible='.$visibleRolesFlag.'">'.$visibleRolesLinkDescription.'</a>
-        </span>
-    </li>
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL"><img
-            src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=ROL">'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'</a>
-        </span>
-    </li>
-</ul>
+// create module menu
+$rolesMenu = new ModuleMenu('admMenuRoles');
 
+// show link to create new profile field
+$rolesMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administration/roles/roles_new.php', 
+							$gL10n->get('SYS_CREATE_ROLE'), 'add.png');
+// show link to show inactive roles
+$rolesMenu->addItem('admMenuItemInactiveRole', $g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$activeRolesFlag, 
+							$activeRolesLinkDescription, $activeRolesImage);
+// show link to show hidden roles
+$rolesMenu->addItem('admMenuItemHiddenRole', $g_root_path.'/adm_program/administration/roles/roles.php?invisible='.$visibleRolesFlag, 
+							$visibleRolesLinkDescription, $visibleRolesImage);
+// show link to maintain categories
+$rolesMenu->addItem('admMenuItemMaintainCategory', $g_root_path.'/adm_program/administration/categories/categories.php?type=ROL', 
+							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
+$rolesMenu->show();
+
+
+echo '
 <table class="tableList" cellspacing="0">
     <thead>
         <tr>

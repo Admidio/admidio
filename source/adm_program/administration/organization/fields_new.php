@@ -34,7 +34,7 @@ $userField = new TableUserField($gDb);
 
 if($getUsfId > 0)
 {
-    $userField->readData($getUsfId);
+    $userField->readDataById($getUsfId);
     
     // Pruefung, ob das Feld zur aktuellen Organisation gehoert
     if($userField->getValue('cat_org_id') >  0

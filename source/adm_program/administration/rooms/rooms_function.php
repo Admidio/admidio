@@ -31,7 +31,7 @@ if (!$gCurrentUser->isWebmaster())
 $room = new TableRooms($gDb);
 if($getRoomId > 0)
 {
-    $room->readData($getRoomId);   
+    $room->readDataById($getRoomId);   
 }
 
 if($getMode == 1)

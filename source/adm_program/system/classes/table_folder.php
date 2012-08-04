@@ -41,22 +41,159 @@ class TableFolder extends TableAccess
         $this->folderPath = new Folder();
     }
 
-
-    // Folder mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($folder_id, $sql_where_condition = '', $sql_additional_tables = '')
+    // Legt einen neuen Ordner im Dateisystem an
+    public function createFolder($folderName)
     {
-        global $gCurrentOrganization;
+        $error = array('text' => '', 'path' => '');
 
-        if(strlen($sql_where_condition) == 0)
+        $this->folderPath->setFolder($this->getCompletePathOfFolder());
+        $b_return = $this->folderPath->createFolder($folderName, true);
+
+        if($this->folderPath->createFolder($folderName, true) == false)
         {
-            $sql_where_condition = '    fol_id     = '.$folder_id.'
-                                    AND fol_type   = \'DOWNLOAD\'
-                                    AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
+            $error['text'] = 'SYS_FOLDER_NOT_CREATED';
+            $error['path'] = $this->getCompletePathOfFolder().'/'.$folderName;
         }
-        return parent::readData($folder_id, $sql_where_condition, $sql_additional_tables);
+
+        return $error;
     }
 
+	/** Deletes the selected record of the table and all references in other tables. 
+     *  Also all files, subfolders and the selected folder will be deleted in the file system. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
+    public function delete($folder_id = 0)
+    {
+		$returnCode = true;
+	
+        if ($folder_id == 0)
+        {
+            $folder_id = $this->getValue('fol_id');
 
+            if (!strlen($this->getValue('fol_name')) > 0) {
+               return false;
+            }
+            $folderPath = $this->getCompletePathOfFolder();
+
+        }
+		
+		$this->db->startTransaction();
+
+        //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
+        $sql_subfolders = 'SELECT *
+                              FROM '. TBL_FOLDERS. '
+                            WHERE fol_fol_id_parent = '.$folder_id;
+        $result_subfolders = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        {
+            //rekursiver Aufruf mit jedem einzelnen Unterordner
+            $this->delete($row_subfolders->fol_id);
+        }
+
+        //In der DB die Files der aktuellen folder_id loeschen
+        $sql_delete_files = 'DELETE from '. TBL_FILES. '
+                        WHERE fil_fol_id = '.$folder_id;
+        $this->db->query($sql_delete_files);
+
+        //In der DB die verknuepften Berechtigungen zu dieser Folder_ID loeschen...
+        $sql_delete_fol_rol = 'DELETE from '. TBL_FOLDER_ROLES. '
+                        WHERE flr_fol_id = '.$folder_id;
+        $this->db->query($sql_delete_fol_rol);
+
+        //In der DB den Eintrag des Ordners selber loeschen
+        $sql_delete_folder = 'DELETE from '. TBL_FOLDERS. '
+                        WHERE fol_id = '.$folder_id;
+        $this->db->query($sql_delete_folder);
+
+
+        //Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
+        if (isset($folderPath))
+        {
+            $this->folderPath->setFolder($folderPath);
+            $this->folderPath->delete($folderPath);
+        }
+
+        //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
+
+        if ($folder_id == $this->getValue('fol_id')) {
+            $returnCode = parent::delete();
+        }
+
+		$this->db->endTransaction();
+		return $returnCode;
+    }
+	
+    // Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
+    // und allen darin enthaltenen Unterordnern und Dateien rekursiv
+    public function editLockedFlagOnFolder($locked_flag, $folder_id = 0)
+    {
+        if ($folder_id == 0)
+        {
+            $folder_id = $this->getValue('fol_id');
+            $this->setValue('fol_locked', $locked_flag);
+        }
+		
+		$this->db->startTransaction();
+
+        //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
+        $sql_subfolders = 'SELECT *
+                              FROM '. TBL_FOLDERS. '
+                            WHERE fol_fol_id_parent = '.$folder_id;
+        $result_subfolders = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        {
+            //rekursiver Aufruf mit jedem einzelnen Unterordner
+            $this->editLockedFlagOnFolder($locked_flag, $row_subfolders->fol_id);
+        }
+
+        //Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
+        $sql_update = 'UPDATE '. TBL_FOLDERS. '
+                          SET fol_locked = \''.$locked_flag.'\'
+                        WHERE fol_id = '.$folder_id;
+        $this->db->query($sql_update);
+
+        //...und natuerlich auch fuer alle Files die in diesem Ordner sind
+        $sql_update = 'UPDATE '. TBL_FILES. '
+                          SET fil_locked = \''.$locked_flag.'\'
+                        WHERE fil_fol_id = '.$folder_id;
+        $this->db->query($sql_update);
+		
+		$this->db->endTransaction();
+    }
+	
+    // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
+    // und all seinen Unterordnern rekursiv
+    public function editPublicFlagOnFolder($public_flag, $folder_id = 0)
+    {
+        if ($folder_id == 0)
+        {
+            $folder_id = $this->getValue('fol_id');
+            $this->setValue('fol_public', $public_flag);
+        }
+
+        //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
+        $sql_subfolders = 'SELECT *
+                              FROM '. TBL_FOLDERS. '
+                            WHERE fol_fol_id_parent = '.$folder_id;
+        $result_subfolders = $this->db->query($sql_subfolders);
+
+        while($row_subfolders = $this->db->fetch_object($result_subfolders))
+        {
+            //rekursiver Aufruf mit jedem einzelnen Unterordner
+            $this->editPublicFlagOnFolder($public_flag, $row_subfolders->fol_id);
+        }
+
+        //Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
+        $sql_update = 'UPDATE '. TBL_FOLDERS. '
+                          SET fol_public = \''.$public_flag.'\'
+                        WHERE fol_id = '.$folder_id;
+        $this->db->query($sql_update);
+
+    }
+	
     // Folder mit der uebergebenen ID aus der Datenbank fuer das Downloadmodul auslesen
 	// Rueckgabe: -2 = keine Rechte; -1 = Ordner existiert nicht; 1 = alles OK
     public function getFolderForDownload($folder_id)
@@ -70,7 +207,7 @@ class TableFolder extends TableAccess
             $condition = '     fol_id     = '.$folder_id.'
                            AND fol_type   = \'DOWNLOAD\'
                            AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
-            parent::readData($folder_id, $condition);
+            parent::readDataById($folder_id, $condition);
         }
         else 
         {
@@ -78,7 +215,7 @@ class TableFolder extends TableAccess
                            AND fol_type   = \'DOWNLOAD\'
                            AND fol_path   = \'/adm_my_files\'
                            AND fol_org_id = '. $gCurrentOrganization->getValue('org_id');
-            parent::readData($folder_id, $condition);
+            parent::readDataById($folder_id, $condition);
         }
 
 
@@ -445,7 +582,6 @@ class TableFolder extends TableAccess
         }
     }
 
-
     //Gibt die aktuellen Rollenbrechtigungen des Ordners als Array zurueck
     public function getRoleArrayOfFolder()
     {
@@ -470,16 +606,37 @@ class TableFolder extends TableAccess
         return $roleArray;
     }
 
-
-    // Setzt das Publicflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
-    // und all seinen Unterordnern rekursiv
-    public function editPublicFlagOnFolder($public_flag, $folder_id = 0)
+    public function getValue($field_name, $format = '')
     {
-        if ($folder_id == 0)
+        $value = parent::getValue($field_name, $format);
+        
+        if($field_name == 'fol_name')
         {
-            $folder_id = $this->getValue('fol_id');
-            $this->setValue('fol_public', $public_flag);
+            // Konvertiert HTML-Auszeichnungen zurück in Buchstaben 
+            $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
         }
+        return $value;
+    }
+
+    //benennt eine Ordnerinstanz um
+    //und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
+    public function rename($newName, $newPath, $folder_id = 0)
+    {
+		if ($folder_id == 0)
+		{
+			$folder_id = $this->getValue('fol_id');
+			$this->setValue('fol_name', $newName);
+			$this->save();
+		}
+
+		$this->db->startTransaction();
+
+        //Den neuen Pfad in der DB setzen fuer die aktuelle folder_id...
+        $sql_update = 'UPDATE '. TBL_FOLDERS. '
+                          SET fol_path = \''.$newPath.'\'
+                        WHERE fol_id = '.$folder_id;
+        $this->db->query($sql_update);
+
 
         //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
         $sql_subfolders = 'SELECT *
@@ -490,18 +647,26 @@ class TableFolder extends TableAccess
         while($row_subfolders = $this->db->fetch_object($result_subfolders))
         {
             //rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->editPublicFlagOnFolder($public_flag, $row_subfolders->fol_id);
+            $this->rename($row_subfolders->fol_name, $newPath. '/'. $newName, $row_subfolders->fol_id);
         }
 
-        //Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
-        $sql_update = 'UPDATE '. TBL_FOLDERS. '
-                          SET fol_public = \''.$public_flag.'\'
-                        WHERE fol_id = '.$folder_id;
-        $this->db->query($sql_update);
-
+		$this->db->endTransaction();
     }
+	
+    // Methode, die Defaultdaten fur Insert und Update vorbelegt
+    public function save($updateFingerPrint = true)
+    {
+        global $gCurrentOrganization, $gCurrentUser;
 
-
+        if($this->new_record)
+        {
+            $this->setValue('fol_timestamp', DATETIME_NOW);
+            $this->setValue('fol_usr_id', $gCurrentUser->getValue('usr_id'));
+            $this->setValue('fol_org_id', $gCurrentOrganization->getValue('org_id'));
+        }
+        parent::save($updateFingerPrint);
+    }
+	
     // Setzt Berechtigungen fuer Rollen auf einer vorhandenen Ordnerinstanz
     // und all seinen Unterordnern rekursiv
     public function setRolesOnFolder($rolesArray, $folder_id = 0)
@@ -540,189 +705,6 @@ class TableFolder extends TableAccess
         }
 
 		$this->db->endTransaction();
-    }
-
-
-    // Setzt das Lockedflag (0 oder 1) auf einer vorhandenen Ordnerinstanz
-    // und allen darin enthaltenen Unterordnern und Dateien rekursiv
-    public function editLockedFlagOnFolder($locked_flag, $folder_id = 0)
-    {
-        if ($folder_id == 0)
-        {
-            $folder_id = $this->getValue('fol_id');
-            $this->setValue('fol_locked', $locked_flag);
-        }
-		
-		$this->db->startTransaction();
-
-        //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
-        $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
-                            WHERE fol_fol_id_parent = '.$folder_id;
-        $result_subfolders = $this->db->query($sql_subfolders);
-
-        while($row_subfolders = $this->db->fetch_object($result_subfolders))
-        {
-            //rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->editLockedFlagOnFolder($locked_flag, $row_subfolders->fol_id);
-        }
-
-        //Jetzt noch das Flag in der DB setzen fuer die aktuelle folder_id...
-        $sql_update = 'UPDATE '. TBL_FOLDERS. '
-                          SET fol_locked = \''.$locked_flag.'\'
-                        WHERE fol_id = '.$folder_id;
-        $this->db->query($sql_update);
-
-        //...und natuerlich auch fuer alle Files die in diesem Ordner sind
-        $sql_update = 'UPDATE '. TBL_FILES. '
-                          SET fil_locked = \''.$locked_flag.'\'
-                        WHERE fil_fol_id = '.$folder_id;
-        $this->db->query($sql_update);
-		
-		$this->db->endTransaction();
-    }
-
-    // Legt einen neuen Ordner im Dateisystem an
-    public function createFolder($folderName)
-    {
-        $error = array('text' => '', 'path' => '');
-
-        $this->folderPath->setFolder($this->getCompletePathOfFolder());
-        $b_return = $this->folderPath->createFolder($folderName, true);
-
-        if($this->folderPath->createFolder($folderName, true) == false)
-        {
-            $error['text'] = 'SYS_FOLDER_NOT_CREATED';
-            $error['path'] = $this->getCompletePathOfFolder().'/'.$folderName;
-        }
-
-        return $error;
-    }
-
-    //benennt eine Ordnerinstanz um
-    //und sorgt dafür das bei allen Unterordnern der Pfad angepasst wird
-    public function rename($newName, $newPath, $folder_id = 0)
-    {
-		if ($folder_id == 0)
-		{
-			$folder_id = $this->getValue('fol_id');
-			$this->setValue('fol_name', $newName);
-			$this->save();
-		}
-
-		$this->db->startTransaction();
-
-        //Den neuen Pfad in der DB setzen fuer die aktuelle folder_id...
-        $sql_update = 'UPDATE '. TBL_FOLDERS. '
-                          SET fol_path = \''.$newPath.'\'
-                        WHERE fol_id = '.$folder_id;
-        $this->db->query($sql_update);
-
-
-        //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
-        $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
-                            WHERE fol_fol_id_parent = '.$folder_id;
-        $result_subfolders = $this->db->query($sql_subfolders);
-
-        while($row_subfolders = $this->db->fetch_object($result_subfolders))
-        {
-            //rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->rename($row_subfolders->fol_name, $newPath. '/'. $newName, $row_subfolders->fol_id);
-        }
-
-		$this->db->endTransaction();
-    }
-
-
-    // die Methode wird innerhalb von delete() aufgerufen und entsorgt die Referenzen des Datensatzes
-    // und loescht die Verzeichnisse auch physikalisch auf der Platte...
-    public function delete($folder_id = 0)
-    {
-		$returnCode = true;
-	
-        if ($folder_id == 0)
-        {
-            $folder_id = $this->getValue('fol_id');
-
-            if (!strlen($this->getValue('fol_name')) > 0) {
-               return false;
-            }
-            $folderPath = $this->getCompletePathOfFolder();
-
-        }
-		
-		$this->db->startTransaction();
-
-        //Alle Unterordner auslesen, die im uebergebenen Verzeichnis enthalten sind
-        $sql_subfolders = 'SELECT *
-                              FROM '. TBL_FOLDERS. '
-                            WHERE fol_fol_id_parent = '.$folder_id;
-        $result_subfolders = $this->db->query($sql_subfolders);
-
-        while($row_subfolders = $this->db->fetch_object($result_subfolders))
-        {
-            //rekursiver Aufruf mit jedem einzelnen Unterordner
-            $this->delete($row_subfolders->fol_id);
-        }
-
-        //In der DB die Files der aktuellen folder_id loeschen
-        $sql_delete_files = 'DELETE from '. TBL_FILES. '
-                        WHERE fil_fol_id = '.$folder_id;
-        $this->db->query($sql_delete_files);
-
-        //In der DB die verknuepften Berechtigungen zu dieser Folder_ID loeschen...
-        $sql_delete_fol_rol = 'DELETE from '. TBL_FOLDER_ROLES. '
-                        WHERE flr_fol_id = '.$folder_id;
-        $this->db->query($sql_delete_fol_rol);
-
-        //In der DB den Eintrag des Ordners selber loeschen
-        $sql_delete_folder = 'DELETE from '. TBL_FOLDERS. '
-                        WHERE fol_id = '.$folder_id;
-        $this->db->query($sql_delete_folder);
-
-
-        //Jetzt noch das Verzeichnis physikalisch von der Platte loeschen
-        if (isset($folderPath))
-        {
-            $this->folderPath->setFolder($folderPath);
-            $this->folderPath->delete($folderPath);
-        }
-
-        //Auch wenn das physikalische Löschen fehl schlägt, wird in der DB alles gelöscht...
-
-        if ($folder_id == $this->getValue('fol_id')) {
-            $returnCode = parent::delete();
-        }
-
-		$this->db->endTransaction();
-		return $returnCode;
-    }
-
-    public function getValue($field_name, $format = '')
-    {
-        $value = parent::getValue($field_name, $format);
-        
-        if($field_name == 'fol_name')
-        {
-            // Konvertiert HTML-Auszeichnungen zurück in Buchstaben 
-            $value = html_entity_decode($value, ENT_QUOTES, 'UTF-8');
-        }
-        return $value;
-    }
-
-    // Methode, die Defaultdaten fur Insert und Update vorbelegt
-    public function save($updateFingerPrint = true)
-    {
-        global $gCurrentOrganization, $gCurrentUser;
-
-        if($this->new_record)
-        {
-            $this->setValue('fol_timestamp', DATETIME_NOW);
-            $this->setValue('fol_usr_id', $gCurrentUser->getValue('usr_id'));
-            $this->setValue('fol_org_id', $gCurrentOrganization->getValue('org_id'));
-        }
-        parent::save($updateFingerPrint);
     }
 }
 ?>
