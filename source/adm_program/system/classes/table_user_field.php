@@ -100,15 +100,22 @@ class TableUserField extends TableAccess
         return $newNameIntern;
     }
 	
-	// returns the value of database column $field_name
-	// for column usf_value_list the following format is accepted
-	// 'plain' -> returns database value of usf_value_list
-	// 'text'  -> extract only text from usf_value_list, image infos will be ignored
-    public function getValue($field_name, $format = '')
+    /** Get the value of a column of the database table.
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read
+     *  @param $format For column @c usf_value_list the following format is accepted: @n
+     *                 @b plain returns database value of usf_value_list; @n
+     *                 @b text extract only text from usf_value_list, image infos will be ignored @n
+     *                 For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
+     *                 For text columns the format can be @b plain that would be the database value without any transformations
+     *  @return Returns the value of the database column.
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+     */ 
+    public function getValue($columnName, $format = '')
     {
 		global $gL10n;
 
-		if($field_name == 'usf_description')
+		if($columnName == 'usf_description')
         {
 			if(isset($this->dbColumns['usf_description']) == false)
 			{
@@ -123,17 +130,17 @@ class TableUserField extends TableAccess
 				$value = $this->dbColumns['usf_description'];
 			}
         }
-		elseif($field_name == 'usf_name_intern')
+		elseif($columnName == 'usf_name_intern')
 		{
 			// internal name should be read with no conversion
-			$value = parent::getValue($field_name, 'plain');
+			$value = parent::getValue($columnName, 'plain');
 		}
         else
         {
-            $value = parent::getValue($field_name, $format);
+            $value = parent::getValue($columnName, $format);
         }
 		
-		if(($field_name == 'usf_name' || $field_name == 'cat_name')
+		if(($columnName == 'usf_name' || $columnName == 'cat_name')
 		&& $format != 'plain')
 		{
 			// if text is a translation-id then translate it
@@ -142,7 +149,7 @@ class TableUserField extends TableAccess
 				$value = $gL10n->get(admStrToUpper($value));
 			}
 		}
-		elseif($field_name == 'usf_value_list' && $format != 'plain')
+		elseif($columnName == 'usf_value_list' && $format != 'plain')
 		{
 			if($this->dbColumns['usf_type'] == 'DROPDOWN'
 			|| $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
@@ -214,7 +221,7 @@ class TableUserField extends TableAccess
 				$value = $arrListValuesWithKeys;
 			}
 		}
-		elseif($field_name == 'usf_icon' && $format != 'plain')
+		elseif($columnName == 'usf_icon' && $format != 'plain')
 		{
 			// if value is imagefile or imageurl then show image
 			if(strpos(admStrToLower($value), '.png') > 0 || strpos(admStrToLower($value), '.jpg') > 0)
@@ -285,47 +292,53 @@ class TableUserField extends TableAccess
     }
 
 
-    // validates the value and adapts it if necessary
-    public function setValue($field_name, $field_value, $check_value = true)
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
         // name, category and type couldn't be edited if it's a system field
-        if(($field_name == 'usf_name' || $field_name == 'usf_cat_id' || $field_name == 'usf_type')
+        if(($columnName == 'usf_name' || $columnName == 'usf_cat_id' || $columnName == 'usf_type')
 		&& $this->getValue('usf_system') == 1)
         {
             return false;
         }
-        elseif($field_name == 'usf_cat_id'
-        && $this->getValue($field_name) != $field_value)
+        elseif($columnName == 'usf_cat_id'
+        && $this->getValue($columnName) != $newValue)
         {
             // erst einmal die hoechste Reihenfolgennummer der Kategorie ermitteln
             $sql = 'SELECT COUNT(*) as count FROM '. TBL_USER_FIELDS. '
-                     WHERE usf_cat_id = '.$field_value;
+                     WHERE usf_cat_id = '.$newValue;
             $this->db->query($sql);
 
             $row = $this->db->fetch_array();
 
             $this->setValue('usf_sequence', $row['count'] + 1);
         }
-        elseif($field_name == 'usf_description')
+        elseif($columnName == 'usf_description')
         {
-            return parent::setValue($field_name, $field_value, false);
+            return parent::setValue($columnName, $newValue, false);
         }
-        elseif($field_name == 'usf_url' && strlen($field_value) > 0)
+        elseif($columnName == 'usf_url' && strlen($newValue) > 0)
 		{
 			// Homepage darf nur gueltige Zeichen enthalten
-			if (!strValidCharacters($field_value, 'url'))
+			if (!strValidCharacters($newValue, 'url'))
 			{
 				return false;
 			}
 			// Homepage noch mit http vorbelegen
-			if(strpos(admStrToLower($field_value), 'http://')  === false
-			&& strpos(admStrToLower($field_value), 'https://') === false )
+			if(strpos(admStrToLower($newValue), 'http://')  === false
+			&& strpos(admStrToLower($newValue), 'https://') === false )
 			{
-				$field_value = 'http://'. $field_value;
+				$newValue = 'http://'. $newValue;
 			}
 		}
 		
-        return parent::setValue($field_name, $field_value);
+        return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
 ?>

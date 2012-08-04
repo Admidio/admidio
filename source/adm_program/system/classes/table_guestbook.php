@@ -47,9 +47,17 @@ class TableGuestbook extends TableAccess
 		return $return;
     }
     
-    public function getValue($field_name, $format = '')
+    /** Get the value of a column of the database table.
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read
+     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *  @return Returns the value of the database column.
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+     */ 
+    public function getValue($columnName, $format = '')
     {
-        if($field_name == 'gbo_text')
+        if($columnName == 'gbo_text')
         {
 			if(isset($this->dbColumns['gbo_text']) == false)
 			{
@@ -66,7 +74,7 @@ class TableGuestbook extends TableAccess
         }
         else
         {
-            $value = parent::getValue($field_name, $format);
+            $value = parent::getValue($columnName, $format);
         }
  
         return $value;
@@ -94,42 +102,48 @@ class TableGuestbook extends TableAccess
         parent::save($updateFingerPrint);
     }
 
-    // validates the value and adapts it if necessary
-    public function setValue($field_name, $field_value, $check_value = true)
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if(strlen($field_value) > 0)
+        if(strlen($newValue) > 0)
         {
-            if($field_name == 'gbo_email')
+            if($columnName == 'gbo_email')
             {
-                $field_value = admStrToLower($field_value);
-                if (!strValidCharacters($field_value, 'email'))
+                $newValue = admStrToLower($newValue);
+                if (!strValidCharacters($newValue, 'email'))
                 {
                     // falls die Email ein ungueltiges Format aufweist wird sie nicht gesetzt
                     return false;
                 }
             }
-            elseif($field_name == 'gbo_homepage')
+            elseif($columnName == 'gbo_homepage')
             {
                 // Homepage darf nur gueltige Zeichen enthalten
-                if (!strValidCharacters($field_value, 'url'))
+                if (!strValidCharacters($newValue, 'url'))
                 {
                     return false;
                 }
                 // Homepage noch mit http vorbelegen
-                if(strpos(admStrToLower($field_value), 'http://')  === false
-                && strpos(admStrToLower($field_value), 'https://') === false )
+                if(strpos(admStrToLower($newValue), 'http://')  === false
+                && strpos(admStrToLower($newValue), 'https://') === false )
                 {
-                    $field_value = 'http://'. $field_value;
+                    $newValue = 'http://'. $newValue;
                 }
             }
         }
 
-        if($field_name == 'gbo_text')
+        if($columnName == 'gbo_text')
         {
-            return parent::setValue($field_name, $field_value, false);
+            return parent::setValue($columnName, $newValue, false);
         }
 
-        return parent::setValue($field_name, $field_value);
+        return parent::setValue($columnName, $newValue, $checkValue);
     } 
 }
 ?>

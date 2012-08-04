@@ -28,14 +28,19 @@ class TableWeblink extends TableAccess
 		parent::__construct($db, TBL_LINKS, 'lnk', $lnk_id);
     }
 
-	// returns the value of database column $field_name
-	// for column usf_value_list the following format is accepted
-	// 'plain' -> returns database value of usf_value_list
-    public function getValue($field_name, $format = '')
+    /** Get the value of a column of the database table.
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read
+     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *  @return Returns the value of the database column.
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+     */ 
+    public function getValue($columnName, $format = '')
     {
 		global $gL10n;
 
-        if($field_name == 'lnk_description')
+        if($columnName == 'lnk_description')
         {
 			if(isset($this->dbColumns['lnk_description']) == false)
 			{
@@ -52,10 +57,10 @@ class TableWeblink extends TableAccess
         }
         else
         {
-            $value = parent::getValue($field_name, $format);
+            $value = parent::getValue($columnName, $format);
         }
 
-		if($field_name == 'cat_name' && $format != 'plain')
+		if($columnName == 'cat_name' && $format != 'plain')
 		{
 			// if text is a translation-id then translate it
 			if(strpos($value, '_') == 3)
@@ -67,28 +72,34 @@ class TableWeblink extends TableAccess
         return $value;
     }
     
-    // validates the value and adapts it if necessary
-    public function setValue($field_name, $field_value, $check_value = true)
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($field_name == 'lnk_url' && strlen($field_value) > 0)
+        if($columnName == 'lnk_url' && strlen($newValue) > 0)
         {
 			// Homepage darf nur gueltige Zeichen enthalten
-			if (!strValidCharacters($field_value, 'url'))
+			if (!strValidCharacters($newValue, 'url'))
 			{
 				return false;
 			}
 			// Homepage noch mit http vorbelegen
-			if(strpos(admStrToLower($field_value), 'http://')  === false
-			&& strpos(admStrToLower($field_value), 'https://') === false )
+			if(strpos(admStrToLower($newValue), 'http://')  === false
+			&& strpos(admStrToLower($newValue), 'https://') === false )
 			{
-				$field_value = 'http://'. $field_value;
+				$newValue = 'http://'. $newValue;
 			}
         }
-        elseif($field_name == 'lnk_description')
+        elseif($columnName == 'lnk_description')
         {
-            return parent::setValue($field_name, $field_value, false);
+            return parent::setValue($columnName, $newValue, false);
         }
-        return parent::setValue($field_name, $field_value);
+        return parent::setValue($columnName, $newValue, $checkValue);
     } 
 }
 ?>

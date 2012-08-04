@@ -342,23 +342,38 @@ class User extends TableUsers
 		return $this->rolesMembership;
 	}
 
-    // Methode prueft, ob evtl. ein Wert aus der User-Fields-Tabelle
-    // angefordert wurde und gibt diesen zurueck
-    public function getValue($field_name, $format = '')
+    /** Get the value of a column of the database table if the column has the praefix @b usr_ 
+     *  otherwise the value of the profile field of the table adm_user_data will be returned.
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read or the internal unique profile field name
+     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *  @return Returns the value of the database column or the value of adm_user_fields
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+	 *  @par Examples
+	 *  @code  // reads data of adm_users column
+	 *  $loginname = $gCurrentUser->getValue('usr_login_name');
+	 *  // reads data of adm_user_fields
+	 *  $email = $gCurrentUser->getValue('EMAIL'); @endcode
+     */ 
+    public function getValue($columnName, $format = '')
     {
-        if(strpos($field_name, 'usr_') === 0)
+        if(strpos($columnName, 'usr_') === 0)
         {
-            return parent::getValue($field_name, $format);
+            return parent::getValue($columnName, $format);
         }
         else
         {
-			return $this->mProfileFieldsData->getValue($field_name, $format);
+			return $this->mProfileFieldsData->getValue($columnName, $format);
         }
     }
 
-	// creates a vcard with all user data
-	// allowedToEditProfile : false (default) user is allowed to edit profile so he can see more data
-	// windows xp address book can't process utf8, so vcard output is iso-8859-1
+	/** Creates a vcard with all data of this user object @n
+	 *  (Windows XP address book can't process utf8, so vcard output is iso-8859-1)
+	 *  @param $allowedToEditProfile If set to @b true than logged in user is allowed to edit profiles 
+	 *                               so he can see more data in the vcard
+	 *  @return Returns the vcard as a string
+	 */
     public function getVCard($allowedToEditProfile = false)
     {
         global $gPreferences;
@@ -471,12 +486,21 @@ class User extends TableUsers
 		}
 	}
 
-    public function readDataById($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
+	/** Reads a user record out of the table adm_users in database selected by the unique user id.
+	 *  Also all profile fields of the object @b mProfileFieldsData will be read.
+	 *  @param $userId Unique id of the user that should be read
+	 *  @return Returns @b true if one record is found
+	 */
+    public function readDataById($userId)
     {
-        parent::readDataById($usr_id, $sql_where_condition, $sql_additional_tables);
+        if(parent::readDataById($userId))
+        {
+			// read data of all user fields from current user
+			$this->mProfileFieldsData->readUserData($userId);
+			return true;
+		}
 
-		// read data of all user fields from current user
-		$this->mProfileFieldsData->readUserData($this->getValue('usr_id'));
+		return false;
     }
     
     // bei setValue werden die Werte nicht auf Gueltigkeit geprueft
@@ -706,32 +730,44 @@ class User extends TableUsers
 		return true;
 	}
 	
-    // interne Methode, die bei setValue den uebergebenen Wert prueft
-    // und ungueltige Werte auf leer setzt
-    public function setValue($fieldName, $fieldValue, $checkValue = true)
+    /** Set a new value for a column of the database table if the column has the praefix @b usr_ 
+     *  otherwise the value of the profile field of the table adm_user_data will set.
+     *  If the user log is activated than the change of the value will be logged in @b adm_user_log.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value or the internal unique profile field name
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+	 *  @par Examples
+	 *  @code  // set data of adm_users column
+	 *  $gCurrentUser->getValue('usr_login_name', 'Admidio');
+	 *  // reads data of adm_user_fields
+	 *  $gCurrentUser->getValue('EMAIL', 'webmaster@admidio.org'); @endcode
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
         global $gCurrentUser, $gPreferences;
 
         $returnCode    = true;
         $updateField   = false;
-        $oldFieldValue = $this->mProfileFieldsData->getValue($fieldName);
+        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName);
 
-        if(strpos($fieldName, 'usr_') !== 0)
+        if(strpos($columnName, 'usr_') !== 0)
         {
             // Daten fuer User-Fields-Tabelle
 
             // gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
             // bei Registrierung muss die Eingabe auch erlaubt sein
-            if((  $this->mProfileFieldsData->getProperty($fieldName, 'usf_disabled') == 1
+            if((  $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
                && $gCurrentUser->editUsers() == true)
-            || $this->mProfileFieldsData->getProperty($fieldName, 'usf_disabled') == 0
+            || $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
             || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
             {
                 // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
                 // oder im eigenen Profil
-                if((  $this->mProfileFieldsData->getProperty($fieldName, 'usf_hidden') == 1
+                if((  $this->mProfileFieldsData->getProperty($columnName, 'usf_hidden') == 1
                    && $gCurrentUser->editUsers() == true)
-                || $this->mProfileFieldsData->getProperty($fieldName, 'usf_hidden') == 0
+                || $this->mProfileFieldsData->getProperty($columnName, 'usf_hidden') == 0
                 || $gCurrentUser->getValue('usr_id') == $this->getValue('usr_id'))
                 {
                     $updateField = true;
@@ -740,17 +776,17 @@ class User extends TableUsers
 
             // nur Updaten, wenn sich auch der Wert geaendert hat
             if($updateField == true
-            && $fieldValue  != $oldFieldValue)
+            && $newValue  != $oldFieldValue)
             {
-				$returnCode = $this->mProfileFieldsData->setValue($fieldName, $fieldValue);
+				$returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
             }
         }
         else
         {
-            $returnCode = parent::setValue($fieldName, $fieldValue);
+            $returnCode = parent::setValue($columnName, $newValue);
         }
 
-        $newFieldValue = $this->mProfileFieldsData->getValue($fieldName);
+        $newFieldValue = $this->mProfileFieldsData->getValue($columnName);
 		
         /*  Nicht alle Aenderungen werden geloggt. Ausnahmen:
          *  usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.
@@ -759,12 +795,12 @@ class User extends TableUsers
          */
         if($gPreferences['profile_log_edit_fields'] == 1
 		&& $this->getValue('usr_id') != 0 
-		&& strpos($fieldName,'usr_') === false 
+		&& strpos($columnName,'usr_') === false 
 		&& $newFieldValue != $oldFieldValue)
         {
 			$logEntry = new TableAccess($this->db, TBL_USER_LOG, 'usl');
 			$logEntry->setValue('usl_usr_id', $this->getValue('usr_id'));
-			$logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($fieldName, 'usf_id'));
+			$logEntry->setValue('usl_usf_id', $this->mProfileFieldsData->getProperty($columnName, 'usf_id'));
 			$logEntry->setValue('usl_value_old', $oldFieldValue);
 			$logEntry->setValue('usl_value_new', $newFieldValue);
 			$logEntry->setValue('usl_comm', '');
@@ -980,7 +1016,9 @@ class User extends TableUsers
         return $mail_role;
     }
 
-    // Methode liefert true zurueck, wenn der User Mitglied der Rolle "Webmaster" ist
+    /** Checks if the user is assigned to the role @b Webmaster
+     *  @return Returns @b true if the user is a member of the role @b Webmaster
+     */
     public function isWebmaster()
     {
         $this->checkRolesRight();

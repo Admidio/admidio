@@ -91,7 +91,7 @@ class ProfileFields
         return null;
     }
 
-	/** returns the value of the field in html format with consideration of all layout parameters
+	/** Returns the value of the field in html format with consideration of all layout parameters
 	 *  @param $fieldNameIntern Internal profile field name of the field that should be html formated
 	 *  @param $value The value that should be formated must be commited so that layout is also possible for values that aren't stored in database
 	 *  @param $value2 An optional parameter that is necessary for some special fields like email to commit the user id
@@ -195,7 +195,7 @@ class ProfileFields
 		return $value;
 	}
 
-	/** returns the user value for this field @n
+	/** Returns the user value for this column @n
 	 *  format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
 	 *  format = 'html'  : returns the value in html-format if this is necessary for that field type @n
 	 *  format = 'intern' : returns the value that is stored in database with no format applied

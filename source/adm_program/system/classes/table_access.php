@@ -10,7 +10,7 @@
  *  independent from SQL. You can use @c getValue, @c setValue, @c readData 
  *  and @c save to handle the record.
  *  @par Examples
- *  @code   // create an object for table adm_roles of role 4711
+ *  @code // create an object for table adm_roles of role 4711
  *  $roleId = 4177;
  *  $role = new TableAccess($gDb, TBL_ROLES, 'rol', $roleId);
  *
@@ -43,9 +43,9 @@ class TableAccess
     
 	/** Constuctor that will create an object of a recordset of the specified table. 
 	 *  If the id is set than this recordset will be loaded.
-	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $tableName The name of the database table. Because of specific praefixes this should be the define value e.g. TBL_USERS
-	 *  @param $columnPraefix The praefix of each column of that table. E.g. for table adm_roles this is 'rol'
+	 *  @param $db Object of the class database. This should be the default object @b $gDb.
+	 *  @param $tableName The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
+	 *  @param $columnPraefix The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
 	 *  @param $id The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
 	 */
     public function __construct(&$db, $tableName, $columnPraefix, $id = '')
@@ -115,6 +115,13 @@ class TableAccess
 	 *  @param $table Database table name that should be connected. This can be the define of the table.
 	 *  @param $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
 	 *  @param $columnNameClassTable Name of the column in the class table that has the foreign key to the connected table
+	 *  @par Examples
+	 *  @code  // Constructor of adm_dates object where the category (calendar) is connected
+     *  public function __construct(&$db, $dat_id = 0)
+     *  {
+     *      $this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
+     *      parent::__construct($db, TBL_DATES, 'dat', $dat_id);
+     *  } @endcode
 	 */
 	protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
 	{
@@ -150,57 +157,62 @@ class TableAccess
         return true;
     }
 
-    // method gets the value of the field ($field_name)
-    // $format - Datetime 'd.m.Y' = '02.04.2011'
-	//         - Text     'plain' the db field value without any transformation
-    public function getValue($field_name, $format = '')
+    /** Get the value of a column of the database table.
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read
+     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *  @return Returns the value of the database column.
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+     */ 
+    public function getValue($columnName, $format = '')
     {
         global $gPreferences;
-        $field_value = '';
+        $columnValue = '';
         
-        if(isset($this->dbColumns[$field_name]))
+        if(isset($this->dbColumns[$columnName]))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
-            if($field_name == $this->key_name && empty($this->dbColumns[$field_name]))
+            if($columnName == $this->key_name && empty($this->dbColumns[$columnName]))
             {
-                $field_value = 0;
+                $columnValue = 0;
             }
             else
             {
-                $field_value = $this->dbColumns[$field_name];
+                $columnValue = $this->dbColumns[$columnName];
             }
         }
 
         // if text field and format not 'plain' then convert all quotes to html syntax
-        if(isset($this->columnsInfos[$field_name]['type'])
+        if(isset($this->columnsInfos[$columnName]['type'])
 		&& $format != 'plain'
-        && (  strpos($this->columnsInfos[$field_name]['type'], 'char') !== false
-           || strpos($this->columnsInfos[$field_name]['type'], 'text') !== false))
+        && (  strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
+           || strpos($this->columnsInfos[$columnName]['type'], 'text') !== false))
         {
-            return htmlspecialchars($field_value, ENT_QUOTES);
+            return htmlspecialchars($columnValue, ENT_QUOTES);
         }
         // in PostgreSQL we must encode the stored hex value back to binary
-        elseif(isset($this->columnsInfos[$field_name]['type'])
-        && strpos($this->columnsInfos[$field_name]['type'], 'bytea') !== false)
+        elseif(isset($this->columnsInfos[$columnName]['type'])
+        && strpos($this->columnsInfos[$columnName]['type'], 'bytea') !== false)
         {
-            $field_value = substr($field_value, 2);
-			$field_value = pack('H*', $field_value);
-			return pack('H*', $field_value);
+            $columnValue = substr($columnValue, 2);
+			$columnValue = pack('H*', $columnValue);
+			return pack('H*', $columnValue);
         }        // Datum in dem uebergebenen Format bzw. Systemformat zurueckgeben
-        elseif(isset($this->columnsInfos[$field_name]['type'])
-        &&  (  strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false
-            || strpos($this->columnsInfos[$field_name]['type'], 'date') !== false
-            || strpos($this->columnsInfos[$field_name]['type'], 'time') !== false))
+        elseif(isset($this->columnsInfos[$columnName]['type'])
+        &&  (  strpos($this->columnsInfos[$columnName]['type'], 'timestamp') !== false
+            || strpos($this->columnsInfos[$columnName]['type'], 'date') !== false
+            || strpos($this->columnsInfos[$columnName]['type'], 'time') !== false))
         {
-            if(strlen($field_value) > 0)
+            if(strlen($columnValue) > 0)
             {
                 if(strlen($format) == 0 && isset($gPreferences))
                 {
-                    if(strpos($this->columnsInfos[$field_name]['type'], 'timestamp') !== false)
+                    if(strpos($this->columnsInfos[$columnName]['type'], 'timestamp') !== false)
                     {
                         $format = $gPreferences['system_date'].' '.$gPreferences['system_time'];
                     }
-                    elseif(strpos($this->columnsInfos[$field_name]['type'], 'date') !== false)
+                    elseif(strpos($this->columnsInfos[$columnName]['type'], 'date') !== false)
                     {
                         $format = $gPreferences['system_date'];
                     }
@@ -213,19 +225,19 @@ class TableAccess
                 // probieren das Datum zu formatieren, ansonsten Ausgabe der vorhandenen Daten
                 try
                 {
-                    $datetime = new DateTime($field_value);
-                    $field_value = $datetime->format($format);
+                    $datetime = new DateTime($columnValue);
+                    $columnValue = $datetime->format($format);
                 }
                 catch(Exception $e)
                 {
-                    $field_value = $this->dbColumns[$field_name];
+                    $columnValue = $this->dbColumns[$columnName];
                 }
             }
-            return $field_value;
+            return $columnValue;
         }
         else
         {
-            return $field_value;
+            return $columnValue;
         }
     }
 
@@ -316,6 +328,10 @@ class TableAccess
 	 *  Per default all columns of the default table will be read and stored in the object.
 	 *  @param $columnArray An array where every element index is the column name and the value is the column value
 	 *  @return Returns @b true if one record is found
+	 *  @par Examples
+	 *  @code  // reads data not be mem_id but with combination of role and user id
+	 *  $member = new TableAccess($gDb, TBL_MEMBERS, 'rol');
+	 *  $member->readDataByColumn(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId)); @endcode
 	 */
 	public function readDataByColumns($columnArray)
 	{
@@ -482,70 +498,75 @@ class TableAccess
         $this->new_record = false;
     }
 
-    // Methode setzt den Wert eines Feldes neu, 
-    // dabei koennen optional noch noetige Plausibilitaetspruefungen gemacht werden
-    public function setValue($field_name, $field_value, $check_value = true)
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
         $return_code = false;
 
-        if(array_key_exists($field_name, $this->dbColumns))
+        if(array_key_exists($columnName, $this->dbColumns))
         {
             // Allgemeine Plausibilitaets-Checks anhand des Feldtyps
-            if(strlen($field_value) > 0 && $check_value == true)
+            if(strlen($newValue) > 0 && $checkValue == true)
             {
                 // Numerische Felder
-                if($this->columnsInfos[$field_name]['type'] == 'integer'
-				|| $this->columnsInfos[$field_name]['type'] == 'smallint')
+                if($this->columnsInfos[$columnName]['type'] == 'integer'
+				|| $this->columnsInfos[$columnName]['type'] == 'smallint')
                 {
-                    if(is_numeric($field_value) == false)
+                    if(is_numeric($newValue) == false)
                     {
-                        $field_value = '';
+                        $newValue = '';
                     }
 
                     // Schluesselfelder duerfen keine 0 enthalten
-                    if(($this->columnsInfos[$field_name]['key'] == 1 || $this->columnsInfos[$field_name]['null'] == 1)
-					&& $field_value == 0)
+                    if(($this->columnsInfos[$columnName]['key'] == 1 || $this->columnsInfos[$columnName]['null'] == 1)
+					&& $newValue == 0)
                     {
-                        $field_value = '';
+                        $newValue = '';
                     }
                 }
                 
                 // Strings
-                elseif(strpos($this->columnsInfos[$field_name]['type'], 'char') !== false
-                ||     strpos($this->columnsInfos[$field_name]['type'], 'text') !== false)
+                elseif(strpos($this->columnsInfos[$columnName]['type'], 'char') !== false
+                ||     strpos($this->columnsInfos[$columnName]['type'], 'text') !== false)
                 {
-                    $field_value = strStripTags($field_value);
+                    $newValue = strStripTags($newValue);
                 }
 
-                elseif($this->columnsInfos[$field_name]['type'] == 'blob'
-                ||     $this->columnsInfos[$field_name]['type'] == 'bytea' )
+                elseif($this->columnsInfos[$columnName]['type'] == 'blob'
+                ||     $this->columnsInfos[$columnName]['type'] == 'bytea' )
                 {
 	                // PostgreSQL can only store hex values in bytea, so we must decode binary in hex
-                	if($this->columnsInfos[$field_name]['type'] == 'bytea')
+                	if($this->columnsInfos[$columnName]['type'] == 'bytea')
                 	{
-	                    $field_value = bin2hex($field_value);
+	                    $newValue = bin2hex($newValue);
                 	}
     	            // we must add slashes to binary data of blob fields so that the default stripslashes don't remove necessary slashes
-                    $field_value = addslashes($field_value);
+                    $newValue = addslashes($newValue);
                 }
             }
 
             // wurde das Schluesselfeld auf 0 gesetzt, dann soll ein neuer Datensatz angelegt werden
-            if($field_name == $this->key_name && $field_value == 0)
+            if($columnName == $this->key_name && $newValue == 0)
             {
                 $this->new_record = true;
             }
 
-            if(array_key_exists($field_name, $this->dbColumns))
+            if(array_key_exists($columnName, $this->dbColumns))
             {
                 $return_code = true;
 
                 // nur wenn der Wert sich geaendert hat, dann auch als geaendert markieren                
-                if($field_value != $this->dbColumns[$field_name])
+                if($newValue != $this->dbColumns[$columnName])
                 {
-                    $this->dbColumns[$field_name] = $field_value;
+                    $this->dbColumns[$columnName] = $newValue;
                     $this->columnsValueChanged    = true;
-                    $this->columnsInfos[$field_name]['changed'] = true;
+                    $this->columnsInfos[$columnName]['changed'] = true;
                 }
             }
         }

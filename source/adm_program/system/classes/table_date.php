@@ -172,17 +172,25 @@ class TableDate extends TableAccess
         }
     }
 
-    public function getValue($field_name, $format = '')
+    /** Get the value of a column of the database table.
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read
+     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *  @return Returns the value of the database column.
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+     */ 
+    public function getValue($columnName, $format = '')
     {
 		global $gL10n;
 
-        if($field_name == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
+        if($columnName == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
         {
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $this->dbColumns['dat_end']);
             $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);
         }
-        elseif($field_name == 'dat_description')
+        elseif($columnName == 'dat_description')
         {
 			if(isset($this->dbColumns['dat_description']) == false)
 			{
@@ -199,16 +207,16 @@ class TableDate extends TableAccess
         }
         else
         {
-            $value = parent::getValue($field_name, $format);
+            $value = parent::getValue($columnName, $format);
         }
 
-        if($field_name == 'dat_country' && strlen($value) > 0)
+        if($columnName == 'dat_country' && strlen($value) > 0)
         {
             // beim Land die sprachabhaengige Bezeichnung auslesen
             global $gL10n;
             $value = $gL10n->getCountryByCode($value);
         }
-		elseif($field_name == 'cat_name' && $format != 'plain')
+		elseif($columnName == 'cat_name' && $format != 'plain')
 		{
 			// if text is a translation-id then translate it
 			if(strpos($value, '_') == 3)
@@ -283,21 +291,27 @@ class TableDate extends TableAccess
 		$this->db->endTransaction();
     }
 
-    // validates the value and adapts it if necessary
-    public function setValue($field_name, $field_value, $check_value = true)
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($field_name == 'dat_end' && $this->getValue('dat_all_day') == 1)
+        if($columnName == 'dat_end' && $this->getValue('dat_all_day') == 1)
         {
             // hier muss bei ganztaegigen Terminen das bis-Datum um einen Tag hochgesetzt werden
             // damit der Termin bei SQL-Abfragen richtig beruecksichtigt wird
-            list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $field_value);
-            $field_value = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 86400);
+            list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $newValue);
+            $newValue = date('Y-m-d H:i:s', mktime($hour, $minute, $second, $month, $day, $year) + 86400);
         }
-        elseif($field_name == 'dat_description')
+        elseif($columnName == 'dat_description')
         {
-            return parent::setValue($field_name, $field_value, false);
+            return parent::setValue($columnName, $newValue, false);
         }
-        return parent::setValue($field_name, $field_value);
+        return parent::setValue($columnName, $newValue, $checkValue);
     }
 
     // die Methode erwartet ein Array mit den fuer den Termin sichtbaren Rollen-IDs

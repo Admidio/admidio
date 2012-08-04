@@ -34,29 +34,35 @@ class TableOrganizations extends TableAccess
 		}
     }
 	
-    // validates the value and adapts it if necessary
-    public function setValue($field_name, $field_value, $check_value = true)
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
         // org_shortname shouldn't be edited
-        if($field_name == 'org_shortname')
+        if($columnName == 'org_shortname')
         {
             return false;
         }
-        elseif($field_name == 'org_homepage' && strlen($field_value) > 0)
+        elseif($columnName == 'org_homepage' && strlen($newValue) > 0)
         {
 			// Homepage darf nur gueltige Zeichen enthalten
-			if (!strValidCharacters($field_value, 'url'))
+			if (!strValidCharacters($newValue, 'url'))
 			{
 				return false;
 			}
 			// Homepage noch mit http vorbelegen
-			if(strpos(admStrToLower($field_value), 'http://')  === false
-			&& strpos(admStrToLower($field_value), 'https://') === false )
+			if(strpos(admStrToLower($newValue), 'http://')  === false
+			&& strpos(admStrToLower($newValue), 'https://') === false )
 			{
-				$field_value = 'http://'. $field_value;
+				$newValue = 'http://'. $newValue;
 			}
         }
-        return parent::setValue($field_name, $field_value);
+        return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
 ?>

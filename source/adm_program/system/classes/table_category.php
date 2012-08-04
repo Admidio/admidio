@@ -142,24 +142,29 @@ class TableCategory extends TableAccess
 		return $row[0];
 	}
 	
-	// returns the value of database column $field_name
-	// for column usf_value_list the following format is accepted
-	// 'plain' -> returns database value of usf_value_list
-    public function getValue($field_name, $format = '')
+    /** Get the value of a column of the database table.
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read
+     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *  @return Returns the value of the database column.
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+     */ 
+    public function getValue($columnName, $format = '')
     {
 		global $gL10n;
 
-		if($field_name == 'cat_name_intern')
+		if($columnName == 'cat_name_intern')
 		{
 			// internal name should be read with no conversion
-			$value = parent::getValue($field_name, 'plain');
+			$value = parent::getValue($columnName, 'plain');
 		}
         else
 		{		
-			$value = parent::getValue($field_name, $format);
+			$value = parent::getValue($columnName, $format);
 		}
 
-		if($field_name == 'cat_name' && $format != 'plain')
+		if($columnName == 'cat_name' && $format != 'plain')
 		{
 			// if text is a translation-id then translate it
 			if(strpos($value, '_') == 3)
@@ -349,17 +354,23 @@ class TableCategory extends TableAccess
 		$this->db->endTransaction();
     }
 
-    // validates the value and adapts it if necessary
-    public function setValue($field_name, $field_value, $check_value = true)
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
 		global $gCurrentOrganization;
 
         // Systemkategorien duerfen nicht umbenannt werden
-        if($field_name == 'cat_name' && $this->getValue('cat_system') == 1)
+        if($columnName == 'cat_name' && $this->getValue('cat_system') == 1)
         {
             return false;
         }
-		elseif($field_name == 'cat_default' && $field_value == '1')
+		elseif($columnName == 'cat_default' && $newValue == '1')
 		{
 			// es darf immer nur eine Default-Kategorie je Bereich geben
 			$sql = 'UPDATE '. TBL_CATEGORIES. ' SET cat_default = 0
@@ -369,7 +380,7 @@ class TableCategory extends TableAccess
 			$this->db->query($sql);
 		}
 
-        return parent::setValue($field_name, $field_value);
+        return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
 ?>
