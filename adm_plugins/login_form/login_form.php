@@ -261,7 +261,8 @@ else
                         if($plg_show_email_link)
                         {
                             // Rollenobjekt fuer 'Webmaster' anlegen
-                            $role_webmaster = new TableRoles($gDb, $gL10n->get('SYS_WEBMASTER'));
+                            $roleWebmaster = new TableRoles($gDb);
+							$roleWebmaster->readDataByColumns(array('rol_name' => $gL10n->get('SYS_WEBMASTER')));
 
                             // Link bei Loginproblemen
                             if($gPreferences['enable_password_recovery'] == 1
@@ -271,10 +272,10 @@ else
                                 $mail_link = $g_root_path.'/adm_program/system/lost_password.php';
                             }
                             elseif($gPreferences['enable_mail_module'] == 1 
-                            && $role_webmaster->getValue('rol_mail_this_role') == 3)
+                            && $roleWebmaster->getValue('rol_mail_this_role') == 3)
                             {
                                 // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-                                $mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?rol_id='. $role_webmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+                                $mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
                             }
                             else
                             {

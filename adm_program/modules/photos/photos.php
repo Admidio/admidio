@@ -20,6 +20,7 @@
 require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 require_once('../../system/classes/image.php');
+require_once('../../system/classes/module_menu.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)
@@ -63,7 +64,7 @@ else
     $photo_album = new TablePhotos($gDb);
     if($getPhotoId > 0)
     {
-        $photo_album->readData($getPhotoId);
+        $photo_album->readDataById($getPhotoId);
     }
 
     $_SESSION['photo_album'] =& $photo_album;
@@ -90,7 +91,7 @@ if($getLocked=='1' || $getLocked=='0')
 
     //Zurueck zum Elternalbum    
     $getPhotoId = $photo_album->getValue('pho_pho_id_parent');
-    $photo_album->readData($getPhotoId);
+    $photo_album->readDataById($getPhotoId);
 }
 
 /*********************HTML_TEIL*******************************/
@@ -171,7 +172,7 @@ $photo_album_parent = new TablePhotos($gDb);
 while ($pho_parent_id > 0)
 {
     // Einlesen des Eltern Albums
-    $photo_album_parent->readData($pho_parent_id);
+    $photo_album_parent->readDataById($pho_parent_id);
     
     //Link zusammensetzen
     $navilink = '&nbsp;&gt;&nbsp;<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album_parent->getValue('pho_id').'">'.
@@ -191,32 +192,31 @@ if($getPhotoId > 0)
         </div>';
 }
 
-//bei Seitenaufruf mit Moderationsrechten
+// create module menu
+$photosMenu = new ModuleMenu('admMenuPhotos');
+
 if($gCurrentUser->editPhotoRight())
 {
-    //Album anlegen
-    echo '
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$getPhotoId.'">
-    	           <img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('PHO_CREATE_ALBUM').'" title="'.$gL10n->get('PHO_CREATE_ALBUM').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$getPhotoId.'">'.$gL10n->get('PHO_CREATE_ALBUM').'</a>
-            </span>
-    </li>';        
-    if($getPhotoId > 0)
-    {
-        echo '
-        <li>
-            <span class="iconTextLink">
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$getPhotoId.'">
-                	<img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'"/></a>
-                <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$getPhotoId.'">'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</a>
-            </span>
-        </li>';
-    }
-    echo '</ul>';
+	// show link to create new album
+	$photosMenu->addItem('admMenuItemNewAlbum', $g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$getPhotoId, 
+								$gL10n->get('PHO_CREATE_ALBUM'), 'add.png');
+								
+	if($getPhotoId > 0)
+	{
+		// show link to upload photos
+		$photosMenu->addItem('admMenuItemUploadPhoto', $g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$getPhotoId, 
+									$gL10n->get('PHO_UPLOAD_PHOTOS'), 'photo_upload.png');
+	}
 }
+
+if($gCurrentUser->isWebmaster())
+{
+	// show link to system preferences of photos
+	$photosMenu->addItem('admMenuItemPreferencesPhotos', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=PHO_PHOTOS', 
+								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+}
+
+$photosMenu->show();
 
 
 //Anlegen der Tabelle

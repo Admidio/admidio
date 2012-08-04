@@ -23,11 +23,13 @@ drop table if exists %PREFIX%_lists cascade;
 drop table if exists %PREFIX%_members cascade;
 drop table if exists %PREFIX%_photos cascade;
 drop table if exists %PREFIX%_preferences cascade;
+drop table if exists %PREFIX%_registrations cascade;
 drop table if exists %PREFIX%_role_dependencies cascade;
 drop table if exists %PREFIX%_roles cascade;
 drop table if exists %PREFIX%_rooms cascade;
 drop table if exists %PREFIX%_sessions cascade;
 drop table if exists %PREFIX%_texts cascade;
+drop table if exists %PREFIX%_user_log cascade;
 drop table if exists %PREFIX%_user_data cascade;
 drop table if exists %PREFIX%_user_fields cascade;
 drop table if exists %PREFIX%_categories cascade;
@@ -407,6 +409,24 @@ create unique index IDX_PRF_ORG_ID_NAME on %PREFIX%_preferences (prf_org_id, prf
 
 
 /*==============================================================*/
+/* Table: adm_registrations                                     */
+/*==============================================================*/
+
+create table %PREFIX%_registrations
+(
+	reg_id                        integer       unsigned not null AUTO_INCREMENT,
+    reg_org_id                    integer       unsigned not null,
+    reg_usr_id                    integer       unsigned not null,
+	reg_timestamp                 timestamp     not null default CURRENT_TIMESTAMP,
+    primary key (reg_id)
+)
+engine = InnoDB
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
+
+
+/*==============================================================*/
 /* Table: adm_role_dependencies                                 */
 /*==============================================================*/
 create table %PREFIX%_role_dependencies
@@ -596,7 +616,7 @@ CREATE TABLE %PREFIX%_user_log (
   usl_usf_id            INTEGER         unsigned NOT NULL ,
   usl_value_old         VARCHAR(255)             NULL ,
   usl_value_new         VARCHAR(255)             NULL ,
-  usl_usr_id_create     INTEGER         unsigned NOT NULL ,
+  usl_usr_id_create     INTEGER         unsigned NULL ,
   usl_timestamp_create  TIMESTAMP                NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   usl_comment           VARCHAR(255) NULL ,
   PRIMARY KEY (usl_id) 
@@ -628,7 +648,6 @@ create table %PREFIX%_users
    usr_usr_id_change              integer       unsigned,
    usr_timestamp_change           timestamp 	null default null,
    usr_valid                      boolean       not null default '0',
-   usr_reg_org_shortname          varchar(10),
    primary key (usr_id)
 )
 engine = InnoDB
@@ -749,6 +768,11 @@ alter table %PREFIX%_photos add constraint %PREFIX%_FK_PHO_USR_CHANGE foreign ke
 alter table %PREFIX%_preferences add constraint %PREFIX%_FK_PRF_ORG foreign key (prf_org_id)
       references %PREFIX%_organizations (org_id) on delete restrict on update restrict;
 	  
+alter table %PREFIX%_registrations add CONSTRAINT %PREFIX%_FK_REG_ORG FOREIGN KEY (reg_org_id)
+    REFERENCES %PREFIX%_organizations (org_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+alter table %PREFIX%_registrations add CONSTRAINT %PREFIX%_FK_REG_USR FOREIGN KEY (reg_usr_id)
+    REFERENCES %PREFIX%_users (usr_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+	  
 alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_ROL_CHILD foreign key (rld_rol_id_child)
       references %PREFIX%_roles (rol_id) on delete restrict on update restrict;
 alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_ROL_PARENT foreign key (rld_rol_id_parent)
@@ -788,32 +812,14 @@ alter table %PREFIX%_user_data add constraint %PREFIX%_FK_USD_USF foreign key (u
 alter table %PREFIX%_user_data add constraint %PREFIX%_FK_USD_USR foreign key (usd_usr_id)
       references %PREFIX%_users (usr_id) on delete restrict on update restrict;
 	  
-alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_ORG_REG foreign key (usr_reg_org_shortname)
-      references %PREFIX%_organizations (org_shortname) on delete restrict on update restrict;
+alter table %PREFIX%_user_log add CONSTRAINT %PREFIX%_FK_USER_LOG_1 FOREIGN KEY (usl_usr_id )
+    REFERENCES %PREFIX%_users (usr_id ) ON DELETE RESTRICT ON UPDATE RESTRICT;
+alter table %PREFIX%_user_log add CONSTRAINT %PREFIX%_FK_USER_LOG_2 FOREIGN KEY (usl_usr_id_create )
+    REFERENCES %PREFIX%_users (usr_id ) ON DELETE RESTRICT ON UPDATE RESTRICT;
+alter table %PREFIX%_user_log add CONSTRAINT %PREFIX%_FK_USER_LOG_3 FOREIGN KEY (usl_usf_id )
+    REFERENCES %PREFIX%_user_fields (usf_id ) ON DELETE RESTRICT ON UPDATE RESTRICT;
+	  
 alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CREATE foreign key (usr_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_users add constraint %PREFIX%_FK_USR_USR_CHANGE foreign key (usr_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
-
-alter table %PREFIX%_user_log add
-  CONSTRAINT %PREFIX%_FK_USER_LOG_1
-    FOREIGN KEY (usl_usr_id )
-    REFERENCES %PREFIX%_users (usr_id )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-
-alter table %PREFIX%_user_log add
-  CONSTRAINT %PREFIX%_FK_USER_LOG_2
-    FOREIGN KEY (usl_usr_id_create )
-    REFERENCES %PREFIX%_users (usr_id )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-
-alter table %PREFIX%_user_log add
-  CONSTRAINT %PREFIX%_FK_USER_LOG_3
-    FOREIGN KEY (usl_usf_id )
-    REFERENCES %PREFIX%_user_fields (usf_id )
-    ON DELETE RESTRICT
-    ON UPDATE RESTRICT;
-

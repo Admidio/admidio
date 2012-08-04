@@ -27,20 +27,18 @@ class TableAutoLogin extends TableAccess
 	 */
     public function __construct(&$db, $session = 0)
     {
-        parent::__construct($db, TBL_AUTO_LOGIN, 'atl', $session);
-    }
+        parent::__construct($db, TBL_AUTO_LOGIN, 'atl');
 
-    // Auto-Login mit der uebergebenen Session-ID aufrufen
-    public function readData($session, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        // wurde session uebergeben, dann die SQL-Bedingung anpassen
-        if(is_numeric($session) == false)
-        {
-            $session = addslashes($session);
-            $sql_where_condition .= ' atl_session_id LIKE \''.$session.'\' ';
-        }
-        
-        return parent::readData($session, $sql_where_condition, $sql_additional_tables);
+		// if not numeric than the session id is commited
+		if(is_numeric($session))
+		{
+			$this->readDataById($session);
+		}
+		else
+		{
+			$this->readDataByColumns(array('atl_session_id' => $session));
+		}
+
     }
 
     // interne Methode, die Defaultdaten fur Insert und Update vorbelegt

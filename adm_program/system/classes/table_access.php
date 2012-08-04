@@ -27,25 +27,10 @@
  *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
-/******************************************************************************
- * readData($id, $sql_where_condition = "", $sql_additional_tables = "")
- *                  - Liest den Datensatz zur uebergebenen ID ($key_value) ein
- * clear()          - Die Klassenvariablen werden neu initialisiert
- * countAllRecords()- Anzahl aller Datensaetze der Tabelle werden zurueckgegeben
- * setArray($field_array)
- *                  - es wird ein Array mit allen noetigen gefuellten Tabellenfeldern
- *                    uebergeben. Key ist Spaltenname und Wert ist der Inhalt.
- *                    Mit dieser Methode kann das Einlesen der Werte umgangen werden.
- * setValue($field_name, $field_value, $check_value = true)
- *                  - setzt einen Wert fuer ein bestimmtes Feld der Tabelle
- * getValue($field_name, format)- gibt den Wert eines Feldes der Tabelle zurueck
- * save()           - die aktuellen Daten werden in die Datenbank zurueckgeschrieben
- *                    Es wird automatisch ein Update oder Insert erstellt
- * delete()         - der aktuelle Datensatz wird aus der Tabelle geloescht
- *****************************************************************************/
 
 class TableAccess
 {
+	private   $additionalTables;	///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
     protected $table_name;
     protected $column_praefix;
     protected $key_name;
@@ -73,7 +58,7 @@ class TableAccess
         if((is_numeric($id) == false && strlen($id) > 0) 
         || (is_numeric($id) == true  && $id > 0))
         {
-            $this->readData($id);
+            $this->readDataById($id);
         }
         else
         {
@@ -81,10 +66,13 @@ class TableAccess
         }
     }
     
-    // alle Klassenvariablen wieder zuruecksetzen
+    /** Initializes all class parameters and deletes all read data.
+	 *  Also the database structure of the assiciated table will be
+	 *  read and stored in the arrays @b dbColumns and @b columnsInfos
+	 */
     public function clear()
     {
-		$columnProperties = array();
+		$columnProperties   = array();
         $this->columnsValueChanged = false;
         $this->new_record   = true;
         $this->record_count = -1;
@@ -116,12 +104,28 @@ class TableAccess
                 if($value['serial'] == 1)
                 {
                     $this->key_name = $key;
-                }				
+                }
 			}
         }
     }
+
+	/** Adds a table with the connected fields to a member array. This table will be add to the 
+	 *  select statement if data is read and the connected record is avaiable in this class.
+	 *  The connected table must have a foreign key in the class table.
+	 *  @param $table Database table name that should be connected. This can be the define of the table.
+	 *  @param $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
+	 *  @param $columnNameClassTable Name of the column in the class table that has the foreign key to the connected table
+	 */
+	protected function connectAdditionalTable($table, $columnNameAdditionalTable, $columnNameClassTable)
+	{
+		$this->additionalTables[] = array('table' => $table, 
+										  'columnNameAdditionalTable' => $columnNameAdditionalTable, 
+										  'columnNameClassTable' => $columnNameClassTable);
+	}
     
-    // Methode gibt die Anzahl aller Datensaetze dieser Tabelle zurueck
+	/** Reads the number of all records of this table
+	 *  @return Number of records of this table
+	 */
     public function countAllRecords()
     {
         $sql = 'SELECT COUNT(1) as count FROM '.$this->table_name;
@@ -130,7 +134,9 @@ class TableAccess
         return $row['count'];
     }
 
-    // aktuelle Datensatz loeschen und ggf. noch die Referenzen
+	/** Deletes the selected record of the table and initializes the class
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
 		if(strlen($this->dbColumns[$this->key_name]) > 0)
@@ -223,60 +229,124 @@ class TableAccess
         }
     }
 
-    // liest den Datensatz von $id ein
-    // die Methode gibt true zurueck, wenn ein DS gefunden wurde, andernfalls false
-    // id : Schluesselwert von dem der Datensatz gelesen werden soll
-    // sql_where_condition : optional eine individuelle WHERE-Bedinugung fuer das SQL-Statement
-    // sql_additioinal_tables : mit Komma getrennte Auflistung weiterer Tabelle, die mit
-    //                          eingelesen werden soll, dabei muessen die Verknuepfungen
-    //                          in sql_where_condition stehen
-    public function readData($id, $sql_where_condition = '', $sql_additional_tables = '')
+	/** Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
+	 *  If the sql will find more than one record the method returns @b false.
+	 *  Per default all columns of the default table will be read and stored in the object.
+	 *  @param $sqlWhereCondition Conditions for the table to select one record
+	 *  @return Returns @b true if one record is found
+	 */
+    private function readData($sqlWhereCondition)
     {
-        // erst einmal alle Felder in das Array schreiben, falls kein Satz gefunden wird
-        $this->clear();
+		$sqlAdditionalTables = '';
 
-        // es wurde keine Bedingung uebergeben, dann den Satz mit der Key-Id lesen, 
-        // falls diese sinnvoll gefuellt ist
-        if(strlen($sql_where_condition) == 0 && strlen($id) > 0 && $id != '0')
-        {
-            $sql_where_condition = ' '.$this->key_name.' = \''.$id.'\' ';
-        }
-        if(strlen($sql_additional_tables) > 0)
-        {
-            $sql_additional_tables = ', '. $sql_additional_tables;
-        }
+		// create sql to connect additional tables to the select statement
+		if(count($this->additionalTables) > 0)
+		{
+			foreach($this->additionalTables as $key => $arrAdditionalTable)
+			{
+				$sqlAdditionalTables .= ', '.$arrAdditionalTable['table'];
+				$sqlWhereCondition   .= ' AND '.$arrAdditionalTable['columnNameAdditionalTable'].' = '.$arrAdditionalTable['columnNameClassTable'].' ';
+			}
+		}
+
+		// if condition starts with AND then remove this 
+		if(strpos(strtoupper($sqlWhereCondition), 'AND') < 2)
+		{
+			$sqlWhereCondition = substr($sqlWhereCondition, 4);
+		}
         
-        if(strlen($sql_where_condition) > 0)
+        if(strlen($sqlWhereCondition) > 0)
         {
-            $sql = 'SELECT * FROM '.$this->table_name.' '.$sql_additional_tables.'
-                     WHERE '.$sql_where_condition.' ';
+            $sql = 'SELECT * FROM '.$this->table_name.$sqlAdditionalTables.'
+                     WHERE '.$sqlWhereCondition;
             $result = $this->db->query($sql);
     
-            if($row = $this->db->fetch_array($result, MYSQL_ASSOC))
-            {
-                $this->new_record = false;
-                
-                // Daten in das Klassenarray schieben
-                foreach($row as $key => $value)
-                {
-                    if(is_null($value))
-                    {
-                        $this->dbColumns[$key] = '';
-                    }
-                    else
-                    {
-                        $this->dbColumns[$key] = $value;
-                    }
-                }
-                return true;
-            }
-            else
-            {
-                $this->clear();
-            }
+			if($this->db->num_rows($result) == 1)			
+			{
+				$row = $this->db->fetch_array($result, MYSQL_ASSOC);
+				$this->new_record = false;
+				
+				// Daten in das Klassenarray schieben
+				foreach($row as $key => $value)
+				{
+					if(is_null($value))
+					{
+						$this->dbColumns[$key] = '';
+					}
+					else
+					{
+						$this->dbColumns[$key] = $value;
+					}
+				}
+				return true;
+			}
+			else
+			{
+				$this->clear();
+			}
         }
         return false;
     }
+	
+	/** Reads a record out of the table in database selected by the unique id column in the table.
+	 *  Per default all columns of the default table will be read and stored in the object.
+	 *  @param $id Unique id of id column of the table.
+	 *  @return Returns @b true if one record is found
+	 */
+	public function readDataById($id)
+	{
+		// initialize the object, so that all fields are empty
+        $this->clear();
+
+		// add id to sql condition
+        if(strlen($id) > 0 && $id != '0')
+        {
+            $sqlWhereCondition = ' AND '.$this->key_name.' = \''.$id.'\' ';
+		
+			// call method to read data out of database
+			return $this->readData($sqlWhereCondition);
+        }
+		return false;
+	}
+	
+	/** Reads a record out of the table in database selected by different columns in the table.
+	 *  The columns are commited with an array where every element index is the column name and the value is the column value.
+	 *  The columns and values must be selected so that they identify only one record. 
+	 *  If the sql will find more than one record the method returns @b false.
+	 *  Per default all columns of the default table will be read and stored in the object.
+	 *  @param $columnArray An array where every element index is the column name and the value is the column value
+	 *  @return Returns @b true if one record is found
+	 */
+	public function readDataByColumns($columnArray)
+	{
+		$returnCode = false;
+		$sqlWhereCondition = '';
+
+		// initialize the object, so that all fields are empty
+        $this->clear();
+
+        if(count($columnArray) > 0)
+        {
+			// add every array element as a sql condition to the condition string
+			foreach($columnArray as $columnName => $columnValue)
+			{
+				$sqlWhereCondition .= ' AND '.$columnName.' = \''.$columnValue.'\' ';
+			}
+		
+			// call method to read data out of database
+			$returnCode = $this->readData($sqlWhereCondition);
+			
+			// save the array fields in the object
+			if($returnCode == false)
+			{
+				foreach($columnArray as $columnName => $columnValue)
+				{
+					$this->setValue($columnName, $columnValue);
+				}				
+			}
+        }
+		return $returnCode;
+	}
     
     // die Methode speichert die Organisationsdaten in der Datenbank,
     // je nach Bedarf wird ein Insert oder Update gemacht

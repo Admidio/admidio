@@ -41,7 +41,7 @@ $announcement = new TableAnnouncement($gDb);
 
 if($getAnnId > 0)
 {
-    $announcement->readData($getAnnId);
+    $announcement->readDataById($getAnnId);
     
     // Pruefung, ob die Ankuendigung zur aktuellen Organisation gehoert bzw. global ist
     if($announcement->editRight() == false)

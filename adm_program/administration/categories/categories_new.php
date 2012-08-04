@@ -52,7 +52,7 @@ $category = new TableCategory($gDb);
 
 if($getCatId > 0)
 {
-    $category->readData($getCatId);
+    $category->readDataById($getCatId);
 
     // Pruefung, ob die Kategorie zur aktuellen Organisation gehoert bzw. allen verfuegbar ist
     if($category->getValue('cat_org_id') >  0

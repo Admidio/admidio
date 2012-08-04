@@ -22,7 +22,10 @@ class TableWeblink extends TableAccess
 	 */
     public function __construct(&$db, $lnk_id = 0)
     {
-        parent::__construct($db, TBL_LINKS, 'lnk', $lnk_id);
+		// read also data of assigned category
+		$this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'lnk_cat_id');
+
+		parent::__construct($db, TBL_LINKS, 'lnk', $lnk_id);
     }
 
 	// returns the value of database column $field_name
@@ -62,18 +65,6 @@ class TableWeblink extends TableAccess
 		}
 
         return $value;
-    }
-	
-    // Termin mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($lnk_id, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        global $gCurrentOrganization;
-        
-        $sql_additional_tables .= TBL_CATEGORIES;
-        $sql_where_condition   .= '     lnk_id     = '.$lnk_id.' 
-                                    AND lnk_cat_id = cat_id
-                                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id');
-        return parent::readData($lnk_id, $sql_where_condition, $sql_additional_tables);
     }
     
     // validates the value and adapts it if necessary

@@ -64,6 +64,7 @@ define('TBL_MEMBERS',           $g_tbl_praefix. '_members');
 define('TBL_ORGANIZATIONS',     $g_tbl_praefix. '_organizations');
 define('TBL_PHOTOS',            $g_tbl_praefix. '_photos');
 define('TBL_PREFERENCES',       $g_tbl_praefix. '_preferences');
+define('TBL_REGISTRATIONS',     $g_tbl_praefix. '_registrations');
 define('TBL_ROLE_DEPENDENCIES', $g_tbl_praefix. '_role_dependencies');
 define('TBL_ROLES',             $g_tbl_praefix. '_roles');
 define('TBL_ROOMS',             $g_tbl_praefix. '_rooms');

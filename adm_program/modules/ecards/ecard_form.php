@@ -52,7 +52,7 @@ else
     $photo_album = new TablePhotos($gDb);
     if($getPhotoId > 0)
     {
-        $photo_album->readData($getPhotoId);
+        $photo_album->readDataById($getPhotoId);
     }
 
     $_SESSION['photo_album'] =& $photo_album;

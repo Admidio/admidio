@@ -37,7 +37,7 @@ $userField = new TableUserField($gDb);
 
 if($getUsfId > 0)
 {
-    $userField->readData($getUsfId);
+    $userField->readDataById($getUsfId);
     
 	// check if profile field belongs to actual organization
     if($userField->getValue('cat_org_id') >  0

@@ -18,24 +18,20 @@ class TableOrganizations extends TableAccess
 	/** Constuctor that will create an object of a recordset of the table adm_organizations. 
 	 *  If the id is set than the specific organization will be loaded.
 	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $org_id The recordset of the organization with this id will be loaded. If id isn't set than an empty object of the table is created.
+	 *  @param $organization The recordset of the organization with this id will be loaded. The organization can be the table id or the organization shortname. If id isn't set than an empty object of the table is created.
 	 */
     public function __construct(&$db, $organization = '')
     {
-        parent::__construct($db, TBL_ORGANIZATIONS, 'org', $organization);
-    }
-
-    // Organisation mit der uebergebenen ID oder der Kurzbezeichnung aus der Datenbank auslesen
-    public function readData($organization, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        // wurde org_shortname uebergeben, dann die SQL-Bedingung anpassen
-        if(is_numeric($organization) == false)
-        {
-            $organization = addslashes($organization);
-            $sql_where_condition .= ' org_shortname LIKE \''.$organization.'\' ';
-        }
-        
-        return parent::readData($organization, $sql_where_condition, $sql_additional_tables);
+        parent::__construct($db, TBL_ORGANIZATIONS, 'org');
+		
+		if(is_numeric($organization))
+		{
+			$this->readDataById($organization);
+		}
+		else
+		{
+			$this->readDataByColumns(array('org_shortname' => $organization));
+		}
     }
 	
     // validates the value and adapts it if necessary

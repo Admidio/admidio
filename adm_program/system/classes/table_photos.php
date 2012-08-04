@@ -91,8 +91,10 @@ class TablePhotos extends TableAccess
         return $error;
     }
 
-    // interne Funktion, die die Fotoveranstaltung in Datenbank und File-System loeschen
-    // die Funktion wird innerhalb von delete() aufgerufen
+	/** Deletes the selected photo album and all sub photo albums. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
         if($this->deleteInDatabase($this->getValue('pho_id')))

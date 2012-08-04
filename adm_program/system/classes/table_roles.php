@@ -47,9 +47,12 @@ class TableRoles extends TableAccess
 	 *  @param $db Object of the class database. This should be the default object $gDb.
 	 *  @param $rol_id The recordset of the role with this id will be loaded. If id isn't set than an empty object of the table is created.
 	 */
-    public function __construct(&$db, $role = '')
+    public function __construct(&$db, $rol_id = 0)
     {
-        parent::__construct($db, TBL_ROLES, 'rol', $role);
+		// read also data of assigned category
+		$this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'rol_cat_id');
+
+        parent::__construct($db, TBL_ROLES, 'rol', $rol_id);
     }
 
 	/** checks if user is allowed to assign members to this role
@@ -183,7 +186,10 @@ class TableRoles extends TableAccess
         return 999;
     }
 
-    // Loescht die Abhaengigkeiten zur Rolle und anschliessend die Rolle selbst...
+	/** Deletes the selected role of the table and all references in other tables. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
         global $gCurrentSession;
@@ -278,28 +284,6 @@ class TableRoles extends TableAccess
             return true;
         }
         return false;
-    }
- 
-    // Rolle mit der uebergebenen ID oder dem Rollennamen aus der Datenbank auslesen
-    public function readData($role, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        global $gCurrentOrganization;
-
-        if(is_numeric($role))
-        {
-            $sql_where_condition .= ' rol_id = '.$role;
-        }
-        else
-        {
-            $role = addslashes($role);
-            $sql_where_condition .= ' rol_name LIKE \''.$role.'\' ';
-        }
-
-        $sql_additional_tables .= TBL_CATEGORIES;
-        $sql_where_condition   .= ' AND rol_cat_id = cat_id
-                                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
-                                        OR cat_org_id IS NULL ) ';
-        return parent::readData($role, $sql_where_condition, $sql_additional_tables);
     }
 
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Neue User auflisten
+ * Show list with new user registrations
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,8 +8,8 @@
  *
  *****************************************************************************/
  
-require('../../system/common.php');
-require('../../system/login_valid.php');
+require_once('../../system/common.php');
+require_once('../../system/login_valid.php');
 
 // nur Webmaster dürfen User bestätigen, ansonsten Seite verlassen
 if($gCurrentUser->approveUsers() == false)
@@ -28,9 +28,9 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 // Neue Mitglieder der Gruppierung selektieren
-$sql    = 'SELECT usr_id, usr_login_name, usr_timestamp_create, last_name.usd_value as last_name,
+$sql    = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as last_name,
                   first_name.usd_value as first_name, email.usd_value as email
-             FROM '. TBL_USERS. ' 
+             FROM '. TBL_REGISTRATIONS. ', '. TBL_USERS. ' 
              LEFT JOIN '. TBL_USER_DATA. ' as last_name
                ON last_name.usd_usr_id = usr_id
               AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
@@ -41,7 +41,8 @@ $sql    = 'SELECT usr_id, usr_login_name, usr_timestamp_create, last_name.usd_va
                ON email.usd_usr_id = usr_id
               AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
             WHERE usr_valid = 0
-              AND usr_reg_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\' 
+			  AND reg_usr_id = usr_id
+			  AND reg_org_id = '.$gCurrentOrganization->getValue('org_id').'
             ORDER BY last_name, first_name ';
 $usr_result   = $gDb->query($sql);
 $member_found = $gDb->num_rows($usr_result);
@@ -56,8 +57,7 @@ if ($member_found == 0)
 $gLayout['title']  = $gL10n->get('NWU_NEW_REGISTRATIONS');
 $gLayout['header'] = '
     <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
+        $(document).ready(function() {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\', onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
@@ -78,7 +78,7 @@ echo '
 
     while($row = $gDb->fetch_array($usr_result))
     {
-        $timestampCreate = new DateTimeExtended($row['usr_timestamp_create'], 'Y-m-d H:i:s');
+        $timestampCreate = new DateTimeExtended($row['reg_timestamp'], 'Y-m-d H:i:s');
         $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
         echo '
         <tr class="tableMouseOver" id="row_user_'.$row['usr_id'].'">

@@ -78,7 +78,7 @@ $guestbook_comment = new TableGuestbookComment($gDb);
 
 if($getGbcId > 0)
 {
-    $guestbook_comment->readData($getGbcId);
+    $guestbook_comment->readDataById($getGbcId);
 
     // Pruefung, ob der Eintrag zur aktuellen Organisation gehoert
     if($guestbook_comment->getValue('gbo_org_id') != $gCurrentOrganization->getValue('org_id'))

@@ -166,7 +166,7 @@ foreach($_POST as $key => $value)
         }
         elseif(strpos($key, 'SYSMAIL_') === 0)
         {
-            $text->readData($key);
+            $text->readDataById($key);
             $text->setValue('txt_text', $value);
             $text->save();
         }

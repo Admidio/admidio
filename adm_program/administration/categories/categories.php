@@ -19,6 +19,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/table_category.php');
 
 // Initialize and check the parameters
@@ -123,19 +124,17 @@ if($getType != 'USF')
 }
 
 // Html des Modules ausgeben
+echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
+
+// create module menu
+$categoriesMenu = new ModuleMenu('admMenuCategories');
+
+// show link to create new category
+$categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle, 
+							$gL10n->get('SYS_CREATE_VAR', $getTitle), 'add.png');
+$categoriesMenu->show();
+
 echo '
-<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle.'"><img
-            src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_VAR', $getTitle).'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle.'">'.$gL10n->get('SYS_CREATE_VAR', $getTitle).'</a>
-        </span>
-    </li>
-</ul>
-
 <table class="tableList" id="tableCategories" style="width: 400px;" cellspacing="0">
     <thead>
         <tr>

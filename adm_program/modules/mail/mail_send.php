@@ -188,7 +188,7 @@ if ($getUserId == 0)
         $gMessage->show($gL10n->get('MAI_CHOOSE_ROLE'));
     }
     
-    $role->readData($postRoleId);
+    $role->readDataById($postRoleId);
 
 	// Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
 	if ($gValidLogin == true && !$gCurrentUser->mailRole($postRoleId))

@@ -29,7 +29,10 @@ class TableGuestbook extends TableAccess
         parent::__construct($db, TBL_GUESTBOOK, 'gbo', $gbo_id);
     }
     
-    // die Methode loescht den Gaestebucheintrag mit allen zugehoerigen Kommentaren
+	/** Deletes the selected guestbook entry and all comments. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
 		$this->db->startTransaction();

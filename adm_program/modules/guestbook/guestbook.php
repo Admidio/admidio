@@ -18,6 +18,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/table_guestbook.php');
 unset($_SESSION['guestbook_entry_request']);
 unset($_SESSION['guestbook_comment_request']);
@@ -175,38 +176,26 @@ $sql = 'SELECT *
          LIMIT '. $guestbook_entries_per_page.' OFFSET '.$getStart;
 $guestbook_result = $gDb->query($sql);
 
-// Icon-Links und Navigation anzeigen
-echo '<ul class="iconTextLinkList">';
+// create module menu
+$guestbookMenu = new ModuleMenu('admMenuGuestbook');
 
-// Neuen Gaestebucheintrag anlegen
-if ($getGboId == 0 && $getModeration == 0)
+if($getGboId == 0 && $getModeration == 0)
 {
-    echo '
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $getHeadline. '"><img
-            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('GBO_CREATE_ENTRY').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $getHeadline. '">'.$gL10n->get('GBO_CREATE_ENTRY').'</a>
-        </span>
-    </li>';
+	// show link to create new guestbook entry
+	$guestbookMenu->addItem('admMenuItemNewEntry', $g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?headline='. $getHeadline, 
+							$gL10n->get('GBO_CREATE_ENTRY'), 'add.png');
 }
 
-// Link zurueck zum Gaestebuch
 if($getGboId > 0 || $getModeration == 1)
 {
-    echo '
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline. '"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('GBO_BACK_TO_GUESTBOOK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline. '">'.$gL10n->get('GBO_BACK_TO_GUESTBOOK').'</a>
-        </span>
-    </li>';
+	// show link to navigate back to guestbook
+	$guestbookMenu->addItem('admMenuItemNavigateBack', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline, 
+							$gL10n->get('GBO_BACK_TO_GUESTBOOK'), 'back.png');
 }
 
-// Link mit Anzahl der zu moderierenden Eintraege
 if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['enable_guestbook_moderation'] > 0)
 {
+	// show link to moderation with number of entries that must be moderated
     $sql = 'SELECT (SELECT count(1) FROM '. TBL_GUESTBOOK. '
                      WHERE gbo_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                        AND gbo_locked = 1) AS count_locked_guestbook,
@@ -222,18 +211,20 @@ if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['
     
     if($countLockedEntries > 0)
     {
-        echo '
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline. '"><img
-                src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('GBO_MODERATE_ENTRIES', $countLockedEntries).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline. '">'.$gL10n->get('GBO_MODERATE_ENTRIES', $countLockedEntries).'</a>
-            </span>
-        </li>';    
+		$guestbookMenu->addItem('admMenuItemModerate', $g_root_path.'/adm_program/modules/guestbook/guestbook.php?moderation=1&amp;headline='. $getHeadline, 
+								$gL10n->get('GBO_MODERATE_ENTRIES', $countLockedEntries), 'star.png');
     }
 }
 
-echo '</ul>';
+if($gCurrentUser->isWebmaster())
+{
+	// show link to system preferences of announcements
+	$guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=GBO_GUESTBOOK', 
+							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+}
+
+$guestbookMenu->show();
+
 
 if ($gDb->num_rows($guestbook_result) == 0)
 {

@@ -510,17 +510,17 @@ echo '
                         <strong>%organization_homepage%</strong> - '.$gL10n->get('ORG_VARIABLE_URL_ORGANIZATION').'<br /><br />
                     </li>';
 
-                    $text->readData("SYSMAIL_REGISTRATION_USER");
+                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                     echo '<li>
                         '.$gL10n->get('ORG_CONFIRM_REGISTRATION').':<br />
                         <textarea id="SYSMAIL_REGISTRATION_USER" name="SYSMAIL_REGISTRATION_USER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
-                    $text->readData("SYSMAIL_REGISTRATION_WEBMASTER");
+                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                     echo '<li>
                         <br />'.$gL10n->get('ORG_NOTIFY_WEBMASTER').':<br />
                         <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
-                    $text->readData("SYSMAIL_NEW_PASSWORD");
+                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                     echo '<li>
                         <br />'.$gL10n->get('ORG_SEND_NEW_PASSWORD').':<br />
                     </li>
@@ -531,7 +531,7 @@ echo '
                     <li>
                         <textarea id="SYSMAIL_NEW_PASSWORD" name="SYSMAIL_NEW_PASSWORD" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
-                    $text->readData("SYSMAIL_ACTIVATION_LINK");
+                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_ACTIVATION_LINK', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                     echo '<li>
                         <br />'.$gL10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK').':<br />
                     </li>

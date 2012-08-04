@@ -44,7 +44,7 @@ $photo_album = new TablePhotos($gDb);
 
 if($getJob != 'new')
 {
-    $photo_album->readData($getPhotoId);
+    $photo_album->readDataById($getPhotoId);
     
     // Pruefung, ob das Fotoalbum zur aktuellen Organisation gehoert
     if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))

@@ -32,7 +32,7 @@ if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
 if($g_organization != $gCurrentOrganization->getValue('org_shortname'))
 {
 	// read organization of config file with their preferences
-    $gCurrentOrganization->readData($g_organization);
+    $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
     $gPreferences = $gCurrentOrganization->getPreferences();
 	
 	// create object with current user field structure und user object

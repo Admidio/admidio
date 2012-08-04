@@ -70,6 +70,81 @@ class User extends TableUsers
         }
         return false;
     }
+	
+	/** Insert a record in table adm_registrations and creates a valid registration 
+	 *  entry for the current user for the organization of the parameter
+	 *  @param $organizationId The id of the organization for which the user should be registered
+	 *  @return Returns @b true if the registration was succesful
+	 */
+	public function insertRegistration($organizationId)
+	{
+		if($organizationId > 0 && is_numeric($organizationId))
+		{
+			// insert a record in registration table
+			$Registration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
+			$Registration->setValue('reg_org_id', $organizationId);
+			$Registration->setValue('reg_usr_id', $this->getValue('usr_id'));
+			$Registration->setValue('reg_timestamp', DATETIME_NOW);
+			$Registration->save();
+			
+			$this->setValue('usr_valid', 0);
+			$this->save();
+			return true;
+		}
+		return false;
+	}
+	
+	/** Deletes the registration record and set the user to valid. So the registration was accepted and
+	 *  if he is assigned to a role than he can login for the organization of the parameter
+	 *  @param $organizationId The id of the organization for which the user should be registered
+	 *  @return Returns @b true if the registration was succesful
+	 */
+	public function acceptRegistration($organizationId)
+	{
+		if($organizationId > 0 && is_numeric($organizationId))
+		{
+			// delete registration record in registration table
+			$Registration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
+			$Registration->readDataByColumns(array('reg_org_id' => $organizationId, 'reg_usr_id' => $this->getValue('usr_id')));
+			$Registration->delete();
+			
+			$this->setValue('usr_valid', 1);
+			$this->save();
+			return true;
+		}
+		return false;		
+	}
+	
+	/** Deletes the registration record and if the user is not valid and has no other registration
+     *  than the whole user record will be deleted	
+	 *  @param $organizationId The id of the organization for which the user registration should be deleted
+	 *  @return Returns @b true if the registration was succesful deleted
+	 */
+	public function removeRegistration($organizationId)
+	{
+		if($organizationId > 0 && is_numeric($organizationId))
+		{
+			// delete registration record in registration table
+			$Registration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
+			$Registration->readDataByColumns(array('reg_org_id' => $organizationId, 'reg_usr_id' => $this->getValue('usr_id')));
+			$Registration->delete();
+			
+			// if user is not valid and has no other registrations 
+			// than delete user because he has no use for the system
+			if($this->getValue('usr_valid') == 0)
+			{
+				$sql = 'SELECT reg_id FROM '.TBL_REGISTRATIONS.' WHERE reg_usr_id = '.$this->getValue('usr_id');
+				$this->db->query($sql);
+
+				if($this->db->num_rows() == 0)
+				{
+					$this->delete();
+				}
+			}
+			return true;
+		}
+		return false;		
+	}
 
     // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags,
     // welche Rollen der User einsehen darf
@@ -396,9 +471,9 @@ class User extends TableUsers
 		}
 	}
 
-    public function readData($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
+    public function readDataById($usr_id, $sql_where_condition = '', $sql_additional_tables = '')
     {
-        parent::readData($usr_id, $sql_where_condition, $sql_additional_tables);
+        parent::readDataById($usr_id, $sql_where_condition, $sql_additional_tables);
 
 		// read data of all user fields from current user
 		$this->mProfileFieldsData->readUserData($this->getValue('usr_id'));

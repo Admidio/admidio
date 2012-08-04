@@ -31,9 +31,14 @@ class TableDate extends TableAccess
 	 */
     public function __construct(&$db, $dat_id = 0)
     {
+		// read also data of assigned category
+		$this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'dat_cat_id');
+
         parent::__construct($db, TBL_DATES, 'dat', $dat_id);
     }
 
+    /** Additional to the parent method visible roles array and flag will be initialized.
+	 */
     public function clear()
     {
         parent::clear();
@@ -42,7 +47,10 @@ class TableDate extends TableAccess
         $this->changeVisibleRoles = false;
     }
         
-    // Methode, die den Termin in der DB loescht
+	/** Deletes the selected record of the table and all references in other tables. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
     public function delete()
     {
 		$this->db->startTransaction();
@@ -235,19 +243,6 @@ class TableDate extends TableAccess
             }
         }
         return $this->visibleRoles;
-    }
-
-    // Benutzerdefiniertes Feld mit der uebergebenen ID aus der Datenbank auslesen
-    public function readData($dat_id, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        if(is_numeric($dat_id))
-        {
-            $sql_additional_tables .= TBL_CATEGORIES;
-            $sql_where_condition   .= '    dat_cat_id = cat_id
-                                       AND dat_id     = '.$dat_id;
-            return parent::readData($dat_id, $sql_where_condition, $sql_additional_tables);
-        }
-        return false;
     }
 
     public function save($updateFingerPrint = true)

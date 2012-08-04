@@ -40,21 +40,6 @@ class TableText extends TableAccess
         }
     }
 
-    // Text mit dem uebergebenen Text-Id oder Namen aus der Datenbank auslesen
-    public function readData($name, $sql_where_condition = '', $sql_additional_tables = '')
-    {
-        global $gCurrentOrganization;
-    
-        // wurde txt_name uebergeben, dann die SQL-Bedingung anpassen
-        if(is_numeric($name) == false)
-        {
-            $sql_where_condition .= '    txt_name   = \''.$name.'\' 
-                                     AND txt_org_id = '. $gCurrentOrganization->getValue('org_id');
-        }
-        
-        return parent::readData($name, $sql_where_condition, $sql_additional_tables);
-    }
-
     // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
     // die Funktion wird innerhalb von save() aufgerufen
     public function save($updateFingerPrint = true)

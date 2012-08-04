@@ -322,7 +322,7 @@ else
             // Initialize object and write new data
             //$date->clear();
             //$date->setArray($row);
-            $date->readData($row['dat_id']);
+            $date->readDataById($row['dat_id']);
         
             echo '
             <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
@@ -343,12 +343,14 @@ else
                             echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
                             src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
                         }
-                        
+                        error_log('1');
                         // change and delete is only for useres with additional rights
                         if ($gCurrentUser->editDates())
                         {
+                        error_log('2');
                             if($date->editRight() == true)
                             {
+                        error_log('3');
                                 echo '
                                 <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$htmlHeadline.'"><img
                                     src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
@@ -359,6 +361,7 @@ else
                             // Deleting events is only allowed for group members
                             if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
                             {
+                        error_log('4');
                                 echo '
                                 <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
                                     $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img 

@@ -20,6 +20,7 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_announcement.php');
 require_once('../../system/classes/module_announcements.php');
+require_once('../../system/classes/module_menu.php');
 unset($_SESSION['announcements_request']);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -67,26 +68,30 @@ if($gPreferences['enable_rss'] == 1)
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-// Html des Modules ausgeben
+// show headline of module
 echo '<h1 class="moduleHeadline">'.$getHeadline.'</h1>';
 
-//Objekt anlegen
+// create objects to manage the selected announcements
 $announcements = new Announcements($getAnnId, $getDate);
 
-// Neue Ankuendigung anlegen
+// create module menu
+$announcementsMenu = new ModuleMenu('admMenuAnnouncements');
+
 if($gCurrentUser->editAnnouncements())
 {
-    echo '
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline.'"><img
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline.'">'.$gL10n->get('SYS_CREATE').'</a>
-            </span>
-        </li>
-    </ul>';        
+	// show link to create new announcement
+	$announcementsMenu->addItem('admMenuItemNewAnnouncement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline, 
+								$gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
 }
+
+if($gCurrentUser->isWebmaster())
+{
+	// show link to system preferences of announcements
+	$announcementsMenu->addItem('admMenuItemPreferencesAnnouncements', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=ANN_ANNOUNCEMENTS', 
+								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+}
+
+$announcementsMenu->show();
 
 if($announcements->getAnnouncementsCount() == 0)
 {

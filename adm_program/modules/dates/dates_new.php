@@ -51,7 +51,7 @@ $date = new TableDate($gDb);
 
 if($getDateId > 0)
 {
-    $date->readData($getDateId);
+    $date->readDataById($getDateId);
     
     if($getCopy)
     {

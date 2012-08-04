@@ -91,7 +91,7 @@ if ($userFound >= 1)
 	if($organizationId != $gCurrentOrganization->getValue('org_id'))
 	{
 		// read organization of config file with their preferences
-		$gCurrentOrganization->readData($organizationId);
+		$gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
 		$gPreferences = $gCurrentOrganization->getPreferences();
 		
 		// create object with current user field structure und user object
@@ -216,12 +216,13 @@ if ($userFound >= 1)
 }
 else
 {
-    // nun noch pruefen ob Login ggf. noch nicht freigeschaltet wurde
+	// now check if login is not released or doesn't exists
     $sql    = 'SELECT usr_id
-                 FROM '. TBL_USERS. '
+                 FROM '. TBL_USERS. ', '.TBL_REGISTRATIONS.'
                 WHERE usr_login_name LIKE \''. $loginname. '\'
-                  AND usr_valid      = 0
-                  AND usr_reg_org_shortname LIKE \''.$gCurrentOrganization->getValue('org_shortname').'\' ';
+                  AND usr_valid  = 0
+				  AND reg_usr_id = usr_id
+				  AND reg_org_id = '.$gCurrentOrganization->getValue('org_id');
     $result = $gDb->query($sql);
 
     if($gDb->num_rows($result) == 1)
