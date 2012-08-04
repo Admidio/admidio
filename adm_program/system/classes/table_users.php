@@ -160,26 +160,32 @@ class TableUsers extends TableAccess
         return $return;
     }
 
-    // validates the value and adapts it if necessary
-    public function setValue($field_name, $field_value, $check_value = true)
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
     {
         // encode Passwort with phpAss
-        if(($field_name == 'usr_password' || $field_name == 'usr_new_password') && strlen($field_value) < 30)
+        if(($columnName == 'usr_password' || $columnName == 'usr_new_password') && strlen($newValue) < 30)
         {
-            $check_value    = false;
+            $checkValue    = false;
             $passwordHasher = new PasswordHash(9, true);
-            $field_value    = $passwordHasher->HashPassword($field_value);
+            $newValue    = $passwordHasher->HashPassword($newValue);
         }
 		// username should not contain special characters
-		elseif($field_name == 'usr_login_name')
+		elseif($columnName == 'usr_login_name')
 		{
-			if (strlen($field_value) > 0 && strValidCharacters($field_value, 'noSpecialChar') == false)
+			if (strlen($newValue) > 0 && strValidCharacters($newValue, 'noSpecialChar') == false)
 			{
 				return false;
 			}
 		}
 
-        return parent::setValue($field_name, $field_value);
+        return parent::setValue($columnName, $newValue, $checkValue);
     }
 	
     // Anzahl Logins hochsetzen, Datum aktualisieren und ungueltige Logins zuruecksetzen

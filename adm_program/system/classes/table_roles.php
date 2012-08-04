@@ -247,16 +247,21 @@ class TableRoles extends TableAccess
 		}
     }
 	
-	// returns the value of database column $field_name
-	// for column usf_value_list the following format is accepted
-	// 'plain' -> returns database value of usf_value_list
-    public function getValue($field_name, $format = '')
+    /** Get the value of a column of the database table.
+     *  If the value was manipulated before with @b setValue than the manipulated value is returned.
+     *  @param $columnName The name of the database column whose value should be read
+     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *  @return Returns the value of the database column.
+     *          If the value was manipulated before with @b setValue than the manipulated value is returned.
+     */ 
+    public function getValue($columnName, $format = '')
     {
 		global $gL10n;
 
-        $value = parent::getValue($field_name, $format);
+        $value = parent::getValue($columnName, $format);
 
-		if($field_name == 'cat_name' && $format != 'plain')
+		if($columnName == 'cat_name' && $format != 'plain')
 		{
 			// if text is a translation-id then translate it
 			if(strpos($value, '_') == 3)
