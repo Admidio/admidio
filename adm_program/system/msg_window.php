@@ -127,6 +127,21 @@ switch ($getMessageId)
                     <td><b>'.$gL10n->get('SYS_YES').'</b></td>
                     <td>'.$gL10n->get('LST_SEARCH_YES_NO_FIELD_DESC').'</td>
                  </tr>
+                 <tr>
+                    <td>'.$gL10n->get('SYS_FIRSTNAME').'</td>
+                    <td><b>&lt;&gt; '.$gL10n->get('LST_EXCLUDE_EXAMPLE').'</b></td>
+                    <td>'.$gL10n->get('LST_EXCLUDE_EXAMPLE_DESC').'</td>
+                 </tr>
+                 <tr>
+                    <td>'.$gL10n->get('SYS_ADDRESS').'</td>
+                    <td><b>'.$gL10n->get('SYS_EMPTY').'</b></td>
+                    <td>'.$gL10n->get('LST_EMPTY_EXAMPLE_DESC').'</td>
+                 </tr>
+                 <tr>
+                    <td>'.$gL10n->get('SYS_ADDRESS').'</td>
+                    <td><b>'.$gL10n->get('SYS_NOT_EMPTY').'</b></td>
+                    <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
+                 </tr>
               </table>';
         break;
 

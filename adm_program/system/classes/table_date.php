@@ -20,7 +20,6 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
 class TableDate extends TableAccess
 {
-    protected $max_members_role = array();
     protected $visibleRoles = array();
     protected $changeVisibleRoles;
     
@@ -157,19 +156,6 @@ class TableDate extends TableAccess
         $icalVEevent .= "END:VEVENT\n";
         
         return $icalVEevent;
-    }
-    
-    // gibt die Anzahl der maximalen Teilnehmer einer Rolle zurueck
-    public function getMaxMembers($rol_id)
-    {
-        if(array_key_exists($rol_id, $this->max_members_role))
-        {
-            return $this->max_members_role[$rol_id];
-        }
-        else
-        {
-            return '';
-        }
     }
 
     /** Get the value of a column of the database table.
