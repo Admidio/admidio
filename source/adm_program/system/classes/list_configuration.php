@@ -256,6 +256,9 @@ class ListConfiguration extends TableLists
                 
                 // Bedingungen aus dem Bedingungsfeld als SQL darstellen
                 $parser    = new ConditionParser;
+				$parser->setNotExistsStatement('SELECT 1 FROM '.TBL_USER_DATA.' '.$tableAlias.'s
+												 WHERE '.$tableAlias.'s.usd_usr_id = usr_id
+												   AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
                 $condition = $parser->makeSqlStatement($value, $currentField, $type);
 				$sqlWhere = $sqlWhere. $condition;
             }        
