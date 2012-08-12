@@ -129,6 +129,7 @@ class ConditionParser
         $bStartCondition = true;   // gibt an, dass eine neue Bedingung angefangen wurde
         $bNewCondition   = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
         $bStartOperand   = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
+        $bOpenQuotes     = false;  // set to true if quotes for conditions are open
         $date            = '';     // Variable speichert bei Datumsfeldern das gesamte Datum
         $this->mDestCond    = '';
 
@@ -302,11 +303,15 @@ class ConditionParser
                             $this->mDestCond = $this->mDestCond. $this->mSrcCondArray[$this->mCount];
                         }
     
-						// allways set quote marks for a value because some fields are a varchar in db
-						// but should only filled with integer
-						$this->mDestCond = $this->mDestCond. ' \'';
-							
-                        $bStartOperand = true;
+                        if($this->mSrcCondArray[$this->mCount] != '_'
+                        && $this->mSrcCondArray[$this->mCount] != '#')
+                        {
+                            // allways set quote marks for a value because some fields are a varchar in db
+                            // but should only filled with integer
+                            $this->mDestCond = $this->mDestCond. ' \'';
+                            $bOpenQuotes = true;
+                            $bStartOperand = true;
+                        }
                     }
                     else
                     {
@@ -314,9 +319,13 @@ class ConditionParser
                         if($this->mSrcCondArray[$this->mCount] == ' '
                         && $bNewCondition == false )
                         {
-							// allways set quote marks for a value because some fields are a varchar in db
-							// but should only filled with integer
-                            $this->mDestCond = $this->mDestCond. '\' ';
+                            if($bOpenQuotes == true)
+                            {
+                                // allways set quote marks for a value because some fields are a varchar in db
+                                // but should only filled with integer
+                                $this->mDestCond = $this->mDestCond. '\' ';
+                                $bOpenQuotes = false;
+                            }
 
 							if($columnType == 'date')
                             {
@@ -335,6 +344,7 @@ class ConditionParser
                         elseif($this->mSrcCondArray[$this->mCount] != ' ')
                         {
                             // neues Suchwort, aber noch keine Bedingung
+                            
                             if($bNewCondition && !$bStartCondition)
                             {
                                 if($columnType == 'string')
@@ -345,6 +355,7 @@ class ConditionParser
                                 {
                                     $this->mDestCond = $this->mDestCond. ' AND '.$columnName.' = ';
                                 }
+                                $bOpenQuotes = false;
                             }
                             elseif($bNewCondition && !$bStartOperand)
                             {
@@ -357,6 +368,7 @@ class ConditionParser
 								{
 									$this->mDestCond = $this->mDestCond. ' = \'';
 								}
+								$bOpenQuotes = true;
                             }
     
                             // Zeichen an Zielstring dranhaengen
@@ -394,9 +406,14 @@ class ConditionParser
                 }
             }
 
-			// allways set quote marks for a value because some fields are a varchar in db
-			// but should only filled with integer; close brackets from the beginning
-            $this->mDestCond = $this->mDestCond. '\' )';
+            if($bOpenQuotes == true)
+            {
+                // allways set quote marks for a value because some fields are a varchar in db
+                // but should only filled with integer
+                $this->mDestCond = $this->mDestCond. ' \'';
+            }
+            
+            $this->mDestCond = $this->mDestCond. ' ) ';
         }
 
         return $this->mDestCond;
