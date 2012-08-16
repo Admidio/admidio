@@ -367,6 +367,7 @@ elseif($getNewUser == 3 || $getUserId == 0)
     // neuer Benutzer wurde ueber Webanmeldung angelegt und soll nun zugeordnet werden
     // oder ein neuer User wurde in der Benutzerverwaltung angelegt
     /*------------------------------------------------------------*/
+	$gDb->startTransaction();
 
     if($getUserId > 0) // Webanmeldung
     {
@@ -386,26 +387,28 @@ elseif($getNewUser == 3 || $getUserId == 0)
         }
     }
 
-    // neuer User -> Rollen zuordnen
-    if($gCurrentUser->assignRoles())
-    {
-        header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user=1');
-        exit();
-    }
-    else
-    {
-        // da der angemeldete Benutzer keine Rechte besitzt Rollen zu zuordnen, 
-        // wird der neue User der Default-Rolle zugeordnet
-        if($gPreferences['profile_default_role'] == 0)
-        {
-            $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
-        }
-		// starts a membership for default role from now
-		$user->setRoleMembership($gPreferences['profile_default_role']);
-        
-        $gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-        $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
-    }
+	// new user -> assign roles
+	// every user will get the default role, if the current user has the right to assign roles
+	// than the roles assignement dialog will be shown
+	if($gPreferences['profile_default_role'] == 0)
+	{
+		$gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
+	}
+
+	// starts a membership for default role from now
+	$user->setRoleMembership($gPreferences['profile_default_role']);
+	$gDb->endTransaction();
+	
+	if($gCurrentUser->assignRoles())
+	{
+		header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user=1');
+		exit();
+	}
+	else
+	{
+		$gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+		$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+	}
 }
 elseif($getNewUser == 0 && $user->getValue('usr_valid') == 0)
 {

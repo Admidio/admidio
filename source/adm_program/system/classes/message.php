@@ -95,6 +95,9 @@ class Message
         global $gForum, $gLayout, $gDb, $gDbConnection, $g_adm_db, $gL10n;
         global $gValidLogin, $g_root_path, $gPreferences, $gHomepage, $gMessages, $gProfileFields;
         global $g_organization, $gCurrentOrganization, $gCurrentUser, $gCurrentSession;
+		
+		// first perform a rollback in database if there is an open transaction
+		$gDb->rollback();
 
         // Ueberschrift setzen, falls diese vorher nicht explizit gesetzt wurde
         if(strlen($headline) == 0)
