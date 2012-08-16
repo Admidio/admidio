@@ -42,7 +42,7 @@ select org_id, usr_id, usr_timestamp_create
  where usr_reg_org_shortname is not null
    and usr_reg_org_shortname = org_shortname;
    
-ALTER TABLE %PREFIX%_users DROP FOREIGN KEY %PREFIX%_FK_USR_ORG_REG;
+ALTER TABLE %PREFIX%_users DROP CONSTRAINT %PREFIX%_FK_USR_ORG_REG;
 ALTER TABLE %PREFIX%_users DROP COLUMN usr_reg_org_shortname;
 	
 -- -----------------------------------------------------

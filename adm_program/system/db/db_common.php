@@ -35,7 +35,7 @@ class DBCommon
         // Rollback bei einer offenen Transaktion
         if($this->transactions > 0)
         {
-            $this->endTransaction(true);
+            $this->rollback();
         }        
 
         if(headers_sent() == false && isset($gPreferences) && defined('THEME_SERVER_PATH'))
@@ -69,29 +69,27 @@ class DBCommon
         exit();
     }
 
-    public function endTransaction($rollback = false)
+	/** The method will commit an open transaction to the database. If the
+	 *  transaction counter is greater 1 than only the counter will be
+	 *  decreased and no commit will performed.
+	 */
+    public function endTransaction()
     {
-        if($rollback)
-        {
-            $result = $this->query('ROLLBACK');
-        }
-        else
-        {
-            // If there was a previously opened transaction we do not commit yet... 
-            // but count back the number of inner transactions
-            if ($this->transactions > 1)
-            {
-                $this->transactions--;
-                return true;
-            }
+		// If there was a previously opened transaction we do not commit yet... 
+		// but count back the number of inner transactions
+		if ($this->transactions > 1)
+		{
+			$this->transactions--;
+			return true;
+		}
 
-            $result = $this->query('COMMIT');
+		$result = $this->query('COMMIT');
 
-            if (!$result)
-            {
-                $this->db_error();
-            }
-        }
+		if (!$result)
+		{
+			$this->db_error();
+		}
+
         $this->transactions = 0;
         return $result;
     }
@@ -188,7 +186,29 @@ class DBCommon
 		return $this->version;
 	}
 	
-    // Modus der Transaktoin setzen (Inspiriert von phpBB)
+	/** If there is a open transaction than this method sends a rollback to the database
+	 *  and will set the transaction counter to zero.
+	 */
+	public function rollback()
+	{
+		if($this->transactions > 0)
+		{
+			$result = $this->query('ROLLBACK');
+			
+			if (!$result)
+			{
+				$this->db_error();
+			}
+		
+			$this->transactions = 0;
+			return true;
+		}
+		return false;
+	}
+	
+	/** Checks if an open transaction exists. If there is no open transaction than
+	 *  start one otherwise increase the internal transaction counter.
+	 */
     public function startTransaction()
     {
         // If we are within a transaction we will not open another one, 
