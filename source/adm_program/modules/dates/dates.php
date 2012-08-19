@@ -36,7 +36,7 @@ require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
 require_once('../../system/classes/module_dates.php');
-require_once('../../system/classes/participients.php');
+require_once('../../system/classes/participants.php');
 unset($_SESSION['dates_request']);
 
 
@@ -464,13 +464,13 @@ else
                         $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
                     }
         
-                    // count participients of the date
+                    // count participants of the date
                     if($date->getValue('dat_rol_id') > 0)
                     {
                         if($date->getValue('dat_max_members')!=0)
                         {
-                            $participients = new Participients ();
-                            $participantsHtml = '<strong>'.$participients->getCount($date->getValue('dat_rol_id')).'</strong>';
+                            $participants = new Participants ($gDb, $date->getValue('dat_rol_id'));
+                            $participantsHtml = '<strong>'.$participants->getCount().'</strong>';
                         }
                         else 
                         {
@@ -527,8 +527,8 @@ else
                                 $non_available_rols = array();
                                 if($date->getValue('dat_max_members'))
                                 {
-                                    // Check limit of participients
-                                    if($participients->getLimit($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
+                                    // Check limit of participants
+                                    if($participants->getLimit() >= $date->getValue('dat_max_members'))
                                     {
                                         $available_signin = false;
                                     }
