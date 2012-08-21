@@ -309,6 +309,7 @@ function admFuncEmailNotification($recipient, $reference, $message, $senderName,
 	mail($recipient, $reference, $message, 'From: '.$senderName.' <'.$senderEmail.'>');
 	//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
 }
+
 /// Verify the content of an array element if it's the expected datatype
 /** The function is designed to check the content of @b $_GET and @b $_POST elements and should be used at the beginning of a script.
  *  But the function can also be used with every array and their elements. You can set several flags (like required value, datatype …) 
@@ -341,17 +342,21 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
     // only check if array entry exists and has a value
 	if(isset($array[$variableName]) && strlen($array[$variableName]) > 0)
 	{
-		if($datatype == 'boolean')
+		if($type == 'boolean')
 		{
-			// Boolean darf nur 2 Werte haben
-			$validValues = array(0, 1);
+			// boolean type must be 0 or 1 otherwise throw error
+			// do not check with in_array because this function don't work properly
+			if($array[$variableName] != '0' && $array[$variableName] != '1')
+			{
+                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+			}
 		}
-		
-		if($validValues != null)
+		elseif($validValues != null)
 		{
-			// Variable muss einen gueltigen Wert haben
-			if(in_array(admStrToUpper($array[$variableName]), $validValues) == false
-			&& in_array(admStrToLower($array[$variableName]), $validValues) == false)
+			// check if parameter has a valid value
+			// do a strict check with in_array because the function don't work properly
+			if(in_array(admStrToUpper($array[$variableName]), $validValues, true) == false
+			&& in_array(admStrToLower($array[$variableName]), $validValues, true) == false)
 			{
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
 			}
