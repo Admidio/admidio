@@ -342,7 +342,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
     // only check if array entry exists and has a value
 	if(isset($array[$variableName]) && strlen($array[$variableName]) > 0)
 	{
-		if($type == 'boolean')
+		if($datatype == 'boolean')
 		{
 			// boolean type must be 0 or 1 otherwise throw error
 			// do not check with in_array because this function don't work properly
