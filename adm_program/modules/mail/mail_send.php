@@ -318,7 +318,7 @@ if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
 $email->setSenderInText($_POST['name'], $_POST['mailfrom'], $role->getValue('rol_name'));
 
 // make html in mail body secure and commit mail body to mail object
-$email->setText(htmLawed(stripslashes($_POST['mail_body'])));
+$email->setText(htmLawed(stripslashes($_POST['mail_body']), array('safe' => 1)));
 
 
 //Nun kann die Mail endgueltig versendet werden...

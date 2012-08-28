@@ -78,8 +78,8 @@ class TableRoles extends TableAccess
 			else
 			{
 				// only webmasters are allowed to assign new members to webmaster role
-				if($this->getValue('rol_name') != $gL10n->get('SYS_WEBMASTER')
-				|| ($this->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $user->isWebmaster()))
+				if($this->getValue('rol_webmaster') == 0
+				|| ($this->getValue('rol_webmaster') == 1 && $user->isWebmaster()))
 				{
 					return true;
 				}

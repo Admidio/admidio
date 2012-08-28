@@ -8,39 +8,40 @@
  *
  *****************************************************************************/
 
-// Funktion prueft, ob ein User die uebergebene Rolle besitzt
-// $role_name - Name der zu pruefenden Rolle
-// $user_id   - Id des Users, fuer den die Mitgliedschaft geprueft werden soll
-
-function hasRole($role_name, $user_id = 0)
+/** Function checks if the user is a member of the role.
+ *  If @b userId is not set than this will be checked for the current user
+ *  @param $rolName	The name of the role where the membership of the user should be checked
+ *  @param $userId 	The id of the user who should be checked if he is a member of the role.
+ *  				If @userId is not set than this will be checked for the current user
+ *  @return Returns @b true if the user is a member of the role
+ */
+function hasRole($roleName, $userId = 0)
 {
     global $gCurrentUser, $gCurrentOrganization, $gDb;
 
-    if($user_id == 0)
+    if($userId == 0)
     {
-        $user_id = $gCurrentUser->getValue('usr_id');
+        $userId = $gCurrentUser->getValue('usr_id');
     }
-    elseif(is_numeric($user_id) == false)
+    elseif(is_numeric($userId) == false)
     {
         return -1;
     }
 
     $sql    = 'SELECT mem_id
                  FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                WHERE mem_usr_id = '.$user_id.'
+                WHERE mem_usr_id = '.$userId.'
                   AND mem_begin <= \''.DATE_NOW.'\'
                   AND mem_end    > \''.DATE_NOW.'\'
                   AND mem_rol_id = rol_id
-                  AND rol_name   = \''.$role_name.'\'
+                  AND rol_name   = \''.$roleName.'\'
                   AND rol_valid  = 1 
                   AND rol_cat_id = cat_id
                   AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                       OR cat_org_id IS NULL ) ';
     $result = $gDb->query($sql);
 
-    $user_found = $gDb->num_rows($result);
-
-    if($user_found == 1)
+    if($gDb->num_rows($result) == 1)
     {
         return 1;
     }
@@ -50,17 +51,19 @@ function hasRole($role_name, $user_id = 0)
     }
 }
 
-// Funktion prueft, ob der uebergebene User Mitglied in einer Rolle der Gruppierung ist
-
-function isMember($user_id)
+/** Function checks if the user is a member in a role of the current organization. 
+ *  @param $userId 	The id of the user who should be checked if he is a member of the current organization
+ *  @return Returns @b true if the user is a member
+ */
+function isMember($userId)
 {
     global $gCurrentOrganization, $gDb;
     
-    if(is_numeric($user_id) && $user_id > 0)
+    if(is_numeric($userId) && $userId > 0)
     {
         $sql    = 'SELECT COUNT(*)
                      FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                    WHERE mem_usr_id = '.$user_id.'
+                    WHERE mem_usr_id = '.$userId.'
                       AND mem_begin <= \''.DATE_NOW.'\'
                       AND mem_end    > \''.DATE_NOW.'\'
                       AND mem_rol_id = rol_id
@@ -71,9 +74,9 @@ function isMember($user_id)
         $result = $gDb->query($sql);
 
         $row = $gDb->fetch_array($result);
-        $row_count = $row[0];
+        $rowCount = $row[0];
 
-        if($row_count > 0)
+        if($rowCount > 0)
         {
             return true;
         }
@@ -81,19 +84,23 @@ function isMember($user_id)
     return false;
 }
 
-// Funktion prueft, ob der angemeldete User Leiter einer Gruppe /Kurs ist
-// Optionaler Parameter role_id prueft ob der angemeldete User Leiter der uebergebenen Gruppe / Kurs ist
-
-function isGroupLeader($user_id, $role_id = 0)
+/** Function checks if the user is a group leader in a role of the current organization. 
+ *  If you use the @b roleId parameter you can check if the user is group leader of that role.
+ *  @param $userId 	The id of the user who should be checked if he is a group leader
+ *  @param $roleId 	If set <> 0 than the function checks if the user is group leader of this role 
+ *					otherwise it checks if the user is group leader in one role of the current organization
+ *  @return Returns @b true if the user is a group leader
+ */
+function isGroupLeader($userId, $roleId = 0)
 {
     global $gCurrentOrganization, $gDb;
 
-    if(is_numeric($user_id) && $user_id >  0
-    && is_numeric($role_id))
+    if(is_numeric($userId) && $userId >  0
+    && is_numeric($roleId))
     {
         $sql    = 'SELECT mem_id
                      FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                    WHERE mem_usr_id = '.$user_id.'
+                    WHERE mem_usr_id = '.$userId.'
                       AND mem_begin <= \''.DATE_NOW.'\'
                       AND mem_end    > \''.DATE_NOW.'\'
                       AND mem_leader = 1
@@ -102,15 +109,13 @@ function isGroupLeader($user_id, $role_id = 0)
                       AND rol_cat_id = cat_id
                       AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
                           OR cat_org_id IS NULL ) ';
-        if ($role_id > 0)
+        if ($roleId > 0)
         {
-            $sql .= '  AND mem_rol_id = '.$role_id;
+            $sql .= '  AND mem_rol_id = '.$roleId;
         }
         $result = $gDb->query($sql);
 
-        $edit_user = $gDb->num_rows($result);
-
-        if($edit_user > 0)
+        if($gDb->num_rows($result) > 0)
         {
             return true;
         }
@@ -307,20 +312,20 @@ function admFuncEmailNotification($recipient, $reference, $message, $senderName,
     }
 
 	mail($recipient, $reference, $message, 'From: '.$senderName.' <'.$senderEmail.'>');
-	//echo "Empfänger: $empfaenger<br>Betreff: $betreff<br>Nachricht: $nachricht<br>Absender Name: $absender<br>Absender Mail: $absendermail";
 }
 
 /// Verify the content of an array element if it's the expected datatype
 /** The function is designed to check the content of @b $_GET and @b $_POST elements and should be used at the beginning of a script.
  *  But the function can also be used with every array and their elements. You can set several flags (like required value, datatype …) 
  *  that should be checked.
- *  @param $array The array with the element that should be checked
- *  @param $variableName Name of the array element that should be checked
- *  @param $datatype The datatype like @b string, @b numeric, @b boolean or @b file that is expected and which will be checked
- *  @param $defaultValue A value that will be set if the variable has no value
- *  @param $requireValue If set to @b true than a value is required otherwise the function returns an error
- *  @param $validValues An array with all values that the variable could have. If another value is found than the function returns an error
- *  @param $directOutput If set to @b true the function returns only the error string, if set to false a html message with the error will be returned
+ *  @param $array 			The array with the element that should be checked
+ *  @param $variableName 	Name of the array element that should be checked
+ *  @param $datatype 		The datatype like @b string, @b numeric, @b boolean, @b date or @b file that is expected and which will be checked.
+ *							Datatype @b date expects a date that has the Admidio default format from the preferences or the english date format @b Y-m-d
+ *  @param $defaultValue 	A value that will be set if the variable has no value
+ *  @param $requireValue 	If set to @b true than a value is required otherwise the function returns an error
+ *  @param $validValues 	An array with all values that the variable could have. If another value is found than the function returns an error
+ *  @param $directOutput 	If set to @b true the function returns only the error string, if set to false a html message with the error will be returned
  *  @return Returns the value of the element or the error message if a test failed 
  *  @par Examples
  *  @code   // numeric value that would get a default value 0 if not set
@@ -334,7 +339,7 @@ function admFuncEmailNotification($recipient, $reference, $message, $senderName,
  */
 function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
 {
-	global $gL10n, $gMessage;
+	global $gL10n, $gMessage, $gPreferences;
 	
 	$errorMessage = '';
 	$datatype = admStrToLower($datatype);
@@ -378,9 +383,25 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
                 }
             }
         }
+		elseif($datatype == 'date')
+		{
+			// check if date is a valid Admidio date format
+			$objAdmidioDate = new DateTimeExtended($array[$variableName], $gPreferences['system_date'], 'date');
+			
+			if($objAdmidioDate->valid() == false)
+			{
+				// check if date has english format
+				$objEnglishDate = new DateTimeExtended($array[$variableName], 'Y-m-d', 'date');
+				
+				if($objEnglishDate->valid() == false)
+				{
+					$errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT');
+				}
+			}
+		}
 		elseif($datatype == 'numeric')
 		{
-			// Numerische Datentypen duerfen nur Zahlen beinhalten
+			// numeric datatype should only contain numbers
 			if (is_numeric($array[$variableName]) == false)
 			{
                 $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
@@ -388,7 +409,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 		}
 		elseif($datatype == 'string')
 		{
-			$array[$variableName] = strStripTags($array[$variableName]);
+			$array[$variableName] = strStripTags(htmlentities($array[$variableName], ENT_COMPAT, 'UTF-8'));
 		}
 
         // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben

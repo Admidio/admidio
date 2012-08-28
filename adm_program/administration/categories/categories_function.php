@@ -191,19 +191,16 @@ if($getMode == 1)
 elseif($getMode == 2)
 {
     // delete category
-
-    if($category->getValue('cat_system') == 1)
-    {
-        // system-category couldn't be deleted
-        echo $gL10n->get('SYS_INVALID_PAGE_VIEW');
-		exit();
-    }
-
-	$returnCode = $category->delete();
-
-	if($returnCode)
+	try
 	{
-		echo 'done';
+		if($category->delete())
+		{
+			echo 'done';
+		}
+	}
+	catch(AdmException $e)
+	{
+		echo $e->show(true);
 	}
 }
 elseif($getMode == 4)

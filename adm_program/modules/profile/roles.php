@@ -138,7 +138,7 @@ echo '
 
 				// if role is webmaster than only webmaster can add new user, 
 				// but don't change their own membership, because there must be at least one webmaster
-				if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER')
+				if($role->getValue('rol_webmaster') == 1
 				&& (  !$gCurrentUser->isWebmaster()
 				   || ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue('usr_id'))))
 				{
@@ -152,7 +152,7 @@ echo '
 				}
 
 				// the leader of webmaster role can only be set by a webmaster
-				if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && !$gCurrentUser->isWebmaster())
+				if($role->getValue('rol_webmaster') == 1 && !$gCurrentUser->isWebmaster())
 				{
 					$leaderDisabled = ' disabled="disabled" ';
 				}

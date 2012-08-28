@@ -166,7 +166,7 @@ foreach($_POST as $key => $value)
         }
         elseif(strpos($key, 'SYSMAIL_') === 0)
         {
-            $text->readDataById($key);
+            $text->readDataByColumns(array('txt_org_id' => $gCurrentOrganization->getValue('org_id'), 'txt_name' => $key));
             $text->setValue('txt_text', $value);
             $text->save();
         }

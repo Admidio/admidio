@@ -63,8 +63,8 @@ $getDateId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 $getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
-$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'string', DATE_NOW, false);
-$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'string', '9999-12-31', false);
+$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', DATE_NOW, false);
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date', '9999-12-31', false);
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', 'html', false, $dates->getViewModes());
 
  

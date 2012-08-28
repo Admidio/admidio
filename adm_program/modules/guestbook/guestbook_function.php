@@ -138,7 +138,7 @@ if ($getMode == 1 || $getMode == 3)
     }
 
     // make html in description secure
-    $_POST['gbo_text'] = htmLawed(stripslashes($_POST['gbo_text']));
+    $_POST['gbo_text'] = htmLawed(stripslashes($_POST['gbo_text']), array('safe' => 1));
 
     // POST Variablen in das Gaestebuchobjekt schreiben
     foreach($_POST as $key => $value)
@@ -325,7 +325,7 @@ elseif($getMode == 4 || $getMode == 8)
     }
 	
     // make html in description secure
-    $_POST['gbc_text'] = htmLawed(stripslashes($_POST['gbc_text']));
+    $_POST['gbc_text'] = htmLawed(stripslashes($_POST['gbc_text']), array('safe' => 1));
 
     // POST Variablen in das Gaestebuchkommentarobjekt schreiben
     foreach($_POST as $key => $value)

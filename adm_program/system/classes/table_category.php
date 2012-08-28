@@ -37,15 +37,22 @@ class TableCategory extends TableAccess
     }
 
 	/** Deletes the selected record of the table and all references in other tables. 
-	 *  After that the class will be initialize.
+	 *  After that the class will be initialize. The method throws exceptions if 
+	 *  the category couldn't be deleted.
 	 *  @return @b true if no error occured
 	 */
     public function delete()
     {
         global $gCurrentSession;
+		
+		// system-category couldn't be deleted
+		if($this->getValue('cat_system') == 1)
+		{
+			throw new AdmException('SYS_DELETE_SYSTEM_CATEGORY');
+		}
         
-        // pruefen, ob noch mind. eine Kategorie fuer diesen Typ existiert, ansonsten das Loeschen nicht erlauben
-        $sql = 'SELECT count(1) AS anzahl FROM '. TBL_CATEGORIES. '
+		// checks if there exists another category of this type. Don't delete the last category of a type!
+        $sql = 'SELECT count(1) AS count_categories FROM '. TBL_CATEGORIES. '
                  WHERE (  cat_org_id = '. $gCurrentSession->getValue('ses_org_id'). '
                        OR cat_org_id IS NULL )
                    AND cat_type     = \''. $this->getValue('cat_type'). '\'';
@@ -53,7 +60,7 @@ class TableCategory extends TableAccess
         
         $row = $this->db->fetch_array($result);
 
-        if($row['anzahl'] > 1)
+        if($row['count_categories'] > 1)
         {
 			$this->db->startTransaction();
 
@@ -106,8 +113,8 @@ class TableCategory extends TableAccess
         }
         else
         {
-            // die letzte Kategorie darf nicht geloescht werden
-            return false;
+            // Don't delete the last category of a type!
+            throw new AdmException('SYS_DELETE_LAST_CATEGORY');
         }
     }
 

@@ -58,7 +58,7 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0) )
     }
 
     // make html in description secure
-    $_POST['lnk_description'] = htmLawed(stripslashes($_POST['lnk_description']));
+    $_POST['lnk_description'] = htmLawed(stripslashes($_POST['lnk_description']), array('safe' => 1));
 
     // POST Variablen in das Ankuendigungs-Objekt schreiben
     foreach($_POST as $key => $value)

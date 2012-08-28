@@ -204,7 +204,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 	}
     
     // make html in description secure
-    $_POST['dat_description'] = htmLawed(stripslashes($_POST['dat_description']));
+    $_POST['dat_description'] = htmLawed(stripslashes($_POST['dat_description']), array('safe' => 1));
 	
     // ------------------------------------------------
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist

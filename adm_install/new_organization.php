@@ -216,13 +216,13 @@ elseif($getMode == 4)
         $sql    = 'SELECT DISTINCT usr_id
                      FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. '
                     WHERE UPPER(usr_login_name) LIKE UPPER(\''. $_SESSION['user_login']. '\')
-                      AND usr_valid    = 1
-                      AND mem_usr_id   = usr_id
-                      AND mem_rol_id   = rol_id
-                      AND mem_begin   <= \''.DATE_NOW.'\'
-                      AND mem_end      > \''.DATE_NOW.'\'
-                      AND rol_valid    = 1
-                      AND rol_name     = \''.$gL10n->get('SYS_WEBMASTER').'\' ';
+                      AND usr_valid     = 1
+                      AND mem_usr_id    = usr_id
+                      AND mem_rol_id    = rol_id
+                      AND mem_begin    <= \''.DATE_NOW.'\'
+                      AND mem_end       > \''.DATE_NOW.'\'
+                      AND rol_valid     = 1
+					  AND rol_webmaster = 1 ';
         $result = $gDb->query($sql);
 
         $user_found = $gDb->num_rows($result);
@@ -425,6 +425,7 @@ elseif($getMode == 6)
     $role_webmaster->setValue('rol_profile', 1);
     $role_webmaster->setValue('rol_this_list_view', 1);
     $role_webmaster->setValue('rol_all_lists_view', 1);
+	$role_webmaster->setValue('rol_webmaster', 1);
     $role_webmaster->save();
 
     // Mitglied
