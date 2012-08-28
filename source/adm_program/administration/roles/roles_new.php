@@ -47,7 +47,7 @@ if($getRoleId > 0)
     }
 
     // Rolle Webmaster darf nur vom Webmaster selber erstellt oder gepflegt werden
-    if($role->getValue('rol_name')    == $gL10n->get('SYS_WEBMASTER')
+    if($role->getValue('rol_webmaster') == 1
     && $gCurrentUser->isWebmaster() == false)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -251,7 +251,7 @@ echo '
 							<dd>
 								<input type="text" id="rol_name" name="rol_name" ';
 								// bei bestimmte Rollen darf der Name nicht geaendert werden
-								if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
+								if($role->getValue('rol_webmaster') == 1)
 								{
 									echo ' readonly="readonly" ';
 								}
@@ -394,7 +394,7 @@ echo '
                             {
                                 echo ' checked="checked" ';
                             }
-                            if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
+                            if($role->getValue('rol_webmaster') == 1)
                             {
                                 echo ' disabled="disabled" ';
                             }
@@ -413,7 +413,7 @@ echo '
                             {
                                 echo ' checked="checked" ';
                             }
-                            if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
+                            if($role->getValue('rol_webmaster') == 1)
                             {
                                 echo ' disabled="disabled" ';
                             }

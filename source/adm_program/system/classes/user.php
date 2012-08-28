@@ -205,7 +205,7 @@ class User extends TableUsers
                     }
 
                     // Webmasterflag setzen
-                    if($row['mem_usr_id'] > 0 && $row['rol_name'] == $gL10n->get('SYS_WEBMASTER'))
+                    if($row['mem_usr_id'] > 0 && $row['rol_webmaster'] == 1)
                     {
                         $this->webmaster = 1;
                     }

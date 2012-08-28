@@ -267,7 +267,7 @@ echo '
                         src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>';
                 }
 
-                if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
+                if($role->getValue('rol_webmaster') == 1)
                 {
                     echo '<a class="iconLink"><img src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" /></a>';
                 }

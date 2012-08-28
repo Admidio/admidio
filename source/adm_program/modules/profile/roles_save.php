@@ -160,8 +160,8 @@ while($row = $gDb->fetch_array($result_rol))
 {
 	// if role is webmaster than only webmaster can add new user, 
 	// but don't change their own membership, because there must be at least one webmaster
-    if($row['rol_name'] != $gL10n->get('SYS_WEBMASTER')
-	|| (  $row['rol_name'] == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->isWebmaster() 
+    if($row['rol_webmaster'] == 0
+	|| (  $row['rol_webmaster'] == 1 && $gCurrentUser->isWebmaster() 
 	   && $getUserId != $gCurrentUser->getValue('usr_id')))
     {
         $roleAssign = 0;

@@ -211,7 +211,7 @@ class FunctionClass
 		$ecard_data = preg_replace ('/<%ecard_email_string%>/'			, htmlentities(utf8_decode($this->emailString)), $ecard_data); 
 			
 		// make html in description secure
-		$ecardMessage = htmLawed(stripslashes($ecardMessage));
+		$ecardMessage = htmLawed(stripslashes($ecardMessage), array('safe' => 1));
 
 		// Hier wird die Nachricht ersetzt
 		$ecard_data = preg_replace ('/<%ecard_message%>/',  $ecardMessage, $ecard_data);

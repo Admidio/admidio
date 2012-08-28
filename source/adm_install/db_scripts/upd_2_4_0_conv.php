@@ -58,5 +58,9 @@ while($row_orga = $gDb->fetch_array($result_orga))
                                        , mem_timestamp_create = \''.DATETIME_NOW.'\'';
     $gDb->query($sql);    
 }
+
+$sql = 'UPDATE '. TBL_ROLES. ' SET rol_webmaster = 1
+         WHERE rol_name LIKE \''.$gL10n->get('SYS_WEBMASTER').'\'';
+$gDb->query($sql);
  
 ?>

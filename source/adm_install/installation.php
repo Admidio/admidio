@@ -655,6 +655,7 @@ elseif($req_mode == 8)
     $role_webmaster->setValue('rol_profile', 1);
     $role_webmaster->setValue('rol_this_list_view', 1);
     $role_webmaster->setValue('rol_all_lists_view', 1);
+	$role_webmaster->setValue('rol_webmaster', 1);
     $role_webmaster->save();
 
     // Mitglied

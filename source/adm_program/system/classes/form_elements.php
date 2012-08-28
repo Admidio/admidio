@@ -80,7 +80,7 @@ class FormElements
 		elseif($showMode == 1 && $gCurrentUser->isWebmaster() == false)
 		{
 			// Webmasterrolle nicht anzeigen
-			$condition .= ' AND rol_name <> \''.$gL10n->get('SYS_WEBMASTER').'\' ';
+			$condition .= ' AND rol_webmaster = 0 ';
 		}
 		elseif($showMode == 2)
 		{

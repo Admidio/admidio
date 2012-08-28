@@ -153,7 +153,8 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                         if($role->allowedToAssignMembers($gCurrentUser))
                         {
 							// You are not allowed to delete your own webmaster membership, other roles could be deleted
-                            if (($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER') && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id')) || ($role->getValue('rol_name') != $gL10n->get('SYS_WEBMASTER')))
+                            if (($role->getValue('rol_webmaster') == 1 && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id')) 
+							|| ($role->getValue('rol_webmaster') == 0))
                             {
                                 $roleMemHTML .= '
                                 <a class="iconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
@@ -167,7 +168,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                             }
 
                             // do not edit webmaster role
-                            if ($row['rol_name'] != $gL10n->get('SYS_WEBMASTER'))
+                            if ($row['rol_webmaster'] == 0)
                             {
                                 $roleMemHTML .= '<a class="iconLink" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$member->getValue('mem_id').')"><img
                                     src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('PRO_CHANGE_DATE').'" title="'.$gL10n->get('PRO_CHANGE_DATE').'" /></a>';

@@ -133,7 +133,7 @@ $gLayout['header'] ='
             }';
             
             //Bei der Rolle Webmaster muss konrolliert werden ob noch mindestend ein User Mitglied bleibt
-            if($role->getValue('rol_name') == $gL10n->get('SYS_WEBMASTER'))
+            if($role->getValue('rol_webmaster') == 1)
             {
                 $gLayout['header'] .='
                 if($("input[name^=\'member_\'].memlist_checkbox:checked").size()<1){

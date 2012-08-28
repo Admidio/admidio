@@ -47,12 +47,22 @@ class AdmException extends Exception
     }
 
 
-    /** show message window with translated message */
-    public function show()
+    /** show message window with translated message 
+	 *  @param $inline 	If set to @b true than no html message dialog will be shown, output is only the plain text.
+	 * 					This setting should be used then error is thrown in ajax context.
+	 */
+    public function show($inline = false)
 	{
 		global $gMessage, $gL10n;
 		
-		return $gMessage->show($gL10n->get($this->message));
+		if($inline)
+		{
+			return $gL10n->get($this->message);
+		}
+		else
+		{
+			return $gMessage->show($gL10n->get($this->message));
+		}
     }
 }
 

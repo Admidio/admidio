@@ -60,13 +60,10 @@ $_POST    = admStrStripTagsSpecial($_POST);
 $_COOKIE  = admStrStripTagsSpecial($_COOKIE);
 
 // escape all quotes so db queries are save
-if(get_magic_quotes_gpc() == false)
-{
-    $_REQUEST = strAddSlashesDeep($_REQUEST);
-    $_GET     = strAddSlashesDeep($_GET);
-    $_POST    = strAddSlashesDeep($_POST);
-    $_COOKIE  = strAddSlashesDeep($_COOKIE);
-}
+$_REQUEST = strAddSlashesDeep($_REQUEST);
+$_GET     = strAddSlashesDeep($_GET);
+$_POST    = strAddSlashesDeep($_POST);
+$_COOKIE  = strAddSlashesDeep($_COOKIE);
 
 // global parameters
 $gValidLogin = false;

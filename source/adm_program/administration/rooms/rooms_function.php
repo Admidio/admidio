@@ -48,7 +48,7 @@ if($getMode == 1)
     }
 
     // make html in description secure
-    $_POST['room_description'] = htmLawed(stripslashes($_POST['room_description']));
+    $_POST['room_description'] = htmLawed(stripslashes($_POST['room_description']), array('safe' => 1));
 
     // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)

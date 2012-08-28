@@ -147,7 +147,7 @@ function deleteEntry()
 {
     entryDeleted = document.getElementById("'.$get_element_id.'");
 
-    // RequestObjekt abschicken und Eintrag loeschen
+    // send RequestObjekt and delete entry
     $.get("'.$url.'", function(data) {
         if(data == "done")
         {
@@ -157,7 +157,14 @@ function deleteEntry()
         }
         else
         {
-            $("#admMessageText").html("'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'<br /><br />" + data);
+			// entry could not be deleted, than show content of data or an common error message
+			$("#admYesNoButtons").css("display","none");
+			$("#admOkButton").css("display","");
+			if(data.length > 0) {
+				$("#admMessageText").html(data);
+			} else {
+				$("#admMessageText").html("'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'");
+			}
         }
     });
 }
@@ -172,7 +179,7 @@ function deleteEntry()
 				<td style="width: 70px; text-align: center;"><br /><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></td>
 				<td id="admMessageText"><br />'.$gL10n->get($text, $textVariable, $textVariable2).'</td>
 			</tr>
-			<tr>
+			<tr id="admYesNoButtons">
 				<td>&nbsp;</td>
 				<td style="padding-top: 30px;">
 					<button id="admButtonYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
@@ -180,6 +187,13 @@ function deleteEntry()
 					&nbsp;&nbsp;&nbsp;&nbsp;
 					<button id="admButtonNo" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
 						alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>
+				</td>
+			</tr>
+			<tr id="admOkButton" style="display: none;">
+				<td>&nbsp;</td>
+				<td style="padding-top: 30px;">
+					<button id="admButtonOk" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/ok.png" 
+						alt="'.$gL10n->get('SYS_OK').'" />&nbsp;'.$gL10n->get('SYS_OK').'</button>
 				</td>
 			</tr>
         </table>
