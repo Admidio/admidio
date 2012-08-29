@@ -127,7 +127,7 @@ while ($row = $gDb->fetch_array($result))
                 $description = $description. 
 					'<a href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.'"><img 
 					 src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&amp;photo_nr='.$photoNr.
-					 '&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=true" border="0" /></a>&nbsp;';
+					 '&amp;pho_begin='.$photo_album->getValue('pho_begin', 'Y-m-d').'&amp;thumb=1" border="0" /></a>&nbsp;';
             }
         }
     }
