@@ -239,6 +239,13 @@ class TableDate extends TableAccess
         return $this->visibleRoles;
     }
 
+	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
+	 *  a new record or if only an update is neccessary. The update statement will only update
+	 *  the changed columns. If the table has columns for creator or editor than these column
+	 *  with their timestamp will be updated.
+	 *  Saves also all roles that could see this date.
+	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+	 */
     public function save($updateFingerPrint = true)
     {
 		$this->db->startTransaction();

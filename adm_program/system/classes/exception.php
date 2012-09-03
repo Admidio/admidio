@@ -32,18 +32,27 @@
 
 class AdmException extends Exception
 {
-	/** constructor that will @b rollback an open database translation
+	/** Constructor that will @b rollback an open database translation
 	 *  @param $message Translation id that should be shown when exception is catched
-	 *  @param $code Optional code for PHP exception constructor
+	 *  @param $param1	Optional parameter for language string of translation id
+	 *  @param $param2	Another optional parameter for language string of translation id
+	 *  @param $param3	Another optional parameter for language string of translation id
+	 *  @param $param4	Another optional parameter for language string of translation id
 	 */
-    public function __construct($message, $code = 0) 
+    public function __construct($message, $param1='', $param2='', $param3='', $param4='')
 	{
         global $gDb;
 		
 		$gDb->EndTransaction(true);
+		
+		// save param in class parameters
+		$this->param1 = $param1;
+		$this->param2 = $param2;
+		$this->param3 = $param3;
+		$this->param4 = $param4;
 
         // sicherstellen, dass alles korrekt zugewiesen wird
-        parent::__construct($message, $code);
+        parent::__construct($message, 0);
     }
 
 
@@ -57,11 +66,11 @@ class AdmException extends Exception
 		
 		if($inline)
 		{
-			return $gL10n->get($this->message);
+			return $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
 		}
 		else
 		{
-			return $gMessage->show($gL10n->get($this->message));
+			return $gMessage->show($gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4));
 		}
     }
 }

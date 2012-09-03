@@ -45,8 +45,6 @@ switch ($get_type)
 		require_once('classes/table_category.php');
         $url  = 'categories_function.php?cat_id='.$get_database_id.'&mode=2&type='.$get_database_id_2;
 		$text = 'CAT_DELETE_CATEGORY';
-		$category = new TableCategory($gDb, $get_database_id);
-		$textVariable2 = $category->getNumberElements();
         break;
     case 'dat':
         $url = 'dates_function.php?mode=2&dat_id='.$get_database_id;
@@ -159,7 +157,7 @@ function deleteEntry()
         {
 			// entry could not be deleted, than show content of data or an common error message
 			$("#admYesNoButtons").css("display","none");
-			$("#admOkButton").css("display","");
+			$("#admCloseButton").css("display","");
 			if(data.length > 0) {
 				$("#admMessageText").html(data);
 			} else {
@@ -189,11 +187,11 @@ function deleteEntry()
 						alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>
 				</td>
 			</tr>
-			<tr id="admOkButton" style="display: none;">
+			<tr id="admCloseButton" style="display: none;">
 				<td>&nbsp;</td>
 				<td style="padding-top: 30px;">
-					<button id="admButtonOk" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/ok.png" 
-						alt="'.$gL10n->get('SYS_OK').'" />&nbsp;'.$gL10n->get('SYS_OK').'</button>
+					<button id="admButtonClose" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
+						alt="'.$gL10n->get('SYS_CLOSE').'" />&nbsp;'.$gL10n->get('SYS_CLOSE').'</button>
 				</td>
 			</tr>
         </table>

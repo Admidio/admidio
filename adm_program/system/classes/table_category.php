@@ -99,11 +99,9 @@ class TableCategory extends TableAccess
 						WHERE '.$this->elementColumn.' = '. $this->getValue('cat_id');
 			$resultRecordsets = $this->db->query($sql);
 			
-			while($row = $this->db->fetch_array($resultRecordsets))
+			if($this->db->num_rows() > 0)
 			{
-				$object->clear();
-				$object->setArray($row);
-				$object->delete();
+				throw new AdmException('CAT_DONT_DELETE_CATEGORY', $this->getValue('cat_name'), $this->getNumberElements());
 			}
 
             $return = parent::delete();
@@ -139,7 +137,9 @@ class TableCategory extends TableAccess
         return $newNameIntern;
     }
 	
-	// number of child recordsets
+	/** Read number of child recordsets of this category.
+	 *  @return Returns the number of child elements of this category
+	 */
 	public function getNumberElements()
 	{
 		$sql    = 'SELECT COUNT(1) FROM '.$this->elementTable.'
@@ -304,7 +304,13 @@ class TableCategory extends TableAccess
         return $returnValue;
     }
 
-    // interne Funktion, die Defaultdaten fur Insert und Update vorbelegt
+	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
+	 *  a new record or if only an update is neccessary. The update statement will only update
+	 *  the changed columns. If the table has columns for creator or editor than these column
+	 *  with their timestamp will be updated.
+	 *  If a new record is inserted than the next free sequence will be determined.
+	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+	 */
     public function save($updateFingerPrint = true)
     {
         global $gCurrentOrganization, $gCurrentSession;

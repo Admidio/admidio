@@ -9,23 +9,31 @@
  *****************************************************************************/
 
 // drop foreign keys to delete index
-$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_ROL';
-$gDb->query($sql, false);
-$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR';
-$gDb->query($sql, false);
-
-
-// delete old index
 if($gDbType == 'mysql')
 { 
+	$sql = 'ALTER TABLE '.TBL_USERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_USR_ORG_REG';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_ROL';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP FOREIGN KEY '.$g_tbl_praefix.'_FK_MEM_USR';
+	$gDb->query($sql, false);
 	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
 	$gDb->query($sql, false);
 }
 else
 {
+	$sql = 'ALTER TABLE '.TBL_USERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_USR_ORG_REG';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_ROL';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR';
+	$gDb->query($sql, false);
 	$sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
 	$gDb->query($sql, false);
 }
+
+$sql = 'ALTER TABLE '.TBL_USERS.' DROP COLUMN usr_reg_org_shortname';
+$gDb->query($sql, false);
 
 // create foreign keys and new index
 $sql = 'alter table '.$g_tbl_praefix.'_members add constraint '.$g_tbl_praefix.'_FK_MEM_ROL foreign key (mem_rol_id)
