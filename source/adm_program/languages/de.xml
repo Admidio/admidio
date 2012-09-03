@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
 <version id="2.4.0" translator="Markus Faßbender">
+    <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Möchtest du die Kategorie %VAR1_BOLD% wirklich löschen?</text>
+    <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="todo">Die Kategorie %VAR1_BOLD% kann nicht gelöscht werden, da sie noch  %VAR2% abhängige Einträge besitzt.</text>
 	<text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Du hast für ein Datumsfeld ein ungültiges Datumsformat angegeben.</text>
     <text id="LST_NOT_NUMERIC" development="new" translation="todo">Du hast in für ein numerisches Feld eine nicht numerische Bedingung angegeben.</text>
 	<text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</text>
@@ -40,7 +42,6 @@
 </version>
 <version id="2.3.0" translator="Markus Faßbender">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
-    <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Soll die Kategorie %VAR1_BOLD% wirklich gelöscht werden?\n\nDiese Kategorie besitzt %VAR2% abhängige Einträge, die ebenfalls gelöscht werden.</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="todo">iCal-Funktion aktivieren</text>
     <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="todo">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Standard: ja)</text>
     <text id="DAT_ICAL_DAYS_FUTURE" development="changed" translation="todo">Anzahl iCal Tage Zukunft</text>

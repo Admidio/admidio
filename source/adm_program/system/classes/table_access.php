@@ -364,9 +364,12 @@ class TableAccess
 		return $returnCode;
 	}
     
-    // die Methode speichert die Organisationsdaten in der Datenbank,
-    // je nach Bedarf wird ein Insert oder Update gemacht
-    // updateFingerPrint : steuert, ob in den Tabellen der Ersteller und Aenderer aktualisiert wird
+	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
+	 *  a new record or if only an update is neccessary. The update statement will only update
+	 *  the changed columns. If the table has columns for creator or editor than these column
+	 *  with their timestamp will be updated.
+	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+	 */
     public function save($updateFingerPrint = true)
     {
         if($this->columnsValueChanged || strlen($this->dbColumns[$this->key_name]) == 0)
