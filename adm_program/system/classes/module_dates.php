@@ -495,7 +495,7 @@ class dates
         {
             $sql .= ' LIMIT '.$limit;
         }               
-        if($startElement = 0)
+        if($startElement != 0)
         {
             $sql .= ' OFFSET '.$startElement;
         }         
