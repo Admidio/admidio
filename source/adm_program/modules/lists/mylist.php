@@ -73,7 +73,7 @@ elseif($getListId > 0)
 }
 
 // Html-Kopf ausgeben
-$gLayout['title']  = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('SYS_CONFIGURATION');
+$gLayout['title']  = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
 $gLayout['header'] = '
     <script type="text/javascript">
         var listId             = '.$getListId.';
