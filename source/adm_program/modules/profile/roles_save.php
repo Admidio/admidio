@@ -57,7 +57,7 @@ if($roleCount == 0)
 if($gCurrentUser->assignRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    $sql    = 'SELECT rol_id, rol_name, rol_max_members, mem_begin, mem_end
+    $sql    = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mem_begin, mem_end
                  FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. '
                    ON rol_id      = mem_rol_id
@@ -74,7 +74,7 @@ if($gCurrentUser->assignRoles())
 else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql    = 'SELECT rol_id, rol_name, rol_max_members, mgl.mem_begin, mgl.mem_end
+    $sql    = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mgl.mem_begin, mgl.mem_end
                  FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. ' mgl
                    ON rol_id         = mgl.mem_rol_id
