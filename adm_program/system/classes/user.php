@@ -657,6 +657,9 @@ class User extends TableUsers
 		// these memberships can be continued with new date
 		$dtStartDate = new DateTimeExtended($startDate, 'Y-m-d', 'date');
         $startDate = date('Y-m-d', $dtStartDate->getTimestamp() - (24 * 60 * 60));
+        // add 1 to max date because we subtract one day if a membership ends
+		$dtEndDate = new DateTimeExtended($endDate, 'Y-m-d', 'date');
+        $endDate = date('Y-m-d', $dtStartDate->getTimestamp() + (24 * 60 * 60));
 	
 		// search for membership with same role and user and overlapping dates
 		$sql = 'SELECT * FROM '.TBL_MEMBERS.' 
@@ -680,7 +683,9 @@ class User extends TableUsers
 			}
 
 			// save new end date if an later date exists
-			if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+			// but only if end date is greater than the begin date otherwise the membership should be deleted
+			if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0
+			&& strcmp($member->getValue('mem_begin', 'Y-m-d'), $maxEndDate) < 0)
 			{
 				$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
 			}

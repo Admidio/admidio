@@ -91,7 +91,7 @@ if ($userFound >= 1)
 	if($organizationId != $gCurrentOrganization->getValue('org_id'))
 	{
 		// read organization of config file with their preferences
-		$gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
+		$gCurrentOrganization->readDataById($organizationId);
 		$gPreferences = $gCurrentOrganization->getPreferences();
 		
 		// create object with current user field structure und user object
