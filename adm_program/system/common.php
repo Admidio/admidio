@@ -75,7 +75,11 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 $gDb = Database::createDatabaseObject($gDbType);
-$gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+if($gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db) == false)
+{
+    // organization not found
+    die('<div style="color: #CC0000;">Error: Wrong database connection parameters!</div>');
+}
 
 // determine forum script and include it bevor session is created
 Forum::includeForumScript($gDb);

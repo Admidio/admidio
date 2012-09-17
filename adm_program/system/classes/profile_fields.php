@@ -257,7 +257,7 @@ class ProfileFields
 		// get html output for that field type and value
 		if($format == 'html')
 		{
-			$value = $this->getHtmlValue($fieldNameIntern, $value);
+			$value = $this->getHtmlValue($fieldNameIntern, $value, $this->mUserId);
 		}
 
 		return $value;
