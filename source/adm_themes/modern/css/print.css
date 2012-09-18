@@ -110,3 +110,56 @@
 #infoboxListsBox {
     width:             400px; 
 }
+
+/************************************** 
+ * Style for printview of date module *
+ **************************************/
+
+@media print{
+    .form {
+        display: none;
+    }
+}
+
+/* Settings for background colors of table rows */
+.even {
+    background-color: #eeeeee;
+}
+.odd {
+    background-color: #FFFFFF;
+}
+/* Settings for html table */
+.tableDateList {
+	position: relative;
+	top: 0px !important;
+	border-collapse: collapse;   
+}
+.tableDateList thead{ 
+    background-color: #ffffff;
+}
+.tableDateList thead h1 {
+    margin: 8px 0 0 0;
+    font-size: 1.7em;
+}
+.tableDateList thead h3 {
+    margin: 5px 0 5px 0;
+}
+.tableDateList tfoot {
+
+}
+.tableDateList th {
+    color:            #000000;
+    font-family:      arial, sans-serif;
+    font-size:        .9em;
+    height: 35px;
+    background-color: #cccccc;
+}
+.tableDateList tr {
+    font-family:      arial, sans-serif;
+    border: 1px;
+
+}
+.tableDateList td {
+	font-size: .9em;
+	text-align: center;
+}
