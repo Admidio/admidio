@@ -122,13 +122,19 @@ class ProfileFields
 			{
 				// the value in db is only the position, now search for the text
 				if(strlen($value) > 0)
-				{
+				{				    
 					if($gPreferences['enable_mail_module'] != 1)
 					{
 						$emailLink = 'mailto:'.$value;
 					}
 					else
 					{
+    				    // set value2 to user id because we need a second parameter in the link to mail module
+    				    if(strlen($value2) == 0)
+    				    {
+        				    $value2 = $this->mUserId;
+    				    }
+    				    
 						$emailLink = $g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $value2;
 					}
 					if(strlen($value) > 30)
@@ -257,7 +263,7 @@ class ProfileFields
 		// get html output for that field type and value
 		if($format == 'html')
 		{
-			$value = $this->getHtmlValue($fieldNameIntern, $value, $this->mUserId);
+			$value = $this->getHtmlValue($fieldNameIntern, $value);
 		}
 
 		return $value;
