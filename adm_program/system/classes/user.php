@@ -36,17 +36,21 @@ class User extends TableUsers
 {
     protected $webmaster;
 
-    public $mProfileFieldsData; 		// object with current user field structure
-    public $roles_rights = array(); // Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
-    protected $list_view_rights = array(); // Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
-    protected $role_mail_rights = array(); // Array ueber Mailrechte einzelner Rollen
-    protected $rolesMembership  = array(); // Array with all roles who the user is assigned
-    protected $rolesMembershipLeader = array(); // Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
+    public $mProfileFieldsData; 				///< object with current user field structure
+    public $roles_rights = array(); 			// Array ueber alle Rollenrechte mit dem entsprechenden Status des Users
+    protected $list_view_rights = array(); 		// Array ueber Listenrechte einzelner Rollen => Zugriff nur über getListViewRights()
+    protected $role_mail_rights = array(); 		// Array ueber Mailrechte einzelner Rollen
+    protected $rolesMembership  = array(); 		///< Array with all roles who the user is assigned
+    protected $rolesMembershipLeader = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
+	protected $organizationId;					///< the organization for which the rights are read, could be changed with method @b setOrganization
 
     // Konstruktor
     public function __construct(&$db, $userFields, $usr_id = 0)
     {
+		global $gCurrentOrganization;
+
 		$this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
+		$this->organizationId = $gCurrentOrganization->getValue('org_id');
         parent::__construct($db, $usr_id);
     }
 
@@ -156,7 +160,6 @@ class User extends TableUsers
         {
             if(count($this->roles_rights) == 0)
             {
-                global $gCurrentOrganization;
                 $tmp_roles_rights  = array('rol_assign_roles'  => '0', 'rol_approve_users' => '0',
                                            'rol_announcements' => '0', 'rol_dates' => '0',
                                            'rol_download'      => '0', 'rol_edit_user' => '0',
@@ -175,7 +178,7 @@ class User extends TableUsers
                            AND mem_end     > \''.DATE_NOW.'\'
                          WHERE rol_valid   = 1
                            AND rol_cat_id  = cat_id
-                           AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').' 
+                           AND (  cat_org_id = '.$this->organizationId.' 
                                OR cat_org_id IS NULL ) ';
                 $this->db->query($sql);
 
@@ -316,7 +319,102 @@ class User extends TableUsers
 		$this->mProfileFieldsData->mUserData = array();
 		$this->db->endTransaction();
     }
-    
+
+	// edit an existing role membership for the current user
+	// if additional memberships to this user and role exists within the period 
+	// than merge them to the current membership
+	public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
+	{
+		require_once('../../system/classes/table_members.php');
+		$minStartDate = $startDate;
+		$maxEndDate   = $endDate;
+		
+		$member = new TableMembers($this->db, $memberId);
+		
+		if(strlen($startDate) == 0 || strlen($startDate) == 0)
+		{
+			return false;
+		}
+		$this->db->startTransaction();
+	
+		// search for membership with same role and user and overlapping dates
+		$sql = 'SELECT * FROM '.TBL_MEMBERS.' 
+		         WHERE mem_id    <> '.$memberId.'
+				   AND mem_rol_id = '.$member->getValue('mem_rol_id').'
+				   AND mem_usr_id = '.$this->getValue('usr_id').'
+				   AND mem_begin <= \''.$endDate.'\'
+				   AND mem_end   >= \''.$startDate.'\'
+				 ORDER BY mem_begin ASC ';
+		$this->db->query($sql);
+
+		if($this->db->num_rows() == 1)
+		{
+			// one record found than update this record
+			$row = $this->db->fetch_array();
+            $member->setArray($row);
+
+			// save new start date if an earlier date exists
+			if(strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
+			{
+				$minStartDate = $member->getValue('mem_begin', 'Y-m-d');
+			}
+
+			// save new end date if an later date exists
+			if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+			{
+				$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+			}
+		}
+		elseif($this->db->num_rows() > 1)
+		{
+			// several records found then read min and max date and delete all records
+			while($row = $this->db->fetch_array())
+			{
+				$member->clear();
+				$member->setArray($row);
+
+				// save new start date if an earlier date exists
+				if(strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
+				{
+					$minStartDate = $member->getValue('mem_begin', 'Y-m-d');
+				}
+
+				// save new end date if an later date exists
+				if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
+				{
+					$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
+				}
+				
+				// delete existing entry because a new overlapping entry will be created
+				$member->delete();
+			}
+			$member->clear();
+		}
+
+		if(strcmp($minStartDate, $maxEndDate) > 0)
+		{
+			// if start date is greater than end date than delete membership
+			if($member->getValue('mem_id') > 0)
+			{
+				$member->delete();
+			}
+		}
+		else
+		{
+			// save membership to database
+			$member->setValue('mem_begin', $minStartDate);
+			$member->setValue('mem_end', $maxEndDate);
+			if(strlen($leader) > 0)
+			{
+				$member->setValue('mem_leader', $leader);
+			}
+			$member->save();
+		}
+
+		$this->db->endTransaction();
+		return true;
+	}
+	
 	/** Creates an array with all roles where the user has the right to view them
 	 *  @return Array with roles where user has the right to view them
 	 */
@@ -485,6 +583,14 @@ class User extends TableUsers
 			return false;
 		}
 	}
+	
+    /** If this method is called than all further calls of method @b setValue will not check the values.
+	 *  The values will be stored in database without any inspections !
+	 */
+    public function noValueCheck()
+    {
+        $this->mProfileFieldsData->noValueCheck();
+    }
 
 	/** Reads a user record out of the table adm_users in database selected by the unique user id.
 	 *  Also all profile fields of the object @b mProfileFieldsData will be read.
@@ -501,12 +607,6 @@ class User extends TableUsers
 		}
 
 		return false;
-    }
-    
-    // bei setValue werden die Werte nicht auf Gueltigkeit geprueft
-    public function noValueCheck()
-    {
-        $this->mProfileFieldsData->noValueCheck();
     }
 
 	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
@@ -541,100 +641,20 @@ class User extends TableUsers
         }
 		$this->db->endTransaction();
     }
-
-	// edit an existing role membership for the current user
-	// if additional memberships to this user and role exists within the period 
-	// than merge them to the current membership
-	public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
-	{
-		require_once('../../system/classes/table_members.php');
-		$minStartDate = $startDate;
-		$maxEndDate   = $endDate;
-		
-		$member = new TableMembers($this->db, $memberId);
-		
-		if(strlen($startDate) == 0 || strlen($startDate) == 0)
-		{
-			return false;
-		}
-		$this->db->startTransaction();
 	
-		// search for membership with same role and user and overlapping dates
-		$sql = 'SELECT * FROM '.TBL_MEMBERS.' 
-		         WHERE mem_id    <> '.$memberId.'
-				   AND mem_rol_id = '.$member->getValue('mem_rol_id').'
-				   AND mem_usr_id = '.$this->getValue('usr_id').'
-				   AND mem_begin <= \''.$endDate.'\'
-				   AND mem_end   >= \''.$startDate.'\'
-				 ORDER BY mem_begin ASC ';
-		$this->db->query($sql);
-
-		if($this->db->num_rows() == 1)
+	/** Set the id of the organization which should be used in this user object.
+	 *  The organization is used to read the rights of the user. If @b setOrganization 
+	 *  isn't called than the default organization @b gCurrentOrganization is set for
+	 *  the current user object.
+	 *  @param $organizationId Id of the organization
+	 */
+	public function setOrganization($organizationId)
+	{
+		if(is_numeric($organizationId))
 		{
-			// one record found than update this record
-			$row = $this->db->fetch_array();
-            $member->setArray($row);
-
-			// save new start date if an earlier date exists
-			if(strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
-			{
-				$minStartDate = $member->getValue('mem_begin', 'Y-m-d');
-			}
-
-			// save new end date if an later date exists
-			if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
-			{
-				$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
-			}
+			$this->organizationId = $organizationId;
+			$this->roles_rights   = array();
 		}
-		elseif($this->db->num_rows() > 1)
-		{
-			// several records found then read min and max date and delete all records
-			while($row = $this->db->fetch_array())
-			{
-				$member->clear();
-				$member->setArray($row);
-
-				// save new start date if an earlier date exists
-				if(strcmp($minStartDate, $member->getValue('mem_begin', 'Y-m-d')) > 0)
-				{
-					$minStartDate = $member->getValue('mem_begin', 'Y-m-d');
-				}
-
-				// save new end date if an later date exists
-				if(strcmp($member->getValue('mem_end', 'Y-m-d'), $maxEndDate) > 0)
-				{
-					$maxEndDate = $member->getValue('mem_end', 'Y-m-d');
-				}
-				
-				// delete existing entry because a new overlapping entry will be created
-				$member->delete();
-			}
-			$member->clear();
-		}
-
-		if(strcmp($minStartDate, $maxEndDate) > 0)
-		{
-			// if start date is greater than end date than delete membership
-			if($member->getValue('mem_id') > 0)
-			{
-				$member->delete();
-			}
-		}
-		else
-		{
-			// save membership to database
-			$member->setValue('mem_begin', $minStartDate);
-			$member->setValue('mem_end', $maxEndDate);
-			if(strlen($leader) > 0)
-			{
-				$member->setValue('mem_leader', $leader);
-			}
-			$member->save();
-		}
-
-		$this->db->endTransaction();
-		return true;
 	}
 
 	// set a role membership for the current user
@@ -937,7 +957,6 @@ class User extends TableUsers
 	// check if current user object is allowed to read user of parameter
     public function viewProfile($user)
     {
-        global $gCurrentOrganization;
         $view_profile = false;
 
         //Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
@@ -962,7 +981,7 @@ class User extends TableUsers
                               AND mem_rol_id = rol_id
                               AND rol_valid  = 1
                               AND rol_cat_id = cat_id
-                              AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id').'
+                              AND (  cat_org_id = '.$this->organizationId.'
                                   OR cat_org_id IS NULL ) ';
                 $this->db->query($sql);
 

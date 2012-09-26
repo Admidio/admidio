@@ -628,55 +628,84 @@ echo '
             // Rollen-Block anderer Organisationen
             // *******************************************************************************
 
-            // Alle Rollen auflisten, die dem Mitglied zugeordnet sind
+            // list all roles where the viewed user has an active membership
             $sql = 'SELECT *
                       FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_ORGANIZATIONS. '
                      WHERE mem_rol_id = rol_id
                        AND mem_begin <= \''.DATE_NOW.'\'
                        AND mem_end   >= \''.DATE_NOW.'\'
                        AND mem_usr_id = '.$user->getValue('usr_id').'
-                       AND rol_valid  = 1
-                       AND rol_this_list_view = 2
-                       AND rol_cat_id = cat_id
-                       AND cat_org_id = org_id
+                       AND rol_valid   = 1
+					   AND rol_visible = 1
+                       AND rol_cat_id  = cat_id
+                       AND cat_org_id  = org_id
                        AND org_id    <> '. $gCurrentOrganization->getValue('org_id'). '
                      ORDER BY org_shortname, cat_sequence, rol_name';
             $result_role = $gDb->query($sql);
 
             if($gDb->num_rows($result_role) > 0)
             {
-                echo '<div class="groupBox profileRolesBox" id="profile_roles_box_other_orga">
-                    <div class="groupBoxHeadline">'.$gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'&nbsp;</div>
-                    <div class="groupBoxBody">
-                        <ul class="formFieldList">';
-							$role = new TableRoles($gDb);
-							
-                            while($row = $gDb->fetch_array($result_role))
-                            {
-								$role->clear();
-								$role->setArray($row);
-		
-                                $startDate = new DateTimeExtended($row['mem_begin'], 'Y-m-d', 'date');
-                                // jede einzelne Rolle anzeigen
-                                echo '
-                                <li>
-                                    <dl>
-                                        <dt>
-                                            '. $row['org_shortname']. ' - '.
-                                                $role->getValue('cat_name'). ' - '. $role->getValue('rol_name');
-                                                if($row['mem_leader'] == 1)
-                                                {
-                                                    echo ' - '.$gL10n->get('SYS_LEADER');
-                                                }
-                                            echo '&nbsp;
-                                        </dt>
-                                        <dd>'.$gL10n->get('SYS_SINCE',$startDate->format($gPreferences['system_date'])).'</dd>
-                                    </dl>
-                                </li>';
-                            }
-                        echo '</ul>
-                    </div>
-                </div>';
+				$showRolesOtherOrganizations = false;
+				$actualOrganization = 0;
+				$role = new TableRoles($gDb);
+				
+				while($row = $gDb->fetch_array($result_role))
+				{
+					error_log('log'.$actualOrganization.'::'.$row['org_id']);
+					// if roles of new organization than read the rights of this organization
+					if($actualOrganization != $row['org_id'])
+					{
+						$gCurrentUser->setOrganization($row['org_id']);
+						$actualOrganization = $row['org_id'];
+					}
+
+					// check if current user has right to view the role of that organization
+					if($gCurrentUser->viewRole($row['rol_id']))
+					{
+						$role->clear();
+						$role->setArray($row);
+						
+						if($showRolesOtherOrganizations == false)
+						{
+							echo '<div class="groupBox profileRolesBox" id="profile_roles_box_other_orga">
+								<div class="groupBoxHeadline">'.$gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'&nbsp;
+									<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS&amp;inline=true"><img 
+										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS\',this)" onmouseout="ajax_hideTooltip()"
+										class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+								</div>
+								<div class="groupBoxBody">
+									<ul class="formFieldList">';
+							$showRolesOtherOrganizations = true;
+						}
+						
+						$startDate = new DateTimeExtended($row['mem_begin'], 'Y-m-d', 'date');
+						// jede einzelne Rolle anzeigen
+						echo '
+						<li>
+							<dl>
+								<dt>
+									'. $row['org_shortname']. ' - '.
+										$role->getValue('cat_name'). ' - '. $role->getValue('rol_name');
+										if($row['mem_leader'] == 1)
+										{
+											echo ' - '.$gL10n->get('SYS_LEADER');
+										}
+									echo '&nbsp;
+								</dt>
+								<dd>'.$gL10n->get('SYS_SINCE',$startDate->format($gPreferences['system_date'])).'</dd>
+							</dl>
+						</li>';
+					}
+				}
+				
+				$gCurrentUser->setOrganization($gCurrentOrganization->getValue('org_id'));
+				
+				if($showRolesOtherOrganizations == true)
+				{
+							echo '</ul>
+						</div>
+					</div>';
+				}
             }
         }
 
