@@ -488,12 +488,31 @@ class TableAccess
         return 0;
     }
 
-    // es wird ein Array mit allen noetigen gefuellten Tabellenfeldern
-    // uebergeben. Key ist Spaltenname und Wert ist der Inhalt.
-    // Mit dieser Methode kann das Einlesen der Werte umgangen werden.
-    public function setArray($field_array)
+	/** The method requires an array with all fields of one recordset of the table object.
+	 *  These fields will be add to the object as if you read one record with @b readDataById
+	 *  but without a separate SQL. This method is useful if you have several recordsets of the
+	 *  table and want to use an table object for each recordset. So you don't have to do an
+	 *  separate sql read for each record. This is a performant way to fill the object with
+	 *  the neccessary data.
+	 *  @param $fieldArray An array with all fields and their values of the table. If the 
+	 *   	   object has more connected tables than you should add the fields of these tables, too.
+	 *  @par Examples
+	 *  @code   // read all announcements with their categories
+	 *  $sql = 'SELECT * FROM adm_announcements, adm_categories WHERE ann_cat_id = cat_id';
+	 *  $result = $gDb->query($sql);
+	 *  $announcement = new TableAnnouncements($gDb);
+	 *  
+	 *  while ($row = $gDb->fetch_array(result))
+     *  {
+	 *      // add each recordset to an object without a separate sql within the object
+	 *      $announcement->clear();
+     *      $announcement->setArray($row);
+	 *      ...
+	 *  } @endcode
+	 */
+    public function setArray($fieldArray)
     {
-        foreach($field_array as $field => $value)
+        foreach($fieldArray as $field => $value)
         {
             $this->dbColumns[$field] = $value;
             $this->columnsInfos[$field]['changed'] = false;
