@@ -13,6 +13,7 @@
 	<text id="PRO_LOG_EDIT_FIELDS" development="new" translation="todo">Änderungen mitloggen</text>
 	<text id="PRO_LOG_EDIT_FIELDS_DESC" development="new" translation="todo">Änderungen in Profilfeldern werden für jeden Benutzer und jedes Feld mitgeschrieben. Dabei wird der bisherige und der neue Wert, sowie der Benutzer, der die Änderung durchgeführt hat, mit Zeitstempel gespeichert. (Standard: ja)</text>
     <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="todo">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</text>
+    <text id="PRO_VIEW_ROLES_OTHER_ORGAS" development="new" translation="todo">Es werden dir nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldete Benutzer sichtbar sind. Falls du auch Mitglied dieser Organisation bist, werden dir zusätzlich die Rollen angezeigt, die du mit deinen Rechten innerhalb der jeweiligen Organisation sehen darfst.</text>
     <text id="ROL_CANT_SHOW_FORMER_ROLES" development="deleted" translation="todo">Es können keine ehemalige Rollenmitgliedschaften angezeigt werden.</text>
 	<text id="ROL_LEADER_NO_ADDITIONAL_RIGHTS" development="new" translation="todo">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</text>
 	<text id="ROL_LEADER_EDIT_MEMBERS" development="new" translation="todo">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</text>
