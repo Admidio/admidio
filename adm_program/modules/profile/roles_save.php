@@ -240,10 +240,20 @@ if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
     // von hier aus direkt zur Registrierungsuebersicht zurueck
     $_SESSION['navigation']->deleteLastUrl();
 }
+
+if($getNewUser == 1)
+{
+	$messageText = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+}
+else
+{
+	$messageText = 'SYS_SAVE_DATA';
+}
+
 if($getInline == 0)
 {
 	$gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-	$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+	$gMessage->show($gL10n->get($messageText));
 }
 else
 {

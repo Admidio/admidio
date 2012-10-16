@@ -50,7 +50,7 @@ else
         // erst mal die Benutzerliste aus der DB holen und in der Session speichern
         if($getMembers == true)
         {
-            $sql    = 'SELECT DISTINCT last_name.usd_value as last_name, first_name.usd_value as first_name
+            $sql    = 'SELECT DISTINCT last_name.usd_value as last_name, first_name.usd_value as first_name, usr_login_name
                          FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_USERS. '
                          LEFT JOIN '. TBL_USER_DATA. ' as last_name
                            ON last_name.usd_usr_id = usr_id
@@ -70,7 +70,7 @@ else
         }
         else
         {
-            $sql    = 'SELECT last_name.usd_value as last_name, first_name.usd_value as first_name
+            $sql    = 'SELECT last_name.usd_value as last_name, first_name.usd_value as first_name, usr_login_name
                          FROM '. TBL_USERS. '
                          LEFT JOIN '. TBL_USER_DATA. ' as last_name
                            ON last_name.usd_usr_id = usr_id
@@ -84,9 +84,9 @@ else
         $result_mgl = $gDb->query($sql);
 
         // Jetzt das komplette resultSet in ein Array schreiben...
-        while($row = $gDb->fetch_object($result_mgl))
+        while($row = $gDb->fetch_array($result_mgl))
         {
-            $entry = array('lastName' => $row->last_name, 'firstName' => $row->first_name);
+            $entry = array('lastName' => $row['last_name'], 'firstName' => $row['first_name'], 'loginName' => $row['usr_login_name']);
             $querySuggestions[]=$entry;
         }
 
@@ -97,19 +97,28 @@ else
 
     // ab hier werden jetzt die zur Query passenden Eintraege ermittelt...
     $match = array();
-    $q = admStrToLower($getSearch);
+    $getSearch = admStrToLower($getSearch);
 
     foreach ($querySuggestions as $suggest)
     {
         $firstName = admStrToLower($suggest['firstName']);
         $lastName  = admStrToLower($suggest['lastName']);
+        $loginName = admStrToLower($suggest['loginName']);
 
-        if (strpos($lastName, $q)===0
-        or  strpos($firstName,$q)===0
-        or  strpos($firstName. " ". $lastName,  str_replace(',', '', $q)) === 0
-        or  strpos($lastName.  " ". $firstName, str_replace(',', '', $q)) === 0)
+        if (strpos($lastName, $getSearch)===0
+        or  strpos($firstName,$getSearch)===0
+        or  strpos($loginName,$getSearch)===0
+        or  strpos($firstName. ' '. $lastName,  str_replace(',', '', $getSearch)) === 0
+        or  strpos($lastName.  ' '. $firstName, str_replace(',', '', $getSearch)) === 0)
         {
-            $match[]='<rs>'. $suggest['lastName']. ', '. $suggest['firstName']. '</rs>';
+			if(strlen($suggest['loginName']) > 0)
+			{
+				$match[]='<rs>'. $suggest['lastName']. ', '. $suggest['firstName']. ' ('.$suggest['loginName'].')</rs>';
+			}
+			else
+			{
+				$match[]='<rs>'. $suggest['lastName']. ', '. $suggest['firstName']. '</rs>';
+			}
         }
     }
     //sort($match);

@@ -145,6 +145,7 @@ elseif($getMode == 2)
                        ,'rol_approve_users'
                        ,'rol_announcements'
                        ,'rol_dates'
+					   ,'rol_default_registration'
                        ,'rol_photo'
                        ,'rol_download'
                        ,'rol_guestbook'
@@ -256,14 +257,20 @@ elseif($getMode == 2)
     {
         if(strpos($key, 'rol_') === 0)
         {
-            $role->setValue($key, $value);
+            $returnCode = $role->setValue($key, $value);
+			
+			// at least one role must have this flag otherwise show error
+			if($returnCode == false && $key == 'rol_default_registration')
+			{
+				$gMessage->show($gL10n->get('ROL_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION')));
+			}
         }
     }
 
     // Daten in Datenbank schreiben
-    $return_code = $role->save();
+    $returnCode = $role->save();
 
-    if($return_code < 0)
+    if($returnCode < 0)
     {
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }

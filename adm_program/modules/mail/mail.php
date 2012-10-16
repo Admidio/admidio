@@ -202,35 +202,9 @@ else
 
 $gLayout['header'] =  '
 <script type="text/javascript"><!--
-	// if role has former members show select box where user can choose to write email also to former members
-    function showMembers(initialize) {
-        fadeIn = "";
-        if(initialize == false) {
-            fadeIn = "slow";
-        }
- 	    
- 	    if($("#rol_id").val() > 0) {
-			// check if role has former members
-            $.get("'.$g_root_path.'/adm_program/administration/roles/roles_function.php?mode=9&rol_id="+ $("#rol_id").val(), function(data) {
-                if(data == "1") {
-                    $("#admShowMembers").show(fadeIn);
-                } 
-				else {
-                    $("#admShowMembers").hide(fadeIn);
-                }
-            });
-        }
-        else {
-            $("#admShowMembers").hide(fadeIn);
-        }
-    }
-
     $(document).ready(function() {
         $("#'.$focusField.'").focus();
 		$(".admLinkAddAttachment").css("cursor", "pointer");
-    
-       	$("#rol_id").change(function() {showMembers(false)});    
-        showMembers(true);
 		
 		// add new line to add new attachment to this mail
 		$(".admLinkAddAttachment").click(function () {
@@ -246,6 +220,40 @@ $gLayout['header'] =  '
 		});
  	}); 	
 //--></script>';
+
+if($gValidLogin == true)
+{
+	$gLayout['header'] .=  '
+	<script type="text/javascript"><!--
+		// if role has former members show select box where user can choose to write email also to former members
+		function showMembers(initialize) {
+			fadeIn = "";
+			if(initialize == false) {
+				fadeIn = "slow";
+			}
+			
+			if($("#rol_id").val() > 0) {
+				// check if role has former members
+				$.get("'.$g_root_path.'/adm_program/administration/roles/roles_function.php?mode=9&rol_id="+ $("#rol_id").val(), function(data) {
+					if(data == "1") {
+						$("#admShowMembers").show(fadeIn);
+					} 
+					else {
+						$("#admShowMembers").hide(fadeIn);
+					}
+				});
+			}
+			else {
+				$("#admShowMembers").hide(fadeIn);
+			}
+		}
+
+		$(document).ready(function() {
+			$("#rol_id").change(function() {showMembers(false)});    
+			showMembers(true);
+		}); 	
+	//--></script>';
+}
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '

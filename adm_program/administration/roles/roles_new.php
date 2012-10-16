@@ -332,6 +332,47 @@ echo '
                     </li>
                     <li>
                         <dl>
+                            <dt><label for="rol_leader_rights">'.$gL10n->get('ROL_DEFAULT_LIST').':</label></dt>
+                            <dd>';
+								$selectBoxEntries = array(0 => $gL10n->get('ROL_SYSTEM_DEFAULT_LIST'));
+								// SQL-Statement fuer alle Listenkonfigurationen vorbereiten, die angezeigt werdne sollen
+								$sql = 'SELECT lst_id, lst_name FROM '. TBL_LISTS. '
+									     WHERE lst_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+									       AND lst_global = 1
+									       AND lst_name IS NOT NULL
+									     ORDER BY lst_global ASC, lst_name ASC';
+								$gDb->query($sql);
+								
+								while($row = $gDb->fetch_array())
+								{
+									$selectBoxEntries[$row['lst_id']] = $row['lst_name'];
+								}
+								
+								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $role->getValue('rol_lst_id'), 'rol_lst_id');
+                                echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_DEFAULT_LIST_DESC&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_DEFAULT_LIST_DESC&amp;\',this)" onmouseout="ajax_hideTooltip()"
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+                            </dd>
+                        </dl>
+                    </li>
+					<li>
+						<dl>
+							<dt>&nbsp;</dt>
+							<dd>
+								<input type="checkbox" id="rol_default_registration" name="rol_default_registration" value="1" ';
+                                if($role->getValue('rol_default_registration') == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+								echo ' /> <label for="rol_default_registration">'.$gL10n->get('ROL_DEFAULT_REGISTRATION').'</label>
+                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ROL_DEFAULT_REGISTRATION_DESC&amp;inline=true"><img 
+                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ROL_DEFAULT_REGISTRATION_DESC&amp;\',this)" onmouseout="ajax_hideTooltip()"
+                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
+					</li>
+                    <li>
+                        <dl>
                             <dt><label for="rol_max_members">'.$gL10n->get('SYS_MAX_PARTICIPANTS').':</label></dt>
                             <dd>
                                 <input type="text" id="rol_max_members" name="rol_max_members" size="3" maxlength="3" onchange="checkMaxMemberCount(this.value)" value="'.$role->getValue('rol_max_members').'" />&nbsp;('.$gL10n->get('ROL_WITHOUT_LEADER').')

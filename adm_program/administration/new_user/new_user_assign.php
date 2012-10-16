@@ -80,54 +80,21 @@ $sql = 'SELECT usr_id, usr_login_name, last_name.usd_value as last_name,
 $result_usr   = $gDb->query($sql);
 $member_found = $gDb->num_rows($result_usr);
 
+// if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
+if($gCurrentUser->editUsers())
+{
+	$urlCreateNewUser = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=3&amp;user_id='.$getNewUserId;
+}
+else
+{
+	$urlCreateNewUser = $g_root_path.'/adm_program/administration/new_user/new_user_function.php?mode=5&new_user_id='.$getNewUserId;
+}
+
 if($member_found == 0)
 {
-    // neuer User -> Rollen zuordnen
-    if($gCurrentUser->editUsers())
-    {
-        // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
-        header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=3&user_id='.$new_user->getValue('usr_id'));
-        exit();
-    }
-    else
-    {
-        // User auf aktiv setzen
-        $new_user->setValue('usr_valid', 1);
-        $new_user->setValue('usr_reg_org_shortname', '');
-        $new_user->save();
-
-        // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
-        if($gPreferences['enable_system_mails'] == 1)
-        {
-            // Mail an den User schicken, um die Anmeldung zu bestaetigen
-            $sysmail = new SystemMail($gDb);
-            $sysmail->addRecipient($new_user->getValue('EMAIL'), $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME'));
-            if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $new_user) == false)
-            {
-                $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $new_user->getValue('EMAIL')));
-            }
-        }
-
-        if($gCurrentUser->assignRoles())
-        {
-            // neuer User -> Rollen zuordnen
-            header('Location: roles.php?new_user=1&usr_id='. $new_user->getValue('usr_id'));
-            exit();
-        }
-        else
-        {
-            // da der angemeldete Benutzer keine Rechte besitzt Rollen zu zuordnen, 
-            // wird der neue User der Default-Rolle zugeordnet
-            if($gPreferences['profile_default_role'] == 0)
-            {
-                $gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
-            }
-			$new_user->setRoleMembership($gPreferences['profile_default_role']);
-            
-            $gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-            $gMessage->show($gL10n->get('SYS_SAVE'));
-        }
-    }
+    // if user doesn't exists than show profile or auto assign roles
+	header('Location: '.$urlCreateNewUser);
+	exit();
 }
 
 $_SESSION['navigation']->addUrl(CURRENT_URL);
@@ -250,9 +217,9 @@ echo '
                     '. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
                     
                     <span class="iconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$getNewUserId.'&amp;new_user=3"><img
-                        src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='.$getNewUserId.'&amp;new_user=3">'.$gL10n->get('SYS_CREATE_NEW_USER').'</a>
+                        <a href="'.$urlCreateNewUser.'"><img 
+							src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" /></a>
+                        <a href="'.$urlCreateNewUser.'">'.$gL10n->get('SYS_CREATE_NEW_USER').'</a>
                     </span>
                 </div>
             </div>
@@ -264,7 +231,7 @@ echo '
     <li>
         <span class="iconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+				src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
             <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
         </span>
     </li>

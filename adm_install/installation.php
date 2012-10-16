@@ -635,7 +635,7 @@ elseif($req_mode == 8)
 
     // nun die Default-Rollen anlegen
 
-    // Webmaster
+    // Create role webmaster
     $role_webmaster = new TableRoles($db);
     $role_webmaster->setValue('rol_cat_id', $category_common);
     $role_webmaster->setValue('rol_name', $gL10n->get('SYS_WEBMASTER'));
@@ -658,7 +658,7 @@ elseif($req_mode == 8)
 	$role_webmaster->setValue('rol_webmaster', 1);
     $role_webmaster->save();
 
-    // Mitglied
+    // Create role member
     $role_member = new TableRoles($db);
     $role_member->setValue('rol_cat_id', $category_common);
     $role_member->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
@@ -666,9 +666,10 @@ elseif($req_mode == 8)
     $role_member->setValue('rol_mail_this_role', 2);
     $role_member->setValue('rol_profile', 1);
     $role_member->setValue('rol_this_list_view', 1);
+    $role_member->setValue('rol_default_registration', 1);
     $role_member->save();
 
-    // Vorstand
+    // Create role board
     $role_management = new TableRoles($db);
     $role_management->setValue('rol_cat_id', $category_common);
     $role_management->setValue('rol_name', $gL10n->get('INS_BOARD'));
@@ -684,12 +685,7 @@ elseif($req_mode == 8)
     $role_management->setValue('rol_all_lists_view', 1);
     $role_management->save();
     
-    // die Rolle Mitglied wird als Defaultrolle fuer neue User eingestellt
-	$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = '. $role_member->getValue('rol_id'). '
-			 WHERE prf_name = \'profile_default_role\' ';
-	$db->query($sql);
-
-    // Mitgliedschaft bei Rolle "Webmaster" anlegen
+    // Create membership for current user in role 'Webmaster'
     $member = new TableMembers($db);
     $member->startMembership($role_webmaster->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
     $member->startMembership($role_member->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));

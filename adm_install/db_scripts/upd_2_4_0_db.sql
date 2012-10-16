@@ -3,6 +3,15 @@ ALTER TABLE %PREFIX%_roles ADD COLUMN rol_leader_rights smallint not null defaul
 
 UPDATE %PREFIX%_roles SET rol_leader_rights = 1;
 ALTER TABLE %PREFIX%_roles ADD COLUMN rol_webmaster boolean not null default '0';
+ALTER TABLE %PREFIX%_roles ADD COLUMN rol_default_registration boolean not null default '0';
+ALTER TABLE %PREFIX%_roles ADD COLUMN rol_lst_id integer unsigned;
+
+UPDATE %PREFIX%_roles SET rol_default_registration = 1
+ WHERE rol_id IN (SELECT prf_value FROM %PREFIX%_preferences WHERE prf_name = 'profile_default_role' );
+DELETE FROM %PREFIX%_preferences WHERE prf_name = 'profile_default_role';
+
+alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_LST_ID foreign key (rol_lst_id)
+      references %PREFIX%_lists (lst_id) on delete set null on update set null;
 
 ALTER TABLE %PREFIX%_members ADD COLUMN mem_usr_id_create integer unsigned;
 ALTER TABLE %PREFIX%_members ADD COLUMN mem_timestamp_create timestamp not null default CURRENT_TIMESTAMP;
