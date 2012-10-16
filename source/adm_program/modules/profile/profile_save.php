@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Profil/Registrierung wird angelegt bzw. gespeichert
+ * Save profile/registration data
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -369,15 +369,15 @@ elseif($getNewUser == 3 || $getUserId == 0)
     /*------------------------------------------------------------*/
 	$gDb->startTransaction();
 
-    if($getUserId > 0) // Webanmeldung
+    if($getUserId > 0) // Registration mode
     {
-        // User auf aktiv setzen
+        // set user aktive
 		$user->acceptRegistration($gCurrentOrganization->getValue('org_id'));
 
-        // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
+        // only send mail if systemmails are enabled
         if($gPreferences['enable_system_mails'] == 1)
         {
-            // Mail an den User schicken, um die Anmeldung zu bestaetigen
+            // send mail to user that his registration was accepted
             $sysmail = new SystemMail($gDb);
             $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
             if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == false)
@@ -388,15 +388,25 @@ elseif($getNewUser == 3 || $getUserId == 0)
     }
 
 	// new user -> assign roles
-	// every user will get the default role, if the current user has the right to assign roles
+	// every user will get the default roles for registration, if the current user has the right to assign roles
 	// than the roles assignement dialog will be shown
-	if($gPreferences['profile_default_role'] == 0)
+	$sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+	         WHERE rol_cat_id = cat_id
+			   AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+			   AND rol_default_registration = 1 ';
+	$result = $gDb->query($sql);
+
+	if($gDb->num_rows() == 0)
 	{
 		$gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
 	}
+	
+	while($row = $gDb->fetch_array($result))
+	{
+		// starts a membership for role from now
+		$user->setRoleMembership($row['rol_id']);
+	}
 
-	// starts a membership for default role from now
-	$user->setRoleMembership($gPreferences['profile_default_role']);
 	$gDb->endTransaction();
 	
 	if($gCurrentUser->assignRoles())
@@ -407,7 +417,7 @@ elseif($getNewUser == 3 || $getUserId == 0)
 	else
 	{
 		$gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-		$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+		$gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
 	}
 }
 elseif($getNewUser == 0 && $user->getValue('usr_valid') == 0)

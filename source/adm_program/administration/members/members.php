@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verwaltung der aller Mitglieder in der Datenbank
+ * Show and manage all members of the organization
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -21,7 +21,7 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/module_menu.php');
 unset($_SESSION['import_request']);
 
-// wurde der Suchstring ueber das Formular als POST uebergeben, dann an GET weiterleiten
+// if search field was used then transform the POST parameter into a GET parameter
 if (isset($_POST['admSearchMembers']) && strlen($_POST['admSearchMembers']) > 0)
 {
     $_GET['search'] = $_POST['admSearchMembers'];
@@ -44,8 +44,8 @@ if (!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// lokale Variablen initialisieren
-$members_per_page = 25; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
+// Initialize local parameteres
+$membersPerPage = 25; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
 
 // Die zum Caching in der Session zwischengespeicherten Namen werden beim
 // neu laden der Seite immer abgeraeumt...
@@ -56,24 +56,37 @@ $_SESSION['navigation']->clear();
 $_SESSION['navigation']->addUrl(CURRENT_URL);
 
 
-// Bedingungen fuer das SQL-Statement je nach Modus setzen
+// Create condition if the search field was used
 if(strlen($getSearch) > 0)
 {
-    // Bedingung fuer die Suchanfrage
-    $search_string = str_replace(',', '', $getSearch). '%';
-    $search_condition = ' AND (  last_name.usd_value  || \' \' || first_name.usd_value LIKE \''.$search_string.'\'
-                              OR first_name.usd_value || \' \' || last_name.usd_value  LIKE \''.$search_string.'\' ) ';
+    $searchString = str_replace(',', '', $getSearch);
+	
+	if(strpos($searchString, '(') > 0)
+	{
+		// search user with loginname
+		$searchString = str_replace('(', '', $searchString);
+		$searchString = str_replace(')', '', $searchString);
+		$searchCondition = ' AND (  last_name.usd_value  || \' \' || first_name.usd_value || \' \' || usr_login_name LIKE \''.$searchString.'%\'
+								 OR first_name.usd_value || \' \' || last_name.usd_value  || \' \' || usr_login_name LIKE \''.$searchString.'%\' ) ';
+	}
+	else
+	{
+		// search user without loginname
+		$searchCondition = ' AND (  last_name.usd_value  || \' \' || first_name.usd_value LIKE \''.$searchString.'%\'
+								 OR first_name.usd_value || \' \' || last_name.usd_value  LIKE \''.$searchString.'%\' ) ';
+	}
 }
 else
 {
-    $search_condition = ' AND last_name.usd_value LIKE \''.$getLetter.'%\' ';
+    $searchCondition = ' AND last_name.usd_value LIKE \''.$getLetter.'%\' ';
 }
 
-$member_condition = '';
+$memberCondition = '';
 
+// Create condition if only active members should be shown
 if($getMembers == 1)
 {
-    $member_condition = ' AND EXISTS 
+    $memberCondition = ' AND EXISTS 
         (SELECT 1
            FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
           WHERE mem_usr_id = usr_id
@@ -96,11 +109,11 @@ $sql = 'SELECT COUNT(1) as count
             ON first_name.usd_usr_id = usr_id
            AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
          WHERE usr_valid = 1
-               '.$member_condition.
-                 $search_condition;
+               '.$memberCondition.
+                 $searchCondition;
 $result = $gDb->query($sql);
 $row    = $gDb->fetch_array($result);
-$num_members = $row['count'];
+$membersCount = $row['count'];
 
 // alle Mitglieder zur Auswahl selektieren
 // unbestaetigte User werden dabei nicht angezeigt
@@ -140,10 +153,10 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
                ON website.usd_usr_id = usr_id
               AND website.usd_usf_id = '. $gProfileFields->getProperty('WEBSITE', 'usf_id'). '
             WHERE usr_valid = 1
-                  '.$member_condition.
-                    $search_condition.'
+                  '.$memberCondition.
+                    $searchCondition.'
             ORDER BY last_name.usd_value, first_name.usd_value 
-			LIMIT '.$members_per_page.' OFFSET '.$getStart;
+			LIMIT '.$membersPerPage.' OFFSET '.$getStart;
 $result_mgl  = $gDb->query($sql);
 
 // Html-Kopf ausgeben
@@ -262,7 +275,7 @@ echo '
                    AND usd_usf_id = usf_id
                    AND usd_usr_id = usr_id
                    AND usd_value LIKE \''.$letter_menu.'%\'
-                       '.$member_condition;
+                       '.$memberCondition;
         $result      = $gDb->query($sql);
         $letter_row  = $gDb->fetch_array($result);
 
@@ -285,7 +298,7 @@ echo '
     }
 echo '</div>';
 
-if($num_members > 0)
+if($membersCount > 0)
 {
     echo '<table class="tableList" cellspacing="0">
         <tr>
@@ -407,7 +420,7 @@ if($num_members > 0)
 
     // Navigation mit Vor- und Zurueck-Buttons
     $base_url = $g_root_path.'/adm_program/administration/members/members.php?letter='.$getLetter.'&amp;members='.$getMembers.'&amp;search='.$getSearch;
-    echo admFuncGeneratePagination($base_url, $num_members, $members_per_page, $getStart, true);
+    echo admFuncGeneratePagination($base_url, $membersCount, $membersPerPage, $getStart, true);
 }
 else
 {

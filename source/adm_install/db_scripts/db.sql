@@ -450,6 +450,7 @@ create table %PREFIX%_roles
 (
    rol_id                         integer       unsigned not null AUTO_INCREMENT,
    rol_cat_id                     integer       unsigned not null,
+   rol_lst_id                     integer       unsigned,
    rol_name                       varchar(50)   not null,
    rol_description                varchar(255),
    rol_assign_roles               boolean       not null default '0',
@@ -467,6 +468,7 @@ create table %PREFIX%_roles
    rol_weblinks                   boolean       not null default '0',
    rol_this_list_view             smallint      not null default 0,
    rol_all_lists_view             boolean       not null default '0',
+   rol_default_registration       boolean       not null default '0',
    rol_leader_rights	 		  smallint      not null default 0,
    rol_start_date                 date,
    rol_start_time                 time,
@@ -783,6 +785,8 @@ alter table %PREFIX%_role_dependencies add constraint %PREFIX%_FK_RLD_USR foreig
 
 alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_CAT foreign key (rol_cat_id)
       references %PREFIX%_categories (cat_id) on delete restrict on update restrict;
+alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_LST_ID foreign key (rol_lst_id)
+      references %PREFIX%_lists (lst_id) on delete set null on update set null;
 alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CREATE foreign key (rol_usr_id_create)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_USR_CHANGE foreign key (rol_usr_id_change)

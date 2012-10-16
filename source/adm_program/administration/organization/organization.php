@@ -1525,15 +1525,6 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PRO_LOCATION_PROFILE_PICTURES_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="profile_default_role">'.$gL10n->get('PRO_DEFAULT_ROLE').':</label></dt>
-                            <dd>
-                                '.FormElements::generateRoleSelectBox($gPreferences['profile_default_role'], 'profile_default_role').'
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_DEFAULT_ROLE_DESC').'</li>                       
                 </ul>
 				<br />
 				<div class="formSubmit">	

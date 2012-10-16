@@ -30,23 +30,7 @@ $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getStart       = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
 
-if($getListId == 0)
-{
-	// wurde keine Liste uebergeben dann Default-Konfiguration laden
-	$sql = 'SELECT lst_id FROM '. TBL_LISTS. '
-	         WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-	           AND lst_default = 1 ';
-	$gDb->query($sql);
-	$row = $gDb->fetch_array();
-	$getListId = $row[0];
-
-	if(is_numeric($getListId) == false || $getListId == 0)
-	{
-	   $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
-	}
-}
-
-// Inhalt der Variablen explizit zuruecksetzen (einige Server behalten ansonsten alte Befüllungen vor)
+// Initialize the content of this parameter (otherwise some servers will keep the content)
 unset($role_ids);
 
 if($getRoleId > 0)
@@ -68,7 +52,30 @@ if($role->viewRole() == false)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$charset    = '';
+// if no list parameter is set then load role default list configuration or system default list configuration
+if($getListId == 0)
+{
+	if($role->getValue('rol_lst_id') > 0)
+	{
+		// set role default list configuration
+		$getListId = $role->getValue('rol_lst_id');
+	}
+	else
+	{
+		// read and set system default list configuration
+		$sql = 'SELECT lst_id FROM '. TBL_LISTS. '
+				 WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+				   AND lst_default = 1 ';
+		$gDb->query($sql);
+		$row = $gDb->fetch_array();
+		$getListId = $row[0];
+	}
+
+	if(is_numeric($getListId) == false || $getListId == 0)
+	{
+	   $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
+	}
+}
 
 if($getMode == 'csv-ms')
 {
@@ -88,6 +95,7 @@ else
 {
     $separator   = ',';    // fuer CSV-Dateien
     $valueQuotes = '';
+	$charset     = '';
 }
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen

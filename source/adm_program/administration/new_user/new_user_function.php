@@ -10,6 +10,7 @@
  *       2 - Registrierung einem Benutzer zuordnen, der noch KEIN Mitglied der Orga ist
  *       3 - Benachrichtigung an den User, dass er nun fuer die aktuelle Orga freigeschaltet wurde
  *       4 - User-Account loeschen
+ *       5 - Create new user and assign roles automatically without dialog
  *       6 - Registrierung muss nicht zugeordnet werden, einfach Logindaten verschicken
  * new_user_id: Id des Logins, das verarbeitet werden soll
  * user_id:     Id des Benutzers, dem das neue Login zugeordnet werden soll
@@ -105,6 +106,59 @@ elseif($getMode == 4)
 
     // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
     echo 'done';
+}
+elseif($getMode == 5)
+{
+	// Create new user and assign roles automatically without dialog
+	
+	$gDb->startTransaction();
+
+	// set user aktive
+	$new_user->acceptRegistration($gCurrentOrganization->getValue('org_id'));
+
+	// every user will get the default roles for registration, if the current user has the right to assign roles
+	// than the roles assignement dialog will be shown
+	$sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+			 WHERE rol_cat_id = cat_id
+			   AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+			   AND rol_default_registration = 1 ';
+	$result = $gDb->query($sql);
+
+	if($gDb->num_rows() == 0)
+	{
+		$gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
+	}
+	
+	while($row = $gDb->fetch_array($result))
+	{
+		// starts a membership for role from now
+		$new_user->setRoleMembership($row['rol_id']);
+	}
+
+	$gDb->endTransaction();
+	
+	// only send mail if systemmails are enabled
+	if($gPreferences['enable_system_mails'] == 1)
+	{
+		// send mail to user that his registration was accepted
+		$sysmail = new SystemMail($gDb);
+		$sysmail->addRecipient($new_user->getValue('EMAIL'), $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME'));
+		if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $new_user) == false)
+		{
+			$gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $new_user->getValue('EMAIL')));
+		}
+	}
+
+	if($gCurrentUser->assignRoles())
+	{
+		header('Location: roles.php?new_user=1&usr_id='. $new_user->getValue('usr_id'));
+		exit();
+	}
+	else
+	{
+		$gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl());
+		$gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
+	}
 }
 elseif($getMode == 6)
 {

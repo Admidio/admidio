@@ -273,7 +273,9 @@ class TableRoles extends TableAccess
         return $value;
     }
     
-    // Methode gibt true zurueck, wenn die Rolle ehemalige Mitglieder besitzt
+	/** Checks if this role has former members
+	 *  @return Returns @b true if the role has former memberships
+	 */
     public function hasFormerMembers()
     {
         $sql = 'SELECT COUNT(1) AS count
@@ -354,6 +356,37 @@ class TableRoles extends TableAccess
             return 0;
         }
         return -1;
+    }
+	
+
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
+    {
+		global $gCurrentOrganization;
+
+        if($columnName == 'rol_default_registration' && $newValue == '0' && $this->dbColumns[$columnName] == '1')
+        {
+			// checks if at least one other role has this flag
+			$sql = 'SELECT COUNT(1) AS count FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+			         WHERE rol_default_registration = 1
+					   AND rol_id    <> '.$this->getValue('rol_id').'
+					   AND rol_cat_id = cat_id
+					   AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
+			$this->db->query($sql);
+			$row = $this->db->fetch_array();
+
+			if($row['count'] == 0)
+			{
+				return false;
+			}
+        }
+        return parent::setValue($columnName, $newValue, $checkValue);
     }
     
     // diese Methode basiert auf viewRole des Usersobjekts, geht aber noch weiter 
