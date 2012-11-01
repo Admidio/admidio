@@ -240,6 +240,15 @@ class TableAccess
             return $columnValue;
         }
     }
+	
+	/** If the recordset is new and wasn't read from database or was not stored in database
+	 *  then this method will return true otherwise false
+	 *  @return Returns @b true if record is not stored in database
+	 */
+	public function isNewRecord()
+	{
+		return $this->new_record;
+	}
 
 	/** Reads a record out of the table in database selected by the conditions of the param @b $sqlWhereCondition out of the table.
 	 *  If the sql will find more than one record the method returns @b false.

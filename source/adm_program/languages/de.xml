@@ -10,6 +10,7 @@
 	<text id="LST_EXCLUDE_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die nicht Stefan heißen</text>
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
     <text id="ORG_FIELD_HIDDEN_DESC" development="changed" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</text>
+    <text id="ORG_REFUSE_REGISTRATION" development="changed" translation="todo">Benachrichtigung bei einer Ablehnung der Registrierung</text>
 	<text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="todo">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</text>
 	<text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="todo">Zukünftige Rollenmitgliedschaften</text>
 	<text id="PRO_LOG_EDIT_FIELDS" development="new" translation="todo">Änderungen mitloggen</text>
@@ -41,6 +42,7 @@
     <text id="SYS_LEADER_DESCRIPTION" development="deleted" translation="todo">Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen haben Leiter mehr Rechte als ein normales Rollenmitglied.\n\nLeiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.</text>
 	<text id="SYS_MODULE_PREFERENCES" development="new" translation="todo">Moduleinstellungen</text>
 	<text id="SYS_NOT_EMPTY" development="new" translation="todo">Nicht leer</text>
+    <text id="SYS_SYSMAIL_REFUSE_REGISTRATION" development="new" translation="todo">#subject# Registrierung bei %organization_long_name% abgelehnt\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Webmaster %webmaster_email% von %organization_homepage%.\n\nViele Grüße\nDie Webmaster</text>
 </version>
 <version id="2.3.4" translator="Markus Faßbender">
     <text id="MAI_COUNT_BCC_DESC" development="changed" translation="todo">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann vom Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Standard: 50)</text>

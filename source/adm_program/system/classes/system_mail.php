@@ -8,14 +8,14 @@
  * 
  * Beside the methods of the parent class there are the following additional methods:
  *
- * getMailText($sysmail_id, &$user)
+ * getMailText($systemMailId, &$user)
  *                  - diese Methode liest den Mailtext aus der DB und ersetzt 
  *                    vorkommende Platzhalter durch den gewuenschten Inhalt
  *
  * setVariable($number, $value)
  *                  - hier kann der Inhalt fuer zusaetzliche Variablen gesetzt werden
  *
- * sendSystemMail($sysmail_id, &$user)
+ * sendSystemMail($systemMailId, &$user)
  *                  - diese Methode sendet eine Systemmail nachdem der Mailtext 
  *                    ausgelesen und Platzhalter ersetzt wurden
  *
@@ -42,13 +42,13 @@ class SystemMail extends Email
     // diese Methode liest den Mailtext aus der DB und ersetzt vorkommende Platzhalter durch den gewuenschten Inhalt
     // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
-    public function getMailText($sysmail_id, &$user)
+    public function getMailText($systemMailId, &$user)
     {
         global $gCurrentOrganization, $gPreferences;
     
-        if($this->textObject->getValue('txt_name') != $sysmail_id)
+        if($this->textObject->getValue('txt_name') != $systemMailId)
         {
-            $this->textObject->readDataById($sysmail_id);
+			$this->textObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
         }
         
         $mailSrcText = $this->textObject->getValue('txt_text');
@@ -100,11 +100,11 @@ class SystemMail extends Email
     // diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
     // sysmail_id : eindeutige Bezeichnung der entsprechenden Systemmail, entspricht adm_texts.txt_name
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden    
-    public function sendSystemMail($sysmail_id, &$user)
+    public function sendSystemMail($systemMailId, &$user)
     {
         global $gPreferences;
         
-        $this->getMailText($sysmail_id, $user);
+        $this->getMailText($systemMailId, $user);
         $this->setSender($gPreferences['email_administrator']);
         $this->setSubject($this->mailHeader);
         $this->setText($this->mailText);

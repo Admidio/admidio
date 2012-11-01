@@ -24,11 +24,11 @@ class TableUsers extends TableAccess
 	/** Constuctor that will create an object of a recordset of the table adm_users. 
 	 *  If the id is set than the specific user will be loaded.
 	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $usr_id The recordset of the user with this id will be loaded. If id isn't set than an empty object of the table is created.
+	 *  @param $userId The recordset of the user with this id will be loaded. If id isn't set than an empty object of the table is created.
 	 */
-    public function __construct(&$db, $usr_id = 0)
+    public function __construct(&$db, $userId = 0)
     {
-        parent::__construct($db, TBL_USERS, 'usr', $usr_id);
+        parent::__construct($db, TBL_USERS, 'usr', $userId);
     }
 
     /** Additional to the parent method the user will be set @b valid per default.

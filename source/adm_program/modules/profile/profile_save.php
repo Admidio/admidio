@@ -8,29 +8,37 @@
  *
  * Parameters:
  *
- * user_id :  ID des Benutzers, dessen Profil bearbeitet werden soll
- * new_user : 0 - (Default) vorhandenen User bearbeiten
- *            1 - Neuen Benutzer hinzufuegen.
- *            2 - Registrierung entgegennehmen
- *            3 - Registrierung zuordnen/akzeptieren
+ * user_id    : ID of the user who should be edited
+ * new_user   : 0 - Edit user of the user id
+ *              1 - Create a new user
+ *              2 - Create a registration
+ *              3 - assign/accept a registration
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/classes/system_mail.php');
-
-// im ausgeloggten Zustand koennen nur Registrierungen gespeichert werden
-if($gValidLogin == false)
-{
-    $_GET['new_user'] = 2;
-}
+require_once('../../system/classes/user_registration.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 
+// if current user has no login then only show registration dialog
+if($gValidLogin == false)
+{
+    $getNewUser = 2;
+}
+
 // read user data
-$user = new User($gDb, $gProfileFields, $getUserId);
+if($getNewUser == 2 || $getNewUser == 3)
+{
+	$user = new UserRegistration($gDb, $gProfileFields, $getUserId);
+}
+else
+{
+	$user = new User($gDb, $gProfileFields, $getUserId);
+}
 
 // pruefen, ob Modul aufgerufen werden darf
 switch($getNewUser)
@@ -273,11 +281,6 @@ if($user->getValue('usr_id') == 0)
     {
         $user->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
     }
-    elseif($getNewUser == 2)
-    {
-		// insert record in registration table
-		$user->insertRegistration($gCurrentOrganization->getValue('org_id'));
-    }
     else
     {
         $user->setValue('usr_usr_id_create', $user->getValue('usr_id'));
@@ -313,7 +316,39 @@ $_SESSION['navigation']->deleteLastUrl();
 /*------------------------------------------------------------*/
 // je nach Aufrufmodus auf die richtige Seite weiterleiten
 /*------------------------------------------------------------*/
-if($getNewUser == 2)
+
+if($getNewUser == 1 || $getNewUser == 3)
+{
+	// assign a registration or create a new user
+
+	if($getNewUser == 3)
+	{
+		// accept a registration, assign neccessary roles and send a notification email
+		$user->acceptRegistration();
+		$messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+	}
+	else
+	{
+		// a new user is created with the user management module
+		// then the user must get the neccessary roles
+		$user->assignDefaultRoles();
+		$messageId = 'SYS_SAVE_DATA';
+	}
+	
+	// if current user has the right to assign roles then show roles dialog
+	// otherwise go to previous url (default roles are assigned automatically)
+	if($gCurrentUser->assignRoles())
+	{
+		header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user='.$getNewUser);
+		exit();
+	}
+	else
+	{
+		$gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+		$gMessage->show($gL10n->get($messageId));
+	}
+}
+elseif($getNewUser == 2)
 {
     /*------------------------------------------------------------*/
     // Registrierung eines neuen Benutzers
@@ -360,65 +395,6 @@ if($getNewUser == 2)
     // nach Registrierungmeldung auf die Startseite verweisen
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_REGISTRATION_SAVED'));
-}
-elseif($getNewUser == 3 || $getUserId == 0)
-{
-    /*------------------------------------------------------------*/
-    // neuer Benutzer wurde ueber Webanmeldung angelegt und soll nun zugeordnet werden
-    // oder ein neuer User wurde in der Benutzerverwaltung angelegt
-    /*------------------------------------------------------------*/
-	$gDb->startTransaction();
-
-    if($getUserId > 0) // Registration mode
-    {
-        // set user aktive
-		$user->acceptRegistration($gCurrentOrganization->getValue('org_id'));
-
-        // only send mail if systemmails are enabled
-        if($gPreferences['enable_system_mails'] == 1)
-        {
-            // send mail to user that his registration was accepted
-            $sysmail = new SystemMail($gDb);
-            $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-            if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == false)
-            {
-                $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
-            }
-        }
-    }
-
-	// new user -> assign roles
-	// every user will get the default roles for registration, if the current user has the right to assign roles
-	// than the roles assignement dialog will be shown
-	$sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-	         WHERE rol_cat_id = cat_id
-			   AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-			   AND rol_default_registration = 1 ';
-	$result = $gDb->query($sql);
-
-	if($gDb->num_rows() == 0)
-	{
-		$gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
-	}
-	
-	while($row = $gDb->fetch_array($result))
-	{
-		// starts a membership for role from now
-		$user->setRoleMembership($row['rol_id']);
-	}
-
-	$gDb->endTransaction();
-	
-	if($gCurrentUser->assignRoles())
-	{
-		header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user=1');
-		exit();
-	}
-	else
-	{
-		$gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
-		$gMessage->show($gL10n->get('PRO_ASSIGN_REGISTRATION_SUCCESSFUL'));
-	}
 }
 elseif($getNewUser == 0 && $user->getValue('usr_valid') == 0)
 {

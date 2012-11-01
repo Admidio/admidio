@@ -8,11 +8,13 @@
  *
  * Parameters:
  *
- * usr_id      - Funktionen der uebergebenen ID aendern
- * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
- *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
- * inline: 	 0 - Ausgaben werden als eigene Seite angezeigt
- *			 1 - nur "body" HTML Code (z.B. für colorbox)
+ * usr_id   : ID of the user whose roles should be edited
+ * new_user : 0 - (Default) Edit roles of an existing user
+ *            1 - Edit roles of a new user
+ *            2 - (not relevant)
+ *            3 - Edit roles of a registration
+ * inline   : 0 - Ausgaben werden als eigene Seite angezeigt
+ *			  1 - nur "body" HTML Code (z.B. für colorbox)
  *
  *****************************************************************************/
 
@@ -22,7 +24,7 @@ require_once('../../system/classes/role_dependency.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
 // if user is allowed to assign roles or is leader with the right to assign members
@@ -221,7 +223,8 @@ if($getInline == 0)
 // dann muessen die Rechte in den Session-Variablen neu eingelesen werden
 $gCurrentSession->renewUserObject();
 
-if($getNewUser == 1 && $count_assigned == 0)
+// Check if a new user get's at least one role
+if($getNewUser > 0 && $count_assigned == 0)
 {
     // Neuem User wurden keine Rollen zugewiesen
 	if($getInline == 0)
@@ -241,19 +244,19 @@ if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
     $_SESSION['navigation']->deleteLastUrl();
 }
 
-if($getNewUser == 1)
+if($getNewUser == 3)
 {
-	$messageText = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+	$messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
 }
 else
 {
-	$messageText = 'SYS_SAVE_DATA';
+	$messageId = 'SYS_SAVE_DATA';
 }
 
 if($getInline == 0)
 {
 	$gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
-	$gMessage->show($gL10n->get($messageText));
+	$gMessage->show($gL10n->get($messageId));
 }
 else
 {

@@ -574,13 +574,14 @@ elseif($req_mode == 8)
     // alle Systemmails aus systemmails_texts.php in die Tabelle adm_texts schreiben
     $systemmails_texts = array('SYSMAIL_REGISTRATION_USER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
                                'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
+                               'SYSMAIL_REFUSE_REGISTRATION' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
                                'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
                                'SYSMAIL_ACTIVATION_LINK' => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
     $text = new TableText($db);
 
     foreach($systemmails_texts as $key => $value)
     {
-        // <br /> muessen zu normalen Zeilenumbruechen umgewandelt werden
+        // convert <br /> to a normal line feed
         $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$value);
 
         $text->clear();

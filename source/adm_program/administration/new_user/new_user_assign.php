@@ -83,7 +83,7 @@ $member_found = $gDb->num_rows($result_usr);
 // if current user can edit profiles than create link to profile otherwise create link to auto assign new registration
 if($gCurrentUser->editUsers())
 {
-	$urlCreateNewUser = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=3&amp;user_id='.$getNewUserId;
+	$urlCreateNewUser = $g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=3&user_id='.$getNewUserId;
 }
 else
 {

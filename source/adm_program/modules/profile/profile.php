@@ -651,7 +651,6 @@ echo '
 				
 				while($row = $gDb->fetch_array($result_role))
 				{
-					error_log('log'.$actualOrganization.'::'.$row['org_id']);
 					// if roles of new organization than read the rights of this organization
 					if($actualOrganization != $row['org_id'])
 					{

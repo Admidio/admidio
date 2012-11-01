@@ -8,11 +8,13 @@
  *
  * Parameters:
  *
- * usr_id      - Funktionen der uebergebenen user_id aendern
- * new_user: 0 - (Default) Daten eines vorhandenen Users werden bearbeitet
- *           1 - Der User ist gerade angelegt worden -> Rollen muessen zugeordnet werden
- * inline:   0 - (Default) wird als eigene Seite angezeigt
- *           1 - nur "body" HTML Code (z.B. für colorbox)
+ * usr_id   : ID of the user whose roles should be edited
+ * new_user : 0 - (Default) Edit roles of an existing user
+ *            1 - Edit roles of a new user
+ *            2 - (not relevant)
+ *            3 - Edit roles of a registration
+ * inline   : 0 - (Default) wird als eigene Seite angezeigt
+ *            1 - nur "body" HTML Code (z.B. für colorbox)
  *
  *****************************************************************************/
 
@@ -22,7 +24,7 @@ require_once('../../system/classes/table_roles.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'boolean', 0);
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
 // if user is allowed to assign roles or is leader with the right to assign members

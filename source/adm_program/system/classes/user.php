@@ -45,16 +45,52 @@ class User extends TableUsers
 	protected $organizationId;					///< the organization for which the rights are read, could be changed with method @b setOrganization
 
     // Konstruktor
-    public function __construct(&$db, $userFields, $usr_id = 0)
+    public function __construct(&$db, $userFields, $userId = 0)
     {
 		global $gCurrentOrganization;
 
 		$this->mProfileFieldsData = clone $userFields; // create explicit a copy of the object (param is in PHP5 a reference)
 		$this->organizationId = $gCurrentOrganization->getValue('org_id');
-        parent::__construct($db, $usr_id);
+        parent::__construct($db, $userId);
     }
+	
+	/** Assign the user to all roles that have set the flag @b rol_default_registration.
+	 *  These flag should be set if you want that every new user should get this role.
+	 */
+	public function assignDefaultRoles()
+	{
+		global $gMessage, $gL10n;
 
-    // check password against stored hash    
+		$this->db->startTransaction();
+
+		// every user will get the default roles for registration, if the current user has the right to assign roles
+		// than the roles assignement dialog will be shown
+		$sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+				 WHERE rol_cat_id = cat_id
+				   AND cat_org_id = '.$this->organizationId.'
+				   AND rol_default_registration = 1 ';
+		$result = $this->db->query($sql);
+
+		if($this->db->num_rows() == 0)
+		{
+			$gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
+		}
+		
+		while($row = $this->db->fetch_array($result))
+		{
+			// starts a membership for role from now
+			$this->setRoleMembership($row['rol_id']);
+		}
+
+		$this->db->endTransaction();
+	}
+
+	/** The method expects the clear password and will check this against the hash in the database.
+	 *  Therefore the password will be hashed the same way as the original password was 
+	 *  hashed and stored in database.
+	 *  @param  $password The clear password that should be checked against the hash in database
+	 *  @return Return @b true if the password is equal to the stored hashed password in database
+	 */
     public function checkPassword($password)
     {
         // if password is stored with phpass hash, then use phpass
@@ -66,7 +102,7 @@ class User extends TableUsers
                 return true;
             }
         }
-        // if password is stored the old was then use md5
+        // if password is stored the old way then use md5
         elseif(md5($password) == $this->getValue('usr_password'))
         {
             $this->setValue('usr_password', $password);
@@ -74,81 +110,6 @@ class User extends TableUsers
         }
         return false;
     }
-	
-	/** Insert a record in table adm_registrations and creates a valid registration 
-	 *  entry for the current user for the organization of the parameter
-	 *  @param $organizationId The id of the organization for which the user should be registered
-	 *  @return Returns @b true if the registration was succesful
-	 */
-	public function insertRegistration($organizationId)
-	{
-		if($organizationId > 0 && is_numeric($organizationId))
-		{
-			// insert a record in registration table
-			$Registration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
-			$Registration->setValue('reg_org_id', $organizationId);
-			$Registration->setValue('reg_usr_id', $this->getValue('usr_id'));
-			$Registration->setValue('reg_timestamp', DATETIME_NOW);
-			$Registration->save();
-			
-			$this->setValue('usr_valid', 0);
-			$this->save();
-			return true;
-		}
-		return false;
-	}
-	
-	/** Deletes the registration record and set the user to valid. So the registration was accepted and
-	 *  if he is assigned to a role than he can login for the organization of the parameter
-	 *  @param $organizationId The id of the organization for which the user should be registered
-	 *  @return Returns @b true if the registration was succesful
-	 */
-	public function acceptRegistration($organizationId)
-	{
-		if($organizationId > 0 && is_numeric($organizationId))
-		{
-			// delete registration record in registration table
-			$Registration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
-			$Registration->readDataByColumns(array('reg_org_id' => $organizationId, 'reg_usr_id' => $this->getValue('usr_id')));
-			$Registration->delete();
-			
-			$this->setValue('usr_valid', 1);
-			$this->save();
-			return true;
-		}
-		return false;		
-	}
-	
-	/** Deletes the registration record and if the user is not valid and has no other registration
-     *  than the whole user record will be deleted	
-	 *  @param $organizationId The id of the organization for which the user registration should be deleted
-	 *  @return Returns @b true if the registration was succesful deleted
-	 */
-	public function removeRegistration($organizationId)
-	{
-		if($organizationId > 0 && is_numeric($organizationId))
-		{
-			// delete registration record in registration table
-			$Registration = new TableAccess($this->db, TBL_REGISTRATIONS, 'reg');
-			$Registration->readDataByColumns(array('reg_org_id' => $organizationId, 'reg_usr_id' => $this->getValue('usr_id')));
-			$Registration->delete();
-			
-			// if user is not valid and has no other registrations 
-			// than delete user because he has no use for the system
-			if($this->getValue('usr_valid') == 0)
-			{
-				$sql = 'SELECT reg_id FROM '.TBL_REGISTRATIONS.' WHERE reg_usr_id = '.$this->getValue('usr_id');
-				$this->db->query($sql);
-
-				if($this->db->num_rows() == 0)
-				{
-					$this->delete();
-				}
-			}
-			return true;
-		}
-		return false;		
-	}
 
     // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags,
     // welche Rollen der User einsehen darf

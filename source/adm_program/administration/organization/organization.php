@@ -510,15 +510,20 @@ echo '
                         <strong>%organization_homepage%</strong> - '.$gL10n->get('ORG_VARIABLE_URL_ORGANIZATION').'<br /><br />
                     </li>';
 
+                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+                    echo '<li>
+                        <br />'.$gL10n->get('ORG_NOTIFY_WEBMASTER').':<br />
+                        <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
+                    </li>';
                     $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                     echo '<li>
                         '.$gL10n->get('ORG_CONFIRM_REGISTRATION').':<br />
                         <textarea id="SYSMAIL_REGISTRATION_USER" name="SYSMAIL_REGISTRATION_USER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
-                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REFUSE_REGISTRATION', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                     echo '<li>
-                        <br />'.$gL10n->get('ORG_NOTIFY_WEBMASTER').':<br />
-                        <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
+                        <br />'.$gL10n->get('ORG_REFUSE_REGISTRATION').':<br />
+                        <textarea id="SYSMAIL_REFUSE_REGISTRATION" name="SYSMAIL_REFUSE_REGISTRATION" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>';
                     $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                     echo '<li>

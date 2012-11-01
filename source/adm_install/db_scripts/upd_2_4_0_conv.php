@@ -45,6 +45,14 @@ $gDb->query($sql, false);
 
 $sql = 'create index IDX_MEM_ROL_USR_ID on '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id)';
 $gDb->query($sql);
+
+$sql = 'UPDATE '. TBL_ROLES. ' SET rol_webmaster = 1
+         WHERE rol_name = \''.$gL10n->get('SYS_WEBMASTER').'\' ';
+$gDb->query($sql);
+
+ 
+ // convert <br /> to a normal line feed
+$emailText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'));
  
 // write data for every organization
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
@@ -57,7 +65,7 @@ while($row_orga = $gDb->fetch_array($result_orga))
               FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE cat_org_id = '. $row_orga['org_id']. '
                AND rol_cat_id = cat_id
-               AND rol_name   = \'Webmaster\'
+               AND rol_webmaster = 1
                AND mem_rol_id = rol_id ';
     $result = $gDb->query($sql);
     $row_webmaster = $gDb->fetch_array($result);
@@ -65,10 +73,14 @@ while($row_orga = $gDb->fetch_array($result_orga))
     $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $row_webmaster['webmaster_id']. '
                                        , mem_timestamp_create = \''.DATETIME_NOW.'\'';
     $gDb->query($sql);    
-}
 
-$sql = 'UPDATE '. TBL_ROLES. ' SET rol_webmaster = 1
-         WHERE rol_name LIKE \''.$gL10n->get('SYS_WEBMASTER').'\'';
-$gDb->query($sql);
+    $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $row_webmaster['webmaster_id']. '
+                                       , mem_timestamp_create = \''.DATETIME_NOW.'\'';
+    $gDb->query($sql);
+	
+	$sql = 'INSERT INTO '. TBL_TEXTS. ' (txt_org_id, txt_name, txt_text)
+								 VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';
+	$gDb->query($sql);
+}
  
 ?>

@@ -169,9 +169,12 @@ foreach($sql_arr as $sql)
 		
 		foreach($results[0] as $key => $value)
 		{
+			// convert <br /> to a normal line feed
+			$convertedText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$gL10n->get($value));
+
 			// search for the exact value as a separate word and replace it with the translation
 			// in l10n the single quote is transformed in html entity, but we need the original sql escaped
-			$sql = preg_replace('/\b'.$value.'\b/', $db->escape_string(str_replace('&rsquo;', '\'', $gL10n->get($value))), $sql);
+			$sql = preg_replace('/\b'.$value.'\b/', $db->escape_string(str_replace('&rsquo;', '\'', $convertedText)), $sql);
 		}
 
         $db->query($sql);
