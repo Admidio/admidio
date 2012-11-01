@@ -137,7 +137,6 @@ class ConditionParser
         {
             $this->mSrcCond     = $this->makeStandardCondition($sourceCondition);
             $this->mSrcCondArray = str_split($this->mSrcCond);
-			error_log($this->mSrcCond);
     
             // Bedingungen fuer das Feld immer mit UND starten
             if($columnType == 'string')

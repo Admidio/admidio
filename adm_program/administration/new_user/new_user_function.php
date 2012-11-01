@@ -20,6 +20,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/system_mail.php');
+require_once('../../system/classes/user_registration.php');
 
 // Initialize and check the parameters
 $getMode      = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
@@ -39,7 +40,7 @@ if($gPreferences['registration_mode'] == 0)
 }
 
 // create user objects
-$new_user = new User($gDb, $gProfileFields, $getNewUserId);
+$registrationUser = new UserRegistration($gDb, $gProfileFields, $getNewUserId);
 
 if($getUserId > 0)
 {
@@ -53,14 +54,14 @@ if($getMode == 1 || $getMode == 2)
     // Daten kopieren, aber nur, wenn noch keine Logindaten existieren
     if(strlen($user->getValue('usr_login_name')) == 0 && strlen($user->getValue('usr_password')) == 0)
     {
-        $user->setValue('EMAIL', $new_user->getValue('EMAIL'));
-        $user->setValue('usr_login_name', $new_user->getValue('usr_login_name'));
-        $user->setValue('usr_password', $new_user->getValue('usr_password'));
+        $user->setValue('EMAIL', $registrationUser->getValue('EMAIL'));
+        $user->setValue('usr_login_name', $registrationUser->getValue('usr_login_name'));
+        $user->setValue('usr_password', $registrationUser->getValue('usr_password'));
     }
 
     // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
     // damit kein Duplicate-Key wegen dem Loginnamen entsteht
-    $new_user->delete();
+    $registrationUser->delete();
     $user->save();
 }
 
@@ -99,59 +100,23 @@ if($getMode == 1 || $getMode == 3)
 }
 elseif($getMode == 4)
 {
-    // Registrierung loeschen    
-    // im Forum muss er nicht geloescht werden, da der User erst nach der vollstaendigen 
-    // Registrierung im Forum angelegt wird.
-    $new_user->removeRegistration($gCurrentOrganization->getValue('org_id'));
+    // delete registration
+	// there is no need to delete user in forum because only valid users are registered in the forum
+    $registrationUser->delete();
 
-    // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+	// return successful delete for XMLHttpRequest
     echo 'done';
 }
 elseif($getMode == 5)
 {
-	// Create new user and assign roles automatically without dialog
+	// accept a registration, assign neccessary roles and send a notification email
+	$registrationUser->acceptRegistration();
 	
-	$gDb->startTransaction();
-
-	// set user aktive
-	$new_user->acceptRegistration($gCurrentOrganization->getValue('org_id'));
-
-	// every user will get the default roles for registration, if the current user has the right to assign roles
-	// than the roles assignement dialog will be shown
-	$sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
-			 WHERE rol_cat_id = cat_id
-			   AND cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-			   AND rol_default_registration = 1 ';
-	$result = $gDb->query($sql);
-
-	if($gDb->num_rows() == 0)
-	{
-		$gMessage->show($gL10n->get('PRO_NO_DEFAULT_ROLE'));
-	}
-	
-	while($row = $gDb->fetch_array($result))
-	{
-		// starts a membership for role from now
-		$new_user->setRoleMembership($row['rol_id']);
-	}
-
-	$gDb->endTransaction();
-	
-	// only send mail if systemmails are enabled
-	if($gPreferences['enable_system_mails'] == 1)
-	{
-		// send mail to user that his registration was accepted
-		$sysmail = new SystemMail($gDb);
-		$sysmail->addRecipient($new_user->getValue('EMAIL'), $new_user->getValue('FIRST_NAME'). ' '. $new_user->getValue('LAST_NAME'));
-		if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $new_user) == false)
-		{
-			$gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $new_user->getValue('EMAIL')));
-		}
-	}
-
+	// if current user has the right to assign roles then show roles dialog
+	// otherwise go to previous url (default roles are assigned automatically)
 	if($gCurrentUser->assignRoles())
 	{
-		header('Location: roles.php?new_user=1&usr_id='. $new_user->getValue('usr_id'));
+		header('Location: roles.php?new_user=3&usr_id='. $registrationUser->getValue('usr_id'));
 		exit();
 	}
 	else
@@ -167,7 +132,7 @@ elseif($getMode == 6)
     // Registrierung loeschen
     // im Forum muss er nicht geloescht werden, da der User erst nach der vollstaendigen 
     // Registrierung im Forum angelegt wird.
-    $new_user->delete();
+    $registrationUser->delete();
 
     // Zugangsdaten neu verschicken
     $_SESSION['navigation']->addUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');

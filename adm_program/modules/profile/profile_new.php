@@ -8,11 +8,11 @@
  *
  * Parameters:
  *
- * user_id  :  ID des Benutzers, dessen Profil bearbeitet werden soll
- * new_user : 0 - (Default) vorhandenen User bearbeiten
- *            1 - Dialog um neue Benutzer hinzuzufuegen.
- *            2 - Dialog um Registrierung entgegenzunehmen
- *            3 - Registrierung zuordnen/akzeptieren
+ * user_id    : ID of the user who should be edited
+ * new_user   : 0 - Edit user of the user id
+ *              1 - Create a new user
+ *              2 - Create a registration
+ *              3 - assign/accept a registration
  * lastname   : Der Nachname kann uebergeben und bei neuen Benutzern vorbelegt werden
  * firstname  : Der Vorname kann uebergeben und bei neuen Benutzern vorbelegt werden
  * remove_usr : 1 - Entfernt die letzte Url aus dem Navigations-Cache
@@ -28,10 +28,16 @@ $getLastname  = admFuncVariableIsValid($_GET, 'lastname', 'string', '');
 $getFirstname = admFuncVariableIsValid($_GET, 'firstname', 'string', '');
 $getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'boolean', 0);
 
-// im ausgeloggten Zustand koennen nur Registrierungen angelegt werden
+// if current user has no login then only show registration dialog
 if($gValidLogin == false)
 {
     $getNewUser = 2;
+}
+
+// if new_user isn't set and no user id is set then show dialog to create a user
+if($getUserId == 0 && $getNewUser == 0)
+{
+	$getNewUser = 1;
 }
 
 if($getRemoveUrl == 1)
