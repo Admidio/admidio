@@ -410,7 +410,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 		}
 		elseif($datatype == 'string')
 		{
-			$array[$variableName] = strStripTags(htmlentities($array[$variableName], ENT_COMPAT, 'UTF-8'));
+			$array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
 		}
 
         // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
