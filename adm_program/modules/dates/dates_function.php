@@ -394,7 +394,7 @@ elseif($getMode == 2)  // Termin loeschen
     }
 }
 elseif($getMode == 3)  // Benutzer zum Termin anmelden
-{
+{   
     $member = new TableMembers($gDb);
 	$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
 
@@ -434,8 +434,15 @@ elseif($getMode == 5)  // Eintrag fuer Sichtbarkeit erzeugen
 elseif($getMode == 6)  // Termin im iCal-Format exportieren
 {
     header('Content-Type: text/calendar');
-    header('Content-Disposition: attachment; filename='. urlencode($date->getValue('dat_headline')). '.ics');
-	// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
+    if (preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"]))
+    {
+        header('Content-Disposition: attachment; filename='. urlencode($date->getValue('dat_headline')). '.ics');
+        // noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
+    }
+    else
+    {
+        header('Content-Disposition: attachment; filename='. $date->getValue('dat_headline'). '.ics');
+    }
 	header('Cache-Control: private');
 	header('Pragma: public');
 
