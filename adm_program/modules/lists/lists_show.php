@@ -607,9 +607,17 @@ if($getMode == 'csv')
 {
     // nun die erstellte CSV-Datei an den User schicken
     $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.csv';
+    
+    // for IE the filename must have special chars in hexadecimal 
+    if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+    {
+        $filename = urlencode($filename);
+    }
+    
     header('Content-Type: text/comma-separated-values; charset='.$charset);
-    header('Content-Disposition: attachment; filename="'.urlencode($filename).'"');
-	// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
+    header('Content-Disposition: attachment; filename="'.$filename.'"');
+    
+    // neccessary for IE, because without it the download with SSL has problems
 	header('Cache-Control: private');
 	header('Pragma: public');
 

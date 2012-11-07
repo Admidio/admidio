@@ -306,7 +306,7 @@ elseif($getMode == 5)
 
     header('Content-Type: text/plain; charset=utf-8');
     header('Content-Length: '.$file_length);
-    header('Content-Disposition: attachment; filename='.$file_name);
+    header('Content-Disposition: attachment; filename="'.$file_name.'"');
     echo $file_content;
     exit();
 }
