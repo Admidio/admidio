@@ -55,12 +55,20 @@ $file->save();
 
 //Dateigroese ermitteln
 $fileSize   = filesize($completePath);
+$filename   = $file->getValue('fil_name');
+
+// for IE the filename must have special chars in hexadecimal 
+if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+{
+    $filename = urlencode($filename);
+}
 
 // Passenden Datentyp erzeugen.
 header('Content-Type: application/octet-stream');
 header('Content-Length: '.$fileSize);
-header('Content-Disposition: attachment; filename="'. urlencode($file->getValue('fil_name')). '"');
-// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
+header('Content-Disposition: attachment; filename="'.$filename.'"');
+
+// neccessary for IE, because without it the download with SSL has problems
 header('Cache-Control: private');
 header('Pragma: public');
 

@@ -433,16 +433,18 @@ elseif($getMode == 5)  // Eintrag fuer Sichtbarkeit erzeugen
 }
 elseif($getMode == 6)  // Termin im iCal-Format exportieren
 {
+    $filename = $date->getValue('dat_headline');
+    
+    // for IE the filename must have special chars in hexadecimal 
+    if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+    {
+        $filename = urlencode($filename);
+    }
+
     header('Content-Type: text/calendar');
-    if (preg_match("/MSIE/", $_SERVER["HTTP_USER_AGENT"]))
-    {
-        header('Content-Disposition: attachment; filename='. urlencode($date->getValue('dat_headline')). '.ics');
-        // noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
-    }
-    else
-    {
-        header('Content-Disposition: attachment; filename='. $date->getValue('dat_headline'). '.ics');
-    }
+    header('Content-Disposition: attachment; filename="'. $filename. '.ics"');
+    
+    // neccessary for IE, because without it the download with SSL has problems
 	header('Cache-Control: private');
 	header('Pragma: public');
 

@@ -38,9 +38,18 @@ if($getMode == 1)
 {
 	// Export vCard of user
 
+    $filename = $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME');
+    
+    // for IE the filename must have special chars in hexadecimal 
+    if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+    {
+        $filename = urlencode($filename);
+    }
+    
     header('Content-Type: text/x-vcard; charset=iso-8859-1');
-    header('Content-Disposition: attachment; filename="'. urlencode($user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')). '.vcf"');
-	// noetig fuer IE, da ansonsten der Download mit SSL nicht funktioniert
+    header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
+    
+    // neccessary for IE, because without it the download with SSL has problems
 	header('Cache-Control: private');
 	header('Pragma: public');
 
