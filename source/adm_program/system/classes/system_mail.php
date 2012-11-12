@@ -1,4 +1,4 @@
-<?php
+ <?php
 /******************************************************************************
  * Diese Klasse dient dazu Systemmails zu verschicken
  *
@@ -26,16 +26,16 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 
 class SystemMail extends Email
 {
-    private $textObject;
+    private $smTextObject;
     private $db;
-    private $mailText;
-    private $mailHeader;
-    private $variables = array();   // speichert zusaetzliche Variablen fuer den Mailtext
+    private $smMailText;
+    private $smMailHeader;
+    private $smVariables = array();   // speichert zusaetzliche Variablen fuer den Mailtext
 
     // Konstruktor
     public function __construct(&$db)
     {
-        $this->textObject = new TableText($db);
+        $this->smTextObject = new TableText($db);
         parent::__construct();
     }
     
@@ -46,12 +46,12 @@ class SystemMail extends Email
     {
         global $gCurrentOrganization, $gPreferences;
     
-        if($this->textObject->getValue('txt_name') != $systemMailId)
+        if($this->smTextObject->getValue('txt_name') != $systemMailId)
         {
-			$this->textObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+			$this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
         }
         
-        $mailSrcText = $this->textObject->getValue('txt_text');
+        $mailSrcText = $this->smTextObject->getValue('txt_text');
         
         // jetzt alle Variablen ersetzen
         $mailSrcText = preg_replace ('/%user_first_name%/', $user->getValue('FIRST_NAME'),  $mailSrcText);
@@ -64,37 +64,37 @@ class SystemMail extends Email
         $mailSrcText = preg_replace ('/%organization_homepage%/',   $gCurrentOrganization->getValue('org_homepage'), $mailSrcText);
         
         // zusaetzliche Variablen ersetzen
-        for($i = 1; $i <= count($this->variables); $i++)
+        for($i = 1; $i <= count($this->smVariables); $i++)
         {
-            $mailSrcText = preg_replace ('/%variable'.$i.'%/', $this->variables[$i],  $mailSrcText);
+            $mailSrcText = preg_replace ('/%variable'.$i.'%/', $this->smVariables[$i],  $mailSrcText);
         }
         
         // Betreff und Inhalt anhand von Kennzeichnungen splitten oder ggf. Default-Inhalte nehmen
         if(strpos($mailSrcText, '#subject#') !== false)
         {
-            $this->mailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#subject#') + 9, strpos($mailSrcText, '#content#') - 9));
+            $this->smMailHeader = trim(substr($mailSrcText, strpos($mailSrcText, '#subject#') + 9, strpos($mailSrcText, '#content#') - 9));
         }
         else
         {
-            $this->mailHeader = 'Systemmail von '. $gCurrentOrganization->getValue('org_homepage');
+            $this->smMailHeader = 'Systemmail von '. $gCurrentOrganization->getValue('org_homepage');
         }
         
         if(strpos($mailSrcText, '#content#') !== false)
         {
-            $this->mailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
+            $this->smMailText   = trim(substr($mailSrcText, strpos($mailSrcText, '#content#') + 9));
         }
         else
         {
-            $this->mailText   = $mailSrcText;
+            $this->smMailText   = $mailSrcText;
         }
 
-        return $this->mailText;
+        return $this->smMailText;
     }
     
     // die Methode setzt den Inhalt fuer spezielle Variablen
     public function setVariable($number, $value)
     {
-        $this->variables[$number] = $value;
+        $this->smVariables[$number] = $value;
     }
     
     // diese Methode sendet eine Systemmail nachdem der Mailtext ausgelesen und Platzhalter ersetzt wurden
@@ -106,8 +106,8 @@ class SystemMail extends Email
         
         $this->getMailText($systemMailId, $user);
         $this->setSender($gPreferences['email_administrator']);
-        $this->setSubject($this->mailHeader);
-        $this->setText($this->mailText);
+        $this->setSubject($this->smMailHeader);
+        $this->setText($this->smMailText);
 
         return $this->sendEmail();
     }

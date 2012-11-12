@@ -322,7 +322,8 @@ $email->setText(htmLawed(stripslashes($_POST['mail_body']), array('safe' => 1)))
 
 
 //Nun kann die Mail endgueltig versendet werden...
-if ($email->sendEmail())
+$sendMailResult = $email->sendEmail();
+if ($sendMailResult === TRUE)
 {
     // Der CaptchaCode wird bei erfolgreichem Mailversand aus der Session geloescht
     if (isset($_SESSION['captchacode']))
@@ -358,11 +359,11 @@ else
 {
     if ($role->getValue('rol_id') > 0)
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
+        $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
     }
     else
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $_POST['mailto']));
+        $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $_POST['mailto']));
     }
 }
 

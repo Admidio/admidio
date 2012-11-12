@@ -1217,6 +1217,16 @@ echo '
                     <li class="smallFontSize">'.$gL10n->get('MAI_ACTIVATE_EMAIL_MODULE_DESC').'</li>
                     <li>
                         <dl>
+                            <dt><label for="mail_send_method">'.$gL10n->get('MAI_SEND_METHOD').':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array('phpMail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_send_method'], 'mail_send_method');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SEND_METHOD_DESC').'</li>
+                    <li>
+                        <dl>
                             <dt><label for="mail_bcc_count">'.$gL10n->get('MAI_COUNT_BCC').':</label>
                             </dt>
                             <dd>
@@ -1270,6 +1280,13 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_sendmail_name">'.$gL10n->get('MAI_SENDER_NAME').':</label></dt>
+                            <dd><input type="text" id="mail_sendmail_name" name="mail_sendmail_name" style="width: 200px;" maxlength="50" value="'. $form_values['mail_sendmail_name'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_EMAIL_NAME_DESC', $_SERVER['HTTP_HOST']).'</li>
 					<li>
                         <dl>
                             <dt><label for="mail_character_encoding">'.$gL10n->get('MAI_CHARACTER_ENCODING').':</label></dt>
@@ -1294,6 +1311,43 @@ echo '
 						</dl>
 					</li>
 					<li class="smallFontSize">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS_DESC').'</li>
+					<li>
+                        <dl>
+                            <dt><label for="mail_smtp_host">'.$gL10n->get('MAI_SMTP_HOST').':</label></dt>
+                            <dd><input type="text" id="mail_smtp_host" name="mail_smtp_host" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_host'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_auth">'.$gL10n->get('MAI_SMTP_AUTH').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="mail_smtp_auth" name="mail_smtp_auth" ';
+                                if(isset($form_values['mail_smtp_auth']) && $form_values['mail_html_smtp_auth'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_port">'.$gL10n->get('MAI_SMTP_PORT').':</label></dt>
+                            <dd><input type="text" id="mail_smtp_port" name="mail_smtp_port" style="width: 50px;" maxlength="5" value="'. $form_values['mail_smtp_port'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_user">'.$gL10n->get('MAI_SMTP_USER').':</label></dt>
+                            <dd><input type="text" id="mail_smtp_user" name="mail_smtp_user" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_user'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_password">'.$gL10n->get('MAI_SMTP_PASSWORD').':</label></dt>
+                            <dd><input type="password" id="mail_smtp_password" name="mail_smtp_password" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_password'].'" /></dd>
+                        </dl>
+                    </li>
                 </ul>
 				<br />
 				<div class="formSubmit">	
