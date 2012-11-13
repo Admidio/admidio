@@ -47,6 +47,8 @@ class Email extends PHPMailer
                 $this->Host       = $gPreferences['mail_smtp_host'];         
                 $this->SMTPAuth   = $gPreferences['mail_smtp_auth'];
                 $this->Port       = $gPreferences['mail_smtp_port'];
+                $this->SMTPSecure = $gPreferences['mail_smtp_secure'];
+                $this->AuthType   = $gPreferences['mail_smtp_authentication_type'];
                 $this->Username   = $gPreferences['mail_smtp_user'];
                 $this->Password   = $gPreferences['mail_smtp_password'];
                 
@@ -88,7 +90,7 @@ class Email extends PHPMailer
     // fileType         : content type of the file in the email
     // fileDisposition  : how the file should be shown in email : 'attachement' or 'inline'
     // fileId           : a unique id for the file, so that it could be identified in the email
-    public function addAttachment($tempFilename, $originalFilename = '', $fileType='application/octet-stream', $fileDisposition = 'attachment',$fileId = '')
+    public function addEmailAttachment($tempFilename, $originalFilename = '', $fileType='application/octet-stream', $fileDisposition = 'attachment',$fileId = '')
     {
         if($fileId=='')
         {
@@ -112,7 +114,7 @@ class Email extends PHPMailer
                return $e->errorMessage();
             }
         }
-        
+        return TRUE;
     }
     
     // method adds BCC recipients to mail
@@ -121,7 +123,7 @@ class Email extends PHPMailer
     {
         $address = admStrToLower($address);
         // Blindcopy must be Ascii-US formated, so encode in MimeHeader
-    	$asciiName = admEncodeMimeheader(stripslashes($name));
+        $asciiName = admEncodeMimeheader(stripslashes($name));
     
         if (strValidCharacters($address, 'email'))
         {
@@ -138,7 +140,7 @@ class Email extends PHPMailer
     {
         $address = admStrToLower($address);
         // Copy must be Ascii-US formated, so encode in MimeHeader
-    	$asciiName = admEncodeMimeheader(stripslashes($name));
+        $asciiName = admEncodeMimeheader(stripslashes($name));
         
         try
         {
@@ -158,7 +160,7 @@ class Email extends PHPMailer
     {
         $address = admStrToLower($address);
         // Recipient must be Ascii-US formated, so encode in MimeHeader
-    	$asciiName = admEncodeMimeheader(stripslashes($name));
+        $asciiName = admEncodeMimeheader(stripslashes($name));
     
         try
         {
@@ -328,11 +330,11 @@ class Email extends PHPMailer
         //Text in Nachricht einfügen
         if($this->emSendAsHTML)
         {
-            $this->MsgHTML($this->emHtmlText);
+            $this->MsgHTML($this->emHtmlText);  
         }
         else
         {
-            $this->AltBody = $this->emText;
+            $this->Body = $this->emText;
         }
         
         //Wenn es Bcc-Empfänger gibt

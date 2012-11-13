@@ -9,6 +9,32 @@
 	<text id="LST_EXCLUDE_EXAMPLE" development="new" translation="todo">Stefan</text>
 	<text id="LST_EXCLUDE_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die nicht Stefan heißen</text>
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
+	<text id="MAI_PHP_MAIL" development="new" translation="todo">php mail()</text>
+	<text id="MAI_SEND_METHOD" development="new" translation="todo">Versandmethode</text>
+	<text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Empfolen wird daher in der Regel der Versand von einer existierenden Mailadresse, über einen SMTP-Server. Die SMTP-Einstellungen können unten konfiguriert werden. (Standrad: php mail())</text>
+	<text id="MAI_SENDER_NAME" development="new" translation="todo">Name des Absenders</text>
+    <text id="MAI_SENDER_NAME_DESC" development="new" translation="todo">Name des Absenders zur verwendeten Versandmailadresse.</text>
+	<text id="MAI_SMTP" development="new" translation="todo">SMTP</text>
+	<text id="MAI_SMTP_AUTH" development="new" translation="todo">SMTP Authentifizierung</text>
+	<text id="MAI_SMTP_AUTH_DESC" development="new" translation="todo">Soll eine Authentifizierung am SMTP-Server stattfinden? Wenn ja, müssen auch die Felder Benutzername und Pssswort ausgefüllt werden.  (Standard: Ja)</text>
+	<text id="MAI_SMTP_AUTH_LOGIN" development="new" translation="todo">Login</text>    
+    <text id="MAI_SMTP_AUTH_NTLM" development="new" translation="todo">NTLM</text>
+	<text id="MAI_SMTP_AUTH_PLAIN" development="new" translation="todo">Plain</text>    
+	<text id="MAI_SMTP_AUTH_TYPE" development="new" translation="todo">SMTP Authentifizierungs-Typ</text>
+    <text id="MAI_SMTP_AUTH_TYPE_DESC" development="new" translation="todo">SMTP kennt verschiedene Authentifizierungsmethoden. Die hier ausgewählte wird von Admidio verwendet. (Standard: Login)</text>   
+	<text id="MAI_SMTP_HOST" development="new" translation="todo">SMTP Host</text>
+	<text id="MAI_SMTP_HOST_DESC" development="new" translation="todo">Adresse des zu verwendenden SMTP-Servers.</text>
+    <text id="MAI_SMTP_PASSWORD" development="new" translation="todo">SMTP Passwort</text>
+    <text id="MAI_SMTP_PASSWORD_DESC" development="new" translation="todo">Das Passwort, das bei der SMTP-Authentifizierung verwendet wird.</text>
+    <text id="MAI_SMTP_PORT" development="new" translation="todo">SMTP Port</text>
+    <text id="MAI_SMTP_PORT_DESC" development="new" translation="todo">Über welchen Port soll die SMTP-Verbindung aufgebaut werden? (Standard: 25)</text>
+    <text id="MAI_SMTP_SECURE" development="new" translation="todo">SMTP Verschlüsselung</text>
+    <text id="MAI_SMTP_SECURE_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob und wie die SMTP-Verbindung verschlüsselt werden soll. (Standard: ohne)</text>
+    <text id="MAI_SMTP_SECURE_NO" development="new" translation="todo">ohne</text>
+    <text id="MAI_SMTP_SECURE_SSL" development="new" translation="todo">SSL</text>
+    <text id="MAI_SMTP_SECURE_TLS" development="new" translation="todo">TLS</text>    
+    <text id="MAI_SMTP_USER" development="new" translation="todo">SMTP Benutzername</text>
+    <text id="MAI_SMTP_USER_DESC" development="new" translation="todo">Der Benutzername, der bei der SMTP-Authentifizierung verwendet wird.</text>
     <text id="ORG_FIELD_HIDDEN_DESC" development="changed" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</text>
     <text id="ORG_REFUSE_REGISTRATION" development="changed" translation="todo">Benachrichtigung bei einer Ablehnung der Registrierung</text>
 	<text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="todo">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</text>
