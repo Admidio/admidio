@@ -12,8 +12,8 @@ INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org
 --
 
 INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
-(1, 1, 'db_version', '2.3.6'),
-(2, 2, 'db_version', '2.3.6'),
+(1, 1, 'db_version', '2.3.8'),
+(2, 2, 'db_version', '2.3.8'),
 (1000, 1, 'announcements_per_page', '10'),
 (1100, 1, 'ecard_view_width', '250'),
 (1200, 1, 'ecard_view_height', '250'),
