@@ -37,7 +37,9 @@ class Email extends PHPMailer
         //fuer den Fall das eine Kopie der Mail angefordert wird...
         $this->emAddresses = '';
         
-        
+        //Fehler ins Error Log
+        $this->Debugoutput = 'error_log';
+               
         //Versandmethode festlegen        
         if($gPreferences['mail_send_method'] == 'SMTP')
         {
