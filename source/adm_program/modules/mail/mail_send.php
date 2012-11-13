@@ -158,13 +158,13 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
                     
                     if (strlen($_FILES['userfile']['type'][$act_attachment_nr]) > 0)
                     {
-                        $email->addAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr], $_FILES['userfile']['type'][$act_attachment_nr]);
+                        $email->addEmailAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr], $_FILES['userfile']['type'][$act_attachment_nr]);
                     }
                     // Falls kein ContentType vom Browser uebertragen wird,
                     // setzt die MailKlasse automatisch "application/octet-stream" als FileTyp
                     else
                     {
-                        $email->addAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr]);
+                        $email->addEmailAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr]);
                     }
                 }
             }
