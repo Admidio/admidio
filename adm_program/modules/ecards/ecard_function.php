@@ -277,7 +277,7 @@ class FunctionClass
 				if($img_name != 'none.jpg' && strlen($img_name) > 0)
 				{
 					$uid = md5(uniqid($img_name.time()));
-					$email->addAttachment($img_server_path, $img_name, 'image/'.$img_type, 'inline', $uid);
+					$email->addEmailAttachment($img_server_path, $img_name, 'image/'.$img_type, 'inline', $uid);
 					$ecard_html_data = str_replace($matchArray[2][$i],'cid:'.$uid,$ecard_html_data);
 				}
 			}
@@ -286,7 +286,7 @@ class FunctionClass
 		$email->setText($ecard_html_data);
 		$email->sendDataAsHtml();
 		$return_code = $email->sendEmail();
-	
+
 		// nun noch das von der Groesse angepasste Bild loeschen
 		unlink($img_photo_path);
 		return $return_code;

@@ -1219,7 +1219,7 @@ echo '
                         <dl>
                             <dt><label for="mail_send_method">'.$gL10n->get('MAI_SEND_METHOD').':</label></dt>
                             <dd>';
-                                $selectBoxEntries = array('phpMail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
+                                $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
                                 echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_send_method'], 'mail_send_method');
                             echo '</dd>
                         </dl>
