@@ -36,10 +36,7 @@ class Email extends PHPMailer
         //Hier werden noch mal alle Empfaenger der Mail reingeschrieben,
         //fuer den Fall das eine Kopie der Mail angefordert wird...
         $this->emAddresses = '';
-        
-        //Fehler ins Error Log
-        $this->Debugoutput = 'error_log';
-               
+                      
         //Versandmethode festlegen        
         if($gPreferences['mail_send_method'] == 'SMTP')
         {
@@ -53,6 +50,7 @@ class Email extends PHPMailer
                 $this->AuthType   = $gPreferences['mail_smtp_authentication_type'];
                 $this->Username   = $gPreferences['mail_smtp_user'];
                 $this->Password   = $gPreferences['mail_smtp_password'];
+                $this->Debugoutput = 'error_log';
                 
                 if($gDebug)
                 {
@@ -92,9 +90,9 @@ class Email extends PHPMailer
     // fileType         : content type of the file in the email
     // fileDisposition  : how the file should be shown in email : 'attachement' or 'inline'
     // fileId           : a unique id for the file, so that it could be identified in the email
-    public function addEmailAttachment($tempFilename, $originalFilename = '', $fileType='application/octet-stream', $fileDisposition = 'attachment',$fileId = '')
+    public function addEmailAttachment($tempFilename, $originalFilename = '', $fileType='application/octet-stream', $fileDisposition = 'attachment', $fileId = '')
     {
-        if($fileId=='')
+        if($fileDisposition == 'attachment')
         {
             try
             {
