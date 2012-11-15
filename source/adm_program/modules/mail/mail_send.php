@@ -156,16 +156,21 @@ if ($email->setSender($_POST['mailfrom'],$_POST['name']))
                         $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                     }
                     
-                    if (strlen($_FILES['userfile']['type'][$act_attachment_nr]) > 0)
+                    //Falls der Dateityp nicht bestimmt ist auf Standard setzen
+                    if (strlen($_FILES['userfile']['type'][$act_attachment_nr]) <= 0)
                     {
-                        $email->addEmailAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr], $_FILES['userfile']['type'][$act_attachment_nr]);
+                        $_FILES['userfile']['type'][$act_attachment_nr] = 'application/octet-stream';                        
                     }
-                    // Falls kein ContentType vom Browser uebertragen wird,
-                    // setzt die MailKlasse automatisch "application/octet-stream" als FileTyp
-                    else
+                    
+                    //Datei anhängen
+                    try
                     {
-                        $email->addEmailAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr]);
+                        $email->AddAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr], $encoding = 'base64', $_FILES['userfile']['type'][$act_attachment_nr]);
                     }
+                    catch (phpmailerException $e)
+                    {
+                        $gMessage->show($e->errorMessage());
+                    }                  
                 }
             }
         }

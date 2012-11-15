@@ -6,7 +6,53 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
+ * Mit dieser Klasse kann ein Email-Objekt erstellt
+ * und anschliessend verschickt werden.
  *
+ * Das Objekt wird erzeugt durch Aufruf des Konstruktors:
+ * Email()
+ *
+ * Nun wird der Absender gesetzt:
+ * setSender($address, $name='')
+ * Parameters: $address - Die Emailadresse
+ *             $name    - Der Name des Absenders (optional)
+ *
+ * Nun koennen in beliebiger Reihenfolge und Anzahl Adressaten (To,Cc,Bcc)
+ * der Mail hinzugefuegt werden:
+ * (optional und mehrfach aufrufbar, es muss jedoch mindestens
+ * ein Empfaenger mittels einer der drei Funktionen gesetzt werden)
+ *
+ * addRecipient($address, $name='')
+ * addCopy($address, $name='')
+ * addBlindCopy($address, $name='')
+ * Parameters: $address - Die Emailadresse
+ *             $name    - Der Name des Absenders (optional)
+ *
+ * Nun noch ein Subject setzen (optional):
+ * setSubject($subject)
+ * Parameters: $subject - Der Text des Betreffs
+ *
+ * Der Email einen Text geben:
+ * function setText($text. )
+ * Parameters: $text - Der Text der Mail
+ *
+ * Bei Bedarf kann man sich eine Kopie der Mail zuschicken lassen (optional):
+ * setCopyToSenderFlag()
+ *
+ * Sollen in der Kopie zusaetzlich noch alle Empfaenger aufgelistet werden,
+ * muss folgende Funktion auch noch aufgerufen werden (optional):
+ * function setListRecipientsFlag()
+ *
+ * Methode gibt die maximale Groesse der Anhaenge zurueck
+ * size_unit : 'b' = byte; 'kb' = kilobyte; 'mb' = megabyte
+ * getMaxAttachementSize($size_unit = 'kb') 
+ *
+ * Soll die Nachricht als HTML Code interpretiert und versendet werden,
+ * muss folgende Funktion auch noch aufgerufen werden (optional):
+ * function sendDataAsHtml()
+ *
+ * Am Ende muss die Mail natuerlich noch gesendet werden:
+ * function sendEmail();
  *
  *****************************************************************************/
 require_once(SERVER_PATH.'/adm_program/libs/phpmailer/class.phpmailer.php');
@@ -82,39 +128,6 @@ class Email extends PHPMailer
            return $e->errorMessage();
         }
            
-    }
-    
-    // method adds an attachement to the mail
-    // tempFilename     : filename of the local server path where admidio is installed
-    // originalFilename : original filename that will be shown in the email
-    // fileType         : content type of the file in the email
-    // fileDisposition  : how the file should be shown in email : 'attachement' or 'inline'
-    // fileId           : a unique id for the file, so that it could be identified in the email
-    public function addEmailAttachment($tempFilename, $originalFilename = '', $fileType='application/octet-stream', $fileDisposition = 'attachment', $fileId = '')
-    {
-        if($fileDisposition == 'attachment')
-        {
-            try
-            {
-                $this->AddAttachment($tempFilename, $originalFilename, $encoding = 'base64', $fileType);
-            }
-            catch (phpmailerException $e)
-            {
-               return $e->errorMessage();
-            }
-        }
-        else
-        {
-            try
-            {
-                $this->AddEmbeddedImage($tempFilename, $fileId, $originalFilename, $encoding = 'base64', $fileType);
-            }
-            catch (phpmailerException $e)
-            {
-               return $e->errorMessage();
-            }
-        }
-        return TRUE;
     }
     
     // method adds BCC recipients to mail
@@ -231,6 +244,7 @@ class Email extends PHPMailer
             $fromAddress=$address;
         }
         
+        //hier wird die Adresse Gesetzt und geprüft
         try
         {
             $this->SetFrom($fromAddress, $fromName);
@@ -420,8 +434,7 @@ class Email extends PHPMailer
             {
                return $e->errorMessage();
             }
-        }
- 
+        } 
         return TRUE;
     }
 }
