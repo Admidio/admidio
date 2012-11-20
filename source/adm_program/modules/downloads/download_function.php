@@ -26,6 +26,7 @@ require_once('../../system/login_valid.php');
 require_once('../../system/classes/my_files.php');
 require_once('../../system/classes/table_folder.php');
 require_once('../../system/classes/table_file.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)
@@ -39,7 +40,7 @@ if (!$gCurrentUser->editDownloadRight())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
-
+        
 // Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', 0);
@@ -139,20 +140,11 @@ if ($getMode == 1)
         $newFile->setValue('fil_counter','0');
         $newFile->save();
 		
-		// Benachrichtigungs-Email für neue Einträge
-		if($gPreferences['enable_email_notification'] == 1)
-		{
-			$sender_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
-			$sender_email = $gCurrentUser->getValue('EMAIL');
-
-			if(strlen($gCurrentUser->getValue('EMAIL')) == 0)
-			{
-				$sender_email = $gPreferences['email_administrator'];
-				$sender_name  = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
-			}
-			admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $file_name. ' ('.$file_description.')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $sender_name, $sender_email);
-		}
-
+		// Benachrichtigungs-Email für neue Einträge        
+        $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $file_name. ' ('.$file_description.')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));           
+        $notification = new Email();
+        $notification->adminNotfication($gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+        
         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
         $gMessage->show($gL10n->get('DOW_FILE_UPLOADED', $file_name));
     }

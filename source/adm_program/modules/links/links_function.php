@@ -19,6 +19,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_weblink.php');
 require_once('../../libs/htmlawed/htmlawed.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // Initialize and check the parameters
 $getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
@@ -92,22 +93,10 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0) )
 	
 	if($return_code == 0 && $getMode == 1)
 	{
-		// Benachrichtigungs-Email für neue Einträge
-		if($gPreferences['enable_email_notification'] == 1)
-		{
-			$sender_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
-			$sender_email = $gCurrentUser->getValue('EMAIL');
-			
-			if(strlen($gCurrentUser->getValue('EMAIL')) == 0)
-			{
-				$sender_email = $gPreferences['email_administrator'];
-				$sender_name  = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
-			}
-			admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ': '.$gL10n->get('LNK_EMAIL_NOTIFICATION_TITLE'), 
-				str_replace('<br />',"\n",$gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), 
-				$_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), 
-				date('d.m.Y H:m', time()))), $sender_name, $sender_email);
-		}	
+		// Benachrichtigungs-Email für neue Einträge        
+        $message = $gL10n->get('LNK_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['lnk_url']. ' ('.$_POST['lnk_name'].')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));           
+        $notification = new Email();
+        $notification->adminNotfication($gL10n->get('LNKEMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));	
 	}
 
     unset($_SESSION['links_request']);

@@ -27,6 +27,7 @@ require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/table_roles.php');
 require_once('../../system/classes/table_rooms.php');
 require_once('../../libs/htmlawed/htmlawed.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_dates_module'] == 0)
@@ -273,52 +274,43 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 	if($return_code == 0)
 	{	
 		// Benachrichtigungs-Email für neue Einträge
-		if($gPreferences['enable_email_notification'] == 1)
-		{
-			// Daten für Benachrichtigung zusammenstellen
-			if($_POST['date_from'] == $_POST['date_to'])
-			{$datum = $_POST['date_from'];}
-			else
-			{$datum = $_POST['date_from']. ' - '.$_POST['date_to'];}
-			
-			if(isset($_POST['dat_all_day']))
-			{$zeit = $gL10n->get('DAT_ALL_DAY');}
-			else
-			{$zeit = $_POST['time_from']. ' - '. $_POST['time_to'];}
-			
-			$sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.' 
-                 WHERE cat_id = '.$_POST['dat_cat_id'];
-			$gDb->query($sql_cal);
-			$row_cal = $gDb->fetch_array();
-			$calendar = $row_cal['cat_name'];
-			
-			if(strlen($_POST['dat_location']) > 0)
-			{$ort = $_POST['dat_location'];}
-			else
-			{$ort = 'n/a';}	
-			
-			if($_POST['dat_room_id'] == 0)
-			{$raum = 'n/a';}
-			
-			if(strlen($_POST['dat_max_members']) > 0)
-			{$teilnehmer = $_POST['dat_max_members'];}
-			else
-			{$teilnehmer = 'n/a';}
-			
-			$message_part1 = str_replace("<br />","\n", $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar));
-			$message_part2 = str_replace("<br />","\n", $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')));
-			$message_part3 = str_replace("<br />","\n", $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date('d.m.Y H:m', time())));
 
-			$sender_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
-			$sender_email = $gCurrentUser->getValue('EMAIL');
-			
-			if(strlen($gCurrentUser->getValue('EMAIL')) == 0)
-			{
-				$sender_email = $gPreferences['email_administrator'];
-				$sender_name  = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
-			}
-			admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ': '.$gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message_part1.$message_part2.$message_part3, $sender_name, $sender_email);
-		}
+		// Daten für Benachrichtigung zusammenstellen
+		if($_POST['date_from'] == $_POST['date_to'])
+		{$datum = $_POST['date_from'];}
+		else
+		{$datum = $_POST['date_from']. ' - '.$_POST['date_to'];}
+		
+		if(isset($_POST['dat_all_day']))
+		{$zeit = $gL10n->get('DAT_ALL_DAY');}
+		else
+		{$zeit = $_POST['time_from']. ' - '. $_POST['time_to'];}
+		
+		$sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.' 
+             WHERE cat_id = '.$_POST['dat_cat_id'];
+		$gDb->query($sql_cal);
+		$row_cal = $gDb->fetch_array();
+		$calendar = $row_cal['cat_name'];
+		
+		if(strlen($_POST['dat_location']) > 0)
+		{$ort = $_POST['dat_location'];}
+		else
+		{$ort = 'n/a';}	
+		
+		if($_POST['dat_room_id'] == 0)
+		{$raum = 'n/a';}
+		
+		if(strlen($_POST['dat_max_members']) > 0)
+		{$teilnehmer = $_POST['dat_max_members'];}
+		else
+		{$teilnehmer = 'n/a';}
+		
+		$message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
+                  .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
+                  .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART3', date($gPreferences['system_date'], time()));
+        
+        $notification = new Email();
+        $notification->adminNotfication($gL10n->get('DAT_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
 	}
     
     // ----------------------------------------
