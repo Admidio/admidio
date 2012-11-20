@@ -335,7 +335,51 @@ class Email extends PHPMailer
     {
         $this->emSendAsHTML = true;
     }    
-
+    
+    //Mailbenachrichtigung für Admin
+    public function adminNotfication($subject, $message, $editorName='', $editorEmail='')
+    {
+        global $gPreferences;
+        global $gCurrentOrganization;
+        global $gL10n;
+        
+        if($gPreferences['enable_email_notification'] == 1)
+        {
+            //Send Notifivation to Admin
+            $this->addRecipient($gPreferences['email_administrator']); 
+            
+            //Set Sender
+            if($editorEmail == '')
+            {
+                $this->setSender($gPreferences['email_administrator']);
+            }
+            else
+            {
+                $this->setSender($editorEmail, $editorName);    
+            }
+            
+            //Set Subject
+            $this->setSubject($gCurrentOrganization->getValue('org_shortname'). ": ".$subject);
+            
+            //Set Text
+            $this->setText($message);
+            
+            //HTML wenn erlaubt
+            if($gPreferences['mail_html_registered_users'] == 1)
+            {
+               $this->sendDataAsHtml();
+            }           
+                            
+            //Verschicken
+            return $this->sendEmail();
+        }
+        else
+        {
+            return FALSE;    
+        }               
+        
+    }
+    
     // Funktion um die Email endgueltig zu versenden...
     public function sendEmail()
     {

@@ -298,22 +298,6 @@ function admFuncProcessableImageSize()
     return $memory_limit/(3*2.5); 
 }
 
-// Funktion zur Versendung von Benachrichtigungs-Emails (bei neuen Einträgen)
-function admFuncEmailNotification($recipient, $reference, $message, $senderName, $senderEmail)
-{
-    global $gPreferences;
-    
-	// if mail should be send in iso-8859-1 then convert the content from utf8 to iso
-	if($gPreferences['mail_character_encoding'] == 'iso-8859-1')
-	{
-	   $reference  = utf8_decode($reference);
-	   $message    = utf8_decode($message);
-	   $senderName = utf8_decode($senderName);
-    }
-
-	mail($recipient, $reference, $message, 'From: '.$senderName.' <'.$senderEmail.'>');
-}
-
 /// Verify the content of an array element if it's the expected datatype
 /** The function is designed to check the content of @b $_GET and @b $_POST elements and should be used at the beginning of a script.
  *  But the function can also be used with every array and their elements. You can set several flags (like required value, datatype …) 

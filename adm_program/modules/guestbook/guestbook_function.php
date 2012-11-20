@@ -26,6 +26,7 @@ require_once('../../system/common.php');
 require_once('../../system/classes/table_guestbook.php');
 require_once('../../system/classes/table_guestbook_comment.php');
 require_once('../../libs/htmlawed/htmlawed.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
@@ -211,28 +212,26 @@ if ($getMode == 1 || $getMode == 3)
 		if($return_code == 0)
 		{	
 			// Benachrichtigungs-Email für neue Einträge
-			if($gPreferences['enable_email_notification'] == 1)
+			if(!$gValidLogin)
 			{
-				if(!$gValidLogin)
-				{
-					$gbo_name  = $_POST['gbo_name'];
-					$gbo_email = $_POST['gbo_email'];
-					$gbo_text  = $_POST['gbo_text'];
-				}
-				else
-				{
-					$gbo_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
-					$gbo_email = $gCurrentUser->getValue('EMAIL');
-					$gbo_text  = $_POST['gbo_text'];
-				}
-				$sender_name = $gbo_name;
-				if(!strValidCharacters($gbo_email, 'email'))
-				{
-					$gbo_email = $gPreferences['email_administrator'];
-					$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
-				}
-				admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date("d.m.Y H:m", time()))), $sender_name, $gbo_email);
+				$gbo_name  = $_POST['gbo_name'];
+				$gbo_email = $_POST['gbo_email'];
+				$gbo_text  = $_POST['gbo_text'];
 			}
+			else
+			{
+				$gbo_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+				$gbo_email = $gCurrentUser->getValue('EMAIL');
+				$gbo_text  = $_POST['gbo_text'];
+			}
+			$sender_name = $gbo_name;
+			if(!strValidCharacters($gbo_email, 'email'))
+			{
+				$gbo_email = $gPreferences['email_administrator'];
+				$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
+			}         
+            $notification = new Email();
+            $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_TITLE'), $gL10n->get('GBO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $gbo_text, $gbo_name, date($gPreferences['system_date'], time())), $sender_name, $gbo_email);
 		}
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht
@@ -398,28 +397,26 @@ elseif($getMode == 4 || $getMode == 8)
 		if($return_code == 0)
 		{	
 			// Benachrichtigungs-Email für neue Einträge
-			if($gPreferences['enable_email_notification'] == 1)
+			if(!$gValidLogin)
 			{
-				if(!$gValidLogin)
-				{
-					$gbc_name  = $guestbook_comment->getValue('gbc_name');
-					$gbc_email = $guestbook_comment->getValue('gbc_email');
-				}
-				else
-				{
-					$gbc_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
-					$gbc_email = $gCurrentUser->getValue('EMAIL');
-				}
-				$sender_name = $gbc_name;
-				if(strlen($gbc_email) == 0)
-				{
-					$gbc_email = $gPreferences['email_administrator'];
-					$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
-				}
-				admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), 
-				    str_replace("<br />","\n",$gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), 
-				    $guestbook_comment->getValue('gbc_text'), $gbc_name, date("d.m.Y H:m", time()))), $sender_name, $gbc_email);
+				$gbc_name  = $guestbook_comment->getValue('gbc_name');
+				$gbc_email = $guestbook_comment->getValue('gbc_email');
 			}
+			else
+			{
+				$gbc_name  = $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME');
+				$gbc_email = $gCurrentUser->getValue('EMAIL');
+			}
+			$sender_name = $gbc_name;
+			if(strlen($gbc_email) == 0)
+			{
+				$gbc_email = $gPreferences['email_administrator'];
+				$sender_name = 'Administrator '.$gCurrentOrganization->getValue('org_homepage');
+			}
+            $message = $gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $guestbook_comment->getValue('gbc_text'), $gbc_name, date($gPreferences['system_date'], time()));           
+            $notification = new Email();
+            $notification->adminNotfication($gL10n->get('GBO_EMAIL_NOTIFICATION_GBC_TITLE'), $message, $sender_name, $gbc_email);    
+
 		}
 
         // Der Inhalt des Formulars wird bei erfolgreichem insert/update aus der Session geloescht

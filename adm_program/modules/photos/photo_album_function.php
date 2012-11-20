@@ -18,6 +18,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_photos.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
@@ -149,12 +150,11 @@ if($getJob == 'new' || $getJob == 'change')
         }
 		
 		if(strlen($error['text']) == 0)
-		{
+		{ 
 			// Benachrichtigungs-Email für neue Einträge
-			if($gPreferences['enable_email_notification'] == 1)
-			{
-				admFuncEmailNotification($gPreferences['email_administrator'], $gCurrentOrganization->getValue('org_shortname'). ": ".$gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), str_replace("<br />","\n",$gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date("d.m.Y H:m", time()))), $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-			}	
+		    $notification = new Email();
+            $message = $gL10n->get('PHO_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $_POST['pho_name'], $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
+            $notification->adminNotfication($gL10n->get('PHO_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));		
 		}
         
         $getPhotoId = $photo_album->getValue('pho_id');
