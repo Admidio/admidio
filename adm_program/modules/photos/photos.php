@@ -40,6 +40,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getShowPage = admFuncVariableIsValid($_GET, 'show_page', 'numeric', 1);
 $getLocked   = admFuncVariableIsValid($_GET, 'locked', 'boolean');
+$getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', 0);
 
 unset($_SESSION['photo_album_request']);
 
@@ -74,7 +75,7 @@ else
 if($getPhotoId > 0 && $photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}   
+}
 
 /*********************LOCKED************************************/
 //Falls gefordert und Foto-edit-rechte, aendern der Freigabe
@@ -151,6 +152,18 @@ if($gPreferences['photo_show_mode']==1)
                                                            next:\''.$gL10n->get('SYS_NEXT').'\'});
             });
         --></script>';
+}
+
+//bei übergebenem Photo LinkKlick simulieren
+if($getPhotoNr>0)
+{
+    $gLayout['header'] = $gLayout['header']. '
+    <script type="text/javascript">
+        $(document).ready(function() 
+        {
+            $("#img_'.$getPhotoNr.'").trigger("click");
+        }); 
+    </script>';
 }
 
 //Photomodulspezifische CSS laden
@@ -237,6 +250,12 @@ echo '<div class="photoModuleContainer">';
         //Popupfenstergröße
         $popup_height = $gPreferences['photo_show_height']+210;
         $popup_width  = $gPreferences['photo_show_width']+70;
+        
+        //Wenn Bild übergeben wurde richtige Albenseite öffnen
+        if($getPhotoNr>0)
+        {
+            $getShowPage = ceil($getPhotoNr/$thumbs_per_page);
+        } 
 
         //Album Seitennavigation
         function photoAlbumPageNavigation($photo_album, $act_thumb_page, $thumbs_per_page)
