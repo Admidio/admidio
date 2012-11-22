@@ -18,6 +18,7 @@ require_once('../../system/common.php');
 require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_weblink.php');
+require_once('../../system/classes/module_weblinks.php');
 unset($_SESSION['links_request']);
 
 // Initialize and check the parameters
@@ -66,42 +67,12 @@ if($gPreferences['enable_rss'] == 1)
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
+$weblinks = new Weblinks($getLinkId, $getCatId);
+$numLinks = $weblinks->getWeblinksCount();
+
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>
 <div id="links_overview">';
-
-// SQL-Statement zusammenbasteln
-
-$sqlCondidtions = '';
-
-if($getLinkId > 0)
-{
-    // falls eine id fuer einen bestimmten Link uebergeben worden ist...
-    $sqlCondidtions .= ' AND lnk_id = '. $getLinkId;
-}
-else if($getCatId > 0)
-{
-    // alle Links zu einer Kategorie anzeigen
-    $sqlCondidtions .= ' AND cat_id = '.$getCatId;
-}
-
-if($gValidLogin == false)
-{
-    // if user isn't logged in, then don't show hidden categories
-    $sqlCondidtions .= ' AND cat_hidden = 0 ';
-}
-
-// Gucken wieviele Linkdatensaetze insgesamt fuer die Gruppierung vorliegen...
-// Das wird naemlich noch fuer die Seitenanzeige benoetigt...
-// Wenn User nicht eingeloggt ist, Kategorien, die hidden sind, aussortieren
-$sql = 'SELECT COUNT(*) FROM '. TBL_LINKS. ', '. TBL_CATEGORIES .'
-        WHERE lnk_cat_id = cat_id
-        AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-        AND cat_type = \'LNK\'
-        '.$sqlCondidtions;
-$cat_result = $gDb->query($sql);
-$row = $gDb->fetch_array($cat_result);
-$numLinks = $row[0];
 
 // Anzahl Ankuendigungen pro Seite
 if($gPreferences['weblinks_per_page'] > 0)
@@ -113,16 +84,6 @@ else
     $weblinks_per_page = $numLinks;
 }
 
-// Links entsprechend der Einschraenkung suchen
-$sql = 'SELECT cat.*, lnk.*
-          FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
-         WHERE lnk_cat_id = cat_id
-           AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-           AND cat_type = \'LNK\'
-           '.$sqlCondidtions.'
-         ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC
-         LIMIT '.$weblinks_per_page.' OFFSET '.$getStart;
-$links_result = $gDb->query($sql);
 
 // show icon links and navigation
 
@@ -156,7 +117,7 @@ if($getLinkId == 0)
     echo admFuncGeneratePagination($baseUrl, $numLinks, $weblinks_per_page, $getStart, TRUE);
 }
 
-if ($gDb->num_rows($links_result) == 0)
+if ($weblinks->getWeblinksCount() == 0)
 {
     // Keine Links gefunden
     if ($getLinkId > 0)
@@ -170,16 +131,18 @@ if ($gDb->num_rows($links_result) == 0)
 }
 else
 {
+    $weblinkArray = $weblinks->getWeblinks();  
+    
+    $getWeblinks = $weblinks->getWeblinks($getStart);    
+    $weblink = new TableWeblink($gDb);
+
     $j = 0;         // Zaehlervariable fuer Anzahl von fetch_object
     $i = 0;         // Zaehlervariable fuer Anzahl der Links in einer Kategorie
     $previous_cat_id = -1;  // Vorherige Kategorie-ID.
     $new_category = true;   // Kommt jetzt eine neue Kategorie?
-
-    $weblink = new TableWeblink($gDb);
-
-    // Solange die vorherige Kategorie-ID sich nicht veraendert...
-    // Sonst in die neue Kategorie springen
-    while ($row = $gDb->fetch_array($links_result))
+    
+    // Weblinks auflisten
+    foreach($getWeblinks['weblinks'] as $row)
     {
         // Link-Objekt initialisieren und neuen DS uebergeben
         $weblink->clear();
