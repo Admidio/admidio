@@ -57,25 +57,10 @@ if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId]=='true')
 }
 
 //Datensatzupdate
-$mem_count = array('mem_count' => 99999999);
-
-//wenn Mitgliederzahl begrenzt aktuelle Mitgliederzahl ermitteln
-if($role->getValue('rol_max_members') > 0)
-{   
-    //Zählen wievile Mitglieder die Rolle schon hat
-    $sql = 'SELECT COUNT(*) as mem_count
-            FROM '. TBL_MEMBERS. '
-            WHERE mem_rol_id = '. $role->getValue('rol_id'). '
-            AND mem_usr_id != '.$getUserId.'
-            AND mem_leader = 0 
-            AND mem_begin <= \''.DATE_NOW.'\'
-            AND mem_end    > \''.DATE_NOW.'\'';
-    $result_mem_count = $gDb->query($sql);
-    $mem_count = $gDb->fetch_array($result_mem_count);
-}
+$mem_count = $role->countMembers($getUserId);
 
 //Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
-if($leadership==1 || ($leadership==0 && $membership==1 && ($role->getValue('rol_max_members') > $mem_count['mem_count'] || $role->getValue('rol_max_members')==0)))
+if($leadership==1 || ($leadership==0 && $membership==1 && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members')==0)))
 {
 	$member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
     echo 'success';
