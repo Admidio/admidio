@@ -146,14 +146,16 @@ class TableRoles extends TableAccess
 	}
 	
 	/** Method determines the number of active members (without leaders) of this role
-	 *  @return Returns the number of members of this role
+	 * @param exceptUserId UserId witch shoudn't be counted 
+     * @return Returns the number of members of this role
 	 */
-	public function countMembers()
+	public function countMembers($exceptUserId=NULL)
 	{
 		if($this->countMembers == -1)
 		{
             $sql    = 'SELECT COUNT(mem_id) FROM '. TBL_MEMBERS. '
 			            WHERE mem_rol_id = '.$this->getValue('rol_id').'
+						  AND mem_usr_id != '.$exceptUserId.'
 						  AND mem_leader = 0 
 						  AND mem_begin <= \''.DATE_NOW.'\'
                           AND mem_end    > \''.DATE_NOW.'\' ';
