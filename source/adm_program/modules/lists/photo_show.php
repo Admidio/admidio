@@ -15,35 +15,22 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true, null, true);
+$user = new User($gDb, $gProfileFields, $getUserId);
 
-// pruefen, ob Profilfoto aus DB oder Filesystem kommt
-if($gPreferences['profile_photo_storage'] == 0)
+$userPhoto = $user->getValue('usr_photo');
+
+// wurde kein Userbild gefunden oder hat der User nicht das recht das Bild zu sehen, dann immer das Default-Bild ausgeben
+if(strlen($userPhoto)==0 || !$gCurrentUser->viewProfile($user))
 {
-    // Profilbild aus DB einlesen
-    $sql = 'SELECT usr_photo FROM '.TBL_USERS.' WHERE usr_id = '.$getUserId;
-    $gDb->query($sql);
-    $row = $gDb->fetch_array();
-
-    if(strlen($row['usr_photo']) > 0)
-    {
-        header('Content-Type: image/jpeg');
-        echo $row['usr_photo'];
-        exit();
-    }
+    header('Content-Type: image/png');
+    readfile(THEME_SERVER_PATH. '/images/no_profile_pic.png');
 }
 else
 {
-    // Profilbild aus dem Filesystem einlesen bzw. Default-Bild anzeigen
-    if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg'))
-    {
-        header('Content-Type: image/jpeg');
-        readfile(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$getUserId.'.jpg');
-        exit();
-    }
+	header('Content-Type: image/jpeg');
+    echo $userPhoto;
 }
 
-// wurde kein Userbild gefunden, dann immer das Default-Bild ausgeben
-header('Content-Type: image/png');
-readfile(THEME_SERVER_PATH. '/images/no_profile_pic.png');
+
 
 ?>

@@ -417,9 +417,17 @@ class User extends TableUsers
      */ 
     public function getValue($columnName, $format = '')
     {
+        global $gPreferences;
         if(strpos($columnName, 'usr_') === 0)
         {
-            return parent::getValue($columnName, $format);
+            if($columnName == 'usr_photo' && $gPreferences['profile_photo_storage'] == 0 && $gPreferences['profile_photo_storage'] == 0 && file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))
+            {
+                return readfile(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg');             
+            }            
+            else
+            {
+                return parent::getValue($columnName, $format);    
+            }
         }
         else
         {
