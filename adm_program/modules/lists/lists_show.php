@@ -506,8 +506,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 				/*****************************************************************/
                 // create field content for each field type and output format
 				/*****************************************************************/
-
-				if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id'))
+				if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
 				{
 					$content = $gL10n->getCountryByCode($row[$sql_column_number]);
 				}
@@ -516,27 +515,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                     // show user photo
                     if($getMode == 'html' || $getMode == 'print')
                     {
-                        $imgSource = 'photo_show.php?usr_id='.$row['usr_id'];
-                        if($gPreferences['profile_photo_storage'] == 0)
-                        {
-                            if(strlen($row[$sql_column_number]) == 0)
-                            {
-                                $imgSource = THEME_PATH. '/images/no_profile_pic.png';
-                            }
-                        }
-                        else
-                        {
-                            // read profile photo from file system or show default photo
-                            if(file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$row['usr_id'].'.jpg'))
-                            {
-                                $imgSource = $g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$row['usr_id'];
-                            }
-                            else
-                            {
-                                $imgSource = THEME_PATH. '/images/no_profile_pic.png';
-                            }
-                        }
-                        $content = '<img src="'.$imgSource.'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
+                        $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$row['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                     }
                     if ($getMode == 'csv' && $row[$sql_column_number] != NULL)
                     {
