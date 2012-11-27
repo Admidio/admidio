@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Profil bearbeiten
+ * Create or edit a user profile
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -13,9 +13,9 @@
  *              1 - Create a new user
  *              2 - Create a registration
  *              3 - assign/accept a registration
- * lastname   : Der Nachname kann uebergeben und bei neuen Benutzern vorbelegt werden
- * firstname  : Der Vorname kann uebergeben und bei neuen Benutzern vorbelegt werden
- * remove_usr : 1 - Entfernt die letzte Url aus dem Navigations-Cache
+ * lastname   : (Optional) Lastname could be set and will than be preassigned for new users
+ * firstname  : (Optional) First name could be set and will than be preassigned for new users
+ * remove_url : 1 - Removes the last url from navigation cache
  *
  *****************************************************************************/
 
@@ -58,84 +58,31 @@ if($getUserId > 0 && $getNewUser != 0 && $getNewUser != 3)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-// read user data
-$user = new User($gDb, $gProfileFields, $getUserId);
-
-// pruefen, ob Modul aufgerufen werden darf
-switch($getNewUser)
-{
-    case 0:
-        // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentUser->editProfile($user) == false)
-        {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        }
-        break;
-
-    case 1:
-        // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
-        if($gCurrentUser->editUsers() == false)
-        {
-            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-        }
-        
-        // wurde Nachname und Vorname uebergeben, dann diese bereits vorbelegen
-        $user->setValue('LAST_NAME', $getLastname);
-        $user->setValue('FIRST_NAME', $getFirstname);
-        break;
-
-    case 2:
-    case 3:
-        // Registrierung deaktiviert, also auch diesen Modus sperren
-        if($gPreferences['registration_mode'] == 0)
-        {
-            $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-        }
-        break;
-}
-
-$_SESSION['navigation']->addUrl(CURRENT_URL);
-
-// Formular wurde ueber "Zurueck"-Funktion aufgerufen, also alle Felder mit den vorherigen Werten fuellen
-if(isset($_SESSION['profile_request']))
-{
-    $user->noValueCheck();
-
-    foreach($gProfileFields->mProfileFields as $field)
-    {
-        $field_name = 'usf-'. $field->getValue('usf_id');
-        if(isset($_SESSION['profile_request'][$field_name]))
-        {
-            $user->setValue($field->getValue('usf_name_intern'), $_SESSION['profile_request'][$field_name]);
-        }
-    }
-
-    if(isset($_SESSION['profile_request']['usr_login_name']))
-    {
-		$user->setArray(array('usr_login_name' => $_SESSION['profile_request']['usr_login_name']));
-    }
-    
-    unset($_SESSION['profile_request']);
-}
-
-// diese Funktion gibt den Html-Code fuer ein Feld mit Beschreibung wieder
-// dabei wird der Inhalt richtig formatiert
+/** This function creates the html code for one profile field that is set in the parameters.
+ *  The html output will consider the configuration of the profile field and creates the 
+ *  neccessary html element. Also the data will be filled and the correct format will be set.
+ *  @param $fieldNameIntern	Internal name of the profile field for which the html should be generated e.g. @b LAST_NAME or @b EMAIL
+ *  @param $user			An object of the @b User class of the user that should be edited
+ *  @param $getNewUser		The parameter @b new_user of the script @b profile_new.php
+ *  @return Returns a string with the html of the profile field to add it to a html form
+ */
 function getFieldCode($fieldNameIntern, $user, $getNewUser)
 {
     global $gPreferences, $g_root_path, $gCurrentUser, $gL10n, $gProfileFields;
     $value    = '';
     
-    // Felder sperren, falls dies so eingestellt wurde
+	// disable field if this is configured in profile field configuration
     $disabled = '';
     if($gProfileFields->getProperty($fieldNameIntern, 'usf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
     {
 		$disabled = ' disabled="disabled" ';
     }
 
-    // Code fuer die einzelnen Felder zusammensetzen    
+    // code for different field types
+    
     if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'COUNTRY')
     {
-        //Laenderliste oeffnen
+		// create selectbox with all countries
         $value = '
 		<select size="1" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" '.$disabled.'>
 			<option value="" ';
@@ -145,20 +92,24 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
                     $value = $value. ' selected="selected" ';
                 }
 			$value = $value. '>- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+			
+			// first add default country to selectbox, so this country is very prominent to the user
             if(strlen($gPreferences['default_country']) > 0)
             {
                 $value = $value. ' <option value="">--------------------------------</option>
 				<option value="'. $gPreferences['default_country']. '">'. $gL10n->getCountryByCode($gPreferences['default_country']). '</option>
                 <option value="">--------------------------------</option>';
             }
+			
+			// add all countries to selectbox and select the assigned or default country
 			foreach($gL10n->getCountries() as $key => $country_name)
 			{
 				$value = $value. '<option value="'.$key.'" ';
-				if($getNewUser > 0 && $key == $gPreferences['default_country'])
+				if($user->getValue('usr_id') == 0 && $key == $gPreferences['default_country'])
 				{
 					$value = $value. ' selected="selected" ';
 				}
-				if(!$getNewUser > 0 && $country_name == $user->getValue($fieldNameIntern))
+				if($user->getValue('usr_id') > 0 && $country_name == $user->getValue($fieldNameIntern))
 				{
 					$value = $value. ' selected="selected" ';
 				}
@@ -345,6 +296,67 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
              
     return $html;
 }
+
+// read user data
+$user = new User($gDb, $gProfileFields, $getUserId);
+
+// pruefen, ob Modul aufgerufen werden darf
+switch($getNewUser)
+{
+    case 0:
+        // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
+        if($gCurrentUser->editProfile($user) == false)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        }
+        break;
+
+    case 1:
+        // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
+        if($gCurrentUser->editUsers() == false)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        }
+        
+        // wurde Nachname und Vorname uebergeben, dann diese bereits vorbelegen
+        $user->setValue('LAST_NAME', $getLastname);
+        $user->setValue('FIRST_NAME', $getFirstname);
+        break;
+
+    case 2:
+    case 3:
+        // Registrierung deaktiviert, also auch diesen Modus sperren
+        if($gPreferences['registration_mode'] == 0)
+        {
+            $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+        }
+        break;
+}
+
+$_SESSION['navigation']->addUrl(CURRENT_URL);
+
+// Formular wurde ueber "Zurueck"-Funktion aufgerufen, also alle Felder mit den vorherigen Werten fuellen
+if(isset($_SESSION['profile_request']))
+{
+    $user->noValueCheck();
+
+    foreach($gProfileFields->mProfileFields as $field)
+    {
+        $field_name = 'usf-'. $field->getValue('usf_id');
+        if(isset($_SESSION['profile_request'][$field_name]))
+        {
+            $user->setValue($field->getValue('usf_name_intern'), $_SESSION['profile_request'][$field_name]);
+        }
+    }
+
+    if(isset($_SESSION['profile_request']['usr_login_name']))
+    {
+		$user->setArray(array('usr_login_name' => $_SESSION['profile_request']['usr_login_name']));
+    }
+    
+    unset($_SESSION['profile_request']);
+}
+
 
 // Html-Kopf ausgeben
 if($getNewUser == 1)
