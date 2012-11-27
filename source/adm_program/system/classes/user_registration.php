@@ -36,8 +36,16 @@ class UserRegistration extends User
 {
 	private $TableRegistration;
 
-    // Constructor
-    public function __construct(&$db, $userFields, $userId, $organizationId = 0)
+	/** Constuctor that will create an object of a recordset of the users table. 
+	 *  If the id is set than this recordset will be loaded.
+	 *  @param $db 				Object of the class database. This could be the default object @b $gDb.
+	 *  @param $userFields 		An object of the ProfileFields class with the profile field structure 
+	 *					   		of the current organization. This could be the default object @b $gProfileFields.
+	 *  @param $userId 			The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
+	 *  @param $organizationId 	The id of the organization for which the user should be registrated. 
+	 *		 				   	If no id is set than the user will be registrated for the current organization.
+	 */
+    public function __construct(&$db, $userFields, $userId = 0, $organizationId = 0)
     {
 		global $gCurrentOrganization;
 		

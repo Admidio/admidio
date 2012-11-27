@@ -31,10 +31,10 @@
 class TableAccess
 {
 	private   $additionalTables;	///< Array with sub array that contains additional tables and their connected fields that should be selected when data is read
-    protected $table_name;
-    protected $column_praefix;
-    protected $key_name;
-    public    $db;					// db object must public because of session handling
+    protected $tableName;			///< Name of the database table of this object. This must be the table name with the installation specific praefix e.g. @b demo_users
+    protected $columnPraefix;		///< The praefix of each column that this table has. E.g. the table adm_users has the column praefix @b usr
+    protected $keyColumnName;		///< Name of the unique autoincrement index column of the database table
+    public    $db;					///< Database object to handle the communication with the database. This must be public because of session handling.
     
     protected $new_record;          // Merker, ob ein neuer Datensatz oder vorhandener Datensatz bearbeitet wird
     public $columnsValueChanged; 	// Merker ob an den dbColumns Daten was geaendert wurde
@@ -43,16 +43,16 @@ class TableAccess
     
 	/** Constuctor that will create an object of a recordset of the specified table. 
 	 *  If the id is set than this recordset will be loaded.
-	 *  @param $db Object of the class database. This should be the default object @b $gDb.
-	 *  @param $tableName The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
-	 *  @param $columnPraefix The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
-	 *  @param $id The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
+	 *  @param $db 				Object of the class database. This should be the default object @b $gDb.
+	 *  @param $tableName 		The name of the database table. Because of specific praefixes this should be the define value e.g. @b TBL_USERS
+	 *  @param $columnPraefix 	The praefix of each column of that table. E.g. for table @b adm_roles this is @b rol
+	 *  @param $id 				The id of the recordset that should be loaded. If id isn't set than an empty object of the table is created.
 	 */
     public function __construct(&$db, $tableName, $columnPraefix, $id = '')
     {
         $this->db            =& $db;
-        $this->table_name     = $tableName;
-        $this->column_praefix = $columnPraefix;
+        $this->tableName     = $tableName;
+        $this->columnPraefix = $columnPraefix;
 
         // if a id is commited, then read data out of database
         if((is_numeric($id) == false && strlen($id) > 0) 
@@ -90,7 +90,7 @@ class TableAccess
         else
         {
             // alle Spalten der Tabelle ins Array einlesen und auf leer setzen
-			$columnProperties = $this->db->showColumns($this->table_name);
+			$columnProperties = $this->db->showColumns($this->tableName);
 			
 			foreach($columnProperties as $key => $value)
 			{
@@ -103,7 +103,7 @@ class TableAccess
                 
                 if($value['serial'] == 1)
                 {
-                    $this->key_name = $key;
+                    $this->keyColumnName = $key;
                 }
 			}
         }
@@ -112,9 +112,9 @@ class TableAccess
 	/** Adds a table with the connected fields to a member array. This table will be add to the 
 	 *  select statement if data is read and the connected record is avaiable in this class.
 	 *  The connected table must have a foreign key in the class table.
-	 *  @param $table Database table name that should be connected. This can be the define of the table.
-	 *  @param $columnNameAdditionalTable Name of the column in the connected table that has the foreign key to the class table
-	 *  @param $columnNameClassTable Name of the column in the class table that has the foreign key to the connected table
+	 *  @param $table 						Database table name that should be connected. This can be the define of the table.
+	 *  @param $columnNameAdditionalTable 	Name of the column in the connected table that has the foreign key to the class table
+	 *  @param $columnNameClassTable 		Name of the column in the class table that has the foreign key to the connected table
 	 *  @par Examples
 	 *  @code  // Constructor of adm_dates object where the category (calendar) is connected
      *  public function __construct(&$db, $dat_id = 0)
@@ -135,7 +135,7 @@ class TableAccess
 	 */
     public function countAllRecords()
     {
-        $sql = 'SELECT COUNT(1) as count FROM '.$this->table_name;
+        $sql = 'SELECT COUNT(1) as count FROM '.$this->tableName;
         $this->db->query($sql);
         $row = $this->db->fetch_array();
         return $row['count'];
@@ -146,10 +146,10 @@ class TableAccess
 	 */
     public function delete()
     {
-		if(strlen($this->dbColumns[$this->key_name]) > 0)
+		if(strlen($this->dbColumns[$this->keyColumnName]) > 0)
 		{
-			$sql    = 'DELETE FROM '.$this->table_name.' 
-						WHERE '.$this->key_name.' = \''. $this->dbColumns[$this->key_name]. '\'';
+			$sql    = 'DELETE FROM '.$this->tableName.' 
+						WHERE '.$this->keyColumnName.' = \''. $this->dbColumns[$this->keyColumnName]. '\'';
 			$this->db->query($sql);
 		}
 
@@ -159,9 +159,9 @@ class TableAccess
 
     /** Get the value of a column of the database table.
      *  If the value was manipulated before with @b setValue than the manipulated value is returned.
-     *  @param $columnName The name of the database column whose value should be read
-     *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *  @param $columnName	The name of the database column whose value should be read
+     *  @param $format 		For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
+     *                 		For text columns the format can be @b plain that would return the original database value without any transformations
      *  @return Returns the value of the database column.
      *          If the value was manipulated before with @b setValue than the manipulated value is returned.
      */ 
@@ -173,7 +173,7 @@ class TableAccess
         if(isset($this->dbColumns[$columnName]))
         {
             // wenn Schluesselfeld leer ist, dann 0 zurueckgeben
-            if($columnName == $this->key_name && empty($this->dbColumns[$columnName]))
+            if($columnName == $this->keyColumnName && empty($this->dbColumns[$columnName]))
             {
                 $columnValue = 0;
             }
@@ -278,7 +278,7 @@ class TableAccess
         
         if(strlen($sqlWhereCondition) > 0)
         {
-            $sql = 'SELECT * FROM '.$this->table_name.$sqlAdditionalTables.'
+            $sql = 'SELECT * FROM '.$this->tableName.$sqlAdditionalTables.'
                      WHERE '.$sqlWhereCondition;
             $result = $this->db->query($sql);
     
@@ -322,7 +322,7 @@ class TableAccess
 		// add id to sql condition
         if(strlen($id) > 0 && $id != '0')
         {
-            $sqlWhereCondition = ' AND '.$this->key_name.' = \''.$id.'\' ';
+            $sqlWhereCondition = ' AND '.$this->keyColumnName.' = \''.$id.'\' ';
 		
 			// call method to read data out of database
 			return $this->readData($sqlWhereCondition);
@@ -381,7 +381,7 @@ class TableAccess
 	 */
     public function save($updateFingerPrint = true)
     {
-        if($this->columnsValueChanged || strlen($this->dbColumns[$this->key_name]) == 0)
+        if($this->columnsValueChanged || strlen($this->dbColumns[$this->keyColumnName]) == 0)
         {
             // SQL-Update-Statement fuer User-Tabelle zusammenbasteln
             $item_connection = '';                
@@ -392,21 +392,21 @@ class TableAccess
             {
                 // besitzt die Tabelle Felder zum Speichern des Erstellers und der letzten Aenderung, 
                 // dann diese hier automatisiert fuellen
-                if($this->new_record && isset($this->dbColumns[$this->column_praefix.'_usr_id_create']))
+                if($this->new_record && isset($this->dbColumns[$this->columnPraefix.'_usr_id_create']))
                 {
                     global $gCurrentUser;
-                    $this->setValue($this->column_praefix.'_timestamp_create', DATETIME_NOW);
-                    $this->setValue($this->column_praefix.'_usr_id_create', $gCurrentUser->getValue('usr_id'));
+                    $this->setValue($this->columnPraefix.'_timestamp_create', DATETIME_NOW);
+                    $this->setValue($this->columnPraefix.'_usr_id_create', $gCurrentUser->getValue('usr_id'));
                 }
-                elseif(isset($this->dbColumns[$this->column_praefix.'_usr_id_change']))
+                elseif(isset($this->dbColumns[$this->columnPraefix.'_usr_id_change']))
                 {
                     global $gCurrentUser;
                     // Daten nicht aktualisieren, wenn derselbe User dies innerhalb von 15 Minuten gemacht hat
-                    if(time() > (strtotime($this->getValue($this->column_praefix.'_timestamp_create')) + 900)
-                    || $gCurrentUser->getValue('usr_id') != $this->getValue($this->column_praefix.'_usr_id_create') )
+                    if(time() > (strtotime($this->getValue($this->columnPraefix.'_timestamp_create')) + 900)
+                    || $gCurrentUser->getValue('usr_id') != $this->getValue($this->columnPraefix.'_usr_id_create') )
                     {
-                        $this->setValue($this->column_praefix.'_timestamp_change', DATETIME_NOW);
-                        $this->setValue($this->column_praefix.'_usr_id_change', $gCurrentUser->getValue('usr_id'));
+                        $this->setValue($this->columnPraefix.'_timestamp_change', DATETIME_NOW);
+                        $this->setValue($this->columnPraefix.'_usr_id_change', $gCurrentUser->getValue('usr_id'));
                     }
                 }
             }
@@ -416,7 +416,7 @@ class TableAccess
             {
                 // Auto-Increment-Felder duerfen nicht im Insert/Update erscheinen
                 // Felder anderer Tabellen auch nicht
-                if(strpos($key, $this->column_praefix. '_') === 0
+                if(strpos($key, $this->columnPraefix. '_') === 0
                 && $this->columnsInfos[$key]['serial'] == 0) 
                 {
                     if($this->columnsInfos[$key]['changed'] == true)
@@ -477,18 +477,18 @@ class TableAccess
             if($this->new_record)
             {
 				// insert record and mark this object as not new and remember the new id
-                $sql = 'INSERT INTO '.$this->table_name.' ('.$sql_field_list.') VALUES ('.$sql_value_list.') ';
+                $sql = 'INSERT INTO '.$this->tableName.' ('.$sql_field_list.') VALUES ('.$sql_value_list.') ';
                 $this->db->query($sql);
                 $this->new_record = false;
-				if(strlen($this->key_name) > 0)
+				if(strlen($this->keyColumnName) > 0)
 				{
-					$this->dbColumns[$this->key_name] = $this->db->insert_id();
+					$this->dbColumns[$this->keyColumnName] = $this->db->insert_id();
 				}
             }
             else
             {
-                $sql = 'UPDATE '.$this->table_name.' SET '.$sql_field_list.' 
-                         WHERE '.$this->key_name.' = \''. $this->dbColumns[$this->key_name]. '\'';
+                $sql = 'UPDATE '.$this->tableName.' SET '.$sql_field_list.' 
+                         WHERE '.$this->keyColumnName.' = \''. $this->dbColumns[$this->keyColumnName]. '\'';
                 $this->db->query($sql);
             }
         }
@@ -531,9 +531,9 @@ class TableAccess
 
     /** Set a new value for a column of the database table.
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
-     *  @param $columnName The name of the database column whose value should get a new value
-     *  @param $newValue The new value that should be stored in the database field
-     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @param $columnName	The name of the database column whose value should get a new value
+     *  @param $newValue 	The new value that should be stored in the database field
+     *  @param $checkValue 	The value will be checked if it's valid. If set to @b false than the value will not be checked.  
      *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
      */ 
     public function setValue($columnName, $newValue, $checkValue = true)
@@ -583,7 +583,7 @@ class TableAccess
             }
 
             // wurde das Schluesselfeld auf 0 gesetzt, dann soll ein neuer Datensatz angelegt werden
-            if($columnName == $this->key_name && $newValue == 0)
+            if($columnName == $this->keyColumnName && $newValue == 0)
             {
                 $this->new_record = true;
             }

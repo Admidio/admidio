@@ -44,7 +44,13 @@ class User extends TableUsers
     protected $rolesMembershipLeader = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
 	protected $organizationId;					///< the organization for which the rights are read, could be changed with method @b setOrganization
 
-    // Konstruktor
+	/** Constuctor that will create an object of a recordset of the users table. 
+	 *  If the id is set than this recordset will be loaded.
+	 *  @param $db			Object of the class database. This could be the default object @b $gDb.
+	 *  @param $userFields 	An object of the ProfileFields class with the profile field structure 
+	 *					   	of the current organization. This could be the default object @b $gProfileFields.
+	 *  @param $userId 		The id of the user who should be loaded. If id isn't set than an empty object with no specific user is created.
+	 */
     public function __construct(&$db, $userFields, $userId = 0)
     {
 		global $gCurrentOrganization;
