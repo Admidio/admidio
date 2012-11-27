@@ -366,6 +366,17 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $date->save();
         $role->delete();
     }
+    
+    if($_POST['date_login'] == 1 && $date->getValue('dat_rol_id') > 0)
+    {
+        // max. members of participation could have been changed and must be updated in table role
+        $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
+        if($role->getValue('rol_max_members') != $date->getValue('dat_max_members'))
+        {
+            $role->setValue('rol_max_members', $date->getValue('dat_max_members'));
+            $role->save();
+        }
+    }
 
     unset($_SESSION['dates_request']);
     $_SESSION['navigation']->deleteLastUrl();
