@@ -36,7 +36,7 @@ if ($gCurrentUser->getValue('usr_id') > 0)
 	$_POST['mailfrom'] = $gCurrentUser->getValue('EMAIL');
 }
 
-$_SESSION['mail_request'] = $_REQUEST;
+$_SESSION['mail_request'] = $_POST;
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 

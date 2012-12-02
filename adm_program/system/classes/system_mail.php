@@ -1,4 +1,4 @@
- <?php
+<?php
 /******************************************************************************
  * Diese Klasse dient dazu Systemmails zu verschicken
  *
@@ -20,13 +20,14 @@
  *                    ausgelesen und Platzhalter ersetzt wurden
  *
  *****************************************************************************/
-
+ 
 require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 
 class SystemMail extends Email
 {
     private $smTextObject;
+    private $smOrganization;
     private $db;
     private $smMailText;
     private $smMailHeader;
@@ -35,7 +36,8 @@ class SystemMail extends Email
     // Konstruktor
     public function __construct(&$db)
     {
-        $this->smTextObject = new TableText($db);
+        $this->db          =& $db;
+        $this->smTextObject = new TableText($this->db);
         parent::__construct();
     }
     
@@ -44,24 +46,31 @@ class SystemMail extends Email
     // user       : Benutzerobjekt, zu dem die Daten dann ausgelesen und in die entsprechenden Platzhalter gesetzt werden
     public function getMailText($systemMailId, &$user)
     {
-        global $gCurrentOrganization, $gPreferences;
+        global $gPreferences;
+        
+        // create organization object of the organization the current user is assigned (at registration this can be every organization)
+        if(is_object($this->smOrganization) == false || $this->smOrganization->getValue('org_id') != $user->getOrganization())
+        {
+            $this->smOrganization = new Organization($this->db, $user->getOrganization());
+        }
     
+        // read email text from text table in database
         if($this->smTextObject->getValue('txt_name') != $systemMailId)
         {
-			$this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+			$this->smTextObject->readDataByColumns(array('txt_name' => $systemMailId, 'txt_org_id' => $this->smOrganization->getValue('org_id')));
         }
         
         $mailSrcText = $this->smTextObject->getValue('txt_text');
         
-        // jetzt alle Variablen ersetzen
+        // now replace all parameters in email text
         $mailSrcText = preg_replace ('/%user_first_name%/', $user->getValue('FIRST_NAME'),  $mailSrcText);
         $mailSrcText = preg_replace ('/%user_last_name%/',  $user->getValue('LAST_NAME'), $mailSrcText);
         $mailSrcText = preg_replace ('/%user_login_name%/', $user->getValue('usr_login_name'), $mailSrcText);
         $mailSrcText = preg_replace ('/%user_email%/', $user->getValue('EMAIL'),   $mailSrcText);
         $mailSrcText = preg_replace ('/%webmaster_email%/', $gPreferences['email_administrator'],  $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_short_name%/', $gCurrentOrganization->getValue('org_shortname'), $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_long_name%/',  $gCurrentOrganization->getValue('org_longname'), $mailSrcText);
-        $mailSrcText = preg_replace ('/%organization_homepage%/',   $gCurrentOrganization->getValue('org_homepage'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_short_name%/', $this->smOrganization->getValue('org_shortname'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_long_name%/',  $this->smOrganization->getValue('org_longname'), $mailSrcText);
+        $mailSrcText = preg_replace ('/%organization_homepage%/',   $this->smOrganization->getValue('org_homepage'), $mailSrcText);
         
         // zusaetzliche Variablen ersetzen
         for($i = 1; $i <= count($this->smVariables); $i++)
@@ -76,7 +85,7 @@ class SystemMail extends Email
         }
         else
         {
-            $this->smMailHeader = 'Systemmail von '. $gCurrentOrganization->getValue('org_homepage');
+            $this->smMailHeader = 'Systemmail von '. $this->smOrganization->getValue('org_homepage');
         }
         
         if(strpos($mailSrcText, '#content#') !== false)

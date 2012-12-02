@@ -51,7 +51,7 @@ if($getRoleId > 0)
     }
 }
 
-$_SESSION['roles_request'] = $_REQUEST;
+$_SESSION['roles_request'] = $_POST;
 
 if($getMode == 1)
 {

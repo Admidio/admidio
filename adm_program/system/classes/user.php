@@ -399,6 +399,19 @@ class User extends TableUsers
 		}
         return $visibleRoles;
     }
+
+	/** Returns the id of the organization this user object has been assigned.
+	 *  This is in the default case the default organization of the config file.
+	 *  @return Returns the id of the organization this user object has been assigned
+	 */
+    public function getOrganization()
+    {
+        if($this->organizationId > 0)
+        {
+            return $this->organizationId;
+        }
+        return 0;
+    }
 	
 	// returns an array with all role ids where the user is a member
 	public function getRoleMemberships()

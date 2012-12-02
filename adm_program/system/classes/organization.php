@@ -1,6 +1,6 @@
 <?php 
 /******************************************************************************
- * Klasse fuer Datenbanktabelle adm_organizations
+ * Class manages access to database table adm_organizations
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -25,17 +25,32 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_organizations.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
-class Organization extends TableOrganizations
+class Organization extends TableAccess
 {
-    protected $b_check_childs;        // Flag, ob schon nach Kinderorganisationen gesucht wurde
-    protected $child_orgas = array(); // Array mit allen Kinderorganisationen
+    protected $bCheckChildOrganizations;     ///< Flag will be set if the class had already search for child organizations
+    protected $childOrganizations = array(); ///< Array with all child organizations of this organization
     
-    // Konstruktor
+	/** Constuctor that will create an object of a recordset of the table adm_organizations. 
+	 *  If the id is set than the specific organization will be loaded.
+	 *  @param $db           Object of the class database. This should be the default object $gDb.
+	 *  @param $organization The recordset of the organization with this id will be loaded. 
+	 *                       The organization can be the table id or the organization shortname. 
+	 *                       If id isn't set than an empty object of the table is created.
+	 */
     public function __construct(&$db, $organization = '')
     {
-        parent::__construct($db, $organization);
+        parent::__construct($db, TBL_ORGANIZATIONS, 'org');
+		
+		if(is_numeric($organization))
+		{
+			$this->readDataById($organization);
+		}
+		else
+		{
+			$this->readDataByColumns(array('org_shortname' => $organization));
+		}
     }
     
     // interne Funktion, die spezielle Daten des Organizationobjekts loescht
@@ -43,59 +58,38 @@ class Organization extends TableOrganizations
     {
         parent::clear();
 
-        $this->b_check_childs = false;
-        $this->child_orgas    = array();
-    }
-        
-    // gibt ein Array mit allen organisationsspezifischen Einstellungen
-    // aus adm_preferences zurueck
-    public function getPreferences()
-    {
-        $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
-                    WHERE prf_org_id = '. $this->getValue('org_id');
-        $result = $this->db->query($sql);
-
-        $preferences = array();
-        while($prf_row = $this->db->fetch_array($result))
-        {
-            $preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
-        }
-        
-        return $preferences;
+        $this->bCheckChildOrganizations = false;
+        $this->childOrganizations    = array();
     }
     
-    // die Methode schreibt alle Parameter aus dem uebergebenen Array
-    // zurueck in die Datenbank, dabei werden nur die veraenderten oder
-    // neuen Parameter geschrieben
-    // $update : bestimmt, ob vorhandene Werte aktualisiert werden
-    public function setPreferences($preferences, $update = true)
+	/** Create a comma separated list with all organization ids of children, 
+	 *  parent and this organization that is prepared for use in SQL
+	 *  @param $shortname If set to true then a list of all shortnames will be returned
+	 *  @return Returns a string with a comma separated list of all organization ids that are parents or children and the own id
+	 */
+    public function getFamilySQL($shortname = false)
     {
-		$this->db->startTransaction();
-        $db_preferences = $this->getPreferences();
+        $organizationsId = '';
+		$organizationsShortname = '';
+        $arr_ref_orgas = $this->getReferenceOrganizations(true, true);
 
-        foreach($preferences as $key => $value)
+        foreach($arr_ref_orgas as $key => $value)
         {
-            if(array_key_exists($key, $db_preferences))
-            {
-                if($update == true
-                && $value  != $db_preferences[$key])
-                {
-                    // Pref existiert in DB, aber Wert hat sich geaendert
-                    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$value.'\'
-                             WHERE prf_org_id = '. $this->getValue('org_id'). '
-                               AND prf_name   = \''.$key.'\' ';
-                    $this->db->query($sql);
-                }
-            }
-            else
-            {
-                // Parameter existiert noch nicht in DB
-                $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
-                        VALUES   ('. $this->getValue('org_id'). ', \''.$key.'\', \''.$value.'\') ';
-                $this->db->query($sql);
-            }
+            $organizationsShortname .= '\''.$value.'\',';
+			$organizationsId .= $key.',';
         }
-		$this->db->endTransaction();
+
+        $organizationsShortname .= '\''. $this->getValue('org_shortname'). '\'';
+		$organizationsId .= $this->getValue('org_id');
+
+		if($shortname)
+		{
+			return $organizationsShortname;
+		}
+		else
+		{
+			return $organizationsId;
+		}
     }
     
     // gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
@@ -138,42 +132,35 @@ class Organization extends TableOrganizations
         }
         return $arr_child_orgas;
     }
-    
-    // prueft, ob die uebergebene Orga (ID oder Shortname) ein Kind
-    // der aktuellen Orga ist
-    public function isChildOrganization($organization)
+        
+    // gibt ein Array mit allen organisationsspezifischen Einstellungen
+    // aus adm_preferences zurueck
+    public function getPreferences()
     {
-        if($this->b_check_childs == false)
+        $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
+                    WHERE prf_org_id = '. $this->getValue('org_id');
+        $result = $this->db->query($sql);
+
+        $preferences = array();
+        while($prf_row = $this->db->fetch_array($result))
         {
-            // Daten erst einmal aus DB einlesen
-            $this->child_orgas = $this->getReferenceOrganizations(true, false);
-            $this->b_check_childs = true;
+            $preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
         }
         
-        if(is_numeric($organization))
-        {
-            // org_id wurde uebergeben
-            $ret_code = array_key_exists($organization, $this->child_orgas);
-        }
-        else
-        {
-            // org_shortname wurde uebergeben
-            $ret_code = in_array($organization, $this->child_orgas);
-        }
-        return $ret_code;
+        return $preferences;
     }
     
     // prueft, ob die Orga Kinderorganisationen besitzt
     public function hasChildOrganizations()
     {
-        if($this->b_check_childs == false)
+        if($this->bCheckChildOrganizations == false)
         {
             // Daten erst einmal aus DB einlesen
-            $this->child_orgas = $this->getReferenceOrganizations(true, false);
-            $this->b_check_childs = true;
+            $this->childOrganizations = $this->getReferenceOrganizations(true, false);
+            $this->bCheckChildOrganizations = true;
         }
 
-        if(count($this->child_orgas) > 0)
+        if(count($this->childOrganizations) > 0)
         {
             return true;
         }
@@ -183,34 +170,93 @@ class Organization extends TableOrganizations
         }
     }
     
-	/** Create a comma separated list with all organization ids of children, 
-	 *  parent and this organization that is prepared for use in SQL
-	 *  @param $shortname If set to true then a list of all shortnames will be returned
-	 *  @return Returns a string with a comma separated list of all organization ids that are parents or children and the own id
-	 */
-    public function getFamilySQL($shortname = false)
+    // prueft, ob die uebergebene Orga (ID oder Shortname) ein Kind
+    // der aktuellen Orga ist
+    public function isChildOrganization($organization)
     {
-        $organizationsId = '';
-		$organizationsShortname = '';
-        $arr_ref_orgas = $this->getReferenceOrganizations(true, true);
-
-        foreach($arr_ref_orgas as $key => $value)
+        if($this->bCheckChildOrganizations == false)
         {
-            $organizationsShortname .= '\''.$value.'\',';
-			$organizationsId .= $key.',';
+            // Daten erst einmal aus DB einlesen
+            $this->childOrganizations = $this->getReferenceOrganizations(true, false);
+            $this->bCheckChildOrganizations = true;
         }
+        
+        if(is_numeric($organization))
+        {
+            // org_id wurde uebergeben
+            $ret_code = array_key_exists($organization, $this->childOrganizations);
+        }
+        else
+        {
+            // org_shortname wurde uebergeben
+            $ret_code = in_array($organization, $this->childOrganizations);
+        }
+        return $ret_code;
+    }
+    
+    // die Methode schreibt alle Parameter aus dem uebergebenen Array
+    // zurueck in die Datenbank, dabei werden nur die veraenderten oder
+    // neuen Parameter geschrieben
+    // $update : bestimmt, ob vorhandene Werte aktualisiert werden
+    public function setPreferences($preferences, $update = true)
+    {
+		$this->db->startTransaction();
+        $db_preferences = $this->getPreferences();
 
-        $organizationsShortname .= '\''. $this->getValue('org_shortname'). '\'';
-		$organizationsId .= $this->getValue('org_id');
-
-		if($shortname)
-		{
-			return $organizationsShortname;
-		}
-		else
-		{
-			return $organizationsId;
-		}
+        foreach($preferences as $key => $value)
+        {
+            if(array_key_exists($key, $db_preferences))
+            {
+                if($update == true
+                && $value  != $db_preferences[$key])
+                {
+                    // Pref existiert in DB, aber Wert hat sich geaendert
+                    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''.$value.'\'
+                             WHERE prf_org_id = '. $this->getValue('org_id'). '
+                               AND prf_name   = \''.$key.'\' ';
+                    $this->db->query($sql);
+                }
+            }
+            else
+            {
+                // Parameter existiert noch nicht in DB
+                $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
+                        VALUES   ('. $this->getValue('org_id'). ', \''.$key.'\', \''.$value.'\') ';
+                $this->db->query($sql);
+            }
+        }
+		$this->db->endTransaction();
+    }
+    
+    /** Set a new value for a column of the database table.
+     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+     *  @param $columnName The name of the database column whose value should get a new value
+     *  @param $newValue   The new value that should be stored in the database field
+     *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
+     *  @return Returns @b true if the value is stored in the current object and @b false if a check failed
+     */ 
+    public function setValue($columnName, $newValue, $checkValue = true)
+    {
+        // org_shortname shouldn't be edited
+        if($columnName == 'org_shortname')
+        {
+            return false;
+        }
+        elseif($columnName == 'org_homepage' && strlen($newValue) > 0)
+        {
+			// Homepage darf nur gueltige Zeichen enthalten
+			if (!strValidCharacters($newValue, 'url'))
+			{
+				return false;
+			}
+			// Homepage noch mit http vorbelegen
+			if(strpos(admStrToLower($newValue), 'http://')  === false
+			&& strpos(admStrToLower($newValue), 'https://') === false )
+			{
+				$newValue = 'http://'. $newValue;
+			}
+        }
+        return parent::setValue($columnName, $newValue, $checkValue);
     }
 }
 ?>

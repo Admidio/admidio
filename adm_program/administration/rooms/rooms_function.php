@@ -36,7 +36,7 @@ if($getRoomId > 0)
 
 if($getMode == 1)
 {
-    $_SESSION['rooms_request'] = $_REQUEST;
+    $_SESSION['rooms_request'] = $_POST;
 
     if(strlen($_POST['room_name']) == 0)
     {

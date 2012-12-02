@@ -20,6 +20,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/form_elements.php');
 
 // Initialize and check the parameters
 $getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
@@ -27,6 +28,8 @@ $getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 $getLastname  = admFuncVariableIsValid($_GET, 'lastname', 'string', '');
 $getFirstname = admFuncVariableIsValid($_GET, 'firstname', 'string', '');
 $getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'boolean', 0);
+
+$registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
 // if current user has no login then only show registration dialog
 if($gValidLogin == false)
@@ -353,6 +356,10 @@ if(isset($_SESSION['profile_request']))
     {
 		$user->setArray(array('usr_login_name' => $_SESSION['profile_request']['usr_login_name']));
     }
+    if(isset($_SESSION['profile_request']['reg_org_id']))
+    {
+        $registrationOrgId = $_SESSION['profile_request']['reg_org_id'];
+    }
     
     unset($_SESSION['profile_request']);
 }
@@ -514,6 +521,18 @@ echo '
                                     </dd>
                                 </dl>
                             </li>';
+
+                			// show selectbox with all organizations of database
+                			if($gPreferences['system_organization_select'] == 1)
+                			{
+                				echo '<li>
+                					<dl>
+                						<dt><label for="reg_org_id">'.$gL10n->get('SYS_ORGANIZATION').':</label></dt>
+                						<dd>'.FormElements::generateOrganizationSelectBox($registrationOrgId, 'reg_org_id').'</dd>
+                					</dl>
+                				</li>';
+                			}
+                            
                         }
                         else
                         {

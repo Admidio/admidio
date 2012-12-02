@@ -51,7 +51,7 @@ if($getAnnId > 0)
     }
 }
 
-$_SESSION['announcements_request'] = $_REQUEST;
+$_SESSION['announcements_request'] = $_POST;
 
 if($getMode == 1)
 {

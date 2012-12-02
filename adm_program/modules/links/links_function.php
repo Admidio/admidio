@@ -41,7 +41,7 @@ if (!$gCurrentUser->editWeblinksRight())
 // Linkobjekt anlegen
 $link = new TableWeblink($gDb, $getLinkId);
 
-$_SESSION['links_request'] = $_REQUEST;
+$_SESSION['links_request'] = $_POST;
 
 if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0) )
 {

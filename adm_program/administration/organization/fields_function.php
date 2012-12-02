@@ -57,7 +57,7 @@ if($getMode == 1)
 {
    // Feld anlegen oder updaten
 
-    $_SESSION['fields_request'] = $_REQUEST;
+    $_SESSION['fields_request'] = $_POST;
     
     // pruefen, ob Pflichtfelder gefuellt sind
     // (bei Systemfeldern duerfen diese Felder nicht veraendert werden)

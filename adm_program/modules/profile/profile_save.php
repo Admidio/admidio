@@ -30,10 +30,24 @@ if($gValidLogin == false)
     $getNewUser = 2;
 }
 
+// save form data in session for back navigation
+$_SESSION['profile_request'] = $_POST;
+
+if(!isset($_POST['usr_login_name']))
+{
+    $_POST['usr_login_name'] = '';
+}
+if(!isset($_POST['reg_org_id']))
+{
+    $_POST['reg_org_id'] = $gCurrentOrganization->getValue('org_id');
+}
+
 // read user data
 if($getNewUser == 2 || $getNewUser == 3)
 {
+    // create user registration object and set requested organization
 	$user = new UserRegistration($gDb, $gProfileFields, $getUserId);
+	$user->setOrganization($_POST['reg_org_id']);
 }
 else
 {
@@ -67,13 +81,6 @@ switch($getNewUser)
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
         }
         break;
-}
-
-$_SESSION['profile_request'] = $_REQUEST;
-
-if(!isset($_POST['usr_login_name']))
-{
-    $_POST['usr_login_name'] = '';
 }
 
 /*------------------------------------------------------------*/
@@ -350,61 +357,19 @@ if($getNewUser == 1 || $getNewUser == 3)
 }
 elseif($getNewUser == 2)
 {
-    /*------------------------------------------------------------*/
-    // Registrierung eines neuen Benutzers
-    // -> E-Mail an alle Webmaster schreiben
-    /*------------------------------------------------------------*/
-    // nur ausfuehren, wenn E-Mails auch unterstuetzt werden und die Webmasterbenachrichtung aktiviert ist
-    if($gPreferences['enable_system_mails'] == 1 && $gPreferences['enable_registration_admin_mail'] == 1)
-    {
-        $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
-                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-                 RIGHT JOIN '. TBL_USER_DATA. ' email
-                    ON email.usd_usr_id = usr_id
-                   AND email.usd_usf_id = '. $gProfileFields->getProperty('EMAIL', 'usf_id'). '
-                   AND LENGTH(email.usd_value) > 0
-                  LEFT JOIN '. TBL_USER_DATA. ' first_name
-                    ON first_name.usd_usr_id = usr_id
-                   AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-                  LEFT JOIN '. TBL_USER_DATA. ' last_name
-                    ON last_name.usd_usr_id = usr_id
-                   AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                 WHERE rol_approve_users = 1
-                   AND rol_cat_id        = cat_id
-                   AND cat_org_id        = '. $gCurrentOrganization->getValue('org_id'). '
-                   AND mem_rol_id        = rol_id
-                   AND mem_begin        <= \''.DATE_NOW.'\'
-                   AND mem_end           > \''.DATE_NOW.'\'
-                   AND mem_usr_id        = usr_id
-                   AND usr_valid         = 1 ';
-        $result = $gDb->query($sql);
-
-        while($row = $gDb->fetch_array($result))
-        {
-            // Mail an die Webmaster schicken, dass sich ein neuer User angemeldet hat
-            $sysmail = new SystemMail($gDb);
-            $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);
-
-            if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $user) == false)
-            {
-                $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $row['email']));
-            }
-        }
-    }
-
-    // nach Registrierungmeldung auf die Startseite verweisen
+    // registration was successful then go to homepage
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_REGISTRATION_SAVED'));
 }
 elseif($getNewUser == 0 && $user->getValue('usr_valid') == 0)
 {
-    // neue Registrierung bearbeitet
+    // a registration was edited then go back to profile view
     $gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 else
 {
-    // zur Profilseite zurueckkehren    
+    // go back to profile view
     $gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }

@@ -479,6 +479,11 @@ class Email extends PHPMailer
                return $e->errorMessage();
             }
         } 
+
+        // initialize recepient adresses so same email could be send to other recepients
+        $this->emAddresses = '';
+        $this->ClearAdresses();
+
         return TRUE;
     }
 }
