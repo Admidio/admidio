@@ -17,7 +17,7 @@ $postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding', 'string', 
 $postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id', 'numeric', null, true);
 $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'numeric', null, true);
 
-$_SESSION['import_request'] = $_REQUEST;
+$_SESSION['import_request'] = $_POST;
 unset($_SESSION['import_csv_request']);
 
 // nur berechtigte User duerfen User importieren

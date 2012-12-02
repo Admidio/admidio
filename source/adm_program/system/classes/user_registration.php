@@ -152,6 +152,8 @@ class UserRegistration extends User
 	 */
     public function save($updateFingerPrint = true)
     {
+		global $gMessage, $gL10n, $gPreferences;
+
 		// if new registration is saved then set user not valid
 		if($this->TableRegistration->isNewRecord())
 		{
@@ -160,13 +162,53 @@ class UserRegistration extends User
 		
         parent::save($updateFingerPrint);
 		
-		// if new registration is saved then save also record in registration table
+		// if new registration is saved then save also record in registration table and send notification mail
 		if($this->TableRegistration->isNewRecord())
 		{
+		    // save registration record
 			$this->TableRegistration->setValue('reg_org_id', $this->organizationId);
 			$this->TableRegistration->setValue('reg_usr_id', $this->getValue('usr_id'));
 			$this->TableRegistration->setValue('reg_timestamp', DATETIME_NOW);
 			$this->TableRegistration->save();
+
+            // send a notification mail to all role members of roles that can approve registrations
+            // therefore the flags system mails and notification mail for roles with approve registration must be activated			
+            if($gPreferences['enable_system_mails'] == 1 && $gPreferences['enable_registration_admin_mail'] == 1)
+            {
+                $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
+                          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
+                         RIGHT JOIN '. TBL_USER_DATA. ' email
+                            ON email.usd_usr_id = usr_id
+                           AND email.usd_usf_id = '. $this->mProfileFieldsData->getProperty('EMAIL', 'usf_id'). '
+                           AND LENGTH(email.usd_value) > 0
+                          LEFT JOIN '. TBL_USER_DATA. ' first_name
+                            ON first_name.usd_usr_id = usr_id
+                           AND first_name.usd_usf_id = '. $this->mProfileFieldsData->getProperty('FIRST_NAME', 'usf_id'). '
+                          LEFT JOIN '. TBL_USER_DATA. ' last_name
+                            ON last_name.usd_usr_id = usr_id
+                           AND last_name.usd_usf_id = '. $this->mProfileFieldsData->getProperty('LAST_NAME', 'usf_id'). '
+                         WHERE rol_approve_users = 1
+                           AND rol_cat_id        = cat_id
+                           AND cat_org_id        = '.$this->organizationId.'
+                           AND mem_rol_id        = rol_id
+                           AND mem_begin        <= \''.DATE_NOW.'\'
+                           AND mem_end           > \''.DATE_NOW.'\'
+                           AND mem_usr_id        = usr_id
+                           AND usr_valid         = 1 ';
+                $result = $this->db->query($sql);
+                $sysmail = new SystemMail($this->db);
+        
+                while($row = $this->db->fetch_array($result))
+                {
+                    // send mail that a new registration is available
+                    $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);
+
+                    if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this) == false)
+                    {
+                        $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $row['email']));
+                    }
+                }
+            }
 		}
     }
 }

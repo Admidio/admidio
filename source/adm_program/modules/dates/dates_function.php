@@ -71,7 +71,7 @@ if($getDateId > 0)
 
 if($getMode == 1)  // Neuen Termin anlegen/aendern
 {
-    $_SESSION['dates_request'] = $_REQUEST;
+    $_SESSION['dates_request'] = $_POST;
     
     // ------------------------------------------------
     // pruefen ob alle notwendigen Felder gefuellt sind

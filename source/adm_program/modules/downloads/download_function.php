@@ -47,7 +47,7 @@ $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', 0);
 $getFileId   = admFuncVariableIsValid($_GET, 'file_id', 'numeric', 0);
 $getName     = admFuncVariableIsValid($_GET, 'name', 'string');
 
-$_SESSION['download_request'] = $_REQUEST;
+$_SESSION['download_request'] = $_POST;
 
 // Pfad in adm_my_files pruefen und ggf. anlegen
 $myFilesDownload = new MyFiles('DOWNLOAD');

@@ -18,7 +18,7 @@ if($gCurrentUser->isWebmaster() == false)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$_SESSION['organization_request'] = $_REQUEST;
+$_SESSION['organization_request'] = $_POST;
 
 // *******************************************************************************
 // Pruefen, ob alle notwendigen Felder gefuellt sind

@@ -54,13 +54,11 @@ require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/forum/forum.php');
 
 // remove HMTL & PHP-Code from all parameters
-$_REQUEST = admStrStripTagsSpecial($_REQUEST);
 $_GET     = admStrStripTagsSpecial($_GET);
 $_POST    = admStrStripTagsSpecial($_POST);
 $_COOKIE  = admStrStripTagsSpecial($_COOKIE);
 
 // escape all quotes so db queries are save
-$_REQUEST = strAddSlashesDeep($_REQUEST);
 $_GET     = strAddSlashesDeep($_GET);
 $_POST    = strAddSlashesDeep($_POST);
 $_COOKIE  = strAddSlashesDeep($_COOKIE);

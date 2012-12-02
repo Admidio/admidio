@@ -81,7 +81,7 @@ if($getMode == 1)
 {
     // Kategorie anlegen oder updaten
 
-    $_SESSION['categories_request'] = $_REQUEST;
+    $_SESSION['categories_request'] = $_POST;
 
     if(strlen($_POST['cat_name']) == 0 && $category->getValue('cat_system') == 0)
     {

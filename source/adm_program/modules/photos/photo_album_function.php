@@ -38,7 +38,7 @@ if(!$gCurrentUser->editPhotoRight())
 }
 
 //Gepostete Variablen in Session speichern
-$_SESSION['photo_album_request'] = $_REQUEST;
+$_SESSION['photo_album_request'] = $_POST;
 
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($gDb);
