@@ -425,8 +425,15 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 	return $defaultValue;
 }
 
-// check version of database against version of file system
-// show notice if version is different
+/** Check version of database against the Admidio version of the file system.
+ *  There will be different messages shown if versions aren't equal. If user has a current
+ *  login and is webmaster than there will be links to the next step to do.
+ *  @param $dbVersion          Admidio version of the database structure. This should be the format @b 2.3.1
+ *  @param $dbVersionBeta      Admidio Beta version that is set in the database. This should be the format @b 1
+ *  @param $webmaster          Flag if the current user is a webmaster. This should be 0 or 1
+ *  @param $emailAdministrator The email address of the administrator.
+ *  @return Nothing will be returned. If the versions aren't equal a message will be shown.
+ */
 function admFuncCheckDatabaseVersion($dbVersion, $dbVersionBeta, $webmaster, $emailAdministrator)
 {
 	global $gMessage, $gL10n, $g_root_path;
