@@ -35,7 +35,6 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 class Session extends TableAccess
 {
 	private $mObjectArray   = array(); ///< Array with all objects of this session object.
-	private $mObjectDbArray = array(); ///< Array which contains information if the @b mObjectArray has a database connection
 
 	/** Constuctor that will create an object of a recordset of the table adm_sessions. 
 	 *  If the id is set than the specific session will be loaded.
@@ -66,22 +65,19 @@ class Session extends TableAccess
 	 *  will be stored in the session and could be read with the method @b getObject.
 	 *  @param $objectName   Internal unique name of the object.
 	 *  @param $object       The object that should be stored in this class.
-	 *  @param $dbConnection Flag if the object uses intern a database connection object.
-	 *                       The internal database objectname should be @b db. If so the
-	 *                       database connection object will automatically reassigned
-	 *                       if the object is read with @b getObject.
 	 */
-	public function addObject($objectName, &$object, $dbConnection = false)
+	public function addObject($objectName, &$object)
 	{
 		if(is_object($object))
 		{
 			$this->mObjectArray[$objectName]   = &$object;
-			$this->mObjectDbArray[$objectName] = $dbConnection;
 		}
 	}
 	
-	/** Returns a reference of an object that is stored in the session. 
-	 *  If neccessary the current database connection is added to the object
+	/** Returns a reference of an object that is stored in the session. If the stored object
+	 *  has a database object than this could be renewed if the object name of the database
+	 *  object is @b db or @b mDb. This is neccessary because the old database connection is
+	 *  not longer valid.
 	 *  @param $objectName Internal unique name of the object. The name was set with the method @b addObject
 	 *  @return Returns the reference to the object
 	 */
@@ -90,16 +86,13 @@ class Session extends TableAccess
 		if(array_key_exists($objectName, $this->mObjectArray))
 		{
 			// if object has database connection add database object
-			if($this->mObjectDbArray[$objectName] == true)
+			if(isset($this->mObjectArray[$objectName]->db))
 			{
-				if(isset($this->mObjectArray[$objectName]->db))
-				{
-					$this->mObjectArray[$objectName]->db =& $this->db;
-				}
-				if(isset($this->mObjectArray[$objectName]->mDb))
-				{
-					$this->mObjectArray[$objectName]->mDb =& $this->db;
-				}
+				$this->mObjectArray[$objectName]->db =& $this->db;
+			}
+			if(isset($this->mObjectArray[$objectName]->mDb))
+			{
+				$this->mObjectArray[$objectName]->mDb =& $this->db;
 			}
 			
 			// return reference of object

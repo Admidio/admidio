@@ -35,6 +35,7 @@
     <text id="MAI_SMTP_SECURE_TLS" development="new" translation="todo">TLS</text>    
     <text id="MAI_SMTP_USER" development="new" translation="todo">SMTP Benutzername</text>
     <text id="MAI_SMTP_USER_DESC" development="new" translation="todo">Der Benutzername, der bei der SMTP-Authentifizierung verwendet wird.</text>
+	<text id="MEM_SEND_NEW_LOGIN" development="changed" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</text>
     <text id="ORG_FIELD_HIDDEN_DESC" development="changed" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</text>
     <text id="ORG_REFUSE_REGISTRATION" development="changed" translation="todo">Benachrichtigung bei einer Ablehnung der Registrierung</text>
 	<text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="todo">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</text>
@@ -667,7 +668,6 @@
     <text id="MEM_REMOVE_USER_DESC" development="new" translation="todo">Wenn du %VAR1_BOLD% auswählst, wird der Datensatz unwiderruflich aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Person einzusehen.</text>
     <text id="MEM_REPLACE" development="new" translation="todo">Ersetzen</text>
     <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="todo">Du hast keine Berechtigung, die Rolle %VAR1% auszuwählen.\nBitte wähle eine andere Rolle aus.</text>
-	<text id="MEM_SEND_NEW_LOGIN" development="new" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem Benutzernamen und einem neuen Passwort zumailen?</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="todo">E-Mail mit Benutzernamen und neuem Passwort zuschicken</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="todo">Alle Benutzer anzeigen</text>
     <text id="MEM_SHOW_MEMBERS" development="new" translation="todo">Momentan werden nur aktive Mitglieder angezeigt. Klicke hier um alle Benutzer aus der Datenbank anzuzeigen.</text>

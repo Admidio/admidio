@@ -138,7 +138,7 @@ else
         die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     $gPreferences = $gCurrentOrganization->getPreferences();
-	$gCurrentSession->addObject('gCurrentOrganization', $gCurrentOrganization, true);
+	$gCurrentSession->addObject('gCurrentOrganization', $gCurrentOrganization);
 	// delete old entries in session table
     $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
 }
@@ -201,8 +201,8 @@ else
 	$gCurrentUser   = new User($gDb, $gProfileFields, $userIdAutoLogin);
 	
 	// save all data in session
-	$gCurrentSession->addObject('gProfileFields', $gProfileFields, true);
-	$gCurrentSession->addObject('gCurrentUser', $gCurrentUser, true);
+	$gCurrentSession->addObject('gProfileFields', $gProfileFields);
+	$gCurrentSession->addObject('gCurrentUser', $gCurrentUser);
 }
 
 // erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
