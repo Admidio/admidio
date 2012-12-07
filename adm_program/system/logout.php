@@ -17,7 +17,6 @@ $gCurrentSession->save();
 
 // delete content of cookie
 $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-//setcookie($gCookiePraefix. '_ID', '' , time() - 1000, '/', $domain, 0);
 
 // remove auto login
 if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
@@ -35,13 +34,8 @@ if($g_organization != $gCurrentOrganization->getValue('org_shortname'))
     $gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
     $gPreferences = $gCurrentOrganization->getPreferences();
 	
-	// create object with current user field structure und user object
-	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
-	
-	// save all data in session variables
-    $_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
-    $_SESSION['gPreferences']         =& $gPreferences;
-    $_SESSION['gProfileFields']       =& $gProfileFields;
+	// read new profile field structure for this organization
+	$gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
 }
 
 // clear data from object of current user

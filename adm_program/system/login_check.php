@@ -94,13 +94,8 @@ if ($userFound >= 1)
 		$gCurrentOrganization->readDataById($organizationId);
 		$gPreferences = $gCurrentOrganization->getPreferences();
 		
-		// create object with current user field structure und user object
-		$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
-		
-		// save all data in session variables
-		$_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
-		$_SESSION['gPreferences']         =& $gPreferences;
-		$_SESSION['gProfileFields']       =& $gProfileFields;
+		// read new profile field structure for this organization
+		$gProfileFields->readProfileFields($organizationId);
 	}
 
     // create user object

@@ -49,7 +49,7 @@ require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_session.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/session.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/forum/forum.php');
 
@@ -79,7 +79,7 @@ if($gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db) == false)
     die('<div style="color: #CC0000;">Error: Wrong database connection parameters!</div>');
 }
 
-// determine forum script and include it bevor session is created
+// determine forum script and include it before session is created
 Forum::includeForumScript($gDb);
 
 // determine cookie prefix and remove special characters
@@ -111,27 +111,25 @@ else
     $gSessionId = session_id();
 }
 
-// create session object and read auto login data if available
-$gCurrentSession = new TableSession($gDb, $gSessionId);
-
-if($gCurrentSession->getValue('ses_id') == 0)
+// Session handling
+if(isset($_SESSION['gCurrentSession']))
 {
-	$gCurrentSession->setValue('ses_session_id', $gSessionId);
-    // maintain the session table and delete old sessions
-    $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
-}
-
-// read global organization class for system preferences
-if(isset($_SESSION['gCurrentOrganization']) 
-&& isset($_SESSION['gPreferences']))
-{
-    $gCurrentOrganization     =& $_SESSION['gCurrentOrganization'];
-    $gCurrentOrganization->db =& $gDb;
-    $gPreferences             =& $_SESSION['gPreferences'];
+	// read session object from PHP session
+	$gCurrentSession       = $_SESSION['gCurrentSession'];
+	$gCurrentSession->db  =& $gDb;
+	// reload session data and if neccessary the organization object
+	$gCurrentSession->refreshSession();
+	// read organization data from session object
+	$gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
+    $gPreferences          = $gCurrentOrganization->getPreferences();
 }
 else
-{	
-	// no php session then read organization of config file with their preferences
+{
+	// create new session object and store it in PHP session
+	$gCurrentSession = new Session($gDb, $gSessionId);
+	$_SESSION['gCurrentSession'] =& $gCurrentSession;
+	
+	// create object of the organization of config file with their preferences
     $gCurrentOrganization = new Organization($gDb, $g_organization);
     
     if($gCurrentOrganization->getValue('org_id') == 0)
@@ -140,10 +138,9 @@ else
         die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
     $gPreferences = $gCurrentOrganization->getPreferences();
- 
-    // save all data in session variables
-    $_SESSION['gCurrentOrganization'] =& $gCurrentOrganization;
-    $_SESSION['gPreferences']         =& $gPreferences;
+	$gCurrentSession->addObject('gCurrentOrganization', $gCurrentOrganization, true);
+	// delete old entries in session table
+    $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
 }
 
 // if auto login is set and session is new or a user assigned then check then create valid login
@@ -153,8 +150,8 @@ $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-
 
 // if no user object or user activity is long ago, then create auto login if possible
 if(isset($_COOKIE[$gCookiePraefix. '_DATA'])
-&& (  isset($_SESSION['gCurrentUser']) == false 
-   || (isset($_SESSION['gCurrentUser']) && $time_gap > $gPreferences['logout_minutes'] * 60)))
+&& (  $gCurrentSession->hasObject('gCurrentUser') == false 
+   || ($gCurrentSession->hasObject('gCurrentUser') && $time_gap > $gPreferences['logout_minutes'] * 60)))
 {
 	$admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
 
@@ -184,15 +181,12 @@ if(isset($_COOKIE[$gCookiePraefix. '_DATA'])
 }
 
 // now if auto login is done, read global user data
-if(isset($_SESSION['gProfileFields']) 
-&& isset($_SESSION['gCurrentUser']))
+if($gCurrentSession->hasObject('gCurrentUser'))
 {
-	$gProfileFields           =& $_SESSION['gProfileFields'];
-    $gProfileFields->mDb      =& $gDb;
-    $gCurrentUser             =& $_SESSION['gCurrentUser'];
-    $gCurrentUser->db         =& $gDb;
+	$gProfileFields =& $gCurrentSession->getObject('gProfileFields');
+	$gCurrentUser   =& $gCurrentSession->getObject('gCurrentUser');
 	$gCurrentUser->mProfileFieldsData->mDb =& $gDb;
-
+	
 	// checks if user in database session is the same as in php session
 	if($gCurrentUser->getValue('usr_id') != $gCurrentSession->getValue('ses_usr_id'))
 	{
@@ -201,14 +195,14 @@ if(isset($_SESSION['gProfileFields'])
 	}
 }
 else
-{	
+{
 	// create object with current user field structure und user object
-	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
+	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
 	$gCurrentUser   = new User($gDb, $gProfileFields, $userIdAutoLogin);
-    
-	// save all data in session variables
-    $_SESSION['gProfileFields']       =& $gProfileFields;
-	$_SESSION['gCurrentUser']         =& $gCurrentUser;
+	
+	// save all data in session
+	$gCurrentSession->addObject('gProfileFields', $gProfileFields, true);
+	$gCurrentSession->addObject('gCurrentUser', $gCurrentUser, true);
 }
 
 // erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
@@ -216,17 +210,8 @@ else
 if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('ses_renew') == 3)
 {
 	// read new field structure in object and than create new user object with new field structure
-	$gProfileFields->readProfileFields();
-	$userID = $gCurrentUser->getValue('usr_id');
-	$gCurrentUser = new User($gDb, $gProfileFields, $userID);
-	$_SESSION['gCurrentUser'] =& $gCurrentUser;
-	$gCurrentSession->setValue('ses_renew', 0);
-}
-if($gCurrentSession->getValue('ses_renew') == 2 || $gCurrentSession->getValue('ses_renew') == 3)
-{
-	// Organisationsobjekt neu einlesen
-	$gCurrentOrganization->readDataByColumns(array('org_shortname' => $g_organization));
-	$gPreferences = $gCurrentOrganization->getPreferences();
+	$gProfileFields->readProfileFields($gCurrentOrganization->getValue('org_id'));
+	$gCurrentUser->readDataById($gCurrentUser->getValue('usr_id'));
 	$gCurrentSession->setValue('ses_renew', 0);
 }
 
