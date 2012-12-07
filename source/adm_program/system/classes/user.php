@@ -590,7 +590,7 @@ class User extends TableUsers
         if(parent::readDataById($userId))
         {
 			// read data of all user fields from current user
-			$this->mProfileFieldsData->readUserData($userId);
+			$this->mProfileFieldsData->readUserData($userId, $this->organizationId);
 			return true;
 		}
 

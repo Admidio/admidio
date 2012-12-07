@@ -24,7 +24,6 @@ class ProfileFields
     public    $mProfileFields = array();///< Array with all user fields objects
     public    $mUserData = array();		///< Array with all user data objects
 
-	protected $mOrganization;			///< organization object
 	protected $mUserId;					///< UserId of the current user of this object
 	public 	  $mDb;						///< db object must public because of session handling
     protected $noValueCheck;    		///< if true, than no value will be checked if method setValue is called
@@ -32,13 +31,13 @@ class ProfileFields
 
 	/** constructor that will initialize variables and read the profile field structure
 	 *  @param $db Database object (should be @b $gDb)
-	 *  @param $organization Organization object (should be @b $gOrganization)
+	 *  @param $organizationId The id of the organization for which the 
+	 *                         profile field structure should be read
 	 */
-    public function __construct(&$db, &$organization)
+    public function __construct(&$db, $organizationId)
     {
 		$this->mDb =& $db;
-		$this->mOrganization = $organization;
-		$this->readProfileFields();
+		$this->readProfileFields($organizationId);
 		$this->mUserId = 0;
 		$this->noValueCheck = false;
 		$this->columnsValueChanged = false;
@@ -277,13 +276,48 @@ class ProfileFields
         $this->noValueCheck = true;
     }
 
-	// build an array with the data of all user fields
-	// userId : read data from this user
-	public function readUserData($userId)
+
+	/** Reads the profile fields structure out of database table @b adm_user_fields
+	 *  and adds an object for each field structure to the @b mProfileFields array. 
+	 *  @param $organizationId The id of the organization for which the profile fields 
+	 *                         structure should be read.
+	 */ 
+	public function readProfileFields($organizationId)
+	{
+		// first initialize existing data
+		$this->mProfileFields = array();
+		$this->clearUserData();
+
+		// read all user fields and belonging category data of organization
+		$sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
+                 WHERE usf_cat_id = cat_id
+                   AND (  cat_org_id IS NULL
+                       OR cat_org_id  = '.$organizationId.' )
+                 ORDER BY cat_sequence ASC, usf_sequence ASC ';
+        $usfResult = $this->mDb->query($sql);
+
+        while($row = $this->mDb->fetch_array($usfResult))
+        {
+            if(isset($this->mProfileFields[$row['usf_name_intern']]) == false)
+            {
+                $this->mProfileFields[$row['usf_name_intern']] = new TableUserField($this->mDb);
+            }
+            $this->mProfileFields[$row['usf_name_intern']]->setArray($row);
+        }
+	}
+	
+	/** Reads the user data of all profile fields out of database table @b adm_user_data
+	 *  and adds an object for each field data to the @b mUserData array. 
+	 *  If profile fields structure wasn't read, this will be done before.
+	 *  @param $userId         The id of the user for which the user data should be read.
+	 *  @param $organizationId The id of the organization for which the profile fields 
+	 *                         structure should be read if neccessary.
+	 */ 
+	public function readUserData($userId, $organizationId)
 	{
 		if(count($this->mProfileFields) == 0)
 		{
-			$this->readProfileFields();
+			$this->readProfileFields($organizationId);
 		}
 
 		if($userId > 0)
@@ -306,31 +340,6 @@ class ProfileFields
 				$this->mUserData[$row['usd_usf_id']]->setArray($row);
 			}
 		}
-	}
-
-	// build an array with the structure of all user fields
-	public function readProfileFields()
-	{
-		// first initialize existing data
-		$this->mProfileFields = array();
-		$this->mUserData   = array();
-
-		// read all user fields and belonging category data of organization
-		$sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
-                 WHERE usf_cat_id = cat_id
-                   AND (  cat_org_id IS NULL
-                       OR cat_org_id  = '.$this->mOrganization->getValue('org_id').' )
-                 ORDER BY cat_sequence ASC, usf_sequence ASC ';
-        $usfResult = $this->mDb->query($sql);
-
-        while($row = $this->mDb->fetch_array($usfResult))
-        {
-            if(isset($this->mProfileFields[$row['usf_name_intern']]) == false)
-            {
-                $this->mProfileFields[$row['usf_name_intern']] = new TableUserField($this->mDb);
-            }
-            $this->mProfileFields[$row['usf_name_intern']]->setArray($row);
-        }
 	}
 
 	// save data of every user field

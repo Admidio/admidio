@@ -82,7 +82,7 @@ if($gCurrentOrganization->getValue('org_id') == 0)
 $gPreferences = $gCurrentOrganization->getPreferences();
 
 // create object with current user field structure
-$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
+$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
 
 // Sprachdateien einlesen
 $gL10n = new Language($gPreferences['system_language']);
@@ -342,7 +342,7 @@ elseif($getMode == 6)
     $gCurrentOrganization->save();
 
 	// create object with current user field structure
-	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization);
+	$gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
 
     // Userobjekt anlegen
     $gCurrentUser = new User($gDb, $gProfileFields, $_SESSION['webmaster_id']);

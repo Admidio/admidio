@@ -31,6 +31,7 @@ class Organization extends TableAccess
 {
     protected $bCheckChildOrganizations;     ///< Flag will be set if the class had already search for child organizations
     protected $childOrganizations = array(); ///< Array with all child organizations of this organization
+	protected $preferences = array();		 ///< Array with all preferences of this organization. Array key is the column @b prf_name and array value is the column @b prf_value.
     
 	/** Constuctor that will create an object of a recordset of the table adm_organizations. 
 	 *  If the id is set than the specific organization will be loaded.
@@ -59,13 +60,15 @@ class Organization extends TableAccess
         parent::clear();
 
         $this->bCheckChildOrganizations = false;
-        $this->childOrganizations    = array();
+        $this->childOrganizations       = array();
+		$this->preferences              = array();
     }
     
 	/** Create a comma separated list with all organization ids of children, 
 	 *  parent and this organization that is prepared for use in SQL
 	 *  @param $shortname If set to true then a list of all shortnames will be returned
-	 *  @return Returns a string with a comma separated list of all organization ids that are parents or children and the own id
+	 *  @return Returns a string with a comma separated list of all organization 
+	 *          ids that are parents or children and the own id
 	 */
     public function getFamilySQL($shortname = false)
     {
@@ -133,21 +136,27 @@ class Organization extends TableAccess
         return $arr_child_orgas;
     }
         
-    // gibt ein Array mit allen organisationsspezifischen Einstellungen
-    // aus adm_preferences zurueck
+	/** Reads all preferences of the current organization out of the database
+	 *  table adm_preferences. If the object has read the preferences than
+	 *  the method will return the stored values of the object.
+	 *  @return Returns an array with all preferences of this organization. 
+	 *          Array key is the column @b prf_name and array value is the column @b prf_value.
+	 */
     public function getPreferences()
     {
-        $sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
-                    WHERE prf_org_id = '. $this->getValue('org_id');
-        $result = $this->db->query($sql);
+		if(count($this->preferences) == 0)
+		{
+			$sql    = 'SELECT * FROM '. TBL_PREFERENCES. '
+						WHERE prf_org_id = '. $this->getValue('org_id');
+			$result = $this->db->query($sql);
 
-        $preferences = array();
-        while($prf_row = $this->db->fetch_array($result))
-        {
-            $preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
-        }
+			while($prf_row = $this->db->fetch_array($result))
+			{
+				$this->preferences[$prf_row['prf_name']] = $prf_row['prf_value'];
+			}
+		}
         
-        return $preferences;
+        return $this->preferences;
     }
     
     // prueft, ob die Orga Kinderorganisationen besitzt

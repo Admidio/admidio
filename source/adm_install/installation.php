@@ -691,7 +691,7 @@ elseif($req_mode == 8)
     $member->startMembership($role_member->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
 	
 	// create object with current user field structure
-	$gProfileFields = new ProfileFields($db, $gCurrentOrganization);
+	$gProfileFields = new ProfileFields($db, $gCurrentOrganization->getValue('org_id'));
     
     // User Webmaster erst jetzt anlegen, da dieser die Rollenrechte bereits haben muss
     $gCurrentUser = new User($db, $gProfileFields, $gCurrentUser->getValue('usr_id'));
