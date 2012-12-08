@@ -9,14 +9,14 @@
 	<text id="LST_EXCLUDE_EXAMPLE" development="new" translation="todo">Stefan</text>
 	<text id="LST_EXCLUDE_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die nicht Stefan heißen</text>
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
-	<text id="MAI_PHP_MAIL" development="new" translation="todo">php mail()</text>
+	<text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
 	<text id="MAI_SEND_METHOD" development="new" translation="todo">Versandmethode</text>
-	<text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Empfolen wird daher in der Regel der Versand von einer existierenden Mailadresse, über einen SMTP-Server. Die SMTP-Einstellungen können unten konfiguriert werden. (Standrad: php mail())</text>
+	<text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Empfohlen wird daher in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</text>
 	<text id="MAI_SENDER_NAME" development="new" translation="todo">Name des Absenders</text>
     <text id="MAI_SENDER_NAME_DESC" development="new" translation="todo">Name des Absenders zur verwendeten Versandmailadresse.</text>
 	<text id="MAI_SMTP" development="new" translation="todo">SMTP</text>
 	<text id="MAI_SMTP_AUTH" development="new" translation="todo">SMTP Authentifizierung</text>
-	<text id="MAI_SMTP_AUTH_DESC" development="new" translation="todo">Soll eine Authentifizierung am SMTP-Server stattfinden? Wenn ja, müssen auch die Felder Benutzername und Pssswort ausgefüllt werden.  (Standard: Ja)</text>
+	<text id="MAI_SMTP_AUTH_DESC" development="new" translation="todo">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Benutzername und Passwort ausgefüllt werden.  (Standard: Ja)</text>
 	<text id="MAI_SMTP_AUTH_LOGIN" development="new" translation="todo">Login</text>    
     <text id="MAI_SMTP_AUTH_NTLM" development="new" translation="todo">NTLM</text>
 	<text id="MAI_SMTP_AUTH_PLAIN" development="new" translation="todo">Plain</text>    
@@ -27,7 +27,7 @@
     <text id="MAI_SMTP_PASSWORD" development="new" translation="todo">SMTP Passwort</text>
     <text id="MAI_SMTP_PASSWORD_DESC" development="new" translation="todo">Das Passwort, das bei der SMTP-Authentifizierung verwendet wird.</text>
     <text id="MAI_SMTP_PORT" development="new" translation="todo">SMTP Port</text>
-    <text id="MAI_SMTP_PORT_DESC" development="new" translation="todo">Über welchen Port soll die SMTP-Verbindung aufgebaut werden? (Standard: 25)</text>
+    <text id="MAI_SMTP_PORT_DESC" development="new" translation="todo">Angabe des Ports über den die SMTP-Verbindung aufgebaut werden soll. (Standard: 25)</text>
     <text id="MAI_SMTP_SECURE" development="new" translation="todo">SMTP Verschlüsselung</text>
     <text id="MAI_SMTP_SECURE_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob und wie die SMTP-Verbindung verschlüsselt werden soll. (Standard: ohne)</text>
     <text id="MAI_SMTP_SECURE_NO" development="new" translation="todo">ohne</text>

@@ -145,8 +145,9 @@ class UserRegistration extends User
         return $return;	
 	}
 
-	/** Save all changed columns of the recordset in table of database. If it's a new user than the registration table
-	 *  will also be filled with a new recordset.
+	/** Save all changed columns of the recordset in table of database. If it's a new user 
+	 *  than the registration table will also be filled with a new recordset and optional a 
+	 *  notification mail will be send to all users of roles that have the right to confirm registrations
 	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset 
 	 *                            if table has columns like @b usr_id_create or @b usr_id_changed
 	 */
