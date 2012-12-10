@@ -22,6 +22,10 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CREATE foreign k
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign key (mem_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
+
+ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_device_id varchar(255);
+
+ALTER TABLE %PREFIX%_dates ADD COLUMN dat_highlight boolean not null default '0';
 	  
 /*==============================================================*/
 /* Table: adm_registrations                                     */
