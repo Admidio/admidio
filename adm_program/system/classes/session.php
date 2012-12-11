@@ -68,7 +68,7 @@ class Session extends TableAccess
 	 */
 	public function addObject($objectName, &$object)
 	{
-		if(is_object($object))
+		if(is_object($object) && array_key_exists($objectName, $this->mObjectArray) == false)
 		{
 			$this->mObjectArray[$objectName]   = &$object;
 		}

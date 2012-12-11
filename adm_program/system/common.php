@@ -44,6 +44,7 @@ require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/exception.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/language_data.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/menu.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
@@ -111,6 +112,9 @@ else
     $gSessionId = session_id();
 }
 
+// create language object to handle translation texts
+$gL10n = new Language();
+
 // Session handling
 if(isset($_SESSION['gCurrentSession']))
 {
@@ -119,6 +123,8 @@ if(isset($_SESSION['gCurrentSession']))
 	$gCurrentSession->db  =& $gDb;
 	// reload session data and if neccessary the organization object
 	$gCurrentSession->refreshSession();
+	// read language data from session and assign them to the language object
+	$gL10n->addLanguageData($gCurrentSession->getObject('gLanguageData'));
 	// read organization data from session object
 	$gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
     $gPreferences          = $gCurrentOrganization->getPreferences();
@@ -139,6 +145,12 @@ else
     }
     $gPreferences = $gCurrentOrganization->getPreferences();
 	$gCurrentSession->addObject('gCurrentOrganization', $gCurrentOrganization);
+		
+	// create a language data object and assign it to the language object
+	$gLanguageData = new LanguageData($gPreferences['system_language']);
+	$gL10n->addLanguageData($gLanguageData);
+	$gCurrentSession->addObject('gLanguageData', $gLanguageData);
+	
 	// delete old entries in session table
     $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
 }
@@ -258,9 +270,6 @@ if($userIdAutoLogin > 0 && $gCurrentUser->getValue('usr_id'))
 /*********************************************************************************
  create necessary objects and parameters
 /********************************************************************************/
-
-// read language file
-$gL10n = new Language($gPreferences['system_language']);
 
 // Pfad zum gewaehlten Theme zusammensetzen
 if(isset($gPreferences['theme']) == false)
