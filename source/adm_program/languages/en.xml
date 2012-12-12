@@ -1256,7 +1256,7 @@
 	<text id="SYS_SIZE" development="new" translation="edited">Size</text>
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{current} of {total}</text>
 	<text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start slideshow</text>
-	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">End slideshow</text>
+	<text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">Stop slideshow</text>
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
