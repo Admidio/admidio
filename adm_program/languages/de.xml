@@ -1301,8 +1301,8 @@
     <text id="SYS_SINCE_TO" development="new" translation="todo">seit %VAR1% bis %VAR2%</text>
 	<text id="SYS_SIZE" development="new" translation="todo">Größe</text>
 	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} von {total}</text>
-	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">Starte Diashow</text>
-	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Stoppe Diashow</text>
+	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">Diashow starten</text>
+	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Diashow anhalten</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
     <text id="SYS_STOP" development="new" translation="todo">Stop</text>
