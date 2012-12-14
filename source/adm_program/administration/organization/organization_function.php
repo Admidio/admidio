@@ -201,6 +201,12 @@ if($ret_code != 0)
 
 $gCurrentOrganization->setPreferences($gPreferences);
 
+// refresh language if neccessary
+if($gL10n->getLanguage() != $gPreferences['system_language'])
+{
+	$gL10n->setLanguage($gPreferences['system_language']);
+}
+
 // Aufraeumen
 unset($_SESSION['organization_request']);
 unset($_SESSION['gForum']);

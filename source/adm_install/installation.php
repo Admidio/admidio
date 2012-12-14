@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Installation und Einrichtung der Admidio-Datenbank und der Config-Datei
+ * Installation and configuration of Admidio database and config file
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,27 +8,16 @@
  *
  * Parameters:
  *
- * mode     = 1 : (Default) Sprache auswaehlen
- *            2 : Willkommen zur Installation
- *            3 : Zugangsdaten zur Datenbank eingeben
- *            4 : Organisationsnamen eingeben
- *            5 : Daten des Administrator eingeben
- *            6 : Konfigurationsdatei erzeugen
- *            7 : Konfigurationsdatei herunterladen
- *            8 : Installation starten
+ * mode     = 1 : (Default) Choose language
+ *            2 : Welcome to installation
+ *            3 : Enter database access information
+ *            4 : Creating organization
+ *            5 : Creating administrator
+ *            6 : Creating configuration file
+ *            7 : Download configuration file
+ *            8 : Start installation
  *
  *****************************************************************************/
-
-// Uebergabevariablen pruefen
-
-if(isset($_GET['mode']) && is_numeric($_GET['mode']))
-{
-    $req_mode = $_GET['mode'];
-}
-else
-{
-    $req_mode = 1;
-}
 
 session_name('admidio_php_session_id');
 session_start();
@@ -39,15 +28,14 @@ if(isset($_SESSION['prefix']))
 }
 else
 {
+	// default praefix is "adm" because of compatibility to older versions
     $g_tbl_praefix = 'adm';
 }
+ 
+// embed constants file
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
 
-$admidio_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1);
-
-// Konstanten und Konfigurationsdatei einbinden
-require_once($admidio_path. '/adm_program/system/constants.php');
-
-// PHP-Version pruefen und ggf. mit Hinweis abbrechen
+// check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
 {
     die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill 
@@ -60,6 +48,7 @@ require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/form_elements.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/language_data.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
@@ -69,13 +58,18 @@ require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 
+// Initialize and check the parameters
+
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
+$message = '';
+
 // default database type is always MySQL and must be set because of old config files
 if(!isset($gDbType))
 {
     $gDbType = 'mysql';
 }
 
-// Sprachdateien einlesen
+// create language and language data object to handle translations
 if(isset($_SESSION['language']))
 {
     $language = $_SESSION['language'];
@@ -84,11 +78,11 @@ else
 {
     $language = 'en';
 }
-$gL10n = new Language($language);
+$gL10n = new Language();
+$gLanguageData = new LanguageData($language);
+$gL10n->addLanguageData($gLanguageData);
 
-$message = '';
-
-if($req_mode == 1)  // (Default) Sprache auswaehlen
+if($getMode == 1)  // (Default) Choose language
 {
     session_destroy();
 
@@ -108,7 +102,7 @@ if($req_mode == 1)  // (Default) Sprache auswaehlen
                 <br />';
     showPage($message, 'installation.php?mode=2', 'forward.png', $gL10n->get('SYS_NEXT'));
 }
-elseif($req_mode == 2)  // Willkommen zur Installation
+elseif($getMode == 2)  // Welcome to installation
 {   
     // Pruefen ob Sprache uebergeben wurde
     if(isset($_POST['system_language']) == false || strlen($_POST['system_language']) == 0)
@@ -135,7 +129,7 @@ elseif($req_mode == 2)  // Willkommen zur Installation
     }
     showPage($message, 'installation.php?mode=3', 'forward.png', $gL10n->get('INS_DATABASE_LOGIN'));
 }
-elseif($req_mode == 3)  // Enter database access information
+elseif($getMode == 3)  // Enter database access information
 {
     // initialize form data
     if(isset($_SESSION['server']))
@@ -203,7 +197,7 @@ elseif($req_mode == 3)  // Enter database access information
                 <img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
     showPage($message, 'installation.php?mode=4', 'forward.png', $gL10n->get('INS_SET_ORGANIZATION'));
 }
-elseif($req_mode == 4)  // Organisationsnamen eingeben
+elseif($getMode == 4)  // Creating organization
 {
     if(isset($_POST['server']))
     {
@@ -294,7 +288,7 @@ elseif($req_mode == 4)  // Organisationsnamen eingeben
                 <br />';
     showPage($message, 'installation.php?mode=5', 'forward.png', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
 }
-elseif($req_mode == 5)  // Daten des Administrator eingeben
+elseif($getMode == 5)  // Creating addministrator
 {
     if(isset($_POST['orgaShortName']))
     {
@@ -372,7 +366,7 @@ elseif($req_mode == 5)  // Daten des Administrator eingeben
                 <br />';
     showPage($message, 'installation.php?mode=6', 'forward.png', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
 }
-elseif($req_mode == 6)  // Konfigurationsdatei erzeugen
+elseif($getMode == 6)  // Creating configuration file
 {
     if(isset($_POST['user_last_name']))
     {
@@ -416,7 +410,7 @@ elseif($req_mode == 6)  // Konfigurationsdatei erzeugen
                 <br />';
     showPage($message, 'installation.php?mode=8', 'database_in.png', $gL10n->get('INS_INSTALL_ADMIDIO'));
 }
-elseif($req_mode == 7)
+elseif($getMode == 7) // Download configuration file
 {
     // MySQL-Zugangsdaten in config.php schreiben
     // Datei auslesen
@@ -452,10 +446,8 @@ elseif($req_mode == 7)
     echo $file_content;
     exit();
 }
-elseif($req_mode == 8)
+elseif($getMode == 8)	// Start installation
 {
-    // Installation starten
-
     if(file_exists('../config.php') == false)
     {
         showPage($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
