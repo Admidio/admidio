@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Update der Admidio-Datenbank auf eine neue Version
+ * Handle update of Admidio database to a new version
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,54 +8,49 @@
  *
  * Parameters: 
  *
- * mode     = 1 : (Default) Statuspruefung und Anzeige, ob ein Update notwendig ist
- *            2 : Update durchfuehren
- *            3 : Ergebnis des Updates ausgeben
+ * mode     = 1 : (Default) Check update status and show dialog with status
+ *            2 : Perform update
+ *            3 : Show result of update
  *
  *****************************************************************************/
 
-require_once('install_functions.php');
-
-// Uebergabevariablen pruefen
-
-if(isset($_GET['mode']) && is_numeric($_GET['mode']))
-{
-    $req_mode = $_GET['mode'];
-}
-else
-{
-    $req_mode = 1;
-}
-
-// Konstanten und Konfigurationsdatei einbinden
+// embed config and constants file
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/config.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
 
-// default praefix is "adm" because of compatibility to older versions
 if(strlen($g_tbl_praefix) == 0)
 {
+	// default praefix is "adm" because of compatibility to older versions
     $g_tbl_praefix = 'adm';
 }
 
-// Default-DB-Type ist immer MySql
-if(!isset($gDbType))
-{
-    $gDbType = 'mysql';
-}
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
 
-// PHP-Version pruefen und ggf. mit Hinweis abbrechen
+// check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
 {
     die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill 
 		the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or more highly.</div>');
 }
 
+require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/language_data.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
+ 
+// Initialize and check the parameters
+
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
+$message = '';
+
+// Default-DB-Type ist immer MySql
+if(!isset($gDbType))
+{
+    $gDbType = 'mysql';
+}
 
 // Verbindung zu Datenbank herstellen
 $gDb = Database::createDatabaseObject($gDbType);
@@ -73,14 +68,14 @@ if($gCurrentOrganization->getValue('org_id') == 0)
 // organisationsspezifische Einstellungen aus adm_preferences auslesen
 $gPreferences = $gCurrentOrganization->getPreferences();
 
-// Sprachdateien einlesen
+// create language and language data object to handle translations
 if(isset($gPreferences['system_language']) == false)
 {
     $gPreferences['system_language'] = 'de';
 }
-$gL10n = new Language($gPreferences['system_language']);
-
-$message = '';
+$gL10n = new Language();
+$gLanguageData = new LanguageData($gPreferences['system_language']);
+$gL10n->addLanguageData($gLanguageData);
 
 //Datenbank- und PHP-Version prüfen
 if(checkVersions($gDb, $message) == false)
@@ -88,7 +83,7 @@ if(checkVersions($gDb, $message) == false)
 	showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'), 2);
 }
 
-if($req_mode == 1)
+if($getMode == 1)
 {
     // pruefen, ob ein Update ueberhaupt notwendig ist
     if(isset($gPreferences['db_version']) == false)
@@ -126,7 +121,7 @@ if($req_mode == 1)
     }
     showPage($message, 'update.php?mode=2', 'database_in.png', $gL10n->get('INS_UPDATE_DATABASE'), 2);
 }
-elseif($req_mode == 2)
+elseif($getMode == 2)
 {
     // Updatescripte fuer die Datenbank verarbeiten
     

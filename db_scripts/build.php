@@ -19,6 +19,7 @@ include('../adm_program/system/string.php');
 include('../adm_program/system/db/database.php');
 include('../adm_program/system/classes/folder.php');
 include('../adm_program/system/classes/language.php');
+include('../adm_program/system/classes/language_data.php');
 
 // default database type should be MySQL
 if(!isset($gDbType))
@@ -94,8 +95,10 @@ $getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', 'de');
 
 echo 'Start with installation ...<br />';
 
-// read language file
-$gL10n = new Language($getLanguage);
+// create language and language data object to handle translations
+$gL10n = new Language();
+$gLanguageData = new LanguageData($getLanguage);
+$gL10n->addLanguageData($gLanguageData);
 $gL10n->addLanguagePath(SERVER_PATH. '/db_scripts/languages');
 
 // copy content of folder adm_my_files to productive folder
