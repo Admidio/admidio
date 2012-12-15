@@ -186,6 +186,10 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $gMessage->show($gL10n->get('SYS_DATE_END_BEFORE_BEGIN'));
     }
 
+    if(isset($_POST['dat_highlight']) == false)
+    {
+        $_POST['dat_highlight'] = 0;
+    }
     if(isset($_POST['dat_global']) == false)
     {
         $_POST['dat_global'] = 0;
