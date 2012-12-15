@@ -398,6 +398,7 @@ elseif($getMode == 2)  // Termin loeschen
 }
 elseif($getMode == 3)  // Benutzer zum Termin anmelden
 {   
+    $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
     $member = new TableMembers($gDb);
 	$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
 

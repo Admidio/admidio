@@ -173,6 +173,7 @@ class Participants
      */
     public function getParticipantsArray($rolId = 0, $order = 'ASC')
     {
+        $participants = '';
         global $gProfileFields;
 
         $this->checkId($rolId);

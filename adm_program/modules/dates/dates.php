@@ -162,7 +162,7 @@ if($datesResult['totalCount'] != 0)
         }
         
         // count members and leaders of the date role and push the result to the array
-        if($date->getValue('dat_max_members')!=0)
+        if($date->getValue('dat_rol_id')!= null)
         {   
             $datesResult['dates'][''.$count.'']['dat_num_members'] = $participants->getCount($date->getValue('dat_rol_id'));
             $datesResult['dates'][''.$count.'']['dat_num_leaders'] = $participants->getNumLeaders($date->getValue('dat_rol_id'));
@@ -652,15 +652,7 @@ else
         <title>'. $gCurrentOrganization->getValue('org_longname'). ' - Terminliste </title>
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
         <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
-    </head>';
-    
-    // Get a copy of date results
-    $dateElements = $datesResult['dates'];
-    // Define options for selectbox
-    $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_PARTICIPANTS'));
-    
-    // define header and footer of the table
-    echo' 
+        
     <script type="text/javascript">
         $(document).ready(function(){
             $("#admSelectBox").change(function(){
@@ -670,7 +662,15 @@ else
             $("#admSelectBox").change();
         })
     </script>
+    </head>';
     
+    // Get a copy of date results
+    $dateElements = $datesResult['dates'];
+    // Define options for selectbox
+    $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_PARTICIPANTS'));
+    
+    // define header and footer of the table
+    echo' 
     <body>
         <div align="center">
             <table class="tableDateList" border="1" cellpadding="3" cellspacing="0" summary="">
@@ -760,10 +760,17 @@ else
                                 }
                 echo'</td>
                         <td style="text-align: center;">';
-                                if(isset($row['dat_num_members']) && $row['dat_num_members'] != 0)
+                                // Show number of participants of date
+                                if(isset($row['dat_num_members']) && $row['dat_max_members'] == 0)
+                                {
+                                    echo $row['dat_num_members'];
+                                }
+                                // If date has limit for assignment also show the value    
+                                if(isset($row['dat_num_members']) && $row['dat_max_members'] != 0)
                                 {
                                     echo $row['dat_num_members'].' '.'('.$row['dat_max_members'].')';
                                 }
+
                 echo'</td>';
                 $numElement++;
                 
@@ -844,7 +851,7 @@ else
                                 <td>';
     
                                         // If date has participation and patricipants are assigned
-                                        if($row['dat_rol_id'] != null && $row['dat_num_members'] != 0) 
+                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members'])) 
                                         {
                                             echo '<table cellspacing="2" cellpadding="2"><tr>';
                                             
