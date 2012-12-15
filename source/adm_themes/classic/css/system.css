@@ -102,6 +102,17 @@ a:hover, a:active {
     padding:            2px;
 }
 
+.boxHeadHighlighted {
+    color:              #FF0000;
+    text-align:         left;
+    background-color:   #85C226;
+    width:              100%;
+    min-height:         20px;
+    font-size:          12pt;
+    font-weight:        bold;
+    padding:            2px;
+}
+
 .boxHead img {
     margin-right:       4px;
     vertical-align:     bottom;

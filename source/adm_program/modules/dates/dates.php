@@ -371,10 +371,13 @@ If($getViewMode == 'html')
                 //$date->clear();
                 //$date->setArray($row);
                 $date->readDataById($row['dat_id']);
+                
+                // Change css if date is hightlighted
+                $cssClass = ($row['dat_highlight'] == 1) ? 'boxHeadHighlighted' : 'boxHead';
 
                 echo '
                 <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
-                    <div class="boxHead">
+                    <div class="'.$cssClass.'">
                         <div class="boxHeadLeft">
                             <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />'
                             . $date->getValue('dat_begin', $gPreferences['system_date']);
@@ -738,15 +741,23 @@ else
                 $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
                 
                 // Change colors of each second row for visibilty
-                $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
+                // Change css if date is hightlighted
+                if($row['dat_highlight'] != 1)
+                {
+                    $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
+                }
+                else
+                {
+                    $classValue = (($numElement % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+                }
                 
                 echo '<tr class="'.$classValue.'">
                         <td>' . $dateBegin . '</td>
                         <td>' . $dateEnd . '</td>
                         <td>' . $dateStartTime . '</td>
                         <td>' . $dateEndTime . '</td>
-                        <td>' . $row['dat_headline'] . '</td>
-                        <td>' . $row['dat_location'] . '</td>
+                        <td style="text-align: left;">' . $row['dat_headline'] . '</td>
+                        <td style="text-align: left;">' . $row['dat_location'] . '</td>
                         <td>';
                                 if(isset($row['room_name']))
                                 {
@@ -802,14 +813,22 @@ else
                     $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
         
                     // Change colors of each second row for visibilty
-                    $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
-                    
+                    // Change css if date is hightlighted
+                    if($row['dat_highlight'] != 1)
+                    {
+                        $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
+                    }
+                    else
+                    {
+                        $classValue = (($numElement % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+                    }
+
                     echo '<tr class="'.$classValue.'">
                             <td>' . $dateBegin . '</td>
                             <td>' . $dateEnd . '</td>
                             <td>' . $dateStartTime . '</td>
                             <td>' . $dateEndTime . '</td>
-                            <td>' . $row['dat_headline'] . '</td>
+                            <td style="text-align: left;">' . $row['dat_headline'] . '</td>
                             <td style="text-align: left;">'.  $row['dat_description'] = preg_replace('/<[^>]*>/', '', $row['dat_description']) .'</td>
                         </tr>';
                    $numElement++; 
@@ -840,14 +859,22 @@ else
                         $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
         
                         // Change colors of each second row for visibilty
-                        $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
-                        
+                        // Change css if date is hightlighted
+                        if($row['dat_highlight'] != 1)
+                        {
+                            $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
+                        }
+                        else
+                        {
+                            $classValue = (($numElement % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+                        }
+
                         echo '<tr class="'.$classValue.'">
                                 <td>' . $dateBegin . '<br />
                                     ' . $dateEnd . '</td>
                                 <td>' . $dateStartTime . '<br />
                                     ' . $dateEndTime . '</td>
-                                <td>' . $row['dat_headline'] . '</td>
+                                <td style="text-align: left;">' . $row['dat_headline'] . '</td>
                                 <td>';
     
                                         // If date has participation and patricipants are assigned

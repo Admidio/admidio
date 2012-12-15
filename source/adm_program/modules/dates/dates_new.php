@@ -461,6 +461,23 @@ echo '
 									<a href="javascript:addRoleSelection(0)">'.$gL10n->get('DAT_ADD_ROLE').'</a>
 								</span></dd>
 						</dl>
+					</li>
+                    <li>
+						<dl>
+							<dt>&nbsp;</dt>
+							<dd>
+								<input type="checkbox" id="dat_highlight" name="dat_highlight"';
+								if($date->getValue('dat_highlight') == 1)
+								{
+									echo ' checked="checked" ';
+								}
+								echo ' value="1" />
+								<label for="dat_highlight">'.$gL10n->get('DAT_HIGHLIGHT_DATE').'</label>
+								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_HIGHLIGHT_DATE&amp;inline=true"><img
+									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_HIGHLIGHT_DATE_DESC\',this)"
+									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+							</dd>
+						</dl>
 					</li>';
 
 					// besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
