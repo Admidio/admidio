@@ -29,7 +29,7 @@ $gLayout['header'] = '
 
 unset($_SESSION['rooms_request']);
 // Navigation weiterfuehren
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 $req_headline = $gL10n->get('SYS_ROOM');
 

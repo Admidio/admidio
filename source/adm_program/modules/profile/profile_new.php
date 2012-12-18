@@ -45,7 +45,7 @@ if($getUserId == 0 && $getNewUser == 0)
 
 if($getRemoveUrl == 1)
 {
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 }
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
@@ -336,7 +336,7 @@ switch($getNewUser)
         break;
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Formular wurde ueber "Zurueck"-Funktion aufgerufen, also alle Felder mit den vorherigen Werten fuellen
 if(isset($_SESSION['profile_request']))

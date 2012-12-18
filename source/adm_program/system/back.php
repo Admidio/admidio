@@ -13,10 +13,10 @@
 include('common.php');
 
 // die letzte Url aus dem Stack loeschen, da dies die aktuelle Seite ist
-$_SESSION['navigation']->deleteLastUrl();
+$gNavigation->deleteLastUrl();
 
 // Jetzt die "neue" letzte Url aufrufen
-$next_url = $_SESSION['navigation']->getUrl();
+$next_url = $gNavigation->getUrl();
 
 // wurde keine Seite gefunden, dann immer die Startseite anzeigen
 if(strlen($next_url) == 0)

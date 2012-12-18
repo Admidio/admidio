@@ -318,7 +318,7 @@ if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 }
 
 unset($_SESSION['profile_request']);
-$_SESSION['navigation']->deleteLastUrl();
+$gNavigation->deleteLastUrl();
 
 /*------------------------------------------------------------*/
 // je nach Aufrufmodus auf die richtige Seite weiterleiten
@@ -351,7 +351,7 @@ if($getNewUser == 1 || $getNewUser == 3)
 	}
 	else
 	{
-		$gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+		$gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
 		$gMessage->show($gL10n->get($messageId));
 	}
 }
@@ -364,13 +364,13 @@ elseif($getNewUser == 2)
 elseif($getNewUser == 0 && $user->getValue('usr_valid') == 0)
 {
     // a registration was edited then go back to profile view
-    $gMessage->setForwardUrl($_SESSION['navigation']->getPreviousUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getPreviousUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 else
 {
     // go back to profile view
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 ?>

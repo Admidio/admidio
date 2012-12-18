@@ -49,9 +49,9 @@ if($getModeration == 1 && $gCurrentUser->editGuestbookRight() == false)
 // Navigation faengt hier im Modul an, wenn keine Eintrag direkt aufgerufen wird
 if($getGboId == 0)
 {
-    $_SESSION['navigation']->clear();
+    $gNavigation->clear();
 }
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 if($getModeration == 1)

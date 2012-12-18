@@ -60,7 +60,7 @@ $NeverBackupDBtypes  = array('HEAP');
 $CloseWindowOnFinish = false;
 
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 $gLayout['title'] = $gL10n->get('BAC_DATABASE_BACKUP');
 

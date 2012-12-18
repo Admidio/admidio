@@ -134,7 +134,7 @@ elseif($getMode == 2)
         $member->stopMembership($row['mem_rol_id'], $row['mem_usr_id']);
     }
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP_OK', $gCurrentOrganization->getValue('org_longname')));
 }
 elseif($getMode == 3)
@@ -201,7 +201,7 @@ elseif($getMode == 4)
         {
             $phrase = $gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL'));
         }
-        $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
+        $gMessage->setForwardUrl($gNavigation->getUrl());
         $gMessage->show($phrase);
     }
 }
@@ -235,6 +235,6 @@ elseif($getMode == 6)
     }
 }
 
-$gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
 $gMessage->show($phrase);
 ?>

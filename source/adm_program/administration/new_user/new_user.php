@@ -24,8 +24,8 @@ if($gPreferences['registration_mode'] == 0)
 }
 
 // Navigation faengt hier im Modul an
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 // Neue Mitglieder der Gruppierung selektieren
 $sql    = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as last_name,

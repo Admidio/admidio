@@ -22,7 +22,7 @@ $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true);
 $_SESSION['set_rol_id'] = $getRoleId;
 
 //URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // create object of the commited role
 $role = new TableRoles($gDb, $getRoleId);
@@ -210,7 +210,7 @@ echo '<img src="'.THEME_PATH.'/images/loading_animation.gif" alt="'.$gL10n->get(
 echo '<form id="memlist_form"></form>';
 
 // Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
-if($_SESSION['navigation']->count() > 1)
+if($gNavigation->count() > 1)
 {
     echo '
     <ul class="iconTextLinkList">

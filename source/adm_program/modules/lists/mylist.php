@@ -38,9 +38,9 @@ if($getActiveRole == 0)
 if($getRoleId == 0)
 {
     // Navigation faengt hier im Modul an
-    $_SESSION['navigation']->clear();
+    $gNavigation->clear();
 }
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 $default_column_rows = 6;    // Anzahl der Spalten, die beim Aufruf angezeigt werden
 
@@ -622,7 +622,7 @@ echo '
 </form>';
 
 // Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
-if($_SESSION['navigation']->count() > 1)
+if($gNavigation->count() > 1)
 {
     echo '
     <ul class="iconTextLinkList">

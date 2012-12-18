@@ -76,7 +76,7 @@ if($getUploadmethod == 1)
         $gMessage->show($gL10n->get('PHO_NO_FILES_SELECTED'));
     }
     // Fotos wurden erfolgreich hochgeladen -> Upload-Seite aus der Navi-Klasse entfernen
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 }
 
 //bei Bedarf Uploadordner erzeugen

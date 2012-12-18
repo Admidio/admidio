@@ -40,8 +40,8 @@ elseif($gPreferences['enable_weblinks_module'] == 2)
 }
 
 // Navigation initialisieren - Modul faengt hier an.
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $gLayout['title']  = $getHeadline;

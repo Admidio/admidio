@@ -282,14 +282,19 @@ if(isset($gPreferences['theme']) == false)
 define('THEME_SERVER_PATH', SERVER_PATH. '/adm_themes/'. $gPreferences['theme']);
 define('THEME_PATH', $g_root_path. '/adm_themes/'. $gPreferences['theme']);
 
-// Nachrichtenklasse anlegen
+// Create message object which can be called if a message should be shown
 $gMessage = new Message();
 
-// Objekt fuer die Zuruecknavigation in den Modulen
-// hier werden die Urls in einem Stack gespeichert
-if(isset($_SESSION['navigation']) == false)
+// Create object for navigation between the scripts and modules
+// Every URL will be stored in a stack and can be called if user want's to navigate back
+if($gCurrentSession->hasObject('gNavigation'))
 {
-    $_SESSION['navigation'] = new Navigation();
+    $gNavigation = $gCurrentSession->getObject('gNavigation');
+}
+else
+{
+    $gNavigation = new Navigation();
+    $gCurrentSession->addObject('gNavigation', $gNavigation);
 }
 
 // check version of database against version of file system and show notice if not equal

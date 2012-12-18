@@ -160,7 +160,7 @@ if($getJob == 'new' || $getJob == 'change')
         $getPhotoId = $photo_album->getValue('pho_id');
 
         // Anlegen des Albums war erfolgreich -> album_new aus der Historie entfernen
-        $_SESSION['navigation']->deleteLastUrl();
+        $gNavigation->deleteLastUrl();
     }//if
 
     /********************Aenderung des Ordners***********************************/
@@ -181,7 +181,7 @@ if($getJob == 'new' || $getJob == 'change')
         }
 
         // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen
-        $_SESSION['navigation']->deleteLastUrl();
+        $gNavigation->deleteLastUrl();
     }//if
 
     /********************Aenderung der Datenbankeinträge***********************************/

@@ -44,7 +44,7 @@ if(!$gCurrentUser->editDates())
 $date_login   = 0;
 $date_assign_yourself = 0;
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Terminobjekt anlegen
 $date = new TableDate($gDb);

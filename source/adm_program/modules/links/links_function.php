@@ -100,9 +100,9 @@ if ($getMode == 1 || ($getMode == 3 && $getLinkId > 0) )
 	}
 
     unset($_SESSION['links_request']);
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 
-    header('Location: '. $_SESSION['navigation']->getUrl());
+    header('Location: '. $gNavigation->getUrl());
     exit();
 }
 

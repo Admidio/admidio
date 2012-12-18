@@ -37,7 +37,7 @@ if (!$gCurrentUser->editWeblinksRight())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Weblinkobjekt anlegen
 $link = new TableWeblink($gDb, $getLinkId);

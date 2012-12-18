@@ -181,10 +181,10 @@ if($getMode == 1)
         }
     }
 
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
     unset($_SESSION['categories_request']);
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
+    $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 
 }

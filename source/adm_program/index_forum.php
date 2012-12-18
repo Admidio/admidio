@@ -11,7 +11,7 @@
 include("system/common.php");
 
 // Url-Stack loeschen
-$_SESSION['navigation']->clear();
+$gNavigation->clear();
 
 // Html-Kopf ausgeben
 $gLayout['title']  = "Admidio Forum";

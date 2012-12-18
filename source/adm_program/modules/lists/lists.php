@@ -30,8 +30,8 @@ $getCategorySelection = admFuncVariableIsValid($_GET, 'category-selection', 'boo
 $getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
 
 // Navigation faengt hier im Modul an
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 // Listen-SQL-Statement zusammensetzen
 if($getActiveRole == 1)

@@ -27,7 +27,7 @@ if(isset($_COOKIE[$gCookiePraefix. '_ID']) == false)
 else
 {
     // remove login page of URL stack
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
     
     $show_time = 2000;
 

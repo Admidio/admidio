@@ -44,7 +44,7 @@ if (ini_get('file_uploads') != '1')
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 if(isset($_SESSION['download_request']))
 {

@@ -28,8 +28,8 @@ if ($gPreferences['enable_download_module'] != 1)
 }
 
 //Verwaltung der Session
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 //Informationen zum aktuellen Ordner aus der DB holen
 $currentFolder = new TableFolder($gDb);

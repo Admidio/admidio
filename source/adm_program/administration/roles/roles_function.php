@@ -331,10 +331,10 @@ elseif($getMode == 2)
         RoleDependency::removeChildRoles($gDb,$getRoleId);
     }
 
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
     unset($_SESSION['roles_request']);
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 elseif($getMode == 3)
@@ -347,7 +347,7 @@ elseif($getMode == 3)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
+    $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_INACTIVE')));
 }
 elseif($getMode == 4)
@@ -360,7 +360,7 @@ elseif($getMode == 4)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_DELETE_DATA'));
 }
 elseif($getMode == 5)
@@ -373,7 +373,7 @@ elseif($getMode == 5)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
+    $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_ACTIVE')));
 }
 elseif($getMode == 6)
@@ -387,7 +387,7 @@ elseif($getMode == 7)
     $role->setValue('rol_visible',0);
     $role->save();
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_INVISIBLE')));
 }
 elseif($getMode == 8)
@@ -395,7 +395,7 @@ elseif($getMode == 8)
     $role->setValue('rol_visible',1);
     $role->save();
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('ROL_ROLE_SET_MODE', $role->getValue('rol_name'), $gL10n->get('SYS_VISIBLE')));
 }
 elseif($getMode == 9)

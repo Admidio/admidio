@@ -149,14 +149,14 @@ elseif ($getRoleId > 0 || (strlen($getRoleName) > 0 && strlen($getCategory) > 0)
 
 // Wenn die letzte URL in der Zuruecknavigation die des Scriptes mail_send.php ist,
 // dann soll das Formular gefuellt werden mit den Werten aus der Session
-if (strpos($_SESSION['navigation']->getUrl(),'mail_send.php') > 0 && isset($_SESSION['mail_request']))
+if (strpos($gNavigation->getUrl(),'mail_send.php') > 0 && isset($_SESSION['mail_request']))
 {
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
     $form_values = strStripSlashesDeep($_SESSION['mail_request']);
     unset($_SESSION['mail_request']);
 
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 }
 else
 {
@@ -172,9 +172,9 @@ else
 // Seiten fuer Zuruecknavigation merken
 if($getUserId == 0 && $getRoleId == 0)
 {
-    $_SESSION['navigation']->clear();
+    $gNavigation->clear();
 }
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Focus auf das erste Eingabefeld setzen
 if ($getUserId == 0 && $getRoleId == 0 && strlen($getRoleName)  == 0)

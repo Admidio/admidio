@@ -19,7 +19,7 @@ if (!$gCurrentUser->isWebmaster())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 unset($_SESSION['fields_request']);
 
 // zusaetzliche Daten fuer den Html-Kopf setzen

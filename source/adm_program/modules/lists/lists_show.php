@@ -155,7 +155,7 @@ if($numMembers < $getStart)
 if($getMode == 'html' && $getStart == 0)
 {
     // Url fuer die Zuruecknavigation merken, aber nur in der Html-Ansicht
-    $_SESSION['navigation']->addUrl(CURRENT_URL);
+    $gNavigation->addUrl(CURRENT_URL);
 }
 
 if($getMode != 'csv')
@@ -237,10 +237,10 @@ if($getMode != 'csv')
             <li>
                 <span class="iconTextLink">';
                 // Navigationspunkt zum uebergeordneten Punkt dieser Liste
-                if(strpos($_SESSION['navigation']->getPreviousUrl(), 'mylist') === false)
+                if(strpos($gNavigation->getPreviousUrl(), 'mylist') === false)
                 {
                     // wenn nicht aus Listenuebersicht aufgerufen, dann wird hier die Listenuebersicht ohne Parameter aufgerufen
-                    if(strpos($_SESSION['navigation']->getPreviousUrl(), 'lists.php') === false)
+                    if(strpos($gNavigation->getPreviousUrl(), 'lists.php') === false)
                     {
                         $url = $g_root_path.'/adm_program/modules/lists/lists.php';
                     }

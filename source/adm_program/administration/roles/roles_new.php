@@ -30,7 +30,7 @@ if(!$gCurrentUser->assignRoles())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);

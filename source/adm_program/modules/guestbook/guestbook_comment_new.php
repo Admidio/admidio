@@ -71,7 +71,7 @@ if($getGbcId > 0)
 
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Gaestebuchkommentarobjekt anlegen
 $guestbook_comment = new TableGuestbookComment($gDb);

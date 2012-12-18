@@ -36,7 +36,7 @@ if(!$gCurrentUser->assignRoles() && !isGroupLeader($gCurrentUser->getValue('usr_
 $user = new User($gDb, $gProfileFields, $getUserId);
 if($getInline == 0)
 {
-    $_SESSION['navigation']->addUrl(CURRENT_URL);
+    $gNavigation->addUrl(CURRENT_URL);
 }
 //Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))

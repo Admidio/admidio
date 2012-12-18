@@ -8,19 +8,19 @@
  *
  * Ueber diese Klasse kann die Navigation innerhalb eines Modules besser
  * verwaltet werden. Ein Objekt dieser Klasse wird in common.php angelegt
- * und als Session-Variable $_SESSION['navigation'] weiter verwendet.
+ * und als Session-Variable $gNavigation weiter verwendet.
  *
  * Beim Aufruf der Basisseite eines Moduls muss die Funktion
- * $_SESSION['navigation']->clear() aufgerufen werden, um alle vorherigen Eintraege
+ * $gNavigation->clear() aufgerufen werden, um alle vorherigen Eintraege
  * zu loeschen.
  *
  * Nun muss auf allen Seiten innerhalb des Moduls die Funktion
- * $_SESSION['navigation']->addUrl(CURRENT_URL) aufgerufen werde
+ * $gNavigation->addUrl(CURRENT_URL) aufgerufen werde
  *
  * Will man nun an einer Stelle zuruecksurfen, so muss die Funktion
- * $_SESSION['navigation']->getUrl() aufgerufen werden
+ * $gNavigation->getUrl() aufgerufen werden
  *
- * Mit $_SESSION['navigation']->deleteLastUrl() kann man die letzte eingetragene
+ * Mit $gNavigation->deleteLastUrl() kann man die letzte eingetragene
  * Url aus dem Stack loeschen
  *
  *****************************************************************************/

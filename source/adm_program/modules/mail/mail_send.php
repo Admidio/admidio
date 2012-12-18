@@ -94,7 +94,7 @@ elseif ($postRoleId > 0)
 
 // aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
 // Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Falls Attachmentgroesse die max_post_size aus der php.ini uebertrifft, ist $_POST komplett leer.
 // Deswegen muss dies ueberprueft werden...
@@ -337,14 +337,14 @@ if ($sendMailResult === TRUE)
     }
 
     // Bei erfolgreichem Versenden wird aus dem NaviObjekt die am Anfang hinzugefuegte URL wieder geloescht...
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
     // dann auch noch die mail.php entfernen
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 
     // Meldung ueber erfolgreichen Versand und danach weiterleiten
-    if($_SESSION['navigation']->count() > 0)
+    if($gNavigation->count() > 0)
     {
-        $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
+        $gMessage->setForwardUrl($gNavigation->getUrl());
     }
     else
     {

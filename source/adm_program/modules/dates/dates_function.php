@@ -202,6 +202,10 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['date_login'] = 0;
     }
+    if(isset($_POST['dat_room_id']) == false)
+    {
+        $_POST['dat_room_id'] = 0;
+    }
 	
 	if(is_numeric($_POST['dat_max_members']) == false)
 	{
@@ -275,7 +279,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     $date->setVisibleRoles($arrRoles);
     $return_code = $date->save();
 	
-	if($return_code == 0)
+	if($return_code == 0 && $gPreferences['enable_email_notification'] == 1)
 	{	
 		// Benachrichtigungs-Email für neue Einträge
 
@@ -383,9 +387,9 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     }
 
     unset($_SESSION['dates_request']);
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 
-    header('Location: '. $_SESSION['navigation']->getUrl());
+    header('Location: '. $gNavigation->getUrl());
     exit();
 }
 elseif($getMode == 2)  // Termin loeschen
@@ -406,7 +410,7 @@ elseif($getMode == 3)  // Benutzer zum Termin anmelden
     $member = new TableMembers($gDb);
 	$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
+    $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
 }
 elseif($getMode == 4)  // Benutzer vom Termin abmelden
@@ -416,7 +420,7 @@ elseif($getMode == 4)  // Benutzer vom Termin abmelden
                AND mem_usr_id = \''.$gCurrentUser->getValue('usr_id').'\'';
     $gDb->query($sql);
 
-    $gMessage->setForwardUrl($_SESSION['navigation']->getUrl());
+    $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
 }
 elseif($getMode == 5)  // Eintrag fuer Sichtbarkeit erzeugen
