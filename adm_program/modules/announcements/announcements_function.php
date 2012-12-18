@@ -99,9 +99,9 @@ if($getMode == 1)
 	}
     
     unset($_SESSION['announcements_request']);
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 
-    header('Location: '. $_SESSION['navigation']->getUrl());
+    header('Location: '. $gNavigation->getUrl());
     exit();
 }
 elseif($getMode == 2)

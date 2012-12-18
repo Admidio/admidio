@@ -52,8 +52,8 @@ $membersPerPage = 25; // Anzahl der Mitglieder, die auf einer Seite angezeigt we
 unset($_SESSION['QuerySuggestions']);
 
 // Navigation faengt hier im Modul an
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 
 // Create condition if the search field was used

@@ -151,11 +151,11 @@ if($getMode == 1)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }    
 
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
     unset($_SESSION['fields_request']);
 
 	// zu den Organisationseinstellungen zurueck
-	$gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+	$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
 	$gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 }
 elseif($getMode == 2)

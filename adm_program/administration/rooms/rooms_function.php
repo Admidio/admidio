@@ -62,9 +62,9 @@ if($getMode == 1)
     $return_code = $room->save();
     
     unset($_SESSION['rooms_request']);
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 
-    header('Location: '. $_SESSION['navigation']->getUrl());
+    header('Location: '. $gNavigation->getUrl());
     exit();
 }
 // Löschen des Raums

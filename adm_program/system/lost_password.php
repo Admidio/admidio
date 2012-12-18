@@ -18,7 +18,7 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && $gPreferences[
 }
 
 // save url to navigation stack
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // 'systemmail' and 'request password' must be activated
 if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)

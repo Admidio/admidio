@@ -38,8 +38,8 @@ $old_backup_files = array();
 $old_backup_files_cp = array();
 
 // Navigation faengt hier im Modul an
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 //Liste der alten Backup Dateien bestimmen
 if ($handle = opendir($backupabsolutepath)) 

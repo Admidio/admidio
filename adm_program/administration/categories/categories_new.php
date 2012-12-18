@@ -45,7 +45,7 @@ elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // UserField-objekt anlegen
 $category = new TableCategory($gDb);

@@ -512,7 +512,7 @@ elseif ($getMode == 6)
         $newFile->save();
 
         //Zurueck zur letzten Seite
-        $_SESSION['navigation']->addUrl(CURRENT_URL);
+        $gNavigation->addUrl(CURRENT_URL);
         $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
         header($location);
         exit();
@@ -533,7 +533,7 @@ elseif ($getMode == 6)
         $newFolder->setRolesOnFolder($targetFolder->getRoleArrayOfFolder());
 
         //Zurueck zur letzten Seite
-        $_SESSION['navigation']->addUrl(CURRENT_URL);
+        $gNavigation->addUrl(CURRENT_URL);
         $location = 'Location: '.$g_root_path.'/adm_program/system/back.php';
         header($location);
         exit();

@@ -13,7 +13,7 @@ require_once('classes/form_elements.php');
 require_once('classes/table_roles.php');
 
 // remember url (will be removed in cookie_check)
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // read id of webmaster role
 $sql = 'SELECT rol_id FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'

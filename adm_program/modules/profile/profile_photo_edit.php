@@ -95,7 +95,7 @@ if($getJob=='save')
     }
     
     // zur Ausgangsseite zurueck
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
     header('Location: '.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId);
     exit();
 }    
@@ -145,7 +145,7 @@ elseif($getJob=='delete')
 /*****************************Foto hochladen*************************************/    
 if(strlen($getJob) == 0)
 {
-    $_SESSION['navigation']->addUrl(CURRENT_URL);
+    $gNavigation->addUrl(CURRENT_URL);
 
     if($getUserId == $gCurrentUser->getValue('usr_id'))
     {

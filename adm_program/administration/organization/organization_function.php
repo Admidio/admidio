@@ -213,6 +213,6 @@ unset($_SESSION['gForum']);
 $gCurrentSession->renewOrganizationObject();
 
 // zur Ausgangsseite zurueck
-$gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
 $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
 ?>

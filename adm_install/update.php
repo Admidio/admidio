@@ -275,7 +275,7 @@ elseif($getMode == 2)
 	// start php session and initialize global parameters
     session_name($gCookiePraefix. '_PHP_ID');
     session_start();
-    unset($_SESSION['g_current_organisation'], $_SESSION['gPreferences'], $_SESSION['gCurrentUser']);
+    unset($_SESSION['gCurrentSession']);
 
     // Hinweis, dass Update erfolgreich war
     $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong><br /><br />

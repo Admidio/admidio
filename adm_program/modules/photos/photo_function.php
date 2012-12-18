@@ -41,7 +41,7 @@ if(!$gCurrentUser->editPhotoRight())
 }
 
 //URL auf Navigationstack ablegen
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 //Loeschen eines Thumbnails
 // photo_album : Referenz auf Objekt des relevanten Albums

@@ -106,9 +106,9 @@ unset($_SESSION['profile_request']);
 // Seiten fuer Zuruecknavigation merken
 if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 {
-    $_SESSION['navigation']->clear();
+    $gNavigation->clear();
 }
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))

@@ -35,7 +35,7 @@ if(!$gCurrentUser->editAnnouncements())
 $getAnnId    = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($gDb);

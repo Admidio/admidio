@@ -123,8 +123,8 @@ if($getCatId > 0)
 }
 
 // Navigation starts here
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 // Number of events each page for default view 'html'
 if($gPreferences['dates_per_page'] > 0 && $getViewMode == 'html')
@@ -642,7 +642,7 @@ If($getViewMode == 'html')
 else
 {
     // create print output in a new window and set view_mode back to default 'html' for back navigation in main window
-    $_SESSION['navigation']->addUrl($g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat);
+    $gNavigation->addUrl($g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat);
     
     $calendar = new TableCategory($gDb, $getCatId);
     

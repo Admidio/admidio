@@ -216,7 +216,7 @@ if(count($parentRoles) > 0 )
 // if role selection was a separate page then delete this page from the navigation stack
 if($getInline == 0)
 {
-	$_SESSION['navigation']->deleteLastUrl();
+	$gNavigation->deleteLastUrl();
 }
 
 // falls Rollen dem eingeloggten User neu zugewiesen wurden,
@@ -238,10 +238,10 @@ if($getNewUser > 0 && $count_assigned == 0)
 }
 
 // zur Ausgangsseite zurueck
-if(strpos($_SESSION['navigation']->getUrl(), 'new_user_assign.php') > 0)
+if(strpos($gNavigation->getUrl(), 'new_user_assign.php') > 0)
 {
     // von hier aus direkt zur Registrierungsuebersicht zurueck
-    $_SESSION['navigation']->deleteLastUrl();
+    $gNavigation->deleteLastUrl();
 }
 
 if($getNewUser == 3)
@@ -255,7 +255,7 @@ else
 
 if($getInline == 0)
 {
-	$gMessage->setForwardUrl($_SESSION['navigation']->getUrl(), 2000);
+	$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
 	$gMessage->show($gL10n->get($messageId));
 }
 else

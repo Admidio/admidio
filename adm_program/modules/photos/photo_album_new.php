@@ -34,7 +34,7 @@ if(!$gCurrentUser->editPhotoRight())
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($gDb);

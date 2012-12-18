@@ -44,7 +44,7 @@ if ( (!$getFileId && !$getFolderId) OR ($getFileId && $getFolderId) )
 }
 
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 if(isset($_SESSION['download_request']))
 {

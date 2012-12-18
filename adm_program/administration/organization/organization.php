@@ -35,8 +35,8 @@ if($gDebug == 0 && file_exists('../../../adm_install'))
 }
 
 // Navigation faengt hier im Modul an
-$_SESSION['navigation']->clear();
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 $html_icon_warning = '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />';
 

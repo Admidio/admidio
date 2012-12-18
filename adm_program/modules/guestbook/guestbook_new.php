@@ -41,7 +41,7 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Gaestebuchobjekt anlegen
 $guestbook = new TableGuestbook($gDb);

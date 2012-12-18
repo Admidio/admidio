@@ -28,7 +28,7 @@ if($gCurrentUser->isWebmaster())
 }
 
 // Url-Stack loeschen
-$_SESSION['navigation']->clear();
+$gNavigation->clear();
 
 // Html-Kopf ausgeben
 $gLayout['title']  = 'Admidio '.$gL10n->get('SYS_OVERVIEW');

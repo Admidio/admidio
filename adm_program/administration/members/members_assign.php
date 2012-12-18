@@ -79,7 +79,7 @@ if($member_found == 0)
     exit();
 }
 
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $gLayout['title'] = $gL10n->get('MEM_CREATE_USER');

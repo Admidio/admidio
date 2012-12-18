@@ -38,7 +38,7 @@ if ($gPreferences['enable_ecard_module'] != 1)
 }
 
 //URL auf Navigationstack ablegen
-$_SESSION['navigation']->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
