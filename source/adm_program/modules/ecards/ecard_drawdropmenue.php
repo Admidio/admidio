@@ -130,7 +130,7 @@ elseif($gValidLogin && $getRoleId > 0 && $getMode == 0 && $getUserId == '0')
 	}
 	while ($row = $gDb->fetch_object($result))
 	{
-		$menudata.='<option value="'.$row->usr_id.'">'.$row->last_name.' '.$row->first_name.'</option>';
+		$menudata.='<option value="'.$row->usr_id.'">'.$row->last_name.', '.$row->first_name.'</option>';
 	}
 	if (!empty($menudata))
 	{

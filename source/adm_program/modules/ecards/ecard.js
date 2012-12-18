@@ -170,7 +170,6 @@ function ecardJSClass()
 	
 	this.makePreview = function()
 	{
-		$.fn.colorbox.init();
 		$("#" + this.ecardformid + " input[name='ecard[submit_action]']").attr("value","preview");
 		$("#" + this.ecardformid).attr("action","ecard_preview.php");
 		$.fn.colorbox({href:"ecard_preview.php",width:"70%",height:"70%",iframe:true,fastIframe:false,onComplete:function(){
@@ -251,7 +250,6 @@ function ecardJSClass()
 				}	 
 			}; 
 			jQuery.fn.SubmitEcard = function(){
-				$.fn.colorbox.init();
 				$("#" + ecardJS.ecardformid + " textarea[name='admEcardMessage']").text( CKEDITOR.instances.admEcardMessage.getData() );
 				if($("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value") == "send")
 					$("#" + ecardJS.ecardformid).ajaxSubmit(options);
