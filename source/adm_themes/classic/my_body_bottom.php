@@ -8,7 +8,7 @@
 if(strpos($_SERVER['REQUEST_URI'], 'index.php') === false)
 {
     echo '<div style="text-align: center; margin-top: 5px;">
-        <a href="'.$gHomepage.'">'.$gL10n->get('SYS_BACK_TO_MODULE_OVERVIEW').'</a>
+        <a href="'.$g_root_path.'/adm_program/index.php">'.$gL10n->get('SYS_BACK_TO_MODULE_OVERVIEW').'</a>
     </div>';
 }
 ?>
