@@ -132,10 +132,23 @@ $gLayout['header'] = '
             profileJS.changeRoleDates_ErrorText = \''.$gL10n->get('ROL_CHANGE_ROLE_DATES_ERROR').'\';
             profileJS.setBy_Text				= \''.$gL10n->get('SYS_SET_BY').'\';
             profileJS.usr_id = '.$user->getValue('usr_id').';
+
 			$(document).ready(function() {
 				profileJS.init();
 				$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+
+    			$(".admMemberInfo").click(function () { 
+    			    id = "#" + $(this).attr("id") + "_Content"; 
+
+    			    if($(id).css("display") == "none") {
+    			        $(id).show("fast");
+    			    }
+    			    else {
+    			        $(id).hide("fast");
+    			    }
+    			});
 			});
+			
     //-->
     </script>';
 

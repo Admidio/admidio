@@ -76,7 +76,7 @@ function getFormerRolesFromDatabase($user_id)
 
 function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $directOutput)
 {
-    global $gDb, $gL10n, $gCurrentUser, $gPreferences, $g_root_path;
+    global $gDb, $gL10n, $gCurrentUser, $gPreferences, $g_root_path, $gProfileFields;
     
     $countShowRoles  = 0;
     $member = new TableMembers($gDb);
@@ -179,7 +179,8 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                             }
 
                         }
-                    $roleMemHTML .= '</dd>
+                        $roleMemHTML .= '<a class="iconLink admMemberInfo" id="admMemberInfo_'.$member->getValue('mem_id').'" href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATION').'" title="'.$gL10n->get('SYS_INFORMATION').'"/></a>
+                        </dd>
                 </dl>
             </li>
             <li id="admMemberId_'.$member->getValue('mem_id').'" style="text-align: right; visibility: hidden; display: none;">
@@ -200,6 +201,22 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                     </div>
                 </form>
             </li>';
+            if($member->getValue('mem_usr_id_create') > 0)
+            {
+                // Infos der Benutzer, die diesen DS erstellt und geaendert haben
+                $roleMemHTML .= '<li  id="admMemberInfo_'.$member->getValue('mem_id').'_Content" style="display: none;">
+                    <div class="editInformation">';
+                        $userCreate = new User($gDb, $gProfileFields, $member->getValue('mem_usr_id_create'));
+                        $roleMemHTML .=  $gL10n->get('SYS_CREATED_BY', $userCreate->getValue('FIRST_NAME'). ' '. $userCreate->getValue('LAST_NAME'), $member->getValue('mem_timestamp_create'));
+        
+                        if($member->getValue('mem_usr_id_change') > 0)
+                        {
+                            $userChange = new User($gDb, $gProfileFields, $member->getValue('mem_usr_id_change'));
+                            $roleMemHTML .=  '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $userChange->getValue('FIRST_NAME'). ' '. $userChange->getValue('LAST_NAME'), $member->getValue('mem_timestamp_change'));
+                        }
+                    $roleMemHTML .=  '</div>
+                </li>';
+            }
             $countShowRoles++;
         }
     }
