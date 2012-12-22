@@ -10,6 +10,19 @@
  *  couldn't be stored in sessions. Therefore an object of @b LanguageData 
  *  should be assigned to this class that stored all neccessary data and can be
  *  stored in a session.
+ *  @par Examples
+ *  @code // show how to use this class with the language data class and sessions
+ *  script_a.php
+ *  // create a language data object and assign it to the language object
+ *  $language = new Language();
+ *  $languageData = new LanguageData('de');
+ *  $language->addLanguageData($languageData);
+ *  $session->addObject('languageData', $languageData);
+ *  
+ *  script_b.php
+ *  // read language data from session and add it to language object
+ *  $language = new Language();
+ *  $language->addLanguageData($session->getObject('languageData'));@endcode
  */
 /*****************************************************************************
  *

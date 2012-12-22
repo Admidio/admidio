@@ -1,27 +1,24 @@
 <?php 
-/******************************************************************************
- * Class manages access to database table adm_organizations
+/*****************************************************************************/
+/** @class Organization
+ *  @brief Handle organization data of Admidio and is connected to database table adm_organizations
  *
- * Copyright    : (c) 2004 - 2012 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *  This class creates the organization object and manages the access to the
+ *  organization specific preferences of the table adm_preferences. There
+ *  are also some method to read the relationship of organizations if the 
+ *  database contains more then one organization.
+ *  @par Examples
+ *  @code // create object and read the value of the language preference
+ *  $organization = new Organization($gDb, $organizationId);
+ *  $preferences  = $organization->getPreferences();
+ *  $language     = $preferences['system_language'];
+ *  // language = 'de'@endcode
+ */
+/*****************************************************************************
  *
- * Diese Klasse dient dazu einen Objekt einer Organisation zu erstellen. 
- * Eine Organisation kann ueber diese Klasse in der Datenbank verwaltet werden
- *
- * Folgende Methoden stehen neben den Standardmethoden aus der table_access_class zur Verfuegung:
- *
- * getPreferences()       - gibt ein Array mit allen organisationsspezifischen Einstellungen
- *                          aus adm_preferences zurueck
- * setPreferences($preferences, $update = true)
- *                        - schreibt alle Parameter aus dem uebergebenen Array
- *                          zurueck in die Datenbank, dabei werden nur die veraenderten oder
- *                          neuen Parameter geschrieben
- * getReferenceOrganizations($child = true, $parent = true)
- *                        - Gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
- * isChildOrganization($organization)
- *                        - prueft ob die uebergebene Orga Kind der aktuellen Orga ist
- * hasChildOrganizations()- prueft, ob die Orga Kinderorganisationen besitzt
+ *  Copyright    : (c) 2004 - 2012 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -54,7 +51,8 @@ class Organization extends TableAccess
 		}
     }
     
-    // interne Funktion, die spezielle Daten des Organizationobjekts loescht
+	/** Initialize all neccessary data of this object.
+	 */
     public function clear()
     {
         parent::clear();
@@ -74,7 +72,7 @@ class Organization extends TableAccess
     {
         $organizationsId = '';
 		$organizationsShortname = '';
-        $arr_ref_orgas = $this->getReferenceOrganizations(true, true);
+        $arr_ref_orgas = $this->getOrganizationsInRelationship(true, true);
 
         foreach($arr_ref_orgas as $key => $value)
         {
@@ -95,13 +93,15 @@ class Organization extends TableAccess
 		}
     }
     
-    // gibt ein Array mit allen Kinder- bzw. Elternorganisationen zurueck
-    // Ueber die Variablen $child und $parent kann die ermittlen der 
-    // Eltern bzw. Kinderorgas deaktiviert werden
-    //
-    // org_id ist der Schluessel und org_shortname der Wert des Arrays
-    // falls $longname = true gesetzt ist, ist org_longname der Wert des Arrays
-    public function getReferenceOrganizations($child = true, $parent = true, $longname = false)
+	/** Read all child and parent organizations of this organization and returns
+	 *  an array with them.
+	 *  @param $child    If set to @b true (default) then all child organizations will be in the array
+	 *  @param $parent   If set to @b true (default) then the parent organization will be in the array
+	 *  @param $longname If set to @b true then the value of the array will be the @b org_longname
+	 *                   otherwise it will be @b org_shortname
+	 *  @return Returns an array with all child and parent organizations e.g. array('org_id' => 'org_shortname')
+	 */
+    public function getOrganizationsInRelationship($child = true, $parent = true, $longname = false)
     {
         $arr_child_orgas = array();
     
@@ -159,13 +159,15 @@ class Organization extends TableAccess
         return $this->preferences;
     }
     
-    // prueft, ob die Orga Kinderorganisationen besitzt
+	/** Method checks if this organization is the parent of other organizations.
+	 *  @return Return @b true if the organization has child organizations.
+	 */
     public function hasChildOrganizations()
     {
         if($this->bCheckChildOrganizations == false)
         {
             // Daten erst einmal aus DB einlesen
-            $this->childOrganizations = $this->getReferenceOrganizations(true, false);
+            $this->childOrganizations = $this->getOrganizationsInRelationship(true, false);
             $this->bCheckChildOrganizations = true;
         }
 
@@ -179,34 +181,48 @@ class Organization extends TableAccess
         }
     }
     
-    // prueft, ob die uebergebene Orga (ID oder Shortname) ein Kind
-    // der aktuellen Orga ist
-    public function isChildOrganization($organization)
+	/** Method checks if the organization is configured as a child
+	 *  organization in the recordset.
+	 *  @param $organization The @b org_shortname or @b org_id of the organization
+	 *                       that should be set. If parameter isn't set than check
+	 *                       the organization of this object.
+	 *  @return Return @b true if the organization is a child of another organization
+	 */
+    public function isChildOrganization($organization = 0)
     {
         if($this->bCheckChildOrganizations == false)
         {
-            // Daten erst einmal aus DB einlesen
-            $this->childOrganizations = $this->getReferenceOrganizations(true, false);
+			// read parent organization from database
+            $this->childOrganizations = $this->getOrganizationsInRelationship(true, false);
             $this->bCheckChildOrganizations = true;
         }
+		
+		// if no orga was set in parameter then check the orga of this object
+		if($organization == 0)
+		{
+			$organization = $this->getValue('org_id');
+		}
         
         if(is_numeric($organization))
         {
-            // org_id wurde uebergeben
+            // parameter was org_id
             $ret_code = array_key_exists($organization, $this->childOrganizations);
         }
         else
         {
-            // org_shortname wurde uebergeben
+            // parameter was org_shortname
             $ret_code = in_array($organization, $this->childOrganizations);
         }
         return $ret_code;
     }
     
-    // die Methode schreibt alle Parameter aus dem uebergebenen Array
-    // zurueck in die Datenbank, dabei werden nur die veraenderten oder
-    // neuen Parameter geschrieben
-    // $update : bestimmt, ob vorhandene Werte aktualisiert werden
+	/** Writes all preferences of the array @b $preferences in the database 
+	 *  table @b adm_preferences. The method will only insert or update 
+	 *  changed preferences.
+	 *  @param $preferences Array with all preferences that should be stored in 
+	 *                      database. array('name_of_preference' => 'value')
+	 *  @param $update      If set to @b false then no update will be done, only inserts
+	 */
     public function setPreferences($preferences, $update = true)
     {
 		$this->db->startTransaction();

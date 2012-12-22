@@ -170,7 +170,7 @@ if($plg_ter_aktiv == 1)
 {
     // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
     $plg_organizations = '';
-    $plg_arr_orgas = $gCurrentOrganization->getReferenceOrganizations(true, true);
+    $plg_arr_orgas = $gCurrentOrganization->getOrganizationsInRelationship(true, true);
     
     foreach($plg_arr_orgas as $key => $value)
     {
