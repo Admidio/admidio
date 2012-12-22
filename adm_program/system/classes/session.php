@@ -1,7 +1,7 @@
 <?php
 /*****************************************************************************/
 /** @class Session
- *  @brief Handle session data of Admidio and is connected to database table admSessions
+ *  @brief Handle session data of Admidio and is connected to database table adm_sessions
  *
  *  This class should be used together with the PHP session handling. If you
  *  create a PHP session than you should also create this session object. The

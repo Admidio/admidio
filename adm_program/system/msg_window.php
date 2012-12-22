@@ -35,14 +35,14 @@ switch ($getMessageId)
     case 'CAT_CATEGORY_GLOBAL':
         // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
         $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
-        $organizations .= implode(',<br />- ', $gCurrentOrganization->getReferenceOrganizations(true, true, true));
+        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
         echo $gL10n->get(strtoupper($getMessageId), $organizations);
         break;
 
     case 'SYS_DATA_GLOBAL':
         // alle Organisationen finden, in denen die Orga entweder Mutter oder Tochter ist
         $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
-        $organizations .= implode(',<br />- ', $gCurrentOrganization->getReferenceOrganizations(true, true, true));
+        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
         echo $gL10n->get(strtoupper($getMessageId), $organizations);
         break;
     
