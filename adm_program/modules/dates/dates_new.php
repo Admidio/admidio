@@ -473,9 +473,6 @@ echo '
 								}
 								echo ' value="1" />
 								<label for="dat_highlight">'.$gL10n->get('DAT_HIGHLIGHT_DATE').'</label>
-								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_HIGHLIGHT_DATE&amp;inline=true"><img
-									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_HIGHLIGHT_DATE_DESC\',this)"
-									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
 							</dd>
 						</dl>
 					</li>';
