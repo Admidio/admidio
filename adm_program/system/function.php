@@ -534,27 +534,33 @@ function admFuncShowCreateChangeInfoByName($userNameCreate, $timestampCreate, $u
 {
     global $gDb, $gProfileFields, $gL10n;
 
-    $html = '<div class="editInformation">';
-    
-    // compose name of user who create the recordset
-    if(strlen(trim($userNameCreate)) == 0)
-    {
-        $userNameCreate = $gL10n->get('SYS_DELETED_USER');
-    }
-    
-    $html .= $gL10n->get('SYS_CREATED_BY', $userNameCreate, $timestampCreate);
+    $html = '';
 
-    // compose name of user who edit the recordset
-    if(strlen($timestampChanged) > 0)
+    // only show info if timestamp of creating is committed
+    if(strlen($timestampCreate) > 0)
     {
-        if(strlen(trim($userNameChanged)) == 0)
+        $html .= '<div class="editInformation">';
+        
+        // compose name of user who create the recordset
+        if(strlen(trim($userNameCreate)) == 0)
         {
-            $userNameChanged = $gL10n->get('SYS_DELETED_USER');
+            $userNameCreate = $gL10n->get('SYS_DELETED_USER');
         }
-        $html .= '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $userNameChanged, $timestampChanged);
+        
+        $html .= $gL10n->get('SYS_CREATED_BY', $userNameCreate, $timestampCreate);
+    
+        // compose name of user who edit the recordset
+        if(strlen($timestampChanged) > 0)
+        {
+            if(strlen(trim($userNameChanged)) == 0)
+            {
+                $userNameChanged = $gL10n->get('SYS_DELETED_USER');
+            }
+            $html .= '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $userNameChanged, $timestampChanged);
+        }
+    
+        $html .=  '</div>';
     }
-
-    $html .=  '</div>';
     return $html;
 }
 
