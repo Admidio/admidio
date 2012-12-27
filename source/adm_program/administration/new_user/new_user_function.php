@@ -59,10 +59,22 @@ if($getMode == 1 || $getMode == 2)
         $user->setValue('usr_password', $registrationUser->getValue('usr_password'));
     }
 
-    // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
-    // damit kein Duplicate-Key wegen dem Loginnamen entsteht
-    $registrationUser->delete();
-    $user->save();
+    try
+    {
+        // zuerst den neuen Usersatz loeschen, dann den alten Updaten,
+        // damit kein Duplicate-Key wegen dem Loginnamen entsteht
+        $registrationUser->notSendEmail();
+        $registrationUser->delete();
+        $user->save();
+    }
+    catch(AdmException $e)
+    {
+        // exception is thrown when email couldn't be send
+        // so save user data and then show error
+        $user->save();
+        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+    	$e->showHtml();
+    }        
 }
 
 if($getMode == 2)
@@ -84,13 +96,14 @@ if($getMode == 1 || $getMode == 3)
         // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
         $sysmail = new SystemMail($gDb);
         $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-        if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user) == true)
+        $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
+        if($sendMailResult == true)
         {
             $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL'));
         }
         else
         {
-            $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL')));
+            $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL'), $sendMailResult));
         }
     }
     else
@@ -100,17 +113,33 @@ if($getMode == 1 || $getMode == 3)
 }
 elseif($getMode == 4)
 {
-    // delete registration
-	// there is no need to delete user in forum because only valid users are registered in the forum
-    $registrationUser->delete();
+    try
+    {
+        // delete registration
+    	// there is no need to delete user in forum because only registered Admidio 
+    	// users are registered in the forum
+        $registrationUser->delete();
+    }
+    catch(AdmException $e)
+    {
+    	$e->showText();
+    }
 
 	// return successful delete for XMLHttpRequest
     echo 'done';
 }
 elseif($getMode == 5)
 {
-	// accept a registration, assign neccessary roles and send a notification email
-	$registrationUser->acceptRegistration();
+    try
+    {
+    	// accept a registration, assign neccessary roles and send a notification email
+    	$registrationUser->acceptRegistration();
+    }
+    catch(AdmException $e)
+    {
+        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+    	$e->showHtml();
+    }
 	
 	// if current user has the right to assign roles then show roles dialog
 	// otherwise go to previous url (default roles are assigned automatically)
@@ -129,10 +158,18 @@ elseif($getMode == 6)
 {
     // Der User existiert schon und besitzt auch ein Login
     
-    // Registrierung loeschen
-    // im Forum muss er nicht geloescht werden, da der User erst nach der vollstaendigen 
-    // Registrierung im Forum angelegt wird.
-    $registrationUser->delete();
+    try
+    {
+        // delete registration
+    	// there is no need to delete user in forum because only registered Admidio 
+    	// users are registered in the forum
+        $registrationUser->delete();
+    }
+    catch(AdmException $e)
+    {
+        $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+    	$e->showHtml();
+    }
 
     // Zugangsdaten neu verschicken
     $gNavigation->addUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');

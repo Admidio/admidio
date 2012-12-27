@@ -618,15 +618,8 @@ If($getViewMode == 'html')
                             }
                         }
 
-                        // Show date of create and changes
-                        echo '<div class="editInformation">'.
-                            $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'));
-
-                            if($date->getValue('dat_usr_id_change') > 0)
-                            {
-                                echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change'));
-                            }
-                        echo '</div>
+                        // show informations about user who creates the recordset and changed it
+                        echo admFuncShowCreateChangeInfoByName($row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'), $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change')).'
                     </div>
                 </div>';
             }  // End foreach

@@ -3,12 +3,12 @@
 /** @class UserRegistration
  *  @brief Creates, assign and update user registrations in database
  *
- *  This class extends the user class with some special functions for new registrations.
+ *  This class extends the User class with some special functions for new registrations.
  *  If a new user is saved than there will be an additional table entry in the 
  *  registration table. This entry must be deleted if a registration is confirmed
- *  or deleted. If a registration is confirmed or deleted then a notification email
- *  will be send to the user.
- *  @par Examples
+ *  or deleted. If a registration is confirmed or deleted then a notification SystemMail
+ *  will be send to the user. If email couldn't be send than an AdmException will be thrown.
+ *  @par Example 1
  *  @code // create a valid registration
  *  $user = new UserRegistration($gDb, $gProfileFields);
  *  $user->setValue('LAST_NAME', 'Schmidt');
@@ -16,6 +16,7 @@
  *  ...
  *  // save user data and create registration
  *  $user->save(); @endcode
+ *  @par Example 2
  *  @code // assign a registration
  *  $userId = 4711;
  *  $user = new UserRegistration($gDb, $gProfileFields, $userId);
@@ -34,7 +35,7 @@ require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
 
 class UserRegistration extends User
 {
-	private $TableRegistration;
+	private $sendEmail; ///< Flag if the object will send a SystemMail if registration is accepted or deleted.
 
 	/** Constuctor that will create an object of a recordset of the users table. 
 	 *  If the id is set than this recordset will be loaded.
@@ -48,6 +49,8 @@ class UserRegistration extends User
     public function __construct(&$db, $userFields, $userId = 0, $organizationId = 0)
     {
 		global $gCurrentOrganization;
+		
+		$this->sendEmail = true;
 		
         parent::__construct($db, $userFields, $userId);
 
@@ -86,14 +89,15 @@ class UserRegistration extends User
 		$this->db->endTransaction();
 		
         // only send mail if systemmails are enabled
-        if($gPreferences['enable_system_mails'] == 1)
+        if($gPreferences['enable_system_mails'] == 1 && $this->sendEmail)
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
-            if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this) == false)
+            $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this);
+            if(strlen($sendMailResult) > 1)
             {
-                $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $this->getValue('EMAIL')));
+                throw new AdmException('SYS_EMAIL_NOT_SEND', $this->getValue('EMAIL'), $sendMailResult);
             }
         }
 
@@ -110,19 +114,8 @@ class UserRegistration extends User
     {
 		global $gMessage, $gL10n, $gPreferences;
 
-        // only send mail if systemmails are enabled
-		// send email before user will be deleted
-        if($gPreferences['enable_system_mails'] == 1)
-        {
-            // send mail to user that his registration was accepted
-            $sysmail = new SystemMail($this->db);
-            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
-            if($sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this) == false)
-            {
-                $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $this->getValue('EMAIL')));
-            }
-        }
-
+		$userEmail = $this->getValue('EMAIL');
+        
 		$this->db->startTransaction();
 		
 		// delete registration record in registration table
@@ -141,8 +134,30 @@ class UserRegistration extends User
 			}
 		}
 		
-        $this->db->endTransaction();		
+        $this->db->endTransaction();
+        
+        // only send mail if systemmails are enabled
+		// send email before user will be deleted
+        if($gPreferences['enable_system_mails'] == 1 && $this->sendEmail)
+        {
+            // send mail to user that his registration was accepted
+            $sysmail = new SystemMail($this->db);
+            $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
+            $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this);
+            if(strlen($sendMailResult) > 1)
+            {
+                throw new AdmException('SYS_EMAIL_NOT_SEND', $userEmail, $sendMailResult);
+            }
+        }        
+        
         return $return;	
+	}
+	
+	/** If called than the object will not send a SystemMail when registration was accepted or deleted.
+	 */
+	public function notSendEmail()
+	{
+    	$this->sendEmail = false;
 	}
 
 	/** Save all changed columns of the recordset in table of database. If it's a new user 
@@ -174,7 +189,7 @@ class UserRegistration extends User
 
             // send a notification mail to all role members of roles that can approve registrations
             // therefore the flags system mails and notification mail for roles with approve registration must be activated			
-            if($gPreferences['enable_system_mails'] == 1 && $gPreferences['enable_registration_admin_mail'] == 1)
+            if($gPreferences['enable_system_mails'] == 1 && $gPreferences['enable_registration_admin_mail'] == 1 && $this->sendEmail)
             {
                 $sql = 'SELECT DISTINCT first_name.usd_value as first_name, last_name.usd_value as last_name, email.usd_value as email
                           FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
@@ -204,9 +219,10 @@ class UserRegistration extends User
                     // send mail that a new registration is available
                     $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);
 
-                    if($sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this) == false)
+                    $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this);
+                    if(strlen($sendMailResult) > 1)
                     {
-                        $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $row['email']));
+                        throw new AdmException('SYS_EMAIL_NOT_SEND', $row['email'], $sendMailResult);
                     }
                 }
             }

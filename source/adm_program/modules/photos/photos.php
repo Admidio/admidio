@@ -427,18 +427,8 @@ echo '<div class="photoModuleContainer">';
         	<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers').'
         </div>';
 
-        // Anleger und Veraendererinfos SYS_CREATED_BY
-        echo '
-        <div class="editInformation">';
-            $user_create = new User($gDb, $gProfileFields, $photo_album->getValue('pho_usr_id_create'));
-            echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_create'));
-                        
-            if($photo_album->getValue('pho_usr_id_change') > 0)
-            {
-                $user_change = new User($gDb, $gProfileFields, $photo_album->getValue('pho_usr_id_change'));
-                echo '<br />'.$gL10n->get('SYS_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $photo_album->getValue('pho_timestamp_change'));
-            }
-        echo '</div>';
+        // show informations about user who creates the recordset and changed it
+        echo admFuncShowCreateChangeInfoById($photo_album->getValue('pho_usr_id_create'), $photo_album->getValue('pho_timestamp_create'), $photo_album->getValue('pho_usr_id_change'), $photo_album->getValue('pho_timestamp_change'));
     }
     /************************Albumliste*************************************/
 

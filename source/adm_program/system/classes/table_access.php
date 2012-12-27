@@ -256,7 +256,7 @@ class TableAccess
 	 *  @param $sqlWhereCondition Conditions for the table to select one record
 	 *  @return Returns @b true if one record is found
 	 */
-    private function readData($sqlWhereCondition)
+    protected function readData($sqlWhereCondition)
     {
 		$sqlAdditionalTables = '';
 

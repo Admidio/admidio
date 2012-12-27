@@ -34,15 +34,15 @@ if (!$gCurrentUser->editDownloadRight())
 
 $gNavigation->addUrl(CURRENT_URL);
 
-//Folderobject erstellen
-$folder = new TableFolder($gDb);
-$folder->getFolderForDownload($getFolderId);
-
-//pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-if (!$folder->getValue('fol_id'))
+try
 {
-    //Datensatz konnte nicht in DB gefunden werden...
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // get recordset of current folder from databse
+    $folder = new TableFolder($gDb);
+    $folder->getFolderForDownload($getFolderId);
+}
+catch(AdmException $e)
+{
+	$e->showHtml();
 }
 
 //NavigationsLink erhalten
@@ -50,9 +50,19 @@ $navigationBar = $folder->getNavigationForDownload();
 
 //Parentordner holen
 $parentRoleSet = null;
-if ($folder->getValue('fol_fol_id_parent')) {
-    $parentFolder = new TableFolder($gDb);
-    $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
+if ($folder->getValue('fol_fol_id_parent')) 
+{
+    try
+    {
+        // get recordset of parent folder from databse
+        $parentFolder = new TableFolder($gDb);
+        $parentFolder->getFolderForDownload($folder->getValue('fol_fol_id_parent'));
+    }
+    catch(AdmException $e)
+    {
+    	$e->showHtml();
+    }
+
     //Rollen des uebergeordneten Ordners holen
     $parentRoleSet = $parentFolder->getRoleArrayOfFolder();
 

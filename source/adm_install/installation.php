@@ -490,16 +490,15 @@ elseif($getMode == 8)	// Start installation
         }
     }
 
-    // Default-Daten anlegen
+    // create default data
 
-    // User Webmaster schon mal in der User-Tabelle anlegen, damit die Id genutzt werden kann
-    // weitere Daten folgen erst weiter unten, wenn die Profilfelder angelegt sind
+    // create a hidden system user for internal use
+    // all recordsets created by installation will get the create id of the system user
     $gCurrentUser = new TableUsers($db);
-    $gCurrentUser->setValue('usr_login_name', $_SESSION['user_login']);
-    $gCurrentUser->setValue('usr_password',   $_SESSION['user_password']);
+    $gCurrentUser->setValue('usr_valid', '0');
     $gCurrentUser->setValue('usr_timestamp_create', DATETIME_NOW);
-    $gCurrentUser->save(false); // kein angemeldeter User -> ErstelltVon kann nicht gefuellt werden
-
+    $gCurrentUser->save(false); // no registered user -> UserIdCreate couldn't be filled
+	$systemUserId = $gCurrentUser->getValue('usr_id');
 
     // Orga-Uebergreifende Kategorien anlegen
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
@@ -628,118 +627,134 @@ elseif($getMode == 8)	// Start installation
     // nun die Default-Rollen anlegen
 
     // Create role webmaster
-    $role_webmaster = new TableRoles($db);
-    $role_webmaster->setValue('rol_cat_id', $category_common);
-    $role_webmaster->setValue('rol_name', $gL10n->get('SYS_WEBMASTER'));
-    $role_webmaster->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_WEBMASTER'));
-    $role_webmaster->setValue('rol_assign_roles', 1);
-    $role_webmaster->setValue('rol_approve_users', 1);
-    $role_webmaster->setValue('rol_announcements', 1);
-    $role_webmaster->setValue('rol_dates', 1);
-    $role_webmaster->setValue('rol_download', 1);
-    $role_webmaster->setValue('rol_guestbook', 1);
-    $role_webmaster->setValue('rol_guestbook_comments', 1);
-    $role_webmaster->setValue('rol_photo', 1);
-    $role_webmaster->setValue('rol_weblinks', 1);
-    $role_webmaster->setValue('rol_edit_user', 1);
-    $role_webmaster->setValue('rol_mail_to_all', 1);
-    $role_webmaster->setValue('rol_mail_this_role', 3);
-    $role_webmaster->setValue('rol_profile', 1);
-    $role_webmaster->setValue('rol_this_list_view', 1);
-    $role_webmaster->setValue('rol_all_lists_view', 1);
-	$role_webmaster->setValue('rol_webmaster', 1);
-    $role_webmaster->save();
+    $roleWebmaster = new TableRoles($db);
+    $roleWebmaster->setValue('rol_cat_id', $category_common);
+    $roleWebmaster->setValue('rol_name', $gL10n->get('SYS_WEBMASTER'));
+    $roleWebmaster->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_WEBMASTER'));
+    $roleWebmaster->setValue('rol_assign_roles', 1);
+    $roleWebmaster->setValue('rol_approve_users', 1);
+    $roleWebmaster->setValue('rol_announcements', 1);
+    $roleWebmaster->setValue('rol_dates', 1);
+    $roleWebmaster->setValue('rol_download', 1);
+    $roleWebmaster->setValue('rol_guestbook', 1);
+    $roleWebmaster->setValue('rol_guestbook_comments', 1);
+    $roleWebmaster->setValue('rol_photo', 1);
+    $roleWebmaster->setValue('rol_weblinks', 1);
+    $roleWebmaster->setValue('rol_edit_user', 1);
+    $roleWebmaster->setValue('rol_mail_to_all', 1);
+    $roleWebmaster->setValue('rol_mail_this_role', 3);
+    $roleWebmaster->setValue('rol_profile', 1);
+    $roleWebmaster->setValue('rol_this_list_view', 1);
+    $roleWebmaster->setValue('rol_all_lists_view', 1);
+	$roleWebmaster->setValue('rol_webmaster', 1);
+    $roleWebmaster->save();
 
     // Create role member
-    $role_member = new TableRoles($db);
-    $role_member->setValue('rol_cat_id', $category_common);
-    $role_member->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
-    $role_member->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
-    $role_member->setValue('rol_mail_this_role', 2);
-    $role_member->setValue('rol_profile', 1);
-    $role_member->setValue('rol_this_list_view', 1);
-    $role_member->setValue('rol_default_registration', 1);
-    $role_member->save();
+    $roleMember = new TableRoles($db);
+    $roleMember->setValue('rol_cat_id', $category_common);
+    $roleMember->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
+    $roleMember->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
+    $roleMember->setValue('rol_mail_this_role', 2);
+    $roleMember->setValue('rol_profile', 1);
+    $roleMember->setValue('rol_this_list_view', 1);
+    $roleMember->setValue('rol_default_registration', 1);
+    $roleMember->save();
 
     // Create role board
-    $role_management = new TableRoles($db);
-    $role_management->setValue('rol_cat_id', $category_common);
-    $role_management->setValue('rol_name', $gL10n->get('INS_BOARD'));
-    $role_management->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
-    $role_management->setValue('rol_announcements', 1);
-    $role_management->setValue('rol_dates', 1);
-    $role_management->setValue('rol_weblinks', 1);
-    $role_management->setValue('rol_edit_user', 1);
-    $role_management->setValue('rol_mail_to_all', 1);
-    $role_management->setValue('rol_mail_this_role', 2);
-    $role_management->setValue('rol_profile', 1);
-    $role_management->setValue('rol_this_list_view', 1);
-    $role_management->setValue('rol_all_lists_view', 1);
-    $role_management->save();
+    $roleManagement = new TableRoles($db);
+    $roleManagement->setValue('rol_cat_id', $category_common);
+    $roleManagement->setValue('rol_name', $gL10n->get('INS_BOARD'));
+    $roleManagement->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
+    $roleManagement->setValue('rol_announcements', 1);
+    $roleManagement->setValue('rol_dates', 1);
+    $roleManagement->setValue('rol_weblinks', 1);
+    $roleManagement->setValue('rol_edit_user', 1);
+    $roleManagement->setValue('rol_mail_to_all', 1);
+    $roleManagement->setValue('rol_mail_this_role', 2);
+    $roleManagement->setValue('rol_profile', 1);
+    $roleManagement->setValue('rol_this_list_view', 1);
+    $roleManagement->setValue('rol_all_lists_view', 1);
+    $roleManagement->save();
+    
+    // create user webmaster and assign roles
+    $webmaster = new TableUsers($db);
+    $webmaster->setValue('usr_login_name', $_SESSION['user_login']);
+    $webmaster->setValue('usr_password',   $_SESSION['user_password']);
+    $webmaster->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
+    $webmaster->setValue('usr_timestamp_create', DATETIME_NOW);
+    $webmaster->save(false); // no registered user -> UserIdCreate couldn't be filled
     
     // Create membership for current user in role 'Webmaster'
     $member = new TableMembers($db);
-    $member->startMembership($role_webmaster->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
-    $member->startMembership($role_member->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
+    $member->startMembership($roleWebmaster->getValue('rol_id'), $webmaster->getValue('usr_id'));
+    $member->startMembership($roleMember->getValue('rol_id'),    $webmaster->getValue('usr_id'));
 	
 	// create object with current user field structure
 	$gProfileFields = new ProfileFields($db, $gCurrentOrganization->getValue('org_id'));
-    
-    // User Webmaster erst jetzt anlegen, da dieser die Rollenrechte bereits haben muss
-    $gCurrentUser = new User($db, $gProfileFields, $gCurrentUser->getValue('usr_id'));
-    $gCurrentUser->setValue('LAST_NAME', $_SESSION['user_last_name']);
+
+    // first create a user object "current user" with webmaster rights because webmaster
+    // is allowed to edit firstname and lastname
+    $gCurrentUser = new User($db, $gProfileFields, $webmaster->getValue('usr_id'));
+    $gCurrentUser->setValue('LAST_NAME',  $_SESSION['user_last_name']);
     $gCurrentUser->setValue('FIRST_NAME', $_SESSION['user_first_name']);
-    $gCurrentUser->setValue('EMAIL', $_SESSION['user_email']);
-    $gCurrentUser->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
-    $gCurrentUser->save(false); // Ersteller wird selber gesetzt, da User bereits angelegt worden ist
+    $gCurrentUser->setValue('EMAIL',      $_SESSION['user_email']);
+    $gCurrentUser->save(false);
+
+    // now create a full user object for system user
+    $systemUser = new User($db, $gProfileFields, $systemUserId);
+    $systemUser->setValue('LAST_NAME', $gL10n->get('SYS_SYSTEM'));
+    $systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
+    
+    // now set current user to system user
+    $gCurrentUser->readDataById($systemUserId);
 
     // Default-Listen-Konfigurationen anlegen
-    $address_list = new ListConfiguration($db);
-    $address_list->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
-    $address_list->setValue('lst_global', 1);
-    $address_list->setValue('lst_default', 1);
-    $address_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $address_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $address_list->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-    $address_list->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
-    $address_list->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
-    $address_list->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
-    $address_list->save();
+    $addressList = new ListConfiguration($db);
+    $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
+    $addressList->setValue('lst_global', 1);
+    $addressList->setValue('lst_default', 1);
+    $addressList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $addressList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $addressList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+    $addressList->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+    $addressList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
+    $addressList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
+    $addressList->save();
 
-    $phone_list = new ListConfiguration($db);
-    $phone_list->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
-    $phone_list->setValue('lst_global', 1);
-    $phone_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $phone_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $phone_list->addColumn(3, $gProfileFields->getProperty('PHONE', 'usf_id'));
-    $phone_list->addColumn(4, $gProfileFields->getProperty('MOBILE', 'usf_id'));
-    $phone_list->addColumn(5, $gProfileFields->getProperty('EMAIL', 'usf_id'));
-    $phone_list->addColumn(6, $gProfileFields->getProperty('FAX', 'usf_id'));
-    $phone_list->save();
+    $phoneList = new ListConfiguration($db);
+    $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
+    $phoneList->setValue('lst_global', 1);
+    $phoneList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $phoneList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $phoneList->addColumn(3, $gProfileFields->getProperty('PHONE', 'usf_id'));
+    $phoneList->addColumn(4, $gProfileFields->getProperty('MOBILE', 'usf_id'));
+    $phoneList->addColumn(5, $gProfileFields->getProperty('EMAIL', 'usf_id'));
+    $phoneList->addColumn(6, $gProfileFields->getProperty('FAX', 'usf_id'));
+    $phoneList->save();
 
-    $contact_list = new ListConfiguration($db);
-    $contact_list->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
-    $contact_list->setValue('lst_global', 1);
-    $contact_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
-    $contact_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
-    $contact_list->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-    $contact_list->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
-    $contact_list->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
-    $contact_list->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
-    $contact_list->addColumn(7, $gProfileFields->getProperty('PHONE', 'usf_id'));
-    $contact_list->addColumn(8, $gProfileFields->getProperty('MOBILE', 'usf_id'));
-    $contact_list->addColumn(9, $gProfileFields->getProperty('EMAIL', 'usf_id'));
-    $contact_list->save();
+    $contactList = new ListConfiguration($db);
+    $contactList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
+    $contactList->setValue('lst_global', 1);
+    $contactList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+    $contactList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+    $contactList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+    $contactList->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+    $contactList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
+    $contactList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
+    $contactList->addColumn(7, $gProfileFields->getProperty('PHONE', 'usf_id'));
+    $contactList->addColumn(8, $gProfileFields->getProperty('MOBILE', 'usf_id'));
+    $contactList->addColumn(9, $gProfileFields->getProperty('EMAIL', 'usf_id'));
+    $contactList->save();
 
-    $former_list = new ListConfiguration($db);
-    $former_list->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
-    $former_list->setValue('lst_global', 1);
-    $former_list->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'));
-    $former_list->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'));
-    $former_list->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
-    $former_list->addColumn(4, 'mem_begin');
-    $former_list->addColumn(5, 'mem_end', 'DESC');
-    $former_list->save();
+    $formerList = new ListConfiguration($db);
+    $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
+    $formerList->setValue('lst_global', 1);
+    $formerList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'));
+    $formerList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'));
+    $formerList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+    $formerList->addColumn(4, 'mem_begin');
+    $formerList->addColumn(5, 'mem_end', 'DESC');
+    $formerList->save();
 
     // nach der Installation zur Sicherheit bei den Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 ';

@@ -11,7 +11,7 @@
  *
  * Beside the methods of the parent class there are the following additional methods:
  *
- * getFileForDownload($file_id)
+ * getFileForDownload($fileId)
  *                         - File mit der uebergebenen ID aus der Datenbank auslesen fuer 
  *                           das Downloadmodul. Hier wird auch direkt ueberprueft ob die 
  *                           Datei oder der Ordner gesperrt ist.
@@ -36,28 +36,59 @@ class TableFile extends TableAccess
         parent::__construct($db, TBL_FILES, 'fil', $fil_id);
     }
 
-    // File mit der uebergebenen ID aus der Datenbank auslesen fuer das Downloadmodul
-    // Hier wird auch direkt ueberprueft ob die Datei oder der Ordner gesperrt ist.
-    public function getFileForDownload($file_id)
+	/** Deletes the selected record of the table and the assiciated file in the file system. 
+	 *  After that the class will be initialize.
+	 *  @return @b true if no error occured
+	 */
+    public function delete()
+    {
+        @chmod($this->getCompletePathOfFile(), 0777);
+        @unlink($this->getCompletePathOfFile());
+
+        //Auch wenn das Loeschen nicht klappt wird true zurueckgegeben,
+        //damit der Eintrag aus der DB verschwindet.
+        return parent::delete();
+    }
+    
+    //Gibt den kompletten Pfad der Datei zurueck
+    public function getCompletePathOfFile()
+    {
+        //Dateinamen und Pfad zusammen setzen
+        $fileName     = $this->getValue('fil_name');
+        $folderPath   = $this->getValue('fol_path');
+        $folderName   = $this->getValue('fol_name');
+        $completePath = SERVER_PATH. $folderPath. '/'. $folderName. '/'. $fileName;
+
+        return $completePath;
+    }
+
+	/** Reads the file recordset from database table @b adm_folders and throws an
+	 *  AdmException if the user has no right to see the corresponding folder or the 
+	 *  file id doesn't exists.
+	 *  @param $fileId The id of the file.
+	 *  @return Returns @b true if everything is ok otherwise an AdmException is thrown.
+	 */
+    public function getFileForDownload($fileId)
     {
         global $gCurrentOrganization, $gCurrentUser, $gValidLogin;
 
-        $this->readDataById($file_id);
+        $this->readDataById($fileId);
 
         //Pruefen ob der aktuelle Benutzer Rechte an der Datei hat
         //Gucken ob ueberhaupt ein Datensatz gefunden wurde...
         if ($this->getValue('fil_id'))
         {
-
             //Falls die Datei gelocked ist und der User keine Downloadadminrechte hat, bekommt er nix zu sehen..
             if (!$gCurrentUser->editDownloadRight() && $this->getValue('fil_locked'))
             {
                 $this->clear();
+                throw new AdmException('DOW_FOLDER_NO_RIGHTS');
             }
             else if (!$gValidLogin && !$this->getValue('fol_public'))
             {
                 //Wenn der Ordner nicht public ist und der Benutzer nicht eingeloggt ist, bekommt er nix zu sehen..
                 $this->clear();
+                throw new AdmException('DOW_FOLDER_NO_RIGHTS');
             }
             else if (!$gCurrentUser->editDownloadRight() && !$this->getValue('fol_public'))
             {
@@ -78,40 +109,17 @@ class TableFile extends TableAccess
                 if ($row_count == 0)
                 {
                     $this->clear();
+                    throw new AdmException('DOW_FOLDER_NO_RIGHTS');
                 }
-
+                return true;
+            }
+            else
+            {
+                return true;
             }
         }
+        throw new AdmException('SYS_INVALID_PAGE_VIEW');
     }
-
-
-    //Gibt den kompletten Pfad der Datei zurueck
-    public function getCompletePathOfFile()
-    {
-        //Dateinamen und Pfad zusammen setzen
-        $fileName     = $this->getValue('fil_name');
-        $folderPath   = $this->getValue('fol_path');
-        $folderName   = $this->getValue('fol_name');
-        $completePath = SERVER_PATH. $folderPath. '/'. $folderName. '/'. $fileName;
-
-        return $completePath;
-    }
-
-
-	/** Deletes the selected record of the table and the assiciated file in the file system. 
-	 *  After that the class will be initialize.
-	 *  @return @b true if no error occured
-	 */
-    public function delete()
-    {
-        @chmod($this->getCompletePathOfFile(), 0777);
-        @unlink($this->getCompletePathOfFile());
-
-        //Auch wenn das Loeschen nicht klappt wird true zurueckgegeben,
-        //damit der Eintrag aus der DB verschwindet.
-        return parent::delete();
-    }
-
 
 	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
 	 *  a new record or if only an update is neccessary. The update statement will only update

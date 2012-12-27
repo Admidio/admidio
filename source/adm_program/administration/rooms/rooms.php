@@ -99,7 +99,7 @@ else
                             $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                     }
-          echo '</div>
+                echo '</div>
             </div>
             <div class="boxBody">
                 <div class="date_info_block">
@@ -121,14 +121,9 @@ else
                        echo '<div class="date_description" style="clear: left;"><br/>'
                             .$room->getValue('room_description').'</div>';
                     }
-                    echo '<div class="editInformation">'.
-                    $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create'));
 
-                    if($room->getValue('room_usr_id_change') > 0)
-                    {
-                        echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'], $room->getValue('room_timestamp_change'));
-                    }
-                echo '</div>
+                    // show informations about user who creates the recordset and changed it
+                    echo admFuncShowCreateChangeInfoByName($row['create_firstname']. ' '. $row['create_surname'], $room->getValue('room_timestamp_create'), $row['change_firstname']. ' '. $row['change_surname'], $room->getValue('room_timestamp_change')).'
                 </div>
             </div>
         </div>';

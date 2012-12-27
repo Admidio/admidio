@@ -57,15 +57,15 @@ else
    $form_values['new_description'] = null;
 }
 
-//Folderobject erstellen
-$folder = new TableFolder($gDb);
-$folder->getFolderForDownload($getFolderId);
-
-//pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-if (!$folder->getValue('fol_id'))
+try
 {
-    //Datensatz konnte nicht in DB gefunden werden...
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // get recordset of current folder from databse
+    $folder = new TableFolder($gDb);
+    $folder->getFolderForDownload($getFolderId);
+}
+catch(AdmException $e)
+{
+	$e->showHtml();
 }
 
 $parentFolderName = $folder->getValue('fol_name');

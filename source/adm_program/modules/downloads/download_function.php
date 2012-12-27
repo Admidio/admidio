@@ -65,15 +65,15 @@ if ($getMode == 1)
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    //Informationen zum Zielordner aus der DB holen
-    $targetFolder = new TableFolder($gDb);
-    $targetFolder->getFolderForDownload($getFolderId);
-
-    //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-    if (!$targetFolder->getValue('fol_id'))
+    try
     {
-        //Datensatz konnte nicht in DB gefunden werden...
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // get recordset of current folder from databse
+        $targetFolder = new TableFolder($gDb);
+        $targetFolder->getFolderForDownload($getFolderId);
+    }
+    catch(AdmException $e)
+    {
+    	$e->showHtml();
     }
 
     if (empty($_POST))
@@ -167,17 +167,21 @@ elseif ($getMode == 2)
 
     if($getFileId > 0)
     {
-        $file = new TableFile($gDb);
-        $file->getFileForDownload($getFileId);
-
-        //Pruefen ob Datensatz gefunden
-        if ($file->getValue('fil_id'))
+        try
         {
-            if ($file->delete())
-            {
-                // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-                echo 'done';
-            }
+            // get recordset of current file from databse
+            $file = new TableFile($gDb);
+            $file->getFileForDownload($getFileId);
+        }
+        catch(AdmException $e)
+        {
+        	$e->showText();
+        }  
+
+        if ($file->delete())
+        {
+            // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+            echo 'done';
         }
     }
 
@@ -194,17 +198,17 @@ elseif ($getMode == 3)
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    //Informationen zum Zielordner aus der DB holen
-    $targetFolder = new TableFolder($gDb);
-    $targetFolder->getFolderForDownload($getFolderId);
-
-    //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-    if (!$targetFolder->getValue('fol_id'))
+    try
     {
-        //Datensatz konnte nicht in DB gefunden werden...
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // get recordset of current folder from databse
+        $targetFolder = new TableFolder($gDb);
+        $targetFolder->getFolderForDownload($getFolderId);
     }
-
+    catch(AdmException $e)
+    {
+    	$e->showHtml();
+    }
+    
     $newFolderName = null;
 
     if (strlen($_POST['new_folder']) > 0)
@@ -287,17 +291,18 @@ elseif ($getMode == 4)
 
     if($getFileId > 0)
     {
-        $file = new TableFile($gDb);
-        $file->getFileForDownload($getFileId);
-
-        //Pruefen ob Datensatz gefunden
-        if ($file->getValue('fil_id')) {
-            $oldFile = $file->getCompletePathOfFile();
+        try
+        {
+            // get recordset of current file from databse
+            $file = new TableFile($gDb);
+            $file->getFileForDownload($getFileId);
         }
-        else {
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-        }
+        catch(AdmException $e)
+        {
+        	$e->showHtml();
+        }    
 
+        $oldFile = $file->getCompletePathOfFile();
         $newFile = null;
 
         if (strlen($_POST['new_name']) > 0)
@@ -359,17 +364,18 @@ elseif ($getMode == 4)
     }
     else if ($getFolderId > 0)
     {
-        $folder = new TableFolder($gDb);
-        $folder->getFolderForDownload($getFolderId);
-
-        //Pruefen ob Datensatz gefunden
-        if ($folder->getValue('fol_id')) {
-            $oldFolder = $folder->getCompletePathOfFolder();
+        try
+        {
+            // get recordset of current folder from databse
+            $folder = new TableFolder($gDb);
+            $folder->getFolderForDownload($getFolderId);
         }
-        else {
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        catch(AdmException $e)
+        {
+        	$e->showHtml();
         }
 
+        $oldFolder = $folder->getCompletePathOfFolder();
         $newFolder = null;
 
         if (strlen($_POST['new_name']) > 0)
@@ -438,17 +444,21 @@ elseif ($getMode == 5)
     }
     else if ($getFolderId > 0)
     {
-        $folder = new TableFolder($gDb);
-        $folder->getFolderForDownload($getFolderId);
-
-        //Pruefen ob Datensatz gefunden
-        if ($folder->getValue('fol_id'))
+        try
         {
-            if ($folder->delete())
-            {
-                // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
-                echo 'done';
-            }
+            // get recordset of current folder from databse
+            $folder = new TableFolder($gDb);
+            $folder->getFolderForDownload($getFolderId);
+        }
+        catch(AdmException $e)
+        {
+        	$e->showText();
+        }
+
+        if ($folder->delete())
+        {
+            // Loeschen erfolgreich -> Rueckgabe fuer XMLHttpRequest
+            echo 'done';
         }
     }
 
@@ -490,15 +500,15 @@ elseif ($getMode == 6)
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    //Informationen zum Zielordner aus der DB holen
-    $targetFolder = new TableFolder($gDb);
-    $targetFolder->getFolderForDownload($getFolderId);
-
-    //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-    if (!$targetFolder->getValue('fol_id'))
+    try
     {
-        //Datensatz konnte nicht in DB gefunden werden...
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // get recordset of current folder from databse
+        $targetFolder = new TableFolder($gDb);
+        $targetFolder->getFolderForDownload($getFolderId);
+    }
+    catch(AdmException $e)
+    {
+    	$e->showHtml();
     }
 
     //Pruefen ob das neue Element eine Datei order ein Ordner ist.
@@ -549,15 +559,15 @@ elseif ($getMode == 7)
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    //Informationen zum Zielordner aus der DB holen
-    $targetFolder = new TableFolder($gDb);
-    $targetFolder->getFolderForDownload($getFolderId);
-
-    //pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-    if (!$targetFolder->getValue('fol_id'))
+    try
     {
-        //Datensatz konnte nicht in DB gefunden werden...
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        // get recordset of current folder from databse
+        $targetFolder = new TableFolder($gDb);
+        $targetFolder->getFolderForDownload($getFolderId);
+    }
+    catch(AdmException $e)
+    {
+    	$e->showHtml();
     }
 
     //Formularinhalt aufbereiten

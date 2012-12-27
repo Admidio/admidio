@@ -279,23 +279,33 @@ if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 /*------------------------------------------------------------*/
 $gDb->startTransaction();
 
-if($user->getValue('usr_id') == 0)
+try
 {
-    // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
-    $user->save();
+    // save changes; if it's a new registration than caught exception if email couldn't send
 
-    if($getNewUser == 1)
+    if($user->getValue('usr_id') == 0)
     {
-        $user->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
+        // der User wird gerade angelegt und die ID kann erst danach in das Create-Feld gesetzt werden
+        $user->save();
+    
+        if($getNewUser == 1)
+        {
+            $user->setValue('usr_usr_id_create', $gCurrentUser->getValue('usr_id'));
+        }
+        else
+        {
+            $user->setValue('usr_usr_id_create', $user->getValue('usr_id'));
+        }
     }
-    else
-    {
-        $user->setValue('usr_usr_id_create', $user->getValue('usr_id'));
-    }
+
+    $ret_code = $user->save();
 }
-
-// Aenderungen speichern
-$ret_code = $user->save();
+catch(AdmException $e)
+{
+    unset($_SESSION['profile_request']);
+    $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+	$e->showHtml();
+}
 
 // wurde der Loginname vergeben oder geaendert, so muss ein Forumaccount gepflegt werden
 // bei einer Bestaetigung der Registrierung muss der Account aktiviert werden
@@ -330,9 +340,17 @@ if($getNewUser == 1 || $getNewUser == 3)
 
 	if($getNewUser == 3)
 	{
-		// accept a registration, assign neccessary roles and send a notification email
-		$user->acceptRegistration();
-		$messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+        try
+        {
+    		// accept a registration, assign neccessary roles and send a notification email
+    		$user->acceptRegistration();
+    		$messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+        }
+        catch(AdmException $e)
+        {
+            $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+        	$e->showHtml();
+        }
 	}
 	else
 	{

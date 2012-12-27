@@ -133,7 +133,7 @@ try
 }
 catch(AdmException $e)
 {
-	$e->show();
+	$e->showHtml();
 }
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
