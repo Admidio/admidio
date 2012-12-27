@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Common functions 
+ * Various common functions 
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -481,4 +481,81 @@ function admFuncCheckDatabaseVersion($dbVersion, $dbVersionBeta, $webmaster, $em
 		}
 	}
 }
+
+/** Creates a html fragment with information about user and time when the recordset was created
+ *  and when it was at last edited. Therefore all neccessary data must be set in the function
+ *  parameters. If userid is not set then the function will show @b deleted @b user.
+ *  @param $userIdCreate    Id of the user who create the recordset.
+ *  @param $timestampCreate Date and time of the moment when the user create the recordset.
+ *  @param $userIdEdit      Id of the user last changed the recordset.
+ *  @param $timestampEdit   Date and time of the moment when the user last changed the recordset
+ */
+function admFuncShowCreateChangeInfoById($userIdCreate, $timestampCreate, $userIdChanged, $timestampChanged)
+{
+    global $gDb, $gProfileFields, $gL10n;
+
+    // compose name of user who create the recordset
+    if($userIdCreate > 0)
+    {
+        $userCreate = new User($gDb, $gProfileFields, $userIdCreate);
+        $htmlCreateName = $userCreate->getValue('FIRST_NAME'). ' '. $userCreate->getValue('LAST_NAME');
+    }
+    else
+    {
+        $htmlCreateName = $gL10n->get('SYS_DELETED_USER');
+    }
+    
+    // compose name of user who edit the recordset
+    if(strlen($timestampChanged) > 0)
+    {
+        if($userIdChanged > 0)
+        {
+            $userChange = new User($gDb, $gProfileFields, $userIdChanged);
+            $htmlChangedName = $userChange->getValue('FIRST_NAME'). ' '. $userChange->getValue('LAST_NAME');
+        }
+        else
+        {
+            $htmlChangedName = $gL10n->get('SYS_DELETED_USER');
+        }
+    }
+
+    return admFuncShowCreateChangeInfoByName($htmlCreateName, $timestampCreate, $htmlChangedName, $timestampChanged);
+}
+
+/** Creates a html fragment with information about user and time when the recordset was created
+ *  and when it was at last edited. Therefore all neccessary data must be set in the function
+ *  parameters. If user name is not set then the function will show @b deleted @b user.
+ *  @param $userNameCreate  Id of the user who create the recordset.
+ *  @param $timestampCreate Date and time of the moment when the user create the recordset.
+ *  @param $userNameChanged Id of the user last changed the recordset.
+ *  @param $timestampEdit   Date and time of the moment when the user last changed the recordset
+ */
+function admFuncShowCreateChangeInfoByName($userNameCreate, $timestampCreate, $userNameChanged, $timestampChanged)
+{
+    global $gDb, $gProfileFields, $gL10n;
+
+    $html = '<div class="editInformation">';
+    
+    // compose name of user who create the recordset
+    if(strlen(trim($userNameCreate)) == 0)
+    {
+        $userNameCreate = $gL10n->get('SYS_DELETED_USER');
+    }
+    
+    $html .= $gL10n->get('SYS_CREATED_BY', $userNameCreate, $timestampCreate);
+
+    // compose name of user who edit the recordset
+    if(strlen($timestampChanged) > 0)
+    {
+        if(strlen(trim($userNameChanged)) == 0)
+        {
+            $userNameChanged = $gL10n->get('SYS_DELETED_USER');
+        }
+        $html .= '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $userNameChanged, $timestampChanged);
+    }
+
+    $html .=  '</div>';
+    return $html;
+}
+
 ?>

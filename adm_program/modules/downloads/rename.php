@@ -57,55 +57,50 @@ else
    $form_values['new_description'] = null;
 }
 
-//Informationen zur Datei/Ordner aus der DB holen,
-//falls keine Daten gefunden wurden gibt es die Standardfehlermeldung (invalid)
-if ($getFileId) {
-    $class = new TableFile($gDb);
-    $class->getFileForDownload($getFileId);
+try
+{
+    if ($getFileId) 
+    {
+        // get recordset of current file from databse
+        $file = new TableFile($gDb);
+        $file->getFileForDownload($getFileId);
+        
+        $originalName = $file->getValue('fil_name');
+    
+        if ($form_values['new_name'] == null) 
+        {
+            $form_values['new_name'] = $originalName;
+        }
+    
+        if ($form_values['new_description'] == null) 
+        {
+            $form_values['new_description'] = $file->getValue('fil_description');
+        }
+    
+    }
+    else 
+    {
+        // get recordset of current folder from databse
+        $folder = new TableFolder($gDb);
+        $folder->getFolderForDownload($getFolderId);
+        
+        $originalName = $folder->getValue('fol_name');
+    
+        if ($form_values['new_name'] == null) 
+        {
+            $form_values['new_name'] = $originalName;
+        }
+    
+        if ($form_values['new_description'] == null) 
+        {
+            $form_values['new_description'] = $folder->getValue('fol_description');
+        }    
+    }
 }
-else {
-    $class = new TableFolder($gDb);
-    $class->getFolderForDownload($getFolderId);
+catch(AdmException $e)
+{
+	$e->showHtml();
 }
-
-if (is_a($class,'TableFile')) {
-
-    if ($class->getValue('fil_id')) {
-        $originalName = $class->getValue('fil_name');
-    }
-    else {
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    if ($form_values['new_name'] == null) {
-        $form_values['new_name'] = $originalName;
-    }
-
-    if ($form_values['new_description'] == null) {
-        $form_values['new_description'] = $class->getValue('fil_description');
-    }
-
-}
-else {
-
-    if ($class->getValue('fol_id')) {
-        $originalName = $class->getValue('fol_name');
-    }
-    else {
-        $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-    }
-
-    if ($form_values['new_name'] == null) {
-        $form_values['new_name'] = $originalName;
-    }
-
-    if ($form_values['new_description'] == null) {
-        $form_values['new_description'] = $class->getValue('fol_description');
-    }
-
-}
-
-
 
 // Html-Kopf ausgeben
 if($getFileId > 0)

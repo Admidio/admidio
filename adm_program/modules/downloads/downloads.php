@@ -31,23 +31,15 @@ if ($gPreferences['enable_download_module'] != 1)
 $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL);
 
-//Informationen zum aktuellen Ordner aus der DB holen
-$currentFolder = new TableFolder($gDb);
-$returnValue   = $currentFolder->getFolderForDownload($getFolderId);
-
-//pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-if ($returnValue < 0)
+try
 {
-	if($returnValue == -2)
-	{
-		//oder Benutzer darf nicht zugreifen
-		$gMessage->show($gL10n->get('DOW_FOLDER_NO_RIGHTS'));
-	}
-	else
-	{
-		//Datensatz konnte nicht in DB gefunden werden
-		$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-	}
+    // get recordset of current folder from databse
+    $currentFolder = new TableFolder($gDb);
+    $currentFolder->getFolderForDownload($getFolderId);
+}
+catch(AdmException $e)
+{
+	$e->showHtml();
 }
 
 $getFolderId = $currentFolder->getValue('fol_id');

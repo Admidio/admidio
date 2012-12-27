@@ -5,9 +5,9 @@
  *
  *  This class extends the default PHP exception class with an Admidio specific
  *  output. The exception get's a language string as parameter and returns a 
- *  html message with the translated error if an exception is thrown
+ *  html or plain text message with the translated error if an exception is thrown
  *
- * @section sec Example
+ * @par Example
  * @code try
  * {
  *    if($bla == 1)
@@ -19,7 +19,11 @@
  * }
  * catch(AdmException $e)
  * {
- *    $e->show();
+ *    // show html message
+ *    $e->showHtml();
+ *
+ *    // show simply text message
+ *    $e->showText();
  * } @endcode
  */
 /*****************************************************************************
@@ -56,23 +60,23 @@ class AdmException extends Exception
     }
 
 
-    /** show message window with translated message 
-	 *  @param $inline 	If set to @b true than no html message dialog will be shown, output is only the plain text.
-	 * 					This setting should be used then error is thrown in ajax context.
+    /** Show html message window with translated message 
 	 */
-    public function show($inline = false)
+    public function showHtml()
 	{
 		global $gMessage, $gL10n;
 		
-		if($inline)
-		{
-			return $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
-		}
-		else
-		{
-			return $gMessage->show($gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4));
-		}
+		return $gMessage->show($gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4));
     }
+    
+    /** Simply return the plain translated error text without any markup
+	 */
+    public function showText()
+	{
+		global $gL10n;
+		echo $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
+		exit();
+    }        
 }
 
 ?>

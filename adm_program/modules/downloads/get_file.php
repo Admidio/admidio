@@ -25,17 +25,15 @@ if ($gPreferences['enable_download_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-//Fileobject erstellen
-$file = new TableFile($gDb);
-
-//Fileproperties aus DB lesen fuer den Download
-$file->getFileForDownload($getFileId);
-
-//pruefen ob ueberhaupt ein Datensatz in der DB gefunden wurde...
-if (!$file->getValue('fil_id'))
+try
 {
-    //Datensatz konnte nicht in DB gefunden werden...
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    // get recordset of current file from databse
+    $file = new TableFile($gDb);
+    $file->getFileForDownload($getFileId);
+}
+catch(AdmException $e)
+{
+	$e->showHtml();
 }
 
 //kompletten Pfad der Datei holen

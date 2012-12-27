@@ -8,6 +8,8 @@
  *
  *****************************************************************************/
 
+require_once(SERVER_PATH. '/adm_program/system/classes/table_users.php');
+
 // drop foreign keys to delete index
 if($gDbType == 'mysql')
 { 
@@ -53,31 +55,37 @@ $gDb->query($sql);
  
  // convert <br /> to a normal line feed
 $emailText = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'));
- 
+
+// create new system user
+$systemUser = new TableUsers($gDb);
+$systemUser->setValue('usr_valid', '0');
+$systemUser->setValue('usr_timestamp_create', DATETIME_NOW);
+$systemUser->save(false); // no registered user -> UserIdCreate couldn't be filled
+
+$sql = 'SELECT usf_id FROM '. TBL_USER_FIELDS. ' WHERE usf_name_intern = \'LAST_NAME\'';
+$gDb->query($sql);
+$usfRow = $gDb->fetch_array();
+
+$sql = 'INSERT INTO '. TBL_USER_DATA. ' (usd_usf_id, usd_usr_id, usd_value) 
+                                 VALUES ('.$usfRow['usf_id'].', '.$systemUser->getValue('usr_id').', \''.$gL10n->get('SYS_SYSTEM').'\')';
+$gDb->query($sql);    
+
+
+$sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $systemUser->getValue('usr_id'). '
+                                   , mem_timestamp_create = \''.DATETIME_NOW.'\'';
+$gDb->query($sql);    
+
+$sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $systemUser->getValue('usr_id'). '
+                                   , mem_timestamp_create = \''.DATETIME_NOW.'\'';
+$gDb->query($sql);
+
+
 // write data for every organization
 $sql = 'SELECT * FROM '. TBL_ORGANIZATIONS. ' ORDER BY org_id DESC';
 $result_orga = $gDb->query($sql);
 
 while($row_orga = $gDb->fetch_array($result_orga))
 {
-    // select ID of webmaster
-    $sql = 'SELECT min(mem_usr_id) as webmaster_id
-              FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-             WHERE cat_org_id = '. $row_orga['org_id']. '
-               AND rol_cat_id = cat_id
-               AND rol_webmaster = 1
-               AND mem_rol_id = rol_id ';
-    $result = $gDb->query($sql);
-    $row_webmaster = $gDb->fetch_array($result);
-
-    $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $row_webmaster['webmaster_id']. '
-                                       , mem_timestamp_create = \''.DATETIME_NOW.'\'';
-    $gDb->query($sql);    
-
-    $sql = 'UPDATE '. TBL_MEMBERS. ' SET mem_usr_id_create = '. $row_webmaster['webmaster_id']. '
-                                       , mem_timestamp_create = \''.DATETIME_NOW.'\'';
-    $gDb->query($sql);
-	
 	$sql = 'INSERT INTO '. TBL_TEXTS. ' (txt_org_id, txt_name, txt_text)
 								 VALUES ('.$row_orga['org_id'].', \'SYSMAIL_REFUSE_REGISTRATION\', \''.$emailText.'\')';
 	$gDb->query($sql);

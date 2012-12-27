@@ -147,15 +147,10 @@ else
             </div>
 
             <div class="boxBody">'.
-                $announcement->getValue('ann_description').'
-                <div class="editInformation">'.
-                    $gL10n->get('SYS_CREATED_BY', $row['create_firstname']. ' '. $row['create_surname'],  $announcement->getValue('ann_timestamp_create'));
+                $announcement->getValue('ann_description').
 
-                    if($announcement->getValue('ann_usr_id_change') > 0)
-                    {
-                        echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $row['change_firstname']. ' '. $row['change_surname'],  $announcement->getValue('ann_timestamp_change'));
-                    }
-                echo '</div>
+                // show informations about user who creates the recordset and changed it
+                admFuncShowCreateChangeInfoByName($row['create_firstname']. ' '. $row['create_surname'], $announcement->getValue('ann_timestamp_create'), $row['change_firstname']. ' '. $row['change_surname'], $announcement->getValue('ann_timestamp_change')).'
             </div>
         </div>';
     }  // Ende While-Schleife

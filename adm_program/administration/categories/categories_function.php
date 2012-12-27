@@ -200,7 +200,7 @@ elseif($getMode == 2)
 	}
 	catch(AdmException $e)
 	{
-		echo $e->show(true);
+		echo $e->showText();
 	}
 }
 elseif($getMode == 4)

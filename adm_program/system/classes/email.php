@@ -482,7 +482,7 @@ class Email extends PHPMailer
 
         // initialize recepient adresses so same email could be send to other recepients
         $this->emAddresses = '';
-        $this->ClearAdresses();
+        $this->ClearAddresses();
 
         return TRUE;
     }

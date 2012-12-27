@@ -3,10 +3,10 @@
 /** @class LanguageData
  *  @brief Stores language data in a class object
  *
- *  This class stores data of the language object. These are the paths to all
+ *  This class stores data of the Language object. These are the paths to all
  *  relevant language files, the configured language and the default language.
- *  This object is designed to be stored in a PHP session. The language 
- *  object itself couldn't be stored in a session because it uses PHP objects
+ *  This object is designed to be stored in a PHP session. The Language 
+ *  object itself couldn't be stored in a Session because it uses PHP objects
  *  which couldn't stored in a PHP session.
  *  @par Examples
  *  @code // show how to use this class with the language class and sessions

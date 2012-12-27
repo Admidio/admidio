@@ -126,22 +126,10 @@ echo '
             </div>
         </div>';
 
-        if($room->getValue('room_usr_id_create') > 0)
-        {
-            // Infos der Benutzer, die diesen DS erstellt und geaendert haben
-            echo '<div class="editInformation">';
-                $user_create = new User($gDb, $gProfileFields, $room->getValue('room_usr_id_create'));
-                echo $gL10n->get('SYS_CREATED_BY', $user_create->getValue('FIRST_NAME'). ' '. $user_create->getValue('LAST_NAME'), $room->getValue('room_timestamp_create'));
-
-                if($room->getValue('room_usr_id_change') > 0)
-                {
-                    $user_change = new User($gDb, $gProfileFields, $room->getValue('dat_usr_id_change'));
-                    echo '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $room->getValue('room_timestamp_change'));
-                }
-            echo '</div>';
-        }
-
-        echo '<div class="formSubmit">
+        // show informations about user who creates the recordset and changed it
+        echo admFuncShowCreateChangeInfoById($room->getValue('room_usr_id_create'), $room->getValue('room_timestamp_create'), $room->getValue('dat_usr_id_change'), $room->getValue('room_timestamp_change')).'
+        
+        <div class="formSubmit">
             <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
         </div>   
     </div>

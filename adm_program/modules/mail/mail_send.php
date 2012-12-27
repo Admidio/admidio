@@ -364,11 +364,11 @@ else
 {
     if ($role->getValue('rol_id') > 0)
     {
-        $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
+        $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name')), $sendMailResult));
     }
     else
     {
-        $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $_POST['mailto']));
+        $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $_POST['mailto'], $sendMailResult));
     }
 }
 
