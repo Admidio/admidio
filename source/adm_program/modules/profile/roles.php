@@ -60,6 +60,10 @@ if($getInline == 0)
 {
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
 }
+else
+{
+    header('Content-type: text/html; charset=utf-8'); 
+}
 
 echo '
 <h1 class="moduleHeadline">'. $gLayout['title']. '</h1>

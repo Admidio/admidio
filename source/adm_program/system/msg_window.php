@@ -21,6 +21,8 @@ $getMessageTitle = admFuncVariableIsValid($_GET, 'message_title', 'string', 'SYS
 $getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1', 'string', '', false, null, true);
 $getInlineView   = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0, false, null, true);
 
+header('Content-type: text/html; charset=utf-8'); 
+
 // show headline
 if($getInlineView)
 {

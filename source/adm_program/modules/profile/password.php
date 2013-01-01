@@ -18,6 +18,8 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
+header('Content-type: text/html; charset=utf-8'); 
+
 $gMessage->setExcludeThemeBody();
  
 // Initialize and check the parameters
