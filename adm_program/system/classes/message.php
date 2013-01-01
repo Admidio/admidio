@@ -126,6 +126,10 @@ class Message
     
             require(SERVER_PATH. '/adm_program/system/overall_header.php');       
         }
+        else
+        {
+            header('Content-type: text/html; charset=utf-8'); 
+        }
         
         echo '
         <div class="formLayout" id="message_form" style="width: 90%; margin-top: 60px;">

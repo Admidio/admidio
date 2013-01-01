@@ -137,6 +137,8 @@ if(strlen($url) == 0)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
+header('Content-type: text/html; charset=utf-8'); 
+
 echo '
 <script type="text/javascript"><!--
 var entryDeleted;
