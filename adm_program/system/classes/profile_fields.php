@@ -223,7 +223,8 @@ class ProfileFields
 			{
 				if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($value) > 0)
 				{
-					if($format == 'html')
+				    // if no format or html is set then show date format from Admidio settings
+					if(strlen($format) == 0 || $format == 'html')
 					{
 						$dateFormat = $gPreferences['system_date'];
 					}

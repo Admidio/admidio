@@ -493,6 +493,8 @@ function admFuncCheckDatabaseVersion($dbVersion, $dbVersionBeta, $webmaster, $em
 function admFuncShowCreateChangeInfoById($userIdCreate, $timestampCreate, $userIdChanged, $timestampChanged)
 {
     global $gDb, $gProfileFields, $gL10n;
+    
+    $htmlChangedName = '';
 
     // compose name of user who create the recordset
     if($userIdCreate > 0)
