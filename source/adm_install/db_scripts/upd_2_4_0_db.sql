@@ -23,6 +23,11 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CREATE foreign k
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign key (mem_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
+ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_session_id` `ses_session_id_old` varchar(35) not null;
+ALTER TABLE %PREFIX%_sessions ADD COLUMN `ses_session_id` varchar(255) not null;
+UPDATE %PREFIX%_sessions SET ses_session_id = ses_session_id_old;
+ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_session_id_old;
+
 ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_device_id varchar(255);
 
 ALTER TABLE %PREFIX%_dates ADD COLUMN dat_highlight boolean not null default '0';

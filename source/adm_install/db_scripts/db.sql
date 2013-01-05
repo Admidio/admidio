@@ -527,7 +527,7 @@ create table %PREFIX%_sessions
    ses_id                         integer       unsigned not null AUTO_INCREMENT,
    ses_usr_id                     integer       unsigned default NULL,
    ses_org_id                     integer       unsigned not null,
-   ses_session_id                 varchar(35)   not null,
+   ses_session_id                 varchar(255)  not null,
    ses_device_id				  varchar(255),
    ses_begin                      timestamp		null default null,
    ses_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
