@@ -227,7 +227,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 --
 
 INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_password, usr_photo, usr_text, usr_activation_code, usr_last_login, usr_actual_login, usr_number_login, usr_date_invalid, usr_number_invalid, usr_usr_id_create, usr_timestamp_create, usr_usr_id_change, usr_timestamp_change, usr_valid, usr_reg_org_shortname) VALUES
-(1, 'admin', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 1, '2008-05-03 09:43:02', 1, '2008-05-03 09:43:02', 1, NULL),
+(1, 'admin', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-02-27 21:52:41', '2009-02-27 22:31:17', 26, NULL, 0, 1, '2008-05-03 09:43:02', 354, '2009-02-24 09:43:02', 1, NULL),
 (202, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', 1, NULL),
 (203, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:44:59', 1, '2009-02-14 15:24:39', 1, NULL),
 (204, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:45:00', 1, '2009-02-14 20:45:00', 1, NULL),
@@ -377,7 +377,7 @@ INSERT INTO %PREFIX%_users (usr_id, usr_login_name, usr_password, usr_new_passwo
 (348, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:20', 1, '2009-02-14 20:47:20', 1, NULL),
 (349, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:21', 1, '2009-02-14 20:47:21', 1, NULL),
 (350, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 1, '2008-04-26 20:47:22', 1, '2009-02-14 20:47:22', 1, NULL),
-(351, 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 351, '2008-05-12 20:29:33', 1, NULL),
+(351, 'Demo', '5c4896c0c3fefb8ef0b326e436790906', NULL, NULL, NULL, NULL, '2008-05-12 20:29:15', '2009-02-27 22:34:06', 2, NULL, 0, 351, '2008-05-12 20:29:33', 354, '2011-02-03 14:19:13', 1, NULL),
 (352, 'Mustermann01', 'e10adc3949ba59abbe56e057f20f883e', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 352, '2008-05-28 23:31:26', NULL, NULL, 0, 'DEMO'),
 (353, 'Dina', 'c33367701511b4f6020ec61ded352059', NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, 0, 353, '2008-05-28 23:33:38', NULL, NULL, 0, 'DEMO'),
 (354, 'DEMO_CHAIRMAN', '$P$CEaSDNBX5KaDVJ7JukTje72cjqD5Kh1', NULL, NULL, NULL, NULL, '2009-04-22 20:30:15', '2009-02-27 02:04:16', 2, NULL, 0, 1, '2009-06-12 20:29:33', 354, '2010-05-12 20:29:33', 1, NULL),
