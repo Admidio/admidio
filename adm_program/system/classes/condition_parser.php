@@ -32,29 +32,61 @@ class ConditionParser
     private $mCount;     			///< Actual index in array @b mSrcCondArray
 	private $mNotExistsSql = '';	///< Stores the sql statement if a record should not exists when user wants to exclude a column
 
-	/** creates a valid date format @b YYYY-MM-DD for the SQL statement
-	 *  @param $date The unformated date from user input e.g. @b 12.04.2012
+	/** Creates a valid date format @b YYYY-MM-DD for the SQL statement
+	 *  @param $date     The unformated date from user input e.g. @b 12.04.2012
+	 *  @param $operator The actual operator for the @b date parameter
 	 *  @return String with a SQL valid date format @b YYYY-MM-DD
 	 */
-    private function getFormatDate($date)
+    private function getFormatDate($date, $operator)
     {
         global $gPreferences;
         $formatDate = '';
 
-        // bastwe: check if user searches for age
+        // if last char is Y or J then user searches for age
         $last = substr($date, -1);
         $last = admStrToUpper($last);
         if( $last == 'J' || $last == 'Y') 
         {
-            $age = substr($date, 0, -1);
-            $nowYear= date('Y');
-            $nowDay = date('d');
-            $nowMonth = date('m');
-            $ret = date('Y-m-d', mktime(0,0,0, $nowMonth, $nowDay, $nowYear - $age));
-            return '\''. $ret. '\'';
+            $age  = substr($date, 0, -1);
+            $date = new DateTimeExtended(date('Y').'-'.date('m').'-'.date('d'), 'Y-m-d', 'date');
+            $ageCondition = '';
+
+            
+            if($operator == '=')
+            {
+                // first remove = from destination condition
+                $this->mDestCond = substr($this->mDestCond, 0, strlen($this->mDestCond) - 4);
+                
+                // now compute the dates for a valid birthday with that age
+                $date->modify('-'.$age.' years');
+                $dateTo = $date->format('Y-m-d');
+                $date->modify('-1 year'); 
+                $date->modify('+1 day'); 
+                $dateFrom = $date->format('Y-m-d');
+                
+                $ageCondition = ' BETWEEN \''.$dateFrom.'\' AND \''.$dateTo;
+            }
+            elseif($operator == '}')
+            {
+                // search for dates that are older than the age
+                // because the age itself takes 1 year we must add 1 year and 1 day to age
+                $date->modify('-'.($age+1).' years');
+                $date->modify('+1 day'); 
+                $ageCondition = $date->format('Y-m-d');
+            }
+            elseif($operator == '{')
+            {
+                // search for dates that are younger than the age
+                // we must add 1 day to the date because the day itself belongs to the age
+                $date->modify('-'.$age.' years');
+                $date->modify('+1 day'); 
+                $ageCondition = $date->format('Y-m-d');
+            }
+            
+            return $ageCondition;
         }
         
-        // Datum validieren und im MySQL-Format ausgeben
+        // validate date and return it in database format
         if(strlen($date) > 0)
         {
             $date = new DateTimeExtended($date, $gPreferences['system_date'], 'date');
@@ -131,6 +163,7 @@ class ConditionParser
         $bStartOperand   = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
         $bOpenQuotes     = false;  // set to true if quotes for conditions are open
         $date            = '';     // Variable speichert bei Datumsfeldern das gesamte Datum
+        $operator        = '=';    // saves the actual operator, if no operator is set then = will be default
         $this->mDestCond    = '';
 
         if(strlen($sourceCondition) > 0 && strlen($columnName) > 0 && strlen($columnType) > 0)
@@ -205,6 +238,9 @@ class ConditionParser
                     || $this->mSrcCondArray[$this->mCount] == '['
                     || $this->mSrcCondArray[$this->mCount] == ']' )
                     {
+                        // save actual operator for later use
+                        $operator = $this->mSrcCondArray[$this->mCount];
+                        
                         if(!$bStartCondition)
                         {
                             $this->mDestCond = $this->mDestCond. ' AND '.$columnName.' ';
@@ -328,9 +364,9 @@ class ConditionParser
 
 							if($columnType == 'date')
                             {
-                                if(strlen($this->getFormatDate($date)) > 0)
+                                if(strlen($this->getFormatDate($date, $operator)) > 0)
                                 {
-                                    $this->mDestCond = $this->mDestCond. $this->getFormatDate($date);
+                                    $this->mDestCond = $this->mDestCond. $this->getFormatDate($date, $operator);
                                 }
                                 else
                                 {
@@ -395,9 +431,9 @@ class ConditionParser
             // Falls als letztes ein Datum verglichen wurde, dann dieses noch einbauen
             if($columnType == 'date')
             {
-                if(strlen($this->getFormatDate($date)) > 0)
+                if(strlen($this->getFormatDate($date, $operator)) > 0)
                 {
-                    $this->mDestCond = $this->mDestCond. $this->getFormatDate($date);
+                    $this->mDestCond = $this->mDestCond. $this->getFormatDate($date, $operator);
                 }
                 else
                 {
@@ -409,7 +445,7 @@ class ConditionParser
             {
                 // allways set quote marks for a value because some fields are a varchar in db
                 // but should only filled with integer
-                $this->mDestCond = $this->mDestCond. ' \'';
+                $this->mDestCond = $this->mDestCond. '\' ';
             }
             
             $this->mDestCond = $this->mDestCond. ' ) ';
