@@ -84,7 +84,7 @@ if ($getMode == 1 || $getMode == 2 || $getMode == 4)
         if(strlen($_POST['column'. $number]) > 0)
         {
             $columnNumber++;
-            $list->addColumn($columnNumber, $_POST['column'. $number], $_POST['sort'. $number], $_POST['condition'. $number]);
+            $list->addColumn($columnNumber, $_POST['column'. $number], $_POST['sort'. $number], $_POST['conditioncolumn'. $number]);
         }
         else
         {
