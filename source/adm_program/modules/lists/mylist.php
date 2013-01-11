@@ -80,7 +80,8 @@ $gLayout['header'] = '
         var fieldNumberIntern  = 0;
         var arr_user_fields    = createProfileFieldsArray();
         var arr_default_fields = createColumnsArray();
-
+        
+ 
         // Funktion fuegt eine neue Zeile zum Zuordnen von Spalten fuer die Liste hinzu
         function addColumn() 
         {
@@ -95,16 +96,17 @@ $gLayout['header'] = '
             var fieldNumberShow  = fieldNumberIntern + 1;
             var table = document.getElementById("mylist_fields_tbody");
             var newTableRow = table.insertRow(fieldNumberIntern);
+            newTableRow.setAttribute("id", "row" + (fieldNumberIntern + 1))
             //$(newTableRow).css("display", "none"); // ausgebaut wg. Kompatibilitaetsproblemen im IE8
             var newCellCount = newTableRow.insertCell(-1);
             newCellCount.innerHTML = (fieldNumberShow) + ".&nbsp;'.$gL10n->get('LST_COLUMN').'&nbsp;:";
             
             // neue Spalte zur Auswahl des Profilfeldes
             var newCellField = newTableRow.insertCell(-1);
-            htmlCboFields = "<select size=\"1\" id=\"column" + fieldNumberShow + "\" name=\"column" + fieldNumberShow + "\">" +
+            htmlCboFields = "<select onchange=\"getConditionField(this.id, this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" name=\"column" + fieldNumberShow + "\">" +
                     "<option value=\"\"></option>";
             for(var counter = 1; counter < arr_user_fields.length; counter++)
-            {
+            {   
                 if(category != arr_user_fields[counter]["cat_name"])
                 {
                     if(category.length > 0)
@@ -123,16 +125,18 @@ $gLayout['header'] = '
                 {
                     selected = " selected=\"selected\" ";
                 }
-
+                
                 // bei gespeicherten Listen das entsprechende Profilfeld selektieren
+                // und den Feldnamen dem Listenarray hinzufügen
                 if(arr_default_fields[fieldNumberIntern])
                 {
                     if(arr_user_fields[counter]["usf_id"] == arr_default_fields[fieldNumberIntern]["usf_id"])
                     {
                         selected = " selected=\"selected\" ";
+                        arr_default_fields[fieldNumberIntern]["usf_name"] = arr_user_fields[counter]["usf_name"];
                     }
                 }
-                htmlCboFields += "<option value=\"" + arr_user_fields[counter]["usf_id"] + "\" " + selected + ">" + arr_user_fields[counter]["usf_name"] + "</option>"; 
+                htmlCboFields += "<option value=\"" + arr_user_fields[counter]["usf_id"] + "\" " + selected + ">" + arr_user_fields[counter]["usf_name"] + "</option>";
             }
             htmlCboFields += "</select>";
             newCellField.innerHTML = htmlCboFields;
@@ -168,16 +172,25 @@ $gLayout['header'] = '
             condition = "";
             if(arr_default_fields[fieldNumberIntern])
             {
+                var fieldName = arr_default_fields[fieldNumberIntern]["usf_name"];
+                
                 if(arr_default_fields[fieldNumberIntern]["condition"])
                 {
                     condition = arr_default_fields[fieldNumberIntern]["condition"];
                     condition = condition.replace(/{/g, "<");
                     condition = condition.replace(/}/g, ">");
                 }
-            }            
+            }
+            else
+            {
+                var fieldName = "";
+            }
+                       
+            setConditonField("column" + (fieldNumberIntern + 1), fieldName, fieldNumberIntern);
             var newCellConditions = newTableRow.insertCell(-1);
-            newCellConditions.innerHTML = "<input type=\"text\" id=\"condition" + fieldNumberShow + "\" name=\"condition" + fieldNumberShow + "\" maxlength=\"50\" value=\"" + condition + "\" />";
-
+            newCellConditions.setAttribute("id", "condition" + (fieldNumberIntern + 1));
+            newCellConditions.innerHTML = htmlFormCondition;
+            
 			$(newTableRow).fadeIn("slow");
             fieldNumberIntern++;
         }
@@ -190,7 +203,7 @@ $gLayout['header'] = '
             $i = 1;
             $oldCategoryNameIntern = '';
 			$posEndOfMasterData = 0;
-
+        
             foreach($gProfileFields->mProfileFields as $field)
             {    
 				// at the end of category master data save positions for loginname and username
@@ -204,15 +217,33 @@ $gLayout['header'] = '
                 
 				// add profile field to user field array
                 if($field->getValue('usf_hidden') == 0 || $gCurrentUser->editUsers())
-                {
+                {   
                     $gLayout['header'] .= '
                     user_fields['. $i. '] = new Object();
-                    user_fields['. $i. ']["cat_id"]   = '. $field->getValue('cat_id'). ';
+                    user_fields['. $i. ']["cat_id"]   = "'. $field->getValue('cat_id'). '";
                     user_fields['. $i. ']["cat_name"] = "'. $field->getValue('cat_name'). '";
-                    user_fields['. $i. ']["usf_id"]   = '. $field->getValue('usf_id'). ';
+                    user_fields['. $i. ']["usf_id"]   = "'. $field->getValue('usf_id'). '";
                     user_fields['. $i. ']["usf_name"] = "'. addslashes($field->getValue('usf_name')). '";
-                    user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";';
-                
+                    user_fields['. $i. ']["usf_name_intern"] = "'. addslashes($field->getValue('usf_name_intern')). '";
+                    user_fields['. $i. ']["usf_type"] = "'. $field->getValue('usf_type'). '"; 
+                    user_fields['. $i. ']["usf_value_list"] = new Object();';
+                    
+                    // get avaiable values for current field type and push to array
+                    if($field->getValue('usf_type') == 'DROPDOWN'
+                        || $field->getValue('usf_type') == 'RADIO_BUTTON')
+                    {
+                        foreach($field->getValue('usf_value_list', 'text') as $key => $value)
+                        {
+                            $gLayout['header'] .= '
+                            user_fields['. $i. ']["usf_value_list"]["'. $key .'"] = "'. $value .'";';
+                        }  
+                    }
+                    else
+                    {
+                        $gLayout['header'] .= '
+                        user_fields['. $i. ']["usf_value_list"] = "";';
+                    }
+                    
                     $oldCategoryNameIntern = $field->getValue('cat_name_intern');
                     $i++;
                 }
@@ -260,9 +291,9 @@ $gLayout['header'] = '
         }
         
         function createColumnsArray()
-        {
+        {   
             var default_fields = new Array(); ';
-            
+    
             if(isset($form_values))
             {
                 // Daten aller Zeilen werden aus den POST-Daten in ein JS-Array geschrieben
@@ -307,6 +338,62 @@ $gLayout['header'] = '
             return default_fields;
         }
 
+        function getConditionField(id, name)
+        {
+            var columnId = id;
+            var columnName = name;
+            condition = "";
+
+            setConditonField(columnId, columnName);
+            $("#condition" + columnId).hide();
+            $("#condition" + columnId).replaceWith(htmlFormCondition);
+            $("#condition" + columnId).show("1000");
+        }
+
+        function setConditonField(columnId, columnName, fieldNumberIntern)
+        {   
+            htmlFormCondition = "<input type=\"text\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\" maxlength=\"50\" value=\"" + condition + "\" />";
+            var key;
+
+            for (key in arr_user_fields)
+            {
+	           if(arr_user_fields[key]["usf_name"] == columnName)
+	           {    
+                   if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
+                      || arr_user_fields[key]["usf_type"] == "RADIO_BUTTON")
+                   {
+                        htmlFormCondition = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
+                        "<option value=\"\">&nbsp;</option>";
+
+                        for (selectValue in arr_user_fields[key]["usf_value_list"])
+                        {
+                            selected = "";
+
+                            if(arr_default_fields[fieldNumberIntern])
+                            {
+                                if(arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberIntern]["usf_id"]
+                                    && arr_user_fields[key]["usf_value_list"][selectValue] == arr_default_fields[fieldNumberIntern]["condition"])
+                                {
+                                    selected = " selected=\"selected\" ";
+                                }
+                            }
+                            htmlFormCondition += "<option value=\"" + arr_user_fields[key]["usf_value_list"][selectValue] + "\" " + selected + ">" + arr_user_fields[key]["usf_value_list"][selectValue] + "</option>";
+                            "</select>";
+                        }
+                    }
+                    
+                    if(arr_user_fields[key]["usf_type"] == "CHECKBOX")
+                    {
+                        htmlFormCondition = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
+                        "<option value=\"\">&nbsp;</option>" +
+                        "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" +
+                        "<option value=\"0\">'.$gL10n->get('SYS_NO').'</option>" +
+                        "</select>";
+                    }
+	            }
+            }
+        }
+        
         function loadList()
         {
             var lst_id = $("#lists_config").attr("value");
@@ -319,9 +406,9 @@ $gLayout['header'] = '
         {
             for(var i = 1; i <= fieldNumberIntern; i++)
             {
-                if(document.getElementById("condition" + i))
+                if(document.getElementById("conditioncolumn" + i))
                 {
-                    var condition = document.getElementById("condition" + i);
+                    var condition = document.getElementById("conditioncolumn" + i);
                     condition.value = condition.value.replace(/</g, "{");
                     condition.value = condition.value.replace(/>/g, "}");
                 }
@@ -381,7 +468,7 @@ $gLayout['header'] = '
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-echo '
+echo ' 
 <form id="form_mylist" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">
 <div class="formLayout" id="mylist_form">
     <div class="formHead">'.$gL10n->get('LST_MY_LIST').'</div>
