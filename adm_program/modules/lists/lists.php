@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * start    : Angabe, ab welchem Datensatz Links angezeigt werden sollen
+ * start    : Position of query recordset where the visual output should start
  * cat_id   : show only roles of this category id, if id is not set than show all roles
  * category-selection: 1 - (Default) Anzeige der Combobox mit den verschiedenen Rollen-Kategorien
  *                     0 - Combobox nicht anzeigen
@@ -466,7 +466,7 @@ if($countCategoryEntries == 0)
 }
 echo '</div></div>';
 
-// Navigation mit Vor- und Zurueck-Buttons
+// If neccessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $getCatId. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;
 echo admFuncGeneratePagination($base_url, $numberOfRoles, $rolesPerPage, $getStart, TRUE);
 

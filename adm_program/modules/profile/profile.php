@@ -189,6 +189,15 @@ echo '
                                 <a rel="colorboxPWContent" href="password.php?usr_id='. $user->getValue('usr_id'). '&amp;inline=1"><img
                                     src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>';
                             }
+							
+							if($gPreferences['profile_log_edit_fields'] == 1)
+							{
+								// show link to view profile field change history
+                                echo '
+                                <a class="iconLink" href="'. $g_root_path. '/adm_program/administration/members/profile_field_history.php?usr_id='. $user->getValue('usr_id'). '"><img
+                                    src="'. THEME_PATH. '/icons/clock.png" alt="'.$gL10n->get('SYS_CHANGE_HISTORY').'" title="'.$gL10n->get('SYS_CHANGE_HISTORY').'" /></a>';
+							}
+							
                             // Nur berechtigte User duerfen ein Profil editieren
 							if($gCurrentUser->editProfile($user))
                             {

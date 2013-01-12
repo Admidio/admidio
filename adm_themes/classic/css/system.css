@@ -311,7 +311,7 @@ ul.autosuggest li.highlight a:visited  {
 }
 
 .iconTextLinkList li{   
-    display:            inline;
+    display:            inline-block;
     padding:            10px;
     font-size:          10pt;
 }

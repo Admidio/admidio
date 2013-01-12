@@ -304,7 +304,7 @@ class dates
         {
             // check if date has system format
             $objDate = new DateTimeExtended($date, $gPreferences['system_date'], 'date');
-            $objDate->setDateTime($date, $gPreferences['system_date']);
+
             if($objDate->valid())
             {
                 return  substr($objDate->getDateTimeEnglish(), 0, 10);
