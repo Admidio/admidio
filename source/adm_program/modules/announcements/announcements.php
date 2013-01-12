@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * start     - Angabe, ab welchem Datensatz Ankuendigungen angezeigt werden sollen
+ * start     - Position of query recordset where the visual output should start
  * headline  - Ueberschrift, die ueber den Ankuendigungen steht
  *             (Default) Ankuendigungen
  * id        - Nur eine einzige Annkuendigung anzeigen lassen.
@@ -155,7 +155,7 @@ else
         </div>';
     }  // Ende While-Schleife
     
-    // Navigation mit Vor- und Zurueck-Buttons
+    // If neccessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
     echo admFuncGeneratePagination($base_url, $getAnnouncements['totalCount'], $getAnnouncements['limit'], $getStart, TRUE);
 }

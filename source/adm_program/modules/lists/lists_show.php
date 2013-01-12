@@ -12,7 +12,7 @@
  * lst_id : ID der Listenkonfiguration, die angezeigt werden soll
  *          Wird keine ID uebergeben, wird die Default-Konfiguration angezeigt
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
- * start  : Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen 
+ * start  : Position of query recordset where the visual output should start
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role
@@ -615,7 +615,7 @@ else
 
     if($getMode != 'print')
     {
-        // Navigation mit Vor- und Zurueck-Buttons
+        // If neccessary show links to navigate to next and previous recordsets of the query
         $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode='.$getMode.'&rol_id='.$getRoleId.'&show_members='.$getShowMembers;
         echo admFuncGeneratePagination($base_url, $numMembers, $members_per_page, $getStart, TRUE);
     }

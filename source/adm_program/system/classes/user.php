@@ -871,38 +871,47 @@ class User extends TableUsers
         return $this->checkRolesRight('rol_download');
     }
 
-	// checks if the current user is allowed to edit the profile of the user
-	public function editProfile($user)
+	/** Checks if the current user is allowed to edit the profile of the user of
+	 *  the parameter. If will check if user can generally edit all users or if 
+	 *  he is a group leader and can edit users of a special role where @b $user
+	 *  is a member or if it's the own profile and he could edit this.
+	 *  @param $user User object of the user that should be checked if the current user can edit his profile.
+	 *  @return Return @b true if the current user is allowed to edit the profile of the user from @b $user.
+     */	
+	 public function editProfile(&$user)
 	{
-		// edit own profile ?
-		if($user->getValue('usr_id') == $this->getValue('usr_id') 
-		&& $this->getValue('usr_id') > 0)
+		if(is_object($user))
 		{
-            $edit_profile = $this->checkRolesRight('rol_profile');
-
-            if($edit_profile == 1)
-            {
-                return true;
-            }
-		}
-		
-		if($this->editUsers())
-		{
-			return true;
-		}
-		else
-		{
-			if(count($this->rolesMembershipLeader) > 0)
+			// edit own profile ?
+			if($user->getValue('usr_id') == $this->getValue('usr_id') 
+			&& $this->getValue('usr_id') > 0)
 			{
-				// check if current user is a group leader of a role where $user is a member
-				$rolesMembership = $user->getRoleMemberships();
-				foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
+				$edit_profile = $this->checkRolesRight('rol_profile');
+
+				if($edit_profile == 1)
 				{
-					// is group leader of role and has the right to edit users ?
-					if(array_search($roleId, $rolesMembership) != false
-					&& $leaderRights > 1)
+					return true;
+				}
+			}
+			
+			if($this->editUsers())
+			{
+				return true;
+			}
+			else
+			{
+				if(count($this->rolesMembershipLeader) > 0)
+				{
+					// check if current user is a group leader of a role where $user is a member
+					$rolesMembership = $user->getRoleMemberships();
+					foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
 					{
-						return true;
+						// is group leader of role and has the right to edit users ?
+						if(array_search($roleId, $rolesMembership) != false
+						&& $leaderRights > 1)
+						{
+							return true;
+						}
 					}
 				}
 			}
@@ -941,57 +950,65 @@ class User extends TableUsers
         return $this->checkRolesRight('rol_weblinks');
     }
 
-    // Funktion prueft, ob der User ein Profil einsehen darf
-	// check if current user object is allowed to read user of parameter
-    public function viewProfile($user)
+	/** Checks if the current user is allowed to view the profile of the user of
+	 *  the parameter. If will check if user has edit rights with method editProfile 
+	 *  or if the user is a member of a role where the current user has the right to
+	 *  view profiles.
+	 *  @param $user User object of the user that should be checked if the current user can view his profile.
+	 *  @return Return @b true if the current user is allowed to view the profile of the user from @b $user.
+     */	
+    public function viewProfile(&$user)
     {
         $view_profile = false;
 
-        //Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
-        if($this->editProfile($user))
-        {
-            $view_profile = true;
-        }
-        else
-        {
-            // Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
-            if($this->viewAllLists())
-            {
-                $view_profile = true;
-            }
-            else
-            {
-                $sql    = 'SELECT rol_id, rol_this_list_view
-                             FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-                            WHERE mem_usr_id = '.$user->getValue('usr_id'). '
-                              AND mem_begin <= \''.DATE_NOW.'\'
-                              AND mem_end    > \''.DATE_NOW.'\'
-                              AND mem_rol_id = rol_id
-                              AND rol_valid  = 1
-                              AND rol_cat_id = cat_id
-                              AND (  cat_org_id = '.$this->organizationId.'
-                                  OR cat_org_id IS NULL ) ';
-                $this->db->query($sql);
+		if(is_object($user))
+		{
+			//Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
+			if($this->editProfile($user))
+			{
+				$view_profile = true;
+			}
+			else
+			{
+				// Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
+				if($this->viewAllLists())
+				{
+					$view_profile = true;
+				}
+				else
+				{
+					$sql    = 'SELECT rol_id, rol_this_list_view
+								 FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+								WHERE mem_usr_id = '.$user->getValue('usr_id'). '
+								  AND mem_begin <= \''.DATE_NOW.'\'
+								  AND mem_end    > \''.DATE_NOW.'\'
+								  AND mem_rol_id = rol_id
+								  AND rol_valid  = 1
+								  AND rol_cat_id = cat_id
+								  AND (  cat_org_id = '.$this->organizationId.'
+									  OR cat_org_id IS NULL ) ';
+					$this->db->query($sql);
 
-                if($this->db->num_rows() > 0)
-                {
-                    while($row = $this->db->fetch_array())
-                    {
-                        if($row['rol_this_list_view'] == 2)
-                        {
-                            // alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
-                            $view_profile = true;
-                        }
-                        elseif($row['rol_this_list_view'] == 1
-                        && isset($this->list_view_rights[$row['rol_id']]))
-                        {
-                            // nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
-                            $view_profile = true;
-                        }
-                    }
-                }
-            }
-        }
+					if($this->db->num_rows() > 0)
+					{
+						while($row = $this->db->fetch_array())
+						{
+							if($row['rol_this_list_view'] == 2)
+							{
+								// alle angemeldeten Benutzer duerfen Rollenlisten/-profile sehen
+								$view_profile = true;
+							}
+							elseif($row['rol_this_list_view'] == 1
+							&& isset($this->list_view_rights[$row['rol_id']]))
+							{
+								// nur Rollenmitglieder duerfen Rollenlisten/-profile sehen
+								$view_profile = true;
+							}
+						}
+					}
+				}
+			}
+		}
         return $view_profile;
     }
 

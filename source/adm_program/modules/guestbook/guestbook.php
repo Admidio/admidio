@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * start      - Angabe, ab welchem Datensatz Gaestebucheintraege angezeigt werden sollen
+ * start      : Position of query recordset where the visual output should start
  * headline   - Ueberschrift, die ueber den Gaestebucheintraegen steht
  *              (Default) Gaestebuch
  * id         - Nur einen einzigen Gaestebucheintrag anzeigen lassen.
@@ -423,7 +423,7 @@ else
 }
 
 
-// Navigation mit Vor- und Zurueck-Buttons
+// If neccessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
 echo admFuncGeneratePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $getStart, TRUE);
 

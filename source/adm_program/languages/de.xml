@@ -36,6 +36,8 @@
     <text id="MAI_SMTP_SECURE_TLS" development="new" translation="todo">TLS</text>    
     <text id="MAI_SMTP_USER" development="new" translation="todo">SMTP Benutzername</text>
     <text id="MAI_SMTP_USER_DESC" development="new" translation="todo">Der Benutzername, der bei der SMTP-Authentifizierung verwendet wird.</text>
+	<text id="MEM_CHANGE_HISTORY" development="new" translation="todo">Änderungshistorie</text>
+	<text id="MEM_CHANGE_HISTORY_OF" development="new" translation="todo">Änderungshistorie von %VAR1%</text>
 	<text id="MEM_SEND_NEW_LOGIN" development="changed" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</text>
     <text id="ORG_FIELD_HIDDEN_DESC" development="changed" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</text>
     <text id="ORG_REFUSE_REGISTRATION" development="changed" translation="todo">Benachrichtigung bei einer Ablehnung der Registrierung</text>
@@ -62,18 +64,22 @@
 	<text id="ROL_NO_DEFAULT_ROLE" development="deleted" translation="todo">Du kannst die Einstellung %VAR1_BOLD% nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</text>
     <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="deleted" translation="todo">Diese Person ist kein Mitglied der Organisation %VAR1_BOLD% bzw. es sind keine Rollen sichtbar.</text>
 	<text id="ROL_SYSTEM_DEFAULT_LIST" development="new" translation="todo">Systemweite Standardliste</text>
+	<text id="SYS_CHANGED_AT" development="new" translation="todo">Geändert am</text>
 	<text id="SYS_DELETE_LAST_CATEGORY" development="new" translation="todo">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</text>
 	<text id="SYS_DELETE_SYSTEM_CATEGORY" development="new" translation="todo">Du darfst keine Systemkategorien löschen.</text>
 	<text id="SYS_DELETED_USER" development="new" translation="todo">Gelöschte Person</text>
 	<text id="SYS_EDIT_MEMBERS" development="new" translation="todo">Mitglieder bearbeiten</text>
+	<text id="SYS_EDITED_BY" development="new" translation="todo">Geändert von</text>
     <text id="SYS_EMAIL_NOT_SEND" development="changed" translation="todo">Die E-Mail konnte nicht an %VAR1_BOLD% gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n%VAR2%</text>
 	<text id="SYS_EMPTY" development="new" translation="todo">Leer</text>
 	<text id="SYS_FROM" development="new" translation="todo">ab %VAR1%</text>
 	<text id="SYS_INFORMATIONS" development="new" translation="todo">Informationen</text>
     <text id="SYS_LEADER_DESCRIPTION" development="deleted" translation="todo">Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen haben Leiter mehr Rechte als ein normales Rollenmitglied.\n\nLeiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.</text>
 	<text id="SYS_MODULE_PREFERENCES" development="new" translation="todo">Moduleinstellungen</text>
+	<text id="SYS_NEW_VALUE" development="new" translation="todo">Neuer Wert</text>
 	<text id="SYS_NOT_EMPTY" development="new" translation="todo">Nicht leer</text>
-    <text id="SYS_SYSMAIL_REFUSE_REGISTRATION" development="new" translation="todo">#subject# Registrierung bei %organization_long_name% abgelehnt\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Webmaster %webmaster_email% von %organization_homepage%.\n\nViele Grüße\nDie Webmaster</text>
+    <text id="SYS_PREVIOUS_VALUE" development="new" translation="todo">Vorheriger Wert</text>
+	<text id="SYS_SYSMAIL_REFUSE_REGISTRATION" development="new" translation="todo">#subject# Registrierung bei %organization_long_name% abgelehnt\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Webmaster %webmaster_email% von %organization_homepage%.\n\nViele Grüße\nDie Webmaster</text>
 	<text id="SYS_SYSTEM" development="new" translation="todo">System</text>
 </version>
 <version id="2.3.4" translator="Markus Faßbender">

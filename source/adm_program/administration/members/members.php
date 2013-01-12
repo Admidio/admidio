@@ -11,7 +11,7 @@
  * members - 1 : (Default) Nur Mitglieder der Gliedgemeinschaft anzeigen
  *           0 : Mitglieder, Ehemalige, Mitglieder anderer Gliedgemeinschaften
  * letter      : alle User deren Nachnamen mit dem Buchstaben beginnt, werden angezeigt
- * start       : Angabe, ab welchem Datensatz Mitglieder angezeigt werden sollen
+ * start       : Position of query recordset where the visual output should start
  * search      : Inhalt des Suchfeldes, damit dieser beim Blaettern weiter genutzt werden kann
  *
  *****************************************************************************/
@@ -45,7 +45,7 @@ if (!$gCurrentUser->editUsers())
 }
 
 // Initialize local parameteres
-$membersPerPage = 25; // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
+$membersPerPage = 25; // Number of recordsets that will be shown per page
 
 // Die zum Caching in der Session zwischengespeicherten Namen werden beim
 // neu laden der Seite immer abgeraeumt...
@@ -225,6 +225,13 @@ $membersAdministrationMenu->addItem('admMenuItemNewUser', $g_root_path.'/adm_pro
 $membersAdministrationMenu->addItem('admMenuItemImportUsers', $g_root_path.'/adm_program/administration/members/import.php', 
 							$gL10n->get('MEM_IMPORT_USERS'), 'database_in.png');
 
+if($gPreferences['profile_log_edit_fields'] == 1)
+{
+	// show link to view profile field change history
+	$membersAdministrationMenu->addItem('admMenuItemChangeHistory', $g_root_path.'/adm_program/administration/members/profile_field_history.php', 
+								$gL10n->get('SYS_CHANGE_HISTORY'), 'clock.png');
+}
+							
 if($gCurrentUser->isWebmaster())
 {
 	// show link to maintain profile fields
@@ -418,7 +425,7 @@ if($membersCount > 0)
 		}
     echo '</table>';
 
-    // Navigation mit Vor- und Zurueck-Buttons
+    // If neccessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/administration/members/members.php?letter='.$getLetter.'&amp;members='.$getMembers.'&amp;search='.$getSearch;
     echo admFuncGeneratePagination($base_url, $membersCount, $membersPerPage, $getStart, true);
 }

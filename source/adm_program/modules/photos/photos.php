@@ -8,12 +8,12 @@
  *
  * Parameters:
  *
- * pho_id:      id des Albums dessen Fotos angezeigt werden sollen
- * headline:    Ueberschrift, die ueber den Ankuendigungen steht
- *              (Default) PHO_PHOTO_ALBUMS
- * show_page:   welch Seite der Thumbnails ist die aktuelle
- * start:       mit welchem Element beginnt die Albumliste
- * locked:      das Album soll freigegebn/gesperrt werden
+ * pho_id    : id des Albums dessen Fotos angezeigt werden sollen
+ * headline  : Ueberschrift, die ueber den Ankuendigungen steht
+ *             (Default) PHO_PHOTO_ALBUMS
+ * show_page : welch Seite der Thumbnails ist die aktuelle
+ * start     : Position of query recordset where the visual output should start
+ * locked    : das Album soll freigegebn/gesperrt werden
  *
  *****************************************************************************/
 
@@ -635,13 +635,9 @@ echo '<div class="photoModuleContainer">';
         echo $gL10n->get('PHO_NO_ALBUM_CONTENT');
     }
     
-    if($gDb->num_rows($result_list) > 2)
-    {
-        // Navigation mit Vor- und Zurueck-Buttons
-        // erst anzeigen, wenn mehr als 2 Eintraege (letzte Navigationsseite) vorhanden sind
-        $base_url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId;
-        echo admFuncGeneratePagination($base_url, $albums-$ignored, 10, $getStart, TRUE);
-    }
+	// If neccessary show links to navigate to next and previous recordsets of the query
+	$base_url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId;
+	echo admFuncGeneratePagination($base_url, $albums-$ignored, 10, $getStart, TRUE);
 echo '</div>';
 
 /************************Buttons********************************/

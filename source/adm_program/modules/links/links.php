@@ -6,7 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * start     : Angabe, ab welchem Datensatz Links angezeigt werden sollen
+ * start     : Position of query recordset where the visual output should start
  * headline  : Ueberschrift, die ueber den Links steht
  *             (Default) Links
  * cat_id    : show only links of this category id, if id is not set than show all links
@@ -212,7 +212,7 @@ else
 
 echo '</div>';
 
-// Navigation mit Vor- und Zurueck-Buttons
+// If neccessary show links to navigate to next and previous recordsets of the query
 $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline;
 echo admFuncGeneratePagination($baseUrl, $numLinks, $weblinks_per_page, $getStart, TRUE);
 
