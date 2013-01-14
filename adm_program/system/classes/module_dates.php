@@ -1,44 +1,33 @@
 <?php
-/******************************************************************************
- * Show a list of all events
+/*******************************************************************************/
+/** @class ModuleDates
+ *  @brief Validates all parmeter required in date-module.
+ *
+ *  This class is designed to handle transferd parameters and do all logical settings,
+ *  like output of headline, values for date range, input fields and also sql queries needed for validation of the content.
+ *  It returns arrays for possible modes and viewmodes. Dates are checked to references and formated for database queries and system format.
+ *  
+ */
+/*******************************************************************************
  *
  * Copyright    : (c) 2004 - 2012 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
- *****************************************************************************/
-
-/// This class handles all parmeter required in date-module. 
-
-/**
- *  This function is designed to handle transferd parameters and do all logical settings,
- *  like output of headline, values for datefilter, input fields and also sql queries for the content.
- *  It returns arrays for possible modes and viewmodes. Dates are checked to references and formated for sql and system format.
- *  @param $mode Returns setting for "mode" regarding to date settings(actual,old,all,day,period are possible)
- *  @param $CatId The current Category ID
- *  @param $datId The current Date ID
- *  @param $dateFrom The first date (startdate) is checked and formated to "Y-m-d" for SQL query 
- *  @param $dateTo The second date (enddate) - same conditions like first date
- *  @param $order optional sorting for SQL query (array: ASC,DESC  dafault:ASC)
- *  @param $headline The headline is set to date, or old dates regarding to given date parameters. 
- *         Optional user text can be set.
- */ 
-class dates
+ * 
+ *******************************************************************************/
+  
+class ModuleDates
 {
-    private $mode;
-    private $catId;
-    private $dateId;
-    private $dateFrom;
-    private $dateTo;
-    private $order;
-    private $headline;
+    private $mode;          ///< Returns setting for "mode", regarding to date settings(@b actual,@b old,@b all,@b day and @b period are possible)
+    private $catId;         ///< Value of the current Category ID
+    private $dateId;        ///< Id of the current date
+    private $dateFrom;      ///< First date value (start) to be checked and formated to database format ("Y-m-d")
+    private $dateTo;        ///< Second date value (end) to be checked and formated to database format ("Y-m-d")
+    private $order;         ///< optional sorting value for SQL query (array: ASC,DESC  dafault:ASC)
+    private $headline;      ///< The headline is set to date, or old dates regarding to given date parameters. Optional user text can be set.
 
-    /**
-     *  setMode()
-     * 
-     *  Initialize parameters
-     * 
-     *  @param catID
-     *  @param headline
+    /** Constuctor that will create an object of a recordset of the specified dates.
+     *  Initialize parameters 
      */
     public function __construct()
     {
@@ -47,14 +36,17 @@ class dates
         $this->headline = '';
     }
     
-    /**
-     * Returns current headline. If no parameter is given, the headline is set by method regarding to given dates.
-     * Returns \b FALSE if one \b paramter is \b missing calling the method!
-     * @param $getHeadline Optinal headline for content else must be initialized !
-     * @param $start Value for the first date of period
-     * @param $end Value for the second date of period
-     * @par Example
-     * @code $dates->getHeadline($getHeadline, $start, $end); @endcode
+    /** Returns current headline regarding the defined date range if an empty string is passed in $getHeadline
+     *  Date values are validated and formated by class method
+     * 
+     *  @param $getHeadline String for the headline of the result list  
+     *  @param $start Date value for the first date of period
+     *  @param $end Date value for the second date of period
+     *  @return Headline of current result list
+     *  @par Example
+     *  @code 
+     *  // Get the dates for January 2001 with customer headline for example
+     *  $dates->getHeadline('My_headline', '01.01.2001', '31.01.2001'); @endcode
      */ 
     public function getHeadline($getHeadline, $start, $end)
     {   
@@ -94,7 +86,10 @@ class dates
         return $this->headline;
     }
     
-    /// Private method setting HTML headline relative to date period
+    /** Private method setting HTML headline relative to date period
+     * @param $start Value for the first date of period
+     * @param $end Value for the second date of period
+     */
     private function setHeadline($start, $end)
     {
         global $gL10n;
@@ -113,40 +108,36 @@ class dates
         return $this;
     }
     
-    /**
-     *  Provides possible view modes for dates as array
-     *  @param html
-     *  @param print
+    /** Returns valid view modes for dates as array
+     *  @return Array ('html', 'print')
      */
     public function getViewModes()
     {
         return array('html', 'print');
     }
     
-    /**
-     *  Provides possible modes for dates as array
-     *  @param actual
-     *  @param old
-     *  @param all
-     *  @param period
-     *  @param day
+    /** Returns valid modes for dates as array
+     *  @return Array('actual', 'old', 'all', 'period', 'day')
      */ 
     public function getModes()
     {
         return array('actual', 'old', 'all', 'period', 'day');
     }
         
-    /**
-     *  Returns current mode.
+    /** Returns current mode defined by paramters
+     *  @return The current mode.
      */ 
     public function getMode()
     {
         return $this->mode;
     }
     
-    /**
-     *  Sets current mode. 
-     *  This method checks valid mode value and validates the date values if necessary.
+    /** Set current mode.
+     *  This function defines the mode of the current instance. If no parameters are defined the @b default @b mode is @b 'actual'
+     *  This method checks valid mode value and validates the date values. If necessary the date values are to be formated by internal function.
+     *  @param $mode String with valid mode defined in Array getModes (default: 'actual') 
+     *  @param $var1 First date value ( dafault: '')
+     *  @param $var2 Second date value ( dafault: '')
      */ 
     public function setMode($mode='actual', $var1='', $var2='')
     {    
@@ -207,7 +198,9 @@ class dates
         }
     }
         
-    //sets $dateFrom
+    /** 
+     *  Validate startdate and set it in class variable 
+     */
     private function setDateFrom($date=DATE_NOW)
     {
         $checkedDate = $this->formatDate($date);
@@ -224,14 +217,16 @@ class dates
     }
     
     /**
-     *  Returns date From.
+     *  Returns dateFrom of current object.
      */ 
     public function getDateFrom()
     {
         return $this->dateFrom;
     }
     
-    //sets $dateTo
+    /**
+     *  Validate enddate and set it in class variable
+     */
     private function setDateTo($date='9999-12-31')
     {
         $checkedDate = $this->formatDate($date);
@@ -247,16 +242,15 @@ class dates
     }
     
     /**
-     *  Returns date To.
+     *  Returns dateTo of current object.
      */
     public function getDateTo()
     {
         return $this->dateTo;
     }
     
-    /** 
-     *  Check date value to reference and set html output.   
-     *  If value matches to reference, value is cleared.
+    /** Check date value to reference and set html output.   
+     *  If value matches to reference, value is cleared to get an empty string.
      */
     private function setFormValue ($date, $reference)
     {
@@ -272,10 +266,14 @@ class dates
         return $date;
     }
 
-    /**
-     *  Returns value for form field. 
-     *  This method checks the date value to reference and set the html output.
-     *  If value matches the reference, the output value is cleared.
+    /** Returns value for form field. 
+     *  This method compares a date value to a reference value and to date '1970-01-01'.
+     *  Html output will be set regarding the parameters.
+     *  If value matches the reference or date('1970-01-01'), the output value is cleared to get an empty string.
+     *  This method can be used to fill a html form
+     *  @param $date Date is to be checked to reference and default date '1970-01-01'.
+     *  @param $reference Reference date
+     *  @return String with date value, or an empty string, if $date is '1970-01-01' or reference date 
      */ 
     public function getFormValue($date, $reference)
     {
@@ -290,7 +288,9 @@ class dates
         }
     }
     
-    //checks date
+    /**Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
+     * @param $date Date to be validated and formated if needed 
+     */
     private function formatDate($date)
     {
         global $gPreferences;
@@ -316,8 +316,8 @@ class dates
         }
     }
         
-    /**
-     *  Sets current catId.
+    /** Set current Category.
+     *  @param $Id Current Category ID (default:0)
      */ 
     public function setCatId($id=0)
     {
@@ -333,7 +333,7 @@ class dates
     }
         
     /**
-     *  Sets current DatId.
+     *  Set current Date.
      */
     public function setDateId($id=0)
     {        
@@ -348,9 +348,8 @@ class dates
         }
     }
         
-    /**
-     * Sets current Order.
-     * Default: ASC
+    /** Sets current Order.
+     *  @param $order (Default: @b ASC)
      */ 
     public function setOrder($order='ASC')
     {        
@@ -365,7 +364,9 @@ class dates
         }
     }
     
-    //returns SQL conditions
+    /** 
+     *  Prepare SQL Statement.
+     */
     private function sqlConditionsGet()
     {
         global $gValidLogin;
@@ -420,7 +421,7 @@ class dates
     }
 
     /**
-     *  get number of available dates.
+     *  Get number of available dates.
      */
     public function getDatesCount()
     {            
@@ -449,10 +450,10 @@ class dates
         }
     }
     
-    /**
-     *  SQL query and returns array with avaible dates.
+    /** SQL query returns an array with avaible dates.
      *  @param $startelement Defines the offset of the query (default: 0)
-     *  @param $limit Limit of query rows (default: 0) 
+     *  @param $limit Limit of query rows (default: 0)
+     *  @return Array with all dates and properties 
      */ 
     public function getDates($startElement=0, $limit=NULL)
     {
