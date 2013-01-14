@@ -282,8 +282,8 @@ If($getViewMode == 'html')
                 $topNavigation .= '<li><span class="iconTextLink">
                     <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')"><img
                         src="'. THEME_PATH. '/icons/print.png" alt="'.$gL10n->get('LST_PRINT_PREVIEW').'" title="'.$gL10n->get('LST_PRINT_PREVIEW').'" /></a>
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')">'.$gL10n->get('LST_PRINT_PREVIEW').'</a></span>
-                    </li><li><dt><br /></dt></li>';
+                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')">'.$gL10n->get('LST_PRINT_PREVIEW').'</a>
+                </span></li>';
             }
             
             // create select box with all calendars that have dates
@@ -292,11 +292,11 @@ If($getViewMode == 'html')
             if(strlen($calendarSelectBox) > 0)
             {
                 // show calendar select box with link to calendar preferences
-                $topNavigation .= '<li>'.$gL10n->get('DAT_CALENDAR').':&nbsp;&nbsp;'.$calendarSelectBox;
+                $topNavigation .= '<li style="margin: 10px 0 0 10px;">'.$gL10n->get('DAT_CALENDAR').':&nbsp;&nbsp;'.$calendarSelectBox;
     
                 if($gCurrentUser->editDates())
                 {
-                    $topNavigation .= '<a  class="iconLink" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
+                    $topNavigation .= '<a class="iconLink" style="margin: 5px;" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
                          src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('DAT_MANAGE_CALENDARS').'" title="'.$gL10n->get('DAT_MANAGE_CALENDARS').'" /></a>';
                 }
                 $topNavigation .= '</li>';
