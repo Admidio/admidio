@@ -53,7 +53,7 @@ elseif($gPreferences['enable_dates_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 //Object erzeugen
-$dates = new Dates();
+$dates = new ModuleDates();
 
 // Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, $dates->getModes());
