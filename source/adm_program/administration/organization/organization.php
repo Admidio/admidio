@@ -586,7 +586,7 @@ echo '
                             <dd>
 								<select size="1" id="captcha_fonts" name="captcha_fonts" style="width:120px;">
 								';
-								$fonts = getfilenames('../../system/fonts/');
+								$fonts = getFileNames('../../system/fonts/');
 								array_push($fonts,'Theme');
 								asort($fonts);
 								foreach($fonts as $myfonts)
@@ -1465,7 +1465,7 @@ echo '
                         <dl>
                             <dt><label for="ecard_template">'.$gL10n->get('ECA_TEMPLATE').':</label></dt>
                             <dd>';
-                                echo getMenueSettings(getfilenames(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
+                                echo getMenueSettings(getFileNames(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
                              echo '</dd>
                         </dl>
                     </li>
@@ -1803,7 +1803,7 @@ echo '
 	</div>
 </div>';
 
-function getfilenames($directory)
+function getFileNames($directory)
 {
 	$array_files    = array();
 	$i                = 0;

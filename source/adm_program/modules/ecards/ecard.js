@@ -39,15 +39,57 @@ function ecardJSClass()
 	this.send_Text				= "";
 	this.template_Text			= "";
 	this.templates				= new Array();
-
 	this.ccSaveDataArray		= new Array();
+	this.submitOptions      = new Array();
 	
 	this.init = function()
 	{
 		$(document).ready(function() {
 			$("a[rel=\'colorboxImage\']").colorbox({photo:true});
 			ecardJS.getMenu();
+
+			$("#btnPreview").click(function(event){
+				event.preventDefault();
+				$("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value","preview");
+				$("#" + ecardJS.ecardformid + " textarea[name='admEcardMessage']").text( CKEDITOR.instances.admEcardMessage.getData() );	
+
+				$.ajax({ // create an AJAX call...
+					data: $("#" + ecardJS.ecardformid).serialize(), // get the form data
+					type: 'POST', // GET or POST
+					url: 'ecard_preview.php', // the file to call
+					success: function(response) { // on success..
+						$.fn.colorbox({width:"70%",height:"70%",iframe:true,fastIframe:false,onComplete:function() {		
+								var cBoxLContent = $("#cboxLoadedContent");
+								var iFrame = cBoxLContent.find("iframe");
+								iFrame.contents().find('html').html(response);	
+
+								var foundHTML = iFrame.contents().find('html');
+								var height = foundHTML.height();
+								var width = foundHTML.width();
+								var cBoxHeight = cBoxLContent.height();
+								var cBoxWidth = cBoxLContent.width();
+								iFrame.height(height > cBoxHeight ? cBoxHeight : height);
+								iFrame.width(width > cBoxWidth ? cBoxWidth : width);			
+						}});
+					}
+				});
+
+				return false; // cancel original event to prevent form submitting
+			});
+
 		});
+
+		this.submitOptions = { 
+			target:        '#cboxLoadedContent',  							 // target element(s) to be updated with server response
+			url: gRootPath + '/adm_program/modules/ecards/ecard_send.php',
+			beforeSubmit: function(formData, jqForm, options) { 
+				$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/loader.gif" alt="' + this.loading_Text + '" />');
+			},
+			success:       function(responseText, statusText){		 // post-submit callback
+				$.fn.colorbox({html:responseText});
+				$("#ecardSubmit").html('<img src="'+ gThemePath+ '/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;' + ecardJS.send_Text);
+			}
+		};
 	}
 
 	this.popup_win = function(theURL,winName,winOptions)
@@ -64,17 +106,17 @@ function ecardJSClass()
 		if ($("#" + this.ecardformid + " input[name='ecard[name_recipient]']").val() == "" || $("#" + this.ecardformid+ "input[name='ecard[name_recipient]']").val() == "< "+ this.recipientName_Text +" >")
 		{
 			error = true;
-			error_message += "- " + this.nameOfRecipient_Text.replace('[VAR1]'," ") + "\n";
+			error_message += this.nameOfRecipient_Text.replace('<VAR1>'," ") + ", ";
 		}
 		if ($("#" + this.ecardformid + " input[name='ecard[email_recipient]']").val() == "" || this.emailValidation( $("#" + this.ecardformid + " input[name='ecard[email_recipient]']").val() ) == false)
 		{
 			error = true;
-			error_message += "- " + this.emailOfRecipient_Text.replace('[VAR1]'," ") + "\n";
+			error_message += this.emailOfRecipient_Text.replace('<VAR1>'," ") + ", ";
 		}
 		if (CKEDITOR.instances.admEcardMessage.getData() == '')
 		{
 			error = true;
-			error_message += "- " + this.message_Text + "\n";
+			error_message += this.message_Text + ", ";
 		}
 		for(var i=1; i <= this.now_recipients; i++)
 		{
@@ -86,7 +128,7 @@ function ecardJSClass()
 			{
 				if(namedoc.val() == "")
 				{
-					message += " - "+ this.nameOfRecipient_Text.replace('[VAR1]'," "+ i +". CC - ") +"\n";
+					message += this.nameOfRecipient_Text.replace('<VAR1>'," "+ i +". CC - ") + ", ";
 					error = true;
 					goterror = true;
 				}
@@ -95,18 +137,18 @@ function ecardJSClass()
 			{
 				if(emaildoc.val() == "" || !this.emailValidation(emaildoc.val()))
 				{
-					message += " - "+ this.emailOfRecipient_Text.replace('[VAR1]'," "+ i +". CC - ") +"\n";
+					message += this.emailOfRecipient_Text.replace('<VAR1>'," "+ i +". CC - ") + ", ";
 					error = true;
 					goterror = true;
 				}
 			}
 			if(goterror && i==1)
 			{
-				error_message += "\nCC - "+ this.message_Text +"\n_________________________________\n\n" + message;
+				error_message += "CC - "+ this.message_Text +" " + message;
 			}
 			else if(goterror)
 			{
-				error_message += "_________________________________\n\n" + message;
+				error_message += " " + message;
 			}
 		}
 		if (error)
@@ -168,22 +210,12 @@ function ecardJSClass()
 		return true
 	}
 	
-	this.makePreview = function()
-	{
-		$("#" + this.ecardformid + " input[name='ecard[submit_action]']").attr("value","preview");
-		$("#" + this.ecardformid).attr("action","ecard_preview.php");
-		$.fn.colorbox({href:"ecard_preview.php",width:"70%",height:"70%",iframe:true,fastIframe:false,onComplete:function(){
-								$("#" + ecardJS.ecardformid).attr("target",$("#cboxLoadedContent iframe").attr("name"));
-								$("#" + ecardJS.ecardformid).submit();}});		
-	}
-	
 	this.sendEcard = function()
 	{
 		if (this.validateForm())
 		{
-			$("#" + this.ecardformid + " input[name='ecard[submit_action]']").attr("value","send");
-			this.setJQuerySubmitOptions();
-			jQuery.fn.SubmitEcard();
+			$("#" + ecardJS.ecardformid + " textarea[name='admEcardMessage']").text( CKEDITOR.instances.admEcardMessage.getData() );
+			$("#" + ecardJS.ecardformid).ajaxSubmit(ecardJS.submitOptions);
 		}
 		else
 		{
@@ -232,30 +264,6 @@ function ecardJSClass()
 				$("#" + this.wrongDiv_id).html("");
 			}
 		}
-	}
-	
-	this.setJQuerySubmitOptions = function()
-	{
-		if($("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value") == "send")
-		{
-			var options = { 
-				target:        '#cboxLoadedContent',  							 // target element(s) to be updated with server response
-				url: gRootPath + '/adm_program/modules/ecards/ecard_send.php',
-				beforeSubmit: function(formData, jqForm, options) { 
-					$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/loader.gif" alt="' + this.loading_Text + '" />');
-				},
-				success:       function(responseText, statusText){		 // post-submit callback
-					$.fn.colorbox({html:responseText});
-					$("#ecardSubmit").html('<img src="'+ gThemePath+ '/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;' + ecardJS.send_Text);
-				}	 
-			}; 
-			jQuery.fn.SubmitEcard = function(){
-				$("#" + ecardJS.ecardformid + " textarea[name='admEcardMessage']").text( CKEDITOR.instances.admEcardMessage.getData() );
-				if($("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value") == "send")
-					$("#" + ecardJS.ecardformid).ajaxSubmit(options);
-			};
-		}
-		$("#" + ecardJS.ecardformid).attr("action","ecardJS.makePreview();");
 	}
 
 	this.makeAjaxRequest = function(url,divId,funcSuccess)

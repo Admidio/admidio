@@ -93,7 +93,7 @@ class FunctionClass
 		return $elementsFromFile;   
 	}
 	
-	function getfilenames($directory) 
+	function getFileNames($directory) 
 	{
 		$array_files    = array();
 		$i              = 0;
@@ -172,7 +172,7 @@ class FunctionClass
 	//      Bild Daten:             <%ecard_image_width%>       <%ecard_image_height%>      <%ecard_image_name%>
 	//      Nachricht:              <%ecard_message%>
 	*/
-	function parseEcardTemplate($ecard,$ecardMessage,$ecard_data,$root_path,&$user,$empfaenger_name,$empfaenger_email) 
+	function parseEcardTemplate($imageName,$ecardMessage,$ecard_data,$root_path,&$user,$empfaenger_name,$empfaenger_email) 
 	{
         global $gCurrentUser;
 
@@ -191,30 +191,35 @@ class FunctionClass
 		{
 		  $ecardMessage = '< '.$this->yourMessageString.' >';
 		}
+
+		$pregRepArray = array();
+
 		// Hier wird der Pfad zum Admidio Verzeichnis ersetzt
-		$ecard_data = preg_replace ('/<%g_root_path%>/',            $root_path, $ecard_data);
+		$pregRepArray["/<%g_root_path%>/"]						= $root_path;
 		// Hier wird der Pfad zum aktuellen Template Verzeichnis ersetzt
-		$ecard_data = preg_replace ('/<%theme_root_path%>/',        THEME_PATH, $ecard_data);
+		$pregRepArray["/<%theme_root_path%>/"]					= THEME_PATH;
 		// Hier wird der Sender Name, Email und Id ersetzt
-		$ecard_data = preg_replace ('/<%ecard_sender_id%>/',        $user->getValue('usr_id'), $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_sender_email%>/',     $user->getValue('EMAIL'), $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_sender_name%>/',      $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $ecard_data);
+		$pregRepArray["/<%ecard_sender_id%>/"]					= $user->getValue('usr_id');
+		$pregRepArray["/<%ecard_sender_email%>/"]				= $user->getValue('EMAIL');
+		$pregRepArray["/<%ecard_sender_name%>/"]				= $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
 		// Hier wird der Empfaenger Name und Email ersetzt
-		$ecard_data = preg_replace ('/<%ecard_reciepient_email%>/', htmlentities(utf8_decode($empfaenger_email)), $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_reciepient_name%>/',  htmlentities(utf8_decode($empfaenger_name)), $ecard_data);
+		$pregRepArray["/<%ecard_reciepient_email%>/"]		= htmlentities($empfaenger_email);
+		$pregRepArray["/<%ecard_reciepient_name%>/"]			= htmlentities($empfaenger_name);
 		// Hier wird der Bildname ersetzt
-		$ecard_data = preg_replace ('/<%ecard_image_name%>/',       $ecard['image_name'], $ecard_data);
+		$pregRepArray["/<%ecard_image_name%>/"]				= $imageName;
 		
-		$ecard_data = preg_replace ('/<%ecard_greeting_card_from%>/'	, htmlentities(utf8_decode($this->greetingCardFrom)), $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_greeting_card_string%>/'	, htmlentities(utf8_decode($this->greetingCardString)), $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_to_string%>/'				, htmlentities(utf8_decode($this->sendToString)), $ecard_data);
-		$ecard_data = preg_replace ('/<%ecard_email_string%>/'			, htmlentities(utf8_decode($this->emailString)), $ecard_data); 
-			
+		$pregRepArray["/<%ecard_greeting_card_from%>/"]		= htmlentities($this->greetingCardFrom);
+		$pregRepArray["/<%ecard_greeting_card_string%>/"]	= htmlentities($this->greetingCardString);
+		$pregRepArray["/<%ecard_to_string%>/"]					= htmlentities($this->sendToString);
+		$pregRepArray["/<%ecard_email_string%>/"]				= htmlentities($this->emailString);
+
 		// make html in description secure
 		$ecardMessage = htmLawed(stripslashes($ecardMessage), array('safe' => 1));
 
 		// Hier wird die Nachricht ersetzt
-		$ecard_data = preg_replace ('/<%ecard_message%>/',  $ecardMessage, $ecard_data);
+		$pregRepArray["/<%ecard_message%>/"]					= $ecardMessage;
+
+		$ecard_data = preg_replace( array_keys($pregRepArray), array_values($pregRepArray), $ecard_data );
 
 		return $ecard_data;
 	}
