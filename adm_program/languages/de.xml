@@ -43,7 +43,7 @@
     <text id="ORG_REFUSE_REGISTRATION" development="changed" translation="todo">Benachrichtigung bei einer Ablehnung der Registrierung</text>
 	<text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="todo">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</text>
 	<text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="todo">Zukünftige Rollenmitgliedschaften</text>
-	<text id="PRO_LOG_EDIT_FIELDS" development="new" translation="todo">Änderungen mitloggen</text>
+	<text id="PRO_LOG_EDIT_FIELDS" development="new" translation="todo">Änderungen protokollieren</text>
 	<text id="PRO_LOG_EDIT_FIELDS_DESC" development="new" translation="todo">Änderungen in Profilfeldern werden für jeden Benutzer und jedes Feld mitgeschrieben. Dabei wird der bisherige und der neue Wert, sowie der Benutzer, der die Änderung durchgeführt hat, mit Zeitstempel gespeichert. (Standard: ja)</text>
 	<text id="PRO_NO_DEFAULT_ROLE" development="changed" translation="todo">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</text>
     <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="todo">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</text>
