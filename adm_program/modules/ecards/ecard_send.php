@@ -12,11 +12,12 @@ require_once('ecard_function.php');
 
 // Initialize and check the parameters
 $postTemplateName = admFuncVariableIsValid($_POST['ecard'], 'template_name', 'file', null, true);
+$imageName			= admFuncVariableIsValid($_POST['ecard'], 'image_name', 'string');
 
 $funcClass 					= new FunctionClass($gL10n);
 $email_versand_liste        = array(); // Array wo alle Empfaenger aufgelistet werden (jedoch keine zusaetzlichen);
 $email_versand_liste_cc     = array(); // Array wo alle CC Empfaenger aufgelistet werden;
-$templates                  = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
+$templates                  = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
 $template                   = THEME_SERVER_PATH. '/ecard_templates/';
 $error_msg                  = '';
 $msg_send_error             = $gL10n->get('ECA_SEND_ERROR');
@@ -112,7 +113,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 				$i++;
 			}
 			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
-			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$firstvalue_name,$firstvalue_email);
+			$ecard_html_data = $funcClass->parseEcardTemplate($imageName,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$firstvalue_name,$firstvalue_email);
 			$b=0;
 			foreach($email_versand_liste as $item)
 			{                       
@@ -143,7 +144,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 			// Wenn nicht dann Name und Email des Empfaengers zur versand Liste hinzufügen
 			array_push($email_versand_liste,array($ecard['name_recipient'],$ecard['email_recipient']));
 			$email_versand_liste_cc = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
-			$ecard_html_data = $funcClass->parseEcardTemplate($ecard,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$ecard['name_recipient'],$ecard['email_recipient']);
+			$ecard_html_data = $funcClass->parseEcardTemplate($imageName,$_POST['admEcardMessage'],$ecard_data_to_parse,$g_root_path,$gCurrentUser,$ecard['name_recipient'],$ecard['email_recipient']);
 			$result = $funcClass->sendEcard($ecard,$ecard_html_data,$ecard['name_recipient'],$ecard['email_recipient'],$email_versand_liste_cc, $ecard['image_serverPath']);
 			// Wenn die Grußkarte erfolgreich gesendet wurde
 			if ($result)

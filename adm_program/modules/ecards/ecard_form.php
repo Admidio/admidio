@@ -27,7 +27,7 @@ $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
 
 // Initialisierung lokaler Variablen
 $funcClass 	 = new FunctionClass($gL10n);
-$templates   = $funcClass->getfilenames(THEME_SERVER_PATH. '/ecard_templates/');
+$templates   = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
 $template    = THEME_SERVER_PATH. '/ecard_templates/';
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -159,7 +159,7 @@ echo '
 			</div>
 		</div>
 
-		<form id="ecard_form" action="javascript:ecardJS.makePreview();" method="post">
+		<form id="ecard_form" method="post">
 			<input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'].'" />
 			<input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$getPhotoNr.'.jpg" />
 			<input type="hidden" name="ecard[submit_action]" value="" />
@@ -272,7 +272,7 @@ echo '
 			</div>
 
 			<div class="formSubmit">
-				<button id="btnPreview" onclick="javascript:ecardJS.makePreview();" type="button"><img 
+				<button id="btnPreview" type="button"><img 
 					src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />&nbsp;'.$gL10n->get('SYS_PREVIEW').'</button>&nbsp;&nbsp;&nbsp;&nbsp;
 				<button id="ecardSubmit" onclick="javascript:ecardJS.sendEcard();" type="button"><img 
 					src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_SEND').'" />&nbsp;'.$gL10n->get('SYS_SEND').'</button>
