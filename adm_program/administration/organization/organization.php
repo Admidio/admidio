@@ -66,51 +66,51 @@ else
 // und die jeweilige Sektion des Accordion automatisch aufgeklappt 
 if( strlen($showOption) > 0 )
 {
-	switch((string)$showOption)
-	{
-		case 'SYS_COMMON':
-		case 'ORG_ORGANIZATION_REGIONAL_SETTINGS':
-		case 'SYS_REGISTRATION':
-		case 'SYS_SYSTEM_MAILS':
-		case 'SYS_CAPTCHA':
-		case 'ORG_SYSTEM_INFORMATIONS':
-		{
-			// Erstes Tab für Allgemeine Einstellungen + Sektion aufklappen
-			$showOptionGenJs .= '$("#tabs").bind("tabscreate", function(event, ui) {
-				$("#tabs").tabs("select" , 0 );
-				$("#accordion-common").accordion("activate", $("#'.$showOption.'"));
-			});';			
-		} break;
-		case 'ANN_ANNOUNCEMENTS':
-		case 'DOW_DOWNLOADS':
-		case 'PHO_PHOTOS':
-		case 'SYS_FORUM':
-		case 'GBO_GUESTBOOK':
-		case 'LST_LISTS':
-		case 'MAI_EMAILS':
-		case 'ECA_GREETING_CARDS':
-		case 'PRO_PROFILE':
-		case 'DAT_DATES':
-		case 'LNK_WEBLINKS':
-		{
-			// Zweites Tab für Modul Einstellungen + Sektion aufklappen
-			$showOptionGenJs .= '$("#tabs").bind("tabscreate", function(event, ui) {
-				$("#tabs").tabs("select" , 1 );
-				$("#accordion-modules").accordion("activate", $("#'.$showOption.'"));
-			});';
-		} break;
-	}
+    switch((string)$showOption)
+    {
+        case 'SYS_COMMON':
+        case 'ORG_ORGANIZATION_REGIONAL_SETTINGS':
+        case 'SYS_REGISTRATION':
+        case 'SYS_SYSTEM_MAILS':
+        case 'SYS_CAPTCHA':
+        case 'ORG_SYSTEM_INFORMATIONS':
+        {
+            // Erstes Tab für Allgemeine Einstellungen + Sektion aufklappen
+            $showOptionGenJs .= '$("#tabs").bind("tabscreate", function(event, ui) {
+                $("#tabs").tabs("select" , 0 );
+                $("#accordion-common").accordion("activate", $("#'.$showOption.'"));
+            });';           
+        } break;
+        case 'ANN_ANNOUNCEMENTS':
+        case 'DOW_DOWNLOADS':
+        case 'PHO_PHOTOS':
+        case 'SYS_FORUM':
+        case 'GBO_GUESTBOOK':
+        case 'LST_LISTS':
+        case 'MAI_EMAILS':
+        case 'ECA_GREETING_CARDS':
+        case 'PRO_PROFILE':
+        case 'DAT_DATES':
+        case 'LNK_WEBLINKS':
+        {
+            // Zweites Tab für Modul Einstellungen + Sektion aufklappen
+            $showOptionGenJs .= '$("#tabs").bind("tabscreate", function(event, ui) {
+                $("#tabs").tabs("select" , 1 );
+                $("#accordion-modules").accordion("activate", $("#'.$showOption.'"));
+            });';
+        } break;
+    }
 }
 
 // zusaetzliche Daten fuer den Html-Kopf setzen
 $gLayout['title']  = $gL10n->get('ORG_ORGANIZATION_PROPERTIES');
 $gLayout['header'] =  '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/administration/organization/organization.js" ></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.core.js" ></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.widget.js" ></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.tabs.js" ></script>		
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.accordion.js" ></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.scrollTo.js" ></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.core.js" ></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.widget.js" ></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.tabs.js" ></script>      
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.accordion.js" ></script>
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.scrollTo.js" ></script>
     <script type="text/javascript"><!--
         var organizationJS = new organizationClass();
         organizationJS.ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
@@ -127,12 +127,12 @@ $gLayout['header'] =  '
         organizationJS.text_DB = "'.$gL10n->get('SYS_DATABASE').':";
         $(document).ready(function()
         {
-			'.$showOptionGenJs.'
+            '.$showOptionGenJs.'
             organizationJS.init();
-            organizationJS.drawForumAccessDataTable();						
+            organizationJS.drawForumAccessDataTable();                      
         });
     //--></script>
-	<link rel="stylesheet" type="text/css" href="'.THEME_PATH.'/css/jquery.css">';
+    <link rel="stylesheet" type="text/css" href="'.THEME_PATH.'/css/jquery.css">';
 
 // Html-Kopf ausgeben
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -141,321 +141,445 @@ echo '
 <h1 class="moduleHeadline">'.$gLayout['title'].'</h1>
 
 <div class="formLayout" id="admOrganizationMenu">
-	<div class="formBody">
-	<form action="'.$g_root_path.'/adm_program/administration/organization/organization_function.php" method="post">
-	<div id="tabs">
-		<ul>
-			<li><a href="#tabs-common">'.$gL10n->get('SYS_COMMON').'</a></li>
-			<li><a href="#tabs-modules">'.$gL10n->get('SYS_MODULES').'</a></li>
-		</ul>
-		<div id="tabs-common">
-			<div id="accordion-common">';
-			/**************************************************************************************/
-        	// Einstellungen Allgemein
-        	/**************************************************************************************/
-			
-			echo '<h3 id="SYS_COMMON" class="iconTextLink">
-				<a href="#"><img src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" title="'.$gL10n->get('SYS_COMMON').'" /></a>
-				<a href="#">'.$gL10n->get('SYS_COMMON').'</a>
-			</h3>
-			<div class="groupBoxBody" style="display: none;">
-				<ul class="formFieldList">
-					<li>
-						<dl>
-							<dt><label for="theme">'.$gL10n->get('ORG_ADMIDIO_THEME').':</label></dt>
-							<dd>
-								<select size="1" id="theme" name="theme">
-									<option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-									$themes_path = SERVER_PATH. '/adm_themes';
-									$dir_handle  = opendir($themes_path);
+    <div class="formBody">
+    <form action="'.$g_root_path.'/adm_program/administration/organization/organization_function.php" method="post">
+    <div id="tabs">
+        <ul>
+            <li><a href="#tabs-common">'.$gL10n->get('SYS_COMMON').'</a></li>
+            <li><a href="#tabs-modules">'.$gL10n->get('SYS_MODULES').'</a></li>
+        </ul>
+        <div id="tabs-common">
+            <div id="accordion-common">';
+            /**************************************************************************************/
+            // Einstellungen Allgemein
+            /**************************************************************************************/
+            
+            echo '<h3 id="SYS_COMMON" class="iconTextLink">
+                <a href="#"><img src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" title="'.$gL10n->get('SYS_COMMON').'" /></a>
+                <a href="#">'.$gL10n->get('SYS_COMMON').'</a>
+            </h3>
+            <div class="groupBoxBody" style="display: none;">
+                <ul class="formFieldList">
+                    <li>
+                        <dl>
+                            <dt><label for="theme">'.$gL10n->get('ORG_ADMIDIO_THEME').':</label></dt>
+                            <dd>
+                                <select size="1" id="theme" name="theme">
+                                    <option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+                                    $themes_path = SERVER_PATH. '/adm_themes';
+                                    $dir_handle  = opendir($themes_path);
 
-									while (false !== ($filename = readdir($dir_handle)))
-									{
-										if(is_file($filename) == false
-										&& strpos($filename, '.') !== 0)
-										{
-											echo '<option value="'.$filename.'" ';
-											if($form_values['theme'] == $filename)
-											{
-												echo ' selected="selected" ';
-											}
-											echo '>'.$filename.'</option>';
-										}
-									}
-								echo '</select>
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_ADMIDIO_THEME_DESC').'</li>
-					<li>
-						<dl>
-							<dt><label for="homepage_logout">'.$gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('SYS_VISITORS').'):</label></dt>
-							<dd><input type="text" id="homepage_logout" name="homepage_logout" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_logout']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_HOMEPAGE_VISITORS').'</li>
-					<li>
-						<dl>
-							<dt><label for="homepage_login">'.$gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('ORG_REGISTERED_USERS').'):</label></dt>
-							<dd><input type="text" id="homepage_login" name="homepage_login" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_login']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_HOMEPAGE_REGISTERED_USERS').'</li>
-					<li>
-						<dl>
-							<dt><label for="enable_rss">'.$gL10n->get('ORG_ENABLE_RSS_FEEDS').':</label></dt>
-							<dd>
-								<input type="checkbox" id="enable_rss" name="enable_rss" ';
-								if(isset($form_values['enable_rss']) && $form_values['enable_rss'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_ENABLE_RSS_FEEDS_DESC').'</li>
-					<li>
-						<dl>
-							<dt><label for="enable_auto_login">'.$gL10n->get('ORG_LOGIN_AUTOMATICALLY').':</label></dt>
-							<dd>
-								<input type="checkbox" id="enable_auto_login" name="enable_auto_login" ';
-								if(isset($form_values['enable_auto_login']) && $form_values['enable_auto_login'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_LOGIN_AUTOMATICALLY_DESC').'</li>
-					<li>
-						<dl>
-							<dt><label for="logout_minutes">'.$gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER').':</label></dt>
-							<dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> '.$gL10n->get('SYS_MINUTES').'</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', $gL10n->get('SYS_REMEMBER_ME')).'</li>
-					<li>
-						<dl>
-							<dt><label for="enable_password_recovery">'.$gL10n->get('ORG_SEND_PASSWORD').':</label>
-							</dt>
-							<dd>
-								<input type="checkbox" id="enable_password_recovery" name="enable_password_recovery" ';
-								if(isset($form_values['enable_password_recovery']) && $form_values['enable_password_recovery'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_SEND_PASSWORD_DESC').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_search_similar">'.$gL10n->get('ORG_SEARCH_SIMILAR_NAMES').':</label>
-							</dt>
-							<dd>
-								<input type="checkbox" id="system_search_similar" name="system_search_similar" ';
-								if(isset($form_values['system_search_similar']) && $form_values['system_search_similar'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_SEARCH_SIMILAR_NAMES_DESC').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_js_editor_enabled">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE').':</label></dt>
-							<dd>
-								<input type="checkbox" id="system_js_editor_enabled" name="system_js_editor_enabled" ';
-								if(isset($form_values['system_js_editor_enabled']) && $form_values['system_js_editor_enabled'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE_DESC').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_js_editor_color">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR').':</label></dt>
-							<dd><input type="text" id="system_js_editor_color" name="system_js_editor_color" style="width: 100px;" maxlength="10" value="'. $form_values['system_js_editor_color']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR_DESC').'</li>
-				</ul>
-				<br />
-				<div class="formSubmit">	
+                                    while (false !== ($filename = readdir($dir_handle)))
+                                    {
+                                        if(is_file($filename) == false
+                                        && strpos($filename, '.') !== 0)
+                                        {
+                                            echo '<option value="'.$filename.'" ';
+                                            if($form_values['theme'] == $filename)
+                                            {
+                                                echo ' selected="selected" ';
+                                            }
+                                            echo '>'.$filename.'</option>';
+                                        }
+                                    }
+                                echo '</select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_ADMIDIO_THEME_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="homepage_logout">'.$gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('SYS_VISITORS').'):</label></dt>
+                            <dd><input type="text" id="homepage_logout" name="homepage_logout" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_logout']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_HOMEPAGE_VISITORS').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="homepage_login">'.$gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('ORG_REGISTERED_USERS').'):</label></dt>
+                            <dd><input type="text" id="homepage_login" name="homepage_login" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_login']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_HOMEPAGE_REGISTERED_USERS').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="enable_rss">'.$gL10n->get('ORG_ENABLE_RSS_FEEDS').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_rss" name="enable_rss" ';
+                                if(isset($form_values['enable_rss']) && $form_values['enable_rss'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_ENABLE_RSS_FEEDS_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="enable_auto_login">'.$gL10n->get('ORG_LOGIN_AUTOMATICALLY').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_auto_login" name="enable_auto_login" ';
+                                if(isset($form_values['enable_auto_login']) && $form_values['enable_auto_login'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_LOGIN_AUTOMATICALLY_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="logout_minutes">'.$gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER').':</label></dt>
+                            <dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> '.$gL10n->get('SYS_MINUTES').'</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', $gL10n->get('SYS_REMEMBER_ME')).'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="enable_password_recovery">'.$gL10n->get('ORG_SEND_PASSWORD').':</label>
+                            </dt>
+                            <dd>
+                                <input type="checkbox" id="enable_password_recovery" name="enable_password_recovery" ';
+                                if(isset($form_values['enable_password_recovery']) && $form_values['enable_password_recovery'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_SEND_PASSWORD_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_search_similar">'.$gL10n->get('ORG_SEARCH_SIMILAR_NAMES').':</label>
+                            </dt>
+                            <dd>
+                                <input type="checkbox" id="system_search_similar" name="system_search_similar" ';
+                                if(isset($form_values['system_search_similar']) && $form_values['system_search_similar'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_SEARCH_SIMILAR_NAMES_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_js_editor_enabled">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="system_js_editor_enabled" name="system_js_editor_enabled" ';
+                                if(isset($form_values['system_js_editor_enabled']) && $form_values['system_js_editor_enabled'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_js_editor_color">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR').':</label></dt>
+                            <dd><input type="text" id="system_js_editor_color" name="system_js_editor_color" style="width: 100px;" maxlength="10" value="'. $form_values['system_js_editor_color']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR_DESC').'</li>
+                </ul>
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-			</div>';
-			
-			/**************************************************************************************/
-        	// Organization and regional settings
-        	/**************************************************************************************/
-			
-			echo '<h3 id="ORG_ORGANIZATION_REGIONAL_SETTINGS" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" /></a>
-				<a href="#">'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'</a>
-			</h3>
-			<div class="groupBoxBody" style="display: none;">
-				<ul class="formFieldList">
-					<li>
-						<dl>
-							<dt><label for="org_shortname">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
-							<dd><input type="text" id="org_shortname" name="org_shortname" disabled="disabled" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="org_longname">'.$gL10n->get('SYS_NAME').':</label></dt>
-							<dd><input type="text" id="org_longname" name="org_longname" style="width: 200px;" maxlength="60" value="'. $form_values['org_longname']. '" /></dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="org_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
-							<dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
-							<dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language', $form_values['system_language']).'</dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="system_date">'.$gL10n->get('ORG_DATE_FORMAT').':</label></dt>
-							<dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_time">'.$gL10n->get('ORG_TIME_FORMAT').':</label></dt>
-							<dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
-					<li>
-						<dl>
-							<dt><label for="system_currency">'.$gL10n->get('ORG_CURRENCY').':</label></dt>
-							<dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_CURRENCY_DESC').'</li>';
+            </div>';
+            
+            /**************************************************************************************/
+            // Organization and regional settings
+            /**************************************************************************************/
+            
+            echo '<h3 id="ORG_ORGANIZATION_REGIONAL_SETTINGS" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" /></a>
+                <a href="#">'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'</a>
+            </h3>
+            <div class="groupBoxBody" style="display: none;">
+                <ul class="formFieldList">
+                    <li>
+                        <dl>
+                            <dt><label for="org_shortname">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
+                            <dd><input type="text" id="org_shortname" name="org_shortname" disabled="disabled" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="org_longname">'.$gL10n->get('SYS_NAME').':</label></dt>
+                            <dd><input type="text" id="org_longname" name="org_longname" style="width: 200px;" maxlength="60" value="'. $form_values['org_longname']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="org_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
+                            <dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
+                            <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language', $form_values['system_language']).'</dd>
+                        </dl>
+                    </li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_date">'.$gL10n->get('ORG_DATE_FORMAT').':</label></dt>
+                            <dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_time">'.$gL10n->get('ORG_TIME_FORMAT').':</label></dt>
+                            <dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="system_currency">'.$gL10n->get('ORG_CURRENCY').':</label></dt>
+                            <dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_CURRENCY_DESC').'</li>';
 
-					//Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-					if($gCurrentOrganization->hasChildOrganizations() == false)
-					{
-						$organizationSelectBox = FormElements::generateOrganizationSelectBox($form_values['org_org_id_parent'], 'org_org_id_parent', 1);
+                    //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
+                    if($gCurrentOrganization->hasChildOrganizations() == false)
+                    {
+                        $organizationSelectBox = FormElements::generateOrganizationSelectBox($form_values['org_org_id_parent'], 'org_org_id_parent', 1);
 
-						if(strlen($organizationSelectBox) > 0)
-						{
-							// Auswahlfeld fuer die uebergeordnete Organisation
-							echo '
-							<li>
-								<dl>
-									<dt><label for="org_org_id_parent">'.$gL10n->get('ORG_PARENT_ORGANIZATION').':</label></dt>
-									<dd>'.$organizationSelectBox.'</dd>
-								</dl>
-							</li>
-							<li class="smallFontSize">'.$gL10n->get('ORG_PARENT_ORGANIZATION_DESC').'</li>';
-						}
-					}
-					
-					if($gCurrentOrganization->countAllRecords() > 1)
-					{
-						echo '<li>
-							<dl>
-								<dt><label for="system_organization_select">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT').':</label></dt>
-								<dd>
-									<input type="checkbox" id="system_organization_select" name="system_organization_select" ';
-									if(isset($form_values['system_organization_select']) && $form_values['system_organization_select'] == 1)
-									{
-										echo ' checked="checked" ';
-									}
-									echo ' value="1" />
-								</dd>
-							</dl>
-						</li>
-						<li class="smallFontSize">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT_DESC').'</li>';
-					}
-				echo '</ul>
-				<br />
-				<div class="formSubmit">	
+                        if(strlen($organizationSelectBox) > 0)
+                        {
+                            // Auswahlfeld fuer die uebergeordnete Organisation
+                            echo '
+                            <li>
+                                <dl>
+                                    <dt><label for="org_org_id_parent">'.$gL10n->get('ORG_PARENT_ORGANIZATION').':</label></dt>
+                                    <dd>'.$organizationSelectBox.'</dd>
+                                </dl>
+                            </li>
+                            <li class="smallFontSize">'.$gL10n->get('ORG_PARENT_ORGANIZATION_DESC').'</li>';
+                        }
+                    }
+                    
+                    if($gCurrentOrganization->countAllRecords() > 1)
+                    {
+                        echo '<li>
+                            <dl>
+                                <dt><label for="system_organization_select">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT').':</label></dt>
+                                <dd>
+                                    <input type="checkbox" id="system_organization_select" name="system_organization_select" ';
+                                    if(isset($form_values['system_organization_select']) && $form_values['system_organization_select'] == 1)
+                                    {
+                                        echo ' checked="checked" ';
+                                    }
+                                    echo ' value="1" />
+                                </dd>
+                            </dl>
+                        </li>
+                        <li class="smallFontSize">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT_DESC').'</li>';
+                    }
+                echo '</ul>
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-			</div>';
-			
-			/**************************************************************************************/
-        	// Einstellungen Registrierung
-        	/**************************************************************************************/
-			
-			echo '<h3 id="SYS_REGISTRATION" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" title="'.$gL10n->get('SYS_REGISTRATION').'" /></a>
-				<a href="#">'.$gL10n->get('SYS_REGISTRATION').'</a>
-			</h3>
-			<div class="groupBoxBody" style="display: none;">
-				<ul class="formFieldList">
-					<li>
-						<dl>
-							<dt><label for="registration_mode">'.$gL10n->get('SYS_REGISTRATION').':</label></dt>
-							<dd>';
-								$selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['registration_mode'], 'registration_mode');
-							echo '</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_REGISTRATION_MODE').'</li>
-					<li>
-						<dl>
-							<dt><label for="enable_registration_captcha">'.$gL10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
-							<dd>
-								<input type="checkbox" id="enable_registration_captcha" name="enable_registration_captcha" ';
-								if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_CAPTCHA_REGISTRATION').'</li>
-					<li>
-						<dl>
-							<dt><label for="enable_registration_admin_mail">'.$gL10n->get('ORG_EMAIL_ALERTS').':</label></dt>
-							<dd>
-								<input type="checkbox" id="enable_registration_admin_mail" name="enable_registration_admin_mail" ';
-								if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_EMAIL_ALERTS_DESC', $gL10n->get('ROL_RIGHT_APPROVE_USERS')).'</li>
-				</ul>
-				<br />
-				<div class="formSubmit">	
+            </div>';
+            
+            /**************************************************************************************/
+            // Einstellungen Registrierung
+            /**************************************************************************************/
+            
+            echo '<h3 id="SYS_REGISTRATION" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" title="'.$gL10n->get('SYS_REGISTRATION').'" /></a>
+                <a href="#">'.$gL10n->get('SYS_REGISTRATION').'</a>
+            </h3>
+            <div class="groupBoxBody" style="display: none;">
+                <ul class="formFieldList">
+                    <li>
+                        <dl>
+                            <dt><label for="registration_mode">'.$gL10n->get('SYS_REGISTRATION').':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['registration_mode'], 'registration_mode');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_REGISTRATION_MODE').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="enable_registration_captcha">'.$gL10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_registration_captcha" name="enable_registration_captcha" ';
+                                if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_CAPTCHA_REGISTRATION').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="enable_registration_admin_mail">'.$gL10n->get('ORG_EMAIL_ALERTS').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_registration_admin_mail" name="enable_registration_admin_mail" ';
+                                if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_EMAIL_ALERTS_DESC', $gL10n->get('ROL_RIGHT_APPROVE_USERS')).'</li>
+                </ul>
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-			</div>';
-			/**************************************************************************************/
-			//Einstellungen Systemmails
-			/**************************************************************************************/
+            </div>';
+            /**************************************************************************************/
+            //Einstellungen Mailversand
+            /**************************************************************************************/
+            $text = new TableText($gDb);
+            echo '<h3 id="SYS_MAIL_DISPATCH" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$gL10n->get('SYS_MAIL_DISPATCH').'" title="'.$gL10n->get('SYS_MAIL_DISPATCH').'" /></a>
+                <a href="#">'.$gL10n->get('SYS_MAIL_DISPATCH').'</a>
+            </h3>        
+            <div class="groupBoxBody" style="display: none;">
+                <ul class="formFieldList">
+                    <li>
+                        <dl>
+                            <dt><label for="mail_send_method">'.$gL10n->get('MAI_SEND_METHOD').':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_send_method'], 'mail_send_method');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SEND_METHOD_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_bcc_count">'.$gL10n->get('MAI_COUNT_BCC').':</label>
+                            </dt>
+                            <dd>
+                                <input type="text" id="mail_bcc_count" name="mail_bcc_count" style="width: 50px;" maxlength="6" value="'. $form_values['mail_bcc_count']. '" />
+                             </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_COUNT_BCC_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_sender_into_to">'.$gL10n->get('MAI_SENDER_INTO_TO').':</label>
+                            </dt>
+                            <dd>
+                                <input type="checkbox" id="mail_sender_into_to" name="mail_sender_into_to" ';
+                                if(isset($form_values['mail_sender_into_to']) && $form_values['mail_sender_into_to'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_INTO_TO_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_character_encoding">'.$gL10n->get('MAI_CHARACTER_ENCODING').':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_character_encoding'], 'mail_character_encoding');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_CHARACTER_ENCODING_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_host">'.$gL10n->get('MAI_SMTP_HOST').':</label></dt>
+                            <dd><input type="text" id="mail_smtp_host" name="mail_smtp_host" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_host'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_HOST_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_auth">'.$gL10n->get('MAI_SMTP_AUTH').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="mail_smtp_auth" name="mail_smtp_auth" ';
+                                if(isset($form_values['mail_smtp_auth']) && $form_values['mail_smtp_auth'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_AUTH_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_port">'.$gL10n->get('MAI_SMTP_PORT').':</label></dt>
+                            <dd><input type="text" id="mail_smtp_port" name="mail_smtp_port" style="width: 50px;" maxlength="5" value="'. $form_values['mail_smtp_port'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_PORT_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_secure">'.$gL10n->get('MAI_SMTP_SECURE').':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array('' => $gL10n->get('MAI_SMTP_SECURE_NO'), 'ssl' => $gL10n->get('MAI_SMTP_SECURE_SSL'), 'tls' => $gL10n->get('MAI_SMTP_SECURE_TLS'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_smtp_secure'], 'mail_smtp_secure');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_SECURE_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_authentication_type">'.$gL10n->get('MAI_SMTP_AUTH_TYPE').':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array('LOGIN' => $gL10n->get('MAI_SMTP_AUTH_LOGIN'), 'PLAIN' => $gL10n->get('MAI_SMTP_AUTH_PLAIN'), 'NTLM' => $gL10n->get('MAI_SMTP_AUTH_NTLM'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_smtp_authentication_type'], 'mail_smtp_authentication_type');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_AUTH_TYPE_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_user">'.$gL10n->get('MAI_SMTP_USER').':</label></dt>
+                            <dd><input type="text" id="mail_smtp_user" name="mail_smtp_user" style="width: 200px;" maxlength="100" value="'. $form_values['mail_smtp_user'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_USER_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="mail_smtp_password">'.$gL10n->get('MAI_SMTP_PASSWORD').':</label></dt>
+                            <dd><input type="password" id="mail_smtp_password" name="mail_smtp_password" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_password'].'" /></dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_PASSWORD_DESC').'</li>
 
-			$text = new TableText($gDb);
-			echo '<h3 id="SYS_SYSTEM_MAILS" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" title="'.$gL10n->get('SYS_SYSTEM_MAILS').'" /></a>
-            	<a href="#">'.$gL10n->get('SYS_SYSTEM_MAILS').'</a>
-			</h3>        
+                </ul>
+                <br />
+                <div class="formSubmit">    
+                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+                </div>
+            </div>';
+            
+            /**************************************************************************************/
+            //Einstellungen Systemmails
+            /**************************************************************************************/
+            $text = new TableText($gDb);
+            echo '<h3 id="SYS_SYSTEM_MAILS" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" title="'.$gL10n->get('SYS_SYSTEM_MAILS').'" /></a>
+                <a href="#">'.$gL10n->get('SYS_SYSTEM_MAILS').'</a>
+            </h3>        
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
@@ -549,64 +673,64 @@ echo '
                         <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
                     </li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
-			/**************************************************************************************/
-			//Einstellungen Captcha
-			/**************************************************************************************/
-		
-			echo '<h3 id="SYS_CAPTCHA" class="iconTextLink">
-				<a href="#"><img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$gL10n->get('SYS_CAPTCHA').'" title="'.$gL10n->get('SYS_CAPTCHA').'" /></a>
-            	<a href="#">'.$gL10n->get('SYS_CAPTCHA').'</a>
-			</h3>        
+            </div>';
+            /**************************************************************************************/
+            //Einstellungen Captcha
+            /**************************************************************************************/
+        
+            echo '<h3 id="SYS_CAPTCHA" class="iconTextLink">
+                <a href="#"><img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$gL10n->get('SYS_CAPTCHA').'" title="'.$gL10n->get('SYS_CAPTCHA').'" /></a>
+                <a href="#">'.$gL10n->get('SYS_CAPTCHA').'</a>
+            </h3>        
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li class="smallFontSize">'.$gL10n->get("ORG_CAPTCHA").'</li>
-					<li>
+                    <li>
                         <dl>
                             <dt><label for="captcha_type">'.$gL10n->get('ORG_CAPTCHA_TYPE').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['captcha_type'], 'captcha_type');
+                                $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['captcha_type'], 'captcha_type');
                             echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">
                         '.$gL10n->get("ORG_CAPTCHA_TYPE_TEXT").'
                     </li>
-					';
-			if($gPreferences['captcha_type'] == 'pic')
-			{
-				echo '	<li>
+                    ';
+            if($gPreferences['captcha_type'] == 'pic')
+            {
+                echo '  <li>
                         <dl>
                             <dt><label for="captcha_fonts">'.$gL10n->get("SYS_FONT").':</label></dt>
                             <dd>
-								<select size="1" id="captcha_fonts" name="captcha_fonts" style="width:120px;">
-								';
-								$fonts = getFileNames('../../system/fonts/');
-								array_push($fonts,'Theme');
-								asort($fonts);
-								foreach($fonts as $myfonts)
-								{
-									if($myfonts == $form_values['captcha_fonts']){
-									   $select = ' selected="selected"';
-								    }
-									else {
-									   $select = '';
-								    }
-									echo '<option value="'.$myfonts.'"'.$select.'>'.$myfonts.'</option>
-									';
-								}
+                                <select size="1" id="captcha_fonts" name="captcha_fonts" style="width:120px;">
+                                ';
+                                $fonts = getFileNames('../../system/fonts/');
+                                array_push($fonts,'Theme');
+                                asort($fonts);
+                                foreach($fonts as $myfonts)
+                                {
+                                    if($myfonts == $form_values['captcha_fonts']){
+                                       $select = ' selected="selected"';
+                                    }
+                                    else {
+                                       $select = '';
+                                    }
+                                    echo '<option value="'.$myfonts.'"'.$select.'>'.$myfonts.'</option>
+                                    ';
+                                }
                              echo '</select>
-							</dd>
+                            </dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">
                         '.$gL10n->get('ORG_CAPTCHA_FONT').'
-                    </li>					
+                    </li>                   
                     <li>
                         <dl>
                             <dt><label for="captcha_font_size">'.$gL10n->get('SYS_FONT_SIZE').':</label></dt>
@@ -622,11 +746,11 @@ echo '
                         <dl>
                             <dt><label for="captcha_background_color">'.$gL10n->get("ORG_CAPTCHA_BACKGROUND_COLOR").':</label></dt>
                             <dd>
-								<input type="text" id="captcha_background_color" name="captcha_background_color" style="width: 60px;" maxlength="7" value="'.$form_values['captcha_background_color'].'" />
-							</dd>
+                                <input type="text" id="captcha_background_color" name="captcha_background_color" style="width: 60px;" maxlength="7" value="'.$form_values['captcha_background_color'].'" />
+                            </dd>
                         </dl>
                     </li>
-					<li class="smallFontSize">
+                    <li class="smallFontSize">
                         '.$gL10n->get("ORG_CAPTCHA_BACKGROUND_COLOR_TEXT").'
                     </li>
                     <li>
@@ -664,7 +788,7 @@ echo '
                     <li class="smallFontSize">
                         '.$gL10n->get("ORG_CAPTCHA_SIGNATURE_TEXT").'
                     </li>
-					<li>
+                    <li>
                         <dl>
                             <dt><label for="captcha_signature_font_size">'.$gL10n->get("SYS_FONT_SIZE").':</label></dt>
                             <dd>';
@@ -675,69 +799,69 @@ echo '
                     <li class="smallFontSize">
                        '.$gL10n->get("ORG_CAPTCHA_SIGNATURE_FONT_SIZE").'
                     </li>';
-			}
-						
-			if($gPreferences['captcha_type']=='pic')
-			{
-				$captcha_parameter = '&amp;type=pic';
-			}
-			else
-			{
-				$captcha_parameter = '';
-			}
+            }
+                        
+            if($gPreferences['captcha_type']=='pic')
+            {
+                $captcha_parameter = '&amp;type=pic';
+            }
+            else
+            {
+                $captcha_parameter = '';
+            }
 
-			echo '
-					<li>
+            echo '
+                    <li>
                         <dl>
                             <dt><label><a rel="colorboxHelp" href="captcha_preview.php?inline=true'.$captcha_parameter.'">'.$gL10n->get("ORG_CAPTCHA_PREVIEW").'</a></label></dt>
                             <dd>&nbsp;</dd>
                         </dl>
                     </li>
-					<li class="smallFontSize">'.$gL10n->get('ORG_CAPTCHA_PREVIEW_TEXT').'</li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_CAPTCHA_PREVIEW_TEXT').'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
             </div>';
 
-			/**************************************************************************************/
-			//Systeminformationen
-			/**************************************************************************************/
+            /**************************************************************************************/
+            //Systeminformationen
+            /**************************************************************************************/
 
-        	echo '<h3 id="ORG_SYSTEM_INFORMATIONS" class="iconTextLink">
-				<a href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" title="'.$gL10n->get('ORG_SYSTEM_INFOS').'" /></a>
-            	<a href="#">'.$gL10n->get('ORG_SYSTEM_INFORMATIONS').'</a>
-			</h3>  
-			<div class="groupBoxBody" style="display: none;">';
-				require_once('systeminfo.php');
-				echo'<br />
-				<div class="formSubmit">	
+            echo '<h3 id="ORG_SYSTEM_INFORMATIONS" class="iconTextLink">
+                <a href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" title="'.$gL10n->get('ORG_SYSTEM_INFOS').'" /></a>
+                <a href="#">'.$gL10n->get('ORG_SYSTEM_INFORMATIONS').'</a>
+            </h3>  
+            <div class="groupBoxBody" style="display: none;">';
+                require_once('systeminfo.php');
+                echo'<br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
-			
-			// ENDE accordion-common
-			echo'</div>
-		</div>
-		<div id="tabs-modules">
-			<div id="accordion-modules">';
-			/**************************************************************************************/
-        	//Einstellungen Ankuendigungsmodul
-        	/**************************************************************************************/
-			
-			echo '<h3 id="ANN_ANNOUNCEMENTS" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/announcements.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" title="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" /></a>
-				<a href="#">'.$gL10n->get('ANN_ANNOUNCEMENTS').'</a>
-			</h3>
-			<div class="groupBoxBody" style="display: none;">
+            </div>';
+            
+            // ENDE accordion-common
+            echo'</div>
+        </div>
+        <div id="tabs-modules">
+            <div id="accordion-modules">';
+            /**************************************************************************************/
+            //Einstellungen Ankuendigungsmodul
+            /**************************************************************************************/
+            
+            echo '<h3 id="ANN_ANNOUNCEMENTS" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/announcements.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" title="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" /></a>
+                <a href="#">'.$gL10n->get('ANN_ANNOUNCEMENTS').'</a>
+            </h3>
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
                             <dt><label for="enable_announcements_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_announcements_module'], 'enable_announcements_module');
+                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_announcements_module'], 'enable_announcements_module');
                             echo '</dd>
                         </dl>
                     </li>
@@ -753,20 +877,20 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-			</div>';
-			
-			/**************************************************************************************/
-			//Einstellungen Downloadmodul
-			/**************************************************************************************/
+            </div>';
+            
+            /**************************************************************************************/
+            //Einstellungen Downloadmodul
+            /**************************************************************************************/
 
-        	echo '<h3 id="DOW_DOWNLOADS" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/download.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" title="'.$gL10n->get('DOW_DOWNLOADS').'" /></a>
-            	<a href="#">'.$gL10n->get('DOW_DOWNLOADS').'</a>
-			</h3>
+            echo '<h3 id="DOW_DOWNLOADS" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/download.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" title="'.$gL10n->get('DOW_DOWNLOADS').'" /></a>
+                <a href="#">'.$gL10n->get('DOW_DOWNLOADS').'</a>
+            </h3>
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
@@ -794,28 +918,28 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('DOW_MAXIMUM_FILE_SIZE_DESC').'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
+            </div>';
 
-			/**************************************************************************************/
-			//Einstellungen Fotomodul
-			/**************************************************************************************/
+            /**************************************************************************************/
+            //Einstellungen Fotomodul
+            /**************************************************************************************/
 
-        	echo '<h3 id="PHO_PHOTOS" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/photo.png" alt="'.$gL10n->get('PHO_PHOTOS').'" title="'.$gL10n->get('PHO_PHOTOS').'" /></a>
-            	<a href="#">'.$gL10n->get('PHO_PHOTOS').'</a>
-			</h3>			
+            echo '<h3 id="PHO_PHOTOS" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/photo.png" alt="'.$gL10n->get('PHO_PHOTOS').'" title="'.$gL10n->get('PHO_PHOTOS').'" /></a>
+                <a href="#">'.$gL10n->get('PHO_PHOTOS').'</a>
+            </h3>           
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
                             <dt><label for="enable_photo_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_photo_module'], 'enable_photo_module');
+                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_photo_module'], 'enable_photo_module');
                             echo '</dd>
                         </dl>
                     </li>
@@ -824,8 +948,8 @@ echo '
                         <dl>
                             <dt><label for="photo_show_mode">'.$gL10n->get('PHO_DISPLAY_PHOTOS').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('0' => $gL10n->get('PHO_POPUP_WINDOW'), '1' => $gL10n->get('PHO_COLORBOX'), '2' => $gL10n->get('PHO_SAME_WINDOW'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['photo_show_mode'], 'photo_show_mode');
+                                $selectBoxEntries = array('0' => $gL10n->get('PHO_POPUP_WINDOW'), '1' => $gL10n->get('PHO_COLORBOX'), '2' => $gL10n->get('PHO_SAME_WINDOW'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['photo_show_mode'], 'photo_show_mode');
                             echo '</dd>
                         </dl>
                     </li>
@@ -902,20 +1026,20 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PHO_SHOW_CAPTION_DESC' ,$gCurrentOrganization->getValue('org_homepage')).'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
+            </div>';
 
-			/**************************************************************************************/
-			//Einstellungen Forum
-			/**************************************************************************************/
+            /**************************************************************************************/
+            //Einstellungen Forum
+            /**************************************************************************************/
 
-        	echo '<h3 id="SYS_FORUM" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/forum.png" alt="'.$gL10n->get('SYS_FORUM').'" title="'.$gL10n->get('SYS_FORUM').'" /></a>
-            	<a href="#">'.$gL10n->get('SYS_FORUM').'</a>
-			</h3>
+            echo '<h3 id="SYS_FORUM" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/forum.png" alt="'.$gL10n->get('SYS_FORUM').'" title="'.$gL10n->get('SYS_FORUM').'" /></a>
+                <a href="#">'.$gL10n->get('SYS_FORUM').'</a>
+            </h3>
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
@@ -1035,28 +1159,28 @@ echo '
                     <li id="forum_access_data"></li>
                     <li id="forum_access_data_text" class="smallFontSize">'.$gL10n->get('ORG_ACCESS_FORUM_DATABASE_DESC').'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
+            </div>';
 
-			/**************************************************************************************/
-			//Einstellungen Gaestebuchmodul
-			/**************************************************************************************/
+            /**************************************************************************************/
+            //Einstellungen Gaestebuchmodul
+            /**************************************************************************************/
 
-        	echo '<h3 id="GBO_GUESTBOOK" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" title="'.$gL10n->get('GBO_GUESTBOOK').'" /></a>
-            	<a href="#">'.$gL10n->get('GBO_GUESTBOOK').'</a>
-			</h3>
+            echo '<h3 id="GBO_GUESTBOOK" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" title="'.$gL10n->get('GBO_GUESTBOOK').'" /></a>
+                <a href="#">'.$gL10n->get('GBO_GUESTBOOK').'</a>
+            </h3>
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
                             <dt><label for="enable_guestbook_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_guestbook_module'], 'enable_guestbook_module');
+                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_guestbook_module'], 'enable_guestbook_module');
                             echo '</dd>
                         </dl>
                     </li>
@@ -1089,8 +1213,8 @@ echo '
                         <dl>
                             <dt><label for="enable_guestbook_moderation">'.$gL10n->get('GBO_GUESTBOOK_MODERATION').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('0' => $gL10n->get('SYS_NOBODY'), '1' => $gL10n->get('GBO_ONLY_VISITORS'), '2' => $gL10n->get('SYS_ALL'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_guestbook_moderation'], 'enable_guestbook_moderation');
+                                $selectBoxEntries = array('0' => $gL10n->get('SYS_NOBODY'), '1' => $gL10n->get('GBO_ONLY_VISITORS'), '2' => $gL10n->get('SYS_ALL'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_guestbook_moderation'], 'enable_guestbook_moderation');
                             echo '</dd>
                         </dl>
                     </li>
@@ -1134,20 +1258,20 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL_DESC').'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
+            </div>';
 
-			/**************************************************************************************/
-			//Einstellungen Listenmodul
-			/**************************************************************************************/
-	
-			echo '<h3 id="LST_LISTS" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_LISTS').'" title="'.$gL10n->get('LST_LISTS').'" /></a>
-            	<a href="#">'.$gL10n->get('LST_LISTS').'</a>
-			</h3>
+            /**************************************************************************************/
+            //Einstellungen Listenmodul
+            /**************************************************************************************/
+    
+            echo '<h3 id="LST_LISTS" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_LISTS').'" title="'.$gL10n->get('LST_LISTS').'" /></a>
+                <a href="#">'.$gL10n->get('LST_LISTS').'</a>
+            </h3>
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
@@ -1185,21 +1309,21 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('LST_HIDE_DETAILS_DESC').'</li>                 
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
+            </div>';
 
-			/**************************************************************************************/
-			//Einstellungen Mailmodul
-			/**************************************************************************************/
+            /**************************************************************************************/
+            //Einstellungen Mailmodul
+            /**************************************************************************************/
 
-        	echo '<h3 id="MAI_EMAILS" class="iconTextLink" >
-				<a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_EMAILS').'" title="'.$gL10n->get('MAI_EMAILS').'" /></a>
-            	<a href="#">'.$gL10n->get('MAI_EMAILS').'</a>
-			</h3>
-			<div class="groupBoxBody" style="display: none;">
+            echo '<h3 id="MAI_EMAILS" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_EMAILS').'" title="'.$gL10n->get('MAI_EMAILS').'" /></a>
+                <a href="#">'.$gL10n->get('MAI_EMAILS').'</a>
+            </h3>
+            <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
@@ -1214,42 +1338,7 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_ACTIVATE_EMAIL_MODULE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_send_method">'.$gL10n->get('MAI_SEND_METHOD').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_send_method'], 'mail_send_method');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SEND_METHOD_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_bcc_count">'.$gL10n->get('MAI_COUNT_BCC').':</label>
-                            </dt>
-                            <dd>
-                                <input type="text" id="mail_bcc_count" name="mail_bcc_count" style="width: 50px;" maxlength="6" value="'. $form_values['mail_bcc_count']. '" />
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_COUNT_BCC_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_sender_into_to">'.$gL10n->get('MAI_SENDER_INTO_TO').':</label>
-                            </dt>
-                            <dd>
-                                <input type="checkbox" id="mail_sender_into_to" name="mail_sender_into_to" ';
-                                if(isset($form_values['mail_sender_into_to']) && $form_values['mail_sender_into_to'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_INTO_TO_DESC').'</li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_ACTIVATE_EMAIL_MODULE_DESC').'</li>                    
                     <li>
                         <dl>
                             <dt><label for="enable_mail_captcha">'.$gL10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
@@ -1287,43 +1376,12 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_NAME_DESC', $_SERVER['HTTP_HOST']).'</li>
-					<li>
-                        <dl>
-                            <dt><label for="mail_character_encoding">'.$gL10n->get('MAI_CHARACTER_ENCODING').':</label></dt>
-                            <dd>';
-								$selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_character_encoding'], 'mail_character_encoding');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_CHARACTER_ENCODING_DESC').'</li>
-					<li>
-						<dl>
-							<dt><label for="mail_html_registered_users">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS').':</label></dt>
-							<dd>
-								<input type="checkbox" id="mail_html_registered_users" name="mail_html_registered_users" ';
-								if(isset($form_values['mail_html_registered_users']) && $form_values['mail_html_registered_users'] == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-							</dd>
-						</dl>
-					</li>
-					<li class="smallFontSize">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS_DESC').'</li>
-					<li>
-                        <dl>
-                            <dt><label for="mail_smtp_host">'.$gL10n->get('MAI_SMTP_HOST').':</label></dt>
-                            <dd><input type="text" id="mail_smtp_host" name="mail_smtp_host" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_host'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_HOST_DESC').'</li>
                     <li>
                         <dl>
-                            <dt><label for="mail_smtp_auth">'.$gL10n->get('MAI_SMTP_AUTH').':</label></dt>
+                            <dt><label for="mail_html_registered_users">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS').':</label></dt>
                             <dd>
-                                <input type="checkbox" id="mail_smtp_auth" name="mail_smtp_auth" ';
-                                if(isset($form_values['mail_smtp_auth']) && $form_values['mail_smtp_auth'] == 1)
+                                <input type="checkbox" id="mail_html_registered_users" name="mail_html_registered_users" ';
+                                if(isset($form_values['mail_html_registered_users']) && $form_values['mail_html_registered_users'] == 1)
                                 {
                                     echo ' checked="checked" ';
                                 }
@@ -1331,61 +1389,21 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_AUTH_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_port">'.$gL10n->get('MAI_SMTP_PORT').':</label></dt>
-                            <dd><input type="text" id="mail_smtp_port" name="mail_smtp_port" style="width: 50px;" maxlength="5" value="'. $form_values['mail_smtp_port'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_PORT_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_secure">'.$gL10n->get('MAI_SMTP_SECURE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('' => $gL10n->get('MAI_SMTP_SECURE_NO'), 'ssl' => $gL10n->get('MAI_SMTP_SECURE_SSL'), 'tls' => $gL10n->get('MAI_SMTP_SECURE_TLS'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_smtp_secure'], 'mail_smtp_secure');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_SECURE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_authentication_type">'.$gL10n->get('MAI_SMTP_AUTH_TYPE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('LOGIN' => $gL10n->get('MAI_SMTP_AUTH_LOGIN'), 'PLAIN' => $gL10n->get('MAI_SMTP_AUTH_PLAIN'), 'NTLM' => $gL10n->get('MAI_SMTP_AUTH_NTLM'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_smtp_authentication_type'], 'mail_smtp_authentication_type');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_AUTH_TYPE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_user">'.$gL10n->get('MAI_SMTP_USER').':</label></dt>
-                            <dd><input type="text" id="mail_smtp_user" name="mail_smtp_user" style="width: 200px;" maxlength="100" value="'. $form_values['mail_smtp_user'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_USER_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_password">'.$gL10n->get('MAI_SMTP_PASSWORD').':</label></dt>
-                            <dd><input type="password" id="mail_smtp_password" name="mail_smtp_password" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_password'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_PASSWORD_DESC').'</li>
+                    <li class="smallFontSize">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS_DESC').'</li>
+                    
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
             </div>';
-			/**************************************************************************************/
-			//Einstellungen Grußkartenmodul
-			/**************************************************************************************/
-        	echo '<h3 id="ECA_GREETING_CARDS" class="iconTextLink">
-				<a href="#"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" title="'.$gL10n->get('ECA_GREETING_CARDS').'" /></a>
-            	<a href="#">'.$gL10n->get('ECA_GREETING_CARDS').'</a>
-			</h3>        
+            /**************************************************************************************/
+            //Einstellungen Grußkartenmodul
+            /**************************************************************************************/
+            echo '<h3 id="ECA_GREETING_CARDS" class="iconTextLink">
+                <a href="#"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" title="'.$gL10n->get('ECA_GREETING_CARDS').'" /></a>
+                <a href="#">'.$gL10n->get('ECA_GREETING_CARDS').'</a>
+            </h3>        
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
@@ -1402,7 +1420,7 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">
-						'.$gL10n->get("ECA_ACTIVATE_GREETING_CARDS_DESC").'
+                        '.$gL10n->get("ECA_ACTIVATE_GREETING_CARDS_DESC").'
                     </li>
                     <li>
                         <dl>
@@ -1473,20 +1491,20 @@ echo '
                         '.$gL10n->get('ECA_TEMPLATE_DESC').'
                     </li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';        
+            </div>';        
 
-			/**************************************************************************************/
-			//Einstellungen Profilmodul
-			/**************************************************************************************/
+            /**************************************************************************************/
+            //Einstellungen Profilmodul
+            /**************************************************************************************/
 
-        	echo '<h3 id="PRO_PROFILE" class="iconTextLink">
-				<a href="#"><img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('PRO_PROFILE').'" title="'.$gL10n->get('PRO_PROFILE').'" /></a>
-            	<a href="#">'.$gL10n->get('PRO_PROFILE').'</a>
-			</h3>       		
+            echo '<h3 id="PRO_PROFILE" class="iconTextLink">
+                <a href="#"><img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('PRO_PROFILE').'" title="'.$gL10n->get('PRO_PROFILE').'" /></a>
+                <a href="#">'.$gL10n->get('PRO_PROFILE').'</a>
+            </h3>               
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
@@ -1603,35 +1621,35 @@ echo '
                         <dl>
                             <dt><label for="profile_photo_storage">'.$gL10n->get('PRO_LOCATION_PROFILE_PICTURES').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['profile_photo_storage'], 'profile_photo_storage', true);
+                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['profile_photo_storage'], 'profile_photo_storage', true);
                             echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PRO_LOCATION_PROFILE_PICTURES_DESC').'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
+            </div>';
 
-			/**************************************************************************************/
-			//Einstellungen Terminmodul
-			/**************************************************************************************/
+            /**************************************************************************************/
+            //Einstellungen Terminmodul
+            /**************************************************************************************/
 
-        	echo '<h3 id="DAT_DATES" class="iconTextLink">
-				<a href="#"><img src="'.THEME_PATH.'/icons/dates.png" alt="'.$gL10n->get('DAT_DATES').'" title="'.$gL10n->get('DAT_DATES').'" /></a>
-            	<a href="#">'.$gL10n->get('DAT_DATES').'</a>
-			</h3>  
+            echo '<h3 id="DAT_DATES" class="iconTextLink">
+                <a href="#"><img src="'.THEME_PATH.'/icons/dates.png" alt="'.$gL10n->get('DAT_DATES').'" title="'.$gL10n->get('DAT_DATES').'" /></a>
+                <a href="#">'.$gL10n->get('DAT_DATES').'</a>
+            </h3>  
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
                             <dt><label for="enable_dates_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_dates_module'], 'enable_dates_module');
+                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_dates_module'], 'enable_dates_module');
                             echo '</dd>
                         </dl>
                     </li>
@@ -1736,28 +1754,28 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('DAT_EDIT_ROOMS_DESC', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />').'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>                
-        	</div>';
+            </div>';
 
-			/**************************************************************************************/
-			//Einstellungen Weblinksmodul
-			/**************************************************************************************/
+            /**************************************************************************************/
+            //Einstellungen Weblinksmodul
+            /**************************************************************************************/
 
-        	echo '<h3 id="LNK_WEBLINKS" class="iconTextLink">
-				<a href="#"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" title="'.$gL10n->get('LNK_WEBLINKS').'" /></a>
-            	<a href="#">'.$gL10n->get('LNK_WEBLINKS').'</a>
-			</h3>  
+            echo '<h3 id="LNK_WEBLINKS" class="iconTextLink">
+                <a href="#"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" title="'.$gL10n->get('LNK_WEBLINKS').'" /></a>
+                <a href="#">'.$gL10n->get('LNK_WEBLINKS').'</a>
+            </h3>  
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
                     <li>
                         <dl>
                             <dt><label for="enable_weblinks_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_weblinks_module'], 'enable_weblinks_module');
+                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_weblinks_module'], 'enable_weblinks_module');
                             echo '</dd>
                         </dl>
                     </li>
@@ -1776,8 +1794,8 @@ echo '
                         <dl>
                             <dt><label for="weblinks_target">'.$gL10n->get('LNK_LINK_TARGET').':</label></dt>
                             <dd>';
-								$selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
-								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['weblinks_target'], 'weblinks_target');
+                                $selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['weblinks_target'], 'weblinks_target');
                             echo '</dd>
                         </dl>
                     </li>
@@ -1790,36 +1808,36 @@ echo '
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('LNK_DISPLAY_REDIRECT_DESC').'</li>
                 </ul>
-				<br />
-				<div class="formSubmit">	
+                <br />
+                <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-        	</div>';
-			// ENDE accordion-modules
-			echo'</div>
-		</div>
-	</div>
-	</form>
-	</div>
+            </div>';
+            // ENDE accordion-modules
+            echo'</div>
+        </div>
+    </div>
+    </form>
+    </div>
 </div>';
 
 function getFileNames($directory)
 {
-	$array_files    = array();
-	$i                = 0;
-	if($curdir = opendir($directory))
-	{
-		while($file = readdir($curdir))
-		{
-			if($file != '.' && $file != '..')
-			{
-				$array_files[$i] = $file;
-				$i++;
-			}
-		}
-	}
-	closedir($curdir);
-	return $array_files;
+    $array_files    = array();
+    $i                = 0;
+    if($curdir = opendir($directory))
+    {
+        while($file = readdir($curdir))
+        {
+            if($file != '.' && $file != '..')
+            {
+                $array_files[$i] = $file;
+                $i++;
+            }
+        }
+    }
+    closedir($curdir);
+    return $array_files;
 }
 
 // oeffnet ein File und gibt alle Zeilen als Array zurueck
@@ -1827,13 +1845,13 @@ function getFileNames($directory)
 //            $filepath .. Der Pfad zu dem File
 function getElementsFromFile($filepath)
 {
-	$elementsFromFile = array();
-	$list = fopen($filepath, "r");
-	while (!feof($list))
-	{
-		array_push($elementsFromFile,trim(fgets($list)));
-	}
-	return $elementsFromFile;
+    $elementsFromFile = array();
+    $list = fopen($filepath, "r");
+    while (!feof($list))
+    {
+        array_push($elementsFromFile,trim(fgets($list)));
+    }
+    return $elementsFromFile;
 }
 
 // gibt ein Menue fuer die Einstellungen des Grußkartenmoduls aus
@@ -1846,53 +1864,53 @@ function getElementsFromFile($filepath)
 //            $showColor       .. wenn gesetzt bekommen die Menue Eintraege einen farbigen Hintergrund (Darstellung der Farben)
 function getMenueSettings($data_array,$name,$first_value,$width,$showFont,$showColor)
 {
-	$temp_data = '';
-	$temp_data .=  '<select size="1" id="'.$name.'" name="'.$name.'" style="width:'.$width.'px;">';
-	for($i=0; $i<count($data_array);$i++)
-	{
-		$name = "";
-		if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
-		{
-			$name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
-		}
-		elseif(is_integer($data_array[$i]))
-		{
-			$name = $data_array[$i];
-		}
-		else if(strpos($data_array[$i],'.') === false)
-		{
-			$name = $data_array[$i];
-		}
-		if($name != '')
-		{
-			if (strcmp($data_array[$i],$first_value) == 0 && $showFont != "true" && $showColor != "true")
-			{
-				$temp_data .= '<option value="'.$data_array[$i].'" selected="selected">'.$name.'</option>';
-			}
-			else if($showFont != "true" && $showColor != "true")
-			{
-				$temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
-			}
-			else if (strcmp($data_array[$i],$first_value) == 0 && $showColor != 'true')
-			{
-				$temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="font-family:'.$name.';">'.$name.'</option>';
-			}
-			else if($showColor != "true")
-			{
-				$temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
-			}
-			else if (strcmp($data_array[$i],$first_value) == 0)
-			{
-				$temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="background-color:'.$name.';">'.$name.'</option>';
-			}
-			else
-			{
-				$temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
-			}
-		}
-	}
-	$temp_data .='</select>';
-	return $temp_data;
+    $temp_data = '';
+    $temp_data .=  '<select size="1" id="'.$name.'" name="'.$name.'" style="width:'.$width.'px;">';
+    for($i=0; $i<count($data_array);$i++)
+    {
+        $name = "";
+        if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
+        {
+            $name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
+        }
+        elseif(is_integer($data_array[$i]))
+        {
+            $name = $data_array[$i];
+        }
+        else if(strpos($data_array[$i],'.') === false)
+        {
+            $name = $data_array[$i];
+        }
+        if($name != '')
+        {
+            if (strcmp($data_array[$i],$first_value) == 0 && $showFont != "true" && $showColor != "true")
+            {
+                $temp_data .= '<option value="'.$data_array[$i].'" selected="selected">'.$name.'</option>';
+            }
+            else if($showFont != "true" && $showColor != "true")
+            {
+                $temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
+            }
+            else if (strcmp($data_array[$i],$first_value) == 0 && $showColor != 'true')
+            {
+                $temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="font-family:'.$name.';">'.$name.'</option>';
+            }
+            else if($showColor != "true")
+            {
+                $temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
+            }
+            else if (strcmp($data_array[$i],$first_value) == 0)
+            {
+                $temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="background-color:'.$name.';">'.$name.'</option>';
+            }
+            else
+            {
+                $temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
+            }
+        }
+    }
+    $temp_data .='</select>';
+    return $temp_data;
 }
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
