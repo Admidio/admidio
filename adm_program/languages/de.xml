@@ -75,6 +75,7 @@
 	<text id="SYS_FROM" development="new" translation="todo">ab %VAR1%</text>
 	<text id="SYS_INFORMATIONS" development="new" translation="todo">Informationen</text>
     <text id="SYS_LEADER_DESCRIPTION" development="deleted" translation="todo">Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen haben Leiter mehr Rechte als ein normales Rollenmitglied.\n\nLeiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.</text>
+	<text id="SYS_MAIL_DISPATCH" development="new" translation="todo">E-Mailversand</text>
 	<text id="SYS_MODULE_PREFERENCES" development="new" translation="todo">Moduleinstellungen</text>
 	<text id="SYS_NEW_VALUE" development="new" translation="todo">Neuer Wert</text>
 	<text id="SYS_NOT_EMPTY" development="new" translation="todo">Nicht leer</text>
