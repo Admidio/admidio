@@ -18,28 +18,49 @@ require_once('../../system/classes/email.php');
 require_once('../../system/classes/table_roles.php');
 require_once('../../libs/htmlawed/htmlawed.php');
 
-// Initialize and check the parameters
-$postRoleId = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$_POST['subject'] = admFuncVariableIsValid($_GET, 'subject', 'string', $_POST['subject']);
-
+//Stop if mail module is disabled
 if ($gPreferences['enable_mail_module'] != 1)
 {
-    // es duerfen oder koennen keine Mails ueber den Server verschickt werden
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// if login then show sender name and email
+//Initialize and check the parameters
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
+$postRoleId = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
+$postSubject = admFuncVariableIsValid($_POST, 'subject', 'string', '');
+$postName = admFuncVariableIsValid($_POST, 'name', 'string', '');
+$postFrom = admFuncVariableIsValid($_POST, 'mailfrom', 'string', '');
+$postTo = admFuncVariableIsValid($_POST, 'mailto', 'string', '');
+$postBody = admFuncVariableIsValid($_POST, 'mail_body', 'string', '');
+$postCarbonCopy  = admFuncVariableIsValid($_POST, 'carbon_copy', 'boolean', 0);
+$postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean', 0);
+$postCaptcha = admFuncVariableIsValid($_POST, 'captcha', 'string');
+$postShowMembers = admFuncVariableIsValid($_POST, 'show_members', 'numeric', 0);
+
+//if user is logged in then show sender name and email
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
-	$_POST['name'] = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
-	$_POST['mailfrom'] = $gCurrentUser->getValue('EMAIL');
+    $postName = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+    $postFrom = $gCurrentUser->getValue('EMAIL');
+}
+//if not User is not able to ask for delivery confirmation 
+else
+{
+    $postDeliveryConfirmation = 0;
 }
 
-$_SESSION['mail_request'] = $_POST;
+//put values into SESSION
+$_SESSION['mail_request'] = array(
+    'name'          => $postName,
+    'mailfrom'      => $postFrom,
+    'subject'       => $postSubject,
+    'mail_body'     => $postBody,
+    'rol_id'        => $postRoleId,
+    'carbon_copy'   => $postCarbonCopy,
+    'delivery_confirmation' => $postDeliveryConfirmation,
+    'show_members' => $postShowMembers);
 
-// Pruefungen, ob die Seite regulaer aufgerufen wurde
-
+// if User ID is delivered
 if ($getUserId > 0)
 {
     // Falls eine Usr_id uebergeben wurde, muss geprueft werden ob der User ueberhaupt
@@ -54,8 +75,7 @@ if ($getUserId > 0)
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden    
-    if((  $gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)
-    || strlen($user->getValue('usr_id')) == 0 )
+    if(($gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)|| strlen($user->getValue('usr_id')) == 0 )
     {
         $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
     }
@@ -66,12 +86,11 @@ if ($getUserId > 0)
         $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 	
-	$_POST['mailto'] = $user->getValue('EMAIL');
+	$postTo = $user->getValue('EMAIL');
 }
 elseif ($postRoleId > 0)
 {
     // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
-
     $sql = 'SELECT rol_mail_this_role, rol_name, rol_id 
               FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_cat_id    = cat_id
@@ -110,24 +129,24 @@ $email = new Email();
 $role = new TableRoles($gDb);
 
 //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
-if(strlen($_POST['name']) == 0)
+if(strlen($postName) == 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
 }
 
 //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
 if ( $gValidLogin 
-&& (  $_POST['mailfrom'] != $gCurrentUser->getValue('EMAIL') 
-   || $_POST['name'] != $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')) )
+&& (  $postFrom != $gCurrentUser->getValue('EMAIL') 
+   || $postName != $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')) )
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
 //Absenderangaben setzen
-if ($email->setSender($_POST['mailfrom'],$_POST['name']))
+if ($email->setSender($postFrom,$postName))
 {
 	//Betreff setzen
-	if ($email->setSubject($_POST['subject']))
+	if ($email->setSubject($postSubject))
 	{
         //Pruefen ob moeglicher Weise ein Attachment vorliegt
         if (isset($_FILES['userfile']))
@@ -211,7 +230,7 @@ if ($getUserId == 0)
 // muss natuerlich der Code ueberprueft werden
 if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 {
-    if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($_POST['captcha']) )
+    if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($postCaptcha) )
     {
 		if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
 		else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
@@ -235,12 +254,12 @@ else
     // Rolle wurde uebergeben, dann alle Mitglieder auslesen (ausser dem Sender selber)
     // je nach Einstellung mit oder nur Ehemalige
     
-    if(isset($_POST['show_members']) && $_POST['show_members'] == 1)
+    if(isset($postShowMembers) && $postShowMembers == 1)
     {
         // only former members
         $sqlConditions = ' AND mem_end < \''.DATE_NOW.'\' ';
     }
-    elseif(isset($_POST['show_members']) && $_POST['show_members'] == 2)
+    elseif(isset($postShowMembers) && $postShowMembers == 2)
     {
         // former members and active members
         $sqlConditions = ' AND mem_begin < \''.DATE_NOW.'\' ';
@@ -289,7 +308,7 @@ else
 		if($gPreferences['mail_sender_into_to'] == 1)
 		{
 			// always fill recipient if preference is set to prevent problems with provider
-			$email->addRecipient($_POST['mailfrom'],$_POST['name']);
+			$email->addRecipient($postFrom,$postName);
 		}
 		
         // all role members will be attached as BCC
@@ -308,7 +327,7 @@ else
 }
 
 // Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
-if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
+if (isset($postCarbonCopy) && $postCarbonCopy == true)
 {
     $email->setCopyToSenderFlag();
 
@@ -319,11 +338,17 @@ if (isset($_POST['carbon_copy']) && $_POST['carbon_copy'] == true)
     }
 }
 
+// Falls eine Lesebestätigung angefordert wurde
+if($postDeliveryConfirmation == 1)
+{
+    $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
+}
+
 // prepare body of email with note of sender and homepage
-$email->setSenderInText($_POST['name'], $_POST['mailfrom'], $role->getValue('rol_name'));
+$email->setSenderInText($postName, $postFrom, $role->getValue('rol_name'));
 
 // make html in mail body secure and commit mail body to mail object
-$email->setText(htmLawed(stripslashes($_POST['mail_body']), array('safe' => 1)));
+$email->setText(htmLawed(stripslashes($postBody), array('safe' => 1)));
 
 
 //Nun kann die Mail endgueltig versendet werden...
@@ -357,7 +382,7 @@ if ($sendMailResult === TRUE)
     }
     else
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $_POST['mailto']));
+        $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $postTo));
     }
 }
 else
@@ -368,7 +393,7 @@ else
     }
     else
     {
-        $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $_POST['mailto'], $sendMailResult));
+        $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $postTo, $sendMailResult));
     }
 }
 

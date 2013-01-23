@@ -43,6 +43,7 @@ $getCategory    = admFuncVariableIsValid($_GET, 'cat', 'string', '');
 $getSubject     = admFuncVariableIsValid($_GET, 'subject', 'string', '');
 $getBody        = admFuncVariableIsValid($_GET, 'body', 'string', '');
 $getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', 1);
+$getDeliveryConfirmation  = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean', 0);
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
 
 // Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
@@ -155,7 +156,6 @@ if (strpos($gNavigation->getUrl(),'mail_send.php') > 0 && isset($_SESSION['mail_
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
     $form_values = strStripSlashesDeep($_SESSION['mail_request']);
     unset($_SESSION['mail_request']);
-
     $gNavigation->deleteLastUrl();
 }
 else
@@ -164,8 +164,9 @@ else
     $form_values['mailfrom']     = '';
     $form_values['subject']      = $getSubject;
     $form_values['mail_body']    = $getBody;
-    $form_values['rol_id']       = '';
+    $form_values['rol_id']       = 0;
     $form_values['carbon_copy']  = $getCarbonCopy;
+    $form_values['delivery_confirmation']  = $getDeliveryConfirmation;
     $form_values['show_members'] = $getShowMembers;
 }
 
@@ -301,7 +302,7 @@ echo '
 									{
 										// keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
 										echo '<select size="1" id="rol_id" name="rol_id">';
-										if ($form_values['rol_id'] == "")
+										if ($form_values['rol_id'] == 0)
 										{
 											echo '<option value="" selected="selected">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 										}
@@ -435,7 +436,25 @@ echo '
 									echo ' /> <label for="carbon_copy">'.$gL10n->get('MAI_SEND_COPY').'</label>
 								</dd>
 							</dl>
-						</li>
+						</li>';
+						if ($gCurrentUser->getValue('usr_id') > 0)
+                        {
+    						echo'
+    						<li>
+                                <dl>
+                                    <dt>&nbsp;</dt>
+                                    <dd>
+                                        <input type="checkbox" id="delivery_confirmation" name="delivery_confirmation" value="1" ';
+                                        if (isset($form_values['delivery_confirmation']) && $form_values['delivery_confirmation'] == 1)
+                                        {
+                                            echo ' checked="checked" ';
+                                        }
+                                        echo ' /> <label for="delivery_confirmation">'.$gL10n->get('MAI_DELIVERY_CONFIRMATION').'</label>
+                                    </dd>
+                                </dl>
+                            </li>';
+                        }
+                        echo '
 					</ul>
 				</div>
 			</div>
