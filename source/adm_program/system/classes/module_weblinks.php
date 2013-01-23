@@ -8,7 +8,7 @@
  *
   *****************************************************************************/
   
-class Weblinks
+class ModuleWeblinks
 {
     protected $getConditions;
         

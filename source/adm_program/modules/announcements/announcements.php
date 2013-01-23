@@ -72,7 +72,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 echo '<h1 class="moduleHeadline">'.$getHeadline.'</h1>';
 
 // create objects to manage the selected announcements
-$announcements = new Announcements($getAnnId, $getDate);
+$announcements = new ModuleAnnouncements($getAnnId, $getDate);
 
 // create module menu
 $announcementsMenu = new ModuleMenu('admMenuAnnouncements');

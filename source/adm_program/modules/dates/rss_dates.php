@@ -41,7 +41,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('
 
 
 //create Object
-$dates = new Dates();
+$dates = new ModuleDates();
 
 // read events for output
 $datesResult = $dates->getDates(0, 10);
