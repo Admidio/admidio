@@ -84,7 +84,7 @@ $gDb->setCurrentDB();
 
 
 //create Object
-$plgDates = new Dates();
+$plgDates = new ModuleDates();
 
 // read events for output
 $plgDatesResult = $plgDates->getDates(0, $plg_dates_count);

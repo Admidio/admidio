@@ -40,7 +40,7 @@ if ($gPreferences['enable_announcements_module'] != 1)
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
 
 //Objekt anlegen
-$announcements = new Announcements();
+$announcements = new ModuleAnnouncements();
 
 /*** ab hier wird der RSS-Feed zusammengestellt**/
 

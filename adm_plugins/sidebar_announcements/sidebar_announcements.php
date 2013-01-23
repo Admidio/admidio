@@ -65,7 +65,7 @@ $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');
 $gDb->setCurrentDB();
 
 //Objekt anlegen
-$plg_announcements = new Announcements();
+$plg_announcements = new ModuleAnnouncements();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
 if($plg_show_headline==1)

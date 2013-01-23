@@ -53,7 +53,7 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 
 
 //create Object
-$dates = new Dates();
+$dates = new ModuleDates();
 
 //Headline für Dateinamen
 $headline = $getHeadline;

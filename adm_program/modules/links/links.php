@@ -67,7 +67,7 @@ if($gPreferences['enable_rss'] == 1)
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-$weblinks = new Weblinks($getLinkId, $getCatId);
+$weblinks = new ModuleWeblinks($getLinkId, $getCatId);
 $numLinks = $weblinks->getWeblinksCount();
 
 // Html des Modules ausgeben

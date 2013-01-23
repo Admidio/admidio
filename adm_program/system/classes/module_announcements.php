@@ -8,7 +8,7 @@
  *
   *****************************************************************************/
   
-class Announcements
+class ModuleAnnouncements
 {
     protected $getConditions;
         
