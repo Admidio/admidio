@@ -44,7 +44,7 @@ if ($gCurrentUser->getValue('usr_id') > 0)
     $postFrom = $gCurrentUser->getValue('EMAIL');
 }
 //if not User is not able to ask for delivery confirmation 
-else
+if(!($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation']==2) && $gPreferences['mail_delivery_confirmation']!=1)                       {
 {
     $postDeliveryConfirmation = 0;
 }

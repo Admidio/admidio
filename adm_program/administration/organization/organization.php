@@ -1390,7 +1390,18 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS_DESC').'</li>
-                    
+                    <li>
+                        <dl>
+                            <dt><label for="mail_delivery_confirmation">'.$gL10n->get("MAI_DELIVERY_CONFIRMATION").':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_delivery_confirmation'], 'mail_delivery_confirmation');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">
+                        '.$gL10n->get("MAI_DELIVERY_CONFIRMATION_DESC").'
+                    </li>
                 </ul>
                 <br />
                 <div class="formSubmit">    
