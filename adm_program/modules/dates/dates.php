@@ -611,7 +611,8 @@ If($getViewMode == 'html')
 					}
 
 					// show informations about user who creates the recordset and changed it
-					echo admFuncShowCreateChangeInfoByName($row['create_firstname']. ' '. $row['create_surname'], $date->getValue('dat_timestamp_create'), $row['change_firstname']. ' '. $row['change_surname'], $date->getValue('dat_timestamp_change')).'
+					echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'), 
+					       $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
 				</div>
 			</div>';
 		}  // End foreach

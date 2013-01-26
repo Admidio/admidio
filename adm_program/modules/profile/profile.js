@@ -34,6 +34,7 @@ function profileJSClass()
 			success: function(responseText, statusText){
 				$("#profile_roles_box_body").html(responseText);
                 $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});
+    			$(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
 			}
 		});
 	}
@@ -57,7 +58,7 @@ function profileJSClass()
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_former_roles_box_body").html(responseText);
-                $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});
+                $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});				               
 			}
 		});
 	}

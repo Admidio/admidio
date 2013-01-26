@@ -22,6 +22,7 @@ $orga_preferences = array(
     'homepage_login'                => 'adm_program/index.php',
     'theme'                         => 'modern',
     'enable_password_recovery'      => '1',
+    'system_show_create_edit'       => '1',
     'system_currency'               => '€',
     'system_date'                   => 'd.m.Y',
     'system_js_editor_enabled'      => '1',

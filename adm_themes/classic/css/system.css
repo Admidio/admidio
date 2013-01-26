@@ -401,6 +401,10 @@ ul.autosuggest li.highlight a:visited  {
     clear:				both;
 }
 
+.admInformationCreated{
+    display:            block;
+}
+
 /*Pflichtfeldmarkierung*/
 .mandatoryFieldMarker{
     color:              #990000;

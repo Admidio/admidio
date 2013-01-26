@@ -74,7 +74,7 @@ if($datesResult['numResults'] > 0)
         }
         $title  	 = $title. ' '. $date->getValue('dat_headline');
         $link   	 = $g_root_path.'/adm_program/modules/dates/dates.php?id='. $date->getValue('dat_id');
-        $author 	 = $row['create_firstname']. ' '. $row['create_surname'];
+        $author 	 = $row['create_name'];
         $pubDate 	 = date('r',strtotime($date->getValue('dat_timestamp_create')));
     	
     	// add additional informations about the event to the description

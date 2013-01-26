@@ -118,18 +118,8 @@ if (isset($comment_result))
                     </ul>';
                 }
 
-                // Falls der Kommentar editiert worden ist, wird dies angezeigt
-                if($gbComment->getValue('gbc_usr_id_change') > 0)
-                {
-                    // Userdaten des Editors holen...
-                    $user_change = new User($gDb, $gProfileFields, $gbComment->getValue('gbc_usr_id_change'));
-
-                    echo '
-                    <div class="editInformation">'.
-                        $gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $gbComment->getValue('gbc_timestamp_change')). '
-                    </div>';
-                }
-            echo '
+                // show informations about user who edit the recordset
+                echo admFuncShowCreateChangeInfoById(0, '', $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')).'
             </div>
         </div>
 
