@@ -38,16 +38,32 @@ if ($gPreferences['enable_weblinks_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// alle Links aus der DB fischen...
-$sql = 'SELECT cat.*, lnk.*,
-               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname
+if($gPreferences['system_show_create_edit'] == 1)
+{
+    // show firstname and lastname of create and last change user
+    $additionalFields = '
+        cre_firstname.usd_value || \' \' || cre_surname.usd_value as create_name ';
+    $additionalTables = '
+      LEFT JOIN '. TBL_USER_DATA .' cre_surname
+        ON cre_surname.usd_usr_id = lnk_usr_id_create
+       AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+      LEFT JOIN '. TBL_USER_DATA .' cre_firstname
+        ON cre_firstname.usd_usr_id = lnk_usr_id_create
+       AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+}
+else
+{
+    // show username of create and last change user
+    $additionalFields = ' cre_username.usr_login_name as create_name ';
+    $additionalTables = '
+      LEFT JOIN '. TBL_USERS .' cre_username
+        ON cre_username.usr_id = lnk_usr_id_create ';
+} 
+
+//read weblinks from database
+$sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
           FROM '. TBL_CATEGORIES .' cat, '. TBL_LINKS. ' lnk
-          LEFT JOIN '. TBL_USER_DATA .' cre_surname
-            ON cre_surname.usd_usr_id = lnk_usr_id_create
-           AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-            ON cre_firstname.usd_usr_id = lnk_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+               '.$additionalTables.'
          WHERE lnk_cat_id = cat_id
            AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
            AND cat_type = \'LNK\'
@@ -76,7 +92,7 @@ while ($row = $gDb->fetch_array($result))
     $description = '<a href="'.$weblink->getValue('lnk_url').'" target="_blank">'.$weblink->getValue('lnk_url').'</a>'.
 				   '<br /><br />'. $weblink->getValue('lnk_description');
     $link   	 = $g_root_path. '/adm_program/modules/links/links.php?id='. $weblink->getValue('lnk_id');
-    $author 	 = $row['create_firstname']. ' '. $row['create_surname'];
+    $author 	 = $row['create_name'];
     $pubDate 	 = date('r', strtotime($weblink->getValue('lnk_timestamp_create')));
 
     // add entry to RSS feed

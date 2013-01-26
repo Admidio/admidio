@@ -485,83 +485,142 @@ function admFuncCheckDatabaseVersion($dbVersion, $dbVersionBeta, $webmaster, $em
 /** Creates a html fragment with information about user and time when the recordset was created
  *  and when it was at last edited. Therefore all neccessary data must be set in the function
  *  parameters. If userid is not set then the function will show @b deleted @b user.
- *  @param $userIdCreate    Id of the user who create the recordset.
+ *  @param $userIdCreated   Id of the user who create the recordset.
  *  @param $timestampCreate Date and time of the moment when the user create the recordset.
- *  @param $userIdEdit      Id of the user last changed the recordset.
+ *  @param $userIdEdited    Id of the user last changed the recordset.
  *  @param $timestampEdit   Date and time of the moment when the user last changed the recordset
+ *  @return Returns a html string with usernames who creates item and edit item the last time
  */
-function admFuncShowCreateChangeInfoById($userIdCreate, $timestampCreate, $userIdChanged, $timestampChanged)
+function admFuncShowCreateChangeInfoById($userIdCreated, $timestampCreate, $userIdEdited, $timestampEdited)
 {
-    global $gDb, $gProfileFields, $gL10n;
+    global $gDb, $gProfileFields, $gL10n, $gPreferences;
     
-    $htmlChangedName = '';
-
-    // compose name of user who create the recordset
-    if($userIdCreate > 0)
+    // only show info if system setting is activated
+    if($gPreferences['system_show_create_edit'] > 0)
     {
-        $userCreate = new User($gDb, $gProfileFields, $userIdCreate);
-        $htmlCreateName = $userCreate->getValue('FIRST_NAME'). ' '. $userCreate->getValue('LAST_NAME');
-    }
-    else
-    {
-        $htmlCreateName = $gL10n->get('SYS_DELETED_USER');
+        $htmlCreateName = '';
+        $htmlEditName   = '';
+    
+        // compose name of user who create the recordset
+        if(strlen($timestampCreate) > 0)
+        {
+            if($userIdCreated > 0)
+            {
+                $userCreate = new User($gDb, $gProfileFields, $userIdCreated);
+                
+                if($gPreferences['system_show_create_edit'] == 1)
+                {
+                    $htmlCreateName = $userCreate->getValue('FIRST_NAME'). ' '. $userCreate->getValue('LAST_NAME');
+                }
+                else
+                {
+                    $htmlCreateName = $userCreate->getValue('usr_login_name');     
+                }
+            }
+            else
+            {
+                $htmlCreateName = $gL10n->get('SYS_DELETED_USER');
+            }
+        }
+        
+        // compose name of user who edit the recordset
+        if(strlen($timestampEdited) > 0)
+        {
+            if($userIdEdited > 0)
+            {
+                $userEdit = new User($gDb, $gProfileFields, $userIdEdited);
+                
+                if($gPreferences['system_show_create_edit'] == 1)
+                {
+                    $htmlEditName = $userEdit->getValue('FIRST_NAME'). ' '. $userEdit->getValue('LAST_NAME');
+                }
+                else
+                {
+                    $htmlEditName = $userEdit->getValue('usr_login_name');     
+                }
+            }
+            else
+            {
+                $htmlEditName = $gL10n->get('SYS_DELETED_USER');
+            }
+        }
+    
+        if(strlen($htmlCreateName) > 0 || strlen($htmlEditName) > 0)
+        {
+            // get html output from other function
+            return admFuncShowCreateChangeInfoByName($htmlCreateName, $timestampCreate, $htmlEditName, $timestampEdited, $userIdCreated, $userIdEdited);
+        }
     }
     
-    // compose name of user who edit the recordset
-    if(strlen($timestampChanged) > 0)
-    {
-        if($userIdChanged > 0)
-        {
-            $userChange = new User($gDb, $gProfileFields, $userIdChanged);
-            $htmlChangedName = $userChange->getValue('FIRST_NAME'). ' '. $userChange->getValue('LAST_NAME');
-        }
-        else
-        {
-            $htmlChangedName = $gL10n->get('SYS_DELETED_USER');
-        }
-    }
-
-    return admFuncShowCreateChangeInfoByName($htmlCreateName, $timestampCreate, $htmlChangedName, $timestampChanged);
+    return '';
 }
 
 /** Creates a html fragment with information about user and time when the recordset was created
  *  and when it was at last edited. Therefore all neccessary data must be set in the function
  *  parameters. If user name is not set then the function will show @b deleted @b user.
- *  @param $userNameCreate  Id of the user who create the recordset.
+ *  @param $userNameCreated Id of the user who create the recordset.
  *  @param $timestampCreate Date and time of the moment when the user create the recordset.
- *  @param $userNameChanged Id of the user last changed the recordset.
+ *  @param $userNameEdited  Id of the user last changed the recordset.
  *  @param $timestampEdit   Date and time of the moment when the user last changed the recordset
+ *  @param $userIdCreated   Optional the id of the user who create the recordset. 
+ *                          If id is set than a link to the user profile will be created
+ *  @param $userIdEdited    Optional the id of the user last changed the recordset.
+ *                          If id is set than a link to the user profile will be created
+ *  @return Returns a html string with usernames who creates item and edit item the last time
  */
-function admFuncShowCreateChangeInfoByName($userNameCreate, $timestampCreate, $userNameChanged, $timestampChanged)
+function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $userNameEdited, $timestampEdited, $userIdCreated = 0, $userIdEdited = 0)
 {
-    global $gDb, $gProfileFields, $gL10n;
+    global $gDb, $gProfileFields, $gL10n, $gValidLogin, $g_root_path, $gPreferences;
 
     $html = '';
 
-    // only show info if timestamp of creating is committed
-    if(strlen($timestampCreate) > 0)
+    // only show info if system setting is activated
+    if($gPreferences['system_show_create_edit'] > 0)
     {
-        $html .= '<div class="editInformation">';
-        
         // compose name of user who create the recordset
-        if(strlen(trim($userNameCreate)) == 0)
+        if(strlen($timestampCreate) > 0)
         {
-            $userNameCreate = $gL10n->get('SYS_DELETED_USER');
+            $userNameCreated = trim($userNameCreated);
+            
+            if(strlen($userNameCreated) == 0)
+            {
+                $userNameCreated = $gL10n->get('SYS_DELETED_USER');
+            }
+    
+            // if valid login and a user id is given than create a link to the profile of this user
+            if($gValidLogin == true && $userIdCreated > 0 && $userNameCreated != $gL10n->get('SYS_SYSTEM'))
+            {
+                $userNameCreated = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
+                                    $userIdCreated.'">'.$userNameCreated.'</a>';
+            }
+            
+            $html .= '<span class="admInformationCreated">'.$gL10n->get('SYS_CREATED_BY', $userNameCreated, $timestampCreate).'</span>';
         }
-        
-        $html .= $gL10n->get('SYS_CREATED_BY', $userNameCreate, $timestampCreate);
     
         // compose name of user who edit the recordset
-        if(strlen($timestampChanged) > 0)
+        if(strlen($timestampEdited) > 0)
         {
-            if(strlen(trim($userNameChanged)) == 0)
+            $userNameEdited = trim($userNameEdited);
+        
+            if(strlen($userNameEdited) == 0)
             {
-                $userNameChanged = $gL10n->get('SYS_DELETED_USER');
+                $userNameEdited = $gL10n->get('SYS_DELETED_USER');
             }
-            $html .= '<br />'.$gL10n->get('SYS_LAST_EDITED_BY', $userNameChanged, $timestampChanged);
+
+            // if valid login and a user id is given than create a link to the profile of this user
+            if($gValidLogin == true && $userIdEdited > 0 && $userNameEdited != $gL10n->get('SYS_SYSTEM'))
+            {
+                $userNameEdited = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.
+                                    $userIdEdited.'">'.$userNameEdited.'</a>';
+            }
+
+            $html .= '<span class="admInformationEdited">'.$gL10n->get('SYS_LAST_EDITED_BY', $userNameEdited, $timestampEdited).'</span>';
         }
     
-        $html .=  '</div>';
+        if(strlen($html) > 0)
+        {
+            $html = '<div class="editInformation">'.$html.'</div>';
+        }
     }
     return $html;
 }

@@ -43,16 +43,32 @@ elseif($gPreferences['enable_photo_module'] == 2)
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('PHO_PHOTO_ALBUMS'));
 
-// die neuesten 10 Fotoalben aus der DB fischen...
-$sql = 'SELECT pho.*,
-               cre_surname.usd_value as create_surname, cre_firstname.usd_value as create_firstname
+if($gPreferences['system_show_create_edit'] == 1)
+{
+    // show firstname and lastname of create and last change user
+    $additionalFields = '
+        cre_firstname.usd_value || \' \' || cre_surname.usd_value as create_name ';
+    $additionalTables = '
+      LEFT JOIN '. TBL_USER_DATA .' cre_surname
+        ON cre_surname.usd_usr_id = pho_usr_id_create
+       AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+      LEFT JOIN '. TBL_USER_DATA .' cre_firstname
+        ON cre_firstname.usd_usr_id = pho_usr_id_create
+       AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+}
+else
+{
+    // show username of create and last change user
+    $additionalFields = ' cre_username.usr_login_name as create_name ';
+    $additionalTables = '
+      LEFT JOIN '. TBL_USERS .' cre_username
+        ON cre_username.usr_id = pho_usr_id_create ';
+} 
+
+//read albums from database
+$sql = 'SELECT pho.*, '.$additionalFields.'
           FROM '. TBL_PHOTOS. ' pho
-          LEFT JOIN '. TBL_USER_DATA .' cre_surname
-            ON cre_surname.usd_usr_id = pho_usr_id_create
-           AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-          LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-            ON cre_firstname.usd_usr_id = pho_usr_id_create
-           AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+               '.$additionalTables.'
          WHERE (   pho_org_shortname = \''. $gCurrentOrganization->getValue('org_shortname'). '\'
                AND pho_locked = 0)
          ORDER BY pho_timestamp_create DESC
@@ -100,7 +116,7 @@ while ($row = $gDb->fetch_array($result))
 
     $title   = $parents.$photo_album->getValue('pho_name');
     $link    = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='. $photo_album->getValue('pho_id');
-    $author  = $row['create_firstname']. ' '. $row['create_surname'];
+    $author  = $row['create_name'];
 	$pubDate = date('r',strtotime($photo_album->getValue('pho_timestamp_create')));
 
     //Inhalt zusammensetzen

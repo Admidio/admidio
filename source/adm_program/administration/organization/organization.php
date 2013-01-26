@@ -268,6 +268,16 @@ echo '
                     <li class="smallFontSize">'.$gL10n->get('ORG_SEARCH_SIMILAR_NAMES_DESC').'</li>
                     <li>
                         <dl>
+                            <dt><label for="system_show_create_edit">'.$gL10n->get('ORG_SHOW_CREATE_EDIT').':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array(0 => $gL10n->get('SYS_DONT_SHOW'), 1 => $gL10n->get('SYS_FIRSTNAME_LASTNAME'), 2 => $gL10n->get('SYS_USERNAME'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['system_show_create_edit'], 'system_show_create_edit');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_SHOW_CREATE_EDIT_DESC').'</li>
+                    <li>
+                        <dl>
                             <dt><label for="system_js_editor_enabled">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE').':</label></dt>
                             <dd>
                                 <input type="checkbox" id="system_js_editor_enabled" name="system_js_editor_enabled" ';

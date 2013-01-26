@@ -495,6 +495,7 @@ elseif($getMode == 8)	// Start installation
     // create a hidden system user for internal use
     // all recordsets created by installation will get the create id of the system user
     $gCurrentUser = new TableUsers($db);
+    $gCurrentUser->setValue('usr_login_name', $gL10n->get('SYS_SYSTEM'));
     $gCurrentUser->setValue('usr_valid', '0');
     $gCurrentUser->setValue('usr_timestamp_create', DATETIME_NOW);
     $gCurrentUser->save(false); // no registered user -> UserIdCreate couldn't be filled

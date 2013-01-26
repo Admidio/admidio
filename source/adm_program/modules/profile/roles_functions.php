@@ -179,8 +179,13 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                             }
 
                         }
-                        $roleMemHTML .= '<a class="iconLink admMemberInfo" id="admMemberInfo_'.$member->getValue('mem_id').'" href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>
-                        </dd>
+
+                        // only show info if system setting is activated
+                        if($gPreferences['system_show_create_edit'] > 0)
+                        {
+                            $roleMemHTML .= '<a class="iconLink admMemberInfo" id="admMemberInfo_'.$member->getValue('mem_id').'" href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>';
+                        }
+                        $roleMemHTML .= '</dd>
                 </dl>
             </li>
             <li id="admMemberId_'.$member->getValue('mem_id').'" style="text-align: right; visibility: hidden; display: none;">
@@ -201,10 +206,10 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                     </div>
                 </form>
             </li>
-            <li  id="admMemberInfo_'.$member->getValue('mem_id').'_Content" style="display: none;">';
-            // show informations about user who creates the recordset and changed it
-            $roleMemHTML .= admFuncShowCreateChangeInfoById($member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'), $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change'));
-            $roleMemHTML .= '</li>';
+            <li id="admMemberInfo_'.$member->getValue('mem_id').'_Content" style="display: none;">';
+                // show informations about user who creates the recordset and changed it
+                $roleMemHTML .= admFuncShowCreateChangeInfoById($member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'), $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change')).'
+            </li>';
             $countShowRoles++;
         }
     }

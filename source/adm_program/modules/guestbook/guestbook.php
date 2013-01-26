@@ -315,17 +315,8 @@ else
                     </ul>';
                 }
 
-                // Falls der Eintrag editiert worden ist, wird dies angezeigt
-                if($guestbook->getValue('gbo_usr_id_change') > 0)
-                {
-                    // Userdaten des Editors holen...
-                    $user_change = new User($gDb, $gProfileFields, $guestbook->getValue('gbo_usr_id_change'));
-
-                    echo '
-                    <div class="editInformation">'.
-                        $gL10n->get('SYS_LAST_EDITED_BY', $user_change->getValue('FIRST_NAME'). ' '. $user_change->getValue('LAST_NAME'), $guestbook->getValue('gbo_timestamp_change')). '
-                    </div>';
-                }
+                // show informations about user who edit the recordset
+                echo admFuncShowCreateChangeInfoById(0, '', $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change'));
 
                 $conditions = '';
 
