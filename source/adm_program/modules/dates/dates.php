@@ -32,6 +32,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_date.php');
@@ -249,19 +250,15 @@ If($getViewMode == 'html')
     //Check if box must be shown, when more dates avaiable
     if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDates())
     {
-        $topNavigation = '';
-    
+        // create module menu
+        $DatesMenu = new ModuleMenu('admDateLinks');
+
+
         //Add new event
         if($gCurrentUser->editDates())
         {
-            $topNavigation .= '
-            <li>
-                <span class="iconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline.'"><img
-                    src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_VAR', $htmlHeadline).'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline.'">'.$gL10n->get('SYS_CREATE_VAR', $htmlHeadline).'</a>
-                </span>
-            </li>';
+            $DatesMenu->addItem("admMenuItemAdd", $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline,
+                                $gL10n->get('SYS_CREATE_VAR', $htmlHeadline), 'add.png' );
         }
     
         if(($getCalendarSelection == 1) && ($getDateId == 0))   
@@ -269,53 +266,34 @@ If($getViewMode == 'html')
             //ical Download
             if($gPreferences['enable_dates_ical'] == 1)
             {
-                $topNavigation .= '<li><span class="iconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$htmlHeadline.'&amp;cat_id='.$getCatId.'"><img
-                        src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'"/></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$htmlHeadline.'&amp;cat_id='.$getCatId.'">'.$gL10n->get('DAT_EXPORT_ICAL').'</a>
-                </span></li>';
+                $DatesMenu->addItem("admMenuItemICal", $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$htmlHeadline.'&amp;cat_id='.$getCatId,
+                                $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png' );
             }
                         
             // If valid login show print button
             if($gValidLogin)
             {
-                $topNavigation .= '<li><span class="iconTextLink">
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')"><img
-                        src="'. THEME_PATH. '/icons/print.png" alt="'.$gL10n->get('LST_PRINT_PREVIEW').'" title="'.$gL10n->get('LST_PRINT_PREVIEW').'" /></a>
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')">'.$gL10n->get('LST_PRINT_PREVIEW').'</a>
-                </span></li>';
+                $DatesMenu->addItem("admMenuItemPrint", '',
+                                $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')' );
             }
-            
-            // create select box with all calendars that have dates
-            $calendarSelectBox = FormElements::generateCategorySelectBox('DAT', $getCatId, 'admCalendar', $gL10n->get('SYS_ALL'), true);
-    
-            if(strlen($calendarSelectBox) > 0)
+
+            // show selectbox with all link categories
+            $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'links.php?headline='.$getHeadline.'&cat_id=', 
+                                $gL10n->get('SYS_CATEGORY'), $gCurrentUser->editDates());
+
+            if($gCurrentUser->editDates())
             {
-                // show calendar select box with link to calendar preferences
-                $topNavigation .= '<li style="margin: 10px 0 0 10px;">'.$gL10n->get('DAT_CALENDAR').':&nbsp;&nbsp;'.$calendarSelectBox;
-    
-                if($gCurrentUser->editDates())
-                {
-                    $topNavigation .= '<a class="iconLink" style="margin: 5px;" href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
-                         src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('DAT_MANAGE_CALENDARS').'" title="'.$gL10n->get('DAT_MANAGE_CALENDARS').'" /></a>';
-                }
-                $topNavigation .= '</li>';
+                // show link to system preferences of roles
+                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR'), 
+                                    $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_double.png');
             }
-            elseif($gCurrentUser->editDates())
-            {
-                // show link to calendar preferences
-                $topNavigation .= '
-                <li><span class="iconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'"><img
-                        src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('DAT_MANAGE_CALENDARS').'" title="'.$gL10n->get('DAT_MANAGE_CALENDARS').'"/></a>
-                    <a href="'.$g_root_path.'/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR').'">'.$gL10n->get('DAT_MANAGE_CALENDARS').'</a>
-                </span></li>';
-            }
+
+            $DatesMenu->show();
         }
         
          //Input for Startdate and Enddate
             
-		$topNavigation .= '
+		$topNavigation = '
 		<div class="navigationPath">
 			<form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php" onsubmit="return Datefilter()">
 				<label for="date_from" style="margin-left: 10px;">'.$gL10n->get('SYS_START').':</label>
