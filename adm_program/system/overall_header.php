@@ -77,6 +77,7 @@ echo '
 	--></script>
 	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js"></script>
     <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
+    <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/jquery.ddslick.js"></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js"></script>
     
     '. $gLayout['header'];
