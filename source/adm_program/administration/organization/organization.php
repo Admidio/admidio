@@ -87,7 +87,7 @@ if( strlen($showOption) > 0 )
         case 'SYS_FORUM':
         case 'GBO_GUESTBOOK':
         case 'LST_LISTS':
-        case 'MAI_EMAILS':
+        case 'SYS_EMAIL':
         case 'ECA_GREETING_CARDS':
         case 'PRO_PROFILE':
         case 'DAT_DATES':
@@ -583,11 +583,11 @@ echo '
             </div>';
             
             /**************************************************************************************/
-            //Einstellungen Systemmails
+            // Preferences for system notification
             /**************************************************************************************/
             $text = new TableText($gDb);
             echo '<h3 id="SYS_SYSTEM_MAILS" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" title="'.$gL10n->get('SYS_SYSTEM_MAILS').'" /></a>
+                <a href="#"><img src="'.THEME_PATH.'/icons/system_notification.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" title="'.$gL10n->get('SYS_SYSTEM_MAILS').'" /></a>
                 <a href="#">'.$gL10n->get('SYS_SYSTEM_MAILS').'</a>
             </h3>        
             <div class="groupBoxBody" style="display: none;">
@@ -1329,9 +1329,9 @@ echo '
             //Einstellungen Mailmodul
             /**************************************************************************************/
 
-            echo '<h3 id="MAI_EMAILS" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('MAI_EMAILS').'" title="'.$gL10n->get('MAI_EMAILS').'" /></a>
-                <a href="#">'.$gL10n->get('MAI_EMAILS').'</a>
+            echo '<h3 id="SYS_EMAIL" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" /></a>
+                <a href="#">'.$gL10n->get('SYS_EMAIL').'</a>
             </h3>
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
