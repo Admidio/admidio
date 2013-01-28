@@ -197,7 +197,7 @@ echo '
 								// show link to view profile field change history
                                 echo '
                                 <a class="iconLink" href="'. $g_root_path. '/adm_program/administration/members/profile_field_history.php?usr_id='. $user->getValue('usr_id'). '"><img
-                                    src="'. THEME_PATH. '/icons/clock.png" alt="'.$gL10n->get('SYS_CHANGE_HISTORY').'" title="'.$gL10n->get('SYS_CHANGE_HISTORY').'" /></a>';
+                                    src="'. THEME_PATH. '/icons/clock.png" alt="'.$gL10n->get('MEM_CHANGE_HISTORY').'" title="'.$gL10n->get('MEM_CHANGE_HISTORY').'" /></a>';
 							}
 							
                             // Nur berechtigte User duerfen ein Profil editieren

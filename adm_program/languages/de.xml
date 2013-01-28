@@ -12,6 +12,7 @@
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
 	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="todo">Lesebestätigung anfordern</text>
 	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="todo">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</text>
+    <text id="MAI_EMAILS" development="deleted" translation="todo">E-Mails</text>
 	<text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
 	<text id="MAI_SEND_METHOD" development="new" translation="todo">Versandmethode</text>
 	<text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Empfohlen wird daher in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</text>
@@ -43,7 +44,15 @@
 	<text id="MEM_SEND_NEW_LOGIN" development="changed" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</text>
     <text id="ORG_SHOW_CREATE_EDIT" development="new" translation="todo">Ersteller und Zeitstempel anzeigen</text>
     <text id="ORG_SHOW_CREATE_EDIT_DESC" development="new" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</text>
+    <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="changed" translation="todo">Systembenachrichtigungen aktivieren</text>
+    <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="changed" translation="todo">Hier können die Systembenachrichtigungen von Admidio deaktiviert werden. Systembenachrichtigungen werden versendet, wenn sich zum Beispiel ein neuer Benutzer angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systembenachrichtigungen verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden. Es sei denn der Server unterstützt keinen E-Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)</text>
     <text id="ORG_REFUSE_REGISTRATION" development="changed" translation="todo">Benachrichtigung bei einer Ablehnung der Registrierung</text>
+    <text id="ORG_SYSTEM_MAIL_ADDRESS" development="changed" translation="todo">E-Mailadresse</text>
+    <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="todo">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systembenachrichtigungen benutzt, z.B. bei der Registrierungsbestätigung. (Standard: webmaster@%VAR1%)</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="todo">Benachrichtigung bei neuen Einträgen</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="todo">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mailadresse %VAR1% versendet. (standard: nein)</text>
+    <text id="ORG_SYSTEM_MAIL_TEXTS" development="changed" translation="todo">Systembenachrichtigungen-Texte</text>
+    <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="todo">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</text>
 	<text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="todo">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</text>
 	<text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="todo">Zukünftige Rollenmitgliedschaften</text>
 	<text id="PRO_LOG_EDIT_FIELDS" development="new" translation="todo">Änderungen protokollieren</text>
@@ -87,6 +96,7 @@
     <text id="SYS_PREVIOUS_VALUE" development="new" translation="todo">Vorheriger Wert</text>
 	<text id="SYS_SYSMAIL_REFUSE_REGISTRATION" development="new" translation="todo">#subject# Registrierung bei %organization_long_name% abgelehnt\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Webmaster %webmaster_email% von %organization_homepage%.\n\nViele Grüße\nDie Webmaster</text>
 	<text id="SYS_SYSTEM" development="new" translation="todo">System</text>
+    <text id="SYS_SYSTEM_MAILS" development="changed" translation="todo">Systembenachrichtigungen</text>
 </version>
 <version id="2.3.4" translator="Markus Faßbender">
     <text id="MAI_COUNT_BCC_DESC" development="changed" translation="todo">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann vom Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Standard: 50)</text>
@@ -642,7 +652,6 @@
     <text id="MAI_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="todo">Anzahl der BCC Empfänger</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>
-    <text id="MAI_EMAILS" development="new" translation="todo">E-Mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Du kannst beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>
     <text id="MAI_ROLE_NO_EMAILS" development="new" translation="todo">Die von dir ausgewählte Rolle enthält keine Mitglieder mit gültigen E-Mail-Adressen, an die eine E-Mail versendet werden kann!</text>
     <text id="MAI_SEND_COPY" development="new" translation="todo">Kopie der E-Mail an mich senden</text>
@@ -725,8 +734,6 @@
     <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="todo">%VAR1% Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0) eingebunden werden. (Standard: nein)</text>
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="todo">Forum Link Intern aktivieren</text>
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="todo">Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)\nDeaktiviert: Forum wird in einem neuen Browserfenster angezeigt.</text>
-    <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="todo">Systemmails aktivieren</text>
-    <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="todo">Hier können die Systemmails von Admidio deaktiviert werden. Systemmails sind Benachrichtigungen, wenn sich zum Beispiel ein neuer User angemeldet hat. Aber auch Registrierungsbestätigungen werden als Systemmail verschickt. Dieses Feature sollte in der Regel nicht deaktiviert werden. Es sei denn der Server unterstützt keinen Mailversand. Das E-Mailmodul ist durch die Deaktivierung nicht betroffen. (Standard: ja)</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="todo">Zusätzliche Variablen</text>
     <text id="ORG_ADMIDIO_THEME" development="new" translation="todo">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
@@ -811,12 +818,6 @@
     <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="todo">Neues Passwort zuschicken</text>
     <text id="ORG_SYSTEM_INFOS" development="new" translation="todo">Systeminfos</text>
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="todo">Systeminformationen</text>
-    <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="todo">Systemmailadresse</text>
-    <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="todo">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systemnachrichten benutzt, z.B. bei der Registrierungsbestätigung. (Standard: webmaster@%VAR1%)</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="todo">Benachrichtigung bei neuen Einträgen</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="todo">Hier kann die E-Mail-Benachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Benachrichtigungs-E-Mail wird an die Systemmailadresse %VAR1% versendet. (standard: nein)</text>
-    <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="todo">Systemmail-Texte</text>
-    <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="todo">Hier können die Texte aller Systemmails angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>
@@ -1327,7 +1328,6 @@
     <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="todo">#subject# Logindaten für %organization_homepage%\n#content# Hallo %user_first_name%,\n\ndu erhälst deine Logindaten für %organization_homepage% .\nBenutzername: %user_login_name%\nPasswort: %variable1%\n\nDas Passwort wurde automatisch generiert.\nDu solltest es nach deiner Anmeldung auf %organization_homepage% in deinem Profil ändern.\n\nViele Grüße\nDie Webmaster</text>
     <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="todo">#subject# Anmeldung bei %organization_long_name%\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde bestätigt.\n\nNun kannst du dich mit deinem Benutzernamen : %user_login_name%\nund dem Passwort auf der Homepage einloggen.\n\nSollten noch Fragen bestehen, schreib eine E-Mail an %webmaster_email% .\n\nViele Grüße\nDie Webmaster</text>
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# Neue Registrierung bei %organization_long_name%\n#content# Es hat sich ein neuer Benutzer auf %organization_homepage% registriert.\n\nNachname: %user_last_name%\nVorname:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDiese Nachricht wurde automatisch erzeugt.</text>
-    <text id="SYS_SYSTEM_MAILS" development="new" translation="todo">Systemmail</text>
     <text id="SYS_TEXT" development="new" translation="todo">Text</text>
     <text id="SYS_THURSDAY" development="new" translation="todo">Donnerstag</text>
     <text id="SYS_TIME" development="new" translation="todo">Uhrzeit</text>

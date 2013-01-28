@@ -229,7 +229,7 @@ if($gPreferences['profile_log_edit_fields'] == 1)
 {
 	// show link to view profile field change history
 	$membersAdministrationMenu->addItem('admMenuItemChangeHistory', $g_root_path.'/adm_program/administration/members/profile_field_history.php', 
-								$gL10n->get('SYS_CHANGE_HISTORY'), 'clock.png');
+								$gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
 }
 							
 if($gCurrentUser->isWebmaster())
