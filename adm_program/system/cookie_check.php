@@ -2,7 +2,7 @@
 /******************************************************************************
  * Check if cookies could be created in current browser of the user
  *
- * Copyright    : (c) 2004 - 2012 The Admidio Team
+ * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
