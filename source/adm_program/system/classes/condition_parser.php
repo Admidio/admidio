@@ -28,9 +28,10 @@ class ConditionParser
 {
     private $mSrcCond;				///< The source condition with the user specific condition
     private $mDestCond;				///< The destination string with the valid sql statement
-    private $mSrcCondArray;			///< An array from the string @b mSrcCond where every char is one array element
-    private $mCount;     			///< Actual index in array @b mSrcCondArray
-	private $mNotExistsSql = '';	///< Stores the sql statement if a record should not exists when user wants to exclude a column
+    private $mSrcCondArray;	        ///< An array from the string @b mSrcCond where every char is one array element
+    private $mCount;                ///< Actual index in array @b mSrcCondArray
+	private $mNotExistsSql = '';    ///< Stores the sql statement if a record should not exists when user wants to exclude a column
+	private $mOpenQuotes = false;   ///< Flag if there is a open quote in this condition that must be closed before the next condition will be parsed
 
 	/** Creates a valid date format @b YYYY-MM-DD for the SQL statement
 	 *  @param $date     The unformated date from user input e.g. @b 12.04.2012
@@ -64,7 +65,8 @@ class ConditionParser
                 $date->modify('+1 day'); 
                 $dateFrom = $date->format('Y-m-d');
                 
-                $ageCondition = ' BETWEEN \''.$dateFrom.'\' AND \''.$dateTo;
+                $ageCondition = ' BETWEEN \''.$dateFrom.'\' AND \''.$dateTo.'\'';
+                $this->mOpenQuotes = false;
             }
             elseif($operator == '}')
             {
@@ -158,13 +160,13 @@ class ConditionParser
 	 */
     public function makeSqlStatement($sourceCondition, $columnName, $columnType)
     {
-        $bStartCondition = true;   // gibt an, dass eine neue Bedingung angefangen wurde
-        $bNewCondition   = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
-        $bStartOperand   = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
-        $bOpenQuotes     = false;  // set to true if quotes for conditions are open
-        $date            = '';     // Variable speichert bei Datumsfeldern das gesamte Datum
-        $operator        = '=';    // saves the actual operator, if no operator is set then = will be default
-        $this->mDestCond    = '';
+        $bStartCondition   = true;   // gibt an, dass eine neue Bedingung angefangen wurde
+        $bNewCondition     = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
+        $bStartOperand     = false;  // gibt an, ob bei num. oder Datumsfeldern schon <>= angegeben wurde
+        $this->mOpenQuotes = false;  // set to true if quotes for conditions are open
+        $date              = '';     // Variable speichert bei Datumsfeldern das gesamte Datum
+        $operator          = '=';    // saves the actual operator, if no operator is set then = will be default
+        $this->mDestCond   = '';
 
         if(strlen($sourceCondition) > 0 && strlen($columnName) > 0 && strlen($columnType) > 0)
         {
@@ -288,7 +290,9 @@ class ConditionParser
                         elseif($this->mSrcCondArray[$this->mCount] == '{')
                         {
                             // bastwe: invert condition on age search
-                            if( $columnType == 'date' && strstr(admStrToUpper($sourceCondition), 'J') != FALSE )
+                            if( $columnType == 'date' 
+                            && (  strstr(admStrToUpper($sourceCondition), 'J') != FALSE 
+                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE ))
                             {
                                 $this->mDestCond = $this->mDestCond. ' > ';
                             } 
@@ -300,7 +304,9 @@ class ConditionParser
                         elseif($this->mSrcCondArray[$this->mCount] == '}')
                         {
                             // bastwe: invert condition on age search
-                            if( $columnType == 'date' && strstr(admStrToUpper($sourceCondition), 'J') != FALSE ) 
+                            if( $columnType == 'date' 
+                            && (  strstr(admStrToUpper($sourceCondition), 'J') != FALSE 
+                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE ))
                             {
                                 $this->mDestCond = $this->mDestCond. ' < ';
                             } 
@@ -312,7 +318,9 @@ class ConditionParser
                         elseif($this->mSrcCondArray[$this->mCount] == '[')
                         {
                             // bastwe: invert condition on age search
-                            if( $columnType == 'date' && strstr(admStrToUpper($sourceCondition), 'J') != FALSE ) 
+                            if( $columnType == 'date' 
+                            && (  strstr(admStrToUpper($sourceCondition), 'J') != FALSE 
+                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE ))
                             {
                                 $this->mDestCond = $this->mDestCond. ' >= ';
                             } 
@@ -324,7 +332,9 @@ class ConditionParser
                         elseif($this->mSrcCondArray[$this->mCount] == ']')
                         {
                             // bastwe: invert condition on age search
-                            if( $columnType == 'date' && strstr(admStrToUpper($sourceCondition), 'J') != FALSE ) 
+                            if( $columnType == 'date' 
+                            && (  strstr(admStrToUpper($sourceCondition), 'J') != FALSE 
+                               || strstr(admStrToUpper($sourceCondition), 'Y') != FALSE ))
                             {
                                 $this->mDestCond = $this->mDestCond. ' <= ';
                             } 
@@ -343,8 +353,8 @@ class ConditionParser
                         {
                             // allways set quote marks for a value because some fields are a varchar in db
                             // but should only filled with integer
-                            $this->mDestCond = $this->mDestCond. ' \'';
-                            $bOpenQuotes = true;
+                            $this->mDestCond   = $this->mDestCond. ' \'';
+                            $this->mOpenQuotes = true;
                             $bStartOperand = true;
                         }
                     }
@@ -354,15 +364,9 @@ class ConditionParser
                         if($this->mSrcCondArray[$this->mCount] == ' '
                         && $bNewCondition == false )
                         {
-                            if($bOpenQuotes == true)
-                            {
-                                // allways set quote marks for a value because some fields are a varchar in db
-                                // but should only filled with integer
-                                $this->mDestCond = $this->mDestCond. '\' ';
-                                $bOpenQuotes = false;
-                            }
-
-							if($columnType == 'date')
+                            // if date column than the date will be saved in $date. 
+                            // This variable must then be parsed and changed in a valid database format
+                            if($columnType == 'date' && strlen($date) > 0)
                             {
                                 if(strlen($this->getFormatDate($date, $operator)) > 0)
                                 {
@@ -374,6 +378,15 @@ class ConditionParser
                                 }
                                 $date = '';
                             }
+                            
+                            if($this->mOpenQuotes == true)
+                            {
+                                // allways set quote marks for a value because some fields are a varchar in db
+                                // but should only filled with integer
+                                $this->mDestCond = $this->mDestCond. '\' ';
+                                $this->mOpenQuotes = false;
+                            }
+                            
                             $bNewCondition = true;
                         }
                         elseif($this->mSrcCondArray[$this->mCount] != ' ')
@@ -390,7 +403,7 @@ class ConditionParser
                                 {
                                     $this->mDestCond = $this->mDestCond. ' AND '.$columnName.' = ';
                                 }
-                                $bOpenQuotes = false;
+                                $this->mOpenQuotes = false;
                             }
                             elseif($bNewCondition && !$bStartOperand)
                             {
@@ -403,7 +416,7 @@ class ConditionParser
 								{
 									$this->mDestCond = $this->mDestCond. ' = \'';
 								}
-								$bOpenQuotes = true;
+								$this->mOpenQuotes = true;
                             }
     
                             // Zeichen an Zielstring dranhaengen
@@ -428,8 +441,9 @@ class ConditionParser
                 }
             }
     
-            // Falls als letztes ein Datum verglichen wurde, dann dieses noch einbauen
-            if($columnType == 'date')
+            // if date column than the date will be saved in $date. 
+            // This variable must then be parsed and changed in a valid database format
+            if($columnType == 'date' && strlen($date) > 0)
             {
                 if(strlen($this->getFormatDate($date, $operator)) > 0)
                 {
@@ -441,7 +455,7 @@ class ConditionParser
                 }
             }
 
-            if($bOpenQuotes == true)
+            if($this->mOpenQuotes == true)
             {
                 // allways set quote marks for a value because some fields are a varchar in db
                 // but should only filled with integer
