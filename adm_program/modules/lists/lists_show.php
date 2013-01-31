@@ -55,48 +55,45 @@ if($role->viewRole() == false)
 // if no list parameter is set then load role default list configuration or system default list configuration
 if($getListId == 0)
 {
-	if($role->getValue('rol_lst_id') > 0)
-	{
-		// set role default list configuration
-		$getListId = $role->getValue('rol_lst_id');
-	}
-	else
-	{
-		// read and set system default list configuration
-		$sql = 'SELECT lst_id FROM '. TBL_LISTS. '
-				 WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-				   AND lst_default = 1 ';
-		$gDb->query($sql);
-		$row = $gDb->fetch_array();
-		$getListId = $row[0];
-	}
-
-	if(is_numeric($getListId) == false || $getListId == 0)
+	// set role default list configuration
+    $getListId = $role->getValue('rol_lst_id');
+	
+	if($getListId == 0)
 	{
 	   $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
 	}
 }
 
-if($getMode == 'csv-ms')
+$separator   = ',';    // fuer CSV-Dateien
+$valueQuotes = '';
+$charset     = '';
+switch ($getMode)
 {
-    $separator   = ';'; // Microsoft Excel 2007 und neuer braucht ein Semicolon
-    $valueQuotes = '"';
-    $getMode     = 'csv';
-	$charset     = 'iso-8859-1';
+	// Microsoft Excel 2007 und neuer braucht ein Semicolon    
+	case 'csv-ms':
+		$separator   = ';'; 
+        $valueQuotes = '"';
+        $getMode     = 'csv';
+        $charset     = 'iso-8859-1';
+		break;
+    case 'csv-oo':
+        $separator   = ',';   // fuer CSV-Dateien
+        $valueQuotes = '"';   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
+        $getMode     = 'csv';
+        $charset     = 'utf-8';
+        break;
+    case 'html':
+        $class_table           = 'tableList';
+        $class_sub_header      = 'tableSubHeader';
+        $class_sub_header_font = 'tableSubHeaderFont';
+        break;
+    case 'print':
+        $class_table           = 'tableListPrint';
+        $class_sub_header      = 'tableSubHeaderPrint';
+        $class_sub_header_font = 'tableSubHeaderFontPrint';
+		break;
 }
-else if($getMode == 'csv-oo')
-{
-    $separator   = ',';   // fuer CSV-Dateien
-    $valueQuotes = '"';   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
-    $getMode     = 'csv';
-	$charset     = 'utf-8';
-}
-else
-{
-    $separator   = ',';    // fuer CSV-Dateien
-    $valueQuotes = '';
-	$charset     = '';
-}
+
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
 $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
@@ -105,19 +102,6 @@ $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
                       'mem_end'        => $gL10n->get('SYS_END'),
                       'mem_leader'     => $gL10n->get('SYS_LEADER')
                       );
-
-if($getMode == 'html')
-{
-    $class_table           = 'tableList';
-    $class_sub_header      = 'tableSubHeader';
-    $class_sub_header_font = 'tableSubHeaderFont';
-}
-else if($getMode == 'print')
-{
-    $class_table           = 'tableListPrint';
-    $class_sub_header      = 'tableSubHeaderPrint';
-    $class_sub_header_font = 'tableSubHeaderFontPrint';
-}
 
 $mainSql      = '';   // enthaelt das Haupt-Sql-Statement fuer die Liste
 $str_csv      = '';   // enthaelt die komplette CSV-Datei als String

@@ -231,6 +231,6 @@ class ModuleLists
             $configurations[]=$row;
         }        
         return $configurations;
-    }        
+    }           
 }
 ?>

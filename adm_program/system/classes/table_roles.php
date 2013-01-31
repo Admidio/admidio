@@ -260,7 +260,8 @@ class TableRoles extends TableAccess
     public function getValue($columnName, $format = '')
     {
 		global $gL10n;
-
+        global $gCurrentOrganization;
+        
         $value = parent::getValue($columnName, $format);
 
 		if($columnName == 'cat_name' && $format != 'plain')
@@ -271,7 +272,23 @@ class TableRoles extends TableAccess
 				$value = $gL10n->get(admStrToUpper($value));
 			}
 		}
-
+        
+        //if default list is not set
+        if($columnName == 'rol_lst_id' && ($value<=0 || $value == FALSE))
+        {
+            // read and set system default list configuration
+            $sql = 'SELECT lst_id FROM '. TBL_LISTS. '
+                     WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                       AND lst_default = 1 ';
+            $result = $this->db->query($sql);
+            $row    = $this->db->fetch_array($result);
+            $value = $row[0];
+            
+            if(!is_numeric($value))
+            {
+               $value = 0;
+            }     
+        }
         return $value;
     }
     
