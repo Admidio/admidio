@@ -58,26 +58,18 @@ class ModuleDates
         if (strlen($getHeadline) == 0)
         {
             $checkedDate = $this->formatDate($start);
-            if($checkedDate != FALSE)
-            {
-                $this->dateFrom = $checkedDate;
-            }
-            else
+            if($checkedDate == FALSE)
             {
                 return FALSE;
             }
             
             $checkedDate = $this->formatDate($end);
-            if($checkedDate != FALSE)
-            {
-                $this->dateTo = $checkedDate;
-            }
-            else
+            if($checkedDate == FALSE)
             {
                 return FALSE;
-            }  
-            
-            $headline = $this->setHeadline($this->dateFrom, $this->dateTo);
+            }
+
+            $headline = $this->setHeadline($start, $end);
         }
         else
         {
