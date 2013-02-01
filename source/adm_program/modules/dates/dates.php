@@ -278,7 +278,7 @@ If($getViewMode == 'html')
             }
 
             // show selectbox with all link categories
-            $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'links.php?headline='.$getHeadline.'&cat_id=', 
+            $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?headline='.$getHeadline.'&cat_id=', 
                                 $gL10n->get('SYS_CATEGORY'), $gCurrentUser->editDates());
 
             if($gCurrentUser->editDates())
