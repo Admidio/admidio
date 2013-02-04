@@ -1089,6 +1089,7 @@
     <text id="SYS_FADE_IN" development="new" translation="edited">Fade ind</text>
     <text id="SYS_FAX" development="new" translation="edited">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="edited">Funktioner</text>
+    <text id="SYS_MORE_FEATURES" development="new" translation="todo">Weitere Funktionen</text>
     <text id="SYS_FEMALE" development="new" translation="edited">Hunkøn</text>
     <text id="SYS_FIELD" development="new" translation="edited">Felt</text>
     <text id="SYS_FIELD_EMPTY" development="new" translation="edited">Felt %VAR1_BOLD% er tomt.</text>

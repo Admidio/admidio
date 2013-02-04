@@ -213,15 +213,16 @@ class ModuleMenu
 				$ddJS .= ',';			
 		}
 
-		return '<li><div id="'.$ddIdName.'"></div></li>
+		return '<li><span class="iconTextLink"><div id="'.$ddIdName.'"></div></span></li>
 						<script type="text/javascript"><!--					
 						var '.$ddIdName.'DDData = ['. $ddJS .'];
 						$("#'.$ddIdName.'").ddslick({
 							data:'.$ddIdName.'DDData,
 							width: '.$ddWidth.',
 							maxWidth: '.$ddMaxWidth.',
-							selectText: "'.$ddText.'",
+							selectText: "<img class=\"dd-selected-image\" src=\"'.THEME_PATH.'/icons/list-point.png\" /> '.$ddText.'",
 							imagePosition:"'.$ddImagePos.'",
+							background: "none",
 							onSelected: function(selectedData) {
 								if (selectedData["selectedData"]["js"])
 									eval(selectedData["selectedData"]["js"]);
@@ -254,10 +255,15 @@ class ModuleMenu
 			// if the count of link elements greater then the maxMenuLinkItem variable create drop down with further items in it
 			if ($linkArrayCount > $this->maxMenuLinkItem)
 			{
-				$html .= $this->createIconTextLinkFromArray($linkArray, 0, $this->maxMenuLinkItem - 1);
+				$menuLinkItemsCnt = 0;
+				if ($this->maxMenuLinkItem > 0) {
+					$menuLinkItemsCnt = $this->maxMenuLinkItem - 1;
+					$html .= $this->createIconTextLinkFromArray($linkArray, 0, $menuLinkItemsCnt);
+				}
 
 				$selectedId = "";
-				$html .= $this->createDropDown($linkArray, $selectedId, 'linkItemDropDown', 'Weitere Funktionen', $this->maxMenuLinkItem - 1);
+				$dropDownText = $menuLinkItemsCnt > 0 ? $gL10n->get('SYS_MORE_FEATURES') : $gL10n->get('SYS_FEATURES');
+				$html .= $this->createDropDown($linkArray, $selectedId, 'linkItemDropDown', $dropDownText, $menuLinkItemsCnt);
 			}
 			else // if not display link entries as usual
 				$html .= $this->createIconTextLinkFromArray($linkArray);

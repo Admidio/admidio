@@ -1151,6 +1151,7 @@
     <text id="SYS_FADE_IN" development="new" translation="todo">Einblenden</text>
     <text id="SYS_FAX" development="new" translation="todo">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="todo">Funktionen</text>
+    <text id="SYS_MORE_FEATURES" development="new" translation="todo">Weitere Funktionen</text>
     <text id="SYS_FEMALE" development="new" translation="todo">Weiblich</text>
     <text id="SYS_FIELD" development="new" translation="todo">Feld</text>
     <text id="SYS_FIELD_EMPTY" development="new" translation="todo">Das Feld %VAR1_BOLD% ist nicht gefüllt.</text>
