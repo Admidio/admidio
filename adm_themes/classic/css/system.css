@@ -545,10 +545,11 @@ ul.autosuggest li.highlight a:visited  {
 
 /* Definitionsliste des DropDown Menüs*/
 .dd-select{ 
-    border-radius:2px; 
-    border:solid 1px #ccc; 
     position:relative; 
     cursor:pointer;
+    background: none;
+    text-decoration: underline;
+    color: #222222;
 }
 .dd-desc { 
     color:#aaa; 
@@ -558,30 +559,10 @@ ul.autosuggest li.highlight a:visited  {
     line-height: 1.4em;
 }
 .dd-selected{ 
-    overflow:hidden; 
     display:block; 
-    padding:10px; 
-    font-weight:bold;
-}
-.dd-pointer{ 
-    width:0; 
-    height:0; 
-    position:absolute; 
-    right:10px; 
-    top:50%; 
-    margin-top:-3px;
-}
-.dd-pointer-down{ 
-    border:solid 5px transparent; 
-    border-top:solid 5px #000;
-}
-.dd-pointer-up{
-    border:solid 5px transparent !important; 
-    border-bottom:solid 5px #000 !important; 
-    margin-top:-8px;
+    padding:0px; 
 }
 .dd-options{ 
-    border:solid 1px #ccc; 
     border-top:none; 
     list-style:none; 
     box-shadow:0px 1px 5px #ddd; 
@@ -615,7 +596,7 @@ ul.autosuggest li.highlight a:visited  {
     border-bottom:none; 
 }
 .dd-option:hover{ 
-    background:#f3f3f3; 
+    background:#f3f3f3;
     color:#000;
 }
 .dd-selected-description-truncated { 
@@ -623,7 +604,6 @@ ul.autosuggest li.highlight a:visited  {
     white-space:nowrap; 
 }
 .dd-option-selected { 
-    background:#f6f6f6; 
 }
 .dd-option-image, .dd-selected-image { 
     vertical-align:middle; 
@@ -636,7 +616,8 @@ ul.autosuggest li.highlight a:visited  {
     margin-left:5px;
 }
 .dd-container { 
-    display: inline; 
+    display: inline;
+    background: none; 
 }​ 
 .dd-selected-text { 
     font-weight:bold;    
