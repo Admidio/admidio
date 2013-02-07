@@ -38,8 +38,10 @@ class ModuleMenu
 		global $g_root_path;
 		$this->id		= $id;
 		$this->items	= array();
-		$this->root_path= $g_root_path;
+		$this->root_path = $g_root_path;
 		$this->maxMenuLinkItem = $maxMenuLinkItem;
+		$this->ddJS = '';
+		$this->ddItemCnt = 0;				
 	}
 	
 	/** add new entry to array and do some checks before so that link and icon get
@@ -129,21 +131,8 @@ class ModuleMenu
 		}
 	}
 
-	/** gets an array of menu entries of a given type
-	 *  @return array of menu entrues
-	 */
-	private function getSpecificMenueEntry($type)
-	{
-		$retArray = array();
-		foreach($this->items as $key => $menuEntry)
-		{
-			if ($menuEntry['type'] == $type)
-				array_push($retArray, $menuEntry);
-		}
-		return $retArray;
-	}
-
 	/** creates an text link icon
+	 *  @param $menuEntry menu entry element which was added with addItem
 	 *  @return HTML of created item
 	 */
 	private function createIconTextLink(&$menuEntry)
@@ -158,69 +147,50 @@ class ModuleMenu
 					</li>';
 	}
 
-	/** creates text link icons from given array
-	 *  @return HTML of created items
+	/** add a drop down item
+	 *  @param $menuEntry menu entry element which was added with addItem
+	 *  @param $selected determines if drop down element should be pre selected 
 	 */
-	private function createIconTextLinkFromArray(&$menuEntryArray, $start = 0, $stop = -1 )
+	private function addDropDownItem(&$menuEntry, $selected = false)
 	{
-		$arrayCount = count($menuEntryArray);
-		if ($arrayCount == 0)
-			return '';
-		if ($start > $arrayCount)
-			return '';
-		if ($stop > 0 && $stop < $arrayCount)
-			$arrayCount = $stop;
+		if (!empty($this->ddJS))
+			$this->ddJS .= ',';
 
-		$retHTML = '';
-		for ($i = $start; $i < $arrayCount; ++$i)
-			$retHTML .= $this->createIconTextLink($menuEntryArray[$i]);
-		return $retHTML;
-	}
-
-	/** creates a drop down menu
-	 *  @return HTML drop down menu
-	 */
-	private function createDropDown(&$itemArray, $selectedItemId = '', $ddIdName, $ddText, $start = 0, $stop = -1, $ddImagePos = "left", $ddWidth = '"auto"', $ddMaxWidth = 1000)
-	{
-		$arrayCount = count($itemArray);
-		if ($arrayCount == 0)
-			return '';
-		if ($start > $arrayCount)
-			return '';
-		if ($stop > 0 && $stop < $arrayCount)
-			$arrayCount = $stop;
-
-		$ddJS = '';
-
-		$itemCount = 0;			
-		for ($i = $start; $i < $arrayCount; ++$i)
-		{
-			$menuEntry = $itemArray[$i];
-
-			$selected = $selectedItemId == $menuEntry['id'] ? 'true' : 'false';
-			$ddJS .= '
+		$selectedText = $selected ? 'true' : 'false';
+		$this->ddJS .= '
 			{
 				text: "'.$menuEntry['text'].'",
-				value: '.++$itemCount.',
-				selected: '.$selected.',
+				value: '.++$this->ddItemCnt.',
+				selected: '.$selectedText.',
 				imageSrc: "'.$menuEntry['icon'].'",
 				link: "'.$menuEntry['link'].'",
 				js: "'.$menuEntry['js'].'"
 			}
 			';
+	}
 
-			if ($i + 1 < $arrayCount)
-				$ddJS .= ',';			
-		}
+
+	/** creates a drop down menu
+	 *  @param $ddIdName html id name of drop down menu
+	 *  @param $ddSelectText pre select text of drop down menu 
+	 *  @param $ddImagePos position of image might be "left" or "right"
+	 *  @param $ddWidth width in px of drop down menu "auto" means width will be calculated
+	 *  @param $ddMaxWidth maximum width of drop down if $ddWidth is "auto"
+	 *  @return HTML drop down menu
+	 */
+	private function createDropDown($ddIdName, $ddSelectText, $ddImagePos = "left", $ddWidth = '"auto"', $ddMaxWidth = 1000)
+	{
+		if ($this->ddItemCnt == 0)
+			return '';
 
 		return '<li><span class="iconTextLink"><div id="'.$ddIdName.'"></div></span></li>
 						<script type="text/javascript"><!--					
-						var '.$ddIdName.'DDData = ['. $ddJS .'];
+						var '.$ddIdName.'DDData = ['. $this->ddJS .'];
 						$("#'.$ddIdName.'").ddslick({
 							data:'.$ddIdName.'DDData,
 							width: '.$ddWidth.',
 							maxWidth: '.$ddMaxWidth.',
-							selectText: "<img class=\"dd-selected-image\" src=\"'.THEME_PATH.'/icons/list-point.png\" /> '.$ddText.'",
+							selectText: "<img class=\"dd-selected-image\" src=\"'.THEME_PATH.'/icons/list-point.png\" /> '.$ddSelectText.'",
 							imagePosition:"'.$ddImagePos.'",
 							background: "none",
 							onSelected: function(selectedData) {
@@ -246,28 +216,7 @@ class ModuleMenu
 		
 		$html = '<ul id="'.$this->id.'" class="iconTextLinkList">';
 
-		// get entries with type of link
-		$linkArray = $this->getSpecificMenueEntry('link');
-		$linkArrayCount = count($linkArray);
-
-		if ($linkArrayCount > 0)
-		{
-			// if the count of link elements greater then the maxMenuLinkItem variable create drop down with further items in it
-			if ($linkArrayCount > $this->maxMenuLinkItem)
-			{
-				$menuLinkItemsCnt = 0;
-				if ($this->maxMenuLinkItem > 0) {
-					$menuLinkItemsCnt = $this->maxMenuLinkItem - 1;
-					$html .= $this->createIconTextLinkFromArray($linkArray, 0, $menuLinkItemsCnt);
-				}
-
-				$selectedId = "";
-				$dropDownText = $menuLinkItemsCnt > 0 ? $gL10n->get('SYS_MORE_FEATURES') : $gL10n->get('SYS_FEATURES');
-				$html .= $this->createDropDown($linkArray, $selectedId, 'linkItemDropDown', $dropDownText, $menuLinkItemsCnt);
-			}
-			else // if not display link entries as usual
-				$html .= $this->createIconTextLinkFromArray($linkArray);
-		}			
+		$linkCnt = 0;		
 
 		foreach($this->items as $key => $menuEntry)
 		{
@@ -299,7 +248,29 @@ class ModuleMenu
 					}
 				$html .= '</li>';
 			}
+			else if($menuEntry['type'] == 'link')
+			{
+				++$linkCnt;
+
+				// if the count of link elements greater equal then the maxMenuLinkItem variable add drop down entry
+				if ($linkCnt >= $this->maxMenuLinkItem)
+				{
+					$this->addDropDownItem($menuEntry);
+				}
+				else // if not display link entry as default
+				{
+					$html .= $this->createIconTextLink($menuEntry);
+				}
+			}
 		}
+
+		// if drop down elements exists create DropDown menu 
+		if($this->ddItemCnt > 0)
+		{
+			$dropDownText = $this->maxMenuLinkItem > 0 ? $gL10n->get('SYS_MORE_FEATURES') : $gL10n->get('SYS_FEATURES');
+			$html .= $this->createDropDown('linkItemDropDown', $dropDownText);
+		}
+			
 		
 		$html .= '</ul>';
 		echo $html;
