@@ -151,7 +151,7 @@ echo '
         <div id="tabs-common">
             <div id="accordion-common">';
             /**************************************************************************************/
-            // Einstellungen Allgemein
+            // Common settings
             /**************************************************************************************/
             
             echo '<h3 id="SYS_COMMON" class="iconTextLink">
@@ -396,7 +396,21 @@ echo '
                         </li>
                         <li class="smallFontSize">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT_DESC').'</li>';
                     }
-                echo '</ul>
+                    echo '<li>
+                        <dl>
+                            <dt><label for="system_show_all_users">'.$gL10n->get('ORG_SHOW_ALL_USERS').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="system_show_all_users" name="system_show_all_users" ';
+                                if(isset($form_values['system_show_all_users']) && $form_values['system_show_all_users'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_SHOW_ALL_USERS_DESC').'</li>
+                </ul>
                 <br />
                 <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
