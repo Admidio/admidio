@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Script mit HTML-Code fuer ein Feld der Eigenen-Liste-Konfiguration
+ * Search for users and return a XML script with all found users
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,9 +8,9 @@
  *
  * Parameters:
  *
- * members - 1 : (Default) Nur Mitglieder der Gliedgemeinschaft anzeigen
- *           0 : Mitglieder, Ehemalige, Mitglieder anderer Gliedgemeinschaften
- * search      : hier steht der Suchstring drin
+ * members - 1 : (Default) Show only active members of the current organization
+ *           0 : Show active and inactive members of all organizations in database
+ * search      : Search string to search in user names
  *
  *****************************************************************************/
 
@@ -28,6 +28,12 @@ $getSearch  = admFuncVariableIsValid($_GET, 'search', 'string', '');
 if (!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
+// if only active members should be shown then set parameter
+if($gPreferences['system_show_all_users'] == 0)
+{
+    $getMembers = 1;
 }
 
 $xml='<?xml version="1.0" encoding="utf-8" ?>';

@@ -186,7 +186,7 @@ $gLayout['header'] = '
                 var fieldName = "";
             }
                        
-            setConditonField("column" + (fieldNumberIntern + 1), fieldName, fieldNumberIntern);
+            htmlFormCondition = setConditonField("column" + (fieldNumberIntern + 1), fieldName, fieldNumberIntern);
             var newCellConditions = newTableRow.insertCell(-1);
             newCellConditions.setAttribute("id", "condition" + (fieldNumberIntern + 1));
             newCellConditions.innerHTML = htmlFormCondition;
@@ -344,7 +344,7 @@ $gLayout['header'] = '
             var columnName = name;
             condition = "";
 
-            setConditonField(columnId, columnName);
+            htmlFormCondition = setConditonField(columnId, columnName);
             $("#condition" + columnId).hide();
             $("#condition" + columnId).replaceWith(htmlFormCondition);
             $("#condition" + columnId).show("1000");
@@ -352,7 +352,7 @@ $gLayout['header'] = '
 
         function setConditonField(columnId, columnName, fieldNumberIntern)
         {   
-            htmlFormCondition = "<input type=\"text\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\" maxlength=\"50\" value=\"" + condition + "\" />";
+            html = "<input type=\"text\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\" maxlength=\"50\" value=\"" + condition + "\" />";
             var key;
 
             for (key in arr_user_fields)
@@ -362,7 +362,7 @@ $gLayout['header'] = '
                    if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
                       || arr_user_fields[key]["usf_type"] == "RADIO_BUTTON")
                    {
-                        htmlFormCondition = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
+                        html = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
                         "<option value=\"\">&nbsp;</option>";
 
                         for (selectValue in arr_user_fields[key]["usf_value_list"])
@@ -377,14 +377,14 @@ $gLayout['header'] = '
                                     selected = " selected=\"selected\" ";
                                 }
                             }
-                            htmlFormCondition += "<option value=\"" + arr_user_fields[key]["usf_value_list"][selectValue] + "\" " + selected + ">" + arr_user_fields[key]["usf_value_list"][selectValue] + "</option>";
+                            html += "<option value=\"" + arr_user_fields[key]["usf_value_list"][selectValue] + "\" " + selected + ">" + arr_user_fields[key]["usf_value_list"][selectValue] + "</option>";
                             "</select>";
                         }
                     }
                     
                     if(arr_user_fields[key]["usf_type"] == "CHECKBOX")
                     {
-                        htmlFormCondition = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
+                        html = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
                         "<option value=\"\">&nbsp;</option>" +
                         "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" +
                         "<option value=\"0\">'.$gL10n->get('SYS_NO').'</option>" +
@@ -392,6 +392,7 @@ $gLayout['header'] = '
                     }
 	            }
             }
+            return html;
         }
         
         function loadList()

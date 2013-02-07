@@ -8,11 +8,11 @@
  *
  * Parameters:
  *
- * members - 1 : (Default) Nur Mitglieder der Gliedgemeinschaft anzeigen
- *           0 : Mitglieder, Ehemalige, Mitglieder anderer Gliedgemeinschaften
- * letter      : alle User deren Nachnamen mit dem Buchstaben beginnt, werden angezeigt
+ * members - 1 : (Default) Show only active members of the current organization
+ *           0 : Show active and inactive members of all organizations in database
+ * letter      : alle User deren Nachnamen mit dem BuchstabeQAan beginnt, werden angezeigt
  * start       : Position of query recordset where the visual output should start
- * search      : Inhalt des Suchfeldes, damit dieser beim Blaettern weiter genutzt werden kann
+ * search      : Content of search field to use for scrolling pages
  *
  *****************************************************************************/
 
@@ -32,6 +32,12 @@ $getLetter  = admFuncVariableIsValid($_GET, 'letter', 'string', '');
 $getMembers = admFuncVariableIsValid($_GET, 'members', 'boolean', 1);
 $getStart   = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getSearch  = admFuncVariableIsValid($_GET, 'search', 'string', '');
+
+// if only active members should be shown then set parameter
+if($gPreferences['system_show_all_users'] == 0)
+{
+    $getMembers = 1;
+}
 
 if(strlen($getLetter) > 1)
 {
@@ -204,14 +210,14 @@ echo '
 // Link mit dem alle Benutzer oder nur Mitglieder angezeigt werden setzen
 if($getMembers == 1)
 {
-    $link_members = 0;
-    $show_all_checked = '';
+    $flagShowMembers = 0;
+    $htmlShowMembers = '';
     
 }
 else
 {
-    $link_members = 1;
-    $show_all_checked = 'checked';
+    $flagShowMembers = 1;
+    $htmlShowMembers = 'checked';
 }
 
 // create module menu
@@ -249,12 +255,17 @@ echo '
         <li>
             <input type="text" value="'.$getSearch.'" name="admSearchMembers" id="admSearchMembers" style="width: 200px;"  />
             <input type="submit" value="'.$gL10n->get('SYS_SEARCH').'" />
-        </li>
-        <li>    
-            <input type="checkbox" name="mem_show_all" id="mem_show_all" 
-                link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$link_members.'&amp;letter='.$getLetter.'&amp;search='.$getSearch.'" '.$show_all_checked.'/><label id="lbl_mem_show_all" for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label>
-        </li>
-    </ul>
+        </li>';
+        
+        // show checkbox to select all users or only active members
+        if($gPreferences['system_show_all_users'] == 1)
+        {
+            echo '<li>
+                <input type="checkbox" name="mem_show_all" id="mem_show_all" 
+                    link="'.$g_root_path.'/adm_program/administration/members/members.php?members='.$flagShowMembers.'&amp;letter='.$getLetter.'&amp;search='.$getSearch.'" '.$htmlShowMembers.'/><label id="lbl_mem_show_all" for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label>
+            </li>';
+        }
+    echo '</ul>
 </form>
 
 <div class="pageNavigation">';

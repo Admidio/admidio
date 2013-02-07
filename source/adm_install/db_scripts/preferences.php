@@ -30,6 +30,7 @@ $orga_preferences = array(
     'system_language'               => 'de',
     'system_organization_select'    => '0',
     'system_search_similar'         => '1',
+    'system_show_all_users'         => '1',
     'system_time'                   => 'H:i',
 
     // Registration

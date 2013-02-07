@@ -106,6 +106,7 @@ $checkboxes = array('dates_show_calendar_select'
                    ,'system_js_editor_enabled'
 				   ,'system_organization_select'
                    ,'system_search_similar'
+                   ,'system_show_all_users'
                    );
 
 foreach($checkboxes as $key => $value)
