@@ -32,13 +32,13 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/form_elements.php');
+require_once('../../system/classes/module_dates.php');
+require_once('../../system/classes/module_menu.php');
+require_once('../../system/classes/participants.php');
 require_once('../../system/classes/table_category.php');
 require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_rooms.php');
-require_once('../../system/classes/module_dates.php');
-require_once('../../system/classes/participants.php');
 unset($_SESSION['dates_request']);
 
 
@@ -251,18 +251,32 @@ If($getViewMode == 'html')
     if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDates())
     {
         // create module menu
-        $DatesMenu = new ModuleMenu('admDateLinks');
+        $DatesMenu = new ModuleMenu('admMenuDates');
 
 
         //Add new event
         if($gCurrentUser->editDates())
         {
-            $DatesMenu->addItem("admMenuItemAdd", $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline,
+            $DatesMenu->addItem('admMenuItemAdd', $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline,
                                 $gL10n->get('SYS_CREATE_VAR', $htmlHeadline), 'add.png' );
         }
     
-        if(($getCalendarSelection == 1) && ($getDateId == 0))   
+        if($getDateId == 0)
         {
+            if($getCalendarSelection == 1)
+            {
+                // show selectbox with all calendars
+                $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?headline='.$getHeadline.'&cat_id=', 
+                                    $gL10n->get('DAT_CALENDAR'), $gCurrentUser->editDates());
+            }
+            elseif($gCurrentUser->editDates())
+            {
+                // if no calendar selectbox is shown, then show link to edit calendars
+                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR'), 
+                                    $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_double.png');
+            }
+
+
             //ical Download
             if($gPreferences['enable_dates_ical'] == 1)
             {
@@ -277,23 +291,18 @@ If($getViewMode == 'html')
                                 $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')' );
             }
 
-            // show selectbox with all link categories
-            $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?headline='.$getHeadline.'&cat_id=', 
-                                $gL10n->get('SYS_CATEGORY'), $gCurrentUser->editDates());
-
-            if($gCurrentUser->editDates())
-            {
-                // show link to system preferences of roles
-                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR'), 
-                                    $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_double.png');
-            }
+        	if($gCurrentUser->isWebmaster())
+        	{
+        		// show link to system preferences of weblinks
+        		$DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=DAT_DATES', 
+        							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+        	}
 
             $DatesMenu->show();
         }
         
          //Input for Startdate and Enddate
-            
-		$topNavigation = '
+		echo '
 		<div class="navigationPath">
 			<form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php" onsubmit="return Datefilter()">
 				<label for="date_from" style="margin-left: 10px;">'.$gL10n->get('SYS_START').':</label>
@@ -315,11 +324,6 @@ If($getViewMode == 'html')
 				<input type="submit" value="OK"> 
 			</form> 
 		</div>'; 
-               
-        if(strlen($topNavigation) > 0)
-        {
-            echo '<ul class="iconTextLinkList">'.$topNavigation.'</ul>'; 
-        }
     }
        
 	if($datesResult['totalCount'] == 0)

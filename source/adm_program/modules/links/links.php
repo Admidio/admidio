@@ -90,7 +90,7 @@ else
 if($getLinkId == 0)
 {	
 	// create module menu
-	$LinksMenu = new ModuleMenu('admMenuLinks');
+	$LinksMenu = new ModuleMenu('admMenuWeblinks');
 
 	if($gCurrentUser->editWeblinksRight())
 	{
@@ -109,13 +109,6 @@ if($getLinkId == 0)
 		$LinksMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=LNK_WEBLINKS', 
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 	}
-
-    if($gCurrentUser->editWeblinksRight())
-    {
-        // show link to system preferences of roles
-        $LinksMenu->addItem('admMenuItemCategories', $g_root_path.'/adm_program/administration/categories/categories.php?type=LNK', 
-                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
-    }
 
 	$LinksMenu->show();
 
