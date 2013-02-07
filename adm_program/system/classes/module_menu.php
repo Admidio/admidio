@@ -46,7 +46,7 @@ class ModuleMenu
 	
 	/** add new entry to array and do some checks before so that link and icon get
 	 *  a valid url
-	 *  @param $id Html id of the element
+	 *  @param $id   Html id of the element
 	 *  @param $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
 	 *  @param $link Link to the page that will be called if menu item is clicked
 	 *  @param $text Link text
@@ -84,12 +84,14 @@ class ModuleMenu
 	
 	/** Creates a selectbox with all categories of a category type. If an category of this selectbox is selected
      *  than the link is called and where you can select entries of this category
-	 *  @param $id Html id of the element
-	 *  @param $categoryType Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+	 *  @param $id Html         id of the element
+	 *  @param $categoryType    Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
 	 *  @param $defaultCategory	Id of selected category (if id = -1 then no default category will be selected)
-	 *  @param $link Link to the page that will be called if menu item is clicked. At the end of this link the ID if the category will be added automatically, so you can add a category parameter at last
-	 *  @param $text Text of the selectbox
-	 *  @param $admin Set to @b true if user has admin rights in this category, than a link to administrate the catories is shown.
+	 *  @param $link            Link to the page that will be called if menu item is clicked. At the end of 
+	 *                          this link the ID if the category will be added automatically, so you can add a 
+	 *                          category parameter at last
+	 *  @param $text            Text of the selectbox
+	 *  @param $admin           Set to @b true if user has admin rights in this category, than a link to administrate the catories is shown.
 	 */
 	public function addCategoryItem($id, $categoryType, $defaultCategory, $link, $text, $admin = false)
 	{
@@ -149,7 +151,7 @@ class ModuleMenu
 
 	/** add a drop down item
 	 *  @param $menuEntry menu entry element which was added with addItem
-	 *  @param $selected determines if drop down element should be pre selected 
+	 *  @param $selected  determines if drop down element should be pre selected 
 	 */
 	private function addDropDownItem(&$menuEntry, $selected = false)
 	{
@@ -171,11 +173,11 @@ class ModuleMenu
 
 
 	/** creates a drop down menu
-	 *  @param $ddIdName html id name of drop down menu
+	 *  @param $ddIdName     html id name of drop down menu
 	 *  @param $ddSelectText pre select text of drop down menu 
-	 *  @param $ddImagePos position of image might be "left" or "right"
-	 *  @param $ddWidth width in px of drop down menu "auto" means width will be calculated
-	 *  @param $ddMaxWidth maximum width of drop down if $ddWidth is "auto"
+	 *  @param $ddImagePos   position of image might be "left" or "right"
+	 *  @param $ddWidth      width in px of drop down menu "auto" means width will be calculated
+	 *  @param $ddMaxWidth   maximum width of drop down if $ddWidth is "auto"
 	 *  @return HTML drop down menu
 	 */
 	private function createDropDown($ddIdName, $ddSelectText, $ddImagePos = "left", $ddWidth = '"auto"', $ddMaxWidth = 1000)
@@ -205,7 +207,10 @@ class ModuleMenu
 						//--></script>';
 	}
 	
-	/** Creates the html output of the module menu
+	/** Creates the html output of the module menu. Each added menu item will be displayed.
+	 *  If there are more menu items then in @b maxMenuLinkItem defined a drowdown menu
+	 *  will be displayed and all other items will be displayed there.
+	 *  @return Returns the html output for the complete menu
 	 */
 	public function show()
 	{
@@ -220,14 +225,35 @@ class ModuleMenu
 
 		foreach($this->items as $key => $menuEntry)
 		{
+			++$linkCnt;
+
 			if($menuEntry['type'] == 'category')
 			{
 				// create select box with all categories that have links
 				$calendarSelectBox = FormElements::generateCategorySelectBox($menuEntry['categoryType'], $menuEntry['defaultCategory'], 
 																			 $menuEntry['id'].'SelectBox', $gL10n->get('SYS_ALL'), true);
+									
+				// dates have other calendar as name for categories
+				if($menuEntry['categoryType'] == 'DAT')
+				{
+    				$textManageCategories = $gL10n->get('DAT_MANAGE_CALENDARS');
+				}
+				else
+				{
+    				$textManageCategories = $gL10n->get('SYS_MAINTAIN_CATEGORIES');
+				}
 						
 				if(strlen($calendarSelectBox) == 0)
-					continue;
+				{
+				    // if no category was found then show link to manage categories if user has the right
+				    if($menuEntry['admin'] == true)
+				    {
+    				    $menuEntry['icon'] = THEME_PATH.'/icons/application_double.png';
+    				    $menuEntry['text'] = $textManageCategories;
+    				    $html .= $this->createIconTextLink($menuEntry);
+                    }
+    				continue;
+				}
 
 				// show category select box with link to calendar preferences
 				$html .= '
@@ -243,17 +269,17 @@ class ModuleMenu
 
 					if($menuEntry['admin'] == true)
 					{
-						$html .= '<a class="iconLink" href="'.$this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'"><img
-							src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" title="'.$gL10n->get('SYS_MAINTAIN_CATEGORIES').'" /></a>';
+    				    // show link to manage categorie
+						$html .= '&nbsp;<a class="iconLink" href="'.$this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'"><img
+							src="'. THEME_PATH. '/icons/options.png" alt="'.$textManageCategories.'" title="'.$textManageCategories.'" /></a>';
 					}
 				$html .= '</li>';
 			}
 			else if($menuEntry['type'] == 'link')
 			{
-				++$linkCnt;
-
 				// if the count of link elements greater equal then the maxMenuLinkItem variable add drop down entry
-				if ($linkCnt >= $this->maxMenuLinkItem)
+				if (count($this->items) > $this->maxMenuLinkItem
+				&& $linkCnt >= $this->maxMenuLinkItem)
 				{
 					$this->addDropDownItem($menuEntry);
 				}

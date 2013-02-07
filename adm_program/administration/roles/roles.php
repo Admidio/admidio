@@ -87,15 +87,15 @@ $rolesMenu = new ModuleMenu('admMenuRoles');
 // show link to create new profile field
 $rolesMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administration/roles/roles_new.php', 
 							$gL10n->get('SYS_CREATE_ROLE'), 'add.png');
+// show link to maintain categories
+$rolesMenu->addItem('admMenuItemMaintainCategory', $g_root_path.'/adm_program/administration/categories/categories.php?type=ROL', 
+							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 // show link to show inactive roles
 $rolesMenu->addItem('admMenuItemInactiveRole', $g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$activeRolesFlag, 
 							$activeRolesLinkDescription, $activeRolesImage);
 // show link to show hidden roles
 $rolesMenu->addItem('admMenuItemHiddenRole', $g_root_path.'/adm_program/administration/roles/roles.php?invisible='.$visibleRolesFlag, 
 							$visibleRolesLinkDescription, $visibleRolesImage);
-// show link to maintain categories
-$rolesMenu->addItem('admMenuItemMaintainCategory', $g_root_path.'/adm_program/administration/categories/categories.php?type=ROL', 
-							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 $rolesMenu->show();
 
 

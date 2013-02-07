@@ -13,6 +13,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/module_menu.php');
 require_once('../../system/classes/table_folder.php');
 require_once('../../system/file_extension_icons.php');
 unset($_SESSION['download_request']);
@@ -69,35 +70,31 @@ echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
 
 echo $navigationBar;
 
+// create module menu
+$DownloadsMenu = new ModuleMenu('admMenuDownloads');
 
-//Button Upload, Neuer Ordner und Ordnerkonfiguration
 if ($gCurrentUser->editDownloadRight())
 {
-    echo '
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$getFolderId.'"><img
-                src="'. THEME_PATH. '/icons/folder_create.png" alt="'.$gL10n->get('DOW_CREATE_FOLDER').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$getFolderId.'">'.$gL10n->get('DOW_CREATE_FOLDER').'</a>
-            </span>
-        </li>
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$getFolderId.'"><img
-                src="'. THEME_PATH. '/icons/page_white_upload.png" alt="'.$gL10n->get('DOW_UPLOAD_FILE').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$getFolderId.'">'.$gL10n->get('DOW_UPLOAD_FILE').'</a>
-            </span>
-        </li>
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$getFolderId.'"><img
-                src="'. THEME_PATH. '/icons/options.png" alt="'.$gL10n->get('DOW_SET_PERMISSIONS').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$getFolderId.'">'.$gL10n->get('DOW_SET_PERMISSIONS').'</a>
-            </span>
-        </li>
-    </ul>';
+    // show links for upload, create folder and folder configuration
+    $DownloadsMenu->addItem('admMenuItemCreateFolder', $g_root_path.'/adm_program/modules/downloads/folder_new.php?folder_id='.$getFolderId,
+                        $gL10n->get('DOW_CREATE_FOLDER'), 'folder_create.png' );
+
+    $DownloadsMenu->addItem('admMenuItemAddFile', $g_root_path.'/adm_program/modules/downloads/upload.php?folder_id='.$getFolderId,
+                        $gL10n->get('DOW_UPLOAD_FILE'), 'page_white_upload.png' );
+
+    $DownloadsMenu->addItem('admMenuItemConfigFolder', $g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$getFolderId,
+                        $gL10n->get('DOW_SET_PERMISSIONS'), 'options.png' );
 };
+
+if($gCurrentUser->isWebmaster())
+{
+	// show link to system preferences of weblinks
+	$DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=DAT_DATES', 
+						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+}
+
+$DownloadsMenu->show();
+
 
 //Anlegen der Tabelle
 echo '
