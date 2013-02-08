@@ -1085,7 +1085,6 @@
     <text id="SYS_FADE_IN" development="new" translation="edited">Fade in</text>
     <text id="SYS_FAX" development="new" translation="edited">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="edited">Features</text>
-    <text id="SYS_MORE_FEATURES" development="new" translation="todo">More Features</text>
     <text id="SYS_FEMALE" development="new" translation="edited">Female</text>
     <text id="SYS_FIELD" development="new" translation="edited">Field</text>
     <text id="SYS_FIELD_EMPTY" development="new" translation="edited">Field %VAR1_BOLD% is empty.</text>
