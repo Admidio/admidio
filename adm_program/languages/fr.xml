@@ -955,7 +955,6 @@
 	<text id="SYS_FADE_IN" development="new" translation="edited">Fondu</text>
    	<text id="SYS_FAX" development="new" translation="edited">Télécopieur</text>
 	<text id="SYS_FEATURES" development="new" translation="edited">Caractéristiques</text>
-   <text id="SYS_MORE_FEATURES" development="new" translation="todo">Plus Caractéristiques</text>
 	<text id="SYS_FEMALE" development="new" translation="edited">Femme</text>
 	<text id="SYS_FIELD" development="new" translation="edited">Champ</text>
 	<text id="SYS_FIELD_EMPTY" development="new" translation="edited">Le champ %VAR1_BOLD% est vide.</text>
