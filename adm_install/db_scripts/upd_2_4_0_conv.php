@@ -21,6 +21,15 @@ if($gDbType == 'mysql')
 	$gDb->query($sql, false);
 	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
 	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_SESSIONS.' MODIFY COLUMN ses_session_id varchar(255) NOT NULL';
+	$gDb->query($sql, false);
+	$sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
+             WHERE rol_id IN (SELECT cast(prf_value as unsigned integer) 
+			                    FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\' )';
+	$gDb->query($sql, false);
+	$sql = 'DELETE FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\'';
+	$gDb->query($sql, false);
+
 }
 else
 {
@@ -31,6 +40,14 @@ else
 	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR';
 	$gDb->query($sql, false);
 	$sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_SESSIONS.' ALTER COLUMN ses_session_id SET NOT NULL';
+	$gDb->query($sql, false);
+	$sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
+             WHERE rol_id IN (SELECT cast(prf_value as integer) 
+			                    FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\' )';
+	$gDb->query($sql, false);
+	$sql = 'DELETE FROM '.TBL_PREFERENCES.' WHERE prf_name = \'profile_default_role\'';
 	$gDb->query($sql, false);
 }
 
