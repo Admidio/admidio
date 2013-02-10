@@ -6,10 +6,6 @@ ALTER TABLE %PREFIX%_roles ADD COLUMN rol_webmaster boolean not null default '0'
 ALTER TABLE %PREFIX%_roles ADD COLUMN rol_default_registration boolean not null default '0';
 ALTER TABLE %PREFIX%_roles ADD COLUMN rol_lst_id integer unsigned;
 
-UPDATE %PREFIX%_roles SET rol_default_registration = 1
- WHERE rol_id IN (SELECT prf_value FROM %PREFIX%_preferences WHERE prf_name = 'profile_default_role' );
-DELETE FROM %PREFIX%_preferences WHERE prf_name = 'profile_default_role';
-
 alter table %PREFIX%_roles add constraint %PREFIX%_FK_ROL_LST_ID foreign key (rol_lst_id)
       references %PREFIX%_lists (lst_id) on delete set null on update set null;
 
@@ -23,10 +19,14 @@ alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CREATE foreign k
 alter table %PREFIX%_members add constraint %PREFIX%_FK_MEM_USR_CHANGE foreign key (mem_usr_id_change)
       references %PREFIX%_users (usr_id) on delete set null on update restrict;
 
-ALTER TABLE %PREFIX%_sessions CHANGE COLUMN `ses_session_id` `ses_session_id_old` varchar(35) not null;
-ALTER TABLE %PREFIX%_sessions ADD COLUMN `ses_session_id` varchar(255) not null;
-UPDATE %PREFIX%_sessions SET ses_session_id = ses_session_id_old;
-ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_session_id_old;
+-- change datatype of a column
+ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_session_id_temp varchar(255);
+UPDATE %PREFIX%_sessions SET ses_session_id_temp = ses_session_id;
+ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_session_id;
+ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_session_id varchar(255);
+UPDATE %PREFIX%_sessions SET ses_session_id = ses_session_id_temp;
+ALTER TABLE %PREFIX%_sessions DROP COLUMN ses_session_id_temp;
+
 
 ALTER TABLE %PREFIX%_sessions ADD COLUMN ses_device_id varchar(255);
 

@@ -581,7 +581,6 @@ INSERT INTO %PREFIX%_list_columns (lsc_id, lsc_lst_id, lsc_number, lsc_usf_id, l
 (45, 5, 6, 16, NULL, NULL, NULL),
 (46, 5, 7, 18, NULL, NULL, NULL),
 (47, 5, 8, 23, NULL, NULL, NULL),
-(48, 5, 9, 17, NULL, NULL, NULL),
 (49, 5, 10, 24, NULL, NULL, NULL),
 (50, 5, 11, 19, NULL, NULL, NULL),
 (60, 6, 1, 1, NULL, NULL, NULL),
