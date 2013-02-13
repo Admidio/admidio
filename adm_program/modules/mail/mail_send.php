@@ -19,7 +19,7 @@ require_once('../../system/classes/table_roles.php');
 require_once('../../libs/htmlawed/htmlawed.php');
 
 //Stop if mail module is disabled
-if ($gPreferences['enable_mail_module'] != 1)
+if($gPreferences['enable_mail_module'] != 1)
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
@@ -44,7 +44,7 @@ if ($gCurrentUser->getValue('usr_id') > 0)
     $postFrom = $gCurrentUser->getValue('EMAIL');
 }
 //if not User is not able to ask for delivery confirmation 
-if(!($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation']==2) && $gPreferences['mail_delivery_confirmation']!=1)                       {
+if(!($gCurrentUser->getValue('usr_id')>0 && $gPreferences['mail_delivery_confirmation']==2) && $gPreferences['mail_delivery_confirmation']!=1)
 {
     $postDeliveryConfirmation = 0;
 }
@@ -85,8 +85,8 @@ if ($getUserId > 0)
     {
         $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
-	
-	$postTo = $user->getValue('EMAIL');
+    
+    $postTo = $user->getValue('EMAIL');
 }
 elseif ($postRoleId > 0)
 {
@@ -145,9 +145,9 @@ if ( $gValidLogin
 //Absenderangaben setzen
 if ($email->setSender($postFrom,$postName))
 {
-	//Betreff setzen
-	if ($email->setSubject($postSubject))
-	{
+    //Betreff setzen
+    if ($email->setSubject($postSubject))
+    {
         //Pruefen ob moeglicher Weise ein Attachment vorliegt
         if (isset($_FILES['userfile']))
         {
@@ -206,7 +206,7 @@ else
 
 if ($getUserId == 0)
 {
-	// wurde kein Benutzer uebergeben, dann muss Rolle uebergeben werden
+    // wurde kein Benutzer uebergeben, dann muss Rolle uebergeben werden
     if ($postRoleId == 0)
     {
         $gMessage->show($gL10n->get('MAI_CHOOSE_ROLE'));
@@ -214,12 +214,12 @@ if ($getUserId == 0)
     
     $role->readDataById($postRoleId);
 
-	// Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
-	if ($gValidLogin == true && !$gCurrentUser->mailRole($postRoleId))
+    // Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
+    if ($gValidLogin == true && !$gCurrentUser->mailRole($postRoleId))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
-	// Falls der User nicht eingeloggt ist, muss der Wert 3 sein
+    // Falls der User nicht eingeloggt ist, muss der Wert 3 sein
     if ($gValidLogin == false && $role->getValue('rol_mail_this_role') != 3)
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -232,8 +232,8 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 {
     if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($postCaptcha) )
     {
-		if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
-		else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
+        if($gPreferences['captcha_type']=='pic') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CODE_INVALID'));}
+        else if($gPreferences['captcha_type']=='calc') {$gMessage->show($gL10n->get('SYS_CAPTCHA_CALC_CODE_INVALID'));}
     }
 }
 
@@ -277,9 +277,9 @@ else
                 JOIN '. TBL_USER_DATA. ' as email
                   ON email.usd_usr_id = usr_id
                  AND LENGTH(email.usd_value) > 0
-				JOIN '.TBL_USER_FIELDS.' as field
-				  ON field.usf_id = email.usd_usf_id
-				 AND field.usf_type = \'EMAIL\'
+                JOIN '.TBL_USER_FIELDS.' as field
+                  ON field.usf_id = email.usd_usf_id
+                 AND field.usf_type = \'EMAIL\'
                 LEFT JOIN '. TBL_USER_DATA. ' as last_name
                   ON last_name.usd_usr_id = usr_id
                  AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
@@ -295,22 +295,22 @@ else
                  AND usr_valid   = 1 '.
                      $sqlConditions;
 
-	// Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 
-	//damit er die Mail nicht an sich selber schickt.
-	if ($gValidLogin)
-	{
-		$sql =$sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
+    // Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 
+    //damit er die Mail nicht an sich selber schickt.
+    if ($gValidLogin)
+    {
+        $sql =$sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
     } 
     $result = $gDb->query($sql);
 
     if($gDb->num_rows($result) > 0)
     {
-		if($gPreferences['mail_sender_into_to'] == 1)
-		{
-			// always fill recipient if preference is set to prevent problems with provider
-			$email->addRecipient($postFrom,$postName);
-		}
-		
+        if($gPreferences['mail_sender_into_to'] == 1)
+        {
+            // always fill recipient if preference is set to prevent problems with provider
+            $email->addRecipient($postFrom,$postName);
+        }
+        
         // all role members will be attached as BCC
         while ($row = $gDb->fetch_object($result))
         {
@@ -349,7 +349,6 @@ $email->setSenderInText($postName, $postFrom, $role->getValue('rol_name'));
 
 // make html in mail body secure and commit mail body to mail object
 $email->setText(htmLawed(stripslashes($postBody), array('safe' => 1)));
-
 
 //Nun kann die Mail endgueltig versendet werden...
 $sendMailResult = $email->sendEmail();
@@ -396,7 +395,4 @@ else
         $gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $postTo, $sendMailResult));
     }
 }
-
-
-
 ?>
