@@ -35,13 +35,11 @@
  */
 
 /**
- * POP Before SMTP Authentication Class
+ * PHP POP-Before-SMTP Authentication Class
+ *
  * Version 5.2.2
  *
- * Orig Author: Richard Davey (rich@corephp.co.uk)
- * Modifications: Andy Prevost
- * Modifications: Jim Jagielski
- * License: LGPL, see PHPMailer License
+ * @license: LGPL, see PHPMailer License
  *
  * Specifically for PHPMailer to allow POP before SMTP authentication.
  * Does not yet work with APOP - if you have an APOP account, contact Jim Jagielski
@@ -53,7 +51,7 @@
  * required for POP3 connection, authentication and disconnection.
  *
  * @package PHPMailer
- * @author Richard Davey (orig)
+ * @author Richard Davey (orig) <rich@corephp.co.uk>
  * @author Andy Prevost
  * @author Jim Jagielski
  */
@@ -117,14 +115,23 @@ class POP3 {
    * Sets the POP3 PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.2-rc2';
+  public $Version         = '5.2.2';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED
   /////////////////////////////////////////////////
 
+  /**
+   * @var resource Resource handle for the POP connection socket
+   */
   private $pop_conn;
+  /**
+   * @var boolean Are we connected?
+   */
   private $connected;
+  /**
+   * @var array Error container
+   */
   private $error;     //  Error log array
 
   /**
@@ -142,10 +149,12 @@ class POP3 {
    * Combination of public events - connect, login, disconnect
    * @access public
    * @param string $host
-   * @param integer $port
-   * @param integer $tval
+   * @param bool|int $port
+   * @param bool|int $tval
    * @param string $username
    * @param string $password
+   * @param int $debug_level
+   * @return bool
    */
   public function Authorise ($host, $port = false, $tval = false, $username, $password, $debug_level = 0) {
     $this->host = $host;
@@ -195,7 +204,7 @@ class POP3 {
    * Connect to the POP3 server
    * @access public
    * @param string $host
-   * @param integer $port
+   * @param bool|int $port
    * @param integer $tval
    * @return boolean
    */
@@ -264,7 +273,7 @@ class POP3 {
     $this->connected = true;
       return true;
     }
-
+    return false;
   }
 
   /**
@@ -305,12 +314,9 @@ class POP3 {
 
       if ($this->checkResponse($pop3_response)) {
         return true;
-      } else {
-        return false;
       }
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**

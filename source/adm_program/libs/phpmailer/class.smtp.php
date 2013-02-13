@@ -35,11 +35,12 @@
  */
 
 /**
- * SMTP is rfc 821 compliant and implements all the rfc 821 SMTP
- * commands except TURN which will always return a not implemented
- * error. SMTP also provides some utility methods for sending mail
- * to an SMTP server.
- * original author: Chris Ryan
+ * PHP RFC821 SMTP client
+ *
+ * Implements all the RFC 821 SMTP commands except TURN which will always return a not implemented error.
+ * SMTP also provides some utility methods for sending mail to an SMTP server.
+ * @author Chris Ryan
+ * @package PHPMailer
  */
 
 class SMTP {
@@ -90,15 +91,24 @@ class SMTP {
    * Sets the SMTP PHPMailer Version number
    * @var string
    */
-  public $Version         = '5.2.2-rc2';
+  public $Version         = '5.2.2';
 
   /////////////////////////////////////////////////
   // PROPERTIES, PRIVATE AND PROTECTED
   /////////////////////////////////////////////////
 
-  private $smtp_conn; // the socket to the server
-  private $error;     // error if any on the last call
-  private $helo_rply; // the reply the server sent to us for HELO
+  /**
+   * @var resource The socket to the server
+   */
+  private $smtp_conn;
+  /**
+   * @var string Error message, if any, for the last call
+   */
+  private $error;
+  /**
+   * @var string The reply the server sent to us for HELO
+   */
+  private $helo_rply;
 
   /**
    * Outputs debugging info via user-defined method
@@ -115,7 +125,7 @@ class SMTP {
   /**
    * Initialize the class so that the data is in a known state.
    * @access public
-   * @return void
+   * @return SMTP
    */
   public function __construct() {
     $this->smtp_conn = 0;
@@ -140,6 +150,9 @@ class SMTP {
    * SMTP CODE SUCCESS: 220
    * SMTP CODE FAILURE: 421
    * @access public
+   * @param string $host
+   * @param int $port
+   * @param int $tval
    * @return bool
    */
   public function Connect($host, $port = 0, $tval = 30) {
@@ -243,10 +256,14 @@ class SMTP {
    * Performs SMTP authentication.  Must be run after running the
    * Hello() method.  Returns true if successfully authenticated.
    * @access public
+   * @param string $username
+   * @param string $password
+   * @param string $authtype
+   * @param string $realm
+   * @param string $workstation
    * @return bool
    */
-  public function Authenticate($username, $password, $authtype='LOGIN', $realm='',
-                               $workstation='') {
+  public function Authenticate($username, $password, $authtype='LOGIN', $realm='', $workstation='') {
     if (empty($authtype)) {
       $authtype = 'LOGIN';
     }
@@ -459,6 +476,7 @@ class SMTP {
    * SMTP CODE FAILURE: 451,554
    * SMTP CODE ERROR  : 500,501,503,421
    * @access public
+   * @param string $msg_data
    * @return bool
    */
   public function Data($msg_data) {
@@ -596,6 +614,7 @@ class SMTP {
    * SMTP CODE SUCCESS: 250
    * SMTP CODE ERROR  : 500, 501, 504, 421
    * @access public
+   * @param string $host
    * @return bool
    */
   public function Hello($host = '') {
@@ -626,6 +645,8 @@ class SMTP {
   /**
    * Sends a HELO/EHLO command.
    * @access private
+   * @param string $hello
+   * @param string $host
    * @return bool
    */
   private function SendHello($hello, $host) {
@@ -666,6 +687,7 @@ class SMTP {
    * SMTP CODE SUCCESS: 552,451,452
    * SMTP CODE SUCCESS: 500,501,421
    * @access public
+   * @param string $from
    * @return bool
    */
   public function Mail($from) {
@@ -709,6 +731,7 @@ class SMTP {
    * SMTP CODE SUCCESS: 221
    * SMTP CODE ERROR  : 500
    * @access public
+   * @param bool $close_on_error
    * @return bool
    */
   public function Quit($close_on_error = true) {
@@ -762,6 +785,7 @@ class SMTP {
    * SMTP CODE FAILURE: 550,551,552,553,450,451,452
    * SMTP CODE ERROR  : 500,501,503,421
    * @access public
+   * @param string $to
    * @return bool
    */
   public function Recipient($to) {
@@ -853,6 +877,7 @@ class SMTP {
    * SMTP CODE SUCCESS: 552,451,452
    * SMTP CODE SUCCESS: 500,501,502,421
    * @access public
+   * @param string $from
    * @return bool
    */
   public function SendAndMail($from) {
@@ -975,5 +1000,4 @@ class SMTP {
   }
 
 }
-
 ?>
