@@ -289,7 +289,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 		else
 		{$datum = $_POST['date_from']. ' - '.$_POST['date_to'];}
 		
-		if(isset($_POST['dat_all_day']))
+		if($_POST['dat_all_day']!=0)
 		{$zeit = $gL10n->get('DAT_ALL_DAY');}
 		else
 		{$zeit = $_POST['time_from']. ' - '. $_POST['time_to'];}
