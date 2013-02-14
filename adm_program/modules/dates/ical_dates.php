@@ -96,7 +96,7 @@ if($getMode == 2)
         $headline = urlencode($headline);
     }
 
-    header('Content-Type: text/calendar');
+    header('Content-Type: text/calendar; charset=utf-8');
     header('Content-Disposition: attachment; filename="'. $headline. '.ics"');
     
 	// neccessary for IE, because without it the download with SSL has problems

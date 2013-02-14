@@ -138,7 +138,7 @@ class TableDate extends TableAccess
         //Semicolons herausfiltern             
         $icalVEevent .=  "UID:". $uid. "\n".
                         "SUMMARY:". str_replace(';', '.', $this->getValue('dat_headline')). "\n".
-                        "DESCRIPTION:". str_replace("\r\n", "\n", str_replace(';', '.', $this->getValue('dat_description', 'plain'))). "\n".
+                        "DESCRIPTION:". str_replace("\r\n", "", str_replace(';', '.', $this->getValue('dat_description', 'plain'))). "\n".
                         "DTSTAMP:".date('Ymd').'T'.date('His')."\n".
                         "LOCATION:". str_replace(';', '.',$this->getValue('dat_location')). "\n";
         if($this->getValue('dat_all_day') == 1)
@@ -150,8 +150,8 @@ class TableDate extends TableAccess
         }
         else
         {
-            $icalVEevent .= "DTSTART:". $this->getValue('dat_begin', 'Ymd')."T".$this->getValue('dat_begin', 'His')."\n".
-                     "DTEND:". $this->getValue('dat_end', 'Ymd')."T".$this->getValue('dat_end', 'His')."\n";
+            $icalVEevent .= "DTSTART;TZID=".date_default_timezone_get().":". $this->getValue('dat_begin', 'Ymd')."T".$this->getValue('dat_begin', 'His')."\n".
+                            "DTEND;TZID=".date_default_timezone_get().":". $this->getValue('dat_end', 'Ymd')."T".$this->getValue('dat_end', 'His')."\n";
         }
         $icalVEevent .= "END:VEVENT\n";
         
