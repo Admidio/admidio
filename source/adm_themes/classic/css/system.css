@@ -590,7 +590,8 @@ ul.autosuggest li.highlight a:visited  {
 }
 .dd-options > li{ 
     display: block; 
-    padding-right: 0px; 
+    padding: 0px;
+    text-align: left; 
 }
 .dd-options > li:last-child > .dd-option{ 
     border-bottom:none; 
@@ -617,7 +618,8 @@ ul.autosuggest li.highlight a:visited  {
 }
 .dd-container { 
     display: inline;
-    background: none; 
+    background: none;
+    text-align: left; 
 }​ 
 .dd-selected-text { 
     font-weight:bold;    
