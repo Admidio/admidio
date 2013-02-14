@@ -41,6 +41,8 @@
     <text id="MAI_SMTP_USER_DESC" development="new" translation="todo">Der Benutzername, der bei der SMTP-Authentifizierung verwendet wird.</text>
 	<text id="MEM_CHANGE_HISTORY" development="new" translation="todo">Änderungshistorie</text>
 	<text id="MEM_CHANGE_HISTORY_OF" development="new" translation="todo">Änderungshistorie von %VAR1%</text>
+	<text id="MEM_NO_CHANGES" development="new" translation="todo">Es sind keine Änderungen protokolliert.</text>
+	<text id="MEM_NO_CHANGES_PROFIL" development="new" translation="todo">Bei %VAR1_BOLD% wurden bisher keine Änderungen protokolliert.</text>
 	<text id="MEM_SEND_NEW_LOGIN" development="changed" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</text>
     <text id="ORG_SHOW_CREATE_EDIT" development="new" translation="todo">Ersteller und Zeitstempel anzeigen</text>
     <text id="ORG_SHOW_CREATE_EDIT_DESC" development="new" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</text>
