@@ -105,11 +105,23 @@ $sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_valu
           JOIN '. TBL_USER_DATA. ' as create_first_name
             ON create_first_name.usd_usr_id = usl_usr_id_create
            AND create_first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-		 WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.'\' AND \''.$dateToIntern.'\' '.
+		 WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.' 00:00:00\' AND \''.$dateToIntern.' 23:59:59\' '.
 		       $sqlConditions.'
 	     ORDER BY usl_timestamp_create DESC 
 		 LIMIT '.$membersPerPage.' OFFSET '.$getStart;
 $result = $gDb->query($sql);
+
+if($gDb->num_rows($result) == 0)
+{
+    if($getUserId > 0)
+    {
+        $gMessage->show($gL10n->get('MEM_NO_CHANGES_PROFIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
+    }
+    else
+    {
+        $gMessage->show($gL10n->get('MEM_NO_CHANGES'));        
+    }
+}
 
 $gLayout['header'] = ' 
 <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
@@ -194,26 +206,23 @@ echo '
         </tr>
     </thead>';
 	
-    if($gDb->num_rows($result) > 0)
+    while($row = $gDb->fetch_array($result))
     {
-        while($row = $gDb->fetch_array($result))
-        {
-			$timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
+		$timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
 
+		echo '
+		<tr class="tableMouseOver">';
+			if($getUserId == 0)
+			{
+				echo '<td>'.$row['last_name'].', '.$row['first_name'].'</td>';
+			}
 			echo '
-			<tr class="tableMouseOver">';
-				if($getUserId == 0)
-				{
-					echo '<td>'.$row['last_name'].', '.$row['first_name'].'</td>';
-				}
-				echo '
-                <td>'.$gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name').'</td>
-                <td>'.$row['usl_value_new'].'</td>
-                <td>'.$row['usl_value_old'].'</td>
-                <td>'.$row['create_last_name'].', '.$row['create_first_name'].'</td>
-                <td>'.$timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</td>
-			</tr>';
-		}
+            <td>'.$gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name').'</td>
+            <td>'.$row['usl_value_new'].'</td>
+            <td>'.$row['usl_value_old'].'</td>
+            <td>'.$row['create_last_name'].', '.$row['create_first_name'].'</td>
+            <td>'.$timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</td>
+		</tr>';
 	}
 echo '</table>';
 
