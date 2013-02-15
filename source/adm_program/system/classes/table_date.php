@@ -108,10 +108,48 @@ class TableDate extends TableAccess
     {
         $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
         
+        //Timezonestuff
+        $timezone = new DateTimeZone(date_default_timezone_get());
+        $transitions = $timezone->getTransitions();        
+        $transitionDaylight=$transitions[0];
+        $transitionStandard=$transitions[0];
+        if(isset($transitions[2]))
+        {
+            if($transitions[1]['offset']>$transitions[2]['offset'])
+            {
+                $transitionDaylight = $transitions[1];
+                $transitionStandard = $transitions[2];   
+            }
+            else
+            {
+                $transitionDaylight = $transitions[2];
+                $transitionStandard = $transitions[1];
+            }
+        }
+        //TimezoneOffset
+        $transitionDaylight['offsetIcal'] = sprintf('%05d', ($transitionDaylight['offset']/3600)*100);
+        $transitionStandard['offsetIcal'] = sprintf('%05d', ($transitionStandard['offset']/3600)*100);                       
+        
         $icalHeader =   "BEGIN:VCALENDAR\n".
                         "METHOD:PUBLISH\n".
                         "PRODID:". $prodid. "\n".
-                        "VERSION:2.0\n";
+                        "VERSION:2.0\n".
+                        "X-WR-TIMEZONE:".date_default_timezone_get()."\n".
+                        "BEGIN:VTIMEZONE"."\n".
+                        "TZID:".date_default_timezone_get()."\n".
+                        "X-LIC-LOCATION:".date_default_timezone_get()."\n".
+                        "BEGIN:STANDARD"."\n".
+                        "TZOFFSETFROM:". $transitionDaylight['offsetIcal']."\n".
+                        "TZOFFSETTO:".$transitionStandard['offsetIcal']."\n".
+                        "TZNAME:".$transitionStandard['abbr']."\n".
+                        "END:STANDARD"."\n".
+                        "BEGIN:DAYLIGHT"."\n".
+                        "TZOFFSETFROM:".$transitionStandard['offsetIcal']."\n".
+                        "TZOFFSETTO:". $transitionDaylight['offsetIcal']."\n".
+                        "TZNAME:".$transitionDaylight['abbr']."\n".
+                        "END:DAYLIGHT"."\n".
+                        "END:VTIMEZONE"."\n";
+                        
         return $icalHeader;
     }
     
@@ -145,8 +183,8 @@ class TableDate extends TableAccess
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $icalVEevent .= "DTSTART;VALUE=DATE:". $this->getValue('dat_begin', 'Ymd'). "\n".
-                     "DTEND;VALUE=DATE:". $this->getValue('dat_end', 'Ymd'). "\n";
+            $icalVEevent .= "DTSTART;TZID=".date_default_timezone_get().";VALUE=DATE:". $this->getValue('dat_begin', 'Ymd'). "\n".
+                     "DTEND;TZID=".date_default_timezone_get().";VALUE=DATE:". $this->getValue('dat_end', 'Ymd'). "\n";
         }
         else
         {
