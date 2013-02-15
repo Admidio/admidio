@@ -250,6 +250,7 @@ class ModuleMenu
 				    {
     				    $menuEntry['icon'] = THEME_PATH.'/icons/application_double.png';
     				    $menuEntry['text'] = $textManageCategories;
+    				    $menuEntry['link'] = $this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'];
     				    $html .= $this->createIconTextLink($menuEntry);
                     }
     				continue;
