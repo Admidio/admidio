@@ -360,16 +360,21 @@ class Email extends PHPMailer
             
             //Set Subject
             $this->setSubject($gCurrentOrganization->getValue('org_shortname'). ": ".$subject);
-            
-            //Set Text
-            $this->setText($message);
-            
-            //HTML wenn erlaubt
+                        
+            // send html if preference is set
             if($gPreferences['mail_html_registered_users'] == 1)
             {
                $this->sendDataAsHtml();
-            }           
+            }
+            else
+            {
+                // html linebreaks should be converted in simple linefeed
+                $message = str_replace('<br />', "\n", $message);
+            }     
                             
+            //Set Text
+            $this->setText($message);
+
             //Verschicken
             return $this->sendEmail();
         }
