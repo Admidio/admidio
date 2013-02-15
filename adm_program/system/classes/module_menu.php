@@ -56,16 +56,25 @@ class ModuleMenu
 	 */
 	private function mkItem($id, $type, $link, $text, $icon, $js = '')
 	{
-		// add root path to link unless the full URL is given
-		if (preg_match('/^http(s?):\/\//', $link)==0)
-		{
-			$link = $this->root_path . $link;
-		}
+	    if(strlen($link) > 0)
+	    {
+    		// add root path to link unless the full URL is given
+    		if (preg_match('/^http(s?):\/\//', $link)==0)
+    		{
+    			$link = $this->root_path . $link;
+    		}
+        }
+        else
+        {
+            $link = '#';
+        }
+
 		// add THEME_PATH to images unless the full URL is given
 		if (preg_match('/^http(s?):\/\//', $icon) == 0)
 		{
 			$icon = THEME_PATH.'/icons/'.$icon;
 		}
+        
 		return array('id'=>$id, 'type'=>$type, 'link'=>$link, 'text'=>$text, 'icon'=>$icon, 'subitems'=>array(), 'js' => $js);
 	}
 
@@ -139,14 +148,29 @@ class ModuleMenu
 	 */
 	private function createIconTextLink(&$menuEntry)
 	{
-		return '<li id="'.$menuEntry['id'].'">
-						<span class="iconTextLink">
-							<a href="'.$menuEntry['link'].'">
-								<img src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" />
-							</a>
-							<a href="'.$menuEntry['link'].'">'.$menuEntry['text'].'</a>
-						</span>
-					</li>';
+	    $html = '';
+	   
+	    // if javascipt was set then add this script to click event of this menu item
+	    if(strlen($menuEntry['js']) > 0)
+	    {
+    	    $html .= '<script type="text/javascript"><!--
+    	                  $(document).ready(function() {
+    	                      $("#'.$menuEntry['id'].'").click(function () {
+    	                          '.$menuEntry['js'].'
+    	                      });
+    	                  });
+    	              //--></script>';
+	    }
+	    
+	    // add html of menu item
+		$html .= '<li id="'.$menuEntry['id'].'">
+		              <span class="iconTextLink">
+				          <a href="'.$menuEntry['link'].'"><img 
+				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" /></a>
+				          <a href="'.$menuEntry['link'].'">'.$menuEntry['text'].'</a>
+				      </span>
+				  </li>';
+        return $html;
 	}
 
 	/** add a drop down item
