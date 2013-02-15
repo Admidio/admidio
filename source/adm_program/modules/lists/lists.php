@@ -131,13 +131,6 @@ if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 	}
 
-    if($gCurrentUser->assignRoles())
-    {
-        // show link to system preferences of roles
-        $ListsMenu->addItem('admMenuItemCategories', $g_root_path.'/adm_program/administration/categories/categories.php?type=ROL', 
-                            $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
-    }
-
 	$ListsMenu->show();
 }
 
