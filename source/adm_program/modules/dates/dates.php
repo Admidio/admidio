@@ -624,12 +624,16 @@ else
         <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
         
     <script type="text/javascript">
+        
         $(document).ready(function(){
             $("#admSelectBox").change(function(){
                 $("#" + "style" + this.value).show().siblings("tbody").hide();
             });
             <!-- Trigger -->
             $("#admSelectBox").change();
+            
+            <!-- Reset selection of extended functions in parent window -->
+            window.opener.parent.location.reload();
         })
     </script>
     </head>';
