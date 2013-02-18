@@ -106,29 +106,7 @@ class TableDate extends TableAccess
     //gibt den Kopf eines iCalCalenders aus
     public function getIcalHeader()
     {
-        $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';
-        
-        //Timezonestuff
-        $timezone = new DateTimeZone(date_default_timezone_get());
-        $transitions = $timezone->getTransitions();        
-        $transitionDaylight=$transitions[0];
-        $transitionStandard=$transitions[0];
-        if(isset($transitions[2]))
-        {
-            if($transitions[1]['offset']>$transitions[2]['offset'])
-            {
-                $transitionDaylight = $transitions[1];
-                $transitionStandard = $transitions[2];   
-            }
-            else
-            {
-                $transitionDaylight = $transitions[2];
-                $transitionStandard = $transitions[1];
-            }
-        }
-        //TimezoneOffset
-        $transitionDaylight['offsetIcal'] = sprintf('%05d', ($transitionDaylight['offset']/3600)*100);
-        $transitionStandard['offsetIcal'] = sprintf('%05d', ($transitionStandard['offset']/3600)*100);                       
+        $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';                            
         
         $icalHeader =   "BEGIN:VCALENDAR\n".
                         "METHOD:PUBLISH\n".
@@ -138,15 +116,20 @@ class TableDate extends TableAccess
                         "BEGIN:VTIMEZONE"."\n".
                         "TZID:".date_default_timezone_get()."\n".
                         "X-LIC-LOCATION:".date_default_timezone_get()."\n".
+                        "BEGIN:VTIMEZONE"."\n".
                         "BEGIN:STANDARD"."\n".
-                        "TZOFFSETFROM:". $transitionDaylight['offsetIcal']."\n".
-                        "TZOFFSETTO:".$transitionStandard['offsetIcal']."\n".
-                        "TZNAME:".$transitionStandard['abbr']."\n".
+                        "DTSTART:19701025T030000"."\n".
+                        "TZOFFSETFROM:+0200"."\n".
+                        "TZOFFSETTO:+0100"."\n".
+                        "TZNAME:CET"."\n".
+                        "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10"."\n".
                         "END:STANDARD"."\n".
                         "BEGIN:DAYLIGHT"."\n".
-                        "TZOFFSETFROM:".$transitionStandard['offsetIcal']."\n".
-                        "TZOFFSETTO:". $transitionDaylight['offsetIcal']."\n".
-                        "TZNAME:".$transitionDaylight['abbr']."\n".
+                        "DTSTART:19700329T020000"."\n".
+                        "TZOFFSETFROM:+0100"."\n".
+                        "TZOFFSETTO:+0200"."\n".
+                        "TZNAME:CEST"."\n".
+                        "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3"."\n".
                         "END:DAYLIGHT"."\n".
                         "END:VTIMEZONE"."\n";
                         
