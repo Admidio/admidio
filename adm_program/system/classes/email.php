@@ -466,11 +466,11 @@ class Email extends PHPMailer
             //Text in Nachricht einfügen
             if($this->emSendAsHTML)
             {
-                $this->MsgHTML($this->emHtmlText);
+                $this->MsgHTML($this->emHtmlText);  
             }
             else
             {
-                $this->AltBody($this->emText);
+                $this->Body = $this->emText;
             }
             
             //neuer Empänger
