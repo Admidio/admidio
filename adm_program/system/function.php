@@ -399,7 +399,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
         
         elseif($datatype == 'html')
         {
-            $array[$variableName] =  strip_tags($array[$variableName], '<i><b><a><u><p><img><span><ol><ul><li><h1><h2><h3><h4><h5><h6><table><thead><tbody><td><tr><th>');
+            $array[$variableName] =  strip_tags($array[$variableName], '<i><b><a><u><p><img><br><span><ol><ul><li><h1><h2><h3><h4><h5><h6><table><thead><tbody><td><tr><th>');
         }
         
         // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
