@@ -304,7 +304,7 @@ function admFuncProcessableImageSize()
  *  that should be checked.
  *  @param $array 			The array with the element that should be checked
  *  @param $variableName 	Name of the array element that should be checked
- *  @param $datatype 		The datatype like @b string, @b numeric, @b boolean, @b date or @b file that is expected and which will be checked.
+ *  @param $datatype 		The datatype like @b string, @b numeric, @b boolean, @b html, @b date or @b file that is expected and which will be checked.
  *							Datatype @b date expects a date that has the Admidio default format from the preferences or the english date format @b Y-m-d
  *  @param $defaultValue 	A value that will be set if the variable has no value
  *  @param $requireValue 	If set to @b true than a value is required otherwise the function returns an error
@@ -396,7 +396,12 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 		{
 			$array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
 		}
-
+        
+        elseif($datatype == 'html')
+        {
+            $array[$variableName] =  strip_tags($array[$variableName], '<i><b><a><u><p><img><span><ol><ul><li><h1><h2><h3><h4><h5><h6><table><thead><tbody><td><tr><th>');
+        }
+        
         // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
         if(strlen($errorMessage) == 0)
         {
