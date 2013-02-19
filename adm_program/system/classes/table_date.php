@@ -108,30 +108,29 @@ class TableDate extends TableAccess
     {
         $prodid = '-//www.admidio.org//Admidio' . ADMIDIO_VERSION . '//DE';                            
         
-        $icalHeader =   "BEGIN:VCALENDAR\n".
-                        "METHOD:PUBLISH\n".
-                        "PRODID:". $prodid. "\n".
-                        "VERSION:2.0\n".
-                        "X-WR-TIMEZONE:".date_default_timezone_get()."\n".
-                        "BEGIN:VTIMEZONE"."\n".
-                        "TZID:".date_default_timezone_get()."\n".
-                        "X-LIC-LOCATION:".date_default_timezone_get()."\n".
-                        "BEGIN:VTIMEZONE"."\n".
-                        "BEGIN:STANDARD"."\n".
-                        "DTSTART:19701025T030000"."\n".
-                        "TZOFFSETFROM:+0200"."\n".
-                        "TZOFFSETTO:+0100"."\n".
-                        "TZNAME:CET"."\n".
-                        "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10"."\n".
-                        "END:STANDARD"."\n".
-                        "BEGIN:DAYLIGHT"."\n".
-                        "DTSTART:19700329T020000"."\n".
-                        "TZOFFSETFROM:+0100"."\n".
-                        "TZOFFSETTO:+0200"."\n".
-                        "TZNAME:CEST"."\n".
-                        "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3"."\n".
-                        "END:DAYLIGHT"."\n".
-                        "END:VTIMEZONE"."\n";
+        $icalHeader =   "BEGIN:VCALENDAR\r\n".
+                        "METHOD:PUBLISH\r\n".
+                        "PRODID:". $prodid. "\r\n".
+                        "VERSION:2.0\r\n".
+                        "X-WR-TIMEZONE:".date_default_timezone_get()."\r\n".
+                        "BEGIN:VTIMEZONE"."\r\n".
+                        "TZID:".date_default_timezone_get()."\r\n".
+                        "X-LIC-LOCATION:".date_default_timezone_get()."\r\n".
+                        "BEGIN:STANDARD"."\r\n".
+                        "DTSTART:19701025T030000"."\r\n".
+                        "TZOFFSETFROM:+0200"."\r\n".
+                        "TZOFFSETTO:+0100"."\r\n".
+                        "TZNAME:CET"."\r\n".
+                        "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=10"."\r\n".
+                        "END:STANDARD"."\r\n".
+                        "BEGIN:DAYLIGHT"."\r\n".
+                        "DTSTART:19700329T020000"."\r\n".
+                        "TZOFFSETFROM:+0100"."\r\n".
+                        "TZOFFSETTO:+0200"."\r\n".
+                        "TZNAME:CEST"."\r\n".
+                        "RRULE:FREQ=YEARLY;BYDAY=-1SU;BYMONTH=3"."\r\n".
+                        "END:DAYLIGHT"."\r\n".
+                        "END:VTIMEZONE"."\r\n";
                         
         return $icalHeader;
     }
@@ -149,32 +148,32 @@ class TableDate extends TableAccess
     {
         $uid = $this->getValue('dat_timestamp_create', 'ymdThis') . '+' . $this->getValue('dat_usr_id_create') . '@' . $domain;
         
-        $icalVEevent =  "BEGIN:VEVENT\n".
-                        "CREATED:". $this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')."\n";
+        $icalVEevent =  "BEGIN:VEVENT\r\n".
+                        "CREATED:". $this->getValue('dat_timestamp_create', 'Ymd').'T'.$this->getValue('dat_timestamp_create', 'His')."\r\n";
         if($this->getValue('dat_timestamp_change') != NULL)
         {
-            $icalVEevent .= "LAST-MODIFIED:". $this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His')."\n";
+            $icalVEevent .= "LAST-MODIFIED:". $this->getValue('dat_timestamp_change', 'Ymd').'T'.$this->getValue('dat_timestamp_change', 'His')."\r\n";
         }
                     
         //Semicolons herausfiltern             
-        $icalVEevent .=  "UID:". $uid. "\n".
-                        "SUMMARY:". str_replace(';', '.', $this->getValue('dat_headline')). "\n".
-                        "DESCRIPTION:". str_replace("\r\n", "", str_replace(';', '.', $this->getValue('dat_description', 'plain'))). "\n".
-                        "DTSTAMP:".date('Ymd').'T'.date('His')."\n".
-                        "LOCATION:". str_replace(';', '.',$this->getValue('dat_location')). "\n";
+        $icalVEevent .=  "UID:". $uid. "\r\n".
+                        "SUMMARY:". str_replace(';', '.', $this->getValue('dat_headline')). "\r\n".
+                        "DESCRIPTION:".trim(str_replace("\r\n", "", str_replace(';', '.', $this->getValue('dat_description', 'plain')))). "\r\n".
+                        "DTSTAMP:".date('Ymd').'T'.date('His')."\r\n".
+                        "LOCATION:". str_replace(';', '.',$this->getValue('dat_location')). "\r\n";
         if($this->getValue('dat_all_day') == 1)
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $icalVEevent .= "DTSTART;TZID=".date_default_timezone_get().";VALUE=DATE:". $this->getValue('dat_begin', 'Ymd'). "\n".
-                     "DTEND;TZID=".date_default_timezone_get().";VALUE=DATE:". $this->getValue('dat_end', 'Ymd'). "\n";
+            $icalVEevent .= "DTSTART;TZID=".date_default_timezone_get().";VALUE=DATE:". $this->getValue('dat_begin', 'Ymd'). "\r\n".
+                     "DTEND;TZID=".date_default_timezone_get().";VALUE=DATE:". $this->getValue('dat_end', 'Ymd'). "\r\n";
         }
         else
         {
-            $icalVEevent .= "DTSTART;TZID=".date_default_timezone_get().":". $this->getValue('dat_begin', 'Ymd')."T".$this->getValue('dat_begin', 'His')."\n".
-                            "DTEND;TZID=".date_default_timezone_get().":". $this->getValue('dat_end', 'Ymd')."T".$this->getValue('dat_end', 'His')."\n";
+            $icalVEevent .= "DTSTART;TZID=".date_default_timezone_get().":". $this->getValue('dat_begin', 'Ymd')."T".$this->getValue('dat_begin', 'His')."\r\n".
+                            "DTEND;TZID=".date_default_timezone_get().":". $this->getValue('dat_end', 'Ymd')."T".$this->getValue('dat_end', 'His')."\r\n";
         }
-        $icalVEevent .= "END:VEVENT\n";
+        $icalVEevent .= "END:VEVENT\r\n";
         
         return $icalVEevent;
     }
