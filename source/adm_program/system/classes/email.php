@@ -142,7 +142,7 @@ class Email extends PHPMailer
         {
             //$this->emBccArray[] = '"'. $asciiName. '" <'. $address. '>';
             $this->emBccArray[] = array('name'=>$asciiName, 'address'=>$address);
-            $this->emAddresses = $this->emAddresses. $name. ', '.$address."\r\n";
+            $this->emAddresses = $this->emAddresses. $name. ", ".$address."\r\n";
             return true;
         }
         return false;
@@ -164,7 +164,7 @@ class Email extends PHPMailer
            return $e->errorMessage();
         }
         
-        $this->emAddresses = $this->emAddresses. $name. ', '. $address. "\r\n";
+        $this->emAddresses = $this->emAddresses. $name. ", ". $address. "\r\n";
         return true;
     }
     
@@ -184,7 +184,10 @@ class Email extends PHPMailer
            return $e->errorMessage();
         }
         
-        $this->emAddresses = $this->emAddresses. $name. ', '. $address. "\r\n";
+        if($this->emCopyToSender==FALSE || $address != $this->emSender['address'])
+        {
+            $this->emAddresses = $this->emAddresses. $name. ", ". $address. "\r\n";    
+        }
         return true;
     }
     
@@ -254,7 +257,7 @@ class Email extends PHPMailer
            return $e->errorMessage();
         }
         
-        $this->emAddresses = $this->emAddresses. $name. ', '. $address. "\r\n";
+        $this->emAddresses = $this->emAddresses. $name. ", ". $address. "\r\n";
         return TRUE;
     }
     
@@ -419,7 +422,7 @@ class Email extends PHPMailer
                         $this->AddBCC($bcc['address'], $bcc['name']);
                     }     
                     //Mail Versenden
-                    $this->Send();
+                   $this->Send();
                 }
                 catch (phpmailerException $e)
                 {
@@ -433,7 +436,7 @@ class Email extends PHPMailer
         {
             try
             {
-                $this->Send();
+              $this->Send();
             }
             catch (phpmailerException $e)
             {
@@ -447,6 +450,8 @@ class Email extends PHPMailer
             //Alle Empfänger entfernen
             $this->ClearAllRecipients();
             
+            $this->Subject = $gL10n->get('MAI_CARBON_COPY').": ".$this->Subject;
+            
             //Kopie Header ergänzen
             $copyHeader = '*****************************************************************************************************************************'.
                           "\r\n"."\r\n";
@@ -459,10 +464,10 @@ class Email extends PHPMailer
                  $copyHeader = $this->emAddresses."\r\n".$copyHeader;
                  $copyHeader = $gL10n->get('MAI_MESSAGE_WENT_TO').':'."\r\n"."\r\n".$copyHeader;
             }
-             
+            
             $this->emText = $copyHeader.$this->emText;
             $this->emHtmlText = nl2br($copyHeader).$this->emHtmlText;
-            
+
             //Text in Nachricht einfügen
             if($this->emSendAsHTML)
             {
@@ -477,7 +482,7 @@ class Email extends PHPMailer
             $this->AddAddress($this->emSender['address'], $this->emSender['name']);
             try
             {
-                $this->Send();
+               $this->Send();
             }
             catch (phpmailerException $e)
             {
