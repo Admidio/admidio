@@ -243,6 +243,18 @@ if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
     $email->sendDataAsHtml();
 }
 
+// Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
+if (isset($postCarbonCopy) && $postCarbonCopy == true)
+{
+    $email->setCopyToSenderFlag();
+
+    //Falls der User eingeloggt ist, werden die Empfaenger der Mail in der Kopie aufgelistet
+    if ($gValidLogin)
+    {
+        $email->setListRecipientsFlag();
+    }
+}
+
 //Nun die Empfaenger zusammensuchen und an das Mailobjekt uebergeben
 if ($getUserId > 0)
 {
@@ -324,18 +336,6 @@ else
         $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));
     }
 
-}
-
-// Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
-if (isset($postCarbonCopy) && $postCarbonCopy == true)
-{
-    $email->setCopyToSenderFlag();
-
-    //Falls der User eingeloggt ist, werden die Empfaenger der Mail in der Kopie aufgelistet
-    if ($gValidLogin)
-    {
-        $email->setListRecipientsFlag();
-    }
 }
 
 // Falls eine Lesebestätigung angefordert wurde
