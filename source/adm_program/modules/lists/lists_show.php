@@ -56,7 +56,7 @@ if($role->viewRole() == false)
 if($getListId == 0)
 {
 	// set role default list configuration
-    $getListId = $role->getValue('rol_lst_id');
+    $getListId = $role->getDefaultList();
 	
 	if($getListId == 0)
 	{

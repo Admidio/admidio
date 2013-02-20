@@ -248,6 +248,35 @@ class TableRoles extends TableAccess
 			return $costPeriods;
 		}
     }
+    
+    /** Read the id of the default list of this role. The list is stored in the
+     *  column @b rol_lst_id. If there is no list stored then the system default
+     *  list will be returned
+     *  @return Returns the default list id of this role
+     */
+    public function getDefaultList()
+    {
+        global $gCurrentOrganization;
+        $defaultListId = $this->getValue('rol_lst_id');
+    
+        //if default list is not set
+        if($defaultListId <= 0 || $defaultListId == null)
+        {
+            // read and set system default list configuration
+            $sql = 'SELECT lst_id FROM '. TBL_LISTS. '
+                     WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                       AND lst_default = 1 ';
+            $result = $this->db->query($sql);
+            $row    = $this->db->fetch_array($result);
+            $defaultListId = $row[0];
+            
+            if(!is_numeric($defaultListId))
+            {
+               $defaultListId = 0;
+            }     
+        }
+        return $defaultListId;
+    }
 	
     /** Get the value of a column of the database table.
      *  If the value was manipulated before with @b setValue than the manipulated value is returned.
@@ -260,8 +289,6 @@ class TableRoles extends TableAccess
     public function getValue($columnName, $format = '')
     {
 		global $gL10n;
-        global $gCurrentOrganization;
-        
         $value = parent::getValue($columnName, $format);
 
 		if($columnName == 'cat_name' && $format != 'plain')
@@ -273,22 +300,6 @@ class TableRoles extends TableAccess
 			}
 		}
         
-        //if default list is not set
-        if($columnName == 'rol_lst_id' && ($value<=0 || $value == FALSE))
-        {
-            // read and set system default list configuration
-            $sql = 'SELECT lst_id FROM '. TBL_LISTS. '
-                     WHERE lst_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                       AND lst_default = 1 ';
-            $result = $this->db->query($sql);
-            $row    = $this->db->fetch_array($result);
-            $value = $row[0];
-            
-            if(!is_numeric($value))
-            {
-               $value = 0;
-            }     
-        }
         return $value;
     }
     
