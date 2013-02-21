@@ -222,7 +222,7 @@ class Email extends PHPMailer
     {
         global $gPreferences;            
         
-        //Speichern fü ggf nötige Kopie
+        // save sender if a copy of the mail should be send to him
         $this->emSender = array('address'=>$address, 'name'=>$name);
         
         $fromName='';
@@ -257,7 +257,6 @@ class Email extends PHPMailer
            return $e->errorMessage();
         }
         
-        $this->emAddresses = $this->emAddresses. $name. ", ". $address. "\r\n";
         return TRUE;
     }
     
