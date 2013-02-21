@@ -165,8 +165,8 @@ class TableDate extends TableAccess
         {
             // das Ende-Datum bei mehrtaegigen Terminen muss im iCal auch + 1 Tag sein
             // Outlook und Co. zeigen es erst dann korrekt an
-            $icalVEevent .= "DTSTART;TZID=".date_default_timezone_get().";VALUE=DATE:". $this->getValue('dat_begin', 'Ymd'). "\r\n".
-                     "DTEND;TZID=".date_default_timezone_get().";VALUE=DATE:". $this->getValue('dat_end', 'Ymd'). "\r\n";
+            $icalVEevent .= "DTSTART;VALUE=DATE:". $this->getValue('dat_begin', 'Ymd'). "\r\n".
+                     "DTEND;VALUE=DATE:". $this->getValue('dat_end', 'Ymd'). "\r\n";
         }
         else
         {
