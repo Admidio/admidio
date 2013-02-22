@@ -183,11 +183,9 @@ class Email extends PHPMailer
         {
            return $e->errorMessage();
         }
-        
-        if($this->emCopyToSender==FALSE || $address != $this->emSender['address'])
-        {
-            $this->emAddresses = $this->emAddresses. $name. ", ". $address. "\r\n";    
-        }
+
+        $this->emAddresses = $this->emAddresses. $name. ", ". $address. "\r\n";    
+
         return true;
     }
     
