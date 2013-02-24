@@ -19,7 +19,6 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_user_field.php');
-require_once('../../libs/htmlawed/htmlawed.php');
 
 // Initialize and check the parameters
 $getUsfId    = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);
@@ -125,7 +124,7 @@ if($getMode == 1)
     }
 	
     // make html in description secure
-    $_POST['usf_description'] = htmLawed(stripslashes($_POST['usf_description']), array('safe' => 1));
+    $_POST['usf_description'] = admFuncVariableIsValid($_POST, 'usf_description', 'html');
 
     // POST Variablen in das UserField-Objekt schreiben
     foreach($_POST as $key => $value)

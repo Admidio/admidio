@@ -38,6 +38,7 @@ if(strlen($g_tbl_praefix) == 0)
 }
 
 // includes WITHOUT database connections
+require_once(SERVER_PATH. '/adm_program/libs/htmlawed/htmlawed.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');

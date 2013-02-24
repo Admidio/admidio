@@ -17,7 +17,6 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_announcement.php');
-require_once('../../libs/htmlawed/htmlawed.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -70,7 +69,7 @@ if($getMode == 1)
     }
     
     // make html in description secure
-    $_POST['ann_description'] = htmLawed(stripslashes($_POST['ann_description']), array('safe' => 1));
+    $_POST['ann_description'] = admFuncVariableIsValid($_POST, 'ann_description', 'html');
     
     // POST Variablen in das Ankuendigungs-Objekt schreiben
     foreach($_POST as $key => $value)
