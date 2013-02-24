@@ -38,13 +38,13 @@ $gNavigation->addUrl(CURRENT_URL);
 $lists = new ModuleLists();
 
 //set role status
-$lists->set_role_status($getActiveRole);
+$lists->setRoleStatus($getActiveRole);
 
 //set category
-$lists->set_category($getCatId);
+$lists->setCategory($getCatId);
 
 //get Number of roles
-$numberOfRoles = $lists->count_lists();
+$numberOfRoles = $lists->countLists();
 
 if($numberOfRoles == 0)
 {
@@ -138,10 +138,10 @@ $previousCategoryId   = 0;
 $countCategoryEntries = 0;
 
 //Get Lists
-$listsResult = $lists->get_lists($getStart);
+$listsResult = $lists->getLists($getStart);
 
 //Get list configurations
-$listConfigurations = $lists->get_list_configurations();
+$listConfigurations = $lists->getListConfigurations();
 
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
@@ -240,7 +240,7 @@ foreach($listsResult as $row)
                     {
                         if($list_global_flag != $rowConfigurations['lst_global'])
                         {
-                            if($rowConfigurartions['lst_global'] == 0)
+                            if($rowConfigurations['lst_global'] == 0)
                             {
                                 echo '<optgroup label="'.$gL10n->get('LST_YOUR_LISTS').'">';
                             }
@@ -396,13 +396,15 @@ foreach($listsResult as $row)
     $countCategoryEntries++;  
 }
 
-
-
+// show message if no role was found
 if($countCategoryEntries == 0)
 {
     echo $gL10n->get('LST_CATEGORY_NO_LISTS');
 }
-echo '</div></div>';
+else
+{
+    echo '</div></div>';
+}
 
 // If neccessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $getCatId. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;

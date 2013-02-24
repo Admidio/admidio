@@ -23,15 +23,15 @@ class ModuleLists
      */              
     public function __construct($category=0)
     {   
-       $this->set_category($category);
-       $this->set_member_status();
-       $this->set_role_status();
+       $this->setCategory($category);
+       $this->setMemberStatus();
+       $this->setRoleStatus();
     }
     
     /** Sets the role status for role selection
      *  @param int status 1=active(default) 0=inactive 
      */
-    public function set_role_status($status = 1)
+    public function setRoleStatus($status = 1)
     {
         if($status == 0)
         {
@@ -46,7 +46,7 @@ class ModuleLists
     /** Sets the status of role members to be shown
      *  @param string status active(default), inactive, both
      */
-    public function set_member_status($status='active')
+    public function setMemberStatus($status='active')
     {
         switch ($status)
         {
@@ -66,7 +66,7 @@ class ModuleLists
     /** Evaluates memberStatus an returns appropriate SQL conditions
      * @return string SQL for member status
      */
-    private function get_member_status_sql()
+    private function getMemberStatusSql()
     {
         switch ($this->memberStatus)
         {
@@ -88,7 +88,7 @@ class ModuleLists
     /** Sets category for role selection
      *  @param int $category sets Category-ID for role selection. Default: 0 (all roles)
      */
-    public function set_category($catId = 0)
+    public function setCategory($catId = 0)
     {
         $this->category = $catId;    
     }    
@@ -97,7 +97,7 @@ class ModuleLists
      *  @return SQL condition for category id
      * 
      */
-    private function get_category_sql()
+    private function getCategorySql()
     {
         if($this->category > 0)
         {
@@ -109,7 +109,7 @@ class ModuleLists
     /** assembles SQL roles visible for current user
      *  @return string SQL condition visible for current user
      */
-    private function get_visible_roles_sql()
+    private function getVisibleRolesSql()
     {
         global $gCurrentUser;
         // create a list with all rol_ids that the user is allowed to view
@@ -129,7 +129,7 @@ class ModuleLists
      *  @param $limit Number of elements returned max. Default NULL will take number from peferences.
      *  @return array with list and corresponding informations
      */
-    public function get_lists($startElement=0, $limit=NULL)
+    public function getLists($startElement=0, $limit=NULL)
     {
         global $gCurrentOrganization;
         global $gPreferences;
@@ -143,18 +143,19 @@ class ModuleLists
         }
         
         //assemble conditions
-        $sql_conditions = $this->get_category_sql().$this->get_visible_roles_sql();
+        $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
+        
         //provoke empty result for not logged in users
         if($gValidLogin == false)
         {
-            $sql_conditions= ' AND cat_hidden = 0 ';
+            $sql_conditions .= ' AND cat_hidden = 0 ';
         }
                
         $sql = 'SELECT rol.*, cat.*, 
                (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
-                 WHERE mem.mem_rol_id = rol.rol_id '.$this->get_member_status_sql().' AND mem_leader = 0) as num_members,
+                 WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().' AND mem_leader = 0) as num_members,
                (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
-                 WHERE mem.mem_rol_id = rol.rol_id '.$this->get_member_status_sql().' AND mem_leader = 1) as num_leader,
+                 WHERE mem.mem_rol_id = rol.rol_id '.$this->getMemberStatusSql().' AND mem_leader = 1) as num_leader,
                (SELECT COUNT(*) FROM '. TBL_MEMBERS. ' mem 
                  WHERE mem.mem_rol_id = rol.rol_id AND mem_end < \''. DATE_NOW.'\') as num_former
           FROM '. TBL_ROLES. ' rol, '. TBL_CATEGORIES. ' cat
@@ -180,14 +181,14 @@ class ModuleLists
     /** Function to get total number of lists limited by current conditions.
      *  @return int Number of lists. 
      */
-    public function count_lists()
+    public function countLists()
     {
         global $gCurrentOrganization;
         global $gDb;
         global $gValidLogin;
         
         //assemble conditions
-        $sql_conditions = $this->get_category_sql().$this->get_visible_roles_sql();
+        $sql_conditions = $this->getCategorySql().$this->getVisibleRolesSql();
         //provoke empty result for not logged in users
         if($gValidLogin == false)
         {
@@ -212,7 +213,7 @@ class ModuleLists
     /** Function to get list configurations accessible by current user 
      *  @return array with accessible list configurations
      */
-    public function get_list_configurations()
+    public function getListConfigurations()
     {
         global $gCurrentOrganization;
         global $gCurrentUser;
