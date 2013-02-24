@@ -25,7 +25,6 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/table_guestbook.php');
 require_once('../../system/classes/table_guestbook_comment.php');
-require_once('../../libs/htmlawed/htmlawed.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // Initialize and check the parameters
@@ -139,7 +138,7 @@ if ($getMode == 1 || $getMode == 3)
     }
 
     // make html in description secure
-    $_POST['gbo_text'] = htmLawed(stripslashes($_POST['gbo_text']), array('safe' => 1));
+    $_POST['gbo_text'] = admFuncVariableIsValid($_POST, 'gbo_text', 'html');
 
     // POST Variablen in das Gaestebuchobjekt schreiben
     foreach($_POST as $key => $value)
@@ -324,7 +323,7 @@ elseif($getMode == 4 || $getMode == 8)
     }
 	
     // make html in description secure
-    $_POST['gbc_text'] = htmLawed(stripslashes($_POST['gbc_text']), array('safe' => 1));
+    $_POST['gbc_text'] = admFuncVariableIsValid($_POST, 'gbc_text', 'html');
 
     // POST Variablen in das Gaestebuchkommentarobjekt schreiben
     foreach($_POST as $key => $value)

@@ -399,7 +399,8 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
         
         elseif($datatype == 'html')
         {
-            $array[$variableName] =  strip_tags($array[$variableName], '<i><b><a><u><p><img><br><span><strong><ol><ul><li><h1><h2><h3><h4><h5><h6><table><thead><tbody><td><tr><th>');
+            // check html string vor invalid tags and scripts
+            $array[$variableName] = htmLawed(stripslashes($array[$variableName]), array('safe' => 1));
         }
         
         // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben

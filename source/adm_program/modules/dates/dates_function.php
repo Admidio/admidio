@@ -26,7 +26,6 @@ require_once('../../system/classes/table_date.php');
 require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/table_roles.php');
 require_once('../../system/classes/table_rooms.php');
-require_once('../../libs/htmlawed/htmlawed.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
@@ -213,7 +212,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 	}
     
     // make html in description secure
-    $_POST['dat_description'] = htmLawed(stripslashes($_POST['dat_description']), array('safe' => 1));
+    $_POST['dat_description'] = admFuncVariableIsValid($_POST, 'dat_description', 'html');
 	
     // ------------------------------------------------
     // Prüfen ob gewaehlter Raum bereits zu dem Termin reserviert ist

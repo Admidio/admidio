@@ -16,7 +16,6 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/email.php');
 require_once('../../system/classes/table_roles.php');
-require_once('../../libs/htmlawed/htmlawed.php');
 
 //Stop if mail module is disabled
 if($gPreferences['enable_mail_module'] != 1)
@@ -24,17 +23,19 @@ if($gPreferences['enable_mail_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-//Initialize and check the parameters
+// Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $postRoleId = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
-$postSubject = admFuncVariableIsValid($_POST, 'subject', 'string', '');
-$postName = admFuncVariableIsValid($_POST, 'name', 'string', '');
-$postFrom = admFuncVariableIsValid($_POST, 'mailfrom', 'string', '');
-$postTo = admFuncVariableIsValid($_POST, 'mailto', 'string', '');
-$postBody = admFuncVariableIsValid($_POST, 'mail_body', 'html', '');
+
+// Check form values
+$postSubject     = admFuncVariableIsValid($_POST, 'subject', 'string', '');
+$postName        = admFuncVariableIsValid($_POST, 'name', 'string', '');
+$postFrom        = admFuncVariableIsValid($_POST, 'mailfrom', 'string', '');
+$postTo          = admFuncVariableIsValid($_POST, 'mailto', 'string', '');
+$postBody        = admFuncVariableIsValid($_POST, 'mail_body', 'html', '');
 $postCarbonCopy  = admFuncVariableIsValid($_POST, 'carbon_copy', 'boolean', 0);
 $postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean', 0);
-$postCaptcha = admFuncVariableIsValid($_POST, 'captcha', 'string');
+$postCaptcha     = admFuncVariableIsValid($_POST, 'captcha', 'string');
 $postShowMembers = admFuncVariableIsValid($_POST, 'show_members', 'numeric', 0);
 
 //if user is logged in then show sender name and email
@@ -346,9 +347,6 @@ if($postDeliveryConfirmation == 1)
 
 // prepare body of email with note of sender and homepage
 $email->setSenderInText($postName, $postFrom, $role->getValue('rol_name'));
-
-// make html in mail body secure and commit mail body to mail object
-$email->setText(htmLawed(stripslashes($postBody), array('safe' => 1)));
 
 //Nun kann die Mail endgueltig versendet werden...
 $sendMailResult = $email->sendEmail();

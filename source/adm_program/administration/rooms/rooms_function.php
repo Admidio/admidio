@@ -15,7 +15,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/classes/table_rooms.php');
-require_once('../../libs/htmlawed/htmlawed.php');
 
 // Initialize and check the parameters
 $getRoomId = admFuncVariableIsValid($_GET, 'room_id', 'numeric', 0);
@@ -48,7 +47,7 @@ if($getMode == 1)
     }
 
     // make html in description secure
-    $_POST['room_description'] = htmLawed(stripslashes($_POST['room_description']), array('safe' => 1));
+    $_POST['room_description'] = admFuncVariableIsValid($_POST, 'room_description', 'html');
 
     // POST Variablen in das Termin-Objekt schreiben
     foreach($_POST as $key => $value)
