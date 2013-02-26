@@ -255,7 +255,7 @@ class TableRoles extends TableAccess
      *  @return Returns the default list id of this role
      */
     public function getDefaultList()
-    {
+    {
         global $gCurrentOrganization;
         $defaultListId = $this->getValue('rol_lst_id');
     
