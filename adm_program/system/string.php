@@ -165,8 +165,13 @@ function strNextLetter($letter, $mode = 0)
     return chr($ascii);
 }
 
-// prueft den uebergebenen String auf gueltige Zeichen
-// checkType kann folgende Werte haben: 'email' 'file' 'noSpecialChar' 'url' 
+/** Check if a string contains only valid characters. Therefore the string is
+ *  compared with a hard coded list of valid characters for each datatype. 
+ *  @param $string    The string that should be checked.
+ *  @param $checkType The type @b email, @b file, @b noSpecialChar or @b url that
+ *                    will be checked. Each type has a different valid character list.
+ *  @return Returns @b true if all characters of @b string match the internal character list.
+ */
 function strValidCharacters($string, $checkType)
 {
     if(strlen(trim($string)) > 0)
@@ -187,10 +192,8 @@ function strValidCharacters($string, $checkType)
 				break;
 		}
 		
-        // nur gueltige Zeichen zulassen
-        $countValidChars = strspn(admStrToLower($string), $validChars);
-
-        if($countValidChars == strlen($string))
+        // check if string contains only valid characters
+        if(strspn(admStrToLower($string), $validChars) == strlen($string))
         {
 			if($checkType == 'email')
 			{
