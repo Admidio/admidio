@@ -348,6 +348,9 @@ if($postDeliveryConfirmation == 1)
 // prepare body of email with note of sender and homepage
 $email->setSenderInText($postName, $postFrom, $role->getValue('rol_name'));
 
+//set Text
+$email->setText($postBody);
+
 //Nun kann die Mail endgueltig versendet werden...
 $sendMailResult = $email->sendEmail();
 if ($sendMailResult === TRUE)
