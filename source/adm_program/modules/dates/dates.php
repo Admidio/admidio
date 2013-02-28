@@ -273,7 +273,7 @@ If($getViewMode == 'html')
             {
                 // if no calendar selectbox is shown, then show link to edit calendars
                 $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR'), 
-                                    $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_double.png');
+                                    $gL10n->get('DAT_MANAGE_CALENDARS'), 'edit.png');
             }
 
 

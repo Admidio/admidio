@@ -242,7 +242,7 @@ if($gCurrentUser->isWebmaster())
 {
 	// show link to maintain profile fields
 	$membersAdministrationMenu->addItem('admMenuItemMaintainProfileFields', $g_root_path. '/adm_program/administration/organization/fields.php', 
-								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form.png');
+								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'edit.png');
 }
 
 $membersAdministrationMenu->show();

@@ -89,7 +89,7 @@ $rolesMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administrat
 							$gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 // show link to maintain categories
 $rolesMenu->addItem('admMenuItemMaintainCategory', $g_root_path.'/adm_program/administration/categories/categories.php?type=ROL', 
-							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
+							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
 // show link to show inactive roles
 $rolesMenu->addItem('admMenuItemInactiveRole', $g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$activeRolesFlag, 
 							$activeRolesLinkDescription, $activeRolesImage);
