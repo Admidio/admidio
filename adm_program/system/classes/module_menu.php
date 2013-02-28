@@ -151,7 +151,7 @@ class ModuleMenu
 	    $html = '';
 	   
 	    // if javascipt was set then add this script to click event of this menu item
-	    if(strlen($menuEntry['js']) > 0)
+	    if(isset($menuEntry['js']) && strlen($menuEntry['js']) > 0)
 	    {
     	    $html .= '<script type="text/javascript"><!--
     	                  $(document).ready(function() {
