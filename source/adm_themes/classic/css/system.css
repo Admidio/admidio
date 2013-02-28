@@ -547,9 +547,9 @@ ul.autosuggest li.highlight a:visited  {
 .dd-select{ 
     position:relative; 
     cursor:pointer;
-    background: none;
-    text-decoration: underline;
-    color: #222222;
+    color: #E0791F;
+    font-weight: bold;
+    text-decoration: none;    
 }
 .dd-desc { 
     color:#aaa; 
@@ -598,7 +598,10 @@ ul.autosuggest li.highlight a:visited  {
 }
 .dd-option:hover{ 
     background:#f3f3f3;
-    color:#000;
+    color: #E0791F;
+    font-weight: bold;
+    text-decoration: none;    
+
 }
 .dd-selected-description-truncated { 
     text-overflow: ellipsis; 
