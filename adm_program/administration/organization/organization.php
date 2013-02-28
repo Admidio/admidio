@@ -1548,7 +1548,7 @@ echo '
                             <dd>
                                 <div class="iconTextLink">
                                     <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
-                                    src="'. THEME_PATH. '/icons/application_form.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" /></a>
+                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" /></a>
                                     <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>
                                 </div>
                             </dd>

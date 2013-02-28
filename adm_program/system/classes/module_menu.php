@@ -272,7 +272,7 @@ class ModuleMenu
 				    // if no category was found then show link to manage categories if user has the right
 				    if($menuEntry['admin'] == true)
 				    {
-    				    $menuEntry['icon'] = THEME_PATH.'/icons/application_double.png';
+    				    $menuEntry['icon'] = THEME_PATH.'/icons/edit.png';
     				    $menuEntry['text'] = $textManageCategories;
     				    $menuEntry['link'] = $this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'];
     				    $html .= $this->createIconTextLink($menuEntry);
@@ -296,7 +296,7 @@ class ModuleMenu
 					{
     				    // show link to manage categorie
 						$html .= '&nbsp;<a class="iconLink" href="'.$this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'"><img
-							src="'. THEME_PATH. '/icons/options.png" alt="'.$textManageCategories.'" title="'.$textManageCategories.'" /></a>';
+							src="'. THEME_PATH. '/icons/edit.png" alt="'.$textManageCategories.'" title="'.$textManageCategories.'" /></a>';
 					}
 				$html .= '</li>';
 			}
