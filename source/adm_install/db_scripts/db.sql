@@ -342,7 +342,7 @@ auto_increment = 1
 default character set = utf8
 collate = utf8_unicode_ci;
 
-create unique index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
+create index IDX_MEM_ROL_USR_ID on %PREFIX%_members (mem_rol_id, mem_usr_id);
 
 /*==============================================================*/
 /* Table: adm_organizations                                     */
