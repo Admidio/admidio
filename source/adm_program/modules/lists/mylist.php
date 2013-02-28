@@ -75,7 +75,7 @@ elseif($getListId > 0)
 // Html-Kopf ausgeben
 $gLayout['title']  = $gL10n->get('LST_MY_LIST').' - '.$gL10n->get('LST_CONFIGURATION');
 $gLayout['header'] = '
-    <script type="text/javascript">
+    <script type="text/javascript"><!--
         var listId             = '.$getListId.';
         var fieldNumberIntern  = 0;
         var arr_user_fields    = createProfileFieldsArray();
@@ -465,7 +465,7 @@ $gLayout['header'] = '
                     break;
             }
         }
-    </script>';
+    //--></script>';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
