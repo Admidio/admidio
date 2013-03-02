@@ -19,11 +19,11 @@ class ModuleWeblinks
         //Bedingungen
         if($lnkId > 0)
         {
-            $this->getConditions = 'AND lnk_id ='. $lnkId;
+            $this->getConditions = ' AND lnk_id = '. $lnkId;
         }
         if($catId > 0)
         {
-            $this->getConditions = 'AAND cat_id ='. $catId;
+            $this->getConditions = ' AND cat_id = '. $catId;
         }
         if($gValidLogin == false)
         {
