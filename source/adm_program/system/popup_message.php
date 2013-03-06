@@ -65,6 +65,25 @@ switch ($get_type)
         break;    
     case 'gbc':
         $url = 'guestbook_function.php?mode=5&id='.$get_database_id;
+        $callbackSuccess = '
+            $("#gbc_'.$get_database_id.'").remove();
+            $("#comments_'.$get_database_id_2.' > br").remove();
+            
+            var count = 0;
+            $("#comments_'.$get_database_id_2.' > .groupBox").each( function(index, value) { 
+                count++;
+            });
+
+            if (count == 0) {
+                $("#admCommentsVisible_'.$get_database_id_2.'").hide();
+                $("#admCommentsInvisible_'.$get_database_id_2.'").hide();
+            }
+            else {
+                var msgOrg = "'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY').'";
+                var msg = msgOrg.replace("%VAR1%",count);
+                $("#admCommentsInvisible_'.$get_database_id_2.' span.iconTextLink > a:nth-child(2)").html(msg);
+            }   
+            ';
         break;
     case 'gbc_mod':
         $url = 'guestbook_function.php?mode=10&id='.$get_database_id;
@@ -152,8 +171,9 @@ function deleteEntry()
         if(data == "done")
         {
             $.colorbox.close();
-            $(entryDeleted).fadeOut("slow");
+            $(entryDeleted).fadeOut("slow", function() { 
 			'.$callbackSuccess.'
+            });
         }
         else
         {
