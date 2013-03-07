@@ -72,6 +72,9 @@ class Language
 	 */ 
     public function get($textId, $var1='', $var2='', $var3='', $var4='')
     {
+		if(!is_object($this->languageData))
+		    return "Error: $this->languageData is not an object!";
+
         $text   = '';
 		
 		// first read text from cache if it exists there
