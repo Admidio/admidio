@@ -44,6 +44,7 @@ require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/language_data.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
@@ -85,7 +86,9 @@ $gPreferences = $gCurrentOrganization->getPreferences();
 $gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
 
 // Sprachdateien einlesen
-$gL10n = new Language($gPreferences['system_language']);
+$gL10n = new Language();
+$gLanguageData = new LanguageData($gPreferences['system_language']);
+$gL10n->addLanguageData($gLanguageData);
 
 $message  = '';
 
