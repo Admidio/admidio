@@ -355,31 +355,37 @@ else
                         $visibility_others        = 'hidden';
                         $display_others           = 'none';
                     }
+
+                    $gboId = $guestbook->getValue('gbo_id');
+
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     echo '
-                    <div id="admCommentsVisible_'. $guestbook->getValue('gbo_id'). '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
+                    <div id="admCommentsVisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
                         <span class="iconTextLink">
-                            <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                            <a href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
                             alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" title="'.$gL10n->get('GBO_HIDE_COMMENTS').'" /></a>
-                            <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')">'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>
+                            <a href="javascript:toggleComments('. $gboId. ')">'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>
                         </span>
                     </div>';
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                     echo '
-                    <div id="admCommentsInvisible_'. $guestbook->getValue('gbo_id'). '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
+                    <div id="admCommentsInvisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
                         <span class="iconTextLink">
-                            <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                            <a href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
                             alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" title="'.$gL10n->get('GBO_SHOW_COMMENTS').'" /></a>
-                            <a href="javascript:toggleComments('. $guestbook->getValue('gbo_id'). ')">'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $gDb->num_rows($comment_result)).'</a>
+                            <a href="javascript:toggleComments('. $gboId. ')">'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $gDb->num_rows($comment_result)).'</a>
                         </span>
-                        <div id="comments_'. $guestbook->getValue('gbo_id'). '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
+                        <div id="comments_'. $gboId. '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
                     </div>';
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
-                    echo '<div id="admCommentSection_'. $guestbook->getValue('gbo_id'). '" class="commentBox" style="display: '. $display_others. ';">';
+                    echo '<div id="admCommentSection_'. $gboId. '" class="commentBox" style="display: '. $display_others. ';">';
                         if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration == 1)
                         {
+                            // Get setzen da diese Datei eigentlich als Aufruf ueber Javascript gedacht ist
+                            $_GET['cid'] = $gboId;
+                            $_GET['moderation'] = $getModeration;
                             include('get_comments.php');
                         }
                     echo '</div>';
