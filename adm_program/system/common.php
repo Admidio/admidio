@@ -42,6 +42,7 @@ require_once(SERVER_PATH. '/adm_program/libs/htmlawed/htmlawed.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/auto_login.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/exception.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
@@ -116,6 +117,9 @@ else
     $gSessionId = session_id();
 }
 
+// if auto login is set and session is new or a user assigned then check then create valid login
+$userIdAutoLogin = 0;
+
 // create language object to handle translation texts
 $gL10n = new Language();
 
@@ -132,6 +136,19 @@ if(isset($_SESSION['gCurrentSession']))
 	// read organization data from session object
 	$gCurrentOrganization =& $gCurrentSession->getObject('gCurrentOrganization');
     $gPreferences          = $gCurrentOrganization->getPreferences();
+    
+    // compute time in ms from last activity in session until now
+    $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
+    
+    // if no user object or user activity is long ago, then create auto login if possible
+    if(isset($_COOKIE[$gCookiePraefix. '_DATA'])
+    && $gCurrentSession->hasObject('gCurrentUser') && $time_gap > $gPreferences['logout_minutes'] * 60)
+    {
+    	// restore user from auto login session
+    	$autoLogin = new AutoLogin($gDb, $gSessionId);
+    	$autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix. '_DATA']);
+    	$userIdAutoLogin = $autoLogin->getValue('atl_usr_id');
+    }
 }
 else
 {
@@ -139,8 +156,30 @@ else
 	$gCurrentSession = new Session($gDb, $gSessionId);
 	$_SESSION['gCurrentSession'] =& $gCurrentSession;
 	
-	// create object of the organization of config file with their preferences
-    $gCurrentOrganization = new Organization($gDb, $g_organization);
+	// if cookie ADMIDIO_DATA is set then there could be an auto login
+	// the auto login must be done here because after that the corresponding organization must be set
+	if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
+	{
+    	// restore user from auto login session
+    	$autoLogin = new AutoLogin($gDb, $gSessionId);
+    	$autoLogin->setValidLogin($gCurrentSession, $_COOKIE[$gCookiePraefix. '_DATA']);
+    	$userIdAutoLogin = $autoLogin->getValue('atl_usr_id');    	
+    	
+    	// create object of the organization of config file with their preferences
+    	if($autoLogin->getValue('atl_org_id') > 0)
+    	{
+            $gCurrentOrganization = new Organization($gDb, $autoLogin->getValue('atl_org_id'));
+        }
+        else
+        {
+            $gCurrentOrganization = new Organization($gDb, $g_organization);            
+        }
+	}
+	else
+	{
+    	// create object of the organization of config file with their preferences
+        $gCurrentOrganization = new Organization($gDb, $g_organization);
+    }
     
     if($gCurrentOrganization->getValue('org_id') == 0)
     {
@@ -157,43 +196,6 @@ else
 	
 	// delete old entries in session table
     $gCurrentSession->tableCleanup($gPreferences['logout_minutes']);
-}
-
-// if auto login is set and session is new or a user assigned then check then create valid login
-$userIdAutoLogin = 0;
-// compute time in ms from last activity in session until now
-$time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
-
-// if no user object or user activity is long ago, then create auto login if possible
-if(isset($_COOKIE[$gCookiePraefix. '_DATA'])
-&& (  $gCurrentSession->hasObject('gCurrentUser') == false 
-   || ($gCurrentSession->hasObject('gCurrentUser') && $time_gap > $gPreferences['logout_minutes'] * 60)))
-{
-	$admidio_data = explode(';', $_COOKIE[$gCookiePraefix. '_DATA']);
-
-	if($admidio_data[0] == true         // autologin
-	&& is_numeric($admidio_data[1]))    // user_id 
-	{   
-		// restore user from auto login session
-		require_once(SERVER_PATH. '/adm_program/system/classes/table_auto_login.php');
-		$auto_login = new TableAutoLogin($gDb, $gSessionId);
-		
-		// restore user if saved database user id == cookie user id
-		// if session is inactive than set it to an active session
-		if($auto_login->getValue('atl_usr_id') == $admidio_data[1])
-		{
-			$userIdAutoLogin = $auto_login->getValue('atl_usr_id');
-			$gCurrentSession->setValue('ses_timestamp', DATETIME_NOW);
-		}
-		else
-		{
-			// something is wrong -> for security reasons delete that auto login
-			$auto_login->delete();
-		}
-
-		// auto login successful then create a valid session
-		$gCurrentSession->setValue('ses_usr_id',  $userIdAutoLogin);
-	}
 }
 
 // now if auto login is done, read global user data

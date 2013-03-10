@@ -9,7 +9,6 @@
  *****************************************************************************/
 
 require_once('common.php');
-require_once('classes/table_auto_login.php');
 
 // Initialize parameters
 $userFound  = 0;
@@ -123,15 +122,15 @@ if ($userFound >= 1)
         if($bAutoLogin == true && $gPreferences['enable_auto_login'] == 1)
         {
             $timestamp_expired = time() + 60*60*24*365;
-            $auto_login = new TableAutoLogin($gDb, $gSessionId);
+            $autoLogin = new AutoLogin($gDb, $gSessionId);
             
             // falls bereits ein Autologin existiert (Doppelanmeldung an 1 Browser), 
             // dann kein Neues anlegen, da dies zu 'Duplicate Key' fuehrt
-            if(strlen($auto_login->getValue('atl_usr_id')) == 0)
+            if(strlen($autoLogin->getValue('atl_usr_id')) == 0)
             {
-                $auto_login->setValue('atl_session_id', $gSessionId);
-                $auto_login->setValue('atl_usr_id', $userRow['usr_id']);            
-                $auto_login->save();
+                $autoLogin->setValue('atl_session_id', $gSessionId);
+                $autoLogin->setValue('atl_usr_id', $userRow['usr_id']);            
+                $autoLogin->save();
             }
         }
         else

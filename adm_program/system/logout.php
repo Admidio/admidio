@@ -9,7 +9,6 @@
  *****************************************************************************/
 
 require_once('common.php');
-require_once('classes/table_auto_login.php');
 
 // remove user from session
 $gCurrentSession->setValue('ses_usr_id', '');
@@ -23,8 +22,8 @@ if(isset($_COOKIE[$gCookiePraefix. '_DATA']))
 {
     setcookie($gCookiePraefix. '_DATA', '', time() - 1000, '/', $domain, 0);
     
-    $auto_login = new TableAutoLogin($gDb, $gSessionId);
-    $auto_login->delete(); 
+    $autoLogin = new AutoLogin($gDb, $gSessionId);
+    $autoLogin->delete(); 
 }
 
 // if login organization is different to organization of config file then create new session variables
