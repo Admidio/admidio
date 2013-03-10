@@ -1,24 +1,31 @@
 <?php
-/******************************************************************************
- * Class manages access to database table adm_auto_login
+/*****************************************************************************/
+/** @class AutoLogin
+ *  @brief Handle auto login with Admidio and manage it in the database
  *
- * Copyright    : (c) 2004 - 2013 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *  The class search in the database table @b adm_auto_login for the session id.
+ *  If there is an entry for that id then it reads the user id and set this 
+ *  user to the current session. Now the current session has become a valid user
+ *  that is automatically login.
+ *  @par Examples
+ *  @code // create a valid user login for a Admidio session from auto login
+ *  $autoLogin = new AutoLogin($gDb, $gSessionId);
+ *  $autoLogin->setValidLogin($gCurrentSession, $_COOKIE['ADMIDIO_ID']);@endcode
+ *  @code // delete an auto login
+ *  $autoLogin = new AutoLogin($gDb, $gSessionId);
+ *  $autoLogin->delete();@endcode
+ */
+/*****************************************************************************
  *
- * Diese Klasse dient dazu ein Autologinobjekt zu erstellen.
- * Das Autologin kann ueber diese Klasse in der Datenbank verwaltet werden.
- *
- * Beside the methods of the parent class there are the following additional methods:
- *
- * tableCleanup()       - loescht Datensaetze aus der AutoLogin-Tabelle die nicht
- *                        mehr gebraucht werden
+ *  Copyright    : (c) 2004 - 2013 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
 require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 
-class TableAutoLogin extends TableAccess
+class AutoLogin extends TableAccess
 {
 	/** Constuctor that will create an object of a recordset of the table adm_auto_login. 
 	 *  If the id is set than the specific auto login will be loaded.
@@ -68,9 +75,42 @@ class TableAutoLogin extends TableAccess
             $this->setValue('atl_ip_address', $_SERVER['REMOTE_ADDR']);
         }
         parent::save($updateFingerPrint);
+    }
+    
+    /** Method checks the data of the cookie against the data stored in the
+     *  database table @b adm_auto_login. If cookie data is ok then the 
+     *  user id will be set in the current session. Now there is a valid login
+     *  for this user.
+     *  @param $session    The Session object of the current Admidio session.
+     *  @param $cookieData The data of the cookie @b ADMIDIO_DATA.
+     */
+    public function setValidLogin(&$session, $cookieData)
+    {
+    	$dataArray = explode(';', $cookieData);
+    
+    	if($dataArray[0] == true         // autologin
+    	&& is_numeric($dataArray[1]))    // user_id 
+    	{   
+    		// restore user if saved database user id == cookie user id
+    		// if session is inactive than set it to an active session
+    		if($this->getValue('atl_usr_id') == $dataArray[1])
+    		{
+    			$session->setValue('ses_timestamp', DATETIME_NOW);
+    		}
+    		else
+    		{
+    			// something is wrong -> for security reasons delete that auto login
+    			$this->delete();
+    		}
+    
+    		// auto login successful then create a valid session
+    		$session->setValue('ses_usr_id',  $this->getValue('atl_usr_id'));
+    	}        
     }  
     
-    // diese Methode loescht Datensaetze aus der AutoLogin-Tabelle die nicht mehr gebraucht werden
+    /** Method will clean the database table @b adm_auto_login. All login that had their last
+     *  login one year ago will be deleted.
+     */
     public function tableCleanup()
     {
         // Zeitpunkt bestimmen, ab dem die Auto-Logins geloescht werden, mind. 1 Jahr alt
@@ -79,6 +119,6 @@ class TableAutoLogin extends TableAccess
         $sql    = 'DELETE FROM '. TBL_AUTO_LOGIN. ' 
                     WHERE atl_last_login < \''. date('Y.m.d H:i:s', $date_session_delete). '\'';
         $this->db->query($sql);
-    }    
+    }
 }
 ?>
