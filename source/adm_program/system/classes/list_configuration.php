@@ -18,8 +18,6 @@
  * deleteColumn($number, $all = false)
  *                       - entfernt die entsprechende Spalte aus der Konfiguration
  * countColumns()        - Anzahl der Spalten der Liste zurueckgeben
- * getColumnObject($number)
- *                       - liefert das entsprechende TableListColumns-Objekt zurueck
  * getSQL($roleIds, $memberStatus = 0)
  *                       - gibt das passende SQL-Statement zu der Liste zurueck
  *
@@ -114,33 +112,55 @@ class ListConfiguration extends TableLists
             if($all)
             {
                 // alle Spalten ab der Nummer werden entfernt
-                for($new_number = $this->countColumns(); $new_number >= $number; $new_number--)
+                for($newColumnNumber = $this->countColumns(); $newColumnNumber >= $number; $newColumnNumber--)
                 {
-                    $this->columns[$new_number]->delete();
+                    $this->columns[$newColumnNumber]->delete();
                     array_pop($this->columns);
                 }
             }
             else
             {
                 // es wird nur die einzelne Spalte entfernt und alle folgenden Spalten ruecken eins nach vorne
-                for($new_number = $number; $new_number < $this->countColumns(); $new_number++)
+                for($newColumnNumber = $number; $newColumnNumber < $this->countColumns(); $newColumnNumber++)
                 {
-                    $this->columns[$new_number]->setValue('lsc_usf_id', $this->columns[$new_number+1]->getValue('lsc_usf_id'));
-                    $this->columns[$new_number]->setValue('lsc_special_field', $this->columns[$new_number+1]->getValue('lsc_special_field'));
-                    $this->columns[$new_number]->setValue('lsc_sort',   $this->columns[$new_number+1]->getValue('lsc_sort'));
-                    $this->columns[$new_number]->setValue('lsc_filter', $this->columns[$new_number+1]->getValue('lsc_filter'));
-                    $this->columns[$new_number]->save();
+                    $this->columns[$newColumnNumber]->setValue('lsc_usf_id', $this->columns[$newColumnNumber+1]->getValue('lsc_usf_id'));
+                    $this->columns[$newColumnNumber]->setValue('lsc_special_field', $this->columns[$newColumnNumber+1]->getValue('lsc_special_field'));
+                    $this->columns[$newColumnNumber]->setValue('lsc_sort',   $this->columns[$newColumnNumber+1]->getValue('lsc_sort'));
+                    $this->columns[$newColumnNumber]->setValue('lsc_filter', $this->columns[$newColumnNumber+1]->getValue('lsc_filter'));
+                    $this->columns[$newColumnNumber]->save();
                 }
-                $this->columns[$new_number]->delete();
+                $this->columns[$newColumnNumber]->delete();
                 array_pop($this->columns);
             }
         }
     }
     
-    // liefert das entsprechende TableListColumns-Objekt zurueck
+    /** Returns the column object with the corresponding number.
+     *  If that column doesn't exists the method try to repair the
+     *  column list. If that won't help then @b null will be returned.
+     *  @param $number The internal number of the column. 
+     *                 This will be the position of the column in the list.
+     *  @return Returns a TableAccess object of the database table @b adm_list_columns.
+     */
     public function getColumnObject($number)
     {
-        return $this->columns[$number];
+        if(isset($this->columns[$number]))
+        {
+            return $this->columns[$number];
+        }
+        else
+        {
+            // column not found, then try to repair list
+            $this->repair();
+            if(isset($this->columns[$number]))
+            {
+                return $this->columns[$number];
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
     
     // gibt das passende SQL-Statement zu der Liste zurueck
@@ -323,6 +343,33 @@ class ListConfiguration extends TableLists
             $this->columns[$lsc_row['lsc_number']] = new TableAccess($this->db, TBL_LIST_COLUMNS, 'lsc');
             $this->columns[$lsc_row['lsc_number']]->setArray($lsc_row);
         }
+    }
+    
+    /** The method will clear all column data of this object and restore all
+     *  columns from the database. Then the column number will be renewed for all columns.
+     *  This is in some cases a neccessary fix if a column number was lost.
+     */
+    public function repair()
+    {
+        // restore columns from database
+        $this->columns = array();
+        $this->readColumns();
+        $newColumnNumber = 1;
+        
+        // check for every column if the number is expected otherwise set new number
+        foreach($this->columns as $number => $listColumn)
+        {
+            if($number != $newColumnNumber)
+            {
+                $this->columns[$number]->setValue('lsc_number', $newColumnNumber);
+                $this->columns[$number]->save();
+            }
+            $newColumnNumber++;
+        }
+        
+        // now restore columns with new numbers
+        $this->columns = array();
+        $this->readColumns();        
     }
 
     public function save($updateFingerPrint = true)
