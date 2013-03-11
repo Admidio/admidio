@@ -404,11 +404,11 @@ if($countCategoryEntries == 0)
 else
 {
     echo '</div></div>';
-}
 
-// If neccessary show links to navigate to next and previous recordsets of the query
-$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $getCatId. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;
-echo admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, TRUE);
+    // If neccessary show links to navigate to next and previous recordsets of the query
+    $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $getCatId. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;
+    echo admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, TRUE);
+}
 
 echo '</div>';
 
