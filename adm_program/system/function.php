@@ -138,7 +138,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 {
     global $g_root_path, $gL10n;
 
-    if ( $num_items == 0)
+    if ( $num_items == 0 || $per_page == 0 )
     {
     	return '';
     }

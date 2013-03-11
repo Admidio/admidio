@@ -139,7 +139,10 @@ class ModuleLists
          //Parameter        
         if($limit == NULL)
         {
-            $limit = $gPreferences['lists_roles_per_page'];
+            // Roles per page
+            $rolesPerPage = $gPreferences['lists_roles_per_page'];
+            if( $rolesPerPage > 0 )
+                $limit = $rolesPerPage;
         }
         
         //assemble conditions
@@ -165,8 +168,13 @@ class ModuleLists
            AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                OR cat_org_id IS NULL )
                '.$sql_conditions.'
-         ORDER BY cat_sequence, rol_name
-         LIMIT '.$limit.' OFFSET '.$startElement;
+         ORDER BY cat_sequence, rol_name';
+
+         // If is there a limit then specify one
+         if( $limit != NULL )
+         {
+            $sql .= ' LIMIT '.$limit.' OFFSET '.$startElement;
+         }
 
         $result = $gDb->query($sql);
         
