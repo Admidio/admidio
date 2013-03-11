@@ -171,7 +171,7 @@ class ModuleLists
          ORDER BY cat_sequence, rol_name';
 
          // If is there a limit then specify one
-         if( $limit != NULL )
+         if($limit > 0)
          {
             $sql .= ' LIMIT '.$limit.' OFFSET '.$startElement;
          }
