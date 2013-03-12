@@ -30,8 +30,9 @@ require_once('../../system/classes/role_dependency.php');
 $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
 
-// nur Moderatoren duerfen Rollen erfassen & verwalten
-if(!$gCurrentUser->assignRoles())
+// only members who are allowed to create and edit roles should have access to 
+// most of these functions
+if(!$gCurrentUser->assignRoles() && $getMode != 9)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
