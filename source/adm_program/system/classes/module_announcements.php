@@ -53,7 +53,11 @@ class ModuleAnnouncements
         //Parameter        
         if($limit == NULL)
         {
-            $limit = $gPreferences['announcements_per_page'];
+            $announcementsPerPage = $gPreferences['announcements_per_page'];
+
+            // If announcements per page value is "0" limit should not be set because every entry will be shown
+            if( $announcementsPerPage > 0 )
+              $limit = $announcementsPerPage;
         }
         
         if($gPreferences['system_show_create_edit'] == 1)
@@ -96,8 +100,12 @@ class ModuleAnnouncements
                     OR (   ann_global   = 1
                    AND ann_org_shortname IN ('.$gCurrentOrganization->getFamilySQL(true).') ))
                        '.$this->getConditions.' 
-                 ORDER BY ann_timestamp_create DESC
-                 LIMIT '.$limit.' OFFSET '.$startElement;
+                 ORDER BY ann_timestamp_create DESC';
+
+        // Check if limit was set
+        if( $limit != NULL )
+          $sql .= ' LIMIT '.$limit.' OFFSET '.$startElement;
+
         $result = $gDb->query($sql);
 
         //array für Ergbenisse       
