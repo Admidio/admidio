@@ -4,6 +4,7 @@
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Möchtest du die Kategorie %VAR1_BOLD% wirklich löschen?</text>
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="todo">Die Kategorie %VAR1_BOLD% kann nicht gelöscht werden, da sie noch %VAR2% abhängige Einträge besitzt.</text>
 	<text id="DAT_HIGHLIGHT_DATE" development="new" translation="todo">Termin optisch hervorheben</text>
+	<text id="DOW_FOLDER_NOT_FOUND" development="new" translation="todo">Der Ordner (ID %VAR1%) konnte nicht gefunden werden.</text>
     <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Du hast für ein Datumsfeld ein ungültiges Datumsformat angegeben.</text>
     <text id="LST_NOT_NUMERIC" development="new" translation="todo">Du hast in ein numerisches Feld eine nicht numerische Bedingung angegeben.</text>
 	<text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</text>
