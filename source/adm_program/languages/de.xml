@@ -95,7 +95,7 @@
 	<text id="SYS_INFORMATIONS" development="new" translation="todo">Informationen</text>
     <text id="SYS_LEADER_DESCRIPTION" development="deleted" translation="todo">Neben der separaten Darstellung der Leiter in Listen und Rollenzuordnungen haben Leiter mehr Rechte als ein normales Rollenmitglied.\n\nLeiter können unabhängig von der Rollenrechteeinstellung die Mitgliederlisten immer einsehen und Mitglieder der Rolle zuordnen oder entfernen.</text>
 	<text id="SYS_MAIL_DISPATCH" development="new" translation="todo">E-Mailversand</text>
-	<text id="SYS_MODULE_ACCESS_FROM_HOMPAGE_ONLY" development="new" translation="edited">Dieses Modul kann nur von der Homepage der beim Login gewählten Organisation (%VAR1%) aus aufgerufen werden.</text>
+	<text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">Dieses Modul kann nur von der Homepage der beim Login gewählten Organisation (%VAR1%) aus aufgerufen werden.</text>
 	<text id="SYS_MODULE_PREFERENCES" development="new" translation="todo">Moduleinstellungen</text>
     <text id="SYS_MORE_FEATURES" development="new" translation="todo">Weitere Funktionen</text>
 	<text id="SYS_NEW_VALUE" development="new" translation="todo">Neuer Wert</text>
