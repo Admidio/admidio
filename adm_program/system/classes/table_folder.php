@@ -265,7 +265,7 @@ class TableFolder extends TableAccess
 				return true;
 			}
         }
-		throw new AdmException('SYS_INVALID_PAGE_VIEW');
+		throw new AdmException('DOW_FOLDER_NOT_FOUND', $folderId);
     }
 
 
