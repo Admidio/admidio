@@ -54,10 +54,6 @@ class ModuleAnnouncements
         if($limit == NULL)
         {
             $announcementsPerPage = $gPreferences['announcements_per_page'];
-
-            // If announcements per page value is "0" limit should not be set because every entry will be shown
-            if( $announcementsPerPage > 0 )
-              $limit = $announcementsPerPage;
         }
         
         if($gPreferences['system_show_create_edit'] == 1)
@@ -103,8 +99,14 @@ class ModuleAnnouncements
                  ORDER BY ann_timestamp_create DESC';
 
         // Check if limit was set
-        if( $limit != NULL )
-          $sql .= ' LIMIT '.$limit.' OFFSET '.$startElement;
+        if($limit > 0)
+        {
+            $sql .= ' LIMIT '.$limit;
+        }               
+        if($startElement != 0)
+        {
+            $sql .= ' OFFSET '.$startElement;
+        }  
 
         $result = $gDb->query($sql);
 

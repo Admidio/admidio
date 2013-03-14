@@ -141,8 +141,6 @@ class ModuleLists
         {
             // Roles per page
             $rolesPerPage = $gPreferences['lists_roles_per_page'];
-            if( $rolesPerPage > 0 )
-                $limit = $rolesPerPage;
         }
         
         //assemble conditions
@@ -170,11 +168,15 @@ class ModuleLists
                '.$sql_conditions.'
          ORDER BY cat_sequence, rol_name';
 
-         // If is there a limit then specify one
-         if($limit > 0)
-         {
-            $sql .= ' LIMIT '.$limit.' OFFSET '.$startElement;
-         }
+        // If is there a limit then specify one
+        if($limit > 0)
+        {
+            $sql .= ' LIMIT '.$limit;
+        }               
+        if($startElement != 0)
+        {
+            $sql .= ' OFFSET '.$startElement;
+        }
 
         $result = $gDb->query($sql);
         
