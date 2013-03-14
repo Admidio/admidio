@@ -63,6 +63,7 @@ else
    $form_values['new_description'] = null;
 }
 
+$extension ='';
 try
 {
     if ($getFileId) 
@@ -75,7 +76,8 @@ try
     
         if ($form_values['new_name'] == null) 
         {
-            $form_values['new_name'] = $originalName;
+            $form_values['new_name'] = admFuncGetFilenameWithoutExtension($originalName);
+            $extension = admFuncGetFilenameExtension($originalName);
         }
     
         if ($form_values['new_description'] == null) 
@@ -86,7 +88,7 @@ try
     }
     else 
     {
-        // get recordset of current folder from databse
+        // get recordset of current folder from databses
         $folder = new TableFolder($gDb);
         $folder->getFolderForDownload($getFolderId);
         
@@ -143,7 +145,7 @@ echo '
                 <dl>
                     <dt><label for="new_name">'.$gL10n->get('DOW_NEW_NAME').':</label></dt>
                     <dd>
-                        <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 90%;" maxlength="255" />
+                        <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 80%;" maxlength="255" />'.$extension.'
                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES&amp;inline=true"><img 
 			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"

@@ -630,5 +630,20 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     }
     return $html;
 }
-
+/** Returns the extension of a given filename
+ * @param $filname given filename
+ * @return Returns the extension including "."
+ */
+function admFuncGetFilenameExtension($filename)
+{
+    return strtolower(strrchr($filename, "."));
+}
+/** Returns the name of a given filename without extension
+ * @param $filname given filename
+ * @return Returns name without extension
+ */
+function admFuncGetFilenameWithoutExtension($filename)
+{
+    return str_replace(strrchr($filename, "."), '', $filename);
+}
 ?>

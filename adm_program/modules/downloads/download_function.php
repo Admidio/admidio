@@ -99,7 +99,7 @@ if ($getMode == 1)
     // wenn neuer Name uebergeben wurde, dann diesen nehmen
     if(strlen($_POST['new_name']) > 0)
     {
-        $file_name = $_POST['new_name'];
+        $file_name = $_POST['new_name'].admFuncGetFilenameExtension($_FILES['userfile']['name']);
     }
 
     // pruefen, ob der Dateiname gueltig ist
@@ -305,7 +305,7 @@ elseif ($getMode == 4)
         $oldFile = $file->getCompletePathOfFile();
         $newFile = null;
 
-        if (strlen($_POST['new_name']) > 0)
+        if(strlen($_POST['new_name']) > 0)
         {
             $ret_code = isValidFileName($_POST['new_name'], true);
 
@@ -325,7 +325,7 @@ elseif ($getMode == 4)
                 }
             }
             else {
-                $newFile = $_POST['new_name'];
+                $newFile = $_POST['new_name'].admFuncGetFilenameExtension($oldFile);
             }
         }
         else
