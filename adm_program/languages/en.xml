@@ -95,7 +95,7 @@
 	<text id="SYS_INFORMATIONS" development="new" translation="edited">information</text>
     <text id="SYS_LEADER_DESCRIPTION" development="deleted" translation="edited">In addition to the separate representation of the group leader in lists and role assignments leaders have more rights than a regular role members.\n\nLeaders can, regardless of the role right setting, see the membership lists and always assign or remove members of the role.</text>
 	<text id="SYS_MAIL_DISPATCH" development="new" translation="edited">E-mail Delivery</text>
-	<text id="SYS_MODULE_ACCESS_FROM_HOMPAGE_ONLY" development="new" translation="edited">This module can only be accessed from the homepage of the organization chosen at login (% VAR1%).</text>
+	<text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">This module can only be accessed from the homepage of the organization chosen at login (% VAR1%).</text>
 	<text id="SYS_MODULE_PREFERENCES" development="new" translation="edited">Module settings</text>
     <text id="SYS_MORE_FEATURES" development="new" translation="edited">Additional functions</text>
 	<text id="SYS_NEW_VALUE" development="new" translation="edited">New value</text>
