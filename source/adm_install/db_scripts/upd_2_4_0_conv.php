@@ -21,6 +21,18 @@ if($gDbType == 'mysql')
 	$gDb->query($sql, false);
 	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX IDX_MEM_ROL_USR_ID';
 	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_FOLDER_ROLES.' DROP INDEX FLR_FOL_FK';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_FOLDER_ROLES.' DROP INDEX FLR_ROL_FK';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_ROLE_DEPENDENCIES.' DROP INDEX RLD_ROL_PARENT_FK';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_PREFERENCES.' DROP INDEX PRF_ORG_FK';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP INDEX MEM_ROL_FK';
+	$gDb->query($sql, false);
+	$sql = 'ALTER TABLE '.TBL_USER_DATA.' DROP INDEX USD_USR_FK';
+	$gDb->query($sql, false);
 	$sql = 'ALTER TABLE '.TBL_SESSIONS.' MODIFY COLUMN ses_session_id varchar(255) NOT NULL';
 	$gDb->query($sql, false);
 	$sql = 'UPDATE '.TBL_ROLES.' SET rol_default_registration = 1
@@ -40,6 +52,18 @@ else
 	$sql = 'ALTER TABLE '.TBL_MEMBERS.' DROP CONSTRAINT '.$g_tbl_praefix.'_FK_MEM_USR';
 	$gDb->query($sql, false);
 	$sql = 'DROP INDEX IDX_MEM_ROL_USR_ID';
+	$gDb->query($sql, false);
+	$sql = 'DROP INDEX FLR_FOL_FK';
+	$gDb->query($sql, false);
+	$sql = 'DROP INDEX FLR_ROL_FK';
+	$gDb->query($sql, false);
+	$sql = 'DROP INDEX RLD_ROL_PARENT_FK';
+	$gDb->query($sql, false);
+	$sql = 'DROP INDEX PRF_ORG_FK';
+	$gDb->query($sql, false);
+	$sql = 'DROP INDEX MEM_ROL_FK';
+	$gDb->query($sql, false);
+	$sql = 'DROP INDEX USD_USR_FK';
 	$gDb->query($sql, false);
 	$sql = 'ALTER TABLE '.TBL_SESSIONS.' ALTER COLUMN ses_session_id SET NOT NULL';
 	$gDb->query($sql, false);
