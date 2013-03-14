@@ -69,7 +69,7 @@ class ModuleWeblinks
                    AND cat_type = \'LNK\'
                    '.$this->getConditions.'
                  ORDER BY cat_sequence, lnk_name, lnk_timestamp_create DESC';
-        if($limit != 0)
+        if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
         }               

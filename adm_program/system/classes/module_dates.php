@@ -455,6 +455,11 @@ class ModuleDates
         global $gDb;
         global $gPreferences;
         
+        if($limit == NULL)
+        {
+            $limit = $gPreferences['dates_per_page'];
+        }
+        
         if($gPreferences['system_show_create_edit'] == 1)
         {
             // show firstname and lastname of create and last change user
@@ -504,7 +509,7 @@ class ModuleDates
                        '.$this->sqlConditionsGet()
                         . ' ORDER BY dat_begin '.$this->order;
          //Parameter        
-        if($limit != NULL)
+        if($limit > 0)
         {
             $sql .= ' LIMIT '.$limit;
         }               
