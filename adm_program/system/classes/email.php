@@ -259,7 +259,7 @@ class Email extends PHPMailer
     }
     
     // write a short text with sender informations in text of email
-    public function setSenderInText($senderName, $senderEmail, $roleName)
+    public function setSenderInText($senderName, $senderEmail, $roleName, $roleMemberStatus)
     {
         global $gL10n, $gValidLogin, $gCurrentOrganization;
         
@@ -274,7 +274,18 @@ class Email extends PHPMailer
         
         if(strlen($roleName) > 0)
         {
-            $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $roleName);
+            switch($roleMemberStatus)
+            {
+                case 0:
+                    $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $roleName);
+                    break;
+                case 1:
+                    $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_FORMER', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $roleName);
+                    break;
+                case 2:
+                    $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ALL', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $roleName);
+                    break;        
+            }            
         }
         else
         {

@@ -267,12 +267,12 @@ else
     // Rolle wurde uebergeben, dann alle Mitglieder auslesen (ausser dem Sender selber)
     // je nach Einstellung mit oder nur Ehemalige
     
-    if(isset($postShowMembers) && $postShowMembers == 1)
+    if($postShowMembers == 1)
     {
         // only former members
         $sqlConditions = ' AND mem_end < \''.DATE_NOW.'\' ';
     }
-    elseif(isset($postShowMembers) && $postShowMembers == 2)
+    elseif($postShowMembers == 2)
     {
         // former members and active members
         $sqlConditions = ' AND mem_begin < \''.DATE_NOW.'\' ';
@@ -346,7 +346,7 @@ if($postDeliveryConfirmation == 1)
 }
 
 // prepare body of email with note of sender and homepage
-$email->setSenderInText($postName, $postFrom, $role->getValue('rol_name'));
+$email->setSenderInText($postName, $postFrom, $role->getValue('rol_name'), $postShowMembers);
 
 //set Text
 $email->setText($postBody);

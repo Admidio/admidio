@@ -14,6 +14,10 @@
 	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="edited">Request read</text>
 	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="edited">When enabled, the author of an e-mail has the opportunity to request a read receipt. It, however, depends on the settings of the email program of the recipient, whether a read receipt is sent. The recipient may suppress at his request.</text>
     <text id="MAI_EMAILS" development="deleted" translation="edited">EMails</text>
+	<text id="MAI_EMAIL_SEND_TO_ROLE" development="deleted" translation="todo"></text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% has sent following e-mail to active users of role %VAR3% on %VAR2%:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% has sent following e-mail to former users of role %VAR3% on %VAR2%:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% has sent following e-mail to active and former users of role %VAR3% on %VAR2%:</text>
 	<text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
 	<text id="MAI_SEND_METHOD" development="new" translation="edited">Shipping method</text>
 	<text id="MAI_SEND_METHOD_DESC" development="new" translation="edited">The mail () function of PHP is limited by some hosters and sometimes leads to suspected spam. It is therefore recommended sending Emails via SMTP server. The SMTP settings can be configured below. (Default: PHP mail ())</text>
@@ -145,7 +149,6 @@
     <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="edited">Subject &amp; Attachment</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="edited">Character encoding</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="edited">Character encoding used in e-mails sent by Admidio. Not all e-mail clients are able to process UTF-8. Hence ISO-8859-1 can be set here alternatively.</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="changed" translation="edited">%VAR1% has sent to role %VAR3% of %VAR2% following e-mail:</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="changed" translation="edited">%VAR1% from %VAR2% has sent to you following e-mail:</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="edited">HTML e-mail</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="edited">Creating and sending HTML based e-mails can be enabled for registered users. A JavaScript editor will be displayed for comfortable editing, instead of the standard text field. The current option is for guests due security reasons unavailable.</text>
