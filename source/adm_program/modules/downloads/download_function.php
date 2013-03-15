@@ -99,7 +99,7 @@ if ($getMode == 1)
     // wenn neuer Name uebergeben wurde, dann diesen nehmen
     if(strlen($_POST['new_name']) > 0)
     {
-        $file_name = $_POST['new_name'].admFuncGetFilenameExtension($_FILES['userfile']['name']);
+        $file_name = admFuncGetFilenameWithoutExtension($_POST['new_name']).admFuncGetFilenameExtension($_FILES['userfile']['name']);
     }
 
     // pruefen, ob der Dateiname gueltig ist
@@ -141,7 +141,14 @@ if ($getMode == 1)
         $newFile->save();
 		
 		// Benachrichtigungs-Email für neue Einträge        
-        $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $file_name. ' ('.$file_description.')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));           
+        if($file_description!='')
+        {
+            $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $file_name. ' ('.$file_description.')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));    
+        }
+        else
+        {
+            $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $file_name, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
+        }          
         $notification = new Email();
         $notification->adminNotfication($gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
         
