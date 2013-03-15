@@ -13,6 +13,10 @@
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
 	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="todo">Lesebestätigung anfordern</text>
 	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="todo">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</text>
+	<text id="MAI_EMAIL_SEND_TO_ROLE" development="deleted" translation="todo"></text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% hat an die aktiven Mitglieder, der Rolle %VAR3%, von %VAR2% folgende E-Mail geschickt:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% hat an die ehemaligen Mitglieder, der Rolle %VAR3%, von %VAR2% folgende E-Mail geschickt:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% hat an die aktiven und ehemaligen Mitglieder, der Rolle %VAR3%, von %VAR2% folgende E-Mail geschickt:</text>
 	<text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
 	<text id="MAI_SEND_METHOD" development="new" translation="todo">Versandmethode</text>
 	<text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Empfohlen wird daher in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</text>
@@ -136,7 +140,6 @@
     <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="todo">Betreff &amp; Anhang</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="todo">Zeichenkodierung</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="todo">Angabe der Zeichenkodierung in der Ihre E-Mail von Admidio verschickt wird. Da ggf. nicht alle E-Mail-Clients UTF-8 richtig verarbeiten können, kann hier alternativ auch ISO-8859-1 eingestellt werden.</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="changed" translation="todo">%VAR1% hat an die Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="changed" translation="todo">%VAR1% hat Ihnen von %VAR2% folgende E-Mail geschickt:</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="todo">HTML-Mails</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="todo">Die Erstellung und der Versand von HTML-Mails kann für registrierte Benutzer aktiviert werden. Anstelle des normalen Textfeldes wird dann ein Javascript-Editor angezeigt über den der Text komfortabel editiert werden kann. Aus Sicherheitsgründen ist diese Funktion nicht für Gäste möglich.</text>
