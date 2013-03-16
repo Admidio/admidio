@@ -156,9 +156,10 @@ class ConditionParser
 	 *  @param $sourceCondition The user condition string
 	 *  @param $columnName 		The name of the database column for which the condition should be created
 	 *  @param $columnType 		The type of the column. Valid types are @b string, @b int, @b date and @b checkbox
+	 *  @param $fieldName       The name of the profile field. This is used for error output to the end user
 	 *  @return Returns a valid SQL string with the condition for that column
 	 */
-    public function makeSqlStatement($sourceCondition, $columnName, $columnType)
+    public function makeSqlStatement($sourceCondition, $columnName, $columnType, $fieldName)
     {
         $bStartCondition   = true;   // gibt an, dass eine neue Bedingung angefangen wurde
         $bNewCondition     = true;   // in Stringfeldern wird nach einem neuen Wort gesucht -> neue Bedingung
@@ -374,7 +375,7 @@ class ConditionParser
                                 }
                                 else
                                 {
-									throw new AdmException('LST_NOT_VALID_DATE_FORMAT');
+									throw new AdmException('LST_NOT_VALID_DATE_FORMAT', $fieldName);
                                 }
                                 $date = '';
                             }
@@ -427,7 +428,7 @@ class ConditionParser
 							elseif($columnType == 'int' && is_numeric($this->mSrcCondArray[$this->mCount]) == false)
 							{
 								// if numeric field than only numeric characters are allowed
-								throw new AdmException('LST_NOT_NUMERIC');
+								throw new AdmException('LST_NOT_NUMERIC', $fieldName);
 							}
                             else
                             {
@@ -451,7 +452,7 @@ class ConditionParser
                 }
                 else
                 {
-					throw new AdmException('LST_NOT_VALID_DATE_FORMAT');
+					throw new AdmException('LST_NOT_VALID_DATE_FORMAT', $fieldName);
                 }
             }
 

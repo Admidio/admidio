@@ -198,15 +198,15 @@ class ListConfiguration extends TableLists
                                           AND '.$tableAlias.'.usd_usf_id = '.$listColumn->getValue('lsc_usf_id');
                 
                 // hierbei wird die usf_id als Tabellen-Alias benutzt und vorangestellt
-                $currentField = $tableAlias.'.usd_value';
+                $dbColumnName = $tableAlias.'.usd_value';
             }
             else
             {
                 // Spezialfelder z.B. usr_photo, mem_begin ...
-                $currentField = $listColumn->getValue('lsc_special_field');
+                $dbColumnName = $listColumn->getValue('lsc_special_field');
             }
 
-            $sqlSelect = $sqlSelect. $currentField;
+            $sqlSelect = $sqlSelect. $dbColumnName;
 
 
             // Sortierung einbauen
@@ -216,7 +216,7 @@ class ListConfiguration extends TableLists
                 {  
                     $sqlOrderBy = $sqlOrderBy. ', ';
                 }
-                $sqlOrderBy = $sqlOrderBy. $currentField. ' '. $listColumn->getValue('lsc_sort');
+                $sqlOrderBy = $sqlOrderBy. $dbColumnName. ' '. $listColumn->getValue('lsc_sort');
             }
 
 
@@ -279,7 +279,7 @@ class ListConfiguration extends TableLists
 				$parser->setNotExistsStatement('SELECT 1 FROM '.TBL_USER_DATA.' '.$tableAlias.'s
 												 WHERE '.$tableAlias.'s.usd_usr_id = usr_id
 												   AND '.$tableAlias.'s.usd_usf_id = '.$listColumn->getValue('lsc_usf_id'));
-                $condition = $parser->makeSqlStatement($value, $currentField, $type);
+                $condition = $parser->makeSqlStatement($value, $dbColumnName, $type, $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_name'));
 				$sqlWhere = $sqlWhere. $condition;
             }        
         }
