@@ -5,8 +5,8 @@
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="edited">Could not delete category %VAR1_BOLD% because of %VAR2% depending entries.</text>
 	<text id="DAT_HIGHLIGHT_DATE" development="new" translation="edited">Highlight date</text>
     <text id="DOW_FOLDER_NOT_FOUND" development="new" translation="edited">Folder (ID %VAR1%) not found.</text>
-    <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Please use in the condition of the field %VAR1_BOLD% a valid date.</text>
-    <text id="LST_NOT_NUMERIC" development="new" translation="edited">Please use in the condition of the field %VAR1_BOLD% a valid number.</text>
+    <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Please use a valid date as condition for field %VAR1_BOLD%.</text>
+    <text id="LST_NOT_NUMERIC" development="new" translation="edited">Please use a valid number as condition for field %VAR1_BOLD%.</text>
 	<text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Find all users with an empty address field</text>
 	<text id="LST_EXCLUDE_EXAMPLE" development="new" translation="edited">Steve</text>
 	<text id="LST_EXCLUDE_EXAMPLE_DESC" development="new" translation="edited">Find all users who are not named Steve</text>

@@ -19,8 +19,8 @@
 	<text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% hat an die ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
 	<text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% hat an die aktiven und ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
 	<text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
-	<text id="MAI_SEND_METHOD" development="new" translation="todo">Versandmethode</text>
-	<text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Empfohlen wird daher in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</text>
+	<text id="MAI_SEND_METHOD" development="new" translation="todo">Versenden über</text>
+	<text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</text>
 	<text id="MAI_SENDER_NAME" development="new" translation="todo">Name des Absenders</text>
     <text id="MAI_SENDER_NAME_DESC" development="new" translation="todo">Name des Absenders zur verwendeten Versandmailadresse.</text>
 	<text id="MAI_SMTP" development="new" translation="todo">SMTP</text>
