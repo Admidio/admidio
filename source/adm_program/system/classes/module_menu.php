@@ -204,7 +204,7 @@ class ModuleMenu
 	 *  @param $ddMaxWidth   maximum width of drop down if $ddWidth is "auto"
 	 *  @return HTML drop down menu
 	 */
-	private function createDropDown($ddIdName, $ddSelectText, $ddImagePos = "left", $ddWidth = '"auto"', $ddMaxWidth = 180)
+	private function createDropDown($ddIdName, $ddSelectText, $ddImagePos = "left", $ddWidth = '"auto"', $ddMaxWidth = 188)
 	{
 		if ($this->ddItemCnt == 0)
 			return '';
