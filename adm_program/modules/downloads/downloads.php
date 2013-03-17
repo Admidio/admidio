@@ -90,7 +90,7 @@ if ($gCurrentUser->editDownloadRight())
                         $gL10n->get('DOW_UPLOAD_FILE'), 'page_white_upload.png' );
 
     $DownloadsMenu->addItem('admMenuItemConfigFolder', $g_root_path.'/adm_program/modules/downloads/folder_config.php?folder_id='.$getFolderId,
-                        $gL10n->get('DOW_SET_PERMISSIONS'), 'lock.png' );
+                        $gL10n->get('SYS_AUTHORIZATION'), 'lock.png' );
 };
 
 if($gCurrentUser->isWebmaster())
