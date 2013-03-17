@@ -12,7 +12,7 @@
  *
  *****************************************************************************/
 
-require('common.php');
+require_once('common.php');
 
 // Initialize and check the parameters
 $getMessageCode = admFuncVariableIsValid($_GET, 'message_code', 'string', null, true);
@@ -38,7 +38,7 @@ else
     }
     
     // pruefen ob eine Weiterleitungsseite gesetzt wurde, anonsten auf die Startseite verweisen
-    if(strlen($_SESSION['login_forward_url']) == 0)
+    if(isset($_SESSION['login_forward_url']) == false || strlen($_SESSION['login_forward_url']) == 0)
     {
         $_SESSION['login_forward_url'] = $gHomepage;
     }
