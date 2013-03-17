@@ -106,20 +106,20 @@ $DownloadsMenu->show();
 //Anlegen der Tabelle
 echo '
 <table class="tableList" cellspacing="0">
-    <tr>
-        <th style="width: 25px;"><img class="iconInformation"
-            src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />
-        </th>
-        <th>'.$gL10n->get('SYS_NAME').'</th>
-        <th>'.$gL10n->get('SYS_DATE_MODIFIED').'</th>
-        <th>'.$gL10n->get('SYS_SIZE').'</th>
-        <th>'.$gL10n->get('DOW_COUNTER').'</th>';
-        if ($gCurrentUser->editDownloadRight())
-        {
-           echo '<th style="text-align: center;">'.$gL10n->get('SYS_FEATURES').'</th>';
-        }
-    echo '</tr>';
-
+        <thead>
+            <tr>
+                <th style="width: 25px;"><img class="iconInformation"
+                    src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />
+                </th>
+                <th>'.$gL10n->get('SYS_NAME').'</th>
+                <th>'.$gL10n->get('SYS_DATE_MODIFIED').'</th>
+                <th>'.$gL10n->get('SYS_SIZE').'</th>
+                <th>'.$gL10n->get('DOW_COUNTER').'</th>';
+                if ($gCurrentUser->editDownloadRight())
+                {
+                   echo '<th style="text-align: center;">'.$gL10n->get('SYS_FEATURES').'</th>';
+                }
+        echo '</tr></thead>';
 
 //falls der Ordner leer ist
 if (count($folderContent) == 0)
