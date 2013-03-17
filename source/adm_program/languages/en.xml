@@ -5,6 +5,7 @@
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="edited">Could not delete category %VAR1_BOLD% because of %VAR2% depending entries.</text>
 	<text id="DAT_HIGHLIGHT_DATE" development="new" translation="edited">Highlight date</text>
     <text id="DOW_FOLDER_NOT_FOUND" development="new" translation="edited">Folder (ID %VAR1%) not found.</text>
+	<text id="DOW_SET_PERMISSIONS" development="deleted" translation="edited"></text>
     <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Please use a valid date as condition for field %VAR1_BOLD%.</text>
     <text id="LST_NOT_NUMERIC" development="new" translation="edited">Please use a valid number as condition for field %VAR1_BOLD%.</text>
 	<text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Find all users with an empty address field</text>
@@ -13,7 +14,7 @@
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Find all users with a filled address field</text>
 	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="edited">Request delivery confirmation</text>
 	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="edited">When enabled, the author of an e-mail has the opportunity to request a delivery confirmation. However, it depends on the settings of the recipients email program, whether a delivery confirmation is sent. The recipient may suppress its transmission.</text>
-    <text id="MAI_EMAILS" development="deleted" translation="edited">EMails</text>
+    <text id="MAI_EMAILS" development="deleted" translation="edited"></text>
 	<text id="MAI_EMAIL_SEND_TO_ROLE" development="deleted" translation="todo"></text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% has sent following e-mail to active users of role %VAR3% on %VAR2%:</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% has sent following e-mail to former users of role %VAR3% on %VAR2%:</text>
@@ -69,10 +70,10 @@
 	<text id="PRO_NO_DEFAULT_ROLE" development="changed" translation="edited">The role management contains no default role for new users. Please contact a webmaster who can edit this setting.</text>
     <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="edited">No roles were found. Possibly you do not have the rights to see certain roles.</text>
     <text id="PRO_VIEW_ROLES_OTHER_ORGAS" development="new" translation="edited">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</text>
-	<text id="PRO_DEFAULT_ROLE" development="deleted" translation="edited">Default role</text>
-	<text id="PRO_DEFAULT_ROLE_DESC" development="deleted" translation="edited">This role is automatically assigned to new users, if the creator of the new user does not have rights to assign roles.</text>
+	<text id="PRO_DEFAULT_ROLE" development="deleted" translation="edited"></text>
+	<text id="PRO_DEFAULT_ROLE_DESC" development="deleted" translation="edited"></text>
 	<text id="ROL_ASSIGN_EDIT_MEMBERS" development="new" translation="edited">Assign and edit members</text>
-    <text id="ROL_CANT_SHOW_FORMER_ROLES" development="deleted" translation="edited">Former role memberships can not be displayed.</text>
+    <text id="ROL_CANT_SHOW_FORMER_ROLES" development="deleted" translation="edited"></text>
 	<text id="ROL_DEFAULT_LIST" development="new" translation="edited">Default list</text>
 	<text id="ROL_DEFAULT_LIST_DESC" development="new" translation="edited">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</text>
 	<text id="ROL_DEFAULT_REGISTRATION" development="new" translation="edited">Default assignment of registering</text>
@@ -83,7 +84,7 @@
 	<text id="ROL_LEADER_RIGHTS_DESC" development="new" translation="edited">Roles members can be appointed as managers of a role and get optional extended rights.\nThey can get the right to manipulate profile data of all roles members and / or the right to add or remove members of the role. Having both rights, however, they would be able to edit information of all members.</text>
 	<text id="ROL_NO_ADDITIONAL_RIGHTS" development="new" translation="edited">No additional rights</text>
 	<text id="ROL_NO_DEFAULT_ROLE" development="new" translation="edited">You can not remove the setting %VAR1_BOLD%, because at least one role must be stored as the default assignment.</text>
-    <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="deleted" translation="edited">This person is not a member of the organization %VAR1_BOLD%, respectively there are no visible roles.</text>
+    <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="deleted" translation="edited"></text>
 	<text id="ROL_SYSTEM_DEFAULT_LIST" development="new" translation="edited">System-wide default list</text>
 	<text id="SYS_CHANGED_AT" development="new" translation="edited">Last Review</text>
 	<text id="SYS_DELETE_LAST_CATEGORY" development="new" translation="edited">There is no other category in this area. For this reason, the category can not be deleted.</text>
@@ -93,7 +94,7 @@
 	<text id="SYS_EDIT_MEMBERS" development="new" translation="edited">Edit members</text>
 	<text id="SYS_EDITED_BY" development="new" translation="edited">Last edited by</text>
     <text id="SYS_EMAIL_NOT_SEND" development="changed" translation="edited">The email could not be sent to %VAR1_BOLD%.\n\nThe following error occurred:\n%VAR2%</text>
-	<text id="SYS_EMPTY" development="new" translation="edited">empty</text>
+	<text id="SYS_EMPTY" development="new" translation="edited">Empty</text>
 	<text id="SYS_FIRSTNAME_LASTNAME" development="new" translation="edited">Firstname and lastname</text>
 	<text id="SYS_FROM" development="new" translation="edited">from %VAR1%</text>
 	<text id="SYS_INFORMATIONS" development="new" translation="edited">information</text>
@@ -372,7 +373,6 @@
     <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="edited">Role access permission</text>
     <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">This panel allows you to configure folder access permissions. Access rights are set recursively for subfolders and all existing folder permissions will be overwritten. Allowed roles must have access permission for higher folders.</text>
 	<text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Set folder permissions</text>
-	<text id="DOW_SET_PERMISSIONS" development="new" translation="edited">Set permissions</text>
 	<text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Unmanaged files</text>
 	<text id="DOW_UPLOAD_FILE" development="new" translation="edited">Upload file</text>
     <text id="DOW_EDIT_FILE" development="new" translation="edited">Edit file</text>
