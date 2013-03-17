@@ -319,20 +319,22 @@ echo '</div>';
 if($membersCount > 0)
 {
     echo '<table class="tableList" cellspacing="0">
-        <tr>
-            <th>'.$gL10n->get('SYS_ABR_NO').'</th>
-            <th><img class="iconInformation"
-                src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-                title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" /></th>
-            <th>'.$gL10n->get('SYS_NAME').'</th>
-            <th><img class="iconInformation"
-                src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" /></th>
-            <th><img class="iconInformation"
-                src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$gL10n->get('SYS_WEBSITE').'" title="'.$gL10n->get('SYS_WEBSITE').'" /></th>
-            <th>'.$gL10n->get('SYS_USER').'</th>
-            <th>'.$gL10n->get('MEM_UPDATED_ON').'</th>
-            <th style="text-align: center;">'.$gL10n->get('SYS_FEATURES').'</th>
-        </tr>';
+        <thead>
+            <tr>
+                <th>'.$gL10n->get('SYS_ABR_NO').'</th>
+                <th><img class="iconInformation"
+                    src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
+                    title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" /></th>
+                <th>'.$gL10n->get('SYS_NAME').'</th>
+                <th><img class="iconInformation"
+                    src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" /></th>
+                <th><img class="iconInformation"
+                    src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$gL10n->get('SYS_WEBSITE').'" title="'.$gL10n->get('SYS_WEBSITE').'" /></th>
+                <th>'.$gL10n->get('SYS_USER').'</th>
+                <th>'.$gL10n->get('MEM_UPDATED_ON').'</th>
+                <th style="text-align: center;">'.$gL10n->get('SYS_FEATURES').'</th>
+            </tr>
+        </thead>';
 
 		$irow = $getStart + 1;  // Zahler fuer die jeweilige Zeile
 
