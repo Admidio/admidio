@@ -1,5 +1,109 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
+<version id="2.4.0" translator="Henrik Troels-Hansen">
+    <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Vil du virkelig slette kategorien %VAR1_BOLD% ?</text>
+    <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="edited">Kunne ikke slette kategorien %VAR1_BOLD% fordi den indeholder %VAR2% afhængige data.</text>
+	<text id="DAT_HIGHLIGHT_DATE" development="new" translation="edited">Fremhæv dato</text>
+    <text id="DOW_FOLDER_NOT_FOUND" development="new" translation="edited">Folder (ID %VAR1%) ikke fundet.</text>
+    <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Venligst anvend en valid dato som grundlag for feltet %VAR1_BOLD%.</text>
+    <text id="LST_NOT_NUMERIC" development="new" translation="edited">Venligst anvend et validt nummer som grundlag for feltet %VAR1_BOLD%.</text>
+	<text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Find alle brugere med et tomt adresse felt</text>
+	<text id="LST_EXCLUDE_EXAMPLE" development="new" translation="edited">Niels</text>
+	<text id="LST_EXCLUDE_EXAMPLE_DESC" development="new" translation="edited">Find alle brugere der ikke hedder Niels</text>
+	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Find alle brugere med et udfyldt adresse felt</text>
+	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="edited">Bed om bekræftelse på levering</text>
+	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="edited">Hvis denne er aktiv, har afsenderen af en e-mail mulighed for at få bekræftet levering af en e-mail. Dog afhænger et eventuelt svar af hvordan modtagerens e-mail program er konfigureret. Modtageren kan vælge at undertrykke afsendelse af en sådan bekræftelse.</text>
+    <text id="MAI_EMAILS" development="deleted" translation="edited"></text>
+	<text id="MAI_EMAIL_SEND_TO_ROLE" development="deleted" translation="todo"></text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% har sendt følgende e-mail til aktive brugere i rollen %VAR3% på %VAR2%:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% har sendt følgende e-mail til tidligere brugere i rollen %VAR3% på %VAR2%:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% har sendt følgende e-mail til aktive og tidligere brugere i rollen %VAR3% på %VAR2%:</text>
+	<text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
+	<text id="MAI_SEND_METHOD" development="new" translation="edited">Send via</text>
+	<text id="MAI_SEND_METHOD_DESC" development="new" translation="edited">Mail () functionen i PHP er hos nogen hosts begrænset og betragtes sommmetider som spam. Det anbefales derfor at sende e-mails via en SMTP server. SMTP server indstillingerne kan konfigureres herunder. (Standard: PHP mail ())</text>
+	<text id="MAI_SENDER_NAME" development="new" translation="edited">Navn på afsender</text>
+    <text id="MAI_SENDER_NAME_DESC" development="new" translation="edited">Afsender e-mail adresse.</text>
+	<text id="MAI_SMTP" development="new" translation="todo">SMTP</text>
+	<text id="MAI_SMTP_AUTH" development="new" translation="edited">SMTP godkendelse</text>
+	<text id="MAI_SMTP_AUTH_DESC" development="new" translation="edited">Hvis SMTP serveren kræver godkendelse, så skal både brugernavn og kodeords feltet udfyldes. (Standard: Ja)</text>
+	<text id="MAI_SMTP_AUTH_LOGIN" development="new" translation="todo">Logind</text>
+    <text id="MAI_SMTP_AUTH_NTLM" development="new" translation="edited">NTLM</text>
+	<text id="MAI_SMTP_AUTH_PLAIN" development="new" translation="todo">Almindelig</text>
+	<text id="MAI_SMTP_AUTH_TYPE" development="new" translation="edited">SMTP godkendelses type</text>
+    <text id="MAI_SMTP_AUTH_TYPE_DESC" development="new" translation="edited">SMTP understøtter forskellige godkendelses metoder. Det viste udvalg anvendes af Admidio. (Standard: Logind)</text>
+	<text id="MAI_SMTP_HOST" development="new" translation="todo">SMTP Vært</text>
+	<text id="MAI_SMTP_HOST_DESC" development="new" translation="edited">SMTP Server adresse.</text>
+    <text id="MAI_SMTP_PASSWORD" development="new" translation="edited">SMTP kodeord</text>
+    <text id="MAI_SMTP_PASSWORD_DESC" development="new" translation="edited">Det kodeord som anvendes til SMTP godkendelse.</text>
+    <text id="MAI_SMTP_PORT" development="new" translation="todo">SMTP port</text>
+    <text id="MAI_SMTP_PORT_DESC" development="new" translation="edited">Specificer den port der skal anvendes til at etablere en SMTP forbindelse. (Standard: 25)</text>
+    <text id="MAI_SMTP_SECURE" development="new" translation="edited">SMTP kryptering</text>
+    <text id="MAI_SMTP_SECURE_DESC" development="new" translation="edited">Her kan du vælge om og hvordan SMTP forbindelsen skal krypteres. (Standard: Nej)</text>
+    <text id="MAI_SMTP_SECURE_NO" development="new" translation="edited">Nej</text>
+    <text id="MAI_SMTP_SECURE_SSL" development="new" translation="todo">SSL</text>
+    <text id="MAI_SMTP_SECURE_TLS" development="new" translation="todo">TLS</text>
+    <text id="MAI_SMTP_USER" development="new" translation="edited">SMTP brugernavn</text>
+    <text id="MAI_SMTP_USER_DESC" development="new" translation="edited">Det brugernavn der anvendes til SMTP godkendelsen.</text>
+	<text id="MEM_CHANGE_HISTORY" development="new" translation="edited">Ændrings historik</text>
+	<text id="MEM_CHANGE_HISTORY_OF" development="new" translation="edited">Ændrings historik af %VAR1%</text>
+	<text id="MEM_NO_CHANGES" development="new" translation="edited">Der er ikke logget nogen ændringer.</text>
+	<text id="MEM_NO_CHANGES_PROFIL" development="new" translation="edited">Ingen ændringer logget for %VAR1_BOLD% .</text>
+	<text id="MEM_SEND_NEW_LOGIN" development="changed" translation="edited">Vil du sende %VAR1_BOLD% en e-mail med nuværende brugernavn og det nye kodeord?</text>
+    <text id="ORG_SHOW_CREATE_EDIT" development="new" translation="edited">Vis opretter og tidspunktet for oprettelsen</text>
+    <text id="ORG_SHOW_CREATE_EDIT_DESC" development="new" translation="edited">Et felt er normalt synligt for alle brugere. Hvis denne funktion ikke er valgt, så vil dataene KUN være synlige for brugere der har rettighed til at redigere alle brugere. I deres egen profil, kan brugeren se og redigere disse data.</text>
+    <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="changed" translation="edited">Aktiver system beskeder</text>
+    <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="changed" translation="edited">Her kan du deaktivere system beskeder fra Admidio. De kan blive afsendt, hvis for eksempel en ny bruger logger på. Registrerings bekræftelser vil også blive sendt som system beskeder. Generelt set, bør disse beskeder ikke slås fra, med mindre serveren ikke understøtter afsendelse af system e-mails. E-mail modulet bliver ikke berørt af en deaktivering. (Standard: Ja)</text>
+    <text id="ORG_REFUSE_REGISTRATION" development="new" translation="edited">Besked om afvisning af registrering</text>
+    <text id="ORG_SHOW_ALL_USERS" development="new" translation="edited">Vis alle brugere</text>
+    <text id="ORG_SHOW_ALL_USERS_DESC" development="new" translation="edited">Hvis denne mulighed er aktiveret, vil tidligere medlemmer og medlemmer af andre organisationer blive vist sammen med de aktive medlemmer af den nuværende organisation/forening. Ellers så vil kun medlemmer af den nuværende organisation/forening blive vist. Når der oprettes nye brugere eller der tildeles registreringer vil alle organisationer/foreninger blive checket for eksisterende brugere.</text>
+    <text id="ORG_SYSTEM_MAIL_ADDRESS" development="changed" translation="edited">E-mail adresse</text>
+    <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Dette felt skal indeholde e-mail adressen på en administrator, da den vil blive brugt som afsender adresse for system beskeder, som f.eks. registrerings bekræftelser. (Standard: webmaster @% VAR1%)</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Besked om nye poster</text>
+	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">Denne funktion bliver brugt til at aktivere system beskeder for nye poster inde i moduler. Det anvendes som en monitorerings funktion inde i Admidio. Så administratoren kan blive gjort opmærksom på når nye poster bliver tilføjet inde i et modul (kun NYE poster vil blive taget i betragtning). Disse system beskeder vil blive sendt til e-mail adressen %VAR1%. (Standard: Nej)</text>
+    <text id="ORG_SYSTEM_MAIL_TEXTS" development="changed" translation="edited">System besked tekster</text>
+    <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Her kan du ændre teksten til hver enkelt system besked. Teksterne er delt i to dele(emne og indhold) og er identificeret med #subject# og #content#. Indholdet i hver sektion kommer lige efter overskriften.\n\nI hver mail kan de følgende wildcards bruges. Disse vil blive erstattet af indhold når systemet køres.</text>
+	<text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="edited">Registrering er blevet bekræftet. Brugeren kan nu logge på systemet.</text>
+	<text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="edited">Fremtidige rolle medlemskaber</text>
+	<text id="PRO_LOG_EDIT_FIELDS" development="new" translation="edited">Log alle ændringer</text>
+	<text id="PRO_LOG_EDIT_FIELDS_DESC" development="new" translation="edited">Ændringer i profil felter logges for hver bruger og hvert felt. Den tidligere og den nye værdi vil blive logget sammen med brugeren og tidspunktet for ændringen. (Standard: Ja)</text>
+	<text id="PRO_NO_DEFAULT_ROLE" development="changed" translation="edited">Rolle styringen indeholder ingen standard rolle for nye brugere. Venligst kontakt en administrator der kan ændre denne indstilling.</text>
+    <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="edited">Ingen roller blev fundet. Der er muligvis roller som du ikke har rettigheder nok til at se.</text>
+    <text id="PRO_VIEW_ROLES_OTHER_ORGAS" development="new" translation="edited">Kun roller fra andre organisationer som er synlige for alle registrerede brugere vises. Hvis du er medlem af denne organisation, vil du også kunne se roller som du vil kunne se inde i denne organisation.</text>
+	<text id="ROL_ASSIGN_EDIT_MEMBERS" development="new" translation="edited">Tildel og rediger medlemmer</text>
+	<text id="ROL_DEFAULT_LIST" development="new" translation="edited">Standard Liste</text>
+	<text id="ROL_DEFAULT_LIST_DESC" development="new" translation="edited">I tilfælde af at der er en medlemsliste for denne rolle som skal vises og ingen liste konfiguration er specificeret, så vises listen i system standard konfigurationen. Ved at bruge dette felt til en individuel rolle, kan du vælge en anden liste konfiguration som kan bruges når der ikke ellers er en liste konfiguration til rådighed.</text>
+	<text id="ROL_DEFAULT_REGISTRATION" development="new" translation="edited">Standard tildeling ved registrering</text>
+	<text id="ROL_DEFAULT_REGISTRATION_DESC" development="new" translation="edited">Hvis en ny bruger bliver oprettet eller en ny registrering accepteret, så bliver denne rolle automatisk tildelt den nye bruger. Når opretteren har ret til at tildele roller så vises listen med roller og tildelingen kan ændres med det samme.</text>
+	<text id="ROL_LEADER_NO_ADDITIONAL_RIGHTS" development="new" translation="edited">Lederen af denne rolle, har ikke nogen specielle rettigheder. De fremhæves kun i liste visninger.</text>
+	<text id="ROL_LEADER_EDIT_MEMBERS" development="new" translation="edited">Lederen af denne rolle kan redigere profil data på alle rolle medlemmer.</text>
+	<text id="ROL_LEADER_ASSIGN_MEMBERS" development="new" translation="edited">Lederen af denne rolle kan tilføje nye rolle medlemmer eller fjerne eksisterende rolle medlemmer.</text>
+	<text id="ROL_LEADER_RIGHTS_DESC" development="new" translation="edited">Rolle medlemmer kan udnævnes til ledere af en rolle og opnå yderligere udvidede rettigheder.\nDe kan få rettigehden til at ændre på profildata for alle rolle medlemmer og / eller ret til at tilføje eller fjerne medlemmer fra rollen. men har de begge rettigheder, så kan de redigere informatonen for alle medlemmer.</text>
+	<text id="ROL_NO_ADDITIONAL_RIGHTS" development="new" translation="edited">Ingen yderligere rettigheder</text>
+	<text id="ROL_NO_DEFAULT_ROLE" development="new" translation="edited">Du kan ikke fjerne indstillingen %VAR1_BOLD%, fordi mindst én rolle skal bestå som standard tildelt.</text>
+	<text id="ROL_SYSTEM_DEFAULT_LIST" development="new" translation="edited">System Standard liste</text>
+	<text id="SYS_CHANGED_AT" development="new" translation="edited">Sidst gennemgået</text>
+	<text id="SYS_DELETE_LAST_CATEGORY" development="new" translation="edited">Der er ikke nogen anden kategori i dette område. Derfor kan denne kategori ikke slettes.</text>
+	<text id="SYS_DELETE_SYSTEM_CATEGORY" development="new" translation="edited">Du må/kan ikke slette system kategorier.</text>
+	<text id="SYS_DELETED_USER" development="new" translation="edited">Slettet bruger</text>
+	<text id="SYS_DONT_SHOW" development="new" translation="edited">Vis ikke</text>
+	<text id="SYS_EDIT_MEMBERS" development="new" translation="edited">Rediger medlemmer</text>
+	<text id="SYS_EDITED_BY" development="new" translation="edited">Sidst ændret af</text>
+    <text id="SYS_EMAIL_NOT_SEND" development="changed" translation="edited">E-mailen kunne ikke sendes til %VAR1_BOLD%.\n\nDen følgende fejl opstod:\n%VAR2%</text>
+	<text id="SYS_EMPTY" development="new" translation="edited">Tom</text>
+	<text id="SYS_FIRSTNAME_LASTNAME" development="new" translation="edited">Fornavn og efternavn</text>
+	<text id="SYS_FROM" development="new" translation="edited">fra %VAR1%</text>
+	<text id="SYS_INFORMATIONS" development="new" translation="edited">information</text>
+	<text id="SYS_MAIL_DISPATCH" development="new" translation="edited">E-mail forsendelse</text>
+	<text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">Dette modul kan kun tilgåes fra hjemmesiden af den organisation/forening der blev valgt ved logind.(% VAR1%).</text>
+	<text id="SYS_MODULE_PREFERENCES" development="new" translation="edited">Modul indstillinger</text>
+    <text id="SYS_MORE_FEATURES" development="new" translation="edited">Yderligere funktioner</text>
+	<text id="SYS_NEW_VALUE" development="new" translation="edited">Ny værdi</text>
+	<text id="SYS_NOT_EMPTY" development="new" translation="edited">Ikke tom</text>
+    <text id="SYS_PREVIOUS_VALUE" development="new" translation="edited">Tidligere værdi</text>
+	<text id="SYS_SYSMAIL_REFUSE_REGISTRATION" development="new" translation="edited">#subject# i registrering hos %organization_long_name% afslået.\n#content#Goddag %user_first_name% din forespørgsel på medlemsskab af %organization_homepage% blev afslået.\n\nRegistreringer bliver generelt accepteret af vores brugere. Hvis du er medlem og din registrering alligvel blev afslået, er det måske fordi du ikke blev genkendt som medlem.\nFor at opklare denne sag, kontakt venligst webmaster %webmaster_email% fra %organization_homepage%.\n\nMed venlig hilsen,\nWebmaster</text>
+	<text id="SYS_SYSTEM" development="new" translation="todo">System</text>
+    <text id="SYS_SYSTEM_MAILS" development="changed" translation="edited">System beskeder</text>
+</version>
 <version id="2.3.4" translator="Henrik Troels-Hansen">
     <text id="MAI_COUNT_BCC_DESC" development="changed" translation="edited">E-Mails til roller med mange medlemmer, vil blive sendt som Blind Kopi (BCC - Blind Copy). På den måde, kan modtagerne ikke se hvem der ellers har modtaget den samme e-mail. Værdien angivet i feltet definerer maksimum antal modtagere af en given e-mail. Maximum antal modtagere kan også være begrænset af din internet udbyder. Hvis der er flere modtagere af en e-mail end tilladt, så bliver der genereret flere e-mails. Sætter du værdien til 1, vil hver enkelt modtager få en individuel e-mail. Antallet af udsendte e-mails inden for en nærmere bestemt periode kan også være begrænset af din internet udbyder. (Standard: 50)</text>
 	<text id="MAI_SENDER_INTO_TO" development="new" translation="edited">Afsender som modtager</text>
@@ -262,7 +366,6 @@
     <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="edited">Rolle adgangs rettigheder</text>
     <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Dette panel tillader dig at konfigurere folder adgangs rettigheder. Adgangs rettigheder bliver sat som kaskade igennem underfoldere og alle eksisterende rettigheder bliver overskrevet. Tilladte roller skal have adgang til topfoldere.</text>
 	<text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Sæt folder rettigheder</text>
-	<text id="DOW_SET_PERMISSIONS" development="new" translation="edited">Sæt rettigheder</text>
 	<text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Filer uden ejer</text>
 	<text id="DOW_UPLOAD_FILE" development="new" translation="edited">Overfør fil</text>
     <text id="DOW_EDIT_FILE" development="new" translation="edited">Rediger fil</text>
@@ -850,8 +953,6 @@
 	<text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Nuværende profil billede</text>
 	<text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Standard land</text>
 	<text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Defineret land vil blive automatisk valgt ved bruger registrering. (default: Danmark)</text>
-	<text id="PRO_DEFAULT_ROLE" development="new" translation="edited">Standard rolle</text>
-	<text id="PRO_DEFAULT_ROLE_DESC" development="new" translation="edited">Rolle bliver automatisk tildelt, hvis personen der opretter en ny bruger ikke har rettighed til at tildele roller.</text>
 	<text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Slet profil billede</text>
 	<text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Rediger egen profil</text>
 	<text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Rediger eget profil billede</text>
@@ -913,7 +1014,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="edited">Alle gæster på hjemmesiden</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Alle brugere som er logget ind</text>
     <text id="ROL_ANNUALLY" development="new" translation="todo">Årligt</text>
-    <text id="ROL_CANT_SHOW_FORMER_ROLES" development="new" translation="edited">Tidligere rolle medlemskaber kan ikke vises.</text>
     <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">Der opstod en fejl!\n\nDen ny dato kunne ikke gemmes.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="edited">Ved at vælge %VAR1_BOLD% vil alle rolle og alle medlems tildelinger blive slettet. Slette information kan ikke åbnes eller genskabes.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="edited">Afhængigheder</text>
@@ -930,7 +1030,6 @@
     <text id="ROL_MEMBERSHIP_DEL" development="new" translation="edited">Vil du slette medlemskabet af denne rolle %VAR1_BOLD%?</text>
     <text id="ROL_MONTHLY" development="new" translation="todo">Månedlig</text>
     <text id="ROL_NEW_ROLE" development="new" translation="edited">Ny rolle</text>
-    <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="edited">Denne person er ikke medlem af organisation %VAR1_BOLD% eller også er der ikke nogen synlige roller.</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="edited">Kun for rolle medlemmer</text>
     <text id="ROL_PREF" development="new" translation="edited" description="Abbreviation for Preferences">Inst.</text>
     <text id="ROL_QUARTERLY" development="new" translation="todo">Kvartalsvis</text>
@@ -1141,7 +1240,6 @@
 	<text id="SYS_LASTNAME" development="new" translation="edited">Efternavn</text>
 	<text id="SYS_LATER" development="new" translation="edited">Senere</text>
     <text id="SYS_LEADER" development="new" translation="edited">Leder</text>
-    <text id="SYS_LEADER_DESCRIPTION" development="new" translation="edited">Ud over at blive vist i seperate lister så har ledere også udvidede rettigheder i forhold til almindelige brugere.\n\nPå trods af deres rolle rettigheder, kan ledere altid se medlems lister, samt tilføje og fjerne medlemmer i en rolle.</text>
     <text id="SYS_LINK_TO" development="new" translation="edited">Link til %VAR1%</text>
     <text id="SYS_LOCATION" description="Location of a date" development="new" translation="edited">By</text>
     <text id="SYS_LOCK" development="new" translation="edited">Lås</text>

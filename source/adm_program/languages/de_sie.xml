@@ -360,7 +360,6 @@
     <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="todo">Rollenzugriffsberechtigungen</text>
     <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="todo">Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben dürfen. Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen nur Rollen zur Verfügung die auf den übergeordneten Ordner Zugriff haben.</text>
 	<text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="todo">Ordnerberechtigungen setzen</text>
-	<text id="DOW_SET_PERMISSIONS" development="new" translation="todo">Berechtigungen setzen</text>
 	<text id="DOW_UNMANAGED_FILES" development="new" translation="todo">Nicht verwaltete Dateien</text>
 	<text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
     <text id="DOW_EDIT_FILE" development="new" translation="todo">Datei bearbeiten</text>

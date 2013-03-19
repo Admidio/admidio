@@ -251,7 +251,6 @@
     <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="edited">Toegangsrechten rol</text>
     <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Via dit panel kunt u toegangsrechten van mappen beheren. Toegangsrechten zijn van toepassing op sub-mappen en alle bestaande toegangsrechten worden overschreven. Toegestane rollen moeten toegang hebben tot hogere mappen.</text>
 	<text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="edited">Instellingen toegangsrechten map</text>
-	<text id="DOW_SET_PERMISSIONS" development="new" translation="edited">Rechten instellen</text>
 	<text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Onbeheerde bestanden</text>
 	<text id="DOW_UPLOAD_FILE" development="new" translation="edited">Upload bestand</text>
     <text id="DOW_EDIT_FILE" development="new" translation="edited">Bewerk bestand</text>
@@ -834,8 +833,6 @@
 	<text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Huidige profielfoto</text>
 	<text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Standaard land</text>
 	<text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Standaard land wordt automatisch geselecteerd tijdens registratie van gebruiker. (standaard: Duitsland)</text>
-	<text id="PRO_DEFAULT_ROLE" development="new" translation="edited">Standaad rol</text>
-	<text id="PRO_DEFAULT_ROLE_DESC" development="new" translation="edited">Rol wordt automatisch bepaald als persoon, die de nieuwe gebruiker maakt, geen nieuwe rollen kan toewijzen.</text>
 	<text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Verwijder profielfoto</text>
 	<text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Bewerk uw profiel</text>
 	<text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Bewerk eigen profielfoto</text>
@@ -897,7 +894,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="edited">Alle gebruikers van de website</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Alle ingelogde gebruikers</text>
     <text id="ROL_ANNUALLY" development="new" translation="edited">Jaarlijks</text>
-    <text id="ROL_CANT_SHOW_FORMER_ROLES" development="new" translation="edited">Voormalige rol lidmaatschappen kunnen niet worden getoond.</text>
     <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">Foutmelding!\n\nWijziging van gegevens kan niet opgeslagen worden.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="edited">Door %VAR1_BOLD% te kiezen zullen alle rollen en alle hieraan gekoppelde leden verwijderd worden. Verwijderde informatie kan niet teruggehaald worden.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="edited">Afhankelijkheden</text>
@@ -914,7 +910,6 @@
     <text id="ROL_MEMBERSHIP_DEL" development="new" translation="edited">Wilt u het lidmaatschap beeindigen van de groep %VAR1_BOLD%?</text>
     <text id="ROL_MONTHLY" development="new" translation="edited">Maandelijks</text>
     <text id="ROL_NEW_ROLE" development="new" translation="edited">Nieuwe rol</text>
-    <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="edited">Deze persoon is geen lid van organisatie %VAR1_BOLD% of er zijn geen rollen zichtbaar.</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="edited">Alleen leden van rol</text>
     <text id="ROL_PREF" development="new" translation="edited" description="Abbreviation for Preferences">Voork.</text>
     <text id="ROL_QUARTERLY" development="new" translation="edited">Driemaandelijks</text>
@@ -1122,7 +1117,6 @@
 	<text id="SYS_LASTNAME" development="new" translation="edited">Achternaam</text>
 	<text id="SYS_LATER" development="new" translation="edited">Later</text>
     <text id="SYS_LEADER" development="new" translation="edited">Leider</text>
-    <text id="SYS_LEADER_DESCRIPTION" development="new" translation="edited">Een leider heeft meer rechten dan reguliere leden.\n\nEen leider kan rollen bekijken, groepsleden toevoegen en groepsleden verwijderen.</text>
     <text id="SYS_LINK_TO" development="new" translation="edited">Link naar %VAR1%</text>
     <text id="SYS_LOCATION" description="Location of a date" development="new" translation="edited">Plaats</text>
     <text id="SYS_LOCK" development="new" translation="edited">Blokkeer</text>
