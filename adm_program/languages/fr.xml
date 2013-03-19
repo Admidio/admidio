@@ -133,7 +133,6 @@
    	<text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="edited">Permission d'accès des rôles.</text>
    	<text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="edited">Ce panneau vous permet de configurer les permissions d'accès aux dossiers. Les droits d'accès sont définis de façon récursive pour les sous-dossiers et toutes les autorisations sur les dossiers existants seront remplacés. Les rôles autorisés doivent avoir les permissions d'accès pour les dossiers plus haut.</text>
 	<text id="DOW_SET_FOLER_PERMISSIONS" development="new" translation="edited">Appliquer les autorisations du dossier</text>
-	<text id="DOW_SET_PERMISSIONS" development="new" translation="edited">Appliquer les autorisations</text>
 	<text id="DOW_UNMANAGED_FILES" development="new" translation="edited">Fichiers non gérés</text>
 	<text id="DOW_UPLOAD_FILE" development="new" translation="edited">Télécharger le fichier</text>
    	<text id="DOW_EDIT_FILE" development="new" translation="edited">Éditer le fichier</text>
@@ -715,8 +714,6 @@
 	<text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Photo de profil actuelle</text>
 	<text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Pays par défaut</text>
 	<text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Les pays définis seront automatiquement sélectionnés lors de l'inscription d'utilisateur pour faciliter l'achèvement. (Par défaut: l'Allemagne)</text>
-	<text id="PRO_DEFAULT_ROLE" development="new" translation="edited">Rôle par défaut</text>
-	<text id="PRO_DEFAULT_ROLE_DESC" development="new" translation="edited">Le rôle est attribué automatiquement si la personne, qui a créé un nouvel utilisateur, ne dispose d'aucune autorisation d'attribuer des rôles.</text>
 	<text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Supprimer la photo de profil</text>
 	<text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Modifier mon profil</text>
 	<text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Modifier ma photo de profil</text>
@@ -778,7 +775,6 @@
 	<text id="ROL_ALL_GUESTS" development="new" translation="edited">Tous les invités du site</text>
 	<text id="ROL_ALL_MEMBERS" development="new" translation="edited">Tous les utilisateurs connectés</text>
 	<text id="ROL_ANNUALLY" development="new" translation="edited">Chaque année</text>
-	<text id="ROL_CANT_SHOW_FORMER_ROLES" development="new" translation="edited">L'ancien rôle d'adhésion ne peut être affiché.</text>
 	<text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">Une erreur s'est produite! \n\nLe changement de date n'a pas pu être enregistré.</text>
 	<text id="ROL_DELETE_ROLE" development="new" translation="edited">En sélectionnant %VAR1_BOLD% tous les rôles et toutes les affectations de membres seront supprimés. Les informations supprimées ne peuvent pas être ouvertes ou récupérés à nouveau.</text>
 	<text id="ROL_DEPENDENCIES" development="new" translation="edited">Dépendances</text>
@@ -795,7 +791,6 @@
 	<text id="ROL_MEMBERSHIP_DEL" development="new" translation="edited">Aimeriez-vous mettre fin à l'adhésion en %VAR1_BOLD%?</text>
 	<text id="ROL_MONTHLY" development="new" translation="edited">Mensuel</text>
 	<text id="ROL_NEW_ROLE" development="new" translation="edited">Nouveau rôle</text>
-	<text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="edited">Cette personne n'est pas un membre de l'organisation %VAR1_BOLD% ou les rôles ne sont pas visibles.</text>
 	<text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="edited">Seulement le rôle des membres</text>
 	<text id="ROL_PREF" development="new" translation="edited" description="Abbreviation pour Préférences">Préf.</text>
 	<text id="ROL_QUARTERLY" development="new" translation="edited">Trimestriel</text>
@@ -1006,7 +1001,6 @@
 	<text id="SYS_LASTNAME" development="new" translation="edited">Nom</text> 
     <text id="SYS_LATER" development="new" translation="edited">Tard</text> 
    	<text id="SYS_LEADER" development="new" translation="edited">Chef</text> 
-   	<text id="SYS_LEADER_DESCRIPTION" development="new" translation="edited">En plus d'être considérés séparément dans les listes, vos propres autorisations augmenteront par rapport à des utilisateurs réguliers. \n\nMalgré leurs autorisations de rôle, les dirigeants sont toujours en mesure d'afficher membres listes, de retirer ou d'ajouter des membres à un rôle.</text>
 	<text id="SYS_LINK_TO" development="new" translation="edited">Lien vers %VAR1%</text>
 	<text id="SYS_LOCATION" description="Location d'un date" development="new" translation="edited">Ville</text>
 	<text id="SYS_LOCK" development="new" translation="edited">Verrouillage</text>

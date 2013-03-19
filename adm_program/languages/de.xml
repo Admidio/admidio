@@ -5,7 +5,6 @@
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="todo">Die Kategorie %VAR1_BOLD% kann nicht gelöscht werden, da sie noch %VAR2% abhängige Einträge besitzt.</text>
 	<text id="DAT_HIGHLIGHT_DATE" development="new" translation="todo">Termin optisch hervorheben</text>
 	<text id="DOW_FOLDER_NOT_FOUND" development="new" translation="todo">Der Ordner (ID %VAR1%) konnte nicht gefunden werden.</text>
-	<text id="DOW_SET_PERMISSIONS" development="deleted" translation="todo"></text>
     <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Bitte in der Bedingung des Feldes %VAR1_BOLD% ein gültiges Datum verwenden.</text>
     <text id="LST_NOT_NUMERIC" development="new" translation="todo">Bitte in der Bedingung des Feldes %VAR1_BOLD% nur gültige Zahlen verwenden.</text>
 	<text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</text>
@@ -70,10 +69,7 @@
 	<text id="PRO_NO_DEFAULT_ROLE" development="changed" translation="todo">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</text>
     <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="todo">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</text>
     <text id="PRO_VIEW_ROLES_OTHER_ORGAS" development="new" translation="todo">Es werden dir hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldete Benutzer sichtbar sind. Falls du auch Mitglied dieser Organisation bist, werden dir zusätzlich die Rollen angezeigt, die du mit deinen Rechten innerhalb der jeweiligen Organisation sehen darfst.</text>
-	<text id="PRO_DEFAULT_ROLE" development="deleted" translation="todo"></text>
-	<text id="PRO_DEFAULT_ROLE_DESC" development="deleted" translation="todo"></text>
 	<text id="ROL_ASSIGN_EDIT_MEMBERS" development="new" translation="todo">Mitglieder zuordnen und bearbeiten</text>
-    <text id="ROL_CANT_SHOW_FORMER_ROLES" development="deleted" translation="todo"></text>
 	<text id="ROL_DEFAULT_LIST" development="new" translation="todo">Standardliste</text>
 	<text id="ROL_DEFAULT_LIST_DESC" development="new" translation="todo">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</text>
 	<text id="ROL_DEFAULT_REGISTRATION" development="new" translation="todo">Standardzuordnung bei Registrierung</text>
@@ -84,7 +80,6 @@
 	<text id="ROL_LEADER_RIGHTS_DESC" development="new" translation="todo">Rollenmitglieder können zu Leitern einer Rolle ernannt werden und optional erweiterte Rechte bekommen.\nSie können das Recht bekommen Profildaten aller Rollenmitglieder zu bearbeiten und/oder das Recht Mitglieder der Rolle hinzuzufügen oder zu entfernen. Bekommen sie beide Rechte zugewiesen wären sie dadurch allerdings indirekt in der Lage Profildaten aller Mitglieder zu bearbeiten.</text>
 	<text id="ROL_NO_ADDITIONAL_RIGHTS" development="new" translation="todo">Keine zusätzlichen Rechte</text>
 	<text id="ROL_NO_DEFAULT_ROLE" development="new" translation="todo">Du kannst die Einstellung %VAR1_BOLD% nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</text>
-    <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="deleted" translation="todo"></text>
 	<text id="ROL_SYSTEM_DEFAULT_LIST" development="new" translation="todo">Systemweite Standardliste</text>
 	<text id="SYS_CHANGED_AT" development="new" translation="todo">Geändert am</text>
 	<text id="SYS_DELETE_LAST_CATEGORY" development="new" translation="todo">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</text>
@@ -98,7 +93,6 @@
 	<text id="SYS_FIRSTNAME_LASTNAME" development="new" translation="todo">Vorname und Nachname</text>
 	<text id="SYS_FROM" development="new" translation="todo">ab %VAR1%</text>
 	<text id="SYS_INFORMATIONS" development="new" translation="todo">Informationen</text>
-    <text id="SYS_LEADER_DESCRIPTION" development="deleted" translation="todo"></text>
 	<text id="SYS_MAIL_DISPATCH" development="new" translation="todo">E-Mailversand</text>
 	<text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">Dieses Modul kann nur von der Homepage der beim Login gewählten Organisation (%VAR1%) aus aufgerufen werden.</text>
 	<text id="SYS_MODULE_PREFERENCES" development="new" translation="todo">Moduleinstellungen</text>

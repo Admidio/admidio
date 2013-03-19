@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
 <version id="2.4.0" translator="Thomas Lange">
-    <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Do you really want to delete caegory %VAR1_BOLD% ?</text>
+    <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Do you really want to delete category %VAR1_BOLD% ?</text>
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="edited">Could not delete category %VAR1_BOLD% because of %VAR2% depending entries.</text>
 	<text id="DAT_HIGHLIGHT_DATE" development="new" translation="edited">Highlight date</text>
     <text id="DOW_FOLDER_NOT_FOUND" development="new" translation="edited">Folder (ID %VAR1%) not found.</text>
-	<text id="DOW_SET_PERMISSIONS" development="deleted" translation="edited"></text>
     <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Please use a valid date as condition for field %VAR1_BOLD%.</text>
     <text id="LST_NOT_NUMERIC" development="new" translation="edited">Please use a valid number as condition for field %VAR1_BOLD%.</text>
 	<text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Find all users with an empty address field</text>
@@ -21,7 +20,7 @@
     <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% has sent following e-mail to active and former users of role %VAR3% on %VAR2%:</text>
 	<text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
 	<text id="MAI_SEND_METHOD" development="new" translation="edited">Send via</text>
-	<text id="MAI_SEND_METHOD_DESC" development="new" translation="edited">The mail () function of PHP is limited by some hosters and sometimes leads to suspected spam. It is therefore recommended to send emails via SMTP server. The SMTP settings can be configured below. (Default: PHP mail ())</text>
+	<text id="MAI_SEND_METHOD_DESC" development="new" translation="edited">The mail () function of PHP is limited by some HOSTERS and sometimes leads to suspected spam. It is therefore recommended to send emails via SMTP server. The SMTP settings can be configured below. (Default: PHP mail ())</text>
 	<text id="MAI_SENDER_NAME" development="new" translation="edited">Name of sender</text>
     <text id="MAI_SENDER_NAME_DESC" development="new" translation="edited">Name of the sender of the email address used.</text>
 	<text id="MAI_SMTP" development="new" translation="todo">SMTP</text>
@@ -70,10 +69,7 @@
 	<text id="PRO_NO_DEFAULT_ROLE" development="changed" translation="edited">The role management contains no default role for new users. Please contact a webmaster who can edit this setting.</text>
     <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="edited">No roles were found. Possibly you do not have the rights to see certain roles.</text>
     <text id="PRO_VIEW_ROLES_OTHER_ORGAS" development="new" translation="edited">Only roles of other organizations which are visible to all registered users are displayed. If you are a member of this organization, you will also be shown the roles that you may see with your rights within the organization.</text>
-	<text id="PRO_DEFAULT_ROLE" development="deleted" translation="edited"></text>
-	<text id="PRO_DEFAULT_ROLE_DESC" development="deleted" translation="edited"></text>
 	<text id="ROL_ASSIGN_EDIT_MEMBERS" development="new" translation="edited">Assign and edit members</text>
-    <text id="ROL_CANT_SHOW_FORMER_ROLES" development="deleted" translation="edited"></text>
 	<text id="ROL_DEFAULT_LIST" development="new" translation="edited">Default list</text>
 	<text id="ROL_DEFAULT_LIST_DESC" development="new" translation="edited">In case there is a member list for this role to be displayed and no list configuration is specified, the list is displayed in the system-wide selected standard list configuration. Using this field for an individual role, a different configuration list can be selected which is displayed when no configuration list is preset.</text>
 	<text id="ROL_DEFAULT_REGISTRATION" development="new" translation="edited">Default assignment of registering</text>
@@ -84,7 +80,6 @@
 	<text id="ROL_LEADER_RIGHTS_DESC" development="new" translation="edited">Roles members can be appointed as managers of a role and get optional extended rights.\nThey can get the right to manipulate profile data of all roles members and / or the right to add or remove members of the role. Having both rights, however, they would be able to edit information of all members.</text>
 	<text id="ROL_NO_ADDITIONAL_RIGHTS" development="new" translation="edited">No additional rights</text>
 	<text id="ROL_NO_DEFAULT_ROLE" development="new" translation="edited">You can not remove the setting %VAR1_BOLD%, because at least one role must be stored as the default assignment.</text>
-    <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="deleted" translation="edited"></text>
 	<text id="ROL_SYSTEM_DEFAULT_LIST" development="new" translation="edited">System-wide default list</text>
 	<text id="SYS_CHANGED_AT" development="new" translation="edited">Last Review</text>
 	<text id="SYS_DELETE_LAST_CATEGORY" development="new" translation="edited">There is no other category in this area. For this reason, the category can not be deleted.</text>
@@ -98,7 +93,6 @@
 	<text id="SYS_FIRSTNAME_LASTNAME" development="new" translation="edited">Firstname and lastname</text>
 	<text id="SYS_FROM" development="new" translation="edited">from %VAR1%</text>
 	<text id="SYS_INFORMATIONS" development="new" translation="edited">information</text>
-    <text id="SYS_LEADER_DESCRIPTION" development="deleted" translation="edited">In addition to the separate representation of the group leader in lists and role assignments leaders have more rights than a regular role members.\n\nLeaders can, regardless of the role right setting, see the membership lists and always assign or remove members of the role.</text>
 	<text id="SYS_MAIL_DISPATCH" development="new" translation="edited">Email dispatch</text>
 	<text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">This module can only be accessed from the homepage of the organization chosen at login (% VAR1%).</text>
 	<text id="SYS_MODULE_PREFERENCES" development="new" translation="edited">Module settings</text>
@@ -955,8 +949,6 @@
 	<text id="PRO_CURRENT_PICTURE" development="new" translation="edited">Current profile picture</text>
 	<text id="PRO_DEFAULT_COUNTRY" development="new" translation="edited">Default country</text>
 	<text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="edited">Defined country will be selected automatically at user registration for easier completion. (default: Germany)</text>
-	<text id="PRO_DEFAULT_ROLE" development="new" translation="edited">Default role</text>
-	<text id="PRO_DEFAULT_ROLE_DESC" development="new" translation="edited">Role is being automatically assigned if person, who is creating a new user, does not have any permissions to assign roles.</text>
 	<text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="edited">Delete profile picture</text>
 	<text id="PRO_EDIT_MY_PROFILE" development="new" translation="edited">Edit own profile</text>
 	<text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="edited">Edit own profile picture</text>
@@ -1018,7 +1010,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="edited">All guests of the site</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="edited">All logged in users</text>
     <text id="ROL_ANNUALLY" development="new" translation="edited">Annually</text>
-    <text id="ROL_CANT_SHOW_FORMER_ROLES" development="new" translation="edited">Former role memberships cannot be displayed.</text>
     <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">An error occurred!\n\nChange of date could not be saved.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="edited">By selecting %VAR1_BOLD% all roles and all member assignments will be deleted. Deleted information cannot be opened or recovered again.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="edited">Dependencies</text>
@@ -1035,7 +1026,6 @@
     <text id="ROL_MEMBERSHIP_DEL" development="new" translation="edited">Would you like to end membership in role %VAR1_BOLD%?</text>
     <text id="ROL_MONTHLY" development="new" translation="edited">Monthly</text>
     <text id="ROL_NEW_ROLE" development="new" translation="edited">New role</text>
-    <text id="ROL_NO_MEMBER_RESP_ROLE_VISIBLE" development="new" translation="edited">This person is not a member of organization %VAR1_BOLD% or nor roles are visible.</text>
     <text id="ROL_ONLY_ROLE_MEMBERS" development="new" translation="edited">Role members only</text>
     <text id="ROL_PREF" development="new" translation="edited" description="Abbreviation for Preferences">Pref.</text>
     <text id="ROL_QUARTERLY" development="new" translation="edited">Quarterly</text>
@@ -1244,7 +1234,6 @@
 	<text id="SYS_LASTNAME" development="new" translation="edited">Surname</text>
 	<text id="SYS_LATER" development="new" translation="edited">Later</text>
     <text id="SYS_LEADER" development="new" translation="edited">Leader</text>
-    <text id="SYS_LEADER_DESCRIPTION" development="new" translation="edited">Apart from being separatly viewed in lists, leaders own encreased autorisation compared to regular users.\n\nDespite their role permissions, leaders are always able to view member lists, to remove from or to add members to a role.</text>
     <text id="SYS_LINK_TO" development="new" translation="edited">Link to %VAR1%</text>
     <text id="SYS_LOCATION" description="Location of a date" development="new" translation="edited">City</text>
     <text id="SYS_LOCK" development="new" translation="edited">Lock</text>
