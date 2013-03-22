@@ -12,15 +12,18 @@
 require_once('../../system/common.php');
 require_once('ecard_function.php');
 
+if (!isset($_POST) || !array_key_exists('ecard',$_POST))
+	die($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+
 // Initialize and check the parameters
 $postTemplateName = admFuncVariableIsValid($_POST['ecard'], 'template_name', 'file', null, true );
 if (!isset($postTemplateName))
 	die($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
 
 $imageName			= admFuncVariableIsValid($_POST['ecard'], 'image_name', 'string');
-$nameRecipient		= $_POST['ecard']['name_recipient'];
-$emailRecipient	= $_POST['ecard']['email_recipient'];
-$admEcardMessage  = $_POST['admEcardMessage'];
+$nameRecipient		= array_key_exists('name_recipient',$_POST['ecard']) ? $_POST['ecard']['name_recipient'] : '';
+$emailRecipient	= array_key_exists('email_recipient',$_POST['ecard']) ? $_POST['ecard']['email_recipient'] : '';
+$admEcardMessage  = array_key_exists('admEcardMessage',$_POST) ? $_POST['admEcardMessage'] : '';
 
 $funcClass = new FunctionClass($gL10n);
 
@@ -28,16 +31,9 @@ $funcClass = new FunctionClass($gL10n);
 list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($postTemplateName, THEME_SERVER_PATH. '/ecard_templates/');
 
 if ($error) 
-{
-	echo $gL10n->get('SYS_ERROR_PAGE_NOT_FOUND');
-} 
-else 
-{
-	if(isset($nameRecipient) && isset($emailRecipient))
-	{
-		// show output of parsed template
-		echo $funcClass->parseEcardTemplate($imageName, $admEcardMessage, $ecard_data_to_parse, $g_root_path, $gCurrentUser, $nameRecipient, $emailRecipient);
-	}
-}
+	die($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+
+// show output of parsed template
+echo $funcClass->parseEcardTemplate($imageName, $admEcardMessage, $ecard_data_to_parse, $g_root_path, $gCurrentUser, $nameRecipient, $emailRecipient);
 
 ?>
