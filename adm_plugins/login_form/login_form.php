@@ -2,7 +2,7 @@
 /******************************************************************************
  * Login Form
  *
- * Version 1.5.0
+ * Version 1.6.0
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so

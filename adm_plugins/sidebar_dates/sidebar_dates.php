@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Dates
  *
- * Version 1.4.0
+ * Version 1.5.0
  *
  * Plugin das die letzten X Termine in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann

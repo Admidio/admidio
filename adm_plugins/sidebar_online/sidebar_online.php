@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Online
  *
- * Version 1.5.0
+ * Version 1.4.1
  *
  * Plugin zeigt Besucher und aktive registrierte Mitglieder der Homepage an
  *
