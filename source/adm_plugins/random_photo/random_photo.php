@@ -2,7 +2,7 @@
 /******************************************************************************
  * Random Photo
  *
- * Version 1.5.0
+ * Version 1.6.0
  *
  * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
  * und verlinkt neben dem Bild das dazugehörige Album

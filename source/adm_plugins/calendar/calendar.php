@@ -2,7 +2,7 @@
 /******************************************************************************
  * Calendar
  *
- * Version 1.8.1
+ * Version 1.9.0
  *
  * Plugin das den aktuellen Monatskalender auflistet und die Termine und Geburtstage
  * des Monats markiert und so ideal in einer Seitenleiste eingesetzt werden kann

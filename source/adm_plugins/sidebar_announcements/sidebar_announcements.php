@@ -2,7 +2,7 @@
 /******************************************************************************
  * Sidebar Announcements
  *
- * Version 1.5.0
+ * Version 1.6.0
  *
  * Plugin das die letzten X Ankuendigungen in einer schlanken Oberflaeche auflistet
  * und so ideal in einer Seitenleiste eingesetzt werden kann
