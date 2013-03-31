@@ -73,6 +73,17 @@ echo '<h1 class="moduleHeadline">'.$getHeadline.'</h1>';
 
 // create objects to manage the selected announcements
 $announcements = new ModuleAnnouncements($getAnnId, $getDate);
+$announcementsCount = $announcements->getAnnouncementsCount();
+
+// number of announcements per page
+if($gPreferences['announcements_per_page'] > 0)
+{
+    $announcementsPerPage = $gPreferences['announcements_per_page'];
+}
+else
+{
+    $announcementsPerPage = $announcementsCount;
+}
 
 // create module menu
 $announcementsMenu = new ModuleMenu('admMenuAnnouncements');
@@ -93,9 +104,9 @@ if($gCurrentUser->isWebmaster())
 
 $announcementsMenu->show();
 
-if($announcements->getAnnouncementsCount() == 0)
+if($announcementsCount == 0)
 {
-    // Keine Ankuendigungen gefunden
+    // no announcements found
     if($getAnnId > 0)
     {
         echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
@@ -107,11 +118,11 @@ if($announcements->getAnnouncementsCount() == 0)
 }
 else
 {
-    $getAnnouncements = $announcements->getAnnouncements($getStart);    
+    $announcementsArray = $announcements->getAnnouncements($getStart, $announcementsPerPage);    
     $announcement = new TableAnnouncement($gDb);
 
-    // Ankuendigungen auflisten
-    foreach($getAnnouncements['announcements'] as $row)
+    // show all announcements
+    foreach($announcementsArray['announcements'] as $row)
     {
         $announcement->clear();
         $announcement->setArray($row);
@@ -158,7 +169,7 @@ else
     
     // If neccessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
-    echo admFuncGeneratePagination($base_url, $getAnnouncements['totalCount'], $getAnnouncements['limit'], $getStart, TRUE);
+    echo admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $getStart, TRUE);
 }
 
 

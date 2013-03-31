@@ -68,20 +68,20 @@ if($gPreferences['enable_rss'] == 1)
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 $weblinks = new ModuleWeblinks($getLinkId, $getCatId);
-$numLinks = $weblinks->getWeblinksCount();
+$weblinksCount = $weblinks->getWeblinksCount();
 
 // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>
 <div id="links_overview">';
 
-// Anzahl Ankuendigungen pro Seite
+// number of weblinks per page
 if($gPreferences['weblinks_per_page'] > 0)
 {
-    $weblinks_per_page = $gPreferences['weblinks_per_page'];
+    $weblinksPerPage = $gPreferences['weblinks_per_page'];
 }
 else
 {
-    $weblinks_per_page = $numLinks;
+    $weblinksPerPage = $weblinksCount;
 }
 
 
@@ -114,12 +114,12 @@ if($getLinkId == 0)
 
     // Navigation mit Vor- und Zurueck-Buttons
     $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline;
-    echo admFuncGeneratePagination($baseUrl, $numLinks, $weblinks_per_page, $getStart, TRUE);
+    echo admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $getStart, TRUE);
 }
 
 if ($weblinks->getWeblinksCount() == 0)
 {
-    // Keine Links gefunden
+    // no weblink found
     if ($getLinkId > 0)
     {
         echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
@@ -141,10 +141,10 @@ else
     $previous_cat_id = -1;  // Vorherige Kategorie-ID.
     $new_category = true;   // Kommt jetzt eine neue Kategorie?
     
-    // Weblinks auflisten
+    // show all weblinks
     foreach($getWeblinks['weblinks'] as $row)
     {
-        // Link-Objekt initialisieren und neuen DS uebergeben
+        // initialize weblink object and read new recordset into this object
         $weblink->clear();
         $weblink->setArray($row);
 
@@ -167,7 +167,7 @@ else
                 echo '<hr />';
             }
 
-		// Ausgabe des Links
+		// show weblink
 		echo '
 			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
 				alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
@@ -202,7 +202,7 @@ else
     }  // Ende While-Schleife
 
     // Es wurde noch gar nichts geschrieben ODER ein einzelner Link ist versteckt
-    if ($numLinks == 0)
+    if ($weblinksCount == 0)
     {
         echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
     }
@@ -214,7 +214,7 @@ echo '</div>';
 
 // If neccessary show links to navigate to next and previous recordsets of the query
 $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline;
-echo admFuncGeneratePagination($baseUrl, $numLinks, $weblinks_per_page, $getStart, TRUE);
+echo admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $getStart, TRUE);
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

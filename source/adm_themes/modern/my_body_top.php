@@ -1,6 +1,6 @@
 
-<!-- Hier koennen Sie Ihren HTML-Code einbauen, der am Anfang des <body> Bereich
-     einer Admidio-Modul-Seite erscheinen soll.
+<!-- Here you can add your html code. This code will be applied at the beginning of the <body> area
+     of an Admidio module page.
 -->
 
 

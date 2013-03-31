@@ -1,6 +1,6 @@
 
-<!-- Here you can add your html code. this code will be applied at the end of the <body> area
-     and after the Admidio module code
+<!-- Here you can add your html code. This code will be applied at the end of the <body> area
+     and after the Admidio module code.
 -->
 
         &nbsp;</div>
