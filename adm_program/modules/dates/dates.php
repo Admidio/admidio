@@ -849,7 +849,7 @@ else
                                 <td>';
     
                                         // If date has participation and patricipants are assigned
-                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members'])) 
+                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members']) && ($row['dat_num_members'] > 0)) 
                                         {
                                             echo '<table cellspacing="2" cellpadding="2"><tr>';
                                             
