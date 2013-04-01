@@ -42,6 +42,14 @@ $sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(1).'\'
 		 WHERE mem_id = 504 ';
 $db->query($sql);
 
+$sql = 'UPDATE '.TBL_REGISTRATIONS.' SET reg_timestamp = \''.addDaysToDate(-2).'\'
+		 WHERE reg_id IN (1, 3) ';
+$db->query($sql);
+
+$sql = 'UPDATE '.TBL_REGISTRATIONS.' SET reg_timestamp = \''.addDaysToDate(-1).'\'
+		 WHERE reg_id IN (2) ';
+$db->query($sql);
+
 // set date of announcements
 $sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(-7).'\'
 		 WHERE ann_id = 1 ';
