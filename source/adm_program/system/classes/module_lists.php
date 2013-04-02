@@ -140,7 +140,7 @@ class ModuleLists
         if($limit == NULL)
         {
             // Roles per page
-            $rolesPerPage = $gPreferences['lists_roles_per_page'];
+            $limit = $gPreferences['lists_roles_per_page'];
         }
         
         //assemble conditions
