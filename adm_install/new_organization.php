@@ -21,12 +21,8 @@
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/config.php');
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
 
-// detect cookie praefix and remove special char
-$gCookiePraefix = 'ADMIDIO_'. $g_organization;
-if($gDebug)
-{
-	$gCookiePraefix .= '_'. ADMIDIO_VERSION. '_'. BETA_VERSION;
-}
+// create an installation unique cookie prefix and remove special characters
+$gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
 $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
 
 // start php session and initialize global parameters

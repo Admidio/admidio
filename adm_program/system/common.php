@@ -88,12 +88,8 @@ if($gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db) == false)
 // determine forum script and include it before session is created
 Forum::includeForumScript($gDb);
 
-// determine cookie prefix and remove special characters
-$gCookiePraefix = 'ADMIDIO_'. $g_organization;
-if($gDebug)
-{
-    $gCookiePraefix .= '_'. ADMIDIO_VERSION. '_'. BETA_VERSION;
-}
+// create an installation unique cookie prefix and remove special characters
+$gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
 $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
 
 /*********************************************************************************
