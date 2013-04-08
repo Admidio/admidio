@@ -113,6 +113,10 @@ $result = $gDb->query($sql);
 
 if($gDb->num_rows($result) == 0)
 {
+    // message is shown, so delete this page from navigation stack
+    $gNavigation->deleteLastUrl();
+    
+    // show message if there were no changes for users
     if($getUserId > 0)
     {
         $gMessage->show($gL10n->get('MEM_NO_CHANGES_PROFIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
