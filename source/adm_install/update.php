@@ -261,9 +261,6 @@ elseif($getMode == 2)
              WHERE prf_name    = \'db_version_beta\' ';
     $gDb->query($sql);                
     
-    // globale Objekte aus einer evtl. vorhandenen Session entfernen, 
-    // damit diese nach dem Update neu eingelesen werden muessen
-    
     // create an installation unique cookie prefix and remove special characters
     $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
     $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');

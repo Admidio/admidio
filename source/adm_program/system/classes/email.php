@@ -117,17 +117,6 @@ class Email extends PHPMailer
         //Setzen der Sprache für Fehlermeldungen
         $this->SetLanguage($gPreferences['system_language']);
         $this->CharSet =  $gPreferences['mail_character_encoding'];
-            
-        //Standardmäßig Absender aus den Maileinstellungen setzen
-        try
-        {
-            $this->SetFrom($gPreferences['email_administrator'], $gPreferences['mail_sendmail_name']);
-        }
-        catch (phpmailerException $e)
-        {
-           return $e->errorMessage();
-        }
-           
     }
     
     // method adds BCC recipients to mail
@@ -223,31 +212,29 @@ class Email extends PHPMailer
         // save sender if a copy of the mail should be send to him
         $this->emSender = array('address'=>$address, 'name'=>$name);
         
-        $fromName='';
-        $fromAddress='';         
+        $fromName    = '';
+        $fromAddress = '';         
         //Falls so eingestellt soll die Mail von einer bestimmten Adresse aus versendet werden
-        if(strlen($gPreferences['mail_sendmail_address']) > 0) // && $address != $gPreferences['email_administrator'])
+        if(strlen($gPreferences['mail_sendmail_address']) > 0)
         {
             //hier wird die Absenderadresse gesetzt
-            $fromName=$gPreferences['mail_sendmail_name'];
-            $fromAddress=$gPreferences['mail_sendmail_address']; 
-                                    
-            //wenn der Empfänger dann auf anworten klickt soll die natürlich an den wirklichen Absender gehen
-            //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
-            $this->Sender = $address;
+            $fromName    = $gPreferences['mail_sendmail_name'];
+            $fromAddress = $gPreferences['mail_sendmail_address']; 
 
         }
         //Im Normalfall wird aber versucht von der Adresse des schreibenden aus zu schicken
         else
         {
             //Der Absendername ist in Doppeltueddel gesetzt, damit auch Kommas im Namen kein Problem darstellen
-            $fromName=$name;
-            $fromAddress=$address;
+            $fromName    = $name;
+            $fromAddress = $address;
         }
         
-        //hier wird die Adresse Gesetzt und geprüft
         try
         {
+            // if someone wants to reply to this mail then this should go to the users email
+            // and not to a domain email, so add a separate reply-to address
+            $this->AddReplyTo($address, $name);
             $this->SetFrom($fromAddress, $fromName);
         }
         catch (phpmailerException $e)
