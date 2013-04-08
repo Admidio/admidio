@@ -631,9 +631,6 @@ else
             });
             <!-- Trigger -->
             $("#admSelectBox").change();
-            
-            <!-- Reset selection of extended functions in parent window -->
-            window.opener.parent.location.reload();
         })
     </script>
     </head>';

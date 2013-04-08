@@ -219,6 +219,7 @@ class ModuleMenu
 							selectText: "<img class=\"dd-selected-image\" src=\"'.THEME_PATH.'/icons/list-point.png\" /> '.$ddSelectText.'",
 							imagePosition:"'.$ddImagePos.'",
 							background: "none",
+							updateSelectedIndex: false,
 							onSelected: function(selectedData) {
 								if (selectedData["selectedData"]["js"])
 									eval(selectedData["selectedData"]["js"]);

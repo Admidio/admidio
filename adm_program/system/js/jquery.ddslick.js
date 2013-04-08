@@ -27,6 +27,7 @@
         background: "#eee",
         selectText: "",
         defaultSelectedIndex: null,
+        updateSelectedIndex: true,
         truncateDescription: true,
         imagePosition: "left",
         showSelectedHTML: true,
@@ -238,27 +239,29 @@
         //Update or Set plugin data with new selection
         pluginData.selectedIndex = index;
         pluginData.selectedItem = selectedLiItem;
-        pluginData.selectedData = selectedData;        
-
-        //If set to display to full html, add html
-        if (settings.showSelectedHTML) {
-            ddSelected.html(
-                    (selectedData.imageSrc ? '<img class="dd-selected-image' + (settings.imagePosition == "right" ? ' dd-image-right' : '') + '" src="' + selectedData.imageSrc + '" />' : '') +
-                    (selectedData.text ? '<label class="dd-selected-text">' + selectedData.text + '</label>' : '') +
-                    (selectedData.description ? '<small class="dd-selected-description dd-desc' + (settings.truncateDescription ? ' dd-selected-description-truncated' : '') + '" >' + selectedData.description + '</small>' : '')
-                );
-
+        pluginData.selectedData = selectedData;       
+        
+        // If selection is to be updated in dropdown (default: true)
+        if (settings.updateSelectedIndex){
+            //If set to display to full html, add html
+            if (settings.showSelectedHTML) {
+                ddSelected.html(
+                        (selectedData.imageSrc ? '<img class="dd-selected-image' + (settings.imagePosition == "right" ? ' dd-image-right' : '') + '" src="' + selectedData.imageSrc + '" />' : '') +
+                        (selectedData.text ? '<label class="dd-selected-text">' + selectedData.text + '</label>' : '') +
+                        (selectedData.description ? '<small class="dd-selected-description dd-desc' + (settings.truncateDescription ? ' dd-selected-description-truncated' : '') + '" >' + selectedData.description + '</small>' : '')
+                    );
+    
+            }
+            //Else only display text as selection
+            else ddSelected.html(selectedData.text);
+    
+            //Updating selected option value
+            ddSelectedValue.val(selectedData.value);
+    
+            //BONUS! Update the original element attribute with the new selection
+            pluginData.original.val(selectedData.value);
+            obj.data('ddslick', pluginData);
         }
-        //Else only display text as selection
-        else ddSelected.html(selectedData.text);
-
-        //Updating selected option value
-        ddSelectedValue.val(selectedData.value);
-
-        //BONUS! Update the original element attribute with the new selection
-        pluginData.original.val(selectedData.value);
-        obj.data('ddslick', pluginData);
-
         //Close options on selection
         close(obj);
 
