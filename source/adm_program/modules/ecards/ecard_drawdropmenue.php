@@ -24,6 +24,8 @@ $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'string', 0);
 $getExtern = admFuncVariableIsValid($_GET, 'extern', 'boolean', 0);
 
+header('Content-type: text/html; charset=utf-8');
+
 // Wenn das erste Menue mit den aufgelisteten Rollen gezeichnet werden soll (Uebergabe mode == 1)
 // Es werden alle Rollen die in dieser Organisation vorhanden sind aufgelistet und stehen nun bereit zur Auswahl
 if($gValidLogin && $getMode == 1)
