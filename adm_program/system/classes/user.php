@@ -287,6 +287,55 @@ class User extends TableUsers
 		$this->db->endTransaction();
     }
 
+	/** Checks if the current user is allowed to edit the profile of the user of
+	 *  the parameter. If will check if user can generally edit all users or if 
+	 *  he is a group leader and can edit users of a special role where @b $user
+	 *  is a member or if it's the own profile and he could edit this.
+	 *  @param $user User object of the user that should be checked if the current user can edit his profile.
+	 *  @return Return @b true if the current user is allowed to edit the profile of the user from @b $user.
+     */	
+	 public function editProfile(&$user)
+	{
+		if(is_object($user))
+		{
+			// edit own profile ?
+			if($user->getValue('usr_id') == $this->getValue('usr_id') 
+			&& $this->getValue('usr_id') > 0)
+			{
+				$edit_profile = $this->checkRolesRight('rol_profile');
+
+				if($edit_profile == 1)
+				{
+					return true;
+				}
+			}
+			
+			if($this->editUsers())
+			{
+				return true;
+			}
+			else
+			{
+				if(count($this->rolesMembershipLeader) > 0)
+				{
+					// check if current user is a group leader of a role where $user is a member
+					$rolesMembership = $user->getRoleMemberships();
+					foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
+					{
+						// is group leader of role and has the right to edit users ?
+						if(array_search($roleId, $rolesMembership) != false
+						&& $leaderRights > 1)
+						{
+							return true;
+						}
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
 	// edit an existing role membership for the current user
 	// if additional memberships to this user and role exists within the period 
 	// than merge them to the current membership
@@ -572,6 +621,15 @@ class User extends TableUsers
 		}
 	}
 	
+    /** Checks if the user is assigned to the role @b Webmaster
+     *  @return Returns @b true if the user is a member of the role @b Webmaster
+     */
+    public function isWebmaster()
+    {
+        $this->checkRolesRight();
+        return $this->webmaster;
+    }
+	
     /** If this method is called than all further calls of method @b setValue will not check the values.
 	 *  The values will be stored in database without any inspections !
 	 */
@@ -829,127 +887,6 @@ class User extends TableUsers
         return $returnCode;
     }
 
-    // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
-    public function editAnnouncements()
-    {
-        return $this->checkRolesRight('rol_announcements');
-    }
-
-    // Funktion prueft, ob der angemeldete User Registrierungen bearbeiten und zuordnen darf
-    public function approveUsers()
-    {
-        return $this->checkRolesRight('rol_approve_users');
-    }
-
-    // Funktion prueft, ob der angemeldete User Rollen zuordnen, anlegen und bearbeiten darf
-    public function assignRoles()
-    {
-        return $this->checkRolesRight('rol_assign_roles');
-    }
-
-    //Ueberprueft ob der User das Recht besitzt, alle Rollenlisten einsehen zu duerfen
-    public function viewAllLists()
-    {
-        return $this->checkRolesRight('rol_all_lists_view');
-    }
-
-    //Ueberprueft ob der User das Recht besitzt, allen Rollenmails zu zusenden
-    public function mailAllRoles()
-    {
-        return $this->checkRolesRight('rol_mail_to_all');
-    }
-
-    // Funktion prueft, ob der angemeldete User Termine anlegen und bearbeiten darf
-    public function editDates()
-    {
-        return $this->checkRolesRight('rol_dates');
-    }
-
-    // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
-    public function editDownloadRight()
-    {
-        return $this->checkRolesRight('rol_download');
-    }
-
-	/** Checks if the current user is allowed to edit the profile of the user of
-	 *  the parameter. If will check if user can generally edit all users or if 
-	 *  he is a group leader and can edit users of a special role where @b $user
-	 *  is a member or if it's the own profile and he could edit this.
-	 *  @param $user User object of the user that should be checked if the current user can edit his profile.
-	 *  @return Return @b true if the current user is allowed to edit the profile of the user from @b $user.
-     */	
-	 public function editProfile(&$user)
-	{
-		if(is_object($user))
-		{
-			// edit own profile ?
-			if($user->getValue('usr_id') == $this->getValue('usr_id') 
-			&& $this->getValue('usr_id') > 0)
-			{
-				$edit_profile = $this->checkRolesRight('rol_profile');
-
-				if($edit_profile == 1)
-				{
-					return true;
-				}
-			}
-			
-			if($this->editUsers())
-			{
-				return true;
-			}
-			else
-			{
-				if(count($this->rolesMembershipLeader) > 0)
-				{
-					// check if current user is a group leader of a role where $user is a member
-					$rolesMembership = $user->getRoleMemberships();
-					foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
-					{
-						// is group leader of role and has the right to edit users ?
-						if(array_search($roleId, $rolesMembership) != false
-						&& $leaderRights > 1)
-						{
-							return true;
-						}
-					}
-				}
-			}
-		}
-
-		return false;
-	}
-
-    // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
-    public function editUsers()
-    {
-        return $this->checkRolesRight('rol_edit_user');
-    }
-
-    // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
-    public function editGuestbookRight()
-    {
-        return $this->checkRolesRight('rol_guestbook');
-    }
-
-    // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
-    public function commentGuestbookRight()
-    {
-        return $this->checkRolesRight('rol_guestbook_comments');
-    }
-
-    // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
-    public function editPhotoRight()
-    {
-        return $this->checkRolesRight('rol_photo');
-    }
-
-    // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
-    public function editWeblinksRight()
-    {
-        return $this->checkRolesRight('rol_weblinks');
-    }
-
 	/** Checks if the current user is allowed to view the profile of the user of
 	 *  the parameter. If will check if user has edit rights with method editProfile 
 	 *  or if the user is a member of a role where the current user has the right to
@@ -1010,7 +947,80 @@ class User extends TableUsers
 			}
 		}
         return $view_profile;
+    }    
+
+    // Funktion prueft, ob der angemeldete User Ankuendigungen anlegen und bearbeiten darf
+    public function editAnnouncements()
+    {
+        return $this->checkRolesRight('rol_announcements');
     }
+
+    // Funktion prueft, ob der angemeldete User Registrierungen bearbeiten und zuordnen darf
+    public function approveUsers()
+    {
+        return $this->checkRolesRight('rol_approve_users');
+    }
+
+    // Funktion prueft, ob der angemeldete User Rollen zuordnen, anlegen und bearbeiten darf
+    public function assignRoles()
+    {
+        return $this->checkRolesRight('rol_assign_roles');
+    }
+
+    //Ueberprueft ob der User das Recht besitzt, alle Rollenlisten einsehen zu duerfen
+    public function viewAllLists()
+    {
+        return $this->checkRolesRight('rol_all_lists_view');
+    }
+
+    //Ueberprueft ob der User das Recht besitzt, allen Rollenmails zu zusenden
+    public function mailAllRoles()
+    {
+        return $this->checkRolesRight('rol_mail_to_all');
+    }
+
+    // Funktion prueft, ob der angemeldete User Termine anlegen und bearbeiten darf
+    public function editDates()
+    {
+        return $this->checkRolesRight('rol_dates');
+    }
+
+    // Funktion prueft, ob der angemeldete User Downloads hochladen und verwalten darf
+    public function editDownloadRight()
+    {
+        return $this->checkRolesRight('rol_download');
+    }
+
+    // Funktion prueft, ob der angemeldete User fremde Benutzerdaten bearbeiten darf
+    public function editUsers()
+    {
+        return $this->checkRolesRight('rol_edit_user');
+    }
+
+    // Funktion prueft, ob der angemeldete User Gaestebucheintraege loeschen und editieren darf
+    public function editGuestbookRight()
+    {
+        return $this->checkRolesRight('rol_guestbook');
+    }
+
+    // Funktion prueft, ob der angemeldete User Gaestebucheintraege kommentieren darf
+    public function commentGuestbookRight()
+    {
+        return $this->checkRolesRight('rol_guestbook_comments');
+    }
+
+    // Funktion prueft, ob der angemeldete User Fotos hochladen und verwalten darf
+    public function editPhotoRight()
+    {
+        return $this->checkRolesRight('rol_photo');
+    }
+
+    // Funktion prueft, ob der angemeldete User Weblinks anlegen und editieren darf
+    public function editWeblinksRight()
+    {
+        return $this->checkRolesRight('rol_weblinks');
+    }
+
 
     // Methode prueft, ob der angemeldete User eine bestimmte oder alle Listen einsehen darf
     public function viewRole($rol_id)
@@ -1050,15 +1060,6 @@ class User extends TableUsers
             }
         }
         return $mail_role;
-    }
-
-    /** Checks if the user is assigned to the role @b Webmaster
-     *  @return Returns @b true if the user is a member of the role @b Webmaster
-     */
-    public function isWebmaster()
-    {
-        $this->checkRolesRight();
-        return $this->webmaster;
     }
 }
 ?>
