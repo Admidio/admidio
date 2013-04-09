@@ -284,33 +284,50 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 
 		// Daten für Benachrichtigung zusammenstellen
 		if($_POST['date_from'] == $_POST['date_to'])
-		{$datum = $_POST['date_from'];}
+		{
+    		$datum = $_POST['date_from'];
+        }
 		else
-		{$datum = $_POST['date_from']. ' - '.$_POST['date_to'];}
+		{
+    		$datum = $_POST['date_from']. ' - '.$_POST['date_to'];
+        }
 		
 		if($_POST['dat_all_day']!=0)
-		{$zeit = $gL10n->get('DAT_ALL_DAY');}
+		{
+		    $zeit = $gL10n->get('DAT_ALL_DAY');
+        }
 		else
-		{$zeit = $_POST['time_from']. ' - '. $_POST['time_to'];}
+		{
+		    $zeit = $_POST['time_from']. ' - '. $_POST['time_to'];
+        }
 		
 		$sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.' 
-             WHERE cat_id = '.$_POST['dat_cat_id'];
+                     WHERE cat_id = '.$_POST['dat_cat_id'];
 		$gDb->query($sql_cal);
-		$row_cal = $gDb->fetch_array();
+		$row_cal  = $gDb->fetch_array();
 		$calendar = $row_cal['cat_name'];
 		
 		if(strlen($_POST['dat_location']) > 0)
-		{$ort = $_POST['dat_location'];}
+		{
+		    $ort = $_POST['dat_location'];
+        }
 		else
-		{$ort = 'n/a';}	
+		{
+		    $ort = 'n/a';
+        }
 		
 		if($_POST['dat_room_id'] == 0)
-		{$raum = 'n/a';}
+		{
+		    $raum = 'n/a';}
 		
 		if(strlen($_POST['dat_max_members']) > 0)
-		{$teilnehmer = $_POST['dat_max_members'];}
+		{
+		    $teilnehmer = $_POST['dat_max_members'];
+        }
 		else
-		{$teilnehmer = 'n/a';}
+		{
+		    $teilnehmer = 'n/a';
+        }
 		
 		$message = $gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART1', $gCurrentOrganization->getValue('org_longname'), $_POST['dat_headline'], $datum. ' ('. $zeit. ')', $calendar)
                   .$gL10n->get('DAT_EMAIL_NOTIFICATION_MESSAGE_PART2', $ort, $raum, $teilnehmer, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'))
@@ -373,13 +390,17 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $date->save();
         $role->delete();
     }
-    
-    if($_POST['date_login'] == 1 && $date->getValue('dat_rol_id') > 0)
+    elseif($_POST['date_login'] == 1 && $date->getValue('dat_rol_id') > 0)
     {
-        // max. members of participation could have been changed and must be updated in table role
+        // if event exists and you could register to this event then we must check
+        // if the data of the role must be changed
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
-        if($role->getValue('rol_max_members') != $date->getValue('dat_max_members'))
+        $roleName = $gL10n->get('DAT_DATE').' '. $date->getValue('dat_begin', 'Y-m-d H:i').' - '.$date->getValue('dat_id');
+        
+        if($role->getValue('rol_max_members') != $date->getValue('dat_max_members')
+        || $role->getValue('role_name'        != $roleName))
         {
+            $role->setValue('rol_name', $roleName);
             $role->setValue('rol_max_members', $date->getValue('dat_max_members'));
             $role->save();
         }
@@ -425,6 +446,7 @@ elseif($getMode == 4)  // Benutzer vom Termin abmelden
 elseif($getMode == 5)  // Eintrag fuer Sichtbarkeit erzeugen
 {
     $label = '';
+    header('Content-type: text/html; charset=utf-8');
 
     if($getNumberRoleSelect == 1)
     {
