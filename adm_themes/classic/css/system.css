@@ -623,8 +623,13 @@ ul.autosuggest li.highlight a:visited  {
     display: inline;
     background: none;
     text-align: left; 
-}​ 
+}
 .dd-selected-text { 
     font-weight:bold;    
     width: 100%;
+}
+
+/* Adjustment for Selectboxes in Own Lists */
+.ListProfileField, .ListConditionField {
+   max-width: 200px;
 }
