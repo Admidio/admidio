@@ -13,7 +13,7 @@
  *				  2 - Flexuploader
  *
  *****************************************************************************/
-if($_GET['uploadmethod'] == 2)
+if ($_GET['uploadmethod'] == 2)
 {
     // Cookies wurden uebergeben, nun wieder in Cookievariable kopieren
     foreach($_GET as $key => $value)
@@ -40,21 +40,22 @@ if ($gPreferences['enable_photo_module'] == 0)
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
+
 //nur von eigentlicher OragHompage erreichbar
-if($gCurrentOrganization->getValue('org_shortname')!= $g_organization)
+if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) != 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $gHomepage));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-if(!$gCurrentUser->editPhotoRight())
+if (!$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 //var_dump($_FILES['Filedata']['size']);exit();
 //Bei Klassischem upload erstmal testen ob Alle Dateien angekommen sind bei Flex reichen die Kontrollen in der Verarbeitung
-if($getUploadmethod == 1)
+if ($getUploadmethod == 1)
 {
     //zaehlen wieviele Fotos hochgeladen werden sollen und ob alle Uploads Fehlerfrei sind
     $counter=0;

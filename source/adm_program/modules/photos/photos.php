@@ -28,13 +28,14 @@ if ($gPreferences['enable_photo_module'] == 0)
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
-elseif($gPreferences['enable_photo_module'] == 2)
+else if ($gPreferences['enable_photo_module'] == 2)
 {
     // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
     require_once('../../system/login_valid.php');
 }
+
 //nur von eigentlicher OragHompage erreichbar
-if($gCurrentOrganization->getValue('org_shortname')!= $g_organization)
+if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) != 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $gHomepage));
@@ -60,7 +61,7 @@ if ($getPhotoId == 0)
 $gNavigation->addUrl(CURRENT_URL);
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
+if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $gDb;

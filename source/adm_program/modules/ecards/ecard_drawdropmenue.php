@@ -183,7 +183,7 @@ elseif($gValidLogin && strlen($getUserId) > 0)
 		{
 			$parseUrl = parse_url($orgHP); 
 			$newUrl = trim($parseUrl['host'] ? $parseUrl['host'] : array_shift(explode('/', $parseUrl['path'], 2)));
-			$newUrlArray = split("[\.]",$newUrl);
+			$newUrlArray = preg_split("[\.]",$newUrl);
 			$count = count($newUrlArray);
 			
 			if( $count >= 2 )
@@ -192,7 +192,7 @@ elseif($gValidLogin && strlen($getUserId) > 0)
             }
 		}
 		
-		list ($rolName, $rolId) = split("[\_]", $getUserId);
+		list ($rolName, $rolId) = preg_split("[\_]", $getUserId);
 		if( $rolId != '' )
 		{
 			$sql = 'SELECT rol_name 

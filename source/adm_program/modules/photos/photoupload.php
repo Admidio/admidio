@@ -29,21 +29,22 @@ if ($gPreferences['enable_photo_module'] == 0)
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
+
 //nur von eigentlicher OragHompage erreichbar
-if($gCurrentOrganization->getValue('org_shortname')!= $g_organization)
+if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization) != 0)
 {
     // das Modul ist deaktiviert
     $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $gHomepage));
 }
 
 // erst pruefen, ob der User Fotoberarbeitungsrechte hat
-if(!$gCurrentUser->editPhotoRight())
+if (!$gCurrentUser->editPhotoRight())
 {
     $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
 //Kontrolle ob Server Dateiuploads zulaesst
-if(ini_get('file_uploads') != 1)
+if (ini_get('file_uploads') != 1)
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
@@ -52,7 +53,7 @@ if(ini_get('file_uploads') != 1)
 $gNavigation->addUrl(CURRENT_URL);
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
-if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
+if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
     $photo_album->db =& $gDb;

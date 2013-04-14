@@ -64,12 +64,12 @@ function ecardJSClass()
 								iFrame.contents().find('html').html(response);	
 
 								var foundHTML = iFrame.contents().find('html');
-								var height = foundHTML.height();
+								var height = foundHTML.height() + 5;
 								var width = foundHTML.width();
 								var cBoxHeight = cBoxLContent.height();
 								var cBoxWidth = cBoxLContent.width();
-								iFrame.height(height > cBoxHeight ? cBoxHeight : height);
-								iFrame.width(width > cBoxWidth ? cBoxWidth : width);			
+								iFrame.height(height > cBoxHeight ? height : cBoxHeight );
+								iFrame.width(width > cBoxWidth ? cBoxWidth : width );			
 						}});
 					}
 				});
@@ -82,11 +82,19 @@ function ecardJSClass()
 		this.submitOptions = { 
 			target:        '#cboxLoadedContent',  							 // target element(s) to be updated with server response
 			url: gRootPath + '/adm_program/modules/ecards/ecard_send.php',
+			type: "POST",
+			dataType: "html",
 			beforeSubmit: function(formData, jqForm, options) { 
 				$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/loader.gif" alt="' + this.loading_Text + '" />');
 			},
-			success:       function(responseText, statusText){		 // post-submit callback
-				$.fn.colorbox({html:responseText});
+			success: function(data, textStatus, xhr){		 // post-submit callback
+				$.fn.colorbox({html:data});
+			},
+			error: function (xhr, ajaxOptions, thrownError){
+				$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/warning.png" />');
+				jQueryAlert("SYS_AJAX_REQUEST_ERROR", "\n\tResponse text: "+xhr.responseText+"\n\tAjax options: "+ajaxOptions+"\n\tTrown error: "+thrownError);
+			},
+			complete: function(xhr, status) {
 				$("#ecardSubmit").html('<img src="'+ gThemePath+ '/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;' + ecardJS.send_Text);
 			}
 		};
