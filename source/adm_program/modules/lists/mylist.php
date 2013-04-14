@@ -103,7 +103,7 @@ $gLayout['header'] = '
             
             // neue Spalte zur Auswahl des Profilfeldes
             var newCellField = newTableRow.insertCell(-1);
-            htmlCboFields = "<select onchange=\"getConditionField(this.id, this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" name=\"column" + fieldNumberShow + "\">" +
+            htmlCboFields = "<select onchange=\"getConditionField(this.id, this.options[this.selectedIndex].text)\" size=\"1\" id=\"column" + fieldNumberShow + "\" class=\"ListProfileField\" name=\"column" + fieldNumberShow + "\">" +
                     "<option value=\"\"></option>";
             for(var counter = 1; counter < arr_user_fields.length; counter++)
             {   
@@ -362,7 +362,7 @@ $gLayout['header'] = '
                    if(arr_user_fields[key]["usf_type"] == "DROPDOWN"
                       || arr_user_fields[key]["usf_type"] == "RADIO_BUTTON")
                    {
-                        html = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
+                        html = "<select size=\"1\" id=\"condition" + columnId + "\" class=\"ListConditionField\" name=\"condition" + columnId + "\">" +
                         "<option value=\"\">&nbsp;</option>";
 
                         for (selectValue in arr_user_fields[key]["usf_value_list"])
@@ -385,10 +385,35 @@ $gLayout['header'] = '
                     if(arr_user_fields[key]["usf_type"] == "CHECKBOX")
                     {
                         html = "<select size=\"1\" id=\"condition" + columnId + "\" name=\"condition" + columnId + "\">" +
-                        "<option value=\"\">&nbsp;</option>" +
-                        "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" +
-                        "<option value=\"0\">'.$gL10n->get('SYS_NO').'</option>" +
-                        "</select>";
+                        "<option value=\"\">&nbsp;</option>";
+                        
+                        selected = "";
+                        
+                        if(arr_default_fields[fieldNumberIntern])
+                        {
+
+                            if(arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberIntern]["usf_id"]
+                                && arr_default_fields[fieldNumberIntern]["condition"] == "1")
+                            {
+                                selected = " selected=\"selected\" ";
+                            }
+                                html += "<option value=\"1\" " + selected + ">'.$gL10n->get('SYS_YES').'</option>";
+                            selected = "";
+
+                            if(arr_user_fields[key]["usf_id"] == arr_default_fields[fieldNumberIntern]["usf_id"]
+                                && arr_default_fields[fieldNumberIntern]["condition"] == "0")
+                            {
+                                selected = " selected=\"selected\" ";
+                            }
+                                html += "<option value=\"0\" " + selected + ">'.$gL10n->get('SYS_NO').'</option>" +
+                                "</select>";
+                        }
+                        else
+                        {           
+                            html += "<option value=\"1\">'.$gL10n->get('SYS_YES').'</option>" + 
+                                    "<option value=\"0\">'.$gL10n->get('SYS_NO').'</option>" +
+                                    "</select>";
+                        }
                     }
 	            }
             }
