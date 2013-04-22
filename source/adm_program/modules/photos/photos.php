@@ -378,7 +378,7 @@ echo '<div class="photoModuleContainer">';
                         if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
                         {
                             $photoThumbnailTable .= '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'"><img 
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getShowPage.'"><img 
                                 src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                         }
                     }

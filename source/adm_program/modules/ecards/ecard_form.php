@@ -24,6 +24,7 @@ require_once('../../system/classes/ckeditor_special.php');
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
+$showPage	= admFuncVariableIsValid($_GET, 'show_page', 'numeric', 1);
 
 // Initialisierung lokaler Variablen
 $funcClass 	 = new FunctionClass($gL10n);
@@ -124,6 +125,7 @@ $javascript = '
 			ecardJS.send_Text				= "'.$gL10n->get('SYS_SEND').'";
 			ecardJS.template_Text			= "'.$gL10n->get('ECA_TEMPLATE').'";
 			ecardJS.templates				= '.$funcClass->createJSTemplateArray($templates).';
+			ecardJS.sendDoneURL			= "'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'&show_page='.$showPage.'"; 
 			
 			ecardJS.init();
     -->

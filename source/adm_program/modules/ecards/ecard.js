@@ -38,6 +38,7 @@ function ecardJSClass()
 	this.loading_Text			= "";
 	this.send_Text				= "";
 	this.template_Text			= "";
+	this.sendDoneURL			= "";
 	this.templates				= new Array();
 	this.ccSaveDataArray		= new Array();
 	this.submitOptions      = new Array();
@@ -88,7 +89,9 @@ function ecardJSClass()
 				$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/loader.gif" alt="' + this.loading_Text + '" />');
 			},
 			success: function(data, textStatus, xhr){		 // post-submit callback
-				$.fn.colorbox({html:data});
+				$.fn.colorbox({html:data, onClosed: function(){
+					window.location = ecardJS.sendDoneURL;
+				}});
 			},
 			error: function (xhr, ajaxOptions, thrownError){
 				$("#ecardSubmit").html('<img src="'+ gThemePath +'/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;<img src="'+ gThemePath + '/icons/warning.png" />');
@@ -98,12 +101,6 @@ function ecardJSClass()
 				$("#ecardSubmit").html('<img src="'+ gThemePath+ '/icons/email.png" alt="' + ecardJS.send_Text + '" />&nbsp;' + ecardJS.send_Text);
 			}
 		};
-	}
-
-	this.popup_win = function(theURL,winName,winOptions)
-	{
-		 win = window.open(theURL,winName,winOptions);
-		 win.focus();
 	}
 	
 	this.validateForm = function()
