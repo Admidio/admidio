@@ -18,7 +18,7 @@
  *                      (Default) Dates
  * cat_id             - show all events of calendar with this id
  * id                 - Show only one event
- * date               - All events for a date are listet
+ * date               - All events for a date are listed
  *                      Format: YYYYMMDD
  * calendar-selection - 1: The box is shown
  *                      0: The box is not shown
@@ -50,10 +50,10 @@ if($gPreferences['enable_dates_module'] == 0)
 }
 elseif($gPreferences['enable_dates_module'] == 2)
 {
-    // module only for valid Useres
+    // module only for valid Users
     require_once('../../system/login_valid.php');
 }
-//Object erzeugen
+// create object
 $dates = new ModuleDates();
 
 // Initialize and check the parameters
@@ -69,7 +69,7 @@ $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date', '9999-12-31', fa
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', 'html', false, $dates->getViewModes());
 
  
-// if exact date is set than convert it to our new syntax with dateFrom and dateTo
+// if exact date is set then convert it to our new syntax with dateFrom and dateTo
 if(strlen($getDate) > 0)
 {
     $getDateFrom = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
@@ -114,7 +114,7 @@ $dateToSystemFormat = $objDate->format($gPreferences['system_date']);
 // get headline of dates relative to date values
 $htmlHeadline = $dates->getHeadline($getHeadline, $getDateFrom, $getDateTo);
 
-// Fill input fields only if user values exists
+// Fill input fields only if user values exist
 $dateFromHtmlOutput = $dates->getFormValue($getDateFrom, DATE_NOW);
 $dateToHtmlOutput = $dates->getFormValue($getDateTo, '9999-12-31');
 
@@ -247,7 +247,7 @@ If($getViewMode == 'html')
     
     echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';  
     
-    //Check if box must be shown, when more dates avaiable
+    //Check if box must be shown, when more dates available
     if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDates())
     {
         // create module menu
@@ -346,7 +346,7 @@ If($getViewMode == 'html')
 			// Initialize object and write new data
 			$date->readDataById($row['dat_id']);
 			
-			// Change css if date is hightlighted
+			// Change css if date is highlighted
 			$cssClass = ($row['dat_highlight'] == 1) ? 'boxHeadHighlighted' : 'boxHead';
 
 			echo '
@@ -369,7 +369,7 @@ If($getViewMode == 'html')
 							src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
 						}
 
-						// change and delete is only for useres with additional rights
+						// change and delete is only for users with additional rights
 						if ($gCurrentUser->editDates())
 						{
 							if($date->editRight() == true)
@@ -409,8 +409,8 @@ If($getViewMode == 'html')
 
 					if (strlen($date->getValue('dat_location')) > 0)
 					{
-						// Show map link, when at leastt 2 words avaiable
-						// having more then 3 characters each
+						// Show map link, when at least 2 words available
+						// having more than 3 characters each
 						$map_info_count = 0;
 						foreach(preg_split('/[,; ]/', $date->getValue('dat_location')) as $key => $value)
 						{
@@ -432,7 +432,7 @@ If($getViewMode == 'html')
 							}
 							$locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
-							// if valid login and enough information about adress exists - calculate the route
+							// if valid login and enough information about address exist - calculate the route
 							if($gValidLogin && strlen($gCurrentUser->getValue('ADDRESS')) > 0
 							&& (  strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0 ))
 							{
@@ -453,7 +453,7 @@ If($getViewMode == 'html')
 								$route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
 								if(strlen($date->getValue('dat_country')) > 0)
 								{
-									// With information about country Google finds  the location much better
+									// With information about country Google finds the location much better
 									$route_url .= ',%20'. $date->getValue('dat_country');
 								}
 								$locationHtml .= '
@@ -521,7 +521,7 @@ If($getViewMode == 'html')
 					}
 					echo '</table>';
 
-					// Show discription
+					// Show description
 					echo '<div class="date_description" style="clear: left;">'.$date->getValue('dat_description').'</div>';
 
 					if($date->getValue('dat_rol_id') > 0)
@@ -532,10 +532,11 @@ If($getViewMode == 'html')
 						{
 							if($row['member_date_role'] > 0)
 							{
+								$buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id');
 								$registrationHtml = '<span class="iconTextLink">
-										<a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'"><img
+										<a href="'.$buttonURL.'"><img
 											src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>
-										<a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">'.$gL10n->get('DAT_CANCEL').'</a>
+										<a href="'.$buttonURL.'">'.$gL10n->get('DAT_CANCEL').'</a>
 									</span>';
 							}
 							else
@@ -554,7 +555,6 @@ If($getViewMode == 'html')
 								if($available_signin)
 								{
 									$buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
-
 									$registrationHtml = '<span class="iconTextLink">
 										<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'" /></a>
 										<a href="'.$buttonURL.'">'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'</a>
@@ -569,22 +569,24 @@ If($getViewMode == 'html')
 							// Link to participiants list
 							if($gValidLogin)
 							{
+								$buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
 								$registrationHtml .= '&nbsp;
 								<span class="iconTextLink">
-									<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img
+									<a href="'.$buttonURL.'"><img
 										src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>
-									 <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>
+									 <a href="'.$buttonURL.'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>
 								</span>';
 							}
 
 							// Link for managing new participiants
 							if($row['mem_leader'] == 1)
 							{
+								$buttonURL = $g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id');
 								$registrationHtml .= '&nbsp;
 								<span class="iconTextLink">
-									<a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'"><img
+									<a href="'.$buttonURL.'"><img
 										src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>
-									 <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'">'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>
+									 <a href="'.$buttonURL.'">'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>
 								</span>';
 							}
 
@@ -592,7 +594,7 @@ If($getViewMode == 'html')
 						}
 					}
 
-					// show informations about user who creates the recordset and changed it
+					// show information about user who created the recordset and changed it
 					echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'), 
 					       $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
 				</div>
@@ -631,6 +633,9 @@ else
             });
             <!-- Trigger -->
             $("#admSelectBox").change();
+            
+            <!-- Reset selection of extended functions in parent window -->
+            window.opener.parent.location.reload();
         })
     </script>
     </head>';
@@ -709,7 +714,7 @@ else
                 $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
                 
                 // Change colors of each second row for visibilty
-                // Change css if date is hightlighted
+                // Change css if date is highlighted
                 if($row['dat_highlight'] != 1)
                 {
                     $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
@@ -753,7 +758,7 @@ else
                 echo'</td>';
                 $numElement++;
                 
-            }   // end forech
+            }   // end foreach
         
         echo'</tbody>
            
@@ -781,7 +786,7 @@ else
                     $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
         
                     // Change colors of each second row for visibilty
-                    // Change css if date is hightlighted
+                    // Change css if date is highlighted
                     if($row['dat_highlight'] != 1)
                     {
                         $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
@@ -827,7 +832,7 @@ else
                         $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
         
                         // Change colors of each second row for visibilty
-                        // Change css if date is hightlighted
+                        // Change css if date is highlighted
                         if($row['dat_highlight'] != 1)
                         {
                             $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
@@ -846,7 +851,7 @@ else
                                 <td>';
     
                                         // If date has participation and patricipants are assigned
-                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members']) && ($row['dat_num_members'] > 0)) 
+                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members'])) 
                                         {
                                             echo '<table cellspacing="2" cellpadding="2"><tr>';
                                             
