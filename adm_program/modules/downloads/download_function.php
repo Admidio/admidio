@@ -230,7 +230,7 @@ elseif ($getMode == 3)
         {
             if ($ret_code == -1)
             {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FILE')));
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
             }
             elseif ($ret_code == -2)
             {
@@ -240,7 +240,7 @@ elseif ($getMode == 3)
     }
     else
     {
-        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FILE')));
+        $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
 
     $newFolderDescription = $_POST['new_description'];
