@@ -105,7 +105,7 @@ class ModuleDates
      */
     public function getViewModes()
     {
-        return array('html', 'print');
+        return array('html', 'compact', 'print');
     }
     
     /** Returns valid modes for dates as array
