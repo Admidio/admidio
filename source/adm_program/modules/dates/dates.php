@@ -27,7 +27,7 @@
  *                      if no date information is delivered
  * date_to            - is set to 31.12.9999, 
  *                      if no date information is delivered
- * view_mode          - content output in 'html' or 'print' view
+ * view_mode          - content output in 'html', 'compact' or 'print' view
  *                      (Default: 'html')
  *****************************************************************************/
 
@@ -126,8 +126,8 @@ if($getCatId > 0)
 $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL);
 
-// Number of events each page for default view 'html'
-if($gPreferences['dates_per_page'] > 0 && $getViewMode == 'html')
+// Number of events each page for default view 'html' or 'compact' view
+if($gPreferences['dates_per_page'] > 0 && ( $getViewMode == 'html' || $getViewMode == 'compact'))
 {
     $dates_per_page = $gPreferences['dates_per_page'];
 }
@@ -181,7 +181,7 @@ if($datesResult['totalCount'] != 0)
     }
 }
 
-if($getViewMode == 'html')
+if($getViewMode == 'html'  || $getViewMode == 'compact')
 {
     // Html-Head output
     if($getCatId > 0)
@@ -340,6 +340,21 @@ if($getViewMode == 'html')
     // List events
     if($datesResult['numResults'] > 0)
     {
+        // Output table header for compact view
+        if ($getViewMode == 'compact')
+        {
+            echo '<table class="tableList" style="width: 100%;" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th colspan="2">'.$gL10n->get('SYS_START').'</th>
+                    <th>'.$gL10n->get('DAT_DATE').'</th>
+                    <th colspan="2">'.$gL10n->get('SYS_PARTICIPANTS').'</th>
+                    <th>'.$gL10n->get('DAT_LOCATION').'</th>
+                </tr>
+            </thead>
+            <tbody>';
+        }
         foreach($datesResult['dates'] as $row)
         {
             // Initialize object and write new data
@@ -491,6 +506,7 @@ if($getViewMode == 'html')
                 {
                     $participantsHtml = '<strong>'.$gL10n->get('SYS_UNLIMITED').'</strong>';
                     $leadersHtml = '0';
+                    $maxMembers = '&infin;';
                 }
                 $dateElements[] = array($gL10n->get('SYS_LEADER'), '<strong>'.$leadersHtml.'</strong>');
                 $dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), $participantsHtml);
@@ -533,15 +549,18 @@ if($getViewMode == 'html')
                         }
                     }
 
-                    // Link to participiants list
+                    // Link to participants list
                     if($gValidLogin)
                     {
-                        $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
-                        $participantIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
-                        $participantText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
+                        if ($leadersHtml + $numMembers > 0)
+                        {
+                            $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
+                            $participantIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
+                            $participantText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
+                        }
                     }
 
-                    // Link for managing new participiants
+                    // Link for managing new participants
                     if($row['mem_leader'] == 1)
                     {
                         $buttonURL = $g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id');
@@ -551,84 +570,116 @@ if($getViewMode == 'html')
                 }
             }
 
-            // Change css if date is highlighted
-            $cssClass = ($row['dat_highlight'] == 1) ? 'boxHeadHighlighted' : 'boxHead';
-                
-            // Output of elements
-            // always 2 then line break
-            $eventDetails='';
-            foreach($dateElements as $element)
+            if ($getViewMode == 'html')
             {
-                if($firstElement)
+                // Change css if date is highlighted
+                $cssClass = ($row['dat_highlight'] == 1) ? 'boxHeadHighlighted' : 'boxHead';
+                    
+                // Output of elements
+                // always 2 then line break
+                $eventDetails='';
+                foreach($dateElements as $element)
                 {
-                    $eventDetails.='<tr>';
-                }
+                    if($firstElement)
+                    {
+                        $eventDetails.='<tr>';
+                    }
 
-                $eventDetails.='<td style="width: 15%">'.$element[0].':</td>
-                <td style="width: 35%">'.$element[1].'</td>';
+                    $eventDetails.='<td style="width: 15%">'.$element[0].':</td>
+                    <td style="width: 35%">'.$element[1].'</td>';
 
-                if($firstElement)
-                {
-                    $firstElement = false;
+                    if($firstElement)
+                    {
+                        $firstElement = false;
+                    }
+                    else
+                    {
+                        $eventDetails.='</tr>';
+                        $firstElement = true;
+                    }
                 }
-                else
-                {
-                    $eventDetails.='</tr>';
-                    $firstElement = true;
-                }
+                
+                echo '
+                <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
+                    <div class="'.$cssClass.'">
+                        <div class="boxHeadLeft">
+                            <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
+                            $date->getValue('dat_begin', $gPreferences['system_date']);
+                            echo $endDate ? ' - ' : '';
+                            echo $endDate . ' ' . $date->getValue('dat_headline') . '
+                        </div>
+                        <div class="boxHeadRight">' . 
+                            $icalIcon . $copyIcon . $editIcon . $deleteIcon . '
+                        </div>
+                    </div>
+
+                    <div class="boxBody">
+                        <table style="width: 100%; border-width: 0px;">' . $eventDetails . '
+                        </table>
+                        <div class="date_description" style="clear: left;">' . $date->getValue('dat_description') . '</div>
+                        <div>';
+                        if ($registerText)
+                        {
+                            echo '
+                            <span class="iconTextLink">
+                                ' . $registerIcon .' '. $registerText . '
+                            </span>&nbsp;';
+                        }
+                        if ($participantText)
+                        {
+                            echo '
+                            <span class="iconTextLink">
+                                ' . $participantIcon .' '. $participantText . '
+                            </span>&nbsp;';
+                        }
+                        if ($mgrpartText)
+                        {
+                            echo '
+                            <span class="iconTextLink">
+                                ' . $mgrpartIcon .' '. $mgrpartText . '
+                            </span>';
+                        }
+                        echo '</div>';
+                        // show information about user who created the recordset and changed it
+                        echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'), 
+                           $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
+                    </div>
+                </div>';
             }
-            
-            echo '
-            <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
-                <div class="'.$cssClass.'">
-                    <div class="boxHeadLeft">
-                        <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
-                        $date->getValue('dat_begin', $gPreferences['system_date']);
-                        echo $endDate ? ' - ' : '';
-                        echo $endDate . ' ' . $date->getValue('dat_headline') . '
-                    </div>
-                    <div class="boxHeadRight">' . 
-                        $icalIcon . $copyIcon . $editIcon . $deleteIcon . '
-                    </div>
-                </div>
-
-                <div class="boxBody">
-                    <table style="width: 100%; border-width: 0px;">' . $eventDetails . '
-                    </table>
-                    <div class="date_description" style="clear: left;">' . $date->getValue('dat_description') . '</div>
-                    <div>';
-                    if ($registerText)
-                    {
-                        echo '
-                        <span class="iconTextLink">
-                            ' . $registerIcon .' '. $registerText . '
-                        </span>&nbsp;';
-                    }
-                    if ($participantText)
-                    {
-                        echo '
-                        <span class="iconTextLink">
-                            ' . $participantIcon .' '. $participantText . '
-                        </span>&nbsp;';
-                    }
-                    if ($mgrpartText)
-                    {
-                        echo '
-                        <span class="iconTextLink">
-                            ' . $mgrpartIcon .' '. $mgrpartText . '
-                        </span>';
-                    }
-                    echo '</div>';
-                    // show information about user who created the recordset and changed it
-                    echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'), 
-                       $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
-                </div>
-            </div>';
+            else
+            {
+                // Change css if date is highlighted
+                $cssWeight = ($row['dat_highlight'] == 1) ? 'bold' : 'normal';
+                
+                $objDateBegin = new DateTime ($row['dat_begin']);
+                $dateBegin = $objDateBegin->format($gPreferences['system_date']);
+                $timeBegin = '';
+                if ($date->getValue('dat_all_day') == 0)
+                {
+                    $timeBegin = $date->getValue('dat_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK');
+                }
+                echo '<tr class="tableMouseOver">
+                <td>'.$registerIcon.'</td>
+                    <td>'.$dateBegin.'</td>
+                    <td>'.$timeBegin.'</td>
+                    <td style="font-weight:'. $cssWeight .'"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>
+                    </td>
+                    <td>'. ($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers.'</td>
+                    <td>'. ($leadersHtml+$numMembers > 0 ? $participantIcon : '').'</td>
+                    <td>'.$locationHtml.'</td>
+                </tr>';
+            }
         }  // End foreach
+
+        // Output table bottom for compact view
+        if ($getViewMode == 'compact')
+        {
+            echo '</tbody></table>';
+        }
     }
 
     // If neccessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat;
+    $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&view_mode='.$getViewMode;
     echo admFuncGeneratePagination($base_url, $datesResult['totalCount'], $datesResult['limit'], $getStart, TRUE);
 
     require(SERVER_PATH. '/adm_program/system/overall_footer.php');
