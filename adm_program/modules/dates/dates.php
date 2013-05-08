@@ -266,7 +266,7 @@ If($getViewMode == 'html')
             if($getCalendarSelection == 1)
             {
                 // show selectbox with all calendars
-                $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?headline='.$getHeadline.'&cat_id=', 
+                $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?headline='.$getHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=', 
                                     $gL10n->get('DAT_CALENDAR'), $gCurrentUser->editDates());
             }
             elseif($gCurrentUser->editDates())
@@ -318,11 +318,13 @@ If($getViewMode == 'html')
 					<input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$dateToHtmlOutput.'" />
 					<a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
 					src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-					
-					&nbsp;&nbsp;
-					
-				<input type="submit" value="OK"> 
-			</form> 
+				
+                <span style="margin-left: 5px;">&nbsp;</span>	
+	            <input type="hidden" id="cat_id" name="cat_id" value="'.$getCatId.'">
+                <input type="submit" value="OK">
+                <span style="margin-left: 5px;">&nbsp;</span>
+			    <input type="button" onclick="window.location.href = \''.$g_root_path.'/adm_program/modules/dates/dates.php\'" value="'.$gL10n->get('SYS_DELETE').'">
+            </form> 
 		</div>'; 
     }
        
@@ -545,7 +547,7 @@ If($getViewMode == 'html')
 								if($date->getValue('dat_max_members'))
 								{
 									// Check limit of participants
-									if($participants->getLimit($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
+									if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
 									{
 										$available_signin = false;
 									}
