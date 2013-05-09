@@ -411,6 +411,10 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             $mgrpartText='';
             $dateElements = array();
             $firstElement = true;
+            $maxMembers='';
+            $numMembers='';
+            $leadersHtml='';
+            $locationHtml='';
 
             if ($date->getValue('dat_all_day') == 0)
             {
