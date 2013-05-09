@@ -28,7 +28,7 @@
  * date_to            - is set to 31.12.9999, 
  *                      if no date information is delivered
  * view_mode          - content output in 'html', 'compact' or 'print' view
- *                      (Default: 'html')
+ *                      (Default: according to preferences)
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -66,7 +66,7 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', DATE_NOW, false);
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date', '9999-12-31', false);
-$getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', 'html', false, $dates->getViewModes());
+$getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', $gPreferences['dates_viewmode'], false, $dates->getViewModes());
 
 // if exact date is set then convert it to our new syntax with dateFrom and dateTo
 if(strlen($getDate) > 0)

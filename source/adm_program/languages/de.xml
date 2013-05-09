@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
+<version id="2.4.1" translator="Markus Faßbender">
+	<text id="DAT_VIEW_MODE" development="new" translation="todo">Standard-Darstellung</text>
+	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="todo">Detailiert</text>
+	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="todo">Kompakt</text>
+	<text id="DAT_VIEW_MODE_DESC" development="new" translation="todo">Gibt an, wie die Termine angezeigt werden. (Standard: Detailiert)</text>
+</version>
 <version id="2.4.0" translator="Markus Faßbender">
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Möchtest du die Kategorie %VAR1_BOLD% wirklich löschen?</text>
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="todo">Die Kategorie %VAR1_BOLD% kann nicht gelöscht werden, da sie noch %VAR2% abhängige Einträge besitzt.</text>
