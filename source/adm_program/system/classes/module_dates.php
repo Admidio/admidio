@@ -86,7 +86,7 @@ class ModuleDates
     {
         global $gL10n;
 
-        If ($start < DATE_NOW && $end < DATE_NOW)
+        if ($this->formatDate($start) < DATE_NOW && $this->formatDate($end) < DATE_NOW)
         {
             $getHeadline =  $gL10n->get('DAT_PREVIOUS_DATES',' ');
             $getHeadline.= $gL10n->get('DAT_DATES');
@@ -205,7 +205,6 @@ class ModuleDates
         {
             return FALSE;    
         }
-        
     }
     
     /**
@@ -411,6 +410,53 @@ class ModuleDates
         return $sqlConditions;
         
     }
+    
+    /**
+     *  Get additional tables for sql statement
+     *  Parameters can be of type 'data' or 'count'
+     *  'data' is joining tables to get more data from them while
+     *  'count' is joining tables only to get the correct number of records
+     */
+     
+    public function sqlAdditionalTablesGet($type='data')
+    {
+        global $gPreferences;
+        global $gProfileFields;
+        
+        $additionalTables='';
+        
+        if ($type=='data')
+        {
+            if($gPreferences['system_show_create_edit'] == 1)
+            {
+                // Tables for showing firstname and lastname of create and last change user
+                $additionalTables = '
+                  LEFT JOIN '. TBL_USER_DATA .' cre_surname
+                    ON cre_surname.usd_usr_id = dat_usr_id_create
+                   AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                  LEFT JOIN '. TBL_USER_DATA .' cre_firstname
+                    ON cre_firstname.usd_usr_id = dat_usr_id_create
+                   AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
+                  LEFT JOIN '. TBL_USER_DATA .' cha_surname
+                    ON cha_surname.usd_usr_id = dat_usr_id_change
+                   AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
+                  LEFT JOIN '. TBL_USER_DATA .' cha_firstname
+                    ON cha_firstname.usd_usr_id = dat_usr_id_change
+                   AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
+            }
+            else
+            {
+                // Tables for showing username of create and last change user
+                $additionalTables = '
+                  LEFT JOIN '. TBL_USERS .' cre_username
+                    ON cre_username.usr_id = dat_usr_id_create
+                  LEFT JOIN '. TBL_USERS .' cha_username
+                    ON cha_username.usr_id = dat_usr_id_change ';
+            }
+        }
+        
+        return $additionalTables;
+    }        
 
     /**
      *  Get number of available dates.
@@ -424,6 +470,7 @@ class ModuleDates
             
             $sql = 'SELECT COUNT(DISTINCT dat_id) as count
                       FROM '.TBL_DATE_ROLE.', '. TBL_DATES. ', '. TBL_CATEGORIES. '
+                      '.$this->sqlAdditionalTablesGet('count') .'
                      WHERE dat_cat_id = cat_id
                        AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                            OR (   dat_global   = 1
@@ -442,7 +489,7 @@ class ModuleDates
         }
     }
     
-    /** SQL query returns an array with avaible dates.
+    /** SQL query returns an array with available dates.
      *  @param $startelement Defines the offset of the query (default: 0)
      *  @param $limit Limit of query rows (default: 0)
      *  @return Array with all dates and properties 
@@ -466,36 +513,18 @@ class ModuleDates
             $additionalFields = '
                 cre_firstname.usd_value || \' \' || cre_surname.usd_value as create_name,
                 cha_firstname.usd_value || \' \' || cha_surname.usd_value as change_name ';
-            $additionalTables = '
-              LEFT JOIN '. TBL_USER_DATA .' cre_surname
-                ON cre_surname.usd_usr_id = dat_usr_id_create
-               AND cre_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-              LEFT JOIN '. TBL_USER_DATA .' cre_firstname
-                ON cre_firstname.usd_usr_id = dat_usr_id_create
-               AND cre_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
-              LEFT JOIN '. TBL_USER_DATA .' cha_surname
-                ON cha_surname.usd_usr_id = dat_usr_id_change
-               AND cha_surname.usd_usf_id = '.$gProfileFields->getProperty('LAST_NAME', 'usf_id').'
-              LEFT JOIN '. TBL_USER_DATA .' cha_firstname
-                ON cha_firstname.usd_usr_id = dat_usr_id_change
-               AND cha_firstname.usd_usf_id = '.$gProfileFields->getProperty('FIRST_NAME', 'usf_id');
         }
         else
         {
             // show username of create and last change user
             $additionalFields = ' cre_username.usr_login_name as create_name,
                                   cha_username.usr_login_name as change_name ';
-            $additionalTables = '
-              LEFT JOIN '. TBL_USERS .' cre_username
-                ON cre_username.usr_id = dat_usr_id_create
-              LEFT JOIN '. TBL_USERS .' cha_username
-                ON cha_username.usr_id = dat_usr_id_change ';
         }        
 
         //read dates from database
         $sql = 'SELECT DISTINCT cat.*, dat.*, mem.mem_usr_id as member_date_role, mem.mem_leader,'.$additionalFields.'
                   FROM '.TBL_DATE_ROLE.' dtr, '. TBL_CATEGORIES. ' cat, '. TBL_DATES. ' dat
-                       '.$additionalTables.'
+                       '.$this->sqlAdditionalTablesGet('data').'
                   LEFT JOIN '. TBL_MEMBERS. ' mem
                     ON mem.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
                    AND mem.mem_rol_id = dat_rol_id
