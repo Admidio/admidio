@@ -23,7 +23,7 @@ class ModuleDates
     private $dateId;        ///< Id of the current date
     private $dateFrom;      ///< First date value (start) to be checked and formatted to database format ("Y-m-d")
     private $dateTo;        ///< Second date value (end) to be checked and formatted to database format ("Y-m-d")
-    private $order;         ///< optional sorting value for SQL query (array: ASC,DESC  dafault:ASC)
+    private $order;         ///< optional sorting value for SQL query (array: ASC,DESC  default:ASC)
     private $headline;      ///< The headline is set to date, or old dates regarding to given date parameters. Optional user text can be set.
 
     /** Constuctor that will create an object of a recordset of the specified dates.
@@ -128,8 +128,8 @@ class ModuleDates
      *  This function defines the mode of the current instance. If no parameters are defined the @b default @b mode is @b 'actual'
      *  This method checks valid mode value and validates the date values. If necessary the date values are to be formatted by internal function.
      *  @param $mode String with valid mode defined in Array getModes (default: 'actual') 
-     *  @param $var1 First date value ( dafault: '')
-     *  @param $var2 Second date value ( dafault: '')
+     *  @param $var1 First date value ( default: '')
+     *  @param $var2 Second date value ( default: '')
      */ 
     public function setMode($mode='actual', $var1='', $var2='')
     {    
@@ -413,9 +413,10 @@ class ModuleDates
     
     /**
      *  Get additional tables for sql statement
-     *  Parameters can be of type 'data' or 'count'
-     *  'data' is joining tables to get more data from them while
-     *  'count' is joining tables only to get the correct number of records
+     *  @param $type of sql statement: @b data is joining tables to get more data from them
+     *                                 @b count is joining tables only to get the correct number of records
+     *                                 (default: 'data')
+     *  @return String with the necessary joins
      */
      
     public function sqlAdditionalTablesGet($type='data')
