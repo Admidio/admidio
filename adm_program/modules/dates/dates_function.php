@@ -197,9 +197,9 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['dat_all_day'] = 0;
     }
-    if(isset($_POST['date_login']) == false)
+    if(isset($_POST['dateRegistrationPossible']) == false)
     {
-        $_POST['date_login'] = 0;
+        $_POST['dateRegistrationPossible'] = 0;
     }
     if(isset($_POST['dat_room_id']) == false)
     {
@@ -341,7 +341,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     // ggf. Rolle fuer Anmeldungen wegschreiben
     // ----------------------------------------         
 
-    if($_POST['date_login'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
+    if($_POST['dateRegistrationPossible'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
     {
         // Kategorie fuer Terminbestaetigungen einlesen
         $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' 
@@ -375,14 +375,8 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
             $role->delete();
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
-        
-		if(isset($_POST['date_assign_yourself']) && $_POST['date_assign_yourself'] == 1)
-		{
-			//Termin-Ersteller als Member und Leader eintragen
-			$gCurrentUser->setRoleMembership($role->getValue('rol_id'), DATE_NOW, '9999-12-31', 1);
-		}
     }
-    elseif($_POST['date_login'] == 0 && $date->getValue('dat_rol_id') > 0)
+    elseif($_POST['dateRegistrationPossible'] == 0 && $date->getValue('dat_rol_id') > 0)
     {
     	// date participation was deselected -> delete flag in event and than delete role
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
@@ -390,7 +384,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $date->save();
         $role->delete();
     }
-    elseif($_POST['date_login'] == 1 && $date->getValue('dat_rol_id') > 0)
+    elseif($_POST['dateRegistrationPossible'] == 1 && $date->getValue('dat_rol_id') > 0)
     {
         // if event exists and you could register to this event then we must check
         // if the data of the role must be changed
@@ -405,6 +399,22 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
             $role->save();
         }
     }
+
+	// check if flag is set that current user wants to participate to the date
+	if(isset($_POST['dateCurrentUserAssigned']) && $_POST['dateCurrentUserAssigned'] == 1 
+	&& $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == false)
+	{
+		// user wants to participate -> add him to date
+		$member = new TableMembers($gDb);
+		$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
+	}
+	elseif(isset($_POST['dateCurrentUserAssigned']) == false 
+	&& $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == true)
+	{
+		// user does't want to participate -> remove him from date
+		$member = new TableMembers($gDb);
+		$member->stopMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
+	}
 
     unset($_SESSION['dates_request']);
     $gNavigation->deleteLastUrl();

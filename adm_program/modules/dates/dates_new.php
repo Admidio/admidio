@@ -41,8 +41,8 @@ if(!$gCurrentUser->editDates())
 }
 
 // lokale Variablen der Uebergabevariablen initialisieren
-$date_login   = 0;
-$date_assign_yourself = 0;
+$dateRegistrationPossible = 0;
+$dateCurrentUserAssigned  = 0;
 
 $gNavigation->addUrl(CURRENT_URL);
 
@@ -101,21 +101,17 @@ if(isset($_SESSION['dates_request']))
     $time_from  = $_SESSION['dates_request']['time_from'];
     $date_to    = $_SESSION['dates_request']['date_to'];
     $time_to    = $_SESSION['dates_request']['time_to'];
-    if(array_key_exists('date_login', $_SESSION['dates_request']))
+	
+	// check if a registration to this event is possible
+    if(array_key_exists('dateRegistrationPossible', $_SESSION['dates_request']))
     {
-        $date_login = $_SESSION['dates_request']['date_login'];
+        $dateRegistrationPossible = $_SESSION['dates_request']['dateRegistrationPossible'];
     }
-    else
+	
+	// check if current user is assigned to this date
+    if(array_key_exists('dateCurrentUserAssigned', $_SESSION['dates_request']))
     {
-        $date_login = 0;
-    }
-    if(array_key_exists('date_assign_yourself', $_SESSION['dates_request']))
-    {
-        $date_assign_yourself = $_SESSION['dates_request']['date_assign_yourself'];
-    }
-    else
-    {
-        $date_assign_yourself = 0;
+        $dateCurrentUserAssigned = $_SESSION['dates_request']['dateCurrentUserAssigned'];
     }
     
     unset($_SESSION['dates_request']);
@@ -139,6 +135,14 @@ else
     {
         $date->getVisibleRoles();
     }
+	
+	// check if a registration to this event is possible
+	if($date->getValue('dat_rol_id') > 0)
+	{
+		$dateRegistrationPossible = 1;
+	}
+	// check if current user is assigned to this date
+	$dateCurrentUserAssigned = $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id'));
 }
 
 // create an object of ckeditor and replace textarea-element
@@ -182,13 +186,13 @@ $gLayout['header'] = '
 	
 	
 	function setDateParticipation() {
-		if ($("#date_login:checked").val() !== undefined) {
-			$("#admAssignYourself").show("slow");
-			$("#admMaxMembers").show("slow");
+		if ($("#dateRegistrationPossible:checked").val() !== undefined) {
+			$("#admAssignYourself").css("display", "block");
+			$("#admMaxMembers").css("display", "block");
 		}
 		else {
-			$("#admAssignYourself").hide();
-			$("#admMaxMembers").hide();
+			$("#admAssignYourself").css("display", "none");
+			$("#admMaxMembers").css("display", "none");
 		}
 	}
 
@@ -244,7 +248,7 @@ $gLayout['header'] = '
 		setLocationCountry();
         $("#dat_headline").focus();
 		
-		$("#date_login").click(function() {setDateParticipation();});
+		$("#dateRegistrationPossible").click(function() {setDateParticipation();});
 		$("#dat_all_day").click(function() {setAllDay();});
 		$("#dat_location").change(function() {setLocationCountry();});';
 
@@ -257,7 +261,7 @@ $gLayout['header'] = '
 		$gLayout['header'] .= '
 		// if date participation should be removed than ask user
 		$("#admButtonSave").click(function () {
-			if(dateRoleID > 0 && $("#date_login").is(":checked") == false) {
+			if(dateRoleID > 0 && $("#dateRegistrationPossible").is(":checked") == false) {
 				var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
 				if(msg_result) {
 					$("#formDate").submit();
@@ -506,13 +510,13 @@ echo '
 						<dl>
 							<dt>&nbsp;</dt>
 							<dd>
-								<input type="checkbox" id="date_login" name="date_login"';
-								if($date->getValue('dat_rol_id') > 0 || $date_login == 1)
+								<input type="checkbox" id="dateRegistrationPossible" name="dateRegistrationPossible"';
+								if($dateRegistrationPossible == 1)
 								{
 									echo ' checked="checked" ';
 								}
 								echo ' value="1" />
-								<label for="date_login">'.$gL10n->get('DAT_REGISTRATION_POSSIBLE').'</label>
+								<label for="dateRegistrationPossible">'.$gL10n->get('DAT_REGISTRATION_POSSIBLE').'</label>
 								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE&amp;inline=true"><img 
 									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE\',this)" 
 									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
@@ -523,13 +527,13 @@ echo '
 						<dl>
 							<dt>&nbsp;</dt>
 							<dd>
-								<input type="checkbox" id="date_assign_yourself" name="date_assign_yourself"';
-								if($date->getValue('dat_rol_id') > 0 || $date_assign_yourself == 1)
+								<input type="checkbox" id="dateCurrentUserAssigned" name="dateCurrentUserAssigned"';
+								if($dateCurrentUserAssigned == 1)
 								{
 									echo ' checked="checked" ';
 								}
 								echo ' value="1" />
-								<label for="date_assign_yourself">'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'</label>
+								<label for="dateCurrentUserAssigned">'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'</label>
 								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC&amp;inline=true"><img 
 									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC\',this)" 
 									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>

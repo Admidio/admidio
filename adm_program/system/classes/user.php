@@ -244,7 +244,9 @@ class User extends TableUsers
         return 0;
     }
 
-    // alle Klassenvariablen wieder zuruecksetzen
+    /** Additional to the parent method the user profile fields and all 
+	 *  user rights and role memberships will be initilized
+	 */
     public function clear()
     {
         parent::clear();
@@ -254,12 +256,10 @@ class User extends TableUsers
 
         $this->webmaster = 0;
 
-        // Arrays initialisieren
-        $this->roles_rights = array();
-        $this->list_view_rights = array();
-        $this->role_mail_rights = array();
+		// initialize rights arrays
+		$this->renewRoleData();
     }
-    
+	
     // returns true if a column of user table or profile fields has changed
     public function columnsValueChanged()
     {
@@ -428,6 +428,7 @@ class User extends TableUsers
 		}
 
 		$this->db->endTransaction();
+		$this->renewRoleData();
 		return true;
 	}
 	
@@ -654,6 +655,19 @@ class User extends TableUsers
 
 		return false;
     }
+	
+	/** Initialize all rights and role membership arrays so that all rights and 
+	 *  role memberships will be read from database if another method needs them
+	 */
+	public function renewRoleData()
+	{
+        // initialize rights arrays
+        $this->roles_rights     = array();
+        $this->list_view_rights = array();
+        $this->role_mail_rights = array();
+		$this->rolesMembership  = array();
+		$this->rolesMembershipLeader = array();
+	}
 
 	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
 	 *  a new record or if only an update is neccessary. The update statement will only update
@@ -805,6 +819,7 @@ class User extends TableUsers
 		}
 
 		$this->db->endTransaction();
+		$this->renewRoleData();
 		return true;
 	}
 	
