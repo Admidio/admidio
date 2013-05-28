@@ -1,18 +1,25 @@
 <?php
-/******************************************************************************
- * The class creates a member object that manages the membership of roles and
- * the access to database table adm_members
+/*****************************************************************************/
+/** @class TableMembers
+ *  @brief Handle memberships of roles and manage it in the database table adm_members
  *
- * Copyright    : (c) 2004 - 2013 The Admidio Team
- * Homepage     : http://www.admidio.org
- * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *  The class search in the database table @b adm_members for role memberships of
+ *  users. It has easy methods to start or stop a membership.
+ *  @par Examples
+ *  @code // start membership without read data before
+ *  $membership = new TableMembers($gDb);
+ *  $membership->startMembership($roleId, $userId);
  *
- * Beside the methods of the parent class there are the following additional methods:
+ *  // read membership data and then stop membership
+ *  $membership = new TableMembers($gDb);
+ *  $membership->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
+ *  $membership->stopMembership();@endcode
+ */
+/*****************************************************************************
  *
- * startMembership($leader = "")
- *                      - starts a membership for the assigned role and user 
- *                        from now until 31.12.9999
- * stopMembership()  	- stops a membership now for the assigned role and user
+ *  Copyright    : (c) 2004 - 2013 The Admidio Team
+ *  Homepage     : http://www.admidio.org
+ *  License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
 
@@ -51,9 +58,18 @@ class TableMembers extends TableAccess
         }
     } 
     
-	// starts a membership for the assigned role and user from now until 31.12.9999
+	/** Starts a membership for the assigned role and user from now until 31.12.9999.
+	 *  An existing membership will be extended if neccessary. If the user is the 
+	 *  current user then initiate a refresh of his role cache.
+	 *  @param $roleId Assign the membership to this role
+	 *  @param $userId The user who should get a member of the role.
+	 *  @param $leader If value @b 1 then the user will be a leader of the role and get more rights.
+	 *  @return Return @b true if the assignement was successful.
+	 */
     public function startMembership($roleId = 0, $userId = 0, $leader = '')
     {
+		global $gCurrentUser;
+		
 		// if role and user is set, than search for this membership and load data into class
 		if(is_numeric($roleId) && is_numeric($userId) && $roleId > 0 && $userId > 0)
 		{
@@ -87,15 +103,29 @@ class TableMembers extends TableAccess
 			if($this->columnsValueChanged)
 			{
 				$this->save();
+				
+				// if role membership of current user will be changed then renew his rights arrays
+				if($gCurrentUser->getValue('usr_id') == $userId)
+				{
+					$gCurrentUser->renewRoleData();
+				}
+				
 				return true;
 			}
 		}
         return false;
     }
 
-	// stops a membership now for the assigned role and user
+	/** Stops a membership for the assigned role and user from now until 31.12.9999.
+	 *  If the user is the current user then initiate a refresh of his role cache.
+	 *  @param $roleId Stops the membership of this role
+	 *  @param $userId The user who should loose the member of the role.
+	 *  @return Return @b true if the membership removement was successful.
+	 */
     public function stopMembership($roleId = 0, $userId = 0)
     {
+		global $gCurrentUser;
+	
 		// if role and user is set, than search for this membership and load data into class
 		if(is_numeric($roleId) && is_numeric($userId) && $roleId > 0 && $userId > 0)
 		{
@@ -130,6 +160,12 @@ class TableMembers extends TableAccess
 					}
 					
 					$this->save();
+				}
+				
+				// if role membership of current user will be changed then renew his rights arrays
+				if($gCurrentUser->getValue('usr_id') == $userId)
+				{
+					$gCurrentUser->renewRoleData();
 				}
                 return true;
             }
