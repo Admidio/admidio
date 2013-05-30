@@ -21,6 +21,10 @@
     <name>Français</name>
 </language>
 <language>
+    <isocode>it</isocode>
+    <name>Italiano</name>
+</language>
+<language>
     <isocode>nl</isocode>
     <name>Nederlands</name>
 </language>
