@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language id="it">
+	<version id="1.4.1">
+		<text id="PLG_LOGIN_LAST_LOGIN" development="new" translation="todo">Ultimo accesso</text>
+	</version>
+	<version id="1.4.0">
+	    <text id="PLG_LOGIN_ACTIVE_SINCE" development="new" translation="edited">Attivo da</text>
+		<text id="PLG_LOGIN_NEW_ONLINE_MEMBER" development="new" translation="todo">Nuovo membro online</text>
+		<text id="PLG_LOGIN_NUMBER_OF_LOGINS" development="new" translation="edited">Numero di accessi</text>
+		<text id="PLG_LOGIN_ONLINE_MEMBER" development="new" translation="todo">Membro online</text>
+		<text id="PLG_LOGIN_SENIOR_ONLINE_MEMBER" development="new" translation="todo">Senior membro online</text>
+		<text id="PLG_LOGIN_HONORARY_MEMBER" development="new" translation="todo">Membro onorario</text>
+	</version>
+</language>
