@@ -23,15 +23,16 @@
  * calendar-selection - 1: The box is shown
  *                      0: The box is not shown
  *
- * date_from          - is set to actual date, 
+ * date_from          - is set to actual date,
  *                      if no date information is delivered
- * date_to            - is set to 31.12.9999, 
+ * date_to            - is set to 31.12.9999,
  *                      if no date information is delivered
  * view_mode          - content output in 'html', 'compact' or 'print' view
  *                      (Default: according to preferences)
  *****************************************************************************/
 
 require_once('../../system/common.php');
+require_once('../../system/classes/html_table.php');
 require_once('../../system/classes/form_elements.php');
 require_once('../../system/classes/module_dates.php');
 require_once('../../system/classes/module_menu.php');
@@ -96,11 +97,11 @@ if($getDateId > 0)
 else
 {
     $dates->setMode($getMode, $getDateFrom, $getDateTo);
-    
+
     if($getCatId > 0)
     {
         $dates->setCatId($getCatId);
-    }   
+    }
 }
 
 //Convert dates to system format
@@ -140,15 +141,15 @@ else
 $datesResult = $dates->getDates($getStart, $dates_per_page);
 
 if($datesResult['totalCount'] != 0)
-{   
+{
     // Initialize counter and object instances
     $count = 0;
     $date = new TableDate($gDb);
     $participants = new Participants ($gDb);
-    
+
     // New array for the participants of a date
     $memberElements = array();
-    
+
     // Loop date array and add further information in right position of each date.
     foreach($datesResult['dates'] as $row)
     {
@@ -160,24 +161,24 @@ if($datesResult['totalCount'] != 0)
             $room = new TableRooms($gDb, $date->getValue('dat_room_id'));
             $datesResult['dates'][''.$count.'']['room_name'] = $room->getValue('room_name');
         }
-        
+
         // count members and leaders of the date role and push the result to the array
         if($date->getValue('dat_rol_id')!= null)
-        {   
+        {
             $datesResult['dates'][''.$count.'']['dat_num_members'] = $participants->getCount($date->getValue('dat_rol_id'));
             $datesResult['dates'][''.$count.'']['dat_num_leaders'] = $participants->getNumLeaders($date->getValue('dat_rol_id'));
         }
-        
+
         // For print view also read the participants and push the result to the array with index 'dat_rol_id'
         if($getViewMode == 'print')
-        {    
+        {
             if($date->getValue('dat_rol_id') > 0)
             {
                 $memberElements[$date->getValue('dat_rol_id')] = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
             }
         }
 
-        $count++;        
+        $count++;
     }
 }
 
@@ -196,56 +197,56 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
     {
         $gLayout['title'] = $gL10n->get('DAT_PREVIOUS_DATES', ' '.$gLayout['title']);
     }
-    
+
     if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1)
     {
         $gLayout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$htmlHeadline).'"
             href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$htmlHeadline.'" />';
     };
-    
+
     $gLayout['header'] .= '
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
         <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />';
-        
-    $gLayout['header'] .= ' 
+
+    $gLayout['header'] .= '
     <script type="text/javascript"><!--
-        $(document).ready(function() 
+        $(document).ready(function()
         {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-        
+
             $("#admCalendar").change(function () {
                 var calendarId = "";
                 if ($("#admCalendar").selectedIndex != 0) {
                     var calendarId = $("#admCalendar").val();
-                } 
+                }
                 self.location.href = "dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=" + calendarId;
             });
         });
-    
-        function Datefilter () 
-        { 
+
+        function Datefilter ()
+        {
             var field_error = "'.$gL10n->get('ECA_FIELD_ERROR').'";
-            
-            if (document.Formular.date_from.value == "" 
-                || document.Formular.date_to.value == "") 
+
+            if (document.Formular.date_from.value == ""
+                || document.Formular.date_to.value == "")
             {
                 alert(field_error);
                 document.Formular.date_from.focus();
                 return false;
-            } 
+            }
         }
 
         var calPopup = new CalendarPopup("calendardiv");
-        calPopup.setCssPrefix("calendar"); 
+        calPopup.setCssPrefix("calendar");
     //--></script>';
 
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
-    
+
     // Html Output
-    
-    echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';  
-    
+
+    echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';
+
     //Check if box must be shown, when more dates available
     if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDates())
     {
@@ -259,19 +260,19 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             $DatesMenu->addItem('admMenuItemAdd', $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline,
                                 $gL10n->get('SYS_CREATE_VAR', $htmlHeadline), 'add.png' );
         }
-    
+
         if($getDateId == 0)
         {
             if($getCalendarSelection == 1)
             {
                 // show selectbox with all calendars
-                $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?headline='.$getHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=', 
+                $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?headline='.$getHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=',
                                     $gL10n->get('DAT_CALENDAR'), $gCurrentUser->editDates());
             }
             elseif($gCurrentUser->editDates())
             {
                 // if no calendar selectbox is shown, then show link to edit calendars
-                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR'), 
+                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR'),
                                     $gL10n->get('DAT_MANAGE_CALENDARS'), 'edit.png');
             }
 
@@ -282,7 +283,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$htmlHeadline.'&amp;cat_id='.$getCatId,
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png' );
             }
-                        
+
             // If valid login show print button
             if($gValidLogin)
             {
@@ -293,13 +294,13 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             if($gCurrentUser->isWebmaster())
             {
                 // show link to system preferences of weblinks
-                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=DAT_DATES', 
+                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=DAT_DATES',
                                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
             }
 
             $DatesMenu->show();
         }
-        
+
          //Input for Startdate and Enddate
         echo '
         <div class="navigationPath">
@@ -317,16 +318,16 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$dateToHtmlOutput.'" />
                     <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
                     src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-                
+
                 <span style="margin-left: 5px;">&nbsp;</span>
-                <input type="hidden" id="cat_id" name="cat_id" value="'.$getCatId.'">   
+                <input type="hidden" id="cat_id" name="cat_id" value="'.$getCatId.'">
                 <input type="submit" value="OK">
                 <span style="margin-left: 5px;">&nbsp;</span>
-                <input type="button" onclick="window.location.href = \''.$g_root_path.'/adm_program/modules/dates/dates.php\'" value="'.$gL10n->get('SYS_DELETE').'"> 
-            </form> 
-        </div>'; 
+                <input type="button" onclick="window.location.href = \''.$g_root_path.'/adm_program/modules/dates/dates.php\'" value="'.$gL10n->get('SYS_DELETE').'">
+            </form>
+        </div>';
     }
-       
+
     if($datesResult['totalCount'] == 0)
     {
         // No events found
@@ -338,24 +339,29 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         {
             echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
         }
-    }    
+    }
     // List events
     if($datesResult['numResults'] > 0)
     {
         // Output table header for compact view
         if ($getViewMode == 'compact')
         {
-            echo '<table class="tableList" style="width: 100%;" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>&nbsp;</th>
-                    <th colspan="2">'.$gL10n->get('SYS_START').'</th>
-                    <th>'.$gL10n->get('DAT_DATE').'</th>
-                    <th colspan="2">'.$gL10n->get('SYS_PARTICIPANTS').'</th>
-                    <th>'.$gL10n->get('DAT_LOCATION').'</th>
-                </tr>
-            </thead>
-            <tbody>';
+            $compactTable = new htmlTable();
+            $compactTable->setAttribute('class', 'tableList', 'table')
+                         ->setAttribute('style', 'width: 100%;', 'table')
+                         ->setAttribute('cellspacing', '0', 'table')
+                         ->setElement('thead')
+                         ->setElement('tr')
+                         ->setElement('th', '&nbsp;')
+                         ->setElement('th')
+                         ->setAttribute('colspan', '2', 'th')
+                         ->setData($gL10n->get('SYS_START'))
+                         ->setElement('th', $gL10n->get('DAT_DATE'))
+                         ->setElement('th')
+                         ->setAttribute('colspan', '2', 'th')
+                         ->setData($gL10n->get('SYS_PARTICIPANTS'))
+                         ->setElement('th', $gL10n->get('DAT_LOCATION'))
+                         ->setElement('tbody');
         }
         foreach($datesResult['dates'] as $row)
         {
@@ -403,7 +409,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             }
 
             // Initialize variables
-            $registerIcon='';
+            $registerIcon='&nbsp;';
             $registerText='';
             $participantIcon='';
             $participantText='';
@@ -580,19 +586,25 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             {
                 // Change css if date is highlighted
                 $cssClass = ($row['dat_highlight'] == 1) ? 'boxHeadHighlighted' : 'boxHead';
-                    
+
                 // Output of elements
                 // always 2 then line break
-                $eventDetails='';
+                $eventDetails = new htmlTable();
+                $eventDetails->setAttribute('style', 'width: 100%,')
+                             ->setAttribute('border-width', '0px;');
+
                 foreach($dateElements as $element)
                 {
                     if($firstElement)
                     {
-                        $eventDetails.='<tr>';
+                        $eventDetails->setElement('tr');
                     }
-
-                    $eventDetails.='<td style="width: 15%">'.$element[0].':</td>
-                    <td style="width: 35%">'.$element[1].'</td>';
+                    $eventDetails->setElement('td')
+                                 ->setAttribute('style', 'width: 15%;')
+                                 ->setData($element[0].':')
+                                 ->setElement('td')
+                                 ->setAttribute('style', 'width: 35%;')
+                                 ->setData($element[1]);
 
                     if($firstElement)
                     {
@@ -600,11 +612,11 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     }
                     else
                     {
-                        $eventDetails.='</tr>';
                         $firstElement = true;
                     }
                 }
-                
+                $tableEventDetails = $eventDetails->getHtmlTable();
+
                 echo '
                 <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
                     <div class="'.$cssClass.'">
@@ -614,16 +626,15 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                             echo $endDate ? ' - ' : '';
                             echo $endDate . ' ' . $date->getValue('dat_headline') . '
                         </div>
-                        <div class="boxHeadRight">' . 
+                        <div class="boxHeadRight">' .
                             $icalIcon . $copyIcon . $editIcon . $deleteIcon . '
                         </div>
                     </div>
 
                     <div class="boxBody">
-                        <table style="width: 100%; border-width: 0px;">' . $eventDetails . '
-                        </table>
+                    ' . $tableEventDetails . '
                         <div class="date_description" style="clear: left;">' . $date->getValue('dat_description') . '</div>
-                        <div>';
+                    <div>';
                         if ($registerText)
                         {
                             echo '
@@ -647,7 +658,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         }
                         echo '</div>';
                         // show information about user who created the recordset and changed it
-                        echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'), 
+                        echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'),
                            $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
                     </div>
                 </div>';
@@ -656,7 +667,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             {
                 // Change css if date is highlighted
                 $cssWeight = ($row['dat_highlight'] == 1) ? 'bold' : 'normal';
-                
+
                 $objDateBegin = new DateTime ($row['dat_begin']);
                 $dateBegin = $objDateBegin->format($gPreferences['system_date']);
                 $timeBegin = '';
@@ -664,23 +675,31 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 {
                     $timeBegin = $date->getValue('dat_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK');
                 }
-                echo '<tr class="tableMouseOver">
-                <td>'.$registerIcon.'</td>
-                    <td>'.$dateBegin.'</td>
-                    <td>'.$timeBegin.'</td>
-                    <td style="font-weight:'. $cssWeight .'"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>
-                    </td>
-                    <td>'. ($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers.'</td>
-                    <td>'. ($leadersHtml+$numMembers > 0 ? $participantIcon : '').'</td>
-                    <td>'.$locationHtml.'</td>
-                </tr>';
+                else
+                {
+                    $timeBegin = '&nbsp;';
+                }
+
+
+                $compactTable->setElement('tr')
+                             ->setAttribute('class', 'tableMouseOver')
+                             ->setElement('td', $registerIcon)
+                             ->setElement('td', $dateBegin)
+                             ->setElement('td', $timeBegin)
+                             ->setElement('td')
+                             ->setAttribute('style', 'font-weight:'. $cssWeight .'')
+                             ->setData('<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>')
+                             ->setElement('td', ($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers)
+                             ->setElement('td', ($leadersHtml+$numMembers > 0 ? $participantIcon : '&nbsp;'))
+                             ->setElement('td', $locationHtml);
             }
         }  // End foreach
 
         // Output table bottom for compact view
         if ($getViewMode == 'compact')
         {
-            echo '</tbody></table>';
+            $htmlCompactTable = $compactTable->getHtmlTable();
+            echo $htmlCompactTable;
         }
     }
 
@@ -694,10 +713,267 @@ else
 {
     // create print output in a new window and set view_mode back to default 'html' for back navigation in main window
     $gNavigation->addUrl($g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat);
-    
+
     $calendar = new TableCategory($gDb, $getCatId);
-    
-    echo'
+    // Get a copy of date results
+    $dateElements = $datesResult['dates'];
+    // Define options for selectbox
+    $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_PARTICIPANTS'));
+    // Define header and footer content for the html table
+    $tableHead = '<h1>'. $gCurrentOrganization->getValue('org_longname'). ' - ' .$gL10n->get('DAT_DATES'). ' ' . $calendar->getValue('cat_name') . '</h1>
+                    <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$dateFromSystemFormat. ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$dateToSystemFormat.
+                        '<span class="form" style="margin-left: 40px;">'.
+                        // Selectbox for table content
+                        FormElements::generateDynamicSelectBox($selectBoxEntries, $defaultEntry = '0', $fieldId = 'admSelectBox', $createFirstEntry = false).'
+                        </span>
+                    </h3>';
+
+    $tableFooter = '<i>provided by Admidio</i>
+                    <i style="font-size: 0.6em;">'.date($gPreferences['system_date'].' '.$gPreferences['system_time']).'</i>';
+
+    // Define columns headlines for body elements
+    $bodyHeadline_1 = array($gL10n->get('SYS_START'),
+                            $gL10n->get('SYS_END'),
+                            $gL10n->get('SYS_TIME_FROM'),
+                            $gL10n->get('SYS_TIME_TO'),
+                            $gL10n->get('DAT_DATE'),
+                            $gL10n->get('SYS_LOCATION'),
+                            $gL10n->get('DAT_ROOM_INFORMATIONS'),
+                            $gL10n->get('SYS_LEADER'),
+                            $gL10n->get('SYS_PARTICIPANTS')
+                            );
+
+    $bodyHeadline_2 = array($gL10n->get('SYS_START'),
+                            $gL10n->get('SYS_END'),
+                            $gL10n->get('SYS_TIME_FROM'),
+                            $gL10n->get('SYS_TIME_TO'),
+                            $gL10n->get('DAT_DATE'),
+                            $gL10n->get('SYS_DESCRIPTION'));
+
+    $bodyHeadline_3 = array($gL10n->get('SYS_START'),
+                            $gL10n->get('SYS_END'),
+                            $gL10n->get('SYS_TIME_FROM'),
+                            $gL10n->get('SYS_TIME_TO'),
+                            $gL10n->get('DAT_DATE'),
+                            $gL10n->get('SYS_PARTICIPANTS'));
+
+    $body_1 = array();
+    $body_2 = array();
+    $body_3 = array();
+
+    // Get dates and  configure table bodies
+    $numElement = 1;
+    foreach($dateElements as $row)
+    {
+        $buffer = array();
+
+        //Convert dates to system format
+        $objDateBegin = new DateTime ($row['dat_begin']);
+        $dateBegin = $objDateBegin->format($gPreferences['system_date']);
+        $dateStartTime = $objDateBegin->format($gPreferences['system_time']);
+
+        $objDateEnd = new DateTime ($row['dat_end']);
+        $dateEnd = $objDateEnd->format($gPreferences['system_date']);
+        $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
+
+        // Write formated date parameter in buffer
+        $buffer['dat_highlight']      = ($row['dat_highlight'] == 1) ? '1' : '0';
+        $buffer['dat_begin']          = $dateBegin;
+        $buffer['dat_end']            = $dateEnd;
+        $buffer['dat_starttime']      = $dateStartTime;
+        $buffer['dat_endtime']        = $dateEndTime;
+        $buffer['dat_headline']       = $row['dat_headline'];
+        $buffer['dat_description']    = preg_replace('/<[^>]*>/', '', $row['dat_description']);
+        $buffer['dat_location']       = $row['dat_location'];
+        $buffer['room_name']          = (isset($row['room_name'])) ? $row['room_name'] : '';
+        $buffer['dat_num_leaders']    = (isset($row['dat_num_leaders']) && $row['dat_num_leaders']!= 0) ? $row['dat_num_leaders'] : '';
+        $buffer['dat_participation']  = '';
+
+        // Show number of participants of date
+        if(isset($row['dat_num_members']) && $row['dat_max_members'] == 0)
+        {
+            $buffer['dat_participation'] = $row['dat_num_members'];
+        }
+        // If date has limit for assignment also show the value
+        if(isset($row['dat_num_members']) && $row['dat_max_members'] != 0)
+        {
+            $buffer['dat_participation'] = $row['dat_num_members'].' '.'('.$row['dat_max_members'].')';
+        }
+
+        // If date has participation and patricipants are assigned
+        if($row['dat_rol_id'] != null && isset($row['dat_num_members']))
+        {
+            $dateParticipation = new htmlTable();
+            $dateParticipation->setAttribute('class', 'dateParticipation', 'table')
+                              ->setAttribute('cellspacing', '2', 'table')
+                              ->setAttribute('cellpadding', '2', 'table')
+                              ->setElement('tr');
+            // Linebreak after 5 entries
+            $memberCount = 1;
+            $totalMemberCount = count($memberElements[$row['dat_rol_id']]);
+
+            foreach(($memberElements[$row['dat_rol_id']]) as $memberDate)
+            {
+                // If last entry close table row
+                if($memberCount < $totalMemberCount)
+                {
+                    $line_break = (($memberCount % 6) == 0) ? 'tr' : 'td';
+                    $dateParticipation->setElement($line_break);
+                }
+                // Leaders are shown highlighted
+                if($memberDate['leader'] != 0)
+                {
+                    $dateParticipation->setAttribute('class', 'left', 'td')
+                                      ->setData('<strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';');
+                }
+                else
+                {
+                    $dateParticipation->setAttribute('class', 'left', 'td')
+                                      ->setData($memberDate['surname'].' '.$memberDate['firstname'].';');
+                }
+                $memberCount++;
+            }
+
+            $tableParticipants = $dateParticipation->getHtmlTable();
+        }
+        else
+        {
+            $tableParticipants = '';
+        }
+
+        // Configure table body contents
+        $body_1[$numElement]['dat_highlight']   = $buffer['dat_highlight'];
+        $body_1[$numElement]['dat_details']     = array($buffer['dat_begin'],
+                                                        $buffer['dat_end'],
+                                                        $buffer['dat_starttime'],
+                                                        $buffer['dat_endtime'],
+                                                        $buffer['dat_headline'],
+                                                        $buffer['dat_location'],
+                                                        $buffer['room_name'],
+                                                        $buffer['dat_num_leaders'],
+                                                        $buffer['dat_participation']);
+
+        $body_2[$numElement]['dat_highlight']   = $buffer['dat_highlight'];
+        $body_2[$numElement]['dat_details']     = array($buffer['dat_begin'],
+                                                        $buffer['dat_end'],
+                                                        $buffer['dat_starttime'],
+                                                        $buffer['dat_endtime'],
+                                                        $buffer['dat_headline'],
+                                                        $buffer['dat_description']);
+
+        $body_3[$numElement]['dat_highlight']   = $buffer['dat_highlight'];
+        $body_3[$numElement]['dat_details']     = array($buffer['dat_begin'],
+                                                        $buffer['dat_end'],
+                                                        $buffer['dat_starttime'],
+                                                        $buffer['dat_endtime'],
+                                                        $buffer['dat_headline'],
+                                                        $tableParticipants);
+        $numElement++;
+        unset ($buffer);
+    }  // end foreach
+
+    // Create table object
+    $datePrint = new htmlTable();
+    $datePrint->setAttribute('id', 'PrintViewDates', 'table')
+              ->setAttribute('class', 'tableDateList', 'table')
+              ->setAttribute('border', '1', 'table')
+              ->setAttribute('cellpadding', '3', 'table')
+              ->setAttribute('summary', 'Printview of dates', 'table');
+    // Define thead
+    $datePrint->setElement('thead')
+              ->setElement('tr')
+              ->setElement('td')
+              ->setAttribute('colspan', '10', 'td')
+              ->setData($tableHead);
+    // Define tfoot
+    $datePrint->setElement('tfoot')
+              ->setElement('tr')
+              ->setElement('td')
+              ->setAttribute('colspan', '9', 'td')
+              ->setAttribute('style', 'text-align: right;', 'td')
+              ->setData($tableFooter);
+
+    // Define tbody
+    $datePrint->setElement('tbody')
+              ->setAttribute('id', 'style0', 'tbody')
+              ->setElement('th', $bodyHeadline_1);
+    if(count($dateElements) == 0)
+    {
+        // No events found
+        if($getDateId > 0)
+        {
+            $datePrint->setElement('tr', $gL10n->get('SYS_NO_ENTRY'));
+        }
+        else
+        {
+            $datePrint->setElement('tr', $gL10n->get('SYS_NO_ENTRIES'));
+        }
+    }
+    else
+    {
+        // Write first body content
+        $numDateElements = 1;
+        foreach($body_1 as $row)
+        {
+            if($row['dat_highlight'] != 1)
+            {
+                $className = (($numDateElements % 2) == 0) ? 'even' : 'odd';
+            }
+            else
+            {
+                $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+            }
+            $datePrint->setElement('tr')
+                      ->setAttribute('class', $className)
+                      ->setData($row['dat_details']);
+            $numDateElements ++;
+        }
+
+        // Write second body content
+        $datePrint->setElement('tbody')
+                  ->setAttribute('id', 'style1')
+                  ->setElement('th', $bodyHeadline_2);
+        $numDateElements = 1;
+        foreach($body_2 as $row)
+        {
+            if($row['dat_highlight'] != 1)
+            {
+                $className = (($numDateElements % 2) == 0) ? 'even' : 'odd';
+            }
+            else
+            {
+                $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+            }
+            $datePrint->setElement('tr')
+                      ->setAttribute('class', $className)
+                      ->setData($row['dat_details']);
+            $numDateElements ++;
+        }
+
+        // Write third body content
+        $datePrint->setElement('tbody')
+                  ->setAttribute('id', 'style2')
+                  ->setElement('th', $bodyHeadline_3);;
+        $numDateElements = 1;
+        foreach($body_3 as $row)
+        {
+            if($row['dat_highlight'] != 1)
+            {
+                $className = (($numDateElements % 2) == 0) ? 'even' : 'odd';
+            }
+            else
+            {
+                $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+            }
+            $datePrint->setElement('tr')
+                      ->setAttribute('class', $className)
+                      ->setData($row['dat_details']);
+            $numDateElements ++;
+        }
+        // Create table
+        $tableDatePrint = $datePrint->getHtmlTable();
+    }
+echo'
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
     <head>
@@ -706,275 +982,21 @@ else
         <title>'. $gCurrentOrganization->getValue('org_longname'). ' - Terminliste </title>
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
         <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
-        
+
     <script type="text/javascript">
-        
+
         $(document).ready(function(){
             $("#admSelectBox").change(function(){
                 $("#" + "style" + this.value).show().siblings("tbody").hide();
             });
             <!-- Trigger -->
             $("#admSelectBox").change();
-            
-            <!-- Reset selection of extended functions in parent window -->
-            window.opener.parent.location.reload();
         })
     </script>
-    </head>';
-    
-    // Get a copy of date results
-    $dateElements = $datesResult['dates'];
-    // Define options for selectbox
-    $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_PARTICIPANTS'));
-    
-    // define header and footer of the table
-    echo' 
-    <body>
-        <div align="center">
-            <table class="tableDateList" border="1" cellpadding="3" cellspacing="0" summary="">
-                <thead>
-                    <tr>
-                        <td colspan="10">
-                            <h1>'. $gCurrentOrganization->getValue('org_longname'). ' - ' .$gL10n->get('DAT_DATES'). ' ' . $calendar->getValue('cat_name') . '</h1>
-                            <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$dateFromSystemFormat. ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$dateToSystemFormat.
-                                '<span class="form"; style="margin-left: 40px;">'.
-                                // Selectbox for table content
-                                FormElements::generateDynamicSelectBox($selectBoxEntries, $defaultEntry = '0', $fieldId = 'admSelectBox', $createFirstEntry = false).
-                                '</span>
-                            </h3>
-                        </td>
-
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <td colspan="9" style="text-align: right;">
-                            <i>provided by Admidio</i>
-                            <i style="font-size: 0.6em;">'.date($gPreferences['system_date'].' '.$gPreferences['system_time']).'</i>
-                        </td>
-                    </tr>
-                </tfoot>
-        <tbody id="style0">';
-        if(count($dateElements) == 0)
-        {
-            // No events found
-            if($getDateId > 0)
-            {
-                echo '<tr><td width="800px">'.$gL10n->get('SYS_NO_ENTRY').'</td></tr>';
-            }
-            else
-            {
-                echo '<tr><td width="800px">'.$gL10n->get('SYS_NO_ENTRIES').'</td></tr>';
-            }
-        }
-        else
-        {  
-            // define header of columns
-            echo'<tr>
-                    <th>' . $gL10n->get('SYS_START'). '</th>
-                    <th>' . $gL10n->get('SYS_END'). '</th>
-                    <th>' . $gL10n->get('SYS_TIME_FROM'). '</th>
-                    <th>' . $gL10n->get('SYS_TIME_TO'). '</th>
-                    <th>' . $gL10n->get('DAT_DATE'). '</th>
-                    <th>' . $gL10n->get('SYS_LOCATION'). '</th>
-                    <th>' . $gL10n->get('DAT_ROOM_INFORMATIONS'). '</th>
-                    <th>' . $gL10n->get('SYS_LEADER'). '</th>
-                    <th>' . $gL10n->get('SYS_PARTICIPANTS'). '</th>
-                </tr>';
-         
-            // Write data to table body
-            $numElement = 1;
-            foreach($dateElements as $row)
-            {
-                //Convert dates to system format
-                $objDateBegin = new DateTime ($row['dat_begin']);
-                $dateBegin = $objDateBegin->format($gPreferences['system_date']);
-                $dateStartTime = $objDateBegin->format($gPreferences['system_time']);
-                
-                $objDateEnd = new DateTime ($row['dat_end']);
-                $dateEnd = $objDateEnd->format($gPreferences['system_date']);
-                $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
-                
-                // Change colors of each second row for visibilty
-                // Change css if date is highlighted
-                if($row['dat_highlight'] != 1)
-                {
-                    $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
-                }
-                else
-                {
-                    $classValue = (($numElement % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
-                }
-                
-                echo '<tr class="'.$classValue.'">
-                        <td>' . $dateBegin . '</td>
-                        <td>' . $dateEnd . '</td>
-                        <td>' . $dateStartTime . '</td>
-                        <td>' . $dateEndTime . '</td>
-                        <td style="text-align: left;">' . $row['dat_headline'] . '</td>
-                        <td style="text-align: left;">' . $row['dat_location'] . '</td>
-                        <td>';
-                                if(isset($row['room_name']))
-                                {
-                                    echo $row['room_name'];
-                                }
-                echo'</td>  
-                        <td style="text-align: center;">';
-                                if(isset($row['dat_num_leaders']) && $row['dat_num_leaders']!= 0)
-                                {
-                                    echo $row['dat_num_leaders'];
-                                }
-                echo'</td>
-                        <td style="text-align: center;">';
-                                // Show number of participants of date
-                                if(isset($row['dat_num_members']) && $row['dat_max_members'] == 0)
-                                {
-                                    echo $row['dat_num_members'];
-                                }
-                                // If date has limit for assignment also show the value    
-                                if(isset($row['dat_num_members']) && $row['dat_max_members'] != 0)
-                                {
-                                    echo $row['dat_num_members'].' '.'('.$row['dat_max_members'].')';
-                                }
-
-                echo'</td>';
-                $numElement++;
-                
-            }   // end foreach
-        
-        echo'</tbody>
-           
-            <tbody id="style1">';
-            
-                echo'<tr>
-                        <th>' . $gL10n->get('SYS_START'). '</th>
-                        <th>' . $gL10n->get('SYS_END'). '</th>
-                        <th>' . $gL10n->get('SYS_TIME_FROM'). '</th>
-                        <th>' . $gL10n->get('SYS_TIME_TO'). '</th>
-                        <th>' . $gL10n->get('DAT_DATE'). '</th>
-                        <th>' . $gL10n->get('SYS_DESCRIPTION'). '</th>
-                    </tr>';
-                    
-                $numElement = 1;
-                foreach($dateElements as $row)
-                {
-                    //Convert dates to system format
-                    $objDateBegin = new DateTime ($row['dat_begin']);
-                    $dateBegin = $objDateBegin->format($gPreferences['system_date']);
-                    $dateStartTime = $objDateBegin->format($gPreferences['system_time']);
-        
-                    $objDateEnd = new DateTime ($row['dat_end']);
-                    $dateEnd = $objDateEnd->format($gPreferences['system_date']);
-                    $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
-        
-                    // Change colors of each second row for visibilty
-                    // Change css if date is highlighted
-                    if($row['dat_highlight'] != 1)
-                    {
-                        $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
-                    }
-                    else
-                    {
-                        $classValue = (($numElement % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
-                    }
-
-                    echo '<tr class="'.$classValue.'">
-                            <td>' . $dateBegin . '</td>
-                            <td>' . $dateEnd . '</td>
-                            <td>' . $dateStartTime . '</td>
-                            <td>' . $dateEndTime . '</td>
-                            <td style="text-align: left;">' . $row['dat_headline'] . '</td>
-                            <td style="text-align: left;">'.  $row['dat_description'] = preg_replace('/<[^>]*>/', '', $row['dat_description']) .'</td>
-                        </tr>';
-                   $numElement++; 
-                } //end foreach
-            
-            echo'</tbody>';
-            
-            echo'<tbody id="style2">
-                    <tr>
-                        <th style="text-align: left;">' . $gL10n->get('SYS_START'). '<br />
-                            ' . $gL10n->get('SYS_END'). '</th>
-                        <th style="text-align: left;">' . $gL10n->get('SYS_TIME_FROM'). '<br />
-                            ' . $gL10n->get('SYS_TIME_TO'). '</th>
-                        <th>' . $gL10n->get('DAT_DATE'). '</th>
-                        <th>' . $gL10n->get('SYS_PARTICIPANTS'). '</th>
-                    </tr>';
-                    
-                    $numElement = 1;
-                    foreach($dateElements as $row)
-                    {
-                        //Convert dates to system format
-                        $objDateBegin = new DateTime ($row['dat_begin']);
-                        $dateBegin = $objDateBegin->format($gPreferences['system_date']);
-                        $dateStartTime = $objDateBegin->format($gPreferences['system_time']);
-        
-                        $objDateEnd = new DateTime ($row['dat_end']);
-                        $dateEnd = $objDateEnd->format($gPreferences['system_date']);
-                        $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
-        
-                        // Change colors of each second row for visibilty
-                        // Change css if date is highlighted
-                        if($row['dat_highlight'] != 1)
-                        {
-                            $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
-                        }
-                        else
-                        {
-                            $classValue = (($numElement % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
-                        }
-
-                        echo '<tr class="'.$classValue.'">
-                                <td>' . $dateBegin . '<br />
-                                    ' . $dateEnd . '</td>
-                                <td>' . $dateStartTime . '<br />
-                                    ' . $dateEndTime . '</td>
-                                <td style="text-align: left;">' . $row['dat_headline'] . '</td>
-                                <td>';
-    
-                                        // If date has participation and patricipants are assigned
-                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members'])) 
-                                        {
-                                            echo '<table cellspacing="2" cellpadding="2"><tr>';
-                                            
-                                            // Linebreak after 5 entries
-                                            $memberCount = 1;
-                                            $totalMemberCount = count($memberElements[$row['dat_rol_id']]);
-                                            
-                                            foreach(($memberElements[$row['dat_rol_id']]) as $memberDate)
-                                            {
-                                                // If last entry close table row
-                                                if($memberCount < $totalMemberCount)
-                                                {
-                                                    $line_break = (($memberCount % 5) == 0) ? '</td></tr><tr>' : '</td>';
-                                                }
-                                                else
-                                                {   
-                                                    $line_break = '</td></tr>';
-                                                }
-                                                    
-                                                // Leaders are shown highlighted
-                                                if($memberDate['leader'] != 0)
-                                                {
-                                                    echo '<td style="text-align: left;"><strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';'.$line_break.'';
-                                                }
-                                                else
-                                                {
-                                                        echo '<td style="text-align: left;">', $memberDate['surname'],' ',$memberDate['firstname'],';', $line_break.'';
-                                                }
-                                                    $memberCount++;
-                                            }
-                                            
-                                            echo'</table>';
-                                        }
-                                        
-                        echo'</td></tr>';
-                        $numElement++;
-                    }           
-            echo'</tbody>';
-        }
-        echo'</table>
-            </div>
-    </body>';
+    </head>
+        <body>
+            ' .$tableDatePrint. '
+        </body>
+    </html>';
 }
 ?>

@@ -137,9 +137,13 @@
     background-color: #FFFFFF;
     font-weight: bolder;
 }
+.left{
+    text-align: left;
+}
 /* Settings for html table */
 .tableDateList {
-	position: relative;
+	margin: auto;
+    text-align: center;
 	top: 0px !important;
 	border-collapse: collapse;
 }
@@ -171,4 +175,19 @@
 .tableDateList td {
 	font-size: .9em;
 	text-align: center;
+}
+.tableDateList td .left {
+    text-align: left;
+}
+.dateParticipation thead{
+    display: none;
+}
+/* Set come columns in tablebody to align: left */
+#style0 :nth-child(5),
+#style0 :nth-child(6),
+#style0 :nth-child(7),
+#style1 :nth-child(5),
+#style1 :nth-child(6),
+#style2 :nth-child(5){
+    text-align: left;
 }
