@@ -69,7 +69,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 		if($rolId > 0 && is_numeric($rolId))
 		// Wenn schon dann alle Namen und die duzugehörigen Emails auslesen und in die versand Liste hinzufügen
 		{
-			list($rol,$homepage) = split("[\@]",$ecard['email_recipient']);
+			list($rol,$homepage) = preg_split('[\@]', $ecard['email_recipient']);
 			$sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
 						   email.usd_value as email, rol_name
 					  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
