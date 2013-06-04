@@ -8,6 +8,7 @@
  *
  *****************************************************************************/
 require_once('../../system/common.php');
+require_once('../../system/classes/html_table.php');
 require_once('ecard_function.php');
 
 // Initialize and check the parameters
@@ -69,7 +70,7 @@ if ( strValidCharacters($ecard['email_recipient'], 'email') && strValidCharacter
 		if($rolId > 0 && is_numeric($rolId))
 		// Wenn schon dann alle Namen und die duzugehörigen Emails auslesen und in die versand Liste hinzufügen
 		{
-			list($rol,$homepage) = split("[\@]",$ecard['email_recipient']);
+			list($rol,$homepage) = preg_split('[\@]',$ecard['email_recipient']);
 			$sql = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name,
 						   email.usd_value as email, rol_name
 					  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
@@ -201,60 +202,95 @@ echo'
 		</div>
 		<br /><br />';
 		if ($error_msg == '')
-		{
-			echo'<table cellpadding="0" cellspacing="0" border="0" summary="Erfolg" style="text-align: center;">
-			<tr>
-				<td style="text-align: left;" colspan="2"><b>'.$gL10n->get("SYS_SENDER").':</b></td>
-			</tr>
-			<tr>
-				<td style="padding-right:5px; text-align: left;">'. $ecard['name_sender'].',</td><td style="text-align: left;">'.$ecard['email_sender'].'</td>
-			</tr>
-			<tr>
-				<td style="text-align: left;">&nbsp;</td>
-			</tr>
-			<tr>
-				<td style="text-align: left;" colspan="2"><b>'.$gL10n->get("SYS_RECIPIENT").':</b></td>
-			</tr><tr>';
+		{   
+		    $success = new HtmlTable();
+		    $success->setAttribute('style', 'text-align: center;', 'table')
+        		    ->setAttribute('summary', 'Erfolg', 'table')
+        		    ->setAttribute('border', '0', 'table')
+        		    ->setAttribute('cellpadding', '0', 'table')
+        		    ->setAttribute('cellspacing', '0', 'table')
+        		    ->setElement('tbody')
+        		    ->setElement('tr')
+        		    ->setElement('td')
+        		    ->setAttribute('style', 'text-align: left;', 'td')
+        		    ->setAttribute('colspan', '2', 'td')
+        		    ->setData('<b>'.$gL10n->get("SYS_SENDER").':</b>')
+        		    ->setElement('tr')
+                    ->setElement('td')
+                    ->setAttribute('style', 'padding-right:5px; text-align: left;', 'td')
+                    ->setData($ecard['name_sender'].',')
+                    ->setElement('td')
+                    ->setAttribute('style', 'text-align: left;', 'td')
+                    ->setData($ecard['email_sender'])
+                    ->setElement('tr')
+                    ->setElement('td')
+                    ->setAttribute('style', 'text-align: left;', 'td')
+                    ->setData('&nbsp;')
+                    ->setElement('tr')
+        		    ->setElement('td')
+        		    ->setAttribute('style', 'text-align: left;', 'td')
+        		    ->setAttribute('colspan', '2', 'td')
+        		    ->setData('<b>'.$gL10n->get("SYS_RECIPIENT").':</b>')
+        		    ->setElement('tr');
+
 			foreach($email_versand_liste as $item)
 			{
 					$i=0;
 					foreach($item as $item2)
 					{
 							if (!is_integer(($i+1)/2))
-							{
-								echo '<td style="padding-right:5px; text-align: left;">'. $item2.',</td></td>';
+							{   
+						        $success->setElement('td')
+        		                        ->setAttribute('style', 'padding-right:5px; text-align: left;', 'td')
+        		                        ->setData($item2.',');
 							}
 							else
-							{
-								echo'<td style="padding-right:5px; text-align: left;">'. $item2.'</td></tr><tr>';
+							{   
+							    $success->setElement('td')
+        		                        ->setAttribute('style', 'padding-right:5px; text-align: left;', 'td')
+        		                        ->setData($item2)
+                                        ->setElement('tr');     
 							}
 							$i++;
 					}
 			}
-			echo '</tr>';
 			$Liste = array();
 			$Liste = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
 			if(count($Liste)>0)
-			{
-				echo '<tr><td>&nbsp;</td></tr><tr><td colspan="2" style="text-align: left;"><b>'.$gL10n->get("ECA_MORE_RECIPIENTS").':</b></td></tr><tr>';
+			{   
+			    $success->setElement('tr')
+                        ->setElement('td', '&nbsp;')
+                        ->setElement('tr')
+                        ->setElement('td')
+                        ->setAttribute('style', 'text-align: left;', 'td')
+                        ->setAttribute('colspan', '2', 'td')
+                        ->setData('<b>'.$gL10n->get("ECA_MORE_RECIPIENTS").':</b>')
+                        ->setElement('tr'); 
+
 				foreach($Liste as $item)
 				{
 					$i=0;
 					foreach($item as $item2)
-					{
-						if (!is_integer(($i+1)/2))
+					{   
+					    if (!is_integer(($i+1)/2))
 						{
-							echo '<td style="text-align: left;">'.$item2.',</td>';
+						    $success->setElement('td')
+        		                    ->setAttribute('style', 'text-align: left;', 'td')
+        		                    ->setData($item2);
 						}
 						else
 						{
-							echo'<td style="text-align: left;">'.$item2.'</td></tr><tr>';
+							$success->setElement('td')
+        		                    ->setAttribute('style', 'text-align: left;', 'td')
+        		                    ->setData($item2)
+                                    ->setElement('tr');
 						}
 						$i++;
 					}
 				}
 			}
-			echo '</tr></table>';
+			$htmlSuccess = $success->getHtmlTable();
+			echo $htmlSuccess;
 		}
 		else
 		{
