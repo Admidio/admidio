@@ -55,6 +55,7 @@ if($getDateId > 0)
     
     if($getCopy)
     {
+        $date->getVisibleRoles();
         $date->setValue('dat_id', 0);
         $getDateId = 0;
     }
@@ -125,11 +126,15 @@ else
     // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
     $date_to = $date->getValue('dat_end', $gPreferences['system_date']);
     $time_to = $date->getValue('dat_end', $gPreferences['system_time']);
-    
+
+    // read all roles that could see this event
     if($getDateId == 0)
     {
-        // Sichtbar fuer alle wird per Default vorbelegt
-        $date->setVisibleRoles(array('-1'));
+        if($getCopy == 0)
+        {
+            // a new event will be visible for all users per default
+            $date->setVisibleRoles(array('-1'));
+        }
     }
     else
     {
@@ -142,7 +147,7 @@ else
 		$dateRegistrationPossible = 1;
 	}
 	// check if current user is assigned to this date
-	$dateCurrentUserAssigned = $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id'));
+	$dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id'));
 }
 
 // create an object of ckeditor and replace textarea-element

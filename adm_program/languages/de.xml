@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
+<version id="2.4.1" translator="Markus Faßbender">
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>
+    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</text>
+	<text id="DAT_VIEW_MODE" development="new" translation="todo">Standard-Darstellung</text>
+	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="todo">Detailiert</text>
+	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="todo">Kompakt</text>
+	<text id="DAT_VIEW_MODE_DESC" development="new" translation="todo">Gibt an, wie die Termine angezeigt werden. (Standard: Detailiert)</text>
+</version>
 <version id="2.4.0" translator="Markus Faßbender">
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Möchtest du die Kategorie %VAR1_BOLD% wirklich löschen?</text>
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="todo">Die Kategorie %VAR1_BOLD% kann nicht gelöscht werden, da sie noch %VAR2% abhängige Einträge besitzt.</text>
@@ -123,7 +131,6 @@
     <text id="DAT_ICAL_DAYS_PAST" development="changed" translation="todo">Anzahl iCal Tage Vergangenheit</text>
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="changed" translation="todo">Gibt an, wie viele Tage aus der Vergangenheit in einem iCal-Download oder -Abo einbezogen werden.  (Standard: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf 'Abschicken'.\n\n %VAR1%</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
@@ -295,7 +302,6 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
-    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">Du nimmst an diesem Termin als Gruppenleiter teil und kannst weitere teilnehmende Personen hinzufügen.</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="todo">Teilnehmerbegrenzung</text>
     <text id="DAT_PREVIOUS_DATES" description="Vergangene Termine" development="new" translation="todo">Vergangene %VAR1%</text>
     <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="todo">Keine Anmeldung mehr möglich.</text>

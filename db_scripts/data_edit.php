@@ -30,15 +30,15 @@ $sql = 'UPDATE '.TBL_ROLES.' SET rol_name = \''.$gL10n->get('DAT_DATE').' '.addD
 $db->query($sql);
 
 // set membership of date role
-$sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(4).'\'
+$sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(-4).'\'
 		 WHERE mem_id = 500 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(2).'\'
+$sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(-2).'\'
 		 WHERE mem_id IN (501, 502, 503) ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(1).'\'
+$sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(-1).'\'
 		 WHERE mem_id = 504 ';
 $db->query($sql);
 
