@@ -37,7 +37,7 @@
 class AdmException extends Exception
 {
 	/** Constructor that will @b rollback an open database translation
-	 *  @param $message Translation id that should be shown when exception is catched
+	 *  @param $message Translation @b id that should be shown when exception is catched
 	 *  @param $param1	Optional parameter for language string of translation id
 	 *  @param $param2	Another optional parameter for language string of translation id
 	 *  @param $param3	Another optional parameter for language string of translation id
@@ -58,23 +58,49 @@ class AdmException extends Exception
         // sicherstellen, dass alles korrekt zugewiesen wird
         parent::__construct($message, 0);
     }
+	
+    /** Simply return the plain translated error text without any markup.
+	 */
+	public function getText()
+	{
+		global $gL10n;
 
+		return $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
+	}
+	
+	/** Set a new Admidio message id with their parameters. This method should be used
+	 *  if during the exception processing a new better message should be set. 
+	 *  @param $message Translation @b id that should be shown when exception is catched
+	 *  @param $param1	Optional parameter for language string of translation id
+	 *  @param $param2	Another optional parameter for language string of translation id
+	 *  @param $param3	Another optional parameter for language string of translation id
+	 *  @param $param4	Another optional parameter for language string of translation id
+	 */
+	public function setNewMessage($message, $param1='', $param2='', $param3='', $param4='')
+	{
+		$this->message = $message;
+
+		// save param in class parameters
+		$this->param1 = $param1;
+		$this->param2 = $param2;
+		$this->param3 = $param3;
+		$this->param4 = $param4;
+	}
 
     /** Show html message window with translated message 
 	 */
     public function showHtml()
 	{
-		global $gMessage, $gL10n;
+		global $gMessage;
 		
-		return $gMessage->show($gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4));
+		return $gMessage->show($this->getText());
     }
     
-    /** Simply return the plain translated error text without any markup
+    /** Simply return the plain translated error text without any markup and stop the script.
 	 */
     public function showText()
 	{
-		global $gL10n;
-		echo $gL10n->get($this->message, $this->param1, $this->param2, $this->param3, $this->param4);
+		echo $this->getText();
 		exit();
     }        
 }

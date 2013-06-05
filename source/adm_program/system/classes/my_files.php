@@ -120,7 +120,7 @@ class MyFiles extends Folder
 	// if that folder doesn't exists than it will be created
     public function setSubFolder($folder)
     {
-		if(isValidFileName($folder))
+		if(admStrIsValidFileName($folder))
 		{
 			$tempPath = $this->modulePath. '/'. $folder;
 			if(is_writeable($tempPath) == false)

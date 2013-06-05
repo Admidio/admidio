@@ -1,8 +1,8 @@
 <?php
 /******************************************************************************
- * Dieses Script kann als Zurueck-Button verlinkt werden und ruft das letzte
- * sinnvolle Script von Admidio auf. Die Scripte werden intern in der 
- * Navigation-Klasse verwaltet
+ * This script should be linked to back buttons in forms. It will search for the
+ * last url that should be shown. The script uses the navigation class to handle 
+ * the url stack.
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,17 +12,17 @@
 
 include('common.php');
 
-// die letzte Url aus dem Stack loeschen, da dies die aktuelle Seite ist
+// delete the last url from the stack. This should be the actual page.
 $gNavigation->deleteLastUrl();
 
-// Jetzt die "neue" letzte Url aufrufen
-$next_url = $gNavigation->getUrl();
+// now get the "new" last url from the stack. This should be the last page
+$nextUrl = $gNavigation->getUrl();
 
-// wurde keine Seite gefunden, dann immer die Startseite anzeigen
-if(strlen($next_url) == 0)
+// if no page was found then show the default homepage
+if(strlen($nextUrl) == 0)
 {
-    $next_url = $gHomepage;
+    $nextUrl = $gHomepage;
 }
-header('Location: '.$next_url);
+header('Location: '.$nextUrl);
  
 ?>

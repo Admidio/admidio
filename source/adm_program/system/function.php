@@ -354,19 +354,14 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 
         if($datatype == 'file')
         {
-            $returnCode = isValidFileName($array[$variableName]);
-            
-            if($returnCode < 0)
-            {
-                if($returnCode == -2)
-                {
-                    $errorMessage = $gL10n->get('BAC_FILE_NAME_INVALID');
-                }
-                else
-                {
-                    $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-                }
-            }
+			try
+			{
+				admStrIsValidFileName($array[$variableName]);
+			}
+			catch(AdmException $e)
+			{
+				$errorMessage = $e->getText();
+			}
         }
 		elseif($datatype == 'date')
 		{

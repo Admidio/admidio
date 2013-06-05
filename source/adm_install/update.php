@@ -52,7 +52,7 @@ if(!isset($gDbType))
     $gDbType = 'mysql';
 }
 
-// Verbindung zu Datenbank herstellen
+// connect to database
 $gDb = Database::createDatabaseObject($gDbType);
 $gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
@@ -83,36 +83,42 @@ if(checkVersions($gDb, $message) == false)
 	showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'), 2);
 }
 
+// if version parameter is not set then
+if(isset($gPreferences['db_version']) == false)
+{
+	$message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
+				<strong>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</strong><br /><br />'.
+				$gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION);
+	showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'), 2);
+}
+
+
 if($getMode == 1)
 {
-    // pruefen, ob ein Update ueberhaupt notwendig ist
-    if(isset($gPreferences['db_version']) == false)
-    {
-        // bei einem Update von Admidio 1.x muss die spezielle Version noch erfragt werden,
-        // da in Admidio 1.x die Version noch nicht in der DB gepflegt wurde
-        $message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
-                    <strong>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED').'</strong><br /><br />
-                    '.$gL10n->get('INS_UPDATE_FROM_ADMIDIO_1X', ADMIDIO_VERSION).'<br /><br />
-                    '.$gL10n->get('INS_PREVIOUS_ADMIDIO_VERSION').':&nbsp;
-                    <select id="old_version" name="old_version" size="1">
-                        <option value="0" selected="selected">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>
-                        <option value="1.4.9">Version 1.4.*</option>
-                        <option value="1.3.9">Version 1.3.*</option>
-                        <option value="1.2.9">Version 1.2.*</option>
-                    </select>';
-    }
-    elseif(version_compare($gPreferences['db_version'], ADMIDIO_VERSION) != 0 || $gPreferences['db_version_beta'] != BETA_VERSION)
+	// if database version is smaller then source version -> update
+	// if database version is equal to source but beta has a differnce -> update
+    if(version_compare($gPreferences['db_version'], ADMIDIO_VERSION) < 0
+	||(version_compare($gPreferences['db_version'], ADMIDIO_VERSION) == 0 && $gPreferences['db_version_beta'] != BETA_VERSION))
     {
         $message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
                     <strong>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $gPreferences['db_version'], ADMIDIO_VERSION).'</strong>';
     }
-    else
+	// if versions are equal > no update
+    elseif(version_compare($gPreferences['db_version'], ADMIDIO_VERSION) == 0 && $gPreferences['db_version_beta'] == BETA_VERSION)
     {
         $message = '<img style="vertical-align: top;" src="layout/ok.png" /> 
                     <strong>'.$gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</strong><br /><br />
                     '.$gL10n->get('INS_DATABASE_IS_UP_TO_DATE');
         showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'), 2);
     }
+	// if source version smaller then database -> show error
+	else
+	{
+        $message = '<img style="vertical-align: top;" src="layout/warning.png" /> 
+                    <strong>'.$gL10n->get('SYS_ERROR').'</strong><br /><br />
+                    '.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $gPreferences['db_version'], ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+        showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'), 2);
+	}
 
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
     if(BETA_VERSION > 0)
@@ -124,31 +130,18 @@ if($getMode == 1)
 elseif($getMode == 2)
 {
     // Updatescripte fuer die Datenbank verarbeiten
-    
-    if(isset($gPreferences['db_version']) == false)
-    {
-        if(isset($_POST['old_version']) == false 
-        || strlen($_POST['old_version']) > 5
-        || $_POST['old_version'] == 0)
-        {
-            showPage($gL10n->get('SYS_FIELD_EMPTY', 'INS_PREVIOUS_ADMIDIO_VERSION'), 'update.php', 'back.png', $gL10n->get('SYS_BACK'), 2);
-        }
-        $old_version = $_POST['old_version'];
-    }
-    else
-    {
-        $old_version = $gPreferences['db_version'];
-    } 
+
+	$currentDatabaseVersion = $gPreferences['db_version'];
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
 
     // vor dem Update die Versionsnummer umsetzen, damit keiner mehr was machen kann
-    $temp_version = substr(ADMIDIO_VERSION, 0, 4). 'u';
+    /*$temp_version = substr(ADMIDIO_VERSION, 0, 4). 'u';
     $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. $temp_version. '\'
-             WHERE prf_name    = \'db_version\' ';
-    $gDb->query($sql);                
+             WHERE prf_name = \'db_version\' ';
+    $gDb->query($sql);                */
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     include('db_scripts/preferences.php');
@@ -162,9 +155,9 @@ elseif($getMode == 2)
         $gCurrentOrganization->setPreferences($orga_preferences, false);
     }
 
-    $main_version      = substr($old_version, 0, 1);
-    $sub_version       = substr($old_version, 2, 1);
-    $micro_version     = substr($old_version, 4, 1);
+    $main_version      = substr($currentDatabaseVersion, 0, 1);
+    $sub_version       = substr($currentDatabaseVersion, 2, 1);
+    $micro_version     = substr($currentDatabaseVersion, 4, 1);
     $micro_version     = $micro_version + 1;
     $flag_next_version = true;
 
@@ -180,46 +173,72 @@ elseif($getMode == 2)
     {
         $flag_next_version = false;
         
-        // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
-        // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-        for($micro_version = $micro_version; $micro_version < 15; $micro_version++)
-        {
-            // Update-Datei der naechsten hoeheren Version ermitteln
-            $sql_file  = 'db_scripts/upd_'. $main_version. '_'. $sub_version. '_'. $micro_version. '_db.sql';
-            $conv_file = 'db_scripts/upd_'. $main_version. '_'. $sub_version. '_'. $micro_version. '_conv.php';                
-            
-            if(file_exists($sql_file))
-            {
-                // SQL-Script abarbeiten
-                $file    = fopen($sql_file, 'r')
-                           or showPage($gL10n->get('INS_ERROR_OPEN_FILE', $sql_file), 'update.php', 'back.png', $gL10n->get('SYS_BACK'));
-                $content = fread($file, filesize($sql_file));
-                $sql_arr = explode(';', $content);
-                fclose($file);
-    
-                foreach($sql_arr as $sql)
-                {
-                    if(strlen(trim($sql)) > 0)
-                    {
-                        // Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-                        $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
-                        $gDb->query($sql);
-                    }
-                }
-                
-                $flag_next_version = true;
-            }
+		if($main_version < 3)
+		{
+			// until version 3 Admidio had sql and php files where the update statements where stored
+			// these files must be excecuted
+		
+			// in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
+			// Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
+			for($micro_version = $micro_version; $micro_version < 15; $micro_version++)
+			{
+				// Update-Datei der naechsten hoeheren Version ermitteln
+				$sql_file  = 'db_scripts/upd_'. $main_version. '_'. $sub_version. '_'. $micro_version. '_db.sql';
+				$conv_file = 'db_scripts/upd_'. $main_version. '_'. $sub_version. '_'. $micro_version. '_conv.php';                
+				
+				if(file_exists($sql_file))
+				{
+					// SQL-Script abarbeiten
+					$file    = fopen($sql_file, 'r')
+							   or showPage($gL10n->get('INS_ERROR_OPEN_FILE', $sql_file), 'update.php', 'back.png', $gL10n->get('SYS_BACK'));
+					$content = fread($file, filesize($sql_file));
+					$sql_arr = explode(';', $content);
+					fclose($file);
+		
+					foreach($sql_arr as $sql)
+					{
+						if(strlen(trim($sql)) > 0)
+						{
+							// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
+							$sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+							$gDb->query($sql);
+						}
+					}
+					
+					$flag_next_version = true;
+				}
+				
+				// now set db specific admidio preferences
+				$gDb->setDBSpecificAdmidioProperties($main_version. '.'. $sub_version. '.'. $micro_version);
+		
+				if(file_exists($conv_file))
+				{
+					// Nun das PHP-Script abarbeiten
+					include($conv_file);
+					$flag_next_version = true;
+				}
+			}
+		}
+		else
+		{
+			// since version 3 xml files exists that store the update statements
 			
-			// now set db specific admidio preferences
-			$gDb->setDBSpecificAdmidioProperties($main_version. '.'. $sub_version. '.'. $micro_version);
-    
-            if(file_exists($conv_file))
-            {
-                // Nun das PHP-Script abarbeiten
-                include($conv_file);
-                $flag_next_version = true;
-            }
-        }
+			if($main_version == 3 && $sub_version == 0)
+			{
+				// first version who works with update steps, so initialize them with 10
+				$updateStep = 10;
+			}
+			else
+			{
+				// read last update step from core module
+				$sql = 'SELECT mod_update_step FROM '. TBL_MODULES_PLUGINS. ' 
+						 WHERE mod_name_intern = \'core\' ';
+				$gDb->query($sql); 
+
+				$row = $gDb->fetch_array();
+				$updateStep = $row['mod_update_step'];
+			}
+		}
 
         // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
         // solange bis die aktuelle Versionsnummer erreicht wurde

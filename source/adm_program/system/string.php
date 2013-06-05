@@ -197,7 +197,7 @@ function strValidCharacters($string, $checkType)
         {
 			if($checkType == 'email')
 			{
-				// Aufbau der E-Mail-Adresse pruefen
+				// check structure of email address
 				return preg_match('/^[^@]+@[^@]+\.[^@]{2,}$/', trim($string));
 			}
 			return true;
@@ -206,44 +206,49 @@ function strValidCharacters($string, $checkType)
 	return false;
 }
 
-// prueft, ob der Dateiname gueltig ist
-// check_ext = true : prueft, ob die Dateiextension fuer den Downloadbereich gueltig ist
-// Rueckgabe 0 : Dateiname ist gueltig
-//          -1 : kein Dateinamen uebergeben
-//          -2 : ungueltige Zeichen
-//          -3 : keine gueltige Dateiextension
-function isValidFileName($file_name, $check_ext = false)
+/** Check if a filename contains invalid characters. The characters will be checked with strValidCharacters.
+ *  In addition the function checks if the name contains .. or a . at the beginning.
+ *  @param $filename       Name of the file that should be checked.
+ *  @param $checkExtension If set to @b true then the extension will be checked against a blacklist of extensions:
+ *                         php, php3, php4, php5, html, htm, htaccess, htpasswd, pl, js, vbs, asp, cgi, ssi
+ *  @return Returns @true if filename contains valid characters. Otherwise an exception is thrown with the 
+ *          following values:
+ *          SYS_FILENAME_EMPTY : Filename was empty
+ *          BAC_FILE_NAME_INVALID : Filename contains invalid characters
+ *          DOW_FILE_EXTENSION_INVALID : Filename contains invalid extension
+ */
+function admStrIsValidFileName($filename, $checkExtension = false)
 {
     // If the filename was not empty
-    if(strlen(trim($file_name)) > 0)
+    if(strlen(trim($filename)) > 0)
     {
-        // Dateiname darf nur gueltige Zeichen beinhalten
-        if(strValidCharacters($file_name, 'file')
-		&& strpos($file_name, '..') === false
-		&& substr($file_name, 0, 1) != '.')
+		// filename should only contains valid characters
+        if(strValidCharacters($filename, 'file')
+		&& strpos($filename, '..') === false
+		&& substr($filename, 0, 1) != '.')
 		{
-			if($check_ext)
+			if($checkExtension)
 			{
-				// auf gueltige Endungen pruefen
-				$arr_invalid_ext = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
+				// check if the extension is not blacklisted
+				$extensionBlacklist = array('php', 'php3', 'php4', 'php5', 'html', 'htm', 'htaccess', 'htpasswd', 'pl',
 										 'js', 'vbs', 'asp', 'cgi', 'ssi');
-				$file_ext  = substr($file_name, strrpos($file_name, '.')+1);
+				$fileExtension  = substr($filename, strrpos($filename, '.')+1);
 
-				if(in_array(strtolower($file_ext), $arr_invalid_ext))
+				if(in_array(strtolower($fileExtension), $extensionBlacklist))
 				{
-					return -3;
+					throw new AdmException('DOW_FILE_EXTENSION_INVALID');
 				}
 			}
 			return 1;
 		}
 		else
 		{
-			return -2;
+			throw new AdmException('BAC_FILE_NAME_INVALID');
 		}
     }
     else
     {
-        return -1;
+		throw new AdmException('SYS_FILENAME_EMPTY');
     }
 }
 

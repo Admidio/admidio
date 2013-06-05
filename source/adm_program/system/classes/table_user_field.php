@@ -196,14 +196,21 @@ class TableUserField extends TableAccess
 							}
 							else
 							{
-								// create html for optionbox entry
-								if(isValidFileName($listValueImage, true))
+								try
 								{
-									$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+									// create html for optionbox entry
+									if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
+									{
+										$listValue = '<img src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+									}
+									elseif(admStrIsValidFileName($listValueImage, true))
+									{
+										$listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+									}
 								}
-								elseif(strpos(admStrToLower($listValueImage), 'http') == 0 && strValidCharacters($listValueImage, 'url'))
+								catch(AdmException $e)
 								{
-									$listValue = '<img src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+									$e->showText();
 								}
 							}
 						}
@@ -226,14 +233,21 @@ class TableUserField extends TableAccess
 			// if value is imagefile or imageurl then show image
 			if(strpos(admStrToLower($value), '.png') > 0 || strpos(admStrToLower($value), '.jpg') > 0)
 			{
-				// create html for icon
-				if(isValidFileName($value, true))
+				try
 				{
-					$value = '<img src="'.THEME_PATH.'/icons/'.$value.'" style="vertical-align: middle;" title="'.$this->getValue('usf_name').'" alt="'.$this->getValue('usf_name').'" />';
+					// create html for icon
+					if(strpos(admStrToLower($value), 'http') === 0 && strValidCharacters($value, 'url'))
+					{
+						$value = '<img src="'.$value.'" style="vertical-align: middle;" title="'.$this->getValue('usf_name').'" alt="'.$this->getValue('usf_name').'" />';
+					}
+					elseif(admStrIsValidFileName($value, true))
+					{
+						$value = '<img src="'.THEME_PATH.'/icons/'.$value.'" style="vertical-align: middle;" title="'.$this->getValue('usf_name').'" alt="'.$this->getValue('usf_name').'" />';
+					}
 				}
-				elseif(strpos(admStrToLower($value), 'http') == 0 && strValidCharacters($value, 'url'))
+				catch(AdmException $e)
 				{
-					$value = '<img src="'.$value.'" style="vertical-align: middle;" title="'.$this->getValue('usf_name').'" alt="'.$this->getValue('usf_name').'" />';
+					$e->showText();
 				}
 			}
 

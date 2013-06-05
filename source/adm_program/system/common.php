@@ -136,7 +136,7 @@ if(isset($_SESSION['gCurrentSession']))
     // compute time in ms from last activity in session until now
     $time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
     
-    // if no user object or user activity is long ago, then create auto login if possible
+    // if cookie ADMIDIO_DATA is set and last user activity is longer ago, then create auto login if possible
     if(isset($_COOKIE[$gCookiePraefix. '_DATA'])
     && $gCurrentSession->hasObject('gCurrentUser') && $time_gap > $gPreferences['logout_minutes'] * 60)
     {
@@ -219,8 +219,7 @@ else
 	$gCurrentSession->addObject('gCurrentUser', $gCurrentUser);
 }
 
-// erst einmal pruefen, ob Organisation- oder Userobjekt neu eingelesen werden muessen,
-// da die Daten evtl. von anderen Usern in der DB geaendert wurden
+// check if organization or user object must be renewed if data was changed by other users
 if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('ses_renew') == 3)
 {
 	// read new field structure in object and than create new user object with new field structure
@@ -229,37 +228,37 @@ if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('s
 	$gCurrentSession->setValue('ses_renew', 0);
 }
 
-// nun die Session pruefen
+// check session
 if($gCurrentSession->getValue('ses_usr_id') > 0)
 {
 	if($gCurrentSession->getValue('ses_usr_id') == $gCurrentUser->getValue('usr_id'))
 	{
-		// Session gehoert zu einem eingeloggten User -> pruefen, ob der User noch eingeloggt sein darf
+		// session has a user assigned -> check if login is still valid
 		$time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
 		
-		// wenn laenger nichts gemacht wurde, als in Orga-Prefs eingestellt ist, dann ausloggen
+		// Check how long the user was inactive. If time range is to long -> logout
 		if($time_gap < $gPreferences['logout_minutes'] * 60) 
 		{
-			// User-Login ist gueltig
+			// user login is valid !
 			$gValidLogin = true;
 			$gCurrentSession->setValue('ses_timestamp', DATETIME_NOW);
 		}
 		else
 		{
-			// User war zu lange inaktiv -> User aus Session entfernen
+			// user was inactive -> clear user data and remove him from session
 			$gCurrentUser->clear();
 			$gCurrentSession->setValue('ses_usr_id', '');
 		}
 	}
 	else
 	{
-		// irgendwas stimmt nicht, also alles zuruecksetzen
+		// something is wrong -> clear user data
 		$gCurrentUser->clear();
 		$gCurrentSession->setValue('ses_usr_id', '');
 	}
 }
 
-// Update auf Sessionsatz machen (u.a. timestamp aktualisieren)
+// update session recordset (i.a. refresh timestamp)
 $gCurrentSession->save();
 
 // if session is created with auto login then update user login data
@@ -273,7 +272,7 @@ if($userIdAutoLogin > 0 && $gCurrentUser->getValue('usr_id'))
  create necessary objects and parameters
 /********************************************************************************/
 
-// Pfad zum gewaehlten Theme zusammensetzen
+// set default theme if no theme was set
 if(isset($gPreferences['theme']) == false)
 {
     $gPreferences['theme'] = 'classic';
@@ -299,7 +298,7 @@ else
 // check version of database against version of file system and show notice if not equal
 admFuncCheckDatabaseVersion($gPreferences['db_version'], $gPreferences['db_version_beta'], $gCurrentUser->isWebmaster(), $gPreferences['email_administrator']);
 
-// Homepageseite festlegen
+// set default homepage
 if($gValidLogin)
 {
     $gHomepage = $g_root_path. '/'. $gPreferences['homepage_login'];
@@ -310,12 +309,12 @@ else
 }
 
 /*********************************************************************************
-Verbindung zur Forum-Datenbank herstellen und die Funktionen, sowie Routinen des Forums laden.
+ Create connection to forum database and load functions and routines for forum
 /********************************************************************************/
 
 if($gPreferences['enable_forum_interface']) 
 {
-    // Admidio-Zugangsdaten nehmen, wenn entsprechende Einstellung gesetzt ist
+	// set Admidio database connection if this is set
     if($gPreferences['forum_sqldata_from_admidio']) 
     {
         $gPreferences['forum_srv'] = $gDb->server;
@@ -324,8 +323,7 @@ if($gPreferences['enable_forum_interface'])
         $gPreferences['forum_db']  = $gDb->dbName;
     }
     
-    // globale Klassen mit Datenbankbezug werden in Sessionvariablen gespeichert, 
-    // damit die Daten nicht bei jedem Script aus der Datenbank ausgelesen werden muessen
+	// save forum object in Admidio session
     if(isset($_SESSION['gForum']))
     {
         $gForum =& $_SESSION['gForum'];
@@ -338,12 +336,12 @@ if($gPreferences['enable_forum_interface'])
         
     if(!$gForum->connect($gPreferences['forum_srv'], $gPreferences['forum_usr'], $gPreferences['forum_pw'], $gPreferences['forum_db'], $gDb))
     {
-        // Verbindungsprobleme, deshalb Forum deaktivieren, damit Admidio ggf. noch funktioniert
+		// connection to forum database failed -> deactivate forum
         $gPreferences['enable_forum_interface'] = 0;
     }
     else
     {
-        // Einstellungen des Forums einlesen
+		// read forum preferences
         if(!$gForum->initialize(session_id(), $gPreferences['forum_praefix'], $gPreferences['forum_export_user'], $gPreferences['forum_link_intern'], $gCurrentUser->getValue('usr_login_name')))
         {
             echo '<div style="color: #CC0000;">Verbindungsfehler zum Forum !<br />
