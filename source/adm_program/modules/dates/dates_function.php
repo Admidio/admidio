@@ -400,9 +400,9 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         }
     }
 
-	// check if flag is set that current user wants to participate to the date
+	// check if flag is set that current user wants to participate as leader to the date
 	if(isset($_POST['dateCurrentUserAssigned']) && $_POST['dateCurrentUserAssigned'] == 1 
-	&& $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == false)
+	&& $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')) == false)
 	{
 		// user wants to participate -> add him to date
 		$member = new TableMembers($gDb);
@@ -436,19 +436,16 @@ elseif($getMode == 2)  // Termin loeschen
 }
 elseif($getMode == 3)  // Benutzer zum Termin anmelden
 {   
-    $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
     $member = new TableMembers($gDb);
-	$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
+	$member->startMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_ATTEND_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
 }
 elseif($getMode == 4)  // Benutzer vom Termin abmelden
 {
-    $sql = 'DELETE FROM '.TBL_MEMBERS.' 
-             WHERE mem_rol_id = \''.$date->getValue('dat_rol_id').'\'
-               AND mem_usr_id = \''.$gCurrentUser->getValue('usr_id').'\'';
-    $gDb->query($sql);
+    $member = new TableMembers($gDb);
+	$member->deleteMembership($date->getValue('dat_rol_id'), $gCurrentUser->getValue('usr_id'));
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));

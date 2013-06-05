@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
+<version id="3.0.0" translator="Markus Faßbender">
+    <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="todo"></text>
+    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="deleted" translation="todo"></text>
+    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="deleted" translation="todo"></text>
+    <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="todo">Eine Aktualisierung der Datenbank ist nicht möglich!</text>
+    <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="todo">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version %VAR1%. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</text>
+    <text id="DOW_FILE_NAME_INVALID" development="deleted" translation="todo"></text>
+    <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
+</version>
 <version id="2.4.1" translator="Markus Faßbender">
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>
+    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</text>
 	<text id="DAT_VIEW_MODE" development="new" translation="todo">Standard-Darstellung</text>
 	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="todo">Detailiert</text>
 	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="todo">Kompakt</text>
@@ -129,7 +140,6 @@
     <text id="DAT_ICAL_DAYS_PAST" development="changed" translation="todo">Anzahl iCal Tage Vergangenheit</text>
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="changed" translation="todo">Gibt an, wie viele Tage aus der Vergangenheit in einem iCal-Download oder -Abo einbezogen werden.  (Standard: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An diesem Termin teilnehmen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf 'Abschicken'.\n\n %VAR1%</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
@@ -301,7 +311,6 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
-    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">Du nimmst an diesem Termin als Gruppenleiter teil und kannst weitere teilnehmende Personen hinzufügen.</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="todo">Teilnehmerbegrenzung</text>
     <text id="DAT_PREVIOUS_DATES" description="Vergangene Termine" development="new" translation="todo">Vergangene %VAR1%</text>
     <text id="DAT_REGISTRATION_NOT_POSSIBLE" development="new" translation="todo">Keine Anmeldung mehr möglich.</text>
@@ -340,7 +349,6 @@
     <text id="DOW_ENABLE_DOWNLOAD_MODULE_DESC" development="new" translation="todo">Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)</text>
     <text id="DOW_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
     <text id="DOW_FILE_EXTENSION_INVALID" development="new" translation="todo">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</text>
-    <text id="DOW_FILE_NAME_INVALID" development="new" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für die Datei aus.</text>
     <text id="DOW_FILE_NAME_RULES" development="new" translation="todo">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</text>
     <text id="DOW_FILE_NOT_EXISTS" development="new" translation="todo">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</text>
     <text id="DOW_FILE_RENAME" development="new" translation="todo">Die Datei %VAR1% wurde umbenannt.</text>
@@ -484,7 +492,6 @@
     <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="todo">Die Admidio-Datenbank ist aktuell</text>
     <text id="INS_DATABASE_LOGIN" development="new" translation="todo">Datenbank Zugangsdaten</text>
     <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="todo">Gib in diesem Formular deine Zugangsdaten zur Datenbank an. Du kannst das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls du mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="todo">Eine Aktualisierung der Datenbank ist erforderlich</text>
     <text id="INS_DATABASE_NO_LOGIN" development="new" translation="todo">Mit den Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden!\n\nKorrigiere gegebenenfalls deine Zugangsdaten bzw. kontrolliere, ob die Datenbank online ist.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="todo">Datenbank wird eingerichtet</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="todo">Vorstand des Vereins</text>
@@ -522,7 +529,6 @@
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu deiner Datenbank ist.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Du solltest versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
-    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>
     <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="todo">Organisation festlegen</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="todo">Organisation einrichten</text>
@@ -537,7 +543,6 @@
     <text id="INS_TRAINING" development="new" translation="todo">Training</text>
     <text id="INS_UPDATE" development="new" translation="todo">Update</text>
     <text id="INS_UPDATE_DATABASE" development="new" translation="todo">Datenbank aktualisieren</text>
-    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="new" translation="todo">Bisher wurde eine Version 1.x von Admidio verwendet. Um die Datenbank erfolgreich auf Admidio %VAR1% zu migrieren, ist es erforderlich, dass du deine bisherige Version angibst.</text>
     <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="new" translation="todo">Die Admidio-Datenbank ist jetzt auf die Version %VAR1% aktualisiert worden.\nDu kannst nun wieder mit Admidio arbeiten.</text>
     <text id="INS_UPDATE_VERSION" development="new" translation="todo">Update auf Version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="todo">Die Aktualisierung war erfolgreich</text>

@@ -36,6 +36,37 @@ class TableMembers extends TableAccess
     {
         parent::__construct($db, TBL_MEMBERS, 'mem', $mem_id);
     }
+    
+	/** Deletes a membership for the assigned role and user. In opposite to removeMembership
+     *  this method will delete the entry and you can't see any history assignment.
+	 *  If the user is the current user then initiate a refresh of his role cache.
+	 *  @param $roleId Stops the membership of this role
+	 *  @param $userId The user who should loose the member of the role.
+	 *  @return Return @b true if the membership was successful deleted.
+	 */
+    public function deleteMembership($roleId = 0, $userId = 0)
+    {
+		global $gCurrentUser;
+	
+		// if role and user is set, than search for this membership and load data into class
+		if(is_numeric($roleId) && is_numeric($userId) && $roleId > 0 && $userId > 0)
+		{
+			$this->readDataByColumns(array('mem_rol_id' => $roleId, 'mem_usr_id' => $userId));
+		}
+
+        if($this->getValue('mem_rol_id') > 0 && $this->getValue('mem_usr_id') > 0)
+        {
+            $this->delete();
+				
+            // if role membership of current user will be changed then renew his rights arrays
+            if($gCurrentUser->getValue('usr_id') == $userId)
+            {
+                $gCurrentUser->renewRoleData();
+            }
+            return true;
+        }
+        return false;
+    }
 
 	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 
 	 *  a new record or if only an update is neccessary. The update statement will only update
