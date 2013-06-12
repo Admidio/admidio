@@ -18,7 +18,7 @@
  *                      (Default) Dates
  * cat_id             - show all events of calendar with this id
  * id                 - Show only one event
- * date               - All events for a date are listet
+ * date               - All events for a date are listed
  *                      Format: YYYYMMDD
  * calendar-selection - 1: The box is shown
  *                      0: The box is not shown
@@ -27,8 +27,8 @@
  *                      if no date information is delivered
  * date_to            - is set to 31.12.9999, 
  *                      if no date information is delivered
- * view_mode          - content output in 'html' or 'print' view
- *                      (Default: 'html')
+ * view_mode          - content output in 'html', 'compact' or 'print' view
+ *                      (Default: according to preferences)
  *****************************************************************************/
 
 require_once('../../system/common.php');
@@ -50,10 +50,10 @@ if($gPreferences['enable_dates_module'] == 0)
 }
 elseif($gPreferences['enable_dates_module'] == 2)
 {
-    // module only for valid Useres
+    // module only for valid Users
     require_once('../../system/login_valid.php');
 }
-//Object erzeugen
+// create object
 $dates = new ModuleDates();
 
 // Initialize and check the parameters
@@ -66,10 +66,9 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', DATE_NOW, false);
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date', '9999-12-31', false);
-$getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', 'html', false, $dates->getViewModes());
+$getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', $gPreferences['dates_viewmode'], false, $dates->getViewModes());
 
- 
-// if exact date is set than convert it to our new syntax with dateFrom and dateTo
+// if exact date is set then convert it to our new syntax with dateFrom and dateTo
 if(strlen($getDate) > 0)
 {
     $getDateFrom = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
@@ -114,7 +113,7 @@ $dateToSystemFormat = $objDate->format($gPreferences['system_date']);
 // get headline of dates relative to date values
 $htmlHeadline = $dates->getHeadline($getHeadline, $getDateFrom, $getDateTo);
 
-// Fill input fields only if user values exists
+// Fill input fields only if user values exist
 $dateFromHtmlOutput = $dates->getFormValue($getDateFrom, DATE_NOW);
 $dateToHtmlOutput = $dates->getFormValue($getDateTo, '9999-12-31');
 
@@ -127,8 +126,8 @@ if($getCatId > 0)
 $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL);
 
-// Number of events each page for default view 'html'
-if($gPreferences['dates_per_page'] > 0 && $getViewMode == 'html')
+// Number of events each page for default view 'html' or 'compact' view
+if($gPreferences['dates_per_page'] > 0 && ( $getViewMode == 'html' || $getViewMode == 'compact'))
 {
     $dates_per_page = $gPreferences['dates_per_page'];
 }
@@ -171,18 +170,18 @@ if($datesResult['totalCount'] != 0)
         
         // For print view also read the participants and push the result to the array with index 'dat_rol_id'
         if($getViewMode == 'print')
-		{    
-			if($date->getValue('dat_rol_id') > 0)
-			{
-				$memberElements[$date->getValue('dat_rol_id')] = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
-			}
-		}
+        {    
+            if($date->getValue('dat_rol_id') > 0)
+            {
+                $memberElements[$date->getValue('dat_rol_id')] = $participants->getParticipantsArray($date->getValue('dat_rol_id'));
+            }
+        }
 
         $count++;        
     }
 }
 
-If($getViewMode == 'html')
+if($getViewMode == 'html'  || $getViewMode == 'compact')
 {
     // Html-Head output
     if($getCatId > 0)
@@ -208,7 +207,7 @@ If($getViewMode == 'html')
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
         <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
         <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />';
-		
+        
     $gLayout['header'] .= ' 
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -224,21 +223,21 @@ If($getViewMode == 'html')
             });
         });
     
-		function Datefilter () 
-		{ 
-			var field_error = "'.$gL10n->get('ECA_FIELD_ERROR').'";
-			
-			if (document.Formular.date_from.value == "" 
-				|| document.Formular.date_to.value == "") 
-			{
-				alert(field_error);
-				document.Formular.date_from.focus();
-				return false;
-			} 
-		}
+        function Datefilter () 
+        { 
+            var field_error = "'.$gL10n->get('ECA_FIELD_ERROR').'";
+            
+            if (document.Formular.date_from.value == "" 
+                || document.Formular.date_to.value == "") 
+            {
+                alert(field_error);
+                document.Formular.date_from.focus();
+                return false;
+            } 
+        }
 
-		var calPopup = new CalendarPopup("calendardiv");
-		calPopup.setCssPrefix("calendar"); 
+        var calPopup = new CalendarPopup("calendardiv");
+        calPopup.setCssPrefix("calendar"); 
     //--></script>';
 
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -247,7 +246,7 @@ If($getViewMode == 'html')
     
     echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';  
     
-    //Check if box must be shown, when more dates avaiable
+    //Check if box must be shown, when more dates available
     if((($getCalendarSelection == 1) && ($getDateId == 0)) || $gCurrentUser->editDates())
     {
         // create module menu
@@ -291,319 +290,402 @@ If($getViewMode == 'html')
                                 $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')' );
             }
 
-        	if($gCurrentUser->isWebmaster())
-        	{
-        		// show link to system preferences of weblinks
-        		$DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=DAT_DATES', 
-        							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
-        	}
+            if($gCurrentUser->isWebmaster())
+            {
+                // show link to system preferences of weblinks
+                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=DAT_DATES', 
+                                    $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+            }
 
             $DatesMenu->show();
         }
         
          //Input for Startdate and Enddate
-		echo '
-		<div class="navigationPath">
-			<form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php" onsubmit="return Datefilter()">
-				<label for="date_from" style="margin-left: 10px;">'.$gL10n->get('SYS_START').':</label>
-					<input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$dateFromHtmlOutput.'" />
-					<a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
-					src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-					<span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
+        echo '
+        <div class="navigationPath">
+            <form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php" onsubmit="return Datefilter()">
+                <label for="date_from" style="margin-left: 10px;">'.$gL10n->get('SYS_START').':</label>
+                    <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$dateFromHtmlOutput.'" />
+                    <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
+                    src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
+                    <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
 
-					&nbsp;&nbsp;
+                    &nbsp;&nbsp;
 
-				<label for="date_to">'.$gL10n->get('SYS_END').':</label>
+                <label for="date_to">'.$gL10n->get('SYS_END').':</label>
 
-					<input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$dateToHtmlOutput.'" />
-					<a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
-					src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-				
-                <span style="margin-left: 5px;">&nbsp;</span>	
-	            <input type="hidden" id="cat_id" name="cat_id" value="'.$getCatId.'">
+                    <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$dateToHtmlOutput.'" />
+                    <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
+                    src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
+                
+                <span style="margin-left: 5px;">&nbsp;</span>
+                <input type="hidden" id="cat_id" name="cat_id" value="'.$getCatId.'">   
                 <input type="submit" value="OK">
                 <span style="margin-left: 5px;">&nbsp;</span>
-			    <input type="button" onclick="window.location.href = \''.$g_root_path.'/adm_program/modules/dates/dates.php\'" value="'.$gL10n->get('SYS_DELETE').'">
+                <input type="button" onclick="window.location.href = \''.$g_root_path.'/adm_program/modules/dates/dates.php\'" value="'.$gL10n->get('SYS_DELETE').'"> 
             </form> 
-		</div>'; 
+        </div>'; 
     }
        
-	if($datesResult['totalCount'] == 0)
-	{
-		// No events found
-		if($getDateId > 0)
-		{
-			echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
-		}
-		else
-		{
-			echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
-		}
-	}    
-	// List events
-	if($datesResult['numResults'] > 0)
-	{
-		foreach($datesResult['dates'] as $row)
-		{
-			// Initialize object and write new data
-			$date->readDataById($row['dat_id']);
-			
-			// Change css if date is hightlighted
-			$cssClass = ($row['dat_highlight'] == 1) ? 'boxHeadHighlighted' : 'boxHead';
+    if($datesResult['totalCount'] == 0)
+    {
+        // No events found
+        if($getDateId > 0)
+        {
+            echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
+        }
+        else
+        {
+            echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
+        }
+    }    
+    // List events
+    if($datesResult['numResults'] > 0)
+    {
+        // Output table header for compact view
+        if ($getViewMode == 'compact')
+        {
+            echo '<table class="tableList" style="width: 100%;" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th colspan="2">'.$gL10n->get('SYS_START').'</th>
+                    <th>'.$gL10n->get('DAT_DATE').'</th>
+                    <th colspan="2">'.$gL10n->get('SYS_PARTICIPANTS').'</th>
+                    <th>'.$gL10n->get('DAT_LOCATION').'</th>
+                </tr>
+            </thead>
+            <tbody>';
+        }
+        foreach($datesResult['dates'] as $row)
+        {
+            // Initialize object and write new data
+            $date->readDataById($row['dat_id']);
 
-			echo '
-			<div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
-				<div class="'.$cssClass.'">
-					<div class="boxHeadLeft">
-						<img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />'
-						. $date->getValue('dat_begin', $gPreferences['system_date']);
-						if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
-						{
-							echo ' - '. $date->getValue('dat_end', $gPreferences['system_date']);
-						}
-						echo ' ' . $date->getValue('dat_headline'). '
-					</div>
-					<div class="boxHeadRight">';
-						//ical Download
-						if($gPreferences['enable_dates_ical'] == 1)
-						{
-							echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
-							src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
-						}
+            $endDate='';
+            if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
+            {
+                $endDate=$date->getValue('dat_end', $gPreferences['system_date']);
+            }
 
-						// change and delete is only for useres with additional rights
-						if ($gCurrentUser->editDates())
-						{
-							if($date->editRight() == true)
-							{
-								echo '
-								<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$htmlHeadline.'"><img
-									src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>
-								<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$htmlHeadline.'"><img
-									src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
-							}
+            //ical Download
+            $icalIcon="";
+            if($gPreferences['enable_dates_ical'] == 1)
+            {
+                $icalIcon = '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
+                src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
+            }
 
-							// Deleting events is only allowed for group members
-							if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
-							{
-								echo '
-								<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
-									$date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img
-									src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
-							}
-						}
-					echo'</div>
-				</div>
+            // change and delete is only for users with additional rights
+            $copyIcon = '';
+            $editIcon = '';
+            $deleteIcon = '';
+            if ($gCurrentUser->editDates())
+            {
+                if($date->editRight() == true)
+                {
+                    $copyIcon = '
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$htmlHeadline.'"><img
+                        src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
+                    $editIcon = '
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$htmlHeadline.'"><img
+                        src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+                }
 
-				<div class="boxBody">';
-					$dateElements = array();
-					$firstElement = true;
+                // Deleting events is only allowed for group members
+                if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
+                {
+                    $deleteIcon = '
+                    <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
+                        $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img
+                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                }
+            }
 
-					if ($date->getValue('dat_all_day') == 0)
-					{
-						// Write start in array
-						$dateElements[] = array($gL10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
-						// Write end in array
-						$dateElements[] = array($gL10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
-					}
-					// write calendar in output array
-					$dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
+            // Initialize variables
+            $registerIcon='';
+            $registerText='';
+            $participantIcon='';
+            $participantText='';
+            $mgrpartIcon='';
+            $mgrpartText='';
+            $dateElements = array();
+            $firstElement = true;
+            $maxMembers='';
+            $numMembers='';
+            $leadersHtml='';
+            $locationHtml='';
 
-					if (strlen($date->getValue('dat_location')) > 0)
-					{
-						// Show map link, when at leastt 2 words avaiable
-						// having more then 3 characters each
-						$map_info_count = 0;
-						foreach(preg_split('/[,; ]/', $date->getValue('dat_location')) as $key => $value)
-						{
-							if(strlen($value) > 3)
-							{
-								$map_info_count++;
-							}
-						}
+            if ($date->getValue('dat_all_day') == 0)
+            {
+                // Write start in array
+                $dateElements[] = array($gL10n->get('SYS_START'), '<strong>'. $date->getValue('dat_begin', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
+                // Write end in array
+                $dateElements[] = array($gL10n->get('SYS_END'), '<strong>'. $date->getValue('dat_end', $gPreferences['system_time']). '</strong> '.$gL10n->get('SYS_CLOCK'));
+            }
+            // write calendar in output array
+            $dateElements[] = array($gL10n->get('DAT_CALENDAR'), '<strong>'. $date->getValue('cat_name'). '</strong>');
 
-						if($gPreferences['dates_show_map_link'] == true
-							&& $map_info_count > 1)
-						{
-							// Create Google-Maps-Link for location
-							$location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
-							if(strlen($date->getValue('dat_country')) > 0)
-							{
-								// Better results with additional country information
-								$location_url .= ',%20'. $date->getValue('dat_country');
-							}
-							$locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
+            if (strlen($date->getValue('dat_location')) > 0)
+            {
+                // Show map link, when at least 2 words available
+                // having more than 3 characters each
+                $map_info_count = 0;
+                foreach(preg_split('/[,; ]/', $date->getValue('dat_location')) as $key => $value)
+                {
+                    if(strlen($value) > 3)
+                    {
+                        $map_info_count++;
+                    }
+                }
 
-							// if valid login and enough information about adress exists - calculate the route
-							if($gValidLogin && strlen($gCurrentUser->getValue('ADDRESS')) > 0
-							&& (  strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0 ))
-							{
-								$route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($gCurrentUser->getValue('ADDRESS'));
-								if(strlen($gCurrentUser->getValue('POSTCODE'))  > 0)
-								{
-									$route_url .= ',%20'. urlencode($gCurrentUser->getValue('POSTCODE'));
-								}
-								if(strlen($gCurrentUser->getValue('CITY'))  > 0)
-								{
-									$route_url .= ',%20'. urlencode($gCurrentUser->getValue('CITY'));
-								}
-								if(strlen($gCurrentUser->getValue('COUNTRY'))  > 0)
-								{
-									$route_url .= ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
-								}
+                if($gPreferences['dates_show_map_link'] == true
+                    && $map_info_count > 1)
+                {
+                    // Create Google-Maps-Link for location
+                    $location_url = 'http://maps.google.com/?q='. $date->getValue('dat_location');
+                    if(strlen($date->getValue('dat_country')) > 0)
+                    {
+                        // Better results with additional country information
+                        $location_url .= ',%20'. $date->getValue('dat_country');
+                    }
+                    $locationHtml = '<a href="'. $location_url. '" target="_blank" title="'.$gL10n->get('DAT_SHOW_ON_MAP').'"/><strong>'.$date->getValue("dat_location").'</strong></a>';
 
-								$route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
-								if(strlen($date->getValue('dat_country')) > 0)
-								{
-									// With information about country Google finds  the location much better
-									$route_url .= ',%20'. $date->getValue('dat_country');
-								}
-								$locationHtml .= '
-									<span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img
-										src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>
-									</span>';
-							}
-						}
-						else
-						{
-							$locationHtml = '<strong>'. $date->getValue('dat_location'). '</strong>';
-						}
+                    // if valid login and enough information about address exist - calculate the route
+                    if($gValidLogin && strlen($gCurrentUser->getValue('ADDRESS')) > 0
+                    && (  strlen($gCurrentUser->getValue('POSTCODE'))  > 0 || strlen($gCurrentUser->getValue('CITY'))  > 0 ))
+                    {
+                        $route_url = 'http://maps.google.com/?f=d&amp;saddr='. urlencode($gCurrentUser->getValue('ADDRESS'));
+                        if(strlen($gCurrentUser->getValue('POSTCODE'))  > 0)
+                        {
+                            $route_url .= ',%20'. urlencode($gCurrentUser->getValue('POSTCODE'));
+                        }
+                        if(strlen($gCurrentUser->getValue('CITY'))  > 0)
+                        {
+                            $route_url .= ',%20'. urlencode($gCurrentUser->getValue('CITY'));
+                        }
+                        if(strlen($gCurrentUser->getValue('COUNTRY'))  > 0)
+                        {
+                            $route_url .= ',%20'. urlencode($gCurrentUser->getValue('COUNTRY'));
+                        }
 
-						$dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
-					}
-					elseif($date->getValue('dat_room_id') > 0)
-					{
-						// if active, then show room information
-						$roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
-						$locationHtml = '<strong><a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
-						$dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
-					}
+                        $route_url .= '&amp;daddr='. urlencode($date->getValue('dat_location'));
+                        if(strlen($date->getValue('dat_country')) > 0)
+                        {
+                            // With information about country Google finds the location much better
+                            $route_url .= ',%20'. $date->getValue('dat_country');
+                        }
+                        $locationHtml .= '
+                            <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img
+                                src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>
+                            </span>';
+                    }
+                }
+                else
+                {
+                    $locationHtml = '<strong>'. $date->getValue('dat_location'). '</strong>';
+                }
 
-					// count participants of the date
-					if($date->getValue('dat_rol_id') > 0)
-					{
-						$leadersHtml = '-';
+                $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
+            }
+            elseif($date->getValue('dat_room_id') > 0)
+            {
+                // if active, then show room information
+                $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
+                $locationHtml = '<strong><a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
+                $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
+            }
 
-						if($date->getValue('dat_max_members')!=0)
-						{
-							$participantsHtml = '<strong>'.$row['dat_num_members'].'</strong>';
-							$leadersHtml = '<strong>'.$row['dat_num_leaders'].'</strong>';
-						}
-						else
-						{
-							$participantsHtml = '<strong>'.$gL10n->get('SYS_UNLIMITED').'</strong>';
-							$leadersHtml = '0';
-						}
-						$dateElements[] = array($gL10n->get('SYS_LEADER'), $leadersHtml);
-						$dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), $participantsHtml);
-					}
+            // count participants of the date
+            if($date->getValue('dat_rol_id') > 0)
+            {
+                $leadersHtml = '-';
 
-					// Output of elements
-					// always 2 then line break
-					echo '<table style="width: 100%; border-width: 0px;">';
-					foreach($dateElements as $element)
-					{
-						if($firstElement)
-						{
-							echo '<tr>';
-						}
+                $numMembers = $row['dat_num_members'];
+                if($date->getValue('dat_max_members')!=0)
+                {
+                    $participantsHtml = '<strong>'.$row['dat_num_members'].'</strong>';
+                    $leadersHtml = $row['dat_num_leaders'];
+                    $maxMembers = $date->getValue('dat_max_members');
+                }
+                else
+                {
+                    $participantsHtml = '<strong>'.$gL10n->get('SYS_UNLIMITED').'</strong>';
+                    $leadersHtml = '0';
+                    $maxMembers = '&infin;';
+                }
+                $dateElements[] = array($gL10n->get('SYS_LEADER'), '<strong>'.$leadersHtml.'</strong>');
+                $dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), $participantsHtml);
+            }
 
-						echo '<td style="width: 15%">'.$element[0].':</td>
-						<td style="width: 35%">'.$element[1].'</td>';
+            if($date->getValue('dat_rol_id') > 0)
+            {
+                // Link for the Agreement in Array
 
-						if($firstElement)
-						{
-							$firstElement = false;
-						}
-						else
-						{
-							echo '</tr>';
-							$firstElement = true;
-						}
-					}
-					echo '</table>';
+                if($date->getValue('dat_rol_id') > 0)
+                {
+                    if($row['member_date_role'] > 0)
+                    {
+                        $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id');
+                        $registerIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>';
+                        $registerText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_CANCEL').'</a>';
+                    }
+                    else
+                    {
+                        $available_signin = true;
+                        $non_available_rols = array();
+                        if($date->getValue('dat_max_members'))
+                        {
+                            // Check limit of participants
+                            if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
+                            {
+                                $available_signin = false;
+                            }
+                        }
 
-					// Show discription
-					echo '<div class="date_description" style="clear: left;">'.$date->getValue('dat_description').'</div>';
+                        if($available_signin)
+                        {
+                            $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
+                            $registerIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" /></a>';
+                            $registerText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_ATTEND').'</a>';
+                        }
+                        else
+                        {
+                            $registerText = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                        }
+                    }
 
-					if($date->getValue('dat_rol_id') > 0)
-					{
-						// Link for the Agreement in Array
+                    // Link to participants list
+                    if($gValidLogin)
+                    {
+                        if ($leadersHtml + $numMembers > 0)
+                        {
+                            $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
+                            $participantIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
+                            $participantText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
+                        }
+                    }
 
-						if($date->getValue('dat_rol_id') > 0)
-						{
-							if($row['member_date_role'] > 0)
-							{
-								$registrationHtml = '<span class="iconTextLink">
-										<a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'"><img
-											src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>
-										<a href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id').'">'.$gL10n->get('DAT_CANCEL').'</a>
-									</span>';
-							}
-							else
-							{
-								$available_signin = true;
-								$non_available_rols = array();
-								if($date->getValue('dat_max_members'))
-								{
-									// Check limit of participants
-									if($participants->getCount($date->getValue('dat_rol_id')) >= $date->getValue('dat_max_members'))
-									{
-										$available_signin = false;
-									}
-								}
+                    // Link for managing new participants
+                    if($row['mem_leader'] == 1)
+                    {
+                        $buttonURL = $g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id');
+                        $mgrpartIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
+                        $mgrpartText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>';
+                    }
+                }
+            }
 
-								if($available_signin)
-								{
-									$buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
+            if ($getViewMode == 'html')
+            {
+                // Change css if date is highlighted
+                $cssClass = ($row['dat_highlight'] == 1) ? 'boxHeadHighlighted' : 'boxHead';
+                    
+                // Output of elements
+                // always 2 then line break
+                $eventDetails='';
+                foreach($dateElements as $element)
+                {
+                    if($firstElement)
+                    {
+                        $eventDetails.='<tr>';
+                    }
 
-									$registrationHtml = '<span class="iconTextLink">
-										<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" /></a>
-										<a href="'.$buttonURL.'">'.$gL10n->get('DAT_ATTEND').'</a>
-									</span>';
-								}
-								else
-								{
-									$registrationHtml = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
-								}
-							}
+                    $eventDetails.='<td style="width: 15%">'.$element[0].':</td>
+                    <td style="width: 35%">'.$element[1].'</td>';
 
-							// Link to participiants list
-							if($gValidLogin)
-							{
-								$registrationHtml .= '&nbsp;
-								<span class="iconTextLink">
-									<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'"><img
-										src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>
-									 <a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id').'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>
-								</span>';
-							}
+                    if($firstElement)
+                    {
+                        $firstElement = false;
+                    }
+                    else
+                    {
+                        $eventDetails.='</tr>';
+                        $firstElement = true;
+                    }
+                }
+                
+                echo '
+                <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
+                    <div class="'.$cssClass.'">
+                        <div class="boxHeadLeft">
+                            <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
+                            $date->getValue('dat_begin', $gPreferences['system_date']);
+                            echo $endDate ? ' - ' : '';
+                            echo $endDate . ' ' . $date->getValue('dat_headline') . '
+                        </div>
+                        <div class="boxHeadRight">' . 
+                            $icalIcon . $copyIcon . $editIcon . $deleteIcon . '
+                        </div>
+                    </div>
 
-							// Link for managing new participiants
-							if($row['mem_leader'] == 1)
-							{
-								$registrationHtml .= '&nbsp;
-								<span class="iconTextLink">
-									<a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'"><img
-										src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>
-									 <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$date->getValue('dat_rol_id').'">'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>
-								</span>';
-							}
+                    <div class="boxBody">
+                        <table style="width: 100%; border-width: 0px;">' . $eventDetails . '
+                        </table>
+                        <div class="date_description" style="clear: left;">' . $date->getValue('dat_description') . '</div>
+                        <div>';
+                        if ($registerText)
+                        {
+                            echo '
+                            <span class="iconTextLink">
+                                ' . $registerIcon .' '. $registerText . '
+                            </span>&nbsp;';
+                        }
+                        if ($participantText)
+                        {
+                            echo '
+                            <span class="iconTextLink">
+                                ' . $participantIcon .' '. $participantText . '
+                            </span>&nbsp;';
+                        }
+                        if ($mgrpartText)
+                        {
+                            echo '
+                            <span class="iconTextLink">
+                                ' . $mgrpartIcon .' '. $mgrpartText . '
+                            </span>';
+                        }
+                        echo '</div>';
+                        // show information about user who created the recordset and changed it
+                        echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'), 
+                           $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
+                    </div>
+                </div>';
+            }
+            else
+            {
+                // Change css if date is highlighted
+                $cssWeight = ($row['dat_highlight'] == 1) ? 'bold' : 'normal';
+                
+                $objDateBegin = new DateTime ($row['dat_begin']);
+                $dateBegin = $objDateBegin->format($gPreferences['system_date']);
+                $timeBegin = '';
+                if ($date->getValue('dat_all_day') == 0)
+                {
+                    $timeBegin = $date->getValue('dat_begin', $gPreferences['system_time']). ' '.$gL10n->get('SYS_CLOCK');
+                }
+                echo '<tr class="tableMouseOver">
+                <td>'.$registerIcon.'</td>
+                    <td>'.$dateBegin.'</td>
+                    <td>'.$timeBegin.'</td>
+                    <td style="font-weight:'. $cssWeight .'"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>
+                    </td>
+                    <td>'. ($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers.'</td>
+                    <td>'. ($leadersHtml+$numMembers > 0 ? $participantIcon : '').'</td>
+                    <td>'.$locationHtml.'</td>
+                </tr>';
+            }
+        }  // End foreach
 
-							echo '<div>'.$registrationHtml.'</div>';
-						}
-					}
-
-					// show informations about user who creates the recordset and changed it
-					echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'), 
-					       $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
-				</div>
-			</div>';
-		}  // End foreach
+        // Output table bottom for compact view
+        if ($getViewMode == 'compact')
+        {
+            echo '</tbody></table>';
+        }
     }
 
     // If neccessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat;
+    $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&view_mode='.$getViewMode;
     echo admFuncGeneratePagination($base_url, $datesResult['totalCount'], $datesResult['limit'], $getStart, TRUE);
 
     require(SERVER_PATH. '/adm_program/system/overall_footer.php');
@@ -633,6 +715,9 @@ else
             });
             <!-- Trigger -->
             $("#admSelectBox").change();
+            
+            <!-- Reset selection of extended functions in parent window -->
+            window.opener.parent.location.reload();
         })
     </script>
     </head>';
@@ -711,7 +796,7 @@ else
                 $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
                 
                 // Change colors of each second row for visibilty
-                // Change css if date is hightlighted
+                // Change css if date is highlighted
                 if($row['dat_highlight'] != 1)
                 {
                     $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
@@ -755,7 +840,7 @@ else
                 echo'</td>';
                 $numElement++;
                 
-            }   // end forech
+            }   // end foreach
         
         echo'</tbody>
            
@@ -783,7 +868,7 @@ else
                     $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
         
                     // Change colors of each second row for visibilty
-                    // Change css if date is hightlighted
+                    // Change css if date is highlighted
                     if($row['dat_highlight'] != 1)
                     {
                         $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
@@ -829,7 +914,7 @@ else
                         $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
         
                         // Change colors of each second row for visibilty
-                        // Change css if date is hightlighted
+                        // Change css if date is highlighted
                         if($row['dat_highlight'] != 1)
                         {
                             $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
@@ -848,7 +933,7 @@ else
                                 <td>';
     
                                         // If date has participation and patricipants are assigned
-                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members']) && ($row['dat_num_members'] > 0)) 
+                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members'])) 
                                         {
                                             echo '<table cellspacing="2" cellpadding="2"><tr>';
                                             

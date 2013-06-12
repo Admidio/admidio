@@ -1691,6 +1691,16 @@ echo '
                     <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
                     <li>
                         <dl>
+                            <dt><label for="dates_viewmode">'.$gL10n->get('DAT_VIEW_MODE').':</label></dt>
+                            <dd>';
+                                $selectBoxEntries = array('html' => $gL10n->get('DAT_VIEW_MODE_DETAIL'), 'compact' => $gL10n->get('DAT_VIEW_MODE_COMPACT'));
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['dates_viewmode'], 'dates_viewmode');
+                            echo '</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('DAT_VIEW_MODE_DESC').'</li>
+                    <li>
+                        <dl>
                             <dt><label for="dates_per_page">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
                             <dd>
                                 <input type="text" id="dates_per_page" name="dates_per_page"
