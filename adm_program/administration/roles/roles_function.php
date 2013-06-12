@@ -353,13 +353,15 @@ elseif($getMode == 3)
 }
 elseif($getMode == 4)
 {
-    // Rolle aus der DB loeschens
-    $return_code = $role->delete();
-
-    if($return_code == false)
+    // delete role from database
+    try
     {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        $role->delete();
     }
+    catch(AdmException $e)
+    {
+        $e->showHtml();
+    } 
 
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_DELETE_DATA'));

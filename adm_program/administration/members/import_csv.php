@@ -10,7 +10,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_members.php');
 require_once('../../system/classes/role_dependency.php');
 
 $_SESSION['import_csv_request'] = $_POST;
@@ -53,7 +52,6 @@ else
 // jede Zeile aus der Datei einzeln durchgehen und den Benutzer in der DB anlegen
 $line = reset($_SESSION['file_lines']);
 $user = new User($gDb, $gProfileFields);
-$member   = new TableMembers($gDb);
 $startRow = 0;
 $countImportNewUser  = 0;
 $countImportEditUser = 0;
@@ -251,7 +249,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             $user->save();            
 
             // assign role membership to user
-            if($member->startMembership($_SESSION['rol_id'], $user->getValue('usr_id')))
+            if($user->setRoleMembership($_SESSION['rol_id']))
             {
                 $countImportEditRole++;
             }
@@ -259,7 +257,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
             // assign dependent role memberships to user
             foreach($depRoles as $depRole)
             {
-                $member->startMembership($depRole, $user->getValue('usr_id'));
+                $user->setRoleMembership($depRole);
             }
             
             

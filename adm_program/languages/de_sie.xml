@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
-<version id="2.4.1" translator="Markus Faßbender">
+<version id="2.4.2" translator="Markus Faßbender">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Sie werden Organisator des Termins und erhalten das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem können Sie weitere Personen zu Organisatoren machen.</text>
 	<text id="DAT_VIEW_MODE" development="new" translation="todo">Standard-Darstellung</text>
 	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="todo">Detailiert</text>
 	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="todo">Kompakt</text>
 	<text id="DAT_VIEW_MODE_DESC" development="new" translation="todo">Gibt an, wie die Termine angezeigt werden. (Standard: Detailiert)</text>
+	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="todo">Sie können die Rolle nicht löschen. Es muss mindestens eine Rolle die Einstellung %VAR1_BOLD% besitzen.</text>
+	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="todo">Sie können eine Systemrolle nicht löschen.</text>
+	<text id="ROL_DELETE_WEBMASTER_ROLE" development="new" translation="todo">Sie können die Rolle %VAR1_BOLD% nicht löschen.</text>
 </version>
 <version id="2.4.0" translator="Markus Faßbender">
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Möchten Sie die Kategorie %VAR1_BOLD% wirklich löschen?</text>

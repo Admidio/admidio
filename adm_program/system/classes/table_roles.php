@@ -194,14 +194,35 @@ class TableRoles extends TableAccess
 	 */
     public function delete()
     {
-        global $gCurrentSession;
+        global $gCurrentSession, $gL10n, $gCurrentOrganization;
+        
+        if($this->getValue('rol_default_registration') == 1)
+        {
+			// checks if at least one other role has this flag, if not than this role couldn't be deleted
+			$sql = 'SELECT COUNT(1) AS count FROM '.TBL_ROLES.', '.TBL_CATEGORIES.'
+			         WHERE rol_default_registration = 1
+					   AND rol_id    <> '.$this->getValue('rol_id').'
+					   AND rol_cat_id = cat_id
+					   AND cat_org_id = '.$gCurrentOrganization->getValue('org_id');
+			$this->db->query($sql);
+			$row = $this->db->fetch_array();
 
-        // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
-        // eine Rechteaenderung vorgenommen wurde
-        $gCurrentSession->renewUserObject();
+			if($row['count'] == 0)
+			{
+                throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION'));
+			}
+        }
 
-        // die Systemrollem duerfen nicht geloescht werden
-        if($this->getValue('rol_system') == false)
+        // users are not allowed to delete system roles
+        if($this->getValue('rol_system'))
+        {
+            throw new AdmException('ROL_DELETE_SYSTEM_ROLE');
+        }
+        elseif($this->getValue('rol_webmaster'))
+        {
+            throw new AdmException('ROL_DELETE_WEBMASTER_ROLE', $gL10n->get('SYS_WEBMASTER'));
+        }
+        else
         {
 			$this->db->startTransaction();
 			
@@ -217,11 +238,12 @@ class TableRoles extends TableAccess
             $return = parent::delete();
 
 			$this->db->endTransaction();
+            
+            // all active users must renew their user data because maybe their 
+            // rights have been changed if they where members of this role
+            $gCurrentSession->renewUserObject();
+
 			return $return;
-        }
-        else
-        {
-            return false;
         }
     }
 
@@ -340,8 +362,8 @@ class TableRoles extends TableAccess
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if($fields_changed && is_object($gCurrentSession))
         {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
-            // eine Rechteaenderung vorgenommen wurde
+            // all active users must renew their user data because maybe their 
+            // rights have been changed if they where members of this role
             $gCurrentSession->renewUserObject();
         }
     }
@@ -358,8 +380,8 @@ class TableRoles extends TableAccess
                         WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
-            // eine Rechteaenderung vorgenommen wurde
+            // all active users must renew their user data because maybe their 
+            // rights have been changed if they where members of this role
             $gCurrentSession->renewUserObject();
 
             return 0;
@@ -379,8 +401,8 @@ class TableRoles extends TableAccess
                         WHERE rol_id = '. $this->getValue('rol_id');
             $this->db->query($sql);
 
-            // einlesen aller Userobjekte der angemeldeten User anstossen, da evtl.
-            // eine Rechteaenderung vorgenommen wurde
+            // all active users must renew their user data because maybe their 
+            // rights have been changed if they where members of this role
             $gCurrentSession->renewUserObject();
 
             return 0;
@@ -388,9 +410,8 @@ class TableRoles extends TableAccess
         return -1;
     }
 	
-
-    /** Set a new value for a column of the database table.
-     *  The value is only saved in the object. You must call the method @b save to store the new value to the database
+    /** Set a new value for a column of the database table. The value is only saved in the object. 
+     *  You must call the method @b save to store the new value to the database.
      *  @param $columnName The name of the database column whose value should get a new value
      *  @param $newValue The new value that should be stored in the database field
      *  @param $checkValue The value will be checked if it's valid. If set to @b false than the value will not be checked.  
