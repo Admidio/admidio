@@ -359,8 +359,7 @@ class TableCategory extends TableAccess
         // Nach dem Speichern noch pruefen, ob Userobjekte neu eingelesen werden muessen,
         if($fields_changed && $this->getValue('cat_type') == 'USF' && is_object($gCurrentSession))
         {
-            // einlesen aller Userobjekte der angemeldeten User anstossen,
-            // da Aenderungen in den Profilfeldern vorgenommen wurden
+            // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();
         }
 		

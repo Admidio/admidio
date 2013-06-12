@@ -219,8 +219,8 @@ if($getInline == 0)
 	$gNavigation->deleteLastUrl();
 }
 
-// falls Rollen dem eingeloggten User neu zugewiesen wurden,
-// dann muessen die Rechte in den Session-Variablen neu eingelesen werden
+// all active users must renew their user data because maybe their 
+// rights have been changed if they where new members of this role
 $gCurrentSession->renewUserObject();
 
 // Check if a new user get's at least one role

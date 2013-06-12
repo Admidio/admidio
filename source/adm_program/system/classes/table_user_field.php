@@ -69,8 +69,7 @@ class TableUserField extends TableAccess
                     WHERE lsc_usf_id = '. $this->getValue('usf_id');
         $this->db->query($sql);
 
-        // einlesen aller Userobjekte der angemeldeten User anstossen, 
-        // da Aenderungen in den Profilfeldern vorgenommen wurden 
+        // all active users must renew their user data because the user field structure has been changed
         $gCurrentSession->renewUserObject();
 
         $return = parent::delete();
@@ -305,8 +304,7 @@ class TableUserField extends TableAccess
         
         if($fields_changed && is_object($gCurrentSession))
         {
-            // einlesen aller Userobjekte der angemeldeten User anstossen, 
-            // da Aenderungen in den Profilfeldern vorgenommen wurden 
+            // all active users must renew their user data because the user field structure has been changed
             $gCurrentSession->renewUserObject();
         }
     }
