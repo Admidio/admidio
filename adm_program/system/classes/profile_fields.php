@@ -417,10 +417,15 @@ class ProfileFields
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'NUMERIC')
             {
-                // Zahl muss numerisch sein
+                // A number must be numeric
                 if(is_numeric(strtr($fieldValue, ',.', '00')) == false && $this->noValueCheck != true)
                 {
                     return false;
+                }
+                else
+                {
+                    // numbers don't have leading zero
+                    $fieldValue = preg_replace('/\\b0*/','',$fieldValue);
                 }
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')

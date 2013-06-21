@@ -77,5 +77,5 @@ header('Cache-Control: private');
 header('Pragma: public');
 
 // Datei ausgeben.
-readfile($completePath);
+echo file_get_contents($completePath);
 ?>

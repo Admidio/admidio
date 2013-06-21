@@ -107,7 +107,7 @@ if($getThumbnail)
         }
         else
         {
-            readfile($ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
+            echo file_get_contents($ordner.'/thumbnails/'.$getPhotoNr.'.jpg');
         }
     }
     else

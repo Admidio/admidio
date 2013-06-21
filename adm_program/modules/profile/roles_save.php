@@ -59,7 +59,7 @@ if($roleCount == 0)
 if($gCurrentUser->assignRoles())
 {
     // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-    $sql    = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mem_begin, mem_end
+    $sql    = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mem_id, mem_begin, mem_end
                  FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. '
                    ON rol_id      = mem_rol_id
@@ -76,7 +76,7 @@ if($gCurrentUser->assignRoles())
 else
 {
     // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql    = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mgl.mem_begin, mgl.mem_end
+    $sql    = 'SELECT rol_id, rol_name, rol_max_members, rol_webmaster, mgl.mem_id, mgl.mem_begin, mgl.mem_end
                  FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
                  LEFT JOIN '. TBL_MEMBERS. ' mgl
                    ON rol_id         = mgl.mem_rol_id
@@ -196,9 +196,13 @@ while($row = $gDb->fetch_array($result_rol))
         }
         else
         {
-			// subtract one day, so that user leaves role immediately
-            $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));
-            $user->setRoleMembership($row['rol_id'], $row['mem_begin'], $newEndDate, $roleLeader);
+            // if membership already exists then stop this membership
+            if($row['mem_id'] > 0)
+            {
+                // subtract one day, so that user leaves role immediately
+                $newEndDate = date('Y-m-d', time() - (24 * 60 * 60));
+                $user->editRoleMembership($row['mem_id'], $row['mem_begin'], $newEndDate, $roleLeader);
+            }
         }
     }
 }
@@ -219,8 +223,8 @@ if($getInline == 0)
 	$gNavigation->deleteLastUrl();
 }
 
-// falls Rollen dem eingeloggten User neu zugewiesen wurden,
-// dann muessen die Rechte in den Session-Variablen neu eingelesen werden
+// all active users must renew their user data because maybe their 
+// rights have been changed if they where new members of this role
 $gCurrentSession->renewUserObject();
 
 // Check if a new user get's at least one role
