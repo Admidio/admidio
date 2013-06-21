@@ -336,9 +336,16 @@ class User extends TableUsers
 		return false;
 	}
 
-	// edit an existing role membership for the current user
-	// if additional memberships to this user and role exists within the period 
-	// than merge them to the current membership
+    /** Edit an existing role membership of the current user. If the new date range contains
+     *  a future or past membership of the same role then the two memberships will be merged.
+     *  In opposite to setRoleMembership this method is useful to end a membership earlier.
+     *  @param $memberId  Id of the current membership that should be edited.
+     *  @param $startDate New start date of the membership. Default will be @b DATE_NOW.
+     *  @param $endDate   New end date of the membership. Default will be @b 31.12.9999
+     *  @param $leader    If set to @b 1 then the member will be leader of the role and 
+     *                    might get more rights for this role.
+     *  @return Return @b true if the membership was successfully edited.
+     */
 	public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
 	{
 		require_once('../../system/classes/table_members.php');
@@ -491,7 +498,7 @@ class User extends TableUsers
         {
             if($columnName == 'usr_photo' && $gPreferences['profile_photo_storage'] == 0 && $gPreferences['profile_photo_storage'] == 0 && file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg'))
             {
-                return readfile(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg');             
+                return file_get_contents(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$this->getValue('usr_id').'.jpg');             
             }            
             else
             {
@@ -717,8 +724,16 @@ class User extends TableUsers
 		}
 	}
 
-	// set a role membership for the current user
-	// if memberships to this user and role exists within the period than merge them to one new membership
+    /** Create a new membership to a role for the current user. If the date range contains
+     *  a future or past membership of the same role then the two memberships will be merged.
+     *  In opposite to setRoleMembership this method can't be used to end a membership earlier!
+     *  @param $roleId    Id of the role for which the membership should be set.
+     *  @param $startDate Start date of the membership. Default will be @b DATE_NOW.
+     *  @param $endDate   End date of the membership. Default will be @b 31.12.9999
+     *  @param $leader    If set to @b 1 then the member will be leader of the role and 
+     *                    might get more rights for this role.
+     *  @return Return @b true if the membership was successfully added.
+     */
 	public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
 	{
 		require_once('../../system/classes/table_members.php');
@@ -739,7 +754,10 @@ class User extends TableUsers
         $startDate = date('Y-m-d', $dtStartDate->getTimestamp() - (24 * 60 * 60));
         // add 1 to max date because we subtract one day if a membership ends
 		$dtEndDate = new DateTimeExtended($endDate, 'Y-m-d', 'date');
-        $endDate = date('Y-m-d', $dtStartDate->getTimestamp() + (24 * 60 * 60));
+        if($endDate != '9999-12-31')
+        {
+            $endDate = date('Y-m-d', $dtEndDate->getTimestamp() + (24 * 60 * 60));
+        }
 	
 		// search for membership with same role and user and overlapping dates
 		$sql = 'SELECT * FROM '.TBL_MEMBERS.' 
@@ -869,7 +887,7 @@ class User extends TableUsers
 
             // nur Updaten, wenn sich auch der Wert geaendert hat
             if($updateField == true
-            && $newValue  != $oldFieldValue)
+            && strcmp($newValue, $oldFieldValue) != 0)
             {
 				$returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
             }

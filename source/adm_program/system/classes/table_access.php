@@ -592,8 +592,8 @@ class TableAccess
             {
                 $return_code = true;
 
-                // nur wenn der Wert sich geaendert hat, dann auch als geaendert markieren                
-                if($newValue != $this->dbColumns[$columnName])
+                // only mark as "changed" if the value is different (use binary safe function!)
+                if(strcmp($newValue, $this->dbColumns[$columnName]) != 0)
                 {
                     $this->dbColumns[$columnName] = $newValue;
                     $this->columnsValueChanged    = true;

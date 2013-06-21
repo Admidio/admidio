@@ -162,9 +162,15 @@ class DBMySQL extends DBCommon
 
         $this->queryResult = mysql_query($sql, $this->connectId);
 
+        // if we got an db error then show this error
         if($this->queryResult == false && $throwError == true)
         {
             return $this->db_error();
+        }
+        elseif($gDebug == 1 && strpos(strtoupper($sql), 'SELECT') === 0)
+        {
+            // if debug modus then show number of selected rows
+            error_log('Found rows: '.$this->num_rows());
         }
 
         return $this->queryResult;

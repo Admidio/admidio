@@ -195,6 +195,11 @@ class DBPostgreSQL extends DBCommon
         {
             return $this->db_error();
         }
+        elseif($gDebug == 1 && strpos(strtoupper($sql), 'SELECT') === 0)
+        {
+            // if debug modus then show number of selected rows
+            error_log('Found rows: '.$this->num_rows());
+        }
 
         return $this->queryResult;
     }
