@@ -71,7 +71,7 @@ if($getMode == 1)
             </p>
             <p align="left">
                 <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" />
-                '.$gL10n->get('ROL_DELETE_ROLE', $gL10n->get('SYS_DELETE')).'
+                '.$gL10n->get('ROL_HINT_DELETE_ROLE', $gL10n->get('SYS_DELETE')).'
             </p>
             <button id="btnDelete" type="button"
                 onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$getRoleId.'&mode=4\'"><img
