@@ -7,9 +7,9 @@
 	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="todo">Detailiert</text>
 	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="todo">Kompakt</text>
 	<text id="DAT_VIEW_MODE_DESC" development="new" translation="todo">Gibt an, wie die Termine angezeigt werden. (Standard: Detailiert)</text>
-	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="todo">Sie können die Rolle nicht löschen. Es muss mindestens eine Rolle die Einstellung %VAR1_BOLD% besitzen.</text>
-	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="todo">Sie können eine Systemrolle nicht löschen.</text>
-	<text id="ROL_DELETE_WEBMASTER_ROLE" development="new" translation="todo">Sie können die Rolle %VAR1_BOLD% nicht löschen.</text>
+	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="todo">Sie können die Rolle %VAR1_BOLD% nicht löschen. Es muss mindestens eine Rolle die Einstellung %VAR2_BOLD% besitzen.</text>
+	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="todo">Sie können die Systemrolle %VAR1_BOLD% nicht löschen.</text>
+	<text id="ROL_DELETE_ROLE" development="new" translation="todo">Sie können die Rolle %VAR1_BOLD% nicht löschen.</text>
 </version>
 <version id="2.4.0" translator="Markus Faßbender">
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Möchten Sie die Kategorie %VAR1_BOLD% wirklich löschen?</text>
@@ -1003,7 +1003,7 @@
     <text id="ROL_ALL_MEMBERS" development="new" translation="todo">Alle angemeldeten Benutzer</text>
     <text id="ROL_ANNUALLY" development="new" translation="todo">Jährlich</text>
     <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten!\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
-    <text id="ROL_DELETE_ROLE" development="new" translation="todo">Wenn Sie %VAR1_BOLD% auswählen, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</text>
+    <text id="ROL_HINT_DELETE_ROLE" development="new" translation="todo">Wenn Sie %VAR1_BOLD% auswählen, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="todo">Abhängigkeiten</text>
     <text id="ROL_DEPENDENT" development="new" translation="todo">Abhängig</text>
     <text id="ROL_EDIT_ROLE" development="new" translation="todo">Rolle bearbeiten</text>

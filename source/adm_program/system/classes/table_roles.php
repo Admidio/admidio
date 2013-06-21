@@ -209,18 +209,18 @@ class TableRoles extends TableAccess
 
 			if($row['count'] == 0)
 			{
-                throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $gL10n->get('ROL_DEFAULT_REGISTRATION'));
+                throw new AdmException('ROL_DELETE_NO_DEFAULT_ROLE', $this->getValue('rol_name'), $gL10n->get('ROL_DEFAULT_REGISTRATION'));
 			}
         }
 
         // users are not allowed to delete system roles
         if($this->getValue('rol_system'))
         {
-            throw new AdmException('ROL_DELETE_SYSTEM_ROLE');
+            throw new AdmException('ROL_DELETE_SYSTEM_ROLE', $this->getValue('rol_name'));
         }
         elseif($this->getValue('rol_webmaster'))
         {
-            throw new AdmException('ROL_DELETE_WEBMASTER_ROLE', $gL10n->get('SYS_WEBMASTER'));
+            throw new AdmException('ROL_DELETE_ROLE', $gL10n->get('SYS_WEBMASTER'));
         }
         else
         {
