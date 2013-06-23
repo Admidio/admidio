@@ -31,8 +31,8 @@ class TableUserField extends TableAccess
         parent::__construct($db, TBL_USER_FIELDS, 'usf', $usf_id);
     }
     
-	/** Deletes the selected fieldand all references in other tables. 
-	 *  After that the class will be initialize.
+	/** Deletes the selected field and all references in other tables. Also 
+	 *  the gap in sequence will be closed. After that the class will be initialize.
 	 *  @return @b true if no error occured
 	 */
     public function delete()
@@ -41,13 +41,13 @@ class TableUserField extends TableAccess
         
 		$this->db->startTransaction();
 		
-        // Luecke in der Reihenfolge schliessen
+        // close gap in sequence
         $sql = 'UPDATE '. TBL_USER_FIELDS. ' SET usf_sequence = usf_sequence - 1 
                  WHERE usf_cat_id   = '. $this->getValue('usf_cat_id'). '
                    AND usf_sequence > '. $this->getValue('usf_sequence');
         $this->db->query($sql);
 
-        // Feldreihenfolge bei gespeicherten Listen anpassen
+        // close gap in sequence of saved lists
         $sql = 'SELECT lsc_lst_id, lsc_number FROM '. TBL_LIST_COLUMNS. ' 
                  WHERE lsc_usf_id = '.$this->getValue('usf_id');
         $result_lst = $this->db->query($sql);
@@ -60,7 +60,11 @@ class TableUserField extends TableAccess
             $this->db->query($sql);
         }
 
-        // Abhaenigigkeiten loeschen
+        // delete all dependencies in other tables
+        $sql    = 'DELETE FROM '. TBL_USER_LOG. '
+                    WHERE usl_usf_id = '. $this->getValue('usf_id');
+        $this->db->query($sql);
+
         $sql    = 'DELETE FROM '. TBL_USER_DATA. '
                     WHERE usd_usf_id = '. $this->getValue('usf_id');
         $this->db->query($sql);
