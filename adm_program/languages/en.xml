@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+<version id="2.4.2" translator="Stefanie Schima">
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Join event as organiser</text>
+    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">You will be the event organiser and are allowed to add/remove further participants or name them as additional organiser.</text>
+	<text id="DAT_VIEW_MODE" development="new" translation="edited">Default view</text>
+	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="edited">Detailed</text>
+	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="edited">Compact</text>
+	<text id="DAT_VIEW_MODE_DESC" development="new" translation="edited">Defines view type of the event list. (Default: detailed)</text>
+	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="edited">You can not delete role %VAR1_BOLD%. At least one role requires the %VAR2_BOLD% setting.</text>
+	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="edited">You can not delete the system role %VAR1_BOLD%.</text>
+	<text id="ROL_DELETE_ROLE" development="new" translation="edited">You can not delete the role %VAR1_BOLD%.</text>
+</version>
 <version id="2.4.0" translator="Thomas Lange">
     <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Do you really want to delete category %VAR1_BOLD% ?</text>
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="edited">Could not delete category %VAR1_BOLD% because of %VAR2% depending entries.</text>
@@ -124,7 +135,6 @@
     <text id="DAT_ICAL_DAYS_PAST" development="new" translation="edited">Number of iCal days in the past</text>
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">This value defines, how many days in the past should be included into an iCal download or subscription. (default: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Enable registration to this appointment.</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Agree on this appointment</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Visibility</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Please fill in all entry fields\n\nand click again %VAR1_BOLD%.</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Your database version is %VAR1%.\nUpdate to version %VAR2% is required</text>
@@ -298,8 +308,6 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="edited">Reduce number of participants for this event. Please leave field empty for unlimited participants.</text>
     <text id="DAT_ORGANIZER" development="new" translation="edited" description="The Person">Organizer</text>
     <text id="DAT_ORGANIZERS" development="new" translation="edited" description="The Persons">Organizers</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="new" translation="edited">Participation confirmation</text>
-    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">You take part at this event as a leader and can add other participating persons.</text>
 	<text id="DAT_PARTICIPANTS" development="new" translation="edited">Participants</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Limited number of participants</text>
    	<text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Previous %VAR1%</text>
