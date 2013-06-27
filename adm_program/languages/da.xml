@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
+<version id="2.4.2" translator="Stefanie Schima">
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Deltag i eventet som organisator.</text>
+    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Du vil blive organisator for eventet og dermed tilladt at tilføje/fjerne deltagere eller udnævne dem til med-organisatorer.</text>
+	<text id="DAT_VIEW_MODE" development="new" translation="edited">Standard Visning</text>
+	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="edited">Detaljeret</text>
+	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="edited">Kompakt</text>
+	<text id="DAT_VIEW_MODE_DESC" development="new" translation="edited">Definerer visnings type på event liste. (Standard: detaljeret)</text>
+	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="edited">Du kan ikke slette rollen %VAR1_BOLD%. Mindst én rolle kræver %VAR2_BOLD% indstillingen.</text>
+	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="edited">Du kan ikke slette system rollen %VAR1_BOLD%.</text>
+	<text id="ROL_DELETE_ROLE" development="new" translation="edited">Du kan ikke slette rollen %VAR1_BOLD%.</text>
+</version>
 <version id="2.4.0" translator="Henrik Troels-Hansen">
     <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Vil du virkelig slette kategorien %VAR1_BOLD% ?</text>
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="edited">Kunne ikke slette kategorien %VAR1_BOLD% fordi den indeholder %VAR2% afhængige data.</text>
