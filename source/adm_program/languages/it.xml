@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="it">
+<version id="2.4.2" translator="Fiorentino Sarro">
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Registrati all'evento come organizzatore</text>
+    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Sarai l'organizzatore dell'evento e hai il permesso di aggiungere/rimuovere altri partecipanti o aggiungerli come organizzatori.</text>
+	<text id="DAT_VIEW_MODE" development="new" translation="edited">Vista predefinita</text>
+	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="edited">Dettagliato</text>
+	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="edited">Sintetico</text>
+	<text id="DAT_VIEW_MODE_DESC" development="new" translation="edited">Definisce il tipo di vista dell'elenco degli eventi. (Predefinita: dettagliata)</text>
+	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="edited">Non puoi cancellare il ruolo %VAR1_BOLD%. Almeno un ruolo richiede l'impostazione %VAR2_BOLD%.</text>
+	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="edited">Non puoi cancellare il ruolo di sistema %VAR1_BOLD%.</text>
+	<text id="ROL_DELETE_ROLE" development="new" translation="edited">Non puoi cancellare il ruolo %VAR1_BOLD%.</text>
+</version>
 <version id="2.4.0" translator="Fiorentino Sarro">
     <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Vuoi davvero cancellare la categoria %VAR1_BOLD% ?</text>
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="edited">Non è possibile cancellare la categoria %VAR1_BOLD% perché a %VAR2% sono associati degli inserimenti.</text>
@@ -104,17 +115,17 @@
 	<text id="SYS_SYSTEM" development="new" translation="todo">Sistema</text>
     <text id="SYS_SYSTEM_MAILS" development="changed" translation="edited">Notifiche di sistema</text>
 </version>
-<version id="2.3.4" translator="Szabolcs Lami">
+<version id="2.3.4" translator="Fiorentino Sarro">
     <text id="MAI_COUNT_BCC_DESC" development="changed" translation="edited">Le email ai ruoli dei singoli membri saranno inviate come copie protette (BCC). In questo modo, i riceventi non potranno vedere chi altri ha ricevuto l'email. Il numero indicato nel campo corrente definisce il numero massimo di riceventi del messaggio email. Il numero massimo di riceventi può essere limitato dall'hosting provider. In caso di più riceventi email del consentito, saranno generati singoli messaggi email. Impostando il valore a 1, ogni ricevente riceverà direttamente un messaggio individuale. Il numero di messaggi email in uscita nell'intervallo di tempo saranno limitati anche dall'hosting provider. (Predefinito: 50)</text>
 	<text id="MAI_SENDER_INTO_TO" development="new" translation="edited">Mittente come ricevente</text>
 	<text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="edited">I riceventi delle email inviate ai ruoli saranno definiti usando il campo BCC. Il campo TO di solito rimane vuoto. Alcuni hosting provider non consentono email senza il campo TO definito o considerano queste email come spam. L'opzione corrente ti consente di impostare gli indirizzi email dei mittenti automaticamente come campo TO, e tutti gli altri riceventi saranno inseriti regolarmente nel campo BCC. (Predefinito: attivo)</text>
 </version>
-<version id="2.3.1" translator="Szabolcs Lami">
+<version id="2.3.1" translator="Fiorentino Sarro">
 	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="edited">Un'organizzazione chiamata %VAR1_BOLD% esiste già. Si prega di scegliere un altro nome.</text>
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="edited">Per l'indirizzo email %VAR1_BOLD% non ci sono corrispondenti dati di accesso disponibili!</text>
     <text id="SYS_LOSTPW_SEVERAL_EMAIL" development="new" translation="edited">L'indirizzo email %VAR1_BOLD% è stato assegnato a registrazioni multiple. Potrebbe essere identificata la registrazione di un unico utente.</text>
 </version>
-<version id="2.3.0" translator="Szabolcs Lami">
+<version id="2.3.0" translator="Fiorentino Sarro">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">%VAR1% standard</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">La categoria %VAR1_BOLD% dovrebbe essere cancellata?\n\nQuesta categoria ha %VAR2% contenuti che ne dipendono, che saranno anche cancellati.</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="edited">Abilita iCal</text>
@@ -124,7 +135,6 @@
     <text id="DAT_ICAL_DAYS_PAST" development="new" translation="edited">Numero di giorni iCal passati</text>
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">Questo valore definisce quanti giorni passati potrai includere in uno scarico o sottoscrizione iCal. (predefiniti: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Abilita la registrazione per questo appuntamento.</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">D'accordo su questo appuntamento</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Visibilità</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Per favore riempi tutti i campi dei contenuti\n\ne clicca di nuovo %VAR1_BOLD%.</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">La versione del tuo database è %VAR1%.\nAggiorna alla versione richiesta %VAR2%</text>
@@ -188,7 +198,7 @@
     <text id="UPD_CURRENT_VERSION" development="changed" translation="todo">Installato</text>  
     <text id="UPD_STABLE_VERSION" development="changed" translation="todo">Disponibile</text>
 </version>
-<version id="2.2.6" translator="Szabolcs Lami">
+<version id="2.2.6" translator="Fiorentino Sarro">
     <text id="ANN_RECENT_ANNOUNCEMENTS_OF_ORGA" development="new" translation="edited">Ultimi annunci dell'organizzazione %VAR1%</text>
     <text id="DAT_CURRENT_DATES_OF_ORGA" development="new" translation="edited">Appuntamenti correnti dell'organizzazione %VAR1%</text>
     <text id="GBO_LATEST_GUESTBOOK_ENTRIES_OF_ORGA" development="new" translation="edited">Ultime voci nel guestbook dell'organizzazione %VAR1%</text>
@@ -233,7 +243,7 @@
     <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Dom</text>
     <text id="SYS_TODAY" development="new" translation="edited">Oggi</text>
 </version>
-<version id="2.2.0" translator="Szabolcs Lami">
+<version id="2.2.0" translator="Fiorentino Sarro">
     <!-- Phrases only in Announcementmodule -->
     <text id="ANN_ANNOUNCEMENT" development="new" translation="edited">Annuncio</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="edited">Annunci</text>
@@ -298,8 +308,6 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="edited">Riduci il numero di partecipoanti a auesto evento. Per favore lascia il campo vuoto per un numero di partecipanti illimitato.</text>
     <text id="DAT_ORGANIZER" development="new" translation="edited" description="The Person">Organizzatore</text>
     <text id="DAT_ORGANIZERS" development="new" translation="edited" description="The Persons">Organizzatori</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="new" translation="edited">Conferma della partecipazione</text>
-    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">Prendi parte a questo evento come leader e puoi aggiungere altre persone partecipanti.</text>
 	<text id="DAT_PARTICIPANTS" development="new" translation="edited">Participanti</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Numero massimo di partecipanti</text>
    	<text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Precedente %VAR1%</text>
