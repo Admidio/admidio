@@ -84,17 +84,22 @@ class DBPostgreSQL extends DBCommon
         return pg_fetch_assoc($result);
     }
 
-    // result : Ergebniskennung
-    // resultType : MYSQL_ASSOC fuer assoziatives Array, MYSQL_NUM fuer numerisches
-    //               oder MYSQL_BOTH fuer beides
-    public function fetch_array($result = false, $resultType = PGSQL_BOTH)
+    /** Fetch a result row as an associative array, a numeric array, or both.
+     *  @param $result     The result resource that is being evaluated. This result comes from a call to query().
+     *  @param $resultType Set the result type. Can contain @b ASSOC for an associative array, 
+     *                     @b NUM for a numeric array or @b BOTH (Default).
+     *  @return Returns an array that corresponds to the fetched row and moves the internal data pointer ahead. 
+     */
+    public function fetch_array($result = false, $resultType = 'BOTH')
     {
+        $typeArray = array('BOTH' => PGSQL_BOTH, 'ASSOC' => PGSQL_ASSOC, 'NUM' => PGSQL_NUM);
+
         if($result === false)
         {
             $result = $this->queryResult;
         }
         
-        return pg_fetch_array($result, null, $resultType);
+        return pg_fetch_array($result, null, $typeArray[$resultType]);
     }
 
     public function fetch_object($result = false)
