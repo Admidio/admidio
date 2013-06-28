@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<update id="de">
+<update>
 	<step id="10">
 	</step>
+    <step>stop</step>
 </update>

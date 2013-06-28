@@ -284,7 +284,7 @@ class TableAccess
     
 			if($this->db->num_rows($result) == 1)			
 			{
-				$row = $this->db->fetch_array($result, MYSQL_ASSOC);
+				$row = $this->db->fetch_array($result, 'ASSOC');
 				$this->new_record = false;
 				
 				// Daten in das Klassenarray schieben
