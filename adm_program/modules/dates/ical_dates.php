@@ -70,7 +70,7 @@ if($getCatId > 0)
 $dates->setMode('period',date('Y-m-d',time()-$gPreferences['dates_ical_days_past']*86400),date('Y-m-d',time()+$gPreferences['dates_ical_days_future']*86400));
 
 // read events for output
-$datesResult = $dates->getDates();
+$datesResult = $dates->getDates(0,0);
 
 $date = new TableDate($gDb);
 $iCal = $date->getIcalHeader();
