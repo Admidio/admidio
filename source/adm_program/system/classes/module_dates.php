@@ -503,7 +503,7 @@ class ModuleDates
         global $gDb;
         global $gPreferences;
         
-        if($limit == NULL)
+        if($limit === NULL)
         {
             $limit = $gPreferences['dates_per_page'];
         }
