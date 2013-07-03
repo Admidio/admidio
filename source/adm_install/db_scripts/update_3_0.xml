@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
-	<step id="10">
+	<step id="10">insert into %PREFIX%_organizations (org_shortname, org_longname) 
+    values  ('MEIN_TEST', 'UPDATE erfolgreich')
 	</step>
     <step>stop</step>
 </update>
