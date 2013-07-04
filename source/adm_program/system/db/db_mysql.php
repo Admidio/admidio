@@ -48,7 +48,14 @@ class DBMySQL extends DBCommon
         return mysql_data_seek($result, $rowNumber);
     }   
     
-    // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
+    /** Read the last error from the database and call the parent method to display
+     *  this error to the user.
+     *  @param $code    Optional you could set a code that should be displayed to the user.
+     *                  Per default the database error code will be read and displayed.
+     *  @param $message Optional you could set a message that should be displayed to the user.
+     *                  Per default the database error message will be read and displayed.
+     *  @return Will exit the script and returns a html output with the error informations.
+     */
     public function db_error($code = 0, $message = '')
     {
         if($code == 0)

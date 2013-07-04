@@ -36,6 +36,7 @@ require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/component_update.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language_data.php');
@@ -155,11 +156,11 @@ elseif($getMode == 2)
         $gCurrentOrganization->setPreferences($orga_preferences, false);
     }
 
-    $main_version      = substr($currentDatabaseVersion, 0, 1);
-    $sub_version       = substr($currentDatabaseVersion, 2, 1);
-    $micro_version     = substr($currentDatabaseVersion, 4, 1);
-    $micro_version     = $micro_version + 1;
-    $flag_next_version = true;
+    $mainVersion      = substr($currentDatabaseVersion, 0, 1);
+    $subVersion       = substr($currentDatabaseVersion, 2, 1);
+    $microVersion     = substr($currentDatabaseVersion, 4, 1);
+    $microVersion     = $microVersion + 1;
+    $flagNextVersion = true;
 
 	if($gDbType == 'mysql')
 	{
@@ -168,96 +169,96 @@ elseif($getMode == 2)
 	    $gDb->query($sql);
 	}
 
-    // nun in einer Schleife die Update-Scripte fuer alle Versionen zwischen der Alten und Neuen einspielen
-    while($flag_next_version)
+    // before version 3 we had an other update mechanism which will be handled here
+    if($mainVersion < 3)
     {
-        $flag_next_version = false;
-        
-		if($main_version < 3)
-		{
-			// until version 3 Admidio had sql and php files where the update statements where stored
-			// these files must be excecuted
-		
-			// in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
-			// Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
-			for($micro_version = $micro_version; $micro_version < 15; $micro_version++)
-			{
-				// Update-Datei der naechsten hoeheren Version ermitteln
-				$sql_file  = 'db_scripts/upd_'. $main_version. '_'. $sub_version. '_'. $micro_version. '_db.sql';
-				$conv_file = 'db_scripts/upd_'. $main_version. '_'. $sub_version. '_'. $micro_version. '_conv.php';                
-				
-				if(file_exists($sql_file))
-				{
-					// SQL-Script abarbeiten
-					$file    = fopen($sql_file, 'r')
-							   or showPage($gL10n->get('INS_ERROR_OPEN_FILE', $sql_file), 'update.php', 'back.png', $gL10n->get('SYS_BACK'));
-					$content = fread($file, filesize($sql_file));
-					$sql_arr = explode(';', $content);
-					fclose($file);
-		
-					foreach($sql_arr as $sql)
-					{
-						if(strlen(trim($sql)) > 0)
-						{
-							// Praefix fuer die Tabellen einsetzen und SQL-Statement ausfuehren
-							$sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
-							$gDb->query($sql);
-						}
-					}
-					
-					$flag_next_version = true;
-				}
-				
-				// now set db specific admidio preferences
-				$gDb->setDBSpecificAdmidioProperties($main_version. '.'. $sub_version. '.'. $micro_version);
-		
-				if(file_exists($conv_file))
-				{
-					// Nun das PHP-Script abarbeiten
-					include($conv_file);
-					$flag_next_version = true;
-				}
-			}
-		}
-		else
-		{
-			// since version 3 xml files exists that store the update statements
-			
-			if($main_version == 3 && $sub_version == 0)
-			{
-				// first version who works with update steps, so initialize them with 10
-				$updateStep = 10;
-			}
-			else
-			{
-				// read last update step from core module
-				$sql = 'SELECT mod_update_step FROM '. TBL_MODULES_PLUGINS. ' 
-						 WHERE mod_name_intern = \'core\' ';
-				$gDb->query($sql); 
-
-				$row = $gDb->fetch_array();
-				$updateStep = $row['mod_update_step'];
-			}
-		}
-
-        // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
-        // solange bis die aktuelle Versionsnummer erreicht wurde
-        if($flag_next_version == false
-        && version_compare($main_version. '.'. $sub_version. '.'. $micro_version , ADMIDIO_VERSION) == -1)
+        // nun in einer Schleife die Update-Scripte fuer alle Versionen zwischen der Alten und Neuen einspielen
+        while($flagNextVersion)
         {
-            if($sub_version == 9)
-            {
-                $main_version  = $main_version + 1;
-                $sub_version   = 0;
-            }
-            else
-            {
-                $sub_version   = $sub_version + 1;
-            }
+            $flagNextVersion = false;
             
-            $micro_version     = 0;
-            $flag_next_version = true;
+            if($mainVersion < 3)
+            {
+                // until version 3 Admidio had sql and php files where the update statements where stored
+                // these files must be excecuted
+            
+                // in der Schleife wird geschaut ob es Scripte fuer eine Microversion (3.Versionsstelle) gibt
+                // Microversion 0 sollte immer vorhanden sein, die anderen in den meisten Faellen nicht
+                for($microVersion = $microVersion; $microVersion < 15; $microVersion++)
+                {
+                    // Update-Datei der naechsten hoeheren Version ermitteln
+                    $sql_file  = 'db_scripts/upd_'. $mainVersion. '_'. $subVersion. '_'. $microVersion. '_db.sql';
+                    $conv_file = 'db_scripts/upd_'. $mainVersion. '_'. $subVersion. '_'. $microVersion. '_conv.php';                
+                    
+                    // output of the version number for better debugging
+                    if($gDebug)
+                    {
+                        error_log('Update to version '.$mainVersion.'.'.$subVersion.'.'.$microVersion);
+                    }
+                    
+                    if(file_exists($sql_file))
+                    {
+                        // SQL-Script abarbeiten
+                        $file    = fopen($sql_file, 'r')
+                                   or showPage($gL10n->get('INS_ERROR_OPEN_FILE', $sql_file), 'update.php', 'back.png', $gL10n->get('SYS_BACK'));
+                        $content = fread($file, filesize($sql_file));
+                        $sql_arr = explode(';', $content);
+                        fclose($file);
+            
+                        foreach($sql_arr as $sql)
+                        {
+                            if(strlen(trim($sql)) > 0)
+                            {
+                                // replace prefix with installation specific table prefix
+                                $sql = str_replace('%PREFIX%', $g_tbl_praefix, $sql);
+                                // now execute update sql
+                                $gDb->query($sql);
+                            }
+                        }
+                        
+                        $flagNextVersion = true;
+                    }
+                    
+                    // now set db specific admidio preferences
+                    $gDb->setDBSpecificAdmidioProperties($mainVersion. '.'. $subVersion. '.'. $microVersion);
+            
+                    if(file_exists($conv_file))
+                    {
+                        // Nun das PHP-Script abarbeiten
+                        include($conv_file);
+                        $flagNextVersion = true;
+                    }
+                }
+
+                // keine Datei mit der Microversion gefunden, dann die Main- oder Subversion hochsetzen,
+                // solange bis die aktuelle Versionsnummer erreicht wurde
+                if($flagNextVersion == false
+                && version_compare($mainVersion. '.'. $subVersion. '.'. $microVersion , ADMIDIO_VERSION) == -1)
+                {
+                    if($subVersion == 4) // we do not have more then 4 subversions with old updater
+                    {
+                        $mainVersion = $mainVersion + 1;
+                        $subVersion  = 0;
+                    }
+                    else
+                    {
+                        $subVersion  = $subVersion + 1;
+                    }
+                    
+                    $microVersion    = 0;
+                    $flagNextVersion = true;
+                }
+            }
         }
+    }
+    
+    // since version 3 we do the update with xml files and a new class model
+    if($mainVersion >= 3)
+    {
+        $updateHandle = new ComponentUpdate($gDb);
+        $updateHandle->setComponent('SYSTEM', 'CORE');
+        $updateHandle->setTargetVersion(ADMIDIO_VERSION);
+        $updateHandle->update();
     }
 
 	if($gDbType == 'mysql')
@@ -270,7 +271,7 @@ elseif($getMode == 2)
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 ';
     $gDb->query($sql);
-    
+    /*
     // nach einem erfolgreichen Update noch die neue Versionsnummer in DB schreiben
     $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. ADMIDIO_VERSION. '\'
              WHERE prf_name    = \'db_version\' ';
@@ -279,7 +280,7 @@ elseif($getMode == 2)
     $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. BETA_VERSION. '\'
              WHERE prf_name    = \'db_version_beta\' ';
     $gDb->query($sql);                
-    
+    */
     // create an installation unique cookie prefix and remove special characters
     $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
     $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');

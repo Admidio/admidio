@@ -10,6 +10,7 @@
 
 drop table if exists %PREFIX%_announcements cascade;
 drop table if exists %PREFIX%_auto_login cascade;
+drop table if exists %PREFIX%_components cascade;
 drop table if exists %PREFIX%_date_role cascade;
 drop table if exists %PREFIX%_dates cascade;
 drop table if exists %PREFIX%_files cascade;

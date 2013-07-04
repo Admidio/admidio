@@ -48,19 +48,19 @@ class DBPostgreSQL extends DBCommon
         return pg_result_seek($result, $rowNumber);
     }   
     
-    // Uebergibt Fehlernummer und Beschreibung an die uebergeordnete Fehlerbehandlung
+    /** Read the last error from the database and call the parent method to display
+     *  this error to the user.
+     *  @param $code    Optional you could set a code that should be displayed to the user.
+     *                  Per default the database error code will be read and displayed.
+     *  @param $message Optional you could set a message that should be displayed to the user.
+     *                  Per default the database error message will be read and displayed.
+     *  @return Will exit the script and returns a html output with the error informations.
+     */
     public function db_error($code = 0, $message = '')
     {
         if($code == 0)
         {
-            if (!$this->connectId)
-            {
-                parent::db_error(0, @pg_last_error());
-            }
-            else
-            {
-                parent::db_error(0, @pg_result_error($this->connectId));
-            }
+            parent::db_error(1, @pg_last_error());
         }
         else
         {
@@ -194,7 +194,7 @@ class DBPostgreSQL extends DBCommon
             error_log($sql);
         }
 		
-        $this->queryResult = pg_query($this->connectId, $sql);
+        $this->queryResult = @pg_query($this->connectId, $sql);
 
         if($this->queryResult == false && $throwError == true)
         {
