@@ -265,7 +265,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             if($getCalendarSelection == 1)
             {
                 // show selectbox with all calendars
-                $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?headline='.$getHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=', 
+                $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $getCatId, 'dates.php?mode='.$getMode.'&headline='.$getHeadline.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&cat_id=', 
                                     $gL10n->get('DAT_CALENDAR'), $gCurrentUser->editDates());
             }
             elseif($gCurrentUser->editDates())
@@ -283,12 +283,10 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png' );
             }
                         
-            // If valid login show print button
-            if($gValidLogin)
-            {
-                $DatesMenu->addItem('admMenuItemPrint', '',
-                                $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')' );
-            }
+            // show print button
+            $DatesMenu->addItem('admMenuItemPrint', '',
+                            $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')' );
+            
 
             if($gCurrentUser->isWebmaster())
             {
@@ -725,7 +723,14 @@ else
     // Get a copy of date results
     $dateElements = $datesResult['dates'];
     // Define options for selectbox
-    $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_PARTICIPANTS'));
+    if($gValidLogin)
+    {
+        $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_PARTICIPANTS'));
+    }
+    else
+    {
+        $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'));
+    }
     
     // define header and footer of the table
     echo' 
@@ -891,87 +896,91 @@ else
             
             echo'</tbody>';
             
-            echo'<tbody id="style2">
-                    <tr>
-                        <th style="text-align: left;">' . $gL10n->get('SYS_START'). '<br />
-                            ' . $gL10n->get('SYS_END'). '</th>
-                        <th style="text-align: left;">' . $gL10n->get('SYS_TIME_FROM'). '<br />
-                            ' . $gL10n->get('SYS_TIME_TO'). '</th>
-                        <th>' . $gL10n->get('DAT_DATE'). '</th>
-                        <th>' . $gL10n->get('SYS_PARTICIPANTS'). '</th>
-                    </tr>';
-                    
-                    $numElement = 1;
-                    foreach($dateElements as $row)
-                    {
-                        //Convert dates to system format
-                        $objDateBegin = new DateTime ($row['dat_begin']);
-                        $dateBegin = $objDateBegin->format($gPreferences['system_date']);
-                        $dateStartTime = $objDateBegin->format($gPreferences['system_time']);
-        
-                        $objDateEnd = new DateTime ($row['dat_end']);
-                        $dateEnd = $objDateEnd->format($gPreferences['system_date']);
-                        $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
-        
-                        // Change colors of each second row for visibilty
-                        // Change css if date is highlighted
-                        if($row['dat_highlight'] != 1)
+            // Participants list only for members
+            if($gValidLogin)
+            {
+                echo'<tbody id="style2">
+                        <tr>
+                            <th style="text-align: left;">' . $gL10n->get('SYS_START'). '<br />
+                                ' . $gL10n->get('SYS_END'). '</th>
+                            <th style="text-align: left;">' . $gL10n->get('SYS_TIME_FROM'). '<br />
+                                ' . $gL10n->get('SYS_TIME_TO'). '</th>
+                            <th>' . $gL10n->get('DAT_DATE'). '</th>
+                            <th>' . $gL10n->get('SYS_PARTICIPANTS'). '</th>
+                        </tr>';
+                        
+                        $numElement = 1;
+                        foreach($dateElements as $row)
                         {
-                            $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
-                        }
-                        else
-                        {
-                            $classValue = (($numElement % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
-                        }
-
-                        echo '<tr class="'.$classValue.'">
-                                <td>' . $dateBegin . '<br />
-                                    ' . $dateEnd . '</td>
-                                <td>' . $dateStartTime . '<br />
-                                    ' . $dateEndTime . '</td>
-                                <td style="text-align: left;">' . $row['dat_headline'] . '</td>
-                                <td>';
+                            //Convert dates to system format
+                            $objDateBegin = new DateTime ($row['dat_begin']);
+                            $dateBegin = $objDateBegin->format($gPreferences['system_date']);
+                            $dateStartTime = $objDateBegin->format($gPreferences['system_time']);
+            
+                            $objDateEnd = new DateTime ($row['dat_end']);
+                            $dateEnd = $objDateEnd->format($gPreferences['system_date']);
+                            $dateEndTime = $objDateEnd->format($gPreferences['system_time']);
+            
+                            // Change colors of each second row for visibilty
+                            // Change css if date is highlighted
+                            if($row['dat_highlight'] != 1)
+                            {
+                                $classValue = (($numElement % 2) == 0) ? 'even' : 'odd';
+                            }
+                            else
+                            {
+                                $classValue = (($numElement % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+                            }
     
-                                        // If date has participation and patricipants are assigned
-                                        if($row['dat_rol_id'] != null && isset($row['dat_num_members'])) 
-                                        {
-                                            echo '<table cellspacing="2" cellpadding="2"><tr>';
-                                            
-                                            // Linebreak after 5 entries
-                                            $memberCount = 1;
-                                            $totalMemberCount = count($memberElements[$row['dat_rol_id']]);
-                                            
-                                            foreach(($memberElements[$row['dat_rol_id']]) as $memberDate)
+                            echo '<tr class="'.$classValue.'">
+                                    <td>' . $dateBegin . '<br />
+                                        ' . $dateEnd . '</td>
+                                    <td>' . $dateStartTime . '<br />
+                                        ' . $dateEndTime . '</td>
+                                    <td style="text-align: left;">' . $row['dat_headline'] . '</td>
+                                    <td>';
+        
+                                            // If date has participation and patricipants are assigned
+                                            if($row['dat_rol_id'] != null && isset($row['dat_num_members']) && $row['dat_num_members']  > 0) 
                                             {
-                                                // If last entry close table row
-                                                if($memberCount < $totalMemberCount)
+                                                echo '<table cellspacing="2" cellpadding="2"><tr>';
+                                                
+                                                // Linebreak after 5 entries
+                                                $memberCount = 1;
+                                                $totalMemberCount = count($memberElements[$row['dat_rol_id']]);
+                                                
+                                                foreach(($memberElements[$row['dat_rol_id']]) as $memberDate)
                                                 {
-                                                    $line_break = (($memberCount % 5) == 0) ? '</td></tr><tr>' : '</td>';
+                                                    // If last entry close table row
+                                                    if($memberCount < $totalMemberCount)
+                                                    {
+                                                        $line_break = (($memberCount % 5) == 0) ? '</td></tr><tr>' : '</td>';
+                                                    }
+                                                    else
+                                                    {   
+                                                        $line_break = '</td></tr>';
+                                                    }
+                                                        
+                                                    // Leaders are shown highlighted
+                                                    if($memberDate['leader'] != 0)
+                                                    {
+                                                        echo '<td style="text-align: left;"><strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';'.$line_break.'';
+                                                    }
+                                                    else
+                                                    {
+                                                            echo '<td style="text-align: left;">', $memberDate['surname'],' ',$memberDate['firstname'],';', $line_break.'';
+                                                    }
+                                                        $memberCount++;
                                                 }
-                                                else
-                                                {   
-                                                    $line_break = '</td></tr>';
-                                                }
-                                                    
-                                                // Leaders are shown highlighted
-                                                if($memberDate['leader'] != 0)
-                                                {
-                                                    echo '<td style="text-align: left;"><strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';'.$line_break.'';
-                                                }
-                                                else
-                                                {
-                                                        echo '<td style="text-align: left;">', $memberDate['surname'],' ',$memberDate['firstname'],';', $line_break.'';
-                                                }
-                                                    $memberCount++;
+                                                
+                                                echo'</table>';
                                             }
                                             
-                                            echo'</table>';
-                                        }
-                                        
-                        echo'</td></tr>';
-                        $numElement++;
-                    }           
-            echo'</tbody>';
+                            echo'</td></tr>';
+                            $numElement++;
+                        }           
+                echo'</tbody>';
+            }
         }
         echo'</table>
             </div>
