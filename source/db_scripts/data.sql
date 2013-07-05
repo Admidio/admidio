@@ -12,8 +12,8 @@ INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org
 --
 
 INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
-(1, 1, 'db_version', '2.4.0'),
-(2, 2, 'db_version', '2.4.0'),
+(1, 1, 'db_version', '2.4.2'),
+(2, 2, 'db_version', '2.4.2'),
 (1000, 1, 'announcements_per_page', '10'),
 (1100, 1, 'ecard_view_width', '250'),
 (1200, 1, 'ecard_view_height', '250'),
@@ -47,6 +47,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (4300, 1, 'enable_weblinks_module', '1'),
 (4310, 1, 'dates_ical_days_past', '60'),
 (4320, 1, 'dates_ical_days_future', '365'),
+(4330, 1, 'dates_viewmode', 'html'),
 (4400, 1, 'dates_per_page', '10'),
 (4500, 1, 'dates_show_calendar_select', '1'),
 (4600, 1, 'dates_show_map_link', '1'),
@@ -162,6 +163,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (43001, 2, 'enable_weblinks_module', '1'),
 (43100, 2, 'dates_ical_days_past', '60'),
 (43200, 2, 'dates_ical_days_future', '365'),
+(43300, 2, 'dates_viewmode', 'html'),
 (44001, 2, 'dates_per_page', '10'),
 (45001, 2, 'dates_show_calendar_select', '1'),
 (46001, 2, 'dates_show_map_link', '1'),
