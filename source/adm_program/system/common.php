@@ -43,6 +43,7 @@ require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/auto_login.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/component.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/exception.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
@@ -127,6 +128,8 @@ if(isset($_SESSION['gCurrentSession']))
 	$gCurrentSession->db  =& $gDb;
 	// reload session data and if neccessary the organization object
 	$gCurrentSession->refreshSession();
+    // read system component
+    $gSystemComponent =& $gCurrentSession->getObject('gSystemComponent');
 	// read language data from session and assign them to the language object
 	$gL10n->addLanguageData($gCurrentSession->getObject('gLanguageData'));
 	// read organization data from session object
@@ -151,6 +154,11 @@ else
 	// create new session object and store it in PHP session
 	$gCurrentSession = new Session($gDb, $gSessionId);
 	$_SESSION['gCurrentSession'] =& $gCurrentSession;
+
+    // create system component
+    $gSystemComponent = new Component($gDb);
+    $gSystemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+    $gCurrentSession->addObject('gSystemComponent', $gSystemComponent);
 	
 	// if cookie ADMIDIO_DATA is set then there could be an auto login
 	// the auto login must be done here because after that the corresponding organization must be set
@@ -295,8 +303,15 @@ else
     $gCurrentSession->addObject('gNavigation', $gNavigation);
 }
 
-// check version of database against version of file system and show notice if not equal
-admFuncCheckDatabaseVersion($gPreferences['db_version'], $gPreferences['db_version_beta'], $gCurrentUser->isWebmaster(), $gPreferences['email_administrator']);
+try
+{
+    // check version of database against version of file system and show notice if not equal
+    $gSystemComponent->checkDatabaseVersion($gCurrentUser->isWebmaster(), $gPreferences['email_administrator']);
+}
+catch(AdmException $e)
+{
+    $e->showHtml();
+} 
 
 // set default homepage
 if($gValidLogin)

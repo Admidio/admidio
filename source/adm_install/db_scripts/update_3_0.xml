@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
-	<step id="10">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version_test', 'db_version_beta_test')</step>
+	<step id="10">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
     <step>stop</step>
 </update>

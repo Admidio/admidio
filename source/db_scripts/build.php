@@ -215,16 +215,25 @@ if($gDbType == 'mysql')
 
 echo 'Installation successful !<br />';
 
-// read installed version
-$sql = 'SELECT prf_value FROM '.$g_tbl_praefix.'_preferences
-         WHERE prf_name   = \'db_version\' 
-           AND prf_org_id = 1';
-$db->query($sql);
-$row  = $db->fetch_array();
+// read installed database version
+if($db->query('SELECT 1 FROM '.TBL_COMPONENTS, false) == false)
+{
+    // in Admidio version 2 the database version was stored in preferences table
+    $sql = 'SELECT prf_value FROM '.$g_tbl_praefix.'_preferences
+             WHERE prf_name   = \'db_version\' 
+               AND prf_org_id = 1';
+    $db->query($sql);
+    $row  = $db->fetch_array();
+    $databaseVersion = $row['prf_value'];
+}
+else
+{
+    $databaseVersion = $gSystemComponent->getValue('com_version');
+}
 
-echo '<p>Database and testdata have the Admidio version '.$row['prf_value'].'.<br />
+echo '<p>Database and testdata have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
- Please make a <a href="../adm_install/update.php">update of your database</a>.</p>
+ Please perform an <a href="../adm_install/update.php">update of your database</a>.</p>
  <p style="font-size: 9pt;">&copy; 2004 - 2013&nbsp;&nbsp;The Admidio team</p>';
 
 ?>

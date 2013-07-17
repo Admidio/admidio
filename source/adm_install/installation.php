@@ -461,7 +461,7 @@ elseif($getMode == 8)	// Start installation
     require_once(SERVER_PATH. '/config.php');
 
     if($g_tbl_praefix != $_SESSION['prefix']
-    || $gDbType     != $_SESSION['db_type']
+    || $gDbType       != $_SESSION['db_type']
     || $g_adm_srv     != $_SESSION['server']
     || $g_adm_usr     != $_SESSION['user']
     || $g_adm_pw      != $_SESSION['password']
@@ -492,6 +492,11 @@ elseif($getMode == 8)	// Start installation
 
     // create default data
 
+    // add system component to database
+    $sql = 'INSERT INTO '.TBL_COMPONENTS.' (com_type, com_name, com_name_intern, com_version, com_beta)
+                                    VALUES (\'SYSTEM\', \'Admidio Core\', \'CORE\', \''.ADMIDIO_VERSION.'\', '.BETA_VERSION.')';
+    $db->query($sql);
+
     // create a hidden system user for internal use
     // all recordsets created by installation will get the create id of the system user
     $gCurrentUser = new TableUsers($db);
@@ -501,7 +506,7 @@ elseif($getMode == 8)	// Start installation
     $gCurrentUser->save(false); // no registered user -> UserIdCreate couldn't be filled
 	$systemUserId = $gCurrentUser->getValue('usr_id');
 
-    // Orga-Uebergreifende Kategorien anlegen
+    // create organization independent categories
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                       VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
@@ -587,13 +592,7 @@ elseif($getMode == 8)	// Start installation
                AND prf_org_id = '. $gCurrentOrganization->getValue('org_id');
     $db->query($sql);
 
-    // Admidio-Versionsnummer schreiben
-    $sql = 'INSERT INTO '. TBL_PREFERENCES. ' (prf_org_id, prf_name, prf_value)
-                                       VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'db_version\',      \''. ADMIDIO_VERSION. '\') 
-                                            , ('. $gCurrentOrganization->getValue('org_id'). ', \'db_version_beta\', \''. BETA_VERSION. '\')';
-    $db->query($sql);
-
-    // Default-Kategorie fuer Rollen und Links eintragen
+    // create default category for roles, events and weblinks
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
                                            VALUES ('. $gCurrentOrganization->getValue('org_id'). ', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
     $db->query($sql);

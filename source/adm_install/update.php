@@ -84,8 +84,38 @@ if(checkVersions($gDb, $message) == false)
 	showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'), 2);
 }
 
-// if version parameter is not set then
-if(isset($gPreferences['db_version']) == false)
+// read current version of Admidio database
+$installedDbVersion     = '';
+$installedDbBetaVersion = '';
+$maxUpdateStep          = 0;
+$currentUpdateStep      = 0;
+
+if($gDb->query('SELECT 1 FROM '.TBL_COMPONENTS, false) == false)
+{
+    // in Admidio version 2 the database version was stored in preferences table
+    if(isset($gPreferences['db_version']))
+    {
+        $installedDbVersion     = $gPreferences['db_version'];
+        $installedDbBetaVersion = $gPreferences['db_version_beta'];
+    }
+}
+else
+{
+    // read system component
+    $componentUpdateHandle = new ComponentUpdate($gDb);
+    $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+    
+    if($componentUpdateHandle->getValue('com_id') > 0)
+    {
+        $installedDbVersion     = $componentUpdateHandle->getValue('com_version');
+        $installedDbBetaVersion = $componentUpdateHandle->getValue('com_beta');
+        $currentUpdateStep      = $componentUpdateHandle->getValue('com_update_step');
+        $maxUpdateStep          = $componentUpdateHandle->getMaxUpdateStep();
+    }
+}
+
+// if databse version is not set then show notice
+if(strlen($installedDbVersion) == 0)
 {
 	$message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
 				<strong>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</strong><br /><br />'.
@@ -98,14 +128,14 @@ if($getMode == 1)
 {
 	// if database version is smaller then source version -> update
 	// if database version is equal to source but beta has a differnce -> update
-    if(version_compare($gPreferences['db_version'], ADMIDIO_VERSION) < 0
-	||(version_compare($gPreferences['db_version'], ADMIDIO_VERSION) == 0 && $gPreferences['db_version_beta'] != BETA_VERSION))
+    if(version_compare($installedDbVersion, ADMIDIO_VERSION) < 0
+	||(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep > $currentUpdateStep))
     {
         $message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
-                    <strong>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $gPreferences['db_version'], ADMIDIO_VERSION).'</strong>';
+                    <strong>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $installedDbVersion, ADMIDIO_VERSION).'</strong>';
     }
 	// if versions are equal > no update
-    elseif(version_compare($gPreferences['db_version'], ADMIDIO_VERSION) == 0 && $gPreferences['db_version_beta'] == BETA_VERSION)
+    elseif(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep == $currentUpdateStep)
     {
         $message = '<img style="vertical-align: top;" src="layout/ok.png" /> 
                     <strong>'.$gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</strong><br /><br />
@@ -117,7 +147,7 @@ if($getMode == 1)
 	{
         $message = '<img style="vertical-align: top;" src="layout/warning.png" /> 
                     <strong>'.$gL10n->get('SYS_ERROR').'</strong><br /><br />
-                    '.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $gPreferences['db_version'], ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+                    '.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $installedDbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
         showPage($message, $g_root_path.'/adm_program/index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'), 2);
 	}
 
@@ -132,17 +162,9 @@ elseif($getMode == 2)
 {
     // Updatescripte fuer die Datenbank verarbeiten
 
-	$currentDatabaseVersion = $gPreferences['db_version'];
-
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
-
-    // vor dem Update die Versionsnummer umsetzen, damit keiner mehr was machen kann
-    /*$temp_version = substr(ADMIDIO_VERSION, 0, 4). 'u';
-    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. $temp_version. '\'
-             WHERE prf_name = \'db_version\' ';
-    $gDb->query($sql);                */
 
     // erst einmal die evtl. neuen Orga-Einstellungen in DB schreiben
     include('db_scripts/preferences.php');
@@ -156,9 +178,9 @@ elseif($getMode == 2)
         $gCurrentOrganization->setPreferences($orga_preferences, false);
     }
 
-    $mainVersion      = substr($currentDatabaseVersion, 0, 1);
-    $subVersion       = substr($currentDatabaseVersion, 2, 1);
-    $microVersion     = substr($currentDatabaseVersion, 4, 1);
+    $mainVersion      = substr($installedDbVersion, 0, 1);
+    $subVersion       = substr($installedDbVersion, 2, 1);
+    $microVersion     = substr($installedDbVersion, 4, 1);
     $microVersion     = $microVersion + 1;
     $flagNextVersion = true;
 
@@ -187,8 +209,8 @@ elseif($getMode == 2)
                 for($microVersion = $microVersion; $microVersion < 15; $microVersion++)
                 {
                     // Update-Datei der naechsten hoeheren Version ermitteln
-                    $sql_file  = 'db_scripts/upd_'. $mainVersion. '_'. $subVersion. '_'. $microVersion. '_db.sql';
-                    $conv_file = 'db_scripts/upd_'. $mainVersion. '_'. $subVersion. '_'. $microVersion. '_conv.php';                
+                    $sqlUpdateFile = 'db_scripts/upd_'. $mainVersion. '_'. $subVersion. '_'. $microVersion. '_db.sql';
+                    $phpUpdateFile = 'db_scripts/upd_'. $mainVersion. '_'. $subVersion. '_'. $microVersion. '_conv.php';                
                     
                     // output of the version number for better debugging
                     if($gDebug)
@@ -196,12 +218,12 @@ elseif($getMode == 2)
                         error_log('Update to version '.$mainVersion.'.'.$subVersion.'.'.$microVersion);
                     }
                     
-                    if(file_exists($sql_file))
+                    if(file_exists($sqlUpdateFile))
                     {
                         // SQL-Script abarbeiten
-                        $file    = fopen($sql_file, 'r')
-                                   or showPage($gL10n->get('INS_ERROR_OPEN_FILE', $sql_file), 'update.php', 'back.png', $gL10n->get('SYS_BACK'));
-                        $content = fread($file, filesize($sql_file));
+                        $file    = fopen($sqlUpdateFile, 'r')
+                                   or showPage($gL10n->get('INS_ERROR_OPEN_FILE', $sqlUpdateFile), 'update.php', 'back.png', $gL10n->get('SYS_BACK'));
+                        $content = fread($file, filesize($sqlUpdateFile));
                         $sql_arr = explode(';', $content);
                         fclose($file);
             
@@ -222,10 +244,10 @@ elseif($getMode == 2)
                     // now set db specific admidio preferences
                     $gDb->setDBSpecificAdmidioProperties($mainVersion. '.'. $subVersion. '.'. $microVersion);
             
-                    if(file_exists($conv_file))
+                    // check if an php update file exists and then execute the script
+                    if(file_exists($phpUpdateFile))
                     {
-                        // Nun das PHP-Script abarbeiten
-                        include($conv_file);
+                        include($phpUpdateFile);
                         $flagNextVersion = true;
                     }
                 }
@@ -255,10 +277,11 @@ elseif($getMode == 2)
     // since version 3 we do the update with xml files and a new class model
     if($mainVersion >= 3)
     {
-        $updateHandle = new ComponentUpdate($gDb);
-        $updateHandle->setComponent('SYSTEM', 'CORE');
-        $updateHandle->setTargetVersion(ADMIDIO_VERSION);
-        $updateHandle->update();
+        // reread component because in version 3.0 the component will be created within the update
+        $componentUpdateHandle = new ComponentUpdate($gDb);
+        $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+        $componentUpdateHandle->setTargetVersion(ADMIDIO_VERSION);
+        $componentUpdateHandle->update();
     }
 
 	if($gDbType == 'mysql')
@@ -271,16 +294,7 @@ elseif($getMode == 2)
     // nach dem Update erst einmal bei Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
     $sql = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 ';
     $gDb->query($sql);
-    /*
-    // nach einem erfolgreichen Update noch die neue Versionsnummer in DB schreiben
-    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. ADMIDIO_VERSION. '\'
-             WHERE prf_name    = \'db_version\' ';
-    $gDb->query($sql);                
 
-    $sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = \''. BETA_VERSION. '\'
-             WHERE prf_name    = \'db_version_beta\' ';
-    $gDb->query($sql);                
-    */
     // create an installation unique cookie prefix and remove special characters
     $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
     $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');

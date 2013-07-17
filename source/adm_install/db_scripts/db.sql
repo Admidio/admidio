@@ -10,6 +10,7 @@
 
 drop table if exists %PREFIX%_announcements cascade;
 drop table if exists %PREFIX%_auto_login cascade;
+drop table if exists %PREFIX%_components cascade;
 drop table if exists %PREFIX%_date_role cascade;
 drop table if exists %PREFIX%_dates cascade;
 drop table if exists %PREFIX%_files cascade;
@@ -96,6 +97,28 @@ create table %PREFIX%_categories
    cat_usr_id_change              integer       unsigned,
    cat_timestamp_change           timestamp 	null default null,
    primary key (cat_id)
+)
+engine = InnoDB
+auto_increment = 1
+default character set = utf8
+collate = utf8_unicode_ci;
+
+
+/*==============================================================*/
+/* Table: adm_components                                         */
+/*==============================================================*/
+
+create table %PREFIX%_components
+(
+	com_id                        integer       unsigned not null AUTO_INCREMENT,
+    com_type                      varchar(10)   not null,
+    com_name                      varchar(255)  not null,
+    com_name_intern               varchar(255)  not null,
+    com_version                   varchar(10)   not null,
+    com_beta                      smallint,
+    com_update_step               integer       not null default 0,
+	com_timestamp_installed       timestamp     not null default CURRENT_TIMESTAMP,
+    primary key (com_id)
 )
 engine = InnoDB
 auto_increment = 1

@@ -426,63 +426,6 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 	return $defaultValue;
 }
 
-/** Check version of database against the Admidio version of the file system.
- *  There will be different messages shown if versions aren't equal. If user has a current
- *  login and is webmaster than there will be links to the next step to do.
- *  @param $dbVersion          Admidio version of the database structure. This should be the format @b 2.3.1
- *  @param $dbVersionBeta      Admidio Beta version that is set in the database. This should be the format @b 1
- *  @param $webmaster          Flag if the current user is a webmaster. This should be 0 or 1
- *  @param $emailAdministrator The email address of the administrator.
- *  @return Nothing will be returned. If the versions aren't equal a message will be shown.
- */
-function admFuncCheckDatabaseVersion($dbVersion, $dbVersionBeta, $webmaster, $emailAdministrator)
-{
-	global $gMessage, $gL10n, $g_root_path;
-
-	if(version_compare($dbVersion, ADMIDIO_VERSION) != 0 || version_compare($dbVersionBeta, BETA_VERSION) != 0)
-	{
-		$arrDbVersion = explode('.', $dbVersion.'.'.$dbVersionBeta);
-		$arrFileSystemVersion = explode('.', ADMIDIO_VERSION.'.'.BETA_VERSION);
-		
-		if($webmaster == true)
-		{
-			// if webmaster and db version is less than file system version then show notice
-			if($arrDbVersion[0] < $arrFileSystemVersion[0]
-			|| $arrDbVersion[1] < $arrFileSystemVersion[1]
-			|| $arrDbVersion[2] < $arrFileSystemVersion[2]
-			|| $arrDbVersion[3] < $arrFileSystemVersion[3])
-			{
-				$gMessage->show($gL10n->get('SYS_WEBMASTER_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION, '<a href="'.$g_root_path.'/adm_install/update.php">', '</a>'));
-			}
-			// if webmaster and file system version is less than db version then show notice
-			elseif($arrDbVersion[0] > $arrFileSystemVersion[0]
-			    || $arrDbVersion[1] > $arrFileSystemVersion[1]
-			    || $arrDbVersion[2] > $arrFileSystemVersion[2]
-			    || $arrDbVersion[3] > $arrFileSystemVersion[3])
-			{
-				$gMessage->show($gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $dbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>'));
-			}
-		}
-		else
-		{
-			// if main version and subversion not equal then show notice
-			if($arrDbVersion[0] != $arrFileSystemVersion[0]
-			|| $arrDbVersion[1] != $arrFileSystemVersion[1])
-			{
-				$gMessage->show($gL10n->get('SYS_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION, '<a href="mailto:'.$emailAdministrator.'">', '</a>'));
-			}
-			// if main version and subversion are equal 
-			// but subsub db version is less then subsub file version show notice
-			elseif($arrDbVersion[0] == $arrFileSystemVersion[0]
-			&&     $arrDbVersion[1] == $arrFileSystemVersion[1]
-			&&     $arrDbVersion[2]  < $arrFileSystemVersion[2])
-			{
-				$gMessage->show($gL10n->get('SYS_DATABASE_INVALID', $dbVersion, ADMIDIO_VERSION, '<a href="mailto:'.$emailAdministrator.'">', '</a>'));
-			}
-		}
-	}
-}
-
 /** Creates a html fragment with information about user and time when the recordset was created
  *  and when it was at last edited. Therefore all neccessary data must be set in the function
  *  parameters. If userid is not set then the function will show @b deleted @b user.
