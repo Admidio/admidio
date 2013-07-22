@@ -19,6 +19,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/html_table.php');
 require_once('../../system/classes/image.php');
 require_once('../../system/classes/my_files.php');
 
@@ -272,18 +273,18 @@ elseif($getJob == 'upload')
     echo '
     <div class="formLayout" id="profile_photo_after_upload_form">
         <div class="formHead">'.$headline.'</div>
-        <div class="formBody">
-            <table style="border: none; width: 100%; padding: 5px;">
-                <tr style="text-align: center;">
-                    <td>'.$gL10n->get('PRO_CURRENT_PICTURE').':</td>
-                    <td>'.$gL10n->get('PRO_NEW_PICTURE').':</td>
-                </tr>
-                <tr style="text-align: center;">
-                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" /></td>
-                    <td><img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" /></td>
-                </tr>
-            </table>
-
+        <div class="formBody">';
+            $table = new HtmlTable();
+            $table->addAttribute('style', 'border: none; width: 100%; padding: 5px;');
+            $table->addRow('', 'style', 'text-align: center;');
+            $table->addColumn($gL10n->get('PRO_CURRENT_PICTURE'));
+            $table->addColumn($gL10n->get('PRO_NEW_PICTURE'));
+            $table->addRow('', 'style', 'text-align: center;');
+            $table->addColumn('<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" /></td>');
+            $table->addColumn('<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" /></td>');
+                
+            echo $table->getHtmlTable();
+            echo'
             <hr />
             
             <div class="formSubmit">

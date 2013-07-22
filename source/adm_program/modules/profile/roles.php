@@ -20,6 +20,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/html_table.php');
 require_once('../../system/classes/table_roles.php');
 
 // Initialize and check the parameters
@@ -56,6 +57,16 @@ $gLayout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_p
     var profileJS = new profileJSClass();
 	profileJS.init();
 </script>';
+// Create table
+$table = new HtmlTable('', 'tableList');
+$table->addAttribute('cellspacing', '0');
+$table->addTableHeader();
+$table->addRow();
+$table->addColumn('&nbsp;', '', '', 'th');
+$table->addColumn($gL10n->get('ROL_ROLE'), '', '', 'th');
+$table->addColumn($gL10n->get('SYS_DESCRIPTION'), '', '', 'th');
+$table->addColumn($gL10n->get('SYS_LEADER'), '', '', 'th');
+
 if($getInline == 0)
 {
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
@@ -68,169 +79,149 @@ else
 echo '
 <h1 class="moduleHeadline">'. $gLayout['title']. '</h1>
 
-<form id="rolesForm" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">
-    <table class="tableList" cellspacing="0">
-        <thead>
-            <tr>
-                <th>&nbsp;</th>
-                <th>'.$gL10n->get('ROL_ROLE').'</th>
-                <th>'.$gL10n->get('SYS_DESCRIPTION').'</th>
-                <th>'.$gL10n->get('SYS_LEADER').'</th>
-            </tr>
-        </thead>';
+<form id="rolesForm" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
 
-        if($gCurrentUser->assignRoles())
-        {
-            // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
-            $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights, 
-			                  mem_rol_id, mem_usr_id, mem_leader
-                         FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                         LEFT JOIN '. TBL_MEMBERS. '
-                           ON rol_id      = mem_rol_id
-                          AND mem_usr_id  = '.$getUserId.'
-                          AND mem_begin  <= \''.DATE_NOW.'\'
-                          AND mem_end     > \''.DATE_NOW.'\'
-                        WHERE rol_valid   = 1
-                          AND rol_visible = 1
-                          AND rol_cat_id  = cat_id
-                          AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-                              OR cat_org_id IS NULL )
-                        ORDER BY cat_sequence, cat_id, rol_name';
-        }
-        else
-        {
-            // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-            $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
-                              mgl.mem_rol_id as mem_rol_id, mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
-                         FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
-                         LEFT JOIN '. TBL_MEMBERS. ' mgl
-                           ON rol_id         = mgl.mem_rol_id
-                          AND mgl.mem_usr_id = '.$getUserId.'
-                          AND mgl.mem_begin <= \''.DATE_NOW.'\'
-                          AND mgl.mem_end    > \''.DATE_NOW.'\'
-                        WHERE bm.mem_usr_id  = '. $gCurrentUser->getValue('usr_id'). '
-                          AND bm.mem_begin  <= \''.DATE_NOW.'\'
-                          AND bm.mem_end     > \''.DATE_NOW.'\'
-                          AND bm.mem_leader  = 1
-                          AND rol_id         = bm.mem_rol_id
-						  AND rol_leader_rights IN ('.ROLE_LEADER_MEMBERS_ASSIGN.','.ROLE_LEADER_MEMBERS_ASSIGN_EDIT.')
-                          AND rol_valid      = 1
-                          AND rol_visible    = 1
-                          AND rol_cat_id     = cat_id
-                          AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                              OR cat_org_id IS NULL )
-                        ORDER BY cat_sequence, cat_id, rol_name';
-        }
-        $result   = $gDb->query($sql);
-        $category = '';
-		$role     = new TableRoles($gDb);
+if($gCurrentUser->assignRoles())
+{
+    // Benutzer mit Rollenrechten darf ALLE Rollen zuordnen
+    $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights, 
+			            mem_rol_id, mem_usr_id, mem_leader
+                    FROM '. TBL_CATEGORIES. ', '. TBL_ROLES. '
+                    LEFT JOIN '. TBL_MEMBERS. '
+                    ON rol_id      = mem_rol_id
+                    AND mem_usr_id  = '.$getUserId.'
+                    AND mem_begin  <= \''.DATE_NOW.'\'
+                    AND mem_end     > \''.DATE_NOW.'\'
+                WHERE rol_valid   = 1
+                    AND rol_visible = 1
+                    AND rol_cat_id  = cat_id
+                    AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                        OR cat_org_id IS NULL )
+                ORDER BY cat_sequence, cat_id, rol_name';
+}
+else
+{
+    // Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
+    $sql    = 'SELECT cat_id, cat_name, rol_name, rol_description, rol_id, rol_visible, rol_leader_rights,
+                        mgl.mem_rol_id as mem_rol_id, mgl.mem_usr_id as mem_usr_id, mgl.mem_leader as mem_leader
+                    FROM '. TBL_MEMBERS. ' bm, '. TBL_CATEGORIES. ', '. TBL_ROLES. '
+                    LEFT JOIN '. TBL_MEMBERS. ' mgl
+                    ON rol_id         = mgl.mem_rol_id
+                    AND mgl.mem_usr_id = '.$getUserId.'
+                    AND mgl.mem_begin <= \''.DATE_NOW.'\'
+                    AND mgl.mem_end    > \''.DATE_NOW.'\'
+                WHERE bm.mem_usr_id  = '. $gCurrentUser->getValue('usr_id'). '
+                    AND bm.mem_begin  <= \''.DATE_NOW.'\'
+                    AND bm.mem_end     > \''.DATE_NOW.'\'
+                    AND bm.mem_leader  = 1
+                    AND rol_id         = bm.mem_rol_id
+					AND rol_leader_rights IN ('.ROLE_LEADER_MEMBERS_ASSIGN.','.ROLE_LEADER_MEMBERS_ASSIGN_EDIT.')
+                    AND rol_valid      = 1
+                    AND rol_visible    = 1
+                    AND rol_cat_id     = cat_id
+                    AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                        OR cat_org_id IS NULL )
+                ORDER BY cat_sequence, cat_id, rol_name';
+}
+$result   = $gDb->query($sql);
+$category = '';
+$role     = new TableRoles($gDb);
 
-        while($row = $gDb->fetch_array($result))
-        {
-			$memberChecked  = '';
-			$memberDisabled = '';
-			$leaderChecked  = '';
-			$leaderDisabled = '';
-			$role->setArray($row);
+while($row = $gDb->fetch_array($result))
+{
+	$memberChecked  = '';
+	$memberDisabled = '';
+	$leaderChecked  = '';
+	$leaderDisabled = '';
+	$role->setArray($row);
 
-            if($role->getValue('rol_visible') == 1)
-            {
-				// if user is assigned to this role 
-				// or if user is created in members.php of list module 
-				if($row['mem_usr_id'] > 0 || $role->getValue('rol_id') == $setRoleId)
-				{
-					$memberChecked = ' checked="checked" ';
-				}
+    if($role->getValue('rol_visible') == 1)
+    {
+		// if user is assigned to this role 
+		// or if user is created in members.php of list module 
+		if($row['mem_usr_id'] > 0 || $role->getValue('rol_id') == $setRoleId)
+		{
+			$memberChecked = ' checked="checked" ';
+		}
 
-				// if role is webmaster than only webmaster can add new user, 
-				// but don't change their own membership, because there must be at least one webmaster
-				if($role->getValue('rol_webmaster') == 1
-				&& (  !$gCurrentUser->isWebmaster()
-				   || ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue('usr_id'))))
-				{
-					$memberDisabled = ' disabled="disabled" ';
-				}
+		// if role is webmaster than only webmaster can add new user, 
+		// but don't change their own membership, because there must be at least one webmaster
+		if($role->getValue('rol_webmaster') == 1
+		&& (  !$gCurrentUser->isWebmaster()
+		|| ($gCurrentUser->isWebmaster() && $getUserId == $gCurrentUser->getValue('usr_id'))))
+		{
+			$memberDisabled = ' disabled="disabled" ';
+		}
 				
-				// if user is flagged as leader than check the ckeckbox ;)
-				if($row['mem_leader'] > 0)
-				{
-					$leaderChecked = ' checked="checked" ';
-				}
+		// if user is flagged as leader than check the ckeckbox ;)
+		if($row['mem_leader'] > 0)
+		{
+			$leaderChecked = ' checked="checked" ';
+		}
 
-				// the leader of webmaster role can only be set by a webmaster
-				if($role->getValue('rol_webmaster') == 1 && !$gCurrentUser->isWebmaster())
-				{
-					$leaderDisabled = ' disabled="disabled" ';
-				}
+		// the leader of webmaster role can only be set by a webmaster
+		if($role->getValue('rol_webmaster') == 1 && !$gCurrentUser->isWebmaster())
+		{
+			$leaderDisabled = ' disabled="disabled" ';
+		}
 
-				// if new category than display a category header
-                if($category != $role->getValue('cat_id'))
-                {
-                    if(strlen($category) > 0)
-                    {
-                        echo '</tbody>';
-                    }
-                    $block_id = 'admCategory'.$role->getValue('cat_id');
-                    echo '<tbody>
-                        <tr>
-                            <td class="tableSubHeader" colspan="4">
-                                <a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\');"><img
-                                id="'.$block_id.'Image" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name').'
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody id="'.$block_id.'">';
+		// if new category than display a category header
+        if($category != $role->getValue('cat_id'))
+        {
+            $block_id = 'admCategory'.$role->getValue('cat_id');
+            $table->addTableBody();
+            $table->addRow();
+            $table->addColumn('', 'class', 'tableSubHeader');
+            $table->addAttribute('colspan', '4', 'td');
+            $table->addData('<a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\');"><img
+                                id="'.$block_id.'Image" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name'));
+            $table->addTableBody('id', $block_id);
     
-                    $category = $role->getValue('cat_id');
-                }
-                echo '
-				<tr class="tableMouseOver">
-					<td style="text-align: center;">
-						<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
-							$memberChecked.$memberDisabled.' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />
-					</td>
-					<td><label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label></td>
-					<td>'.$role->getValue('rol_description').'</td>
-					<td>
-						<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
-							$leaderChecked.$leaderDisabled.' onclick="javascript:profileJS.markLeader(this);" value="1" />';
-
-						// show icon that leaders have no additional rights
-						if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
-						{
-							echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/info.png"
-							alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
-							<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-						}
-
-						// show icon with edit user right if leader has this right
-						if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
-						|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-						{
-							echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
-							alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
-						}
-
-						// show icon with assign role right if leader has this right
-						if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
-						|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-						{
-							echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
-							alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
-						}
-						
-						// show dummy icon if leader has not all rights
-						if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-						{
-							echo '<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-						}
-					echo '</td>
-                </tr>';
-            }
+            $category = $role->getValue('cat_id');
         }
-        echo '</tbody>
-    </table>
+        $table->addRow('', 'class', 'tableMouseOver');
+        $table->addColumn('<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
+					        $memberChecked.$memberDisabled.' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />', 'style', 'text-align: center;');
+        $table->addColumn('<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>');
+        $table->addColumn($role->getValue('rol_description'));
 
+		$leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
+					       $leaderChecked.$leaderDisabled.' onclick="javascript:profileJS.markLeader(this);" value="1" />';
+
+		// show icon that leaders have no additional rights
+		if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
+		{
+			$leaderRights .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/info.png"
+							     alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
+							         <img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		}
+
+		// show icon with edit user right if leader has this right
+		if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
+		|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+		{
+		    $leaderRights .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
+							     alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+		}
+
+		// show icon with assign role right if leader has this right
+		if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
+		|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+		{
+			$leaderRights .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
+							     alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+		}
+						
+		// show dummy icon if leader has not all rights
+		if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+		{
+			$leaderRights .= '<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		}
+    	$table->addColumn($leaderRights);
+    }
+}
+echo $table->getHtmlTable();
+echo'
     <div class="formSubmit">
         <button id="btnSave" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
     </div>';

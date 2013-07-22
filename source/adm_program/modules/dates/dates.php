@@ -284,12 +284,10 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png' );
             }
 
-            // If valid login show print button
-            if($gValidLogin)
-            {
-                $DatesMenu->addItem('admMenuItemPrint', '',
+            // show print button
+            $DatesMenu->addItem('admMenuItemPrint', '',
                                 $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getDateFrom().'&date_to='.$dates->getDateTo().'&view_mode=print\', \'_blank\')' );
-            }
+
 
             if($gCurrentUser->isWebmaster())
             {
@@ -346,22 +344,17 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         // Output table header for compact view
         if ($getViewMode == 'compact')
         {
-            $compactTable = new htmlTable();
-            $compactTable->setAttribute('class', 'tableList', 'table')
-                         ->setAttribute('style', 'width: 100%;', 'table')
-                         ->setAttribute('cellspacing', '0', 'table')
-                         ->setElement('thead')
-                         ->setElement('tr')
-                         ->setElement('th', '&nbsp;')
-                         ->setElement('th')
-                         ->setAttribute('colspan', '2', 'th')
-                         ->setData($gL10n->get('SYS_START'))
-                         ->setElement('th', $gL10n->get('DAT_DATE'))
-                         ->setElement('th')
-                         ->setAttribute('colspan', '2', 'th')
-                         ->setData($gL10n->get('SYS_PARTICIPANTS'))
-                         ->setElement('th', $gL10n->get('DAT_LOCATION'))
-                         ->setElement('tbody');
+            $compactTable = new htmlTable('', 'tableList');
+            $compactTable->addAttribute('style', 'width: 100%;', 'table');
+            $compactTable->addAttribute('cellspacing', '0', 'table');
+            $compactTable->addTableHeader();
+            $compactTable->addRow();
+            $compactTable->addColumn('&nbsp;', '', '', 'th');
+            $compactTable->addColumn($gL10n->get('SYS_START'), 'colspan', '2', 'th');
+            $compactTable->addColumn($gL10n->get('DAT_DATE'), '', '', 'th');
+            $compactTable->addColumn($gL10n->get('SYS_PARTICIPANTS'), 'colspan', '2', 'th');
+            $compactTable->addColumn($gL10n->get('DAT_LOCATION'));
+            $compactTable->addTableBody();
         }
         foreach($datesResult['dates'] as $row)
         {
@@ -590,21 +583,17 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 // Output of elements
                 // always 2 then line break
                 $eventDetails = new htmlTable();
-                $eventDetails->setAttribute('style', 'width: 100%,')
-                             ->setAttribute('border-width', '0px;');
+                $eventDetails->addAttribute('style', 'width: 100%,');
+                $eventDetails->addAttribute('border-width', '0px;');
 
                 foreach($dateElements as $element)
                 {
                     if($firstElement)
                     {
-                        $eventDetails->setElement('tr');
+                        $eventDetails->addRow();
                     }
-                    $eventDetails->setElement('td')
-                                 ->setAttribute('style', 'width: 15%;')
-                                 ->setData($element[0].':')
-                                 ->setElement('td')
-                                 ->setAttribute('style', 'width: 35%;')
-                                 ->setData($element[1]);
+                    $eventDetails->addColumn($element[0].':', 'style', 'width: 15%;');
+                    $eventDetails->addColumn($element[1], 'style', 'width: 35%;');
 
                     if($firstElement)
                     {
@@ -681,17 +670,14 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 }
 
 
-                $compactTable->setElement('tr')
-                             ->setAttribute('class', 'tableMouseOver')
-                             ->setElement('td', $registerIcon)
-                             ->setElement('td', $dateBegin)
-                             ->setElement('td', $timeBegin)
-                             ->setElement('td')
-                             ->setAttribute('style', 'font-weight:'. $cssWeight .'')
-                             ->setData('<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>')
-                             ->setElement('td', ($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers)
-                             ->setElement('td', ($leadersHtml+$numMembers > 0 ? $participantIcon : '&nbsp;'))
-                             ->setElement('td', $locationHtml);
+                $compactTable->addRow('', 'class', 'tableMouseOver');
+                $compactTable->addColumn($registerIcon);
+                $compactTable->addColumn($dateBegin);
+                $compactTable->addColumn($timeBegin);
+                $compactTable->addColumn('<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>', 'style', 'font-weight:'. $cssWeight .'');
+                $compactTable->addColumn(($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers);
+                $compactTable->addColumn(($leadersHtml+$numMembers > 0 ? $participantIcon : '&nbsp;'));
+                $compactTable->addColumn($locationHtml);
             }
         }  // End foreach
 
@@ -714,11 +700,21 @@ else
     // create print output in a new window and set view_mode back to default 'html' for back navigation in main window
     $gNavigation->addUrl($g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat);
 
+    $tableDatePrint = '';
+    
     $calendar = new TableCategory($gDb, $getCatId);
     // Get a copy of date results
     $dateElements = $datesResult['dates'];
     // Define options for selectbox
-    $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_PARTICIPANTS'));
+    if($gValidLogin)
+    {
+        $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'), $gL10n->get('SYS_PARTICIPANTS'));
+    }
+    else
+    {
+        $selectBoxEntries = array($gL10n->get('SYS_OVERVIEW'), $gL10n->get('SYS_DESCRIPTION'));
+    }
+    
     // Define header and footer content for the html table
     $tableHead = '<h1>'. $gCurrentOrganization->getValue('org_longname'). ' - ' .$gL10n->get('DAT_DATES'). ' ' . $calendar->getValue('cat_name') . '</h1>
                     <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$dateFromSystemFormat. ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$dateToSystemFormat.
@@ -803,11 +799,10 @@ else
         // If date has participation and patricipants are assigned
         if($row['dat_rol_id'] != null && isset($row['dat_num_members']))
         {
-            $dateParticipation = new htmlTable();
-            $dateParticipation->setAttribute('class', 'dateParticipation', 'table')
-                              ->setAttribute('cellspacing', '2', 'table')
-                              ->setAttribute('cellpadding', '2', 'table')
-                              ->setElement('tr');
+            $dateParticipation = new htmlTable('', 'dateParticipation');
+            $dateParticipation->addAttribute('cellspacing', '2', 'table');
+            $dateParticipation->addAttribute('cellpadding', '2', 'table');
+            $dateParticipation->addRow();
             // Linebreak after 5 entries
             $memberCount = 1;
             $totalMemberCount = count($memberElements[$row['dat_rol_id']]);
@@ -817,19 +812,19 @@ else
                 // If last entry close table row
                 if($memberCount < $totalMemberCount)
                 {
-                    $line_break = (($memberCount % 6) == 0) ? 'tr' : 'td';
-                    $dateParticipation->setElement($line_break);
+                    if(($memberCount % 6) == 0)
+                    {
+                        $dateParticipation->addRow();
+                    }
                 }
                 // Leaders are shown highlighted
                 if($memberDate['leader'] != 0)
                 {
-                    $dateParticipation->setAttribute('class', 'left', 'td')
-                                      ->setData('<strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';');
+                    $dateParticipation->addColumn('<strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';', 'class', 'left', 'td');
                 }
                 else
                 {
-                    $dateParticipation->setAttribute('class', 'left', 'td')
-                                      ->setData($memberDate['surname'].' '.$memberDate['firstname'].';');
+                    $dateParticipation->addColumn($memberDate['surname'].' '.$memberDate['firstname'].';', 'class', 'left', 'td');
                 }
                 $memberCount++;
             }
@@ -873,45 +868,40 @@ else
     }  // end foreach
 
     // Create table object
-    $datePrint = new htmlTable();
-    $datePrint->setAttribute('id', 'PrintViewDates', 'table')
-              ->setAttribute('class', 'tableDateList', 'table')
-              ->setAttribute('border', '1', 'table')
-              ->setAttribute('cellpadding', '3', 'table')
-              ->setAttribute('summary', 'Printview of dates', 'table');
+    $datePrint = new htmlTable('PrintViewDates', 'tableDateList', 1);
+    $datePrint->addAttribute('cellpadding', '3', 'table');
+    $datePrint->addAttribute('summary', 'Printview of dates', 'table');
     // Define thead
-    $datePrint->setElement('thead')
-              ->setElement('tr')
-              ->setElement('td')
-              ->setAttribute('colspan', '10', 'td')
-              ->setData($tableHead);
+    $datePrint->addTableHeader();
+    $datePrint->addRow();
+    $datePrint->addColumn($tableHead, 'colspan', '10', 'td');
     // Define tfoot
-    $datePrint->setElement('tfoot')
-              ->setElement('tr')
-              ->setElement('td')
-              ->setAttribute('colspan', '9', 'td')
-              ->setAttribute('style', 'text-align: right;', 'td')
-              ->setData($tableFooter);
+    $datePrint->addTableFooter();
+    $datePrint->addRow();
+    $datePrint->addColumn();
+    $datePrint->addAttribute('colspan', '9', 'td');
+    $datePrint->addAttribute('style', 'text-align: right;', 'td');
+    $datePrint->addData($tableFooter);
 
     // Define tbody
-    $datePrint->setElement('tbody')
-              ->setAttribute('id', 'style0', 'tbody')
-              ->setElement('th', $bodyHeadline_1);
+    $datePrint->addTableBody('id', 'style0', $bodyHeadline_1, 'th');
+
     if(count($dateElements) == 0)
     {
+        $datePrint->addRow();
         // No events found
         if($getDateId > 0)
         {
-            $datePrint->setElement('tr', $gL10n->get('SYS_NO_ENTRY'));
+            $datePrint->addColumn($gL10n->get('SYS_NO_ENTRY'), 'colspan', '9');
         }
         else
-        {
-            $datePrint->setElement('tr', $gL10n->get('SYS_NO_ENTRIES'));
+        {   
+            $datePrint->addColumn($gL10n->get('SYS_NO_ENTRIES'), 'colspan', '9');
         }
     }
     else
     {
-        // Write first body content
+        // Define first body content
         $numDateElements = 1;
         foreach($body_1 as $row)
         {
@@ -923,16 +913,13 @@ else
             {
                 $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
             }
-            $datePrint->setElement('tr')
-                      ->setAttribute('class', $className)
-                      ->setData($row['dat_details']);
+            
+            $datePrint->addRow($row['dat_details'], 'class', $className);
             $numDateElements ++;
         }
 
-        // Write second body content
-        $datePrint->setElement('tbody')
-                  ->setAttribute('id', 'style1')
-                  ->setElement('th', $bodyHeadline_2);
+        // Define second body content
+        $datePrint->addTableBody('id', 'style1', $bodyHeadline_2, 'th');
         $numDateElements = 1;
         foreach($body_2 as $row)
         {
@@ -944,35 +931,35 @@ else
             {
                 $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
             }
-            $datePrint->setElement('tr')
-                      ->setAttribute('class', $className)
-                      ->setData($row['dat_details']);
+            $datePrint->addRow($row['dat_details'], 'class', $className);
             $numDateElements ++;
         }
 
-        // Write third body content
-        $datePrint->setElement('tbody')
-                  ->setAttribute('id', 'style2')
-                  ->setElement('th', $bodyHeadline_3);;
-        $numDateElements = 1;
-        foreach($body_3 as $row)
+        // Define third body content for members only
+        if($gValidLogin)
         {
-            if($row['dat_highlight'] != 1)
+            $datePrint->addTableBody('id', 'style2', $bodyHeadline_3, 'th');
+    
+            $numDateElements = 1;
+            foreach($body_3 as $row)
             {
-                $className = (($numDateElements % 2) == 0) ? 'even' : 'odd';
+                if($row['dat_highlight'] != 1)
+                {
+                    $className = (($numDateElements % 2) == 0) ? 'even' : 'odd';
+                }
+                else
+                {
+                    $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
+                }
+                
+                $datePrint->addRow($row['dat_details'], 'class', $className);
+                $numDateElements ++;
             }
-            else
-            {
-                $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
-            }
-            $datePrint->setElement('tr')
-                      ->setAttribute('class', $className)
-                      ->setData($row['dat_details']);
-            $numDateElements ++;
         }
-        // Create table
-        $tableDatePrint = $datePrint->getHtmlTable();
     }
+    // Create table
+    $tableDatePrint = $datePrint->getHtmlTable();
+    
 echo'
     <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
     <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">

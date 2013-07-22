@@ -15,6 +15,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/html_table.php');
 require_once('../../system/classes/table_roles.php');
 require_once('roles_functions.php');
 
@@ -356,33 +357,35 @@ echo '
 
                 echo '
                 <div id="admProfilePhoto" class="groupBox">
-                    <div class="groupBoxBody" style="text-align: center;">
-                        <table width="100%" summary="Profilfoto" border="0" style="border:0px;" cellpadding="0" cellspacing="0" rules="none">
-                            <tr>
-                                <td>
-                                	<img id="profile_picture" src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />
-                                </td>
-                            </tr>';
-                             // Nur berechtigte User duerfen das Profilfoto editieren
-                            if($gCurrentUser->editProfile($user) == true)
-                            {
-                                echo '
-                                <tr>
-                                    <td align="center">
-                                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
+                    <div class="groupBoxBody" style="text-align: center;">';
+                        
+                        $table = new HtmlTable('', '', '0');
+                        $table->addAttribute('width', '100%');
+                        $table->addAttribute('summary', 'Profilfoto');
+                        $table->addAttribute('style', 'border:0px;');
+                        $table->addAttribute('cellpadding', '0');
+                        $table->addAttribute('cellspacing', '0');
+                        $table->addAttribute('rules', 'none');
+                        $table->addRow('<img id="profile_picture" src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+
+                        // Nur berechtigte User duerfen das Profilfoto editieren
+                        if($gCurrentUser->editProfile($user) == true)
+                        {
+                            $picture = '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
                                             src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /></a>';
-                                    //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
-                                    if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
-                                    	|| file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
-                                    {
-                                        echo '<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
-                                            '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
-                                            alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>';
-                                    }
-                                echo '</td>
-                                </tr>';
+                            //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
+                            if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
+                                || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
+                            {
+                                $picture .= '<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
+                                                '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
+                                                alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>';
                             }
-                        echo '</table>
+                            $table->addRow();
+                            $table->addColumn($picture, 'align', 'center;');
+                        }
+                        echo $table->getHtmlTable();
+                echo'    
                     </div>
                 </div>
             </div>

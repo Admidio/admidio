@@ -19,6 +19,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/html_table.php');
 
 // Initialize and check the parameters
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
@@ -192,43 +193,43 @@ echo '
 			
 		<input type="button" onclick="send()" value="OK"> 
 	</form> 
-</div>
+</div>';
 
-<table class="tableList" cellspacing="0">
-    <thead>
-        <tr>';
-			if($getUserId == 0)
-			{
-				echo '<th>'.$gL10n->get('SYS_NAME').'</th>';
-			}
-            echo '
-			<th>'.$gL10n->get('SYS_FIELD').'</th>
-            <th>'.$gL10n->get('SYS_NEW_VALUE').'</th>
-            <th>'.$gL10n->get('SYS_PREVIOUS_VALUE').'</th>
-            <th>'.$gL10n->get('SYS_EDITED_BY').'</th>
-            <th>'.$gL10n->get('SYS_CHANGED_AT').'</th>
-        </tr>
-    </thead>';
+$table = new HtmlTable('', 'tableList');
+$table->addAttribute('cellspacing', '0');
+$table->addTableHeader();
+$table->addRow();
+
+if($getUserId == 0)
+{
+    $table->addColumn($gL10n->get('SYS_NAME'), '', '', 'th');
+}
+
+$table->addColumn($gL10n->get('SYS_FIELD'), '', '', 'th');
+$table->addColumn($gL10n->get('SYS_NEW_VALUE'), '', '', 'th');
+$table->addColumn($gL10n->get('SYS_PREVIOUS_VALUE'), '', '', 'th');
+$table->addColumn($gL10n->get('SYS_EDITED_BY'), '', '', 'th');
+$table->addColumn($gL10n->get('SYS_CHANGED_AT'), '', '', 'th');         
+$table->addTableBody();			
+
+while($row = $gDb->fetch_array($result))
+{
+	$timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
+
+	$table->addRow('', 'class', 'tableMouseOver');
 	
-    while($row = $gDb->fetch_array($result))
-    {
-		$timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
-
-		echo '
-		<tr class="tableMouseOver">';
-			if($getUserId == 0)
-			{
-				echo '<td>'.$row['last_name'].', '.$row['first_name'].'</td>';
-			}
-			echo '
-            <td>'.$gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name').'</td>
-            <td>'.$row['usl_value_new'].'</td>
-            <td>'.$row['usl_value_old'].'</td>
-            <td>'.$row['create_last_name'].', '.$row['create_first_name'].'</td>
-            <td>'.$timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</td>
-		</tr>';
+	if($getUserId == 0)
+	{
+        $table->addColumn($row['last_name'].', '.$row['first_name']);
 	}
-echo '</table>';
+	
+	$table->addColumn($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name'));
+	$table->addColumn($row['usl_value_new']);
+	$table->addColumn($row['usl_value_old']);
+	$table->addColumn($row['create_last_name'].', '.$row['create_first_name']);
+	$table->addColumn($timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']));
+}
+echo $table->getHtmlTable();
 
 // If neccessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/administration/members/profile_field_history.php?start='.$getStart.'&usr_id='.$getUserId.'&date_from='.$getDateFrom.'&date_to='.$getDateTo;

@@ -19,6 +19,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/module_menu.php');
+require_once('../../system/classes/html_table.php');
 unset($_SESSION['import_request']);
 
 // if search field was used then transform the POST parameter into a GET parameter
@@ -318,125 +319,137 @@ echo '</div>';
 
 if($membersCount > 0)
 {
-    echo '<table class="tableList" cellspacing="0">
-        <thead>
-            <tr>
-                <th>'.$gL10n->get('SYS_ABR_NO').'</th>
-                <th><img class="iconInformation"
-                    src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-                    title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" /></th>
-                <th>'.$gL10n->get('SYS_NAME').'</th>
-                <th><img class="iconInformation"
-                    src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" /></th>
-                <th><img class="iconInformation"
-                    src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$gL10n->get('SYS_WEBSITE').'" title="'.$gL10n->get('SYS_WEBSITE').'" /></th>
-                <th>'.$gL10n->get('SYS_USER').'</th>
-                <th>'.$gL10n->get('MEM_UPDATED_ON').'</th>
-                <th style="text-align: center;">'.$gL10n->get('SYS_FEATURES').'</th>
-            </tr>
-        </thead>';
+    $tableMembers = new HtmlTable('', 'tableList');
+    $tableMembers->addAttribute('cellspacing', '0', 'table');
+    $tableMembers->addTableHeader();
+    $tableMembers->addRow();
+    $tableMembers->addColumn($gL10n->get('SYS_ABR_NO'), '', '', 'th');
+    $tableMembers->addColumn('<img class="iconInformation"
+                                src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
+                                title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />', '', '', 'th');
+    $tableMembers->addColumn($gL10n->get('SYS_NAME'), '', '', 'th');
+    $tableMembers->addColumn('<img class="iconInformation"
+                                src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />', '', '', 'th');
+    $tableMembers->addColumn('<img class="iconInformation"
+                                src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$gL10n->get('SYS_WEBSITE').'" title="'.$gL10n->get('SYS_WEBSITE').'" />', '', '', 'th');
+    $tableMembers->addColumn($gL10n->get('SYS_USER'), '', '', 'th');
+    $tableMembers->addColumn($gL10n->get('MEM_UPDATED_ON'), '', '', 'th');
+    $tableMembers->addColumn($gL10n->get('SYS_FEATURES'), 'style', 'text-align: center;', 'th');
 
-		$irow = $getStart + 1;  // Zahler fuer die jeweilige Zeile
+	$irow = $getStart + 1;  // Zahler fuer die jeweilige Zeile
 
-		while($row = $gDb->fetch_array($result_mgl))
+	while($row = $gDb->fetch_array($result_mgl))
+	{
+		$timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
+
+		// Icon fuer Orgamitglied und Nichtmitglied auswaehlen
+		if($row['member_this_orga'] > 0)
 		{
-			$timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
+			$icon = 'profile.png';
+			$iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
+		}
+		else
+		{
+			$icon = 'no_profile.png';
+			$iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
+		}
 
-			// Icon fuer Orgamitglied und Nichtmitglied auswaehlen
-			if($row['member_this_orga'] > 0)
+        $tableMembers->addTableBody();
+        $tableMembers->addRow('', 'class', 'tableMouseOver');
+        $tableMembers->addColumn($irow);
+        $tableMembers->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
+							         src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />');
+		$tableMembers->addColumn('<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a>');
+
+		if(strlen($row['email']) > 0)
+		{
+			if($gPreferences['enable_mail_module'] != 1)
 			{
-				$icon = 'profile.png';
-				$iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
+				$mail_link = 'mailto:'. $row['email'];
 			}
 			else
 			{
-				$icon = 'no_profile.png';
-				$iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
+				$mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id'];
 			}
-
-			echo '
-			<tr class="tableMouseOver">
-				<td>'. $irow. '</td>
-				<td><a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
-							src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>
-				</td>
-				<td><a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a></td>
-				<td>';
-					if(strlen($row['email']) > 0)
-					{
-						if($gPreferences['enable_mail_module'] != 1)
-						{
-							$mail_link = 'mailto:'. $row['email'];
-						}
-						else
-						{
-							$mail_link = $g_root_path.'/adm_program/modules/mail/mail.php?usr_id='. $row['usr_id'];
-						}
-						echo '
-						<a class="iconLink" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
-							alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>';
-					}
-				echo '</td>
-				<td>';
-					if(strlen($row['website']) > 0)
-					{
-						echo '
-						<a class="iconLink" href="'. $row['website']. '" target="_blank"><img
-							src="'. THEME_PATH. '/icons/weblinks.png" alt="'. $row['website']. '" title="'. $row['website']. '" /></a>';
-					}
-				echo '</td>
-				<td>'. $row['usr_login_name']. '</td>
-				<td>'. $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']). '</td>
-				<td style="text-align: center;">';
-					// Link um E-Mail mit neuem Passwort zu zuschicken
-					// nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
-					if($row['member_this_orga'] > 0
-					&& $gCurrentUser->isWebmaster()
-					&& strlen($row['usr_login_name']) > 0
-					&& strlen($row['email']) > 0
-					&& $gPreferences['enable_system_mails'] == 1
-					&& $row['usr_id'] != $gCurrentUser->getValue('usr_id'))
-					{
-						echo '
-						<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
-							src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
-					}
-					else
-					{
-						echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-					}
-
-					// Link um User zu editieren
-					// es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
-					if($row['member_this_orga'] > 0 || $row['member_other_orga'] == 0)
-					{
-						echo '
-						<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
-							src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
-					}
-					else
-					{
-						echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-					}
-
-					// Mitglieder entfernen
-					if( (($row['member_other_orga'] == 0 && $gCurrentUser->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
-					  || $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
-					&& $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
-					{
-						echo '
-						<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
-							src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
-					}
-					else
-					{
-						echo '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
-					}
-				echo '</td>
-			</tr>';
-			$irow++;
+			
+			$tableMembers->addColumn('<a class="iconLink" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"
+				                        alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $row['email']).'" /></a>');
 		}
-    echo '</table>';
+		else
+		{
+            $tableMembers->addColumn('&nbsp;');             
+		}
+		
+
+		if(strlen($row['website']) > 0)
+		{
+			$tableMembers->addColumn('<a class="iconLink" href="'. $row['website']. '" target="_blank"><img
+							             src="'. THEME_PATH. '/icons/weblinks.png" alt="'. $row['website']. '" title="'. $row['website']. '" /></a>');			             
+		}
+		else
+		{
+            $tableMembers->addColumn('&nbsp;');
+		}
+		
+		if(strlen($row['usr_login_name']) > 0)
+		{
+            $tableMembers->addColumn($row['usr_login_name']);
+        }
+        else
+        {
+            $tableMembers->addColumn('&nbsp;');
+        }
+        
+		$tableMembers->addColumn($timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']));		
+
+        $userAdministration = '';
+		// Link um E-Mail mit neuem Passwort zu zuschicken
+		// nur ausfuehren, wenn E-Mails vom Server unterstuetzt werden
+		if($row['member_this_orga'] > 0
+		  && $gCurrentUser->isWebmaster()
+		  && strlen($row['usr_login_name']) > 0
+		  && strlen($row['email']) > 0
+		  && $gPreferences['enable_system_mails'] == 1
+		  && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))
+		{
+            $userAdministration = '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
+							         src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
+        }
+		else
+		{
+			$userAdministration = '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		}
+
+		// Link um User zu editieren
+		// es duerfen keine Nicht-Mitglieder editiert werden, die Mitglied in einer anderen Orga sind
+		if($row['member_this_orga'] > 0 || $row['member_other_orga'] == 0)
+		{
+			$userAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?user_id='. $row['usr_id']. '"><img
+							            src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
+		}
+		else
+		{
+			$userAdministration .= '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		}
+
+		// Mitglieder entfernen
+		if( (($row['member_other_orga'] == 0 && $gCurrentUser->isWebmaster()) // kein Mitglied einer anderen Orga, dann duerfen Webmaster loeschen
+			|| $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
+			&& $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
+		{
+			$userAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
+				                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
+		}
+		else
+		{
+			$userAdministration .= '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+		}
+		
+		$tableMembers->addColumn($userAdministration, 'style', 'text-align: center;');
+		$irow++;
+	}
+	
+    echo $tableMembers->getHtmlTable();
 
     // If neccessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/administration/members/members.php?letter='.$getLetter.'&amp;members='.$getMembers.'&amp;search='.$getSearch;

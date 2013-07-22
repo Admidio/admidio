@@ -4,102 +4,101 @@
  *  @brief  Create html tables
  * 
  *  This class creates html tables.
- *  Create a table object and pass your content.
- *  Several methods allows you to create html tables, just passing header, footer and
- *  body as array and set individual attributes for the table elements, or
- *  create tricky tables step by step with individual attribute settings.
- *  It is also possibe to define a row counter to change background colors .
- *  CSS classes are needed and the content must be passed as array, using this option for class change !
+ *  Create a table object, define the elements with optional attributes and pass your content.
+ *  Several methods allows you to set table rows, columns, header and footer element. Also you can define an array with column widths.
+ *  The class provides changing class in table rows of body elements using modulo.
+ *  You can define the class names and the row number for line change.
+ *  CSS classes are needed using this option for class change !
  *  This class supports strings, arrays, bi dimensional arrays and associative arrays for creating the table content.
  *  @par Notice
  *  Tables should be styled by CSS !
  *  Attributes, like 'align', 'bgcolor',... are worse style,
  *  and deprecated in HTML5. Please check the reference.
- *  @par Example data arrays
+ *  @par Data array for example
  *  @code
- *  $header = array('a', 'b', 'c');
- *  $footer = array('foo', 'bar', 'needle');
- *  // Example 2 dim. Array
- *  $content[] = array(1, 2, 3);
- *  $content[] = array(4, 5, 6);
- *  // Also assoc Arrays can be used
- *  $content[] = array('a'=> 7,'b'=> 8,'c'=> 9);
- *  // array with cols width
- *  $columnsWidth = array('33%', '33%', '33%');
- *  @endcode 
- *  @par Example 1: Create a simple table
- *  @code
- *  // create a table instance
- *  $table1 = new HtmlTable('id','class', 1);  // optional parameters( ID, class, border, line number for class change mode )
- *  // set optional attributes
- *  $table1->setTableWidth('600px');          // optional
- *  $table1->setColumnsWidth($columnsWidth);  // optional
- *  $table1->setHeadId('foo1');               // optional
- *  $table1->setHeadClass('bar1');            // optional
- *  $table1->setFootId('foo2');               // optional
- *  $table1->setFootClass('bar2');            // optional
- *  $table1->setBodyId('foo3');               // optional
- *  $table1->setBodyClass('bar3');            // optional
- *
- *  // pass contents and create a html table 
- *  $htmlTable1 = $table1->getHtmlTable($header, $footer, $content);
- *  echo $htmlTable1;
+ *  $dataArray = array('Data 1', 'Data 2', 'Data 3');
  *  @endcode
- *  @par Example 2: Create a html table step by step 
- *  Create a table using the methods @c setElement() , @c setAttribute() and @c setData().
+ *  @par Example_1
  *  @code
- *  // create a table instance
- *  $table2 = new HtmlTable();
- *  // Set class change mode for each second row.
- *  // IMPORTANT: Using this mode, the rows must be passed as array !
- *  $table2->setClassChange('odd', 'even', 2);
- *  // set table attributes (optional). All attributes are supported.
- *  // It is recommended styling the table with CSS only.
- *  // However just an example
- *  $table2->setAttribute('style', 'width: 500px;', 'table');
- *  $table2->setAttribute('id', 'table2', 'table');
- *  $table2->setAttribute('summary', 'table2', 'table');
- *  $table2->setAttribute('border', '1', 'table');
- *  // set column width as array
- *  $table2->setColumnsWidth(array('10%', '10%', '80%'));
- *  // set head element for the table
- *  $table2->setElement('thead');
- *  // now set the attributes for the head element
- *  $table2->setAttribute('id', 'head');
- *  // and add the header as content array
- *  $table2->setData($header);
- *  // set the footer element
- *  $table2->setElement('tfoot');
- *  // we want to define a class for this element too
- *  $table2->setAttribute('class', 'footer');
- *  // add footer content
- *  $table2->setData($footer);
- *  // set the table body element
- *  $table2->setElement('tbody');
- *  // set body attributes
- *  $table2->setAttribute('class', 'tbody_1');
- *  // add  the body content
- *  $table2->setData($content);
- *  // several body elements are valid
- *  // set next body element with content in this case.
- *  // It is also possible by function to pass the content directly.
- *  $table2->setElement('tbody', $content);
- *  // set body attributes again
- *  $table2->setAttribute('class', 'tbody_2');
- *  $table2->setElement('tbody');
- *  // set body attributes
- *  $table2->setAttribute('class', 'tbody_3');
- *  // add a headline to full table width as string
- *  $table2->setElement('tr');
- *  $table2->setElement('th');
- *  $table2->setAttribute('class', 'head');
- *  $table2->setAttribute('colspan', '3');
- *  $table2->setData('headline');
- *  // add next row with columns array
- *  $table2->setElement('tr' , $content);
- *  // html table
- *  $htmlTable2 = $table2->getHtmlTable();
- *  echo $htmlTable2;
+ *  // Example without defining table head and table foot elements.
+ *  // Starting a row directly, all missing table elements are set automatically for semantic table.
+ *  // Create an table instance with optional table ID, table class.
+ *  $table = new HtmlTable('Id_Example_1', 'tableClass');
+ *  // For each key => value a column is to be defined in a table row.
+ *  $table->addRow($dataArray);
+ *  // get validated table
+ *  echo $table->getHtmlTable();
+ *  @endcode
+ *  @par Example_2
+ *  @code
+ *  // Create an table instance with optional table ID, table class and border
+ *  $table = new HtmlTable('Id_Example_2', 'tableClass', 1);
+ *  // we can also set further attributes for the table
+ *  $table->addAttribute('style', 'width: 100%;');
+ *  $table->addAttribute('summary', 'Example');
+ *  // add table header with class attribute and a column as string
+ *  $table->addTableHeader('class', 'name', 'columntext', 'th'); // $col paremeter 'th' is set by dafault to 'td'
+ *  // add next row to the header
+ *  $table->addRow('... some more text ...'); // optional parameters ( $content, $attribute, $value, $col = 'td')
+ *  // Third row we can also pass single arrays, bidimensional arrays, and assoc. arrays
+ *  // For each key => value a column is to be defined in a table row
+ *  $table->addRow($dataArray);
+ *  // add the table footer
+ *  $table->addTableFooter('class', 'foot', 'Licensed by Admidio');
+ *  // add a body element
+ *  $table->addTableBody('class', 'body', $dataArray);
+ *  // also we can set further body elements
+ *  $table->addTableBody('class', 'nextBody', $dataArray);
+ *  // in this body elemtent for example, we want to define the cols in a table row programmatically
+ *  // define a new row
+ *  $table->addRow(); // no data and no attributes for this row
+ *  $table->addColumn('col1');
+ *  $table->addColumn('col2', 'class', 'secondColumn'); // this col has a class attribute
+ *  $table->addColumn('col3');
+ *  // also we can pass our Array at the end
+ *  $table->addColumn($dataArray);
+ *  // get validated table
+ *  echo $table->getHtmlTable();
+ *  @endcode
+ *  @par Example 3
+ *  @code
+ *  // Example with fixed columns width and changing classes for rows in body element and table border
+ *  $table = new HtmlTable('Id_Example_3', 'tableClass', 1);
+ *  // Set table width to 600px. Ok, we should do this in the class or id in CSS ! However,...
+ *  $table->addAttribute('style', 'width: 600px;');
+ *  // Define columms width as array
+ *  $table->setColumnsWidth(array('20%', '20%', '60%'));
+ *  // We also want to have changing class in every 3rd table row in the table body
+ *  $table->setClassChange('class_1', 'class_2', 3); // Parameters: class names and integer for the line ( Default: 2 )
+ *  // Define a table header with class="head" and define a column string (arrays are also possible)
+ *  // and Set a header element for the column (Default: 'td')
+ *  $table->addTableHeader('class', 'head', 'Headline_1', 'th');
+ *  // 2 more columns ...
+ *  $table->addColumn('Headline_2', '', '', 'th'); // no attribute/value in this example
+ *  $table->addColumn('Headline_3', '', '', 'th'); // no attribute/value in this example
+ *  // Define the footer with a string in center position
+ *  $table->addTableFooter();
+ *  // First mention that we do not want to have fixed columns in the footer. So we clear the array and set the text to center positon!
+ *  $table->setColumnsWidth(array());
+ *  // Define a new table row
+ *  $table->addRow();
+ *  // Add the column with colspan attribute
+ *  $table->addColumn('', 'colspan', '3'); // no data here, because first do the settings and after finishend pass the content !
+ *  // Define center position for the text
+ *  $table->addAttribute('align', 'center'); // ok, it is worse style! 
+ *  // Now we can set the data if all settings are done!
+ *  $table->addData('Tablefooter');
+ *  // Now set the body element of the table
+ *  // Remember we deleted the columns width array, so we need to set it again
+ *  $table->setColumnsWidth(array('20%', '20%', '60%'));
+ *  // Define a table row with array or string for first column
+ *  $table->addTableBody('class', 'body', $dataArray);
+ *  // Some more rows with changeclass mode in body element
+ *  $table->addRow($dataArray);
+ *  $table->addRow($dataArray);
+ *  $table->addRow($dataArray);
+ *  $table->addRow($dataArray);
+ *  echo $table->getHtmlTable();
  *  @endcode
  */
 /*****************************************************************************
@@ -111,565 +110,421 @@
  *
  *****************************************************************************/
 
-final class HtmlTable {
+require_once('html_element.php');
 
-    private $tableAttributes;            ///< String with attributes of the table
-    private $tableId;                    ///< String with ID attribute and value of the table
-    private $tableClass;                 ///< String with class attribute and name of the table
-    private $tableWidth;                 ///< String with table width
+class HtmlTable extends HtmlElement {
+
     private $border;                     ///< String with border attribute and value of the table
-    private $classChange;                ///< Integer value for class change mode for table rows.
+    private $lineChange;                ///< Integer value for class change mode for table rows.
     private $class_1;                    ///< Class name for standard design of table rows 
     private $class_2;                    ///< Class name for changed design of table rows 
-    private $theadAttributes;            ///< String with all attributes defined for 'thead'
-    private $theadId;                    ///< String with ID attribute and value of the 'thead' element
-    private $theadClass;                 ///< String with class attribute and name of the 'thead' element
-    private $theadElement;               ///< String with the created 'thead' content
-    private $tfootElement;               ///< String with the created 'tfoot' content
-    private $tbodyElement;               ///< String with the created 'tbody' content
-    private $tbodyFlag;                  ///< Flag for several body elements. It is need to control the content, if more mody elements are defined in the table
-    private $storedHtmlBodies;           ///< Buffer for defined body content
-    private $tfootAttributes;            ///< String with all attributes defined for 'tfoot'
-    private $tbodyAttributes;            ///< String with all attributes defined for first 'tbody'
-    private $tbodyId;                    ///< String with ID attribute and value of the first table body
-    private $tbodyClass;                 ///< String with class attribute and name of the first table body
-    private $tfootId;                    ///< String with ID attribute and value of the 'tfoot' element
-    private $tfootClass;                 ///< String with class attribute and name of the 'tfoot' element
     private $changeClass;                ///< Class name for the next table row using class change mode
     private $columnsWidth;               ///< Array with values for the columns width
-    private $currentElement;             ///< Internal pointer of the actual table element
-    private $currentElementAttribute;    ///< Attributes of the current table element
-    private $anchor;                     ///< Variable with current anchor value. It is needed to know the position in the table main elements ( thead, tfoot, tbody ) creating the table manually
-    private $arrAnchors;                 ///< Array with stored anchor values to avoid, e.g. double 'thead' could be set. This is not allowed
-    private $refElements;                ///< Array with valid element definitions for html tables
-
+    protected $thead;                    ///< Internal Flag for setted thead element
+    protected $tfoot;                    ///< Internal Flag for setted tfoot element
+    protected $tbody;                    ///< Internal Flag for setted tbody element
+    private $columnCount;                ///< Counter for setted columns
+    private $rowCount;                   ///< Counter for setted rows in body element
+    
     /**
      * Constructor initializing all class variables
      * 
      * @param $id Id of the table
      * @param $class Class name of the table
      * @param $border Set table border
-     * @param $classChange Set linecounter for classChange mode
      */
-    public function __construct($id = null, $class = null, $border = 0, $classChange = null)
-    {
-        $this->border = (is_numeric($border))? $border : 0;
-        $this->classChange = ($classChange != null && is_numeric($classChange))? $classChange : null;
-        $this->columsWidth = array();
-        $this->theadElement = '';
-        $this->tfootElement = '';
-        $this->tbodyElement = '';
-        $this->storedHtmlBodies = '';
-        $this->tbodyFlag = false;
-        $this->tableAttributes = '';
-        $this->theadAttributes = '';
-        $this->tfootAttributes = '';
-        $this->tbodyAttributes = '';
-        $this->currentElement = '';
-        $this->currentElementAttribute = '';
-        $this->anchor = '';
-        $this->arrAnchors = array();
-        $this->refElements = array('table', 'thead', 'tfoot', 'tbody', 'th', 'tr', 'td');
-        $this->changeclass = '';
-
-        if ($id != null) 
+    public function __construct($id = '', $class = '', $border = 0)
+    {        
+        $this->border       = (is_numeric($border))? $border : 0;
+        $this->lineChange  = '';
+        $this->columsWidth  = array();
+        $this->changeclass  = '';
+        $this->thead        = -1;
+        $this->tfoot        = -1;
+        $this->tbody        = -1;
+        $this->columnCount  = 0;
+        $this->rowCount     = 1;
+        
+        parent::__construct('table', '', '', true);
+        
+        if(strlen($id) > 0)
         {
-            $this->tableId = ' id="' . $id . '"';
-        } 
-        if ($class != null) 
+            $this->addAttribute('id', $id);
+        }
+        
+        if(strlen($class) > 0)
         {
-            $this->tableClass = ' class="' . $class . '"';
-        } 
+            $this->addAttribute('class', $class);
+        }
+        
+        if($border == 1)
+        {
+            $this->addAttribute('border', '1');
+        }
     } 
 
     /**
-     * Set classChange mode
-     * 
-     * @param $class_1 Name of the standard class used for classChange mode
-     * @param $class_2 Name of the change class used for classChange mode
-     * @param $integer Number of the line that is changed to Class_2
+     *  @par Add Columns to current table row.
+     *  This method defines the columns for the current table row.
+     *  The data can be passed as string or array. Using Arrays, for each key/value a new column is set.
+     *  You can define an attribute for each column. If you need further attributes for the column first do the settings with addAttribute();
+     *  If all settings are done for the column use the addData(); to define your column content.
+     *
+     *  @param $data Content for the column as string, or array
+     *  @param $attribute Attribute
+     *  @param $value Value of the attribute
+     *  @param $col Column element 'td' or 'th' (Default: 'td')
      */
-    public function setClassChange($class_1 = '', $class_2 = '', $integer)
+    public function addColumn($data = '', $attribute = '', $value = '', $col = 'td')
     {
-        $this->classChange = ($integer != null && is_numeric($integer))? $integer : null;
+        if($col == 'td' || $col == 'th')
+        {
+            $this->addElement($col);
+        }
+
+        if(!empty($this->columnsWidth))
+        {
+            $this->addAttribute('style', 'width:' . $this->columnsWidth[$this->columnCount]);
+        }
+
+        if($attribute != '' && $value != '')
+        {
+            $this->addAttribute($attribute, $value);
+        }
+
+
+        if($data != '')
+        {
+            $this->addData($data);
+            $this->columnCount ++;
+        }
+    }
+
+    /**
+     *  @par Add new table row.
+     *  Starting the table table directly with a row, the class automatically defines 'thead' and 'tfoot' element with an empty row.
+     *  The method checks if a row is already defined and must be closed first.
+     *  You can define 1 attribute/value pair for the row, calling the method. If you need further attributes for the new row, use method addAttribute(), before passing the content.
+     *  The element and attributes are stored in buffer first and will be parsed and written in the output string if the content is defined.
+     *  After all settings are done use addColumn(); to define your columns with content.
+     *
+     *
+     *  @param $data Content for the table row as string, or array
+     *  @param $attribute Attribute
+     *  @param $value Value of the attribute
+     *  @param $col Column element 'td' or 'th' (Default: 'td')
+     */
+    public function addRow($data = '', $attribute = '', $value = '', $col = 'td')
+    {
+        // Clear column counter
+        $this->columnCount = 0;
+
+        if($this->thead == -1)
+        {
+            // if no table elements are defined then create it for semantic markup
+            $this->addTableHeader();
+            $this->addElement('tr', '' ,'', '<td></td>');
+            $this->closeParentElement('thead');
+            $this->thead = 1;
+
+            $this->addTableFooter();
+            $this->addElement('tr', '' ,'', '<td></td>');
+            $this->closeParentElement('tfoot');
+            $this->tfoot = 1;
+
+            $this->addTableBody();
+            $this->thead = 1;
+            $this->tfoot = 1;
+            $this->tbody = 1;
+        }
+        // If row is active we must close it first before starting new one
+        if(in_array('tr', $this->arrParentElements))
+        {
+            $this->closeParentElement('tr');
+        }
+
+        if($this->lineChange == '' && empty($this->columnsWidth))
+        {
+            $this->addParentElement('tr');
+            // if class change is not set and no cols width are available
+            if($attribute != '' && $value != '')
+            {
+                $this->addAttribute($attribute, $value);
+            }
+
+            if($data != '')
+            {
+                $this->addColumn($data, '', '', $col);
+                $this->closeParentElement('tr');
+            }
+
+        }
+        elseif($this->lineChange == '' && !empty($this->columnsWidth))
+        {
+            $this->addParentElement('tr');
+            // if class change is not set and cols width are available
+
+            if($attribute != '' && $value != '')
+            {
+                $this->addAttribute($attribute, $value);
+            }
+            if($data != '')
+            {
+                if(is_array($data))
+                {
+                    foreach($data as $column)
+                    {
+                        $style = $this->columnsWidth[$this->columnCount];
+                        $this->addColumn($column, '', '', $col);
+                    }
+                }
+                else
+                {
+                    // String
+                    $this->addColumn($data, '', '', $col);
+                }
+            }
+        }
+        elseif($this->lineChange != '' && empty($this->columnsWidth))
+        {
+            $this->addParentElement('tr');
+            // if class change is set and no cols width are available
+            if($attribute != '' && $value != '' && $attribute != 'class')
+            {
+                $this->addAttribute($attribute, $value);
+            }
+
+            if($this->tbody == 1)
+            {
+                // Only allowed in body element of the table
+                if($this->rowCount % $this->lineChange == 0)
+                {
+                    $this->changeclass = $this->class_1;
+                }
+                else
+                {
+                    $this->changeclass = $this->class_2;
+                }    
+                $modulo = $this->changeclass;
+                $this->addAttribute('class', $modulo, 'tr');
+                $this->rowCount ++;
+            }
+
+            if($data != '')
+            {
+                if(is_array($data))
+                {
+                    foreach($data as $column)
+                    {
+                        $style = $this->columnsWidth[$this->columnCount];
+                        $this->addColumn($column, '', '', $col);
+                    }
+                }
+                else
+                {
+                        $this->addColumn($data, '', '', $col);
+                }
+            }
+        }
+        else
+        {
+            $this->addParentElement('tr');
+            // class change and cols width are set
+            if($attribute != '' && $value != '' && $attribute != 'class')
+            {
+                $this->addAttribute($attribute, $value);
+            }
+
+            if($this->tbody == 1)
+            {
+                // Only allowed in body element of the table
+                if($this->rowCount % $this->lineChange == 0)
+                {
+                    $this->changeclass = $this->class_1;
+                }
+                else
+                {
+                    $this->changeclass = $this->class_2;
+                }
+                $modulo = $this->changeclass;
+                $this->addAttribute('class', $modulo, 'tr');
+                $this->rowCount ++;
+            }
+
+            if($data != '')
+            {
+                if(is_array($data))
+                {
+                    foreach($data as $column)
+                    {
+                        $style = $this->columnsWidth[$this->columnCount];
+                        $this->addColumn($column, '', '', $col);
+                    }
+                }
+                else
+                {
+                    // String
+                    $this->addColumn($data, '', '', $col);
+                }
+            }
+        }
+    }
+
+    /**
+     *  @par Define table body.
+     *  Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
+     *
+     *  @param $attribute Attribute
+     *  @param $value Value of the attribute
+     *  @param $data Content for the element as string, or array
+     */
+    public function addTableBody($attribute = '', $value = '', $data = '', $col = 'td')
+    {
+        if($this->tfoot != -1 && in_array('tfoot', $this->arrParentElements));
+        {
+            $this->closeParentElement('tr');
+        }
+
+        $this->closeParentElement('tfoot');
+        $this->addParentElement('tbody');
+        $this->tbody = 1 ;
+
+        if($attribute != '' && $value != '')
+        {
+            $this->addAttribute($attribute, $value);
+        }
+
+        if($data != '')
+        {
+            $this->addRow($data, '', '', $col);
+        }
+    }
+    
+    /**
+     *  @par Define table footer
+     *  Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
+     *
+     *  @param $attribute Attribute
+     *  @param $value Value of the attribute
+     *  @param $data Content for the element as string, or array
+     *  @return Returns @b false if tfoot element is already set
+     */
+    public function addTableFooter($attribute = '', $value = '', $data = '', $col = 'td')
+    {
+        if($this->thead != -1 && in_array('thead', $this->arrParentElements));
+        {
+            $this->closeParentElement('thead');
+        }
+        // Check if table footer already exists
+        if($this->tfoot != 1)
+        {
+            $this->closeParentElement('thead');
+            $this->addParentElement('tfoot');
+            $this->tfoot = 1 ;
+
+            if($attribute != '' && $value != '')
+            {
+                $this->addAttribute($attribute, $value);
+            }
+
+            if($data != '')
+            {
+                $this->addRow($data, '', '', $col);
+            }
+        }
+        return false;
+    }
+    
+    /**
+     *  @par Define table header
+     *  Please have a look at the description addRow(); and addColumn(); how you can define further attribute settings
+     *
+     *  @param $attribute Attribute
+     *  @param $value Value of the attribute
+     *  @param $data Content for the element as string, or array
+     *  @return Returns @b false if thead element is already set
+     */
+    public function addTableHeader($attribute = '', $value = '', $data = '', $col = 'td')
+    {
+        // Check if table head already exists
+        if($this->thead != 1)
+        {
+            $this->addParentElement('thead');
+            $this->thead = 1 ;
+
+            if($attribute != '' && $value != '')
+            {
+                $this->addAttribute($attribute, $value);
+            }
+
+            if($data != '')
+            {
+                $this->addRow($data, '', '', $col);
+            }
+        }
+        return false;
+    }
+    
+    /**
+     * Get the parsed html table
+     *
+     * @return Returns the validated html table as string
+     */
+    public function getHtmlTable()
+    {
+        $this->closeParentElement('tr');
+        $this->closeParentElement('tbody');
+        $table = $this->getHtmlElement();
+        return $table;
+    }
+
+    /**
+     * @par Set line Change mode
+     * In body elements you can use this option. You have to define two class names and a counter as integer value.
+     * The first class name is the standard class and the second name is the class used if the class is changed regarding the counter.
+     * As default value, every second row is to be changed.
+     * 
+     * @param $class_1 Name of the standard class used for lineChange mode
+     * @param $class_2 Name of the change class used for lineChange mode
+     * @param $line Number (integer) of the line that is changed to Class_2 (Default: 2)
+     */
+    public function setClassChange($class_1 = '', $class_2 = '', $line = 2)
+    {
+        if(is_numeric($line))
+        {
+            $this->lineChange = $line;
+        }
+        else
+        {
+            return false;
+        }
+        
         $this->class_1 = $class_1;
         $this->class_2 = $class_2;
-    } 
+    }
 
     /**
-     * Set table width
-     * 
-     * @param $string Width of table for example '600px' or '100%'
-     */
-    public function setTableWidth($string)
-    {
-        $this->tableWidth = ' style="width:' . $string . '"';
-    } 
-
-    /**
-     * Set columns width
+     * Set columns width as array
      * 
      * @param $array Array with values for each column width
      */
     public function setColumnsWidth($array)
     {
-        foreach ($array as $column) 
+        if(is_array($array))
         {
-            $this->columnsWidth[] = ($column != '') ? ' style="width: ' . $column . ';"' : '';
-        } 
-    } 
-
-    /**
-     * Set table class
-     * 
-     * @param $class Class name of table
-     */
-    public function setTableClass($name)
-    {
-        $this->tableClass = ' class="' . $class . '"';
-    } 
-
-    /**
-     * Set  table id
-     * 
-     * @param $id Id of table
-     */
-    public function setTableId($value)
-    {
-        $this->tableId = ' id="' . $id . '"';
-    } 
-
-    /**
-     * Set thead class name
-     * 
-     * @param $class class name of 'thead' element
-     */
-    public function setHeadClass($name)
-    {
-        $this->theadClass = ' class="' . $class . '"';
-    } 
-
-    /**
-     * Setter for theadId 
-     * 
-     * @param $id Id of 'thead' element
-     */
-    public function setHeadId($value)
-    {
-        $this->theadId = ' id="' . $id . '"';
-    } 
-
-    /**
-     * Setter for tbody class name
-     * 
-     * @param  $class Class name for body element
-     */
-    public function setBodyClass($name)
-    {
-        $this->tbodyClass = ' class="' . $class . '"';
-    } 
-
-    /**
-     * Setter for tbody id 
-     * 
-     * @param $id Id of body element
-     */
-    public function setBodyId($value)
-    {
-        $this->tbodyId = ' id="' . $id . '"';
-    } 
-
-    /**
-     * Setter for tfootClass name
-     * 
-     * @param $class Class name of 'tfoot' element
-     */
-    public function setFootClass($name)
-    {
-        $this->tfootClass = ' class="' . $class . '"';
-    } 
-
-    /**
-     * Setter for tfootId name
-     * 
-     * @param $id Id of 'tfoot' element
-     */
-    public function setFootId($value)
-    {
-        $this->tfootId = ' id="' . $id . '"';
-    } 
-
-    /**
-     * Helper function that creates attributes
-     * 
-     * @param $attribute Attribute name
-     * @param $value Value for the attribute
-     * @return Returns validated string
-     */
-    private function setElementAttribute($attribute, $string)
-    {
-        $validatedAttribute = ' '. $attribute .'="' . $string . '"';
-        return $validatedAttribute;
-    } 
-
-    /**
-     * Helper function checks the current element
-     * 
-     * @param $element
-     * @return Returns FALSE, if trying to set attributes to an element that is actually not selected!
-     */
-    private function checkElement($element)
-    {
-        if($this->currentElement == $element) 
-        {
-            return true;
-        } 
-        return false;
-    } 
-
-    /**
-     * Set new table element
-     * 
-     * @param $tableElement Tags used in tables as string (thead, tfoot, tbody, tr, th ,td )
-     * @param $data Values for the table content can be passed as string, array, bidimensional Array and assoc. Array. ( Default: no data )
-     */
-    public function setElement($tableElement, $data = '')
-    {
-        if(in_array($tableElement, $this->refElements)) 
-        {
-            // If currently no anchor position in table is set, then set  new anchor
-            if($this->anchor == null) 
+            foreach ($array as $column) 
             {
-                switch ($tableElement) 
+                if($column != '')
                 {
-                    case 'thead':
-                    case 'tfoot': 
-                        // First save tag in array, because it is only allowed once
-                        $this->arrAnchors[] = $tableElement; 
-                        // Mark as actual position in table
-                        $this->anchor = $tableElement; 
-                        // Set current element
-                        $this->currentElement = $tableElement;
-                        break;
-
-                    case 'tbody': 
-                        // Mark as actual position in table
-                        $this->anchor = $tableElement; 
-                        // Set current element
-                        $this->currentElement = $tableElement; 
-                        // count first body
-                        $this->tbodyFlag = true;
-                        break;
-                    
-                    case 'tr':
-                    case 'th':
-                    case 'td':
-                        // Mark as actual position in table
-                        $this->anchor = 'tbody';
-                        $this->currentElement = 'tbody';
-                        break;
-                } 
-            } 
-
-            $checkedElement = $this->checkElement($tableElement); 
-            // if main element tag already exists and new main element tag is set
-            if($this->anchor != $tableElement && $this->anchor != null 
-            || $this->anchor == 'tbody' 
-            && $this->anchor == $tableElement) 
-            {
-                switch ($tableElement) 
+                    $this->columnsWidth[] =  $column;
+                }
+                else
                 {
-                    case 'thead':
-                    case 'tfoot': 
-                        // if not defined in current table object so far
-                        if(!in_array($tableElement, $this->arrAnchors)) 
-                        {
-                            // push main element tag to reference array
-                            $this->arrAnchors .= $tableElement; 
-                            // and set new main element
-                            $this->anchor = $tableElement; 
-                            // and also set as current element
-                            $this->currentElement = $tableElement;
-                        } 
-                        break;
-
-                    case 'tbody': 
-                        // Several body elements in table are valid
-                        // set new main element and check if body element already exists, otherwise set body flag
-                        If(!$this->tbodyFlag) 
-                        {
-                            $this->tbodyFlag = true;
-                        } 
-                        else
-                        {
-                            // write body string
-                            $this->storedHtmlBodies .= (strlen($this->tbodyAttributes) == null) ? '<tbody ' . $this->tbodyId . $this->tbodyClass . '>' : '<tbody ' . $this->tbodyAttributes . '>';
-                            $this->storedHtmlBodies .= $this->tbodyElement . '</tbody>'; 
-                            // clear body attributes
-                            $this->tbodyAttributes = ''; 
-                            // clear body element and clear flag
-                            $this->tbodyElement = '';
-                            $this->tbodyFlag = true;
-                        } 
-
-                        $this->anchor = $tableElement; 
-                        // set current element
-                        $this->currentElement = $tableElement;
-                        break;
-
-                    case 'tr':
-                        $this->{$this->anchor . 'Element'} .= ($this->currentElement == 'td' ) ? '</tr>' : '';
-                        $this->currentElement = $tableElement;
-                        break;
-
-                    case 'th':
-                    case 'td':
-                    
-                        if(!$checkedElement)
-                        {
-                            $this->{$this->anchor . 'Element'} .= ($this->currentElement == 'tr') ? '<tr' .$this->currentElementAttribute. '>' : '';
-                            $this->currentElementAttribute = '';
-                        }
-                        
-                        $this->currentElement = $tableElement;
-                } 
-            } 
-            if($data != '') 
-            {
-                $this->setData($data);
-            } 
-        } 
-        return $this;
-    } 
-
-    /**
-     * Setter for attributes of the selected table element
-     * 
-     * @param $attribute Attribute 
-     * @param $value Value of the attribute
-     * @param $tableElement Element of the table
-     */
-    public function setAttribute($attribute, $value, $tableElement = null)
-    {
-        If($tableElement == null) 
-        {
-            $tableElement = $this->currentElement;
-        } 
-
-        switch ($tableElement) 
-        {
-            case 'table':
-
-                $this->tableAttributes .= $this->setElementAttribute($attribute, $value);
-                break;
-
-            case 'thead':
-
-                $this->theadAttributes .= $this->setElementAttribute($attribute, $value);
-                break;
-
-            case 'tfoot':
-
-                $this->tfootAttributes .= $this->setElementAttribute($attribute, $value);
-                break;
-
-            case 'tbody':
-
-                $this->tbodyAttributes .= $this->setElementAttribute($attribute, $value);
-                break;
-
-            case 'tr':
-            case 'th':
-            case 'td': 
-                // check whether current element is actual
-                $checkedElement = $this->checkElement($tableElement);
-                if($checkedElement) 
-                {
-                    $this->currentElementAttribute .= $this->setElementAttribute($attribute, $value);
-                } 
-
-                break;
-        } 
-        return $this;
-    } 
-
-    /**
-     *  Set data to current element
-     * 
-     *  @param $data Content for the element as string, or array
-     *  @return Returns FALSE is no data is given
-     */
-    public function setData($data)
-    {
-        $counter = 0;
-
-        if($data != '') 
-        {
-            // input is a string
-            if(!is_array($data)) 
-            {
-                switch ($this->currentElement) 
-                {   
-                    case 'thead':
-                    case 'tfoot':
-                    case 'tbody':
-                        if ($this->classChange != null) 
-                        {
-                            $this->changeclass = (($counter % $this->classChange) == 0) ? $this->class_1 : $this->class_2;
-                            $counter++;
-                            $this-> {$this->anchor . 'Element'} .= '<tr class="' . $this->changeclass . '">';
-                        }
-                        else
-                        {
-                            $this-> {$this->anchor . 'Element'} .= '<tr' . $this->currentElementAttribute . '>';
-                        }
-                        // initialize attribute variable because it is already set
-                        $this->currentElementAttribute = '';
-                        break;
-                    
-                    case 'tr':
-
-                        break;
-                    
-                    case 'th':
-                        $this-> {$this->anchor . 'Element'} .= '<th' . $this->currentElementAttribute . '>' . $data . '</th>';
-                        break;
-
-                    case 'td':
-                        $this-> {$this->anchor . 'Element'} .= '<td' . $this->currentElementAttribute . '>' . $data . '</td>';
-                        break;
-                } 
-            } 
-            else 
-            {
-                // validate the content array
-               $this-> {$this->anchor . 'Element'} .= $this->readData($data);
-            } 
-            // initialize attribute variable for columns, because configuration is set
-            $this->currentElementAttribute = '';
-        } 
-        return $this;
-    } 
-
-    /**
-     *  Prepare html of data set from content arrays
-     *  param: $data Array with content for the table columns
-     */
-    private function readData($data)
-    {
-        if(isset($data)) 
-        {
-            $buffer = '';
-            $ColumnTag = ($this->currentElement == 'th') ? 'th' : 'td';
-            $count = 0; 
-            // count entries
-            $numberEntries = count($data); 
-            // count 1 level deeper.
-            $nextLevel = count($data[0]);
-            if($nextLevel > 1) 
-            {
-                for ($i = 0; $i < count($data); $i++) 
-                {
-                    if ($this->classChange != null) 
-                    {
-                        $this->changeclass = (($count % $this->classChange) == 0) ? $this->class_1 : $this->class_2;
-                        $count++;
-                    } 
-
-                    $buffer .= '<tr class="' . $this->changeclass . '">';
-
-                    foreach ($data[$i] as $col => $value) 
-                    {
-                        $buffer .= '<' . $ColumnTag . $this->currentElementAttribute . '>' . $value . '</' . $ColumnTag . '>';
-                    } 
-                    $buffer .= '</tr>';
-                } 
-            } 
-            else 
-            {
-                // single array
-                $counter = count($this->columnsWidth);
-                $j = 0;
-                $buffer .= '<tr class="' . $this->changeclass . '">';
-                foreach ($data as $col) 
-                {
-                    $buffer .= '<' . $ColumnTag . $this->currentElementAttribute . ' ' . $this->columnsWidth[$j] . '>' . $col . '</' . $ColumnTag . '>';
-                    if($j <= $counter) 
-                    {
-                        $j++;
-                    } 
-                } 
-                $buffer .= '</tr>';
-            } 
-            return $buffer;
-        } 
-
-        return false;
-    } 
-
-    /**
-     * Create the table
-     * 
-     * @param $thead Array with head content (Default: null)
-     * @param $tfoot Array with footer content (Default: null)
-     * @param $data Array with body content (Default: null)
-     * @return Returns the validated html table as string
-     */
-    public function getHtmlTable($thead = null, $tfoot = null, $data = null)
-    {
-        $borderFlag = ($this->border == 0) ? '' : 'border = "1"';
-        $countData = 0;
-        $table = (strlen($this->tableAttributes) == null) ? '<table' . $this->tableWidth . $this->tableId . $this->tableClass .  $borderFlag . '>': '<table ' . $this->tableAttributes . ' ' . $borderFlag . '>'; 
-        // Header
-        $table .= (strlen($this->theadAttributes) == null) ? '<thead' . $this->theadId . $this->theadClass . '>' : '<thead ' . $this->theadAttributes . '>';
-
-        if($thead != null) 
-        {
-            $table .= '<tr>';
-            foreach($thead as $content) 
-            {
-                $style = $this->columnsWidth[$countData];
-                $table .= '<td' . $style . '>' . $content . '</td>';
-                $countData++;
-            } 
-            $table .= '</tr>';
-        } 
-        else 
-        {
-            $table .= ($this->theadElement == null) ? '<tr><td>' .$this->theadElement. '</td></tr>' : $this->theadElement .'</tr>';
-        } 
-        // End of table head
-        $table .= "</thead>"; 
-        // Footer
-        $table .= (strlen($this->tfootAttributes) == null) ? '<tfoot' . $this->tfootId . $this->tfootClass . '>' : '<tfoot ' . $this->tfootAttributes . '>';
-        if($tfoot != null) 
-        {
-            $table .= '<tr>';
-            foreach($tfoot as $content) 
-            {
-                $table .= '<td>' . $content . '</td>';
-            } 
-            $table .= '</tr>';
-        } 
-        else 
-        {
-            $table .= ($this->tfootElement == null) ? '<tr><td>' .$this->tfootElement. '</td></tr>' : $this->tfootElement .'</tr>';
-        } 
-        $table .= '</tfoot>';
-        $table .= (strlen($this->tbodyAttributes) == null) ? '<tbody' . $this->tbodyId . $this->tbodyClass . '>' : $this->storedHtmlBodies . '<tbody ' . $this->tbodyAttributes . '>'; 
-        // Table body
-        if($data != null) 
-        {
-            $table .= $this->readData($data);
-        } 
-        else 
-        {
-            $table .= ($this->currentElement == 'tr') ? $this->tbodyElement  : $this->tbodyElement . '</tr>';
+                    $this->columnsWidth[] =  '';
+                }
+            }
         }
-        $table .= ($this->tbodyElement == null) ? '<tr><td>' .$this->tbodyElement. '</td></tr>' : ''; 
-        $table .= '</tbody></table>';
-
-        return $table;
+        return false; 
     } 
 } 
 

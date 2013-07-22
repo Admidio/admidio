@@ -204,34 +204,25 @@ echo'
 		if ($error_msg == '')
 		{   
 		    $success = new HtmlTable();
-		    $success->setAttribute('style', 'text-align: center;', 'table')
-        		    ->setAttribute('summary', 'Erfolg', 'table')
-        		    ->setAttribute('border', '0', 'table')
-        		    ->setAttribute('cellpadding', '0', 'table')
-        		    ->setAttribute('cellspacing', '0', 'table')
-        		    ->setElement('tbody')
-        		    ->setElement('tr')
-        		    ->setElement('td')
-        		    ->setAttribute('style', 'text-align: left;', 'td')
-        		    ->setAttribute('colspan', '2', 'td')
-        		    ->setData('<b>'.$gL10n->get("SYS_SENDER").':</b>')
-        		    ->setElement('tr')
-                    ->setElement('td')
-                    ->setAttribute('style', 'padding-right:5px; text-align: left;', 'td')
-                    ->setData($ecard['name_sender'].',')
-                    ->setElement('td')
-                    ->setAttribute('style', 'text-align: left;', 'td')
-                    ->setData($ecard['email_sender'])
-                    ->setElement('tr')
-                    ->setElement('td')
-                    ->setAttribute('style', 'text-align: left;', 'td')
-                    ->setData('&nbsp;')
-                    ->setElement('tr')
-        		    ->setElement('td')
-        		    ->setAttribute('style', 'text-align: left;', 'td')
-        		    ->setAttribute('colspan', '2', 'td')
-        		    ->setData('<b>'.$gL10n->get("SYS_RECIPIENT").':</b>')
-        		    ->setElement('tr');
+		    $success->addAttribute('style', 'text-align: center;', 'table');
+        	$success->addAttribute('summary', 'Erfolg', 'table');
+        	$success->addAttribute('border', '0', 'table');
+        	$success->addAttribute('cellpadding', '0', 'table');
+        	$success->addAttribute('cellspacing', '0', 'table');
+        	$success->addRow();
+        	$success->addColumn('', 'style', 'text-align: left;', 'td');
+        	$success->addAttribute('colspan', '2', 'td');
+        	$success->addData('<b>'.$gL10n->get("SYS_SENDER").':</b>');
+        	$success->addRow();
+            $success->addColumn($ecard['name_sender'], 'style', 'padding-right:5px; text-align: left;', 'td');
+            $success->addColumn($ecard['email_sender'], 'style', 'text-align: left;', 'td');
+            $success->addRow();
+            $success->addColumn('&nbsp;', 'style', 'text-align: left;', 'td');
+            $success->addRow();
+        	$success->addColumn('', 'style', 'text-align: left;', 'td');
+        	$success->addAttribute('colspan', '2', 'td');
+        	$success->addData('<b>'.$gL10n->get("SYS_RECIPIENT").':</b>');
+        	$success->addRow();
 
 			foreach($email_versand_liste as $item)
 			{
@@ -240,16 +231,12 @@ echo'
 					{
 							if (!is_integer(($i+1)/2))
 							{   
-						        $success->setElement('td')
-        		                        ->setAttribute('style', 'padding-right:5px; text-align: left;', 'td')
-        		                        ->setData($item2.',');
+        		                $success->addColumn($item2.',', 'style', 'padding-right:5px; text-align: left;', 'td');
 							}
 							else
 							{   
-							    $success->setElement('td')
-        		                        ->setAttribute('style', 'padding-right:5px; text-align: left;', 'td')
-        		                        ->setData($item2)
-                                        ->setElement('tr');     
+        		                $success->addColumn($item2, 'style', 'padding-right:5px; text-align: left;', 'td');
+                                $success->addRow();     
 							}
 							$i++;
 					}
@@ -258,14 +245,12 @@ echo'
 			$Liste = $funcClass->getCCRecipients($ecard,$gPreferences['ecard_cc_recipients']);
 			if(count($Liste)>0)
 			{   
-			    $success->setElement('tr')
-                        ->setElement('td', '&nbsp;')
-                        ->setElement('tr')
-                        ->setElement('td')
-                        ->setAttribute('style', 'text-align: left;', 'td')
-                        ->setAttribute('colspan', '2', 'td')
-                        ->setData('<b>'.$gL10n->get("ECA_MORE_RECIPIENTS").':</b>')
-                        ->setElement('tr'); 
+                $success->addRow('&nbsp;');
+                $success->addRow();
+                $success->addColumn('', 'style', 'text-align: left;', 'td');
+                $success->addAttribute('colspan', '2', 'td');
+                $success->addData('<b>'.$gL10n->get("ECA_MORE_RECIPIENTS").':</b>');
+                $success->addRow(); 
 
 				foreach($Liste as $item)
 				{
@@ -274,16 +259,12 @@ echo'
 					{   
 					    if (!is_integer(($i+1)/2))
 						{
-						    $success->setElement('td')
-        		                    ->setAttribute('style', 'text-align: left;', 'td')
-        		                    ->setData($item2);
+        		            $success->addColumn($item2, 'style', 'text-align: left;', 'td');
 						}
 						else
 						{
-							$success->setElement('td')
-        		                    ->setAttribute('style', 'text-align: left;', 'td')
-        		                    ->setData($item2)
-                                    ->setElement('tr');
+							$success->addColumn($item2, 'style', 'text-align: left;', 'td');
+                            $success->addRow();
 						}
 						$i++;
 					}

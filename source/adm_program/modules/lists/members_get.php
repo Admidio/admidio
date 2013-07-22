@@ -17,6 +17,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../system/classes/table_roles.php');
+require_once('../../system/classes/html_table.php');
 
 $gMessage->setExcludeThemeBody();
 
@@ -175,47 +176,48 @@ if($gDb->num_rows($resultUser)>0)
         echo '</div>';    
     }
     
-    // create table header
-    echo '
-    <table class="tableList" cellspacing="0">
-        <thead>
-            <tr>
-                <th><img class="iconInformation"
-                    src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-                    title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" /></th>
-                <th style="text-align: center;">'.$gL10n->get('SYS_MEMBER').'</th>
-                <th>'.$gL10n->get('SYS_LASTNAME').'</th>
-                <th>'.$gL10n->get('SYS_FIRSTNAME').'</th>
-                <th><img class="iconInformation" src="'. THEME_PATH. '/icons/map.png" 
-                    alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" /></th>
-                <th>'.$gL10n->get('SYS_BIRTHDAY').'</th>
-                <th style="text-align: center;">'.$gL10n->get('SYS_LEADER');
+    // create table object
+    $table = new HtmlTable('', 'tableList');
+    $table->addAttribute('cellspacing', '0');
+    $table->addTableHeader();
+    $table->addRow();
+    $table->addColumn('<img class="iconInformation"
+                        src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
+                        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />','', '', 'th');
+    $table->addColumn($gL10n->get('SYS_MEMBER'), 'style', 'text-align: center;', 'th');
+    $table->addColumn($gL10n->get('SYS_LASTNAME'), '', '', 'th');
+    $table->addColumn($gL10n->get('SYS_FIRSTNAME'), '', '', 'th');
+    $table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/map.png"
+                        alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />', '', '', 'th');
+    $table->addColumn($gL10n->get('SYS_BIRTHDAY'), '', '', 'th');
+    $table->addColumn('', 'style', 'text-align: center;', 'th');
 
-					// show icon that leaders have no additional rights
+                    $buffer = '';
+                    
+                    // show icon that leaders have no additional rights
 					if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
 					{
-						echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/info.png"
-						alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
+						$buffer .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/info.png"
+						              alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
 					}
 
 					// show icon with edit user right if leader has this right
 					if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
 					|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
 					{
-						echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
-						alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+						$buffer .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
+						              alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
 					}
 
 					// show icon with assign role right if leader has this right
 					if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
 					|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
 					{
-						echo '<img class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
-						alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+						$buffer .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
+						              alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
 					}
-				echo '</th>
-            </tr>
-        </thead>';
+					
+		$table->addData($gL10n->get('SYS_LEADER').$buffer);
         
     $letter_merker = '';
     $this_letter   = '';
@@ -246,21 +248,15 @@ if($gDb->num_rows($resultUser)>0)
             
             if($this_letter != $letter_merker)
             {
-                if(mb_strlen($letter_merker) > 0)
-                {
-                    echo '</tbody>';
-                }
-
                 // Ueberschrift fuer neuen Buchstaben
-                echo '<tbody block_head_id="'.$this_letter.'" class="letterBlockHead">
-                    <tr>
-                        <td class="tableSubHeader" colspan="7">
-                            '.$this_letter.'
-                        </td>
-                    </tr>
-                </tbody>
-                <tbody block_body_id="'.$this_letter.'" class="letterBlockBody">';
-
+                $table->addTableBody('block_head_id', $this_letter);
+                $table->addAttribute('class', 'letterBlockHead');
+                $table->addRow();
+                $table->addColumn('', 'class', 'tableSubHeader');
+                $table->addAttribute('colspan', '7', 'td');
+                $table->addData($this_letter);
+                $table->addTableBody('block_body_id', $this_letter);
+                      
                 // aktuellen Buchstaben merken
                 $letter_merker = $this_letter;
             }
@@ -293,58 +289,61 @@ if($gDb->num_rows($resultUser)>0)
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
         }
 
-        echo '
-        <tr class="tableMouseOver" user_id="'.$user['usr_id'].'">
-            <td><img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></td>
+        $table->addRow('', 'class', 'tableMouseOver');
+        $table->addAttribute('user_id', $user['usr_id']);
+        $table->addColumn('<img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />');
+        $table->addColumn('', 'style', 'text-align: center;');
 
-            <td style="text-align: center;">';
                 //Haekchen setzen ob jemand Mitglied ist oder nicht
                 if($user['member_this_role'])
                 {
-                    echo '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox" checkboxtype="member" />';
+                    $table->addData('<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox" checkboxtype="member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>');
                 }
                 else
                 {
-                    echo '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox" checkboxtype="member"/>';
+                    $table->addData('<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox" checkboxtype="member"/><b id="loadindicator_member_'.$user['usr_id'].'"></b>');
                 }
-            echo '<b id="loadindicator_member_'.$user['usr_id'].'"></b></td>
-            <td>'.$user['last_name'].'</td>
-            <td>'.$user['first_name'].'</td>
-            <td>';
+
+        $table->addColumn($user['last_name']);
+        $table->addColumn($user['first_name']);
+        
                 if(strlen($user_text) > 0)
                 {
-                    echo '<img class="iconInformation" src="'. THEME_PATH.'/icons/map.png" alt="'.$user_text.'" title="'.$user_text.'" />';
+                    $buffer = '<img class="iconInformation" src="'. THEME_PATH.'/icons/map.png" alt="'.$user_text.'" title="'.$user_text.'" />';
                 }
                 else
                 {
-                    echo '&nbsp';
+                    $buffer = '&nbsp';
                 }
-            echo '</td>
-            <td>';
+        
+        $table->addColumn($buffer);
+
                 //Geburtstag nur ausgeben wenn bekannt
                 if(strlen($user['birthday']) > 0)
                 {
                     $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d', 'date');
-                    echo $birthdayDate->format($gPreferences['system_date']);
+                    $buffer = $birthdayDate->format($gPreferences['system_date']);
                 }
-            echo '</td>
-
-            <td style="text-align: center;">';
+        
+        $table->addColumn($buffer);
+        $table->addColumn('', 'style', 'text-align: center;');
+              
                 //Haekchen setzen ob jemand Leiter ist oder nicht
                 if($user['leader_this_role'])
                 {
-                    echo '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox" checkboxtype="leader"/>';
+                    $buffer = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox" checkboxtype="leader"/>';
                 }
                 else
                 {
-                    echo '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox" checkboxtype="leader" />';
+                    $buffer = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox" checkboxtype="leader" />';
                 }
-            echo '<b id="loadindicator_leader_'.$user['usr_id'].'"></b>
-        </tr>';
+        
+        $table->addData($buffer.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');      
+        
     }//End While
 
-    echo '</table>
-    <p>'.$gL10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>';
+    echo $table->getHtmlTable();
+    echo '<p>'.$gL10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>';
     
     //Hilfe nachladen
     echo '<script type="text/javascript">$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'})</script>';

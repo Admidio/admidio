@@ -10,6 +10,7 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
+require_once('../../system/classes/html_table.php');
 require_once('../../system/classes/table_rooms.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
@@ -122,20 +123,21 @@ else
                 echo '</div>
             </div>
             <div class="boxBody">
-                <div class="date_info_block">
-                    <table style="float:left; width: 200px;">
-                        <tr>
-                            <td>'.$gL10n->get('ROO_CAPACITY').':</td>
-                            <td><strong>'.$room->getValue('room_capacity').'</strong></td>
-                        </tr>';
-                        if($room->getValue('room_overhang')!=null)
-                        {
-                            echo '<tr>
-                                    <td>'.$gL10n->get('ROO_OVERHANG').':</td>
-                                    <td><strong>'.$room->getValue('room_overhang').'</strong></td>
-                                  </tr>';
-                        }
-                    echo '</table>';
+                <div class="date_info_block">';
+                    $table = new HtmlTable();
+                    $table->addAttribute('style', 'float:left; width: 200px;');
+                    $table->addRow();
+                    $table->addColumn($gL10n->get('ROO_CAPACITY'));
+                    $table->addColumn('<strong>'.$room->getValue('room_capacity').'</strong>');
+
+                    if($room->getValue('room_overhang')!=null)
+                    {
+                        $table->addRow();
+                        $table->addColumn($gL10n->get('ROO_OVERHANG'));
+                        $table->addColumn('<strong>'.$room->getValue('room_overhang').'</strong>');
+                    }
+                    echo $table->getHtmlTable();
+                    
                     if(strlen($room->getValue('room_description')) > 0)
                     {
                        echo '<div class="date_description" style="clear: left;"><br/>'

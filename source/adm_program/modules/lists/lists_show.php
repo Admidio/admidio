@@ -22,6 +22,7 @@
 require_once('../../system/common.php');
 require_once('../../system/classes/list_configuration.php');
 require_once('../../system/classes/table_roles.php');
+require_once('../../system/classes/html_table.php');
 
 // Initialize and check the parameters
 $getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', null, true, array('csv-ms', 'csv-oo', 'html', 'print'));
@@ -291,9 +292,12 @@ if($getMode != 'csv')
         </ul>';
     }
 
-    // write table header
-    echo '<table class="'.$class_table.'" style="width: 100%;" cellspacing="0">
-        <thead><tr>';
+    // Create table object
+    $table = new htmlTable('', $class_table);
+    $table->addAttribute('style', 'width: 100%;', 'table');
+    $table->addAttribute('cellspacing', '0', 'table');
+    $table->addTableHeader();
+    $table->addRow();
 }
 
 // headlines for columns
@@ -344,9 +348,10 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
             if($column_number == 1)
             {
                 // die Laufende Nummer noch davorsetzen
-                echo '<th style="text-align: '.$align.';">'.$gL10n->get('SYS_ABR_NO').'</th>';
+                $table->addColumn($gL10n->get('SYS_ABR_NO'), 'style', 'text-align: '.$align.';', 'th');
             }
-            echo '<th style="text-align: '.$align.';">'.$col_name.'</th>';
+            
+            $table->addColumn($col_name, 'style', 'text-align: '.$align.';', 'th');
         }
     }
 }  // End-For
@@ -357,7 +362,7 @@ if($getMode == 'csv')
 }
 else
 {
-    echo '</tr></thead><tbody>';
+    $table->addTableBody();
 }
 
 // set number of first member of this page (leaders are counted separately)
@@ -408,23 +413,24 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 					$listRowNumber = 1;
                     $title = $gL10n->get('SYS_PARTICIPANTS');
                 }
-                echo '<tr>
-                    <td class="'.$class_sub_header.'" colspan="'. ($list->countColumns() + 1). '">
-                        <div class="'.$class_sub_header_font.'" style="float: left;">&nbsp;'.$title.'</div>
-                    </td>
-                </tr>';
+                $table->addRow();
+                $table->addColumn('', 'class', $class_sub_header);
+                $table->addAttribute('colspan', ($list->countColumns() + 1));
+                $table->addData('<div class="'.$class_sub_header_font.'" style="float: left;">&nbsp;'.$title.'</div>');
+
                 $lastGroupHead = $row['mem_leader'];
             }
         }
 
         if($getMode == 'html')
         {
-            echo '<tr class="tableMouseOver" style="cursor: pointer"
-            onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'">';
+            $table->addRow('', 'class', 'tableMouseOver');
+            $table->addAttribute('style', 'cursor: pointer', 'tr');
+            $table->addAttribute('', 'onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'"', 'tr');
         }
         else if($getMode == 'print')
         {
-            echo '<tr>';
+            $table->addRow();
         }
 
         // Felder zu Datensatz
@@ -472,9 +478,9 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                     if($column_number == 1)
                     {
                         // die Laufende Nummer noch davorsetzen
-                        echo '<td style="text-align: '.$align.';">'.$listRowNumber.'</td>';
+                        $table->addColumn($listRowNumber, 'style', 'text-align: '.$align.';');
                     }
-                    echo '<td style="text-align: '.$align.';">';
+                    $table->addColumn('', 'style', 'text-align: '.$align.';');
                 }
                 else
                 {
@@ -548,7 +554,15 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 				else
 				{
 					$content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
-					echo $content.'</td>';
+					// if empty string pass a whitespace
+                    if(strlen($content) > 0)
+					{
+                        $table->addData($content);
+                    }
+                    else
+                    {
+                        $table->addData('&nbsp;');
+                    }
 				}
             }
         }
@@ -556,10 +570,6 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
         if($getMode == 'csv')
         {
             $str_csv = $str_csv. "\n";
-        }
-        else
-        {
-            echo '</tr>';
         }
 
         $listRowNumber++;
@@ -595,7 +605,7 @@ if($getMode == 'csv')
 }
 else
 {
-    echo '</tbody></table>';
+    echo $table->getHtmlTable();
 
     if($getMode != 'print')
     {
