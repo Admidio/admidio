@@ -31,7 +31,7 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
     
     header('Content-type: text/html; charset=utf-8'); 
     echo '
-    <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <!DOCTYPE html>
     <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
     <head>
         <!-- (c) 2004 - 2013 The Admidio Team - http://www.admidio.org -->
@@ -44,9 +44,14 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
 
         <link rel="shortcut icon" type="image/x-icon" href="layout/favicon.png" />
         <link rel="stylesheet" type="text/css" href="layout/install.css" />
-        <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
+        <script type="text/javascript" src="../adm_program/libs/jquery/jquery.js"></script>
+        <script type="text/javascript" src="../adm_program/system/js/common_functions.js"></script>
         
         <script><!--
+            $(document).ready(function() {
+                $("form:first *:input[type!=hidden]:first").focus();
+            });
+
             imgLoader = new Image();
             imgLoader.src = "../adm_themes/classic/icons/loader.gif";
 
@@ -72,34 +77,24 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
         //--></script>
     </head>
     <body>
-        <form id="adm_install" action="'. $next_url. '" method="post">
-        <div id="page">
-        <div><img class="img_border" src="layout/border_top_big.png" alt="border" /></div>
-        <div id="content_left" class="content">&nbsp;
-            <div class="formLayout" id="installation_form">
-                <div class="formHead" style="text-align: left; letter-spacing: 0em;">'. $headline. '</div>
-    
-                <div class="formBody" style="text-align: left;">
-                    <p>'.$message.'</p>
+        <div id="adm_content" class="admContent">&nbsp;
+            <img id="adm-logo" src="layout/logo.png" alt="Logo" />
+            <h1 class="admHeadline">'. $headline. '</h1>
+            <div class="admFormLayout" id="installation_form">
+                <form id="adm_install" action="'. $next_url. '" method="post">
+                    '.$message.'
     
                     <div class="formSubmit">
-                        <button type="button" id="next_page" name="next_page" onclick="startUpdate()" value="'.$icon_text.'"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>';
+                        <button class="admButton" type="button" id="next_page" name="next_page" onclick="startUpdate()" value="'.$icon_text.'"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>';
                         if($icon == 'money.png')
                         {
                             echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button type="button" onclick="self.location.href=\'../adm_program/index.php\'" value="'.$gL10n->get('SYS_LATER').'"><img id="btn_icon" src="layout/application_view_list.png" alt="'. $gL10n->get('SYS_LATER'). '" />&nbsp;'. $gL10n->get('SYS_LATER'). '</button>';
+                            <button class="admButton" type="button" onclick="self.location.href=\'../adm_program/index.php\'" value="'.$gL10n->get('SYS_LATER').'"><img id="btn_icon" src="layout/application_view_list.png" alt="'. $gL10n->get('SYS_LATER'). '" />&nbsp;'. $gL10n->get('SYS_LATER'). '</button>';
                         }
                     echo '</div>
-                </div>
+                </form>
             </div>
         </div>
-        <div><img class="img_border" src="layout/border_bottom_big.png" alt="border" /></div>
-        </div>
-        </form>
-
-        <script type="text/javascript"><!--
-            document.getElementById("next_page").focus();
-        //--></script>
     </body>
     </html>';
     exit();

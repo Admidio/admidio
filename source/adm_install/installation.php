@@ -89,14 +89,12 @@ if($getMode == 1)  // (Default) Choose language
     $message = '<div class="groupBox">
                     <div class="groupBoxHeadline">'.$gL10n->get('INS_CHOOSE_LANGUAGE').'</div>
                     <div class="groupBoxBody">
-                        <ul class="formFieldList">
-                            <li>
-                                <dl>
-                                    <dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
-                                    <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language').'</dd>
-                                </dl>
-                            </li>
-                        </ul>
+                        <div class="admFieldList">
+                            <div class="admFieldLabel">
+                                <label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></div>
+                            <div class="admFieldElement">
+                                '. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language').'</div>
+                        </div>
                     </div>
                 </div>
                 <br />';
@@ -115,7 +113,7 @@ elseif($getMode == 2)  // Welcome to installation
         $gL10n->setLanguage($_SESSION['language']);
     }
     
-    $message = '<strong>'.$gL10n->get('INS_WELCOME_TO_INSTALLATION').'</strong><br /><br />'.$gL10n->get('INS_WELCOME_TEXT');
+    $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_WELCOME_TO_INSTALLATION').'</h2>'.$gL10n->get('INS_WELCOME_TEXT');
 
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
     if(BETA_VERSION > 0)
@@ -149,52 +147,53 @@ elseif($getMode == 3)  // Enter database access information
         $prefix   = 'adm';
     }
 
-    $message = '<strong>'.$gL10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</strong><br /><br />'.$gL10n->get('INS_DATABASE_LOGIN_DESC').'
+    $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</h2>'.$gL10n->get('INS_DATABASE_LOGIN_DESC').'
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$gL10n->get('INS_DATABASE_LOGIN').'</div>
                     <div class="groupBoxBody">
-                        <ul class="formFieldList">
-                            <li>
-                                <dl>
-                                    <dt><label for="db_type">'.$gL10n->get('INS_DATABASE_SYSTEM').':</label></dt>
-                                    <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/db/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', $dbType).'</dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="server">'.$gL10n->get('SYS_SERVER').':</label></dt>
-                                    <dd><input type="text" name="server" id="server" style="width: 250px;" maxlength="50" value="'. $server. '" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="user">'.$gL10n->get('SYS_USERNAME').':</label></dt>
-                                    <dd><input type="text" name="user" id="user" style="width: 250px;" maxlength="50" value="'. $user. '" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
-                                    <dd><input type="password" name="password" id="password" style="width: 250px;" maxlength="50" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="database">'.$gL10n->get('SYS_DATABASE').':</label></dt>
-                                    <dd><input type="text" name="database" id="database" style="width: 250px;" maxlength="50" value="'. $database. '" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="prefix">'.$gL10n->get('INS_TABLE_PREFIX').':</label></dt>
-                                    <dd><input type="text" name="prefix" id="prefix" style="width: 80px;" maxlength="10" value="'. $prefix. '" /></dd>
-                                </dl>
-                            </li>
-                        </ul>
+                        <div class="admFieldList">
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="db_type">'.$gL10n->get('INS_DATABASE_SYSTEM').':</label></div>
+                                <div class="admFieldElement">
+                                    '. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/db/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', $dbType).'</div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="server">'.$gL10n->get('SYS_SERVER').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" type="text" name="server" id="server" maxlength="50" value="'. $server. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="user">'.$gL10n->get('SYS_USERNAME').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" type="text" name="user" id="user" maxlength="50" value="'. $user. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="password">'.$gL10n->get('SYS_PASSWORD').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" type="password" name="password" id="password" maxlength="50" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="database">'.$gL10n->get('SYS_DATABASE').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" type="text" name="database" id="database" maxlength="50" value="'. $database. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="prefix">'.$gL10n->get('INS_TABLE_PREFIX').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admSmallTextInput" type="text" name="prefix" id="prefix" maxlength="10" value="'. $prefix. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <br />
-                <img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'<br />';
+                </div>';
     showPage($message, 'installation.php?mode=4', 'forward.png', $gL10n->get('INS_SET_ORGANIZATION'));
 }
 elseif($getMode == 4)  // Creating organization
@@ -264,25 +263,24 @@ elseif($getMode == 4)  // Creating organization
         $orgaLongName  = '';
     }
 
-    $message = $message.'<strong>'.$gL10n->get('INS_SET_ORGANIZATION').'</strong><br /><br />
+    $message = $message.'<h2 class="admHeadline2">'.$gL10n->get('INS_SET_ORGANIZATION').'</h2>
                 '.$gL10n->get('INS_NAME_OF_ORGANIZATION_DESC').'
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$gL10n->get('INS_NAME_OF_ORGANIZATION').'</div>
                     <div class="groupBoxBody">
-                        <ul class="formFieldList">
-                            <li>
-                                <dl>
-                                    <dt><label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
-                                    <dd><input type="text" name="orgaShortName" id="orgaShortName" style="width: 80px;" maxlength="10" value="'. $orgaShortName. '" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></dt>
-                                    <dd><input type="text" name="orgaLongName" id="orgaLongName" style="width: 250px;" maxlength="60" value="'. $orgaLongName. '" /></dd>
-                                </dl>
-                            </li>
-                        </ul>
+                        <div class="admFieldList">
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admSmallTextInput" type="text" name="orgaShortName" id="orgaShortName" style="width: 80px;" maxlength="10" value="'. $orgaShortName. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" type="text" name="orgaLongName" id="orgaLongName" style="width: 250px;" maxlength="60" value="'. $orgaLongName. '" /></div>
+                            </div>
                     </div>
                 </div>
                 <br />';
@@ -318,49 +316,49 @@ elseif($getMode == 5)  // Creating addministrator
         $user_email      = '';
         $user_login      = '';
     }
-    $message = '<strong>'.$gL10n->get('INS_CREATE_ADMINISTRATOR').'</strong><br /><br />
+    $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_CREATE_ADMINISTRATOR').'</h2>
                 '.$gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC').'
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$gL10n->get('INS_DATA_OF_ADMINISTRATOR').'</div>
                     <div class="groupBoxBody">
-                        <ul class="formFieldList">
-                            <li>
-                                <dl>
-                                    <dt><label for="user_last_name">'.$gL10n->get('SYS_LASTNAME').':</label></dt>
-                                    <dd><input type="text" name="user_last_name" id="user_last_name" style="width: 250px;" maxlength="50" value="'. $user_last_name. '" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="user_first_name">'.$gL10n->get('SYS_FIRSTNAME').':</label></dt>
-                                    <dd><input type="text" name="user_first_name" id="user_first_name" style="width: 250px;" maxlength="50" value="'. $user_first_name. '" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="user_email">'.$gL10n->get('SYS_EMAIL').':</label></dt>
-                                    <dd><input type="text" name="user_email" id="user_email" style="width: 250px;" maxlength="50" value="'. $user_email. '" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="user_login">'.$gL10n->get('SYS_USERNAME').':</label></dt>
-                                    <dd><input type="text" name="user_login" id="user_login" style="width: 250px;" maxlength="35" value="'. $user_login. '" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="user_password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
-                                    <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="20" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="user_password_confirm">'.$gL10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
-                                    <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" maxlength="20" /></dd>
-                                </dl>
-                            </li>
-                        </ul>
+                        <div class="admFieldList">
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="user_last_name">'.$gL10n->get('SYS_LASTNAME').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" class="admTextInput" type="text" name="user_last_name" id="user_last_name" maxlength="50" value="'. $user_last_name. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="user_first_name">'.$gL10n->get('SYS_FIRSTNAME').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" type="text" name="user_first_name" id="user_first_name" maxlength="50" value="'. $user_first_name. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="user_email">'.$gL10n->get('SYS_EMAIL').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" type="text" name="user_email" id="user_email" maxlength="50" value="'. $user_email. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="user_login">'.$gL10n->get('SYS_USERNAME').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admTextInput" type="text" name="user_login" id="user_login" maxlength="35" value="'. $user_login. '" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="user_password">'.$gL10n->get('SYS_PASSWORD').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admSmallTextInput" type="password" name="user_password" id="user_password" maxlength="20" /></div>
+                            </div>
+                            <div class="admFieldRow">
+                                <div class="admFieldLabel">
+                                    <label for="user_password_confirm">'.$gL10n->get('SYS_CONFIRM_PASSWORD').':</label></div>
+                                <div class="admFieldElement">
+                                    <input class="admSmallTextInput" type="password" name="user_password_confirm" id="user_password_confirm" maxlength="20" /></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <br />';
@@ -399,7 +397,7 @@ elseif($getMode == 6)  // Creating configuration file
         }
     }
 
-    $message = '<strong>'.$gL10n->get('INS_CREATE_CONFIGURATION_FILE').'</strong><br /><br />
+    $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_CREATE_CONFIGURATION_FILE').'</h2>
                 '.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_example.php').'<br /><br />
 
                 <span class="iconTextLink">
@@ -763,7 +761,7 @@ elseif($getMode == 8)	// Start installation
     // Daten der Session loeschen
     session_unset();
 
-    $message = '<img style="vertical-align: top;" src="layout/ok.png" /> <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong><br /><br />
+    $message = '<h2 class="admHeadline2"><img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</h2>
                '.$gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />
                '.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
     if(is_writeable("../adm_my_files") == false)

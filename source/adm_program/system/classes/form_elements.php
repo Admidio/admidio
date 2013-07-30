@@ -279,7 +279,7 @@ class FormElements
 		xml_parser_free($p);
 		
 		// SelectBox ausgeben
-		$selectBoxHtml = '<select size="1" id="'.$htmlFieldId.'" name="'.$htmlFieldId.'">
+		$selectBoxHtml = '<select class="admSelectBox" size="1" id="'.$htmlFieldId.'" name="'.$htmlFieldId.'">
 			<option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
 
 			for($i = 0; $i < count($index[$xmlValueTag]); $i++)
