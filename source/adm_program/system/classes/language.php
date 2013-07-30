@@ -8,7 +8,7 @@
  *  SimpleXMLElement which search through xml files. An object of this class
  *  can't be stored in a PHP session because it creates PHP core objects which
  *  couldn't be stored in sessions. Therefore an object of @b LanguageData 
- *  should be assigned to this class that stored all neccessary data and can be
+ *  should be assigned to this class that stored all necessary data and can be
  *  stored in a session.
  *  @par Examples
  *  @code // show how to use this class with the language data class and sessions
@@ -22,7 +22,10 @@
  *  script_b.php
  *  // read language data from session and add it to language object
  *  $language = new Language();
- *  $language->addLanguageData($session->getObject('languageData'));@endcode
+ *  $language->addLanguageData($session->getObject('languageData'));
+ *
+ *  // read and display a language specific text with placeholders for individual content
+ *  echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');@endcode
  */
 /*****************************************************************************
  *
@@ -34,12 +37,12 @@
 
 class Language
 {
-	private $languageData;					///< An object of the class @b LanguageData that stores all neccessary language data in a session
-	private $languages = array();			///< An Array with all avaiable languages and their ISO codes
+	private $languageData;					///< An object of the class @b LanguageData that stores all necessary language data in a session
+	private $languages = array();			///< An Array with all available languages and their ISO codes
 	private $xmlLanguageObjects = array();	///< An array with all SimpleXML object of the language from all paths that are set in @b $languageData.
 	private $xmlReferenceLanguageObjects = array(); ///< An array with all SimpleXML object of the reference language from all paths that are set in @b $languageData.
 	
-	/** Adds a language data object to this class. The object contains all neccessary
+	/** Adds a language data object to this class. The object contains all necessary
 	 *  language data that is stored in the PHP session.
 	 *  @param $languageDataObject An object of the class @b LanguageData.
 	 */
@@ -62,18 +65,24 @@ class Language
 	
 	/** Reads a text string out of a language xml file that is identified 
 	 *  with a unique text id e.g. SYS_COMMON. If the text contains placeholders
-	 *  than the there are 4 parameters to replace them.
+	 *  than you must set more parameters to replace them.
 	 *  @param $textId Unique text id of the text that should be read e.g. SYS_COMMON
-	 *  @param $var1   Content of this parameter will replace the placeholder @b %VAR1% or @b %VAR1_BOLD% in the text.
-	 *  @param $var2   Content of this parameter will replace the placeholder @b %VAR2% or @b %VAR2_BOLD% in the text.
-	 *  @param $var3   Content of this parameter will replace the placeholder @b %VAR3% or @b %VAR3_BOLD% in the text.
-	 *  @param $var4   Content of this parameter will replace the placeholder @b %VAR4% or @b %VAR4_BOLD% in the text.
+	 *  @param $param1,$param2... The function accepts an undefined number of values which will be used to replace
+     *                            the placeholder in the text.
+     *                            $param1 will replace @b %VAR1% or %VAR1_BOLD%
+     *                            $param2 will replace @b %VAR2% or %VAR2_BOLD% etc.
 	 *  @return Returns the text string with replaced placeholders of the text id.
+     *  @par Examples
+     *  @code // display a text without placeholders
+     *  echo $gL10n->get('SYS_NUMBER');
+     *
+     *  // display a text with placeholders for individual content
+     *  echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');@endcode
 	 */ 
-    public function get($textId, $var1='', $var2='', $var3='', $var4='')
+    public function get($textId)
     {
 		if(!is_object($this->languageData))
-		    return "Error: $this->languageData is not an object!";
+		    return 'Error: '.$this->languageData.' is not an object!';
 
         $text   = '';
 		
@@ -109,30 +118,15 @@ class Language
 
 		if(strlen($text) > 0)
 		{
-			// replace placeholder for parameters
-			if(strlen($var1) > 0)
-			{
-				$text = str_replace('%VAR1%', $var1, $text);
-				$text = str_replace('%VAR1_BOLD%', '<strong>'.$var1.'</strong>', $text);
-				
-				if(strlen($var2) > 0)
-				{
-					$text = str_replace('%VAR2%', $var2, $text);
-					$text = str_replace('%VAR2_BOLD%', '<strong>'.$var2.'</strong>', $text);
-
-					if(strlen($var3) > 0)
-					{
-						$text = str_replace('%VAR3%', $var3, $text);
-						$text = str_replace('%VAR3_BOLD%', '<strong>'.$var3.'</strong>', $text);
-						
-						if(strlen($var4) > 0)
-						{
-							$text = str_replace('%VAR4%', $var4, $text);
-							$text = str_replace('%VAR4_BOLD%', '<strong>'.$var4.'</strong>', $text);
-						}
-					}
-				}
-			}
+			// replace placeholder with value of parameters
+            $paramCount = func_num_args();
+            $paramArray = func_get_args();
+            
+            for($paramNumber = 1; $paramNumber < $paramCount; $paramNumber++)
+            {
+				$text = str_replace('%VAR'.$paramNumber.'%', $paramArray[$paramNumber], $text);
+				$text = str_replace('%VAR'.$paramNumber.'_BOLD%', '<strong>'.$paramArray[$paramNumber].'</strong>', $text);
+            }
 			
 			// replace square brackets with html tags
 			$text = strtr($text, '[]', '<>');
@@ -228,7 +222,7 @@ class Language
 
 	/** Creates an array with all languages that are possible in Admidio.
 	 *  The array will have the following syntax e.g.: array('DE' => 'deutsch' ...)
-	 *  @return Return an array with all avaiable languages.
+	 *  @return Return an array with all available languages.
 	 */
 	public function getAvaiableLanguages()
 	{
@@ -271,13 +265,13 @@ class Language
 
 		if(is_object($objectArray[$languagePath]))
 		{
-			// Text nicht im Cache -> aus XML-Datei einlesen
+            // text not in cache -> read from xml file
 			$node   = $objectArray[$languagePath]->xpath("/language/version/text[@id='".$textId."']");
 			if($node != false)
 			{
-				// Zeilenumbrueche in HTML setzen
+                // set line break with html
 				$text = str_replace('\n', '<br />', $node[0]);
-				// Hochkomma muessen ersetzt werden, damit es im Code spaeter keine Probleme gibt
+                // replace highly comma, so there are no problems in the code later
 				$text = str_replace('\'', '&rsquo;', $text);
 				$this->languageData->textCache[$textId] = $text;
 				return $text;
