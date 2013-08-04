@@ -69,15 +69,16 @@ class Language
 	 *  @param $textId Unique text id of the text that should be read e.g. SYS_COMMON
 	 *  @param $param1,$param2... The function accepts an undefined number of values which will be used to replace
      *                            the placeholder in the text.
-     *                            $param1 will replace @b %VAR1% or %VAR1_BOLD%
-     *                            $param2 will replace @b %VAR2% or %VAR2_BOLD% etc.
+     *                            $param1 will replace @b %%VAR1% or @b %%VAR1_BOLD%,
+     *                            $param2 will replace @b %%VAR2% or @b %%VAR2_BOLD% etc.
 	 *  @return Returns the text string with replaced placeholders of the text id.
      *  @par Examples
      *  @code // display a text without placeholders
      *  echo $gL10n->get('SYS_NUMBER');
      *
      *  // display a text with placeholders for individual content
-     *  echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');@endcode
+     *  echo $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', 'John Doe', 'Demo-Organization', 'Webmaster');
+     *  @endcode
 	 */ 
     public function get($textId)
     {

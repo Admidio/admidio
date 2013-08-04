@@ -32,7 +32,7 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
     header('Content-type: text/html; charset=utf-8'); 
     echo '
     <!DOCTYPE html>
-    <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
+    <html>
     <head>
         <!-- (c) 2004 - 2013 The Admidio Team - http://www.admidio.org -->
         

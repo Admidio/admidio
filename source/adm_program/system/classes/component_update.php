@@ -15,8 +15,7 @@
  *  $componentUpdateHandle = new ComponentUpdate($gDb);
  *  $componentUpdateHandle->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
  *  $componentUpdateHandle->setTargetVersion(ADMIDIO_VERSION);
- *  $componentUpdateHandle->update();
-@endcode
+ *  $componentUpdateHandle->update();@endcode
  */
 /*****************************************************************************
  *
