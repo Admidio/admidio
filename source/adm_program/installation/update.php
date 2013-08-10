@@ -15,7 +15,7 @@
  *****************************************************************************/
 
 // embed config and constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/config.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/config.php');
 
 if(strlen($g_tbl_praefix) == 0)
 {
@@ -23,7 +23,7 @@ if(strlen($g_tbl_praefix) == 0)
     $g_tbl_praefix = 'adm';
 }
 
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
@@ -152,13 +152,16 @@ if($getMode == 1)
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
     if(BETA_VERSION > 0)
     {
-        $message .= '<br /><br />'.$gL10n->get('INS_WARNING_BETA_VERSION');
+        $message .= $gL10n->get('INS_WARNING_BETA_VERSION');
     }
+    
     showPage($message, 'update.php?mode=2', 'database_in.png', $gL10n->get('INS_UPDATE_DATABASE'), 2);
 }
 elseif($getMode == 2)
 {
-    // Updatescripte fuer die Datenbank verarbeiten
+    /**************************************/
+    /* execute update script for database */
+    /**************************************/
 
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
@@ -303,7 +306,7 @@ elseif($getMode == 2)
     session_start();
     unset($_SESSION['gCurrentSession']);
 
-    // Hinweis, dass Update erfolgreich war
+    // show notice that update was successful
     $message = '<h2 class="admHeadline2"><img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</h2>
                '.$gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT).'<br /><br />
                '.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');

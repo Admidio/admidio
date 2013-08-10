@@ -148,7 +148,13 @@ class DBMySQL extends DBCommon
         return mysql_num_fields($result);
     }
     
-    // Liefert die Anzahl der Datensaetze im Ergebnis
+    /** Returns the number of rows of the last executed statement.
+     *  Therefore a valid result must exists or set as parameter.
+     *  If no valid result exists the method will return 0.
+     *  @param $result Optional a valid result of a executed sql statement. If no result is set
+     *                 then the method will look for a result within the database object.
+     *  @return Return the number of rows of the result of the sql statement.
+     */
     public function num_rows($result = false)
     {
         if($result === false)
@@ -156,7 +162,15 @@ class DBMySQL extends DBCommon
             $result = $this->queryResult;
         }
         
-        return mysql_num_rows($result);
+        // no result then return 0
+        if($result === false)
+        {
+            return 0;
+        }
+        else
+        {
+            return mysql_num_rows($result);
+        }
     }    
     
     /** Send a sql statement to the database that will be executed. If debug mode is set

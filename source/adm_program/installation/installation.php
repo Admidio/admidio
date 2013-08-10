@@ -33,7 +33,7 @@ else
 }
  
 // embed constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
 if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
@@ -45,6 +45,7 @@ if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
 require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/component_update.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/form_elements.php');
 require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
@@ -81,6 +82,30 @@ else
 $gL10n = new Language();
 $gLanguageData = new LanguageData($language);
 $gL10n->addLanguageData($gLanguageData);
+
+// if config file exists then connect to database
+if(file_exists('../../config.php') == true)
+{
+    require_once(SERVER_PATH. '/config.php');
+
+    $db = Database::createDatabaseObject($gDbType);
+    $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+
+    // now check if a valid installation exists.
+    $sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
+    $db->query($sql, false);
+    $count = $db->num_rows();
+    
+    if($count > 0)
+    {
+        // valid installation exists -> exist installation
+        showPage($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'));
+    }
+    /*elseif($getMode != 8)
+    {
+        showPage($gL10n->get('INS_CONFIGURATION_FILE_FOUND', 'config.php'), 'installation.php?mode=8', 'database_in.png', $gL10n->get('INS_CONTINUE_INSTALLATION'));
+    }*/
+}
 
 if($getMode == 1)  // (Default) Choose language
 {
@@ -237,17 +262,21 @@ elseif($getMode == 4)  // Creating organization
             showPage($gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
         }
 
-        // pruefen, ob eine Verbindung zur Datenbank erstellt werden kann
-        $db = Database::createDatabaseObject($_SESSION['db_type']);
-        if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
+        // for security reasons only check database connection if no config file exists
+        if(file_exists('../../config.php') == false)
         {
-            showPage($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
-        }
+            // check database connections
+            $db = Database::createDatabaseObject($_SESSION['db_type']);
+            if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
+            {
+                showPage($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
+            }
 
-        //Datenbank- und PHP-Version prüfen
-        if(checkVersions($db, $message) == false)
-        {
-            showPage($message, 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
+            //Datenbank- und PHP-Version prüfen
+            if(checkVersions($db, $message) == false)
+            {
+                showPage($message, 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
+            }
         }
     }
 
@@ -273,14 +302,15 @@ elseif($getMode == 4)  // Creating organization
                                 <div class="admFieldLabel">
                                     <label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></div>
                                 <div class="admFieldElement">
-                                    <input class="admSmallTextInput" type="text" name="orgaShortName" id="orgaShortName" style="width: 80px;" maxlength="10" value="'. $orgaShortName. '" /></div>
+                                    <input class="admSmallTextInput" type="text" name="orgaShortName" id="orgaShortName" maxlength="10" value="'. $orgaShortName. '" /></div>
                             </div>
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
                                     <label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></div>
                                 <div class="admFieldElement">
-                                    <input class="admTextInput" type="text" name="orgaLongName" id="orgaLongName" style="width: 250px;" maxlength="60" value="'. $orgaLongName. '" /></div>
+                                    <input class="admTextInput" type="text" name="orgaLongName" id="orgaLongName" maxlength="60" value="'. $orgaLongName. '" /></div>
                             </div>
+                        </div>
                     </div>
                 </div>
                 <br />';
@@ -418,11 +448,11 @@ elseif($getMode == 7) // Download configuration file
     fclose($config_file);
 
     // den Root-Pfad ermitteln
-    $root_path = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
-    $root_path = substr($root_path, 0, strpos($root_path, '/adm_install'));
-    if(!strpos($root_path, 'http://'))
+    $rootPath = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
+    $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
+    if(!strpos($rootPath, 'http://'))
     {
-        $root_path = 'http://'. $root_path;
+        $rootPath = 'http://'. $rootPath;
     }
 
     $file_content = str_replace('%PREFIX%',  $_SESSION['prefix'],  $file_content);
@@ -431,7 +461,7 @@ elseif($getMode == 7) // Download configuration file
     $file_content = str_replace('%USER%',    $_SESSION['user'],    $file_content);
     $file_content = str_replace('%PASSWORD%',$_SESSION['password'],$file_content);
     $file_content = str_replace('%DATABASE%',$_SESSION['database'],$file_content);
-    $file_content = str_replace('%ROOT_PATH%', $root_path, $file_content);
+    $file_content = str_replace('%ROOT_PATH%', $rootPath, $file_content);
     $file_content = str_replace('%ORGANIZATION%', $_SESSION['orgaShortName'], $file_content);
 
     // die erstellte Config-Datei an den User schicken
@@ -446,7 +476,8 @@ elseif($getMode == 7) // Download configuration file
 }
 elseif($getMode == 8)	// Start installation
 {
-    if(file_exists('../config.php') == false)
+    // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
+    if(file_exists('../../config.php') == false)
     {
         showPage($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
     }
@@ -455,25 +486,26 @@ elseif($getMode == 8)	// Start installation
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
 
-    // Verbindung zu Datenbank herstellen
-    require_once(SERVER_PATH. '/config.php');
-
-    if($g_tbl_praefix != $_SESSION['prefix']
-    || $gDbType       != $_SESSION['db_type']
-    || $g_adm_srv     != $_SESSION['server']
-    || $g_adm_usr     != $_SESSION['user']
-    || $g_adm_pw      != $_SESSION['password']
-    || $g_adm_db      != $_SESSION['database']
-    || $g_organization!= $_SESSION['orgaShortName'])
+    // first check if session is filled (if installation was aborted then this is not filled)
+    if(isset($_SESSION['prefix']))
     {
-        showPage($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
+        // if previous dialogs were filled then check if the settings are equal to config file
+        if($g_tbl_praefix != $_SESSION['prefix']
+        || $gDbType       != $_SESSION['db_type']
+        || $g_adm_srv     != $_SESSION['server']
+        || $g_adm_usr     != $_SESSION['user']
+        || $g_adm_pw      != $_SESSION['password']
+        || $g_adm_db      != $_SESSION['database']
+        || $g_organization!= $_SESSION['orgaShortName'])
+        {
+            showPage($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
+        }
     }
-    $db = Database::createDatabaseObject($gDbType);
-    $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
-
+    
+    // read data from sql script db.sql and execute all statements to the current database
     $filename = 'db_scripts/db.sql';
     $file     = fopen($filename, 'r')
-                or showPage($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_install/db_scripts'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
+                or showPage($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_program/installation/db_scripts'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
     $content  = fread($file, filesize($filename));
     $sql_arr  = explode(';', $content);
     fclose($file);
@@ -491,9 +523,14 @@ elseif($getMode == 8)	// Start installation
     // create default data
 
     // add system component to database
-    $sql = 'INSERT INTO '.TBL_COMPONENTS.' (com_type, com_name, com_name_intern, com_version, com_beta)
-                                    VALUES (\'SYSTEM\', \'Admidio Core\', \'CORE\', \''.ADMIDIO_VERSION.'\', '.BETA_VERSION.')';
-    $db->query($sql);
+    $component = new ComponentUpdate($db);
+    $component->setValue('com_type', 'SYSTEM');
+    $component->setValue('com_name', 'Admidio Core');
+    $component->setValue('com_name_intern', 'CORE');
+    $component->setValue('com_version', ADMIDIO_VERSION);
+    $component->setValue('com_beta', BETA_VERSION);
+    $component->setValue('com_update_step', $component->getMaxUpdateStep());    
+    $component->save();
 
     // create a hidden system user for internal use
     // all recordsets created by installation will get the create id of the system user
@@ -622,7 +659,7 @@ elseif($getMode == 8)	// Start installation
                                             15, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\')';
     $db->query($sql);
 
-    // nun die Default-Rollen anlegen
+    // now create default roles
 
     // Create role webmaster
     $roleWebmaster = new TableRoles($db);
@@ -706,7 +743,7 @@ elseif($getMode == 8)	// Start installation
     // now set current user to system user
     $gCurrentUser->readDataById($systemUserId);
 
-    // Default-Listen-Konfigurationen anlegen
+    // create default list configurations
     $addressList = new ListConfiguration($db);
     $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
     $addressList->setValue('lst_global', 1);
@@ -753,18 +790,15 @@ elseif($getMode == 8)	// Start installation
     $formerList->addColumn(4, 'mem_begin');
     $formerList->addColumn(5, 'mem_end', 'DESC');
     $formerList->save();
-
-    // nach der Installation zur Sicherheit bei den Sessions das neue Einlesen des Organisations- und Userobjekts erzwingen
-    $sql = 'UPDATE '. TBL_SESSIONS. ' SET ses_renew = 1 ';
-    $db->query($sql);
     
-    // Daten der Session loeschen
+    // delete session data
     session_unset();
 
+    // show dialog with success notification
     $message = '<h2 class="admHeadline2"><img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</h2>
                '.$gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />
                '.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
-    if(is_writeable("../adm_my_files") == false)
+    if(is_writeable('../../adm_my_files') == false)
     {
         $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /> '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }

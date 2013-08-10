@@ -28,12 +28,6 @@ if($gCurrentUser->isWebmaster() == false)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// der Installationsordner darf aus Sicherheitsgruenden nicht existieren
-if($gDebug == 0 && file_exists('../../../adm_install'))
-{
-    $gMessage->show($gL10n->get('SYS_INSTALL_FOLDER_EXIST'));
-}
-
 // Navigation faengt hier im Modul an
 $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL);

@@ -65,7 +65,7 @@ class Component extends TableAccess
                 || $arrDbVersion[2] < $arrFileSystemVersion[2]
                 || $arrDbVersion[3] < $arrFileSystemVersion[3])
                 {
-                    throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $this->getValue('com_version'), ADMIDIO_VERSION, '<a href="'.$g_root_path.'/adm_install/update.php">', '</a>');
+                    throw new AdmException('SYS_WEBMASTER_DATABASE_INVALID', $this->getValue('com_version'), ADMIDIO_VERSION, '<a href="'.$g_root_path.'/adm_program/installation/update.php">', '</a>');
                 }
                 // if webmaster and file system version is less than db version then show notice
                 elseif($arrDbVersion[0] > $arrFileSystemVersion[0]

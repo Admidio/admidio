@@ -8,24 +8,15 @@
  *
  *****************************************************************************/
 
-// wenn noch nicht installiert, dann Install-Dialog anzeigen
+// if config file doesn't exists, than show installation dialog
 if(!file_exists('../config.php'))
 {
-    $location = 'Location: ../adm_install/index.php';
+    $location = 'Location: installation/index.php';
     header($location);
     exit();
 }
 
 require_once('system/common.php');
-
-if($gCurrentUser->isWebmaster())
-{
-    // der Installationsordner darf aus Sicherheitsgruenden nicht existieren
-    if($gDebug == 0 && file_exists('../adm_install'))
-    {
-        $gMessage->show($gL10n->get('SYS_INSTALL_FOLDER_EXIST'));
-    }
-}
 
 // Url-Stack loeschen
 $gNavigation->clear();

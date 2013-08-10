@@ -1,13 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
 <version id="3.0.0" translator="Markus Faßbender">
+    <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
+    <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="todo"></text>
+    <text id="INS_INSTALLATION_EXISTS" development="new" translation="todo">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</text>
+    <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="todo">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version %VAR1%. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="deleted" translation="todo"></text>
     <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="deleted" translation="todo"></text>
     <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="todo">Eine Aktualisierung der Datenbank ist nicht möglich!</text>
-    <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="todo">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version %VAR1%. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</text>
+    <text id="INS_WEBMASTER_LOGIN" development="new" translation="todo">Webmaster-Anmeldung</text>
+    <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="todo">Gib im nachfolgenden Formular bitte die Zugangsdaten eines Webmasters an. Nur Webmaster sind berichtigt ein Datenbankupdate durchzuführen.</text>
     <text id="DOW_FILE_NAME_INVALID" development="deleted" translation="todo"></text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
+    <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
 </version>
 <version id="2.4.2" translator="Markus Faßbender">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>
@@ -1210,7 +1216,6 @@
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
 	<text id="SYS_INFO" development="new" translation="todo">Info</text>
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_IO_ERROR" development="new" translation="todo">E/A Fehler</text>

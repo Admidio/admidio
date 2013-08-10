@@ -18,8 +18,8 @@
  *****************************************************************************/
 
 // integrate constants and configuration file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/config.php');
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_install')-1). '/adm_program/system/constants.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/config.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
 // create an installation unique cookie prefix and remove special characters
 $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
@@ -285,7 +285,7 @@ elseif($getMode == 5)
 
     // den Root-Pfad ermitteln
     $root_path = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
-    $root_path = substr($root_path, 0, strpos($root_path, '/adm_install'));
+    $root_path = substr($root_path, 0, strpos($root_path, '/adm_program'));
     if(!strpos($root_path, 'http://'))
     {
         $root_path = 'http://'. $root_path;

@@ -26,7 +26,7 @@ if(file_exists('config.php'))
 else
 {
 	// config file doesn't exists then show installation wizard
-	header('Location: adm_install/index.php');
+	header('Location: adm_program/installation/index.php');
 }
 
 ?>

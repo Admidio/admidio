@@ -133,7 +133,7 @@ if($gDbType == 'mysql')
 
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
-			or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_install/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
+			or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_program/installation/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -153,7 +153,7 @@ foreach($sql_arr as $sql)
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')
-            or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_install/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
+            or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_program/installation/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -233,7 +233,7 @@ else
 
 echo '<p>Database and testdata have the Admidio version '.$databaseVersion.'.<br />
  Your files have Admidio version '.ADMIDIO_VERSION.'.<br /><br />
- Please perform an <a href="../adm_install/update.php">update of your database</a>.</p>
+ Please perform an <a href="../adm_program/installation/update.php">update of your database</a>.</p>
  <p style="font-size: 9pt;">&copy; 2004 - 2013&nbsp;&nbsp;The Admidio team</p>';
 
 ?>

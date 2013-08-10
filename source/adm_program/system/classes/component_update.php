@@ -7,7 +7,7 @@
  *  component. It will read the database version from the component and set this as
  *  source version. Then you should set the target version. The class will then search
  *  search for specific update xml files in special directories. For the system this should be
- *  @b adm_install/db_scripts and for plugins there should be an install folder within the
+ *  @b adm_program/installation/db_scripts and for plugins there should be an install folder within the
  *  plugin directory. The xml files should have the prefix update and than the main und subversion 
  *  within their filename e.g. @b update_3_0.xml .
  *  @par Examples
@@ -44,7 +44,7 @@ class ComponentUpdate extends Component
         // update of Admidio core has another path for the xml files as plugins
         if($this->getValue('com_type') == 'SYSTEM')
         {
-            $updateFile = SERVER_PATH. '/adm_install/db_scripts/update_'.$mainVersion.'_'.$subVersion.'.xml';
+            $updateFile = SERVER_PATH. '/adm_program/installation/db_scripts/update_'.$mainVersion.'_'.$subVersion.'.xml';
             
             if(file_exists($updateFile))
             {
@@ -118,7 +118,7 @@ class ComponentUpdate extends Component
                 }
             }
         }
-        return $maxUpdateStep;
+        return (int) $maxUpdateStep;
     }
 
     /** Set the target version for the component after update. This information should be
@@ -190,7 +190,7 @@ class ComponentUpdate extends Component
                 }
                 
                 // check if an php update file exists and then execute the script
-                $phpUpdateFile = SERVER_PATH.'/adm_install/db_scripts/upd_'. $mainVersion. '_'. $subVersion. '_0_conv.php';
+                $phpUpdateFile = SERVER_PATH.'/adm_program/installation/db_scripts/upd_'. $mainVersion. '_'. $subVersion. '_0_conv.php';
                 
                 if(file_exists($phpUpdateFile))
                 {
