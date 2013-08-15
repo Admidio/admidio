@@ -62,6 +62,181 @@ class Organization extends TableAccess
 		$this->preferences              = array();
     }
     
+    /** Creates all necessary data for a new organization. This method can only be 
+     *  called once for an organization. It will create the basic categories, lists,
+     *  roles, systemmails etc.
+     *  @param $userId The id of the webmaster who creates the new organization. 
+     *                 This will be the first valid user of the new organization.
+     */
+    public function createBasicData($userId)
+    {
+        require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
+        require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
+        
+        global $gL10n, $gProfileFields;
+        
+        // read id of system user from database
+        $sql = 'SELECT usr_id FROM '.TBL_USERS.' 
+                 WHERE usr_login_name LIKE \''.$gL10n->get('SYS_SYSTEM').'\' ';
+        $this->db->query($sql);
+        $row = $this->db->fetch_array();
+        $systemUserId = $row['usr_id'];
+
+        // create all systemmail texts and write them into table adm_texts
+        $systemmailsTexts = array('SYSMAIL_REGISTRATION_USER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_USER'),
+                                  'SYSMAIL_REGISTRATION_WEBMASTER' => $gL10n->get('SYS_SYSMAIL_REGISTRATION_WEBMASTER'),
+                                  'SYSMAIL_REFUSE_REGISTRATION' => $gL10n->get('SYS_SYSMAIL_REFUSE_REGISTRATION'),
+                                  'SYSMAIL_NEW_PASSWORD' => $gL10n->get('SYS_SYSMAIL_NEW_PASSWORD'),
+                                  'SYSMAIL_ACTIVATION_LINK' => $gL10n->get('SYS_SYSMAIL_ACTIVATION_LINK'));
+        $text = new TableText($this->db);
+
+        foreach($systemmailsTexts as $key => $value)
+        {
+            // convert <br /> to a normal line feed
+            $value = preg_replace('/<br[[:space:]]*\/?[[:space:]]*>/',chr(13).chr(10),$value);
+
+            $text->clear();
+            $text->setValue('txt_org_id', $this->getValue('org_id'));
+            $text->setValue('txt_name', $key);
+            $text->setValue('txt_text', $value);
+            $text->save();
+        }
+        
+        // create default category for roles, events and weblinks
+        $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                                               VALUES ('. $this->getValue('org_id'). ', \'ROL\', \'COMMON\', \'SYS_COMMON\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')';
+        $this->db->query($sql);
+        $categoryCommon = $this->db->insert_id();
+
+        $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                                         VALUES ('. $this->getValue('org_id').', \'ROL\', \'GROUPS\',  \'INS_GROUPS\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , ('. $this->getValue('org_id').', \'ROL\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , ('. $this->getValue('org_id').', \'ROL\', \'TEAMS\',   \'INS_TEAMS\', 0, 0, 0, 4, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , ('. $this->getValue('org_id').', \'LNK\', \'COMMON\',  \'SYS_COMMON\', 0, 1, 0, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , ('. $this->getValue('org_id').', \'LNK\', \'INTERN\',  \'INS_INTERN\', 1, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , ('. $this->getValue('org_id').', \'DAT\', \'COMMON\',  \'SYS_COMMON\', 0, 1, 0, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , ('. $this->getValue('org_id').', \'DAT\', \'TRAINING\',\'INS_TRAINING\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , ('. $this->getValue('org_id').', \'DAT\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                              , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
+        $this->db->query($sql);
+
+        // create default folder for download module in database
+        $sql = 'INSERT INTO '. TBL_FOLDERS. ' (fol_org_id, fol_type, fol_name, fol_path,
+                                               fol_locked, fol_public, fol_timestamp)
+                                        VALUES ('. $this->getValue('org_id'). ', \'DOWNLOAD\', \'download\', \'/adm_my_files\',
+                                                0,1,\''.DATETIME_NOW.'\')';
+        $this->db->query($sql);
+        
+        // now create default roles
+
+        // Create role webmaster
+        $roleWebmaster = new TableRoles($this->db);
+        $roleWebmaster->setValue('rol_cat_id', $categoryCommon);
+        $roleWebmaster->setValue('rol_name', $gL10n->get('SYS_WEBMASTER'));
+        $roleWebmaster->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_WEBMASTER'));
+        $roleWebmaster->setValue('rol_assign_roles', 1);
+        $roleWebmaster->setValue('rol_approve_users', 1);
+        $roleWebmaster->setValue('rol_announcements', 1);
+        $roleWebmaster->setValue('rol_dates', 1);
+        $roleWebmaster->setValue('rol_download', 1);
+        $roleWebmaster->setValue('rol_guestbook', 1);
+        $roleWebmaster->setValue('rol_guestbook_comments', 1);
+        $roleWebmaster->setValue('rol_photo', 1);
+        $roleWebmaster->setValue('rol_weblinks', 1);
+        $roleWebmaster->setValue('rol_edit_user', 1);
+        $roleWebmaster->setValue('rol_mail_to_all', 1);
+        $roleWebmaster->setValue('rol_mail_this_role', 3);
+        $roleWebmaster->setValue('rol_profile', 1);
+        $roleWebmaster->setValue('rol_this_list_view', 1);
+        $roleWebmaster->setValue('rol_all_lists_view', 1);
+        $roleWebmaster->setValue('rol_webmaster', 1);
+        $roleWebmaster->save();
+
+        // Create role member
+        $roleMember = new TableRoles($this->db);
+        $roleMember->setValue('rol_cat_id', $categoryCommon);
+        $roleMember->setValue('rol_name', $gL10n->get('SYS_MEMBER'));
+        $roleMember->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_MEMBER'));
+        $roleMember->setValue('rol_mail_this_role', 2);
+        $roleMember->setValue('rol_profile', 1);
+        $roleMember->setValue('rol_this_list_view', 1);
+        $roleMember->setValue('rol_default_registration', 1);
+        $roleMember->save();
+
+        // Create role board
+        $roleManagement = new TableRoles($this->db);
+        $roleManagement->setValue('rol_cat_id', $categoryCommon);
+        $roleManagement->setValue('rol_name', $gL10n->get('INS_BOARD'));
+        $roleManagement->setValue('rol_description', $gL10n->get('INS_DESCRIPTION_BOARD'));
+        $roleManagement->setValue('rol_announcements', 1);
+        $roleManagement->setValue('rol_dates', 1);
+        $roleManagement->setValue('rol_weblinks', 1);
+        $roleManagement->setValue('rol_edit_user', 1);
+        $roleManagement->setValue('rol_mail_to_all', 1);
+        $roleManagement->setValue('rol_mail_this_role', 2);
+        $roleManagement->setValue('rol_profile', 1);
+        $roleManagement->setValue('rol_this_list_view', 1);
+        $roleManagement->setValue('rol_all_lists_view', 1);
+        $roleManagement->save();
+        
+        // Create membership for user in role 'Webmaster' and 'Members'
+        $member = new TableMembers($this->db);
+        $member->startMembership($roleWebmaster->getValue('rol_id'), $userId);
+        $member->startMembership($roleMember->getValue('rol_id'),    $userId);
+
+        // create object with current user field structure
+        $gProfileFields = new ProfileFields($this->db, $this->getValue('org_id'));
+
+        // create default list configurations
+        $addressList = new ListConfiguration($this->db);
+        $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
+        $addressList->setValue('lst_global', 1);
+        $addressList->setValue('lst_default', 1);
+        $addressList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $addressList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $addressList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $addressList->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+        $addressList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
+        $addressList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
+        $addressList->save();
+
+        $phoneList = new ListConfiguration($this->db);
+        $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
+        $phoneList->setValue('lst_global', 1);
+        $phoneList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $phoneList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $phoneList->addColumn(3, $gProfileFields->getProperty('PHONE', 'usf_id'));
+        $phoneList->addColumn(4, $gProfileFields->getProperty('MOBILE', 'usf_id'));
+        $phoneList->addColumn(5, $gProfileFields->getProperty('EMAIL', 'usf_id'));
+        $phoneList->addColumn(6, $gProfileFields->getProperty('FAX', 'usf_id'));
+        $phoneList->save();
+
+        $contactList = new ListConfiguration($this->db);
+        $contactList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
+        $contactList->setValue('lst_global', 1);
+        $contactList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
+        $contactList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
+        $contactList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $contactList->addColumn(4, $gProfileFields->getProperty('ADDRESS', 'usf_id'));
+        $contactList->addColumn(5, $gProfileFields->getProperty('POSTCODE', 'usf_id'));
+        $contactList->addColumn(6, $gProfileFields->getProperty('CITY', 'usf_id'));
+        $contactList->addColumn(7, $gProfileFields->getProperty('PHONE', 'usf_id'));
+        $contactList->addColumn(8, $gProfileFields->getProperty('MOBILE', 'usf_id'));
+        $contactList->addColumn(9, $gProfileFields->getProperty('EMAIL', 'usf_id'));
+        $contactList->save();
+
+        $formerList = new ListConfiguration($this->db);
+        $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
+        $formerList->setValue('lst_global', 1);
+        $formerList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'));
+        $formerList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'));
+        $formerList->addColumn(3, $gProfileFields->getProperty('BIRTHDAY', 'usf_id'));
+        $formerList->addColumn(4, 'mem_begin');
+        $formerList->addColumn(5, 'mem_end', 'DESC');
+        $formerList->save();
+    }
+    
 	/** Create a comma separated list with all organization ids of children, 
 	 *  parent and this organization that is prepared for use in SQL
 	 *  @param $shortname If set to true then a list of all shortnames will be returned
@@ -263,7 +438,7 @@ class Organization extends TableAccess
     public function setValue($columnName, $newValue, $checkValue = true)
     {
         // org_shortname shouldn't be edited
-        if($columnName == 'org_shortname')
+        if($columnName == 'org_shortname' && $this->new_record == false)
         {
             return false;
         }

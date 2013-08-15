@@ -12,6 +12,7 @@
     <text id="INS_WEBMASTER_LOGIN" development="new" translation="todo">Webmaster-Anmeldung</text>
     <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="todo">Gib im nachfolgenden Formular bitte die Zugangsdaten eines Webmasters an. Nur Webmaster sind berichtigt ein Datenbankupdate durchzuführen.</text>
     <text id="DOW_FILE_NAME_INVALID" development="deleted" translation="todo"></text>
+    <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="todo">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
 </version>

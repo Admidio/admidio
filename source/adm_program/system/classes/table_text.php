@@ -56,7 +56,7 @@ class TableText extends TableAccess
 	 */
     public function save($updateFingerPrint = true)
     {
-        if($this->new_record)
+        if($this->new_record && strlen($this->getValue('txt_org_id')) == 0)
         {
             // Insert
             global $gCurrentOrganization;

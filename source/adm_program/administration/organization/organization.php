@@ -22,7 +22,7 @@ require_once('../../system/classes/table_text.php');
 $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 $showOptionGenJs = '';
 
-// nur Webmaster duerfen Organisationen bearbeiten
+// only webmasters are allowed to edit organization preferences
 if($gCurrentUser->isWebmaster() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -404,6 +404,19 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('ORG_SHOW_ALL_USERS_DESC').'</li>
+                    <li>
+                        <dl>
+                            <dt>
+                                <div class="iconTextLink">
+                                    <a href="'. $g_root_path. '/adm_program/administration/organization/organization_function.php?mode=2"><img
+                                    src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" /></a>
+                                    <a href="'. $g_root_path. '/adm_program/administration/organization/organization_function.php?mode=2">'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>
+                                </div>
+                            </dt>
+                            <dd>&nbsp;</dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('ORG_ADD_ORGANIZATION_DESC').'</li>
                 </ul>
                 <br />
                 <div class="formSubmit">    
