@@ -13,7 +13,6 @@
  *****************************************************************************/
 
 require('../../system/common.php');
-require('../../system/classes/table_file.php');
 
 // Initialize and check the parameters
 $getFileId = admFuncVariableIsValid($_GET, 'file_id', 'numeric', null, true);

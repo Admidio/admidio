@@ -19,10 +19,6 @@
  *
  *****************************************************************************/
 
-$absolute_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1);
-require_once($absolute_path. '/adm_program/system/classes/folder.php');
-require_once($absolute_path. '/adm_program/system/classes/htaccess.php');
-
 class MyFiles extends Folder
 {
     protected $module;		// name of the module and name of the folder in adm_my_files

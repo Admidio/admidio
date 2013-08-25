@@ -16,8 +16,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
 class TableDate extends TableAccess
 {
     protected $visibleRoles = array();

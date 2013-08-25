@@ -13,7 +13,6 @@
  *****************************************************************************/
 
 require_once('common.php');
-require_once('classes/table_rooms.php');
 
 // Initialize and check the parameters
 $getMessageId    = admFuncVariableIsValid($_GET, 'message_id', 'string', null, true, null, true);

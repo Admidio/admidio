@@ -16,9 +16,8 @@
  *				Voreinstellung zurückgegeben 
  *
  *****************************************************************************/
-require_once('../../system/classes/table_photos.php');
+
 require_once('../../system/common.php');
-require_once('../../system/classes/image.php');
 
 // Initialize and check the parameters
 $getPhotoId    = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
@@ -96,7 +95,6 @@ if($getThumbnail)
             //Nachsehen ob Thumnailordner existiert und wenn nicht SafeMode ggf. anlegen
             if(file_exists($ordner.'/thumbnails') == false)
             {
-                require_once('../../system/classes/folder.php');
                 $folder = new Folder($ordner);
                 $folder->createFolder('thumbnails', true);
             }

@@ -30,8 +30,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
 class Session extends TableAccess
 {
 	private $mObjectArray   = array(); ///< Array with all objects of this session object.

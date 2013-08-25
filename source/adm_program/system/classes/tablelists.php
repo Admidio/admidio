@@ -15,8 +15,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
 class TableLists extends TableAccess
 {
 	/** Constuctor that will create an object of a recordset of the table adm_lists. 
@@ -63,7 +61,10 @@ class TableLists extends TableAccess
         {
             $this->setValue('lst_timestamp', DATETIME_NOW);
             $this->setValue('lst_usr_id', $gCurrentUser->getValue('usr_id'));
-            $this->setValue('lst_org_id', $gCurrentOrganization->getValue('org_id'));
+            if(strlen($this->getValue('lst_org_id')) == 0)
+            {
+                $this->setValue('lst_org_id', $gCurrentOrganization->getValue('org_id'));
+            }
         }
         else
         {

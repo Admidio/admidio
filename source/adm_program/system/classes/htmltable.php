@@ -110,8 +110,6 @@
  *
  *****************************************************************************/
 
-require_once('html_element.php');
-
 class HtmlTable extends HtmlElement {
 
     private $border;                     ///< String with border attribute and value of the table

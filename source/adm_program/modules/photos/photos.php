@@ -17,10 +17,7 @@
  *
  *****************************************************************************/
 
-require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
-require_once('../../system/classes/image.php');
-require_once('../../system/classes/module_menu.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)

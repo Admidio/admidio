@@ -1,28 +1,29 @@
 <?php
 /******************************************************************************
- * Class manages access to database table adm_rooms
+ * Class manages access to database table adm_links
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese Klasse dient dazu, um ein neues Raumobjekt in der Datenbanktabelle
- * adm_rooms zu erstellen. 
+ * This class creates objects of the database table links. 
+ * You can read, change and create weblinks in the database.
  *
- *****************************************************************************/ 
+ *****************************************************************************/
 
- require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
-class TableRooms extends TableAccess
+class TableWeblink extends TableAccess
 {
-	/** Constuctor that will create an object of a recordset of the table adm_rooms. 
-	 *  If the id is set than the specific room will be loaded.
+	/** Constuctor that will create an object of a recordset of the table adm_links. 
+	 *  If the id is set than the specific weblink will be loaded.
 	 *  @param $db Object of the class database. This should be the default object $gDb.
-	 *  @param $room_id The recordset of the room with this id will be loaded. If id isn't set than an empty object of the table is created.
+	 *  @param $lnk_id The recordset of the weblink with this id will be loaded. If id isn't set than an empty object of the table is created.
 	 */
-    public function __construct(&$db, $room_id = 0)
+    public function __construct(&$db, $lnk_id = 0)
     {
-        parent::__construct($db, TBL_ROOMS, 'room', $room_id);
+		// read also data of assigned category
+		$this->connectAdditionalTable(TBL_CATEGORIES, 'cat_id', 'lnk_cat_id');
+
+		parent::__construct($db, TBL_LINKS, 'lnk', $lnk_id);
     }
 
     /** Get the value of a column of the database table.
@@ -35,29 +36,40 @@ class TableRooms extends TableAccess
      */ 
     public function getValue($columnName, $format = '')
     {
-        if($columnName == 'room_description')
+		global $gL10n;
+
+        if($columnName == 'lnk_description')
         {
-			if(isset($this->dbColumns['room_description']) == false)
+			if(isset($this->dbColumns['lnk_description']) == false)
 			{
 				$value = '';
 			}
 			elseif($format == 'plain')
 			{
-				$value = html_entity_decode(strStripTags($this->dbColumns['room_description']));
+				$value = html_entity_decode(strStripTags($this->dbColumns['lnk_description']));
 			}
 			else
 			{
-				$value = $this->dbColumns['room_description'];
+				$value = $this->dbColumns['lnk_description'];
 			}
         }
         else
         {
             $value = parent::getValue($columnName, $format);
         }
- 
+
+		if($columnName == 'cat_name' && $format != 'plain')
+		{
+			// if text is a translation-id then translate it
+			if(strpos($value, '_') == 3)
+			{
+				$value = $gL10n->get(admStrToUpper($value));
+			}
+		}
+
         return $value;
     }
- 
+    
     /** Set a new value for a column of the database table.
      *  The value is only saved in the object. You must call the method @b save to store the new value to the database
      *  @param $columnName The name of the database column whose value should get a new value
@@ -67,11 +79,25 @@ class TableRooms extends TableAccess
      */ 
     public function setValue($columnName, $newValue, $checkValue = true)
     {
-        if($columnName == 'room_description')
+        if($columnName == 'lnk_url' && strlen($newValue) > 0)
+        {
+			// Homepage darf nur gueltige Zeichen enthalten
+			if (!strValidCharacters($newValue, 'url'))
+			{
+				return false;
+			}
+			// Homepage noch mit http vorbelegen
+			if(strpos(admStrToLower($newValue), 'http://')  === false
+			&& strpos(admStrToLower($newValue), 'https://') === false )
+			{
+				$newValue = 'http://'. $newValue;
+			}
+        }
+        elseif($columnName == 'lnk_description')
         {
             return parent::setValue($columnName, $newValue, false);
         }
         return parent::setValue($columnName, $newValue, $checkValue);
-    }
+    } 
 }
 ?>

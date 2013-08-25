@@ -16,8 +16,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_announcement.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_announcements_module'] == 0)

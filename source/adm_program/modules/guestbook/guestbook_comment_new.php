@@ -16,20 +16,11 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/ckeditor_special.php');
-require_once('../../system/classes/table_guestbook_comment.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 $getGbcId    = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
-
-// Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
-// Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
-if (!$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1 && $gPreferences['captcha_type']=='calc')
-{
-	require_once('../../system/classes/captcha.php');
-}
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_guestbook_module'] == 0)

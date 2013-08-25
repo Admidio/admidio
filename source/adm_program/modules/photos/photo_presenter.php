@@ -13,7 +13,6 @@
  *
  *****************************************************************************/
 
-require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 
 // Initialize and check the parameters

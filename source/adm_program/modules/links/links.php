@@ -15,10 +15,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/module_menu.php');
-require_once('../../system/classes/table_category.php');
-require_once('../../system/classes/table_weblink.php');
-require_once('../../system/classes/module_weblinks.php');
+
 unset($_SESSION['links_request']);
 
 // Initialize and check the parameters

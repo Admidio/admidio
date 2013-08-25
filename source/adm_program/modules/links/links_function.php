@@ -17,8 +17,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_weblink.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // Initialize and check the parameters
 $getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);

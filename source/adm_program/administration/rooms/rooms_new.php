@@ -16,8 +16,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/ckeditor_special.php');
-require_once('../../system/classes/table_rooms.php'); 
 
 // Initialize and check the parameters
 $getRoomId   = admFuncVariableIsValid($_GET, 'room_id', 'numeric', 0);

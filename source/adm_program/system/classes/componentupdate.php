@@ -25,8 +25,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/component.php');
- 
 class ComponentUpdate extends Component
 {
 	private $updateFinished;    			///< Flag that will store if the update prozess of this version was successfully finished

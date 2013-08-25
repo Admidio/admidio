@@ -20,7 +20,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/list_configuration.php');
 
 // Initialize and check the parameters
 $getListId = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);

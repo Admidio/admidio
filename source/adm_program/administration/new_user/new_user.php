@@ -10,7 +10,6 @@
  
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/html_table.php');
 
 // Only Webmasters can confirm new users. Otherwise exit.
 if($gCurrentUser->approveUsers() == false)

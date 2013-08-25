@@ -22,8 +22,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_members.php');
-require_once('../../system/classes/table_roles.php');
 require_once('roles_functions.php');
 
 // Initialize and check the parameters

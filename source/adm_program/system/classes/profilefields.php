@@ -17,8 +17,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_user_field.php');
-
 class ProfileFields
 {
     public    $mProfileFields = array();///< Array with all user fields objects

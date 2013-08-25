@@ -8,6 +8,18 @@
  *
  *****************************************************************************/
 
+ /** Autoloading function of class files. This function is automatically called
+  *  by PHP. Therefore the class name must be the same as the file name except 
+  *  for case sensitive.
+  *  @param $className Name of the class for which the file should be loaded
+  */
+ function __autoload($className)
+ {
+    $fileName = SERVER_PATH. '/adm_program/system/classes/'.strtolower($className).'.php';
+    require_once($fileName);
+ }
+ 
+ 
 /** Function checks if the user is a member of the role.
  *  If @b userId is not set than this will be checked for the current user
  *  @param $rolName	The name of the role where the membership of the user should be checked

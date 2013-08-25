@@ -23,9 +23,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/condition_parser.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_lists.php');
-
 class ListConfiguration extends TableLists
 {
     protected $columns = array();     // Array ueber alle Listenspaltenobjekte

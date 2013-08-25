@@ -21,9 +21,6 @@
  *
  *****************************************************************************/
  
-require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
-
 class SystemMail extends Email
 {
     private $smTextObject;

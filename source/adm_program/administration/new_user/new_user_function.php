@@ -19,8 +19,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/system_mail.php');
-require_once('../../system/classes/user_registration.php');
 
 // Initialize and check the parameters
 $getMode      = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);

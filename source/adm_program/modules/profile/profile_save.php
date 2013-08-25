@@ -17,8 +17,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/system_mail.php');
-require_once('../../system/classes/user_registration.php');
 
 // Initialize and check the parameters
 $getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);

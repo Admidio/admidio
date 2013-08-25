@@ -18,8 +18,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/rss.php');
-require_once('../../system/classes/table_weblink.php');
 
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));

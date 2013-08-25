@@ -23,10 +23,6 @@
  *
  *****************************************************************************/
 
-$absolute_path = substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1);
-require_once($absolute_path.'/adm_program/system/classes/table_access.php');
-require_once($absolute_path. '/adm_program/system/classes/my_files.php');
-
 class TablePhotos extends TableAccess
 {
 	/** Constuctor that will create an object of a recordset of the table adm_photos. 

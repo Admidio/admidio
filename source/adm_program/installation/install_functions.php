@@ -48,52 +48,45 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
         <script type="text/javascript" src="../system/js/common_functions.js"></script>
         
         <script type="text/javascript"><!--
-            imgLoader = new Image();
-            imgLoader.src = "layout/loader.gif";
-            
             $(document).ready(function() {
                 $("form:first *:input[type!=hidden]:first").focus();
+                $("#next_page").click(function() {
+                    if($(this).val() == "'.$gL10n->get('INS_UPDATE_DATABASE').'"
+                    || $(this).val() == "'.$gL10n->get('INS_INSTALL_ADMIDIO').'")
+                    {
+                        $(this).prop("disabled", "true");
+                        $("#btn_icon").attr("src", "layout/loader.gif");
+                        
+                        if($(this).val() == "'.$gL10n->get('INS_UPDATE_DATABASE').'")
+                        {
+                            $("#btn_text").html("'.$gL10n->get('INS_DATABASE_IS_UPDATED').'");
+                        }
+                        else
+                        {
+                            $("#btn_text").html("'.$gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED').'");
+                        }
+                    }
+                    $("#installation-form").submit();                
+                });
             });
-
-            function startUpdate()
-            {
-                submit_button = document.getElementById("next_page");
-                if(submit_button.value == "'.$gL10n->get('INS_UPDATE_DATABASE').'"
-                || submit_button.value == "'.$gL10n->get('INS_INSTALL_ADMIDIO').'")
-                {
-                    submit_button.disabled  = true;
-                    document.getElementById("btn_icon").src = imgLoader.src;
-                    if(submit_button.value == "'.$gL10n->get('INS_UPDATE_DATABASE').'")
-                    {
-                        document.getElementById("btn_text").innerHTML = "'.$gL10n->get('INS_DATABASE_IS_UPDATED').'";
-                    }
-                    else
-                    {
-                        document.getElementById("btn_text").innerHTML = "'.$gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED').'";
-                    }
-                }
-                document.getElementById("adm-install").submit();
-            }
         //--></script>
     </head>
     <body>
-        <div id="adm_content" class="admContent">&nbsp;
+        <div class="admContent" id="adm_content">&nbsp;
             <img id="adm-logo" src="layout/logo.png" alt="Logo" />
             <h1 class="admHeadline">'. $headline. '</h1>
-            <div class="admFormLayout" id="installation-form">
-                <form id="adm-install" action="'. $next_url. '" method="post">
-                    '.$message.'
-    
-                    <div class="formSubmit">
-                        <button class="admButton" type="button" id="next_page" name="next_page" onclick="startUpdate()" value="'.$icon_text.'"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>';
-                        if($icon == 'money.png')
-                        {
-                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <button class="admButton" type="button" onclick="self.location.href=\'../index.php\'" value="'.$gL10n->get('SYS_LATER').'"><img id="btn_icon" src="layout/application_view_list.png" alt="'. $gL10n->get('SYS_LATER'). '" />&nbsp;'. $gL10n->get('SYS_LATER'). '</button>';
-                        }
-                    echo '</div>
-                </form>
-            </div>
+            <form class="admFormLayout" id="installation-form" action="'. $next_url. '" method="post">
+                '.$message.'
+
+                <div class="formSubmit">
+                    <button class="admButton" type="button" id="next_page" name="next_page" value="'.$icon_text.'"><img id="btn_icon" src="layout/'. $icon. '" alt="'. $icon_text. '" />&nbsp;<span id="btn_text">'. $icon_text. '</span></button>';
+                    if($icon == 'money.png')
+                    {
+                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button class="admButton" type="button" onclick="self.location.href=\'../index.php\'" value="'.$gL10n->get('SYS_LATER').'"><img id="btn_icon" src="layout/application_view_list.png" alt="'. $gL10n->get('SYS_LATER'). '" />&nbsp;'. $gL10n->get('SYS_LATER'). '</button>';
+                    }
+                echo '</div>
+            </form>
         </div>
     </body>
     </html>';

@@ -13,10 +13,8 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/module_menu.php');
-require_once('../../system/classes/table_folder.php');
 require_once('../../system/file_extension_icons.php');
-require_once('../../system/classes/html_table.php');
+
 unset($_SESSION['download_request']);
 
 $buffer = '';

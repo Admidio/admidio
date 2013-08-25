@@ -16,9 +16,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/ckeditor_special.php');
-require_once('../../system/classes/form_elements.php');
-require_once('../../system/classes/table_weblink.php');
 
 // Initialize and check the parameters
 $getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);

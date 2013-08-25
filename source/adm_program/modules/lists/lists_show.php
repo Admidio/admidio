@@ -20,9 +20,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/list_configuration.php');
-require_once('../../system/classes/table_roles.php');
-require_once('../../system/classes/html_table.php');
 
 // Initialize and check the parameters
 $getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', null, true, array('csv-ms', 'csv-oo', 'html', 'print'));

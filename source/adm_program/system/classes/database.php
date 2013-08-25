@@ -16,11 +16,9 @@ class Database
         switch ($dbType)
         {
 			case 'mysql':
-				require_once(SERVER_PATH. '/adm_program/system/db/db_mysql.php');
 				return new DBMySQL();
 				
 			case 'postgresql':
-				require_once(SERVER_PATH. '/adm_program/system/db/db_postgresql.php');
 				return new DBPostgreSQL();
                 
             default:

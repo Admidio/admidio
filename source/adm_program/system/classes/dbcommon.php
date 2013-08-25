@@ -163,7 +163,7 @@ class DBCommon
 	{
 		if(strlen($this->name) == 0)
 		{
-			$xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/db/databases.xml', 0, true);
+			$xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
 			$node = $xmlDatabases->xpath("/databases/database[@id='".$this->dbType."']/name");
 			$this->name = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
 		}
@@ -175,7 +175,7 @@ class DBCommon
 	{
 		if(strlen($this->minVersion) == 0)
 		{
-			$xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/db/databases.xml', 0, true);
+			$xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
 			$node = $xmlDatabases->xpath("/databases/database[@id='".$this->dbType."']/minversion");
 			$this->minversion = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
 		}

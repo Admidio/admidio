@@ -16,10 +16,6 @@ include('../config.php');
 include('../adm_program/system/constants.php');
 include('../adm_program/system/function.php');
 include('../adm_program/system/string.php');
-include('../adm_program/system/db/database.php');
-include('../adm_program/system/classes/folder.php');
-include('../adm_program/system/classes/language.php');
-include('../adm_program/system/classes/language_data.php');
 
 // default database type should be MySQL
 if(!isset($gDbType))

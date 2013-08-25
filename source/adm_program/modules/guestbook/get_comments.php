@@ -15,7 +15,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/table_guestbook_comment.php');
 
 // Initialize and check the parameters
 $getGbcId      = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);

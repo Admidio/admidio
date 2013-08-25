@@ -10,7 +10,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_roles.php');
 
 // Initialize and check the parameters
 $postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding', 'string', null, true, array('iso-8859-1', 'utf-8'));

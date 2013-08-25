@@ -30,8 +30,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_users.php');
-
 class User extends TableUsers
 {
     protected $webmaster;
@@ -348,7 +346,6 @@ class User extends TableUsers
      */
 	public function editRoleMembership($memberId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
 	{
-		require_once('../../system/classes/table_members.php');
 		$minStartDate = $startDate;
 		$maxEndDate   = $endDate;
 		
@@ -736,7 +733,6 @@ class User extends TableUsers
      */
 	public function setRoleMembership($roleId, $startDate = DATE_NOW, $endDate = '9999-12-31', $leader = '')
 	{
-		require_once('../../system/classes/table_members.php');
 		$minStartDate = $startDate;
 		$maxEndDate   = $endDate;
 		

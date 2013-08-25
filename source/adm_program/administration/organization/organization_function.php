@@ -11,13 +11,11 @@
  * mode     : 1 - Save organization preferences
  *            2 - show welcome dialog for new organization
  *            3 - create new organization
- *            4 - show success dialog for new organization with download of config file
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/table_text.php');
 
 // Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1, true);
@@ -221,7 +219,7 @@ case 1:
         $gL10n->setLanguage($gPreferences['system_language']);
     }
 
-    // Aufraeumen
+    // clean up
     unset($_SESSION['organization_request']);
     unset($_SESSION['gForum']);
     $gCurrentSession->renewOrganizationObject();
@@ -232,40 +230,134 @@ case 1:
     break;
     
 case 2:
-    // Html-Kopf ausgeben
+    if(isset($_SESSION['add_organization_request']))
+    {
+        $formValues = strStripSlashesDeep($_SESSION['add_organization_request']);
+        unset($_SESSION['add_organization_request']);
+    }
+    else
+    {
+        $formValues['orgaShortName'] = '';
+        $formValues['orgaLongName']  = '';
+    }
+
+    // show html header
     $gLayout['title'] = $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION');
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-    // Html des Modules ausgeben
-    echo '<br /><br /><br />
-    <div class="formLayout" id="user_delete_message_form" style="width: 400px">
-        <div class="formHead">'.$gL10n->get('MEM_REMOVE_USER').'</div>
+    // show individual module html content
+    echo '
+    <div class="formLayout" id="user_delete_message_form">
+        <div class="formHead">'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</div>
         <div class="formBody">
-            <p align="left">
-                <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />
-                '.$gL10n->get('MEM_MAKE_FORMER').'
-            </p>
-            <p align="left">
-                <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" />
-                '.$gL10n->get('MEM_REMOVE_USER', $gL10n->get('SYS_DELETE')).'
-            </p>
-            <button id="btnBack" type="button" onclick="history.back()"><img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnDelete" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $getUserId. '&mode=3\'"><img 
-                src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnFormer" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$getUserId.'&mode=2\'"><img 
-                src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />&nbsp;'.$gL10n->get('SYS_FORMER').'</button>
+            '.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'
+
+            <form action="organization_function.php?mode=3" method="post">
+                <div class="groupBox">
+                    <div class="groupBoxHeadline">'.$gL10n->get('INS_NAME_OF_ORGANIZATION').'</div>
+                    <div class="groupBoxBody">
+                        <ul class="formFieldList">
+                            <li>
+                                <dl>
+                                    <dt><label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
+                                    <dd><input type="text" name="orgaShortName" id="orgaShortName" style="width: 80px;" maxlength="10" value="'.$formValues['orgaShortName'].'" /></dd>
+                                </dl>
+                            </li>
+                            <li>
+                                <dl>
+                                    <dt><label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></dt>
+                                    <dd><input type="text" name="orgaLongName" id="orgaLongName" style="width: 250px;" maxlength="60" value="'.$formValues['orgaLongName'].'" /></dd>
+                                </dl>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="formSubmit">
+                    <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button id="btnForward" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('INS_SET_UP_ORGANIZATION').'" />&nbsp;'.$gL10n->get('INS_SET_UP_ORGANIZATION').'</button>
+                </div>
+            </form>
         </div>
     </div>';
 
+    // show html footer
     require(SERVER_PATH. '/adm_program/system/overall_footer.php');
     break;
     
 case 3:
-    break;
+    /******************************************************/
+    /* Create basic data for new organization in database */
+    /******************************************************/
+    $_SESSION['add_organization_request'] = strStripSlashesDeep($_POST);
+
+    // form fields are not filled
+    if(strlen($_POST['orgaShortName']) == 0
+    || strlen($_POST['orgaLongName']) == 0 )
+    {
+        $gMessage->show($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'));
+    }
+
+    // check if orga shortname exists
+    $organization = new Organization($gDb, $_POST['orgaShortName']);
+    if($organization->getValue('org_id') > 0)
+    {
+        $gMessage->show($gL10n->get('INS_ORGA_SHORTNAME_EXISTS', $_POST['orgaShortName']));
+    }
+
+    // set execution time to 2 minutes because we have a lot to do :)
+    // there should be no error output because of safe mode
+    @set_time_limit(120);
+
+    $gDb->startTransaction();
+
+    // create new organization
+    $newOrganization = new Organization($gDb, $_POST['orgaShortName']);
+    $newOrganization->setValue('org_longname', $_POST['orgaLongName']);
+    $newOrganization->setValue('org_shortname', $_POST['orgaShortName']);
+    $newOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
+    $newOrganization->save();
     
-case 3:
+    // write all preferences from preferences.php in table adm_preferences
+    require_once('../../installation/db_scripts/preferences.php');
+
+    // set the administrator email adress to the email of the current user
+    $orga_preferences['email_administrator'] = $gCurrentUser->getValue('EMAIL');
+
+    // create all necessary data for this organization
+    $newOrganization->setPreferences($orga_preferences, false);
+    $newOrganization->createBasicData($gCurrentUser->getValue('usr_id'));
+
+	// if installation of second organization than show organization select at login
+	if($gCurrentOrganization->countAllRecords() == 2)
+	{
+		$sql = 'UPDATE '. TBL_PREFERENCES. ' SET prf_value = 1
+				 WHERE prf_name = \'system_organization_select\' ';
+		$gDb->query($sql);
+	}
+
+    $gDb->endTransaction();
+
+    // show html header
+    $gLayout['title'] = $gL10n->get('INS_SETUP_WAS_SUCCESSFUL');
+    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+
+    // show individual module html content
+    echo '
+    <div class="formLayout" id="user_delete_message_form" style="width: 400px">
+        <div class="formHead">'.$gL10n->get('INS_SETUP_WAS_SUCCESSFUL').'</div>
+        <div class="formBody">
+            <p align="left"> '.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>
+            <button id="btnForward" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/organization.php\'"><img src="'.THEME_PATH.'/icons/forward.png" alt="'.$gL10n->get('SYS_FORWARD').'" />&nbsp;'.$gL10n->get('SYS_FORWARD').'</button>
+        </div>
+    </div>';
+
+    // show html footer
+    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+    
+    // clean up
+    unset($_SESSION['add_organization_request']);
     break;
 }
 ?>

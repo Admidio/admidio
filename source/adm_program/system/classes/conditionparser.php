@@ -22,8 +22,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
- 
 class ConditionParser
 {
     private $mSrcCond;				///< The source condition with the user specific condition

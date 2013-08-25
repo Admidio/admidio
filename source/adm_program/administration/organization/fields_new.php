@@ -14,9 +14,6 @@
  
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/ckeditor_special.php');
-require_once('../../system/classes/form_elements.php');
-require_once('../../system/classes/table_user_field.php');
 
 // Initialize and check the parameters
 $getUsfId = admFuncVariableIsValid($_GET, 'usf_id', 'numeric', 0);

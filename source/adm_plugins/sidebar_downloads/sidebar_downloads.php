@@ -25,7 +25,6 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos)); 
 } 
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php'); 
-require_once(PLUGIN_PATH. '/../adm_program/system/classes/table_file.php'); 
 require_once(PLUGIN_PATH. '/../adm_program/system/file_extension_icons.php');
 require_once(PLUGIN_PATH. '/'.$plugin_folder.'/config.php');
 

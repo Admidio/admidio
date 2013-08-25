@@ -26,8 +26,6 @@
  *
  *****************************************************************************/
  
-require_once(SERVER_PATH. '/adm_program/system/classes/form_elements.php');
-
 class ModuleMenu
 {
 	/** creates the object of the module menu and initialize all class parameters

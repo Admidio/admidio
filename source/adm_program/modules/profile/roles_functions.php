@@ -13,9 +13,6 @@ if ('roles_functions.php' == basename($_SERVER['SCRIPT_FILENAME']))
     die('This page may not be called directly !');
 }
 
-require_once('../../system/classes/table_members.php');
-require_once('../../system/classes/table_roles.php');
-
 // get all memberships where the user is assigned
 function getRolesFromDatabase($user_id)
 {

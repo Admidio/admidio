@@ -13,8 +13,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
 class TableText extends TableAccess
 {
 	/** Constuctor that will create an object of a recordset of the table adm_texts. 

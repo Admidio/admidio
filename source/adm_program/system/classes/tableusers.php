@@ -16,7 +16,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
 require_once(SERVER_PATH. '/adm_program/libs/phpass/passwordhash.php');
 
 class TableUsers extends TableAccess

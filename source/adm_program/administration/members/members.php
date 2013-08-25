@@ -18,8 +18,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/module_menu.php');
-require_once('../../system/classes/html_table.php');
 unset($_SESSION['import_request']);
 
 // if search field was used then transform the POST parameter into a GET parameter

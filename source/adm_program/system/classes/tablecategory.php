@@ -19,8 +19,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
 class TableCategory extends TableAccess
 {
 	protected $elementTable;
@@ -75,22 +73,18 @@ class TableCategory extends TableAccess
             // Abhaenigigkeiten loeschen
             if($this->getValue('cat_type') == 'DAT')
             {
-				require_once(SERVER_PATH. '/adm_program/system/classes/table_date.php');
 				$object = new TableDate($this->db);
             }
             elseif($this->getValue('cat_type') == 'LNK')
             {
-				require_once(SERVER_PATH. '/adm_program/system/classes/table_weblink.php');
 				$object = new TableWeblink($this->db);
             }
             elseif($this->getValue('cat_type') == 'ROL')
             {
-				require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 				$object = new TableRoles($this->db);
             }
             elseif($this->getValue('cat_type') == 'USF')
             {
-				require_once(SERVER_PATH. '/adm_program/system/classes/table_user_field.php');
 				$object = new TableUserField($this->db);
             }
 			

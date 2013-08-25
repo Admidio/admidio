@@ -22,8 +22,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
 class Organization extends TableAccess
 {
     protected $bCheckChildOrganizations;     ///< Flag will be set if the class had already search for child organizations
@@ -70,9 +68,6 @@ class Organization extends TableAccess
      */
     public function createBasicData($userId)
     {
-        require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
-        require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
-        
         global $gL10n, $gProfileFields;
         
         // read id of system user from database
@@ -112,13 +107,11 @@ class Organization extends TableAccess
                                          VALUES ('. $this->getValue('org_id').', \'ROL\', \'GROUPS\',  \'INS_GROUPS\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'ROL\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'ROL\', \'TEAMS\',   \'INS_TEAMS\', 0, 0, 0, 4, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'LNK\', \'COMMON\',  \'SYS_COMMON\', 0, 1, 0, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'LNK\', \'INTERN\',  \'INS_INTERN\', 1, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'DAT\', \'COMMON\',  \'SYS_COMMON\', 0, 1, 0, 1, '.$systemUserId.',\''. DATETIME_NOW.'\')
                                               , ('. $this->getValue('org_id').', \'DAT\', \'TRAINING\',\'INS_TRAINING\', 0, 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , ('. $this->getValue('org_id').', \'DAT\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\')
-                                              , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
+                                              , ('. $this->getValue('org_id').', \'DAT\', \'COURSES\', \'INS_COURSES\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
         $this->db->query($sql);
 
         // create default folder for download module in database
@@ -191,6 +184,7 @@ class Organization extends TableAccess
         // create default list configurations
         $addressList = new ListConfiguration($this->db);
         $addressList->setValue('lst_name', $gL10n->get('INS_ADDRESS_LIST'));
+        $addressList->setValue('lst_org_id', $this->getValue('org_id'));
         $addressList->setValue('lst_global', 1);
         $addressList->setValue('lst_default', 1);
         $addressList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
@@ -203,6 +197,7 @@ class Organization extends TableAccess
 
         $phoneList = new ListConfiguration($this->db);
         $phoneList->setValue('lst_name', $gL10n->get('INS_PHONE_LIST'));
+        $phoneList->setValue('lst_org_id', $this->getValue('org_id'));
         $phoneList->setValue('lst_global', 1);
         $phoneList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $phoneList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
@@ -214,6 +209,7 @@ class Organization extends TableAccess
 
         $contactList = new ListConfiguration($this->db);
         $contactList->setValue('lst_name', $gL10n->get('SYS_CONTACT_DETAILS'));
+        $contactList->setValue('lst_org_id', $this->getValue('org_id'));
         $contactList->setValue('lst_global', 1);
         $contactList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'), 'ASC');
         $contactList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'), 'ASC');
@@ -228,6 +224,7 @@ class Organization extends TableAccess
 
         $formerList = new ListConfiguration($this->db);
         $formerList->setValue('lst_name', $gL10n->get('INS_MEMBERSHIP'));
+        $formerList->setValue('lst_org_id', $this->getValue('org_id'));
         $formerList->setValue('lst_global', 1);
         $formerList->addColumn(1, $gProfileFields->getProperty('LAST_NAME', 'usf_id'));
         $formerList->addColumn(2, $gProfileFields->getProperty('FIRST_NAME', 'usf_id'));

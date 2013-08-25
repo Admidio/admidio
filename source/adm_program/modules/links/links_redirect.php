@@ -12,7 +12,6 @@
  *****************************************************************************/
  
 require_once('../../system/common.php');
-require_once('../../system/classes/table_weblink.php');
 
 // Initialize and check the parameters
 $getLinkId   = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', null, true);

@@ -42,7 +42,6 @@ switch ($get_type)
         $url = 'backup_file_function.php?job=delete&filename='.$get_database_id;
         break;
     case 'cat':
-		require_once('classes/table_category.php');
         $url  = 'categories_function.php?cat_id='.$get_database_id.'&mode=2&type='.$get_database_id_2;
 		$text = 'CAT_DELETE_CATEGORY';
         break;

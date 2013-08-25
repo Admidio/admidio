@@ -19,9 +19,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/html_table.php');
-require_once('../../system/classes/module_menu.php');
-require_once('../../system/classes/table_category.php');
 
 // Initialize and check the parameters
 $getType  = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));

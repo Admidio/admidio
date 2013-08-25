@@ -34,18 +34,18 @@ class Forum
                 $forumEnable = $row['prf_value'];
             }
         }
-        
+       /* 
         if($forumEnable)
         {
             switch ($forumVersion)
             {
                 case 'phpBB2':
-                    require_once(SERVER_PATH. '/adm_program/system/forum/phpbb2.php');
+                    //require_once(SERVER_PATH. '/adm_program/system/forum/phpbb2.php');
                     
                 default:
                     return false;
             }    
-        }
+        }*/
     }
 
 	// method creates the interface to the relevant forum
@@ -54,7 +54,6 @@ class Forum
         switch ($forumType)
         {
             case "phpBB2":
-                require_once(SERVER_PATH. "/adm_program/system/forum/phpbb2.php");
                 return new PhpBB2;
                 
             default:

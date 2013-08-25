@@ -10,7 +10,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/role_dependency.php');
 
 $_SESSION['import_csv_request'] = $_POST;
 

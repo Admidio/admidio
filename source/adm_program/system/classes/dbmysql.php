@@ -8,8 +8,6 @@
  *
  *****************************************************************************/
  
-require_once(SERVER_PATH. '/adm_program/system/db/db_common.php');
- 
 class DBMySQL extends DBCommon
 {
     // create database connection  

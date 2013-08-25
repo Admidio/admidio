@@ -18,9 +18,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/rss.php');
-require_once('../../system/classes/table_date.php');
-require_once('../../system/classes/module_dates.php');
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
 if ($gPreferences['enable_rss'] != 1)

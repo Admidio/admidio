@@ -45,19 +45,6 @@ if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
 require_once('install_functions.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/component_update.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/form_elements.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/language_data.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/list_configuration.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_text.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
-require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 
 // Initialize and check the parameters
 
@@ -181,7 +168,7 @@ elseif($getMode == 3)  // Enter database access information
                                 <div class="admFieldLabel">
                                     <label for="db_type">'.$gL10n->get('INS_DATABASE_SYSTEM').':</label></div>
                                 <div class="admFieldElement">
-                                    '. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/db/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', $dbType).'</div>
+                                    '. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', $dbType).'</div>
                             </div>
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
@@ -482,8 +469,8 @@ elseif($getMode == 8)	// Start installation
         showPage($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
     }
 
-    // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
-    // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
+    // set execution time to 6 minutes because we have a lot to do :)
+    // there should be no error output because of safe mode
     @set_time_limit(300);
 
     // first check if session is filled (if installation was aborted then this is not filled)
@@ -543,14 +530,19 @@ elseif($getMode == 8)	// Start installation
 
     // create organization independent categories
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                      VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                      VALUES (NULL, \'USF\', \'MASTER_DATA\', \'SYS_MASTER_DATA\', 0, 1, 1, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_master_data = $db->insert_id();
 
     $sql = 'INSERT INTO '. TBL_CATEGORIES. ' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
-                                      VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 0, 2, '.$gCurrentUser->getValue('usr_id').',\''. DATETIME_NOW.'\') ';
+                                      VALUES (NULL, \'USF\', \'SOCIAL_NETWORKS\', \'SYS_SOCIAL_NETWORKS\', 0, 0, 2, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
     $db->query($sql);
     $cat_id_messenger = $db->insert_id();
+
+    $sql = 'INSERT INTO '. TBL_CATEGORIES.' (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_default, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                                     VALUES (NULL, \'ROL\', \'CONFIRMATION_OF_PARTICIPATION\', \'SYS_CONFIRMATION_OF_PARTICIPATION\', 1, 0, 1, 5, '.$systemUserId.',\''. DATETIME_NOW.'\')
+                                          , (NULL, \'USF\', \'ADDIDIONAL_DATA\', \'INS_ADDIDIONAL_DATA\', 0, 0, 0, 3, '.$systemUserId.',\''. DATETIME_NOW.'\') ';
+    $this->db->query($sql);
 
     // Stammdatenfelder anlegen
     $sql = 'INSERT INTO '. TBL_USER_FIELDS. ' (usf_cat_id, usf_type, usf_name_intern, usf_name, usf_description, usf_value_list, usf_system, usf_disabled, usf_mandatory, usf_sequence, usf_usr_id_create, usf_timestamp_create)
@@ -600,10 +592,10 @@ elseif($getMode == 8)	// Start installation
     $webmaster->setValue('usr_timestamp_create', DATETIME_NOW);
     $webmaster->save(false); // no registered user -> UserIdCreate couldn't be filled
 
-    // alle Einstellungen aus preferences.php in die Tabelle adm_preferences schreiben
-    include('db_scripts/preferences.php');
+    // write all preferences from preferences.php in table adm_preferences
+    require_once('db_scripts/preferences.php');
 
-    // die Administrator-Email-Adresse ist erst einmal die vom Installationsuser
+    // set the administrator email adress to the email of the installation user
     $orga_preferences['email_administrator'] = $_SESSION['user_email'];
 
     // create all necessary data for this organization

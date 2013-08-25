@@ -21,10 +21,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/table_date.php');
-require_once('../../system/classes/table_category.php');
-require_once('../../system/classes/table_rooms.php');
-require_once('../../system/classes/module_dates.php');
+
 unset($_SESSION['dates_request']);
 
 // prüfen ob das Modul überhaupt aktiviert ist

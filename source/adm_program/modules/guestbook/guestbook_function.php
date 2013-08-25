@@ -23,9 +23,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/table_guestbook.php');
-require_once('../../system/classes/table_guestbook_comment.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/email.php');
 
 // Initialize and check the parameters
 $getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);

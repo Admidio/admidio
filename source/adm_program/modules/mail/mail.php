@@ -23,13 +23,10 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/email.php');
-require_once('../../system/classes/form_elements.php');
 
 if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 {
 	// create an object of ckeditor and replace textarea-element
-	require_once('../../system/classes/ckeditor_special.php');
 	$ckEditor = new CKEditorSpecial();
 }
 
@@ -45,13 +42,6 @@ $getBody        = admFuncVariableIsValid($_GET, 'body', 'html', '');
 $getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', 1);
 $getDeliveryConfirmation  = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean', 0);
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
-
-// Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
-// Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
-if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && $gPreferences['captcha_type']=='calc')
-{
-	require_once('../../system/classes/captcha.php');
-}
 
 // Pruefungen, ob die Seite regulaer aufgerufen wurde
 if ($gPreferences['enable_mail_module'] != 1)

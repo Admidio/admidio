@@ -25,10 +25,8 @@ if ($_GET['uploadmethod'] == 2)
     }
 }
 
-require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/image.php');
 
 // Initialize and check the parameters
 $getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
@@ -89,7 +87,6 @@ if ($getUploadmethod == 1)
 //bei Bedarf Uploadordner erzeugen
 if(file_exists(SERVER_PATH. '/adm_my_files/photos/upload') == false)
 {
-    require_once('../../system/classes/folder.php');
     $folder = new Folder(SERVER_PATH. '/adm_my_files/photos');
     $folder->createFolder('upload', true);
 }
@@ -204,7 +201,6 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
             //Nachsehen ob Thumnailordner existiert
             if(file_exists($ordner.'/thumbnails') == false)
             {
-                require_once('../../system/classes/folder.php');
                 $folder = new Folder($ordner);
                 $folder->createFolder('thumbnails', true);
             }

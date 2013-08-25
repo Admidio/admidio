@@ -10,13 +10,6 @@
 
 require_once('../../system/common.php');
 
-// Falls die Ausgabe des Catpcha die Ausgabe als Rechenaufgabe eingestellt wurde, 
-// muss die Klasse geladen werden
-if ($gPreferences['captcha_type']=='calc')
-{
-	require_once('../../system/classes/captcha.php');
-}
-
 echo '<b>'.$gL10n->get("ORG_CAPTCHA_PREVIEW").'</b><br><br>';
 
 if($gPreferences['captcha_type'] == 'pic')

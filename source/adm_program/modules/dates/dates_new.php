@@ -17,11 +17,6 @@
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/ckeditor_special.php');
-require_once('../../system/classes/form_elements.php');
-require_once('../../system/classes/table_date.php');
-require_once('../../system/classes/table_rooms.php');
-require_once('../../system/classes/table_roles.php');
 
 // Initialize and check the parameters
 $getDateId   = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', 0);

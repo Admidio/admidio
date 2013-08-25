@@ -14,8 +14,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/email.php');
-require_once('../../system/classes/table_roles.php');
 
 //Stop if mail module is disabled
 if($gPreferences['enable_mail_module'] != 1)

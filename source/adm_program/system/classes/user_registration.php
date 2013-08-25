@@ -31,8 +31,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
-
 class UserRegistration extends User
 {
 	private $sendEmail; ///< Flag if the object will send a SystemMail if registration is accepted or deleted.

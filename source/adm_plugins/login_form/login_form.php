@@ -27,8 +27,6 @@ if(!defined('PLUGIN_PATH'))
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
 }
 require_once(PLUGIN_PATH. '/../adm_program/system/common.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/form_elements.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/table_roles.php');
 
 // Sprachdatei des Plugins einbinden
 $gL10n->addLanguagePath(PLUGIN_PATH. '/'.$plugin_folder.'/languages');

@@ -20,7 +20,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/form_elements.php');
 
 // Initialize and check the parameters
 $getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
@@ -46,13 +45,6 @@ if($getUserId == 0 && $getNewUser == 0)
 if($getRemoveUrl == 1)
 {
     $gNavigation->deleteLastUrl();
-}
-
-// Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
-// Rechenaufgabe eingestellt wurde, muss die Klasse f�r neue Registrierungen geladen werden
-if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1 && $gPreferences['captcha_type']=='calc')
-{
-	require_once('../../system/classes/captcha.php');
 }
 
 // User-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird

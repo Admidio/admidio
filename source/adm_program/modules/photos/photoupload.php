@@ -14,7 +14,6 @@
  * 
  *****************************************************************************/
 
-require_once('../../system/classes/table_photos.php');
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('../../libs/flexupload/class.flexupload.inc.php');
@@ -67,7 +66,6 @@ else
 //ordner fuer Flexupload anlegen, falls dieser nicht existiert
 if(file_exists(SERVER_PATH. '/adm_my_files/photos/upload') == false)
 {
-    require_once('../../system/classes/folder.php');
     $folder = new Folder(SERVER_PATH. '/adm_my_files/photos');
     $folder->createFolder('upload', true);
 }

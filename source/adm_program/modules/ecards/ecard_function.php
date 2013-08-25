@@ -7,9 +7,6 @@
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *****************************************************************************/
 
-require_once('../../system/classes/email.php');
-require_once('../../system/classes/image.php');
-
 class FunctionClass
 {
 	public $nameRecipientString 		= '';

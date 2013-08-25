@@ -16,8 +16,6 @@
 
 require_once('common.php');
 require_once('login_valid.php');
-require_once('classes/image.php');
-require_once('classes/my_files.php');
 
 $getCKEditor        = admFuncVariableIsValid($_GET, 'CKEditor', 'string', null, true, null, true);
 $getCKEditorFuncNum = admFuncVariableIsValid($_GET, 'CKEditorFuncNum', 'string', null, true, null, true);

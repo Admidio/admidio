@@ -5,14 +5,25 @@
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="todo"></text>
     <text id="INS_INSTALLATION_EXISTS" development="new" translation="todo">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</text>
+    <text id="INS_LOGIN_OF_WEBMASTER" development="deleted" translation="todo"></text>
+    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="deleted" translation="todo"></text>
+    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="deleted" translation="todo"></text>
+    <text id="INS_NECESSARY_INFORMATION" development="deleted" translation="todo"></text>
     <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="todo">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version %VAR1%. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="deleted" translation="todo"></text>
+    <text id="INS_SET_ADMINISTRATOR" development="deleted" translation="todo"></text>
+    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="deleted" translation="todo"></text>
     <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="deleted" translation="todo"></text>
     <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="todo">Eine Aktualisierung der Datenbank ist nicht möglich!</text>
     <text id="INS_WEBMASTER_LOGIN" development="new" translation="todo">Webmaster-Anmeldung</text>
     <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="todo">Gib im nachfolgenden Formular bitte die Zugangsdaten eines Webmasters an. Nur Webmaster sind berichtigt ein Datenbankupdate durchzuführen.</text>
+    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="deleted" translation="todo"></text>
+    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="deleted" translation="todo"></text>
+    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="deleted" translation="todo"></text>
     <text id="DOW_FILE_NAME_INVALID" development="deleted" translation="todo"></text>
     <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="todo">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</text>
+    <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="todo">Gib im folgenden Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die du nun hinzufügen möchtest. Im nächsten Schritt wird die Organisation mit ihren dazugehörigen Stammdaten angelegt.</text>
+    <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="todo">Die Organisation %VAR1_BOLD% wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
 </version>
@@ -522,27 +533,19 @@
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="todo">Die Installation war erfolgreich</text>
     <text id="INS_INTERN" development="new" translation="todo">Intern</text>
     <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="todo">Es wurde keine Sprache ausgewählt.</text>
-    <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="todo">Zugangsdaten eines Webmasters</text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="todo">Gib in diesem Formular die Zugangsdaten eines bereits existierenden Webmasters einer bestehenden Organisation ein. Dieser wird der neue Administrator der neuen Organisation mit dem du dich direkt an der Organisation anmelden kannst.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="todo">Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden!</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="todo">Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation!</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
     <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="todo">Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, für die du Admidio nutzen möchtest.</text>
-    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="todo">Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die du nun hinzufügen möchtest.</text>
-    <text id="INS_NECESSARY_INFORMATION" development="new" translation="todo">Auf den nächsten Seiten musst du einige notwendige Informationen der neuen Organisation eingeben.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
     <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Du solltest versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu deiner Datenbank ist.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Du solltest versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
-    <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="todo">Organisation festlegen</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="todo">Organisation einrichten</text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="todo">Die neue Organisation %VAR1_BOLD% wurde eingerichtet und die Konfigurationsdatei erstellt. Du kannst nun mit Admidio arbeiten und dich mit den Daten des Administrators anmelden.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="todo">Die Einrichtung war erfolgreich</text>
     <text id="INS_SKYPE" development="new" translation="todo">Skype</text>
     <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="todo">Wir würden uns freuen, wenn du die weitere Entwicklung von Admidio mit einer Spende unterstützen würdest!</text>
@@ -558,7 +561,6 @@
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="todo">Die Aktualisierung war erfolgreich</text>
     <text id="INS_WARNING_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</text>
     <text id="INS_WARNING_SAFE_MODE" development="new" translation="todo">Auf deinem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</text>
-    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="todo">Willkommen zur Einrichtung einer weiteren Organisation</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="todo">Willkommen zur Installation von Admidio</text>
     <text id="INS_WELCOME_TEXT" development="new" translation="todo">Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung von Admidio eingeben werden. Du benötigst dazu unter anderem die Zugangsdaten zu der Datenbank, auf der Admidio zukünftig laufen soll.</text>
     <text id="INS_YAHOO_MESSENGER" development="new" translation="todo">Yahoo! Messenger</text>

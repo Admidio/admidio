@@ -18,10 +18,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/module_menu.php');
-require_once('../../system/classes/table_category.php');
-require_once('../../system/classes/table_roles.php');
-require_once('../../system/classes/module_lists.php');
+
 unset($_SESSION['mylist_request']);
 
 // Initialize and check the parameters

@@ -32,16 +32,8 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/html_table.php');
-require_once('../../system/classes/form_elements.php');
-require_once('../../system/classes/module_dates.php');
-require_once('../../system/classes/module_menu.php');
-require_once('../../system/classes/participants.php');
-require_once('../../system/classes/table_category.php');
-require_once('../../system/classes/table_date.php');
-require_once('../../system/classes/table_rooms.php');
-unset($_SESSION['dates_request']);
 
+unset($_SESSION['dates_request']);
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)

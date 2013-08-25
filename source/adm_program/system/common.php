@@ -39,23 +39,8 @@ if(strlen($g_tbl_praefix) == 0)
 
 // includes WITHOUT database connections
 require_once(SERVER_PATH. '/adm_program/libs/htmlawed/htmlawed.php');
-require_once(SERVER_PATH. '/adm_program/system/db/database.php');
 require_once(SERVER_PATH. '/adm_program/system/function.php');
 require_once(SERVER_PATH. '/adm_program/system/string.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/auto_login.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/component.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/datetime_extended.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/exception.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/language.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/language_data.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/menu.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/message.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/navigation.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/organization.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/profile_fields.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/session.php');
-require_once(SERVER_PATH. '/adm_program/system/classes/user.php');
-require_once(SERVER_PATH. '/adm_program/system/forum/forum.php');
 
 // remove HMTL & PHP-Code from all parameters
 $_GET     = admStrStripTagsSpecial($_GET);

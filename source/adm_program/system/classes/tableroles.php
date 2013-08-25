@@ -28,8 +28,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
 // constants for column rol_leader_rights
 define('ROLE_LEADER_NO_RIGHTS', 0);
 define('ROLE_LEADER_MEMBERS_ASSIGN', 1);

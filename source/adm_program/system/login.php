@@ -9,8 +9,6 @@
  *****************************************************************************/
 
 require_once('common.php');
-require_once('classes/form_elements.php');
-require_once('classes/table_roles.php');
 
 // remember url (will be removed in cookie_check)
 $gNavigation->addUrl(CURRENT_URL);

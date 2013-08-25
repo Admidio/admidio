@@ -18,8 +18,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-require_once('../../system/classes/module_menu.php');
-require_once('../../system/classes/table_guestbook.php');
+
 unset($_SESSION['guestbook_entry_request']);
 unset($_SESSION['guestbook_comment_request']);
 

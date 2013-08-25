@@ -8,7 +8,6 @@
  *
  *****************************************************************************/
 require_once('../../system/common.php');
-require_once('../../system/classes/html_table.php');
 require_once('ecard_function.php');
 
 // Initialize and check the parameters

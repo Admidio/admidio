@@ -10,9 +10,6 @@
  
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../system/classes/html_table.php');
-require_once('../../system/classes/module_menu.php');
-require_once('../../system/classes/table_user_field.php');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())

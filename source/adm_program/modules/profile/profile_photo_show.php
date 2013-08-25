@@ -15,7 +15,6 @@
  *****************************************************************************/
 require('../../system/common.php');
 require('../../system/login_valid.php');
-require('../../system/classes/image.php');
 
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);

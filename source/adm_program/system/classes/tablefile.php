@@ -19,8 +19,6 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_access.php');
-
 class TableFile extends TableAccess
 {
 	/** Constuctor that will create an object of a recordset of the table adm_files. 

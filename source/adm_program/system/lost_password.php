@@ -8,14 +8,6 @@
  *****************************************************************************/
  
 require_once('common.php');
-require_once('classes/system_mail.php');
-
-// Falls das Catpcha in den Orgaeinstellungen aktiviert wurde und die Ausgabe als
-// Rechenaufgabe eingestellt wurde, muss die Klasse für nicht eigeloggte Benutzer geladen werden
-if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1 && $gPreferences['captcha_type']=='calc')
-{
-	require_once('classes/captcha.php');
-}
 
 // save url to navigation stack
 $gNavigation->addUrl(CURRENT_URL);
