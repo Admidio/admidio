@@ -131,7 +131,7 @@ abstract class HtmlElement {
     private     $mainElement;                   ///< String with main element as string
     private     $mainElementAttributes;         ///< String with attributes of the main element
     private     $nesting;                       ///< Flag enables nesting of main elements, e.g div blocks ( Default : false )
-    private     $parentFlag;                    ///< Flag for setted parent Element
+    protected   $parentFlag;                    ///< Flag for setted parent Element
     
     /**
      * Constructor initializing all class variables
@@ -275,7 +275,7 @@ abstract class HtmlElement {
         }
 
         // If nesting is enabled, main element can be set again
-        if($childElement == $this->mainElement && $nesting === true)
+        if($childElement == $this->mainElement && $this->nesting === true)
         {
             // now set as current position
             $this->currentElement = $childElement;
@@ -336,9 +336,10 @@ abstract class HtmlElement {
                 $this->currentElementAttributes = '';
             }
             else
-            {
+            {   
                 // set Flag
                 $this->parentFlag = 1;
+                
                 if($this->currentElement == $this->mainElement && $this->nesting === true)
                 {
                     $this->htmlString .= '<' .$this->currentElement . $this->mainElementAttributes . '>';
@@ -396,10 +397,10 @@ abstract class HtmlElement {
                 {
                     if($this->arrParentElements[$i] == $parentElement)
                     {
-                        $position = $i;    
+                        $position = $i;
                     }
                 }
-                
+
                 // if last position set Endtag in string and remove from array
                 if($position == $totalCount)
                 {
