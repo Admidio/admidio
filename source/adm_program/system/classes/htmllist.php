@@ -4,14 +4,16 @@
  *  @brief  Create html lists
  * 
  *  This class creates html list elements.
- *  Create a list object for ordered, unordered or datalist an add the list items.
- *  The class supports datalists and ordered/unorderedlists and combinations of nested lists and/or datalists.
+ *  Create a list object for ordered, unordered or data list an add the list items.
+ *  The class supports data lists and lists and combination of nested lists and data lists.
  *  The parsed list object is returned as string.
  *  
- *  @par Example 1: Creating a datalist
+ *  @par Example 1: Creating datalist
  *  @code
  *  // Get instance
  *  $list = new HtmlList('dl', 'id_dl', 'class'); // Parameter for list type, id and class are optional ( Default list type = ul )
+ *  // In html strict a data list is determined to be nested in a list element if used in an ordered/unordered list
+ *  $list->addListItem();
  *  // add  2 list items term and description as string. Arrays are not supported!
  *  $list->addDataListItems('term_1', 'Listdata_1');
  *  $list->addDataListItems('term_2', 'Listdata_2');
@@ -20,7 +22,7 @@
  *  @endcode
  *  @par Example 2: Creating  ordered list
  *  @code
- *  // Get instance
+ *  // Get Instance
  *  $list = new HtmlList('ol', 'id_ol', 'class');
  *  // Set type Attribute 
  *  $list->addAttribute('type', 'square');
@@ -35,7 +37,7 @@
  *  $list->addListItem('Item_5');
  *  // Define datalist in link element
  *  $list->addDataList();
- *  // Define several terms and descriptions of the data list
+ *  // Define several term and description of the data list
  *  $list->addDataListItems('term_5', 'Listdata_5');
  *  list->addDataListItems('term_5.1', 'Listdata_5.1');
  *  list->addDataListItems('term_5.2', 'Listdata_5.2');
@@ -58,7 +60,7 @@ class HtmlList extends HtmlElement
     /**
      * Constructor creates the element
      *
-     * @param $list List element ( ul/ol/dl Default: ul) 
+     * @param $list List element ( ul/ol Default: ul) 
      * @param $id Id of the list
      * @param $class Class name of the list
      */
@@ -80,11 +82,11 @@ class HtmlList extends HtmlElement
     } 
 
     /**
-     *  @par Add a datalist (dl).
+     *  @par Add datalist (dl).
      *
-     *  @param $id Id Attribute
-     *  @param $term Term as string for datalist
-     *  @param $description Description as string for data 
+     *  @param $id id Attribute
+     *  @param $term term as string for datalist
+     *  @param $description description as string for data description
      */
     public function addDatalist($id = '', $term = null, $description = null)
     {
@@ -95,7 +97,7 @@ class HtmlList extends HtmlElement
         }
         $this->addParentElement('dl');
         
-            if(strlen($id) > 0)
+        if(strlen($id) > 0)
         {
             $this->addAttribute('id', $id);
         }
@@ -103,6 +105,7 @@ class HtmlList extends HtmlElement
         if($term != null && $description != null)
         {
             $this->addDataListItems($term, $description);
+
         }
     }
     
@@ -132,7 +135,7 @@ class HtmlList extends HtmlElement
     }
     
     /**
-     *  @par Add a list item (li).
+     *  @par Add list item (li).
      *
      *  @param $id id Attribute
      *  @param $data element data
@@ -158,6 +161,7 @@ class HtmlList extends HtmlElement
                  
             // Define datalist with term and data as description
             $this->addDataList('', $term, $data);
+            $this->closeParentElement('li');
         }
         else
         {
@@ -174,6 +178,7 @@ class HtmlList extends HtmlElement
             }
             else
             {
+                $this->closeParentElement('li');
                 // handle as parent element maybe a datalist could be nested next
                 $this->addParentElement('li');
                 

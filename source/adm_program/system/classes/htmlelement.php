@@ -378,48 +378,44 @@ abstract class HtmlElement {
      */
     public function closeParentElement($parentElement)
     {
-        // intialize positioand count entries in array
+        // intialize position and count entries in array
         $position = '';
         $totalCount = count($this->arrParentElements);
-            
+
         if($totalCount == 0 )
         {
             return false;
         }
-        
-        if($this->nesting === false)
-        {
-            // if not nesting mode
-            if(in_array($parentElement, $this->arrParentElements))
-            {
-                // find position in log array
-                for($i = 0; $i < $totalCount-1; $i++)
-                {
-                    if($this->arrParentElements[$i] == $parentElement)
-                    {
-                        $position = $i;
-                    }
-                }
 
-                // if last position set Endtag in string and remove from array
-                if($position == $totalCount)
+        if(in_array($parentElement, $this->arrParentElements) && $this->nesting === false)
+        {
+            // find position in log array
+            for($i = 0; $i < $totalCount-1; $i++)
+            {
+                if($this->arrParentElements[$i] == $parentElement)
                 {
-                    $this->htmlString .= '</' . $this->arrParentElements[$totalCount] . '>';
-                    unset($this->arrParentElements[$position]);
+                    $position = $i;
                 }
-                else
+            }
+
+            // if last position set Endtag in string and remove from array
+            if($position == $totalCount)
+            {
+                $this->htmlString .= '</' . $this->arrParentElements[$totalCount] . '>';
+                unset($this->arrParentElements[$position]);
+            }
+            else
+            {
+                // all elements setted later must also be closed and removed from array
+                for($i = $totalCount-1; $i >= $position; $i--)
                 {
-                    // all elements setted later must also be closed and removed from array
-                    for($i = $totalCount-1; $i >= $position; $i--)
-                    {
-                        $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
-                        unset($this->arrParentElements[$i]);
-                    }
+                    $this->htmlString .= '</' . $this->arrParentElements[$i] . '>';
+                    unset($this->arrParentElements[$i]);
                 }
             }
         }
         else
-        {   
+        {
             // close last tag and delete whitespaces in log array
             $this->htmlString .= '</' . $this->arrParentElements[$totalCount-1] . '>';
             unset($this->arrParentElements[$totalCount-1]);
