@@ -21,35 +21,30 @@ require_once('../../system/common.php');
 
 unset($_SESSION['announcements_request']);
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if module is enabled
 if ($gPreferences['enable_announcements_module'] == 0)
 {
-    // das Modul ist deaktiviert
+    // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($gPreferences['enable_announcements_module'] == 2)
 {
-    // nur eingeloggte Benutzer duerfen auf das Modul zugreifen
+    // Access only with valid login
     require('../../system/login_valid.php');
 }
 
-// Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
-$getAnnId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
+// create object for announcements
+$announcements = new ModuleAnnouncements();
+// get parameters and number of recordsets
+$parameter = $announcements->getParameter();
+$announcementsCount = $announcements->getDataSetCount();
 
-if(strlen($getDate) > 0)
-{
-	$getDate = substr($getDate,0,4). '-'. substr($getDate,4,2). '-'. substr($getDate,6,2);
-}
-
-// Navigation faengt hier im Modul an
+// Navigation of the module starts here
 $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL);
 
-// Html-Kopf ausgeben
-$gLayout['title']  = $getHeadline;
+// Start html head
+$gLayout['title']  = $announcements->getHeadline();
 $gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
@@ -60,18 +55,14 @@ $gLayout['header'] = '
 
 if($gPreferences['enable_rss'] == 1)
 {
-    $gLayout['header'] .= '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline).'"
-        href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$getHeadline.'" />';
+    $gLayout['header'] .= '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$announcements->getHeadline()).'"
+        href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$announcements->getHeadline().'" />';
 };
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // show headline of module
-echo '<h1 class="moduleHeadline">'.$getHeadline.'</h1>';
-
-// create objects to manage the selected announcements
-$announcements = new ModuleAnnouncements($getAnnId, $getDate);
-$announcementsCount = $announcements->getAnnouncementsCount();
+echo '<h1 class="moduleHeadline">'.$announcements->getHeadline().'</h1>';
 
 // number of announcements per page
 if($gPreferences['announcements_per_page'] > 0)
@@ -89,8 +80,8 @@ $announcementsMenu = new ModuleMenu('admMenuAnnouncements');
 if($gCurrentUser->editAnnouncements())
 {
 	// show link to create new announcement
-	$announcementsMenu->addItem('admMenuItemNewAnnouncement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline, 
-								$gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
+	$announcementsMenu->addItem('admMenuItemNewAnnouncement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$announcements->getHeadline(), 
+								$gL10n->get('SYS_CREATE_VAR', $announcements->getHeadline()), 'add.png');
 }
 
 if($gCurrentUser->isWebmaster())
@@ -105,7 +96,7 @@ $announcementsMenu->show();
 if($announcementsCount == 0)
 {
     // no announcements found
-    if($getAnnId > 0)
+    if($parameter['id'] > 0)
     {
         echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
     }
@@ -116,9 +107,10 @@ if($announcementsCount == 0)
 }
 else
 {
-    $announcementsArray = $announcements->getAnnouncements($getStart, $announcementsPerPage);    
+    // get all recordsets 
+    $announcementsArray = $announcements->getDataSet($parameter['startelement'], $announcementsPerPage);    
     $announcement = new TableAnnouncement($gDb);
-
+    
     // show all announcements
     foreach($announcementsArray['announcements'] as $row)
     {
@@ -139,7 +131,7 @@ else
                         if($announcement->editRight() == true)
                         {
                             echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><img 
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$announcements->getHeadline().'"><img 
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                         }
 
@@ -163,15 +155,11 @@ else
                     $row['change_name'], $announcement->getValue('ann_timestamp_change'), $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')).'
             </div>
         </div>';
-    }  // Ende While-Schleife
+    }  // Ende foreach
     
     // If neccessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
-    echo admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $getStart, TRUE);
+    $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$announcements->getHeadline();
+    echo admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $parameter['startelement'], TRUE);
 }
-
-
-        
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-
 ?>

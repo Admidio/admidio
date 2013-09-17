@@ -1,33 +1,101 @@
-<?php 
+<?php
+/*****************************************************************************/
+/** @class ModuleAnnouncements
+ *  @brief This class reads announcement recordsets from database
+ *
+ *  This class reads all available recordsets from table announcements
+ *  and returns an Array with results, recordsets and validated parameters from $_GET Array.
+ *  @par Returned Array
+ *  @code
+ *  Array
+ *  (
+ *      [numResults] => 3
+ *      [limit] => 10
+ *      [totalCount] => 3
+ *      [recordsets] => Array
+ *          (
+ *              [0] => Array
+ *                  (
+ *                      [0] => 3
+ *                      [ann_id] => 3
+ *                      [1] => DEMO
+ *                      [ann_org_shortname] => DEMO
+ *                      [2] => 1
+ *                      [ann_global] => 1
+ *                      [3] => Willkommen im Demobereich
+ *                      [ann_headline] => Willkommen im Demobereich
+ *                      [4] => <p>In diesem Bereich kannst du mit Admidio herumspielen und schauen, ....</p>
+ *                      [ann_description] => <p>In diesem Bereich kannst du mit Admidio herumspielen und schauen, ....</p>
+ *                      [5] => 1
+ *                      [ann_usr_id_create] => 1
+ *                      [6] => 2013-07-18 00:00:00
+ *                      [ann_timestamp_create] => 2013-07-18 00:00:00
+ *                      [7] =>
+ *                      [ann_usr_id_change] =>
+ *                      [8] =>
+ *                      [ann_timestamp_change] =>
+ *                      [9] => Paul Webmaster
+ *                      [create_name] => Paul Webmaster
+ *                      [10] =>
+ *                      [change_name] =>
+ *                  )
+ *          )
+ *      [parameter] => Array
+ *          (
+ *              [date] => ''
+ *              [daterange] => Array
+ *                  (
+ *                      [english] => Array
+ *                          (
+ *                              [start_date] => 2013-09-16 // current date
+ *                              [end_date] => 9999-12-31
+ *                          )
+ *
+ *                      [system] => Array
+ *                          (
+ *                              [start_date] => 16.09.2013 // current date
+ *                              [end_date] => 31.12.9999
+ *                          )
+ *                  )
+ *              [headline] => Ankündigungen
+ *              [id] => 0
+ *              [mode] => Default
+ *              [startelement] => 0
+ *              [view_mode] => Default
+ *          )
+ *  )
+ *  @endcode
+ */ 
 /******************************************************************************
- * Klasse fuer zum Abruf und Bearbeiten von Ankündigungen
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
-  *****************************************************************************/
+ ******************************************************************************/
   
-class ModuleAnnouncements
-{
-    protected $getConditions;
-        
-    public function __construct($annId=0, $date='')
+class ModuleAnnouncements extends Modules
+{    
+    protected $getConditions;   ///< String with SQL condition
+    
+    /**
+     *  Constructor setting default module headline as constant
+     *  and initializing all parameters  
+     */    
+    public function __construct()
     {   
-        //Bedingungen
-        if($annId > 0)
-        {
-            $this->getConditions = 'AND ann_id ='. $annId;
-        }
-        // Ankuendigungen an einem Tag suchen
-        elseif(strlen($date) > 0)
-        {
-            $this->getConditions = ' AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$date.'\'';        
-        }             
+        global $gL10n;
+        // define constant for headline
+        define('HEADLINE', $gL10n->get('ANN_ANNOUNCEMENTS'));
+        parent::__construct();
+        $this->setCondition($this->id, $this->date);           
     }
     
-    //get number of available announcements
-    public function getAnnouncementsCount()
+    /**
+     * Get number of available announcements
+     * @Return Returns the total count and push it in the array
+     */
+    public function getDataSetCount()
     {     
         global $gCurrentOrganization;
         global $gDb;
@@ -43,7 +111,11 @@ class ModuleAnnouncements
         return $row['count'];
     }
 
-    public function getAnnouncements($startElement=0, $limit=NULL)
+    /**
+     * Get all records and push it to the array 
+     * @return Returns the Array with results, recordsets and validated parameters from $_GET Array
+     */
+    public function getDataSet($startElement=0, $limit=NULL)
     {
         global $gCurrentOrganization;
         global $gPreferences;
@@ -110,16 +182,35 @@ class ModuleAnnouncements
 
         $result = $gDb->query($sql);
 
-        //array für Ergbenisse       
-        $announcements= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'stratElement'=>$startElement, 'totalCount'=>$this->getAnnouncementsCount(), 'anouncements'=>array());
-       
+        //array for results       
+        $announcements= array('numResults'=>$gDb->num_rows($result), 'limit' => $limit, 'totalCount'=>$this->getDataSetCount());
+        
         //Ergebnisse auf Array pushen
         while($row = $gDb->fetch_array($result))
-        {           
+        {       
             $announcements['announcements'][] = $row; 
         }
        
+        // Push parameter to array
+        $announcements['parameter'] = $this->getParameter();
         return $announcements;
     }
-}
+    
+    /**
+     * Set SQL condition for ID and required date 
+     */
+    private function setCondition($annId=0, $date='')
+    {
+        //Bedingungen
+        if($annId > 0)
+        {
+            $this->getConditions = 'AND ann_id ='. $annId;
+        }
+        // Search announcements to date 
+        elseif(strlen($date) > 0)
+        {
+            $this->getConditions = 'AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$this->date.'\'';
+        }
+    }
+}      
 ?>
