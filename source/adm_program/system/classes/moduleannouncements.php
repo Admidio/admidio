@@ -12,7 +12,7 @@
  *      [numResults] => 3
  *      [limit] => 10
  *      [totalCount] => 3
- *      [recordsets] => Array
+ *      [recordset] => Array
  *          (
  *              [0] => Array
  *                  (
@@ -42,6 +42,7 @@
  *          )
  *      [parameter] => Array
  *          (
+ *              [cat_id] => 0
  *              [date] => ''
  *              [daterange] => Array
  *                  (
@@ -60,6 +61,7 @@
  *              [headline] => Ankündigungen
  *              [id] => 0
  *              [mode] => Default
+ *              [order] => 'ASC'
  *              [startelement] => 0
  *              [view_mode] => Default
  *          )
@@ -188,7 +190,7 @@ class ModuleAnnouncements extends Modules
         //Ergebnisse auf Array pushen
         while($row = $gDb->fetch_array($result))
         {       
-            $announcements['announcements'][] = $row; 
+            $announcements['recordset'][] = $row; 
         }
        
         // Push parameter to array

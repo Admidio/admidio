@@ -112,7 +112,7 @@ else
     $announcement = new TableAnnouncement($gDb);
     
     // show all announcements
-    foreach($announcementsArray['announcements'] as $row)
+    foreach($announcementsArray['recordset'] as $row)
     {
         $announcement->clear();
         $announcement->setArray($row);

@@ -39,14 +39,17 @@ abstract class Modules
     
     public    $arrParameter;    ///< Array with validated parameters 
     protected $headline;        ///< String with headline expression
+    protected $catId;           ///< ID as integer for choosen category
     protected $id;              ///< ID as integer to choose record
     protected $date;            ///< String with date value
     protected $daterange;       ///< Array with date settings in English format and system format
-    protected $mode;            ///< String with current mode ( Deafault: "Default" )
+    protected $mode;            ///< String with current mode ( Default: "Default" )
+    protected $order;           ///< String with order ASC/DESC( Default: "ASC" )
     protected $start;           ///< Integer for start element
-    private   $properties;      ///< Array Clone of $_GET Array
+    protected $properties;      ///< Array Clone of $_GET Array
     protected $validModes;      ///< Array with valid modes ( Deafault: "Default" )
-    protected $viewMode;        ///< Array with valid view modes ( Deafault: "Default" )
+    protected $validViewModes;  ///< Array with valid view modes ( Deafault: "Default" )
+    protected $viewMode;        ///< String with view mode ( Default: "Default" )
     
     abstract public function getDataSet($startElement=0, $limit=NULL);
     abstract public function getDataSetCount();
@@ -60,21 +63,35 @@ abstract class Modules
         $this->date             = '';
         $this->daterange        = array();
         $this->headline         = '';
+        $this->catId            = 0;
         $this->id               = 0;
         $this->mode             = 'Default';
+        $this->order            = '';
         $this->properties       = $_GET;
         $this->start            = '';
         $this->validModes       = array('Default');
         $this->viewMode         = 'Default';
+        $this->validViewModes   = array('Default');
         
         // Set parameters
+        $this->setCatId();
         $this->setDate();
         $this->setDaterange();
         $this->setHeadline();
         $this->setId();
         $this->setMode();
+        $this->setOrder();
         $this->setStartElement();
         $this->setViewMode();
+    }
+    
+    /**
+     *  Return category ID
+     *  @return Returns the category ID 
+     */
+    public function getCatId()
+    {
+        return $this->catId;
     }
     
     /**
@@ -123,6 +140,15 @@ abstract class Modules
     }
     
     /**
+     *  Return mode
+     *  @return Returns order as string
+     */
+    public function getOrder()
+    {
+        return $this->order;
+    }
+    
+    /**
      *  Return start element
      *  @return Returns Integer value for the start element
      */
@@ -145,16 +171,30 @@ abstract class Modules
      *  @return Returns an Array with all needed parameters as Key/Value pair 
      */
     public function getParameter()
-    {
+    {    
         // Set Array
+        $this->arrParameter['cat_id']       = $this->catId;
         $this->arrParameter['date']         = $this->date;
         $this->arrParameter['daterange']    = $this->daterange;
         $this->arrParameter['headline']     = $this->headline;
         $this->arrParameter['id']           = $this->id;
         $this->arrParameter['mode']         = $this->mode;
+        $this->arrParameter['order']        = $this->order;
         $this->arrParameter['startelement'] = $this->start;
         $this->arrParameter['view_mode']    = $this->viewMode;
         return $this->arrParameter;
+    }
+    
+    /**
+     *  Set category ID
+     *
+     *  @par If user string is set in $_GET Array the string is validated by Admidio function and set as category ID in the modules. Otherwise the category is set default to "0"
+     *
+     */
+    protected function setCatId()
+    {
+        // check optional user parameter and make secure. Otherwise set default value
+        $this->catId = admFuncVariableIsValid($this->properties, 'cat_id', 'numeric', 0);
     }
     
     /**
@@ -279,7 +319,18 @@ abstract class Modules
     protected function setMode()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->mode = admFuncVariableIsValid($this->properties, 'mode', 'string', $this->mode, false, $this->validModes);
+        $this->mode = admFuncVariableIsValid($this->properties, 'mode', 'string', $this->validModes[0], false, $this->validModes);
+    }
+    
+    /**
+     *  Set order
+     *
+     *  @par If user string is set in $_GET Array the string is validated by Admidio function and set as order for the results in the modules. Otherwise mode is set to default "ASC"
+     */
+    protected function setOrder()
+    {
+        // check optional user parameter and make secure. Otherwise set default value
+        $this->order = admFuncVariableIsValid($this->properties, 'order', 'string', 'ASC', false, array('ASC', 'DESC'));
     }
     
     /**
@@ -301,7 +352,7 @@ abstract class Modules
     protected function setViewMode()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->viewMode = admFuncVariableIsValid($this->properties, 'viewMode', 'string', $this->viewMode);
+        $this->viewMode = admFuncVariableIsValid($this->properties, 'view_mode', 'string', $this->validViewModes[0], false, $this->validViewModes);
     }
 }
 ?>
