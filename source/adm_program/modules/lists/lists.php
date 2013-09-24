@@ -396,7 +396,6 @@ else
 }
 
 echo '</div>';
-print_r($listsResult);
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>
