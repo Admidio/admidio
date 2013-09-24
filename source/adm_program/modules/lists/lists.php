@@ -21,12 +21,6 @@ require_once('../../system/common.php');
 
 unset($_SESSION['mylist_request']);
 
-// Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
-$getCategorySelection = admFuncVariableIsValid($_GET, 'category-selection', 'boolean', 1);
-$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
-
 // Navigation faengt hier im Modul an
 $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL);
@@ -34,21 +28,15 @@ $gNavigation->addUrl(CURRENT_URL);
 //New Modulelist object
 $lists = new ModuleLists();
 
-//set role status
-$lists->setRoleStatus($getActiveRole);
-
-//set category
-$lists->setCategory($getCatId);
-
 //get Number of roles
-$numberOfRoles = $lists->countLists();
+$numberOfRoles = $lists->getDataSetCount();
 
 if($numberOfRoles == 0)
 {
     if($gValidLogin == true)
     {
         // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
-        if($getActiveRole == 0)
+        if($lists->getActiveRole() == 0)
         {
             $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
         }
@@ -66,18 +54,18 @@ if($numberOfRoles == 0)
 
 
 // Html-Kopf ausgeben
-if($getActiveRole)
+if($lists->getActiveRole())
 {
-    $gLayout['title']  = $gL10n->get('LST_ACTIVE_ROLES');
+    $gLayout['title']  = $lists->getHeadline();
 }
 else
 {
     $gLayout['title']  = $gL10n->get('LST_INACTIVE_ROLES');
 }
 
-if($getCatId > 0)
+if($lists->getCatId() > 0)
 {
-    $category = new TableCategory($gDb, $getCatId);
+    $category = new TableCategory($gDb, $lists->getCatId());
     $gLayout['title'] .= ' - '.$category->getValue('cat_name');
 }
 
@@ -89,7 +77,7 @@ $gLayout['header'] = '
 				roleId    = elementId.substr(elementId.search(/_/)+1);
 
 				if($(this).val() == "mylist") {
-					self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$getActiveRole.'";
+					self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$lists->getActiveRole().'";
 				}
 				else {
 					self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_id=" + roleId;
@@ -97,7 +85,6 @@ $gLayout['header'] = '
 			})
         });
     //--></script>';
-
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
@@ -105,7 +92,7 @@ echo '<div id="lists_overview">
 <h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';
 
 // Kategorienauswahlbox soll angezeigt werden oder der User darf neue Rollen anlegen
-if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
+if($lists->getCategorySelection() == 1 || $gCurrentUser->assignRoles())
 {
 	// create module menu
 	$ListsMenu = new ModuleMenu('admMenuLists');
@@ -118,7 +105,7 @@ if($getCategorySelection == 1 || $gCurrentUser->assignRoles())
 	}
 	
 	// show selectbox with all roles categories
-	$ListsMenu->addCategoryItem('admMenuItemCategory', 'ROL', $getCatId, 'lists.php?category-selection='. $getCategorySelection. '&active_role='.$getActiveRole.'&cat_id=', 
+	$ListsMenu->addCategoryItem('admMenuItemCategory', 'ROL', $lists->getCatId(), 'lists.php?category-selection='. $lists->getCategorySelection(). '&active_role='.$lists->getActiveRole().'&cat_id=', 
 								$gL10n->get('SYS_CATEGORY'), $gCurrentUser->assignRoles());
 
 	if($gCurrentUser->isWebmaster())
@@ -135,7 +122,8 @@ $previousCategoryId   = 0;
 $countCategoryEntries = 0;
 
 //Get Lists
-$listsResult = $lists->getLists($getStart);
+$getStart = $lists->getStartElement();
+$listsResult = $lists->getDataSet($getStart);
 
 //Get list configurations
 $listConfigurations = $lists->getListConfigurations();
@@ -336,7 +324,7 @@ foreach($listsResult as $row)
                     {
                         echo '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
                     }
-                    if($getActiveRole && $row['num_former'] > 0)
+                    if($lists->getActiveRole() && $row['num_former'] > 0)
                     {
                         // Anzahl Ehemaliger anzeigen
                         if($row['num_former'] == 1)
@@ -403,12 +391,12 @@ else
     echo '</div></div>';
 
     // If neccessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $getCatId. '&category-selection='. $getCategorySelection. '&active_role='.$getActiveRole;
+    $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $lists->getCatId(). '&category-selection='. $lists->getCategorySelection(). '&active_role='.$lists->getActiveRole();
     echo admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, TRUE);
 }
 
 echo '</div>';
-
+print_r($listsResult);
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

@@ -42,7 +42,10 @@
  *          )
  *      [parameter] => Array
  *          (
+ *              [active_role] => 1
+ *              [calendar-selection] => 1
  *              [cat_id] => 0
+ *              [category-selection] => 0,
  *              [date] => ''
  *              [daterange] => Array
  *                  (
@@ -89,7 +92,9 @@ class ModuleAnnouncements extends Modules
         global $gL10n;
         // define constant for headline
         define('HEADLINE', $gL10n->get('ANN_ANNOUNCEMENTS'));
+        // get parent instance with all parameters from $_GET Array
         parent::__construct();
+        // set SQL condition
         $this->setCondition($this->id, $this->date);           
     }
     

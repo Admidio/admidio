@@ -13,15 +13,21 @@
  *  The returned array contains following settings:
  *  @par Return parameter array:
  *  @code
- *  array('headline'    => 'string',
- *        'id'          => 'integer',
- *        'mode'        => 'string',
- *        'view_mode'   => 'string',
- *        'date'        => 'string',
- *        'daterange'   =>  array(
- *                               [english] (date_from => 'string', date_to => 'string'),
- *                               [sytem] (date_from => 'string', date_to => 'string'))
- *                               );
+ *  array('active_role'         => '1',
+ *        'headline'            => 'string',
+ *        'category-selection'  => '0',
+ *        'cat_id'              => '0',
+ *        'calendar-selection'  => '1',
+ *        'id'                  => 'integer',
+ *        'mode'                => 'string',
+ *        'order'               => 'ASC'
+ *        'startelement'        => 0
+ *        'view_mode'           => 'string',
+ *        'date'                => 'string',
+ *        'daterange'           =>  array(
+ *                                          [english] (date_from => 'string', date_to => 'string'),
+ *                                          [sytem] (date_from => 'string', date_to => 'string'))
+ *                                       );
  *  @endcode                               
  */
 /*****************************************************************************
@@ -35,21 +41,24 @@
  
 abstract class Modules
 {
-    const HEADLINE = '';        ///< Constant for language parameter set in modul classes
+    const HEADLINE = '';            ///< Constant for language parameter set in modul classes
     
-    public    $arrParameter;    ///< Array with validated parameters 
-    protected $headline;        ///< String with headline expression
-    protected $catId;           ///< ID as integer for choosen category
-    protected $id;              ///< ID as integer to choose record
-    protected $date;            ///< String with date value
-    protected $daterange;       ///< Array with date settings in English format and system format
-    protected $mode;            ///< String with current mode ( Default: "Default" )
-    protected $order;           ///< String with order ASC/DESC( Default: "ASC" )
-    protected $start;           ///< Integer for start element
-    protected $properties;      ///< Array Clone of $_GET Array
-    protected $validModes;      ///< Array with valid modes ( Deafault: "Default" )
-    protected $validViewModes;  ///< Array with valid view modes ( Deafault: "Default" )
-    protected $viewMode;        ///< String with view mode ( Default: "Default" )
+    protected $activeRole;          ///< Boolean 0/1 for active role
+    public    $arrParameter;        ///< Array with validated parameters 
+    protected $headline;            ///< String with headline expression
+    protected $calendarSelection;   ///< Boolean 0/1 to show calendar selection
+    protected $categorySelection;   ///< Boolean 0/1 to show category selection
+    protected $catId;               ///< ID as integer for choosen category
+    protected $id;                  ///< ID as integer to choose record
+    protected $date;                ///< String with date value
+    protected $daterange;           ///< Array with date settings in English format and system format
+    protected $mode;                ///< String with current mode ( Default: "Default" )
+    protected $order;               ///< String with order ASC/DESC( Default: "ASC" )
+    protected $start;               ///< Integer for start element
+    protected $properties;          ///< Array Clone of $_GET Array
+    protected $validModes;          ///< Array with valid modes ( Deafault: "Default" )
+    protected $validViewModes;      ///< Array with valid view modes ( Deafault: "Default" )
+    protected $viewMode;            ///< String with view mode ( Default: "Default" )
     
     abstract public function getDataSet($startElement=0, $limit=NULL);
     abstract public function getDataSetCount();
@@ -59,22 +68,28 @@ abstract class Modules
      */
     public function __construct()
     {
-        $this->arrParameters    = array();
-        $this->date             = '';
-        $this->daterange        = array();
-        $this->headline         = '';
-        $this->catId            = 0;
-        $this->id               = 0;
-        $this->mode             = 'Default';
-        $this->order            = '';
-        $this->properties       = $_GET;
-        $this->start            = '';
-        $this->validModes       = array('Default');
-        $this->viewMode         = 'Default';
-        $this->validViewModes   = array('Default');
+        $this->activeRole           = '';
+        $this->arrParameters        = array();
+        $this->calendarSelection    = '';
+        $this->catId                = 0;
+        $this->categorySelection    = '';
+        $this->date                 = '';
+        $this->daterange            = array();
+        $this->headline             = '';
+        $this->id                   = 0;
+        $this->mode                 = 'Default';
+        $this->order                = '';
+        $this->properties           = $_GET;
+        $this->start                = '';
+        $this->validModes           = array('Default');
+        $this->viewMode             = 'Default';
+        $this->validViewModes       = array('Default');
         
         // Set parameters
+        $this->setActiveRole();
+        $this->setCalendarSelection();
         $this->setCatId();
+        $this->setCategorySelection();
         $this->setDate();
         $this->setDaterange();
         $this->setHeadline();
@@ -86,12 +101,39 @@ abstract class Modules
     }
     
     /**
+     *  Return boolean for active role
+     *  @return Returns boolean for active role
+     */
+    public function getActiveRole()
+    {
+        return $this->activeRole;
+    }
+    
+    /**
+     *  Return Calendar Selection
+     *  @return Returns boolean calendar selection
+     */
+    public function getCalendarSelection()
+    {
+        return $this->calendarSelection;
+    }
+    
+    /**
      *  Return category ID
      *  @return Returns the category ID 
      */
     public function getCatId()
     {
         return $this->catId;
+    }
+    
+    /**
+     *  Return Category Selection
+     *  @return Returns boolean for category selection
+     */
+    public function getCategorySelection()
+    {
+        return $this->categorySelection;
     }
     
     /**
@@ -173,18 +215,42 @@ abstract class Modules
     public function getParameter()
     {    
         // Set Array
-        $this->arrParameter['cat_id']       = $this->catId;
-        $this->arrParameter['date']         = $this->date;
-        $this->arrParameter['daterange']    = $this->daterange;
-        $this->arrParameter['headline']     = $this->headline;
-        $this->arrParameter['id']           = $this->id;
-        $this->arrParameter['mode']         = $this->mode;
-        $this->arrParameter['order']        = $this->order;
-        $this->arrParameter['startelement'] = $this->start;
-        $this->arrParameter['view_mode']    = $this->viewMode;
+        $this->arrParameter['active_role']          = $this->activeRole;
+        $this->arrParameter['calendar-selection']   = $this->calendarSelection;
+        $this->arrParameter['cat_id']               = $this->catId;
+        $this->arrParameter['category-selection']   = $this->categorySelection;
+        $this->arrParameter['date']                 = $this->date;
+        $this->arrParameter['daterange']            = $this->daterange;
+        $this->arrParameter['headline']             = $this->headline;
+        $this->arrParameter['id']                   = $this->id;
+        $this->arrParameter['mode']                 = $this->mode;
+        $this->arrParameter['order']                = $this->order;
+        $this->arrParameter['startelement']         = $this->start;
+        $this->arrParameter['view_mode']            = $this->viewMode;
         return $this->arrParameter;
     }
     
+    /**
+     *  Set active role
+     *
+     *  Set boolean for active role. Default 1 for active
+     */
+    protected function setActiveRole()
+    {
+        $this->activeRole = admFuncVariableIsValid($this->properties, 'active_role', 'boolean', 1);
+    }
+    
+    /**
+     *  Set calendar selection
+     * 
+     *  Set Calendar selection boolean 0/1. Default $gPreferences 
+     */
+    protected function setCalendarSelection()
+    {
+        global $gPreferences;
+        $this->calendarSelection = admFuncVariableIsValid($this->properties, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
+    }
+     
     /**
      *  Set category ID
      *
@@ -195,6 +261,16 @@ abstract class Modules
     {
         // check optional user parameter and make secure. Otherwise set default value
         $this->catId = admFuncVariableIsValid($this->properties, 'cat_id', 'numeric', 0);
+    }
+    
+    /**
+     *  Set category selection
+     *
+     *  Set category selection boolean 0/1. Default 1
+     */
+    protected function setCategorySelection()
+    {
+        $this->categorySelection = admFuncVariableIsValid($this->properties, 'category-selection', 'boolean', 1);
     }
     
     /**

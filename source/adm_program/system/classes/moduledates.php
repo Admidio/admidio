@@ -91,7 +91,10 @@
  *  
  *      [parameter] => Array
  *          (
+ *              [active_role] => 1
+ *              [calendar-selection] => 1
  *              [cat_id] => 0
+ *              [category-selection] => 0,
  *              [date] => 
  *              [daterange] => Array
  *                  (
@@ -139,7 +142,7 @@ class ModuleDates extends Modules
         // define constant for headline
         define('HEADLINE', $gL10n->get('DAT_DATES')); 
         
-        // get parent instance
+        // get parent instance with all parameters from $_GET Array
         parent::__construct();
         // call class methods different to main class
         $this->setHeadline();

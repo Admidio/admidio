@@ -47,9 +47,6 @@ elseif($gPreferences['enable_dates_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-// Initialize and check the parameters
-$getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
-
 // create object and get recordset of available dates
 $dates = new ModuleDates();
 $datesResult = $dates->getDataset();
@@ -197,7 +194,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
     echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';
 
     //Check if box must be shown, when more dates available
-    if((($getCalendarSelection == 1) && ($parameter['id'] == 0)) || $gCurrentUser->editDates())
+    if((($parameter['calendar-selection'] == 1) && ($parameter['id'] == 0)) || $gCurrentUser->editDates())
     {
         // create module menu
         $DatesMenu = new ModuleMenu('admMenuDates');
@@ -212,7 +209,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
 
         if($parameter['id'] == 0)
         {
-            if($getCalendarSelection == 1)
+            if($parameter['calendar-selection'] == 1)
             {
                 // show selectbox with all calendars
                 $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $parameter['cat_id'], 'dates.php?headline='.$parameter['headline'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date'].'&cat_id=',

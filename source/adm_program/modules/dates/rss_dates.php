@@ -33,20 +33,16 @@ if ($gPreferences['enable_dates_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
-
-
 //create Object
 $dates = new ModuleDates();
 
 // read events for output
-$datesResult = $dates->getDates(0, 10);
+$datesResult = $dates->getDataset(0, 10);
 
 // ab hier wird der RSS-Feed zusammengestellt
 
 // create RSS feed object with channel information
-$rss  = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline, 
+$rss  = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '. $dates->getHeadline(), 
             $gCurrentOrganization->getValue('org_homepage'), 
             $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
@@ -56,7 +52,7 @@ $date = new TableDate($gDb);
 if($datesResult['numResults'] > 0)
 {
     $date = new TableDate($gDb);
-    foreach($datesResult['dates'] as $row)
+    foreach($datesResult['recordset'] as $row)
     {
 
         // ausgelesene Termindaten in Date-Objekt schieben

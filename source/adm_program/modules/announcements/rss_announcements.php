@@ -33,27 +33,24 @@ if ($gPreferences['enable_announcements_module'] != 1)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-// Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
-
 //Objekt anlegen
 $announcements = new ModuleAnnouncements();
 
 /*** ab hier wird der RSS-Feed zusammengestellt**/
 
 // create RSS feed object with channel information
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$announcements->getHeadline(), 
             $gCurrentOrganization->getValue('org_homepage'), 
             $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
 
 //Wenn Ankündigungen vorhanden laden
-if($announcements->getAnnouncementsCount()>0)
+if($announcements->getDataSetCount()>0)
 {
     $announcement = new TableAnnouncement($gDb);
-    $rows = $announcements->getAnnouncements(0,10);
+    $rows = $announcements->getDataset(0,10);
     // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
-    foreach ($rows['announcements'] as $row)
+    foreach ($rows['recordset'] as $row)
     {
         // ausgelesene Ankuendigungsdaten in Announcement-Objekt schieben
         $announcement->clear();
@@ -62,7 +59,7 @@ if($announcements->getAnnouncementsCount()>0)
         // set data for attributes of this entry
         $title       = $announcement->getValue('ann_headline');
         $description = $announcement->getValue('ann_description');
-        $link        = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$getHeadline;
+        $link        = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$announcements->getHeadline();
         $author      = $row['create_name'];
         $pubDate     = date('r',strtotime($announcement->getValue('ann_timestamp_create')));
     

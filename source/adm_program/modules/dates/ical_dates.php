@@ -43,31 +43,26 @@ if ($gPreferences['enable_dates_ical'] != 1)
     $gMessage->show($gL10n->get('SYS_ICAL_DISABLED'));
 }
 
-// Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 2);
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
-
-
 //create Object
-$dates = new ModuleDates(0,0);
-
-//Headline für Dateinamen
-$headline = $getHeadline;
-if($getCatId > 0)
-{
-    $calendar = new TableCategory($gDb, $getCatId);
-    $headline.= '_'. $calendar->getValue('cat_name');
-    
-    //Set Category
-    $dates->setCatId($getCatId);
-}
-
-//Set Period
-$dates->setMode('period',date('Y-m-d',time()-$gPreferences['dates_ical_days_past']*86400),date('Y-m-d',time()+$gPreferences['dates_ical_days_future']*86400));
+$dates = new ModuleDates();
+// get parameters fom $_GET Array stored in class
+$parameter = $dates->getParameter();
+// set mode, viewmode, startdate and enddate manually
+$parameter['mode'] = 2; 
+$parameter['view_mode'] = 'period';
+$parameter['date_from'] = date('Y-m-d',time()-$gPreferences['dates_ical_days_past']*86400);
+$parameter['date_to'] = date('Y-m-d',time()+$gPreferences['dates_ical_days_future']*86400);
 
 // read events for output
-$datesResult = $dates->getDates();
+$datesResult = $dates->getDataset();
+
+//Headline für Dateinamen
+$headline = $dates->getHeadline();
+if($dates->getCatId() > 0)
+{
+    $calendar = new TableCategory($gDb, $dates->getCatId());
+    $headline.= '_'. $calendar->getValue('cat_name');
+}
 
 $date = new TableDate($gDb);
 $iCal = $date->getIcalHeader();
@@ -75,7 +70,7 @@ $iCal = $date->getIcalHeader();
 if($datesResult['numResults'] > 0)
 {
     $date = new TableDate($gDb);
-    foreach($datesResult['dates'] as $row)
+    foreach($datesResult['recordset'] as $row)
     {
         $date->clear();
         $date->setArray($row);
@@ -85,7 +80,7 @@ if($datesResult['numResults'] > 0)
 
 $iCal .= $date->getIcalFooter();
 
-if($getMode == 2)
+if($parameter['mode'] == 2)
 {
     // for IE the filename must have special chars in hexadecimal 
     if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
