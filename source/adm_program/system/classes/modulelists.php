@@ -302,6 +302,11 @@ class ModuleLists extends Modules
         {
             $lists['recordset'][] = $row;
         }
+        // Set empty array if no results are found
+        if(!isset($lists['recordset']))
+        {
+            $lists['recordset'] = array();
+        }        
         // Push parameter to array
         $lists['parameter'] = $this->getParameter();        
         return $lists;

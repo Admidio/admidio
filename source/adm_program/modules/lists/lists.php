@@ -131,7 +131,7 @@ $listConfigurations = $lists->getListConfigurations();
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
 
-foreach($listsResult as $row)
+foreach($listsResult['recordset'] as $row)
 {
     //Put data to Roleobject
     $role->setArray($row);
