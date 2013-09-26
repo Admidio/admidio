@@ -59,7 +59,7 @@ $dates = new ModuleDates();
 // Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, $dates->getModes());
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));
 $getDateId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 $getDate     = admFuncVariableIsValid($_GET, 'date', 'numeric');
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
@@ -123,8 +123,11 @@ if($getCatId > 0)
 }
 
 // Navigation starts here
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
+if($getDateId  == 0 || $getViewMode == 'compact' && $getDateId > 0)
+{
+    $gNavigation->clear();
+    $gNavigation->addUrl(CURRENT_URL);
+}
 
 // Number of events each page for default view 'html' or 'compact' view
 if($gPreferences['dates_per_page'] > 0 && ( $getViewMode == 'html' || $getViewMode == 'compact'))
@@ -256,8 +259,8 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         //Add new event
         if($gCurrentUser->editDates())
         {
-            $DatesMenu->addItem('admMenuItemAdd', $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$htmlHeadline,
-                                $gL10n->get('SYS_CREATE_VAR', $htmlHeadline), 'add.png' );
+            $DatesMenu->addItem('admMenuItemAdd', $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline,
+                                $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png' );
         }
     
         if($getDateId == 0)
@@ -666,7 +669,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 <td>'.$registerIcon.'</td>
                     <td>'.$dateBegin.'</td>
                     <td>'.$timeBegin.'</td>
-                    <td style="font-weight:'. $cssWeight .'"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>
+                    <td style="font-weight:'. $cssWeight .'"><a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>
                     </td>
                     <td>'. ($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers.'</td>
                     <td>'. ($leadersHtml+$numMembers > 0 ? $participantIcon : '').'</td>
@@ -685,7 +688,22 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
     // If neccessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$htmlHeadline.'&cat_id='.$getCatId.'&date_from='.$dateFromSystemFormat.'&date_to='.$dateToSystemFormat.'&view_mode='.$getViewMode;
     echo admFuncGeneratePagination($base_url, $datesResult['totalCount'], $datesResult['limit'], $getStart, TRUE);
-
+    
+    // If default view mode is set to compact we need a back navigation if one date is selected for detail view
+    if($gPreferences['dates_viewmode'] == 'compact' && $getViewMode == 'html' && $getDateId > 0)
+    {
+        echo'
+        <ul class="iconTextLinkList">
+            <li>
+                <span class="iconTextLink">
+                    <a href="'.$gNavigation->getUrl().'"><img
+                    src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                    <a href="'.$gNavigation->getUrl().'">'.$gL10n->get('SYS_BACK').'</a>
+                </span>
+            </li>
+        </ul>';
+    }
+    
     require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }
 else
