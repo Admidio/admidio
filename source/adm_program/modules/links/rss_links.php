@@ -6,13 +6,13 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Erzeugt einen RSS 2.0 - Feed mit Hilfe der RSS-Klasse fuer alle Links
+ * Creatw RSS 2.0 - Feed for Links
  *
  * Spezifikation von RSS 2.0: http://www.feedvalidator.org/docs/rss2.html
  *
  * Parameters:
  *
- * headline  - Ueberschrift fuer den RSS-Feed
+ * headline  - Headline for RSS-Feed
  *             (Default) Weblinks
  *
  *****************************************************************************/
@@ -22,17 +22,17 @@ require_once('../../system/common.php');
 // Initialize and check the parameters
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
 
-// Nachschauen ob RSS ueberhaupt aktiviert ist...
+// Check if RSS is active...
 if ($gPreferences['enable_rss'] != 1)
 {
     $gMessage->setForwardUrl($gHomepage);
     $gMessage->show($gL10n->get('SYS_RSS_DISABLED'));
 }
 
-// pruefen ob das Modul ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
+// check if module is active or is public
 if ($gPreferences['enable_weblinks_module'] != 1)
 {
-    // das Modul ist deaktiviert
+    // disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
@@ -69,7 +69,7 @@ $sql = 'SELECT cat.*, lnk.*, '.$additionalFields.'
 $result = $gDb->query($sql);
 
 
-// ab hier wird der RSS-Feed zusammengestellt
+// start defining the RSS Feed
 
 // create RSS feed object with channel information
 $rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
@@ -81,7 +81,7 @@ $weblink = new TableWeblink($gDb);
 // Dem RSSfeed-Objekt jetzt die RSSitems zusammenstellen und hinzufuegen
 while ($row = $gDb->fetch_array($result))
 {
-    // ausgelesene Linkdaten in Weblink-Objekt schieben
+    // submit links to object
     $weblink->clear();
     $weblink->setArray($row);
 
