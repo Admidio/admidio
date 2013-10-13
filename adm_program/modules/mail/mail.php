@@ -428,12 +428,22 @@ echo '
 							<dl>
 								<dt>&nbsp;</dt>
 								<dd>
-									<input type="checkbox" id="carbon_copy" name="carbon_copy" value="1" ';
-									if (isset($form_values['carbon_copy']) && $form_values['carbon_copy'] == 1)
+									<input type="checkbox" id="carbon_copy" name="carbon_copy" ';
+									if($gValidLogin)
 									{
-										echo ' checked="checked" ';
-									}
+    									if (isset($form_values['carbon_copy']) && $form_values['carbon_copy'] == 1)
+    									{
+    										echo ' value="1" checked="checked" ';
+    									}
+    								}
+    								else
+    								{
+    								    echo ' value="0" disabled="disabled"';
+    								}
 									echo ' /> <label for="carbon_copy">'.$gL10n->get('MAI_SEND_COPY').'</label>
+            									<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_CARBON_COPY&amp;inline=true"><img
+            											onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_CARBON_COPY\',this)" onmouseout="ajax_hideTooltip()"
+            											class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
 								</dd>
 							</dl>
 						</li>';
