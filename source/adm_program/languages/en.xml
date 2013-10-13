@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+<version id="2.4.3" translator="Thomas Lange">
+    <text id="MAI_CARBON_COPY" development="new" translation="todo">Carbon copies for registered Users only to protect for spam mails. Please log in the members area with your username and password</text>
+</version>
 <version id="3.0.0" translator="Markus Faßbender">
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Continue installation</text>
