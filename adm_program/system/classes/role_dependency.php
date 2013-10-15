@@ -182,6 +182,21 @@ class RoleDependency
         }
         return $allChildIds;
     }
+    
+    static public function removeChildRoles(&$db, $parentId)
+    {
+        if($parentId > 0 && is_numeric($parentId))
+        {
+            $allChildIds = array();
+
+            $sql = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES.
+                   ' WHERE rld_rol_id_parent = '.$parentId;
+            $db->query($sql);
+
+            return  0;
+        }
+        return -1;
+    }
 
     public function setParent($parentId)
     {
@@ -204,10 +219,15 @@ class RoleDependency
         }
         return -1;
     }
-
+    
+    /* Adds all active memberships of the child role to the parent role.
+     * If a membership still exists than start date will not be changed. Only
+     * the end date will be set to 31.12.9999.
+     * @return Returns -1 if no parent or child row exists
+     */
     public function updateMembership()
     {
-        if(0 != $this->role_id_parent and 0 != $this->role_id_child )
+        if($this->role_id_parent != 0 and $this->role_id_child != 0)
         {
             $sql = 'SELECT mem_usr_id FROM '. TBL_MEMBERS.
                    ' WHERE mem_rol_id = '.$this->role_id_child.'
@@ -218,36 +238,16 @@ class RoleDependency
             $num_rows = $this->db->num_rows($result);
             if ($num_rows)
             {
-                $sql = 'INSERT IGNORE INTO '. TBL_MEMBERS. ' (mem_rol_id, mem_usr_id, mem_begin, mem_end, mem_leader) VALUES ';
+                $member = new TableMembers($this->db);
 
                 while ($row = $this->db->fetch_object($result))
                 {
-                    $sql .= '('.$this->role_id_parent.', '.$row->mem_usr_id.', \''.DATE_NOW.'\', \'9999-12-31\', 0),';
+                    $member->startMembership($this->role_id_parent, $row->mem_usr_id);
                 }
-                //Das letzte Komma wieder wegschneiden
-                $sql = substr($sql,0,-1);
-                
-                $this->db->query($sql);
             }
             return 0;
         }
         return -1;
     }
-
-    static public function removeChildRoles(&$db, $parentId)
-    {
-        if($parentId > 0 && is_numeric($parentId))
-        {
-            $allChildIds = array();
-
-            $sql = 'DELETE FROM '. TBL_ROLE_DEPENDENCIES.
-                   ' WHERE rld_rol_id_parent = '.$parentId;
-            $db->query($sql);
-
-            return  0;
-        }
-        return -1;
-    }
-
 }
 ?>
