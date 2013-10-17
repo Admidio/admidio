@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
-<language id="de">
 <version id="2.4.3" translator="Thomas Lange">
     <text id="MAI_CARBON_COPY" development="new" translation="todo">Blindkopien stehen nur registrierten Benutzern zur Verfügung, um das versenden von Spam-Mails zu unterbinden. Bitte melden Sie sich mit Ihrem Zugangsdaten im Mitgliederbereich an.</text>
 </version>

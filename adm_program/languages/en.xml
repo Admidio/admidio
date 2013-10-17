@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
-<language id="de">
 <version id="2.4.3" translator="Thomas Lange">
     <text id="MAI_CARBON_COPY" development="new" translation="todo">Carbon copies for registered Users only to protect for spam mails. Please log in the members area with your username and password</text>
 </version>
