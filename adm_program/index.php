@@ -29,6 +29,7 @@ if($gCurrentUser->isWebmaster())
 
 // Url-Stack loeschen
 $gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL);
 
 // Html-Kopf ausgeben
 $gLayout['title']  = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
