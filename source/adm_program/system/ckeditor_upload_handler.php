@@ -48,6 +48,10 @@ try
 	{
 		$folderName = 'mail';
 	}
+	elseif($getCKEditor == 'plugin_CKEditor')
+    {
+        $folderName = 'plugins';
+    }
 	elseif($getCKEditor == 'room_description')
 	{
 		$folderName = 'rooms';

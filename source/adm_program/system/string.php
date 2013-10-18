@@ -67,6 +67,7 @@ function admStrStripTagsSpecial($srcArray)
         && $key != 'gbo_text'
         && $key != 'lnk_description'
         && $key != 'mail_body'
+        && $key != 'plugin_CKEditor'
         && $key != 'room_description'
         && $key != 'usf_description')
         {
@@ -179,16 +180,16 @@ function strValidCharacters($string, $checkType)
 		switch($checkType)
 		{
 			case 'email':
-				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß.-_@';
+				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_@';
 				break;
 			case 'file':
-				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß$&!?.-_+ ';
+				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß$&!?.-_+ ';
 				break;
 			case 'noSpecialChar': // eine einfache E-Mail-Adresse sollte dennoch moeglich sein (Benutzername)
 				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789.-_+@';
 				break;
 			case 'url':
-				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæćĉčçéèěêńňñóòôöõøœúùûüß.-_:/#?=%&!';
+				$validChars = 'abcdefghijklmnopqrstuvwxyz0123456789áàâåäæcccçéèeênnñóòôöõøœúùûüß.-_:/#?=%&!';
 				break;
 		}
 		
