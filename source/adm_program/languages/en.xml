@@ -5,9 +5,6 @@
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Continue installation</text>
     <text id="INS_INSTALLATION_EXISTS" development="new" translation="todo">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</text>
 </version>
-<version id="2.4.3" translator="Thomas Lange">
-    <text id="MAI_CARBON_COPY" development="new" translation="todo">Carbon copies for registered Users only to protect for spam mails. Please log in the members area with your username and password</text>
-</version>
 <version id="2.4.2" translator="Stefanie Schima">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Join event as organiser</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">You will be the event organiser and are allowed to add/remove further participants or name them as additional organiser.</text>
