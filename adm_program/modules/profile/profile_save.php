@@ -362,7 +362,7 @@ if($getNewUser == 1 || $getNewUser == 3)
 	
 	// if current user has the right to assign roles then show roles dialog
 	// otherwise go to previous url (default roles are assigned automatically)
-	if($gCurrentUser->assignRoles())
+	if($gCurrentUser->onlyAssignRoles())
 	{
 		header('Location: roles.php?usr_id='. $user->getValue('usr_id'). '&new_user='.$getNewUser);
 		exit();
