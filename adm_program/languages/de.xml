@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
-<version id="2.4.3" translator="Thomas Lange">
-    <text id="MAI_CARBON_COPY" development="new" translation="todo">Blindkopien stehen nur registrierten Benutzern zur Verfügung, um das versenden von Spam-Mails zu unterbinden. Bitte melde dich mit deine Zugangsdaten im Mitgliederbereich an.</text>
-</version>
 <version id="2.4.2" translator="Markus Faßbender">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</text>

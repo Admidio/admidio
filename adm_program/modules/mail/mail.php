@@ -423,30 +423,25 @@ echo '
 									}
 								echo '</dd>
 							</dl>
-						</li>
-						<li>
-							<dl>
-								<dt>&nbsp;</dt>
-								<dd>
-									<input type="checkbox" id="carbon_copy" name="carbon_copy" ';
-									if($gValidLogin)
-									{
+						</li>';
+						
+						// show option to send a copy to your email address only for registered users because of spam abuse
+						if($gValidLogin)
+						{
+    						echo '<li>
+    							<dl>
+    								<dt>&nbsp;</dt>
+    								<dd>
+    									<input type="checkbox" id="carbon_copy" name="carbon_copy" ';
     									if (isset($form_values['carbon_copy']) && $form_values['carbon_copy'] == 1)
     									{
     										echo ' value="1" checked="checked" ';
     									}
-    								}
-    								else
-    								{
-    								    echo ' value="0" disabled="disabled"';
-    								}
-									echo ' /> <label for="carbon_copy">'.$gL10n->get('MAI_SEND_COPY').'</label>
-            									<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_CARBON_COPY&amp;inline=true"><img
-            											onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_CARBON_COPY\',this)" onmouseout="ajax_hideTooltip()"
-            											class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-								</dd>
-							</dl>
-						</li>';
+    								echo '</dd>
+    							</dl>
+    						</li>';
+                        }
+
 						if (($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation']==2) || $gPreferences['mail_delivery_confirmation']==1)
                         {
     						echo'

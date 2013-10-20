@@ -33,10 +33,19 @@ $postName        = admFuncVariableIsValid($_POST, 'name', 'string', '');
 $postFrom        = admFuncVariableIsValid($_POST, 'mailfrom', 'string', '');
 $postTo          = admFuncVariableIsValid($_POST, 'mailto', 'string', '');
 $postBody        = admFuncVariableIsValid($_POST, 'mail_body', 'html', '');
-$postCarbonCopy  = admFuncVariableIsValid($_POST, 'carbon_copy', 'boolean', 0);
 $postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean', 0);
 $postCaptcha     = admFuncVariableIsValid($_POST, 'captcha', 'string');
 $postShowMembers = admFuncVariableIsValid($_POST, 'show_members', 'numeric', 0);
+
+// show option to send a copy to your email address only for registered users because of spam abuse
+if($gValidLogin)
+{
+    $postCarbonCopy = admFuncVariableIsValid($_POST, 'carbon_copy', 'boolean', 0);
+}
+else
+{
+    $postCarbonCopy = 0;
+}
 
 //if user is logged in then show sender name and email
 if ($gCurrentUser->getValue('usr_id') > 0)
