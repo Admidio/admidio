@@ -41,6 +41,7 @@ class User extends TableUsers
     protected $rolesMembership  = array(); 		///< Array with all roles who the user is assigned
     protected $rolesMembershipLeader = array(); ///< Array with all roles who the user is assigned and is leader (key = role_id; value = rol_leader_rights)
 	protected $organizationId;					///< the organization for which the rights are read, could be changed with method @b setOrganization
+	protected $assignRoles;                     ///< Flag if the user has the right to assign at least one role
 
 	/** Constuctor that will create an object of a recordset of the users table. 
 	 *  If the id is set than this recordset will be loaded.
@@ -125,6 +126,7 @@ class User extends TableUsers
         {
             if(count($this->roles_rights) == 0)
             {
+                $this->assignRoles = false;
                 $tmp_roles_rights  = array('rol_assign_roles'  => '0', 'rol_approve_users' => '0',
                                            'rol_announcements' => '0', 'rol_dates' => '0',
                                            'rol_download'      => '0', 'rol_edit_user' => '0',
@@ -153,6 +155,14 @@ class User extends TableUsers
 					{
 						// if user is leader in this role than add role id and leader rights to array
 						$this->rolesMembershipLeader[$row['rol_id']] = $row['rol_leader_rights'];
+						
+						// if role leader could assign new members then remember this setting
+						// roles for confirmation of dates should be ignored
+						if($row['cat_name_intern'] != 'CONFIRMATION_OF_PARTICIPATION'
+						&& ($row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN || $row['rol_leader_rights'] == ROLE_LEADER_MEMBERS_ASSIGN_EDIT))
+						{
+    						$this->assignRoles = true;
+						}
 					}
 					
                     // Rechte nur beruecksichtigen, wenn auch Rollenmitglied
@@ -170,6 +180,12 @@ class User extends TableUsers
                                 $tmp_roles_rights[$key] = '1';
                             }
                         }
+
+                        // set flag assignRoles of user can manage roles
+    					if($row['rol_assign_roles'] == 1)
+    					{
+        					$this->assignRoles = true;
+    					}
                     }
 
                     // Webmasterflag setzen
@@ -321,7 +337,7 @@ class User extends TableUsers
 					foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
 					{
 						// is group leader of role and has the right to edit users ?
-						if(array_search($roleId, $rolesMembership) != false
+						if(in_array($roleId, $rolesMembership) == true
 						&& $leaderRights > 1)
 						{
 							return true;
@@ -990,8 +1006,20 @@ class User extends TableUsers
         return $this->checkRolesRight('rol_approve_users');
     }
 
-    // Funktion prueft, ob der angemeldete User Rollen zuordnen, anlegen und bearbeiten darf
+    /** Checks if the user has the right to assign members to at least one role.
+     *  @return Return @b true if the user can assign members to at least one role.
+     */
     public function assignRoles()
+    {
+        $this->checkRolesRight();
+        return $this->assignRoles;
+    }
+
+    /** Checks if the user has the right to manage roles. Therefore he must be a member
+     *  of a role with the right @b rol_manage_roles.
+     *  @return Return @b true if the user can manage roles.
+     */
+    public function manageRoles()
     {
         return $this->checkRolesRight('rol_assign_roles');
     }

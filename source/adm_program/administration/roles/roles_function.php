@@ -30,7 +30,7 @@ $getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
 
 // only members who are allowed to create and edit roles should have access to 
 // most of these functions
-if(!$gCurrentUser->assignRoles() && $getMode != 9)
+if(!$gCurrentUser->manageRoles() && $getMode != 9)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

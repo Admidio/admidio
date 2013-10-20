@@ -141,7 +141,7 @@ elseif($getMode == 5)
 	
 	// if current user has the right to assign roles then show roles dialog
 	// otherwise go to previous url (default roles are assigned automatically)
-	if($gCurrentUser->assignRoles())
+	if($gCurrentUser->manageRoles())
 	{
 		header('Location: roles.php?new_user=3&usr_id='. $registrationUser->getValue('usr_id'));
 		exit();

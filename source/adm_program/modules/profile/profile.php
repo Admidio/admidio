@@ -571,7 +571,7 @@ echo '
                 <div class="groupBoxHeadline">
                     <div style="float: left;">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'&nbsp;</div>';
                         // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                        if($gCurrentUser->assignRoles() || isGroupLeader($gCurrentUser->getValue('usr_id')))
+                        if($gCurrentUser->assignRoles())
                         {
                             echo '
                             <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>

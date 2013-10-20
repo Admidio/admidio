@@ -23,7 +23,7 @@ $getInactive  = admFuncVariableIsValid($_GET, 'inactive', 'boolean', 0);
 $getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'boolean', 0); 
 
 // nonly moderators are allowed to set/manage roles !
-if(!$gCurrentUser->assignRoles())
+if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

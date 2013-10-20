@@ -72,7 +72,7 @@ class FormElements
 		// SQL-Statement entsprechend dem Modus zusammensetzen
 		$condition = '';
 		$active_roles = 1;
-		if($showMode == 1 && $gCurrentUser->assignRoles() == false)
+		if($showMode == 1 && $gCurrentUser->manageRoles() == false)
 		{
 			// keine Rollen mit Rollenzuordnungsrecht anzeigen
 			$condition .= ' AND rol_assign_roles = 0 ';

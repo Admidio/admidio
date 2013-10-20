@@ -22,7 +22,7 @@ $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $showSystemCategory = false;
 
 // nur Moderatoren duerfen Rollen anlegen und verwalten
-if(!$gCurrentUser->assignRoles())
+if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

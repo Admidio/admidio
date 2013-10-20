@@ -32,7 +32,7 @@ $getTitle    = admFuncVariableIsValid($_GET, 'title', 'string', $gL10n->get('SYS
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));
 
 // Modus und Rechte pruefen
-if($getType == 'ROL' && $gCurrentUser->assignRoles() == false)
+if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
 {
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

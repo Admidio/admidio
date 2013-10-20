@@ -63,7 +63,7 @@ class TableRoles extends TableAccess
 		// you aren't allowed to change membership of not active roles
 		if($this->getValue('rol_valid'))
 		{
-			if($user->assignRoles() == false)
+			if($user->manageRoles() == false)
 			{
 				// leader are allowed to assign members if it's configured in the role
 				if($user->isLeaderOfRole($this->getValue('rol_id'))

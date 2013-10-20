@@ -92,12 +92,12 @@ echo '<div id="lists_overview">
 <h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';
 
 // Kategorienauswahlbox soll angezeigt werden oder der User darf neue Rollen anlegen
-if($lists->getCategorySelection() == 1 || $gCurrentUser->assignRoles())
+if($lists->getCategorySelection() == 1 || $gCurrentUser->manageRoles())
 {
 	// create module menu
 	$ListsMenu = new ModuleMenu('admMenuLists');
 
-	if($gCurrentUser->assignRoles())
+	if($gCurrentUser->manageRoles())
 	{
 		// show link to create new role
 		$ListsMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administration/roles/roles_new.php', 
@@ -106,7 +106,7 @@ if($lists->getCategorySelection() == 1 || $gCurrentUser->assignRoles())
 	
 	// show selectbox with all roles categories
 	$ListsMenu->addCategoryItem('admMenuItemCategory', 'ROL', $lists->getCatId(), 'lists.php?category-selection='. $lists->getCategorySelection(). '&active_role='.$lists->getActiveRole().'&cat_id=', 
-								$gL10n->get('SYS_CATEGORY'), $gCurrentUser->assignRoles());
+								$gL10n->get('SYS_CATEGORY'), $gCurrentUser->manageRoles());
 
 	if($gCurrentUser->isWebmaster())
 	{
@@ -195,7 +195,7 @@ foreach($listsResult['recordset'] as $row)
             }
 
             // edit roles of you are allowed to assign roles
-            if($gCurrentUser->assignRoles())
+            if($gCurrentUser->manageRoles())
             {
                 echo '
                 <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img

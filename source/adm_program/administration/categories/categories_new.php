@@ -27,7 +27,7 @@ $getType  = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('R
 $getTitle = admFuncVariableIsValid($_GET, 'title', 'string', $gL10n->get('SYS_CATEGORY'));
 
 // Modus und Rechte pruefen
-if($getType == 'ROL' && $gCurrentUser->assignRoles() == false)
+if($getType == 'ROL' && $gCurrentUser->manageRoles() == false)
 {
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

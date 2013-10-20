@@ -146,7 +146,7 @@ if($gPreferences['enable_forum_interface'])
 $moduleMenu->show('long');
 
 
-if($gCurrentUser->isWebmaster() || $gCurrentUser->assignRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
+if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
 {
 	$adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
 	if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
@@ -163,7 +163,7 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->assignRoles() || $gCurrentUser
 							$gL10n->get('MEM_USER_MANAGEMENT_DESC'));
 	}
 
-	if($gCurrentUser->assignRoles())
+	if($gCurrentUser->manageRoles())
 	{
 		$adminMenu->addItem('roladm', '/adm_program/administration/roles/roles.php',
 							$gL10n->get('ROL_ROLE_ADMINISTRATION'), '/icons/roles_big.png',
