@@ -18,7 +18,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1, true);
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
 
 // only webmasters are allowed to edit organization preferences or create new organizations
 if($gCurrentUser->isWebmaster() == false)

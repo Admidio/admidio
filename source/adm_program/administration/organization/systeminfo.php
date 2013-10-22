@@ -52,7 +52,17 @@ if($getMode == 1)
                 </dd>
             </dl>
         </li>';
+
                 
+        // Performed update step
+        echo'
+        <li>
+            <dl>
+                <dt>'.$gL10n->get('ORG_PERFORMED_UPDATE_STEP').':</dt>
+                <dd>'.$gSystemComponent->getValue('com_update_step').'</dd>
+            </dl>
+        </li>';
+        
         //php Version
         echo'
         <li>
