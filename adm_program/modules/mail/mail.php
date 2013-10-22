@@ -437,7 +437,8 @@ echo '
     									{
     										echo ' value="1" checked="checked" ';
     									}
-    								echo '</dd>
+                                        echo ' /> <label for="carbon_copy">'.$gL10n->get('MAI_SEND_COPY').'</label>
+    								</dd>
     							</dl>
     						</li>';
                         }
