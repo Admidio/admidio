@@ -81,6 +81,7 @@ class DateTimeExtended extends DateTime
             }
         }
         $age = $act_date['year'] - $this->year;
+        error_log($act_date['year'].'::'.$this->year);
         if($birthday == false)
         {
             $age--;
