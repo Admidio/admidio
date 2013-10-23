@@ -167,7 +167,7 @@ class ListConfiguration extends TableLists
     //                 2 - Aktive und ehemalige Rollenmitglieder
     public function getSQL($roleIds, $memberStatus = 0)
     {
-        global $gL10n, $gProfileFields, $gCurrentOrganization;
+        global $gL10n, $gProfileFields, $gCurrentOrganization, $gDbType;
         $sql = '';
         $sqlSelect  = '';
         $sqlJoin    = '';
@@ -206,14 +206,35 @@ class ListConfiguration extends TableLists
             $sqlSelect = $sqlSelect. $dbColumnName;
 
 
-            // Sortierung einbauen
+            $userFieldType = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type');
+
+            // create a valid sort
             if(strlen($listColumn->getValue('lsc_sort')) > 0)
             {
                 if(strlen($sqlOrderBy) > 0) 
                 {  
                     $sqlOrderBy = $sqlOrderBy. ', ';
                 }
-                $sqlOrderBy = $sqlOrderBy. $dbColumnName. ' '. $listColumn->getValue('lsc_sort');
+
+                if($userFieldType == 'NUMERIC')
+                {
+                    // if a field has numeric values then there must be a cast because database 
+                    // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
+                    if($gDbType == 'postgresql')
+                    {
+                        $columnType = 'numeric';
+                    }
+                    else
+                    {
+                        // mysql
+                        $columnType = 'unsigned';
+                    }
+                    $sqlOrderBy = $sqlOrderBy. ' CAST('.$dbColumnName. ' AS '.$columnType.') '. $listColumn->getValue('lsc_sort');
+                }
+                else
+                {
+                    $sqlOrderBy = $sqlOrderBy. $dbColumnName. ' '. $listColumn->getValue('lsc_sort');
+                }
             }
 
 
@@ -221,7 +242,6 @@ class ListConfiguration extends TableLists
             if(strlen($listColumn->getValue('lsc_filter')) > 0)
             {
                 $value = $listColumn->getValue('lsc_filter');
-				$userFieldType = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_type');
 
 				// custom profile field
                 if($listColumn->getValue('lsc_usf_id') > 0)

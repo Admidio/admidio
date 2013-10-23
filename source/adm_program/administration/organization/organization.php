@@ -332,6 +332,27 @@ echo '
                     </li>
                     <li>
                         <dl>
+                            <dt><label for="default_country">'.$gL10n->get('PRO_DEFAULT_COUNTRY').':</label></dt>
+                            <dd>
+                                <select size="1" id="default_country" name="default_country">
+                                    <option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+                                    foreach($gL10n->getCountries() as $key => $value)
+                                    {
+                                        echo '<option value="'.$key.'" ';
+                                        if($key == $form_values['default_country'])
+                                        {
+                                            echo ' selected="selected" ';
+                                        }
+                                        echo '>'.$value.'</option>';
+                                    }
+                                echo '</select>
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('PRO_DEFAULT_COUNTRY_DESC').'</li>
+
+                    <li>
+                        <dl>
                             <dt><label for="system_date">'.$gL10n->get('ORG_DATE_FORMAT').':</label></dt>
                             <dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
                         </dl>
@@ -1560,26 +1581,6 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="default_country">'.$gL10n->get('PRO_DEFAULT_COUNTRY').':</label></dt>
-                            <dd>
-                                <select size="1" id="default_country" name="default_country">
-                                    <option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-                                    foreach($gL10n->getCountries() as $key => $value)
-                                    {
-                                        echo '<option value="'.$key.'" ';
-                                        if($key == $form_values['default_country'])
-                                        {
-                                            echo ' selected="selected" ';
-                                        }
-                                        echo '>'.$value.'</option>';
-                                    }
-                                echo '</select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_DEFAULT_COUNTRY_DESC').'</li>
                     <li>
                         <dl>
                             <dt><label for="profile_log_edit_fields">'.$gL10n->get('PRO_LOG_EDIT_FIELDS').':</label></dt>

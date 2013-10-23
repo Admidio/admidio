@@ -53,12 +53,23 @@ if($getMode == 1)
             </dl>
         </li>';
 
+        // if database version is different to file version, then show database version
+        if(strcmp(ADMIDIO_VERSION, $gSystemComponent->getValue('com_version')) != 0)
+        {
+            echo'
+            <li>
+                <dl>
+                    <dt>'.$gL10n->get('ORG_DIFFERENT_DATABASE_VERSION').':</dt>
+                    <dd>'.$gSystemComponent->getValue('com_version').'</dd>
+                </dl>
+            </li>';
+        }
                 
         // Performed update step
         echo'
         <li>
             <dl>
-                <dt>'.$gL10n->get('ORG_PERFORMED_UPDATE_STEP').':</dt>
+                <dt>'.$gL10n->get('ORG_LAST_UPDATE_STEP').':</dt>
                 <dd>'.$gSystemComponent->getValue('com_update_step').'</dd>
             </dl>
         </li>';

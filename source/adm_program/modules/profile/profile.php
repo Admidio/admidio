@@ -49,7 +49,7 @@ function getFieldCode($fieldNameIntern, $user)
 	// if birthday then show age
 	if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
 	{
-		$birthday = new DateTimeExtended($user->getValue($fieldNameIntern, $gPreferences['system_date']), $gPreferences['system_date'], 'date');
+        $birthday = new DateTimeExtended($user->getValue($fieldNameIntern, 'Y.m.d'), 'Y.m.d', 'date');
 		$value = $value. '&nbsp;&nbsp;&nbsp;('. $birthday->getAge(). ' '.$gL10n->get('PRO_YEARS').')';
 	}
 
