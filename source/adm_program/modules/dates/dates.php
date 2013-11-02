@@ -656,7 +656,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             </li>
         </ul>';
     }
-    echo $gPreferences['dates_viewmode'];
+    
     require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }
 else
