@@ -63,8 +63,11 @@ if($parameter['cat_id'] > 0)
     $calendar = new TableCategory($gDb, $parameter['cat_id']);
 }
 // Navigation starts here
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
+if($parameter['id']  == 0 || $parameter['view_mode'] == 'compact' && $parameter['id'] > 0)
+{
+    $gNavigation->clear();
+    $gNavigation->addUrl(CURRENT_URL);
+}
 
 // Number of events each page for default view 'html' or 'compact' view
 if($gPreferences['dates_per_page'] > 0 && ( $parameter['view_mode'] == 'html' || $parameter['view_mode'] == 'compact'))
@@ -299,7 +302,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             $compactTable->addColumn($gL10n->get('SYS_START'), 'colspan', '2', 'th');
             $compactTable->addColumn($gL10n->get('DAT_DATE'), '', '', 'th');
             $compactTable->addColumn($gL10n->get('SYS_PARTICIPANTS'), 'colspan', '2', 'th');
-            $compactTable->addColumn($gL10n->get('DAT_LOCATION'));
+            $compactTable->addColumn($gL10n->get('DAT_LOCATION'), '', '', 'th');
             $compactTable->addTableBody();
         }
         foreach($datesResult['recordset'] as $row)
@@ -620,7 +623,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 $compactTable->addColumn($registerIcon);
                 $compactTable->addColumn($dateBegin);
                 $compactTable->addColumn($timeBegin);
-                $compactTable->addColumn('<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>', 'style', 'font-weight:'. $cssWeight .'');
+                $compactTable->addColumn('<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>', 'style', 'font-weight:'. $cssWeight .'');
                 $compactTable->addColumn(($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers);
                 $compactTable->addColumn(($leadersHtml+$numMembers > 0 ? $participantIcon : '&nbsp;'));
                 $compactTable->addColumn($locationHtml);
@@ -639,6 +642,21 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
     $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date'].'&view_mode='.$parameter['view_mode'];
     echo admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $parameter['startelement'], TRUE);
 
+    // If default view mode is set to compact we need a back navigation if one date is selected for detail view
+    if($gPreferences['dates_viewmode'] == 'compact' && $parameter['view_mode'] == 'html' && $parameter['id'] > 0)
+    {
+        echo'
+        <ul class="iconTextLinkList">
+            <li>
+                <span class="iconTextLink">
+                    <a href="'.$gNavigation->getUrl().'"><img
+                    src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                    <a href="'.$gNavigation->getUrl().'">'.$gL10n->get('SYS_BACK').'</a>
+                </span>
+            </li>
+        </ul>';
+    }
+    echo $gPreferences['dates_viewmode'];
     require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }
 else

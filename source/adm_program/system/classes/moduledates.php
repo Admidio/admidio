@@ -367,8 +367,10 @@ class ModuleDates extends Modules
      */
     protected function setViewMode()
     {
+        global $gPreferences;
+        
         $this->viewMode         = '';
-        $this->validViewModes   = array('html', 'compact', 'print');
+        $this->validViewModes   = array($gPreferences['dates_viewmode'], 'html', 'compact', 'print');
         
         parent::setViewMode();
     }
