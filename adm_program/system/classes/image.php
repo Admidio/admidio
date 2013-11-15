@@ -23,7 +23,7 @@
  *                  - dreht das Bild um 90° in eine Richtung ("left"/"right")
  * scaleLargerSide($new_max_size)
  *                  - skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
- * scale($photo_x_size, $photo_y_size, $aspect_ratio = true)
+ * scale($newXSize, $newYSize, $maintainAspectRatio = true)
  *                  - das Bild wird in einer vorgegebenen maximalen Laenge/Hoehe skaliert
  * delete()         - entfernt das Bild aus dem Speicher
  *
@@ -215,7 +215,7 @@ class Image
     
     // Methode skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
     // die andere Seite wird dann entsprechend dem Seitenverhaeltnis zurueckgerechnet
-    public function scaleLargerSide($new_max_size)
+    public function scaleLargerSide($newMaxSize)
     {
         // Errechnung Seitenverhaeltnis
         $seitenverhaeltnis = $this->imageWidth / $this->imageHeight;
@@ -223,64 +223,71 @@ class Image
         if($this->imageWidth >= $this->imageHeight)
         {
             // x-Seite soll scalliert werden
-            $photo_x_size = $new_max_size;
-            $photo_y_size = round($new_max_size / $seitenverhaeltnis);
+            $newXSize = $newMaxSize;
+            $newYSize = round($newMaxSize / $seitenverhaeltnis);
         }
         else
         {
             // y-Seite soll scalliert werden
-            $photo_x_size = round($new_max_size * $seitenverhaeltnis);
-            $photo_y_size = $new_max_size;
+            $newXSize = round($newMaxSize * $seitenverhaeltnis);
+            $newYSize = $newMaxSize;
         }
-        $this->scale($photo_x_size, $photo_y_size, false);
+        $this->scale($newXSize, $newYSize, false);
     }
 
-    // das Bild wird in einer vorgegebenen maximalen Laenge/Hoehe skaliert
-    // new_x_size   : Anzahl Pixel auf die die X-Seite maximal veraendert werden soll
-    // new_y_size   : Anzahl Pixel auf die die Y-Seite maximal veraendert werden soll
-    // aspect_ratio : das aktuelle Seitenverhaeltnis des Bildes wird belassen,
-    //                dadurch kann eine Seite kleiner werden als die Angabe vorsieht
-    public function scale($photo_x_size, $photo_y_size, $aspect_ratio = true)
+    /** Scale an image to the new size of the parameters. Therefore the PHP instanze may need
+     *  some memory which should be set through the PHP setting memory_limit.
+     *  @param $newXSize The new horizontal width in pixel. The image will be scaled to this size.
+     *  @param $newYSize The new vertical height in pixel. The image will be scaled to this size.
+     *  @param $maintainAspectRatio If this is set to true, the image will be within the given size
+     *                              but maybe one side will be smaller than set with the parameters.
+     */
+    public function scale($newXSize, $newYSize, $maintainAspectRatio = true)
     {
-        if($aspect_ratio == true)
+        if($maintainAspectRatio == true)
         {
-            if($photo_x_size < $this->imageWidth || $photo_y_size < $this->imageHeight)
+            if($newXSize < $this->imageWidth || $newYSize < $this->imageHeight)
             {
-                if($this->imageWidth / $this->imageHeight > $photo_x_size / $photo_y_size)
+                if($this->imageWidth / $this->imageHeight > $newXSize / $newYSize)
                 {
-                    // auf max. Breite scalieren
-                    $new_width  = $photo_x_size;
-                    $new_height = round($photo_x_size / ($this->imageWidth / $this->imageHeight));
+                    // scale to maximum width
+                    $newWidth  = $newXSize;
+                    $newHeight = round($newXSize / ($this->imageWidth / $this->imageHeight));
                 }
                 else
                 {
-                    // auf max. Hoehe scalieren
-                    $new_width  = round($photo_y_size * ($this->imageWidth / $this->imageHeight));
-                    $new_height = $photo_y_size;
+                    // scale to maximum height
+                    $newWidth  = round($newYSize * ($this->imageWidth / $this->imageHeight));
+                    $newHeight = $newYSize;
                 }
-                $this->scale($new_width, $new_height, false);
+                $this->scale($newWidth, $newHeight, false);
             }
         }
         else
         {
-            //Speicher zur Bildbearbeitung bereit stellen, erst ab php5 noetig
-            @ini_set('memory_limit', '50M');
+            // check current memory limit and set this to 50MB if the current value is lower
+            preg_match('/(\d+)/', ini_get('memory_limit'), $memoryLimit);
+            if($memoryLimit[0] < 50)
+            {
+                @ini_set('memory_limit', '50M');
+            }
 
-            // Erzeugung neues Bild
-            $resized_user_photo = imagecreatetruecolor($photo_x_size, $photo_y_size);
+            // create a new image
+            $resizedUserPhoto = imagecreatetruecolor($newXSize, $newYSize);
 
-            //kopieren der Daten in neues Bild
-            imagecopyresampled($resized_user_photo, $this->imageResource, 0, 0, 0, 0, $photo_x_size, $photo_y_size, $this->imageWidth, $this->imageHeight);
-
-            // nun die internen Bilddaten updaten
+            // copy image data to a new image with the new given size
+            imagecopyresampled($resizedUserPhoto, $this->imageResource, 0, 0, 0, 0, $newXSize, $newYSize, $this->imageWidth, $this->imageHeight);
             imagedestroy($this->imageResource);
-            $this->imageResource = $resized_user_photo;
-            $this->imageWidht    = $photo_x_size;
-            $this->imageHeight   = $photo_y_size;
+            
+            // update the class parameters to new image data
+            $this->imageResource = $resizedUserPhoto;
+            $this->imageWidht    = $newXSize;
+            $this->imageHeight   = $newYSize;
         }
     }
 
-    // entfernt das Bild aus dem Speicher
+    /** Delete image from class and server memory
+     */
     public function delete()
     {
     	imagedestroy($this->imageResource);
