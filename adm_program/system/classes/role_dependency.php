@@ -8,6 +8,8 @@
  *
  *****************************************************************************/
 
+require_once(SERVER_PATH. '/adm_program/system/classes/table_members.php');
+
 class RoleDependency
 {
     var $db;
