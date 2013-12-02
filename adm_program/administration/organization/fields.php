@@ -173,7 +173,7 @@ echo '
                     // laengere Texte kuerzen und Tooltip mit Popup anbieten
                     if(strlen($userField->getValue('usf_description')) > 22)
                     {
-                        echo substr($userField->getValue('usf_description', 'plain'), 0, 22). ' 
+                        echo substr($userField->getValue('usf_description', 'database'), 0, 22). ' 
                         <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('usf_name_intern'). '&amp;inline=true"
                             onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('usf_name_intern'). '\',this)" 
                             onmouseout="ajax_hideTooltip()">[..]</a>';

@@ -108,10 +108,11 @@ class TableUserField extends TableAccess
      *  If the value was manipulated before with @b setValue than the manipulated value is returned.
      *  @param $columnName The name of the database column whose value should be read
      *  @param $format For column @c usf_value_list the following format is accepted: @n
-     *                 @b plain returns database value of usf_value_list; @n
+     *                 @b database returns database value of usf_value_list; @n
      *                 @b text extract only text from usf_value_list, image infos will be ignored @n
+     *                 @b html return an html formated string, if the field type support this e.g. Dropdown or RadioButton @n     
      *                 For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011' @n
-     *                 For text columns the format can be @b plain that would be the database value without any transformations
+     *                 For text columns the format can be @b database that would be the database value without any transformations
      *  @return Returns the value of the database column.
      *          If the value was manipulated before with @b setValue than the manipulated value is returned.
      */ 
@@ -125,7 +126,7 @@ class TableUserField extends TableAccess
 			{
 				$value = '';
 			}
-			elseif($format == 'plain')
+			elseif($format == 'database')
 			{
 				$value = html_entity_decode(strStripTags($this->dbColumns['usf_description']), ENT_QUOTES, 'UTF-8');
 			}
@@ -137,7 +138,7 @@ class TableUserField extends TableAccess
 		elseif($columnName == 'usf_name_intern')
 		{
 			// internal name should be read with no conversion
-			$value = parent::getValue($columnName, 'plain');
+			$value = parent::getValue($columnName, 'database');
 		}
         else
         {
@@ -145,7 +146,7 @@ class TableUserField extends TableAccess
         }
 		
 		if(($columnName == 'usf_name' || $columnName == 'cat_name')
-		&& $format != 'plain')
+		&& $format != 'database')
 		{
 			// if text is a translation-id then translate it
 			if(strpos($value, '_') == 3)
@@ -153,7 +154,7 @@ class TableUserField extends TableAccess
 				$value = $gL10n->get(admStrToUpper($value));
 			}
 		}
-		elseif($columnName == 'usf_value_list' && $format != 'plain')
+		elseif($columnName == 'usf_value_list' && $format != 'database')
 		{
 			if($this->dbColumns['usf_type'] == 'DROPDOWN'
 			|| $this->dbColumns['usf_type'] == 'RADIO_BUTTON')
@@ -225,7 +226,7 @@ class TableUserField extends TableAccess
 				$value = $arrListValuesWithKeys;
 			}
 		}
-		elseif($columnName == 'usf_icon' && $format != 'plain')
+		elseif($columnName == 'usf_icon' && $format != 'database')
 		{
 			// if value is imagefile or imageurl then show image
 			if(strpos(admStrToLower($value), '.png') > 0 || strpos(admStrToLower($value), '.jpg') > 0)
@@ -288,7 +289,7 @@ class TableUserField extends TableAccess
 		// if new field than generate new name intern, otherwise no change will be made
 		if($this->new_record == true)
         {
-            $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'plain'), 1));
+            $this->setValue('usf_name_intern', $this->getNewNameIntern($this->getValue('usf_name', 'database'), 1));
         }
         
         parent::save($updateFingerPrint);

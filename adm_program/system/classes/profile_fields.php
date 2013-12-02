@@ -98,7 +98,7 @@ class ProfileFields
 	 */
 	public function getHtmlValue($fieldNameIntern, $value, $value2 = '')
 	{
-		global $gPreferences, $g_root_path;
+		global $gPreferences, $g_root_path, $gL10n;
 
 		if(strlen($value) > 0
 		&& array_key_exists($fieldNameIntern, $this->mProfileFields) == true)
@@ -145,6 +145,60 @@ class ProfileFields
 						$htmlValue = '<a href="'.$emailLink.'" style="overflow: visible; display: inline;" title="'.$value.'">'.$value.'</a>';;
 					}
 				}
+			}
+			elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DROPDOWN'
+			|| $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
+			{
+				$arrListValues = explode("\r\n", $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list', 'database'));
+				$arrListValuesWithKeys = array(); 	// array with list values and keys that represents the internal value
+
+				foreach($arrListValues as $key => &$listValue)
+				{
+					if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
+					{
+						// if value is imagefile or imageurl then show image
+						if(strpos(admStrToLower($listValue), '.png') > 0 || strpos(admStrToLower($listValue), '.jpg') > 0)
+						{
+							// if there is imagefile and text separated by | then explode them
+							if(strpos($listValue, '|') > 0)
+							{
+								$listValueImage = substr($listValue, 0, strpos($listValue, '|'));
+								$listValueText  = substr($listValue, strpos($listValue, '|') + 1);
+							}
+							else
+							{
+								$listValueImage = $listValue;
+								$listValueText  = $this->getValue('usf_name');
+							}
+							
+							// if text is a translation-id then translate it
+							if(strpos($listValueText, '_') == 3)
+							{
+								$listValueText = $gL10n->get(admStrToUpper($listValueText));
+							}
+
+                            // create html for optionbox entry
+                            if(isValidFileName($listValueImage, true))
+                            {
+                                $listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                            }
+                            elseif(strpos(admStrToLower($listValueImage), 'http') == 0 && strValidCharacters($listValueImage, 'url'))
+                            {
+                                $listValue = '<img src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                            }
+						}
+					}
+
+					// if text is a translation-id then translate it
+					if(strpos($listValue, '_') == 3)
+					{
+						$listValue = $gL10n->get(admStrToUpper($listValue));
+					}
+
+					// save values in new array that starts with key = 1
+					$arrListValuesWithKeys[++$key] = $listValue;
+				}
+				$htmlValue = $arrListValuesWithKeys[$value];
 			}
 			elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')
 			{
@@ -203,9 +257,9 @@ class ProfileFields
 	/** Returns the user value for this column @n
 	 *  format = 'd.m.Y' : a date or timestamp field accepts the format of the PHP date() function @n
 	 *  format = 'html'  : returns the value in html-format if this is necessary for that field type @n
-	 *  format = 'intern' : returns the value that is stored in database with no format applied
+	 *  format = 'database' : returns the value that is stored in database with no format applied
 	 *  @param $fieldNameIntern Expects the @b usf_name_intern of table @b adm_user_fields
-	 *  @param $format Returns the field value in a special format @b text, @b html, @b intern or datetime (detailed description in method description)
+	 *  @param $format Returns the field value in a special format @b text, @b html, @b database or datetime (detailed description in method description)
 	 */
 	public function getValue($fieldNameIntern, $format = '')
 	{
@@ -219,7 +273,7 @@ class ProfileFields
 		{
 			$value = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->getValue('usd_value', $format);
 
-			if($format != 'intern')
+			if($format != 'database')
 			{
 				if($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DATE' && strlen($value) > 0)
 				{
@@ -244,12 +298,11 @@ class ProfileFields
 				elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DROPDOWN'
 					|| $this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'RADIO_BUTTON')
 				{
-					// the value in db is only the position, now search for the text
-					if($value > 0)
+					// the value in db is only the position, now search for the plain text
+					if($value > 0 && $format != 'html')
 					{
 						$arrListValues = $this->mProfileFields[$fieldNameIntern]->getValue('usf_value_list');
 						$value = $arrListValues[$value];
-						
 					}
 				}
 				elseif($fieldNameIntern == 'COUNTRY' && strlen($value) > 0)

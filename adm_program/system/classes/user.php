@@ -498,7 +498,7 @@ class User extends TableUsers
      *  If the value was manipulated before with @b setValue than the manipulated value is returned.
      *  @param $columnName The name of the database column whose value should be read or the internal unique profile field name
      *  @param $format For date or timestamp columns the format should be the date/time format e.g. @b d.m.Y = '02.04.2011'. @n
-     *                 For text columns the format can be @b plain that would return the original database value without any transformations
+     *                 For text columns the format can be @b database that would return the original database value without any transformations
      *  @return Returns the value of the database column or the value of adm_user_fields
      *          If the value was manipulated before with @b setValue than the manipulated value is returned.
 	 *  @par Examples
@@ -877,7 +877,7 @@ class User extends TableUsers
 
         $returnCode    = true;
         $updateField   = false;
-        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName);
+        $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
         if(strpos($columnName, 'usr_') !== 0)
         {
@@ -913,7 +913,7 @@ class User extends TableUsers
             $returnCode = parent::setValue($columnName, $newValue);
         }
 
-        $newFieldValue = $this->mProfileFieldsData->getValue($columnName);
+        $newFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 		
         /*  Nicht alle Aenderungen werden geloggt. Ausnahmen:
          *  usr_id ist Null, wenn der User neu angelegt wird. Das wird bereits dokumentiert.

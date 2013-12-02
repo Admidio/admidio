@@ -220,10 +220,11 @@ echo '
 			{
 				echo '<td>'.$row['last_name'].', '.$row['first_name'].'</td>';
 			}
+
 			echo '
             <td>'.$gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name').'</td>
-            <td>'.$row['usl_value_new'].'</td>
-            <td>'.$row['usl_value_old'].'</td>
+            <td>'.$gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html').'</td>
+            <td>'.$gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html').'</td>
             <td>'.$row['create_last_name'].', '.$row['create_first_name'].'</td>
             <td>'.$timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']).'</td>
 		</tr>';

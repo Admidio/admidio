@@ -126,7 +126,7 @@ echo '
 						<dl>
 							<dt><label for="usf_name">'.$gL10n->get('SYS_NAME').':</label></dt>
 							<dd><input type="text" name="usf_name" id="usf_name" '.$html_disabled.' style="width: 90%;" maxlength="100"
-								value="'. $userField->getValue('usf_name', 'plain'). '" />
+								value="'. $userField->getValue('usf_name', 'database'). '" />
 								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 							</dd>
 						</dl>
@@ -220,7 +220,7 @@ echo '
 						<dl>
 							<dt><label for="usf_value_list">'.$gL10n->get('ORG_VALUE_LIST').':</label></dt>
 							<dd><textarea name="usf_value_list" id="usf_value_list" style="width: 90%;" rows="6" cols="40">'.
-								$userField->getValue('usf_value_list', 'plain'). '</textarea>
+								$userField->getValue('usf_value_list', 'database'). '</textarea>
 								<span class="mandatoryFieldMarker" style="margin: 0px;" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_VALUE_LIST_DESC&amp;inline=true"><img 
 									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_VALUE_LIST_DESC\',this)" onmouseout="ajax_hideTooltip()"
@@ -232,7 +232,7 @@ echo '
 						<dl>
 							<dt><label for="usf_icon">'.$gL10n->get('SYS_ICON').':</label></dt>
 							<dd><input type="text" name="usf_icon" id="usf_icon" style="width: 90%;" maxlength="100"
-								value="'. $userField->getValue('usf_icon', 'plain'). '" />
+								value="'. $userField->getValue('usf_icon', 'database'). '" />
 							</dd>
 						</dl>
 					</li>

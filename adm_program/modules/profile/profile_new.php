@@ -151,7 +151,7 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
 			foreach($arrListValues as $key => $valueList)
 			{
 				$value .= '<option value="'.$position.'" '; 
-				if($user->getValue($fieldNameIntern) == $valueList) 
+				if($user->getValue($fieldNameIntern, 'database') == $key) 
 				{
 					$value .= ' selected="selected"';
 				}
@@ -169,7 +169,7 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
         if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 0)
         {
 	        $htmlChecked = '';
-	        if(strlen($user->getValue($fieldNameIntern)) == 0)
+	        if(strlen($user->getValue($fieldNameIntern, 'database')) == 0)
 	        {
 	            $htmlChecked = ' checked="checked" ';
 	        }
@@ -181,7 +181,7 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
 		foreach($arrListValues as $key => $valueList)
 		{
 	        $htmlChecked = '';
-	        if($user->getValue($fieldNameIntern) == $valueList)
+	        if($user->getValue($fieldNameIntern, 'database') == $key)
 	        {
 	            $htmlChecked = ' checked="checked" ';
 	        }
