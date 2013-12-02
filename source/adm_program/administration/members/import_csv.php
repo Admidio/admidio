@@ -218,7 +218,7 @@ for($i = $startRow; $i < count($_SESSION['file_lines']); $i++)
 		                    || $gProfileFields->getProperty($field_name_intern, 'usf_type') == 'RADIO_BUTTON')
 		                {
 		                	// get number and not value of entry
-							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, 'intern'));
+							$duplicate_user->setValue($field_name_intern, $user->getValue($field_name_intern, 'database'));
 		                }
 						else
 						{

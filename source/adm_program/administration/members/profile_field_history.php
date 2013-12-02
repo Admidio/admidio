@@ -223,8 +223,8 @@ while($row = $gDb->fetch_array($result))
 	}
 	
 	$table->addColumn($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name'));
-	$table->addColumn($row['usl_value_new']);
-	$table->addColumn($row['usl_value_old']);
+	$table->addColumn($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html'));
+	$table->addColumn($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html'));
 	$table->addColumn($row['create_last_name'].', '.$row['create_first_name']);
 	$table->addColumn($timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']));
 }

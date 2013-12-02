@@ -520,21 +520,15 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 						$content = $date->format($gPreferences['system_date']);
 					}
 				}
-				elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
-				||     $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') 
+				elseif( ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
+				      || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') 
+                && $getMode == 'csv')
 				{
 					if(strlen($row[$sql_column_number]) > 0)
 					{
 						// show selected text of optionfield or combobox
-						if($getMode != 'csv')
-						{
-							$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'html');
-						}
-						else
-						{
-							$arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
-						}
-						$content = $arrListValues[$row[$sql_column_number]];
+                        $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
+						$content       = $arrListValues[$row[$sql_column_number]];
 					}
 				}
 				else 
