@@ -444,7 +444,7 @@ echo '
             </div>';
             
             /**************************************************************************************/
-            // Einstellungen Registrierung
+            // Preferences registration
             /**************************************************************************************/
             
             echo '<h3 id="SYS_REGISTRATION" class="iconTextLink" >
@@ -498,7 +498,7 @@ echo '
                 </div>
             </div>';
             /**************************************************************************************/
-            //Einstellungen Mailversand
+            // Preferences send mail
             /**************************************************************************************/
             $text = new TableText($gDb);
             echo '<h3 id="SYS_MAIL_DISPATCH" class="iconTextLink" >
@@ -729,7 +729,7 @@ echo '
                 </div>
             </div>';
             /**************************************************************************************/
-            //Einstellungen Captcha
+            // Preferences captcha
             /**************************************************************************************/
         
             echo '<h3 id="SYS_CAPTCHA" class="iconTextLink">
@@ -876,7 +876,7 @@ echo '
             </div>';
 
             /**************************************************************************************/
-            //Systeminformationen
+            // System inforamtions
             /**************************************************************************************/
 
             echo '<h3 id="ORG_SYSTEM_INFORMATIONS" class="iconTextLink">
@@ -897,7 +897,7 @@ echo '
         <div id="tabs-modules">
             <div id="accordion-modules">';
             /**************************************************************************************/
-            //Einstellungen Ankuendigungsmodul
+            // preferences announcements module
             /**************************************************************************************/
             
             echo '<h3 id="ANN_ANNOUNCEMENTS" class="iconTextLink" >
@@ -934,7 +934,7 @@ echo '
             </div>';
             
             /**************************************************************************************/
-            //Einstellungen Downloadmodul
+            // Preferences downloads module
             /**************************************************************************************/
 
             echo '<h3 id="DOW_DOWNLOADS" class="iconTextLink" >
@@ -975,7 +975,7 @@ echo '
             </div>';
 
             /**************************************************************************************/
-            //Einstellungen Fotomodul
+            // Preferences photo module
             /**************************************************************************************/
 
             echo '<h3 id="PHO_PHOTOS" class="iconTextLink" >
@@ -1075,13 +1075,12 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PHO_SHOW_CAPTION_DESC' ,$gCurrentOrganization->getValue('org_homepage')).'</li>
-                    
                     <li>
                         <dl>
-                            <dt><label for="photo_save_originals">'.$gL10n->get('PHO_SAVE_ORIGINALS').':</label></dt>
+                            <dt><label for="photo_download_enabled">'.$gL10n->get('PHO_DOWNLOAD_ENABLED').':</label></dt>
                             <dd>
-                                <input type="checkbox" id="photo_save_originals" name="photo_save_originals" ';
-                                if(isset($form_values['photo_save_originals']) && $form_values['photo_save_originals'] == 1)
+                                <input type="checkbox" id="photo_download_enabled" name="photo_download_enabled" ';
+                                if(isset($form_values['photo_download_enabled']) && $form_values['photo_download_enabled'] == 1)
                                 {
                                     echo ' checked="checked" ';
                                 }
@@ -1089,8 +1088,22 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_SAVE_ORIGINALS_DESC').'</li>
-                </ul>
+                    <li class="smallFontSize">'.$gL10n->get('PHO_DOWNLOAD_ENABLED_DESC', $gL10n->get('PHO_KEEP_ORIGINAL')).'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="photo_keep_original">'.$gL10n->get('PHO_KEEP_ORIGINAL').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="photo_keep_original" name="photo_keep_original" ';
+                                if(isset($form_values['photo_keep_original']) && $form_values['photo_keep_original'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('PHO_KEEP_ORIGINAL_DESC', $gL10n->get('PHO_DOWNLOAD_ENABLED')).'</li>
+                 </ul>
                 <br />
                 <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
@@ -1098,7 +1111,7 @@ echo '
             </div>';
 
             /**************************************************************************************/
-            //Einstellungen Forum
+            // Preferences forum
             /**************************************************************************************/
 
             echo '<h3 id="SYS_FORUM" class="iconTextLink" >
@@ -1231,7 +1244,7 @@ echo '
             </div>';
 
             /**************************************************************************************/
-            //Einstellungen Gaestebuchmodul
+            // Preferences guestbook module
             /**************************************************************************************/
 
             echo '<h3 id="GBO_GUESTBOOK" class="iconTextLink" >
@@ -1330,7 +1343,7 @@ echo '
             </div>';
 
             /**************************************************************************************/
-            //Einstellungen Listenmodul
+            // Preferences lists module
             /**************************************************************************************/
     
             echo '<h3 id="LST_LISTS" class="iconTextLink" >
@@ -1381,7 +1394,7 @@ echo '
             </div>';
 
             /**************************************************************************************/
-            //Einstellungen Mailmodul
+            // Preferences mail module
             /**************************************************************************************/
 
             echo '<h3 id="SYS_EMAIL" class="iconTextLink" >
@@ -1474,7 +1487,7 @@ echo '
                 </div>
             </div>';
             /**************************************************************************************/
-            //Einstellungen Grußkartenmodul
+            // Preferences ecards module
             /**************************************************************************************/
             echo '<h3 id="ECA_GREETING_CARDS" class="iconTextLink">
                 <a href="#"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" title="'.$gL10n->get('ECA_GREETING_CARDS').'" /></a>
@@ -1574,7 +1587,7 @@ echo '
             </div>';        
 
             /**************************************************************************************/
-            //Einstellungen Profilmodul
+            // Preferences profile module
             /**************************************************************************************/
 
             echo '<h3 id="PRO_PROFILE" class="iconTextLink">
@@ -1691,7 +1704,7 @@ echo '
             </div>';
 
             /**************************************************************************************/
-            //Einstellungen Terminmodul
+            // Preferences event module
             /**************************************************************************************/
 
             echo '<h3 id="DAT_DATES" class="iconTextLink">
@@ -1719,7 +1732,7 @@ echo '
                             echo '</dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_VIEW_MODE_DESC').'</li>
+                    <li class="smallFontSize">'.$gL10n->get('DAT_VIEW_MODE_DESC', $gL10n->get('DAT_VIEW_MODE_DETAIL'), $gL10n->get('DAT_VIEW_MODE_COMPACT')).'</li>
                     <li>
                         <dl>
                             <dt><label for="dates_per_page">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
@@ -1827,7 +1840,7 @@ echo '
             </div>';
 
             /**************************************************************************************/
-            //Einstellungen Weblinksmodul
+            // Preferences weblinks module
             /**************************************************************************************/
 
             echo '<h3 id="LNK_WEBLINKS" class="iconTextLink">

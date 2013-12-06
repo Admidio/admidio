@@ -77,8 +77,8 @@ case 1:
         $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('LNK_DISPLAY_REDIRECT'), $gL10n->get('LNK_WEBLINKS')));
     }
 
-    // bei allen Checkboxen muss geprueft werden, ob hier ein Wert uebertragen wurde
-    // falls nicht, dann den Wert hier auf 0 setzen, da 0 nicht uebertragen wird
+    // check every checkbox if a value was committed
+    // if no value is found then set 0 because 0 will not be committed in a html checkbox element
 
     $checkboxes = array('dates_show_calendar_select'
                        ,'dates_show_map_link'
@@ -108,6 +108,8 @@ case 1:
                        ,'mail_html_registered_users'
                        ,'mail_sender_into_to'
                        ,'mail_smtp_auth'
+                       ,'photo_download_enabled'
+                       ,'photo_keep_original'
                        ,'photo_upload_mode'
                        ,'profile_log_edit_fields'
                        ,'profile_show_map_link'

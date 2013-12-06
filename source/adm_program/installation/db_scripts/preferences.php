@@ -59,7 +59,8 @@ $orga_preferences = array(
     'photo_upload_mode'     => '1',
     'photo_image_text'      => '© '.$_SERVER['HTTP_HOST'],
     'photo_slideshow_speed' => '5',
-    'photo_save_originals'  => '0',
+    'photo_keep_original'   => '0',
+    'photo_download_enabled' => '0',
 
     // Forum
     'enable_forum_interface'=> '0',

@@ -226,6 +226,14 @@ if($gCurrentUser->editPhotoRight())
 	}
 }
 
+//show link to download photos if enabled
+if($gPreferences['photo_download_enabled']==1 && $getPhotoId > 0)
+{
+        //show link to download photos
+        $photosMenu->addItem('admMenuItemDownloadPhotos', $g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId, 
+                                                $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'page_white_compressed.png');
+}
+
 if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of photos
@@ -372,11 +380,20 @@ echo '<div class="photoModuleContainer">';
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 
                         }
+                        
                         if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
                         {
                             $photoThumbnailTable .= '
                             <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getShowPage.'"><img 
                                 src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
+                        }
+                        
+                        if($gPreferences['photo_download_enabled']==1)
+                        {
+                            //show link to download photo
+                            $photoThumbnailTable .= '
+                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'"><img 
+                                            src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
                         }
                     }
 
@@ -582,13 +599,20 @@ echo '<div class="photoModuleContainer">';
                                 echo ' '.$gL10n->get('SYS_DATE_TO').' '.$sub_photo_album->getValue('pho_end', $gPreferences['system_date']);
                             }
                             echo '</li> 
-                            <li>'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$sub_photo_album->getValue('pho_photographers').'</li>';
+                            <li>'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$sub_photo_album->getValue('pho_photographers').'</li>
+                            <li>';
 
-                            //bei Moderationrecheten
+                            // check if download option is enabled
+                            if($gPreferences['photo_download_enabled']==1)
+                            {
+                                echo '
+                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
+                                            src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>';
+                            }
+
+                            // if user has admin rights for photo module then show some functions
                             if ($gCurrentUser->editPhotoRight())
                             {
-                                echo '<li>';
-
                                 if(file_exists($ordner))
                                 {
                                     echo '
@@ -615,10 +639,10 @@ echo '<div class="photoModuleContainer">';
                                 echo '
                                 <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=pho_'.
                                     $sub_photo_album->getValue('pho_id').'&amp;name='.urlencode($sub_photo_album->getValue('pho_name')).'&amp;database_id='.$sub_photo_album->getValue('pho_id').'"><img 
-                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
-                                </li>';
+                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                             }
-                    echo '</ul>
+                    echo '</li>
+                    </ul>
                 </dd>
             </dl>
             </li>';
