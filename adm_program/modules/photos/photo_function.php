@@ -68,6 +68,24 @@ function deleteThumbnail(&$photo_album, $pic_nr)
     }
 }
 
+function tryDelete($path)
+{
+    if(file_exists($path))
+    {
+        chmod($path, 0777);
+        unlink($path);
+    }
+};
+
+function tryRename($path,$newPath)
+{
+    if(file_exists($path))
+    {
+        chmod($path, 0777);
+        rename($path, $newPath);
+    }
+};
+
 //Loeschen eines Bildes
 function deletePhoto($pho_id, $pic_nr)
 {
@@ -83,11 +101,9 @@ function deletePhoto($pho_id, $pic_nr)
         $album_path = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin','Y-m-d').'_'.$photo_album->getValue('pho_id');
         
         //Bilder loeschen
-        if(file_exists($album_path.'/'.$pic_nr.'.jpg'))
-        {
-            chmod($album_path.'/'.$pic_nr.'.jpg', 0777);
-            unlink($album_path.'/'.$pic_nr.'.jpg');
-        }
+        tryDelete($album_path.'/'.$pic_nr.'.jpg');
+        tryDelete($album_path.'/originals/'.$pic_nr.'.jpg');
+        tryDelete($album_path.'/originals/'.$pic_nr.'.png');
 
         // Umbenennen der Restbilder und Thumbnails loeschen
         $new_pic_nr = $pic_nr;
@@ -99,8 +115,9 @@ function deletePhoto($pho_id, $pic_nr)
             {
                 if($act_pic_nr > $new_pic_nr)
                 {
-                    chmod($album_path.'/'.$act_pic_nr.'.jpg', 0777);
-                    rename($album_path.'/'.$act_pic_nr.'.jpg', $album_path.'/'.$new_pic_nr.'.jpg');
+                    tryRename($album_path.'/'.$act_pic_nr.'.jpg', $album_path.'/'.$new_pic_nr.'.jpg');
+                    tryRename($album_path.'/originals/'.$act_pic_nr.'.jpg', $album_path.'/originals/'.$new_pic_nr.'.jpg');
+                    tryRename($album_path.'/originals/'.$act_pic_nr.'.png', $album_path.'/originals/'.$new_pic_nr.'.png');
                     $new_pic_nr++;
                 }                
             }

@@ -133,7 +133,7 @@ if($getUploadmethod == 1)
 
 
 //Bildverarbeitung
-$new_quantity = $photo_album->getValue('pho_quantity');
+$newFotoFileNumber = $photo_album->getValue('pho_quantity');
 //Anzahl der Durchläufe
 $numLoops = 1;
 if($getUploadmethod == 1)
@@ -160,11 +160,11 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
     //Datei wurde hochgeladen
     if(isset($_FILES['Filedata']['name']) && is_uploaded_file($temp_filename))
     {
-        $new_quantity++;
+        $newFotoFileNumber++;
     	
     	if($getUploadmethod == 1)
     	{
-    		echo '<br /><br />'.$gL10n->get('PHO_PHOTO').' '.$new_quantity.':<br />';
+    		echo '<br /><br />'.$gL10n->get('PHO_PHOTO').' '.$newFotoFileNumber.':<br />';
     	}
     	
     	// Sonderzeichen aus Dateinamen entfernen
@@ -182,22 +182,30 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
     	{
         	echo $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
     	}
-    	
-    	//Typkontrolle
-        elseif($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
+        
+    	// check mime type and set file extension
+        if($image_properties['mime'] == 'image/jpeg')
+        {
+            $fileExtension = 'jpg';
+        }
+        elseif($image_properties['mime'] == 'image/png')
+        {
+            $fileExtension = 'png';
+        }
+        else
         {
             $gMessage->show($gL10n->get('PHO_PHOTO_FORMAT_INVALID'));
         }
     	
     	//Bild in Tempordner verschieben und weiterverarbeiten
-    	elseif (move_uploaded_file($temp_filename, $image_file)) 
+    	if (move_uploaded_file($temp_filename, $image_file)) 
     	{ 
     
     		//Bildobjekt erzeugen und scaliert speichern
     	    $image = new Image($image_file);
             $image->setImageType('jpeg');
             $image->scaleLargerSide($gPreferences['photo_save_scale']);
-            $image->copyToFile(null, $ordner.'/'.$new_quantity.'.jpg');
+            $image->copyToFile(null, $ordner.'/'.$newFotoFileNumber.'.jpg');
             $image->delete();
             
             //Nachsehen ob Thumnailordner existiert
@@ -211,8 +219,21 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
             //Thumbnail speichern
             $image = new Image($image_file);
             $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
-            $image->copyToFile(null, $ordner.'/thumbnails/'.$new_quantity.'.jpg');
+            $image->copyToFile(null, $ordner.'/thumbnails/'.$newFotoFileNumber.'.jpg');
             $image->delete(); 
+            
+            //save original if enabled
+            if ($gPreferences['photo_keep_original'] == 1)
+            {
+                if(file_exists($ordner.'/originals') == false)
+                {
+                    require_once('../../system/classes/folder.php');
+                    $folder = new Folder($ordner);
+                    $folder->createFolder('originals', true);
+                }
+                                
+                rename($image_file, $ordner.'/originals/'.$newFotoFileNumber.'.'.$fileExtension);
+            }
       
             //Loeschen des Bildes aus Arbeitsspeicher
             if(file_exists($image_file))
@@ -227,7 +248,7 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
         	}
         	
             //Endkontrolle
-            if(file_exists($ordner.'/'.$new_quantity.'.jpg'))
+            if(file_exists($ordner.'/'.$newFotoFileNumber.'.jpg'))
             {
                 //Aendern der Datenbankeintaege
                 $photo_album->setValue('pho_quantity', $photo_album->getValue('pho_quantity')+1);
@@ -237,8 +258,8 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
                 {
                 	 echo '
                 	  <img class="photoOutput" 
-                	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&photo_nr='.$new_quantity.'&max_width=300&max_height=200" 
-                	  alt="'.$gL10n->get('PHO_PHOTO').' '.$new_quantity.'" title="'.$gL10n->get('PHO_PHOTO').' '.$new_quantity.'">
+                	  src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$photo_album->getValue('pho_id').'&photo_nr='.$newFotoFileNumber.'&max_width=300&max_height=200" 
+                	  alt="'.$gL10n->get('PHO_PHOTO').' '.$newFotoFileNumber.'" title="'.$gL10n->get('PHO_PHOTO').' '.$newFotoFileNumber.'">
                 	  <br />';
                 }
                 else
@@ -248,7 +269,7 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
             }
             else
             {
-                $new_quantity --;
+                $newFotoFileNumber --;
                 echo $gL10n->get('PHO_PHOTO_PROCESSING_ERROR');
             }	        
     	}

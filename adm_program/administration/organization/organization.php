@@ -1049,6 +1049,34 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PHO_SHOW_CAPTION_DESC' ,$gCurrentOrganization->getValue('org_homepage')).'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="photo_download_enabled">'.$gL10n->get('PHO_DOWNLOAD_ENABLED').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="photo_download_enabled" name="photo_download_enabled" ';
+                                if(isset($form_values['photo_download_enabled']) && $form_values['photo_download_enabled'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('PHO_DOWNLOAD_ENABLED_DESC', $gL10n->get('PHO_KEEP_ORIGINAL')).'</li>
+                    <li>
+                        <dl>
+                            <dt><label for="photo_keep_original">'.$gL10n->get('PHO_KEEP_ORIGINAL').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="photo_keep_original" name="photo_keep_original" ';
+                                if(isset($form_values['photo_keep_original']) && $form_values['photo_keep_original'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('PHO_KEEP_ORIGINAL_DESC', $gL10n->get('PHO_DOWNLOAD_ENABLED')).'</li>
                 </ul>
                 <br />
                 <div class="formSubmit">    
@@ -1698,7 +1726,7 @@ echo '
                             echo '</dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_VIEW_MODE_DESC').'</li>
+                    <li class="smallFontSize">'.$gL10n->get('DAT_VIEW_MODE_DESC', $gL10n->get('DAT_VIEW_MODE_DETAIL'), $gL10n->get('DAT_VIEW_MODE_COMPACT')).'</li>
                     <li>
                         <dl>
                             <dt><label for="dates_per_page">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>

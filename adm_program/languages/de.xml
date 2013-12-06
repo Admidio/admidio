@@ -1,12 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
+<version id="2.4.4" translator="Henrik Muhs">
+	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="todo">Anzeigeart der Termine. Im Modus %VAR1_BOLD% werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus %VAR2_BOLD% werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</text>
+    <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="todo">Fotos herunterladen</text>
+    <text id="PHO_DOWNLOAD_SINGLE_PHOTO" development="new" translation="todo">Foto speichern</text>
+    <text id="PHO_DOWNLOAD_ENABLED" development="new" translation="todo">Download aktivieren</text>
+    <text id="PHO_DOWNLOAD_ENABLED_DESC" development="new" translation="todo">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option %VAR1_BOLD% aktiviert, dann werden nur die Originalfotos heruntergeladen.</text>
+    <text id="PHO_KEEP_ORIGINAL" development="new" translation="todo">Originale zusätzlich speichern</text>
+    <text id="PHO_KEEP_ORIGINAL_DESC" development="new" translation="todo">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option %VAR1_BOLD% aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</text>
+</version>
 <version id="2.4.2" translator="Markus Faßbender">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</text>
 	<text id="DAT_VIEW_MODE" development="new" translation="todo">Standard-Darstellung</text>
 	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="todo">Detailiert</text>
 	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="todo">Kompakt</text>
-	<text id="DAT_VIEW_MODE_DESC" development="new" translation="todo">Gibt an, wie die Termine angezeigt werden. (Standard: Detailiert)</text>
 	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="todo">Du kannst die Rolle %VAR1_BOLD% nicht löschen. Es muss mindestens eine Rolle die Einstellung %VAR2_BOLD% besitzen.</text>
 	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="todo">Du kannst die Systemrolle %VAR1_BOLD% nicht löschen.</text>
 	<text id="ROL_DELETE_ROLE" development="new" translation="todo">Du kannst die Rolle %VAR1_BOLD% nicht löschen.</text>
