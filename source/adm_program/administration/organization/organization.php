@@ -1075,6 +1075,21 @@ echo '
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PHO_SHOW_CAPTION_DESC' ,$gCurrentOrganization->getValue('org_homepage')).'</li>
+                    
+                    <li>
+                        <dl>
+                            <dt><label for="photo_save_originals">'.$gL10n->get('PHO_SAVE_ORIGINALS').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="photo_save_originals" name="photo_save_originals" ';
+                                if(isset($form_values['photo_save_originals']) && $form_values['photo_save_originals'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('PHO_SAVE_ORIGINALS_DESC').'</li>
                 </ul>
                 <br />
                 <div class="formSubmit">    
