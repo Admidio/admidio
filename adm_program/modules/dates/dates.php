@@ -274,7 +274,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             elseif($gCurrentUser->editDates())
             {
                 // if no calendar selectbox is shown, then show link to edit calendars
-                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&amp;title='.$gL10n->get('DAT_CALENDAR'), 
+                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR'), 
                                     $gL10n->get('DAT_MANAGE_CALENDARS'), 'edit.png');
             }
 
@@ -282,7 +282,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             //ical Download
             if($gPreferences['enable_dates_ical'] == 1)
             {
-                $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$htmlHeadline.'&amp;cat_id='.$getCatId,
+                $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$htmlHeadline.'&cat_id='.$getCatId,
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png' );
             }
                         
