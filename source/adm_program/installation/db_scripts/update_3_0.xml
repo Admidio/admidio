@@ -1,5 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
 	<step id="10">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="20">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="30">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="40">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="50">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="60">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="70">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="80">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="90">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="110">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="120">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="130">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="140">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="150">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="160">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="170">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="180">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="190">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="210">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="220">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="230">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="240">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="250">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="260">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="270">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="280">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="290">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="310">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="320">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="330">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="340">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="350">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="360">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="370">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="380">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="390">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
     <step>stop</step>
 </update>

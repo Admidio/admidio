@@ -386,7 +386,6 @@ class HtmlTable extends HtmlElement {
         $this->closeParentElement('tfoot');
         $this->addParentElement('tbody');
         $this->tbody = 1 ;
-
         if($attribute != '' && $value != '')
         {
             $this->addAttribute($attribute, $value);

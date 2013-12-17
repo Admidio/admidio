@@ -92,7 +92,7 @@ class HtmlDiv extends HtmlElement
         // attributes are not parsed, because parent class htmlElement()  determines that the attributes of the
         // parent element are already parsed if flag has value 1 and the next element is a child with optional attributes and closing tag.
         // So we must overwrite the protected parent variable
-        $this->parentFlag = -1;
+        $this->parentFlag = 0;
         // Define new div element
         $this->addParentElement('div');
         

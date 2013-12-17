@@ -104,15 +104,13 @@ class HtmlForm extends HtmlElement
 
     }
     
-    /**
-     *  @par Add a button.
-     *
+    /** Adds a button to the form.
      *  @param $name Name of the button
      *  @param $type Type attribute (Allowed: submit, reset, button (Default: button))
      *  @param $value Value of the button
      *  @param $id Optional ID for the button
      */
-    public function addButton($name, $type = 'button', $value, $id = null)
+    public function addSimpleButton($name, $type = 'button', $value, $id = null)
     {
         $this->addElement('button');
         
@@ -123,7 +121,6 @@ class HtmlForm extends HtmlElement
         
         $this->addAttribute('name', $name);
         $this->addAttribute('type', $type);
-        $this->addAttribute('value', $value);
         $this->addData($value);
     }
     
@@ -146,7 +143,7 @@ class HtmlForm extends HtmlElement
     /**
      *  @par Add a input field with attribute properties.
      *
-     *  @param $type Type of input field
+     *  @param $type Type of input field e.g. 'text'
      *  @param $name Name of the input field
      *  @param $id Optional ID for the input
      *  @param $value Yalue of the field (Default: empty)
@@ -288,7 +285,7 @@ class HtmlForm extends HtmlElement
         $this->addParentElement('select', 'name', $name);
 
         // set attributes
-        if($id != null)
+        if(strlen($id) > 0)
         {
             $this->addAttribute('id', $id);
         }
@@ -303,30 +300,6 @@ class HtmlForm extends HtmlElement
         {
             $this->currentElementAttributes .= ' disabled';
         }
-    }
-    
-    /**
-     *  @par Close current fieldset.
-     */
-    public function closeFieldSet()
-    {
-        $this->closeParentElement('fieldset');
-    }
-    
-    /**
-     *  @par Close current option group.
-     */
-    public function closeOptionGroup()
-    {
-        $this->closeParentElement('optgroup');
-    }
-    
-    /**
-     *  @par Close current select.
-     */
-    public function closeSelect()
-    {
-        $this->closeParentElement('select');
     }
 
     /**
@@ -370,7 +343,40 @@ class HtmlForm extends HtmlElement
     }
     
     /**
-     * @par set attributes from associative array.
+     *  @par Close current fieldset.
+     */
+    public function closeFieldSet()
+    {
+        $this->closeParentElement('fieldset');
+    }
+    
+    /**
+     *  @par Close current option group.
+     */
+    public function closeOptionGroup()
+    {
+        $this->closeParentElement('optgroup');
+    }
+    
+    /**
+     *  @par Close current select.
+     */
+    public function closeSelect()
+    {
+        $this->closeParentElement('select');
+    }
+    
+    /** Get the full parsed html form 
+     *  @return Returns the validated html form as string
+     */
+    public function getHtmlForm()
+    {   
+        return parent::getHtmlElement();
+    }
+    
+    /** Set attributes from associative array.
+     *  @param $array An array that contains all attribute names as array key 
+     *                and all attribute content as array value
      */
     private function setAttributesFromArray($array)
     {
@@ -383,16 +389,6 @@ class HtmlForm extends HtmlElement
         }
         return false;
     }    
-    
-    /**
-     * Get the parsed html form 
-     *
-     * @return Returns the validated html form as string
-     */
-    public function getHtmlForm()
-    {   
-        return parent::getHtmlElement();
-    }
 } 
 
 ?>

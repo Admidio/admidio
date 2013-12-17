@@ -22,14 +22,23 @@
 session_name('admidio_php_session_id');
 session_start();
 
-if(isset($_SESSION['prefix']))
+// if config file already exists then load file with their variables
+if(file_exists('../../config.php') == true)
 {
-    $g_tbl_praefix = $_SESSION['prefix'];
+    require_once('../../config.php');
 }
-else
+
+if(isset($g_tbl_praefix) == false)
 {
-	// default praefix is "adm" because of compatibility to older versions
-    $g_tbl_praefix = 'adm';
+    if(isset($_SESSION['prefix']))
+    {
+        $g_tbl_praefix = $_SESSION['prefix'];
+    }
+    else
+    {
+        // default praefix is "adm" because of compatibility to older versions
+        $g_tbl_praefix = 'adm';
+    }
 }
  
 // embed constants file
@@ -73,8 +82,6 @@ $gL10n->addLanguageData($gLanguageData);
 // if config file exists then connect to database
 if(file_exists('../../config.php') == true)
 {
-    require_once(SERVER_PATH. '/config.php');
-
     $db = Database::createDatabaseObject($gDbType);
     $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
@@ -98,24 +105,19 @@ if($getMode == 1)  // (Default) Choose language
 {
     session_destroy();
 
-    $message = '<div class="groupBox">
-                    <div class="groupBoxHeadline">'.$gL10n->get('INS_CHOOSE_LANGUAGE').'</div>
-                    <div class="groupBoxBody">
-                        <div class="admFieldList">
-                            <div class="admFieldLabel">
-                                <label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></div>
-                            <div class="admFieldElement">
-                                '. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language').'</div>
-                        </div>
-                    </div>
-                </div>
-                <br />';
-    showPage($message, 'installation.php?mode=2', 'forward.png', $gL10n->get('SYS_NEXT'));
+    // create form with selectbox where user can select a language
+    // the possible languages will be read from a xml file
+    $form = new FormInstallation('installation-form', 'installation.php?mode=2');
+    $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
+    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', true, null, true);
+    $form->closeGroupBox();
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), 'layout/forward.png', null, 'button');
+    $form->show();
 }
 elseif($getMode == 2)  // Welcome to installation
 {   
-    // Pruefen ob Sprache uebergeben wurde
-    if(isset($_POST['system_language']) == false || strlen($_POST['system_language']) == 0)
+    // check if a language string was committed
+    if(isset($_POST['system_language']) == false || strlen(trim($_POST['system_language'])) == 0)
     {
         showPage($gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', 'back.png', $gL10n->get('SYS_BACK'));
     }
@@ -125,19 +127,26 @@ elseif($getMode == 2)  // Welcome to installation
         $gL10n->setLanguage($_SESSION['language']);
     }
     
-    $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_WELCOME_TO_INSTALLATION').'</h2>'.$gL10n->get('INS_WELCOME_TEXT');
+    // create the text that should be shown in the form
+    $message = $gL10n->get('INS_WELCOME_TEXT');
 
-    // falls dies eine Betaversion ist, dann Hinweis ausgeben
+    // if this is a beta version then show a notice to the user
     if(BETA_VERSION > 0)
     {
         $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('INS_WARNING_BETA_VERSION');
     }
 
+    // if safe mode is used then show a notice to the user
     if(ini_get('safe_mode') == 1)
     {    
         $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('INS_WARNING_SAFE_MODE');
     }
-    showPage($message, 'installation.php?mode=3', 'forward.png', $gL10n->get('INS_DATABASE_LOGIN'));
+
+    // create a page with the notice that the installation must be configured on the next pages
+    $form = new FormInstallation('installation-form', 'installation.php?mode=3');
+    $form->setFormDescription($message, $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
+    $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), 'layout/forward.png', null, 'button');
+    $form->show();
 }
 elseif($getMode == 3)  // Enter database access information
 {
@@ -159,6 +168,20 @@ elseif($getMode == 3)  // Enter database access information
         $prefix   = 'adm';
     }
 
+    // create a page to enter all necessary database connection informations
+    $form = new FormInstallation('installation-form', 'installation.php?mode=4');
+    $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
+    $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
+    $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', true, $dbType);
+    $form->addTextInput('server', $gL10n->get('SYS_SERVER'), $server, true);
+    $form->addTextInput('user', $gL10n->get('SYS_USERNAME'), $user, true);
+    $form->addPasswordInput('password', $gL10n->get('SYS_PASSWORD'), true);
+    $form->addTextInput('database', $gL10n->get('SYS_DATABASE'), $database, true);
+    $form->addTextInput('prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, true);
+    $form->closeGroupBox();
+    $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), 'layout/forward.png', null, 'button');
+    $form->show();
+/*
     $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</h2>'.$gL10n->get('INS_DATABASE_LOGIN_DESC').'
                 <div class="groupBox">
                     <div class="groupBoxHeadline">'.$gL10n->get('INS_DATABASE_LOGIN').'</div>
@@ -167,46 +190,48 @@ elseif($getMode == 3)  // Enter database access information
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
                                     <label for="db_type">'.$gL10n->get('INS_DATABASE_SYSTEM').':</label></div>
-                                <div class="admFieldElement">
+                                <div class="admFieldElement admMandatory">
                                     '. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', $dbType).'</div>
                             </div>
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
                                     <label for="server">'.$gL10n->get('SYS_SERVER').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput" type="text" name="server" id="server" maxlength="50" value="'. $server. '" /></div>
+                                <div class="admFieldElement admMandatory">
+                                    <input class="admTextInput admMandatory" type="text" name="server" id="server" maxlength="50" value="'. $server. '" /></div>
                             </div>
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
                                     <label for="user">'.$gL10n->get('SYS_USERNAME').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput" type="text" name="user" id="user" maxlength="50" value="'. $user. '" /></div>
+                                <div class="admFieldElement admMandatory">
+                                    <input class="admTextInput admMandatory" type="text" name="user" id="user" maxlength="50" value="'. $user. '" /></div>
                             </div>
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
                                     <label for="password">'.$gL10n->get('SYS_PASSWORD').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput" type="password" name="password" id="password" maxlength="50" /></div>
+                                <div class="admFieldElement admMandatory">
+                                    <input class="admTextInput admMandatory" type="password" name="password" id="password" maxlength="50" /></div>
                             </div>
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
                                     <label for="database">'.$gL10n->get('SYS_DATABASE').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput" type="text" name="database" id="database" maxlength="50" value="'. $database. '" /></div>
+                                <div class="admFieldElement admMandatory">
+                                    <input class="admTextInput admMandatory" type="text" name="database" id="database" maxlength="50" value="'. $database. '" /></div>
                             </div>
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
                                     <label for="prefix">'.$gL10n->get('INS_TABLE_PREFIX').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admSmallTextInput" type="text" name="prefix" id="prefix" maxlength="10" value="'. $prefix. '" /></div>
+                                <div class="admFieldElement admMandatory">
+                                    <input class="admSmallTextInput admMandatory" type="text" name="prefix" id="prefix" maxlength="10" value="'. $prefix. '" /></div>
                             </div>
                             <div class="admFieldRow">
                                 <img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'
                             </div>
                         </div>
                     </div>
-                </div>';
+                </div>
+                <div class="admMandatoryDefinition"><span></span> Pflichtfelder</div>';
     showPage($message, 'installation.php?mode=4', 'forward.png', $gL10n->get('INS_SET_ORGANIZATION'));
+    */
 }
 elseif($getMode == 4)  // Creating organization
 {
@@ -289,13 +314,13 @@ elseif($getMode == 4)  // Creating organization
                                 <div class="admFieldLabel">
                                     <label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></div>
                                 <div class="admFieldElement">
-                                    <input class="admSmallTextInput" type="text" name="orgaShortName" id="orgaShortName" maxlength="10" value="'. $orgaShortName. '" /></div>
+                                    <input class="admSmallTextInput admMandatory" type="text" name="orgaShortName" id="orgaShortName" maxlength="10" value="'. $orgaShortName. '" /></div>
                             </div>
                             <div class="admFieldRow">
                                 <div class="admFieldLabel">
                                     <label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></div>
                                 <div class="admFieldElement">
-                                    <input class="admTextInput" type="text" name="orgaLongName" id="orgaLongName" maxlength="60" value="'. $orgaLongName. '" /></div>
+                                    <input class="admTextInput admMandatory" type="text" name="orgaLongName" id="orgaLongName" maxlength="60" value="'. $orgaLongName. '" /></div>
                             </div>
                         </div>
                     </div>

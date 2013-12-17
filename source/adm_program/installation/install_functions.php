@@ -55,7 +55,7 @@ function showPage($message, $next_url, $icon, $icon_text, $mode = 1)
                     || $(this).val() == "'.$gL10n->get('INS_INSTALL_ADMIDIO').'")
                     {
                         $(this).prop("disabled", "true");
-                        $("#btn_icon").attr("src", "layout/loader.gif");
+                        $("#next_page img").attr("src", "layout/loader.gif");
                         
                         if($(this).val() == "'.$gL10n->get('INS_UPDATE_DATABASE').'")
                         {

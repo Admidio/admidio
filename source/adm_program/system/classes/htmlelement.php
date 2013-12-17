@@ -93,14 +93,14 @@
  *  HtmlElement::addElement('input');
  *  HtmlElement::addAttribute('type', 'text');
  *  HtmlElement::addAttribute('name', 'input');
- *  HtmlElement::addLabel('Inputfield:');
+ *  HtmlElement::addString('Inputfield:');
  *  // pass a whitespace because element has no content
  *  HtmlElement::addData(' ', true); // true for self closing element (default: false)
  *  // add a checkbox
  *  HtmlElement::addElement('input');
  *  HtmlElement::addAttribute('type', 'checkbox');
  *  HtmlElement::addAttribute('name', 'checkbox');
- *  HtmlElement::addLabel('Checkbox:');
+ *  HtmlElement::addString('Checkbox:');
  *  // pass a whitespace because element has no content
  *  HtmlElement::addData(' ', true); // true for self closing element (default: false)
  *  // add a submit button
@@ -127,11 +127,13 @@ abstract class HtmlElement {
     protected   $arrParentElements;             ///< Array with opened child elements 
     protected   $currentElement;                ///< Internal pointer showing to actual element or child element
     protected   $currentElementAttributes;      ///< Attributes of the current element
+    protected   $currentElementDataWritten;     ///< Flag if an element is added but the data is not added
     protected   $htmlString;                    ///< String with prepared html
     private     $mainElement;                   ///< String with main element as string
     private     $mainElementAttributes;         ///< String with attributes of the main element
     private     $nesting;                       ///< Flag enables nesting of main elements, e.g div blocks ( Default : false )
     protected   $parentFlag;                    ///< Flag for setted parent Element
+    private     $mainElementWritten;              ///< Flag if the main element was written in the html string
     
     /**
      * Constructor initializing all class variables
@@ -143,13 +145,11 @@ abstract class HtmlElement {
      */
     public function __construct($element = '', $attribute = '', $value = '', $nesting = false)
     {        
+        $this->mainElementAttributes = array();
+
         if($attribute != '')
         {
-            $this->mainElementAttributes = $this->getElementAttribute($attribute, $value);
-        }
-        else
-        {
-            $this->mainElementAttributes = '';
+            $this->mainElementAttributes[$attribute] = $value;
         }
         
         if($nesting === false)
@@ -161,20 +161,22 @@ abstract class HtmlElement {
             $this->nesting = true;
         }
         
-        $this->mainElement              = $element;
-        $this->currentElement           = $element;
-        $this->currentElementAttributes = '';
-        $this->htmlString               = '';
-        $this->parentFlag               = -1;
-        $this->arrParentElements        = array();
+        $this->mainElement               = $element;
+        $this->currentElement            = $element;
+        $this->currentElementAttributes  = array();
+        $this->htmlString                = '';
+        $this->parentFlag                = 0;
+        $this->arrParentElements         = array();
+        $this->mainElementWritten          = false;
+        $this->currentElementDataWritten = true;
     }
     
-    /**
-     * Add attributes to the selected element
-     *
-     * @param $attribute Attribute
-     * @param $value Value of the attribute
-     * @param $element Element
+    /** Add attributes to the selected element. If that attribute is already added 
+     *  than the new value will be attached to the current value.
+     *  @param $attribute Name of the html attribute
+     *  @param $value Value of the attribute
+     *  @param $element Optional the element for which the attribute should be set, 
+     *                  if this is not the current element
      */
     public function addAttribute($attribute, $value, $element = null)
     {
@@ -185,11 +187,25 @@ abstract class HtmlElement {
 
         if($element == $this->mainElement)
         {
-            $this->mainElementAttributes .= $this->getElementAttribute($attribute, $value);
+            if(array_key_exists($attribute, $this->mainElementAttributes) == true)
+            {
+                $this->mainElementAttributes[$attribute] = $this->mainElementAttributes[$attribute].' '.$value;
+            }
+            else
+            {
+                $this->mainElementAttributes[$attribute] = $value;
+            }
         }
         else
         {
-            $this->currentElementAttributes .= $this->getElementAttribute($attribute, $value);
+            if(array_key_exists($attribute, $this->currentElementAttributes) == true)
+            {
+                $this->currentElementAttributes[$attribute] = $this->currentElementAttributes[$attribute].' '.$value;
+            }
+            else
+            {
+                $this->currentElementAttributes[$attribute] = $value;
+            }
         }
     }
 
@@ -210,12 +226,12 @@ abstract class HtmlElement {
             // Define needed tags
             if($selfClosing === false)
             {
-                $startTag = '<' .$this->currentElement . $this->currentElementAttributes . '>';
+                $startTag = '<' .$this->currentElement . $this->getElementAttributesString() . '>';
                 $endTag   = '</' . $this->currentElement . '>';
             }
             else
             {
-                $startTag = '<' .$this->currentElement . $this->currentElementAttributes;
+                $startTag = '<' .$this->currentElement . $this->getElementAttributesString();
                 $endTag   = '/>';
             }
             // data is a string
@@ -228,7 +244,9 @@ abstract class HtmlElement {
             {
                 $this->htmlString .= $this->readData($data);
             }
-            $this->currentElementAttributes = '';
+            $this->currentElementAttributes = array();
+            // set flag that the data of the current element is written to html string
+            $this->currentElementDataWritten = true;
         }
         return false;
     }
@@ -249,61 +267,76 @@ abstract class HtmlElement {
      */
     public function addElement($childElement, $attribute = '', $value = '',  $data = '', $selfClosing = false)
     {
-        if($attribute != '' || $value != '')
+        // if previous current element was not written to html string and the same child element is set 
+        // than this could be a call of parent class so do not reinitialize the current element
+        if($this->currentElementDataWritten == true || $childElement != $this->currentElement)
         {
-            $this->currentElementAttributes .= $this->getElementAttribute($attribute, $value);
-        }
-        // check if parent element is set, then write first the tag and attributes for the previous element
-        if($this->parentFlag != -1)
-        {
-            // Main element attributes are set in own variable, so in nesting mode main element can be set again
-            if($this->currentElement == $this->mainElement)
+            $this->currentElementDataWritten = false;
+            
+            if($attribute != '' || $value != '')
             {
-                $this->currentElementAttributes = $this->mainElementAttributes;
+                $this->addAttribute($attribute, $value);
+            }
+            // check if parent element is set, then write first the tag and attributes for the previous element
+            if($this->parentFlag == true)
+            {
+                // Main element attributes are set in own variable, so in nesting mode main element can be set again
+                if($this->currentElement == $this->mainElement)
+                {
+                    $this->currentElementAttributes = $this->mainElementAttributes;
+                }
+                
+                $this->htmlString .= '<' .$this->currentElement . $this->getElementAttributesString() . '>';
+                $this->currentElement = $childElement;
+                $this->currentElementAttributes = array();
+                $this->parentFlag = false;
             }
 
-            $this->htmlString .= '<' .$this->currentElement . $this->currentElementAttributes . '>';
-            $this->currentElement = $childElement;
-            $this->currentElementAttributes = '';
-            $this->parentFlag = -1;
-        }
+            // If first child is set start writing the html beginning with main element and attributes
+            if($this->currentElement == $this->mainElement && $this->mainElement != '' && $this->mainElementWritten == false)
+            {
+                $this->htmlString .= '<' .$this->mainElement.$this->getMainElementAttributesString().'>';
+                $this->mainElementWritten = true;
+            }
 
-        // If first child is set start writing the html beginning with main element and attributes
-        if($this->currentElement == $this->mainElement && $this->mainElement != '')
-        {
-            $this->htmlString .= '<' .$this->mainElement.$this->mainElementAttributes.'>';
-        }
+            // If nesting is enabled, main element can be set again
+            if($childElement == $this->mainElement && $this->nesting === true)
+            {
+                // now set as current position
+                $this->currentElement = $childElement;
+                // clear attribute buffer
+                $this->currentElementAttributes = array();
+            }
 
-        // If nesting is enabled, main element can be set again
-        if($childElement == $this->mainElement && $this->nesting === true)
-        {
-            // now set as current position
-            $this->currentElement = $childElement;
-            // clear attribute buffer
-            $this->currentElementAttributes = '';
-        }
+            if($childElement != $this->mainElement)
+            {
+                // now set as current position
+                $this->currentElement = $childElement;
+                // clear attribute buffer
+                $this->currentElementAttributes = array();
+            }
 
-        if($childElement != $this->mainElement)
-        {
-            // now set as current position
-            $this->currentElement = $childElement;
-            // clear attribute buffer
-            $this->currentElementAttributes = '';
-        }
-
-        // add content if exists
-        if($data != '')
-        {
-            $this->addData($data, $selfClosing);
+            // add content if exists
+            if($data != '')
+            {
+                $this->addData($data, $selfClosing);
+            }
         }
     }
     
-    /**
-     *  Add a text label
+    /** Add any string to the html output. If the main element wasn't written to the 
+     *  html string than this will be done before your string will be added.
      *  @param $string Text as string in current string position
      */
-    public function addLabel($string = '')
+    public function addString($string = '')
     {
+        // If first child is set start writing the html beginning with main element and attributes
+        if($this->currentElement == $this->mainElement && $this->mainElement != '' && $this->mainElementWritten == false)
+        {
+            $this->htmlString .= '<' .$this->mainElement.$this->getMainElementAttributesString().'>';
+            $this->mainElementWritten = true;
+        }
+
         $this->htmlString .= $string;
     }
 
@@ -321,29 +354,24 @@ abstract class HtmlElement {
      */
     public function addParentElement($parentElement, $attribute = '', $value = '')
     {   
-        if($attribute != '' || $value != '')
-        {
-            $this->currentElementAttributes .= $this->getElementAttribute($attribute, $value);
-        }
-        
         // Only possible for child elements of the main element or nesting mode is active!
         if($this->currentElement != $this->mainElement || $this->nesting === true)
         {   
             // check if already parent element is set, then write first the tag and attributes for the previous element
-            if($this->parentFlag != -1)
+            if($this->parentFlag == true)
             {
-                $this->htmlString .= '<' .$this->currentElement . $this->currentElementAttributes . '>';
-                $this->currentElementAttributes = '';
+                $this->htmlString .= '<' .$this->currentElement . $this->getElementAttributesString() . '>';
+                $this->currentElementAttributes = array();
             }
             else
             {   
                 // set Flag
-                $this->parentFlag = 1;
-                
-                if($this->currentElement == $this->mainElement && $this->nesting === true)
+                $this->parentFlag = true;
+   
+                if($this->currentElement == $this->mainElement && $this->nesting === true && $this->mainElementWritten == false)
                 {
-                    $this->htmlString .= '<' .$this->currentElement . $this->mainElementAttributes . '>';
-                    $this->currentElementAttributes = '';
+                    $this->htmlString .= '<' .$this->currentElement . $this->getMainElementAttributesString() . '>';
+                    $this->mainElementAttributes = array();
                 }
             }
 
@@ -363,8 +391,15 @@ abstract class HtmlElement {
                 $this->closeParentElement($parentElement);
                 $this->arrParentElements[] = $parentElement;
             }
+            // set parent element to current element
             $this->currentElement = $parentElement;
-            $this->mainElementAttributes = '';
+
+            // save attribute for parent element
+            if($attribute != '' || $value != '')
+            {
+                $this->addAttribute($attribute, $value);
+            }
+            //$this->mainElementAttributes = array();
         }
     }
     
@@ -423,26 +458,38 @@ abstract class HtmlElement {
         $this->arrParentElements = array_values($this->arrParentElements);
     }
     
-    /**
-     * Helper function creates attributes as string
-     * If no attribute is set then only the value is returned to use Javascript
-     *
-     * @param $attribute Attribute name
-     * @param $value Value for the attribute
-     * @return Returns validated string
+    /** Create a valid html compatible string with all attributes and their values of the 
+     *  last added element.
+     *  @return Returns a string with all attributes and values.
      */
-    private function getElementAttribute($attribute, $string)
+    private function getElementAttributesString()
     {
-        if($attribute != '')
+        $string = '';
+        
+        foreach($this->currentElementAttributes as $key => $value)
         {
-            $validatedAttribute = ' '. $attribute .'="' . $string . '"';
+            $string .= ' '.$key.'="'.$value.'" ';
         }
-        else
+        
+        return $string;
+    }
+
+    
+    /** Create a valid html compatible string with all attributes and their values of the 
+     *  main element.
+     *  @return Returns a string with all attributes and values.
+     */
+    private function getMainElementAttributesString()
+    {
+        $string = '';
+        
+        foreach($this->mainElementAttributes as $key => $value)
         {
-            $validatedAttribute = ' '.$string;
+            $string .= ' '.$key.'="'.$value.'" ';
         }
-        return $validatedAttribute;
-    }      
+        
+        return $string;
+    }
 
     /**
      * Return the element as string
@@ -452,6 +499,7 @@ abstract class HtmlElement {
     public function getHtmlElement()
     {
         $this->htmlString .= '</' . $this->mainElement . '>';
+        
         return  $this->htmlString;
     }
     
@@ -472,12 +520,12 @@ abstract class HtmlElement {
             // no selfclosing element
             if($selfClosing === false)
             {
-                $startTag = '<' .$this->currentElement . $this->currentElementAttributes . '>';
+                $startTag = '<' .$this->currentElement . $this->getElementAttributesString() . '>';
                 $endTag   = '</' . $this->currentElement . '>';
             }
             else
             {
-                $startTag = '<' .$this->currentElement . $this->currentElementAttributes;
+                $startTag = '<' .$this->currentElement . $this->getElementAttributesString();
                 $endTag   = '/>';
             }
             // count entries

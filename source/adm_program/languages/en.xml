@@ -4,6 +4,7 @@
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Continue installation</text>
     <text id="INS_INSTALLATION_EXISTS" development="new" translation="todo">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</text>
+    <text id="SYS_MANDATORY_FIELDS" development="new" translation="todo">Mandatory fields</text>
 </version>
 <version id="2.4.2" translator="Stefanie Schima">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Join event as organiser</text>

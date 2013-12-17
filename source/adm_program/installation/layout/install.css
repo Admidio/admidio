@@ -78,11 +78,6 @@ a:hover, a:active {
     padding-right:      1px;
 }
 
-button img {
-     vertical-align:    middle;
-     border-width:      0;
-}
-
 /* form layout */
 
 .admFormLayout {
@@ -122,6 +117,7 @@ button img {
 .admFieldElement {
     display: inline-block;
     width: 60%;
+    white-space: nowrap;
 }
 
 /* Form elements */
@@ -148,11 +144,27 @@ button img {
     min-width: 50px;
 }
 
-.formSubmit {
-    padding-top: 20px;
+.admButton {
+    margin-top: 20px;
+    margin-right: 20px;
 }
 
+.admButton img {
+     vertical-align:    bottom;
+     border-width:      0;
+     margin-right:      5px;
+}
 
+.admFieldElement.admMandatory:after, .admMandatoryDefinition span:after {
+    content: url(bullet_red.png);
+    white-space: nowrap;
+    vertical-align: top;
+}
+
+.admMandatoryDefinition {
+    font-size: 9pt;
+    margin-top: 5px;
+}
 
 /* A simple groupbox to group some elements. This is often used in forms. */
 
