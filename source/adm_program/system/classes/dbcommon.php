@@ -177,7 +177,7 @@ class DBCommon
 		{
 			$xmlDatabases = new SimpleXMLElement(SERVER_PATH.'/adm_program/system/databases.xml', 0, true);
 			$node = $xmlDatabases->xpath("/databases/database[@id='".$this->dbType."']/minversion");
-			$this->minversion = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
+			$this->minVersion = (string)$node[0]; // explicit typcasting because of problem with simplexml and sessions
 		}
 		return $this->minVersion;		
 	}

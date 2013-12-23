@@ -8,6 +8,7 @@
     <text id="PHO_DOWNLOAD_ENABLED_DESC" development="new" translation="todo">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option %VAR1_BOLD% aktiviert, dann werden nur die Originalfotos heruntergeladen.</text>
     <text id="PHO_KEEP_ORIGINAL" development="new" translation="todo">Originale zusätzlich speichern</text>
     <text id="PHO_KEEP_ORIGINAL_DESC" development="new" translation="todo">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option %VAR1_BOLD% aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</text>
+    <text id="SYS_DATABASE_VERSION" development="new" translation="todo">Datenbank-Version</text>
 </version>
 <version id="2.4.2" translator="Markus Faßbender">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>
@@ -529,7 +530,6 @@
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
-    <text id="INS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu Ihrer Datenbank ist.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Sie sollten versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>

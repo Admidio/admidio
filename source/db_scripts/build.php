@@ -129,7 +129,7 @@ if($gDbType == 'mysql')
 
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
-			or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_program/installation/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
+			or die('File <strong>db.sql</strong> could not be found in folder <strong>adm_program/installation/db_scripts</strong>.');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -149,7 +149,7 @@ foreach($sql_arr as $sql)
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')
-            or showPage('File <strong>db.sql</strong> could not be found in folder <strong>adm_program/installation/db_scripts</strong>.', 'installation.php?mode=5', 'back.png', 'Zurück');
+            or die('File <strong>db.sql</strong> could not be found in folder <strong>adm_program/installation/db_scripts</strong>.');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);

@@ -93,12 +93,12 @@ if(file_exists('../../config.php') == true)
     if($count > 0)
     {
         // valid installation exists -> exist installation
-        showPage($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', 'application_view_list.png', $gL10n->get('SYS_OVERVIEW'));
+        showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
     }
-    /*elseif($getMode != 8)
+    elseif($getMode != 8)
     {
-        showPage($gL10n->get('INS_CONFIGURATION_FILE_FOUND', 'config.php'), 'installation.php?mode=8', 'database_in.png', $gL10n->get('INS_CONTINUE_INSTALLATION'));
-    }*/
+        showNotice($gL10n->get('INS_CONFIGURATION_FILE_FOUND', 'config.php'), 'installation.php?mode=8', $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png');
+    }
 }
 
 if($getMode == 1)  // (Default) Choose language
@@ -111,7 +111,7 @@ if($getMode == 1)  // (Default) Choose language
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
     $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', true, null, true);
     $form->closeGroupBox();
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), 'layout/forward.png', null, 'button');
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), 'layout/forward.png', null, null, 'button');
     $form->show();
 }
 elseif($getMode == 2)  // Welcome to installation
@@ -119,7 +119,7 @@ elseif($getMode == 2)  // Welcome to installation
     // check if a language string was committed
     if(isset($_POST['system_language']) == false || strlen(trim($_POST['system_language'])) == 0)
     {
-        showPage($gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', 'back.png', $gL10n->get('SYS_BACK'));
+        showNotice($gL10n->get('INS_LANGUAGE_NOT_CHOOSEN'), 'installation.php?mode=1', $gL10n->get('SYS_BACK'), 'layout/back.png');
     }
     else
     {
@@ -145,7 +145,7 @@ elseif($getMode == 2)  // Welcome to installation
     // create a page with the notice that the installation must be configured on the next pages
     $form = new FormInstallation('installation-form', 'installation.php?mode=3');
     $form->setFormDescription($message, $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
-    $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), 'layout/forward.png', null, 'button');
+    $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), 'layout/forward.png', null, null, 'button');
     $form->show();
 }
 elseif($getMode == 3)  // Enter database access information
@@ -178,60 +178,10 @@ elseif($getMode == 3)  // Enter database access information
     $form->addPasswordInput('password', $gL10n->get('SYS_PASSWORD'), true);
     $form->addTextInput('database', $gL10n->get('SYS_DATABASE'), $database, true);
     $form->addTextInput('prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, true);
+    $form->addDescription('<img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA'));
     $form->closeGroupBox();
-    $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), 'layout/forward.png', null, 'button');
+    $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), 'layout/forward.png', null, null, 'button');
     $form->show();
-/*
-    $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_ENTER_LOGIN_TO_DATABASE').'</h2>'.$gL10n->get('INS_DATABASE_LOGIN_DESC').'
-                <div class="groupBox">
-                    <div class="groupBoxHeadline">'.$gL10n->get('INS_DATABASE_LOGIN').'</div>
-                    <div class="groupBoxBody">
-                        <div class="admFieldList">
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="db_type">'.$gL10n->get('INS_DATABASE_SYSTEM').':</label></div>
-                                <div class="admFieldElement admMandatory">
-                                    '. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', 'db_type', $dbType).'</div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="server">'.$gL10n->get('SYS_SERVER').':</label></div>
-                                <div class="admFieldElement admMandatory">
-                                    <input class="admTextInput admMandatory" type="text" name="server" id="server" maxlength="50" value="'. $server. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="user">'.$gL10n->get('SYS_USERNAME').':</label></div>
-                                <div class="admFieldElement admMandatory">
-                                    <input class="admTextInput admMandatory" type="text" name="user" id="user" maxlength="50" value="'. $user. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="password">'.$gL10n->get('SYS_PASSWORD').':</label></div>
-                                <div class="admFieldElement admMandatory">
-                                    <input class="admTextInput admMandatory" type="password" name="password" id="password" maxlength="50" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="database">'.$gL10n->get('SYS_DATABASE').':</label></div>
-                                <div class="admFieldElement admMandatory">
-                                    <input class="admTextInput admMandatory" type="text" name="database" id="database" maxlength="50" value="'. $database. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="prefix">'.$gL10n->get('INS_TABLE_PREFIX').':</label></div>
-                                <div class="admFieldElement admMandatory">
-                                    <input class="admSmallTextInput admMandatory" type="text" name="prefix" id="prefix" maxlength="10" value="'. $prefix. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="admMandatoryDefinition"><span></span> Pflichtfelder</div>';
-    showPage($message, 'installation.php?mode=4', 'forward.png', $gL10n->get('INS_SET_ORGANIZATION'));
-    */
 }
 elseif($getMode == 4)  // Creating organization
 {
@@ -254,7 +204,7 @@ elseif($getMode == 4)  // Creating organization
 
             if($anz != strlen($_POST['prefix']))
             {
-                showPage($gL10n->get('INS_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
+                showNotice($gL10n->get('INS_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
         }
 
@@ -271,7 +221,7 @@ elseif($getMode == 4)  // Creating organization
         || strlen($_SESSION['user'])     == 0
         || strlen($_SESSION['database']) == 0 )
         {
-            showPage($gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
+            showNotice($gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
         // for security reasons only check database connection if no config file exists
@@ -281,13 +231,14 @@ elseif($getMode == 4)  // Creating organization
             $db = Database::createDatabaseObject($_SESSION['db_type']);
             if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
             {
-                showPage($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
+                showNotice($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
 
-            //Datenbank- und PHP-Version prüfen
-            if(checkVersions($db, $message) == false)
+            // check database version
+            $message = checkDatabaseVersion($db); 
+            if(strlen($message) > 0)
             {
-                showPage($message, 'installation.php?mode=3', 'back.png', $gL10n->get('SYS_BACK'));
+                showNotice($message, 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
         }
     }
@@ -304,29 +255,15 @@ elseif($getMode == 4)  // Creating organization
         $orgaLongName  = '';
     }
 
-    $message = $message.'<h2 class="admHeadline2">'.$gL10n->get('INS_SET_ORGANIZATION').'</h2>
-                '.$gL10n->get('INS_NAME_OF_ORGANIZATION_DESC').'
-                <div class="groupBox">
-                    <div class="groupBoxHeadline">'.$gL10n->get('INS_NAME_OF_ORGANIZATION').'</div>
-                    <div class="groupBoxBody">
-                        <div class="admFieldList">
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admSmallTextInput admMandatory" type="text" name="orgaShortName" id="orgaShortName" maxlength="10" value="'. $orgaShortName. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput admMandatory" type="text" name="orgaLongName" id="orgaLongName" maxlength="60" value="'. $orgaLongName. '" /></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br />';
-    showPage($message, 'installation.php?mode=5', 'forward.png', $gL10n->get('INS_CREATE_ADMINISTRATOR'));
+    // create a page to enter the organization names
+    $form = new FormInstallation('installation-form', 'installation.php?mode=5');
+    $form->setFormDescription($gL10n->get('INS_NAME_OF_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
+    $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
+    $form->addSmallTextInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, true);
+    $form->addTextInput('orgaLongName', $gL10n->get('SYS_NAME'), $orgaLongName, true);
+    $form->closeGroupBox();
+    $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), 'layout/forward.png', null, null, 'button');
+    $form->show();
 }
 elseif($getMode == 5)  // Creating addministrator
 {
@@ -339,72 +276,39 @@ elseif($getMode == 5)  // Creating addministrator
         if(strlen($_SESSION['orgaShortName']) == 0
         || strlen($_SESSION['orgaLongName']) == 0 )
         {
-            showPage($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', 'back.png', $gL10n->get('SYS_BACK'));
+            showNotice($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
 
     // initialize form data
     if(isset($_SESSION['user_last_name']))
     {
-        $user_last_name  = $_SESSION['user_last_name'];
-        $user_first_name = $_SESSION['user_first_name'];
-        $user_email      = $_SESSION['user_email'];
-        $user_login      = $_SESSION['user_login'];
+        $userLastName  = $_SESSION['user_last_name'];
+        $userFirstName = $_SESSION['user_first_name'];
+        $userEmail     = $_SESSION['user_email'];
+        $userLogin     = $_SESSION['user_login'];
     }
     else
     {
-        $user_last_name  = '';
-        $user_first_name = '';
-        $user_email      = '';
-        $user_login      = '';
+        $userLastName  = '';
+        $userFirstName = '';
+        $userEmail     = '';
+        $userLogin     = '';
     }
-    $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_CREATE_ADMINISTRATOR').'</h2>
-                '.$gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC').'
-                <div class="groupBox">
-                    <div class="groupBoxHeadline">'.$gL10n->get('INS_DATA_OF_ADMINISTRATOR').'</div>
-                    <div class="groupBoxBody">
-                        <div class="admFieldList">
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="user_last_name">'.$gL10n->get('SYS_LASTNAME').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput" class="admTextInput" type="text" name="user_last_name" id="user_last_name" maxlength="50" value="'. $user_last_name. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="user_first_name">'.$gL10n->get('SYS_FIRSTNAME').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput" type="text" name="user_first_name" id="user_first_name" maxlength="50" value="'. $user_first_name. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="user_email">'.$gL10n->get('SYS_EMAIL').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput" type="text" name="user_email" id="user_email" maxlength="50" value="'. $user_email. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="user_login">'.$gL10n->get('SYS_USERNAME').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admTextInput" type="text" name="user_login" id="user_login" maxlength="35" value="'. $user_login. '" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="user_password">'.$gL10n->get('SYS_PASSWORD').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admSmallTextInput" type="password" name="user_password" id="user_password" maxlength="20" /></div>
-                            </div>
-                            <div class="admFieldRow">
-                                <div class="admFieldLabel">
-                                    <label for="user_password_confirm">'.$gL10n->get('SYS_CONFIRM_PASSWORD').':</label></div>
-                                <div class="admFieldElement">
-                                    <input class="admSmallTextInput" type="password" name="user_password_confirm" id="user_password_confirm" maxlength="20" /></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br />';
-    showPage($message, 'installation.php?mode=6', 'forward.png', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
+    
+    // create a page to enter all necessary data to create a administrator user
+    $form = new FormInstallation('installation-form', 'installation.php?mode=6');
+    $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
+    $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
+    $form->addTextInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, true);
+    $form->addTextInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, true);
+    $form->addTextInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, true);
+    $form->addTextInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, true);
+    $form->addPasswordInput('user_password', $gL10n->get('SYS_PASSWORD'), true);
+    $form->addPasswordInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), true);
+    $form->closeGroupBox();
+    $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'), 'layout/forward.png', null, null, 'button');
+    $form->show();
 }
 elseif($getMode == 6)  // Creating configuration file
 {
@@ -424,31 +328,32 @@ elseif($getMode == 6)  // Creating configuration file
         || strlen($_SESSION['user_login'])      == 0
         || strlen($_SESSION['user_password'])   == 0 )
         {
-            showPage($gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', 'back.png', $gL10n->get('SYS_BACK'));
+            showNotice($gL10n->get('INS_ADMINISTRATOR_DATA_NOT_COMPLETELY'), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
         $_SESSION['user_email'] = admStrToLower($_SESSION['user_email']);
         if(!strValidCharacters($_SESSION['user_email'], 'email'))
         {
-            showPage($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')), 'installation.php?mode=5', 'back.png', $gL10n->get('SYS_BACK'));
+            showNotice($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('SYS_EMAIL')), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
 
         if($_SESSION['user_password'] != $_SESSION['user_password_confirm'])
         {
-            showPage($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', 'back.png', $gL10n->get('SYS_BACK'));
+            showNotice($gL10n->get('INS_PASSWORDS_NOT_EQUAL'), 'installation.php?mode=5', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
 
-    $message = '<h2 class="admHeadline2">'.$gL10n->get('INS_CREATE_CONFIGURATION_FILE').'</h2>
-                '.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_example.php').'<br /><br />
-
-                <span class="iconTextLink">
-                    <a href="installation.php?mode=7"><img
-                    src="layout/page_white_download.png" alt="'.$gL10n->get('INS_DOWNLOAD', 'config.php').'" /></a>
-                    <a href="installation.php?mode=7">'.$gL10n->get('INS_DOWNLOAD', 'config.php').'</a>
-                </span>
-                <br />';
-    showPage($message, 'installation.php?mode=8', 'database_in.png', $gL10n->get('INS_INSTALL_ADMIDIO'));
+    // create a page with a download link for the config file
+    $form = new FormInstallation('installation-form', 'installation.php?mode=8');
+    $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_example.php'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
+    $form->addString('
+        <span class="iconTextLink">
+            <a href="installation.php?mode=7"><img
+            src="layout/page_white_download.png" alt="'.$gL10n->get('INS_DOWNLOAD', 'config.php').'" /></a>
+            <a href="installation.php?mode=7">'.$gL10n->get('INS_DOWNLOAD', 'config.php').'</a>
+        </span><br />');
+    $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), 'layout/database_in.png', null, 'button');
+    $form->show();
 }
 elseif($getMode == 7) // Download configuration file
 {
@@ -491,7 +396,7 @@ elseif($getMode == 8)	// Start installation
     // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
     if(file_exists('../../config.php') == false)
     {
-        showPage($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
+        showNotice($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
     }
 
     // set execution time to 6 minutes because we have a lot to do :)
@@ -510,14 +415,14 @@ elseif($getMode == 8)	// Start installation
         || $g_adm_db      != $_SESSION['database']
         || $g_organization!= $_SESSION['orgaShortName'])
         {
-            showPage($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
+            showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
     }
     
     // read data from sql script db.sql and execute all statements to the current database
     $filename = 'db_scripts/db.sql';
     $file     = fopen($filename, 'r')
-                or showPage($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_program/installation/db_scripts'), 'installation.php?mode=6', 'back.png', $gL10n->get('SYS_BACK'));
+                or showNotice($gL10n->get('INS_DATABASE_FILE_NOT_FOUND', 'db.sql', 'adm_program/installation/db_scripts'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
     $content  = fread($file, filesize($filename));
     $sql_arr  = explode(';', $content);
     fclose($file);
@@ -652,15 +557,19 @@ elseif($getMode == 8)	// Start installation
     // delete session data
     session_unset();
 
-    // show dialog with success notification
-    $message = '<h2 class="admHeadline2"><img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</h2>
-               '.$gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />
-               '.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
+    // text for dialog
+    $text = $gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
     if(is_writeable('../../adm_my_files') == false)
     {
-        $message = $message. '<br /><br /><img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /> '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
+        $text = $text. '<br /><br /><img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /> '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
     }
-    showPage($message, 'http://www.admidio.org/index.php?page=donate', 'money.png', $gL10n->get('SYS_DONATE'));
+    
+    // show dialog with success notification
+    $form = new FormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
+    $form->setFormDescription($text, '<img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL'));
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png', null, null, 'button');
+    $form->addSubmitButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php', null, 'button');
+    $form->show();
 }
 
 ?>

@@ -3,16 +3,21 @@
 /** @class Form
  *  @brief Creates an Admidio specific form with special elements
  *
- *  This class creates the organization object and manages the access to the
- *  organization specific preferences of the table adm_preferences. There
- *  are also some method to read the relationship of organizations if the 
- *  database contains more then one organization.
+ *  This class inherits the common HtmlForm class and extends their elements
+ *  with custom Admidio form elements. The class should be used to create the 
+ *  html part of all Admidio forms. The Admidio elements will contain
+ *  the label of fields and some other specific features like a identification
+ *  of mandatory fields, help buttons and special css classes for every
+ *  element.
  *  @par Examples
- *  @code // create object and read the value of the language preference
- *  $organization = new Organization($gDb, $organizationId);
- *  $preferences  = $organization->getPreferences();
- *  $language     = $preferences['system_language'];
- *  // language = 'de'@endcode
+ *  @code // create a simple form with one input field and a button
+ *  $form = new Form('simple-form', 'next_page.php');
+ *  $form->openGroupBox('gbSimpleForm', $gL10n->get('SYS_SIMPLE_FORM'));
+ *  $form->addTextInput('name', $gL10n->get('SYS_NAME'), $formName, true);
+ *  $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'), true, 'simple', true);
+ *  $form->closeGroupBox();
+ *  $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), 'layout/forward.png');
+ *  $form->show();@endcode
  */
 /*****************************************************************************
  *
@@ -48,11 +53,13 @@ class Form extends HtmlForm
      *  @param $text  Text of the button
      *  @param $icon  Optional parameter. Path and filename of an icon. 
      *                If set a icon will be shown in front of the text.
+     *  @param $link  If set a javascript click event with a page load to this link 
+     *                will be attached to the button.
      *  @param $class Optional an additional css classname. The class @b admButton
      *                is set as default and need not set with this parameter.
      *  @param $type  Optional a button type could be set. The default is @b button.
      */
-    public function addButton($id, $text, $icon = '', $class = '', $type = 'button')
+    public function addButton($id, $text, $icon = '', $link = '', $class = '', $type = 'button')
     {
         // add text and icon to button
         $value = $text;
@@ -67,7 +74,16 @@ class Form extends HtmlForm
         {
             $this->addAttribute('class', $class);
         }
-        $this->addSimpleButton($id, $type, $value, $id);
+        $this->addSimpleButton($id, $type, $value, $id, $link);
+    }
+    
+    /** Add a line with a custom description to the form. No form elements will be 
+     *  displayed in this line.
+     *  @param $text The (html) text that should be displayed.
+     */
+    public function addDescription($text)
+    {
+        $this->addString('<div class="admFieldRow">'.$text.'</div>');
     }
     
     /** Creates a html structure for a form field. This structure contains the label
@@ -77,7 +93,7 @@ class Form extends HtmlForm
      *  @param $label     The label of the field. This string should already be translated.
      *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
      */
-    public function addFieldStructure($id, $label, $mandatory = false)
+    protected function addFieldStructure($id, $label, $mandatory = false)
     {
         // if necessary set css class for a mandatory element
         $classMandatory = '';
@@ -202,6 +218,28 @@ class Form extends HtmlForm
         // now call default method to create a selectbox
         $this->addSelectBox($id, $label, $simpleArray, $mandatory, $defaultValue, $setPleaseChoose, $class);
     }
+
+    /** Add a new small input field with a label to the form.
+     *  @param $id     Id of the input field. This will also be the name of the input field.
+     *  @param $label  The label of the input field.
+	 *  @param $value  A value for the text field. The field will be created with this value.
+     *  @param $class  Optional an additional css classname. The class @b admTextInput
+     *                 is set as default and need not set with this parameter.
+     */
+    public function addSmallTextInput($id, $label, $value, $mandatory = false, $class = '')
+    {
+        $attributes = array('class' => 'admSmallTextInput');
+        
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] = 'admSmallTextInput '.$class;
+        }
+        
+        $this->addFieldStructure($id, $label, $mandatory);
+        $this->addInput('text', $id, $id, $value, $attributes);
+        $this->addAttribute('class', 'admTextInput');
+        $this->closeFieldStructure();
+    }
     
     /** Add a new button with a custom text to the form. This button could have 
      *  an icon in front of the text. Different to addButton this method adds an
@@ -212,12 +250,14 @@ class Form extends HtmlForm
      *  @param $text  Text of the button
      *  @param $icon  Optional parameter. Path and filename of an icon. 
      *                If set a icon will be shown in front of the text.
+     *  @param $link  If set a javascript click event with a page load to this link 
+     *                will be attached to the button.
      *  @param $typeSubmit If set to true this button get the type @b submit. This will 
      *                be the default.
      *  @param $class Optional an additional css classname. The class @b admButton
      *                is set as default and need not set with this parameter.
      */
-    public function addSubmitButton($id, $text, $icon = '', $class = '', $type = 'submit')
+    public function addSubmitButton($id, $text, $icon = '', $link = '', $class = '', $type = 'submit')
     {
         global $gL10n;
         
@@ -230,11 +270,10 @@ class Form extends HtmlForm
         $class .= 'admSubmitButton';
         
         // now add button to form
-        $this->addButton($id, $text, $icon, $class, $type);
+        $this->addButton($id, $text, $icon, $link, $class, $type);
     }
     
-    /** Add a new input field with a label to the form. The input field could have
-     *  maximum 50 characters.
+    /** Add a new input field with a label to the form.
      *  @param $id     Id of the input field. This will also be the name of the input field.
      *  @param $label  The label of the input field.
 	 *  @param $value  A value for the text field. The field will be created with this value.
@@ -258,7 +297,7 @@ class Form extends HtmlForm
     
     /** Closes a field structure that was added with the method addFieldStructure.
      */
-    public function closeFieldStructure()
+    protected function closeFieldStructure()
     {
         $this->addString('</div></div>');
     }

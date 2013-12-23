@@ -104,29 +104,7 @@ class HtmlForm extends HtmlElement
 
     }
     
-    /** Adds a button to the form.
-     *  @param $name Name of the button
-     *  @param $type Type attribute (Allowed: submit, reset, button (Default: button))
-     *  @param $value Value of the button
-     *  @param $id Optional ID for the button
-     */
-    public function addSimpleButton($name, $type = 'button', $value, $id = null)
-    {
-        $this->addElement('button');
-        
-        if($id != null)
-        {
-            $this->addAttribute('id', $id);
-        }
-        
-        $this->addAttribute('name', $name);
-        $this->addAttribute('type', $type);
-        $this->addData($value);
-    }
-    
-    /**
-     *  @par Add a fieldset.
-     *
+    /** Add a fieldset.
      *  @param $id Optional ID 
      *  @param $legend Description for optional legend element as string
      */
@@ -140,9 +118,7 @@ class HtmlForm extends HtmlElement
         }
     } 
 
-    /**
-     *  @par Add a input field with attribute properties.
-     *
+    /** Add a input field with attribute properties.
      *  @param $type Type of input field e.g. 'text'
      *  @param $name Name of the input field
      *  @param $id Optional ID for the input
@@ -180,9 +156,7 @@ class HtmlForm extends HtmlElement
            
     }
     
-    /**
-     *  @par Add a label to the input field.
-     *
+    /** Add a label to the input field.
      *  @param $string Value of the label as string
      */
     public function addLabel($string = '', $refID = null, $attribute = 'for')
@@ -197,9 +171,7 @@ class HtmlForm extends HtmlElement
     }
     
     
-    /**
-     *  @par Add a legend element in current fieldset.
-     *
+    /** Add a legend element in current fieldset.
      *  @param $legend Data for the element as string   
      */
     public function addLegend($legend)
@@ -208,9 +180,7 @@ class HtmlForm extends HtmlElement
     }
     
     
-    /**
-     *  @par Add inline element into current division.
-     *
+    /** Add inline element into current division.
      *  @param $value Option value
      *  @param $label Label of the option
      *  @param $selected Mark as selected (Default: false)
@@ -240,9 +210,7 @@ class HtmlForm extends HtmlElement
         $this->addData($label);
     }
     
-    /**
-     *  @par Add an option group.
-     *
+    /** Add an option group.
      *  @param $label Label of the option group
      *  @param $id Optional Id of the group
      *  @param $arrAttributes Further attributes as array with key/value pairs
@@ -272,9 +240,7 @@ class HtmlForm extends HtmlElement
         }
     }
     
-    /**
-     *  @par Add an option group.
-     *
+    /** Add an option group.
      *  @param $lname Name of the select
      *  @param $id Optional Id of the select
      *  @param $arrAttributes Further attributes as array with key/value pairs
@@ -301,10 +267,36 @@ class HtmlForm extends HtmlElement
             $this->currentElementAttributes .= ' disabled';
         }
     }
+    
+    /** Adds a button to the form.
+     *  @param $name  Name of the button
+     *  @param $type  Type attribute (Allowed: submit, reset, button (Default: button))
+     *  @param $value Value of the button
+     *  @param $id    Optional ID for the button
+     *  @param $link  If set a javascript click event with a page load to this link 
+     *                will be attached to the button.
+     */
+    public function addSimpleButton($name, $type = 'button', $value, $id = null, $link = null)
+    {
+        $this->addElement('button');
+        
+        if(strlen($id) > 0)
+        {
+            $this->addAttribute('id', $id);        
+        }
 
-    /**
-     * @par Add a text area.
-     * 
+        // if link is set then add a onclick event
+        if(strlen($link) > 0)
+        {
+            $this->addAttribute('onclick', 'self.location.href=\''.$link.'\'');
+        }
+        
+        $this->addAttribute('name', $name);
+        $this->addAttribute('type', $type);
+        $this->addData($value);
+    }
+    
+    /** Add a text area.
      * @param $name Name of the text area
      * @param $rows Number of rows
      * @param $cols Number of cols
