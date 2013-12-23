@@ -2,12 +2,14 @@
 <language id="de">
 <version id="2.4.4" translator="Henrik Muhs">
 	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="todo">Anzeigeart der Termine. Im Modus %VAR1_BOLD% werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus %VAR2_BOLD% werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</text>
+    <text id="INS_PHP_VERSION" development="deleted" translation="todo"></text>
     <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="todo">Fotos herunterladen</text>
     <text id="PHO_DOWNLOAD_SINGLE_PHOTO" development="new" translation="todo">Foto speichern</text>
     <text id="PHO_DOWNLOAD_ENABLED" development="new" translation="todo">Download aktivieren</text>
     <text id="PHO_DOWNLOAD_ENABLED_DESC" development="new" translation="todo">Erlaubt es einzelne Fotos sowie komplette Alben als Zip-datei herunterzuladen. Dabei wird bei jedem Album als auch bei jedem Foto ein entsprechender Link angezeigt. Ist die Option %VAR1_BOLD% aktiviert, dann werden nur die Originalfotos heruntergeladen.</text>
     <text id="PHO_KEEP_ORIGINAL" development="new" translation="todo">Originale zusätzlich speichern</text>
     <text id="PHO_KEEP_ORIGINAL_DESC" development="new" translation="todo">Speichert alle hochgeladenen Fotos zusätzlich zur eingestellten Auflösung auch in der Originalgröße des Fotos ab. Ist zusätzlich die Option %VAR1_BOLD% aktiviert, werden die Originalfotos herunterladen. Diese Option verbraucht deutlich mehr Speicherplatz auf dem Webserver und sollte nur gewählt werden, wenn genügend Speicherplatz zur Verfügung steht.</text>
+    <text id="SYS_DATABASE_VERSION" development="new" translation="todo">Datenbank-Version</text>
 </version>
 <version id="2.4.2" translator="Markus Faßbender">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>

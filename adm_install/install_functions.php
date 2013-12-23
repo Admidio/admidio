@@ -112,12 +112,13 @@ function checkVersions(&$db, &$message)
     $message = '';
 
     // Datenbank pruefen
+    error_log($db->getVersion().'::'.$db->getMinVersion());
     if(version_compare($db->getVersion(), $db->getMinVersion()) == -1)
     {
         $message = $message. ' 
         <li>
             <dl>
-                <dt>'.$gL10n->get('INS_MYSQL_VERSION').':</dt>
+                <dt>'.$gL10n->get('SYS_DATABASE_VERSION').':</dt>
                 <dd><strong>'.$db->getVersion().'</strong><br />'.
                     $gL10n->get('INS_WRONG_MYSQL_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, $db->getMinVersion(), '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
                 '</dd>
@@ -131,7 +132,7 @@ function checkVersions(&$db, &$message)
         $message = $message. ' 
         <li>
             <dl>
-                <dt>'.$gL10n->get('INS_PHP_VERSION').':</dt>
+                <dt>'.$gL10n->get('SYS_PHP_VERSION').':</dt>
                 <dd><strong>'.phpversion().'</strong><br />'.
                     $gL10n->get('INS_WRONG_PHP_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT, MIN_PHP_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').
                 '</dd>
