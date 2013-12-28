@@ -25,4 +25,10 @@ CKEDITOR.editorConfig = function( config )
         ['EcardTemplate','Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 
         'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList', '-', 'Maximize']
     ];
+    
+    config.toolbar_AdmidioPlugin_WC =
+    [
+        ['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',
+        'NumberedList', 'BulletedList', '-','-', '-', '-', 'Table', '-', 'Maximize']
+    ];
 };
