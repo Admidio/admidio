@@ -51,6 +51,17 @@ if(!isset($gDbType))
 $gDb = Database::createDatabaseObject($gDbType);
 $gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
 
+// now check if a valid installation exists.
+$sql = 'SELECT org_id FROM '.TBL_ORGANIZATIONS;
+$gDb->query($sql, false);
+$count = $gDb->num_rows();
+
+if($count == 0)
+{
+    // no valid installation exists -> show installation wizard
+    header('Location: installation.php');
+}
+
 // Daten der aktuellen Organisation einlesen
 $gCurrentOrganization = new Organization($gDb, $g_organization);
 

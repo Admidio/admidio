@@ -244,10 +244,10 @@ elseif($getMode == 4)  // Creating organization
     }
 
     // initialize form data
-    if(isset($_SESSION['orgaShortName']))
+    if(isset($_SESSION['orga_shortname']))
     {
-        $orgaShortName = $_SESSION['orgaShortName'];
-        $orgaLongName  = $_SESSION['orgaLongName'];
+        $orgaShortName = $_SESSION['orga_shortname'];
+        $orgaLongName  = $_SESSION['orga_longname'];
     }
     else
     {
@@ -259,22 +259,22 @@ elseif($getMode == 4)  // Creating organization
     $form = new FormInstallation('installation-form', 'installation.php?mode=5');
     $form->setFormDescription($gL10n->get('INS_NAME_OF_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
-    $form->addSmallTextInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, true);
-    $form->addTextInput('orgaLongName', $gL10n->get('SYS_NAME'), $orgaLongName, true);
+    $form->addSmallTextInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, true);
+    $form->addTextInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, true);
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), 'layout/forward.png', null, null, 'button');
     $form->show();
 }
 elseif($getMode == 5)  // Creating addministrator
 {
-    if(isset($_POST['orgaShortName']))
+    if(isset($_POST['orga_shortname']))
     {
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
-        $_SESSION['orgaShortName'] = strStripTags($_POST['orgaShortName']);
-        $_SESSION['orgaLongName']  = strStripTags($_POST['orgaLongName']);
+        $_SESSION['orga_shortname'] = strStripTags($_POST['orga_shortname']);
+        $_SESSION['orga_longname']  = strStripTags($_POST['orga_longname']);
 
-        if(strlen($_SESSION['orgaShortName']) == 0
-        || strlen($_SESSION['orgaLongName']) == 0 )
+        if(strlen($_SESSION['orga_shortname']) == 0
+        || strlen($_SESSION['orga_longname']) == 0 )
         {
             showNotice($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
@@ -307,7 +307,7 @@ elseif($getMode == 5)  // Creating addministrator
     $form->addPasswordInput('user_password', $gL10n->get('SYS_PASSWORD'), true);
     $form->addPasswordInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), true);
     $form->closeGroupBox();
-    $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_CONFIGURATION_FILE'), 'layout/forward.png', null, null, 'button');
+    $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), 'layout/database_in.png', null, null, 'button');
     $form->show();
 }
 elseif($getMode == 6)  // Creating configuration file
@@ -343,28 +343,13 @@ elseif($getMode == 6)  // Creating configuration file
         }
     }
 
-    // create a page with a download link for the config file
-    $form = new FormInstallation('installation-form', 'installation.php?mode=8');
-    $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE', 'config.php', 'config_example.php'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
-    $form->addString('
-        <span class="iconTextLink">
-            <a href="installation.php?mode=7"><img
-            src="layout/page_white_download.png" alt="'.$gL10n->get('INS_DOWNLOAD', 'config.php').'" /></a>
-            <a href="installation.php?mode=7">'.$gL10n->get('INS_DOWNLOAD', 'config.php').'</a>
-        </span><br />');
-    $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), 'layout/database_in.png', null, 'button');
-    $form->show();
-}
-elseif($getMode == 7) // Download configuration file
-{
-    // MySQL-Zugangsdaten in config.php schreiben
-    // Datei auslesen
+    // read configuration file structure
     $filename     = 'config.php';
-    $config_file  = fopen($filename, 'r');
-    $file_content = fread($config_file, filesize($filename));
-    fclose($config_file);
+    $configFileHandle  = fopen($filename, 'r');
+    $configFileContent = fread($configFileHandle, filesize($filename));
+    fclose($configFileHandle);
 
-    // den Root-Pfad ermitteln
+    // detect root path
     $rootPath = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
     $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
     if(!strpos($rootPath, 'http://'))
@@ -372,23 +357,54 @@ elseif($getMode == 7) // Download configuration file
         $rootPath = 'http://'. $rootPath;
     }
 
-    $file_content = str_replace('%PREFIX%',  $_SESSION['prefix'],  $file_content);
-    $file_content = str_replace('%DB_TYPE%', $_SESSION['db_type'], $file_content);
-    $file_content = str_replace('%SERVER%',  $_SESSION['server'],  $file_content);
-    $file_content = str_replace('%USER%',    $_SESSION['user'],    $file_content);
-    $file_content = str_replace('%PASSWORD%',$_SESSION['password'],$file_content);
-    $file_content = str_replace('%DATABASE%',$_SESSION['database'],$file_content);
-    $file_content = str_replace('%ROOT_PATH%', $rootPath, $file_content);
-    $file_content = str_replace('%ORGANIZATION%', $_SESSION['orgaShortName'], $file_content);
+    // replace placeholders in configuration file structure with data of installation wizard
+    $configFileContent = str_replace('%PREFIX%',  $_SESSION['prefix'],  $configFileContent);
+    $configFileContent = str_replace('%DB_TYPE%', $_SESSION['db_type'], $configFileContent);
+    $configFileContent = str_replace('%SERVER%',  $_SESSION['server'],  $configFileContent);
+    $configFileContent = str_replace('%USER%',    $_SESSION['user'],    $configFileContent);
+    $configFileContent = str_replace('%PASSWORD%',$_SESSION['password'],$configFileContent);
+    $configFileContent = str_replace('%DATABASE%',$_SESSION['database'],$configFileContent);
+    $configFileContent = str_replace('%ROOT_PATH%', $rootPath, $configFileContent);
+    $configFileContent = str_replace('%ORGANIZATION%', $_SESSION['orga_shortname'], $configFileContent);
+    $_SERVER['config_file_content'] = $configFileContent;
 
-    // die erstellte Config-Datei an den User schicken
-    $file_name   = 'config.php';
-    $file_length = strlen($file_content);
+    // now save new configuration file in Admidio folder if user has write access to this folder
+    $filename   = '../../config.php';
+    $configFileHandle = fopen($filename, 'a');
+
+    if($configFileHandle)
+    {
+        // save config file in Admidio folder
+        fwrite($configFileHandle, $configFileContent);
+        fclose($configFileHandle);
+        
+        // start installation
+        header('Location: installation.php?mode=8');
+    }
+    else
+    {
+        // if user doesn't has write access then create a page with a download link for the config file
+        $form = new FormInstallation('installation-form', 'installation.php?mode=8');
+        $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
+        $form->addString('
+            <span class="iconTextLink">
+                <a href="installation.php?mode=7"><img
+                src="layout/page_white_download.png" alt="'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'" /></a>
+                <a href="installation.php?mode=7">'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'</a>
+            </span><br />');
+        $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png', null, 'button');
+        $form->show();
+    }
+}
+elseif($getMode == 7) // Download configuration file
+{
+    $filename   = 'config.php';
+    $fileLength = strlen($_SERVER['config_file_content']);
 
     header('Content-Type: text/plain; charset=utf-8');
-    header('Content-Length: '.$file_length);
-    header('Content-Disposition: attachment; filename="'.$file_name.'"');
-    echo $file_content;
+    header('Content-Length: '.$fileLength);
+    header('Content-Disposition: attachment; filename="'.$filename.'"');
+    echo $_SERVER['config_file_content'];
     exit();
 }
 elseif($getMode == 8)	// Start installation
@@ -413,7 +429,7 @@ elseif($getMode == 8)	// Start installation
         || $g_adm_usr     != $_SESSION['user']
         || $g_adm_pw      != $_SESSION['password']
         || $g_adm_db      != $_SESSION['database']
-        || $g_organization!= $_SESSION['orgaShortName'])
+        || $g_organization!= $_SESSION['orga_shortname'])
         {
             showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
@@ -508,9 +524,9 @@ elseif($getMode == 8)	// Start installation
 	$db->setDBSpecificAdmidioProperties();
 
     // create new organization
-    $gCurrentOrganization = new Organization($db, $_SESSION['orgaShortName']);
-    $gCurrentOrganization->setValue('org_longname', $_SESSION['orgaLongName']);
-    $gCurrentOrganization->setValue('org_shortname', $_SESSION['orgaShortName']);
+    $gCurrentOrganization = new Organization($db, $_SESSION['orga_shortname']);
+    $gCurrentOrganization->setValue('org_longname', $_SESSION['orga_longname']);
+    $gCurrentOrganization->setValue('org_shortname', $_SESSION['orga_shortname']);
     $gCurrentOrganization->setValue('org_homepage', $_SERVER['HTTP_HOST']);
     $gCurrentOrganization->save();
 

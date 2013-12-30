@@ -10,6 +10,21 @@
 
 if(file_exists('config.php'))
 {
+    require_once('config.php');
+    require_once('adm_program/system/constants.php');
+    require_once('adm_program/system/function.php');
+
+    // connect to database
+    $gDb = Database::createDatabaseObject($gDbType);
+    $gDbConnection = $gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
+
+    // if database doen't contain the components table then link to update wizard
+    // because database Admidio version is lower then 3.0
+    if($gDb->query('SELECT 1 FROM '.TBL_COMPONENTS, false) == false)
+    {
+        header('Location: adm_program/installation/update.php');
+    }
+    
 	// if config file exists then show stored homepage
 	require_once('adm_program/system/common.php');
 

@@ -4,6 +4,9 @@
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="todo"></text>
+    <text id="INS_DOWNLOAD" development="deleted" translation="todo"></text>
+    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="todo">Konfigurationsdatei herunterladen</text>
+    <text id="INS_DOWNLOAD_CONFIGURATION_FILE_DESC" development="new" translation="todo">Die Konfigurationsdatei %VAR1_BOLD% konnte nicht im Ordner %VAR2_BOLD% abgelegt werden. Lade bitte die Konfigurationsdatei herunter und kopiere diese mit einem FTP-Programm in das Admidio Hauptverzeichnis %VAR2_BOLD%.\n\nNachdem du die Datei dort abgelegt hast, kannst du die Installation fortsetzen.</text>
     <text id="INS_INSTALLATION_EXISTS" development="new" translation="todo">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="deleted" translation="todo"></text>
     <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="deleted" translation="todo"></text>
@@ -536,8 +539,6 @@
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="todo">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="todo">Alle Mitglieder der Organisation</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="todo">Gruppe der Administratoren des Systems</text>
-    <text id="INS_DOWNLOAD" development="new" translation="todo">%VAR1% herunterladen</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="todo">Lade die Konfigurationsdatei %VAR1_BOLD% herunter und kopiere diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine %VAR2_BOLD%.\n\nErst nachdem die Datei dort abgelegt wurde, kannst du mit der Installation fortfahren.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank eingeben</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="todo">Die Datei %VAR1_BOLD% konnte nicht geöffnet werden.</text>
     <text id="INS_FOLDER_NOT_WRITABLE" development="new" translation="todo">Der Ordner %VAR1_BOLD% besitzt noch keine Schreibrechte. Diese solltest du noch vergeben, da ohne Schreibrechte keine Fotos oder Dateien für das Downloadmodul hochgeladen werden können.</text>
