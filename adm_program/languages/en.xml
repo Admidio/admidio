@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+<version id="2.4.4" translator="Stefanie Schima">
+	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="edited">Display type for events. With mode %VAR1_BOLD% all event details will be displayed within a box. With mode %VAR2_BOLD% the most important event details will be displayed in a compact list. (Default: Detailed)</text>
+    <text id="INS_PHP_VERSION" development="deleted" translation="edited"></text>
+    <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="edited">Download photos</text>
+    <text id="PHO_DOWNLOAD_SINGLE_PHOTO" development="new" translation="edited">Save photo</text>
+    <text id="PHO_DOWNLOAD_ENABLED" development="new" translation="edited">Activate download</text>
+    <text id="PHO_DOWNLOAD_ENABLED_DESC" development="new" translation="edited">Allows to download single photos or complete albums as zip file. A hyperlink will be displayed for each photo or album. If option %VAR1_BOLD% is active only original photos will be downloaded.</text>
+    <text id="PHO_KEEP_ORIGINAL" development="new" translation="edited">Save original files additionally</text>
+    <text id="PHO_KEEP_ORIGINAL_DESC" development="new" translation="edited">Saves each photo not only with selected resolution but with original size. If option %VAR1_BOLD% is active all original photos will be downloaded. This option requires significantly more storage space and should only be selected If enough space is available.</text>
+    <text id="SYS_DATABASE_VERSION" development="new" translation="edited">Database version</text>
+</version>
 <version id="2.4.2" translator="Stefanie Schima">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Join event as organiser</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">You will be the event organiser and are allowed to add/remove further participants or name them as additional organiser.</text>
