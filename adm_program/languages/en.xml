@@ -2,7 +2,6 @@
 <language id="en">
 <version id="2.4.4" translator="Stefanie Schima">
 	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="edited">Display type for events. With mode %VAR1_BOLD% all event details will be displayed within a box. With mode %VAR2_BOLD% the most important event details will be displayed in a compact list. (Default: Detailed)</text>
-    <text id="INS_PHP_VERSION" development="deleted" translation="edited"></text>
     <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="edited">Download photos</text>
     <text id="PHO_DOWNLOAD_SINGLE_PHOTO" development="new" translation="edited">Save photo</text>
     <text id="PHO_DOWNLOAD_ENABLED" development="new" translation="edited">Activate download</text>
@@ -17,7 +16,6 @@
 	<text id="DAT_VIEW_MODE" development="new" translation="edited">Default view</text>
 	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="edited">Detailed</text>
 	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="edited">Compact</text>
-	<text id="DAT_VIEW_MODE_DESC" development="new" translation="edited">Defines view type of the event list. (Default: detailed)</text>
 	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="edited">You can not delete role %VAR1_BOLD%. At least one role requires the %VAR2_BOLD% setting.</text>
 	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="edited">You can not delete the system role %VAR1_BOLD%.</text>
 	<text id="ROL_DELETE_ROLE" development="new" translation="edited">You can not delete the role %VAR1_BOLD%.</text>
@@ -35,8 +33,6 @@
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Find all users with a filled address field</text>
 	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="edited">Request delivery confirmation</text>
 	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="edited">When enabled, the author of an e-mail has the opportunity to request a delivery confirmation. However, it depends on the settings of the recipients email program, whether a delivery confirmation is sent. The recipient may suppress its transmission.</text>
-    <text id="MAI_EMAILS" development="deleted" translation="edited"></text>
-	<text id="MAI_EMAIL_SEND_TO_ROLE" development="deleted" translation="todo"></text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% has sent following e-mail to active users of role %VAR3% on %VAR2%:</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% has sent following e-mail to former users of role %VAR3% on %VAR2%:</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% has sent following e-mail to active and former users of role %VAR3% on %VAR2%:</text>
@@ -138,7 +134,6 @@
 </version>
 <version id="2.3.0" translator="Szabolcs Lami">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
-    <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Should category %VAR1_BOLD% be deleted?\n\nThis category has %VAR2% depending entries, which will be deleted, too.</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="edited">Enabling iCal</text>
     <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="edited">If iCal is enabled, appointments (individual or all) within a given time frame can be downloaded. Also, users will be able to subscribe to appointments by using their own calendar client software . (default: yes)</text>
     <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Number of iCal days in the future</text>
@@ -287,7 +282,6 @@
     <text id="CAT_CATEGORY_EXIST" development="new" translation="edited">Category name already exists in selected organization.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="edited">When option activated, profile fields of category will appear and can be edited in profile view of following organizations:\n\n%VAR1_BOLD%\n\n Please deactivate if fields should be shown in your organization only.</text>
     <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="edited">You can not delete all categories of a module.\nPlease create first new category for selected module.</text>
-    <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Would you like to delete following category: %VAR1% \n\nAll data of selected category will be deleted (fields, roles, links, events).</text>
     <text id="CAT_MOVE_DOWN" development="new" translation="edited">Moving down %VAR1%</text>
     <text id="CAT_MOVE_UP" development="new" translation="edited">Moving up %VAR1%</text>
 
@@ -537,7 +531,6 @@
     <text id="INS_OVERVIEW" development="new" translation="edited">Overview</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Provided passwords do not match.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Phone list</text>
-    <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Previous Admidio version</text>
@@ -679,10 +672,8 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">When option is activated, logged in users will receive a picture with a captcha code or a simple calculation. It's necessary to fill in the correct code or result to send the mail. The captcha is part of antispam solution in Admidio. (default: yes)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Please select a role as recipient of the e-mail!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="edited">Number if BCC recipients</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="edited">%VAR1% has sent to role %VAR4% of %VAR2% following message:\nPlease reply to %VAR3%.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% has sent you from %VAR2% following message:\nPlease reply to %VAR3%.</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails can be sent to different roles like groups, courses or departments.</text>
-    <text id="MAI_EMAILS" development="new" translation="edited">E-mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Unlimited number of recipients can be added. Total size of all attachments together must not exceed %VAR1% MB.</text>
     <text id="MAI_MESSAGE" development="new" translation="edited">Message</text>
     <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Selected role does not have any member with valid e-mail address!</text>
@@ -727,7 +718,6 @@
     <text id="MEM_REMOVE_USER_DESC" development="new" translation="edited">By choosing %VAR1_BOLD%, all data will be deleted and this information wont be available anymore.</text>
     <text id="MEM_REPLACE" development="new" translation="edited">Replace</text>
     <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="edited">You do not have permission to select role %VAR1%.\nPlease try to select another role.</text>
-	<text id="MEM_SEND_NEW_LOGIN" development="new" translation="edited">Would you like to e-mail %VAR1_BOLD% new username and password?</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Send e-mail with username and password.</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Display all users</text>
     <text id="MEM_SHOW_MEMBERS" development="new" translation="edited">Only active members are displayed. Click here to see all members registered in the database.</text>
@@ -768,8 +758,6 @@
     <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="edited">%VAR1% Admidio provides no own forum functionality. You are able to integrate third party software (at present phpBB 2.0). (default: no)</text>
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="edited">Activating internal forum hyperlink</text>
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="edited">Active: forum is being shown within Admidio layout. (default)\nInactive: Forum is being shown in new browser window.</text>
-    <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="edited">Activate system messages</text>
-    <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="edited">Enable or disable Admidio system messages. System messages are generated e.g. in case of new user registration or registration validation. This feature usually should be disabled but only when server does not support sending any mails. E-mail module is not being affected by this. (default: yes)</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Additional variables</text>
     <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</text>
@@ -857,12 +845,6 @@
     <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Send new password</text>
     <text id="ORG_SYSTEM_INFOS" development="new" translation="edited">Sysinfo</text>
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">System information</text>
-    <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">System e-mail address</text>
-    <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Fill in the e-mail address of an administrator. This address will be used as sender address for system messages and for registration confirmations. (default: webmaster@%VAR1%)</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="edited">Notification for new entries</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="edited">You can activate email notification for new database entries in this modules. The administrator is informed by mail about new entries in the modules (only in case of new entries). The notification e-mail will be sent to the system mail address %VAR1%. (default: no)</text>
-    <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="edited">System message texts</text>
-    <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="edited">Please individualize all system message here. Texts have to paragraphs (subject &amp; content) which are identified by titles like #subject# and #content#. Content parts follow after this titles.\n\nEach message can have free space for current messages.</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="edited">Time format</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Format complies with PHP function %VAR1%. (default: H:i)</text>
     <text id="ORG_URL" development="new" translation="edited">URL</text>
@@ -986,7 +968,6 @@
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Own profile can be displayed and edited here.</text>
 	<text id="PRO_NEW_PASSWORD" development="new" translation="edited">New password</text>
 	<text id="PRO_NEW_PICTURE" development="new" translation="edited">New profile picture</text>
-	<text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">No default role has been defined in organization preferences. Please contact webmaster for help.</text>
 	<text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Password has been successfully changed.</text>
     <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Password has to have at least 6 characters including numbers, letters and special characters.\n\nDue to security reasons, password is being saved encrypted.Later it can not be seen anymore.</text>
     <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Password has to include at least 6 characters.</text>
@@ -1190,7 +1171,6 @@
     <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail address in field %VAR1_BOLD% includes invalid characters or is incomplete.</text>
     <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail has been sent to %VAR1_BOLD%.</text>
-    <text id="SYS_EMAIL_NOT_SEND" development="new" translation="edited">E-mail to %VAR1_BOLD% could not be sent.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Entry visible for multiple organizations</text>
     <text id="SYS_END" development="new" translation="edited" description="End of a date">End</text>
     <text id="SYS_ERROR" development="new" translation="edited">Error</text>
@@ -1381,7 +1361,6 @@
     <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="edited">#subject# Login details for %organization_short_name% website\n#content# Hello %user_first_name%,\n\nyour new login details for the %organization_long_name% website:\nUsername: %user_login_name%\nPassword: %variable1%\n\nThe password was generated automatically,\ntherefore you should log in at %organization_homepage% to change it under "My profile".\n\nCheers,\nWebmaster</text>
     <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="edited">#subject# Registration on %organization_short_name% website approved\n#content# Hello %user_first_name%,\n\nyour registration on %organization_homepage% is approved.\n\nNow you may log in with your username: %user_login_name%\nand your password.\n\nIn case of any questions, please don't hesitate to contact the webmaster via email to %webmaster_email% .\n\nCheers,\nWebmaster</text>
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="edited">#subject# New registration at %organization_short_name% website\n#content# A new user registered himself on %organization_homepage%.\n\nSurname: %user_last_name%\nFirst Name:  %user_first_name%\nE-Mail:   %user_email%\n\n\nThis message was generated automatically.</text>
-    <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System message</text>
     <text id="SYS_TEXT" development="new" translation="edited">Text</text>
     <text id="SYS_THURSDAY" development="new" translation="edited">Thursday</text>
     <text id="SYS_TIME" development="new" translation="edited">Time</text>

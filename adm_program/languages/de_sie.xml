@@ -33,7 +33,6 @@
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
 	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="todo">Lesebestätigung anfordern</text>
 	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="todo">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</text>
-	<text id="MAI_EMAIL_SEND_TO_ROLE" development="deleted" translation="todo"></text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% hat an die aktiven Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% hat an die ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% hat an die aktiven und ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
@@ -311,7 +310,6 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="todo">Hier kann die Teilnehmeranzahl für diesen Termin beschränkt werden. Soll die Anzahl nicht begrenzt werden, so kann dieses Feld leer gelassen werden.</text>
     <text id="DAT_ORGANIZER" description="The Person" development="new" translation="todo">Organisator</text>
     <text id="DAT_ORGANIZERS" description="The Personen" development="new" translation="todo">Organisatoren</text>
-    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">Sie nehmen an diesem Termin als Gruppenleiter teil und können weitere teilnehmende Personen hinzufügen.</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="todo">Teilnehmerbegrenzung</text>
     <text id="DAT_PREVIOUS_DATES" description="Vergangene Termine" development="new" translation="todo">Vergangene %VAR1%</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="new" translation="todo">Anmeldung möglich.</text>
@@ -669,7 +667,6 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="todo">Bitte wählen Sie eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="todo">Anzahl der BCC Empfänger</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="todo">%VAR1% hat an die Rolle %VAR4% von %VAR2% folgende E-Mail geschickt:\nEine Antwort können Sie an %VAR3% schicken.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="todo">%VAR1% hat Ihnen von %VAR2% folgende E-Mail geschickt:\nEine Antwort können Sie an %VAR3% schicken.</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="todo">Sie können beliebig viele Anhänge hinzufügen. Allerdings darf die Dateigröße aller Anhänge zusammen %VAR1% MB nicht überschreiten.</text>

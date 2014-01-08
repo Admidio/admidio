@@ -30,7 +30,6 @@
     <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="edited">Onderwerp &amp; Attachment</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="edited">Karakter codering</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="edited">Er wordt codering van karakters gebruikt bij het versturen van Admidio e-mails. Niet alle e-mail clients ondersteunen UTF-8. ISO-8859-1 kan als alternatief gebruikt worden.</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="changed" translation="edited">%VAR1% heeft naar rol %VAR3% van %VAR2% de volgende e-mail gestuurd:</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="changed" translation="edited">%VAR1% van %VAR2% heeft jou de volgende e-mail gestuurd:</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="edited">HTML e-mail</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="edited">Het maken en versturen van op HTML gebaseerde e-mails kan ingeschakeld worden voor geregistreerde gebruikers. Een JavaScript editor wordt getoond voor comfortabel bewerken, in plaats van het standaard tekst veld. Deze optie is voor gasten in verband met veligheid niet mogelijk.</text>
@@ -407,7 +406,6 @@
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="edited">Doorgegeven naar van organisatie is niet volledig!</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Doorgegeven wachtwoorden zijn niet gelijk.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Telefoonlijst</text>
-    <text id="INS_PHP_VERSION" development="new" translation="edited">PHP versie</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% heeft minimaal MySQL versie %VAR2% nodig. Probeer svp uw MySQL database te updaten of gebruik een %VAR3%oudere Admidio versie%VAR4% voor optimaal gebruik.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% heeft minimaal PHP versie %VAR2% nodig. Probeer svp uw PHP versie te updaten of grbuik een %VAR3%oudere Admidio versie%VAR4% voor optimaal gebruik.</text>    
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Vorige Admidio versie</text>
@@ -553,7 +551,6 @@
     <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Selecteer svp rol als ontvanger van de e-mail!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="edited">Aantal BCC ontvangers</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="edited">Er kunnen e-mails gestuurd worden naar verschillende rollen, personen, groepen of afdelingen. </text>
-    <text id="MAI_EMAILS" development="new" translation="edited">E-mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Onbeperkt aantal ontvangers kan toegevoegd worden. Totale grootte van alle attachments mag niet meer zijn dan %VAR1% MB.</text>
     <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Geselecteerde rol heeft geen lid met geldig e-mail adres!</text>
     <text id="MAI_SEND_COPY" development="new" translation="edited">Stuur kopie naar mijn e-mail adres</text>
