@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
-<version id="2.4.2" translator="Stefanie Schima">
+<version id="2.4.4" translator="Henrik Troels-Hansen">
+	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="edited">Visnings type for events. Med indstillingen %VAR1_BOLD% vil alle event detaljer blive vist inde i en boks. Med indstilling %VAR2_BOLD% vises kun de mest vigtige event detaljer i en compakt liste. (Standard: Detaljeret)</text>
+    <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="edited">Hent billeder</text>
+    <text id="PHO_DOWNLOAD_SINGLE_PHOTO" development="new" translation="edited">Gem billede</text>
+    <text id="PHO_DOWNLOAD_ENABLED" development="new" translation="edited">Aktiver download</text>
+    <text id="PHO_DOWNLOAD_ENABLED_DESC" development="new" translation="edited">Tillader download af et billede eller komplet album som zip fil. Et link vil blive vist for hvert enkelt billede eller album. Hvis indstillingen %VAR1_BOLD% er aktiv så vil kun det originale billede eller billeder kunne downloades.</text>
+    <text id="PHO_KEEP_ORIGINAL" development="new" translation="edited">Gem også original billedet</text>
+    <text id="PHO_KEEP_ORIGINAL_DESC" development="new" translation="edited">Gemmer hvert billede ikke kun med den valgte opløsning men også med den originale opløsning. Hvis indstillingen %VAR1_BOLD% er aktiv, vil alle original billeder blive gemt. Denne indstilling kræver rigtigt meget mere plads på harddisken, og bør KUN anvendes hvis der er plads nok.</text>
+    <text id="SYS_DATABASE_VERSION" development="new" translation="edited">Database version</text>
+</version>
+<version id="2.4.2" translator="Henrik Troels-Hansen">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Deltag i eventet som organisator.</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Du vil blive organisator for eventet og dermed tilladt at tilføje/fjerne deltagere eller udnævne dem til med-organisatorer.</text>
 	<text id="DAT_VIEW_MODE" development="new" translation="edited">Standard Visning</text>
 	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="edited">Detaljeret</text>
 	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="edited">Kompakt</text>
-	<text id="DAT_VIEW_MODE_DESC" development="new" translation="edited">Definerer visnings type på event liste. (Standard: detaljeret)</text>
 	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="edited">Du kan ikke slette rollen %VAR1_BOLD%. Mindst én rolle kræver %VAR2_BOLD% indstillingen.</text>
 	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="edited">Du kan ikke slette system rollen %VAR1_BOLD%.</text>
 	<text id="ROL_DELETE_ROLE" development="new" translation="edited">Du kan ikke slette rollen %VAR1_BOLD%.</text>
@@ -24,8 +33,6 @@
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Find alle brugere med et udfyldt adresse felt</text>
 	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="edited">Bed om bekræftelse på levering</text>
 	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="edited">Hvis denne er aktiv, har afsenderen af en e-mail mulighed for at få bekræftet levering af en e-mail. Dog afhænger et eventuelt svar af hvordan modtagerens e-mail program er konfigureret. Modtageren kan vælge at undertrykke afsendelse af en sådan bekræftelse.</text>
-    <text id="MAI_EMAILS" development="deleted" translation="edited"></text>
-	<text id="MAI_EMAIL_SEND_TO_ROLE" development="deleted" translation="todo"></text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% har sendt følgende e-mail til aktive brugere i rollen %VAR3% på %VAR2%:</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% har sendt følgende e-mail til tidligere brugere i rollen %VAR3% på %VAR2%:</text>
     <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% har sendt følgende e-mail til aktive og tidligere brugere i rollen %VAR3% på %VAR2%:</text>
@@ -127,7 +134,6 @@
 </version>
 <version id="2.3.0" translator="Henrik Troels-Hansen">
 	<text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standard %VAR1%</text>
-    <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Skal kategorien %VAR1_BOLD% slettes?\n\n>Denne kategori har %VAR2% afhængige indlæg, som vil også vil blive slettet.</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="edited">Aktiver iCal</text>
     <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="edited">Hvis iCal er aktiveret, kan aftaler (individuelle eller alle) inden for et givent tidspunkt downloades. Og brugerne kan abonnere på aftaler ved at bruge deres egen kalender software. (Standard: Ja)</text>
     <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Antal iCal dage i ud i fremtiden</text>
@@ -135,7 +141,6 @@
     <text id="DAT_ICAL_DAYS_PAST" development="new" translation="edited">Antal iCal dage tilbage i tiden</text>
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">Denne værdi definerer hvor mange dage bag ud i tiden der skal inkluderes i iCal downloadedt eller abonnementet. (Standard: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Aktiver registrering til denne aftale.</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Tilslut dig denne aftale</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Synlighed</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Venligst udfyld alle felter\n\nog klik igen %VAR1_BOLD%.</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Din database version er %VAR1%.\nEn opdatering til version %VAR2% er påkrævet</text>
@@ -154,7 +159,6 @@
     <text id="MAI_SUBJECT_ATTACHMENT" development="new" translation="edited">Emne &amp; Vedhæftning</text>
     <text id="MAI_CHARACTER_ENCODING" development="new" translation="edited">Karakter kodning</text>
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="edited">Karakter kodningen brugt i e-mails sendt af Admidio. Ikke alle e-mail klienter kan håndtere UTF-8. Derfor kan du sætte den til ISO-8859-1 som alternativ.</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="changed" translation="edited">%VAR1% har sendt til rolle %VAR3% af %VAR2% følgende e-mail:</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="changed" translation="edited">%VAR1% fra %VAR2% har sendt dig følgende e-mail:</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="edited">HTML e-mail</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="edited">Oprettelse og afsendelse af HTML formaterede e-mails kan tillades for registrerede brugere. En JavaScript editor vil blive vist, istedet for standard tekstfeltet. Af sikkerheds årsager er dette ikke tilladt for gæster.</text>
@@ -276,7 +280,6 @@
     <text id="CAT_CATEGORY_EXIST" development="new" translation="edited">Kategori navn eksisterer allerede i den valgte organisation.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="edited">Hvis aktiveret, profil felter af kategorier vil blive vist og kan redigeres i profil visningen af følgende organisationer:\n\n%VAR1_BOLD%\n\n Venligst deaktiver hvis felterne kun skal vises i din organisation.</text>
     <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="edited">Du kan ikke slette alle kategorier for et modul.\nOpret første nye kategori for det valgte modul.</text>
-    <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Vil du slette den følgende kategori: %VAR1% \n\nAlle data i den valgte kategori bliver slettet (felter, roller, links, events).</text>
     <text id="CAT_MOVE_DOWN" development="new" translation="edited">Flyt ned %VAR1%</text>
     <text id="CAT_MOVE_UP" development="new" translation="edited">Flyt op %VAR1%</text>
 
@@ -308,8 +311,6 @@
     <text id="DAT_MAX_MEMBERS" development="new" translation="edited">Reducer antallet af deltagere til denne event. Lad feltet være tomt hvis der er ubegrænset adgang.</text>
     <text id="DAT_ORGANIZER" development="new" translation="edited" description="The Person">Organisator</text>
     <text id="DAT_ORGANIZERS" development="new" translation="edited" description="The Persons">Organisatorer</text>
-    <text id="DAT_PARTICIPATE_AT_DATE" development="new" translation="edited">Deltager bekræftigelse</text>
-    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="new" translation="edited">Du deltager i denne event som leder og kan derfor tilføje andre og yderligere deltagere.</text>
 	<text id="DAT_PARTICIPANTS" development="new" translation="edited">Deltagere</text>
     <text id="DAT_PARTICIPANTS_LIMIT" development="new" translation="edited">Begrænset antal deltagere</text>
    	<text id="DAT_PREVIOUS_DATES" development="new" translation="edited" description="Past events">Tidligere %VAR1%</text>
@@ -534,7 +535,6 @@
     <text id="INS_OVERVIEW" development="new" translation="edited">Oversigt</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">De oplyste kodeord er ikke ens.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Telefonliste</text>
-    <text id="INS_PHP_VERSION" development="new" translation="edited">PHP version</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst MySQL version %VAR2%. Venligst opdater din MySQL database eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% kræver mindst PHP version %VAR2%. Venligst opdater din PHP version eller brug en %VAR3%ældre Admidio version%VAR4% for at sikre kompatabilitet.</text>    
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Tidligere Admidio version</text>
@@ -678,10 +678,8 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Hvis indstillingen er aktiv, kan brugere der er logget ind se et billede med en captcha kode eller et simpelt regnestykke. Det er nødvendigt at skrive den rigtige kode eller den rigtige løsning for at kunne sende e-mailen. Captcha er en del af antispam løsningen i Admidio. (Standard: Ja)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Venligst vælg en rolle som modtager af denne mail!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="edited">Antal BCC modtagere</text>
-    <text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="edited">%VAR1% har sendt til rolle %VAR4% af %VAR2% følgende besked:\nVenligst svar til %VAR3%.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% har sendt dig fra %VAR2% følgende besked:\nVenligst svar til %VAR3%.</text>
 	<text id="MAI_EMAIL_DESC" development="new" translation="edited">E-mails kan sendes til forskellige roller såsom grupper, kurser, afdelinger.</text>
-    <text id="MAI_EMAILS" development="new" translation="edited">E-mails</text>
     <text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Ubegrænset antal modtagere kan tilføjes. Total størrelse af alle vedhæftede filer må ikke overstige %VAR1% MB.</text>
     <text id="MAI_MESSAGE" development="new" translation="edited">Besked</text>
     <text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Den valgte rolle har ingen medlemmer med gyldige e-mail adresser!</text>
@@ -726,7 +724,6 @@
     <text id="MEM_REMOVE_USER_DESC" development="new" translation="edited">Ved at vælge %VAR1_BOLD%, vil alle data blive slettet og denne information vil ikke være tilgængelig mere.</text>
     <text id="MEM_REPLACE" development="new" translation="edited">Udskift</text>
     <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="edited">Du har ikke rettighed til at vælge rollen %VAR1%.\nVælg venligst en anden rolle.</text>
-	<text id="MEM_SEND_NEW_LOGIN" development="new" translation="edited">Vil du sende en e-mail til %VAR1_BOLD% med det nye brugerid og kodeord?</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Send e-mail med brugerid og kodeord.</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Vis alle brugere</text>
     <text id="MEM_SHOW_MEMBERS" development="new" translation="edited">Kun aktive medlemmer er vist. Klik her for at se alle medlemmer registreret i databasen.</text>
@@ -767,8 +764,6 @@
     <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="edited">%VAR1% Admidio har ikke sin egen forum funktionalitet. Du har mulighed for at integrere tredie parts software (For tiden kun phpBB 2.0). (Standard: Nej)</text>
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="edited">Aktivere interne forums links</text>
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="edited">Aktiv: forum bliver vist indenfor Admidio layouttet. (Standard)\nInaktivt: Forum bliver vist i nyt browser vindue.</text>
-    <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="edited">Aktiver system beskeder</text>
-    <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="edited">Aktiver eller deaktiver Admidio system beskeder. System beskeder bliver genereret ved f.eks. nye registreringer eller registrerings validering. Denne mulighed skal normalt være slået til, kun hvis serveren ikke kan sende mails skal man slå den fra. E-mail modulet bliver ikke påvirket af dette. (Standard: Ja)</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Yderligere variabler</text>
     <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Admidio-Tema</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Vælg layout for Admidio. Alle temaer gemt i folderen adm_themes bliver vist. (Standard: modern)</text>
@@ -850,17 +845,11 @@
     <text id="ORG_REGISTRATION_MODE" development="new" translation="edited">Definér karaktereren af registreringen eller deaktiver den. Kvik registrering tillader brugere at registrere sig ved at udfylde kun de påkrævede felter,  imens den fulde registrering betyder at hele profilen skal udfyldes.  (Standard: kvik registrering)</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES" development="new" translation="edited">Søg efter lignende navne</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES_DESC" development="new" translation="edited">Ved registrering og ved tildeling af registreringer søger Admidio efter lignende efternavne og fornavne for at undgå dobbelt registrering. Deaktivering betyder at der kun søges efter identiske navne. (Standard: Ja)</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="new" translation="edited">Advisering om nye poster/indlæg</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="new" translation="edited">Du kan aktivere e-mail advisering, således at system administratr får besked om nye poster/indlæg i modulerne. Administratoreren får en e-mail med besked om nye og (kun nye). Adviserings mail bliver sendt til den e-mail der er sat som system e-mail adresse %VAR1%. (Standard: Nej)</text>
     <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Send kodeord</text>
     <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Brugerne kan anmode om at få tilsendt glemte og regenererede kodeord automatisk til deres egen registrerede e-mail adresse. Hvis denne indstilling deaktiveres, så kan brugerne kun få adgang ved at henvende sig til system administratoren. . (Standard: Ja)</text>
     <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Send nyt kodeord</text>
     <text id="ORG_SYSTEM_INFOS" development="new" translation="edited">Sysinfo</text>
     <text id="ORG_SYSTEM_INFORMATIONS" development="new" translation="edited">System information</text>
-    <text id="ORG_SYSTEM_MAIL_ADDRESS" development="new" translation="edited">System e-mail adresse</text>
-    <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="new" translation="edited">Udfyld dette felt med e-mail adressen på en administrator. Denne adresse vil blive brugt som afsender adresse for system beskeder og registrerings bekræftelser. (Standard: webmaster@%VAR1%)</text>
-    <text id="ORG_SYSTEM_MAIL_TEXTS" development="new" translation="edited">System besked tekster</text>
-    <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="new" translation="edited">Venligst individualiser alle system beskeder her. Teksterne har to afsnit (Emne &amp; indhold) som er identifiseret af titler såsom #subject# og #content#. Indholdet følger i vinduet under disse titler.\n\nHver besked kan have plads til nuværende beskeder.</text>
     <text id="ORG_TIME_FORMAT" development="new" translation="edited">Tidsformat</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Formatet efterkommer standarden i PHP funktionen %VAR1%. (Standard: H:i)</text>
     <text id="ORG_URL" development="new" translation="edited">URL</text>
@@ -982,7 +971,6 @@
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="edited">Egen profil kan vises og redigeres her.</text>
 	<text id="PRO_NEW_PASSWORD" development="new" translation="edited">Nyt kodeord</text>
 	<text id="PRO_NEW_PICTURE" development="new" translation="edited">Nyt profil billede</text>
-	<text id="PRO_NO_DEFAULT_ROLE" development="new" translation="edited">Der er ikke defineret en standard rolle i organisations indstillingerne. Venligst kontakt webmaster for at få hjælp.</text>
 	<text id="PRO_PASSWORD_CHANGED" development="new" translation="edited">Kodeordet er blevet ændret.</text>
     <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="edited">Kodeordet skal have mindst 6 karakterer som kan være numre, bogstaver og specielle karakterer (brug IKKE ÆØÅ).\n\nAf sikkerhedshensyn gemmes kodeordet krypteret. Det kan derfor ikke vises i klartekst efter indtastningen.</text>
     <text id="PRO_PASSWORD_LENGTH" development="new" translation="edited">Kodeord skal indeholde mindst 6 karakterer.</text>
@@ -1187,7 +1175,6 @@
     <text id="SYS_EMAIL" development="new" translation="edited">E-mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="edited">E-mail adressen i feltet %VAR1_BOLD% mangler eller indeholder ugyldige karakterer.</text>
     <text id="SYS_EMAIL_SEND" development="new" translation="edited">E-mail er blevet sendt til %VAR1_BOLD%.</text>
-    <text id="SYS_EMAIL_NOT_SEND" development="new" translation="edited">E-mail til %VAR1_BOLD% kunne ikke afsendes.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="edited">Posten er synlig for flere organisationer</text>	
     <text id="SYS_END" development="new" translation="edited" description="End of a date">Slut</text>
     <text id="SYS_ERROR" development="new" translation="edited">Fejl</text>
@@ -1378,7 +1365,6 @@
     <text id="SYS_SYSMAIL_NEW_PASSWORD" development="new" translation="todo">#subject# Login detaljer for organisationen %organization_short_name%'s hjemmeside\n#content# Hej %user_first_name%,\n\nDine nye login detaljer til %organization_long_name%'s hjemmeside er:\nBrugernavn: %user_login_name%\nKodeord: %variable1%\n\nKodeordet du lige har modtaget er genereret automatisk,\nderfor bør du logge ind på %organization_homepage% og så ændre det under "Min profil".\n\nMed venlig hilsen,\nWebmaster</text>
     <text id="SYS_SYSMAIL_REGISTRATION_USER" development="new" translation="todo">#subject# Registreringen på %organization_short_name%'s hjemmeside er godkendt\n#content# Hej %user_first_name%,\n\nDin registrering på %organization_homepage% er blevet godkendt.\n\nDu kan nu logge ind med dit bruger navn: %user_login_name%\nog dit valgte kodeord.\n\nHvis du har nogen spørgsmål, så tøv ikke med at skrive til webmaster via %webmaster_email% .\n\nTak for registreringen,\nWebmaster</text>
     <text id="SYS_SYSMAIL_REGISTRATION_WEBMASTER" development="new" translation="todo">#subject# Ny registrering på %organization_short_name%'s hjemmeside\n#content# En ny bruger har registreret sig selv på %organization_homepage%.\n\nEfternavn: %user_last_name%\nFornavn:  %user_first_name%\nE-Mail:   %user_email%\n\n\nDenne mail blev genereret automatisk.</text>
-    <text id="SYS_SYSTEM_MAILS" development="new" translation="edited">System Beskeder</text>
     <text id="SYS_TEXT" development="new" translation="edited">Tekst</text>
     <text id="SYS_THURSDAY" development="new" translation="todo">torsdag</text>
     <text id="SYS_TIME" development="new" translation="edited">Tid</text>

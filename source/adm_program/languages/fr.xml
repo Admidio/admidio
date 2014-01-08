@@ -285,7 +285,6 @@
    	<text id="INS_OVERVIEW" development="new" translation="edited">Aperçu</text>
    	<text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Les mots de passe entrés non sont pas identique.</text>
    	<text id="INS_PHONE_LIST" development="new" translation="edited">Liste des téléphones</text>
-   	<text id="INS_PHP_VERSION" development="new" translation="edited">Version PHP</text>
    	<text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% nécessite au minimum MySQL version %VAR2%. Veuillez mettre à jour votre base de donnée MySQL ou utilisez une version de Admidio plus ancienne.</text>
    	<text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% nécessite au minimum PHP version %VAR2%. Veuillez mettre à jour votre version PHP ou utilisez une version de Admidio plus ancienne.</text>    
    	<text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Version antérieure d'Amidio</text>
@@ -426,10 +425,8 @@
 	<text id="MAI_CAPTCHA_DESC" development="new" translation="edited">Quand l'option est activé, les membres authentifiés recevrons une image avec un capcha ou un calcule simple. Il est important de remplir le champs demandé afin d'envoyer le courriel. (Par defaut: oui)</text>
    	<text id="MAI_CHOOSE_ROLE" development="new" translation="edited">Veuillez sélectionner un rôle en tant que récipiendaire du courriel !</text>
    	<text id="MAI_COUNT_BCC" development="new" translation="edited">Nombre si BCC récipiendaires</text>
-   	<text id="MAI_EMAIL_SEND_TO_ROLE" development="new" translation="edited">%VAR1% a envoyé au rôle %VAR4% de %VAR2% message suivant:\nVeuillez répondre à %VAR3%.</text>
    	<text id="MAI_EMAIL_SEND_TO_USER" development="new" translation="edited">%VAR1% a envoyé de %VAR2% message suivant:\nVeuillez répondre à %VAR3%.</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="edited">Système de courriel des membres.</text>
-   	<text id="MAI_EMAILS" development="new" translation="edited">Courriels</text>
    	<text id="MAI_MAX_ATTACHMENT_SIZE" development="new" translation="edited">Un nombre illimité de récipiendaire peut être ajouté. La taille total des fichiers ne doit pas dépasser %VAR1% MO.</text>
    	<text id="MAI_MESSAGE" development="new" translation="edited">Message</text>
    	<text id="MAI_ROLE_NO_EMAILS" development="new" translation="edited">Le rôle sélectionné n'a aucun membre avec un courriel valide !</text>

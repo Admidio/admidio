@@ -39,7 +39,6 @@
 </version>
 <version id="2.4.4" translator="Henrik Muhs">
 	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="todo">Anzeigeart der Termine. Im Modus %VAR1_BOLD% werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus %VAR2_BOLD% werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</text>
-    <text id="INS_PHP_VERSION" development="deleted" translation="todo"></text>
     <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="todo">Fotos herunterladen</text>
     <text id="PHO_DOWNLOAD_SINGLE_PHOTO" development="new" translation="todo">Foto speichern</text>
     <text id="PHO_DOWNLOAD_ENABLED" development="new" translation="todo">Download aktivieren</text>
@@ -71,8 +70,6 @@
 	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
 	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="todo">Lesebestätigung anfordern</text>
 	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="todo">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</text>
-    <text id="MAI_EMAILS" development="deleted" translation="todo"></text>
-	<text id="MAI_EMAIL_SEND_TO_ROLE" development="deleted" translation="todo"></text>
 	<text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% hat an die aktiven Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
 	<text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% hat an die ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
 	<text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% hat an die aktiven und ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
