@@ -27,8 +27,11 @@ if($gPreferences['enable_mail_module'] != 1)
 $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $postRoleId = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
 
+// subject should not be checked because we want accept special chars like & ' or "
+// subject will not be parsed as html in emails so no xss is possible
+$postSubject     = stripslashes($_POST['subject']);
+
 // Check form values
-$postSubject     = admFuncVariableIsValid($_POST, 'subject', 'string', '');
 $postName        = admFuncVariableIsValid($_POST, 'name', 'string', '');
 $postFrom        = admFuncVariableIsValid($_POST, 'mailfrom', 'string', '');
 $postTo          = admFuncVariableIsValid($_POST, 'mailto', 'string', '');
