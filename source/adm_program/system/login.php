@@ -53,7 +53,7 @@ echo '
             <li>
                 <dl>
                     <dt><label for="usr_password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
-                    <dd><input type="password" id="usr_password" name="usr_password" style="width: 120px;" maxlength="20" /></dd>
+                    <dd><input type="password" id="usr_password" name="usr_password" style="width: 120px;" /></dd>
                 </dl>
             </li>';
 

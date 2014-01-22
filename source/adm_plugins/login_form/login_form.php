@@ -191,7 +191,7 @@ else
             <li>
                 <dl>
                     <dt><label for="plg_usr_password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
-                    <dd><input type="password" id="plg_usr_password" name="plg_usr_password" size="10" maxlength="25" /></dd>
+                    <dd><input type="password" id="plg_usr_password" name="plg_usr_password" size="10" /></dd>
                 </dl>
             </li>';
 
