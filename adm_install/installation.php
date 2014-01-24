@@ -175,7 +175,7 @@ elseif($getMode == 3)  // Enter database access information
                             <li>
                                 <dl>
                                     <dt><label for="password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
-                                    <dd><input type="password" name="password" id="password" style="width: 250px;" maxlength="50" /></dd>
+                                    <dd><input type="password" name="password" id="password" style="width: 250px;" /></dd>
                                 </dl>
                             </li>
                             <li>
@@ -351,13 +351,13 @@ elseif($getMode == 5)  // Creating addministrator
                             <li>
                                 <dl>
                                     <dt><label for="user_password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
-                                    <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" maxlength="20" /></dd>
+                                    <dd><input type="password" name="user_password" id="user_password" style="width: 150px;" /></dd>
                                 </dl>
                             </li>
                             <li>
                                 <dl>
                                     <dt><label for="user_password_confirm">'.$gL10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
-                                    <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" maxlength="20" /></dd>
+                                    <dd><input type="password" name="user_password_confirm" id="user_password_confirm" style="width: 150px;" /></dd>
                                 </dl>
                             </li>
                         </ul>
