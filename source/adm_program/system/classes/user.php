@@ -101,7 +101,7 @@ class User extends TableUsers
         // if password is stored with phpass hash, then use phpass
         if(substr($this->getValue('usr_password'), 0, 1) == '$')
         {
-            $passwordHasher = new PasswordHash(9, true);
+            $passwordHasher = new PasswordHash(9, false); // use Bcrypt and if PHP < 5.3 use md5 hashes
             if($passwordHasher->CheckPassword($password, $this->getValue('usr_password')) == true)
             {
                 return true;

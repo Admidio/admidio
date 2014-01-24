@@ -9,7 +9,7 @@
  *****************************************************************************/
 
 // if config file doesn't exists, than show installation dialog
-if(!file_exists('../config.php'))
+if(!file_exists('../adm_my_files/config.php'))
 {
     $location = 'Location: installation/index.php';
     header($location);

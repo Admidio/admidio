@@ -12,7 +12,22 @@
  *
  *****************************************************************************/
 
-include('../config.php');
+// embed config file
+if(file_exists('../adm_my_files/config.php') == true)
+{
+    // search in path of version 3.x
+    require_once('../adm_my_files/config.php');
+}
+elseif(file_exists('../config.php') == true)
+{
+    // search in path of version 1.x and 2.x
+    include('../config.php');
+}
+else
+{
+    die('Error: Config file not found!');
+}
+
 include('../adm_program/system/constants.php');
 include('../adm_program/system/function.php');
 include('../adm_program/system/string.php');

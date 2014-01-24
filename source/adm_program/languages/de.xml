@@ -4,9 +4,10 @@
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="todo"></text>
+    <text id="INS_DELETE_CONFIG_FILE" development="new" translation="todo">Im Hauptverzeichnis von Admidio %VAR1_BOLD% existiert noch eine Datei config.php. Diese wurde bereits in den Ordner adm_my_files verschoben. Löschen Sie bitte diese Datei im Hauptverzeichnis.</text>
     <text id="INS_DOWNLOAD" development="deleted" translation="todo"></text>
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="todo">Konfigurationsdatei herunterladen</text>
-    <text id="INS_DOWNLOAD_CONFIGURATION_FILE_DESC" development="new" translation="todo">Die Konfigurationsdatei %VAR1_BOLD% konnte nicht im Ordner %VAR2_BOLD% abgelegt werden. Lade bitte die Konfigurationsdatei herunter und kopiere diese mit einem FTP-Programm in das Admidio Hauptverzeichnis %VAR2_BOLD%.\n\nNachdem du die Datei dort abgelegt hast, kannst du die Installation fortsetzen.</text>
+    <text id="INS_DOWNLOAD_CONFIGURATION_FILE_DESC" development="new" translation="todo">Die Konfigurationsdatei %VAR1_BOLD% konnte nicht im Ordner %VAR2_BOLD% abgelegt werden. Bitte gib dem Ordner Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) oder lade die Konfigurationsdatei herunter und kopiere diese mit einem FTP-Programm in das Admidio Verzeichnis %VAR3_BOLD%.\n\nNachdem du die Datei dort abgelegt hast, kannst du die Installation fortsetzen.</text>
     <text id="INS_INSTALLATION_EXISTS" development="new" translation="todo">In der Datenbank existiert bereits eine Admidio Installation. Eine erneute Installation ist nicht möglich.</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="deleted" translation="todo"></text>
     <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="deleted" translation="todo"></text>

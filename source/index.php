@@ -8,9 +8,9 @@
  *
  *****************************************************************************/
 
-if(file_exists('config.php'))
+if(file_exists('adm_my_files/config.php'))
 {
-    require_once('config.php');
+    require_once('adm_my_files/config.php');
     require_once('adm_program/system/constants.php');
     require_once('adm_program/system/function.php');
 

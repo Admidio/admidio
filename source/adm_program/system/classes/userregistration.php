@@ -134,9 +134,8 @@ class UserRegistration extends User
 		
         $this->db->endTransaction();
         
-        // only send mail if systemmails are enabled
-		// send email before user will be deleted
-        if($gPreferences['enable_system_mails'] == 1 && $this->sendEmail)
+        // only send mail if systemmails are enabled and user has email address
+        if($gPreferences['enable_system_mails'] == 1 && $this->sendEmail && strlen($userEmail) > 0)
         {
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);

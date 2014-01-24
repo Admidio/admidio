@@ -51,19 +51,44 @@ else
 	$g_page_title = $gCurrentOrganization->getValue('org_longname');
 }
 
+if(strpos($_SERVER['PHP_SELF'], 'announcements.php') > 0)
+{
+    $newLayout = true;
+}
+else
+{
+    $newLayout = false;
+}
+
 header('Content-type: text/html; charset=utf-8'); 
+if($newLayout)
+{
+    echo '<!DOCTYPE html>
+    <html>';
+}
+else
+{
+    echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+    <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">';
+}
 echo '
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
 <head>
     <!-- (c) 2004 - 2013 The Admidio Team - http://www.admidio.org -->
     
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     
-    <title>'. $g_page_title. '</title>    
+    <title>'. $g_page_title. '</title> '; 
     
-    <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />
-	<link rel="stylesheet" href="'.THEME_PATH. '/css/colorbox.css" type="text/css" media="screen" />
+    if($newLayout)
+    {
+        echo '<link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/admidio.css" />';
+    }
+    else
+    {
+        echo '<link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />';
+    }
+
+	echo '<link rel="stylesheet" href="'.THEME_PATH. '/css/colorbox.css" type="text/css" media="screen" />
 
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
     <script type="text/javascript"><!-- 
@@ -84,14 +109,29 @@ echo '
 
     if($gLayout['includes'])
     {
-        require(THEME_SERVER_PATH. '/my_header.php');
+        if($newLayout)
+        {
+            require(THEME_SERVER_PATH. '/my_header_new.php');
+        }
+        else
+        {
+            require(THEME_SERVER_PATH. '/my_header.php');
+        }
     }
     
 echo '</head>
 <body'. $gLayout['onload']. '>';
     if($gLayout['includes'])
     {
-        require(THEME_SERVER_PATH. '/my_body_top.php');
+        if($newLayout)
+        {
+            require(THEME_SERVER_PATH. '/my_body_top_new.php');
+        }
+        else
+        {
+            require(THEME_SERVER_PATH. '/my_body_top.php');
+        }
+        
         if(isset($gDb))
         {
             // falls Anwender andere DB nutzt, hier zur Sicherheit wieder zu Admidio-DB wechseln

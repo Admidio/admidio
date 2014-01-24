@@ -23,9 +23,9 @@ session_name('admidio_php_session_id');
 session_start();
 
 // if config file already exists then load file with their variables
-if(file_exists('../../config.php') == true)
+if(file_exists('../../adm_my_files/config.php') == true)
 {
-    require_once('../../config.php');
+    require_once('../../adm_my_files/config.php');
 }
 
 if(isset($g_tbl_praefix) == false)
@@ -80,7 +80,7 @@ $gLanguageData = new LanguageData($language);
 $gL10n->addLanguageData($gLanguageData);
 
 // if config file exists then connect to database
-if(file_exists('../../config.php') == true)
+if(file_exists('../../adm_my_files/config.php') == true)
 {
     $db = Database::createDatabaseObject($gDbType);
     $connection = $db->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db);
@@ -92,13 +92,19 @@ if(file_exists('../../config.php') == true)
     
     if($count > 0)
     {
-        // valid installation exists -> exist installation
+        // valid installation exists -> exit installation
         showNotice($gL10n->get('INS_INSTALLATION_EXISTS'), '../index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
     }
     elseif($getMode != 8)
     {
         showNotice($gL10n->get('INS_CONFIGURATION_FILE_FOUND', 'config.php'), 'installation.php?mode=8', $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png');
     }
+}
+elseif(file_exists('../../config.php') == true)
+{
+    // Config file found at location of version 2. Then go to update
+    header('Location: update.php');
+    exit();
 }
 
 if($getMode == 1)  // (Default) Choose language
@@ -173,11 +179,11 @@ elseif($getMode == 3)  // Enter database access information
     $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', true, $dbType);
-    $form->addTextInput('server', $gL10n->get('SYS_SERVER'), $server, true);
-    $form->addTextInput('user', $gL10n->get('SYS_USERNAME'), $user, true);
-    $form->addPasswordInput('password', $gL10n->get('SYS_PASSWORD'), true);
-    $form->addTextInput('database', $gL10n->get('SYS_DATABASE'), $database, true);
-    $form->addTextInput('prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, true);
+    $form->addTextInput('server', $gL10n->get('SYS_SERVER'), $server, 50, true);
+    $form->addTextInput('user', $gL10n->get('SYS_USERNAME'), $user, 50, true);
+    $form->addPasswordInput('password', $gL10n->get('SYS_PASSWORD'), 50, true);
+    $form->addTextInput('database', $gL10n->get('SYS_DATABASE'), $database, 50, true);
+    $form->addSmallTextInput('prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, 10, true);
     $form->addDescription('<img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA'));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), 'layout/forward.png', null, null, 'button');
@@ -225,7 +231,7 @@ elseif($getMode == 4)  // Creating organization
         }
 
         // for security reasons only check database connection if no config file exists
-        if(file_exists('../../config.php') == false)
+        if(file_exists('../../adm_my_files/config.php') == false)
         {
             // check database connections
             $db = Database::createDatabaseObject($_SESSION['db_type']);
@@ -259,8 +265,8 @@ elseif($getMode == 4)  // Creating organization
     $form = new FormInstallation('installation-form', 'installation.php?mode=5');
     $form->setFormDescription($gL10n->get('INS_NAME_OF_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
-    $form->addSmallTextInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, true);
-    $form->addTextInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, true);
+    $form->addSmallTextInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, 10, true);
+    $form->addTextInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, 50, true);
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), 'layout/forward.png', null, null, 'button');
     $form->show();
@@ -300,10 +306,10 @@ elseif($getMode == 5)  // Creating addministrator
     $form = new FormInstallation('installation-form', 'installation.php?mode=6');
     $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
-    $form->addTextInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, true);
-    $form->addTextInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, true);
-    $form->addTextInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, true);
-    $form->addTextInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, true);
+    $form->addTextInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, 50, true);
+    $form->addTextInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, 50, true);
+    $form->addTextInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, 255, true);
+    $form->addTextInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, 35, true);
     $form->addPasswordInput('user_password', $gL10n->get('SYS_PASSWORD'), true);
     $form->addPasswordInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), true);
     $form->closeGroupBox();
@@ -369,7 +375,7 @@ elseif($getMode == 6)  // Creating configuration file
     $_SERVER['config_file_content'] = $configFileContent;
 
     // now save new configuration file in Admidio folder if user has write access to this folder
-    $filename   = '../../config.php';
+    $filename   = '../../adm_my_files/config.php';
     $configFileHandle = fopen($filename, 'a');
 
     if($configFileHandle)
@@ -385,7 +391,7 @@ elseif($getMode == 6)  // Creating configuration file
     {
         // if user doesn't has write access then create a page with a download link for the config file
         $form = new FormInstallation('installation-form', 'installation.php?mode=8');
-        $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
+        $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath.'/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
         $form->addString('
             <span class="iconTextLink">
                 <a href="installation.php?mode=7"><img
@@ -410,7 +416,7 @@ elseif($getMode == 7) // Download configuration file
 elseif($getMode == 8)	// Start installation
 {
     // Check if configuration file exists. This file must be copied to the base folder of the Admidio installation.
-    if(file_exists('../../config.php') == false)
+    if(file_exists('../../adm_my_files/config.php') == false)
     {
         showNotice($gL10n->get('INS_CONFIGURATION_FILE_NOT_FOUND', 'config.php'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
     }

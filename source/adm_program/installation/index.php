@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Index-Datei welche auf Installation bzw. Update verweist
+ * Redirect the user to installation or update page
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,8 +8,8 @@
  *
  *****************************************************************************/
 
-// pruefen, ob es eine Erstinstallation ist
-if(file_exists('../../config.php'))
+// check if installation is necessary
+if(file_exists('../../adm_my_files/config.php'))
 {
    $page = 'update.php';
 }
@@ -18,7 +18,7 @@ else
    $page = 'installation.php';
 }
 
-// weiterleiten auf die entsprechende Seite
+// redirect to installation or update page
 header('Location: '.$page);
 exit();
 ?>

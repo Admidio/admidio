@@ -62,7 +62,7 @@ if($gPreferences['enable_rss'] == 1)
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // show headline of module
-echo '<h1 class="moduleHeadline">'.$announcements->getHeadline().'</h1>';
+echo '<h1 class="admHeadline">'.$announcements->getHeadline().'</h1>';
 
 // number of announcements per page
 if($gPreferences['announcements_per_page'] > 0)

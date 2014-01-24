@@ -32,7 +32,7 @@ Information.
 
 Bevor du Admidio benutzt, solltest du dich zumindest in Grundzügen mit 
 unserer Lizenz beschäftigt haben und dir die Nutzungsbedingungen klar
-sein. (siehe gpl-de.html) 
+sein. (Informationen findest du in der Datei gpl.txt) 
 
 Falls du mit dieser Open Source Mitgliederverwaltung zufrieden bist,
 freuen wir uns, wenn du das Programm weiterempfehlen oder uns über 

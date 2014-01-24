@@ -119,10 +119,11 @@ class Form extends HtmlForm
     
     /** Add a new password field with a label to the form. The password field could have
      *  maximum 50 characters. You could not set a value to a password field.
-     *  @param $id     Id of the password field. This will also be the name of the password field.
-     *  @param $label  The label of the password field.
-     *  @param $class  Optional an additional css classname. The class @b admTextInput
-     *                 is set as default and need not set with this parameter.
+     *  @param $id        Id of the password field. This will also be the name of the password field.
+     *  @param $label     The label of the password field.
+     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $class     Optional an additional css classname. The class @b admTextInput
+     *                    is set as default and need not set with this parameter.
      */
     public function addPasswordInput($id, $label, $mandatory = false, $class = '')
     {
@@ -146,6 +147,7 @@ class Form extends HtmlForm
 	 *  @param $values Array with all entries of the select box; 
 	 *                 Array key will be the internal value of the entry
 	 *                 Array value will be the visual value of the entry
+     *  @param $mandatory       A flag if the field is mandatory. Then the specific css classes will be set.
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
@@ -195,6 +197,7 @@ class Form extends HtmlForm
 	 *  @param xmlFile     Serverpath to the xml file
 	 *  @param xmlValueTag Name of the xml tag that should contain the internal value of a selectbox entry
 	 *  @param xmlViewTag  Name of the xml tag that should contain the visual value of a selectbox entry
+     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
@@ -220,24 +223,33 @@ class Form extends HtmlForm
     }
 
     /** Add a new small input field with a label to the form.
-     *  @param $id     Id of the input field. This will also be the name of the input field.
-     *  @param $label  The label of the input field.
-	 *  @param $value  A value for the text field. The field will be created with this value.
-     *  @param $class  Optional an additional css classname. The class @b admTextInput
-     *                 is set as default and need not set with this parameter.
+     *  @param $id        Id of the input field. This will also be the name of the input field.
+     *  @param $label     The label of the input field.
+	 *  @param $value     A value for the text field. The field will be created with this value.
+     *  @param $maxLength The maximum number of characters that are allowed in this field.
+     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $class     Optional an additional css classname. The class @b admTextInput
+     *                    is set as default and need not set with this parameter.
      */
-    public function addSmallTextInput($id, $label, $value, $mandatory = false, $class = '')
+    public function addSmallTextInput($id, $label, $value, $maxLength = 0, $mandatory = false, $class = '')
     {
         $attributes = array('class' => 'admSmallTextInput');
         
+
+        // set specific css class for this field
         if(strlen($class) > 0)
         {
             $attributes['class'] = 'admSmallTextInput '.$class;
         }
+
+        // set max input length
+        if($maxLength > 0)
+        {
+            $attributes['maxlength'] = $maxLength;
+        }
         
         $this->addFieldStructure($id, $label, $mandatory);
         $this->addInput('text', $id, $id, $value, $attributes);
-        $this->addAttribute('class', 'admTextInput');
         $this->closeFieldStructure();
     }
     
@@ -274,24 +286,32 @@ class Form extends HtmlForm
     }
     
     /** Add a new input field with a label to the form.
-     *  @param $id     Id of the input field. This will also be the name of the input field.
-     *  @param $label  The label of the input field.
-	 *  @param $value  A value for the text field. The field will be created with this value.
-     *  @param $class  Optional an additional css classname. The class @b admTextInput
-     *                 is set as default and need not set with this parameter.
+     *  @param $id        Id of the input field. This will also be the name of the input field.
+     *  @param $label     The label of the input field.
+	 *  @param $value     A value for the text field. The field will be created with this value.
+     *  @param $maxLength The maximum number of characters that are allowed in this field.
+     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $class     Optional an additional css classname. The class @b admTextInput
+     *                    is set as default and need not set with this parameter.
      */
-    public function addTextInput($id, $label, $value, $mandatory = false, $class = '')
+    public function addTextInput($id, $label, $value, $maxLength = 0, $mandatory = false, $class = '')
     {
         $attributes = array('class' => 'admTextInput');
-        
+
+        // set specific css class for this field
         if(strlen($class) > 0)
         {
             $attributes['class'] = 'admTextInput '.$class;
         }
+
+        // set max input length
+        if($maxLength > 0)
+        {
+            $attributes['maxlength'] = $maxLength;
+        }
         
         $this->addFieldStructure($id, $label, $mandatory);
         $this->addInput('text', $id, $id, $value, $attributes);
-        $this->addAttribute('class', 'admTextInput');
         $this->closeFieldStructure();
     }
     

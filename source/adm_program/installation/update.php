@@ -15,7 +15,27 @@
  *****************************************************************************/
 
 // embed config and constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/config.php');
+if(file_exists('../../adm_my_files/config.php') == true)
+{
+    require_once('../../adm_my_files/config.php');
+}
+elseif(file_exists('../../config.php') == true)
+{
+    // config file at destination of version 2.0 exists -> copy config file to new destination
+    if(copy('../../config.php', '../../adm_my_files/config.php') == false)
+    {
+         die('<div style="color: #CC0000;">Error: The file <b>config.php</b> could not be copied to the folder <b>adm_my_files</b>.
+         Please check if this folder has the necessary write rights. If it\'s not possible to set this right then copy the
+         config.php from the Admidio main folder to adm_my_files with your FTP program.</div>');
+    }
+    require_once('../../adm_my_files/config.php');
+}
+else
+{
+    // no config file exists -> go to installation
+    header('installation.php');
+    exit();
+}
 
 if(strlen($g_tbl_praefix) == 0)
 {
@@ -83,10 +103,18 @@ $gL10n = new Language();
 $gLanguageData = new LanguageData($gPreferences['system_language']);
 $gL10n->addLanguageData($gLanguageData);
 
+// config.php exists at wrong place
+if(file_exists('../../config.php') == true && file_exists('../../adm_my_files/config.php') == true)
+{
+    if(unlink('../../config.php') == true)
+    {
+        showNotice($gL10n->get('INS_DELETE_CONFIG_FILE', $g_root_path), $g_root_path.'/adm_program/installation/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
+    }
+}
+
 // check database version
-error_log('test::'.$gDb->getMinVersion());
 $message = checkDatabaseVersion($gDb); 
-error_log('test::'.$message);
+
 if(strlen($message) > 0)
 {
     showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');

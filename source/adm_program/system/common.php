@@ -15,7 +15,7 @@ if ('common.php' == basename($_SERVER['SCRIPT_FILENAME']))
 }
 
 // embed config and constants file
-require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/config.php');
+require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_my_files/config.php');
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
 // if there is no debug flag in config.php than set debug to false

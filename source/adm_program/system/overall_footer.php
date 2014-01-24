@@ -16,7 +16,14 @@
   
     if($gLayout['includes'])
     {
-       require(THEME_SERVER_PATH. '/my_body_bottom.php');
+        if($newLayout)
+        {
+            require(THEME_SERVER_PATH. '/my_body_bottom_new.php');
+        }
+        else
+        {
+            require(THEME_SERVER_PATH. '/my_body_bottom.php');
+        }
     }
 echo '</body>
 </html>';
