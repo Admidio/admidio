@@ -106,7 +106,8 @@ $gL10n->addLanguageData($gLanguageData);
 // config.php exists at wrong place
 if(file_exists('../../config.php') == true && file_exists('../../adm_my_files/config.php') == true)
 {
-    if(unlink('../../config.php') == true)
+    // try to delete the config file at the old place otherwise show notice to user
+    if(@unlink('../../config.php') == false)
     {
         showNotice($gL10n->get('INS_DELETE_CONFIG_FILE', $g_root_path), $g_root_path.'/adm_program/installation/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png');
     }

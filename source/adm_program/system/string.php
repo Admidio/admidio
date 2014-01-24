@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Allgemeine String-Funktionen
+ * Common functions that manipulate strings
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -35,22 +35,6 @@ function admStrToUpper($string)
     else
     {
         return strtoupper($string);
-    }
-}
-
-// da die Multibyte-Funktionen nicht bei allen Installationen zur Verfuegung 
-// stehen, wird hier eine Fallunterscheidung gemacht
-// WICHTIG: wird die Multibyte-Funktion nicht genutzt, funktioniert die Umwandlung von Umlauten nicht !!!
-function admEncodeMimeheader($string)
-{
-    if(function_exists('mb_encode_mimeheader'))
-    {
-    	mb_internal_encoding('UTF-8');
-        return mb_encode_mimeheader(stripslashes($string), 'UTF-8', 'Q');
-    }
-    else
-    {
-        return utf8_decode(stripslashes($string));
     }
 }
 

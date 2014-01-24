@@ -125,7 +125,6 @@ class Email extends PHPMailer
     {
         $address = admStrToLower($address);
         // Blindcopy must be Ascii-US formated, so encode in MimeHeader
-        //$asciiName = admEncodeMimeheader(stripslashes($name));
         $asciiName = stripslashes($name);
     
         if (strValidCharacters($address, 'email'))
@@ -143,7 +142,6 @@ class Email extends PHPMailer
     {
         $address = admStrToLower($address);
         // Copy must be Ascii-US formated, so encode in MimeHeader
-        //$asciiName = admEncodeMimeheader(stripslashes($name));
         $asciiName = stripslashes($name);
         
         try
@@ -164,7 +162,6 @@ class Email extends PHPMailer
     {
         $address = admStrToLower($address);
         // Recipient must be Ascii-US formated, so encode in MimeHeader
-        //$asciiName = admEncodeMimeheader(stripslashes($name));
         $asciiName = stripslashes($name);
     
         try
@@ -303,7 +300,6 @@ class Email extends PHPMailer
     {
         if (strlen($subject) > 0)
         {
-            //$this->Subject = admEncodeMimeheader(stripslashes($subject));
             $this->Subject = stripslashes($subject);
             return true;
         }
