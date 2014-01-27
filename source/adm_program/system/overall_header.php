@@ -138,5 +138,7 @@ echo '</head>
             $gDb->setCurrentDB();
         }
     }
+    
+    echo '<div class="admContent">';
 
  ?>
