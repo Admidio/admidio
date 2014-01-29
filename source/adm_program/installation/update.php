@@ -22,7 +22,7 @@ if(file_exists('../../adm_my_files/config.php') == true)
 elseif(file_exists('../../config.php') == true)
 {
     // config file at destination of version 2.0 exists -> copy config file to new destination
-    if(copy('../../config.php', '../../adm_my_files/config.php') == false)
+    if(@copy('../../config.php', '../../adm_my_files/config.php') == false)
     {
          die('<div style="color: #CC0000;">Error: The file <b>config.php</b> could not be copied to the folder <b>adm_my_files</b>.
          Please check if this folder has the necessary write rights. If it\'s not possible to set this right then copy the
