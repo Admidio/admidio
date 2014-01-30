@@ -1286,7 +1286,7 @@
     <text id="SYS_PARTICIPANTS" development="new" translation="todo">Teilnehmer</text>
     <text id="SYS_PASSWORD" development="new" translation="todo">Passwort</text>
     <text id="SYS_PASSWORD_FORGOTTEN" development="new" translation="todo">Passwort vergessen</text>
-    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn Sie Phr Passwort vergessen haben, kann das System ein neues Passwort erstellen und an Ihre E-Mail-Adresse senden.\nGeben Sie dazu Ihre E-Mail-Adresse in das untenstehende Formular ein und klicken Sie auf die Schaltfläche "Neues Passwort zusenden".</text>
+    <text id="SYS_PASSWORD_FORGOTTEN_DESCRIPTION" development="new" translation="todo">Wenn Sie Ihr Passwort vergessen haben, kann das System ein neues Passwort erstellen und an Ihre E-Mail-Adresse senden.\nGeben Sie dazu Ihre E-Mail-Adresse in das untenstehende Formular ein und klicken Sie auf die Schaltfläche "Neues Passwort zusenden".</text>
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="todo">Sie haben ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfen Sie bitte Ihr Passwort und geben Sie dieses dann erneut ein.</text>
     <text id="SYS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>
