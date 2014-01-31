@@ -135,7 +135,7 @@ class FormInstallation extends Form
                 {
                     if(strlen($this->descriptionTitle) > 0)
                     {
-                        $html .= '<h2 class="admHeadline2">'.$this->descriptionTitle.'</h2>';
+                        $html .= '<h3 class="admHeadline3">'.$this->descriptionTitle.'</h3>';
                     }
                     $html .= $this->descriptionText;
                 }

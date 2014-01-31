@@ -42,6 +42,19 @@
     padding-bottom:     10px;
 }
 
+#plugin_login_form * .admFieldLabel {
+    width: 50%;
+    min-width: 100px;
+}
+
+#plugin_login_form * .admFieldElement {
+    width: 45%;
+}
+
+#plugin_login_form * .admButton {
+    margin-top: 10px;
+    margin-right: 0px;
+}
 
 /* Hack, da der IE mit diesem CSS nicht klar kommt */
 ul[id]#plgLoginFormFieldList li {

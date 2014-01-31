@@ -37,6 +37,7 @@
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
     <text id="SYS_MANDATORY_FIELDS" development="new" translation="todo">Pflichtfelder</text>
+    <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="todo">Die Online-Mitgliederverwaltung</text>
 </version>
 <version id="2.4.4" translator="Henrik Muhs">
 	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="todo">Anzeigeart der Termine. Im Modus %VAR1_BOLD% werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus %VAR2_BOLD% werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</text>

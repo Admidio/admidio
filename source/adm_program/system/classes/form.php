@@ -190,22 +190,62 @@ class Form extends HtmlForm
         $this->closeFieldStructure();
     }
     
-    /** Add a new selectbox with a label to the form. The selectbox could have
-     *  different values and a default value could be set.
-     *  @param $id         Id of the selectbox. This will also be the name of the selectbox.
-     *  @param $label      The label of the selectbox.
-	 *  @param xmlFile     Serverpath to the xml file
-	 *  @param xmlValueTag Name of the xml tag that should contain the internal value of a selectbox entry
-	 *  @param xmlViewTag  Name of the xml tag that should contain the visual value of a selectbox entry
-     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+    /** Add a new selectbox with a label to the form. The selectbox get their data from a sql statement.
+     *  You can create any sql statement and method should create a selectbox with the found data.
+     *  @par Examples
+     *  @code // create a selectbox with all profile fields of a specific category
+     *  $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'
+     *  $form = new Form('simple-form', 'next_page.php');
+     *  $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, false, $gL10n->get('SYS_SURNAME'), true);
+     *  $form->show();@endcode
+     *  @param $id              Id of the selectbox. This will also be the name of the selectbox.
+     *  @param $label           The label of the selectbox.
+     *  @param $databaseObject  A Admidio database object that contains a valid connection to a database
+	 *  @param $sql             Any SQL statement that return 2 columns. The first column will be the internal value of the
+     *                          selectbox item and will be submitted with the form. The second column represents the
+     *                          displayed value of the item. Each row of the result will be a new selectbox entry.
+     *  @param $mandatory       A flag if the field is mandatory. Then the specific css classes will be set.
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
-     *  @param $class  Optional an additional css classname. The class @b admSelectbox
+     *  @param $class           Optional an additional css classname. The class @b admSelectbox
+     *                          is set as default and need not set with this parameter.
+     */
+    public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $mandatory = false, $defaultValue= '', $setPleaseChoose = false, $class = '')
+    {
+        $selectboxEntries = array();
+    
+        // execute the sql statement
+        $result = $databaseObject->query($sql);
+        
+        // create array from sql result
+        while($row = $databaseObject->fetch_array($result))
+        {
+            $selectboxEntries[$row[0]] = $row[1];
+        }
+        
+        // now call default method to create a selectbox
+        $this->addSelectBox($id, $label, $selectboxEntries, $mandatory, $defaultValue, $setPleaseChoose, $class);
+    }
+    
+    /** Add a new selectbox with a label to the form. The selectbox could have
+     *  different values and a default value could be set.
+     *  @param $id           Id of the selectbox. This will also be the name of the selectbox.
+     *  @param $label        The label of the selectbox.
+	 *  @param $xmlFile      Serverpath to the xml file
+	 *  @param $xmlValueTag  Name of the xml tag that should contain the internal value of a selectbox entry
+	 *  @param $xmlViewTag   Name of the xml tag that should contain the visual value of a selectbox entry
+     *  @param $mandatory    A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $defaultValue This is the value the selectbox shows when loaded.
+     *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
+     *                          the list with the caption "Please choose".
+     *  @param $class        Optional an additional css classname. The class @b admSelectbox
      *                 is set as default and need not set with this parameter.
      */
     public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $mandatory = false, $defaultValue= '', $setPleaseChoose = false, $class = '')
     {
+        $selectboxEntries = array();
+        
 		// write content of xml file to an array
 		$data = implode('', file($xmlFile));
 		$p = xml_parser_create();
@@ -215,11 +255,11 @@ class Form extends HtmlForm
         // transform the two complex arrays to one simply array
         for($i = 0; $i < count($index[$xmlValueTag]); $i++)
         {
-            $simpleArray[$vals[$index[$xmlValueTag][$i]]['value']] = $vals[$index[$xmlViewTag][$i]]['value'];
+            $selectboxEntries[$vals[$index[$xmlValueTag][$i]]['value']] = $vals[$index[$xmlViewTag][$i]]['value'];
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $simpleArray, $mandatory, $defaultValue, $setPleaseChoose, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $mandatory, $defaultValue, $setPleaseChoose, $class);
     }
 
     /** Add a new small input field with a label to the form.
@@ -350,6 +390,11 @@ class Form extends HtmlForm
             $this->addString('<div class="groupBoxHeadline">'.$headline.'</div>');
         }
         $this->addString('<div class="groupBoxBody">');
+    }
+    
+    public function show()
+    {
+        echo $this->getHtmlForm();
     }
 }
 ?>

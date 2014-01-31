@@ -20,28 +20,56 @@ body {
     background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
 	background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
 	background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
-    text-align: left;
+    text-align: center;
 }
 
 /* Custom theme classes */
-
-/*
-#header-block {
-    top: -90px;
-    position: relative;
-    visibility: inherit;
-    margin-bottom: -90px;
-    
-}*/
-
-#header-block {
-    margin-bottom: 25px;
-}
 
 #page {
     text-align: left;
     margin: 0px auto;
     max-width: 1200px;
+}
+
+#header-block {
+    margin-top: 0px;
+    margin-bottom: 25px;
+    background-color: #96c4cb; 
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+	background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+	background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+}
+
+#page-h1-membership {
+    color: #44939F;
+    font-size: 18pt;
+    font-weight: bold;
+    margin-top: 0px;
+    margin-left: 350px;
+}
+
+#adm-logo {
+    top: -10px;
+    position: relative;
+    visibility: inherit;
+    margin-bottom: -130px;
+    
+}
+
+#page-h1-orga {
+    color: #dbebee;
+    font-size: 24pt;
+    font-weight: bold;
+    margin: 0px -30px 25px -30px;
+    padding: 3px 10px 3px 380px;
+    border: 1px solid #7d7d7d;
+    -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px;
+    background-color: #96c4cb;
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top, #55B6C5 0%, #347078 95%);	
+	background-image: -webkit-linear-gradient(top, #55B6C5 0%, #347078 95%);	
+	background-image: -ms-linear-gradient(top, #55B6C5 0%, #347078 95%);	
 }
 
 .admFrame {
@@ -76,18 +104,24 @@ img {
 
 /* Headlines */
 
+.admHeadline, .admHeadline2, .admHeadline3 {
+    font-weight: bold;
+    margin: 25px 0px 10px 0px;
+}
+
 .admHeadline {
-    color:              #333333;
-    font-size:          14pt;
-    font-weight:        bold;
-    letter-spacing:     0.2em;
-    text-align:         left;
-    border-bottom:      2px solid #449ba6;   
-    margin-top: 25px; 
+    color: #333333;
+    font-size: 14pt;
+    letter-spacing: 0.2em;
+    text-align: left;
+    border-bottom: 2px solid #449ba6;   
 }
 
 .admHeadline2 {
-    font-weight: bold;
+    font-size: 14pt;
+}
+
+.admHeadline3 {
     font-size: 11pt;
 }
 
@@ -114,7 +148,6 @@ a:hover, a:active {
 .admFormLayout {
     width:              100%;
     margin:             auto;
-    margin-top:         30px;
 }
 
 .formBody hr {
@@ -142,7 +175,8 @@ a:hover, a:active {
     display: inline-block;
     width: 31%;
     min-width: 200px;
-    padding: 5px;
+    padding: 5px 0px 5px 0px;
+    white-space: nowrap;
 }
 
 .admFieldElement {
@@ -187,7 +221,7 @@ a:hover, a:active {
 }
 
 .admFieldElement.admMandatory:after, .admMandatoryDefinition span:after {
-    content: url(bullet_red.png);
+    content: url(../icons/bullet_red.png);
     white-space: nowrap;
     vertical-align: top;
 }
@@ -218,4 +252,3 @@ a:hover, a:active {
     padding-top:        7px;
     clear:              both;
 }
-

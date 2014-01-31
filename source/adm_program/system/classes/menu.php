@@ -102,7 +102,7 @@ class Menu
 		else
 		{
 			$html  = '';														// Wraps the whole menu
-			$html .= '<h3>'.$this->title.'</h3>';								// Title of the menu
+			$html .= '<h3 class="admHeadline3">'.$this->title.'</h3>';								// Title of the menu
 			$html .= '';														// Wraps all menu items
 		}
 		

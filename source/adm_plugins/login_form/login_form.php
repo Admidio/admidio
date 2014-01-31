@@ -22,6 +22,9 @@ $plugin_folder_pos = strpos(__FILE__, 'adm_plugins') + 11;
 $plugin_file_pos   = strpos(__FILE__, 'login_form.php');
 $plugin_folder     = substr(__FILE__, $plugin_folder_pos+1, $plugin_file_pos-$plugin_folder_pos-2);
 
+// initialize parameters
+$plg_icon_code = null;
+
 if(!defined('PLUGIN_PATH'))
 {
     define('PLUGIN_PATH', substr(__FILE__, 0, $plugin_folder_pos));
@@ -78,11 +81,11 @@ echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
 <div class="admPluginHeader">';
     if($gValidLogin)
     {
-        echo '<h3>'.$gL10n->get('SYS_REGISTERED_AS').'</h3>';
+        echo '<h3 class="admHeadline3">'.$gL10n->get('SYS_REGISTERED_AS').'</h3>';
     }
     else
     {
-        echo '<h3>'.$gL10n->get('SYS_LOGIN').'</h3>';
+        echo '<h3 class="admHeadline3">'.$gL10n->get('SYS_LOGIN').'</h3>';
     }
 echo '</div>
 <div class="admPluginBody">';
@@ -178,7 +181,28 @@ if($gValidLogin == 1)
 }
 else
 {
-    // Login-Formular
+    // show login form
+    if($newLayout)
+    {
+        if($plg_show_icons == 1)
+        {
+            $plg_icon_code  = THEME_PATH. '/icons/key.png';
+        }
+    
+        $form = new Form('plugin_'.$plugin_folder, $g_root_path.'/adm_program/system/login_check.php');
+        $form->addTextInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, 35);
+        $form->addPasswordInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'));
+        $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
+        $form->addSelectBoxFromSql('plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, false, $gCurrentOrganization->getValue('org_id'), true);
+        $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), $plg_icon_code, null, null);
+        $form->show();
+    }
+    else
+    {
+    if($plg_show_icons == 1)
+    {
+        $plg_icon_code  = '<img src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_LOGIN').'" />&nbsp;';
+    }
     echo '
     <form id="plugin_'. $plugin_folder. '" style="display: inline;" action="'. $g_root_path. '/adm_program/system/login_check.php" method="post">
         <ul class="formFieldList" id="plgLoginFormFieldList">
@@ -216,11 +240,7 @@ else
                     </dl>
                 </li>';
             } 
-            
-            if($plg_show_icons)
-            {
-                $plg_icon_code = '<img src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_LOGIN').'" />&nbsp;';
-            }
+
             echo '
             <li id="plgRowLoginButton">
                 <dl>
@@ -310,6 +330,7 @@ else
             }    
         echo '</ul>
     </form>';   
+    }
 }
 
 echo '</div></div>';
