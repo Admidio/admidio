@@ -180,6 +180,8 @@ abstract class HtmlElement {
      */
     public function addAttribute($attribute, $value, $element = null)
     {
+		error_log($this->currentElement);
+		error_log(print_r($this->currentElementAttributes, true));
         If($element === null)
         {
             $element = $this->currentElement;
@@ -361,7 +363,7 @@ abstract class HtmlElement {
             if($this->parentFlag == true)
             {
                 $this->htmlString .= '<' .$this->currentElement . $this->getElementAttributesString() . '>';
-                $this->currentElementAttributes = array();
+                //$this->currentElementAttributes = array();
             }
             else
             {   
@@ -393,6 +395,8 @@ abstract class HtmlElement {
             }
             // set parent element to current element
             $this->currentElement = $parentElement;
+			// initialize attributes because parent element should not get attributes of previous element
+			$this->currentElementAttributes = array();
 
             // save attribute for parent element
             if($attribute != '' || $value != '')

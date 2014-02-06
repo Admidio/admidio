@@ -1,9 +1,8 @@
 /******************************************************************************
- * Cascading-Style-Sheets-Datei um das Aussehen des Login Form Plugins anzupassen
+ * Cascading-Style-Sheets file to modify the layout of the login form plugin
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
- * Module-Owner : Markus Fassbender
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
@@ -42,21 +41,69 @@
     padding-bottom:     10px;
 }
 
-#plugin_login_form * .admFieldLabel {
-    width: 50%;
-    min-width: 100px;
+/* new CSS */
+
+/* special css adjustments for login form */
+
+#plugin-login-form-form * .admFieldRow {
+    margin: 8px 0px 0px 0px;
 }
 
-#plugin_login_form * .admFieldElement {
+#plugin-login-form-form * .admFieldLabel {
+	display: inline-block;
+    width: 90%;
+	padding-top: 0px;
+}
+
+#plugin-login-form-form * .admFieldElement {
+	display: inline-block;
+    width: 100%;
+	padding-top: 2px;
+}
+
+#plugin-login-form-form * .admCheckboxRow  .admFieldLabel {
+	display: inline;
+    width: auto;
+}
+
+#plugin-login-form-form * .admCheckboxRow  .admFieldElement {
+	display: inline;
+}
+
+#plugin-login-form-form * .admCheckbox {
+	margin-top: 3px;
+}
+
+#plugin-login-form-form * .admSelectBox {
+    width: 100%;
+}
+
+#plugin-login-form-form * .admButton {
+	display: block;
+    margin: 8px 0px 15px 0px;
+}
+
+/* special css adjustments for informations of registered user */
+
+#adm-plugin-form-informations .admFieldRow {
+	margin: 0px;
+}
+
+#adm-plugin-form-informations * .admFieldLabel {
     width: 45%;
+	white-space: normal;
+ 	padding-top: 5px;
 }
 
-#plugin_login_form * .admButton {
-    margin-top: 10px;
-    margin-right: 0px;
+#adm-plugin-form-informations * .admFieldElement {
+    width: 55%;
+	white-space: normal;
 }
 
-/* Hack, da der IE mit diesem CSS nicht klar kommt */
-ul[id]#plgLoginFormFieldList li {
-    display:              block;
+/* layout of links with icons */
+
+.admPluginContent * .admIconTextLink  {
+	clear: both;
+    display: block;
+    margin-top: 7px;
 }

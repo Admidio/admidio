@@ -103,8 +103,8 @@
         $adminMenu->show();
         ?>
     </div>
-    <div style="clear: both;"></div>
 </div>
+<div style="clear: both;"></div>
 
 <p id="copyright">
     <a href="http://www.admidio.org"><img

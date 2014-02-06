@@ -77,44 +77,37 @@ class Form extends HtmlForm
         $this->addSimpleButton($id, $type, $value, $id, $link);
     }
     
+    
+    /** Add a new checkbox with a label to the form.
+     *  @param $id        Id of the checkbox. This will also be the name of the checkbox.
+     *  @param $label     The label of the checkbox.
+	 *  @param $value     A value for the checkbox. This value will be send with the form if the checkbox is checked.
+     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $class     Optional an additional css classname. The class @b admCheckbox
+     *                    is set as default and need not set with this parameter.
+     */
+    public function addCheckbox($id, $label, $value, $mandatory = false, $class = '')
+    {
+        $attributes = array('class' => 'admCheckbox');
+
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+        
+        $this->openFieldStructure($id, $label, $mandatory, 'admCheckboxRow');
+        $this->addInput('checkbox', $id, $id, $value, $attributes);
+        $this->closeFieldStructure();
+    }
+    
     /** Add a line with a custom description to the form. No form elements will be 
      *  displayed in this line.
      *  @param $text The (html) text that should be displayed.
      */
     public function addDescription($text)
     {
-        $this->addString('<div class="admFieldRow">'.$text.'</div>');
-    }
-    
-    /** Creates a html structure for a form field. This structure contains the label
-     *  and the div for the form element. After the form element is added the 
-     *  method closeFieldStructure must be called.
-     *  @param $id        The id of this field structure.
-     *  @param $label     The label of the field. This string should already be translated.
-     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
-     */
-    protected function addFieldStructure($id, $label, $mandatory = false)
-    {
-        // if necessary set css class for a mandatory element
-        $classMandatory = '';
-        if($mandatory == true)
-        {
-            $classMandatory = ' admMandatory';
-            $this->flagMandatoryFields = true;
-        }
-        
-        // create a div tag for the field list
-        if($this->flagFieldListOpen == false)
-        {
-            $this->addString('<div class="admFieldList">');
-            $this->flagFieldListOpen = true;
-        }
-        
-        // create html
-        $this->addString('
-        <div class="admFieldRow'.$classMandatory.'">
-            <div class="admFieldLabel'.$classMandatory.'"><label for="'.$id.'">'.$label.':</label></div>
-            <div class="admFieldElement'.$classMandatory.'">');
+        $this->addString('<div class="admFieldRow"><div class="admDescription">'.$text.'</div></div>');
     }
     
     /** Add a new password field with a label to the form. The password field could have
@@ -129,12 +122,13 @@ class Form extends HtmlForm
     {
         $attributes = array('class' => 'admTextInput admPasswordInput');
         
+        // set specific css class for this field
         if(strlen($class) > 0)
         {
-            $attributes['class'] = 'admTextInput '.$class;
+            $attributes['class'] .= ' '.$class;
         }
         
-        $this->addFieldStructure($id, $label, $mandatory);
+        $this->openFieldStructure($id, $label, $mandatory, 'admPasswordInputRow');
         $this->addInput('password', $id, $id, null, $attributes);
         $this->addAttribute('class', 'admTextInput');
         $this->closeFieldStructure();
@@ -157,10 +151,17 @@ class Form extends HtmlForm
     public function addSelectBox($id, $label, $values, $mandatory = false, $defaultValue = '', $setPleaseChoose = false, $class = '')
     {
         global $gL10n;
+
+        $attributes = array('class' => 'admSelectBox');
         
-        $this->addFieldStructure($id, $label, $mandatory);
-        $this->addSelect($id, $id);
-        $this->addAttribute('class', 'admSelectBox');
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+        
+        $this->openFieldStructure($id, $label, $mandatory, 'admSelectboxRow');
+        $this->addSelect($id, $id, $attributes);
 
         if($setPleaseChoose == true)
         {
@@ -275,11 +276,10 @@ class Form extends HtmlForm
     {
         $attributes = array('class' => 'admSmallTextInput');
         
-
         // set specific css class for this field
         if(strlen($class) > 0)
         {
-            $attributes['class'] = 'admSmallTextInput '.$class;
+            $attributes['class'] .= ' '.$class;
         }
 
         // set max input length
@@ -288,7 +288,7 @@ class Form extends HtmlForm
             $attributes['maxlength'] = $maxLength;
         }
         
-        $this->addFieldStructure($id, $label, $mandatory);
+        $this->openFieldStructure($id, $label, $mandatory, 'admSmallTextInputRow');
         $this->addInput('text', $id, $id, $value, $attributes);
         $this->closeFieldStructure();
     }
@@ -341,7 +341,7 @@ class Form extends HtmlForm
         // set specific css class for this field
         if(strlen($class) > 0)
         {
-            $attributes['class'] = 'admTextInput '.$class;
+            $attributes['class'] .= ' '.$class;
         }
 
         // set max input length
@@ -350,12 +350,12 @@ class Form extends HtmlForm
             $attributes['maxlength'] = $maxLength;
         }
         
-        $this->addFieldStructure($id, $label, $mandatory);
+        $this->openFieldStructure($id, $label, $mandatory, 'admTextInputRow');
         $this->addInput('text', $id, $id, $value, $attributes);
         $this->closeFieldStructure();
     }
     
-    /** Closes a field structure that was added with the method addFieldStructure.
+    /** Closes a field structure that was added with the method openFieldStructure.
      */
     protected function closeFieldStructure()
     {
@@ -376,6 +376,48 @@ class Form extends HtmlForm
         $this->addString('</div></div>');
     }
     
+    /** Creates a html structure for a form field. This structure contains the label
+     *  and the div for the form element. After the form element is added the 
+     *  method closeFieldStructure must be called.
+     *  @param $id        The id of this field structure.
+     *  @param $label     The label of the field. This string should already be translated.
+     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $class     Optional an additional css classname for the row. The class @b admFieldRow
+     *                    is set as default and need not set with this parameter.
+     */
+    protected function openFieldStructure($id, $label, $mandatory = false, $class = '')
+    {
+        $cssClassRow       = '';
+        $cssClassMandatory = '';
+
+        // set specific css class for this row
+        if(strlen($class) > 0)
+        {
+            $cssClassRow .= ' '.$class;
+        }
+
+        // if necessary set css class for a mandatory element
+        if($mandatory == true)
+        {
+			$cssClassMandatory = ' admMandatory';
+            $cssClassRow .= $cssClassMandatory;
+            $this->flagMandatoryFields = true;
+        }
+        
+        // create a div tag for the field list
+        if($this->flagFieldListOpen == false)
+        {
+            $this->addString('<div class="admFieldList">');
+            $this->flagFieldListOpen = true;
+        }
+        
+        // create html
+        $this->addString('
+        <div class="admFieldRow'.$cssClassRow.'">
+            <div class="admFieldLabel'.$cssClassMandatory.'"><label for="'.$id.'">'.$label.':</label></div>
+            <div class="admFieldElement'.$cssClassMandatory.'">');
+    }
+	
     /** Add a new groupbox to the form. This could be used to group some elements 
      *  together. There is also the option to set a headline to this group box.
      *  @param $id       Id the the groupbox.
@@ -383,15 +425,18 @@ class Form extends HtmlForm
      */
     public function openGroupBox($id, $headline = '')
     {
-        $this->addString('<div id="'.$id.'" class="groupBox">');
+        $this->addString('<div id="'.$id.'" class="admGroupBox">');
         // add headline to groupbox
         if(strlen($headline) > 0)
         {
-            $this->addString('<div class="groupBoxHeadline">'.$headline.'</div>');
+            $this->addString('<div class="admGroupBoxHeadline">'.$headline.'</div>');
         }
-        $this->addString('<div class="groupBoxBody">');
+        $this->addString('<div class="admGroupBoxBody">');
     }
     
+	/* This method send the whole html code of the form to the browser. Call this method
+	 * if you have finished your form layout.
+	 */
     public function show()
     {
         echo $this->getHtmlForm();

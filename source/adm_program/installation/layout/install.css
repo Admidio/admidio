@@ -17,9 +17,7 @@ body {
     font-family: Helvetica, Verdana, Arial, sans-serif;
     background-color: #96c4cb; 
     background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
-	background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
-	background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
     text-align: left;
 }
 
@@ -32,9 +30,7 @@ body {
     -moz-border-radius: 15px; -webkit-border-radius: 15px; -khtml-border-radius: 15px; border-radius: 15px;
     background-color: #ffffff; 
     background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #ffffff 0%, #CBDDE3 95%);	
-	background-image: -webkit-linear-gradient(top, #ffffff 0%, #CBDDE3 95%);	
-	background-image: -ms-linear-gradient(top, #ffffff 0%, #CBDDE3 95%);	
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #CBDDE3 95%);	
 }
 
 #adm-logo {
@@ -45,18 +41,26 @@ body {
     
 }
 
+/* Headlines */
+
+.admHeadline, .admHeadline2, .admHeadline3 {
+    font-weight: bold;
+    margin: 25px 0px 10px 0px;
+}
+
 .admHeadline {
-    color:              #333333;
-    font-size:          14pt;
-    font-weight:        bold;
-    letter-spacing:     0.2em;
-    text-align:         left;
-    border-bottom:      2px solid #449ba6;   
-    margin-top: 25px; 
+    color: #333333;
+    font-size: 14pt;
+    letter-spacing: 0.2em;
+    text-align: left;
+    border-bottom: 2px solid #449ba6;   
+}
+
+.admHeadline2 {
+    font-size: 14pt;
 }
 
 .admHeadline3 {
-    font-weight: bold;
     font-size: 11pt;
 }
 
@@ -72,27 +76,19 @@ a:hover, a:active {
     color: #FF9C00;
 }
 
-.iconTextLink img {
-    border:             none;
-    vertical-align:     middle;
-    padding-right:      1px;
+.admIconTextLink img {
+    border: none;
+    vertical-align: middle;
+    padding-right: 1px;
 }
 
 /* form layout */
 
 .admFormLayout {
-    width:              100%;
-    margin:             auto;
-    margin-top:         30px;
+    width: 100%;
+    margin: auto;
+    margin-top: 30px;
 }
-
-.formBody hr {
-    border:             1px solid #bad8e2;
-    width:              100%;
-    margin-top:         10px; 
-    margin-bottom:      10px; 
-}
-
 
 /* set structure of fields and their labels in a form */
    
@@ -102,21 +98,20 @@ a:hover, a:active {
 
 .admFieldRow {
     clear: both;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin: 10px 0px;
 }
    
 .admFieldLabel {
     float: left;
-    display: inline-block;
-    width: 31%;
-    min-width: 200px;
-    padding: 5px;
+	display: inline-block;
+    width: 30%;
+	padding-top: 10px;
 }
 
 .admFieldElement {
     display: inline-block;
-    width: 60%;
+    width: 70%;
+    padding-top: 5px;
     white-space: nowrap;
 }
 
@@ -135,8 +130,7 @@ a:hover, a:active {
 }
 
 .admTextInput {
-    width: 100%;
-    min-width: 100px;
+    width: 95%;
 }
 
 .admSmallTextInput {
@@ -150,9 +144,9 @@ a:hover, a:active {
 }
 
 .admButton img {
-     vertical-align:    bottom;
-     border-width:      0;
-     margin-right:      5px;
+     vertical-align: bottom;
+     border-width: 0px;
+     margin-right: 5px;
 }
 
 .admFieldElement.admMandatory:after, .admMandatoryDefinition span:after {
@@ -168,23 +162,22 @@ a:hover, a:active {
 
 /* A simple groupbox to group some elements. This is often used in forms. */
 
-.groupBox {
-    color:              #555555;
-    border:             2px solid #bad8e2;
-    padding:            5px 10px 5px 10px;
-    text-align:         left;
-    margin-top:         12px;
-    border-radius:      10px;
+.admGroupBox {
+    color: #555555;
+    border: 2px solid #bad8e2;
+    padding: 5px 10px 5px 10px;
+    text-align: left;
+    margin-top: 12px;
+    border-radius: 10px;
 }
 
-.groupBoxHeadline {
-    color:              #333333;
-    font-weight:        bold;
-    padding-left: 5px;
+.admGroupBoxHeadline {
+    color: #333333;
+    font-weight: bold;
 }
 
-.groupBoxBody {
-    padding-top:        7px;
-    clear:              both;
+.admGroupBoxBody {
+    padding-top: 7px;
+    clear: both;
 }
 
