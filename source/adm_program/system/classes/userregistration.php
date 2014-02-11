@@ -209,11 +209,11 @@ class UserRegistration extends User
                            AND mem_usr_id        = usr_id
                            AND usr_valid         = 1 ';
                 $result = $this->db->query($sql);
-                $sysmail = new SystemMail($this->db);
         
                 while($row = $this->db->fetch_array($result))
                 {
                     // send mail that a new registration is available
+                    $sysmail = new SystemMail($this->db);
                     $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);
 
                     $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this);
