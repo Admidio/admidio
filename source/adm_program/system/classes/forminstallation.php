@@ -104,7 +104,6 @@ class FormInstallation extends Form
             
             <script type="text/javascript"><!--
                 $(document).ready(function() {
-                    $("form:first *:input[type!=hidden]:first").focus();
                     $("#next_page").click(function() {
                         if($(this).val() == "'.$gL10n->get('INS_UPDATE_DATABASE').'"
                         || $(this).val() == "'.$gL10n->get('INS_INSTALL_ADMIDIO').'")

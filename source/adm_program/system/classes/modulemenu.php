@@ -31,7 +31,7 @@ class ModuleMenu
 	/** creates the object of the module menu and initialize all class parameters
 	 *  @param $id Html id of the module menu
 	 */
-	public function __construct($id, $maxMenuLinkItem = 3)
+	public function __construct($id, $maxMenuLinkItem = 4)
 	{
 		global $g_root_path;
 		$this->id		= $id;
@@ -162,7 +162,7 @@ class ModuleMenu
 	    
 	    // add html of menu item
 		$html .= '<li id="'.$menuEntry['id'].'">
-		              <span class="iconTextLink">
+		              <span class="admIconTextLink">
 				          <a href="'.$menuEntry['link'].'"><img 
 				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" /></a>
 				          <a href="'.$menuEntry['link'].'">'.$menuEntry['text'].'</a>
@@ -207,7 +207,7 @@ class ModuleMenu
 		if ($this->ddItemCnt == 0)
 			return '';
 
-		return '<li><span class="iconTextLink"><div id="'.$ddIdName.'"></div></span></li>
+		return '<li><span class="admIconTextLink"><div id="'.$ddIdName.'"></div></span></li>
 						<script type="text/javascript"><!--					
 						var '.$ddIdName.'DDData = ['. $this->ddJS .'];
 						$("#'.$ddIdName.'").ddslick({
@@ -242,7 +242,7 @@ class ModuleMenu
 
 		global $gL10n;
 		
-		$html = '<ul id="'.$this->id.'" class="iconTextLinkList">';
+		$html = '<ul id="'.$this->id.'" class="admIconTextLinkList">';
 
 		$linkCnt = 0;		
 
@@ -294,7 +294,7 @@ class ModuleMenu
 					if($menuEntry['admin'] == true)
 					{
     				    // show link to manage categorie
-						$html .= '&nbsp;<a class="iconLink" href="'.$this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'&title='.$menuEntry['text'].'"><img
+						$html .= '&nbsp;<a class="admIconLink" href="'.$this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'&title='.$menuEntry['text'].'"><img
 							src="'. THEME_PATH. '/icons/edit.png" alt="'.$textManageCategories.'" title="'.$textManageCategories.'" /></a>';
 					}
 				$html .= '</li>';

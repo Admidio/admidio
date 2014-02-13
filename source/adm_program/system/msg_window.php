@@ -26,9 +26,9 @@ header('Content-type: text/html; charset=utf-8');
 if($getInlineView)
 {
     echo '
-    <div class="formLayout" id="message_window">
-            <div class="formHead">'.$gL10n->get($getMessageTitle).'</div>
-            <div class="formBody">';
+	<div class="admMessage">
+		<h1 class="admHeadline" id="message-window">'.$gL10n->get($getMessageTitle).'</h1>
+		<div class="admMessageText">';
 }
 
 switch ($getMessageId)

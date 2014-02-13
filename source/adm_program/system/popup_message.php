@@ -189,33 +189,27 @@ function deleteEntry()
 }
 //--></script>
 
-<form id="admFormPopupMessage" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
-<div class="formLayout">
-    <div class="formHead">'. $gL10n->get('SYS_NOTE'). '</div>
-    <div class="formBody">
-        <table>
-			<tr>
-				<td style="width: 70px; text-align: center;"><br /><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></td>
-				<td id="admMessageText"><br />'.$gL10n->get($text, $textVariable, $textVariable2).'</td>
-			</tr>
-			<tr id="admYesNoButtons">
-				<td>&nbsp;</td>
-				<td style="padding-top: 30px;">
-					<button id="admButtonYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
-						alt="'.$gL10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
-					&nbsp;&nbsp;&nbsp;&nbsp;
-					<button id="admButtonNo" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
-						alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>
-				</td>
-			</tr>
-			<tr id="admCloseButton" style="display: none;">
-				<td>&nbsp;</td>
-				<td style="padding-top: 30px;">
-					<button id="admButtonClose" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
-						alt="'.$gL10n->get('SYS_CLOSE').'" />&nbsp;'.$gL10n->get('SYS_CLOSE').'</button>
-				</td>
-			</tr>
-        </table>
+<div class="admMessage">
+    <h1 class="admHeadline">'.$gL10n->get('SYS_NOTE').'</h1>
+
+    <div class="admMessageText">
+        <div><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
+        <div>'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
+
+        <ul class="admIconTextLinkList">
+            <li id="admYesButton">
+                <button id="admButtonYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
+                    alt="'.$gL10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
+            </li>
+            <li id="admNoButton">
+                <button id="admButtonNo" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
+                    alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>
+            </li>
+            <li id="admCloseButton" style="display: none;">
+                <button id="admButtonClose" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
+                    alt="'.$gL10n->get('SYS_CLOSE').'" />&nbsp;'.$gL10n->get('SYS_CLOSE').'</button>
+            </li>
+        </ul>
     </div>
-</form>';
+</div>';
 ?>

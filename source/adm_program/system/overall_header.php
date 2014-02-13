@@ -51,7 +51,7 @@ else
 	$g_page_title = $gCurrentOrganization->getValue('org_longname');
 }
 
-if(strpos($_SERVER['PHP_SELF'], 'announcements.php') > 0)
+if(strpos($_SERVER['PHP_SELF'], 'announcements') > 0)
 {
     $newLayout = true;
 }

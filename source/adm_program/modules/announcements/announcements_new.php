@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Ankuendigungen anlegen und bearbeiten
+ * Create and edit announcements
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,8 +8,8 @@
  *
  * Parameters:
  *
- * ann_id    - ID der Ankuendigung, die bearbeitet werden soll
- * headline  - Ueberschrift, die ueber den Ankuendigungen steht
+ * ann_id    - ID of the announcement that should be edited
+ * headline  - Title of the announcements module. This will be shown in the whole module.
  *             (Default) ANN_ANNOUNCEMENTS
  *
  *****************************************************************************/
@@ -57,9 +57,6 @@ if(isset($_SESSION['announcements_request']))
     unset($_SESSION['announcements_request']);
 }
 
-// create an object of ckeditor and replace textarea-element
-$ckEditor = new CKEditorSpecial();
-
 // Html-Kopf ausgeben
 if($getAnnId > 0)
 {
@@ -70,91 +67,31 @@ else
     $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
 }
 
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $("#ann_headline").focus();
-        });
-        
-    //--></script>';
-
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-// Html des Modules ausgeben
+// show headline of module
+echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+
+// show form
+$form = new Form('announcements-edit-form', $g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1');
+$form->openGroupBox('gbAnnouncementTitle', $gL10n->get('SYS_DESCRIPTION'));
+$form->addTextInput('ann_headline', $gL10n->get('SYS_TITLE'), $announcement->getValue('ann_headline'), 100, true);
+
+// if current organization has a parent organization or is child organizations then show option to set this announcement to global
+if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
+{
+	$form->addCheckbox('ann_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $announcement->getValue('ann_global'), false, 'SYS_DATA_GLOBAL');
+}
+$form->addEditor('ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'), true);
+$form->closeGroupBox();
+$form->addString(admFuncShowCreateChangeInfoById($announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'), $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')));
+$form->addSubmitButton('btnSave', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->show();
+
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1" >
-<div class="formLayout" id="edit_announcements_form">
-    <div class="formHead">'. $gLayout['title']. '</div>
-    <div class="formBody">
-		<div class="groupBox" id="admAnnouncementTitle">
-			<div class="groupBoxHeadline" id="admAnnouncementTitleHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admAnnouncementTitleBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admAnnouncementTitleBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_TITLE').'
-			</div>
-
-			<div class="groupBoxBody" id="admAnnouncementTitleBody">
-                <ul class="formFieldList">
-                    <li>
-                        <div>
-                                <input type="text" id="ann_headline" name="ann_headline" style="width: 95%;" maxlength="100" value="'. $announcement->getValue('ann_headline'). '" />
-                                <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                        </div>
-                    </li>';
-                    
-        
-                    // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf 'global' gesetzt werden
-                    if($gCurrentOrganization->getValue('org_org_id_parent') > 0
-                    || $gCurrentOrganization->hasChildOrganizations())
-                    {
-                        echo '
-                        <li>
-                            <div>
-                                    <input type="checkbox" id="ann_global" name="ann_global" ';
-                                    if($announcement->getValue('ann_global') == 1)
-                                    {
-                                        echo ' checked="checked" ';
-                                    }
-                                    echo ' value="1" />
-                                    <label for="ann_global">'.$gL10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
-                                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL&amp;inline=true"><img 
-                                        onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
-                                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
-                            </div>
-                        </li>';
-                    }
-                echo '</ul>
-            </div>
-        </div>
-		<div class="groupBox" id="admDescription">
-			<div class="groupBoxHeadline" id="admDescriptionHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_TEXT').'
-			</div>
-
-			<div class="groupBoxBody" id="admDescriptionBody">
-                <ul class="formFieldList">
-                    <li>
-                         '.$ckEditor->createEditor('ann_description', $announcement->getValue('ann_description')).'
-                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </li>
-                </ul>
-            </div>
-        </div>';
-
-        // show informations about user who creates the recordset and changed it
-        echo admFuncShowCreateChangeInfoById($announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'), $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')).'
-        
-        <div class="formSubmit">
-            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-        </div>
-    </div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
+<ul class="admIconTextLinkList">
     <li>
-        <span class="iconTextLink">
+        <span class="admIconTextLink">
             <a href="'.$g_root_path.'/adm_program/system/back.php"><img
             src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
             <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>

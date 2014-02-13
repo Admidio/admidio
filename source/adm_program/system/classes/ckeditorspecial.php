@@ -75,7 +75,7 @@ class CKEditorSpecial extends CKEditor
     // creates a textarea element with the config of the ckeditor
     private function createTextArea($elementName, $value = '')
     {
-        $out = '<textarea id="'.$elementName.'" name="'.$elementName.'" 
+        $out = '<textarea id="'.$elementName.'" name="'.$elementName.'"
                     style="width: '.$this->config['width'].'; height: '.$this->config['height'].';">
                     '.$value.'</textarea>';
         return $out;

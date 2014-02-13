@@ -575,7 +575,7 @@ function admFuncShowCreateChangeInfoByName($userNameCreated, $timestampCreate, $
     
         if(strlen($html) > 0)
         {
-            $html = '<div class="editInformation">'.$html.'</div>';
+            $html = '<div class="admCreateEditInformations">'.$html.'</div>';
         }
     }
     return $html;

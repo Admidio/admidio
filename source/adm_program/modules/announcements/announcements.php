@@ -9,11 +9,11 @@
  * Parameters:
  *
  * start     - Position of query recordset where the visual output should start
- * headline  - Ueberschrift, die ueber den Ankuendigungen steht
- *             (Default) Ankuendigungen
- * id        - Nur eine einzige Annkuendigung anzeigen lassen.
- * date      - Alle Ankuendigungen zu einem Datum werden aufgelistet
- *             Uebergabeformat: YYYYMMDD
+ * headline  - Title of the announcements module. This will be shown in the whole module.
+ *             (Default) ANN_ANNOUNCEMENTS
+ * id        - Id of a single announcement that should be shown.
+ * date      - If set all announcements of that date will be shown.
+ *             Format: YYYYMMDD
  *
  *****************************************************************************/
 
@@ -47,8 +47,7 @@ $gNavigation->addUrl(CURRENT_URL);
 $gLayout['title']  = $announcements->getHeadline();
 $gLayout['header'] = '
     <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
+        $(document).ready(function() {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
@@ -117,13 +116,13 @@ else
         $announcement->clear();
         $announcement->setArray($row);
         echo '
-        <div class="boxLayout" id="ann_'.$announcement->getValue("ann_id").'">
-            <div class="boxHead">
-                <div class="boxHeadLeft">
+        <div class="admBoxLayout" id="ann_'.$announcement->getValue('ann_id').'">
+            <div class="admBoxHead">
+                <div class="admBoxHeadLeft">
                     <img src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
-                    $announcement->getValue("ann_headline"). '
+                    $announcement->getValue('ann_headline'). '
                 </div>
-                <div class="boxHeadRight">'.$announcement->getValue("ann_timestamp_create", $gPreferences['system_date']).'&nbsp;';
+                <div class="admBoxHeadRight">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'&nbsp;';
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())
@@ -131,7 +130,7 @@ else
                         if($announcement->editRight() == true)
                         {
                             echo '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$announcements->getHeadline().'"><img 
+                            <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$announcements->getHeadline().'"><img 
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                         }
 
@@ -139,7 +138,7 @@ else
                         if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
                         {
                             echo '
-                            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
+                            <a class="admIconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
                                 $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                         }    
@@ -147,7 +146,7 @@ else
                     echo '</div>
             </div>
 
-            <div class="boxBody">'.
+            <div class="admBoxBody">'.
                 $announcement->getValue('ann_description').
 
                 // show informations about user who creates the recordset and changed it

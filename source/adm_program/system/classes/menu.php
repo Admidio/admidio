@@ -139,7 +139,7 @@ class Menu
 				$html .= '<span id="smenu_'.$this->id.'_' .
 						  $this->items[$key]['id'].'" class="menu">';			// Wraps each item
 				
-				$html .= '<a href="'.$this->items[$key]['link'].'"><img style="vertical-align: middle;" src="'.$this->items[$key]['icon'].'"
+				$html .= '<a href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
 						  alt="'.$this->items[$key]['text'].'" title="'.$this->items[$key]['text'].'" /></a>
 						  <a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a>';
 				

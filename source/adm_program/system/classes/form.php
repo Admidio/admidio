@@ -43,6 +43,13 @@ class Form extends HtmlForm
         
         // set specific Admidio css form class
         $this->addAttribute('class', 'admFormLayout');
+		
+		// first field of form should get focus
+		$js = '<script type="text/javascript"><!--
+			       $(document).ready(function() { $("form:first *:input[type!=hidden]:first").focus();});
+			   //--></script>';
+		$this->addString($js);
+		
         $this->flagMandatoryFields = false;
         $this->flagFieldListOpen   = false;
     }
@@ -79,14 +86,16 @@ class Form extends HtmlForm
     
     
     /** Add a new checkbox with a label to the form.
-     *  @param $id        Id of the checkbox. This will also be the name of the checkbox.
-     *  @param $label     The label of the checkbox.
-	 *  @param $value     A value for the checkbox. This value will be send with the form if the checkbox is checked.
-     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
-     *  @param $class     Optional an additional css classname. The class @b admCheckbox
-     *                    is set as default and need not set with this parameter.
+     *  @param $id         Id of the checkbox. This will also be the name of the checkbox.
+     *  @param $label      The label of the checkbox.
+	 *  @param $value      A value for the checkbox. This value will be send with the form if the checkbox is checked.
+     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+	 *  @param $helpTextId If set a help icon will be shown after the checkbox and on mouseover the translated text 
+	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class      Optional an additional css classname. The class @b admCheckbox
+     *                     is set as default and need not set with this parameter.
      */
-    public function addCheckbox($id, $label, $value, $mandatory = false, $class = '')
+    public function addCheckbox($id, $label, $value, $mandatory = false, $helpTextId = null, $class = null)
     {
         $attributes = array('class' => 'admCheckbox');
 
@@ -96,8 +105,10 @@ class Form extends HtmlForm
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $mandatory, 'admCheckboxRow');
+        $this->openFieldStructure($id, null, $mandatory, 'admCheckboxRow');
         $this->addInput('checkbox', $id, $id, $value, $attributes);
+		$this->addString('<label for="'.$id.'">'.$label.'</label>');
+		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
@@ -109,16 +120,45 @@ class Form extends HtmlForm
     {
         $this->addString('<div class="admFieldRow"><div class="admDescription">'.$text.'</div></div>');
     }
+	
+    /** Add a new CKEditor element to the form. 
+     *  @param $id         Id of the password field. This will also be the name of the password field.
+     *  @param $label      The label of the password field.
+     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+	 *  @param $helpTextId If set a help icon will be shown after the password field and on mouseover the translated text 
+	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class      Optional an additional css classname. The class @b admTextInput
+     *                     is set as default and need not set with this parameter.
+     */
+	public function addEditor($id, $label, $value, $mandatory = false, $helpTextId = null, $class = '')
+	{
+        $attributes = array('class' => 'admEditor');
+
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+
+		$ckEditor = new CKEditorSpecial();
+
+        $this->openFieldStructure($id, $label, $mandatory, 'admEditorRow');
+		$this->addString('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value).'</div>');
+		$this->setHelpText($helpTextId);
+        $this->closeFieldStructure();
+	}
     
     /** Add a new password field with a label to the form. The password field could have
      *  maximum 50 characters. You could not set a value to a password field.
-     *  @param $id        Id of the password field. This will also be the name of the password field.
-     *  @param $label     The label of the password field.
-     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
-     *  @param $class     Optional an additional css classname. The class @b admTextInput
-     *                    is set as default and need not set with this parameter.
+     *  @param $id         Id of the password field. This will also be the name of the password field.
+     *  @param $label      The label of the password field.
+     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+	 *  @param $helpTextId If set a help icon will be shown after the password field and on mouseover the translated text 
+	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class      Optional an additional css classname. The class @b admTextInput
+     *                     is set as default and need not set with this parameter.
      */
-    public function addPasswordInput($id, $label, $mandatory = false, $class = '')
+    public function addPasswordInput($id, $label, $mandatory = false, $helpTextId = null, $class = '')
     {
         $attributes = array('class' => 'admTextInput admPasswordInput');
         
@@ -131,6 +171,7 @@ class Form extends HtmlForm
         $this->openFieldStructure($id, $label, $mandatory, 'admPasswordInputRow');
         $this->addInput('password', $id, $id, null, $attributes);
         $this->addAttribute('class', 'admTextInput');
+		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
@@ -145,10 +186,12 @@ class Form extends HtmlForm
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
+	 *  @param $helpTextId      If set a help icon will be shown after the selectbox and on mouseover the translated text 
+	 *                          of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class  Optional an additional css classname. The class @b admSelectbox
      *                 is set as default and need not set with this parameter.
      */
-    public function addSelectBox($id, $label, $values, $mandatory = false, $defaultValue = '', $setPleaseChoose = false, $class = '')
+    public function addSelectBox($id, $label, $values, $mandatory = false, $defaultValue = '', $setPleaseChoose = false, $helpTextId = null, $class = '')
     {
         global $gL10n;
 
@@ -188,6 +231,7 @@ class Form extends HtmlForm
             $value = next($values);
         }
         $this->closeSelect();
+		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
@@ -209,10 +253,12 @@ class Form extends HtmlForm
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
+	 *  @param $helpTextId      If set a help icon will be shown after the selectbox and on mouseover the translated text 
+	 *                          of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class           Optional an additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $mandatory = false, $defaultValue= '', $setPleaseChoose = false, $class = '')
+    public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $mandatory = false, $defaultValue= '', $setPleaseChoose = false, $helpTextId = null, $class = '')
     {
         $selectboxEntries = array();
     
@@ -240,10 +286,12 @@ class Form extends HtmlForm
      *  @param $defaultValue This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
+	 *  @param $helpTextId   If set a help icon will be shown after the selectbox and on mouseover the translated text 
+	 *                       of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class        Optional an additional css classname. The class @b admSelectbox
-     *                 is set as default and need not set with this parameter.
+     *                       is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $mandatory = false, $defaultValue= '', $setPleaseChoose = false, $class = '')
+    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $mandatory = false, $defaultValue= '', $setPleaseChoose = false, $helpTextId = null, $class = '')
     {
         $selectboxEntries = array();
         
@@ -264,15 +312,17 @@ class Form extends HtmlForm
     }
 
     /** Add a new small input field with a label to the form.
-     *  @param $id        Id of the input field. This will also be the name of the input field.
-     *  @param $label     The label of the input field.
-	 *  @param $value     A value for the text field. The field will be created with this value.
-     *  @param $maxLength The maximum number of characters that are allowed in this field.
-     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
-     *  @param $class     Optional an additional css classname. The class @b admTextInput
-     *                    is set as default and need not set with this parameter.
+     *  @param $id         Id of the input field. This will also be the name of the input field.
+     *  @param $label      The label of the input field.
+	 *  @param $value      A value for the text field. The field will be created with this value.
+     *  @param $maxLength  The maximum number of characters that are allowed in this field.
+     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
+	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class      Optional an additional css classname. The class @b admTextInput
+     *                     is set as default and need not set with this parameter.
      */
-    public function addSmallTextInput($id, $label, $value, $maxLength = 0, $mandatory = false, $class = '')
+    public function addSmallTextInput($id, $label, $value, $maxLength = 0, $mandatory = false, $helpTextId = null, $class = '')
     {
         $attributes = array('class' => 'admSmallTextInput');
         
@@ -290,14 +340,13 @@ class Form extends HtmlForm
         
         $this->openFieldStructure($id, $label, $mandatory, 'admSmallTextInputRow');
         $this->addInput('text', $id, $id, $value, $attributes);
+		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
     /** Add a new button with a custom text to the form. This button could have 
      *  an icon in front of the text. Different to addButton this method adds an
      *  additional @b div around the button and the type of the button is @b submit.
-     *  If mandatory fields were set than a notice which marker represents the
-     *  mandatory will be shown.
      *  @param $id    Id of the button. This will also be the name of the button.
      *  @param $text  Text of the button
      *  @param $icon  Optional parameter. Path and filename of an icon. 
@@ -311,30 +360,24 @@ class Form extends HtmlForm
      */
     public function addSubmitButton($id, $text, $icon = '', $link = '', $class = '', $type = 'submit')
     {
-        global $gL10n;
-        
-        // If mandatory fields were set than a notice which marker represents the mandatory will be shown.
-        if($this->flagMandatoryFields)
-        {
-            $this->addString('<div class="admMandatoryDefinition"><span></span> '.$gL10n->get('SYS_MANDATORY_FIELDS').'</div>');
-        }
-        
-        $class .= 'admSubmitButton';
+        $class .= ' admSubmitButton';
         
         // now add button to form
         $this->addButton($id, $text, $icon, $link, $class, $type);
     }
     
     /** Add a new input field with a label to the form.
-     *  @param $id        Id of the input field. This will also be the name of the input field.
-     *  @param $label     The label of the input field.
-	 *  @param $value     A value for the text field. The field will be created with this value.
-     *  @param $maxLength The maximum number of characters that are allowed in this field.
-     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
-     *  @param $class     Optional an additional css classname. The class @b admTextInput
-     *                    is set as default and need not set with this parameter.
+     *  @param $id         Id of the input field. This will also be the name of the input field.
+     *  @param $label      The label of the input field.
+	 *  @param $value      A value for the text field. The field will be created with this value.
+     *  @param $maxLength  The maximum number of characters that are allowed in this field.
+     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
+	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class      Optional an additional css classname. The class @b admTextInput
+     *                     is set as default and need not set with this parameter.
      */
-    public function addTextInput($id, $label, $value, $maxLength = 0, $mandatory = false, $class = '')
+    public function addTextInput($id, $label, $value, $maxLength = 0, $mandatory = false, $helpTextId = null, $class = '')
     {
         $attributes = array('class' => 'admTextInput');
 
@@ -352,6 +395,7 @@ class Form extends HtmlForm
         
         $this->openFieldStructure($id, $label, $mandatory, 'admTextInputRow');
         $this->addInput('text', $id, $id, $value, $attributes);
+		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
@@ -389,6 +433,7 @@ class Form extends HtmlForm
     {
         $cssClassRow       = '';
         $cssClassMandatory = '';
+		$htmlLabel         = '';
 
         // set specific css class for this row
         if(strlen($class) > 0)
@@ -410,11 +455,16 @@ class Form extends HtmlForm
             $this->addString('<div class="admFieldList">');
             $this->flagFieldListOpen = true;
         }
+		
+		if(strlen($label) > 0)
+		{
+			$htmlLabel = '<label for="'.$id.'">'.$label.':</label>';
+		}
         
         // create html
         $this->addString('
         <div class="admFieldRow'.$cssClassRow.'">
-            <div class="admFieldLabel'.$cssClassMandatory.'"><label for="'.$id.'">'.$label.':</label></div>
+            <div class="admFieldLabel'.$cssClassMandatory.'">'.$htmlLabel.'</div>
             <div class="admFieldElement'.$cssClassMandatory.'">');
     }
 	
@@ -433,12 +483,39 @@ class Form extends HtmlForm
         }
         $this->addString('<div class="admGroupBoxBody">');
     }
+	
+	/* Add a small help icon to the form at the current element which shows the
+	 * translated text of the text-id on mouseover or when you click on the icon.
+	 * @param $textId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+	 */
+	protected function setHelpText($textId)
+	{
+		if(strlen($textId) > 0)
+		{
+			global $g_root_path;
+			
+			$this->addString('<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$textId.'&amp;inline=true"><img 
+								   onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$textId.'\',this)" 
+								   onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>');
+		}
+	}
     
 	/* This method send the whole html code of the form to the browser. Call this method
 	 * if you have finished your form layout.
+     * If mandatory fields were set than a notice which marker represents the
+     * mandatory will be shown before the form.
 	 */
     public function show()
     {
+		global $gL10n;
+		
+	    // If mandatory fields were set than a notice which marker represents the mandatory will be shown.
+        if($this->flagMandatoryFields)
+        {
+            echo '<div class="admMandatoryDefinition"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
+        }
+		
+		// now show whole form
         echo $this->getHtmlForm();
     }
 }
