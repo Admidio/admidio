@@ -207,7 +207,7 @@ a:hover, a:active {
 .admTextInput, .admSmallTextInput, .admSelectBox, .admButton {
     border: 1px solid #888686;
     padding: 4px;
-    font-size: 10pt;
+    font-size: 11pt;
     background-color: #ffffff;
     -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px;
 }
@@ -257,7 +257,7 @@ a:hover, a:active {
 }
 
 .admButton img {
-    vertical-align: bottom;
+    vertical-align: text-top;
     border-width: 0px;
     margin-right: 5px;
 }
@@ -384,9 +384,24 @@ a:hover, a:active {
 	display: none;
 }
 
-/* Style for the popup messagebox */
+/* Style for the popup messagebox and popup messagebox */
 
 .admMessage {
     max-width: 600px;
 	text-align: left;
+}
+
+.admPopupIcon {
+    float: left;
+    display: inline-block;
+    width: 20%;
+}
+
+.admPopupMessageText {
+    display: inline-block;
+    width: 80%;
+}
+
+.admPopupMessage  * .admIconTextLinkList {
+    margin-left: 20%;
 }

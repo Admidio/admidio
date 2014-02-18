@@ -148,8 +148,8 @@ class Form extends HtmlForm
         $this->closeFieldStructure();
 	}
     
-    /** Add a new password field with a label to the form. The password field could have
-     *  maximum 50 characters. You could not set a value to a password field.
+    /** Add a new password field with a label to the form. The password field has not a limit of characters.
+     *  You could not set a value to a password field.
      *  @param $id         Id of the password field. This will also be the name of the password field.
      *  @param $label      The label of the password field.
      *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.

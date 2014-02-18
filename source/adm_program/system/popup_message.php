@@ -167,18 +167,17 @@ function deleteEntry()
 
     // send RequestObjekt and delete entry
     $.get("'.$url.'", function(data) {
-        if(data == "done")
-        {
+        if(data == "done") {
             $.colorbox.close();
             $(entryDeleted).fadeOut("slow", function() { 
 			'.$callbackSuccess.'
             });
         }
-        else
-        {
+        else {
 			// entry could not be deleted, than show content of data or an common error message
-			$("#admYesNoButtons").css("display","none");
-			$("#admCloseButton").css("display","");
+			$("#admButtonYesRow").css("display","none");
+			$("#admButtonNoRow").css("display","none");
+			$("#admButtonCloseRow").css("display","");
 			if(data.length > 0) {
 				$("#admMessageText").html(data);
 			} else {
@@ -189,25 +188,25 @@ function deleteEntry()
 }
 //--></script>
 
-<div class="admMessage">
+<div class="admMessage admPopupMessage">
     <h1 class="admHeadline">'.$gL10n->get('SYS_NOTE').'</h1>
 
     <div class="admMessageText">
-        <div><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
-        <div>'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
+        <div class="admPopupIcon"><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
+        <div class="admPopupMessageText">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 
         <ul class="admIconTextLinkList">
-            <li id="admYesButton">
-                <button id="admButtonYes" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
-                    alt="'.$gL10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
+            <li id="admButtonYesRow">
+                <button id="admButtonYes" class="admButton" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
+                    alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
             </li>
-            <li id="admNoButton">
-                <button id="admButtonNo" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
-                    alt="'.$gL10n->get('SYS_NO').'" />&nbsp;'.$gL10n->get('SYS_NO').'</button>
+            <li id="admButtonNoRow">
+                <button id="admButtonNo" class="admButton" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
+                    alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
             </li>
-            <li id="admCloseButton" style="display: none;">
-                <button id="admButtonClose" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
-                    alt="'.$gL10n->get('SYS_CLOSE').'" />&nbsp;'.$gL10n->get('SYS_CLOSE').'</button>
+            <li id="admButtonCloseRow" style="display: none;">
+                <button id="admButtonClose" class="admButton" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
+                    alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
             </li>
         </ul>
     </div>
