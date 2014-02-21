@@ -180,8 +180,6 @@ abstract class HtmlElement {
      */
     public function addAttribute($attribute, $value, $element = null)
     {
-		error_log($this->currentElement);
-		error_log(print_r($this->currentElementAttributes, true));
         If($element === null)
         {
             $element = $this->currentElement;

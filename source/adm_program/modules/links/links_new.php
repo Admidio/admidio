@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Links anlegen und bearbeiten
+ * Create and edit weblinks
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,9 +8,9 @@
  *
  * Parameters:
  *
- * lnk_id        - ID der Ankuendigung, die bearbeitet werden soll
- * headline      - Ueberschrift, die ueber den Links steht
- *                 (Default) Links
+ * lnk_id    - ID of the weblink that should be edited
+ * headline  - Title of the weblink module. This will be shown in the whole module.
+ *             (Default) LNK_WEBLINKS
  *
  *****************************************************************************/
 
@@ -34,8 +34,6 @@ if (!$gCurrentUser->editWeblinksRight())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$gNavigation->addUrl(CURRENT_URL);
-
 // Weblinkobjekt anlegen
 $link = new TableWeblink($gDb, $getLinkId);
 
@@ -47,9 +45,6 @@ if(isset($_SESSION['links_request']))
     unset($_SESSION['links_request']);
 }
 
-// create an object of ckeditor and replace textarea-element
-$ckEditor = new CKEditorSpecial();
-
 // Html-Kopf ausgeben
 if($getLinkId > 0)
 {
@@ -60,28 +55,41 @@ else
     $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
 }
 
-$gLayout['header'] = '
-	<script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
-            $("#lnk_name").focus();
-	 	}); 
-	//--></script>';
-
+// add current url to navigation stack
+$gNavigation->addUrl(CURRENT_URL, $gLayout['title']);
+    
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
+
+// show back link
+echo $gNavigation->getHtmlBackButton();
+
+// show headline of module
+echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
 // Html des Modules ausgeben
 if($getLinkId > 0)
 {
-    $new_mode = '3';
+    $modeEditOrCreate = '3';
 }
 else
 {
-    $new_mode = '1';
+    $modeEditOrCreate = '1';
 }
 
+// show form
+$form = new Form('weblinks-edit-form', $g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$modeEditOrCreate);
+$form->openGroupBox('gb-weblink-name');
+$form->addTextInput('lnk_name', $gL10n->get('LNK_LINK_NAME'), $link->getValue('lnk_name'), 250, true);
+$form->addTextInput('lnk_url', $gL10n->get('LNK_LINK_ADDRESS'), $link->getValue('lnk_url'), 250, true);
+// add selectbox !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+$form->addEditor('lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'), false, 'AdmidioDefault', '150px');
+$form->closeGroupBox();
+$form->addString(admFuncShowCreateChangeInfoById($link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'), $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')));
+$form->addSubmitButton('btnSave', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->show();
+/*
 echo '
-<form action="'.$g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$new_mode.'" method="post">
+<form action="'.$g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$modeEditOrCreate.'" method="post">
 <div class="formLayout" id="edit_links_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">
@@ -156,7 +164,7 @@ echo '
             <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
         </span>
     </li>
-</ul>';
+</ul>';*/
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

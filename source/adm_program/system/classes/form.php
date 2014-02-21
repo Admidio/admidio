@@ -125,12 +125,15 @@ class Form extends HtmlForm
      *  @param $id         Id of the password field. This will also be the name of the password field.
      *  @param $label      The label of the password field.
      *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $toolbar    Optional set a predefined toolbar for the editor. Possible values are 
+     *                     @b AdmidioDefault, @b Admidio Guestbook, @b AdmidioEcard and @b AdmidioPlugin_WC
+     *  @param $height     Optional set the height in pixel of the editor. The default will be 300px.
 	 *  @param $helpTextId If set a help icon will be shown after the password field and on mouseover the translated text 
 	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-	public function addEditor($id, $label, $value, $mandatory = false, $helpTextId = null, $class = '')
+	public function addEditor($id, $label, $value, $mandatory = false, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = '')
 	{
         $attributes = array('class' => 'admEditor');
 
@@ -140,10 +143,22 @@ class Form extends HtmlForm
             $attributes['class'] .= ' '.$class;
         }
 
+        // set specific toolbar for editor
+        if(strlen($toolbar) == 0)
+        {
+            $toolbar = 'AdmidioDefault';
+        }
+        
+        // set specific height for editor
+        if(strlen($height) == 0)
+        {
+            $height = '300px';
+        }
+
 		$ckEditor = new CKEditorSpecial();
 
         $this->openFieldStructure($id, $label, $mandatory, 'admEditorRow');
-		$this->addString('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value).'</div>');
+		$this->addString('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
 	}

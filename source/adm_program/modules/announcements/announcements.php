@@ -40,8 +40,7 @@ $parameter = $announcements->getParameter();
 $announcementsCount = $announcements->getDataSetCount();
 
 // Navigation of the module starts here
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addStartUrl(CURRENT_URL, $announcements->getHeadline());
 
 // Start html head
 $gLayout['title']  = $announcements->getHeadline();

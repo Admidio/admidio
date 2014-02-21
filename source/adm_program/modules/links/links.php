@@ -30,10 +30,6 @@ elseif($gPreferences['enable_weblinks_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-// Initialize navigation - Module start
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
-
 // Create Link object
 $weblinks = new ModuleWeblinks();
 $weblinksCount = $weblinks->getDataSetCount();
@@ -48,8 +44,7 @@ if($weblinks->getCatId() > 0)
 
 $gLayout['header'] = '
     <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
+        $(document).ready(function() {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
@@ -60,10 +55,13 @@ if($gPreferences['enable_rss'] == 1)
         href="'. $g_root_path. '/adm_program/modules/links/rss_links.php?headline='.$weblinks->getHeadline().'" />';
 };
 
+// Navigation of the module starts here
+$gNavigation->addStartUrl(CURRENT_URL, $gLayout['title']);
+
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // output html of module
-echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>
+echo '<h1 class="admHeadline">'. $gLayout['title']. '</h1>
 <div id="links_overview">';
 
 // number of weblinks per page
@@ -145,42 +143,44 @@ else
             $new_category = true;
             if ($j>0)
             {
-                echo '</div></div><br />';
+                echo '</div></div>';
             }
-            echo '<div class="formLayout">
-                <div class="formHead">'.$weblink->getValue('cat_name').'</div>
-                <div class="formBody" style="overflow: hidden;">';
+            echo '<div class="admBoxLayout">
+                <div class="admBoxHead">'.$weblink->getValue('cat_name').'</div>
+                <div class="admBoxBody">';
         }
 
-        echo '<div id="lnk_'.$weblink->getValue('lnk_id').'">';
-            if($i > 0)
+        echo '<div class="admWeblinkItem" id="lnk_'.$weblink->getValue('lnk_id').'">';
+                /*if($i > 0)
+                {
+                    echo '<hr />';
+                }*/
+
+            // show weblink
+            echo '
+            <span class="admIconTextLink">
+                <a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+                    alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
+                <a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>
+            </span>';
+            // change and delete only users with rights
+            if ($gCurrentUser->editWeblinksRight())
             {
-                echo '<hr />';
+                echo '
+                <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $weblinks->getHeadline(). '"><img
+                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                <a class="admIconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=lnk&amp;element_id=lnk_'.
+                    $weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'&amp;database_id='.$weblink->getValue('lnk_id').'"><img 
+                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
             }
 
-		// show weblink
-		echo '
-			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-				alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
-			<a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>';
-		// change and delete only users with rights
-		if ($gCurrentUser->editWeblinksRight())
-		{
-			echo '
-			<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $weblinks->getHeadline(). '"><img
-				src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=lnk&amp;element_id=lnk_'.
-                $weblink->getValue('lnk_id').'&amp;name='.urlencode($weblink->getValue('lnk_name')).'&amp;database_id='.$weblink->getValue('lnk_id').'"><img 
-                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
-		}
-
-		// get available description
-		if(strlen($weblink->getValue('lnk_description')) > 0)
-		{
-			echo '<div style="margin-top: 10px;">'.$weblink->getValue('lnk_description').'</div>';
-		}
-		
-		echo '<div class="smallFontSize" style="text-align: right">'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</div>
+            // get available description
+            if(strlen($weblink->getValue('lnk_description')) > 0)
+            {
+                echo '<div class="admWeblinkDescription">'.$weblink->getValue('lnk_description').'</div>';
+            }
+            
+            echo '<div class="admSmallFont">'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</div>
 		</div>';
 
         $j++;
@@ -206,7 +206,7 @@ echo '</div>';
 // If neccessary show links to navigate to next and previous recordsets of the query
 $baseUrl = $g_root_path.'/adm_program/modules/links/links.php?headline='. $weblinks->getHeadline();
 echo admFuncGeneratePagination($baseUrl, $weblinksCount, $weblinksPerPage, $weblinks->getStartElement(), TRUE);
-print_r($getWeblinks);
+
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

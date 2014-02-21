@@ -33,8 +33,6 @@ if(!$gCurrentUser->editAnnouncements())
 $getAnnId    = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
 
-$gNavigation->addUrl(CURRENT_URL);
-
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($gDb);
 
@@ -67,14 +65,20 @@ else
     $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
 }
 
+// add current url to navigation stack
+$gNavigation->addUrl(CURRENT_URL, $gLayout['title']);
+
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
+
+// show back link
+echo $gNavigation->getHtmlBackButton();
 
 // show headline of module
 echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
 // show form
 $form = new Form('announcements-edit-form', $g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1');
-$form->openGroupBox('gbAnnouncementTitle', $gL10n->get('SYS_DESCRIPTION'));
+$form->openGroupBox('gb-announcement-description');
 $form->addTextInput('ann_headline', $gL10n->get('SYS_TITLE'), $announcement->getValue('ann_headline'), 100, true);
 
 // if current organization has a parent organization or is child organizations then show option to set this announcement to global
@@ -88,17 +92,5 @@ $form->addString(admFuncShowCreateChangeInfoById($announcement->getValue('ann_us
 $form->addSubmitButton('btnSave', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
 $form->show();
 
-echo '
-<ul class="admIconTextLinkList">
-    <li>
-        <span class="admIconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-
 ?>
