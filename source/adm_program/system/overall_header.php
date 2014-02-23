@@ -52,7 +52,8 @@ else
 }
 
 if(strpos($_SERVER['PHP_SELF'], 'announcements') > 0
-|| strpos($_SERVER['PHP_SELF'], 'links') > 0)
+|| strpos($_SERVER['PHP_SELF'], 'links') > 0
+|| strpos($_SERVER['PHP_SELF'], 'index.php') > 0)
 {
     $newLayout = true;
 }

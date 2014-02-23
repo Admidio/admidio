@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Liste aller Module und Administrationsseiten von Admidio
+ * list of all modules and administration pages of Admidio
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -18,25 +18,24 @@ if(!file_exists('../adm_my_files/config.php'))
 
 require_once('system/common.php');
 
-// Url-Stack loeschen
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
-
 // Html-Kopf ausgeben
 $gLayout['title']  = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
 $gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
+
+// Navigation of the module starts here
+$gNavigation->addStartUrl(CURRENT_URL, $gLayout['title']);
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<h1 class="moduleHeadline">'.$gCurrentOrganization->getValue('org_longname').'</h1>
+<h1 class="admHeadline">'.$gCurrentOrganization->getValue('org_longname').'</h1>
 
-<ul class="iconTextLinkList">';
+<ul class="admIconTextLinkList">';
     if($gValidLogin == 1)
     {
         echo '<li>
-            <span class="iconTextLink">
+            <span class="admIconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/logout.php"><img
                 src="'.THEME_PATH.'/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" /></a>
                 <a href="'.$g_root_path.'/adm_program/system/logout.php">'.$gL10n->get('SYS_LOGOUT').'</a>
@@ -46,7 +45,7 @@ echo '
     else
     {
         echo '<li>
-            <span class="iconTextLink">
+            <span class="admIconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/login.php"><img
                 src="'.THEME_PATH.'/icons/key.png" alt="'.$gL10n->get('SYS_LOGIN').'" /></a>
                 <a href="'.$g_root_path.'/adm_program/system/login.php">'.$gL10n->get('SYS_LOGIN').'</a>
@@ -56,7 +55,7 @@ echo '
         if($gPreferences['registration_mode'] > 0)
         {
             echo '<li>
-                <span class="iconTextLink">
+                <span class="admIconTextLink">
                     <a href="'.$g_root_path.'/adm_program/system/registration.php"><img
                     src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" /></a>
                     <a href="'.$g_root_path.'/adm_program/system/registration.php">'.$gL10n->get('SYS_REGISTRATION').'</a>

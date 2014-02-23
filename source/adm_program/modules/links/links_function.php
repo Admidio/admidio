@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer Links
+ * Several functions for weblinks module
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,10 +8,10 @@
  *
  * Parameters:
  *
- * lnk_id:   ID der Ankuendigung, die angezeigt werden soll
- * mode:     1 - Neuen Link anlegen
- *           2 - Link loeschen
- *           3 - Link editieren
+ * lnk_id  - ID of the weblink that should be edited
+ * mode    - 1 : Create new link
+ *           2 : Delete link
+ *           3 : Edit link
  *
  *****************************************************************************/
 
@@ -22,10 +22,10 @@ require_once('../../system/login_valid.php');
 $getLinkId = admFuncVariableIsValid($_GET, 'lnk_id', 'numeric', 0);
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled for use
 if ($gPreferences['enable_weblinks_module'] == 0)
 {
-    // das Modul ist deaktiviert
+    // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 

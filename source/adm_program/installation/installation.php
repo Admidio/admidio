@@ -57,6 +57,7 @@ require_once(SERVER_PATH. '/adm_program/system/function.php');
 
 // Initialize and check the parameters
 
+define('THEME_PATH', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
 $message = '';
 
@@ -181,7 +182,7 @@ elseif($getMode == 3)  // Enter database access information
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', true, $dbType);
     $form->addTextInput('server', $gL10n->get('SYS_SERVER'), $server, 50, true);
     $form->addTextInput('user', $gL10n->get('SYS_USERNAME'), $user, 50, true);
-    $form->addPasswordInput('password', $gL10n->get('SYS_PASSWORD'), 50, true);
+    $form->addPasswordInput('password', $gL10n->get('SYS_PASSWORD'), true);
     $form->addTextInput('database', $gL10n->get('SYS_DATABASE'), $database, 50, true);
     $form->addSmallTextInput('prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, 10, true);
     $form->addDescription('<img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA'));

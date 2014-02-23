@@ -18,10 +18,10 @@ require_once('../../system/common.php');
 
 unset($_SESSION['links_request']);
 
-// Check if module is activated
+// check if the module is enabled for use
 if ($gPreferences['enable_weblinks_module'] == 0)
 {
-    // Module is deactivated
+    // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 elseif($gPreferences['enable_weblinks_module'] == 2)

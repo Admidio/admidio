@@ -95,9 +95,8 @@ class Menu
 	{
 		if ($type == 'long')
 		{
-			$html  = '<div class="formLayout" id="'.$this->id.'_list_form">';	// Wraps the whole menu
-			$html .= '<div class="formHead">'.$this->title.'</div>';			// Title of the menu
-			$html .= '<div class="formBody"><ul class="formFieldList">';		// Wraps all menu items
+			$html .= '<h2 class="admHeadline2">'.$this->title.'</h2>';			// Title of the menu
+			$html .= '<ul class="formFieldList" id="'.$this->id.'_list">';		// Wraps all menu items
 		}
 		else
 		{
@@ -149,8 +148,7 @@ class Menu
 		
 		if ($type == 'long')
 		{
-			$html .= '</ul></div>';												// End Wraps all menu items
-			$html .= '</div>';													// End Wraps the whole menu
+			$html .= '</ul>';												// End Wraps all menu items
 		}
 		else
 		{

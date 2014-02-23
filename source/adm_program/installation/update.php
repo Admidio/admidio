@@ -33,7 +33,7 @@ elseif(file_exists('../../config.php') == true)
 else
 {
     // no config file exists -> go to installation
-    header('installation.php');
+    header('Location: installation.php');
     exit();
 }
 
@@ -58,6 +58,7 @@ require_once(SERVER_PATH. '/adm_program/system/function.php');
  
 // Initialize and check the parameters
 
+define('THEME_PATH', 'layout');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
 $message = '';
 

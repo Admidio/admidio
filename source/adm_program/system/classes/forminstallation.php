@@ -74,7 +74,7 @@ class FormInstallation extends Form
     /** This method will create the whole html installation/update code. It will show the headline,
      *  text and the configured form. If no modus is set the installation modus will be set here.
      */
-    public function show()
+    public function show($directOutput = true)
     {
         global $gL10n;
     
@@ -139,13 +139,19 @@ class FormInstallation extends Form
                     $html .= $this->descriptionText;
                 }
                 // now show the configured form
-                $html .= $this->getHtmlForm();
+                $html .= parent::show(false);
             $html .= '</div>
         </body>
         </html>';
         
-        echo $html;
-        exit();
+        if($directOutput)
+        {
+            echo $html;
+        }
+        else
+        {
+            return $html;
+        }
     }
 }
 ?>

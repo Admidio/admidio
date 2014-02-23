@@ -273,7 +273,8 @@ class Form extends HtmlForm
      *  @param $class           Optional an additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $mandatory = false, $defaultValue= '', $setPleaseChoose = false, $helpTextId = null, $class = '')
+    public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $mandatory = false, $defaultValue= '', 
+                                        $setPleaseChoose = false, $helpTextId = null, $class = '')
     {
         $selectboxEntries = array();
     
@@ -306,7 +307,8 @@ class Form extends HtmlForm
      *  @param $class        Optional an additional css classname. The class @b admSelectbox
      *                       is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $mandatory = false, $defaultValue= '', $setPleaseChoose = false, $helpTextId = null, $class = '')
+    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $mandatory = false, $defaultValue= '', 
+                                        $setPleaseChoose = false, $helpTextId = null, $class = '')
     {
         $selectboxEntries = array();
         
@@ -325,6 +327,102 @@ class Form extends HtmlForm
         // now call default method to create a selectbox
         $this->addSelectBox($id, $label, $selectboxEntries, $mandatory, $defaultValue, $setPleaseChoose, $class);
     }
+    
+    /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must
+     *  define the category type (roles, dates, links ...). All categories of this type will be shown.
+     *  @param $id                 Id of the selectbox. This will also be the name of the selectbox.
+     *  @param $label              The label of the selectbox.
+     *  @param $databaseObject     A Admidio database object that contains a valid connection to a database
+	 *  @param $categoryType	   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+	 *  @param $defaultValue	   Id of category that should be selected per default.
+     *  @param $setPleaseChoose    If set to @b true a new entry will be added to the top of 
+     *                             the list with the caption "Please choose".
+	 *  @param $helpTextId         If set a help icon will be shown after the selectbox and on mouseover the translated text 
+	 *                             of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $showCategoryChoice This mode shows only categories with elements and if default category will be selected 
+	 *                             there must be at least more then one category to select
+	 *  @param $showSystemCategory Show user defined and system categories
+     *  @param $class              Optional an additional css classname. The class @b admSelectbox
+     *                             is set as default and need not set with this parameter.
+	 */
+	public function addSelectBoxForCategories($id, $label, &$databaseObject, $categoryType, $mandatory = false, $defaultValue = 0, $setPleaseChoose = false, 
+	                                          $helpTextId = null, $showCategoryChoice = false, $showSystemCategory = true, $class = '')
+	{
+		global $gCurrentOrganization, $gValidLogin;
+
+        $sqlTables      = TBL_CATEGORIES;
+        $sqlCondidtions = '';
+        $selectBoxHtml  = '';
+
+		// create sql conditions if category must have child elements
+		if($showCategoryChoice)
+		{
+            if($categoryType == 'DAT')
+            {
+                $sqlTables = TBL_CATEGORIES.', '.TBL_DATES;
+                $sqlCondidtions = ' AND cat_id = dat_cat_id ';
+            }
+            elseif($categoryType == 'LNK')
+            {
+                $sqlTables = TBL_CATEGORIES.', '.TBL_LINKS;
+                $sqlCondidtions = ' AND cat_id = lnk_cat_id ';
+            }
+            elseif($categoryType == 'ROL')
+            {
+				// don't show system categories
+                $sqlTables = TBL_CATEGORIES.', '.TBL_ROLES;
+                $sqlCondidtions = ' AND cat_id = rol_cat_id 
+                                    AND rol_visible = 1 ';
+            }
+		}
+		
+		if($showSystemCategory == false)
+		{
+			 $sqlCondidtions .= ' AND cat_system = 0 ';
+		}
+		
+		if($gValidLogin == false)
+		{
+			 $sqlCondidtions .= ' AND cat_hidden = 0 ';
+		}
+		
+		// the sql statement which returns all found categories
+		$sql = 'SELECT DISTINCT cat_id, cat_name, cat_default 
+		          FROM '.$sqlTables.'
+				 WHERE (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+					   OR cat_org_id IS NULL )
+				   AND cat_type   = \''.$categoryType.'\'
+				       '.$sqlCondidtions.'
+				 ORDER BY cat_sequence ASC ';
+		$result = $databaseObject->query($sql);
+		$countCategories = $databaseObject->num_rows($result);
+		
+		// if no default value was set then try to set one
+		if($defaultValue == null)
+		{
+    		// if only one category exists then select this
+		    if($countCategories == 1)
+		    {
+		        $row = $databaseObject->fetch_array($result);
+                $defaultValue = $row['car_id'];
+            }
+            // if several categories exist than select default category
+            elseif($countCategories > 1)
+            {
+                while($row = $databaseObject->fetch_array($result))
+                {
+                    if($row['cat_default'] == 1)
+                    {
+                        $defaultValue = $row['cat_id'];
+                    }
+                }
+            }
+		}
+        
+        // now call method to create selectbox from sql
+        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $mandatory, $defaultValue, $setPleaseChoose, $helpTextId, $class);
+	}
+
 
     /** Add a new small input field with a label to the form.
      *  @param $id         Id of the input field. This will also be the name of the input field.
@@ -520,18 +618,28 @@ class Form extends HtmlForm
      * If mandatory fields were set than a notice which marker represents the
      * mandatory will be shown before the form.
 	 */
-    public function show()
+    public function show($directOutput = true)
     {
 		global $gL10n;
-		
+		$html = '';
+
 	    // If mandatory fields were set than a notice which marker represents the mandatory will be shown.
         if($this->flagMandatoryFields)
         {
-            echo '<div class="admMandatoryDefinition"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
+            $html .= '<div class="admMandatoryDefinition"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
         }
 		
 		// now show whole form
-        echo $this->getHtmlForm();
+        $html .= $this->getHtmlForm();
+        
+        if($directOutput)
+        {
+            echo $html;
+        }
+        else
+        {
+            return $html;
+        }
     }
 }
 ?>

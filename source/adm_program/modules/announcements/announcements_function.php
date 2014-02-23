@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Verschiedene Funktionen fuer Ankuendigungen
+ * Several functions for announcement module
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,19 +8,19 @@
  *
  * Parameters:
  *
- * ann_id:   ID der Ankuendigung, die angezeigt werden soll
- * mode:     1 - Neue Ankuendigung anlegen/aendern
- *           2 - Ankuendigung loeschen
+ * ann_id  - ID of the announcement that should be edited
+ * mode    - 1 : Create or edit announcement
+ *           2 : Delete announcement
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
+// check if the module is enabled for use
 if ($gPreferences['enable_announcements_module'] == 0)
 {
-    // das Modul ist deaktiviert
+    // module is disabled
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
