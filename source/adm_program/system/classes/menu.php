@@ -6,6 +6,7 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  * Description  : Create, modify and display menus. Each menu item is defined by
+ *
  *      - $id   : identifier of the menu item
  *      - $link : URL, relative to the admidio root directory, starting with a /
  *                or full URL with http or https protocol
@@ -90,74 +91,75 @@ class Menu
 		}
 	}
 	
-	// actual method for generating the menu
-	public function show($type='short')
+    /** Create the html menu from the internal array that must be filled before.
+     *  You have the option to create a simple menu with icon and link or 
+     *  a more complex menu with submenu and description text.
+     *  @param $type         Create a @b simple menu as default. If you set the param to @b complex 
+     *                       then you will create a menu with submenus and description
+     *  @param $directOutput If set to @b true (default) the form html will be directly send
+     *                       to the browser. If set to @b false the html will be returned.
+     *  @return If $directOutput is set to @b false this method will return the html code of the form.
+     */
+	public function show($type='simple', $directOutput = true)
 	{
-		if ($type == 'long')
+        $html         = '';
+        $cssMenuClass = '';
+        $cssFontClass = '';
+
+		if ($type == 'complex')
 		{
-			$html .= '<h2 class="admHeadline2">'.$this->title.'</h2>';			// Title of the menu
-			$html .= '<ul class="formFieldList" id="'.$this->id.'_list">';		// Wraps all menu items
+			$html .= '<h2 class="admHeadline2" id="head_'.$this->id.'">'.$this->title.'</h2>';			// Title of the menu
+            $cssMenuClass = ' admMenuLargeIcons';
+            $cssFontClass = ' admBigFont';
 		}
 		else
 		{
-			$html  = '';														// Wraps the whole menu
-			$html .= '<h3 class="admHeadline3">'.$this->title.'</h3>';								// Title of the menu
-			$html .= '';														// Wraps all menu items
+			$html .= '<h3 class="admHeadline3" id="head_'.$this->id.'">'.$this->title.'</h3>';			// Title of the menu
 		}
+
+        $html .= '<ul class="admIconTextLinkList admMenu'.$cssMenuClass.'" id="menu_'.$this->id.'">';		// Wraps all menu items
 		
+        // now create each menu item
 		foreach($this->items as $key => $value)
 		{
-			if ($type == 'long')
+            $html .= '
+            <li id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'">
+                <span class="admIconTextLink'.$cssFontClass.'"><a href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
+                    alt="'.$this->items[$key]['text'].'" title="'.$this->items[$key]['text'].'" /></a>
+                    <a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a></span>';
+
+			if ($type == 'complex')
 			{
-				$html .= '<li id="lmenu_'.$this->id.'_' .
-				          $this->items[$key]['id'].'"><dl>';					// Wraps each item
-				
-				$html .= '<dt><a href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'" alt="'.$this->items[$key]['text'].'"
-						  title="'.$this->items[$key]['text'].'" /></a></dt>
-						  <dd><span class="veryBigFontSize"><a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a></span>';
-						  
 				// adding submenus if any
 				if ($this->items[$key]['subitems'])
 				{
 					$separator = '';
-					$html .= '&nbsp;&nbsp;&#91; ';
+					$html .= '<div class="admMenuSubmenu">&#91; ';
 					foreach($this->items[$key]['subitems'] as $subkey => $subvalue)
 					{
 						$html .= $separator . '<a href="'.$this->items[$key]['subitems'][$subkey]['link'].'">'.$this->items[$key]['subitems'][$subkey]['text'].'</a>';
 						$separator = '&nbsp;| ';
 					}
-					$html .= ' &#93;';
+					$html .= ' &#93;</div>';
 				}
 				
-				$html .= '<br><span class="smallFontSize">'.$this->items[$key]['desc'].'</span></dd>';
-				
-				$html .= '</dl></li>';											// End Wraps each item
+				$html .= '<div class="admMenuDescription admSmallFont">'.$this->items[$key]['desc'].'</div>';
 			}
-			else
-			{
-				$html .= '<span id="smenu_'.$this->id.'_' .
-						  $this->items[$key]['id'].'" class="menu">';			// Wraps each item
-				
-				$html .= '<a href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
-						  alt="'.$this->items[$key]['text'].'" title="'.$this->items[$key]['text'].'" /></a>
-						  <a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a>';
-				
-				$html .= '</span>';												// End Wraps each item
-			}
+            $html .= '</li>';
 		}
 		
-		if ($type == 'long')
+        $html .= '</ul>';												// End Wraps all menu items
+
+		if (count($this->items) > 0)
 		{
-			$html .= '</ul>';												// End Wraps all menu items
-		}
-		else
-		{
-			$html .= '';														// End Wraps all menu items
-			$html .= '';														// End Wraps the whole menu
-		}
-		if (count($this->items)>0)
-		{
-			echo "$html";
+            if($directOutput)
+            {
+                echo $html;
+            }
+            else
+            {
+                return $html;
+            }
 		}
 	}	
 }

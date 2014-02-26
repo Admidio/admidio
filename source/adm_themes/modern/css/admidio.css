@@ -89,11 +89,6 @@ body {
     padding: 1.5%;
 }
 
-.menu {
-    display: block;
-    padding-bottom: 7px;
-}
-
 /* Headlines */
 
 .admHeadline, .admHeadline2, .admHeadline3 {
@@ -102,15 +97,15 @@ body {
 }
 
 .admHeadline {
-    color: #333333;
-    font-size: 14pt;
+    font-size: 18pt;
+    color: #409099;
     letter-spacing: 0.2em;
-    text-align: left;
-    border-bottom: 2px solid #449ba6;   
 }
 
 .admHeadline2 {
+    color: #333333;
     font-size: 14pt;
+    border-bottom: 2px solid #449ba6;
 }
 
 .admHeadline3 {
@@ -125,8 +120,8 @@ a:link, a:visited {
 }
 
 a:hover, a:active {
-    text-decoration: underline;
-    color: #FF9C00;
+    text-decoration: underline !important;
+    color: #FF9C00 !important;
 }
 
 /* Different font sizes */
@@ -427,6 +422,37 @@ a:hover, a:active {
     padding: 5px;
     z-index: 1000001;
 	display: none;
+}
+
+/* The module and administration menu on the main page */
+
+.admMenu {
+    margin-top: -10px;
+}
+
+.admMenu li {
+    margin-top: 7px;
+    display: block;
+}
+
+.admMenuLargeIcons li .admIconTextLink img {
+    width: 32px;
+    height: 32px;
+    vertical-align: middle !important;
+}
+
+.admMenuLargeIcons li .admIconTextLink a:link, .admMenuLargeIcons li .admIconTextLink a:visited {
+    color: #409099;
+    text-decoration: none;
+}
+
+.admMenuDescription {
+    margin-left: 38px;
+}
+
+.admMenuSubmenu {
+    display: inline;
+    margin-left: 10px;
 }
 
 /* Module specific css layout */

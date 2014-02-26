@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * list of all modules and administration pages of Admidio
+ * List of all modules and administration pages of Admidio
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -18,7 +18,7 @@ if(!file_exists('../adm_my_files/config.php'))
 
 require_once('system/common.php');
 
-// Html-Kopf ausgeben
+// show html head
 $gLayout['title']  = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
 $gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
 
@@ -27,7 +27,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $gLayout['title']);
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-// Html des Modules ausgeben
+// headline and menu of the page
 echo '
 <h1 class="admHeadline">'.$gCurrentOrganization->getValue('org_longname').'</h1>
 
@@ -65,6 +65,7 @@ echo '
     }
 echo '</ul>';
 
+// menu with links to all modules of Admidio
 $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
 if( $gPreferences['enable_announcements_module'] == 1
 || ($gPreferences['enable_announcements_module'] == 2 && $gValidLogin))
@@ -127,7 +128,8 @@ if( $gPreferences['enable_weblinks_module'] == 1
 						$gL10n->get('LNK_WEBLINKS'), '/icons/weblinks_big.png',
 						$gL10n->get('LNK_WEBLINKS_DESC'));
 }
-// Wenn das Forum aktiv ist, dieses auch in der Uebersicht anzeigen.
+
+// If a forum is connected to Admidio then show a link to this forum
 if($gPreferences['enable_forum_interface'])
 {
 	if($gForum->session_valid)
@@ -142,9 +144,9 @@ if($gPreferences['enable_forum_interface'])
 						$gL10n->get('SYS_FORUM'), '/icons/forum_big.png',
 						$forumstext);
 }
-$moduleMenu->show('long');
+$moduleMenu->show('complex');
 
-
+// menu with links to all administration pages of Admidio if the user has the right to administrate
 if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
 {
 	$adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
@@ -178,7 +180,7 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser
 							$gL10n->get('ORG_ORGANIZATION_PROPERTIES'), '/icons/options_big.png',
 							$gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
 	}
-	$adminMenu->show('long');
+	$adminMenu->show('complex');
 }
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
