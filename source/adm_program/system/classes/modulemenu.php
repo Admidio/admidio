@@ -41,54 +41,7 @@ class ModuleMenu
 		$this->ddJS = '';
 		$this->ddItemCnt = 0;				
 	}
-	
-	/** add new entry to array and do some checks before so that link and icon get
-	 *  a valid url
-	 *  @param $id   Html id of the element
-	 *  @param $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
-	 *  @param $link Link to the page that will be called if menu item is clicked
-	 *  @param $text Link text
-	 *  @param $icon Icon of the menu item, that will also be linked
-	 *  @param $desc Optional description of the menu item
-	 *  @param $js   Javascript to be executed
-	 */
-	private function mkItem($id, $type, $link, $text, $icon, $js = '')
-	{
-	    if(strlen($link) > 0)
-	    {
-    		// add root path to link unless the full URL is given
-    		if (preg_match('/^http(s?):\/\//', $link)==0)
-    		{
-    			$link = $this->root_path . $link;
-    		}
-        }
-        else
-        {
-            $link = '#';
-        }
-
-		// add THEME_PATH to images unless the full URL is given
-		if (preg_match('/^http(s?):\/\//', $icon) == 0)
-		{
-			$icon = THEME_PATH.'/icons/'.$icon;
-		}
-        
-		return array('id'=>$id, 'type'=>$type, 'link'=>$link, 'text'=>$text, 'icon'=>$icon, 'subitems'=>array(), 'js' => $js);
-	}
-
-	/** add new entry to menu
-	 *  @param $id Html id of the element
-	 *  @param $link Link to the page that will be called if menu item is clicked
-	 *  @param $text Link text
-	 *  @param $icon Icon of the menu item, that will also be linked
-	 *  @param $desc Optional description of the menu item
-	 *  @param $js   Javascript to be executed
-	 */
-	public function addItem($id, $link, $text, $icon, $js = '')
-	{
-		$this->items[$id] = $this->mkItem($id, 'link', $link, $text, $icon, $js);
-	}
-	
+		
 	/** Creates a selectbox with all categories of a category type. If an category of this selectbox is selected
      *  than the link is called and where you can select entries of this category
 	 *  @param $id Html         id of the element
@@ -105,72 +58,7 @@ class ModuleMenu
 		$this->items[$id] = array('id'=>$id, 'type'=>'category', 'categoryType'=>$categoryType, 'defaultCategory'=>$defaultCategory, 
 								  'link'=>$link, 'text'=>$text, 'admin'=>$admin, 'subitems'=>array());
 	}
-	
-	/** gets the position of a given ID in the menu
-	 *  @return Position of the element; Returns false of no elemnt is found
-	 */
-	public function getPosition($id)
-	{
-		$keys=array_keys($this->items);
-		$keyfound=array_keys($keys,$id);
-		if (count($keyfound)==1)
-		{
-			return $keyfound[0];
-		}
-		else
-		{
-			return false;
-		}
-	}
-	
-	// inserts a new menu entry before the named position
-	public function insertItem($position, $id, $link, $text, $icon, $desc='')
-	{
-		if (!is_numeric($position))
-		{
-			return false;
-		}
-		else
-		{
-			$head = array_slice($this->items, 0, $position);
-			$insert=array($id=>$this->mkItem($id, $link, $text, $icon, $desc));
-			$tail = array_slice($this->items, $position);
-			$this->items = array_merge($head, $insert, $tail);
-			return true;
-		}
-	}
-
-	/** creates an text link icon
-	 *  @param $menuEntry menu entry element which was added with addItem
-	 *  @return HTML of created item
-	 */
-	private function createIconTextLink(&$menuEntry)
-	{
-	    $html = '';
-	   
-	    // if javascipt was set then add this script to click event of this menu item
-	    if(isset($menuEntry['js']) && strlen($menuEntry['js']) > 0)
-	    {
-    	    $html .= '<script type="text/javascript"><!--
-    	                  $(document).ready(function() {
-    	                      $("#'.$menuEntry['id'].'").click(function () {
-    	                          '.$menuEntry['js'].'
-    	                      });
-    	                  });
-    	              //--></script>';
-	    }
-	    
-	    // add html of menu item
-		$html .= '<li id="'.$menuEntry['id'].'">
-		              <span class="admIconTextLink">
-				          <a href="'.$menuEntry['link'].'"><img 
-				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" /></a>
-				          <a href="'.$menuEntry['link'].'">'.$menuEntry['text'].'</a>
-				      </span>
-				  </li>';
-        return $html;
-	}
-
+  
 	/** add a drop down item
 	 *  @param $menuEntry menu entry element which was added with addItem
 	 *  @param $selected  determines if drop down element should be pre selected 
@@ -192,8 +80,20 @@ class ModuleMenu
 			}
 			';
 	}
-
-
+    
+	/** add new entry to menu
+	 *  @param $id Html id of the element
+	 *  @param $link Link to the page that will be called if menu item is clicked
+	 *  @param $text Link text
+	 *  @param $icon Icon of the menu item, that will also be linked
+	 *  @param $desc Optional description of the menu item
+	 *  @param $js   Javascript to be executed
+	 */
+	public function addItem($id, $link, $text, $icon, $js = '')
+	{
+		$this->items[$id] = $this->mkItem($id, 'link', $link, $text, $icon, $js);
+	}
+    
 	/** creates a drop down menu
 	 *  @param $ddIdName     html id name of drop down menu
 	 *  @param $ddSelectText pre select text of drop down menu 
@@ -229,7 +129,106 @@ class ModuleMenu
 						});
 						//--></script>';
 	}
+
+	/** creates an text link icon
+	 *  @param $menuEntry menu entry element which was added with addItem
+	 *  @return HTML of created item
+	 */
+	private function createIconTextLink(&$menuEntry)
+	{
+	    $html = '';
+	   
+	    // if javascipt was set then add this script to click event of this menu item
+	    if(isset($menuEntry['js']) && strlen($menuEntry['js']) > 0)
+	    {
+    	    $html .= '<script type="text/javascript"><!--
+    	                  $(document).ready(function() {
+    	                      $("#'.$menuEntry['id'].'").click(function () {
+    	                          '.$menuEntry['js'].'
+    	                      });
+    	                  });
+    	              //--></script>';
+	    }
+	    
+	    // add html of menu item
+		$html .= '<li id="'.$menuEntry['id'].'">
+		              <span class="admIconTextLink">
+				          <a href="'.$menuEntry['link'].'"><img 
+				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" /></a>
+				          <a href="'.$menuEntry['link'].'">'.$menuEntry['text'].'</a>
+				      </span>
+				  </li>';
+        return $html;
+	}
 	
+	/** gets the position of a given ID in the menu
+	 *  @return Position of the element; Returns false of no elemnt is found
+	 */
+	public function getPosition($id)
+	{
+		$keys=array_keys($this->items);
+		$keyfound=array_keys($keys,$id);
+		if (count($keyfound)==1)
+		{
+			return $keyfound[0];
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	// inserts a new menu entry before the named position
+	public function insertItem($position, $id, $link, $text, $icon, $desc='')
+	{
+		if (!is_numeric($position))
+		{
+			return false;
+		}
+		else
+		{
+			$head = array_slice($this->items, 0, $position);
+			$insert=array($id=>$this->mkItem($id, $link, $text, $icon, $desc));
+			$tail = array_slice($this->items, $position);
+			$this->items = array_merge($head, $insert, $tail);
+			return true;
+		}
+	}
+    
+	/** add new entry to array and do some checks before so that link and icon get
+	 *  a valid url
+	 *  @param $id   Html id of the element
+	 *  @param $type The different type of menu that should be shown: @b link normal link with icon; @b category category select box
+	 *  @param $link Link to the page that will be called if menu item is clicked
+	 *  @param $text Link text
+	 *  @param $icon Icon of the menu item, that will also be linked
+	 *  @param $desc Optional description of the menu item
+	 *  @param $js   Javascript to be executed
+	 */
+	private function mkItem($id, $type, $link, $text, $icon, $js = '')
+	{
+	    if(strlen($link) > 0)
+	    {
+    		// add root path to link unless the full URL is given
+    		if (preg_match('/^http(s?):\/\//', $link)==0)
+    		{
+    			$link = $this->root_path . $link;
+    		}
+        }
+        else
+        {
+            $link = '#';
+        }
+
+		// add THEME_PATH to images unless the full URL is given
+		if (preg_match('/^http(s?):\/\//', $icon) == 0)
+		{
+			$icon = THEME_PATH.'/icons/'.$icon;
+		}
+        
+		return array('id'=>$id, 'type'=>$type, 'link'=>$link, 'text'=>$text, 'icon'=>$icon, 'subitems'=>array(), 'js' => $js);
+	}
+    
 	/** Creates the html output of the module menu. Each added menu item will be displayed.
 	 *  If there are more menu items then in @b maxMenuLinkItem defined a drowdown menu
 	 *  will be displayed and all other items will be displayed there.
@@ -272,8 +271,8 @@ class ModuleMenu
 				    if($menuEntry['admin'] == true)
 				    {
     				    $menuEntry['icon'] = THEME_PATH.'/icons/edit.png';
-    				    $menuEntry['text'] = $textManageCategories;
     				    $menuEntry['link'] = $this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'&title='.$menuEntry['text'];
+    				    $menuEntry['text'] = $textManageCategories;
     				    $html .= $this->createIconTextLink($menuEntry);
                     }
     				continue;
