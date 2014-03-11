@@ -244,7 +244,7 @@ a:hover, a:active {
 
 /* Form elements */
 
-.admTextInput, .admSmallTextInput, .admSelectBox, .admButton {
+.admTextInput, .admSmallTextInput, .admMultilineTextInput, .admSelectBox, .admButton {
     border: 1px solid #888686;
     padding: 4px;
     font-size: 11pt;
@@ -252,16 +252,21 @@ a:hover, a:active {
     border-radius: 5px;
 }
 
-.admTextInput:focus, .admSmallTextInput:focus, .admSelectBox:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
+.admTextInput:focus, .admSmallTextInput:focus, .admMultilineTextInput:focus, .admSelectBox:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
     background-color: #fff8a0;
 }
 
-.admTextInput {
+.admTextInput, .admMultilineTextInput {
     width: 95%;
 }
 
 .admSmallTextInput {
     width: 50%;
+}
+
+.admUploadInput {
+    margin-bottom: 5px;
+    padding: 2px;
 }
 
 .admCheckbox {

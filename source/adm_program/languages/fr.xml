@@ -418,7 +418,7 @@
    	<text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">Activation du module de courriel</text>
    	<text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">Le module de courriel peut être déasctivé en décochant la case. Après la désactivation, le module sera inutilisable dans le panneau d'aperçu du module. Si votre serveur ne supporte pas l'envoie de courriel, veuillez désactiver le module. (Par défaut: actif)</text>
    	<text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Joindre un fichier</text>
-	<text id="MAI_ATTACHEMENT" development="new" translation="edited">Fichiers joints:</text>
+	<text id="MAI_ATTACHEMENT" development="new" translation="edited">Fichiers joints</text>
    	<text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Taille maximum des fichiers joint</text>
    	<text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Les utilisateurs sont capable de joindre des fichiers de taille inférieur à la taille spécifiée ici. Si la valeur est à 0, aucun fichier ne pourra être joint au courriel (Par defaut: 1024MO)</text>
    	<text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Erreur lors du téléversement du fichier joint. \nLa taille du fichier est trop importante !</text>

@@ -27,6 +27,11 @@
  *
  *****************************************************************************/
 
+// constants for field property
+define('FIELD_DEFAULT', 0);
+define('FIELD_MANDATORY', 1);
+define('FIELD_DISABLED', 2);
+
 class Form extends HtmlForm
 {
     protected $flagMandatoryFields; ///< Flag if this form has mandatory fields. Then a notice must be written at the end of the form
@@ -88,16 +93,33 @@ class Form extends HtmlForm
     /** Add a new checkbox with a label to the form.
      *  @param $id         Id of the checkbox. This will also be the name of the checkbox.
      *  @param $label      The label of the checkbox.
-	 *  @param $value      A value for the checkbox. This value will be send with the form if the checkbox is checked.
-     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+	 *  @param $value      A value for the checkbox. The value could only be @b 0 or @b 1. If the value is @b 1 then 
+	 *                     the checkbox will be checked when displayed.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
 	 *  @param $helpTextId If set a help icon will be shown after the checkbox and on mouseover the translated text 
 	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class      Optional an additional css classname. The class @b admCheckbox
      *                     is set as default and need not set with this parameter.
      */
-    public function addCheckbox($id, $label, $value, $mandatory = false, $helpTextId = null, $class = null)
+    public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $class = null)
     {
         $attributes = array('class' => 'admCheckbox');
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
+        
+        // if value = 1 then set checkbox checked
+        if($value == '1')
+        {
+            $attributes['checked'] = 'checked';            
+        }
 
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -105,8 +127,8 @@ class Form extends HtmlForm
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, null, $mandatory, 'admCheckboxRow');
-        $this->addInput('checkbox', $id, $id, $value, $attributes);
+        $this->openFieldStructure($id, null, $property, 'admCheckboxRow');
+        $this->addInput('checkbox', $id, $id, '1', $attributes);
 		$this->addString('<label for="'.$id.'">'.$label.'</label>');
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
@@ -124,7 +146,10 @@ class Form extends HtmlForm
     /** Add a new CKEditor element to the form. 
      *  @param $id         Id of the password field. This will also be the name of the password field.
      *  @param $label      The label of the password field.
-     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+	 *  @param $value      A value for the editor field. The editor will contain this value when created.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *  @param $toolbar    Optional set a predefined toolbar for the editor. Possible values are 
      *                     @b AdmidioDefault, @b Admidio Guestbook, @b AdmidioEcard and @b AdmidioPlugin_WC
      *  @param $height     Optional set the height in pixel of the editor. The default will be 300px.
@@ -133,7 +158,7 @@ class Form extends HtmlForm
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-	public function addEditor($id, $label, $value, $mandatory = false, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = '')
+	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = '')
 	{
         $attributes = array('class' => 'admEditor');
 
@@ -157,25 +182,83 @@ class Form extends HtmlForm
 
 		$ckEditor = new CKEditorSpecial();
 
-        $this->openFieldStructure($id, $label, $mandatory, 'admEditorRow');
+        $this->openFieldStructure($id, $label, $property, 'admEditorRow');
 		$this->addString('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
 	}
+	
+	/** Add a simple line to the form. This could be used to structure a form.
+	 *  The line has only a visual effect.
+	 */
+	public function addLine()
+	{
+        $this->addString('<hr />');
+	}
+	
+    
+    /** Add a new textarea field with a label to the form.
+     *  @param $id         Id of the input field. This will also be the name of the input field.
+     *  @param $label      The label of the input field.
+	 *  @param $value      A value for the text field. The field will be created with this value.
+     *  @param $rows       The number of rows that the textarea field should have.
+     *  @param $columns    The number of columns that the textarea field should have. This are the 
+     *                     number of characters that could be displayed in one row.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
+	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
+	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class      Optional an additional css classname. The class @b admTextInput
+     *                     is set as default and need not set with this parameter.
+     */
+    public function addMultilineTextInput($id, $label, $value, $rows, $columns, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
+    {
+        $attributes = array('class' => 'admMultilineTextInput');
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
+
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+        
+        $this->openFieldStructure($id, $label, $property, 'admMultilineTextInputRow');
+        $this->addTextArea($id, $rows, $columns, $value, $id, $attributes);
+		$this->setHelpText($helpTextId);
+        $this->closeFieldStructure();
+    }
     
     /** Add a new password field with a label to the form. The password field has not a limit of characters.
      *  You could not set a value to a password field.
      *  @param $id         Id of the password field. This will also be the name of the password field.
      *  @param $label      The label of the password field.
-     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
 	 *  @param $helpTextId If set a help icon will be shown after the password field and on mouseover the translated text 
 	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-    public function addPasswordInput($id, $label, $mandatory = false, $helpTextId = null, $class = '')
+    public function addPasswordInput($id, $label, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
         $attributes = array('class' => 'admTextInput admPasswordInput');
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
         
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -183,7 +266,7 @@ class Form extends HtmlForm
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $mandatory, 'admPasswordInputRow');
+        $this->openFieldStructure($id, $label, $property, 'admPasswordInputRow');
         $this->addInput('password', $id, $id, null, $attributes);
         $this->addAttribute('class', 'admTextInput');
 		$this->setHelpText($helpTextId);
@@ -197,7 +280,10 @@ class Form extends HtmlForm
 	 *  @param $values Array with all entries of the select box; 
 	 *                 Array key will be the internal value of the entry
 	 *                 Array value will be the visual value of the entry
-     *  @param $mandatory       A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
@@ -206,11 +292,18 @@ class Form extends HtmlForm
      *  @param $class  Optional an additional css classname. The class @b admSelectbox
      *                 is set as default and need not set with this parameter.
      */
-    public function addSelectBox($id, $label, $values, $mandatory = false, $defaultValue = '', $setPleaseChoose = false, $helpTextId = null, $class = '')
+    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setPleaseChoose = false, $helpTextId = null, $class = '')
     {
         global $gL10n;
 
         $attributes = array('class' => 'admSelectBox');
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
         
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -218,7 +311,7 @@ class Form extends HtmlForm
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $mandatory, 'admSelectboxRow');
+        $this->openFieldStructure($id, $label, $property, 'admSelectboxRow');
         $this->addSelect($id, $id, $attributes);
 
         if($setPleaseChoose == true)
@@ -232,26 +325,65 @@ class Form extends HtmlForm
         }
 
         $value = reset($values);
+        $optionGroup = null;
+        
         for($arrayCount = 0; $arrayCount < count($values); $arrayCount++)
         {
             // create entry in html
             $defaultEntry = false;
-            if($defaultValue == key($values))
-            {
-                $defaultEntry = true;
-            }
             
-            $this->addOption(key($values), $value, null, $defaultEntry);
+            // if each array element is an array then create option groups
+            if(is_array($value))
+            {
+                // add optiongroup if neccessary
+    			if($optionGroup != $values[$arrayCount][2])
+    			{
+    				if($optionGroup != null)
+    				{
+    					$this->closeOptionGroup();
+    				}
+    				$this->addOptionGroup($values[$arrayCount][2]);
+    				$optionGroup = $values[$arrayCount][2];
+    			}
+    			
+    			// add option
+                if($defaultValue == $values[$arrayCount][0])
+                {
+                    $defaultEntry = true;
+                }
+                
+                $this->addOption($values[$arrayCount][0], $values[$arrayCount][1], null, $defaultEntry);
+            }
+            else
+            {
+                // array has only key and value then create a normal selectbox without optiongroups
+                if($defaultValue == key($values))
+                {
+                    $defaultEntry = true;
+                }
+                
+                $this->addOption(key($values), $value, null, $defaultEntry);
+            }
 
             $value = next($values);
         }
+        
+        if($optionGroup != null)
+        {
+            $this->closeOptionGroup();
+        }
+        
         $this->closeSelect();
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from a sql statement.
-     *  You can create any sql statement and method should create a selectbox with the found data.
+     *  You can create any sql statement and this method should create a selectbox with the found data.
+     *  The sql must contain at least two columns. The first column represents the value and the second 
+     *  column represents the label of each option of the selectbox. Optional you can add a third column
+     *  to the sql statement. This column will be used as label for an optiongroup. Each time the value
+     *  of the third column changed a new optiongroup will be created.
      *  @par Examples
      *  @code // create a selectbox with all profile fields of a specific category
      *  $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'
@@ -264,7 +396,10 @@ class Form extends HtmlForm
 	 *  @param $sql             Any SQL statement that return 2 columns. The first column will be the internal value of the
      *                          selectbox item and will be submitted with the form. The second column represents the
      *                          displayed value of the item. Each row of the result will be a new selectbox entry.
-     *  @param $mandatory       A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $property        With this param you can set the following properties: 
+     *                          @b FIELD_DEFAULT The field can accept an input.
+     *                          @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                          @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
@@ -273,7 +408,7 @@ class Form extends HtmlForm
      *  @param $class           Optional an additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $mandatory = false, $defaultValue= '', 
+    public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= '', 
                                         $setPleaseChoose = false, $helpTextId = null, $class = '')
     {
         $selectboxEntries = array();
@@ -284,11 +419,19 @@ class Form extends HtmlForm
         // create array from sql result
         while($row = $databaseObject->fetch_array($result))
         {
-            $selectboxEntries[$row[0]] = $row[1];
+            // if result has 3 columns then create a array in array
+            if(array_key_exists(2, $row))
+            {
+                $selectboxEntries[] = array($row[0], $row[1], $row[2]);
+            }
+            else
+            {
+                $selectboxEntries[$row[0]] = $row[1];
+            }
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $mandatory, $defaultValue, $setPleaseChoose, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
@@ -298,7 +441,10 @@ class Form extends HtmlForm
 	 *  @param $xmlFile      Serverpath to the xml file
 	 *  @param $xmlValueTag  Name of the xml tag that should contain the internal value of a selectbox entry
 	 *  @param $xmlViewTag   Name of the xml tag that should contain the visual value of a selectbox entry
-     *  @param $mandatory    A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *  @param $defaultValue This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
@@ -307,7 +453,7 @@ class Form extends HtmlForm
      *  @param $class        Optional an additional css classname. The class @b admSelectbox
      *                       is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $mandatory = false, $defaultValue= '', 
+    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= '', 
                                         $setPleaseChoose = false, $helpTextId = null, $class = '')
     {
         $selectboxEntries = array();
@@ -325,7 +471,7 @@ class Form extends HtmlForm
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $mandatory, $defaultValue, $setPleaseChoose, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must
@@ -334,6 +480,10 @@ class Form extends HtmlForm
      *  @param $label              The label of the selectbox.
      *  @param $databaseObject     A Admidio database object that contains a valid connection to a database
 	 *  @param $categoryType	   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
 	 *  @param $defaultValue	   Id of category that should be selected per default.
      *  @param $setPleaseChoose    If set to @b true a new entry will be added to the top of 
      *                             the list with the caption "Please choose".
@@ -345,7 +495,7 @@ class Form extends HtmlForm
      *  @param $class              Optional an additional css classname. The class @b admSelectbox
      *                             is set as default and need not set with this parameter.
 	 */
-	public function addSelectBoxForCategories($id, $label, &$databaseObject, $categoryType, $mandatory = false, $defaultValue = 0, $setPleaseChoose = false, 
+	public function addSelectBoxForCategories($id, $label, &$databaseObject, $categoryType, $property = FIELD_DEFAULT, $defaultValue = 0, $setPleaseChoose = false, 
 	                                          $helpTextId = null, $showCategoryChoice = false, $showSystemCategory = true, $class = '')
 	{
 		global $gCurrentOrganization, $gValidLogin;
@@ -420,7 +570,7 @@ class Form extends HtmlForm
 		}
         
         // now call method to create selectbox from sql
-        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $mandatory, $defaultValue, $setPleaseChoose, $helpTextId, $class);
+        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class);
 	}
 
 
@@ -429,29 +579,39 @@ class Form extends HtmlForm
      *  @param $label      The label of the input field.
 	 *  @param $value      A value for the text field. The field will be created with this value.
      *  @param $maxLength  The maximum number of characters that are allowed in this field.
-     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
 	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
 	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-    public function addSmallTextInput($id, $label, $value, $maxLength = 0, $mandatory = false, $helpTextId = null, $class = '')
+    public function addSmallTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
         $attributes = array('class' => 'admSmallTextInput');
-        
-        // set specific css class for this field
-        if(strlen($class) > 0)
-        {
-            $attributes['class'] .= ' '.$class;
-        }
 
         // set max input length
         if($maxLength > 0)
         {
             $attributes['maxlength'] = $maxLength;
         }
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
         
-        $this->openFieldStructure($id, $label, $mandatory, 'admSmallTextInputRow');
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+        
+        $this->openFieldStructure($id, $label, $property, 'admSmallTextInputRow');
         $this->addInput('text', $id, $id, $value, $attributes);
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
@@ -484,31 +644,124 @@ class Form extends HtmlForm
      *  @param $label      The label of the input field.
 	 *  @param $value      A value for the text field. The field will be created with this value.
      *  @param $maxLength  The maximum number of characters that are allowed in this field.
-     *  @param $mandatory  A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
 	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
 	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-    public function addTextInput($id, $label, $value, $maxLength = 0, $mandatory = false, $helpTextId = null, $class = '')
+    public function addTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
         $attributes = array('class' => 'admTextInput');
-
-        // set specific css class for this field
-        if(strlen($class) > 0)
-        {
-            $attributes['class'] .= ' '.$class;
-        }
 
         // set max input length
         if($maxLength > 0)
         {
             $attributes['maxlength'] = $maxLength;
         }
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
+
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
         
-        $this->openFieldStructure($id, $label, $mandatory, 'admTextInputRow');
+        $this->openFieldStructure($id, $label, $property, 'admTextInputRow');
         $this->addInput('text', $id, $id, $value, $attributes);
 		$this->setHelpText($helpTextId);
+        $this->closeFieldStructure();
+    }
+    
+    
+    /** Add a new input field with a label to the form.
+     *  @param $id            Id of the input field. This will also be the name of the input field.
+     *  @param $label         The label of the input field.
+	 *  @param $maxUploadSize The size in byte that could be maximum uploaded
+	 *  @param $enableMultiUploads If set to true a button will be added where the user can 
+	 *                             add new upload fields to upload more than one file.
+	 *  @param $multiUploadLabel   The label for the button who will add new upload fields to the form.
+	 *  @param $hideUploadField    Hide the upload field if multi uploads are enabled. Then the first
+	 *                             upload field will be shown if the user will click the multi upload button.
+     *  @param $property      With this param you can set the following properties: 
+     *                        @b FIELD_DEFAULT The field can accept an input.
+     *                        @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                        @b FIELD_DISABLED The field will be disabled and could not accept an input.
+	 *  @param $helpTextId    If set a help icon will be shown after the input field and on mouseover the translated text 
+	 *                        of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class         Optional an additional css classname. The class @b admTextInput
+     *                        is set as default and need not set with this parameter.
+     */
+    public function addUploadButton($id, $label, $maxUploadSize, $enableMultiUploads = false, $multiUploadLabel = null, $hideUploadField = false, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
+    {
+        $attributes = array('class' => 'admUploadButton');
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
+
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+        
+        // if multiple uploads are enabled then add javascript that will
+        // dynamically add new upload fields to the form
+        if($enableMultiUploads)
+        {
+            $this->addString('
+            <script type="text/javascript"><!--
+                $(document).ready(function() {
+            		$(".admLinkAddAttachment").css("cursor", "pointer");
+            		
+            		// add new line to add new attachment to this mail
+            		$(".admLinkAddAttachment").click(function () {
+            			newAttachment = document.createElement("input");
+            			$(newAttachment).attr("type", "file");
+            			$(newAttachment).attr("name", "userfile[]");
+            			$(newAttachment).attr("class", "admTextInput admUploadInput");
+            			$(newAttachment).hide();
+            			$("#admAddAttachment").before(newAttachment);
+            			$(newAttachment).show("slow");
+            		});
+             	}); 	
+            //--></script>');
+        }
+        
+        $this->openFieldStructure($id, $label, $property, 'admUploadButtonRow');
+        $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $maxUploadSize);
+        
+        // if multi uploads are enabled then the file upload field could be hidden
+        // until the user will click on the button to add a new upload field
+        if($hideUploadField == false || $enableMultiUploads == false)
+        {
+            $this->addInput('file', 'userfile[]', null, null, array('class' => 'admTextInput admUploadInput'));
+        }
+
+        if($enableMultiUploads)
+        {
+            // show button to add new upload field to form
+            $this->addString('
+                <span id="admAddAttachment" class="admIconTextLink" style="display: block;">
+    				<a class="admLinkAddAttachment"><img
+    				src="'. THEME_PATH. '/icons/add.png" alt="'.$multiUploadLabel.'" /></a>
+    				<a class="admLinkAddAttachment">'.$multiUploadLabel.'</a>');
+        }
+		$this->setHelpText($helpTextId);
+        $this->addString('</span>');
         $this->closeFieldStructure();
     }
     
@@ -538,11 +791,14 @@ class Form extends HtmlForm
      *  method closeFieldStructure must be called.
      *  @param $id        The id of this field structure.
      *  @param $label     The label of the field. This string should already be translated.
-     *  @param $mandatory A flag if the field is mandatory. Then the specific css classes will be set.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *  @param $class     Optional an additional css classname for the row. The class @b admFieldRow
      *                    is set as default and need not set with this parameter.
      */
-    protected function openFieldStructure($id, $label, $mandatory = false, $class = '')
+    protected function openFieldStructure($id, $label, $property = FIELD_DEFAULT, $class = '')
     {
         $cssClassRow       = '';
         $cssClassMandatory = '';
@@ -555,7 +811,7 @@ class Form extends HtmlForm
         }
 
         // if necessary set css class for a mandatory element
-        if($mandatory == true)
+        if($property == FIELD_MANDATORY)
         {
 			$cssClassMandatory = ' admMandatory';
             $cssClassRow .= $cssClassMandatory;

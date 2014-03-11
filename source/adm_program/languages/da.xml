@@ -671,7 +671,7 @@
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">Aktiver e-mail modul</text>
     <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">E-mail modulet kan dekativeres ved at fjerne mærket i checkboksen. Efter deaktivation, vil modulet heller ikke være at finde i modul oversigten. Hvis serveren ikke understøtter afsendelse af e-mails så bedes du venligst deaktivere modulet. (Standrd: aktivt)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Vedhæft fil</text>
-	<text id="MAI_ATTACHEMENT" development="new" translation="todo">Vedhæftet:</text>
+	<text id="MAI_ATTACHEMENT" development="new" translation="todo">Vedhæftet</text>
     <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum størrelse af vedhæftede filer (tilsammen)</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Brugere kan vedhæfte filer som er mindre end værdien der er defineret her. Hvis værdien er 0, kan vedhæftede filer ikke sendes. (Standard: 1024KB)</text>
     <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Filerne vedhæftet e-mailen kunne ikke overføres.\nFilen er sikkert for stor!</text>

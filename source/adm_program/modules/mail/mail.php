@@ -191,30 +191,9 @@ else
     $gLayout['title'] = $gL10n->get('MAI_SEND_EMAIL');
 }
 
-$gLayout['header'] =  '
-<script type="text/javascript"><!--
-    $(document).ready(function() {
-        $("#'.$focusField.'").focus();
-		$(".admLinkAddAttachment").css("cursor", "pointer");
-		
-		// add new line to add new attachment to this mail
-		$(".admLinkAddAttachment").click(function () {
-			newAttachment = document.createElement("input");
-			$(newAttachment).attr("type", "file");
-			$(newAttachment).attr("name", "userfile[]");
-			$(newAttachment).css("display", "block");
-			$(newAttachment).css("width", "90%");
-			$(newAttachment).css("margin-bottom", "5px");
-			$(newAttachment).hide();
-			$("#admAddAttachment").before(newAttachment);
-			$(newAttachment).show("slow");
-		});
- 	}); 	
-//--></script>';
-
 if($gValidLogin == true)
 {
-	$gLayout['header'] .=  '
+	$gLayout['header'] =  '
 	<script type="text/javascript"><!--
 		// if role has former members show select box where user can choose to write email also to former members
 		function showMembers(initialize) {
@@ -247,6 +226,148 @@ if($gValidLogin == true)
 }
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
+
+// show back link
+if($getUserId > 0 || $getRoleId > 0)
+{
+    echo $gNavigation->getHtmlBackButton();
+}
+
+// show headline of module
+echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+
+$formParam = '';
+
+// if user id is set then this id must be send to the next script
+if($getUserId > 0)
+{
+    $formParam .= 'usr_id='.$getUserId.'&';
+}
+// if subject was set as param then send this subject to next script
+if (strlen($getSubject) > 0)
+{
+	$formParam .= 'subject='.$getSubject.'&';
+}
+
+
+// show form
+$form = new Form('mail_send_form', $g_root_path.'/adm_program/modules/mail/mail_send.php?'.$formParam);
+$form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
+if ($getUserId > 0)
+{
+	// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
+    $form->addTextInput('mailto', $gL10n->get('SYS_TO'), $userEmail, 50, FIELD_DISABLED);
+}
+elseif ($getRoleId > 0 || (strlen($getRoleName) > 0 && strlen($getCategory) > 0) )
+{
+	// Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
+	$form->addSelectBox('rol_id', $gL10n->get('SYS_TO'), array($rollenID => $rollenName), FIELD_MANDATORY, $rollenID);
+}
+else
+{
+	// keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
+	if ($gValidLogin)
+	{
+		// alle Rollen auflisten,
+		// an die im eingeloggten Zustand Mails versendet werden duerfen
+		$sql = 'SELECT rol_id, rol_name, cat_name 
+				  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+				 WHERE rol_valid   = 1
+				   AND rol_cat_id  = cat_id
+				   AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+				 ORDER BY cat_sequence, rol_name ';
+	}
+	else
+	{
+		// alle Rollen auflisten,
+		// an die im nicht eingeloggten Zustand Mails versendet werden duerfen
+		$sql = 'SELECT rol_id, rol_name, cat_name 
+				  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+				 WHERE rol_mail_this_role = 3
+				   AND rol_valid  = 1
+				   AND rol_cat_id = cat_id
+				   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+				 ORDER BY cat_sequence, rol_name ';
+	}
+	$form->addSelectBoxFromSql('rol_id', $gL10n->get('SYS_TO'), $gDb, $sql, FIELD_MANDATORY, $form_values['rol_id'], true, 'MAI_SEND_MAIL_TO_ROLE');
+}
+
+// add a selectbox where you can choose to which members (active, former) you want to send the mail
+if (($getUserId == 0 && $gValidLogin == true && $getRoleId == 0)
+||  ($getRoleId  > 0 && $formerMembers > 0))
+{
+	$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+ 	$form->addSelectBox('show_members', null, $selectBoxEntries, FIELD_DEFAULT, $form_values['show_members']);
+}
+
+$form->addLine();
+
+if ($gCurrentUser->getValue('usr_id') > 0)
+{
+    $form->addTextInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), 50, FIELD_DISABLED);
+    $form->addTextInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), 50, FIELD_DISABLED);
+}
+else
+{
+    $form->addTextInput('name', $gL10n->get('MAI_YOUR_NAME'), $form_values['name'], 50, FIELD_MANDATORY);
+    $form->addTextInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], 50, FIELD_MANDATORY);
+}
+
+// show option to send a copy to your email address only for registered users because of spam abuse
+if($gValidLogin)
+{
+    $form->addCheckbox('carbon_copy', $gL10n->get('MAI_SEND_COPY'), $form_values['carbon_copy']);
+}
+
+// if preference is set then show a checkbox where the user can request a delivery confirmation for the email
+if (($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation']==2) || $gPreferences['mail_delivery_confirmation']==1)
+{
+    $form->addCheckbox('delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $form_values['delivery_confirmation']);
+}
+
+$form->closeGroupBox();
+
+$form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
+$form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], 77, FIELD_MANDATORY);
+
+// Nur eingeloggte User duerfen Attachments anhaengen...
+if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
+{
+    $form->addUploadButton('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), ($gPreferences['max_email_attachment_size'] * 1024), true, $gL10n->get('MAI_ADD_ATTACHEMENT'), true, FIELD_DEFAULT, 'MAI_MAX_ATTACHMENT_SIZE');
+/*	echo '
+	<li>
+		<dl>
+			<dt><label for="admAddAttachment">'.$gL10n->get('MAI_ATTACHEMENT').'</label></dt>
+			<dd id="attachments">
+				<input type="hidden" name="MAX_FILE_SIZE" value="' . ($gPreferences['max_email_attachment_size'] * 1024) . '" />
+				<span id="admAddAttachment" class="iconTextLink" style="display: block;">
+					<a class="admLinkAddAttachment"><img
+					src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
+					<a class="admLinkAddAttachment">'.$gL10n->get('MAI_ADD_ATTACHEMENT').'</a>
+					<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
+						onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
+						class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
+				</span>
+			</dd>
+		</dl>
+	</li>';*/
+}
+
+// add textfield or ckeditor to form
+if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
+{
+    $form->addEditor('mail_body', null, $form_values['mail_body']);
+}
+else
+{
+    $form->addMultilineTextInput('mail_body', $gL10n->get('SYS_TEXT'), ' ', 10, 45);
+}
+
+$form->closeGroupBox();
+$form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), THEME_PATH.'/icons/email.png');
+$form->show();
+
+/*
 echo '
 <form action="'.$g_root_path.'/adm_program/modules/mail/mail_send.php?';
     // usr_id wird mit GET uebergeben,
@@ -566,21 +687,7 @@ echo '
             </div>
         </div>
     </div>
-</form>';
-
-if($getUserId > 0 || $getRoleId > 0)
-{
-    echo '
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-            </span>
-        </li>
-    </ul>';
-}
+</form>';*/
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

@@ -665,7 +665,7 @@
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">Attivazione modulo email</text>
     <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">Il modulo email può essere disattivato togliendo il check al box. Dopo la disattivazione, il modulo non sarà più disponibile nel pannello con la panoramica dei moduli. Se il server non supporta l'invio di email, per favore disattiva il modulo. (predefinito: attivo)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Allega file</text>
-    <text id="MAI_ATTACHEMENT" development="new" translation="edited">Allegati:</text>
+    <text id="MAI_ATTACHEMENT" development="new" translation="edited">Allegati</text>
 	<text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Grandezza massima degli allegati email</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Gli utenti possono allegare file di grandezza più piccola del valore definito qui. Quando il valore è 0, gli allegati non possono essere inviati. (predefinito: 1024KB)</text>
     <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Errore nel caricamento dell'allegato all'email.\nLa misura del file probabilmente è troppo grande!</text>
