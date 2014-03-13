@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * E-Mails verschicken
+ * Send mails
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -23,12 +23,6 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-
-if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
-{
-	// create an object of ckeditor and replace textarea-element
-	$ckEditor = new CKEditorSpecial();
-}
 
 $formerMembers = 0;
 
@@ -333,24 +327,7 @@ $form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject
 // Nur eingeloggte User duerfen Attachments anhaengen...
 if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
 {
-    $form->addUploadButton('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), ($gPreferences['max_email_attachment_size'] * 1024), true, $gL10n->get('MAI_ADD_ATTACHEMENT'), true, FIELD_DEFAULT, 'MAI_MAX_ATTACHMENT_SIZE');
-/*	echo '
-	<li>
-		<dl>
-			<dt><label for="admAddAttachment">'.$gL10n->get('MAI_ATTACHEMENT').'</label></dt>
-			<dd id="attachments">
-				<input type="hidden" name="MAX_FILE_SIZE" value="' . ($gPreferences['max_email_attachment_size'] * 1024) . '" />
-				<span id="admAddAttachment" class="iconTextLink" style="display: block;">
-					<a class="admLinkAddAttachment"><img
-					src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
-					<a class="admLinkAddAttachment">'.$gL10n->get('MAI_ADD_ATTACHEMENT').'</a>
-					<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
-						onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
-						class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-				</span>
-			</dd>
-		</dl>
-	</li>';*/
+    $form->addUploadButton('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), ($gPreferences['max_email_attachment_size'] * 1024), true, $gL10n->get('MAI_ADD_ATTACHEMENT'), true, FIELD_DEFAULT, array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mb')));
 }
 
 // add textfield or ckeditor to form
@@ -364,330 +341,17 @@ else
 }
 
 $form->closeGroupBox();
+
+// if captchas are enabled then visitors of the website must resolve this
+if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+{
+    $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
+    $form->addCaptcha('captcha', $gPreferences['captcha_type']);
+    $form->closeGroupBox();
+}
+
 $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), THEME_PATH.'/icons/email.png');
 $form->show();
-
-/*
-echo '
-<form action="'.$g_root_path.'/adm_program/modules/mail/mail_send.php?';
-    // usr_id wird mit GET uebergeben,
-    // da keine E-Mail-Adresse von mail_send angenommen werden soll
-    if($getUserId > 0)
-    {
-        echo 'usr_id='.$getUserId.'&';
-    }
-	if (strlen($getSubject) > 0)
-	{
-		echo 'subject='.$getSubject.'&';
-	}
-    echo '" method="post" enctype="multipart/form-data">
-
-    <div class="formLayout" id="write_mail_form">
-        <div class="formHead">'. $gLayout['title']. '</div>
-        <div class="formBody">
-			<div class="groupBox" id="admMailContactDetails">
-				<div class="groupBoxHeadline" id="admMailContactDetailsHead">
-					<a class="iconShowHide" href="javascript:showHideBlock(\'admMailContactDetailsBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-					id="admMailContactDetailsBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_CONTACT_DETAILS').'
-				</div>
-
-				<div class="groupBoxBody" id="admMailContactDetailsBody">
-					<ul class="formFieldList">
-						<li>
-							<dl>
-								<dt><label for="rol_id">'.$gL10n->get('SYS_TO').':</label></dt>
-								<dd>';
-									if ($getUserId > 0)
-									{
-										// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-										echo '<input type="text" disabled="disabled" id="mailto" name="mailto" style="width: 90%;" maxlength="50" value="'.$userEmail.'" />
-										<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-									}
-									elseif ($getRoleId > 0 || (strlen($getRoleName) > 0 && strlen($getCategory) > 0) )
-									{
-										// Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-										echo '<select size="1" id="rol_id" name="rol_id"><option value="'.$rollenID.'" selected="selected">'.$rollenName.'</option></select>
-										<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-									}
-									else
-									{
-										// keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
-										echo '<select size="1" id="rol_id" name="rol_id">';
-										if ($form_values['rol_id'] == 0)
-										{
-											echo '<option value="" selected="selected">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-										}
-
-										if ($gValidLogin)
-										{
-											// alle Rollen auflisten,
-											// an die im eingeloggten Zustand Mails versendet werden duerfen
-											$sql = 'SELECT rol_name, rol_id, cat_name 
-													  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-													 WHERE rol_valid   = 1
-													   AND rol_cat_id  = cat_id
-													   AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-													 ORDER BY cat_sequence, rol_name ';
-										}
-										else
-										{
-											// alle Rollen auflisten,
-											// an die im nicht eingeloggten Zustand Mails versendet werden duerfen
-											$sql = 'SELECT rol_name, rol_id, cat_name 
-													  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-													 WHERE rol_mail_this_role = 3
-													   AND rol_valid  = 1
-													   AND rol_cat_id = cat_id
-													   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-													 ORDER BY cat_sequence, rol_name ';
-										}
-										$result = $gDb->query($sql);
-										$act_category = '';
-
-										while ($row = $gDb->fetch_array($result))
-										{
-											if(!$gValidLogin || ($gValidLogin && $gCurrentUser->mailRole($row['rol_id'])))
-											{
-												// if text is a translation-id then translate it
-												if(strpos($row['cat_name'], '_') == 3)
-												{
-													$row['cat_name'] = $gL10n->get(admStrToUpper($row['cat_name']));
-												}
-
-												if($act_category != $row['cat_name'])
-												{
-													if(strlen($act_category) > 0)
-													{
-														echo '</optgroup>';
-													}
-													echo '<optgroup label="'.$row['cat_name'].'">';
-													$act_category = $row['cat_name'];
-												}
-												echo '<option value="'.$row['rol_id'].'" ';
-												if (isset($form_values['rol_id']) 
-												&& $row['rol_id'] == $form_values['rol_id'])
-												{
-													echo ' selected="selected" ';
-												}
-												echo '>'.$row['rol_name'].'</option>';
-											}
-										}
-
-										echo '</optgroup>
-										</select>
-										<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-										<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_SEND_MAIL_TO_ROLE&amp;inline=true"><img 
-											onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_SEND_MAIL_TO_ROLE\',this)" onmouseout="ajax_hideTooltip()"
-											class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
-									}
-								echo'
-								</dd>
-							</dl>
-						</li>';
-						
-						if (($getUserId == 0 && $gValidLogin == true && $getRoleId == 0)
-						||  ($getRoleId  > 0 && $formerMembers > 0))
-						{
-							echo '
-							<li>
-								<dl id="admShowMembers">
-									<dt>&nbsp;</dt>
-									<dd>';
-        								$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-        								echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['show_members'], 'show_members');
-									echo '</dd>
-								</dl>
-							</li>';
-						}
-						
-						echo '<li>
-							<hr />
-						</li>
-						<li>
-							<dl>
-								<dt><label for="name">'.$gL10n->get('MAI_YOUR_NAME').':</label></dt>
-								<dd>';
-									if ($gCurrentUser->getValue('usr_id') > 0)
-									{
-									   echo '<input type="text" id="name" name="name" disabled="disabled" style="width: 90%;" maxlength="50" value="'. $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'). '" />';
-									}
-									else
-									{
-									   echo '<input type="text" id="name" name="name" style="width: 200px;" maxlength="50" value="'. $form_values['name']. '" />
-									   <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-									}
-								echo '</dd>
-							</dl>
-						</li>
-						<li>
-							<dl>
-								<dt><label for="mailfrom">'.$gL10n->get('MAI_YOUR_EMAIL').':</label></dt>
-								<dd>';
-									if ($gCurrentUser->getValue('usr_id') > 0)
-									{
-									   echo '<input type="text" id="mailfrom" name="mailfrom" disabled="disabled" style="width: 90%;" maxlength="50" value="'. $gCurrentUser->getValue('EMAIL'). '" />';
-									}
-									else
-									{
-									   echo '<input type="text" id="mailfrom" name="mailfrom" style="width: 90%;" maxlength="50" value="'. $form_values['mailfrom']. '" />
-									   <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-									}
-								echo '</dd>
-							</dl>
-						</li>';
-						
-						// show option to send a copy to your email address only for registered users because of spam abuse
-						if($gValidLogin)
-						{
-    						echo '<li>
-    							<dl>
-    								<dt>&nbsp;</dt>
-    								<dd>
-    									<input type="checkbox" id="carbon_copy" name="carbon_copy" ';
-    									if (isset($form_values['carbon_copy']) && $form_values['carbon_copy'] == 1)
-    									{
-    										echo ' value="1" checked="checked" ';
-    									}
-                                        echo ' /> <label for="carbon_copy">'.$gL10n->get('MAI_SEND_COPY').'</label>
-    								</dd>
-    							</dl>
-    						</li>';
-                        }
-                        
-						if (($gCurrentUser->getValue('usr_id') > 0 && $gPreferences['mail_delivery_confirmation']==2) || $gPreferences['mail_delivery_confirmation']==1)
-                        {
-    						echo'
-    						<li>
-                                <dl>
-                                    <dt>&nbsp;</dt>
-                                    <dd>
-                                        <input type="checkbox" id="delivery_confirmation" name="delivery_confirmation" value="1" ';
-                                        if (isset($form_values['delivery_confirmation']) && $form_values['delivery_confirmation'] == 1)
-                                        {
-                                            echo ' checked="checked" ';
-                                        }
-                                        echo ' /> <label for="delivery_confirmation">'.$gL10n->get('MAI_DELIVERY_CONFIRMATION').'</label>
-                                    </dd>
-                                </dl>
-                            </li>';
-                        }
-                        echo '
-					</ul>
-				</div>
-			</div>
-				
-			<div class="groupBox" id="admMailMessage">
-				<div class="groupBoxHeadline" id="admMailMessageHead">
-					<a class="iconShowHide" href="javascript:showHideBlock(\'admMailMessageBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-					id="admMailMessageBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_MESSAGE').'
-				</div>
-
-				<div class="groupBoxBody" id="admMailMessageBody">
-					<ul class="formFieldList">
-						<li>
-							<dl>
-								<dt><label for="subject">'.$gL10n->get('MAI_SUBJECT').':</label></dt>
-								<dd><input type="text" id="subject" name="subject" style="width: 90%;" maxlength="77" value="'. $form_values['subject']. '" />
-									<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-								</dd>
-							</dl>
-						</li>';
-
-						// Nur eingeloggte User duerfen Attachments anhaengen...
-						if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
-						{
-							echo '
-							<li>
-								<dl>
-									<dt><label for="admAddAttachment">'.$gL10n->get('MAI_ATTACHEMENT').'</label></dt>
-									<dd id="attachments">
-										<input type="hidden" name="MAX_FILE_SIZE" value="' . ($gPreferences['max_email_attachment_size'] * 1024) . '" />
-										<span id="admAddAttachment" class="iconTextLink" style="display: block;">
-											<a class="admLinkAddAttachment"><img
-											src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MAI_ADD_ATTACHEMENT').'" /></a>
-											<a class="admLinkAddAttachment">'.$gL10n->get('MAI_ADD_ATTACHEMENT').'</a>
-											<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'&amp;inline=true"><img 
-												onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MAI_MAX_ATTACHMENT_SIZE&amp;message_var1='. Email::getMaxAttachementSize('mb').'\',this)" onmouseout="ajax_hideTooltip()"
-												class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-										</span>
-									</dd>
-								</dl>
-							</li>';
-						}
-
-						echo '
-						<li>
-							<div>';
-									if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
-									{
-										echo $ckEditor->createEditor('mail_body', $form_values['mail_body']);
-									}
-									else
-									{
-									   echo '<textarea id="mail_body" name="mail_body" style="width: 99%;" rows="10" cols="45">'. $form_values['mail_body']. '</textarea>';
-									}
-							echo '</div>
-						</li>
-					</ul>
-				</div>
-			</div>';
-
-			// Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
-			// falls es in den Orgaeinstellungen aktiviert wurde...
-			if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
-			{
-				echo '<div class="groupBox" id="admConfirmationOfEntry">
-					<div class="groupBoxHeadline" id="admConfirmationOfEntryHead">
-						<a class="iconShowHide" href="javascript:showHideBlock(\'admConfirmationOfEntryBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-						id="admConfirmationOfEntryBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_CONFIRMATION_OF_INPUT').'
-					</div>
-		
-					<div class="groupBoxBody" id="admConfirmationOfEntryBody">
-						<ul class="formFieldList">
-							<li>
-								<dl>
-									<dt>&nbsp;</dt>
-									<dd>';
-										if($gPreferences['captcha_type']=='pic')
-										{
-											echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
-											$captcha_label = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-											$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
-										}
-										else if($gPreferences['captcha_type']=='calc')
-										{
-											$captcha = new Captcha();
-											$captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
-											$captcha_label = $gL10n->get('SYS_CAPTCHA_CALC');
-											$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
-										}
-									echo '
-									</dd>
-								</dl>
-							</li>
-							<li>
-								<dl>
-									<dt><label for="captcha">'.$captcha_label.':</label></dt>
-									<dd>
-										<input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-										<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-										<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
-											onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
-											class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-									</dd>
-								</dl>
-							</li>
-						</ul>
-					</div>
-				</div>';
-			}
-
-            echo '<div class="formSubmit">
-                <button id="btnSend" type="submit"><img src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_SEND').'" />&nbsp;'.$gL10n->get('SYS_SEND').'</button>
-            </div>
-        </div>
-    </div>
-</form>';*/
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

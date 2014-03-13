@@ -89,6 +89,49 @@ class Form extends HtmlForm
         $this->addSimpleButton($id, $type, $value, $id, $link);
     }
     
+    /** Add a captcha with an input field to the form. The captcha could be a picture with a character code
+     *  or a simple mathematical calculation that must be solved.
+     *  @param $id         Id of the captcha field. This will also be the name of the captcha field.
+     *  @param $type       The of captcha that should be shown. This can be characters in a image or 
+     *                     simple mathematical calculation. Possible values are @b pic or @b calc.
+     *  @param $property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *  @param $class      Optional an additional css classname. The class @b admTextInput
+     *                     is set as default and need not set with this parameter.
+     */
+    public function addCaptcha($id, $type, $property = FIELD_MANDATORY, $class = '')
+    {
+        global $gL10n, $g_root_path;
+        $attributes = array('class' => 'admCaptcha');
+
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+
+        // add a row with the captcha puzzle
+        $this->openFieldStructure('captcha_puzzle', null, FIELD_DEFAULT, 'admCaptchaPuzzleRow');
+        if($type == 'pic')
+        {
+            $this->addString('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
+            $captchaLabel = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
+            $captchaDescription = 'SYS_CAPTCHA_DESCRIPTION';
+        }
+        elseif($type == 'calc')
+        {
+            $captcha = new Captcha();
+            $this->addString($captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),
+                                                      $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4')));
+            $captchaLabel = $gL10n->get('SYS_CAPTCHA_CALC');
+            $captchaDescription = 'SYS_CAPTCHA_CALC_DESCRIPTION';
+        }
+        $this->closeFieldStructure();
+        
+        // now add a row with a text field where the user can write the solution for the puzzle
+        $this->addSmallTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, $captchaDescription);
+    }
     
     /** Add a new checkbox with a label to the form.
      *  @param $id         Id of the checkbox. This will also be the name of the checkbox.
@@ -856,17 +899,32 @@ class Form extends HtmlForm
 	/** Add a small help icon to the form at the current element which shows the
 	 *  translated text of the text-id on mouseover or when you click on the icon.
 	 *  @param $textId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                 If you need an additional parameter for the text you can add an array. The first entry must
+     *                 be the unique text id and the second entry will be a parameter of the text id.
 	 */
 	protected function setHelpText($textId)
 	{
-		if(strlen($textId) > 0)
-		{
-			global $g_root_path;
-			
-			$this->addString('<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$textId.'&amp;inline=true"><img 
-								   onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$textId.'\',this)" 
-								   onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>');
-		}
+        global $g_root_path;
+        $parameters = null;
+        
+        if(is_array($textId))
+        {
+            $parameters = 'message_id='.$textId[0].'&amp;message_var1='.$textId[1];
+        }
+        else
+        {
+            if(strlen($textId) > 0)
+            {
+                $parameters = 'message_id='.$textId;
+            }
+        }
+        
+        if($parameters != null)
+        {
+            $this->addString('<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
+                                   onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?'.$parameters.'\',this)" 
+                                   onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>');
+        }
 	}
     
 	/** This method send the whole html code of the form to the browser. Call this method

@@ -110,7 +110,7 @@ class Captcha
 			$this->makeCaptcha();
     }
 	
-	public function getCaptchaCalc($text_part1,$text_part2,$text_part3_third,$text_part3_half,$text_part4)
+	public function getCaptchaCalc($text_part1, $text_part2, $text_part3_third, $text_part3_half, $text_part4)
     {
 		// Zuweisung der Einstiegsvariablen
 		$number = array(rand(40,60),rand(20,40),rand(1,20));
@@ -161,7 +161,7 @@ class Captcha
         $_SESSION['captchacode'] = $result;
 		
 		// Aufgabe ausgeben
-		echo "$text_part1 $number[0]$operator_value[0]$number[1]$operator_value[1]$number[2] $text_part2 $operator_value[2] $number[3] $text_part4";
+		return $text_part1.' '.$number[0].$operator_value[0].$number[1].$operator_value[1].$number[2].' '.$text_part2.' '.$operator_value[2].' '.$number[3].' '.$text_part4;
 		//echo "<br>= $result (".$_SESSION['captchacode'].")";
     }	
 
