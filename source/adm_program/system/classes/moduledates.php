@@ -133,6 +133,8 @@
   
 class ModuleDates extends Modules
 {    
+    protected $showMode; ///< String with show mode ( Default: "all" )
+
     /** Constuctor that will create an object of a recordset of the specified dates.
      *  Initialize parameters 
      */
@@ -148,6 +150,7 @@ class ModuleDates extends Modules
         $this->setHeadline();
         $this->setMode();
         $this->setViewMode(); 
+        $this->setShowMode('all');
     }
     
     /** Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
@@ -361,8 +364,21 @@ class ModuleDates extends Modules
             return FALSE;    
     }
     
-    /** 
-     *  Set current view mode.
+    /** Set current show mode.
+     *  This method checks valid valid mode value and sets the current show mode.
+     *  @param $show Possible values are @b all (Default) show all events, 
+     *               @b maybe_participate show only events where the current user participates or could participate and
+     *               @b only_participate show only events where the current user participates
+     */
+    public function setShowMode($show)
+    {
+        if(in_array($show, array('all', 'maybe_participate', 'only_participate')))
+        {
+            $this->showMode = $show;
+        }
+    }
+    
+    /** Set current view mode.
      *  This method checks valid valid mode value and sets the current view mode.
      */
     protected function setViewMode()
@@ -428,8 +444,7 @@ class ModuleDates extends Modules
      */
     private function sqlConditionsGet()
     {
-        global $gValidLogin;
-        global $gCurrentUser;
+        global $gValidLogin, $gCurrentUser;
         
         $sqlConditions ='';
         
@@ -462,13 +477,37 @@ class ModuleDates extends Modules
         // add conditions for role permission
         if($gCurrentUser->getValue('usr_id') > 0)
         {
-            $sqlConditions .= '
-            AND (  dtr_rol_id IS NULL 
-                OR dtr_rol_id IN (SELECT mem_rol_id 
-                                    FROM '.TBL_MEMBERS.' mem2
-                                   WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                     AND mem2.mem_begin  <= dat_begin
-                                     AND mem2.mem_end    >= dat_end) ) ';
+            if($this->showMode == 'all')
+            {
+                $sqlConditions .= '
+                AND (  dtr_rol_id IS NULL 
+                    OR dtr_rol_id IN (SELECT mem_rol_id 
+                                        FROM '.TBL_MEMBERS.' mem2
+                                       WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                         AND mem2.mem_begin  <= dat_begin
+                                         AND mem2.mem_end    >= dat_end) ) ';
+            }
+            elseif($this->showMode == 'maybe_participate')
+            {
+                $sqlConditions .= '
+                AND dat_rol_id IS NOT NULL
+                AND (  dtr_rol_id IS NULL 
+                    OR dtr_rol_id IN (SELECT mem_rol_id 
+                                        FROM '.TBL_MEMBERS.' mem2
+                                       WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                         AND mem2.mem_begin  <= dat_begin
+                                         AND mem2.mem_end    >= dat_end) ) ';
+            }
+            elseif($this->showMode == 'only_participate')
+            {
+                $sqlConditions .= '
+                AND dat_rol_id IS NOT NULL
+                AND dat_rol_id IN (SELECT mem_rol_id 
+                                     FROM '.TBL_MEMBERS.' mem2
+                                    WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                      AND mem2.mem_begin  <= dat_begin
+                                      AND mem2.mem_end    >= dat_end) ';
+            }
         }
         else
         {

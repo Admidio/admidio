@@ -8,32 +8,37 @@
  *
  * Parameters:
  *
- * mode: actual       - (Default) shows actual dates and all events in future
- *       old          - shows events in the past
- *       period       - shows all events in a specified period (date_from/date_to)
- *       day          - shows all events of a specified day (date_from)
- *       all          - shows all events in past and future
- * start              - Position of query recordset where the visual output should start
- * headline           - Headline shown over events
- *                      (Default) Dates
- * cat_id             - show all events of calendar with this id
- * id                 - Show only one event
- * date               - All events for a date are listed
- *                      Format: YYYYMMDD
- * calendar-selection - 1: The box is shown
- *                      0: The box is not shown
- *
- * date_from          - is set to actual date,
- *                      if no date information is delivered
- * date_to            - is set to 31.12.9999,
- *                      if no date information is delivered
- * view_mode          - content output in 'html', 'compact' or 'print' view
- *                      (Default: according to preferences)
+ * mode      - actual : (Default) shows actual dates and all events in future
+ *             old    : shows events in the past
+ *             period : shows all events in a specified period (date_from/date_to)
+ *             day    : shows all events of a specified day (date_from)
+ *             all    : shows all events in past and future
+ * start     - Position of query recordset where the visual output should start
+ * headline  - Headline shown over events
+ *             (Default) Dates
+ * cat_id    - show all events of calendar with this id
+ * id        - Show only one event
+ * date      - All events for a date are listed
+ *             Format : YYYYMMDD
+ * calendar-selection - 1 : The box is shown
+ *                      0 : The box is not shown
+ * show      - all               : (Default) show all events
+ *           - maybe_participate : Show only events where the current user participates or could participate
+ *           - only_participate  : Show only events where the current user participates
+ * date_from - is set to actual date,
+ *             if no date information is delivered
+ * date_to   - is set to 31.12.9999,
+ *             if no date information is delivered
+ * view_mode - content output in 'html', 'compact' or 'print' view
+ *             (Default: according to preferences)
  *****************************************************************************/
 
 require_once('../../system/common.php');
 
 unset($_SESSION['dates_request']);
+
+$getShow = admFuncVariableIsValid($_GET, 'show', 'string', 'all', false, array('all', 'maybe_participate', 'only_participate'));
+
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -49,6 +54,7 @@ elseif($gPreferences['enable_dates_module'] == 2)
 
 // create object and get recordset of available dates
 $dates = new ModuleDates();
+$dates->setShowMode($getShow);
 $datesResult = $dates->getDataset();
 $datesTotalCount = $dates->getDataSetCount();
 // get parameter
