@@ -33,6 +33,7 @@
 	<text id="PHO_SAVE_ORIGINALS" development="new" translation="todo">Originale speichern</text>
 	<text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
 	<text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
+    <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>

@@ -323,7 +323,7 @@ if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 }
 else
 {
-    $form->addMultilineTextInput('mail_body', $gL10n->get('SYS_TEXT'), ' ', 10, 45);
+    $form->addMultilineTextInput('mail_body', $gL10n->get('SYS_TEXT'), null, 10);
 }
 
 $form->closeGroupBox();

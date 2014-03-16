@@ -142,7 +142,7 @@ else
             $downloadOverview->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">
                                             <img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" /></a>');
             
-            if($nextFolder['fol_description']!='')
+            if($nextFolder['fol_description'] != '')
             {
                 $buffer = '<span class="iconLink" ><a class="textTooltip" title="'.$nextFolder['fol_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FOLDER').'"/></a></span>';
             }

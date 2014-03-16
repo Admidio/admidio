@@ -52,6 +52,7 @@ else
 }
 
 if(strpos($_SERVER['PHP_SELF'], 'announcements') > 0
+|| strpos($_SERVER['PHP_SELF'], 'downloads') > 0
 || strpos($_SERVER['PHP_SELF'], 'links') > 0
 || strpos($_SERVER['PHP_SELF'], 'mail') > 0
 || strpos($_SERVER['PHP_SELF'], 'lost_password') > 0

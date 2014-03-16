@@ -214,41 +214,36 @@ abstract class HtmlElement {
      *
      *  @param $data Content for the element as string, or array
      *  @param $selfClosing Element has self closing tag ( default: false)
-     *  @return Returns FALSE if no data are set
      */
     public function addData($data, $selfClosing = false)
     {
         $startTag = '';
         $endTag   = '';
 
-        if($data != '')
+        // Define needed tags
+        if($selfClosing === false)
         {
-            // Define needed tags
-            if($selfClosing === false)
-            {
-                $startTag = '<' .$this->currentElement . $this->getElementAttributesString() . '>';
-                $endTag   = '</' . $this->currentElement . '>';
-            }
-            else
-            {
-                $startTag = '<' .$this->currentElement . $this->getElementAttributesString();
-                $endTag   = '/>';
-            }
-            // data is a string
-            if(!is_array($data))
-            {
-
-                $this->htmlString .= $startTag . $data . $endTag;
-            }
-            else
-            {
-                $this->htmlString .= $this->readData($data);
-            }
-            $this->currentElementAttributes = array();
-            // set flag that the data of the current element is written to html string
-            $this->currentElementDataWritten = true;
+            $startTag = '<' .$this->currentElement . $this->getElementAttributesString() . '>';
+            $endTag   = '</' . $this->currentElement . '>';
         }
-        return false;
+        else
+        {
+            $startTag = '<' .$this->currentElement . $this->getElementAttributesString();
+            $endTag   = '/>';
+        }
+        // data is a string
+        if(!is_array($data))
+        {
+
+            $this->htmlString .= $startTag . $data . $endTag;
+        }
+        else
+        {
+            $this->htmlString .= $this->readData($data);
+        }
+        $this->currentElementAttributes = array();
+        // set flag that the data of the current element is written to html string
+        $this->currentElementDataWritten = true;
     }
 
     /**

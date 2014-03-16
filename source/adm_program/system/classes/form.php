@@ -245,8 +245,8 @@ class Form extends HtmlForm
      *  @param $label      The label of the input field.
 	 *  @param $value      A value for the text field. The field will be created with this value.
      *  @param $rows       The number of rows that the textarea field should have.
-     *  @param $columns    The number of columns that the textarea field should have. This are the 
-     *                     number of characters that could be displayed in one row.
+     *  @param $maxLength  The maximum number of characters that are allowed in this field. If set
+     *                     then show a counter how many characters still available
      *  @param $property   With this param you can set the following properties: 
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
@@ -256,8 +256,9 @@ class Form extends HtmlForm
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-    public function addMultilineTextInput($id, $label, $value, $rows, $columns, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
+    public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
+        global $gL10n;
         $attributes = array('class' => 'admMultilineTextInput');
 
         // disable field
@@ -273,9 +274,29 @@ class Form extends HtmlForm
             $attributes['class'] .= ' '.$class;
         }
         
+        if($maxLength > 0)
+        {
+            // if max field length is set then show a counter how many characters still available
+            $this->addString('<script type="text/javascript">
+                    $(document).ready(function(){
+                        $(\'#'.$id.'\').NobleCount(\'#'.$id.'_counter\',{
+                            max_chars: 255,
+                            on_negative: \'systeminfoBad\',
+                            block_negative: true
+                        });
+                    });
+                </script>  '
+            );
+        }
+        
         $this->openFieldStructure($id, $label, $property, 'admMultilineTextInputRow');
-        $this->addTextArea($id, $rows, $columns, $value, $id, $attributes);
+        $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
 		$this->setHelpText($helpTextId);
+        if($maxLength > 0)
+        {
+            // if max field length is set then show a counter how many characters still available
+            $this->addString('<div class="admCharactersCount">('.$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="'.$id.'_counter" class="">255</span>').')</div>');
+        }
         $this->closeFieldStructure();
     }
     

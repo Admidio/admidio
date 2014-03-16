@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Neuen Ordner Anlegen
+ * Create new folder
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * folder_id : Ordner Id des uebergeordneten Ordners
+ * folder_id : Folder id of the parent folder
  *
  *****************************************************************************/
 
@@ -64,17 +64,27 @@ catch(AdmException $e)
 $parentFolderName = $folder->getValue('fol_name');
 
 
-// Html-Kopf ausgeben
-$gLayout['title']  = $gL10n->get('DOW_CREATE_FOLDER');
+// show html head
+$gLayout['title'] = $gL10n->get('DOW_CREATE_FOLDER');
 $gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $("#new_folder").focus();
-        }); 
-    //--></script>';
+    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js"></script>';
+
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
+// show back link
+echo $gNavigation->getHtmlBackButton();
+
+// show headline of module
+echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+
+// show form
+$form = new Form('new_folder_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId);
+$form->addDescription($gL10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName));
+$form->addTextInput('new_folder', $gL10n->get('SYS_NAME'), $form_values['new_folder'], 255, FIELD_MANDATORY);
+$form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, 255);
+$form->addSubmitButton('btn_create', $gL10n->get('DOW_CREATE_FOLDER'), THEME_PATH.'/icons/folder_create.png');
+$form->show();
+    /*
 // Html des Modules ausgeben
 echo '
 <form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId.'">
@@ -127,7 +137,7 @@ echo '
         </span>
     </li>
 </ul>';
-
+*/
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

@@ -321,6 +321,10 @@ a:hover, a:active {
 	text-align: right;
 }
 
+.admCharactersCount {
+    font-size:          9pt;
+}
+
 /* A simple groupbox to group some elements. This is often used in forms. */
 
 .admGroupBox {
