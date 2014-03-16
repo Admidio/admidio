@@ -25,6 +25,7 @@ class ModuleDates
     private $dateTo;        ///< Second date value (end) to be checked and formatted to database format ("Y-m-d")
     private $order;         ///< optional sorting value for SQL query (array: ASC,DESC  default:ASC)
     private $headline;      ///< The headline is set to date, or old dates regarding to given date parameters. Optional user text can be set.
+    private $showMode;      ///< String with show mode ( Default: "all" )
 
     /** Constuctor that will create an object of a recordset of the specified dates.
      *  Initialize parameters 
@@ -34,6 +35,7 @@ class ModuleDates
         $this->setMode();
         $this->catId = '';
         $this->headline = '';
+        $this->setShowMode('all');
     }
     
     /** Returns current headline regarding the defined date range if an empty string is passed in $getHeadline
@@ -187,6 +189,20 @@ class ModuleDates
         else
         {
             return FALSE;    
+        }
+    }
+    
+    /** Set current show mode.
+     *  This method checks valid valid mode value and sets the current show mode.
+     *  @param $show Possible values are @b all (Default) show all events, 
+     *               @b maybe_participate show only events where the current user participates or could participate and
+     *               @b only_participate show only events where the current user participates
+     */
+    public function setShowMode($show)
+    {
+        if(in_array($show, array('all', 'maybe_participate', 'only_participate')))
+        {
+            $this->showMode = $show;
         }
     }
         
@@ -394,13 +410,37 @@ class ModuleDates
         // add conditions for role permission
         if($gCurrentUser->getValue('usr_id') > 0)
         {
-            $sqlConditions .= '
-            AND (  dtr_rol_id IS NULL 
-                OR dtr_rol_id IN (SELECT mem_rol_id 
-                                    FROM '.TBL_MEMBERS.' mem2
-                                   WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
-                                     AND mem2.mem_begin  <= dat_begin
-                                     AND mem2.mem_end    >= dat_end) ) ';
+            if($this->showMode == 'all')
+            {
+                $sqlConditions .= '
+                AND (  dtr_rol_id IS NULL 
+                    OR dtr_rol_id IN (SELECT mem_rol_id 
+                                        FROM '.TBL_MEMBERS.' mem2
+                                       WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                         AND mem2.mem_begin  <= dat_begin
+                                         AND mem2.mem_end    >= dat_end) ) ';
+            }
+            elseif($this->showMode == 'maybe_participate')
+            {
+                $sqlConditions .= '
+                AND dat_rol_id IS NOT NULL
+                AND (  dtr_rol_id IS NULL 
+                    OR dtr_rol_id IN (SELECT mem_rol_id 
+                                        FROM '.TBL_MEMBERS.' mem2
+                                       WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                         AND mem2.mem_begin  <= dat_begin
+                                         AND mem2.mem_end    >= dat_end) ) ';
+            }
+            elseif($this->showMode == 'only_participate')
+            {
+                $sqlConditions .= '
+                AND dat_rol_id IS NOT NULL
+                AND dat_rol_id IN (SELECT mem_rol_id 
+                                     FROM '.TBL_MEMBERS.' mem2
+                                    WHERE mem2.mem_usr_id = '.$gCurrentUser->getValue('usr_id').'
+                                      AND mem2.mem_begin  <= dat_begin
+                                      AND mem2.mem_end    >= dat_end) ';
+            }
         }
         else
         {

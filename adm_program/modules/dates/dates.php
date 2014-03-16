@@ -22,7 +22,9 @@
  *                      Format: YYYYMMDD
  * calendar-selection - 1: The box is shown
  *                      0: The box is not shown
- *
+ * show - all               : (Default) show all events
+ *      - maybe_participate : Show only events where the current user participates or could participate
+ *      - only_participate  : Show only events where the current user participates
  * date_from          - is set to actual date, 
  *                      if no date information is delivered
  * date_to            - is set to 31.12.9999, 
@@ -66,6 +68,7 @@ $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getCalendarSelection = admFuncVariableIsValid($_GET, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', DATE_NOW, false);
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date', '9999-12-31', false);
+$getShow     = admFuncVariableIsValid($_GET, 'show', 'string', 'all', false, array('all', 'maybe_participate', 'only_participate'));
 $getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', $gPreferences['dates_viewmode'], false, $dates->getViewModes());
 
 // if exact date is set then convert it to our new syntax with dateFrom and dateTo
@@ -102,6 +105,8 @@ else
         $dates->setCatId($getCatId);
     }   
 }
+
+$dates->setShowMode($getShow);
 
 //Convert dates to system format
 $objDate = new DateTimeExtended($dates->getDateFrom(), 'Y-m-d', 'date');
