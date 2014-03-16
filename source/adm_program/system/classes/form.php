@@ -115,7 +115,7 @@ class Form extends HtmlForm
         $this->openFieldStructure('captcha_puzzle', null, FIELD_DEFAULT, 'admCaptchaPuzzleRow');
         if($type == 'pic')
         {
-            $this->addString('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
+            $this->addString('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&amp;type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
             $captchaLabel = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
             $captchaDescription = 'SYS_CAPTCHA_DESCRIPTION';
         }
@@ -678,6 +678,13 @@ class Form extends HtmlForm
     {
         $class .= ' admSubmitButton';
         
+        // first check if a field list was opened
+        if($this->flagFieldListOpen == true)
+        {
+            $this->addString('</div>');
+            $this->flagFieldListOpen = false;
+        }
+
         // now add button to form
         $this->addButton($id, $text, $icon, $link, $class, $type);
     }

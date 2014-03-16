@@ -94,91 +94,32 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
 }
 else
 {
-    /*********************HTML_TEIL*******************************/
+    /*********************HTML_PART*******************************/
 
-    // Html-Kopf ausgeben
+    // show html head
     $gLayout['title'] = $gL10n->get('SYS_PASSWORD_FORGOTTEN').'?';
 
     require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    
+    // show back link
+    echo $gNavigation->getHtmlBackButton();
 
-    echo'
-    <div class="formLayout" id="profile_form">
-        <div class="formHead">'.$gLayout['title'].'?</div>
-            <div class="formBody">
-            <form name="password_form" action="'.$g_root_path.'/adm_program/system/lost_password.php" method="post">
-                <ul class="formFieldList">
-                    <li>
-                        <div>
-                          '.$gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION').'
-                        </div>
-                    </li>
-                    <li>&nbsp;</li>
-                    <li>
-                        <dl>
-                            <dt>
-                                <label>'.$gL10n->get('SYS_EMAIL').':</label>
-                            </dt>
-                            <dd>
-                                <input type="text" name="recipient_email" style="width: 300px;" maxlength="50" />
-                            </dd>
-                        </dl>
-                    </li>';
-                // Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
-                // falls es in den Orgaeinstellungen aktiviert wurde...
-                if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
-                {
-                    echo '
-                    <li>&nbsp;</li>
-                    <li>
-                        <dl>
-                            <dt>&nbsp;</dt>
-                            <dd>
-							';
-					if($gPreferences['captcha_type']=='pic')
-					{
-						echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
-						$captcha_label = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-						$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
-					}
-					else if($gPreferences['captcha_type']=='calc')
-					{
-						$captcha = new Captcha();
-						$captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
-						$captcha_label = $gL10n->get('SYS_CAPTCHA_CALC');
-						$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
-					}
-					echo '
-                            </dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="captcha">'.$captcha_label.':</label></dt>
-                            <dd>
-                                <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-                                <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
-					                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
-					                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>
-                            </dd>
-                        </dl>
-                    </li>';
-                }
-                echo'<hr />                                 
-                <button id="btnSend" type="submit"><img src="'. THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_SEND').'" />&nbsp;'.$gL10n->get('SYS_SEND_NEW_PW').'</button>
-                </ul>
-            </form>
-            </div>
-        </div>
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="$g_root_path/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'"></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-            </span>
-        </li>
-    </ul>';
+    // show headline of module
+    echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+
+    // show form
+    $form = new Form('password_form', $g_root_path.'/adm_program/system/lost_password.php');
+    $form->addDescription($gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION'));
+    $form->addTextInput('recipient_email', $gL10n->get('SYS_EMAIL'), null, 50, FIELD_MANDATORY);
+
+    // if captchas are enabled then visitors of the website must resolve this
+    if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+    {
+        $form->addCaptcha('captcha', $gPreferences['captcha_type']);
+    }
+
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), THEME_PATH.'/icons/email.png');
+    $form->show();
 
     require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 }

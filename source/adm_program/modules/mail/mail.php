@@ -161,20 +161,6 @@ if($getUserId == 0 && $getRoleId == 0)
 }
 $gNavigation->addUrl(CURRENT_URL);
 
-// Focus auf das erste Eingabefeld setzen
-if ($getUserId == 0 && $getRoleId == 0 && strlen($getRoleName)  == 0)
-{
-    $focusField = 'rol_id';
-}
-else if($gCurrentUser->getValue('usr_id') == 0)
-{
-    $focusField = 'name';
-}
-else
-{
-    $focusField = 'subject';
-}
-
 // Html-Kopf ausgeben
 if (strlen($getSubject) > 0)
 {
