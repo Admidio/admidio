@@ -335,6 +335,11 @@ else
             // always fill recipient if preference is set to prevent problems with provider
             $email->addRecipient($postFrom,$postName);
         }
+        else
+        {
+            // set recipient to "undisclosed recipients"
+            $email->addRecipient('undisclosed-recipient:;');
+        }
         
         // all role members will be attached as BCC
         while ($row = $gDb->fetch_object($result))
