@@ -370,7 +370,7 @@ class HtmlForm extends HtmlElement
      *  @param $array An array that contains all attribute names as array key 
      *                and all attribute content as array value
      */
-    private function setAttributesFromArray($array)
+    protected function setAttributesFromArray($array)
     {
         if(is_array($array))
         {

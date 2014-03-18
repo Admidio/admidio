@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Passwort Aktivierung
+ * Activate new password
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,8 +8,8 @@
  *
  * Parameters:
  *
- * aid      ..  Activation Id für die Bestaetigung das der User wirklich ein neues Passwort wuenscht
- * usr_id   ..  Die Id des Useres der ein neues Passwort wuenscht
+ * aid      ..  Activation id for confirmation of new password
+ * usr_id   ..  Id of the user who wants a new password
  *****************************************************************************/
  
 require_once('common.php');

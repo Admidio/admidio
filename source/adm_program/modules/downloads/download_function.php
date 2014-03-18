@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Downloadfunktionen
+ * Various functions for download module
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,16 +8,16 @@
  *
  * Parameters:
  *
- * mode   :  1 - Datei hochladen
+ * mode   :  1 - Upload files
  *           2 - Datei loeschen
  *           3 - Ordner erstellen
  *           4 - Datei / Ordner umbenennen
  *           5 - Ordner loeschen
  *           6 - Datei / Ordner zur DB hinzufuegen
- *           7 - Berechtigungen ffür Ordner speichern
- * folder_id :  OrdnerId in der DB
- * file_id   :  FileId in der DB
- * name      : Name des Ordners/Datei die zur DB hinzugefuegt werden soll
+ *           7 - Berechtigungen für Ordner speichern
+ * folder_id : Id of the folder in the database
+ * file_id   : Id of the file in the database
+ * name      : Name of the file/folder that should be added to the database
  *
  *****************************************************************************/
 
@@ -52,7 +52,7 @@ if($myFilesDownload->checkSettings() == false)
     $gMessage->show($gL10n->get($myFilesDownload->errorText, $myFilesDownload->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
 }
 
-// Dateien hochladen
+// upload files
 if ($getMode == 1)
 {
     if ($getFolderId == 0) 
@@ -67,74 +67,87 @@ if ($getMode == 1)
         $targetFolder = new TableFolder($gDb);
         $targetFolder->getFolderForDownload($getFolderId);
 
-		if (empty($_POST))
+		if(strlen($_FILES['userfile']['name'][0]) == 0)
 		{
 			$gMessage->show($gL10n->get('DOW_UPLOAD_POST_EMPTY',ini_get('upload_max_filesize')));
 		}
 
-		//Dateigroesse ueberpruefen Servereinstellungen
-		if ($_FILES['userfile']['error']==1)
-		{
-			$gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER',ini_get('upload_max_filesize')));
-		}
-
-		//Dateigroesse ueberpruefen Administratoreinstellungen
-		if ($_FILES['userfile']['size']>($gPreferences['max_file_upload_size'])*1024)
-		{
-			$gMessage->show($gL10n->get('DOW_FILE_TO_LARGE', $gPreferences['max_file_upload_size']));
-		}
-
-		// Dateinamen ermitteln
-		$filename = $_FILES['userfile']['name'];
-
-		// wenn neuer Name uebergeben wurde, dann diesen nehmen
-		if(strlen($_POST['new_name']) > 0)
-		{
-			$filename = admFuncGetFilenameWithoutExtension($_POST['new_name']).admFuncGetFilenameExtension($_FILES['userfile']['name']);
-		}
-
-		// check filename and throw exception if something is wrong
-		if(admStrIsValidFileName($filename, true))
+        
+        $fileSize = 0;
+        $fileName = '';
+        
+        // now check every file
+        for($currentFileNo = 0; isset($_FILES['userfile']['name'][$currentFileNo]) == true; $currentFileNo++)
         {
-			if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$filename))
-			{
-				$gMessage->show($gL10n->get('DOW_FILE_EXIST', $filename));
-			}
+            //Dateigroesse ueberpruefen Servereinstellungen
+            if ($_FILES['userfile']['error'][$currentFileNo] == 1)
+            {
+                $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER',ini_get('upload_max_filesize')));
+            }
+            
+            //Dateigroesse ueberpruefen Administratoreinstellungen
+            if ($_FILES['userfile']['size'][$currentFileNo] > ($gPreferences['max_file_upload_size'])*1024)
+            {
+                $gMessage->show($gL10n->get('DOW_FILE_TO_LARGE', $gPreferences['max_file_upload_size']));
+            }
+            
+            // Wenn eine Datei vorliegt diese in den Ordner hochlagen
+            if ($_FILES['userfile']['error'][$currentFileNo] == 0)
+            {
+                // pruefen, ob die Anhanggroesse groesser als die zulaessige Groesse ist
+                $fileSize = $fileSize + $_FILES['userfile']['size'][$currentFileNo];
+                
+                //Falls der Dateityp nicht bestimmt ist auf Standard setzen
+                if (strlen($_FILES['userfile']['type'][$currentFileNo]) <= 0)
+                {
+                    $_FILES['userfile']['type'][$currentFileNo] = 'application/octet-stream';                        
+                }
+                
+                // Dateinamen ermitteln
+                $fileName = $_FILES['userfile']['name'][$currentFileNo];                
+                
+                // check filename and throw exception if something is wrong
+                if(admStrIsValidFileName($fileName, true))
+                {
+                    if (file_exists($targetFolder->getCompletePathOfFolder(). '/'.$fileName))
+                    {
+                        $gMessage->show($gL10n->get('DOW_FILE_EXIST', $fileName));
+                    }
 
-			$file_description = $_POST['new_description'];
+                    // Datei hochladen
+                    if(move_uploaded_file($_FILES['userfile']['tmp_name'][$currentFileNo], $targetFolder->getCompletePathOfFolder(). '/'.$fileName))
+                    {
+                        //Neue Datei noch in der DB eintragen
+                        $newFile = new TableFile($gDb);
+                        $newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
+                        $newFile->setValue('fil_name',$fileName);
+                        $newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
+                        $newFile->setValue('fil_counter','0');
+                        $newFile->save();
+                        
+                        // Benachrichtigungs-Email für neue Einträge        
+                        $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $fileName, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
+                        $notification = new Email();
+                        $notification->adminNotfication($gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+                    }
+                    else
+                    {
+                        $gMessage->show($gL10n->get('DOW_FILE_UPLOAD_ERROR',$fileName));
+                    }
+                }               
+            }
+        }
 
-			// Datei hochladen
-			if(move_uploaded_file($_FILES['userfile']['tmp_name'], $targetFolder->getCompletePathOfFolder(). '/'.$filename))
-			{
-				//Neue Datei noch in der DB eintragen
-				$newFile = new TableFile($gDb);
-				$newFile->setValue('fil_fol_id',$targetFolder->getValue('fol_id'));
-				$newFile->setValue('fil_name',$filename);
-				$newFile->setValue('fil_description',$file_description);
-				$newFile->setValue('fil_locked',$targetFolder->getValue('fol_locked'));
-				$newFile->setValue('fil_counter','0');
-				$newFile->save();
-				
-				// Benachrichtigungs-Email für neue Einträge        
-				if($file_description!='')
-				{
-					$message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $filename. ' ('.$file_description.')', $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));    
-				}
-				else
-				{
-					$message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $filename, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
-				}          
-				$notification = new Email();
-				$notification->adminNotfication($gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
-				
-				$gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-				$gMessage->show($gL10n->get('DOW_FILE_UPLOADED', $filename));
-			}
-			else
-			{
-				$gMessage->show($gL10n->get('DOW_FILE_UPLOAD_ERROR',$filename));
-			}
-		}
+        if($currentFileNo == 1)
+        {
+            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+            $gMessage->show($gL10n->get('DOW_FILE_UPLOADED', $fileName));
+        }
+        else
+        {
+            $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
+            $gMessage->show($gL10n->get('DOW_FILES_UPLOADED', $currentFileNo));
+        }
     }
     catch(AdmException $e)
     {

@@ -65,9 +65,8 @@ $parentFolderName = $folder->getValue('fol_name');
 
 
 // show html head
-$gLayout['title'] = $gL10n->get('DOW_CREATE_FOLDER');
-$gLayout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js"></script>';
+$gLayout['title']  = $gL10n->get('DOW_CREATE_FOLDER');
+$gLayout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js"></script>';
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
@@ -84,60 +83,7 @@ $form->addTextInput('new_folder', $gL10n->get('SYS_NAME'), $form_values['new_fol
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, 255);
 $form->addSubmitButton('btn_create', $gL10n->get('DOW_CREATE_FOLDER'), THEME_PATH.'/icons/folder_create.png');
 $form->show();
-    /*
-// Html des Modules ausgeben
-echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId.'">
-<div class="formLayout" id="edit_download_folder_form">
-    <div class="formHead">'.$gLayout['title'].'</div>
-    <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt>'.$gL10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName).'</dt>
-                    <dd>&nbsp;</dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="new_folder">'.$gL10n->get('SYS_NAME').':</label></dt>
-                    <dd>
-                        <input type="text" id="new_folder" name="new_folder" value="'.$form_values['new_folder'].'" style="width: 90%;" maxlength="255" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="new_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
-                    <dd>
-                        <textarea id="new_description" name="new_description" style="width: 90%;" rows="4" cols="40" >'.$form_values['new_description'].'</textarea>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
 
-        <hr />
-
-        <div class="formSubmit">
-            <button id="btnCreate" type="submit">
-            <img src="'. THEME_PATH. '/icons/folder_create.png" alt="'.$gL10n->get('DOW_CREATE_FOLDER').'" />
-            &nbsp;'.$gL10n->get('DOW_CREATE_FOLDER').'</button>
-        </div>
-    </div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-*/
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

@@ -231,7 +231,7 @@ if (strlen($getSubject) > 0)
 
 
 // show form
-$form = new Form('mail_send_form', $g_root_path.'/adm_program/modules/mail/mail_send.php?'.$formParam);
+$form = new Form('mail_send_form', $g_root_path.'/adm_program/modules/mail/mail_send.php?'.$formParam, true);
 $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 if ($getUserId > 0)
 {
@@ -313,7 +313,7 @@ $form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject
 // Nur eingeloggte User duerfen Attachments anhaengen...
 if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
 {
-    $form->addUploadButton('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), ($gPreferences['max_email_attachment_size'] * 1024), true, $gL10n->get('MAI_ADD_ATTACHEMENT'), true, FIELD_DEFAULT, array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mb')));
+    $form->addFileUpload('btn_add_attachment', $gL10n->get('MAI_ATTACHEMENT'), ($gPreferences['max_email_attachment_size'] * 1024), true, $gL10n->get('MAI_ADD_ATTACHEMENT'), true, FIELD_DEFAULT, array('MAI_MAX_ATTACHMENT_SIZE', Email::getMaxAttachementSize('mb')));
 }
 
 // add textfield or ckeditor to form

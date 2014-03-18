@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Umbenenn einer Datei oder eines Ordners im Downloadmodul
+ * Rename a file or a folder of download module
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,9 +8,8 @@
  *
  * Parameters:
  *
- * folder_id    :  OrdnerId des Ordners
- * file_id      :  FileId der Datei
- *
+ * folder_id    :  Id of the folder that should be renamed
+ * file_id      :  Id of the file that should be renamed
  *
  *****************************************************************************/
 
@@ -109,7 +108,7 @@ catch(AdmException $e)
 	$e->showHtml();
 }
 
-// Html-Kopf ausgeben
+// show html head
 if($getFileId > 0)
 {
     $gLayout['title']  = $gL10n->get('DOW_EDIT_FILE');
@@ -118,70 +117,23 @@ else
 {
     $gLayout['title']  = $gL10n->get('DOW_EDIT_FOLDER');
 }
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $("#new_name").focus();
-        }); 
-    //--></script>';
+$gLayout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js"></script>';
+
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-// Html des Modules ausgeben
-echo '
-<form method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId.'">
-<div class="formLayout" id="edit_download_form">
-    <div class="formHead">'.$gLayout['title'].'</div>
-    <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt>'.$gL10n->get('DOW_PREVIOUS_NAME').':</dt>
-                    <dd>'.$originalName.'&nbsp;</dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="new_name">'.$gL10n->get('DOW_NEW_NAME').':</label></dt>
-                    <dd>
-                        <input type="text" id="new_name" name="new_name" value="'. $form_values['new_name']. '" style="width: 80%;" maxlength="255" />'.$extension.'
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES&amp;inline=true"><img 
-			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"
-			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="new_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
-                    <dd>
-                        <textarea id="new_description" name="new_description" style="width: 90%;" rows="5">'. $form_values['new_description']. '</textarea>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
+// show back link
+echo $gNavigation->getHtmlBackButton();
 
-        <hr />
+// show headline of module
+echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
-        <div class="formSubmit">
-            <button id="btnRename" type="submit">
-            <img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />
-            &nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-        </div>
-    </div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
+// create html form
+$form = new Form('edit_download_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId);
+$form->addTextInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName, 0, FIELD_DISABLED);
+$form->addTextInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], 255, FIELD_MANDATORY, 'DOW_FILE_NAME_RULES');
+$form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, 255);
+$form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->show();
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Neue Datei hochladen
+ * Upload new files
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * folder_id : ID des akutellen Ordner
+ * folder_id : Id of the current folder where the files should be uploaded
  *
  *****************************************************************************/
 
@@ -77,82 +77,23 @@ catch(AdmException $e)
 $parentFolderName = $folder->getValue('fol_name');
 
 
-// Html-Kopf ausgeben
+// show html head
 $gLayout['title']  = $gL10n->get('DOW_UPLOAD_FILE');
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $("#userfile").focus();
-        }); 
-    //--></script>';
+
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-// Html des Modules ausgeben
-echo '
-<form action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$getFolderId.'" method="post" enctype="multipart/form-data">
-<div class="formLayout" id="upload_download_form">
-    <div class="formHead">'.$gLayout['title'].'</div>
-    <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt>'.$gL10n->get('DOW_UPLOAD_FILE_TO_FOLDER', $parentFolderName).'</dt>
-                    <dd>&nbsp;</dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="userfile">'.$gL10n->get('DOW_CHOOSE_FILE').':</label></dt>
-                    <dd>
-                        <input type="hidden" name="MAX_FILE_SIZE" value="'.($gPreferences['max_file_upload_size'] * 1024).'" />
-                        <input type="file" id="userfile" name="userfile" style="width: 90%;" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="new_name">'.$gL10n->get('DOW_NEW_FILE_NAME').':</label></dt>
-                    <dd>
-                        <input type="text" id="new_name" name="new_name" value="'.$form_values['new_name'].'" style="width: 250px;" maxlength="255" />
-                        &nbsp;('.$gL10n->get('SYS_OPTIONAL').')
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES&amp;inline=true"><img 
-			                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NAME_RULES\',this)" onmouseout="ajax_hideTooltip()"
-			                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="new_description">'.$gL10n->get('SYS_DESCRIPTION').':</label></dt>
-                    <dd>
-                        <textarea id="new_description" name="new_description" style="width: 90%;" rows="4" cols="40">'.$form_values['new_description'].'</textarea>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
+// show back link
+echo $gNavigation->getHtmlBackButton();
 
-        <hr />
+// show headline of module
+echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
-        <div class="formSubmit">
-            <button id="btnUpload" type="submit"><img 
-            src="'.THEME_PATH.'/icons/page_white_upload.png" alt="'.$gL10n->get('SYS_UPLOAD').'" />
-            &nbsp;'.$gL10n->get('SYS_UPLOAD').'</button>
-        </div>
-    </div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
+// show form
+$form = new Form('upload_files_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$getFolderId, true);
+$form->addDescription($gL10n->get('DOW_UPLOAD_TO_FOLDER', $parentFolderName));
+$form->addFileUpload('add_files', $gL10n->get('DOW_CHOOSE_FILE'), ($gPreferences['max_file_upload_size'] * 1024), true, $gL10n->get('DOW_UPLOAD_ANOTHER_FILE'), false);
+$form->addSubmitButton('btn_upload', $gL10n->get('SYS_UPLOAD'), THEME_PATH.'/icons/page_white_upload.png');
+$form->show();
 
 require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 

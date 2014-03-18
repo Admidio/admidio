@@ -38,10 +38,11 @@ class Form extends HtmlForm
     private   $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
     
     /** Constructor creates the form element
-     *  @param $id Id of the form
-     *  @param $action Optional action attribute of the form
+     *  @param $id               Id of the form
+     *  @param $action           Optional action attribute of the form
+     *  @param $enableFileUpload Set specific parameters that are necessary for file upload with a form
      */
-    public function __construct($id, $action)
+    public function __construct($id, $action, $enableFileUpload = false)
     {        
         
         parent::__construct($action, $id, 'post');
@@ -49,6 +50,12 @@ class Form extends HtmlForm
         // set specific Admidio css form class
         $this->addAttribute('class', 'admFormLayout');
 		
+        // Set specific parameters that are necessary for file upload with a form
+        if($enableFileUpload == true)
+        {
+            $this->addAttribute('enctype', 'multipart/form-data');
+        }        
+        
 		// first field of form should get focus
 		$js = '<script type="text/javascript"><!--
 			       $(document).ready(function() { $("form:first *:input[type!=hidden]:first").focus();});
@@ -230,7 +237,90 @@ class Form extends HtmlForm
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
 	}
-	
+    
+    /** Add a field for file upload. If necessary multiple files could be uploaded. The fields for multiple upload could 
+     *  be added dynamically to the form by the user.
+     *  @param $id            Id of the input field. This will also be the name of the input field.
+     *  @param $label         The label of the input field.
+	 *  @param $maxUploadSize The size in byte that could be maximum uploaded
+	 *  @param $enableMultiUploads If set to true a button will be added where the user can 
+	 *                             add new upload fields to upload more than one file.
+	 *  @param $multiUploadLabel   The label for the button who will add new upload fields to the form.
+	 *  @param $hideUploadField    Hide the upload field if multi uploads are enabled. Then the first
+	 *                             upload field will be shown if the user will click the multi upload button.
+     *  @param $property      With this param you can set the following properties: 
+     *                        @b FIELD_DEFAULT The field can accept an input.
+     *                        @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                        @b FIELD_DISABLED The field will be disabled and could not accept an input.
+	 *  @param $helpTextId    If set a help icon will be shown after the input field and on mouseover the translated text 
+	 *                        of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class         Optional an additional css classname. The class @b admTextInput
+     *                        is set as default and need not set with this parameter.
+     */
+    public function addFileUpload($id, $label, $maxUploadSize, $enableMultiUploads = false, $multiUploadLabel = null, $hideUploadField = false, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
+    {
+        $attributes = array('class' => 'admUploadButton');
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
+
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+        
+        // if multiple uploads are enabled then add javascript that will
+        // dynamically add new upload fields to the form
+        if($enableMultiUploads)
+        {
+            $this->addString('
+            <script type="text/javascript"><!--
+                $(document).ready(function() {
+            		$(".admLinkAddAttachment").css("cursor", "pointer");
+            		
+            		// add new line to add new attachment to this mail
+            		$(".admLinkAddAttachment").click(function () {
+            			newAttachment = document.createElement("input");
+            			$(newAttachment).attr("type", "file");
+            			$(newAttachment).attr("name", "userfile[]");
+            			$(newAttachment).attr("class", "admTextInput admUploadInput");
+            			$(newAttachment).hide();
+            			$("#admAddAttachment").before(newAttachment);
+            			$(newAttachment).show("slow");
+            		});
+             	}); 	
+            //--></script>');
+        }
+        
+        $this->openFieldStructure($id, $label, $property, 'admUploadButtonRow');
+        $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $maxUploadSize);
+        
+        // if multi uploads are enabled then the file upload field could be hidden
+        // until the user will click on the button to add a new upload field
+        if($hideUploadField == false || $enableMultiUploads == false)
+        {
+            $this->addInput('file', 'userfile[]', null, null, array('class' => 'admTextInput admUploadInput'));
+        }
+
+        if($enableMultiUploads)
+        {
+            // show button to add new upload field to form
+            $this->addString('
+                <span id="admAddAttachment" class="admIconTextLink" style="display: block;">
+    				<a class="admLinkAddAttachment"><img
+    				src="'. THEME_PATH. '/icons/add.png" alt="'.$multiUploadLabel.'" /></a>
+    				<a class="admLinkAddAttachment">'.$multiUploadLabel.'</a>');
+        }
+		$this->setHelpText($helpTextId);
+        $this->addString('</span>');
+        $this->closeFieldStructure();
+    }
+
 	/** Add a simple line to the form. This could be used to structure a form.
 	 *  The line has only a visual effect.
 	 */
@@ -750,89 +840,6 @@ class Form extends HtmlForm
         $this->openFieldStructure($id, $label, $property, 'admTextInputRow');
         $this->addInput('text', $id, $id, $value, $attributes);
 		$this->setHelpText($helpTextId);
-        $this->closeFieldStructure();
-    }
-    
-    
-    /** Add a new input field with a label to the form.
-     *  @param $id            Id of the input field. This will also be the name of the input field.
-     *  @param $label         The label of the input field.
-	 *  @param $maxUploadSize The size in byte that could be maximum uploaded
-	 *  @param $enableMultiUploads If set to true a button will be added where the user can 
-	 *                             add new upload fields to upload more than one file.
-	 *  @param $multiUploadLabel   The label for the button who will add new upload fields to the form.
-	 *  @param $hideUploadField    Hide the upload field if multi uploads are enabled. Then the first
-	 *                             upload field will be shown if the user will click the multi upload button.
-     *  @param $property      With this param you can set the following properties: 
-     *                        @b FIELD_DEFAULT The field can accept an input.
-     *                        @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                        @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId    If set a help icon will be shown after the input field and on mouseover the translated text 
-	 *                        of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
-     *  @param $class         Optional an additional css classname. The class @b admTextInput
-     *                        is set as default and need not set with this parameter.
-     */
-    public function addUploadButton($id, $label, $maxUploadSize, $enableMultiUploads = false, $multiUploadLabel = null, $hideUploadField = false, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
-    {
-        $attributes = array('class' => 'admUploadButton');
-
-        // disable field
-        if($property == FIELD_DISABLED)
-        {
-            $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
-        }
-
-        // set specific css class for this field
-        if(strlen($class) > 0)
-        {
-            $attributes['class'] .= ' '.$class;
-        }
-        
-        // if multiple uploads are enabled then add javascript that will
-        // dynamically add new upload fields to the form
-        if($enableMultiUploads)
-        {
-            $this->addString('
-            <script type="text/javascript"><!--
-                $(document).ready(function() {
-            		$(".admLinkAddAttachment").css("cursor", "pointer");
-            		
-            		// add new line to add new attachment to this mail
-            		$(".admLinkAddAttachment").click(function () {
-            			newAttachment = document.createElement("input");
-            			$(newAttachment).attr("type", "file");
-            			$(newAttachment).attr("name", "userfile[]");
-            			$(newAttachment).attr("class", "admTextInput admUploadInput");
-            			$(newAttachment).hide();
-            			$("#admAddAttachment").before(newAttachment);
-            			$(newAttachment).show("slow");
-            		});
-             	}); 	
-            //--></script>');
-        }
-        
-        $this->openFieldStructure($id, $label, $property, 'admUploadButtonRow');
-        $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $maxUploadSize);
-        
-        // if multi uploads are enabled then the file upload field could be hidden
-        // until the user will click on the button to add a new upload field
-        if($hideUploadField == false || $enableMultiUploads == false)
-        {
-            $this->addInput('file', 'userfile[]', null, null, array('class' => 'admTextInput admUploadInput'));
-        }
-
-        if($enableMultiUploads)
-        {
-            // show button to add new upload field to form
-            $this->addString('
-                <span id="admAddAttachment" class="admIconTextLink" style="display: block;">
-    				<a class="admLinkAddAttachment"><img
-    				src="'. THEME_PATH. '/icons/add.png" alt="'.$multiUploadLabel.'" /></a>
-    				<a class="admLinkAddAttachment">'.$multiUploadLabel.'</a>');
-        }
-		$this->setHelpText($helpTextId);
-        $this->addString('</span>');
         $this->closeFieldStructure();
     }
     

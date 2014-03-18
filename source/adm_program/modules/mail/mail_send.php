@@ -167,35 +167,35 @@ if ($email->setSender($postFrom,$postName))
             {
                 $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
             }
-            $attachment_size = 0;
+            $attachmentSize = 0;
             // Nun jedes Attachment
-            for($act_attachment_nr = 0; isset($_FILES['userfile']['name'][$act_attachment_nr]) == true; $act_attachment_nr++)
+            for($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]) == true; $currentAttachmentNo++)
             {
                 //Pruefen ob ein Fehler beim Upload vorliegt
-                if (($_FILES['userfile']['error'][$act_attachment_nr] != 0) &&  ($_FILES['userfile']['error'][$act_attachment_nr] != 4))
+                if (($_FILES['userfile']['error'][$currentAttachmentNo] != 0) &&  ($_FILES['userfile']['error'][$currentAttachmentNo] != 4))
                 {
                     $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                 }
                 //Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
-                if ($_FILES['userfile']['error'][$act_attachment_nr] == 0)
+                if ($_FILES['userfile']['error'][$currentAttachmentNo] == 0)
                 {
                     // pruefen, ob die Anhanggroesse groesser als die zulaessige Groesse ist
-                    $attachment_size = $attachment_size + $_FILES['userfile']['size'][$act_attachment_nr];
-                    if($attachment_size > $email->getMaxAttachementSize("b"))
+                    $attachmentSize = $attachmentSize + $_FILES['userfile']['size'][$currentAttachmentNo];
+                    if($attachmentSize > $email->getMaxAttachementSize("b"))
                     {
                         $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                     }
                     
                     //Falls der Dateityp nicht bestimmt ist auf Standard setzen
-                    if (strlen($_FILES['userfile']['type'][$act_attachment_nr]) <= 0)
+                    if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0)
                     {
-                        $_FILES['userfile']['type'][$act_attachment_nr] = 'application/octet-stream';                        
+                        $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';                        
                     }
                     
                     //Datei anhängen
                     try
                     {
-                        $email->AddAttachment($_FILES['userfile']['tmp_name'][$act_attachment_nr], $_FILES['userfile']['name'][$act_attachment_nr], $encoding = 'base64', $_FILES['userfile']['type'][$act_attachment_nr]);
+                        $email->AddAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
                     }
                     catch (phpmailerException $e)
                     {
