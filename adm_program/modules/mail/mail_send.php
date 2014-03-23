@@ -330,15 +330,12 @@ else
 
     if($gDb->num_rows($result) > 0)
     {
+        // normaly we need no To-address and set "undisclosed recipients", but if 
+        // that won't work than the From-address will be set 
         if($gPreferences['mail_sender_into_to'] == 1)
         {
             // always fill recipient if preference is set to prevent problems with provider
             $email->addRecipient($postFrom,$postName);
-        }
-        else
-        {
-            // set recipient to "undisclosed recipients"
-            $email->addRecipient('undisclosed-recipient:;');
         }
         
         // all role members will be attached as BCC
