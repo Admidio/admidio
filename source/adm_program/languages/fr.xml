@@ -349,7 +349,6 @@
    	<text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Veuillez sélectionner un nom pour la configuration</text>
    	<text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Création de la nouvelle configuration</text>
    	<text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Créer ma propre liste</text>
-   	<text id="LST_CSV_FILE" development="new" translation="edited">Fichier CSV</text>
    	<text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Configurations par défaut</text>
    	<text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Spécifier une configuration par défaut. Sélectionner la configuration de votre choix et cliquez sur le symbole suivant: %VAR1%. La configuration sélectionnée sera active pour tous les membres du rôle. Les membres ne seront pas capable d'utiliser leurs propres configurations.</text>
    	<text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Aucune liste de configuration par défaut n'a été spécifiée par l'administrateur !\n\nContactez l'administrateur pour de l'aide.</text>

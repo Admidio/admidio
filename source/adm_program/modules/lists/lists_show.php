@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * mode   : Ausgabeart   (html, print, csv-ms, csv-oo)
+ * mode   : Ausgabeart   (html, print, csv-ms, csv-oo, pdf, pdfl)
  * lst_id : ID der Listenkonfiguration, die angezeigt werden soll
  *          Wird keine ID uebergeben, wird die Default-Konfiguration angezeigt
  * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
@@ -18,15 +18,16 @@
  *                2 - show active and former members of role
  *
  *****************************************************************************/
-
+ 
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', null, true, array('csv-ms', 'csv-oo', 'html', 'print'));
+$getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', null, true, array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' ));
 $getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getStart       = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
+
 
 // Initialize the content of this parameter (otherwise some servers will keep the content)
 unset($role_ids);
@@ -53,32 +54,39 @@ if($role->viewRole() == false)
 // if no list parameter is set then load role default list configuration or system default list configuration
 if($getListId == 0)
 {
-	// set role default list configuration
+    // set role default list configuration
     $getListId = $role->getDefaultList();
-	
-	if($getListId == 0)
-	{
-	   $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
-	}
+    
+    if($getListId == 0)
+    {
+       $gMessage->show($gL10n->get('LST_DEFAULT_LIST_NOT_SET_UP'));
+    }
 }
 
+$pdf_orientation  = 'P';
+$pdf_linesOnPage  = 40;
 $separator   = ',';    // fuer CSV-Dateien
 $valueQuotes = '';
 $charset     = '';
 switch ($getMode)
 {
-	// Microsoft Excel 2007 und neuer braucht ein Semicolon    
-	case 'csv-ms':
-		$separator   = ';'; 
+    // Microsoft Excel 2007 und neuer braucht ein Semicolon    
+    case 'csv-ms':
+        $separator   = ';'; 
         $valueQuotes = '"';
         $getMode     = 'csv';
         $charset     = 'iso-8859-1';
-		break;
+        break;
     case 'csv-oo':
         $separator   = ',';   // fuer CSV-Dateien
         $valueQuotes = '"';   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
         $getMode     = 'csv';
         $charset     = 'utf-8';
+        break;
+    case 'pdfl':
+        $pdf_orientation  = 'L';
+        $getMode          = 'pdf';
+        $pdf_linesOnPage  = 25;
         break;
     case 'html':
         $class_table           = 'tableList';
@@ -89,9 +97,12 @@ switch ($getMode)
         $class_table           = 'tableListPrint';
         $class_sub_header      = 'tableSubHeaderPrint';
         $class_sub_header_font = 'tableSubHeaderFontPrint';
-		break;
+        break;
+    default:
+        break;
 }
 
+$pdf_linesOnPageAll = $pdf_linesOnPage;
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
 $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
@@ -108,14 +119,14 @@ $memberStatus = '';
 
 try
 {
-	// create list configuration object and create a sql statement out of it
-	$list = new ListConfiguration($gDb, $getListId);
-	$mainSql = $list->getSQL($role_ids, $getShowMembers);
-	//echo $mainSql; exit();
+    // create list configuration object and create a sql statement out of it
+    $list = new ListConfiguration($gDb, $getListId);
+    $mainSql = $list->getSQL($role_ids, $getShowMembers);
+    //echo $mainSql; exit();
 }
 catch(AdmException $e)
 {
-	$e->showHtml();
+    $e->showHtml();
 }
 
 // SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
@@ -145,7 +156,7 @@ if($getMode != 'csv')
     // Html-Kopf wird geschrieben
     if($getMode == 'print')
     {
-    	header('Content-type: text/html; charset=utf-8');
+        header('Content-type: text/html; charset=utf-8');
         echo '
         <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
         <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
@@ -165,6 +176,35 @@ if($getMode != 'csv')
         </head>
         <body class="bodyPrint">';
     }
+    elseif($getMode == 'pdf')
+    {
+        require_once(SERVER_PATH. '/adm_program/libs/tcpdf/tcpdf.php');
+        $pdf = new TCPDF($pdf_orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+        // set document information
+        $pdf->SetCreator(PDF_CREATOR);
+        $pdf->SetAuthor('Admidio');
+        $pdf->SetTitle($role->getValue('rol_name') . ' - ' . $role->getValue('cat_name'));
+
+        // remove default header/footer
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        
+        // set auto page breaks
+        $pdf->SetAutoPageBreak(false, PDF_MARGIN_BOTTOM);
+
+        // set font
+        $pdf->SetFont('times', '', 10);
+
+        // add a page
+        $pdf->AddPage();
+
+        //headline for PDF
+        $pdf_htmlHeadline = '<div style="text-align:center; font-size:16"><h1>' . $role->getValue('rol_name') . ' &#40;' . $role->getValue('cat_name') . '&#41;</h1></div>';
+        
+        
+        $pdf_tableHeadline = '<table border="0.5" cellspacing="1" cellpadding="1"> <tr>';
+    }
     else
     {
         $gLayout['title']    = $gL10n->get('LST_LIST').' - '. $role->getValue('rol_name');
@@ -177,33 +217,32 @@ if($getMode != 'csv')
             </style>
 
             <script type="text/javascript"><!--
-				$(document).ready(function() {
-					$("#admSelectExportMode").change(function () {
-						if($(this).val().length > 1) {
-							self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-								"lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
-						}
-					})
-				});
+                $(document).ready(function() {
+                    $("#admSelectExportMode").change(function () {
+                        if($(this).val().length > 1) {
+                            self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
+                                "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
+                        }
+                    })
+                });
             //--></script>';
         require(SERVER_PATH. '/adm_program/system/overall_header.php');
     }
 
     if($getShowMembers == 0)
     {
-    	$memberStatus = $gL10n->get('LST_ACTIVE_MEMBERS');
+        $memberStatus = $gL10n->get('LST_ACTIVE_MEMBERS');
     }
     elseif($getShowMembers == 1)
     {
-    	$memberStatus = $gL10n->get('LST_FORMER_MEMBERS');
+        $memberStatus = $gL10n->get('LST_FORMER_MEMBERS');
     }
     elseif($getShowMembers == 2)
     {
-    	$memberStatus = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+        $memberStatus = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
-    echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>
-    <h3>';
+    echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>';
 
     //Beschreibung der Rolle einblenden
     if(strlen($role->getValue('rol_description')) > 0)
@@ -211,7 +250,7 @@ if($getMode != 'csv')
         echo $role->getValue('rol_description'). ' - ';
     }
     
-    echo $memberStatus.'</h3>';
+    echo '<h3>'.$memberStatus.'</h3>';
 
     if($getMode == 'html')
     {
@@ -245,7 +284,7 @@ if($getMode != 'csv')
             echo '</span>
             </li>';
 
-			// link to mail module with this role and members status
+            // link to mail module with this role and members status
             if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
             {
                 echo '<li>
@@ -257,18 +296,19 @@ if($getMode != 'csv')
                 </li>';
             }
 
-			// link to assign or remove members if you are allowed to do it
-			if($role->allowedToAssignMembers($gCurrentUser))
-			{
-				echo '<li>
-					<span class="iconTextLink">
-						<a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '"><img 
-							src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>
-						<a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">'.$gL10n->get('SYS_ASSIGN_MEMBERS').'</a>
-					</span>
-				</li>';
-			}
-
+            // link to assign or remove members if you are allowed to do it
+            if($role->allowedToAssignMembers($gCurrentUser))
+            {
+                echo '<li>
+                    <span class="iconTextLink">
+                        <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '"><img 
+                            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>
+                        <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">'.$gL10n->get('SYS_ASSIGN_MEMBERS').'</a>
+                    </span>
+                </li>';
+            }
+            
+            // link to print overlay and exports
             echo '<li>
                 <span class="iconTextLink">
                     <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=print&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'\', \'_blank\')"><img
@@ -282,19 +322,25 @@ if($getMode != 'csv')
                     <select id="admSelectExportMode" size="1">
                         <option value="" selected="selected">'.$gL10n->get('LST_EXPORT_TO').' ...</option>
                         <option value="csv-ms">'.$gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')</option>
-                        <option value="csv-oo">'.$gL10n->get('LST_CSV_FILE').' ('.$gL10n->get('SYS_UTF8').')</option>
+                        <option value="pdf">'.$gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')</option>
+                        <option value="pdfl">'.$gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')</option>
+                        <option value="csv-oo">'.$gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')</option>
                     </select>
                 </span>
             </li>   
         </ul>';
     }
 
-    // Create table object
-    $table = new htmlTable('', $class_table);
-    $table->addAttribute('style', 'width: 100%;', 'table');
-    $table->addAttribute('cellspacing', '0', 'table');
-    $table->addTableHeader();
-    $table->addRow();
+    // Create table object for display
+    if($getMode != 'pdf')
+    {
+        $table = new htmlTable('', $class_table);
+        $table->addAttribute('style', 'width: 100%;', 'table');
+        $table->addAttribute('cellspacing', '0', 'table');
+        $table->addTableHeader();
+        $table->addRow();
+    }
+
 }
 
 // headlines for columns
@@ -340,6 +386,15 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
             }
             $str_csv = $str_csv. $separator. $valueQuotes. $col_name. $valueQuotes;
         }
+        elseif($getMode == 'pdf')
+        {
+            if($column_number == 1)
+            {
+                $pdf_tableHeadline .= '<th width="25"; bgcolor="#C7C7C7"><div style="font-size:14">' . $gL10n->get('SYS_ABR_NO') . '</div></th>';
+            }
+            
+            $pdf_tableHeadline .= '<th bgcolor="#C7C7C7"><div style="font-size:14">'.$col_name.'</div></th>';
+        }
         else
         {                
             if($column_number == 1)
@@ -357,6 +412,11 @@ if($getMode == 'csv')
 {
     $str_csv = $str_csv. "\n";
 }
+elseif($getMode == 'pdf')
+{
+    $pdf_tableHeadline .= '</tr>';
+    $pdf_html = $pdf_htmlHeadline.$pdf_tableHeadline;
+}
 else
 {
     $table->addTableBody();
@@ -365,11 +425,11 @@ else
 // set number of first member of this page (leaders are counted separately)
 if($getStart > $role->countLeaders())
 {
-	$listRowNumber = $getStart - $role->countLeaders() + 1;
+    $listRowNumber = $getStart - $role->countLeaders() + 1;
 }
 else
 {
-	$listRowNumber = $getStart + 1;	
+    $listRowNumber = $getStart + 1;    
 }
 
 $lastGroupHead = -1;             // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
@@ -393,7 +453,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 {
     if($row = $gDb->fetch_array($resultList))
     {
-        if($getMode != 'csv')
+        if($getMode == 'html' || $getMode == 'print')
         {
             // erst einmal pruefen, ob es ein Leiter ist, falls es Leiter in der Gruppe gibt, 
             // dann muss noch jeweils ein Gruppenkopf eingefuegt werden
@@ -406,8 +466,8 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                 }
                 else
                 {
-					// if list has leaders then initialize row number for members
-					$listRowNumber = 1;
+                    // if list has leaders then initialize row number for members
+                    $listRowNumber = 1;
                     $title = $gL10n->get('SYS_PARTICIPANTS');
                 }
                 $table->addRow();
@@ -456,7 +516,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
             || $gCurrentUser->editUsers()
             || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
             {
-                if($getMode != 'csv')
+                if($getMode == 'html' || $getMode == 'print')
                 {
                     $align = 'left';
                     if($b_user_field == true)
@@ -479,6 +539,28 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                     }
                     $table->addColumn('', 'style', 'text-align: '.$align.';');
                 }
+                elseif($getMode == 'pdf')
+                {
+                    if($column_number == 1)
+                    {
+                        if($listRowNumber == $pdf_linesOnPageAll)
+                        {
+                            $pdf_linesOnPageAll = $pdf_linesOnPageAll + $pdf_linesOnPage;
+
+                            $pdf_html .= '</table>';
+                            $pdf->writeHTML($pdf_html, true, false, true, false, '');
+                            $pdf->AddPage();
+                            
+                            $pdf_html = $pdf_htmlHeadline;
+                            $pdf_html .= $pdf_tableHeadline;
+                            
+                        }
+                        
+                        $pdf_html .= '<tr>';
+                        // erste Spalte zeigt lfd. Nummer an
+                        $pdf_html .= '<td>' . $listRowNumber . '</td>';
+                    }
+                }
                 else
                 {
                     if($column_number == 1)
@@ -490,13 +572,13 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
     
                 $content  = '';
 
-				/*****************************************************************/
+                /*****************************************************************/
                 // create field content for each field type and output format
-				/*****************************************************************/
-				if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
-				{
-					$content = $gL10n->getCountryByCode($row[$sql_column_number]);
-				}
+                /*****************************************************************/
+                if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
+                {
+                    $content = $gL10n->getCountryByCode($row[$sql_column_number]);
+                }
                 elseif($column->getValue('lsc_special_field') == 'usr_photo')
                 {
                     // show user photo
@@ -509,58 +591,66 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                         $content = $gL10n->get('LST_USER_PHOTO');
                     }
                 }
-				elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
-				||     $column->getValue('lsc_special_field') == 'mem_begin'
-				||     $column->getValue('lsc_special_field') == 'mem_end') 
-				{
-					if(strlen($row[$sql_column_number]) > 0)
-					{
-						// date must be formated
-						$date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
-						$content = $date->format($gPreferences['system_date']);
-					}
-				}
-				elseif( ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
-				      || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') 
+                elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DATE'
+                ||     $column->getValue('lsc_special_field') == 'mem_begin'
+                ||     $column->getValue('lsc_special_field') == 'mem_end') 
+                {
+                    if(strlen($row[$sql_column_number]) > 0)
+                    {
+                        // date must be formated
+                        $date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
+                        $content = $date->format($gPreferences['system_date']);
+                    }
+                }
+                elseif( ($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'DROPDOWN'
+                      || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') 
                 && $getMode == 'csv')
-				{
-					if(strlen($row[$sql_column_number]) > 0)
-					{
-						// show selected text of optionfield or combobox
+                {
+                    if(strlen($row[$sql_column_number]) > 0)
+                    {
+                        // show selected text of optionfield or combobox
                         $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
-						$content       = $arrListValues[$row[$sql_column_number]];
-					}
-				}
-				else 
-				{
-					$content = $row[$sql_column_number];
-				}
+                        $content       = $arrListValues[$row[$sql_column_number]];
+                    }
+                }
+                else 
+                {
+                    $content = $row[$sql_column_number];
+                }
 
-				// format value for csv export
+                // format value for csv export
                 if($getMode == 'csv')
                 {
                     $str_csv = $str_csv. $separator. $valueQuotes. $content. $valueQuotes;
                 }
-				// create output in html layout
-				else
-				{
-					$content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
-					// if empty string pass a whitespace
+                elseif($getMode == 'pdf')
+                {
+                    $pdf_html .= '<td>' . $content . '</td>';
+                }
+                // create output in html layout
+                else
+                {
+                    $content = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($usf_id, 'usf_name_intern'), $content, $row['usr_id']);
+                    // if empty string pass a whitespace
                     if(strlen($content) > 0)
-					{
+                    {
                         $table->addData($content);
                     }
                     else
                     {
                         $table->addData('&nbsp;');
                     }
-				}
+                }
             }
         }
 
         if($getMode == 'csv')
         {
             $str_csv = $str_csv. "\n";
+        }
+        elseif($getMode == 'pdf')
+        {
+            $pdf_html .= '</tr>';
         }
 
         $listRowNumber++;
@@ -581,18 +671,51 @@ if($getMode == 'csv')
     header('Content-Type: text/comma-separated-values; charset='.$charset);
     header('Content-Disposition: attachment; filename="'.$filename.'"');
     
-    // neccessary for IE, because without it the download with SSL has problems
-	header('Cache-Control: private');
-	header('Pragma: public');
+    // neccessary for IE6 to 8, because without it the download with SSL has problems
+    header('Cache-Control: private');
+    header('Pragma: public');
 
-	if($charset == 'iso-8859-1')
-	{
-		echo utf8_decode($str_csv);
-	}
-	else
-	{
-		echo $str_csv;
-	}
+    if($charset == 'iso-8859-1')
+    {
+        echo utf8_decode($str_csv);
+    }
+    else
+    {
+        echo $str_csv;
+    }
+}
+// send the new PDF to the User
+elseif($getMode == 'pdf')
+{
+    $pdf_html .= '</table>';
+
+    // output the HTML content
+    $pdf->writeHTML($pdf_html, true, false, true, false, '');
+    
+    //file name in the current directory...
+    $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.pdf';
+    
+    // for IE the filename must have special chars in hexadecimal 
+    if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+    {
+        $filename = urlencode($filename);
+    }
+    
+    //Save PDF to file
+    $pdf->Output($filename, 'F');
+    
+    //Redirect
+    header('Content-Type: application/pdf');
+    header('Content-Disposition: attachment; filename="'.$filename.'"');
+    
+    // neccessary for IE6 to 8, because without it the download with SSL has problems
+    header('Cache-Control: private');
+    header('Pragma: public');
+    
+    readfile($filename);
+    ignore_user_abort(true);
+    unlink($filename);
+    
 }
 else
 {
@@ -604,7 +727,7 @@ else
         $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode='.$getMode.'&rol_id='.$getRoleId.'&show_members='.$getShowMembers;
         echo admFuncGeneratePagination($base_url, $numMembers, $members_per_page, $getStart, TRUE);
     }
-
+    
     //INFOBOX zur Gruppe
     //nur anzeigen wenn zusatzfelder gefüllt sind
     if(strlen($role->getValue('rol_start_date')) > 0
@@ -693,7 +816,7 @@ else
                             </li>';
                         }
 
-						//Beitragszeitraum
+                        //Beitragszeitraum
                         if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                         {
                             echo '<li>
