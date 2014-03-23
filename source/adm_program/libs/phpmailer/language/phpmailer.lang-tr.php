@@ -24,4 +24,3 @@ $PHPMAILER_LANG['signing']              = 'İmzalama hatası: ';
 $PHPMAILER_LANG['smtp_connect_failed']  = 'SMTP bağlantı() başarısız.';
 $PHPMAILER_LANG['smtp_error']           = 'SMTP sunucu hatası: ';
 $PHPMAILER_LANG['variable_set']         = 'Ayarlanamıyor yada sıfırlanamıyor: ';
-?>

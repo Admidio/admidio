@@ -22,5 +22,3 @@ $PHPMAILER_LANG['signing']              = 'Ошибка подписывания
 $PHPMAILER_LANG['smtp_connect_failed']  = 'Ошибка соединения с SMTP-сервером';
 $PHPMAILER_LANG['smtp_error']           = 'Ошибка SMTP-сервера: ';
 $PHPMAILER_LANG['variable_set']         = 'Невозможно установить или переустановить переменную: ';
-
-?>
