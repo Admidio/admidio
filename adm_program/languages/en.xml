@@ -597,7 +597,6 @@
     <text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Please select name for configuration set?</text>
     <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Creating new configuration</text>
     <text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Create own list</text>
-    <text id="LST_CSV_FILE" development="new" translation="edited">CSV file</text>
     <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Default configurations</text>
     <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Make a configuration set to default configuration. Select configuration set of your choice and click following symbol: %VAR1%. Selected configuration will be active for all member requested role lists. Members will not be able to use own configuration sets.</text>
     <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">No default list configuration set defined by the administrator!\n\nContact system administrator for help.</text>

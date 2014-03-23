@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
+<version id="2.4.5" translator="Markus Faßbender">
+	<text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</text>
+    <text id="SYS_CSV" development="new" translation="todo">CSV</text>
+    <text id="SYS_LANDSCAPE" description="Format for printing" development="new" translation="todo">Querformat</text>
+    <text id="SYS_PDF" development="new" translation="todo">PDF</text>
+    <text id="SYS_PORTRAIT" description="Format for printing" development="new" translation="todo">Hochformat</text>
+</version>
 <version id="2.4.4" translator="Henrik Muhs">
 	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="todo">Anzeigeart der Termine. Im Modus %VAR1_BOLD% werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus %VAR2_BOLD% werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</text>
     <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="todo">Fotos herunterladen</text>
@@ -123,7 +130,6 @@
 <version id="2.3.4" translator="Markus Faßbender">
     <text id="MAI_COUNT_BCC_DESC" development="changed" translation="todo">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann vom Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Standard: 50)</text>
 	<text id="MAI_SENDER_INTO_TO" development="new" translation="todo">Absender als Adressat</text>
-	<text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld bleibt dann in der Regel leer. Manche Provider erlauben keine E-Mails ohne ein gefülltes Empfängerfeld (TO) oder stufen solche E-Mails als Spam ein. Mit dieser Einstellung wird das Empfängerfeld (TO) mit der Absenderadresse gefüllt und alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Aktiviert)</text>
 </version>
 <version id="2.3.1" translator="Markus Faßbender">
 	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="todo">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wählen Sie bitte einen anderen Namen aus.</text>
@@ -592,7 +598,6 @@
     <text id="LST_CONFIGURATION_SAVE" development="new" translation="todo">Unter welcher Bezeichnung soll diese Konfiguration gespeichert werden?</text>
     <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="todo">Neue Konfiguration erstellen</text>
     <text id="LST_CREATE_OWN_LIST" development="new" translation="todo">Eigene Liste erstellen</text>
-    <text id="LST_CSV_FILE" development="new" translation="todo">CSV-Datei</text>
     <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="todo">Standardkonfigurationen</text>
     <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="todo">Eine vorgegebene Konfiguration können Sie zur Standardkonfiguration machen. Wählen Sie dazu die entsprechende vorgegebene Konfiguration aus und klicken Sie auf folgendes Symbol: %VAR1%. Die gewählte Konfiguration wird nun an allen Stellen angezeigt, bei denen der Anwender eine Rollenliste angezeigt bekommt, ohne vorher die Möglichkeit zu haben, eine Konfiguration auszuwählen.</text>
     <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="todo">Es wurde keine Standardliste eingerichtet!\n\nWenden Sie sich bitte an einen Administrator, damit dieser in den eigenen Listen eine beliebige Liste als Standardliste deklariert.</text>

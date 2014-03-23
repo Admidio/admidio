@@ -597,7 +597,6 @@
     <text id="LST_CONFIGURATION_SAVE" development="new" translation="edited">Per favore seleziona il nome per l'impostazione della configurazione?</text>
     <text id="LST_CREATE_NEW_CONFIGURATION" development="new" translation="edited">Creazione nuova configurazione</text>
     <text id="LST_CREATE_OWN_LIST" development="new" translation="edited">Crea un proprio elenco</text>
-    <text id="LST_CSV_FILE" development="new" translation="edited">File CSV</text>
     <text id="LST_DEFAULT_CONFIGURATION" development="new" translation="edited">Configurazioni predefinite</text>
     <text id="LST_DEFAULT_CONFIGURATION_DESC" development="new" translation="edited">Fai un'impostazione della configurazione come configurazione predefinita. Seleziona l'impostazione della configurazione corrispondente alla tua scelta e clicca sul simbolo seguente: %VAR1%. La configurazione selezionata sarà attiva per tutti i membri degli elenchi del ruolo richiesto. I membri non potranno usare le impostazioni della propria configurazione.</text>
     <text id="LST_DEFAULT_LIST_NOT_SET_UP" development="new" translation="edited">Nessuna impostazione della configurazione dell'elenco predefinito è stata definita dall'amministratore!\n\nContatta l'amministratore del sietma per avere aiuto.</text>
