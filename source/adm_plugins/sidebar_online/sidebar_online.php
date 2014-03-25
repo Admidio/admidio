@@ -2,9 +2,9 @@
 /******************************************************************************
  * Sidebar Online
  *
- * Version 1.4.1
+ * Version 1.4.2
  *
- * Plugin zeigt Besucher und aktive registrierte Mitglieder der Homepage an
+ * Plugin shows visitors and registered members of the homepage
  *
  * Compatible with Admidio version 2.3.0
  *
@@ -80,7 +80,8 @@ $sql = 'SELECT ses_usr_id, usr_login_name
           FROM '. TBL_SESSIONS. ' 
           LEFT JOIN '. TBL_USERS. '
             ON ses_usr_id = usr_id
-         WHERE ses_timestamp BETWEEN \''.$ref_date.'\' AND \''.DATETIME_NOW.'\' ';
+         WHERE ses_timestamp BETWEEN \''.$ref_date.'\' AND \''.DATETIME_NOW.'\'
+           AND ses_org_id = '.$gCurrentOrganization->getValue('org_id');
 if($plg_show_visitors == 0)
 {
     $sql = $sql. ' AND ses_usr_id IS NOT NULL ';
