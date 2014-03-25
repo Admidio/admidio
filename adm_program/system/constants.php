@@ -74,4 +74,11 @@ define('TBL_USERS',             $g_tbl_praefix. '_users');
 define('TBL_USER_DATA',         $g_tbl_praefix. '_user_data');
 define('TBL_USER_FIELDS',       $g_tbl_praefix. '_user_fields');
 define('TBL_USER_LOG',          $g_tbl_praefix. '_user_log');
+
+// constants for column rol_leader_rights
+define('ROLE_LEADER_NO_RIGHTS', 0);
+define('ROLE_LEADER_MEMBERS_ASSIGN', 1);
+define('ROLE_LEADER_MEMBERS_EDIT', 2);
+define('ROLE_LEADER_MEMBERS_ASSIGN_EDIT', 3);
+
 ?>

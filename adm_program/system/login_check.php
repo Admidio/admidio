@@ -95,6 +95,10 @@ if ($userFound >= 1)
 		
 		// read new profile field structure for this organization
 		$gProfileFields->readProfileFields($organizationId);
+		
+		// save new organization id to session
+		$gCurrentSession->setValue('ses_org_id', $organizationId);
+		$gCurrentSession->save();
 	}
 
     // create user object
