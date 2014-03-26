@@ -334,7 +334,7 @@ if($getMode != 'csv')
     // Create table object for display
     if($getMode != 'pdf')
     {
-        $table = new htmlTable('', $class_table);
+        $table = new HtmlTableBasic('', $class_table);
         $table->addAttribute('style', 'width: 100%;', 'table');
         $table->addAttribute('cellspacing', '0', 'table');
         $table->addTableHeader();

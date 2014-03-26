@@ -299,7 +299,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
         // Output table header for compact view
         if ($parameter['view_mode'] == 'compact')
         {
-            $compactTable = new htmlTable('', 'tableList');
+            $compactTable = new HtmlTableBasic('', 'tableList');
             $compactTable->addAttribute('style', 'width: 100%;', 'table');
             $compactTable->addAttribute('cellspacing', '0', 'table');
             $compactTable->addTableHeader();
@@ -537,7 +537,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
 
                 // Output of elements
                 // always 2 then line break
-                $eventDetails = new htmlTable();
+                $eventDetails = new HtmlTableBasic();
                 $eventDetails->addAttribute('style', 'width: 100%,');
                 $eventDetails->addAttribute('border-width', '0px;');
 
@@ -776,7 +776,7 @@ else
             // If date has participation and patricipants are assigned
             if($row['dat_rol_id'] != null && isset($row['dat_num_members']))
             {
-                $dateParticipation = new htmlTable('', 'dateParticipation');
+                $dateParticipation = new HtmlTableBasic('', 'dateParticipation');
                 $dateParticipation->addAttribute('cellspacing', '2', 'table');
                 $dateParticipation->addAttribute('cellpadding', '2', 'table');
                 $dateParticipation->addRow();
@@ -845,7 +845,7 @@ else
         }  // end foreach
     }
     // Create table object
-    $datePrint = new htmlTable('PrintViewDates', 'tableDateList', 1);
+    $datePrint = new HtmlTableBasic('PrintViewDates', 'tableDateList', 1);
     $datePrint->addAttribute('cellpadding', '3', 'table');
     $datePrint->addAttribute('summary', 'Printview of dates', 'table');
     // Define thead

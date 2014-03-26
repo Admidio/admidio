@@ -202,12 +202,12 @@ a:hover, a:active {
 
 /* form layout */
 
-.admFormLayout {
+.admForm {
     width: 100%;
     margin: auto;
 }
 
-.admFormLayout hr {
+.admForm hr {
     border: 1px solid #bad8e2;
     width: 100%;
     margin-top: 10px; 
@@ -391,6 +391,47 @@ a:hover, a:active {
 
 .admBoxBody {
     clear: both;
+}
+
+/* Layout for tables that will be used in list or download module */
+
+.admTable {
+    width: 100%;
+    margin: auto;
+}
+
+.admTable th, .admTable td {
+    padding: 5px 2px 5px 2px;
+    text-align: left;
+/*    vertical-align: top;*/
+}
+
+.admTable th {
+    padding-bottom: 0px;
+    border-bottom: 2px solid #409099;
+}
+
+/* Der SubHeader wird zur Gruppierung innerhalb von Tabellen genutzt
+   (z.B.: Kategorienanzeige bei Rollenzuordnung, Leiter-Mitglied bei Listen) */
+
+.tableSubHeader {
+    background-color:   #c5c5c5;
+    padding:            1px;
+    font-size:          11pt;  
+    font-weight:        bold;
+    font-style:         italic;
+    letter-spacing:     0.2em;
+    background-repeat:  repeat-x;
+    background-image:   url(../images/sub_row_marker.png);   
+}
+
+/* aktuelle Zeile kann in Listen markiert werden */
+.admTable tr:hover {
+    background-repeat:  repeat-x;
+    background-color:   #a8d9df;
+	background-image:   -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
+	background-image:   -webkit-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
+	background-image:   -ms-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
 }
 
 /* A simple box that looks like a tooltip */

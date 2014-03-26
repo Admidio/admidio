@@ -66,8 +66,7 @@ $gLayout['title']  = $gL10n->get('DOW_DOWNLOADS');
 $gLayout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/text_tooltip.js"></script>
     <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
+        $(document).ready(function() {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>';
@@ -96,7 +95,7 @@ if($gCurrentUser->isWebmaster())
 }
 
 //Create table object
-$downloadOverview = new htmlTable('', 'tableList');
+$downloadOverview = new HtmlTable('tbl_downloads');
 $downloadOverview->addAttribute('cellspacing', '0', 'table');
 $downloadOverview->addTableHeader();
 $downloadOverview->addRow();
@@ -245,7 +244,7 @@ if ($gCurrentUser->editDownloadRight())
                                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>            
                                     </h3>';
 
-        $adminTable = new htmlTable('', 'tableList');
+        $adminTable = new HtmlTable('tbl_additional_content');
         $adminTable->addAttribute('cellspacing', '0', 'table');
         $adminTable->addRow();
         $adminTable->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />', 'style', 'width: 25px;', 'th');
@@ -300,7 +299,7 @@ if ($gCurrentUser->editDownloadRight())
 // Output module html to client
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
+echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
 $DownloadsMenu->show();
 
