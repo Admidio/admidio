@@ -109,9 +109,9 @@ $sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_valu
 		       $sqlConditions.'
 	     ORDER BY usl_timestamp_create DESC 
 		 LIMIT '.$membersPerPage.' OFFSET '.$getStart;
-$result = $gDb->query($sql);
+$resultFieldHistory = $gDb->query($sql);
 
-if($gDb->num_rows($result) == 0)
+if($gDb->num_rows($resultFieldHistory) == 0)
 {
     // message is shown, so delete this page from navigation stack
     $gNavigation->deleteLastUrl();
@@ -211,7 +211,7 @@ $table->addColumn($gL10n->get('SYS_EDITED_BY'), '', '', 'th');
 $table->addColumn($gL10n->get('SYS_CHANGED_AT'), '', '', 'th');         
 $table->addTableBody();			
 
-while($row = $gDb->fetch_array($result))
+while($row = $gDb->fetch_array($resultFieldHistory))
 {
 	$timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
 
