@@ -77,7 +77,7 @@ echo $gNavigation->getHtmlBackButton();
 echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
 // show form
-$form = new Form('new_folder_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId);
+$form = new HtmlForm('new_folder_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId);
 $form->addDescription($gL10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName));
 $form->addTextInput('new_folder', $gL10n->get('SYS_NAME'), $form_values['new_folder'], 255, FIELD_MANDATORY);
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, 255);

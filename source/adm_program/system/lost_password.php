@@ -108,7 +108,7 @@ else
     echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
     // show form
-    $form = new Form('lost_password_form', $g_root_path.'/adm_program/system/lost_password.php');
+    $form = new HtmlForm('lost_password_form', $g_root_path.'/adm_program/system/lost_password.php');
     $form->addDescription($gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION'));
     $form->addTextInput('recipient_email', $gL10n->get('SYS_EMAIL'), null, 50, FIELD_MANDATORY);
 

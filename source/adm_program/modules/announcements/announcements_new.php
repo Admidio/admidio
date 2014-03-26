@@ -77,7 +77,7 @@ echo $gNavigation->getHtmlBackButton();
 echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
 // show form
-$form = new Form('announcements_edit_form', $g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1');
+$form = new HtmlForm('announcements_edit_form', $g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1');
 $form->openGroupBox('gb_announcement_description');
 $form->addTextInput('ann_headline', $gL10n->get('SYS_TITLE'), $announcement->getValue('ann_headline'), 100, FIELD_MANDATORY);
 

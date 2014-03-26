@@ -56,7 +56,7 @@ $gLayout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_p
 	profileJS.init();
 </script>';
 // Create table
-$table = new HtmlTable('', 'tableList');
+$table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0');
 $table->addTableHeader();
 $table->addRow();

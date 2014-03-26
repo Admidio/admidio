@@ -231,7 +231,7 @@ if (strlen($getSubject) > 0)
 
 
 // show form
-$form = new Form('mail_send_form', $g_root_path.'/adm_program/modules/mail/mail_send.php?'.$formParam, true);
+$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/mail/mail_send.php?'.$formParam, true);
 $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 if ($getUserId > 0)
 {

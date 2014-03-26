@@ -317,7 +317,7 @@ echo '</div>';
 
 if($membersCount > 0)
 {
-    $tableMembers = new HtmlTable('', 'tableList');
+    $tableMembers = new HtmlTableBasic('', 'tableList');
     $tableMembers->addAttribute('cellspacing', '0', 'table');
     $tableMembers->addTableHeader();
     $tableMembers->addRow();

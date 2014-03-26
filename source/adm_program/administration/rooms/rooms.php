@@ -122,7 +122,7 @@ else
             </div>
             <div class="boxBody">
                 <div class="date_info_block">';
-                    $table = new HtmlTable();
+                    $table = new HtmlTableBasic();
                     $table->addAttribute('style', 'float:left; width: 200px;');
                     $table->addRow();
                     $table->addColumn($gL10n->get('ROO_CAPACITY'));

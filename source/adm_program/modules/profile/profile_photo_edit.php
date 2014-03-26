@@ -271,7 +271,7 @@ elseif($getJob == 'upload')
     <div class="formLayout" id="profile_photo_after_upload_form">
         <div class="formHead">'.$headline.'</div>
         <div class="formBody">';
-            $table = new HtmlTable();
+            $table = new HtmlTableBasic();
             $table->addAttribute('style', 'border: none; width: 100%; padding: 5px;');
             $table->addRow('', 'style', 'text-align: center;');
             $table->addColumn($gL10n->get('PRO_CURRENT_PICTURE'));

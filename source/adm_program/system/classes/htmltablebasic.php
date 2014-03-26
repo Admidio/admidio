@@ -1,6 +1,6 @@
 <?php
 /*****************************************************************************/
-/** @class HtmlTable
+/** @class HtmlTableBasic
  *  @brief  Create html tables
  * 
  *  This class creates html tables.
@@ -23,7 +23,7 @@
  *  // Example without defining table head and table foot elements.
  *  // Starting a row directly, all missing table elements are set automatically for semantic table.
  *  // Create an table instance with optional table ID, table class.
- *  $table = new HtmlTable('Id_Example_1', 'tableClass');
+ *  $table = new HtmlTableBasic('Id_Example_1', 'tableClass');
  *  // For each key => value a column is to be defined in a table row.
  *  $table->addRow($dataArray);
  *  // get validated table
@@ -32,7 +32,7 @@
  *  @par Example_2
  *  @code
  *  // Create an table instance with optional table ID, table class and border
- *  $table = new HtmlTable('Id_Example_2', 'tableClass', 1);
+ *  $table = new HtmlTableBasic('Id_Example_2', 'tableClass', 1);
  *  // we can also set further attributes for the table
  *  $table->addAttribute('style', 'width: 100%;');
  *  $table->addAttribute('summary', 'Example');
@@ -63,7 +63,7 @@
  *  @par Example 3
  *  @code
  *  // Example with fixed columns width and changing classes for rows in body element and table border
- *  $table = new HtmlTable('Id_Example_3', 'tableClass', 1);
+ *  $table = new HtmlTableBasic('Id_Example_3', 'tableClass', 1);
  *  // Set table width to 600px. Ok, we should do this in the class or id in CSS ! However,...
  *  $table->addAttribute('style', 'width: 600px;');
  *  // Define columms width as array
@@ -110,7 +110,7 @@
  *
  *****************************************************************************/
 
-class HtmlTable extends HtmlElement {
+class HtmlTableBasic extends HtmlElement {
 
     private $border;                     ///< String with border attribute and value of the table
     private $lineChange;                ///< Integer value for class change mode for table rows.

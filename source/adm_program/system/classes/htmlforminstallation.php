@@ -1,6 +1,6 @@
 <?php 
 /*****************************************************************************/
-/** @class FormInstallation
+/** @class HtmlFormInstallation
  *  @brief Create the html script for an installation / update form 
  *
  *  This class will create the complete html for a installation / update page.
@@ -9,7 +9,7 @@
  *  form. You can use the complete methods of the Form class.
  *  @par Examples
  *  @code // create a simple installation form with a free text, a text field and a submit button
- *  $form = new FormInstallation('installation-form', 'next_html_page.php');
+ *  $form = new HtmlFormInstallation('installation-form', 'next_html_page.php');
     $form->setText('This is an example.');
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), 'layout/forward.png', null, 'button');
     $form->show();
@@ -23,7 +23,7 @@
  *
  *****************************************************************************/
 
-class FormInstallation extends Form
+class HtmlFormInstallation extends HtmlForm
 {
     private $descriptionTitle;  ///< A title for the description of the form. This will be displayed as h2
     private $descriptionText;   ///< A text that will be shown after the headline before the form will be set

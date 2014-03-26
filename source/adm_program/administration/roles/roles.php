@@ -89,7 +89,7 @@ $rolesMenu->addItem('admMenuItemInactiveRole', $g_root_path.'/adm_program/admini
 $rolesMenu->addItem('admMenuItemHiddenRole', $g_root_path.'/adm_program/administration/roles/roles.php?invisible='.$visibleRolesFlag, 
 							$visibleRolesLinkDescription, $visibleRolesImage);
 // Create table
-$table = new HtmlTable('', 'tableList');
+$table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0');
 $table->addTableHeader();
 $table->addRow();

@@ -194,7 +194,7 @@ echo '
 	</form> 
 </div>';
 
-$table = new HtmlTable('', 'tableList');
+$table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0');
 $table->addTableHeader();
 $table->addRow();

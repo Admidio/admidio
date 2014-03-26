@@ -18,7 +18,7 @@
 function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 {
     // show dialog with success notification
-    $form = new FormInstallation('installation-form', $url);
+    $form = new HtmlFormInstallation('installation-form', $url);
     if($update)
     {
         $form->setUpdateModus();

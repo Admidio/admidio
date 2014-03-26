@@ -252,7 +252,7 @@ else
             $iconCode  = THEME_PATH. '/icons/key.png';
         }
     
-        $form = new Form('plugin-login-form-form', $g_root_path.'/adm_program/system/login_check.php');
+        $form = new HtmlForm('plugin-login-form-form', $g_root_path.'/adm_program/system/login_check.php');
         $form->addTextInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, 35);
         $form->addPasswordInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'));
         

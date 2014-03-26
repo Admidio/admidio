@@ -345,7 +345,7 @@ elseif($getMode == 2)
     unset($_SESSION['gCurrentSession']);
 
     // show notice that update was successful
-    $form = new FormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
+    $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
     $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL'));
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png', null, null, 'button');
     $form->addSubmitButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php', null, 'button');

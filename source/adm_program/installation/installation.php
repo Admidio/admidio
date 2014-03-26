@@ -114,7 +114,7 @@ if($getMode == 1)  // (Default) Choose language
 
     // create form with selectbox where user can select a language
     // the possible languages will be read from a xml file
-    $form = new FormInstallation('installation-form', 'installation.php?mode=2');
+    $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=2');
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
     $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', true, null, true);
     $form->closeGroupBox();
@@ -150,7 +150,7 @@ elseif($getMode == 2)  // Welcome to installation
     }
 
     // create a page with the notice that the installation must be configured on the next pages
-    $form = new FormInstallation('installation-form', 'installation.php?mode=3');
+    $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=3');
     $form->setFormDescription($message, $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
     $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), 'layout/forward.png', null, null, 'button');
     $form->show();
@@ -176,7 +176,7 @@ elseif($getMode == 3)  // Enter database access information
     }
 
     // create a page to enter all necessary database connection informations
-    $form = new FormInstallation('installation-form', 'installation.php?mode=4');
+    $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=4');
     $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', true, $dbType);
@@ -263,7 +263,7 @@ elseif($getMode == 4)  // Creating organization
     }
 
     // create a page to enter the organization names
-    $form = new FormInstallation('installation-form', 'installation.php?mode=5');
+    $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=5');
     $form->setFormDescription($gL10n->get('INS_NAME_OF_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
     $form->addSmallTextInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, 10, true);
@@ -304,7 +304,7 @@ elseif($getMode == 5)  // Creating addministrator
     }
     
     // create a page to enter all necessary data to create a administrator user
-    $form = new FormInstallation('installation-form', 'installation.php?mode=6');
+    $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=6');
     $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
     $form->addTextInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, 50, true);
@@ -391,7 +391,7 @@ elseif($getMode == 6)  // Creating configuration file
     else
     {
         // if user doesn't has write access then create a page with a download link for the config file
-        $form = new FormInstallation('installation-form', 'installation.php?mode=8');
+        $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
         $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath.'/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
         $form->addString('
             <span class="admIconTextLink">
@@ -588,7 +588,7 @@ elseif($getMode == 8)	// Start installation
     }
     
     // show dialog with success notification
-    $form = new FormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
+    $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
     $form->setFormDescription($text, '<img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL'));
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png', null, null, 'button');
     $form->addSubmitButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php', null, 'button');

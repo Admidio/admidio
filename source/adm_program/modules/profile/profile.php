@@ -357,7 +357,7 @@ echo '
                 <div id="admProfilePhoto" class="groupBox">
                     <div class="groupBoxBody" style="text-align: center;">';
                         
-                        $table = new HtmlTable('', '', '0');
+                        $table = new HtmlTableBasic('', '', '0');
                         $table->addAttribute('width', '100%');
                         $table->addAttribute('summary', 'Profilfoto');
                         $table->addAttribute('style', 'border:0px;');

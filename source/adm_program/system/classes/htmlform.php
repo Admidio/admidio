@@ -1,6 +1,6 @@
 <?php 
 /*****************************************************************************/
-/** @class Form
+/** @class HtmlForm
  *  @brief Creates an Admidio specific form with special elements
  *
  *  This class inherits the common HtmlFormBasic class and extends their elements
@@ -11,7 +11,7 @@
  *  element.
  *  @par Examples
  *  @code // create a simple form with one input field and a button
- *  $form = new Form('simple-form', 'next_page.php');
+ *  $form = new HtmlForm('simple-form', 'next_page.php');
  *  $form->openGroupBox('gbSimpleForm', $gL10n->get('SYS_SIMPLE_FORM'));
  *  $form->addTextInput('name', $gL10n->get('SYS_NAME'), $formName, true);
  *  $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'), true, 'simple', true);
@@ -32,7 +32,7 @@ define('FIELD_DEFAULT', 0);
 define('FIELD_MANDATORY', 1);
 define('FIELD_DISABLED', 2);
 
-class Form extends HtmlFormBasic
+class HtmlForm extends HtmlFormBasic
 {
     protected $flagMandatoryFields; ///< Flag if this form has mandatory fields. Then a notice must be written at the end of the form
     private   $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
@@ -541,7 +541,7 @@ class Form extends HtmlFormBasic
      *  @par Examples
      *  @code // create a selectbox with all profile fields of a specific category
      *  $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'
-     *  $form = new Form('simple-form', 'next_page.php');
+     *  $form = new HtmlForm('simple-form', 'next_page.php');
      *  $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, false, $gL10n->get('SYS_SURNAME'), true);
      *  $form->show();@endcode
      *  @param $id              Id of the selectbox. This will also be the name of the selectbox.

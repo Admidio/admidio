@@ -128,7 +128,7 @@ echo $gNavigation->getHtmlBackButton();
 echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
 // create html form
-$form = new Form('edit_download_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId);
+$form = new HtmlForm('edit_download_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId);
 $form->addTextInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName, 0, FIELD_DISABLED);
 $form->addTextInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], 255, FIELD_MANDATORY, 'DOW_FILE_NAME_RULES');
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, 255);

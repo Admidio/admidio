@@ -127,7 +127,7 @@ $categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/ad
 							$gL10n->get('SYS_CREATE_VAR', $getTitle), 'add.png');
 
 // Define table
-$table = new HtmlTable('tableCategories', 'tableList');
+$table = new HtmlTableBasic('tableCategories', 'tableList');
 $table->addAttribute('style', 'width: 400px;');
 $table->addAttribute('cellspacing', '0');
 $table->addTableHeader();

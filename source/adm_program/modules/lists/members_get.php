@@ -175,7 +175,7 @@ if($gDb->num_rows($resultUser)>0)
     }
     
     // create table object
-    $table = new HtmlTable('', 'tableList');
+    $table = new HtmlTableBasic('', 'tableList');
     $table->addAttribute('cellspacing', '0');
     $table->addTableHeader();
     $table->addRow();

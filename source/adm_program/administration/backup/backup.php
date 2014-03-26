@@ -76,7 +76,7 @@ $backupMenu->show();
 
 
 //Define table
-$table = new HtmlTable('', 'tableList');
+$table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0');
 $table->addRow();
 $table->addColumn($gL10n->get('BAC_BACKUP_FILE'), '', '', 'th');

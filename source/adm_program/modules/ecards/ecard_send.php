@@ -202,7 +202,7 @@ echo'
 		<br /><br />';
 		if ($error_msg == '')
 		{   
-		    $success = new HtmlTable();
+		    $success = new HtmlTableBasic();
 		    $success->addAttribute('style', 'text-align: center;', 'table');
         	$success->addAttribute('summary', 'Erfolg', 'table');
         	$success->addAttribute('border', '0', 'table');

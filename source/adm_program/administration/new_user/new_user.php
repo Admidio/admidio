@@ -62,7 +62,7 @@ $gLayout['header'] = '
         }); 
     //--></script>';
 
-$table = new HtmlTable('', 'tableList');
+$table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0', 'table');
 $table->addRow();
 $table->addColumn($gL10n->get('SYS_NAME'), 'colspan', '2', 'th');

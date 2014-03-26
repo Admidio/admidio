@@ -106,7 +106,7 @@ $sql = 'SELECT * FROM '. TBL_CATEGORIES. ', '. TBL_USER_FIELDS. '
          ORDER BY cat_sequence ASC, usf_sequence ASC ';
 $result = $gDb->query($sql);
 // Create table
-$table = new HtmlTable('', 'tableList');
+$table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0');
 $table->addTableHeader();
 $table->addRow();
