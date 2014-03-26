@@ -1,6 +1,6 @@
 <?php
 /*****************************************************************************/
-/** @class HtmlForm
+/** @class HtmlFormBasic
  *  @brief  Create html form elements
  * 
  *  This class creates html form elements.
@@ -15,7 +15,7 @@
  *  @par Example: Creating a form element
  *  @code
  *  // Get the Instance for a new form element and set an action attribute
- *  $form = new HtmlForm('test.php');
+ *  $form = new HtmlFormBasic('test.php');
  *  // XHTML determines that the input elements are inline elements of a block element
  *  // so we need somthing like a div Block. In this example we use a fieldset
  *  $form->addFieldSet();
@@ -63,7 +63,7 @@
  *
  *****************************************************************************/
 
-class HtmlForm extends HtmlElement 
+class HtmlFormBasic extends HtmlElement 
 {
        
     /**

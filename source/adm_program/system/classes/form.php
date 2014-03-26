@@ -3,7 +3,7 @@
 /** @class Form
  *  @brief Creates an Admidio specific form with special elements
  *
- *  This class inherits the common HtmlForm class and extends their elements
+ *  This class inherits the common HtmlFormBasic class and extends their elements
  *  with custom Admidio form elements. The class should be used to create the 
  *  html part of all Admidio forms. The Admidio elements will contain
  *  the label of fields and some other specific features like a identification
@@ -32,7 +32,7 @@ define('FIELD_DEFAULT', 0);
 define('FIELD_MANDATORY', 1);
 define('FIELD_DISABLED', 2);
 
-class Form extends HtmlForm
+class Form extends HtmlFormBasic
 {
     protected $flagMandatoryFields; ///< Flag if this form has mandatory fields. Then a notice must be written at the end of the form
     private   $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
