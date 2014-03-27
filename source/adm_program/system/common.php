@@ -175,8 +175,10 @@ else
         // organization not found
         die('<div style="color: #CC0000;">Error: The organization of the config.php could not be found in the database!</div>');
     }
+    // add the organization to the session
     $gPreferences = $gCurrentOrganization->getPreferences();
 	$gCurrentSession->addObject('gCurrentOrganization', $gCurrentOrganization);
+    $gCurrentSession->setValue('ses_org_id', $gCurrentOrganization->getValue('org_id'));
 		
 	// create a language data object and assign it to the language object
 	$gLanguageData = new LanguageData($gPreferences['system_language']);
