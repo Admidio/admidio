@@ -63,8 +63,8 @@ if($getListId == 0)
     }
 }
 
+$class_table      = 'table';
 $pdf_orientation  = 'P';
-$pdf_linesOnPage  = 40;
 $separator   = ',';    // fuer CSV-Dateien
 $valueQuotes = '';
 $charset     = '';
@@ -86,7 +86,6 @@ switch ($getMode)
     case 'pdfl':
         $pdf_orientation  = 'L';
         $getMode          = 'pdf';
-        $pdf_linesOnPage  = 25;
         break;
     case 'html':
         $class_table           = 'tableList';
@@ -101,8 +100,6 @@ switch ($getMode)
     default:
         break;
 }
-
-$pdf_linesOnPageAll = $pdf_linesOnPage;
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
 $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
@@ -191,7 +188,7 @@ if($getMode != 'csv')
         $pdf->setPrintFooter(false);
         
         // set auto page breaks
-        $pdf->SetAutoPageBreak(false, PDF_MARGIN_BOTTOM);
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 
         // set font
         $pdf->SetFont('times', '', 10);
@@ -201,9 +198,7 @@ if($getMode != 'csv')
 
         //headline for PDF
         $pdf_htmlHeadline = '<div style="text-align:center; font-size:16"><h1>' . $role->getValue('rol_name') . ' &#40;' . $role->getValue('cat_name') . '&#41;</h1></div>';
-        
-        
-        $pdf_tableHeadline = '<table border="0.5" cellspacing="1" cellpadding="1"> <tr>';
+
     }
     else
     {
@@ -242,15 +237,17 @@ if($getMode != 'csv')
         $memberStatus = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
-    echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>';
-
-    //Beschreibung der Rolle einblenden
-    if(strlen($role->getValue('rol_description')) > 0)
+    if($getMode == 'html' || $getMode == 'print')
     {
-        echo $role->getValue('rol_description'). ' - ';
-    }
+        echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>';
+        //Beschreibung der Rolle einblenden
+        if(strlen($role->getValue('rol_description')) > 0)
+        {
+            echo $role->getValue('rol_description'). ' - ';
+        }
     
-    echo '<h3>'.$memberStatus.'</h3>';
+        echo '<h3>'.$memberStatus.'</h3>';
+    }
 
     if($getMode == 'html')
     {
@@ -332,15 +329,21 @@ if($getMode != 'csv')
     }
 
     // Create table object for display
-    if($getMode != 'pdf')
+    $table = new htmlTable('', $class_table);
+    $table->addAttribute('style', 'width: 100%;', 'table');
+    $table->addAttribute('cellspacing', '0', 'table');
+    if($getMode == 'pdf')
     {
-        $table = new HtmlTableBasic('', $class_table);
-        $table->addAttribute('style', 'width: 100%;', 'table');
-        $table->addAttribute('cellspacing', '0', 'table');
+        $table->addAttribute('border', '1');
         $table->addTableHeader();
         $table->addRow();
+        $table->addColumn('', 'colspan', $list->countColumns() + 1);
+        $table->addAttribute('align', 'center');
+        $table->addData($pdf_htmlHeadline);
+        $table->addTableHeader();
     }
-
+    $table->addTableHeader();
+    $table->addRow();
 }
 
 // headlines for columns
@@ -390,10 +393,10 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
         {
             if($column_number == 1)
             {
-                $pdf_tableHeadline .= '<th width="25"; bgcolor="#C7C7C7"><div style="font-size:14">' . $gL10n->get('SYS_ABR_NO') . '</div></th>';
+                $table->addColumn($gL10n->get('SYS_ABR_NO'), 'style', 'text-align: '.$align.';font-size:14;background-color:#C7C7C7;', 'th');
             }
             
-            $pdf_tableHeadline .= '<th bgcolor="#C7C7C7"><div style="font-size:14">'.$col_name.'</div></th>';
+            $table->addColumn($col_name, 'style', 'text-align: '.$align.';font-size:14;background-color:#C7C7C7;', 'th');
         }
         else
         {                
@@ -411,11 +414,6 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
 if($getMode == 'csv')
 {
     $str_csv = $str_csv. "\n";
-}
-elseif($getMode == 'pdf')
-{
-    $pdf_tableHeadline .= '</tr>';
-    $pdf_html = $pdf_htmlHeadline.$pdf_tableHeadline;
 }
 else
 {
@@ -453,7 +451,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 {
     if($row = $gDb->fetch_array($resultList))
     {
-        if($getMode == 'html' || $getMode == 'print')
+        if($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
         {
             // erst einmal pruefen, ob es ein Leiter ist, falls es Leiter in der Gruppe gibt, 
             // dann muss noch jeweils ein Gruppenkopf eingefuegt werden
@@ -485,9 +483,10 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
             $table->addAttribute('style', 'cursor: pointer', 'tr');
             $table->addAttribute('', 'onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'"', 'tr');
         }
-        else if($getMode == 'print')
+        else if($getMode == 'print' || $getMode == 'pdf')
         {
             $table->addRow();
+            $table->addAttribute('nobr', 'true', 'tr');
         }
 
         // Felder zu Datensatz
@@ -516,7 +515,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
             || $gCurrentUser->editUsers()
             || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
             {
-                if($getMode == 'html' || $getMode == 'print')
+                if($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
                 {
                     $align = 'left';
                     if($b_user_field == true)
@@ -538,28 +537,6 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                         $table->addColumn($listRowNumber, 'style', 'text-align: '.$align.';');
                     }
                     $table->addColumn('', 'style', 'text-align: '.$align.';');
-                }
-                elseif($getMode == 'pdf')
-                {
-                    if($column_number == 1)
-                    {
-                        if($listRowNumber == $pdf_linesOnPageAll)
-                        {
-                            $pdf_linesOnPageAll = $pdf_linesOnPageAll + $pdf_linesOnPage;
-
-                            $pdf_html .= '</table>';
-                            $pdf->writeHTML($pdf_html, true, false, true, false, '');
-                            $pdf->AddPage();
-                            
-                            $pdf_html = $pdf_htmlHeadline;
-                            $pdf_html .= $pdf_tableHeadline;
-                            
-                        }
-                        
-                        $pdf_html .= '<tr>';
-                        // erste Spalte zeigt lfd. Nummer an
-                        $pdf_html .= '<td>' . $listRowNumber . '</td>';
-                    }
                 }
                 else
                 {
@@ -623,10 +600,6 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                 {
                     $str_csv = $str_csv. $separator. $valueQuotes. $content. $valueQuotes;
                 }
-                elseif($getMode == 'pdf')
-                {
-                    $pdf_html .= '<td>' . $content . '</td>';
-                }
                 // create output in html layout
                 else
                 {
@@ -648,32 +621,35 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
         {
             $str_csv = $str_csv. "\n";
         }
-        elseif($getMode == 'pdf')
-        {
-            $pdf_html .= '</tr>';
-        }
 
         $listRowNumber++;
     }
 }  // End-While (jeder gefundene User)
 
-if($getMode == 'csv')
+// Settings for export file
+if($getMode == 'csv' || $getMode == 'pdf')
 {
-    // nun die erstellte CSV-Datei an den User schicken
-    $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.csv';
+    //file name in the current directory...
+    $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.'. $getMode;
     
-    // for IE the filename must have special chars in hexadecimal 
+     // for IE the filename must have special chars in hexadecimal 
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
     {
         $filename = urlencode($filename);
     }
-    
-    header('Content-Type: text/comma-separated-values; charset='.$charset);
+
     header('Content-Disposition: attachment; filename="'.$filename.'"');
     
     // neccessary for IE6 to 8, because without it the download with SSL has problems
     header('Cache-Control: private');
     header('Pragma: public');
+    
+}
+
+if($getMode == 'csv')
+{
+    // nun die erstellte CSV-Datei an den User schicken
+    header('Content-Type: text/comma-separated-values; charset='.$charset);
 
     if($charset == 'iso-8859-1')
     {
@@ -687,35 +663,18 @@ if($getMode == 'csv')
 // send the new PDF to the User
 elseif($getMode == 'pdf')
 {
-    $pdf_html .= '</table>';
-
     // output the HTML content
-    $pdf->writeHTML($pdf_html, true, false, true, false, '');
-    
-    //file name in the current directory...
-    $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.pdf';
-    
-    // for IE the filename must have special chars in hexadecimal 
-    if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
-    {
-        $filename = urlencode($filename);
-    }
+    $pdf->writeHTML($table->getHtmlTable(), true, false, true, false, '');
     
     //Save PDF to file
     $pdf->Output($filename, 'F');
     
     //Redirect
     header('Content-Type: application/pdf');
-    header('Content-Disposition: attachment; filename="'.$filename.'"');
-    
-    // neccessary for IE6 to 8, because without it the download with SSL has problems
-    header('Cache-Control: private');
-    header('Pragma: public');
-    
+
     readfile($filename);
     ignore_user_abort(true);
-    unlink($filename);
-    
+    unlink($filename);  
 }
 else
 {
