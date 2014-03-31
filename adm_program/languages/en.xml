@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
+<version id="2.4.5" translator="Stefanie Schima">
+	<text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain "Undisclosed Recipients". If this results in an error you can use this option to fill the recipient addresses into the TO field. The other addresses will remain in the BCC field. (Default: Deactivated)</text>
+    <text id="SYS_CSV" development="new" translation="edited">CSV</text>
+    <text id="SYS_LANDSCAPE" description="Format for printing" development="new" translation="edited">Landscape</text>
+    <text id="SYS_PDF" development="new" translation="edited">PDF</text>
+    <text id="SYS_PORTRAIT" description="Format for printing" development="new" translation="edited">Portrait</text>
+</version>
 <version id="2.4.4" translator="Stefanie Schima">
 	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="edited">Display type for events. With mode %VAR1_BOLD% all event details will be displayed within a box. With mode %VAR2_BOLD% the most important event details will be displayed in a compact list. (Default: Detailed)</text>
     <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="edited">Download photos</text>
@@ -125,7 +132,6 @@
 <version id="2.3.4" translator="Szabolcs Lami">
     <text id="MAI_COUNT_BCC_DESC" development="changed" translation="edited">E-Mails to roles of several members will be sent as blind copy (BCC). This way, the recipients will not be able to see who else received the message. The amount indicated in the current field is defining the number of maximum recipients of an e-mail message. The maximum number of recepients might also be restricted by the hosting provider. In case of more e-mail recepients than allowed, several e-mail messages will be generated. Should the value be set to 1, each recepient will receive directly an individual message. The number of outgoing e-mail messages within a certain time frame might be restricted by the hosting provider, too. (Default: 50)</text>
 	<text id="MAI_SENDER_INTO_TO" development="new" translation="edited">Sender as recipient</text>
-	<text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="edited">Recipients of e-mails sent to roles will be sent by using the BCC field. Field TO remains usually empty. Certain hosting provider do not allow e-mails without TO field, or they might regard these e-mails as Spam. The current option allows you to set the senders e-mail address automatically as TO field, and all other recipients will be filled in to the regular BCC field. (Default: active)</text>
 </version>
 <version id="2.3.1" translator="Szabolcs Lami">
 	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="edited">Organisation %VAR1_BOLD% already exists. Please select another name.</text>
