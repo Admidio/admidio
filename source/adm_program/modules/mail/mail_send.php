@@ -259,8 +259,10 @@ if (isset($postCarbonCopy) && $postCarbonCopy == true)
 {
     $email->setCopyToSenderFlag();
 
-    //Falls der User eingeloggt ist, werden die Empfaenger der Mail in der Kopie aufgelistet
-    if ($gValidLogin)
+    // if mail was send to user than show recipient in copy of mail if current user has a valid login
+    // or if the user has the right to view the role then show the recipient list in the copy of the mail
+    if(($postRoleId == 0 && $gValidLogin == true)
+    || ($postRoleId  > 0 && $gCurrentUser->viewRole($postRoleId) == true))
     {
         $email->setListRecipientsFlag();
     }
