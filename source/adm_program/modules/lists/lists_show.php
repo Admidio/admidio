@@ -63,39 +63,46 @@ if($getListId == 0)
     }
 }
 
-$class_table      = 'table';
-$pdf_orientation  = 'P';
-$separator   = ',';    // fuer CSV-Dateien
+// initialize some special mode parameters
+$separator   = '';
 $valueQuotes = '';
 $charset     = '';
+$classTable  = '';
+$orientation = '';
+
 switch ($getMode)
 {
-    // Microsoft Excel 2007 und neuer braucht ein Semicolon    
     case 'csv-ms':
-        $separator   = ';'; 
-        $valueQuotes = '"';
+        $separator   = ';';  // Microsoft Excel 2007 or new needs a semicolon
+        $valueQuotes = '"';  // all values should be set with quotes
         $getMode     = 'csv';
         $charset     = 'iso-8859-1';
         break;
     case 'csv-oo':
-        $separator   = ',';   // fuer CSV-Dateien
-        $valueQuotes = '"';   // Werte muessen mit Anfuehrungszeichen eingeschlossen sein
+        $separator   = ',';   // a CSV file should have a comma
+        $valueQuotes = '"';   // all values should be set with quotes
         $getMode     = 'csv';
         $charset     = 'utf-8';
         break;
+    case 'pdf':
+        $classTable   = 'table';
+        $orientation  = 'P';
+        $getMode      = 'pdf';
+        break;
     case 'pdfl':
-        $pdf_orientation  = 'L';
-        $getMode          = 'pdf';
+        $classTable   = 'table';
+        $orientation  = 'L';
+        $getMode      = 'pdf';
         break;
     case 'html':
-        $class_table           = 'tableList';
-        $class_sub_header      = 'tableSubHeader';
-        $class_sub_header_font = 'tableSubHeaderFont';
+        $classTable         = 'tableList';
+        $classSubHeader     = 'tableSubHeader';
+        $classSubHeaderFont = 'tableSubHeaderFont';
         break;
     case 'print':
-        $class_table           = 'tableListPrint';
-        $class_sub_header      = 'tableSubHeaderPrint';
-        $class_sub_header_font = 'tableSubHeaderFontPrint';
+        $classTable         = 'tableListPrint';
+        $classSubHeader     = 'tableSubHeaderPrint';
+        $classSubHeaderFont = 'tableSubHeaderFontPrint';
         break;
     default:
         break;
@@ -176,7 +183,7 @@ if($getMode != 'csv')
     elseif($getMode == 'pdf')
     {
         require_once(SERVER_PATH. '/adm_program/libs/tcpdf/tcpdf.php');
-        $pdf = new TCPDF($pdf_orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+        $pdf = new TCPDF($orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         // set document information
         $pdf->SetCreator(PDF_CREATOR);
@@ -329,7 +336,7 @@ if($getMode != 'csv')
     }
 
     // Create table object for display
-    $table = new htmlTable('', $class_table);
+    $table = new HtmlTableBasic('', $classTable);
     $table->addAttribute('style', 'width: 100%;', 'table');
     $table->addAttribute('cellspacing', '0', 'table');
     if($getMode == 'pdf')
@@ -469,9 +476,9 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                     $title = $gL10n->get('SYS_PARTICIPANTS');
                 }
                 $table->addRow();
-                $table->addColumn('', 'class', $class_sub_header);
+                $table->addColumn('', 'class', $classSubHeader);
                 $table->addAttribute('colspan', ($list->countColumns() + 1));
-                $table->addData('<div class="'.$class_sub_header_font.'" style="float: left;">&nbsp;'.$title.'</div>');
+                $table->addData('<div class="'.$classSubHeaderFont.'" style="float: left;">&nbsp;'.$title.'</div>');
 
                 $lastGroupHead = $row['mem_leader'];
             }
