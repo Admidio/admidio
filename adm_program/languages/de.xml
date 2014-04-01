@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
 <version id="2.4.5" translator="Markus Faßbender">
-	<text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</text>
+    <text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</text>
     <text id="SYS_CSV" development="new" translation="todo">CSV</text>
     <text id="SYS_LANDSCAPE" description="Format for printing" development="new" translation="todo">Querformat</text>
     <text id="SYS_PDF" development="new" translation="todo">PDF</text>
     <text id="SYS_PORTRAIT" description="Format for printing" development="new" translation="todo">Hochformat</text>
 </version>
 <version id="2.4.4" translator="Henrik Muhs">
-	<text id="DAT_VIEW_MODE_DESC" development="changed" translation="todo">Anzeigeart der Termine. Im Modus %VAR1_BOLD% werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus %VAR2_BOLD% werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</text>
+    <text id="DAT_VIEW_MODE_DESC" development="changed" translation="todo">Anzeigeart der Termine. Im Modus %VAR1_BOLD% werden sämtliche Informationen eines Termins in einer Box angezeigt. Im Modus %VAR2_BOLD% werden die wichtigsten Termininformationen in einer kompakten Liste dargestellt. (Standard: Detailiert)</text>
     <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="todo">Fotos herunterladen</text>
     <text id="PHO_DOWNLOAD_SINGLE_PHOTO" development="new" translation="todo">Foto speichern</text>
     <text id="PHO_DOWNLOAD_ENABLED" development="new" translation="todo">Download aktivieren</text>
@@ -20,44 +20,44 @@
 <version id="2.4.2" translator="Markus Faßbender">
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="todo">An Termin als Organisator teilnehmen</text>
     <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">Du wirst Organisator des Termins und erhälst das Recht weitere teilnehmende Personen hinzuzufügen oder zu entfernen. Außerdem kannst du weitere Personen zu Organisatoren machen.</text>
-	<text id="DAT_VIEW_MODE" development="new" translation="todo">Standard-Darstellung</text>
-	<text id="DAT_VIEW_MODE_DETAIL" development="new" translation="todo">Detailiert</text>
-	<text id="DAT_VIEW_MODE_COMPACT" development="new" translation="todo">Kompakt</text>
-	<text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="todo">Du kannst die Rolle %VAR1_BOLD% nicht löschen. Es muss mindestens eine Rolle die Einstellung %VAR2_BOLD% besitzen.</text>
-	<text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="todo">Du kannst die Systemrolle %VAR1_BOLD% nicht löschen.</text>
-	<text id="ROL_DELETE_ROLE" development="new" translation="todo">Du kannst die Rolle %VAR1_BOLD% nicht löschen.</text>
+    <text id="DAT_VIEW_MODE" development="new" translation="todo">Standard-Darstellung</text>
+    <text id="DAT_VIEW_MODE_DETAIL" development="new" translation="todo">Detailiert</text>
+    <text id="DAT_VIEW_MODE_COMPACT" development="new" translation="todo">Kompakt</text>
+    <text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="todo">Du kannst die Rolle %VAR1_BOLD% nicht löschen. Es muss mindestens eine Rolle die Einstellung %VAR2_BOLD% besitzen.</text>
+    <text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="todo">Du kannst die Systemrolle %VAR1_BOLD% nicht löschen.</text>
+    <text id="ROL_DELETE_ROLE" development="new" translation="todo">Du kannst die Rolle %VAR1_BOLD% nicht löschen.</text>
 </version>
 <version id="2.4.0" translator="Markus Faßbender">
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="todo">Möchtest du die Kategorie %VAR1_BOLD% wirklich löschen?</text>
     <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="todo">Die Kategorie %VAR1_BOLD% kann nicht gelöscht werden, da sie noch %VAR2% abhängige Einträge besitzt.</text>
-	<text id="DAT_HIGHLIGHT_DATE" development="new" translation="todo">Termin optisch hervorheben</text>
-	<text id="DOW_FOLDER_NOT_FOUND" development="new" translation="todo">Der Ordner (ID %VAR1%) konnte nicht gefunden werden.</text>
+    <text id="DAT_HIGHLIGHT_DATE" development="new" translation="todo">Termin optisch hervorheben</text>
+    <text id="DOW_FOLDER_NOT_FOUND" development="new" translation="todo">Der Ordner (ID %VAR1%) konnte nicht gefunden werden.</text>
     <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="todo">Bitte in der Bedingung des Feldes %VAR1_BOLD% ein gültiges Datum verwenden.</text>
     <text id="LST_NOT_NUMERIC" development="new" translation="todo">Bitte in der Bedingung des Feldes %VAR1_BOLD% nur gültige Zahlen verwenden.</text>
-	<text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</text>
-	<text id="LST_EXCLUDE_EXAMPLE" development="new" translation="todo">Stefan</text>
-	<text id="LST_EXCLUDE_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die nicht Stefan heißen</text>
-	<text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
-	<text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="todo">Lesebestätigung anfordern</text>
-	<text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="todo">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</text>
-	<text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% hat an die aktiven Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
-	<text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% hat an die ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
-	<text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% hat an die aktiven und ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
-	<text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
-	<text id="MAI_SEND_METHOD" development="new" translation="todo">Versenden über</text>
-	<text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</text>
-	<text id="MAI_SENDER_NAME" development="new" translation="todo">Name des Absenders</text>
+    <text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse nicht gefüllt haben</text>
+    <text id="LST_EXCLUDE_EXAMPLE" development="new" translation="todo">Stefan</text>
+    <text id="LST_EXCLUDE_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die nicht Stefan heißen</text>
+    <text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="todo">Sucht alle Benutzer, die das Feld Adresse gefüllt haben</text>
+    <text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="todo">Lesebestätigung anfordern</text>
+    <text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="todo">Ist diese Option aktiviert, hat der Verfasser einer E-Mail die Möglichkeit eine Lesebestätigung anzufordern. Es hängt allerdings von den Einstellungen des E-Mailprogramms des Empfängers ab, ob eine Lesebestätigung versendet wird. Der Empfänger kann dies auf seinen Wunsch unterdrücken.</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="todo">%VAR1% hat an die aktiven Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="todo">%VAR1% hat an die ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="todo">%VAR1% hat an die aktiven und ehemaligen Mitglieder der Rolle %VAR3% von %VAR2% folgende E-Mail geschickt:</text>
+    <text id="MAI_PHP_MAIL" development="new" translation="todo">PHP mail()</text>
+    <text id="MAI_SEND_METHOD" development="new" translation="todo">Versenden über</text>
+    <text id="MAI_SEND_METHOD_DESC" development="new" translation="todo">Die mail()-Funktion von PHP wird von einigen Hostern eingeschränkt und führt gelegentlich zu Spamverdacht. Daher wird in der Regel der Versand von einer existierenden Mailadresse über einen SMTP-Server empfohlen. Die SMTP-Einstellungen können weiter unten konfiguriert werden. (Standard: PHP mail())</text>
+    <text id="MAI_SENDER_NAME" development="new" translation="todo">Name des Absenders</text>
     <text id="MAI_SENDER_NAME_DESC" development="new" translation="todo">Name des Absenders zur verwendeten Versandmailadresse.</text>
-	<text id="MAI_SMTP" development="new" translation="todo">SMTP</text>
-	<text id="MAI_SMTP_AUTH" development="new" translation="todo">SMTP Authentifizierung</text>
-	<text id="MAI_SMTP_AUTH_DESC" development="new" translation="todo">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Benutzername und Passwort ausgefüllt werden.  (Standard: Ja)</text>
-	<text id="MAI_SMTP_AUTH_LOGIN" development="new" translation="todo">Login</text>    
+    <text id="MAI_SMTP" development="new" translation="todo">SMTP</text>
+    <text id="MAI_SMTP_AUTH" development="new" translation="todo">SMTP Authentifizierung</text>
+    <text id="MAI_SMTP_AUTH_DESC" development="new" translation="todo">Falls eine Authentifizierung am SMTP-Server stattfinden soll, müssen auch die Felder Benutzername und Passwort ausgefüllt werden.  (Standard: Ja)</text>
+    <text id="MAI_SMTP_AUTH_LOGIN" development="new" translation="todo">Login</text>    
     <text id="MAI_SMTP_AUTH_NTLM" development="new" translation="todo">NTLM</text>
-	<text id="MAI_SMTP_AUTH_PLAIN" development="new" translation="todo">Plain</text>    
-	<text id="MAI_SMTP_AUTH_TYPE" development="new" translation="todo">SMTP Authentifizierungs-Typ</text>
+    <text id="MAI_SMTP_AUTH_PLAIN" development="new" translation="todo">Plain</text>    
+    <text id="MAI_SMTP_AUTH_TYPE" development="new" translation="todo">SMTP Authentifizierungs-Typ</text>
     <text id="MAI_SMTP_AUTH_TYPE_DESC" development="new" translation="todo">SMTP kennt verschiedene Authentifizierungsmethoden. Die hier ausgewählte wird von Admidio verwendet. (Standard: Login)</text>   
-	<text id="MAI_SMTP_HOST" development="new" translation="todo">SMTP Host</text>
-	<text id="MAI_SMTP_HOST_DESC" development="new" translation="todo">Adresse des zu verwendenden SMTP-Servers.</text>
+    <text id="MAI_SMTP_HOST" development="new" translation="todo">SMTP Host</text>
+    <text id="MAI_SMTP_HOST_DESC" development="new" translation="todo">Adresse des zu verwendenden SMTP-Servers.</text>
     <text id="MAI_SMTP_PASSWORD" development="new" translation="todo">SMTP Passwort</text>
     <text id="MAI_SMTP_PASSWORD_DESC" development="new" translation="todo">Das Passwort, das bei der SMTP-Authentifizierung verwendet wird.</text>
     <text id="MAI_SMTP_PORT" development="new" translation="todo">SMTP Port</text>
@@ -69,11 +69,11 @@
     <text id="MAI_SMTP_SECURE_TLS" development="new" translation="todo">TLS</text>    
     <text id="MAI_SMTP_USER" development="new" translation="todo">SMTP Benutzername</text>
     <text id="MAI_SMTP_USER_DESC" development="new" translation="todo">Der Benutzername, der bei der SMTP-Authentifizierung verwendet wird.</text>
-	<text id="MEM_CHANGE_HISTORY" development="new" translation="todo">Änderungshistorie</text>
-	<text id="MEM_CHANGE_HISTORY_OF" development="new" translation="todo">Änderungshistorie von %VAR1%</text>
-	<text id="MEM_NO_CHANGES" development="new" translation="todo">Es sind keine Änderungen protokolliert.</text>
-	<text id="MEM_NO_CHANGES_PROFIL" development="new" translation="todo">Bei %VAR1_BOLD% wurden bisher keine Änderungen protokolliert.</text>
-	<text id="MEM_SEND_NEW_LOGIN" development="changed" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</text>
+    <text id="MEM_CHANGE_HISTORY" development="new" translation="todo">Änderungshistorie</text>
+    <text id="MEM_CHANGE_HISTORY_OF" development="new" translation="todo">Änderungshistorie von %VAR1%</text>
+    <text id="MEM_NO_CHANGES" development="new" translation="todo">Es sind keine Änderungen protokolliert.</text>
+    <text id="MEM_NO_CHANGES_PROFIL" development="new" translation="todo">Bei %VAR1_BOLD% wurden bisher keine Änderungen protokolliert.</text>
+    <text id="MEM_SEND_NEW_LOGIN" development="changed" translation="todo">Möchtest du %VAR1_BOLD% eine E-Mail mit dem aktuellen Benutzernamen und einem neuen Passwort zumailen?</text>
     <text id="ORG_SHOW_CREATE_EDIT" development="new" translation="todo">Ersteller und Zeitstempel anzeigen</text>
     <text id="ORG_SHOW_CREATE_EDIT_DESC" development="new" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen und bearbeiten.</text>
     <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="changed" translation="todo">Systembenachrichtigungen aktivieren</text>
@@ -83,63 +83,63 @@
     <text id="ORG_SHOW_ALL_USERS_DESC" development="new" translation="todo">Ist diese Einstellung gesetzt, so werden in der Benutzerverwaltung neben den aktiven Mitgliedern der aktuellen Organisation optional auch ehemalige Mitglieder und Mitglieder anderer Organisationen angezeigt. Wird die Einstellung deaktiviert, werden nur aktive Mitglieder der aktuellen Organisation angezeigt. Beim Anlegen neuer Benutzer oder Zuordnen von Anmeldungen wird allerdings weiterhin im gesamten Benutzerbestand aller Organisationen nach bereits existierenden Benutzern geschaut.</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS" development="changed" translation="todo">E-Mailadresse</text>
     <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="todo">Hier sollte die E-Mail-Adresse eines Administrators eingetragen werden. Diese wird als Absenderadresse für Systembenachrichtigungen benutzt, z.B. bei der Registrierungsbestätigung. (Standard: webmaster@%VAR1%)</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="todo">Benachrichtigung bei neuen Einträgen</text>
-	<text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="todo">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mailadresse %VAR1% versendet. (Standard: nein)</text>
+    <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="todo">Benachrichtigung bei neuen Einträgen</text>
+    <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="todo">Hier kann die Systembenachrichtigung für neue Einträge in den Modulen aktiviert werden. Sie dient als Überwachungsfunktion innerhalb von Admidio. Der Administrator hat so die Möglichkeit sich über neue Einträge in den Module per E-Mail benachrichtigen zu lassen (es werden nur neue Einträge berücksichtigt). Die Systembenachrichtigungen wird an die E-Mailadresse %VAR1% versendet. (Standard: nein)</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS" development="changed" translation="todo">Systembenachrichtigungen-Texte</text>
     <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="todo">Hier können die Texte aller Systembenachrichtigungen angepasst und ergänzt werden. Die Texte sind in 2 Bereiche (Betreff &amp; Inhalt) unterteilt und werden durch die Zeichenfolge #subject# und #content# identifiziert. Danach folgt dann der jeweilige Inhalt für diesen Bereich.\n\nIn jeder Mail können folgende Platzhalter benutzt werden, welche dann zur Laufzeit durch die entsprechenden Inhalt ersetzt werden</text>
-	<text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="todo">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</text>
-	<text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="todo">Zukünftige Rollenmitgliedschaften</text>
-	<text id="PRO_LOG_EDIT_FIELDS" development="new" translation="todo">Änderungen protokollieren</text>
-	<text id="PRO_LOG_EDIT_FIELDS_DESC" development="new" translation="todo">Änderungen in Profilfeldern werden für jeden Benutzer und jedes Feld mitgeschrieben. Dabei wird der bisherige und der neue Wert, sowie der Benutzer, der die Änderung durchgeführt hat, mit Zeitstempel gespeichert. (Standard: ja)</text>
-	<text id="PRO_NO_DEFAULT_ROLE" development="changed" translation="todo">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</text>
+    <text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="todo">Die Registrierung wurde erfolgreich bestätigt. Der Benutzer kann sich jetzt im System anmelden.</text>
+    <text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="todo">Zukünftige Rollenmitgliedschaften</text>
+    <text id="PRO_LOG_EDIT_FIELDS" development="new" translation="todo">Änderungen protokollieren</text>
+    <text id="PRO_LOG_EDIT_FIELDS_DESC" development="new" translation="todo">Änderungen in Profilfeldern werden für jeden Benutzer und jedes Feld mitgeschrieben. Dabei wird der bisherige und der neue Wert, sowie der Benutzer, der die Änderung durchgeführt hat, mit Zeitstempel gespeichert. (Standard: ja)</text>
+    <text id="PRO_NO_DEFAULT_ROLE" development="changed" translation="todo">In der Rollenverwaltung wurde keine Standardrolle für neue Benutzer hinterlegt. Wende dich bitte an einen Webmaster, der diese Einstellung vornehmen kann.</text>
     <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="todo">Es wurden keine Rollen gefunden. Ggf. fehlen dir die Rechte bestimmte Rollen zu sehen.</text>
     <text id="PRO_VIEW_ROLES_OTHER_ORGAS" development="new" translation="todo">Es werden dir hier nur Rollen anderer Organisationen angezeigt, die dort für alle angemeldete Benutzer sichtbar sind. Falls du auch Mitglied dieser Organisation bist, werden dir zusätzlich die Rollen angezeigt, die du mit deinen Rechten innerhalb der jeweiligen Organisation sehen darfst.</text>
-	<text id="ROL_ASSIGN_EDIT_MEMBERS" development="new" translation="todo">Mitglieder zuordnen und bearbeiten</text>
-	<text id="ROL_DEFAULT_LIST" development="new" translation="todo">Standardliste</text>
-	<text id="ROL_DEFAULT_LIST_DESC" development="new" translation="todo">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</text>
-	<text id="ROL_DEFAULT_REGISTRATION" development="new" translation="todo">Standardzuordnung bei Registrierung</text>
-	<text id="ROL_DEFAULT_REGISTRATION_DESC" development="new" translation="todo">Wird ein neuer Benutzer angelegt bzw. eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</text>
-	<text id="ROL_LEADER_NO_ADDITIONAL_RIGHTS" development="new" translation="todo">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</text>
-	<text id="ROL_LEADER_EDIT_MEMBERS" development="new" translation="todo">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</text>
-	<text id="ROL_LEADER_ASSIGN_MEMBERS" development="new" translation="todo">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</text>
-	<text id="ROL_LEADER_RIGHTS_DESC" development="new" translation="todo">Rollenmitglieder können zu Leitern einer Rolle ernannt werden und optional erweiterte Rechte bekommen.\nSie können das Recht bekommen Profildaten aller Rollenmitglieder zu bearbeiten und/oder das Recht Mitglieder der Rolle hinzuzufügen oder zu entfernen. Bekommen sie beide Rechte zugewiesen wären sie dadurch allerdings indirekt in der Lage Profildaten aller Mitglieder zu bearbeiten.</text>
-	<text id="ROL_NO_ADDITIONAL_RIGHTS" development="new" translation="todo">Keine zusätzlichen Rechte</text>
-	<text id="ROL_NO_DEFAULT_ROLE" development="new" translation="todo">Du kannst die Einstellung %VAR1_BOLD% nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</text>
-	<text id="ROL_SYSTEM_DEFAULT_LIST" development="new" translation="todo">Systemweite Standardliste</text>
-	<text id="SYS_CHANGED_AT" development="new" translation="todo">Geändert am</text>
-	<text id="SYS_DELETE_LAST_CATEGORY" development="new" translation="todo">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</text>
-	<text id="SYS_DELETE_SYSTEM_CATEGORY" development="new" translation="todo">Du darfst keine Systemkategorien löschen.</text>
-	<text id="SYS_DELETED_USER" development="new" translation="todo">Gelöschte Person</text>
-	<text id="SYS_DONT_SHOW" development="new" translation="todo">Nicht anzeigen</text>
-	<text id="SYS_EDIT_MEMBERS" development="new" translation="todo">Mitglieder bearbeiten</text>
-	<text id="SYS_EDITED_BY" development="new" translation="todo">Geändert von</text>
+    <text id="ROL_ASSIGN_EDIT_MEMBERS" development="new" translation="todo">Mitglieder zuordnen und bearbeiten</text>
+    <text id="ROL_DEFAULT_LIST" development="new" translation="todo">Standardliste</text>
+    <text id="ROL_DEFAULT_LIST_DESC" development="new" translation="todo">Soll eine Mitgliederliste zu dieser Rolle angezeigt werden und wird keine Listenkonfiguration vorgegeben, so wird die Liste in der systemweit eingestellten Standardlistenkonfiguration dargestellt. Über dieses Feld kann für die einzelne Rolle eine andere Listenkonfiguration ausgewählt werden, die angezeigt wird, wenn keine Listenkonfiguration vorgegeben ist.</text>
+    <text id="ROL_DEFAULT_REGISTRATION" development="new" translation="todo">Standardzuordnung bei Registrierung</text>
+    <text id="ROL_DEFAULT_REGISTRATION_DESC" development="new" translation="todo">Wird ein neuer Benutzer angelegt bzw. eine neue Registrierung akzeptiert, dann wird diese Rolle automatisch dem neuen Benutzer zugeordnet. Besitzt der Ersteller das Recht Rollen zu zuordnen, so werden ihm alle Rollenzuordnung angezeigt und er kann sie entsprechend anpassen.</text>
+    <text id="ROL_LEADER_NO_ADDITIONAL_RIGHTS" development="new" translation="todo">Leiter dieser Rolle haben keine gesonderten Rechte. Sie werden in Listenansichten nur hervorgehoben dargestellt.</text>
+    <text id="ROL_LEADER_EDIT_MEMBERS" development="new" translation="todo">Leiter dieser Rolle können Profildaten aller Rollenmitglieder bearbeiten.</text>
+    <text id="ROL_LEADER_ASSIGN_MEMBERS" development="new" translation="todo">Leiter dieser Rolle können neue Rollenmitglieder hinzufügen oder vorhandene Mitglieder entfernen.</text>
+    <text id="ROL_LEADER_RIGHTS_DESC" development="new" translation="todo">Rollenmitglieder können zu Leitern einer Rolle ernannt werden und optional erweiterte Rechte bekommen.\nSie können das Recht bekommen Profildaten aller Rollenmitglieder zu bearbeiten und/oder das Recht Mitglieder der Rolle hinzuzufügen oder zu entfernen. Bekommen sie beide Rechte zugewiesen wären sie dadurch allerdings indirekt in der Lage Profildaten aller Mitglieder zu bearbeiten.</text>
+    <text id="ROL_NO_ADDITIONAL_RIGHTS" development="new" translation="todo">Keine zusätzlichen Rechte</text>
+    <text id="ROL_NO_DEFAULT_ROLE" development="new" translation="todo">Du kannst die Einstellung %VAR1_BOLD% nicht entfernen, da mindestens eine Rolle als Standardzuordnung hinterlegt sein muss.</text>
+    <text id="ROL_SYSTEM_DEFAULT_LIST" development="new" translation="todo">Systemweite Standardliste</text>
+    <text id="SYS_CHANGED_AT" development="new" translation="todo">Geändert am</text>
+    <text id="SYS_DELETE_LAST_CATEGORY" development="new" translation="todo">Es existiert keine weitere Kategorie für diesen Bereich. Aus diesem Grund kann die Kategorie nicht gelöscht werden.</text>
+    <text id="SYS_DELETE_SYSTEM_CATEGORY" development="new" translation="todo">Du darfst keine Systemkategorien löschen.</text>
+    <text id="SYS_DELETED_USER" development="new" translation="todo">Gelöschte Person</text>
+    <text id="SYS_DONT_SHOW" development="new" translation="todo">Nicht anzeigen</text>
+    <text id="SYS_EDIT_MEMBERS" development="new" translation="todo">Mitglieder bearbeiten</text>
+    <text id="SYS_EDITED_BY" development="new" translation="todo">Geändert von</text>
     <text id="SYS_EMAIL_NOT_SEND" development="changed" translation="todo">Die E-Mail konnte nicht an %VAR1_BOLD% gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n%VAR2%</text>
-	<text id="SYS_EMPTY" development="new" translation="todo">Leer</text>
-	<text id="SYS_FIRSTNAME_LASTNAME" development="new" translation="todo">Vorname und Nachname</text>
-	<text id="SYS_FROM" development="new" translation="todo">ab %VAR1%</text>
-	<text id="SYS_INFORMATIONS" development="new" translation="todo">Informationen</text>
-	<text id="SYS_MAIL_DISPATCH" development="new" translation="todo">E-Mailversand</text>
-	<text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">Dieses Modul kann nur von der Homepage der beim Login gewählten Organisation (%VAR1%) aus aufgerufen werden.</text>
-	<text id="SYS_MODULE_PREFERENCES" development="new" translation="todo">Moduleinstellungen</text>
+    <text id="SYS_EMPTY" development="new" translation="todo">Leer</text>
+    <text id="SYS_FIRSTNAME_LASTNAME" development="new" translation="todo">Vorname und Nachname</text>
+    <text id="SYS_FROM" development="new" translation="todo">ab %VAR1%</text>
+    <text id="SYS_INFORMATIONS" development="new" translation="todo">Informationen</text>
+    <text id="SYS_MAIL_DISPATCH" development="new" translation="todo">E-Mailversand</text>
+    <text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">Dieses Modul kann nur von der Homepage der beim Login gewählten Organisation (%VAR1%) aus aufgerufen werden.</text>
+    <text id="SYS_MODULE_PREFERENCES" development="new" translation="todo">Moduleinstellungen</text>
     <text id="SYS_MORE_FEATURES" development="new" translation="todo">Weitere Funktionen</text>
-	<text id="SYS_NEW_VALUE" development="new" translation="todo">Neuer Wert</text>
-	<text id="SYS_NOT_EMPTY" development="new" translation="todo">Nicht leer</text>
+    <text id="SYS_NEW_VALUE" development="new" translation="todo">Neuer Wert</text>
+    <text id="SYS_NOT_EMPTY" development="new" translation="todo">Nicht leer</text>
     <text id="SYS_PREVIOUS_VALUE" development="new" translation="todo">Vorheriger Wert</text>
-	<text id="SYS_SYSMAIL_REFUSE_REGISTRATION" development="new" translation="todo">#subject# Registrierung bei %organization_long_name% abgelehnt\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Webmaster %webmaster_email% von %organization_homepage%.\n\nViele Grüße\nDie Webmaster</text>
-	<text id="SYS_SYSTEM" development="new" translation="todo">System</text>
+    <text id="SYS_SYSMAIL_REFUSE_REGISTRATION" development="new" translation="todo">#subject# Registrierung bei %organization_long_name% abgelehnt\n#content# Hallo %user_first_name%,\n\ndeine Anmeldung auf %organization_homepage% wurde abgelehnt.\n\nRegistrierungen werden in der Regel nur von Mitgliedern akzeptiert. Falls du Mitglied bist und deine Registrierung dennoch abgelehnt wurde, kann es daran liegen, dass du als Mitglied nicht identifiziert wurdest.\nZur Klärung der Gründe für die Ablehnung wende dich bitte an den Webmaster %webmaster_email% von %organization_homepage%.\n\nViele Grüße\nDie Webmaster</text>
+    <text id="SYS_SYSTEM" development="new" translation="todo">System</text>
     <text id="SYS_SYSTEM_MAILS" development="changed" translation="todo">Systembenachrichtigungen</text>
 </version>
 <version id="2.3.4" translator="Markus Faßbender">
     <text id="MAI_COUNT_BCC_DESC" development="changed" translation="todo">E-Mails an Rollen mit mehreren Mitgliedern werden als Blindkopie (BCC) versendet. So kann vom Empfänger nicht eingesehen werden, wer diese E-Mail noch bekommen hat. Die Anzahl in diesem Feld gibt die maximale Anzahl an Empfängern pro E-Mail an. Diese Anzahl kann von Providern beschränkt werden. Besitzt eine Rolle mehr Mitglieder als die eingestellte Zahl, so werden mehrere E-Mails erzeugt. Wird der Wert auf 1 gesetzt, so werden die E-Mails nicht als Blindkopie versendet, sondern direkt an den Empfänger. Die Anzahl der möglichen zu versendenden E-Mails innerhalb eines Zeitraums kann auch von Providern beschränkt werden. (Standard: 50)</text>
-	<text id="MAI_SENDER_INTO_TO" development="new" translation="todo">Absender als Adressat</text>
+    <text id="MAI_SENDER_INTO_TO" development="new" translation="todo">Absender als Adressat</text>
 </version>
 <version id="2.3.1" translator="Markus Faßbender">
-	<text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="todo">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wähle bitte einen anderen Namen aus.</text>
+    <text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="todo">Eine Organisation mit dem Namen %VAR1_BOLD% existiert bereits. Wähle bitte einen anderen Namen aus.</text>
     <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="todo">Zu der E-Mail-Adresse %VAR1_BOLD% konnte im System keine gültige Anmeldung gefunden werden!</text>
     <text id="SYS_LOSTPW_SEVERAL_EMAIL" development="new" translation="todo">Die E-Mail-Adresse %VAR1_BOLD% wurde mehrfach zugeordnet. Es konnte kein eindeutiger Benutzer gefunden werden.</text>
 </version>
 <version id="2.3.0" translator="Markus Faßbender">
-	<text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
+    <text id="CAT_DEFAULT_VAR" development="new" translation="todo">Standard-%VAR1%</text>
     <text id="DAT_ENABLE_ICAL" development="new" translation="todo">iCal-Funktion aktivieren</text>
     <text id="DAT_ENABLE_ICAL_DESC" development="new" translation="todo">Ist diese Funktion aktiviert, lassen sich einzelne Termine oder alle Termine in einem festgelegten Zeitraum herunterladen. Auch das Abonnieren der Termine mit einer Kalendersoftware wird möglich. (Standard: ja)</text>
     <text id="DAT_ICAL_DAYS_FUTURE" development="changed" translation="todo">Anzahl iCal Tage Zukunft</text>
@@ -198,8 +198,8 @@
     <text id="SYS_MESSAGE" development="new" translation="todo">Nachricht</text>
     <text id="SYS_ORGANIZATION" development="new" translation="todo">Organisation</text>
     <text id="SYS_PERIOD" development="new" translation="todo">Zeitraum</text>
-	<text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>    	
-	<text id="SYS_PRESENTATION" development="new" translation="todo">Darstellung</text>
+    <text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="todo">Admidio benötigt %VAR1% oder höher</text>        
+    <text id="SYS_PRESENTATION" development="new" translation="todo">Darstellung</text>
     <text id="SYS_RADIO_BUTTON" development="new" translation="todo">Optionsfeld</text>
     <text id="SYS_SOCIAL_NETWORKS" development="new" translation="todo">Soziale Netzwerke</text>
     <text id="SYS_URL_INVALID_CHAR" development="changed" translation="todo">Die URL im Feld %VAR1_BOLD% enthält ungültige Zeichen.\n\nErlaubt sind nur Buchstaben und Umlaute, Zahlen 0-9 und die Sonderzeichen .-_:/#?=% .</text>
@@ -260,10 +260,10 @@
     <text id="ANN_ANNOUNCEMENT" development="new" translation="todo">Ankündigung</text>
     <text id="ANN_ANNOUNCEMENTS" development="new" translation="todo">Ankündigungen</text>
     <text id="ANN_ANNOUNCEMENTS_DESC" development="new" translation="todo">Ankündigungen, Neuigkeiten oder Informationen können hier veröffentlicht und angeschaut werden.</text>
-	<text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Ankündigung wurde angelegt</text>
-	<text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Ankündigung bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
-	
-	<!-- Phrases only in Backupmodule -->
+    <text id="ANN_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Ankündigung wurde angelegt</text>
+    <text id="ANN_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Ankündigung bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+    
+    <!-- Phrases only in Backupmodule -->
     <text id="BAC_BACK_TO_BACKUP_PAGE" development="new" translation="todo">Zurück zur Backupseite</text>
     <text id="BAC_BACKUP_COMPLETED" development="new" translation="todo">Backup fertiggestellt in %VAR1%</text>
     <text id="BAC_BACKUP_FILE" development="new" translation="todo">Backupdatei</text>
@@ -306,12 +306,12 @@
     <text id="DAT_DATES_DESC" development="new" translation="todo">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
     <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="todo">Hier können Räume angelegt und bearbeitet werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
-	<text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Termin wurde angelegt</text>
-	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="todo">Es wurde ein neuer Termin bei %VAR1% angelegt.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
-	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="todo">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nAngelegt von: %VAR4%\n</text>
-	<text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3" development="new" translation="todo">Angelegt am: %VAR1%</text>
+    <text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Termin wurde angelegt</text>
+    <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="todo">Es wurde ein neuer Termin bei %VAR1% angelegt.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
+    <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="todo">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nAngelegt von: %VAR4%\n</text>
+    <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART3" development="new" translation="todo">Angelegt am: %VAR1%</text>
     <text id="DAT_EXPORT_ICAL" development="new" translation="todo">Exportieren (iCal)</text>
-	<text id="DAT_LOCATION" development="new" translation="todo">Ort</text>	
+    <text id="DAT_LOCATION" development="new" translation="todo">Ort</text>    
     <text id="DAT_LOCATION_LINK" development="new" translation="todo">Werden genügend Informationen (Straße, Stadt, Lokalität) zum Ort des Termins eingegeben, so kann ein Link bzw. eine Route zu diesem Treffpunkt über Google-Maps erstellt werden.</text>
     <text id="DAT_LOGIN_POSSIBLE" development="new" translation="todo">Hier kann ausgewählt werden, ob eine Anmeldung zu dem angegebenen Termin möglich sein soll oder nicht.\nFalls die Anmeldung nachträglich gelöscht wird, werden auch alle bisherigen Teilnehmer vom Termin entfernt.\nWenn man hingegen nur die Anmeldung für neue Teilnehmer beenden möchte, so kann man die derzeitige Teilnehmerzahl als Teilnahmebegrenzung eintragen.</text>
     <text id="DAT_MANAGE_CALENDARS" development="new" translation="todo">Kalender verwalten</text>
@@ -342,16 +342,16 @@
 
     <!-- Phrases only in Downloadsmodule -->
     <text id="DOW_ACCESS_ALLOWED" development="new" translation="todo">Zugriff erlaubt</text>
-	<text id="DOW_ADD_TO_DATABASE" development="new" translation="todo">Zur Datenbank hinzufügen</text>
+    <text id="DOW_ADD_TO_DATABASE" development="new" translation="todo">Zur Datenbank hinzufügen</text>
     <text id="DOW_ADDITIONAL_FILES" development="new" translation="todo">In dieser Übersicht sind Dateien und Ordner aufgelistet, die noch nicht in der Datenbank verwaltet werden. Diese können nun der Datenbank hinzugefügt werden. Es werden automatisch die Berechtigungen des aktuellen Ordners übernommen.</text>
-	<text id="DOW_CHOOSE_FILE" development="new" translation="todo">Datei auswählen</text>
-	<text id="DOW_COUNTER" development="new" translation="todo">Zähler</text>
-	<text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
-	<text id="DOW_CREATE_FOLDER_DESC" development="new" translation="todo">Den neuen Ordner im Ordner %VAR1_BOLD% anlegen.</text>
+    <text id="DOW_CHOOSE_FILE" development="new" translation="todo">Datei auswählen</text>
+    <text id="DOW_COUNTER" development="new" translation="todo">Zähler</text>
+    <text id="DOW_CREATE_FOLDER" development="new" translation="todo">Ordner anlegen</text>
+    <text id="DOW_CREATE_FOLDER_DESC" development="new" translation="todo">Den neuen Ordner im Ordner %VAR1_BOLD% anlegen.</text>
     <text id="DOW_DOWNLOADS" development="new" translation="todo">Downloads</text>
     <text id="DOW_DOWNLOADS_DESC" development="new" translation="todo">Unterschiedliche Daten und Dateien können hier zum Download angeboten werden. Diese können in Ordnern mit individuellen Zugriffsrechten zusammengefasst werden.</text>
-	<text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Datei wurde hochgeladen</text>
-	<text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Datei bei %VAR1% hochgeladen.\n\nDatei: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+    <text id="DOW_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Eine neue Datei wurde hochgeladen</text>
+    <text id="DOW_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde eine neue Datei bei %VAR1% hochgeladen.\n\nDatei: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="DOW_ENABLE_DOWNLOAD_MODULE" development="new" translation="todo">Downloadmodul aktivieren</text>
     <text id="DOW_ENABLE_DOWNLOAD_MODULE_DESC" development="new" translation="todo">Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)</text>
     <text id="DOW_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nWähle bitte einen anderen Dateinamen aus.</text>
@@ -362,29 +362,29 @@
     <text id="DOW_FILE_RENAME" development="new" translation="todo">Die Datei %VAR1% wurde umbenannt.</text>
     <text id="DOW_FILE_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen der Datei %VAR1% ist ein Fehler aufgetreten.</text>
     <text id="DOW_FILE_TO_LARGE" development="new" translation="todo">Die hochgeladene Datei übersteigt die zulässige Dateigröße von %VAR1% KB.</text>
-	<text id="DOW_FILE_TYPE" development="new" translation="todo">Dateityp</text>
+    <text id="DOW_FILE_TYPE" development="new" translation="todo">Dateityp</text>
     <text id="DOW_FILE_UPLOAD_ERROR" development="new" translation="todo">Beim Hochladen der Datei %VAR1% ist ein unbekannter Fehler aufgetreten.</text>
     <text id="DOW_FILE_UPLOADED" development="new" translation="todo">Die Datei %VAR1_BOLD% wurde hochgeladen</text>
     <text id="DOW_FOLDER_CREATED" development="new" translation="todo">Der Ordner %VAR1_BOLD% wurde angelegt.</text>
     <text id="DOW_FOLDER_EXISTS" development="new" translation="todo">Der Ordner %VAR1% existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
     <text id="DOW_FOLDER_NAME_INVALID" development="new" translation="todo">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
-	<text id="DOW_FOLDER_NO_FILES" development="new" translation="todo">Der Ordner enhält keine Dateien.</text>
+    <text id="DOW_FOLDER_NO_FILES" development="new" translation="todo">Der Ordner enhält keine Dateien.</text>
     <text id="DOW_FOLDER_NO_RIGHTS" development="new" translation="todo">Du besitzt keine Rechte den gewählten Downloadordner zu sehen.</text>
     <text id="DOW_FOLDER_NOT_EXISTS" development="new" translation="todo">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</text>
     <text id="DOW_FOLDER_RENAME" development="new" translation="todo">Der Ordner %VAR1% wurde umbenannt.</text>
     <text id="DOW_FOLDER_RENAME_ERROR" development="new" translation="todo">Beim Umbenennen des Ordners %VAR1% ist ein Fehler aufgetreten.</text>
     <text id="DOW_MAXIMUM_FILE_SIZE" development="new" translation="todo">Maximale Dateigröße</text>
     <text id="DOW_MAXIMUM_FILE_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien hochladen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so ist der Upload deaktiviert. (Standard: 3072KB)</text>
-	<text id="DOW_NEW_FILE_NAME" development="new" translation="todo">Neuer Dateiname</text>
-	<text id="DOW_NEW_NAME" development="new" translation="todo">Neuer Name</text>
+    <text id="DOW_NEW_FILE_NAME" development="new" translation="todo">Neuer Dateiname</text>
+    <text id="DOW_NEW_NAME" development="new" translation="todo">Neuer Name</text>
     <text id="DOW_NO_ACCESS" development="new" translation="todo">Kein Zugriff</text>
-	<text id="DOW_NO_PUBLIC_ACCESS" development="new" translation="todo">Öffentlicher Zugriff ist nicht erlaubt.</text>
+    <text id="DOW_NO_PUBLIC_ACCESS" development="new" translation="todo">Öffentlicher Zugriff ist nicht erlaubt.</text>
     <text id="DOW_PUBLIC_DOWNLOAD_FLAG" development="new" translation="todo">Wenn diese Option aktiviert ist, können nur eingeloggte Besucher, die Mitglied in einer der berechtigten Rollen sind, den Inhalt des Ordners sehen.</text>
     <text id="DOW_ROLE_ACCESS_PERMISSIONS" development="new" translation="todo">Rollenzugriffsberechtigungen</text>
     <text id="DOW_ROLE_ACCESS_PERMISSIONS_DESC" development="new" translation="todo">Hier wird konfiguriert welche Rollen Zugriff auf den Ordner haben dürfen. Gesetzte Berechtigungen werden an alle Unterordner vererbt und bereits vorhandene Berechtigungen in Unterordnern werden überschrieben. Es stehen nur Rollen zur Verfügung die auf den übergeordneten Ordner Zugriff haben.</text>
-	<text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="todo">Ordnerberechtigungen setzen</text>
-	<text id="DOW_UNMANAGED_FILES" development="new" translation="todo">Nicht verwaltete Dateien</text>
-	<text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
+    <text id="DOW_SET_FOLDER_PERMISSIONS" development="new" translation="todo">Ordnerberechtigungen setzen</text>
+    <text id="DOW_UNMANAGED_FILES" development="new" translation="todo">Nicht verwaltete Dateien</text>
+    <text id="DOW_UPLOAD_FILE" development="new" translation="todo">Datei hochladen</text>
     <text id="DOW_EDIT_FILE" development="new" translation="todo">Datei bearbeiten</text>
     <text id="DOW_EDIT_FOLDER" development="new" translation="todo">Ordner bearbeiten</text>
     <text id="DOW_PREVIOUS_NAME" development="new" translation="todo">Bisheriger Name</text>
@@ -455,10 +455,10 @@
     <text id="GBO_CREATE_VAR_ENTRY" development="new" translation="todo">%VAR1%-Eintrag anlegen</text>
     <text id="GBO_EDIT_COMMENT" development="new" translation="todo">Kommentar bearbeiten</text>
     <text id="GBO_EDIT_ENTRY" development="new" translation="todo">%VAR1%-Eintrag bearbeiten</text>
-	<text id="GBO_EMAIL_NOTIFICATION_GBC_TITLE" development="new" translation="todo">Ein neuer Gästebuchkommentar wurde angelegt</text>
-	<text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebuchkommentar bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
-	<text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Gästebucheintrag wurde angelegt</text>
-	<text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebucheintrag bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+    <text id="GBO_EMAIL_NOTIFICATION_GBC_TITLE" development="new" translation="todo">Ein neuer Gästebuchkommentar wurde angelegt</text>
+    <text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebuchkommentar bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+    <text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Gästebucheintrag wurde angelegt</text>
+    <text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neuer Gästebucheintrag bei %VAR1% angelegt.\n\nText: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="GBO_ENTRY_QUEUED" development="new" translation="todo">Der Eintrag wurde gespeichert. Er wird erst sichtbar nachdem er von einem Moderator freigeschaltet wurde.</text>
     <text id="GBO_FLOODING_PROTECTION" development="new" translation="todo">Dein letzter Eintrag im Gästebuch liegt weniger als %VAR1% Sekunden zurück.</text>
     <text id="GBO_FLOODING_PROTECTION_INTERVALL" development="new" translation="todo">Flooding Protection Intervall</text>
@@ -564,12 +564,12 @@
     <text id="INS_YAHOO_MESSENGER" development="new" translation="todo">Yahoo! Messenger</text>
 
     <!-- Phrases only in Linkmodule -->
-	<text id="LNK_COUNTER" development="new" translation="todo">Zähler</text>
+    <text id="LNK_COUNTER" development="new" translation="todo">Zähler</text>
     <text id="LNK_CREATE_LINK" development="new" translation="todo">Link anlegen</text>
     <text id="LNK_DISPLAY_REDIRECT" development="new" translation="todo">Anzeige Weiterleitung</text>
     <text id="LNK_DISPLAY_REDIRECT_DESC" development="new" translation="todo">Hier kann die automatische Weiterleitung für Links aktiviert werden. Es wird bei Aufruf eines Links aus dem Linkmodul zunächst eine Hinweisseite angezeigt, die auf das Verlassen der Admidioseiten hinweist. Nach vorgegebener Zeit in Sekunden wird dann der eigentliche Link aufgerufen. Wird der Redirect auf 0 gesetzt wird der Link ohne Anzeige der Hinweisseite direkt aufgerufen. (Standard: 10 Sekunden)</text>
-	<text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Weblink wurde angelegt</text>
-	<text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neuer Weblink bei %VAR1% angelegt.\n\nLink: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+    <text id="LNK_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Weblink wurde angelegt</text>
+    <text id="LNK_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neuer Weblink bei %VAR1% angelegt.\n\nLink: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="LNK_GO_TO" development="new" translation="todo">Gehe zu %VAR1%</text>
     <text id="LNK_LINK_ADDRESS" development="new" translation="todo">Linkadresse</text>
     <text id="LNK_LINK_NAME" development="new" translation="todo">Linkname</text>
@@ -625,15 +625,15 @@
     <text id="LST_MEMBERSHIP_END" development="new" translation="todo">Mitgliedschaftsende</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="todo">Mitgliedschaftsbeginn</text>
     <text id="LST_MICROSOFT_EXCEL" development="new" translation="todo">Microsoft Excel</text>
-	<text id="LST_MUST_HAVE_WEBMASTER" development="new" translation="todo">Die Rolle Webmaster muss mindestens ein Mitglied haben!</text>
+    <text id="LST_MUST_HAVE_WEBMASTER" development="new" translation="todo">Die Rolle Webmaster muss mindestens ein Mitglied haben!</text>
     <text id="LST_MY_LIST" development="new" translation="todo">Eigene Liste</text>
     <text id="LST_MYLIST_CONDITION_DESC" development="new" translation="todo">Hier kannst du Bedingungen zu jedem Feld in deiner neuen Liste eingeben. Damit wird die ausgewählte Rolle noch einmal nach deinen Bedingungen eingeschränkt.</text>
     <text id="LST_NO_MORE_COLUMN" development="new" translation="todo">Aus technischen Gründen können keine weiteren Spalten hinzugefügt werden.</text>
-	<text id="LST_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
+    <text id="LST_NO_USER_FOUND" development="new" translation="todo">Es wurde kein Benutzer gefunden, der den gewählten Kriterien entspricht.</text>
     <text id="LST_NO_ROLES_REMOVED" development="new" translation="todo">Es sind noch keine Rollen aus dem System entfernt worden.\n\nErst wenn du in der Rollenverwaltung Rollen löschst, erscheinen diese automatisch bei den "Entfernten Rollen".</text>
     <text id="LST_NO_RIGHTS_VIEW_LIST" development="new" translation="todo">Du besitzt keine Rechte Listen der hinterlegten Rollen anzuschauen.</text>
     <text id="LST_NEW_DEFAULT_CONFIGURATION" development="new" translation="todo">Konfiguration wird zur neuen Standardkonfiguration</text>
-	<text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
+    <text id="LST_NUMBER_OF_ROLES_PER_PAGE" development="new" translation="todo">Anzahl Rollen pro Seite</text>
     <text id="LST_PRESET_CONFIGURATION" development="new" translation="todo">Vorgegebene Konfigurationen</text>
     <text id="LST_PRESET_CONFIGURATION_DESC" development="new" translation="todo">Als Webmaster kannst du Konfigurationen erstellen, welche allen Benutzern des Systems zur Verfügung stehen. Konfiguriere die entsprechende Spalten und Bedingungen und speichere diese unter dem gewünschten Namen. Wähle nun die neu erstellte Liste aus und klick auf dieses Symbol: %VAR1%</text>
     <text id="LST_PRINT_PREVIEW" development="new" translation="todo">Druckvorschau</text>
@@ -668,11 +668,11 @@
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="todo">Mailmodul aktivieren</text>
     <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="todo">Das Mailmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden. (Standard: Aktiviert)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="todo">Anhang hinzufügen</text>
-	<text id="MAI_ATTACHEMENT" development="new" translation="todo">Anhang:</text>
+    <text id="MAI_ATTACHEMENT" development="new" translation="todo">Anhang:</text>
     <text id="MAI_ATTACHMENT_SIZE" development="new" translation="todo">Maximale Dateigröße für Anhänge</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="todo">Benutzer können nur Dateien anhängen, bei denen die Dateigröße kleiner als der hier angegebene Wert ist. Steht hier 0, so sind keine Anhänge im Mailmodul möglich. (Standard:1024KB)</text>
     <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="todo">Dein Dateianhang konnte nicht hochgeladen werden.\nVermutlich ist der Anhang zu groß!</text>
-	<text id="MAI_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
+    <text id="MAI_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_CHOOSE_ROLE" development="new" translation="todo">Bitte wähle eine Rolle als Adressat der E-Mail aus!</text>
     <text id="MAI_COUNT_BCC" development="new" translation="todo">Anzahl der BCC Empfänger</text>
     <text id="MAI_EMAIL_DESC" development="new" translation="todo">E-Mails können an unterschiedliche Rollen, dies können Gruppen, Kurse oder Abteilungen sein, geschrieben werden.</text>
@@ -764,26 +764,26 @@
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="todo">Erweiterte Registrierung</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Automatischer Logout nach</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>    
-	<text id="ORG_CAPTCHA" development="new" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
-	<text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Hintergrundfarbe</text>
-	<text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (standard: #FFEFC4)</text>
-	<text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (standard: Theme-Schriftart)</text>
-	<text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (standard: 20)</text>
-	<text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha-Vorschau</text>	
-	<text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">Hier kann eine Vorschau des Captchas aufgerufen werden. Ungespeicherte Angaben werden nicht berücksichtigt!</text>
+    <text id="ORG_CAPTCHA" development="new" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
+    <text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Hintergrundfarbe</text>
+    <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (standard: #FFEFC4)</text>
+    <text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (standard: Theme-Schriftart)</text>
+    <text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (standard: 20)</text>
+    <text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha-Vorschau</text>    
+    <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">Hier kann eine Vorschau des Captchas aufgerufen werden. Ungespeicherte Angaben werden nicht berücksichtigt!</text>
     <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="todo">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
-	<text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha Untertitel</text>
-	<text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (standard: 9)</text>
-	<text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
-	<text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Zulässige Captcha-Zeichen</text>
-	<text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</text>
-	<text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Skalierung des Captchas (Breite x Höhe)</text>
-	<text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Captcha Art</text>
-	<text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Rechenaufgabe</text>
-	<text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Bildchen</text>
-	<text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (standard: Bildchen)</text>
+    <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha Untertitel</text>
+    <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (standard: 9)</text>
+    <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
+    <text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Zulässige Captcha-Zeichen</text>
+    <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</text>
+    <text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Skalierung des Captchas (Breite x Höhe)</text>
+    <text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Captcha Art</text>
+    <text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Rechenaufgabe</text>
+    <text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Bildchen</text>
+    <text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (standard: Bildchen)</text>
     <text id="ORG_CONFIRM_REGISTRATION" development="new" translation="todo">Bestätigung der Anmeldung nach der manuellen Freigabe</text>
-	<text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
+    <text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
     <text id="ORG_CURRENCY" development="new" translation="todo">Währung</text>
     <text id="ORG_CURRENCY_DESC" development="new" translation="todo">Kennzeichen der Währung, die benutzt wird. Dieses Zeichen wird hinter allen Beträgen angezeigt.</text>
     <text id="ORG_DATATYPE" development="new" translation="todo">Datentyp</text>
@@ -857,15 +857,15 @@
     <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="todo">URL der Webseite der Organisation</text>
     <text id="ORG_VARIABLE_USERNAME" development="new" translation="todo">Benutzername des Benutzers aus dem jeweiligen Mailkontext</text>
     <text id="ORG_WHICH_FORUM_USED" development="new" translation="todo">Welches Forum soll genutzt werden?</text>
-	
-	<!-- Phrases only in Updatecheck -->
-	<text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
-	<text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von %VAR1% prüfen ob ein Update vorliegt.</text>
-	<text id="UPD_NEW" development="new" translation="todo">Eine neue stabile Version ist verfügbar!</text>
-	<text id="UPD_NEW_BETA" development="new" translation="todo">Eine neue Beta Version ist verfügbar!</text>
-	<text id="UPD_NEW_BOTH" development="new" translation="todo">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</text>
-	<text id="UPD_NO_NEW" development="new" translation="todo">Du benutzt eine aktuelle %VAR1%Version von Admidio!</text>
-	<text id="UPD_TITLE" development="new" translation="todo">Update Prüfung</text>
+    
+    <!-- Phrases only in Updatecheck -->
+    <text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
+    <text id="UPD_CONNECTION_ERROR" development="new" translation="todo">Es konnte keine Verbindung zum Admidio Updateserver hergestellt werden! Bitte prüfe Deine Internetverbindung oder versuche es zu einem späteren Zeitpunkt nocheinmal. Alternativ kannst Du auch manuell auf der Webseite von %VAR1% prüfen ob ein Update vorliegt.</text>
+    <text id="UPD_NEW" development="new" translation="todo">Eine neue stabile Version ist verfügbar!</text>
+    <text id="UPD_NEW_BETA" development="new" translation="todo">Eine neue Beta Version ist verfügbar!</text>
+    <text id="UPD_NEW_BOTH" development="new" translation="todo">Eine neue stabile Version und eine neue Beta Version ist verfügbar!</text>
+    <text id="UPD_NO_NEW" development="new" translation="todo">Du benutzt eine aktuelle %VAR1%Version von Admidio!</text>
+    <text id="UPD_TITLE" development="new" translation="todo">Update Prüfung</text>
     
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="todo">Album</text>
@@ -874,26 +874,26 @@
     <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="todo">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Du kannst das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</text>
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="todo">Das Album wurde erfolgreich angelegt / geändert</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="todo">Alben-Verwaltung</text>
-	<text id="PHO_BACK_TO_ALBUM" development="new" translation="todo">zurück zum Album</text>
+    <text id="PHO_BACK_TO_ALBUM" development="new" translation="todo">zurück zum Album</text>
     <text id="PHO_COLORBOX" development="new" translation="todo">ColorBox</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album anlegen</text>
     <text id="PHO_DISPLAY_PHOTOS" development="new" translation="todo">Fotodarstellung</text>
     <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="todo">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann über ein Popup-Fenster, über eine Javascript-Animation (ColorBox) oder auf dergleichen Seite in HTML erfolgen. (Standard: ColorBox)</text>
     <text id="PHO_EDIT_ALBUM" development="new" translation="todo">Album Bearbeiten</text>
-	<text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neues Fotoalbum wurde angelegt</text>
-	<text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neues Fotoalbum bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
+    <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neues Fotoalbum wurde angelegt</text>
+    <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neues Fotoalbum bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="todo">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</text>
     <text id="PHO_MAX_PHOTO_SIZE" development="new" translation="todo">Max. Bildanzeigegröße (Breite x Höhe)</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)</text>
     <text id="PHO_MULTIUPLOAD" development="new" translation="todo">Multiupload</text>
     <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="todo">Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen. Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash (Version 9+) installiert oder diese Option nicht aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt. (Standard: ja)</text>
-	<text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>
+    <text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="todo">Dieses Album enthält leider noch keine Fotos.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="todo">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
     <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="todo">Bilderanzahl</text>
-	<text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
+    <text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="todo">Fotoalben</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="todo">dieses Foto löschen</text>
     <text id="PHO_PHOTO_DESTINATION" development="new" translation="todo">Die Fotos werden zu dem Album %VAR1_BOLD% hinzugefügt.</text>
@@ -909,8 +909,8 @@
     <text id="PHO_PHOTOS" development="new" translation="todo">Fotos</text>
     <text id="PHO_PHOTOS_DESC" development="new" translation="todo">Fotos zu Veranstaltungen können hochgeladen und betrachtet werden. Die Fotos werden in Alben zusammengefasst, welche wiederum beliebig verschachtelt werden können.</text>
     <text id="PHO_POPUP_WINDOW" development="new" translation="todo">Popup-Fenster</text>
-	<text id="PHO_PREVIOUS_PHOTO" development="new" translation="todo">Vorheriges Foto</text>
-	<text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="todo">Auflösung größer als</text>
+    <text id="PHO_PREVIOUS_PHOTO" development="new" translation="todo">Vorheriges Foto</text>
+    <text id="PHO_RESOLUTION_MORE_THAN" development="new" translation="todo">Auflösung größer als</text>
     <text id="PHO_RESTRICTIONS_HELP_1" development="new" translation="todo">Die Fotos müssen im Format JPG oder PNG gespeichert sein.</text>
     <text id="PHO_RESTRICTIONS_HELP_2" development="new" translation="todo">Der Server kann Fotos mit einer maximalen Auflösung von %VAR1% MegaPixeln verarbeiten.</text>
     <text id="PHO_RESTRICTIONS_HELP_3" development="new" translation="todo">Die hochgeladenen Dateien dürfen nicht größer als %VAR1% MB sein.</text>
@@ -935,38 +935,38 @@
     <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
 
     <!-- Phrases only in Profilemodule -->
-	<text id="PRO_ACCEPT_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto übernehmen</text>
-	<text id="PRO_ADD_USER" development="new" translation="todo">Benutzer anlegen</text>
+    <text id="PRO_ACCEPT_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto übernehmen</text>
+    <text id="PRO_ADD_USER" development="new" translation="todo">Benutzer anlegen</text>
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft beenden</text>
-	<text id="PRO_CHANGE_DATE" development="new" translation="todo">Datum ändern</text>
-	<text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto ändern</text>
-	<text id="PRO_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
-	<text id="PRO_CURRENT_PASSWORD" development="new" translation="todo">Aktuelles Passwort</text>
-	<text id="PRO_CURRENT_PICTURE" development="new" translation="todo">Aktuelles Profilfoto</text>
-	<text id="PRO_DEFAULT_COUNTRY" development="new" translation="todo">Standard-Land</text>
-	<text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="todo">Das ausgewählte Land wird beim Anlegen eines neuen Benutzers automatisch vorgeschlagen und erleichtert die Eingabe. (Standard: Deutschland)</text>
-	<text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto löschen</text>
-	<text id="PRO_EDIT_MY_PROFILE" development="new" translation="todo">Mein Profil bearbeiten</text>
-	<text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="todo">Mein Profilfoto bearbeiten</text>
-	<text id="PRO_EDIT_PASSWORD" development="new" translation="todo">Passwort bearbeiten</text>
-	<text id="PRO_EDIT_PROFILE" development="new" translation="todo">Profil bearbeiten</text>
-	<text id="PRO_EDIT_PROFILE_PIC_FROM" development="new" translation="todo">Profilfoto von %VAR1% %VAR2% bearbeiten</text>
-	<text id="PRO_EXPORT_VCARD_FROM_VAR" development="new" translation="todo">vCard von %VAR1% exportieren</text>
-  	<text id="PRO_FIELD_NUMERIC" development="new" translation="todo" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
-	<text id="PRO_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften</text>
-	<text id="PRO_LOCATION_PROFILE_PICTURES" development="new" translation="todo">Speicherort der Profilbilder</text>
-	<text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)</text>
-	<text id="PRO_LOGIN_NAME_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</text>
-	<text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">Profilfelder pflegen</text>
-	<text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
-	<text id="PRO_MY_PROFILE" development="new" translation="todo">Mein Profil</text>
+    <text id="PRO_CHANGE_DATE" development="new" translation="todo">Datum ändern</text>
+    <text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto ändern</text>
+    <text id="PRO_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
+    <text id="PRO_CURRENT_PASSWORD" development="new" translation="todo">Aktuelles Passwort</text>
+    <text id="PRO_CURRENT_PICTURE" development="new" translation="todo">Aktuelles Profilfoto</text>
+    <text id="PRO_DEFAULT_COUNTRY" development="new" translation="todo">Standard-Land</text>
+    <text id="PRO_DEFAULT_COUNTRY_DESC" development="new" translation="todo">Das ausgewählte Land wird beim Anlegen eines neuen Benutzers automatisch vorgeschlagen und erleichtert die Eingabe. (Standard: Deutschland)</text>
+    <text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto löschen</text>
+    <text id="PRO_EDIT_MY_PROFILE" development="new" translation="todo">Mein Profil bearbeiten</text>
+    <text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="todo">Mein Profilfoto bearbeiten</text>
+    <text id="PRO_EDIT_PASSWORD" development="new" translation="todo">Passwort bearbeiten</text>
+    <text id="PRO_EDIT_PROFILE" development="new" translation="todo">Profil bearbeiten</text>
+    <text id="PRO_EDIT_PROFILE_PIC_FROM" development="new" translation="todo">Profilfoto von %VAR1% %VAR2% bearbeiten</text>
+    <text id="PRO_EXPORT_VCARD_FROM_VAR" development="new" translation="todo">vCard von %VAR1% exportieren</text>
+      <text id="PRO_FIELD_NUMERIC" development="new" translation="todo" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
+    <text id="PRO_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften</text>
+    <text id="PRO_LOCATION_PROFILE_PICTURES" development="new" translation="todo">Speicherort der Profilbilder</text>
+    <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)</text>
+    <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</text>
+    <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">Profilfelder pflegen</text>
+    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
+    <text id="PRO_MY_PROFILE" development="new" translation="todo">Mein Profil</text>
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Benutzerprofil kann hier angeschaut und bearbeitet werden.</text>
-	<text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>
-	<text id="PRO_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto</text>
-	<text id="PRO_PASSWORD_CHANGED" development="new" translation="todo">Das Passwort wurde erfolgreich geändert.</text>
+    <text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>
+    <text id="PRO_NEW_PICTURE" development="new" translation="todo">Neues Profilfoto</text>
+    <text id="PRO_PASSWORD_CHANGED" development="new" translation="todo">Das Passwort wurde erfolgreich geändert.</text>
     <text id="PRO_PASSWORD_DESCRIPTION" development="new" translation="todo">Das Passwort muss mindestens aus 6 Zeichen bestehen. Es sollte sowohl Zahlen,  Buchstaben als auch Sonderzeichen beinhalten.\n\nAus Sicherheitsgründen wird das Passwort verschlüsselt gespeichert. Es ist später nicht mehr möglich dieses einzusehen.</text>
     <text id="PRO_PASSWORD_LENGTH" development="new" translation="todo">Das Passwort muss aus mindestens 6 Zeichen bestehen.</text>
-	<text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="todo">Das alte Passwort ist falsch.</text>
+    <text id="PRO_PASSWORD_OLD_WRONG" development="new" translation="todo">Das alte Passwort ist falsch.</text>
     <text id="PRO_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="PRO_PHOTO_DELETED" development="new" translation="todo">Das Profilfoto wurde gelöscht.</text>
     <text id="PRO_PHOTO_FILE_TO_LARGE" development="new" translation="todo">Das hochgeladene Foto übersteigt die vom Server zugelassene Dateigröße von %VAR1% B.</text>
@@ -975,30 +975,30 @@
     <text id="PRO_PHOTO_RESOLUTION_TO_LARGE" development="new" translation="todo">Die Auflösung des hochgeladenen Bildes übersteigt die vom Server zugelassene Auflösung von %VAR1% Megapixeln.</text>
     <text id="PRO_PHOTO_SAVED" development="new" translation="todo">Das neue Profilfoto wurde erfolgreich gespeichert.</text>   
     <text id="PRO_PROFILE" development="new" translation="todo">Profil</text>
-	<text id="PRO_PROFILE_FROM" development="new" translation="todo">Profil von %VAR1% %VAR2%</text>
-	<text id="PRO_RESTRICTIONS_HELP_1" development="new" translation="todo">Du solltest selbst auf dem Foto zu sehen sein.</text>
-	<text id="PRO_RESTRICTIONS_HELP_2" development="new" translation="todo">Das Foto muss im Format JPG oder PNG gespeichert sein.</text>
-	<text id="PRO_RESTRICTIONS_HELP_3" development="new" translation="todo">Der Server kann Fotos mit einer maximalen Auflösung von %VAR1% MegaPixeln verarbeiten.</text>
-	<text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="todo">Die hochgeladene Datei darf nicht größer als %VAR1% MB sein.</text>
-	<text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="todo">Rollenmitgliedschaften anderer Organisationen</text>
-	<text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="todo">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
+    <text id="PRO_PROFILE_FROM" development="new" translation="todo">Profil von %VAR1% %VAR2%</text>
+    <text id="PRO_RESTRICTIONS_HELP_1" development="new" translation="todo">Du solltest selbst auf dem Foto zu sehen sein.</text>
+    <text id="PRO_RESTRICTIONS_HELP_2" development="new" translation="todo">Das Foto muss im Format JPG oder PNG gespeichert sein.</text>
+    <text id="PRO_RESTRICTIONS_HELP_3" development="new" translation="todo">Der Server kann Fotos mit einer maximalen Auflösung von %VAR1% MegaPixeln verarbeiten.</text>
+    <text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="todo">Die hochgeladene Datei darf nicht größer als %VAR1% MB sein.</text>
+    <text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="todo">Rollenmitgliedschaften anderer Organisationen</text>
+    <text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="todo">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
     <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="todo">Bitte hier ein neues Foto auswählen</text>
-	<text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften anzeigen</text>
-	<text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="todo">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Standard: ja)</text>
-	<text id="PRO_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>
-	<text id="PRO_SHOW_MAP_LINK_DESC" development="new" translation="todo">Sobald genügend Adressinformationen vorhanden sind, wird ein Link zu Google-Maps erstellt, welcher den Wohnort des Benutzers anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</text>
-	<text id="PRO_SHOW_ROLE_MEMBERSHIP" development="new" translation="todo">Rollenmitgliedschaften anzeigen</text>
-	<text id="PRO_SHOW_ROLE_MEMBERSHIP_DESC" development="new" translation="todo">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)</text>
-	<text id="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS" development="new" translation="todo">Rollen anderer Organisationen anzeigen</text>
-	<text id="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC" development="new" translation="todo">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</text>
-	<text id="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">zur Profilfeldpflege wechseln</text>
-	<text id="PRO_TO_ADD" development="new" translation="todo">%VAR1% zu %VAR2% hinzufügen</text>
-	<text id="PRO_UPLOAD_HELP_1" development="new" translation="todo">Auf den Button %VAR1_BOLD% klicken und die gewünschte Fotodatei von der Festplatte auswählen.</text>
-	<text id="PRO_UPLOAD_HELP_2" development="new" translation="todo">Danach auf %VAR1_BOLD% klicken und ein wenig Geduld haben.</text>
-	<text id="PRO_UPLOAD_PHOTO" development="new" translation="todo">Foto hochladen</text>
+    <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften anzeigen</text>
+    <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="todo">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Standard: ja)</text>
+    <text id="PRO_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>
+    <text id="PRO_SHOW_MAP_LINK_DESC" development="new" translation="todo">Sobald genügend Adressinformationen vorhanden sind, wird ein Link zu Google-Maps erstellt, welcher den Wohnort des Benutzers anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</text>
+    <text id="PRO_SHOW_ROLE_MEMBERSHIP" development="new" translation="todo">Rollenmitgliedschaften anzeigen</text>
+    <text id="PRO_SHOW_ROLE_MEMBERSHIP_DESC" development="new" translation="todo">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied ist. Dazu werden die entsprechenden Berechtigungen und das Eintrittsdatum aufgelistet. (Standard: ja)</text>
+    <text id="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS" development="new" translation="todo">Rollen anderer Organisationen anzeigen</text>
+    <text id="PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC" development="new" translation="todo">Ist der Benutzer Mitglied in Rollen einer anderen Organisation, so wird ein Kasten mit allen entsprechenden Rollen und dem Eintrittsdatum angezeigt. (Standard: ja)</text>
+    <text id="PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">zur Profilfeldpflege wechseln</text>
+    <text id="PRO_TO_ADD" development="new" translation="todo">%VAR1% zu %VAR2% hinzufügen</text>
+    <text id="PRO_UPLOAD_HELP_1" development="new" translation="todo">Auf den Button %VAR1_BOLD% klicken und die gewünschte Fotodatei von der Festplatte auswählen.</text>
+    <text id="PRO_UPLOAD_HELP_2" development="new" translation="todo">Danach auf %VAR1_BOLD% klicken und ein wenig Geduld haben.</text>
+    <text id="PRO_UPLOAD_PHOTO" development="new" translation="todo">Foto hochladen</text>
     <text id="PRO_USERNAME_DESCRIPTION" development="new" translation="todo">Mit diesem Namen kannst du dich später auf der Homepage anmelden.\n\nDer Name muss im System eindeutig sein. Ist dein Wunschname bereits vergeben, dann versuche es mit Kombinationen, wie zum Beispiel Andi78 oder StefanT.</text>
-	<text id="PRO_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
-	<text id="PRO_YEARS" development="new" translation="todo">Jahre</text>
+    <text id="PRO_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
+    <text id="PRO_YEARS" development="new" translation="todo">Jahre</text>
 
     <!-- Phrases only in Rolesmodule -->
     <text id="ROL_ACTIV_ROLES" development="new" translation="todo">Aktive Rollen</text>
@@ -1085,7 +1085,7 @@
     <text id="SYS_ACTIVATED" development="new" translation="todo">Aktiviert</text>
     <text id="SYS_ADD_ROLE" development="new" translation="todo">Rolle hinzufügen</text>
     <text id="SYS_ADD_RECIPIENTS" development="new" translation="todo">Empfänger hinzufügen</text>
-	<text id="SYS_ADDRESS" development="new" translation="todo">Adresse</text>
+    <text id="SYS_ADDRESS" development="new" translation="todo">Adresse</text>
     <text id="SYS_ADMIDIO_SHORT_DESC" development="new" translation="todo">Das Online-Verwaltungssystem für Vereine, Gruppen und Organisationen</text>
     <text id="SYS_ADMIDIO_TEAM" development="new" translation="todo">Admidio Team</text>
     <text id="SYS_ADMIDIO_VERSION" development="new" translation="todo">Admidio-Version</text>
@@ -1096,33 +1096,33 @@
     <text id="SYS_ALSO_VISITORS" development="new" translation="todo">auch Besucher</text>
     <text id="SYS_APPROVE_ENTRY" development="new" translation="todo">Willst du den Eintrag %VAR1_BOLD% freischalten?</text>
     <text id="SYS_ASSIGN_MEMBERS" development="new" translation="todo">Mitglieder zuordnen</text>
-	<text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
+    <text id="SYS_AUTHORIZATION" development="new" translation="todo">Berechtigungen</text>
     <text id="SYS_BACK" development="new" translation="todo">Zurück</text>
     <text id="SYS_BACK_TO_MODULE_OVERVIEW" development="new" translation="todo">Zurück zur Modulübersicht</text>
     <text id="SYS_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</text>
-	<text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
+    <text id="SYS_BIRTHDAY" development="new" translation="todo">Geburtstag</text>
     <text id="SYS_BROWSE" development="new" translation="todo">Durchsuchen</text>
     <text id="SYS_BROWSE_ERROR" development="new" translation="todo">Dateien konnten nicht durchsucht werden.</text>
     <text id="SYS_CAPTCHA" development="new" translation="todo">Captcha</text>
-	<text id="SYS_CAPTCHA_CALC" development="new" translation="todo">Ergebnis der Rechnung</text>
-	<text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="todo">Das Ergbenis der Rechnung wurde falsch eingegeben.</text>
-	<text id="SYS_CAPTCHA_CALC_DESCRIPTION" development="new" translation="todo">Bei der Rechenaufgabe handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Rechenaufgabe wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage die Lösung der Rechenaufgabe in das Formularfeld ein.</text>
-	<text id="SYS_CAPTCHA_CALC_PART1" development="new" translation="todo">Bitte berechne</text>
-	<text id="SYS_CAPTCHA_CALC_PART2" development="new" translation="todo">und zähle</text>
-	<text id="SYS_CAPTCHA_CALC_PART3_THIRD" development="new" translation="todo">ein Drittel von</text>
-	<text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="todo">die Hälfte von</text>
-	<text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="todo">dazu.</text>
-	<text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="todo">Der Bestätigungscode wurde falsch eingegeben.</text>
-	<text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
-	<text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="todo">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</text>
+    <text id="SYS_CAPTCHA_CALC" development="new" translation="todo">Ergebnis der Rechnung</text>
+    <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="todo">Das Ergbenis der Rechnung wurde falsch eingegeben.</text>
+    <text id="SYS_CAPTCHA_CALC_DESCRIPTION" development="new" translation="todo">Bei der Rechenaufgabe handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Rechenaufgabe wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage die Lösung der Rechenaufgabe in das Formularfeld ein.</text>
+    <text id="SYS_CAPTCHA_CALC_PART1" development="new" translation="todo">Bitte berechne</text>
+    <text id="SYS_CAPTCHA_CALC_PART2" development="new" translation="todo">und zähle</text>
+    <text id="SYS_CAPTCHA_CALC_PART3_THIRD" development="new" translation="todo">ein Drittel von</text>
+    <text id="SYS_CAPTCHA_CALC_PART3_HALF" development="new" translation="todo">die Hälfte von</text>
+    <text id="SYS_CAPTCHA_CALC_PART4" development="new" translation="todo">dazu.</text>
+    <text id="SYS_CAPTCHA_CODE_INVALID" development="new" translation="todo">Der Bestätigungscode wurde falsch eingegeben.</text>
+    <text id="SYS_CAPTCHA_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
+    <text id="SYS_CAPTCHA_DESCRIPTION" development="new" translation="todo">Bei dem Bestätigungscode handelt es sich um ein Captcha. Ein Captcha dient zur Spamerkennung. Mit Hilfe des Bildes wird versucht festzustellen, ob das Formular von einem User oder einem Script/Spambot ausgefüllt wurde.\nBitte trage den im Bild angezeigten 4- bis 6-stelligen Code in das Formularfeld ein.</text>
     <text id="SYS_CATEGORY" development="new" translation="todo">Kategorie</text>
-	<text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
-	<text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">nach Update suchen</text>
-	<text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
+    <text id="SYS_CHANGE_PASSWORD" development="new" translation="todo">Passwort ändern</text>
+    <text id="SYS_CHECK_FOR_UPDATE" development="new" translation="todo">nach Update suchen</text>
+    <text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="todo">Die Speicherung erfolgt automatisch mit Setzen eines Hakens.</text>
     <text id="SYS_CITY" development="new" translation="todo">Ort</text>
     <text id="SYS_CLOCK" development="new" translation="todo">Uhr</text>
     <text id="SYS_CLOSE" development="new" translation="todo">Schließen</text>
-	<text id="SYS_CLOSE_WINDOW" development="new" translation="todo">Fenster schließen</text>
+    <text id="SYS_CLOSE_WINDOW" development="new" translation="todo">Fenster schließen</text>
     <text id="SYS_COMMENT" development="new" translation="todo">Kommentar</text>
     <text id="SYS_COMMON" development="new" translation="todo">Allgemein</text>
     <text id="SYS_CONDITION" development="new" translation="todo">Bedingung</text>
@@ -1136,9 +1136,9 @@
     <text id="SYS_COUNTRY" development="new" translation="todo">Land</text>
     <text id="SYS_CREATE" development="new" translation="todo">Anlegen</text>
     <text id="SYS_CREATE_VAR" development="new" translation="todo">%VAR1% anlegen</text>
-	<text id="SYS_CREATE_NEW_USER" development="new" translation="todo">Neuen Benutzer anlegen</text>
+    <text id="SYS_CREATE_NEW_USER" development="new" translation="todo">Neuen Benutzer anlegen</text>
     <text id="SYS_CREATE_NOT_FOUND_USER" development="new" translation="todo">Falls der neue Benutzer nicht unter den gefundenen Benutzern aufgelistet ist, kannst du diesen neu anlegen.</text>
-	<text id="SYS_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
+    <text id="SYS_CREATE_ROLE" development="new" translation="todo">Rolle anlegen</text>
     <text id="SYS_CREATED_BY" development="new" translation="todo">Angelegt von %VAR1% am %VAR2%</text>
     <text id="SYS_CURRENT_USER_NO_EMAIL" description="Var1 und Var2 erzeugen den Profil-Link" development="new" translation="todo">Du hast keine gültige E-Mail-Adresse hinterlegt!\n\nTrage bitte in deinem %VAR1%Profil%VAR1% eine E-Mail-Adresse ein.</text>
     <text id="SYS_DATABASE" development="new" translation="todo">Datenbank</text>
@@ -1149,7 +1149,7 @@
     <text id="SYS_DATE_FROM_TO" development="new" translation="todo" description="Used in date-context: 2010/01/10 to 2010/01/12">%VAR1% bis %VAR2%</text>
     <text id="SYS_DATA_GLOBAL" development="new" translation="todo">Ist diese Option aktiviert, erscheinen diese Daten auch auf den Webseiten folgender Organisationen und können dort von Benutzern mit entsprechenden Rechten bearbeitet werden:\n\n%VAR1_BOLD%</text>
     <text id="SYS_DATE_INVALID" development="new" translation="todo">Es wurde kein gültiges Datum in das Feld %VAR1_BOLD% eingegeben.\n\nDas Datum muss dem folgenden Format %VAR2_BOLD% entsprechen.</text>
-	<text id="SYS_DATE_MODIFIED" development="new" translation="todo">Änderungsdatum</text>
+    <text id="SYS_DATE_MODIFIED" development="new" translation="todo">Änderungsdatum</text>
     <text id="SYS_DATE_TO" development="new" translation="todo">bis</text>
     <text id="SYS_DEACTIVATED" >Deaktiviert</text>
     <text id="SYS_DEBUG_MODUS" development="new" translation="todo">Debugmodus</text>
@@ -1159,7 +1159,7 @@
     <text id="SYS_DESCRIPTION" development="new" translation="todo">Beschreibung</text>
     <text id="SYS_DONATE" development="new" translation="todo">Spenden</text>
     <text id="SYS_EDIT" development="new" translation="todo">Bearbeiten</text>
-	<text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
+    <text id="SYS_EDIT_VAR" development="new" translation="todo">%VAR1% bearbeiten</text>
     <text id="SYS_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</text>
@@ -1184,10 +1184,10 @@
     <text id="SYS_FILE_PROGRESS" development="new" translation="todo">%0 von %1 übertragen</text>
     <text id="SYS_FILE_TO_LARGE" development="new" translation="todo">Datei ist zu groß.</text>
     <text id="SYS_FILE_TO_LARGE_SERVER" development="new" translation="todo">Die hochgeladene Datei übersteigt die vom Server zugelassene Dateigröße von %VAR1%.</text>
-	<text id="SYS_FILE_UPLOADS" development="new" translation="todo">Dateiuploads</text>
-	<text id="SYS_FIRSTNAME" development="new" translation="todo">Vorname</text>
-	<text id="SYS_FROM_TO" development="new" translation="todo">vom %VAR1% bis %VAR2%</text>
-	<text id="SYS_FOLDER" development="new" translation="todo">Ordner</text>
+    <text id="SYS_FILE_UPLOADS" development="new" translation="todo">Dateiuploads</text>
+    <text id="SYS_FIRSTNAME" development="new" translation="todo">Vorname</text>
+    <text id="SYS_FROM_TO" development="new" translation="todo">vom %VAR1% bis %VAR2%</text>
+    <text id="SYS_FOLDER" development="new" translation="todo">Ordner</text>
     <text id="SYS_FOLDER_NOT_CREATED" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht angelegt werden.\n\nWende dich bitte an den %VAR2%Webmaster%VAR3%, damit dieser die Schreibrechte des übergeordneten Ordners prüfen kann.</text>
     <text id="SYS_FOLDER_WRITE_ACCESS" description="Var2 und Var3 erzeugen den MailTo-Link" development="new" translation="todo">Der Ordner %VAR1_BOLD% kann nicht mit Schreibrechten angelegt werden.\n\nWende dich bitte an den %VAR2%Webmaster%VAR3%, damit dieser die Schreibrechte (über FTP die Dateiattribute auf 0777 bzw. drwxrwxrwx setzen) prüfen kann.</text>
     <text id="SYS_FORMER" development="new" translation="todo">Ehemaliger</text>
@@ -1215,7 +1215,7 @@
     <text id="SYS_HOMEPAGE" development="new" translation="todo">Startseite</text>
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
-	<text id="SYS_INFO" development="new" translation="todo">Info</text>
+    <text id="SYS_INFO" development="new" translation="todo">Info</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
@@ -1223,7 +1223,7 @@
     <text id="SYS_ISO_8859_1" development="new" translation="todo">ISO-8859-1</text>
     <text id="SYS_LANGUAGE" development="new" translation="todo">Sprache</text>
     <text id="SYS_LAST_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
-	<text id="SYS_LASTNAME" development="new" translation="todo">Nachname</text>
+    <text id="SYS_LASTNAME" development="new" translation="todo">Nachname</text>
     <text id="SYS_LATER" development="new" translation="todo">Später</text>
     <text id="SYS_LEADER" development="new" translation="todo">Leiter</text>
     <text id="SYS_LINK_TO" development="new" translation="todo">Link auf %VAR1%</text>
@@ -1241,7 +1241,7 @@
     <text id="SYS_LOSTPW_AREADY_LOGGED_ID" development="new" translation="todo">Du bist am System angemeldet, folglich kennst du ja dein Passwort!</text>
     <text id="SYS_LOSTPW_SEND" development="new" translation="todo">Das neue Passwort wurde an die E-Mail-Adresse %VAR1% geschickt!</text>
     <text id="SYS_LOSTPW_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler beim Senden an die E-Mail-Adresse %VAR1% aufgetreten!\nBitte versuche es später erneut!</text>
-	<text id="SYS_MAP" development="new" translation="todo">Karte</text>
+    <text id="SYS_MAP" development="new" translation="todo">Karte</text>
     <text id="SYS_MAINTAIN_CATEGORIES" development="new" translation="todo">Kategorien pflegen</text>
     <text id="SYS_MALE" development="new" translation="todo">Männlich</text>
     <text id="SYS_MANDATORY_FIELD" development="new" translation="todo">Pflichtfeld</text>
@@ -1265,18 +1265,18 @@
     <text id="SYS_NO" development="new" translation="todo">Nein</text>
     <text id="SYS_NO_ENTRY" development="new" translation="todo">Der angeforderte Eintrag existiert nicht in der Datenbank.</text>
     <text id="SYS_NO_ENTRIES" development="new" translation="todo">Es sind keine Einträge vorhanden.</text>
-	<text id="SYS_NO_ENTRIES_FOUND" development="new" translation="todo">Es wurden keine Einträge gefunden.</text>
+    <text id="SYS_NO_ENTRIES_FOUND" development="new" translation="todo">Es wurden keine Einträge gefunden.</text>
     <text id="SYS_NO_RIGHTS" development="new" translation="todo">Du hast kein Recht, diese Aktion auszuführen.</text>
     <text id="SYS_NOBODY" development="new" translation="todo">Niemand</text>
     <text id="SYS_NONE" development="new" translation="todo">Keiner</text>
     <text id="SYS_NOTE" development="new" translation="todo">Hinweis</text>
-  	<text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="todo">Kein Mitglied der Organisation %VAR1%</text>
-	<text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
-	<text id="SYS_NOT_SET" development="new" translation="todo">nicht gesetzt</text>
+      <text id="SYS_NOT_MEMBER_OF_ORGANIZATION" development="new" translation="todo">Kein Mitglied der Organisation %VAR1%</text>
+    <text id="SYS_NOT_REGISTERED" development="new" translation="todo">nicht registriert</text>
+    <text id="SYS_NOT_SET" development="new" translation="todo">nicht gesetzt</text>
     <text id="SYS_NUMBER" development="new" translation="todo">Zahl</text>
-	<text id="SYS_OFF" development="new" translation="todo">aus</text>
-	<text id="SYS_OK" development="new" translation="todo">OK</text>
-	<text id="SYS_ON" development="new" translation="todo">an</text>
+    <text id="SYS_OFF" development="new" translation="todo">aus</text>
+    <text id="SYS_OK" development="new" translation="todo">OK</text>
+    <text id="SYS_ON" development="new" translation="todo">an</text>
     <text id="SYS_OPTIONAL" development="new" translation="todo">Optional</text>
     <text id="SYS_ORDER" development="new" translation="todo">Reihenfolge</text>
     <text id="SYS_OVERVIEW" development="new" translation="todo">Übersicht</text>
@@ -1290,9 +1290,9 @@
     <text id="SYS_PASSWORD_UNKNOWN" development="new" translation="todo">Du hast ein falsches Passwort eingegeben und konntest deshalb nicht angemeldet werden.\n\nÜberprüfe bitte dein Passwort und gib dieses erneut ein.</text>
     <text id="SYS_PHONE" development="new" translation="todo">Telefon</text>    
     <text id="SYS_PHOTO" development="new" translation="todo">Foto</text>
-	<text id="SYS_PHOTOS" development="new" translation="todo">Fotos</text>
-	<text id="SYS_PHP_INFO" development="new" translation="todo">alle PHP-Einstellungen</text>
-	<text id="SYS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
+    <text id="SYS_PHOTOS" development="new" translation="todo">Fotos</text>
+    <text id="SYS_PHP_INFO" development="new" translation="todo">alle PHP-Einstellungen</text>
+    <text id="SYS_PHP_VERSION" development="new" translation="todo">PHP-Version</text>
     <text id="SYS_PLEASE_CHOOSE" development="new" translation="todo">Bitte wählen</text>
     <text id="SYS_PLEASE_WAIT" development="new" translation="todo">Bitte warten</text>
     <text id="SYS_POST_MAX_SIZE" development="new" translation="todo">max. POST-Größe</text>
@@ -1300,7 +1300,7 @@
     <text id="SYS_PREVIEW" development="new" translation="todo">Vorschau</text>
     <text id="SYS_PREVIOUS" development="new" translation="todo">Voriges</text>
     <text id="SYS_PROCESS_CANCELED" development="new" translation="todo">Der Vorgang wurde abgebrochen.</text>
-	<text id="SYS_PROGRESSBAR" development="new" translation="todo">Ladebalken</text>
+    <text id="SYS_PROGRESSBAR" development="new" translation="todo">Ladebalken</text>
     <text id="SYS_PROPERTIES" development="new" translation="todo">Eigenschaften</text>
     <text id="SYS_PWACT_PW_SAVED" development="new" translation="todo">Das neue Passwort wurde nun übernommen!</text>
     <text id="SYS_PWACT_CODE_INVALID" development="new" translation="todo">Es wurde entweder schon das Passwort aktiviert oder der Aktivierungscode ist falsch!</text>
@@ -1310,8 +1310,8 @@
     <text id="SYS_REMEMBER_ME" development="new" translation="todo">Angemeldet bleiben</text>
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
     <text id="SYS_REMOVE_ROLE" development="new" translation="todo">Rolle entfernen</text>
-	<text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
-	<text id="SYS_REPORT" development="new" translation="todo">Bericht</text>
+    <text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
+    <text id="SYS_REPORT" development="new" translation="todo">Bericht</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="todo">Einschränkungen</text>
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="todo">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
@@ -1326,7 +1326,7 @@
     <text id="SYS_SECURITY_ERROR" development="new" translation="todo">Sicherheits Fehler</text>
     <text id="SYS_SEND" development="new" translation="todo">Abschicken</text>
     <text id="SYS_SEND_EMAIL_TO" development="new" translation="todo">Sende eine E-Mail an %VAR1%</text>
-	<text id="SYS_SEARCH" development="new" translation="todo">Suche</text>
+    <text id="SYS_SEARCH" development="new" translation="todo">Suche</text>
     <text id="SYS_SEND_NEW_PW" development="new" translation="todo">Neues Passwort zusenden</text>
     <text id="SYS_SENDER" development="new" translation="todo">Absender</text>
     <text id="SYS_SERVER" development="new" translation="todo">Server</text>
@@ -1335,15 +1335,15 @@
     <text id="SYS_SETTINGS" development="new" translation="todo">Einstellungen</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
     <text id="SYS_SHOW_HELP" development="new" translation="todo">Hilfe anzeigen</text>
-	<text id="SYS_SHOW_PROFILE" development="new" translation="todo">Profil anzeigen</text>
-	<text id="SYS_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
+    <text id="SYS_SHOW_PROFILE" development="new" translation="todo">Profil anzeigen</text>
+    <text id="SYS_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="todo">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</text>
     <text id="SYS_SINCE" development="new" translation="todo">seit %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="todo">seit %VAR1% bis %VAR2%</text>
-	<text id="SYS_SIZE" development="new" translation="todo">Größe</text>
-	<text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} von {total}</text>
-	<text id="SYS_SLIDESHOW_START" development="new" translation="todo">Diashow starten</text>
-	<text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Diashow anhalten</text>
+    <text id="SYS_SIZE" development="new" translation="todo">Größe</text>
+    <text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} von {total}</text>
+    <text id="SYS_SLIDESHOW_START" development="new" translation="todo">Diashow starten</text>
+    <text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Diashow anhalten</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
     <text id="SYS_STOP" development="new" translation="todo">Stop</text>
@@ -1367,11 +1367,11 @@
     <text id="SYS_UNKNOWN" development="new" translation="todo">Unbekannt</text>
     <text id="SYS_UNLIMITED" development="new" translation="todo">Unbegrenzt</text>
     <text id="SYS_UNLOCK" development="new" translation="todo">Freigeben</text>
-	<text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
+    <text id="SYS_UPDATE" development="new" translation="todo">Aktualisieren</text>
     <text id="SYS_UPLOAD" development="new" translation="todo">Hochladen</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="todo">Die Datei(en) konnten nicht hochgeladen werden.</text>
-	<text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. Uploadgröße</text>
-	<text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" heißen.</text>
+    <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="todo">max. Uploadgröße</text>
+    <text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Der Dateiname darf nicht "submit" heißen.</text>
     <text id="SYS_USER" development="new" translation="todo">Benutzer</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="todo">Es konnte kein Benutzer zu der übergebenen ID gefunden werden!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="todo">Der Benutzer %VAR1_BOLD% hat keine gültige E-Mail-Adresse in seinem Profil hinterlegt!</text>
