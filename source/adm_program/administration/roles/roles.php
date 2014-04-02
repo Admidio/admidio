@@ -141,7 +141,7 @@ while($row = $gDb->fetch_array($rol_result))
         $cat_id = $role->getValue('cat_id');
     }
     
-    $table->addRow('', 'class', 'tableMouseOver');
+    $table->addRow('', array('class', 'tableMouseOver'));
     $table->addColumn('&nbsp;<a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'" title="'.$role->getValue('rol_description').'">'.$role->getValue('rol_name').'</a>');
                 
     if($role->getValue('rol_assign_roles') == 1)

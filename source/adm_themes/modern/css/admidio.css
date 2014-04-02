@@ -97,8 +97,8 @@ body {
 }
 
 .admHeadline {
-    font-size: 18pt;
     color: #333333;
+    font-size: 18pt;
     letter-spacing: 0.2em;
     border-bottom: 2px solid #409099;
 }
@@ -110,6 +110,7 @@ body {
 }
 
 .admHeadline3 {
+    color: #333333;
     font-size: 11pt;
 }
 
@@ -400,13 +401,17 @@ a:hover, a:active {
     margin: auto;
 }
 
-.admTable th, .admTable td {
+.admTableRowHeading {
+    color: #333333;
+}
+
+.admTableRowHeading th, .admTableRow td {
     padding: 5px 2px 5px 2px;
     text-align: left;
 /*    vertical-align: top;*/
 }
 
-.admTable th {
+.admTableRowHeading th {
     padding-bottom: 0px;
     border-bottom: 2px solid #409099;
 }
@@ -426,7 +431,7 @@ a:hover, a:active {
 }
 
 /* aktuelle Zeile kann in Listen markiert werden */
-.admTable tr:hover {
+.admTableRow:hover {
     background-repeat:  repeat-x;
     background-color:   #a8d9df;
 	background-image:   -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	

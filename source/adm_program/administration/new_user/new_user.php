@@ -76,7 +76,7 @@ while($row = $gDb->fetch_array($usr_result))
     $timestampCreate = new DateTimeExtended($row['reg_timestamp'], 'Y-m-d H:i:s');
     $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
     
-    $table->addRow('', 'class', 'tableMouseOver');
+    $table->addRow('', array('class' => 'tableMouseOver'));
     $table->addAttribute('id', 'row_user_'.$row['usr_id']);
     $table->addColumn('<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>');
     $table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/calendar_time.png"

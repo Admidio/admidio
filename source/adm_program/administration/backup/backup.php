@@ -96,7 +96,7 @@ $backup_size_sum = 0;
 	
 foreach($old_backup_files as $key => $old_backup_file)
 {
-    $table->addRow('', 'id', 'row_file_'.$key);
+    $table->addRow('', array('id' => 'row_file_'.$key));
     $table->addAttribute('class', 'tableMouseOver');
     $table->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">
                         <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" /></a>

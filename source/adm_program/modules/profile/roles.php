@@ -177,7 +177,7 @@ while($row = $gDb->fetch_array($result))
     
             $category = $role->getValue('cat_id');
         }
-        $table->addRow('', 'class', 'tableMouseOver');
+        $table->addRow('', array('class' => 'tableMouseOver'));
         $table->addColumn('<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
 					        $memberChecked.$memberDisabled.' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />', 'style', 'text-align: center;');
         $table->addColumn('<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>');

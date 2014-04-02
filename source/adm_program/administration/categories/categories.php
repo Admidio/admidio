@@ -188,7 +188,7 @@ while($cat_row = $gDb->fetch_array($cat_result))
             }
         }
 
-        $table->addRow('', 'id', 'row_'. $category->getValue('cat_id'));
+        $table->addRow('', array('id' => 'row_'. $category->getValue('cat_id')));
         $table->addAttribute('class', 'tableMouseOver', 'tr');
         $table->addColumn('<a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>');
 

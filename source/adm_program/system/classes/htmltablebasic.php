@@ -207,12 +207,11 @@ class HtmlTableBasic extends HtmlElement {
      *  After all settings are done use addColumn(); to define your columns with content.
      *
      *
-     *  @param $data Content for the table row as string, or array
-     *  @param $attribute Attribute
-     *  @param $value Value of the attribute
-     *  @param $col Column element 'td' or 'th' (Default: 'td')
+     *  @param $data          Content for the table row as string, or array
+     *  @param $arrAttributes Further attributes as array with key/value pairs
+     *  @param $col           Column element 'td' or 'th' (Default: 'td')
      */
-    public function addRow($data = '', $attribute = '', $value = '', $col = 'td')
+    public function addRow($data = '', $arrAttributes = null, $col = 'td')
     {
         // Clear column counter
         $this->columnCount = 0;
@@ -230,11 +229,17 @@ class HtmlTableBasic extends HtmlElement {
             $this->closeParentElement('tfoot');
             $this->tfoot = 1;
 
-            $this->addTableBody();
             $this->thead = 1;
             $this->tfoot = 1;
+        }
+
+        // now add tbody element if this was not set until now
+        if($this->tbody == -1)
+        {
+            $this->addTableBody();
             $this->tbody = 1;
         }
+        
         // If row is active we must close it first before starting new one
         if(in_array('tr', $this->arrParentElements))
         {
@@ -244,10 +249,11 @@ class HtmlTableBasic extends HtmlElement {
         if($this->lineChange == '' && empty($this->columnsWidth))
         {
             $this->addParentElement('tr');
-            // if class change is not set and no cols width are available
-            if($attribute != '' && $value != '')
+
+            // Check optional attributes in associative array and set all attributes
+            if($arrAttributes != null && is_array($arrAttributes))
             {
-                $this->addAttribute($attribute, $value);
+                $this->setAttributesFromArray($arrAttributes);
             }
 
             if($data != '')
@@ -260,12 +266,13 @@ class HtmlTableBasic extends HtmlElement {
         elseif($this->lineChange == '' && !empty($this->columnsWidth))
         {
             $this->addParentElement('tr');
-            // if class change is not set and cols width are available
 
-            if($attribute != '' && $value != '')
+            // Check optional attributes in associative array and set all attributes
+            if($arrAttributes != null && is_array($arrAttributes))
             {
-                $this->addAttribute($attribute, $value);
+                $this->setAttributesFromArray($arrAttributes);
             }
+
             if($data != '')
             {
                 if(is_array($data))
@@ -286,12 +293,13 @@ class HtmlTableBasic extends HtmlElement {
         elseif($this->lineChange != '' && empty($this->columnsWidth))
         {
             $this->addParentElement('tr');
-            // if class change is set and no cols width are available
-            if($attribute != '' && $value != '' && $attribute != 'class')
-            {
-                $this->addAttribute($attribute, $value);
-            }
 
+            // Check optional attributes in associative array and set all attributes
+            if($arrAttributes != null && is_array($arrAttributes))
+            {
+                $this->setAttributesFromArray($arrAttributes);
+            }
+            
             if($this->tbody == 1)
             {
                 // Only allowed in body element of the table
@@ -327,10 +335,11 @@ class HtmlTableBasic extends HtmlElement {
         else
         {
             $this->addParentElement('tr');
-            // class change and cols width are set
-            if($attribute != '' && $value != '' && $attribute != 'class')
+            
+            // Check optional attributes in associative array and set all attributes
+            if($arrAttributes != null && is_array($arrAttributes))
             {
-                $this->addAttribute($attribute, $value);
+                $this->setAttributesFromArray($arrAttributes);
             }
 
             if($this->tbody == 1)
@@ -393,7 +402,7 @@ class HtmlTableBasic extends HtmlElement {
 
         if($data != '')
         {
-            $this->addRow($data, '', '', $col);
+            $this->addRow($data, null, $col);
         }
     }
     
@@ -426,7 +435,7 @@ class HtmlTableBasic extends HtmlElement {
 
             if($data != '')
             {
-                $this->addRow($data, '', '', $col);
+                $this->addRow($data, null, $col);
             }
         }
         return false;
@@ -456,7 +465,7 @@ class HtmlTableBasic extends HtmlElement {
 
             if($data != '')
             {
-                $this->addRow($data, '', '', $col);
+                $this->addRow($data, null, $col);
             }
         }
         return false;

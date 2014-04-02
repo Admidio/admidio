@@ -353,7 +353,7 @@ if($membersCount > 0)
 		}
 
         $tableMembers->addTableBody();
-        $tableMembers->addRow('', 'class', 'tableMouseOver');
+        $tableMembers->addRow('', array('class' => 'tableMouseOver'));
         $tableMembers->addColumn($irow);
         $tableMembers->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
 							         src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />');

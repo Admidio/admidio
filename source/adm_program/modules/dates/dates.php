@@ -625,7 +625,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 }
 
 
-                $compactTable->addRow('', 'class', 'tableMouseOver');
+                $compactTable->addRow('', array('class' => 'tableMouseOver'));
                 $compactTable->addColumn($registerIcon);
                 $compactTable->addColumn($dateBegin);
                 $compactTable->addColumn($timeBegin);
@@ -891,7 +891,7 @@ else
                 $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
             }
             
-            $datePrint->addRow($row['dat_details'], 'class', $className);
+            $datePrint->addRow($row['dat_details'], array('class' => $className));
             $numDateElements ++;
         }
 
@@ -908,7 +908,7 @@ else
             {
                 $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
             }
-            $datePrint->addRow($row['dat_details'], 'class', $className);
+            $datePrint->addRow($row['dat_details'], array('class' => $className));
             $numDateElements ++;
         }
 
@@ -929,7 +929,7 @@ else
                     $className = (($numDateElements % 2) == 0) ? 'evenHighlight' : 'oddHighlight';
                 }
                 
-                $datePrint->addRow($row['dat_details'], 'class', $className);
+                $datePrint->addRow($row['dat_details'], array('class' => $className));
                 $numDateElements ++;
             }
         }

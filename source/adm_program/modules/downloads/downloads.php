@@ -96,20 +96,22 @@ if($gCurrentUser->isWebmaster())
 
 //Create table object
 $downloadOverview = new HtmlTable('tbl_downloads');
-$downloadOverview->addAttribute('cellspacing', '0', 'table');
-$downloadOverview->addTableHeader();
-$downloadOverview->addRow();
-$downloadOverview->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />', 'style', 'width: 25px;', 'th');
-$downloadOverview->addColumn($gL10n->get('SYS_NAME'), '', '', 'th');
-$downloadOverview->addColumn($gL10n->get('SYS_DATE_MODIFIED'), '', '', 'th');
-$downloadOverview->addColumn($gL10n->get('SYS_SIZE'), '', '', 'th');
-$downloadOverview->addColumn($gL10n->get('DOW_COUNTER'), '', '', 'th');
+
+// create array with all column heading values
+$columnHeading = array(
+    '<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />',
+    $gL10n->get('SYS_NAME'),
+    $gL10n->get('SYS_DATE_MODIFIED'),
+    $gL10n->get('SYS_SIZE'),
+    $gL10n->get('DOW_COUNTER')
+);
 
 if ($gCurrentUser->editDownloadRight())
 {
-    $downloadOverview->addColumn($gL10n->get('SYS_FEATURES'), 'style', 'text-align: center;', 'th');
-    $downloadOverview->addTableBody();
+    $columnHeading[] = $gL10n->get('SYS_FEATURES');
 }
+
+$downloadOverview->addRowHeadingByArray($columnHeading);
 
 // If folder is empty
 if (count($folderContent) == 0)
@@ -123,6 +125,7 @@ if (count($folderContent) == 0)
         $colspan = '5';
     }
 
+    $downloadOverview->addTableBody();
     $downloadOverview->addRow();
     $downloadOverview->addColumn($gL10n->get('DOW_FOLDER_NO_FILES'), 'colspan', $colspan);
 }
@@ -134,47 +137,51 @@ else
         // First get possible sub folders
         for($i=0; $i<count($folderContent['folders']); $i++) 
         {
-
             $nextFolder = $folderContent['folders'][$i];
-            $downloadOverview->addRow('', 'id', 'row_folder_'.$nextFolder['fol_id'].'');
-            $downloadOverview->addAttribute('class', 'tableMouseOver', 'tr');
-            $downloadOverview->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">
-                                            <img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" /></a>');
-            
+            $folderDescription = '';
             if($nextFolder['fol_description'] != '')
             {
-                $buffer = '<span class="iconLink" ><a class="textTooltip" title="'.$nextFolder['fol_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FOLDER').'"/></a></span>';
+                $folderDescription = '<span class="iconLink" ><a class="textTooltip" title="'.$nextFolder['fol_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FOLDER').'"/></a></span>';
             }
-            $downloadOverview->addColumn('<a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">'. $nextFolder['fol_name']. '</a>' . $buffer);
-            $downloadOverview->addColumn('&nbsp;');
-            $downloadOverview->addColumn('&nbsp;');
-            $downloadOverview->addColumn('&nbsp;');
-                             
-                if ($gCurrentUser->editDownloadRight())
+            
+            // create array with all column values
+            $columnValues = array(
+                '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">
+                                            <img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" /></a>',
+                '<a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">'. $nextFolder['fol_name']. '</a>'.$folderDescription,
+                '&nbsp;',
+                '&nbsp;',
+                '&nbsp;'
+            );
+
+            if ($gCurrentUser->editDownloadRight())
+            {
+                //Links for change and delete
+                $noteFolderNotExists = '';
+                
+                if($nextFolder['fol_exists'] == false)
                 {
-                    //Links for change and delete
-                    $buffer = '';
-                    
-                    if(!$nextFolder['fol_exists'])
-                    {
-                        $buffer = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS&amp;inline=true"><img
-				                                                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
-				                                                                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
-                    }
-                    
-                    $downloadOverview->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '">
-                                                <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                                                <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fol&amp;element_id=row_folder_'.
-                                                $nextFolder['fol_id'].'&amp;name='.urlencode($nextFolder['fol_name']).'&amp;database_id='.$nextFolder['fol_id'].'"><img
-                                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>' . $buffer, 'style', 'text-align: center;', 'td'); 
+                    $noteFolderNotExists = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS&amp;inline=true"><img
+                                                                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
+                                                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
                 }
+
+                $columnValues[] = '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '">
+                                            <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                                            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fol&amp;element_id=row_folder_'.
+                                            $nextFolder['fol_id'].'&amp;name='.urlencode($nextFolder['fol_name']).'&amp;database_id='.$nextFolder['fol_id'].'"><img
+                                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>'. 
+                                            $noteFolderNotExists; 
+            }
+            $downloadOverview->addRowByArray($columnValues, 'row_folder_'.$nextFolder['fol_id']);
         }
     }
 
     // Get contained files
-    if (isset($folderContent['files'])) {
-        for($i=0; $i<count($folderContent['files']); $i++) {
-
+    if (isset($folderContent['files'])) 
+    {
+        for($i=0; $i<count($folderContent['files']); $i++) 
+        {
             $nextFile = $folderContent['files'][$i];
 
             // Check filetyp
@@ -189,46 +196,48 @@ else
             
             // Format timestamp
             $timestamp = new DateTimeExtended($nextFile['fil_timestamp'], 'Y-m-d H:i:s');
-            $downloadOverview->addRow('', 'id', 'row_file_'.$nextFile['fil_id'].'');
-            $downloadOverview->addAttribute('class', 'tableMouseOver', 'tr');
-            $downloadOverview->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">
-                                            <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>');
-            $buffer = '';
-            
+
+            $fileDescription = '';
             if($nextFile['fil_description']!='')
             {
-                $buffer = '<span class="iconLink" ><a class="textTooltip" title="'.$nextFile['fil_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'"/></a></span>';
+                $fileDescription = '<span class="iconLink" ><a class="textTooltip" title="'.$nextFile['fil_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FILE').'"/></a></span>';
             }
             
-            $downloadOverview->addColumn('<a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>' . $buffer);
-            $downloadOverview->addColumn($timestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']));
-            $downloadOverview->addColumn($nextFile['fil_size']. ' kB&nbsp;');
-            $downloadOverview->addColumn(($nextFile['fil_counter'] != '') ? $nextFile['fil_counter'] : '&nbsp;');
-                            
-                if ($gCurrentUser->editDownloadRight())
+            // create array with all column values
+            $columnValues = array(
+                '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">
+                    <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',     
+                '<a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
+                $timestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']),
+                $nextFile['fil_size']. ' kB&nbsp;',
+                ($nextFile['fil_counter'] != '') ? $nextFile['fil_counter'] : '&nbsp;'
+            );
+            
+            if ($gCurrentUser->editDownloadRight())
+            {
+                //Links for change and delete
+                $noteFileNotExists = '';
+                
+                if(!$nextFile['fil_exists'])
                 {
-                    //Links for change and delete
-                    $buffer = '';
-                    
-                    if(!$nextFile['fil_exists'])
-                    {
-                        $buffer = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS&amp;inline=true"><img
-                                                    				                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
-                                                    				                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
-                    }
-                    $downloadOverview->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?file_id='. $nextFile['fil_id']. '">
-                                                    <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                                                    <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fil&amp;element_id=row_file_'.
-                                                    $nextFile['fil_id'].'&amp;name='.urlencode($nextFile['fil_name']).'&amp;database_id='.$nextFile['fil_id'].'"><img
-                                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>' . $buffer, 'style', 'text-align: center;', 'td');
+                    $noteFileNotExists = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS&amp;inline=true"><img
+                                                                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS\',this)" onmouseout="ajax_hideTooltip()"
+                                                                                class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
                 }
+                $columnValues[] = '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?file_id='. $nextFile['fil_id']. '">
+                                                <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                                                <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=fil&amp;element_id=row_file_'.
+                                                $nextFile['fil_id'].'&amp;name='.urlencode($nextFile['fil_name']).'&amp;database_id='.$nextFile['fil_id'].'"><img
+                                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>'.
+                                                $noteFileNotExists;
+            }
+            $downloadOverview->addRowByArray($columnValues, 'row_file_'.$nextFile['fil_id']);
         }
     }
-
 }
 
 //Create download table
-$htmlDownloadOverview = $downloadOverview->getHtmlTable();
+$htmlDownloadOverview = $downloadOverview->show(false);
 
 //If user is download Admin show further files contained in this folder.
 if ($gCurrentUser->editDownloadRight())

@@ -486,7 +486,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 
         if($getMode == 'html')
         {
-            $table->addRow('', 'class', 'tableMouseOver');
+            $table->addRow('', array('class' => 'tableMouseOver'));
             $table->addAttribute('style', 'cursor: pointer', 'tr');
             $table->addAttribute('', 'onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'"', 'tr');
         }

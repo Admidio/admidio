@@ -273,10 +273,10 @@ elseif($getJob == 'upload')
         <div class="formBody">';
             $table = new HtmlTableBasic();
             $table->addAttribute('style', 'border: none; width: 100%; padding: 5px;');
-            $table->addRow('', 'style', 'text-align: center;');
+            $table->addRow('', array('style' => 'text-align: center;'));
             $table->addColumn($gL10n->get('PRO_CURRENT_PICTURE'));
             $table->addColumn($gL10n->get('PRO_NEW_PICTURE'));
-            $table->addRow('', 'style', 'text-align: center;');
+            $table->addRow('', array('style' => 'text-align: center;'));
             $table->addColumn('<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" /></td>');
             $table->addColumn('<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" /></td>');
                 

@@ -215,7 +215,7 @@ while($row = $gDb->fetch_array($resultFieldHistory))
 {
 	$timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
 
-	$table->addRow('', 'class', 'tableMouseOver');
+	$table->addRow('', array('class' => 'tableMouseOver'));
 	
 	if($getUserId == 0)
 	{

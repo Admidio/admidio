@@ -287,7 +287,7 @@ if($gDb->num_rows($resultUser)>0)
             $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
         }
 
-        $table->addRow('', 'class', 'tableMouseOver');
+        $table->addRow('', array('class' => 'tableMouseOver'));
         $table->addAttribute('user_id', $user['usr_id']);
         $table->addColumn('<img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />');
         $table->addColumn('', 'style', 'text-align: center;');

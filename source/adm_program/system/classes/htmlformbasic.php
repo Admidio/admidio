@@ -122,9 +122,9 @@ class HtmlFormBasic extends HtmlElement
      *  @param $type Type of input field e.g. 'text'
      *  @param $name Name of the input field
      *  @param $id Optional ID for the input
-     *  @param $value Yalue of the field (Default: empty)
+     *  @param $value         Value of the field (Default: empty)
      *  @param $arrAttributes Further attributes as array with key/value pairs
-     *  @param $status Optional Status like "readonly", "disabled", etc. can be set
+     *  @param $status        Optional Status like "readonly", "disabled", etc. can be set
      */
     public function addInput($type , $name, $id = null, $value ='', $arrAttributes = null, $status = null)
     {
@@ -365,22 +365,6 @@ class HtmlFormBasic extends HtmlElement
     {   
         return parent::getHtmlElement();
     }
-    
-    /** Set attributes from associative array.
-     *  @param $array An array that contains all attribute names as array key 
-     *                and all attribute content as array value
-     */
-    protected function setAttributesFromArray($array)
-    {
-        if(is_array($array))
-        {
-            foreach($array as $key => $value)
-            {
-                $this->addAttribute($key, $value);
-            }
-        }
-        return false;
-    }    
 } 
 
 ?>

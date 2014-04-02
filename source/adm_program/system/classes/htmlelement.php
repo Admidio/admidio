@@ -208,7 +208,23 @@ abstract class HtmlElement {
             }
         }
     }
-
+    
+    /** Set attributes from associative array.
+     *  @param $array An array that contains all attribute names as array key 
+     *                and all attribute content as array value
+     */
+    protected function setAttributesFromArray($array)
+    {
+        if(is_array($array))
+        {
+            foreach($array as $key => $value)
+            {
+                $this->addAttribute($key, $value);
+            }
+        }
+        return false;
+    }    
+    
     /**
      *  Add data to current element
      *

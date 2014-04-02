@@ -152,7 +152,7 @@ if($gDb->num_rows($result) > 0)
             
             $categoryId = $userField->getValue('usf_cat_id');
         }           
-        $table->addRow('', 'id', 'row_usf_'.$userField->getValue('usf_id'));
+        $table->addRow('', array('id' => 'row_usf_'.$userField->getValue('usf_id')));
         $table->addAttribute('class', 'tableMouseOver', 'tr');
         $table->addColumn('<a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$userField->getValue('usf_id').'">'.$userField->getValue('usf_name').'</a>');
         $table->addColumn('<a class="iconLink" href="javascript:moveCategory(\'up\', '.$userField->getValue('usf_id').')"><img
