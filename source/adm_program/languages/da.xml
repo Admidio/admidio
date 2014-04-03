@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="da">
+<version id="2.4.5" translator="Henrik Troels-Hansen">
+    <text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">Hvis en e-mail er sendt til en rolle, vil alle modtager adresser blive placeret i BCC feltet. Til feltet vil så indeholde ordet "Undisclosed Recipients". Hvis dette resulterer i en fejl, så kan du benytte dig af muligheden for at flytte adresserne til til-feltet. De andre adresser vil forblive i BCC feltet. (Standard: Deaktiveret)</text>
+    <text id="SYS_CSV" development="new" translation="edited">CSV</text>
+    <text id="SYS_LANDSCAPE" description="Format for printing" development="new" translation="edited">Landskab</text>
+    <text id="SYS_PDF" development="new" translation="edited">PDF</text>
+    <text id="SYS_PORTRAIT" description="Format for printing" development="new" translation="edited">Portræt</text>
+</version>
 <version id="2.4.4" translator="Henrik Troels-Hansen">
     <text id="DAT_VIEW_MODE_DESC" development="changed" translation="edited">Visnings type for events. Med indstillingen %VAR1_BOLD% vil alle event detaljer blive vist inde i en boks. Med indstilling %VAR2_BOLD% vises kun de mest vigtige event detaljer i en compakt liste. (Standard: Detaljeret)</text>
     <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="edited">Hent billeder</text>
@@ -670,7 +677,7 @@
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">Aktiver e-mail modul</text>
     <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">E-mail modulet kan dekativeres ved at fjerne mærket i checkboksen. Efter deaktivation, vil modulet heller ikke være at finde i modul oversigten. Hvis serveren ikke understøtter afsendelse af e-mails så bedes du venligst deaktivere modulet. (Standrd: aktivt)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Vedhæft fil</text>
-    <text id="MAI_ATTACHEMENT" development="new" translation="todo">Vedhæftet</text>
+    <text id="MAI_ATTACHEMENT" development="new" translation="todo">Vedhæftet:</text>
     <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Maximum størrelse af vedhæftede filer (tilsammen)</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Brugere kan vedhæfte filer som er mindre end værdien der er defineret her. Hvis værdien er 0, kan vedhæftede filer ikke sendes. (Standard: 1024KB)</text>
     <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Filerne vedhæftet e-mailen kunne ikke overføres.\nFilen er sikkert for stor!</text>
