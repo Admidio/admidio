@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="it">
+<version id="2.4.5" translator="Fiorentino Sarro">
+    <text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">Se un'email viene inviata ad un ruolo tutti gli indirizzi dei destinatari verranno inseriti nel campo Ccn. Il campo TO conterrà quindi "Destinatari non divulgati". Se questo dà errore è possibile utilizzare questa opzione per inserire gli indirizzi dei destinatari nel campo TO. Gli altri indirizzi rimarranno nel campo Ccn. (Predefinito: Disattivato)</text>
+    <text id="SYS_CSV" development="new" translation="edited">CSV</text>
+    <text id="SYS_LANDSCAPE" description="Format for printing" development="new" translation="edited">Panoramica</text>
+    <text id="SYS_PDF" development="new" translation="edited">PDF</text>
+    <text id="SYS_PORTRAIT" description="Format for printing" development="new" translation="edited">Ritratto</text>
+</version>
 <version id="2.4.4" translator="Fiorentino Sarro">
     <text id="DAT_VIEW_MODE_DESC" development="changed" translation="edited">Tipo di visualizzazione per gli eventi. Con la modalità %VAR1_BOLD% tutti i dettagli degli eventi saranno visualizzati in un box. Con la modalità %VAR2_BOLD% i dettagli più importanti dell'evento saranno visualizzati in un elenco compatto. (Predefinito: Detailed)</text>
     <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="edited">Scarica foto</text>
@@ -125,7 +132,6 @@
 <version id="2.3.4" translator="Fiorentino Sarro">
     <text id="MAI_COUNT_BCC_DESC" development="changed" translation="edited">Le email ai ruoli dei singoli membri saranno inviate come copie protette (BCC). In questo modo, i riceventi non potranno vedere chi altri ha ricevuto l'email. Il numero indicato nel campo corrente definisce il numero massimo di riceventi del messaggio email. Il numero massimo di riceventi può essere limitato dall'hosting provider. In caso di più riceventi email del consentito, saranno generati singoli messaggi email. Impostando il valore a 1, ogni ricevente riceverà direttamente un messaggio individuale. Il numero di messaggi email in uscita nell'intervallo di tempo saranno limitati anche dall'hosting provider. (Predefinito: 50)</text>
     <text id="MAI_SENDER_INTO_TO" development="new" translation="edited">Mittente come ricevente</text>
-    <text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="edited">I riceventi delle email inviate ai ruoli saranno definiti usando il campo BCC. Il campo TO di solito rimane vuoto. Alcuni hosting provider non consentono email senza il campo TO definito o considerano queste email come spam. L'opzione corrente ti consente di impostare gli indirizzi email dei mittenti automaticamente come campo TO, e tutti gli altri riceventi saranno inseriti regolarmente nel campo BCC. (Predefinito: attivo)</text>
 </version>
 <version id="2.3.1" translator="Fiorentino Sarro">
     <text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="edited">Un'organizzazione chiamata %VAR1_BOLD% esiste già. Si prega di scegliere un altro nome.</text>
