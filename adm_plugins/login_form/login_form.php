@@ -2,16 +2,16 @@
 /******************************************************************************
  * Login Form
  *
- * Version 1.6.0
+ * Version 1.6.1
  *
  * Login Form stellt das Loginformular mit den entsprechenden Feldern dar,
  * damit sich ein Benutzer anmelden kann. Ist der Benutzer angemeldet, so
  * werden an der Stelle der Felder nun nützliche Informationen des Benutzers
  * angezeigt.
  *
- * Compatible with Admidio version 2.3.0
+ * Compatible with Admidio version 2.3.0 and 2.4.0
  *
- * Copyright    : (c) 2004 - 2013 The Admidio Team
+ * Copyright    : (c) 2004 - 2014‚ The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
