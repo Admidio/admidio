@@ -693,20 +693,7 @@ elseif($getMode == 'pdf')
     }
     
     //Save PDF to file
-    $pdf->Output($filename, 'F');
-    
-    //Redirect
-    header('Content-Type: application/pdf');
-    header('Content-Disposition: attachment; filename="'.$filename.'"');
-    
-    // neccessary for IE6 to 8, because without it the download with SSL has problems
-    header('Cache-Control: private');
-    header('Pragma: public');
-    
-    readfile($filename);
-    ignore_user_abort(true);
-    unlink($filename);
-    
+    $pdf->Output($filename, 'D');
 }
 else
 {
