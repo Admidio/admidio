@@ -472,6 +472,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                         <div class="'.$class_sub_header_font.'" style="float: left;">&nbsp;'.$title.'</div>
                     </td>
                 </tr>';
+                $lastGroupHead = $row['mem_leader'];
             }
         }
 
