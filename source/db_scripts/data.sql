@@ -12,8 +12,8 @@ INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org
 --
 
 INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
-(1, 1, 'db_version', '2.4.4'),
-(2, 2, 'db_version', '2.4.4'),
+(1, 1, 'db_version', '2.4.6'),
+(2, 2, 'db_version', '2.4.6'),
 (1000, 1, 'announcements_per_page', '10'),
 (1100, 1, 'ecard_view_width', '250'),
 (1200, 1, 'ecard_view_height', '250'),
@@ -77,7 +77,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (6910, 1, 'mail_character_encoding', 'utf-8'),
 (6915, 1, 'mail_delivery_confirmation', '0'),
 (6920, 1, 'mail_html_registered_users', '1'),
-(6950, 1, 'mail_sender_into_to', '1'),
+(6950, 1, 'mail_sender_into_to', '0'),
 (7000, 1, 'mail_sendmail_address', ''),
 (7010, 1, 'mail_sendmail_name', ''),
 (7020, 1, 'mail_send_method', 'phpmail'),
@@ -193,7 +193,7 @@ INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUE
 (69100, 2, 'mail_character_encoding', 'utf-8'),
 (69150, 2, 'mail_delivery_confirmation', '0'),
 (69200, 2, 'mail_html_registered_users', '1'),
-(69500, 2, 'mail_sender_into_to', '1'),
+(69500, 2, 'mail_sender_into_to', '0'),
 (70001, 2, 'mail_sendmail_address', ''),
 (70010, 2, 'mail_sendmail_name', ''),
 (70020, 2, 'mail_send_method', 'phpmail'),
