@@ -406,7 +406,7 @@ a:hover, a:active {
 }
 
 .admTableRowHeading th, .admTableRow td {
-    padding: 5px 2px 5px 2px;
+    padding: 5px 6px 5px 0px;
     text-align: left;
 /*    vertical-align: top;*/
 }

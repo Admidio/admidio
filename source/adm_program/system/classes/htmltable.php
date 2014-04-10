@@ -24,13 +24,15 @@
  *****************************************************************************/
 
 class HtmlTable extends HtmlTableBasic
-{    
+{
+    protected $columnAlign;    ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center
+
     /** Constructor creates the table element
      *  @param $id               Id of the table
      */
     public function __construct($id)
     {        
-        parent::__construct($id, 'admTable');        
+        parent::__construct($id, 'admTable');
         $this->addAttribute('cellspacing', '0');
     }
 
@@ -55,7 +57,14 @@ class HtmlTable extends HtmlTableBasic
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
         {
-            $this->addColumn($value, '', '', 'th');
+            if(is_array($this->columnAlign))
+            {
+                $this->addColumn($value, 'style', 'text-align: '.$this->columnAlign[$key], 'th');
+            }
+            else
+            {
+                $this->addColumn($value, '', '', 'th');
+            }
         }
     }
 
@@ -79,8 +88,25 @@ class HtmlTable extends HtmlTableBasic
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
         {
-            $this->addColumn($value, '', '', 'td');
+            if(is_array($this->columnAlign))
+            {
+                $this->addColumn($value, 'style', 'text-align: '.$this->columnAlign[$key], 'td');
+            }
+            else
+            {
+                $this->addColumn($value, '', '', 'td');
+            }
         }
+    }
+    
+    /** Set the align for each column of the current table. This method must be called
+     *  before a row is added to the table. Each entry of the array represents a column.
+     *  @param $arrayColumnAlign An array which contains the align for each column of the table.
+     *                           E.g. array('center', 'left', 'left', 'right') for a table with 4 columns.
+     */
+    public function setColumnAlignByArray($arrayColumnAlign)
+    {
+        $this->columnAlign = $arrayColumnAlign;
     }
     
 	/** This method send the whole html code of the table to the browser. Call this method

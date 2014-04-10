@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * folder_id : akutelle OrdnerId
+ * folder_id : Id of the current folder that should be shown
  *
  *****************************************************************************/
 
@@ -62,7 +62,14 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 
 
 // Define html header
-$gLayout['title']  = $gL10n->get('DOW_DOWNLOADS');
+if($currentFolder->getValue('fol_fol_id_parent') == null)
+{
+    $gLayout['title']  = $gL10n->get('DOW_DOWNLOADS');
+}
+else
+{
+    $gLayout['title']  = $gL10n->get('DOW_DOWNLOADS').' - '.$currentFolder->getValue('fol_name');
+}
 $gLayout['header'] = '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/text_tooltip.js"></script>
     <script type="text/javascript"><!--
@@ -111,6 +118,7 @@ if ($gCurrentUser->editDownloadRight())
     $columnHeading[] = $gL10n->get('SYS_FEATURES');
 }
 
+$downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'right', 'right', 'left'));
 $downloadOverview->addRowHeadingByArray($columnHeading);
 
 // If folder is empty
@@ -239,6 +247,10 @@ else
 //Create download table
 $htmlDownloadOverview = $downloadOverview->show(false);
 
+/**************************************************************************/
+// Add Admin table to html page
+/**************************************************************************/
+
 //If user is download Admin show further files contained in this folder.
 if ($gCurrentUser->editDownloadRight())
 {
@@ -246,19 +258,21 @@ if ($gCurrentUser->editDownloadRight())
     if (isset($folderContent['additionalFolders']) || isset($folderContent['additionalFiles']))
     {
 
-        $htmlAdminTableHeadline = '<h3>
+        $htmlAdminTableHeadline = '<h2 class="admHeadline2">
                                     '.$gL10n->get('DOW_UNMANAGED_FILES').'
 		                              <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES&amp;inline=true"><img 
                                         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES\',this)" onmouseout="ajax_hideTooltip()"
                                         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>            
-                                    </h3>';
+                                    </h2>';
 
-        $adminTable = new HtmlTable('tbl_additional_content');
-        $adminTable->addAttribute('cellspacing', '0', 'table');
-        $adminTable->addRow();
-        $adminTable->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />', 'style', 'width: 25px;', 'th');
-        $adminTable->addColumn($gL10n->get('SYS_NAME'), '' , '', 'th');
-        $adminTable->addColumn($gL10n->get('SYS_FEATURES'), 'style', 'text-align: right;', 'th');
+        //Create table object
+        $adminTable = new HtmlTable('tbl_downloads');
+
+        // create array with all column heading values
+        $columnHeading = array('<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />',
+                               $gL10n->get('SYS_NAME'),
+                               $gL10n->get('SYS_FEATURES'));
+        $adminTable->addRowHeadingByArray($columnHeading);
 
         // Get folders
         if (isset($folderContent['additionalFolders'])) 
@@ -268,11 +282,11 @@ if ($gCurrentUser->editDownloadRight())
 
                 $nextFolder = $folderContent['additionalFolders'][$i];
 
-                $adminTable->addRow();
-                $adminTable->addColumn('<img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" />', 'class', 'tableMouseOver');
-                $adminTable->addColumn($nextFolder['fol_name']);
-                $adminTable->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFolder['fol_name']). '">
-                                        <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" /></a>', 'style', 'text-align: right;');
+                $columnValues = array('<img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" />',
+                                      $nextFolder['fol_name'],
+                                      '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFolder['fol_name']). '">
+                                          <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" /></a>');
+                $adminTable->addRowByArray($columnValues);
             }
         }
 
@@ -294,25 +308,26 @@ if ($gCurrentUser->editDownloadRight())
                     $iconFile = $icon_file_extension[$fileExtension];
                 }
 
-                $adminTable->addRow();
-                $adminTable->addColumn('<img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>', 'class', 'tableMouseOver');
-                $adminTable->addColumn($nextFile['fil_name']);
-                $adminTable->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFile['fil_name']). '">
-                                        <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" /></a>', 'style', 'text-align: right;');
+                $columnValues = array('<img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',
+                                      $nextFile['fil_name'],
+                                      '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=6&amp;folder_id='.$getFolderId.'&amp;name='. urlencode($nextFile['fil_name']). '">
+                                          <img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" title="'.$gL10n->get('DOW_ADD_TO_DATABASE').'" /></a>');
+                $adminTable->addRowByArray($columnValues);
             }
         }
-        $htmlAdminTable = $adminTable->getHtmlTable();
+        $htmlAdminTable = $adminTable->show(false);
     }
 }
 
 // Output module html to client
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
+echo $navigationBar;
 echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
 
 $DownloadsMenu->show();
 
-echo $navigationBar, $htmlDownloadOverview;
+echo $htmlDownloadOverview;
 // if user has admin download rights, then show admin table for undefined files in folders
 if(isset($htmlAdminTable))
 {

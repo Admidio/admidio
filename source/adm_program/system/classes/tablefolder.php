@@ -511,7 +511,7 @@ class TableFolder extends TableAccess
     //Gibt fuer das Downloadmodul eine HTML-Navigationsleiste fuer die Ordner zurueck
     public function getNavigationForDownload($folderId = 0, $currentNavigation = '')
     {
-        global $gCurrentOrganization, $g_root_path;
+        global $gCurrentOrganization, $g_root_path, $gL10n;
 
         $originalCall = false;
 
@@ -535,9 +535,12 @@ class TableFolder extends TableAccess
 
                 $rootFolderId = $rootFolderRow->fol_id;
 
-                $navigationPrefix =    '<a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '">
-                                         <img src="'.THEME_PATH.'/icons/application_view_list.png" alt="Downloads" /></a>
-                                          <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '">Downloads</a>';
+                $navigationPrefix = '
+                    <span class="admIconTextLink">
+                        <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img 
+                            src="'.THEME_PATH.'/icons/application_view_list.png" alt="Downloads" /></a>
+                        <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '">'.$gL10n->get('DOW_DOWNLOADS').'</a>
+                    </span>';
 
                 $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
             }
@@ -558,7 +561,7 @@ class TableFolder extends TableAccess
 
             if ($currentFolderRow->fol_fol_id_parent) 
 			{
-                $currentNavigation = ' &gt; <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.
+                $currentNavigation = ' &gt; <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.
                                        $currentFolderRow->fol_id. '">'. $currentFolderRow->fol_name. '</a>'. $currentNavigation;
 
 
@@ -573,7 +576,7 @@ class TableFolder extends TableAccess
 
         if ($originalCall) 
 		{
-            $link = '<div class="navigationPath">'.$navigationPrefix.' '.$currentNavigation.' &gt; '. $this->getValue('fol_name'). '</div>';
+            $link = '<div class="admNavigation admNavigationBar">'.$navigationPrefix.' '.$currentNavigation.' &gt; '. $this->getValue('fol_name'). '</div>';
 
             return $link;
         }
