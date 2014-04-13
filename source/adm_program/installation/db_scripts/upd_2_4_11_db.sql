@@ -22,3 +22,7 @@ collate = utf8_unicode_ci;
 
 insert into %PREFIX%_components (com_type, com_name, com_name_intern, com_version, com_beta)
                          values ('SYSTEM', 'Admidio Core', 'CORE', '3.0.0', 1);
+                         
+update %PREFIX%_announcements SET ann_description = '<p>' || ann_description || '</p>' WHERE ann_description not like '<p>%';
+update %PREFIX%_guestbook SET gbo_text = '<p>' || gbo_text || '</p>' WHERE gbo_text not like '<p>%';
+update %PREFIX%_guestbook_comments SET gbc_text = '<p>' || gbc_text || '</p>' WHERE gbc_text not like '<p>%';
