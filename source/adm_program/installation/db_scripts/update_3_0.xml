@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <update>
 	<step id="10">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
+	<step id="20">ALTER TABLE %PREFIX%_members ADD COLUMN mem_approved integer unsigned default null</step>
+	<step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(255)</step>
+	<step id="40">ALTER TABLE %PREFIX%_members ADD COLUMN mem_count_guests integer unsigned not null default '0'</step>
     <step>stop</step>
 </update>
