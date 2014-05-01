@@ -239,7 +239,9 @@ if($db->query('SELECT 1 FROM '.TBL_COMPONENTS, false) == false)
 }
 else
 {
-    $databaseVersion = $gSystemComponent->getValue('com_version');
+    $systemComponent = new Component($db);
+    $systemComponent->readDataByColumns(array('com_type' => 'SYSTEM', 'com_name_intern' => 'CORE'));
+    $databaseVersion = $systemComponent->getValue('com_version');
 }
 
 echo '<p>Database and testdata have the Admidio version '.$databaseVersion.'.<br />

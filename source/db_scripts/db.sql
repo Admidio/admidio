@@ -70,7 +70,7 @@ create table %PREFIX%_auto_login
    atl_org_id                     integer       unsigned not null,
    atl_usr_id                     integer       unsigned not null,
    atl_last_login                 timestamp		null default null,
-   atl_ip_address                 varchar(39)   not null,
+   atl_ip_address                 varchar(15)   not null,
    primary key (atl_id)
 )
 engine = InnoDB
@@ -97,28 +97,6 @@ create table %PREFIX%_categories
    cat_usr_id_change              integer       unsigned,
    cat_timestamp_change           timestamp 	null default null,
    primary key (cat_id)
-)
-engine = InnoDB
-auto_increment = 1
-default character set = utf8
-collate = utf8_unicode_ci;
-
-
-/*==============================================================*/
-/* Table: adm_components                                         */
-/*==============================================================*/
-
-create table %PREFIX%_components
-(
-	com_id                        integer       unsigned not null AUTO_INCREMENT,
-    com_type                      varchar(10)   not null,
-    com_name                      varchar(255)  not null,
-    com_name_intern               varchar(255)  not null,
-    com_version                   varchar(10)   not null,
-    com_beta                      smallint,
-    com_update_step               integer       not null default 0,
-	com_timestamp_installed       timestamp     not null default CURRENT_TIMESTAMP,
-    primary key (com_id)
 )
 engine = InnoDB
 auto_increment = 1
@@ -242,7 +220,7 @@ create table %PREFIX%_guestbook
    gbo_text                       text          not null,
    gbo_email                      varchar(50),
    gbo_homepage                   varchar(50),
-   gbo_ip_address                 varchar(39)   not null,
+   gbo_ip_address                 varchar(15)   not null,
    gbo_locked                     boolean       not null default '0',
    gbo_usr_id_create              integer       unsigned,
    gbo_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
@@ -266,7 +244,7 @@ create table %PREFIX%_guestbook_comments
    gbc_name                       varchar(60)   not null,
    gbc_text                       text          not null,
    gbc_email                      varchar(50),
-   gbc_ip_address                 varchar(39)   not null,
+   gbc_ip_address                 varchar(15)   not null,
    gbc_locked                     boolean       not null default '0',
    gbc_usr_id_create              integer       unsigned,
    gbc_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
@@ -358,9 +336,6 @@ create table %PREFIX%_members
    mem_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
    mem_usr_id_change              integer       unsigned,
    mem_timestamp_change           timestamp 	null default null,
-   mem_approved                   integer       unsigned default null,
-   mem_comment                    varchar(255),
-   mem_count_guests               integer       unsigned not null default '0',
    primary key (mem_id)
 )
 engine = InnoDB
@@ -557,7 +532,7 @@ create table %PREFIX%_sessions
    ses_device_id				  varchar(255),
    ses_begin                      timestamp		null default null,
    ses_timestamp                  timestamp     not null default CURRENT_TIMESTAMP,
-   ses_ip_address                 varchar(39)   not null,
+   ses_ip_address                 varchar(15)   not null,
    ses_binary                     blob,
    ses_renew                      smallint      not null default 0,
    primary key (ses_id)
