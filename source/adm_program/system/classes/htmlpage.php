@@ -206,6 +206,16 @@ class HtmlPage
                 $headerContent .= '<link rel="alternate" type="application/rss+xml" href="'.$file.'" />';                
             }
         }
+        
+        // add organization name to title
+        if(strlen($this->title) > 0)
+        {
+            $this->title = $gCurrentOrganization->getValue('org_longname').' - '.$this->title;
+        }
+        else
+        {
+        	$this->title = $gCurrentOrganization->getValue('org_longname');
+        }
 
         // add javascript code to page        
         if(strlen($this->javascriptContent) > 0)

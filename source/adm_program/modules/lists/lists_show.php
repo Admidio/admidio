@@ -85,14 +85,18 @@ switch ($getMode)
         $charset     = 'utf-8';
         break;
     case 'pdf':
-        $classTable   = 'table';
-        $orientation  = 'P';
-        $getMode      = 'pdf';
+        $classTable         = 'table';
+        $classSubHeader     = 'tableSubHeader';
+        $classSubHeaderFont = 'tableSubHeaderFont';
+        $orientation        = 'P';
+        $getMode            = 'pdf';
         break;
     case 'pdfl':
-        $classTable   = 'table';
-        $orientation  = 'L';
-        $getMode      = 'pdf';
+        $classTable         = 'table';
+        $classSubHeader     = 'tableSubHeader';
+        $classSubHeaderFont = 'tableSubHeaderFont';
+        $orientation        = 'L';
+        $getMode            = 'pdf';
         break;
     case 'html':
         $classTable         = 'tableList';
@@ -149,6 +153,11 @@ if($numMembers < $getStart)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
+// define title (html) and headline
+$title    = $gL10n->get('LST_LIST').' - '. $role->getValue('rol_name');
+$headline = $role->getValue('rol_name').' - '.$list->getValue('lst_name');
+
+
 if($getMode == 'html' && $getStart == 0)
 {
     // Url fuer die Zuruecknavigation merken, aber nur in der Html-Ansicht
@@ -182,7 +191,7 @@ if($getMode != 'csv')
             
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         
-            <title>'. $gCurrentOrganization->getValue('org_longname'). ' - Liste - '. $role->getValue('rol_name'). '</title>
+            <title>'. $gCurrentOrganization->getValue('org_longname'). $title. '</title>
             
             <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
             <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
@@ -219,7 +228,7 @@ if($getMode != 'csv')
         $pdf->AddPage();
 
         //headline for PDF
-        $pdf_htmlHeadline = '<div style="text-align:center; font-size:16"><h1>' . $role->getValue('rol_name') . ' &#40;' . $role->getValue('cat_name') . '&#41;</h1></div>';
+        $pdf_htmlHeadline = '<div style="text-align:center; font-size:16"><h1>'.$headline.'</h1></div>';
 
     }
     elseif($getMode == 'html')
@@ -239,8 +248,8 @@ if($getMode != 'csv')
         // show back link
         $page->addHtml($gNavigation->getHtmlBackButton());
 
-        $page->setTitle($gL10n->get('LST_LIST').' - '. $role->getValue('rol_name'));
-        $page->addHeadline($role->getValue('rol_name').' - '.$list->getValue('lst_name'));
+        $page->setTitle($title);
+        $page->addHeadline($headline);
         
         $page->addHtml('<div class="admListShortInfo">'.$role->getValue('cat_name').' - '.$memberStatus.'</div>
         <ul class="admIconTextLinkList">
