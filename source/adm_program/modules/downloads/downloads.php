@@ -36,10 +36,6 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
     $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $gHomepage));
 }
 
-// Session handling
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
-
 try
 {
     // get recordset of current folder from databse
@@ -51,6 +47,20 @@ catch(AdmException $e)
 	$e->showHtml();
 }
 
+// set headline of the script
+if($currentFolder->getValue('fol_fol_id_parent') == null)
+{
+    $headline = $gL10n->get('DOW_DOWNLOADS');
+}
+else
+{
+    $headline = $gL10n->get('DOW_DOWNLOADS').' - '.$currentFolder->getValue('fol_name');
+}
+
+// Session handling
+$gNavigation->clear();
+$gNavigation->addUrl(CURRENT_URL, $headline);
+
 $getFolderId = $currentFolder->getValue('fol_id');
 
 // Get folder content for style
@@ -59,24 +69,11 @@ $folderContent = $currentFolder->getFolderContentsForDownload();
 // Keep navigation link 
 $navigationBar = $currentFolder->getNavigationForDownload();
 
+// create html page object
+$page = new HtmlPage();
 
-
-// Define html header
-if($currentFolder->getValue('fol_fol_id_parent') == null)
-{
-    $gLayout['title']  = $gL10n->get('DOW_DOWNLOADS');
-}
-else
-{
-    $gLayout['title']  = $gL10n->get('DOW_DOWNLOADS').' - '.$currentFolder->getValue('fol_name');
-}
-$gLayout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/tooltip/text_tooltip.js"></script>
-    <script type="text/javascript"><!--
-        $(document).ready(function() {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-        }); 
-    //--></script>';
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/tooltip/text_tooltip.js');
+$page->addJavascript('$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
     
 // create module menu
 $DownloadsMenu = new ModuleMenu('admMenuDownloads');
@@ -218,7 +215,7 @@ else
                 '<a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
                 $timestamp->format($gPreferences['system_date'].' '.$gPreferences['system_time']),
                 $nextFile['fil_size']. ' kB&nbsp;',
-                ($nextFile['fil_counter'] != '') ? $nextFile['fil_counter'] : '&nbsp;'
+                ($nextFile['fil_counter'] != '') ? $nextFile['fil_counter'] : '0'
             );
             
             if ($gCurrentUser->editDownloadRight())
@@ -320,20 +317,23 @@ if ($gCurrentUser->editDownloadRight())
 }
 
 // Output module html to client
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-echo $navigationBar;
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+$page->addHtml($navigationBar);
 
-$DownloadsMenu->show();
+$page->addHeadline($headline);
 
-echo $htmlDownloadOverview;
+$page->addHtml($DownloadsMenu->show(false));
+
+$page->addHtml($htmlDownloadOverview);
+
 // if user has admin download rights, then show admin table for undefined files in folders
 if(isset($htmlAdminTable))
 {
-    echo $htmlAdminTableHeadline, $htmlAdminTable;
+    $page->addHtml($htmlAdminTableHeadline);
+    $page->addHtml($htmlAdminTable);
 }
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// show html of complete page
+$page->show();
 
 ?>

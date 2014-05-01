@@ -36,13 +36,16 @@ class HtmlForm extends HtmlFormBasic
 {
     protected $flagMandatoryFields; ///< Flag if this form has mandatory fields. Then a notice must be written at the end of the form
     private   $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
+    private   $htmlPage;            ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     
     /** Constructor creates the form element
      *  @param $id               Id of the form
      *  @param $action           Optional action attribute of the form
+     *  @param $htmlPage         Optional a HtmlPage object that will be used to add javascript code 
+     *                           or files to the html output page.
      *  @param $enableFileUpload Set specific parameters that are necessary for file upload with a form
      */
-    public function __construct($id, $action, $enableFileUpload = false)
+    public function __construct($id, $action, &$htmlPage = null, $enableFileUpload = false)
     {        
         
         parent::__construct($action, $id, 'post');
@@ -64,6 +67,11 @@ class HtmlForm extends HtmlFormBasic
 		
         $this->flagMandatoryFields = false;
         $this->flagFieldListOpen   = false;
+        
+        if(is_object($htmlPage))
+        {
+            $this->htmlPage =& $htmlPage;
+        }
     }
     
     /** Add a new button with a custom text to the form. This button could have 
@@ -137,7 +145,7 @@ class HtmlForm extends HtmlFormBasic
         $this->closeFieldStructure();
         
         // now add a row with a text field where the user can write the solution for the puzzle
-        $this->addSmallTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, $captchaDescription);
+        $this->addTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, $captchaDescription, 'admTextInputSmall');
     }
     
     /** Add a new checkbox with a label to the form.
@@ -278,23 +286,34 @@ class HtmlForm extends HtmlFormBasic
         // dynamically add new upload fields to the form
         if($enableMultiUploads)
         {
-            $this->addString('
-            <script type="text/javascript"><!--
-                $(document).ready(function() {
-            		$(".admLinkAddAttachment").css("cursor", "pointer");
-            		
-            		// add new line to add new attachment to this mail
-            		$(".admLinkAddAttachment").click(function () {
-            			newAttachment = document.createElement("input");
-            			$(newAttachment).attr("type", "file");
-            			$(newAttachment).attr("name", "userfile[]");
-            			$(newAttachment).attr("class", "admTextInput admUploadInput");
-            			$(newAttachment).hide();
-            			$("#admAddAttachment").before(newAttachment);
-            			$(newAttachment).show("slow");
-            		});
-             	}); 	
-            //--></script>');
+            $javascriptCode = '
+        		$(".admLinkAddAttachment").css("cursor", "pointer");
+        		
+        		// add new line to add new attachment to this mail
+        		$(".admLinkAddAttachment").click(function () {
+        			newAttachment = document.createElement("input");
+        			$(newAttachment).attr("type", "file");
+        			$(newAttachment).attr("name", "userfile[]");
+        			$(newAttachment).attr("class", "admTextInput admUploadInput");
+        			$(newAttachment).hide();
+        			$("#admAddAttachment").before(newAttachment);
+        			$(newAttachment).show("slow");
+        		});';
+            
+            // if a htmlPage object was set then add code to the page, otherwise to the current string
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->addJavascript($javascriptCode, true);
+            }
+            else
+            {
+                $this->addString('
+                <script type="text/javascript"><!--
+                    $(document).ready(function() {
+                        '.$javascriptCode.'
+                 	}); 	
+                //--></script>');
+            }
         }
         
         $this->openFieldStructure($id, $label, $property, 'admUploadButtonRow');
@@ -348,7 +367,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
-        global $gL10n;
+        global $gL10n, $g_root_path;
         $attributes = array('class' => 'admMultilineTextInput');
 
         // disable field
@@ -367,16 +386,27 @@ class HtmlForm extends HtmlFormBasic
         if($maxLength > 0)
         {
             // if max field length is set then show a counter how many characters still available
-            $this->addString('<script type="text/javascript">
-                    $(document).ready(function(){
-                        $(\'#'.$id.'\').NobleCount(\'#'.$id.'_counter\',{
-                            max_chars: 255,
-                            on_negative: \'systeminfoBad\',
-                            block_negative: true
+            $javascriptCode = '
+                $(\'#'.$id.'\').NobleCount(\'#'.$id.'_counter\',{
+                    max_chars: 255,
+                    on_negative: \'systeminfoBad\',
+                    block_negative: true
+                });';
+
+            // if a htmlPage object was set then add code to the page, otherwise to the current string
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js');
+                $this->htmlPage->addJavascript($javascriptCode, true);
+            }
+            else
+            {
+                $this->addString('<script type="text/javascript">
+                        $(document).ready(function(){
+                            '.$javascriptCode.'
                         });
-                    });
-                </script>  '
-            );
+                    </script>');
+            }
         }
         
         $this->openFieldStructure($id, $label, $property, 'admMultilineTextInputRow');
@@ -726,50 +756,6 @@ class HtmlForm extends HtmlFormBasic
         // now call method to create selectbox from sql
         $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class);
 	}
-
-
-    /** Add a new small input field with a label to the form.
-     *  @param $id         Id of the input field. This will also be the name of the input field.
-     *  @param $label      The label of the input field.
-	 *  @param $value      A value for the text field. The field will be created with this value.
-     *  @param $maxLength  The maximum number of characters that are allowed in this field.
-     *  @param $property   With this param you can set the following properties: 
-     *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
-	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
-     *  @param $class      Optional an additional css classname. The class @b admTextInput
-     *                     is set as default and need not set with this parameter.
-     */
-    public function addSmallTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
-    {
-        $attributes = array('class' => 'admSmallTextInput');
-
-        // set max input length
-        if($maxLength > 0)
-        {
-            $attributes['maxlength'] = $maxLength;
-        }
-
-        // disable field
-        if($property == FIELD_DISABLED)
-        {
-            $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
-        }
-        
-        // set specific css class for this field
-        if(strlen($class) > 0)
-        {
-            $attributes['class'] .= ' '.$class;
-        }
-        
-        $this->openFieldStructure($id, $label, $property, 'admSmallTextInputRow');
-        $this->addInput('text', $id, $id, $value, $attributes);
-		$this->setHelpText($helpTextId);
-        $this->closeFieldStructure();
-    }
     
     /** Add a new button with a custom text to the form. This button could have 
      *  an icon in front of the text. Different to addButton this method adds an
@@ -899,7 +885,7 @@ class HtmlForm extends HtmlFormBasic
         // create a div tag for the field list
         if($this->flagFieldListOpen == false)
         {
-            $this->addString('<div class="admFieldList">');
+            $this->addString('<div class="admFieldEditList">');
             $this->flagFieldListOpen = true;
         }
 		

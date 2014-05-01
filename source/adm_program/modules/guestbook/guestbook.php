@@ -52,28 +52,18 @@ if($getGboId == 0)
 }
 $gNavigation->addUrl(CURRENT_URL);
 
-// Html-Kopf ausgeben
-if($getModeration == 1)
-{
-    $gLayout['title'] = $gL10n->get('GBO_MODERATE_VAR', $getHeadline);
-}
-else
-{
-    $gLayout['title'] = $getHeadline;
-}
-$gLayout['header'] = '';
+
+// create html page object
+$page = new HtmlPage();
+
+// add rss feed to guestbook
 if($gPreferences['enable_rss'] == 1)
 {
-    $gLayout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline).'"
-        href="'.$g_root_path.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$getHeadline.'" />';
+    $page->addRssFile($g_root_path.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 };
 
-$gLayout['header'] = $gLayout['header']. '
-    <script type="text/javascript"><!--
-        $(document).ready(function() {
-            $("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-        }); 
-
+$page->addJavascript('$("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
+$page->addJavascript('
         function getComments(commentId) {
             // RequestObjekt abschicken und Kommentar laden
             $.get("'.$g_root_path.'/adm_program/modules/guestbook/get_comments.php?cid=" + commentId + "&moderation=" + '.$getModeration.', 
@@ -110,12 +100,17 @@ $gLayout['header'] = $gLayout['header']. '
                 document.getElementById(objectId).style.display    = "none";
             }
         }
-    //--></script>';
+    ');
 
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-
-// show headline of module
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+// add headline and title of module
+if($getModeration == 1)
+{
+    $page->addHeadline($gL10n->get('GBO_MODERATE_VAR', $getHeadline));
+}
+else
+{
+    $page->addHeadline($getHeadline);
+}
 
 // ------------------------------------------------------
 // SQL-Statements zur Anzeige der Eintraege zusammensetzen
@@ -218,7 +213,7 @@ if($gCurrentUser->isWebmaster())
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 }
 
-$guestbookMenu->show();
+$page->addHtml($guestbookMenu->show(false));
 
 
 if ($gDb->num_rows($guestbook_result) == 0)
@@ -226,11 +221,11 @@ if ($gDb->num_rows($guestbook_result) == 0)
     // Keine Gaestebucheintraege gefunden
     if ($getGboId > 0)
     {
-        echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
+        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>');
     }
     else
     {
-        echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
+        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
     }
 }
 else
@@ -244,52 +239,52 @@ else
         $guestbook->clear();
         $guestbook->setArray($row);
 
-        echo '
+        $page->addHtml('
         <div class="admBoxLayout" id="gbo_'.$guestbook->getValue('gbo_id').'">
             <div class="admBoxHead">
                 <div class="admBoxHeadLeft">
-                    <img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$guestbook->getValue('gbo_name').'" />'.$guestbook->getValue('gbo_name');
+                    <img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$guestbook->getValue('gbo_name').'" />'.$guestbook->getValue('gbo_name'));
 
                     // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
                     if (strlen($guestbook->getValue('gbo_homepage')) > 0)
                     {
-                        echo '
+                        $page->addHtml('
                         <a class="admIconLink" href="'.$guestbook->getValue('gbo_homepage').'" target="_blank"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                            alt="'.$guestbook->getValue('gbo_homepage').'" title="'.$guestbook->getValue('gbo_homepage').'" /></a>';
+                            alt="'.$guestbook->getValue('gbo_homepage').'" title="'.$guestbook->getValue('gbo_homepage').'" /></a>');
                     }
 
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
                     if (strlen($guestbook->getValue('gbo_email')) > 0)
                     {
-                        echo '
+                        $page->addHtml('
                         <a class="admIconLink" href="mailto:'.$guestbook->getValue('gbo_email').'"><img src="'. THEME_PATH. '/icons/email.png"
-                            alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" /></a>';
+                            alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" /></a>');
                     }
-                echo '</div>
+                $page->addHtml('</div>
 
-                <div class="admBoxHeadRight">'. $guestbook->getValue('gbo_timestamp_create'). '&nbsp;';
+                <div class="admBoxHeadRight">'. $guestbook->getValue('gbo_timestamp_create'). '&nbsp;');
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($gCurrentUser->editGuestbookRight())
                     {
-                            echo '
+                            $page->addHtml('
                             <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                             <a class="admIconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
                                 $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                     }
 
-                echo '</div>
+                $page->addHtml('</div>
             </div>
 
             <div class="admBoxBody">'.
-                $guestbook->getValue('gbo_text');
+                $guestbook->getValue('gbo_text'));
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
                 if($getModeration == 1 && $guestbook->getValue('gbo_locked') == 1)
                 {
-                    echo '
+                    $page->addHtml('
                     <ul class="admIconTextLinkList">
                         <li>
                             <span class="admIconTextLink">
@@ -307,11 +302,11 @@ else
                                     $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'">'.$gL10n->get('SYS_REMOVE').'</a>
                             </span>
                         </li>
-                    </ul>';
+                    </ul>');
                 }
 
                 // show informations about user who edit the recordset
-                echo admFuncShowCreateChangeInfoById(0, '', $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change'));
+                $page->addHtml(admFuncShowCreateChangeInfoById(0, '', $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')));
 
                 $conditions = '';
 
@@ -354,17 +349,17 @@ else
                     $gboId = $guestbook->getValue('gbo_id');
 
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
-                    echo '
+                    $page->addHtml('
                     <div id="admCommentsVisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
                         <span class="admIconTextLink">
                             <a href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
                             alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" title="'.$gL10n->get('GBO_HIDE_COMMENTS').'" /></a>
                             <a href="javascript:toggleComments('. $gboId. ')">'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>
                         </span>
-                    </div>';
+                    </div>');
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
-                    echo '
+                    $page->addHtml('
                     <div id="admCommentsInvisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
                         <span class="admIconTextLink">
                             <a href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
@@ -372,18 +367,23 @@ else
                             <a href="javascript:toggleComments('. $gboId. ')">'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $gDb->num_rows($comment_result)).'</a>
                         </span>
                         <div id="comments_'. $gboId. '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
-                    </div>';
+                    </div>');
 
                     // Hier ist das div, in das die Kommentare reingesetzt werden
-                    echo '<div id="admCommentSection_'. $gboId. '" class="commentBox" style="display: '. $display_others. ';">';
+                    $page->addHtml('<div id="admCommentSection_'. $gboId. '" class="commentBox" style="display: '. $display_others. ';">');
                         if($gPreferences['enable_intial_comments_loading'] == 1 || $getModeration == 1)
                         {
                             // Get setzen da diese Datei eigentlich als Aufruf ueber Javascript gedacht ist
                             $_GET['cid'] = $gboId;
                             $_GET['moderation'] = $getModeration;
+                            
+                            // read all comments of this guestbook entry
+                            ob_start();
                             include('get_comments.php');
+                            $page->addHtml(ob_get_contents());
+                            ob_end_clean();
                         }
-                    echo '</div>';
+                    $page->addHtml('</div>');
                 }
 
                 if ($getGboId == 0 && $gDb->num_rows($comment_result) == 0 
@@ -392,14 +392,14 @@ else
                 {
                     // Falls keine Kommentare vorhanden sind, aber das Recht zur Kommentierung, wird der Link zur Kommentarseite angezeigt...
                     $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');
-                    echo '
+                    $page->addHtml('
                     <div class="admCommentLink">
                         <span class="admIconTextLink">
                             <a href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png"
                             alt="'.$gL10n->get('GBO_WRITE_COMMENT').'" title="'.$gL10n->get('GBO_WRITE_COMMENT').'" /></a>
                             <a href="'.$load_url.'">'.$gL10n->get('GBO_WRITE_COMMENT').'</a>
                         </span>
-                    </div>';
+                    </div>');
                 }
 
 
@@ -407,18 +407,22 @@ else
                 // werden unter dem Eintrag die dazugehoerigen Kommentare (falls welche da sind) angezeigt.
                 if ($gDb->num_rows($guestbook_result) > 0 && $getGboId > 0)
                 {
+                    ob_start();
                     include('get_comments.php');
+                    $page->addHtml(ob_get_contents());
+                    ob_end_clean();
                 }
-            echo '</div>
-        </div>';
+            $page->addHtml('</div>
+        </div>');
     }  // Ende While-Schleife
 }
 
 
 // If neccessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/modules/guestbook/guestbook.php?headline='. $getHeadline.'&amp;moderation='.$getModeration;
-echo admFuncGeneratePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $getStart, TRUE);
+$page->addHtml(admFuncGeneratePagination($base_url, $num_guestbook, $guestbook_entries_per_page, $getStart, TRUE));
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// show html of complete page
+$page->show();
 
 ?>

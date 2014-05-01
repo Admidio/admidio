@@ -48,23 +48,24 @@ if(isset($_SESSION['links_request']))
 // Html-Kopf ausgeben
 if($getLinkId > 0)
 {
-    $gLayout['title'] = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
 }
 else
 {
-    $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
+    $headline = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
 }
 
 // add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $gLayout['title']);
+$gNavigation->addUrl(CURRENT_URL, $headline);
     
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create html page object
+$page = new HtmlPage();
 
 // show back link
-echo $gNavigation->getHtmlBackButton();
+$page->addHtml($gNavigation->getHtmlBackButton());
 
 // show headline of module
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+$page->addHeadline($headline);
 
 // Html des Modules ausgeben
 if($getLinkId > 0)
@@ -87,8 +88,9 @@ $form->closeGroupBox();
 
 $form->addString(admFuncShowCreateChangeInfoById($link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'), $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
-$form->show();
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

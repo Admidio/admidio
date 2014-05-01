@@ -114,169 +114,58 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     }
 }
 
+// create html page object
+$page = new HtmlPage();
+
+// show back link
+$page->addHtml($gNavigation->getHtmlBackButton());
+
 // Html-Kopf ausgeben
 if($getGboId > 0)
 {
     $id   = $getGboId;
     $mode = '4';
-    $gLayout['title'] = $gL10n->get('GBO_CREATE_COMMENT');
+    $page->addHeadline($gL10n->get('GBO_CREATE_COMMENT'));
 }
 else
 {
     $id   = $getGbcId;
     $mode = '8';
-    $gLayout['title'] = $gL10n->get('GBO_EDIT_COMMENT');
+    $page->addHeadline($gL10n->get('GBO_EDIT_COMMENT'));
 }
 
-// create an object of ckeditor and replace textarea-element
-$ckEditor = new CKEditorSpecial();
-
-if ($gCurrentUser->getValue('usr_id') == 0)
+// show form
+$form = new HtmlForm('guestbook_comment_edit_form', $g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='.$getHeadline.'&amp;mode='.$mode);
+$form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
+if ($gCurrentUser->getValue('usr_id') > 0)
 {
-    $focusField = 'gbc_name';
+    // registered users should not change their name
+    $form->addTextInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), 60, FIELD_DISABLED);
 }
 else
 {
-    $focusField = 'gbc_text';
+    $form->addTextInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), 60, FIELD_MANDATORY);
+}
+$form->addTextInput('gbc_email', $gL10n->get('SYS_EMAIL'), $guestbook_comment->getValue('gbc_email'), 50);
+$form->closeGroupBox();
+$form->openGroupBox('gb_message', $gL10n->get('SYS_COMMENT'));
+$form->addEditor('gbc_text', null, $guestbook_comment->getValue('gbc_text'), FIELD_MANDATORY, 'AdmidioGuestbook');
+$form->closeGroupBox();
+
+// if captchas are enabled then visitors of the website must resolve this
+if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
+{
+    $form->openGroupBox('gb_confirmation_of_entry', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
+    $form->addCaptcha('captcha', $gPreferences['captcha_type']);
+    $form->closeGroupBox();
 }
 
-$gLayout['header'] = '
-	<script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
-            $("#'.$focusField.'").focus();
-	 	}); 
-	//--></script>';
+// show informations about user who creates the recordset and changed it
+$form->addString(admFuncShowCreateChangeInfoById($guestbook_comment->getValue('gbc_usr_id_create'), $guestbook_comment->getValue('gbc_timestamp_create'), $guestbook_comment->getValue('gbc_usr_id_change'), $guestbook_comment->getValue('gbc_timestamp_change')));
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
 
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-
-echo '
-<form action="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='.$getHeadline.'&amp;mode='.$mode.'" method="post">
-<div class="formLayout" id="edit_guestbook_comment_form">
-    <div class="formHead">'. $gLayout['title']. '</div>
-    <div class="formBody">
-		<div class="groupBox" id="admContactDetails">
-			<div class="groupBoxHeadline" id="admContactDetailsHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admContactDetailsBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admContactDetailsBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_CONTACT_DETAILS').'
-			</div>
-
-			<div class="groupBoxBody" id="admContactDetailsBody">
-                <ul class="formFieldList">
-					<li>
-						<dl>
-							<dt><label for="gbc_name">'.$gL10n->get('SYS_NAME').':</label></dt>
-							<dd>';
-								if ($gCurrentUser->getValue('usr_id') > 0)
-								{
-									// Eingeloggte User sollen ihren Namen nicht aendern duerfen
-									echo '<input type="text" id="gbc_name" name="gbc_name" disabled="disabled" style="width: 90%;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />';
-								}
-								else
-								{
-									echo '<input type="text" id="gbc_name" name="gbc_name" style="width: 90%;" maxlength="60" value="'. $guestbook_comment->getValue('gbc_name'). '" />
-									<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-								}
-							echo '</dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="gbc_email">'.$gL10n->get('SYS_EMAIL').':</label></dt>
-							<dd>
-								<input type="text" id="gbc_email" name="gbc_email" style="width: 90%;" maxlength="50" value="'. $guestbook_comment->getValue('gbc_email'). '" />
-							</dd>
-						</dl>
-					</li>
-                </ul>
-            </div>
-        </div>
-        <div class="groupBox" id="admComment">
-			<div class="groupBoxHeadline" id="admCommentHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admCommentBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admCommentBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_COMMENT').'
-			</div>
-
-			<div class="groupBoxBody" id="admCommentBody">
-                <ul class="formFieldList">
-                    <li>
-                         '.$ckEditor->createEditor('gbc_text', $guestbook_comment->getValue('gbc_text'), 'AdmidioGuestbook').'
-                         <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </li>
-                </ul>
-            </div>
-        </div>';
-
-		// Nicht eingeloggte User bekommen jetzt noch das Captcha praesentiert,
-		// falls es in den Orgaeinstellungen aktiviert wurde...
-		if (!$gValidLogin && $gPreferences['enable_guestbook_captcha'] == 1)
-		{
-            echo '<div class="groupBox" id="admConfirmationOfEntry">
-    			<div class="groupBoxHeadline" id="admConfirmationOfEntryHead">
-    				<a class="iconShowHide" href="javascript:showHideBlock(\'admConfirmationOfEntryBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-    				id="admConfirmationOfEntryBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_CONFIRMATION_OF_INPUT').'
-    			</div>
-    
-    			<div class="groupBoxBody" id="admConfirmationOfEntryBody">
-                    <ul class="formFieldList">
-                        <li>
-                            <dl>
-                                <dt>&nbsp;</dt>
-                                <dd>';
-									if($gPreferences['captcha_type']=='pic')
-									{
-										echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
-										$captcha_label = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-										$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
-									}
-									else if($gPreferences['captcha_type']=='calc')
-									{
-										$captcha = new Captcha();
-										$captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
-										$captcha_label = $gL10n->get('SYS_CAPTCHA_CALC');
-										$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
-									}
-								echo '</dd>
-							</dl>
-						</li>
-						<li>
-							<dl>
-								   <dt><label for="captcha">'.$captcha_label.':</label></dt>
-								   <dd>
-									   <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-									   <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-									   <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
-										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
-										class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-								   </dd>
-							</dl>
-                        </li>
-                    </ul>
-                </div>
-            </div>';
-		}
-
-        // show informations about user who creates the recordset and changed it
-        echo admFuncShowCreateChangeInfoById($guestbook_comment->getValue('gbc_usr_id_create'), $guestbook_comment->getValue('gbc_timestamp_create'), $guestbook_comment->getValue('gbc_usr_id_change'), $guestbook_comment->getValue('gbc_timestamp_change')).'
-
-        <div class="formSubmit">
-            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-        </div>';
-
-    echo '</div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

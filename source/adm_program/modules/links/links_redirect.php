@@ -46,35 +46,35 @@ $weblink->save();
 // MR: Neue Prüfung für direkte Weiterleitung oder mit Anzeige
 if ($gPreferences['weblinks_redirect_seconds'] > 0)
 {
-	$gLayout['header'] = '<meta http-equiv="refresh" content="'. $gPreferences['weblinks_redirect_seconds'].'; url='.$weblink->getValue('lnk_url').'">';
+    // create html page object
+    $page = new HtmlPage();
+
+    // add special header for automatic redirection after x seconds
+	$page->addHeader('<meta http-equiv="refresh" content="'. $gPreferences['weblinks_redirect_seconds'].'; url='.$weblink->getValue('lnk_url').'">');
 
 	//Counter zählt die sekunden bis zur Weiterleitung runter
-	$gLayout['header'] = $gLayout['header'].'<script type="text/javascript">
+	$page->addJavascript('
 		function countDown(init) {
-			if (init || --document.getElementById( "counter" ).firstChild.nodeValue > 0 ) {
+			if (init || --document.getElementById("counter").firstChild.nodeValue > 0 ) {
 				window.setTimeout( "countDown()" , 1000 );
 			}
 		};
-		countDown(true);
-	</script>'; 
+		countDown(true);');
+
+    // show headline of module
+    $page->addHeadline($gL10n->get('LNK_REDIRECT'));
 	
-	$redirect_seconds = '<span id="counter">'.$gPreferences["weblinks_redirect_seconds"].'</span>';
-
-	// Html-Kopf ausgeben
-	$gLayout['title'] = $gL10n->get('LNK_REDIRECT');
-
-	require(SERVER_PATH. '/adm_program/system/overall_header.php');
-
 	// Html des Modules ausgeben
-	echo '<h1 class="admHeadline">'.$gL10n->get('LNK_REDIRECT').'</h1>
+	$page->addHtml('
 	<div id="links_overview" class="admMessage">
 		<p>'.$gL10n->get('LNK_REDIRECT_DESC', $gCurrentOrganization->getValue('org_longname'), 
             '<span id="counter">'.$gPreferences['weblinks_redirect_seconds'].'</span>', '<strong>'.$weblink->getValue('lnk_name').'</strong> ('.$weblink->getValue('lnk_url').')', 
             '<a href="'.$weblink->getValue('lnk_url').'" target="_self">hier</a>').'
 		</p>
-	</div>';
+	</div>');
 
-	require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+    // show html of complete page
+    $page->show();
 }
 else
 {

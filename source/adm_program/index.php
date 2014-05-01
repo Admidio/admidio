@@ -18,52 +18,54 @@ if(!file_exists('../adm_my_files/config.php'))
 
 require_once('system/common.php');
 
-// show html head
-$gLayout['title']  = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
-$gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/overview_modules.css" type="text/css" />';
+$headline = 'Admidio '.$gL10n->get('SYS_OVERVIEW');
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $gLayout['title']);
+$gNavigation->addStartUrl(CURRENT_URL, $headline);
 
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create html page object
+$page = new HtmlPage();
 
-// headline and menu of the page
-echo '
-<h1 class="admHeadline">'.$gCurrentOrganization->getValue('org_longname').'</h1>
+$page->addCssFile(THEME_PATH. '/css/overview_modules.css');
 
-<ul class="admIconTextLinkList">';
+// show headline of script
+$page->addHeadline($headline);
+
+// menu of the page
+$page->addHtml('<ul class="admIconTextLinkList">');
+
     if($gValidLogin == 1)
     {
-        echo '<li>
+        $page->addHtml('<li>
             <span class="admIconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/logout.php"><img
                 src="'.THEME_PATH.'/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" /></a>
                 <a href="'.$g_root_path.'/adm_program/system/logout.php">'.$gL10n->get('SYS_LOGOUT').'</a>
             </span>
-        </li>';
+        </li>');
     }
     else
     {
-        echo '<li>
+        $page->addHtml('<li>
             <span class="admIconTextLink">
                 <a href="'.$g_root_path.'/adm_program/system/login.php"><img
                 src="'.THEME_PATH.'/icons/key.png" alt="'.$gL10n->get('SYS_LOGIN').'" /></a>
                 <a href="'.$g_root_path.'/adm_program/system/login.php">'.$gL10n->get('SYS_LOGIN').'</a>
             </span>
-        </li>';
+        </li>');
 
         if($gPreferences['registration_mode'] > 0)
         {
-            echo '<li>
+            $page->addHtml('<li>
                 <span class="admIconTextLink">
                     <a href="'.$g_root_path.'/adm_program/system/registration.php"><img
                     src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" /></a>
                     <a href="'.$g_root_path.'/adm_program/system/registration.php">'.$gL10n->get('SYS_REGISTRATION').'</a>
                 </span>
-            </li>';
+            </li>');
         }
     }
-echo '</ul>';
+$page->addHtml('</ul>');
 
 // menu with links to all modules of Admidio
 $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));
@@ -144,7 +146,7 @@ if($gPreferences['enable_forum_interface'])
 						$gL10n->get('SYS_FORUM'), '/icons/forum_big.png',
 						$forumstext);
 }
-$moduleMenu->show('complex');
+$page->addHtml($moduleMenu->show('complex', false));
 
 // menu with links to all administration pages of Admidio if the user has the right to administrate
 if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser->approveUsers() || $gCurrentUser->editUsers())
@@ -180,9 +182,9 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser
 							$gL10n->get('ORG_ORGANIZATION_PROPERTIES'), '/icons/options_big.png',
 							$gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
 	}
-	$adminMenu->show('complex');
+	$page->addHtml($adminMenu->show('complex', false));
 }
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+$page->show();
 
 ?>

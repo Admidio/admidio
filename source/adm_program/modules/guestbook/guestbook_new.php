@@ -32,7 +32,18 @@ elseif($gPreferences['enable_guestbook_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
-$gNavigation->addUrl(CURRENT_URL);
+// set headline of the script
+if ($getGboId > 0)
+{
+    $headline = $gL10n->get('GBO_EDIT_ENTRY', $getHeadline);
+}
+else
+{
+    $headline = $gL10n->get('GBO_CREATE_VAR_ENTRY', $getHeadline);
+}
+
+// add current url to navigation stack
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Gaestebuchobjekt anlegen
 $guestbook = new TableGuestbook($gDb);
@@ -93,23 +104,14 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
     }
 }
 
-// Html-Kopf ausgeben
-if ($getGboId > 0)
-{
-    $gLayout['title'] = $gL10n->get('GBO_EDIT_ENTRY', $getHeadline);
-}
-else
-{
-    $gLayout['title'] = $gL10n->get('GBO_CREATE_VAR_ENTRY', $getHeadline);
-}
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create html page object
+$page = new HtmlPage();
 
 // show back link
-echo $gNavigation->getHtmlBackButton();
+$page->addHtml($gNavigation->getHtmlBackButton());
 
-// show headline of module
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+// add headline and title of module
+$page->addHeadline($headline);
 
 // Html des Modules ausgeben
 if ($getGboId > 0)
@@ -151,8 +153,9 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 // show informations about user who creates the recordset and changed it
 $form->addString(admFuncShowCreateChangeInfoById($guestbook->getValue('gbo_usr_id_create'), $guestbook->getValue('gbo_timestamp_create'), $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
-$form->show();
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

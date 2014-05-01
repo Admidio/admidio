@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Ordnerberechtigungen konfigurieren
+ * Configure download folder rights
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * folder_id : Ordner Id des uebergeordneten Ordners
+ * folder_id : Id of the current folder to configure the rights
  *
  *****************************************************************************/
 
@@ -17,6 +17,8 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', null, true);
+
+$headline = $gL10n->get('DOW_SET_FOLDER_PERMISSIONS');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)
@@ -38,7 +40,7 @@ if (!$gCurrentUser->editDownloadRight())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 try
 {
@@ -51,11 +53,9 @@ catch(AdmException $e)
 	$e->showHtml();
 }
 
-//NavigationsLink erhalten
-$navigationBar = $folder->getNavigationForDownload();
-
 //Parentordner holen
 $parentRoleSet = null;
+
 if ($folder->getValue('fol_fol_id_parent')) 
 {
     try
@@ -96,20 +96,16 @@ if ($parentRoleSet == null)
 	}
 }
 
-
 //aktuelles Rollenset des Ordners holen
 $roleSet = $folder->getRoleArrayOfFolder();
 
-// Html-Kopf ausgeben
-$gLayout['title'] = $gL10n->get('DOW_SET_FOLDER_PERMISSIONS');
+// create html page object
+$page = new HtmlPage();
 
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-    	$(document).ready(function() 
-		{
-            $("#fol_public").focus();
-	 	});
+// show back link
+$page->addHtml($gNavigation->getHtmlBackButton());
 
+$page->addJavascript('
         // Scripts fuer Rollenbox
         function hinzufuegen()
         {
@@ -148,76 +144,73 @@ $gLayout['header'] = '
             }
 
             $("#admFormFolderRights").submit();
-        }
-    //--></script>';
+        }');
 
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// show headline of module
+$page->addHeadline($headline);
 
 // Html des Modules ausgeben
-echo '
+$page->addHtml('
 <form id="admFormFolderRights" method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId.'">
 <div class="formLayout" id="edit_download_folder_form" >
-    <div class="formHead">'.$gLayout['title'].'</div>
-    <div class="formBody">'.
-        $navigationBar.'
+    <div class="formBody">
         <div class="groupBox">
             <div class="groupBoxBody" >
                 <ul class="formFieldList">
                     <li>
                         <div>
-                            <input type="checkbox" id="fol_public" name="fol_public" ';
+                            <input type="checkbox" id="fol_public" name="fol_public" ');
                             if($folder->getValue('fol_public') == 0)
                             {
-                                echo ' checked="checked" ';
+                                $page->addHtml(' checked="checked" ');
                             }
                             if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
                             {
-                                echo ' disabled="disabled" ';
+                                $page->addHtml(' disabled="disabled" ');
                             }
-                            echo ' value="0" onclick="showHideBlock(\'admRolesBox\', \'\', \'\');" />
+                            $page->addHtml(' value="0" onclick="showHideBlock(\'admRolesBox\', \'\', \'\');" />
                             <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="'.$gL10n->get('DOW_NO_PUBLIC_ACCESS').'" /></label>&nbsp;
                             <label for="fol_public">'.$gL10n->get('DOW_NO_PUBLIC_ACCESS').'</label>
                             <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PUBLIC_DOWNLOAD_FLAG&amp;inline=true"><img 
                                 onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PUBLIC_DOWNLOAD_FLAG\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
+                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>');
 
                             //Der Wert der DisabledCheckbox muss mit einem versteckten Feld uebertragen werden.
                             if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
                             {
-                                echo '<input type=hidden id="fol_public_hidden" name="fol_public" value='. $parentFolder->getValue('fol_public'). ' />';
+                                $page->addHtml('<input type=hidden id="fol_public_hidden" name="fol_public" value='. $parentFolder->getValue('fol_public'). ' />');
                             }
 
-                        echo '
+                        $page->addHtml('
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <div class="groupBox" id="admRolesBox" ';
+        <div class="groupBox" id="admRolesBox" ');
             if($folder->getValue('fol_public') == 1)
             {
-                echo ' style="display: none;" ';
+                $page->addHtml(' style="display: none;" ');
             }
-            echo '>
+            $page->addHtml('>
             <div class="groupBoxHeadline">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS').'</div>
             <div class="groupBoxBody" ><p>'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC').'</p>
                 <div style="text-align: left; float: left;">
                     <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</div>
                     <div>
-                        <select id="admDeniedRoles" size="8" style="width: 200px;">';
+                        <select id="admDeniedRoles" size="8" style="width: 200px;">');
                         for($i=0; $i < count($parentRoleSet); $i++) 
                         {
                             $nextRole = $parentRoleSet[$i];
 
                             if ($roleSet == null || in_array($nextRole, $roleSet) == false) 
                             {
-                                echo '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
+                                $page->addHtml('<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>');
                             }
                         }
 
-                        echo '
+                        $page->addHtml('
                         </select>
                     </div>
                 </div>
@@ -236,13 +229,13 @@ echo '
                 <div>
                     <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" title="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" />'.$gL10n->get('DOW_ACCESS_ALLOWED').'</div>
                     <div>
-                        <select id="admAllowedRoles" name="AllowedRoles[]" size="8" style="width: 200px;">';
+                        <select id="admAllowedRoles" name="AllowedRoles[]" size="8" style="width: 200px;">');
                         for($i=0; $i<count($roleSet); $i++) {
 
                             $nextRole = $roleSet[$i];
-                            echo '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
+                            $page->addHtml('<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>');
                         }
-                        echo '
+                        $page->addHtml('
                         </select>
                     </div>
                 </div>
@@ -257,18 +250,8 @@ echo '
         </div>
     </div>
 </div>
-</form>
+</form>');
 
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+$page->show();
 
 ?>

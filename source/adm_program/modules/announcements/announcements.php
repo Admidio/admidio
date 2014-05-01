@@ -42,25 +42,18 @@ $announcementsCount = $announcements->getDataSetCount();
 // Navigation of the module starts here
 $gNavigation->addStartUrl(CURRENT_URL, $announcements->getHeadline());
 
-// Start html head
-$gLayout['title']  = $announcements->getHeadline();
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-        }); 
-    //--></script>';
+// create html page object
+$page = new HtmlPage();
 
+// add rss feed to announcements
 if($gPreferences['enable_rss'] == 1)
 {
-    $gLayout['header'] .= '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$announcements->getHeadline()).'"
-        href="'.$g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$announcements->getHeadline().'" />';
+    $page->addRssFile($g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$announcements->getHeadline(), $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$announcements->getHeadline()));
 };
 
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+$page->addJavascript('$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
 
-// show headline of module
-echo '<h1 class="admHeadline">'.$announcements->getHeadline().'</h1>';
+$page->addHeadline($announcements->getHeadline());
 
 // number of announcements per page
 if($gPreferences['announcements_per_page'] > 0)
@@ -89,18 +82,18 @@ if($gCurrentUser->isWebmaster())
 								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 }
 
-$announcementsMenu->show();
+$page->addHtml($announcementsMenu->show(false));
 
 if($announcementsCount == 0)
 {
     // no announcements found
     if($parameter['id'] > 0)
     {
-        echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
+        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>');
     }
     else
     {
-        echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
+        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
     }
 }
 else
@@ -114,35 +107,35 @@ else
     {
         $announcement->clear();
         $announcement->setArray($row);
-        echo '
+        $page->addHtml('
         <div class="admBoxLayout" id="ann_'.$announcement->getValue('ann_id').'">
             <div class="admBoxHead">
                 <div class="admBoxHeadLeft">
                     <img src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
                     $announcement->getValue('ann_headline'). '
                 </div>
-                <div class="admBoxHeadRight">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'&nbsp;';
+                <div class="admBoxHeadRight">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'&nbsp;');
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())
                     {
                         if($announcement->editRight() == true)
                         {
-                            echo '
+                            $page->addHtml('
                             <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$announcements->getHeadline().'"><img 
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
+                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
                         }
 
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
                         if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
                         {
-                            echo '
+                            $page->addHtml('
                             <a class="admIconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
                                 $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                         }    
                     }
-                    echo '</div>
+                    $page->addHtml('</div>
             </div>
 
             <div class="admBoxBody">'.
@@ -152,12 +145,15 @@ else
                 admFuncShowCreateChangeInfoByName($row['create_name'], $announcement->getValue('ann_timestamp_create'), 
                     $row['change_name'], $announcement->getValue('ann_timestamp_change'), $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')).'
             </div>
-        </div>';
+        </div>');
     }  // Ende foreach
     
     // If neccessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$announcements->getHeadline();
-    echo admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $parameter['startelement'], TRUE);
+    $page->addHtml(admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $parameter['startelement'], TRUE));
 }
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+
+// show html of complete page
+$page->show();
+
 ?>

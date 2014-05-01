@@ -154,27 +154,28 @@ else
     $form_values['show_members'] = $getShowMembers;
 }
 
-// Seiten fuer Zuruecknavigation merken
+if (strlen($getSubject) > 0)
+{
+    $headline = $getSubject;
+}
+else
+{
+    $headline = $gL10n->get('MAI_SEND_EMAIL');
+}
+
+// add current url to navigation stack
 if($getUserId == 0 && $getRoleId == 0)
 {
     $gNavigation->clear();
 }
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
-// Html-Kopf ausgeben
-if (strlen($getSubject) > 0)
-{
-    $gLayout['title'] = $getSubject;
-}
-else
-{
-    $gLayout['title'] = $gL10n->get('MAI_SEND_EMAIL');
-}
+// create html page object
+$page = new HtmlPage();
 
 if($gValidLogin == true)
 {
-	$gLayout['header'] =  '
-	<script type="text/javascript"><!--
+    $page->addJavascript('
 		// if role has former members show select box where user can choose to write email also to former members
 		function showMembers(initialize) {
 			fadeIn = "";
@@ -196,25 +197,20 @@ if($gValidLogin == true)
 			else {
 				$("#admShowMembers").hide(fadeIn);
 			}
-		}
-
-		$(document).ready(function() {
-			$("#rol_id").change(function() {showMembers(false)});    
-			showMembers(true);
-		}); 	
-	//--></script>';
+		}');
+    $page->addJavascript('
+		$("#rol_id").change(function() {showMembers(false)});    
+		showMembers(true);', true);
 }
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // show back link
 if($getUserId > 0 || $getRoleId > 0)
 {
-    echo $gNavigation->getHtmlBackButton();
+    $page->addHtml($gNavigation->getHtmlBackButton());
 }
 
 // show headline of module
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+$page->addHeadline($headline);
 
 $formParam = '';
 
@@ -231,7 +227,7 @@ if (strlen($getSubject) > 0)
 
 
 // show form
-$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/mail/mail_send.php?'.$formParam, true);
+$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/mail/mail_send.php?'.$formParam, $page, true);
 $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 if ($getUserId > 0)
 {
@@ -337,8 +333,9 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 }
 
 $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), THEME_PATH.'/icons/email.png');
-$form->show();
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

@@ -232,9 +232,11 @@ class ModuleMenu
 	/** Creates the html output of the module menu. Each added menu item will be displayed.
 	 *  If there are more menu items then in @b maxMenuLinkItem defined a drowdown menu
 	 *  will be displayed and all other items will be displayed there.
+     *  @param $directOutput If set to @b true (default) the module menu will be directly send
+     *                       to the browser. If set to @b false the html will be returned.
 	 *  @return Returns the html output for the complete menu
 	 */
-	public function show()
+	public function show($directOutput = true)
 	{
 		if(count($this->items) == 0)
 			return;
@@ -320,9 +322,17 @@ class ModuleMenu
 			$html .= $this->createDropDown('linkItemDropDown', $dropDownText);
 		}
 			
-		
 		$html .= '</ul>';
-		echo $html;
+		
+        // now show the complete html of the menu
+        if($directOutput)
+        {
+            echo $html;
+        }
+        else
+        {
+            return $html;
+        }
 	}	
 }
 ?>

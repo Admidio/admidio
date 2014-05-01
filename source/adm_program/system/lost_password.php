@@ -5,12 +5,15 @@
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
+ *
  *****************************************************************************/
  
 require_once('common.php');
 
+$headline = $gL10n->get('SYS_PASSWORD_FORGOTTEN').'?';
+
 // save url to navigation stack
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // 'systemmail' and 'request password' must be activated
 if($gPreferences['enable_system_mails'] != 1 || $gPreferences['enable_password_recovery'] != 1)
@@ -96,16 +99,14 @@ else
 {
     /*********************HTML_PART*******************************/
 
-    // show html head
-    $gLayout['title'] = $gL10n->get('SYS_PASSWORD_FORGOTTEN').'?';
-
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    // create html page object
+    $page = new HtmlPage();
     
     // show back link
-    echo $gNavigation->getHtmlBackButton();
-
+    $page->addHtml($gNavigation->getHtmlBackButton());
+    
     // show headline of module
-    echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+    $page->addHeadline($headline);
 
     // show form
     $form = new HtmlForm('lost_password_form', $g_root_path.'/adm_program/system/lost_password.php');
@@ -119,9 +120,10 @@ else
     }
 
     $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), THEME_PATH.'/icons/email.png');
-    $form->show();
 
-    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+    // add form to html page and show page
+    $page->addHtml($form->show(false));
+    $page->show();
 }
 
 //************************* Funktionen/Unterprogramme ***********/

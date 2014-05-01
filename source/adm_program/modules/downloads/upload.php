@@ -18,6 +18,8 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', null, true);
 
+$headline = $gL10n->get('DOW_UPLOAD_FILE');
+
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)
 {
@@ -50,7 +52,7 @@ if (ini_get('file_uploads') != '1')
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
 {
@@ -76,25 +78,23 @@ catch(AdmException $e)
 
 $parentFolderName = $folder->getValue('fol_name');
 
-
-// show html head
-$gLayout['title']  = $gL10n->get('DOW_UPLOAD_FILE');
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create html page object
+$page = new HtmlPage();
 
 // show back link
-echo $gNavigation->getHtmlBackButton();
+$page->addHtml($gNavigation->getHtmlBackButton());
 
 // show headline of module
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+$page->addHeadline($headline);
 
 // show form
-$form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$getFolderId, true);
+$form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$getFolderId, $page, true);
 $form->addDescription($gL10n->get('DOW_UPLOAD_TO_FOLDER', $parentFolderName));
 $form->addFileUpload('add_files', $gL10n->get('DOW_CHOOSE_FILE'), ($gPreferences['max_file_upload_size'] * 1024), true, $gL10n->get('DOW_UPLOAD_ANOTHER_FILE'), false);
 $form->addSubmitButton('btn_upload', $gL10n->get('SYS_UPLOAD'), THEME_PATH.'/icons/page_white_upload.png');
-$form->show();
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

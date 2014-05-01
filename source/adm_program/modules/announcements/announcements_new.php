@@ -33,6 +33,19 @@ if(!$gCurrentUser->editAnnouncements())
 $getAnnId    = admFuncVariableIsValid($_GET, 'ann_id', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
 
+// set headline of the script
+if($getAnnId > 0)
+{
+    $headline = $gL10n->get('SYS_EDIT_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
+}
+else
+{
+    $headline = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
+}
+
+// add current url to navigation stack
+$gNavigation->addUrl(CURRENT_URL, $headline);
+
 // Ankuendigungsobjekt anlegen
 $announcement = new TableAnnouncement($gDb);
 
@@ -55,26 +68,14 @@ if(isset($_SESSION['announcements_request']))
     unset($_SESSION['announcements_request']);
 }
 
-// Html-Kopf ausgeben
-if($getAnnId > 0)
-{
-    $gLayout['title'] = $gL10n->get('SYS_EDIT_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
-}
-else
-{
-    $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $gL10n->get('ANN_ANNOUNCEMENT'));
-}
-
-// add current url to navigation stack
-$gNavigation->addUrl(CURRENT_URL, $gLayout['title']);
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create html page object
+$page = new HtmlPage();
 
 // show back link
-echo $gNavigation->getHtmlBackButton();
+$page->addHtml($gNavigation->getHtmlBackButton());
 
-// show headline of module
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+// add headline and title of module
+$page->addHeadline($headline);
 
 // show form
 $form = new HtmlForm('announcements_edit_form', $g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1');
@@ -90,7 +91,9 @@ $form->addEditor('ann_description', $gL10n->get('SYS_TEXT'), $announcement->getV
 $form->closeGroupBox();
 $form->addString(admFuncShowCreateChangeInfoById($announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_timestamp_create'), $announcement->getValue('ann_usr_id_change'), $announcement->getValue('ann_timestamp_change')));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
-$form->show();
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
+
 ?>

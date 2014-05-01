@@ -119,6 +119,8 @@ class Message
         global $gValidLogin, $g_root_path, $gPreferences, $gHomepage, $gMessages, $gProfileFields;
         global $g_organization, $gCurrentOrganization, $gCurrentUser, $gCurrentSession;
 		
+		$html = '';
+		
 		// first perform a rollback in database if there is an open transaction
 		$gDb->rollback();
 
@@ -137,35 +139,42 @@ class Message
         
         if($this->inline == false)
         {
-            // Html-Kopf ausgeben
-            $gLayout['title']    = $headline;
-            $gLayout['includes'] = $this->includeThemeBody;
+            // create html page object
+            $page = new HtmlPage();
+
+            if($this->includeThemeBody == false)
+            {
+                // dont show custom html of the current theme
+                $page->excludeThemeHtml();
+            }
+
+            // forward to next page after x seconds
             if ($this->timer > 0)
             {
-                $gLayout['header'] = '<script language="JavaScript1.2" type="text/javascript"><!--
-                    window.setTimeout("window.location.href=\''. $this->forwardUrl. '\'", '. $this->timer. ');
-                    //--></script>';
+                $page->addJavascript('window.setTimeout("window.location.href=\''. $this->forwardUrl. '\'", '. $this->timer. ');');
             }
-    
-            require(SERVER_PATH. '/adm_program/system/overall_header.php');       
+            
+            // show headline of the script
+            $page->addHeadline($headline);
         }
         else
         {
             header('Content-type: text/html; charset=utf-8'); 
+            $html .= '<h1 class="admHeadline">'.$headline.'</h1>';
         }
         
-        echo '<h1 class="admHeadline">'.$headline.'</h1>
+        $html .= '
 		<div class="admMessage">
 			<p>'. $content.'</p>';
                 
 			if($this->showButtons == true)
 			{
-				echo '<ul class="admIconTextLinkList">';
+				$html .= '<ul class="admIconTextLinkList">';
 					if(strlen($this->forwardUrl) > 0)
 					{
 						if($this->showYesNoButtons == true)
 						{
-							echo '<li>
+							$html .= '<li>
 								<button id="admButtonYes" class="admButton" type="button" onclick="self.location.href=\''. $this->forwardUrl. '\'"><img src="'. THEME_PATH. '/icons/ok.png" 
 									alt="'.$gL10n->get('SYS_YES').'" />&nbsp;&nbsp;'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;&nbsp;</button>
 							</li>
@@ -177,7 +186,7 @@ class Message
 						else
 						{
 							// Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
-							echo '<li>
+							$html .= '<li>
 								<span class="admIconTextLink">
 									<a href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'</a>
 									<a href="'. $this->forwardUrl. '"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" title="'.$gL10n->get('SYS_NEXT').'" /></a>
@@ -191,7 +200,7 @@ class Message
 						// bzw. ggf. einen Fenster-Schließen-Button                       
 						if($this->showCloseButton == true)
 						{
-							echo '<li>
+							$html .= '<li>
 								<span class="admIconTextLink">
 									<a href="javascript:window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE').'" title="'.$gL10n->get('SYS_CLOSE').'" /></a>
 									<a href="javascript:window.close()">'.$gL10n->get('SYS_CLOSE').'</a>
@@ -200,7 +209,7 @@ class Message
 						}
 						else
 						{
-							echo '<li>
+							$html .= '<li>
 								<span class="admIconTextLink">
 									<a href="javascript:history.back()"><img 
 										src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'" /></a>
@@ -209,13 +218,15 @@ class Message
 							</li>';
 						}
 					}
-				echo '</ul>';
+				$html .= '</ul>';
 			}
-		echo '</div>';
+		$html .= '</div>';
         
         if($this->inline == false)
         {
-            require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+            // now show html page
+            $page->addHtml($html);
+            $page->show();
             exit();
         }
     }

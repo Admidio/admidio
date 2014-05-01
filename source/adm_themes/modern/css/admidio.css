@@ -129,7 +129,7 @@ a:hover, a:active {
 /* Different font sizes */
 
 .admBigFont {
-    font-size:          14pt;
+    font-size:          12pt;
     font-weight:        bold;
 }
 .admSmallFont {
@@ -208,7 +208,7 @@ a:hover, a:active {
     margin: auto;
 }
 
-.admForm hr {
+.admForm hr, .admBoxBody hr {
     border: 1px solid #bad8e2;
     width: 100%;
     margin-top: 10px; 
@@ -217,7 +217,7 @@ a:hover, a:active {
 
 /* set structure of fields and their labels in a form */
    
-.admFieldList, .admFieldInformations {
+.admFieldEditList, .admFieldViewList, .admFieldInformations {
     width: 100%;
 }
 
@@ -246,7 +246,7 @@ a:hover, a:active {
 
 /* Form elements */
 
-.admTextInput, .admSmallTextInput, .admMultilineTextInput, .admSelectBox, .admButton {
+.admTextInput, .admTextInputSmall, .admMultilineTextInput, .admSelectBox, .admSelectBoxSmall, .admButton {
     border: 1px solid #888686;
     padding: 4px;
     font-size: 11pt;
@@ -254,7 +254,7 @@ a:hover, a:active {
     border-radius: 5px;
 }
 
-.admTextInput:focus, .admSmallTextInput:focus, .admMultilineTextInput:focus, .admSelectBox:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
+.admTextInput:focus, .admTextInputSmall:focus, .admMultilineTextInput:focus, .admSelectBox:focus, .admSelectBoxSmall:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
     background-color: #fff8a0;
 }
 
@@ -262,7 +262,7 @@ a:hover, a:active {
     width: 95%;
 }
 
-.admSmallTextInput {
+.admTextInputSmall {
     width: 50%;
 }
 
@@ -276,9 +276,13 @@ a:hover, a:active {
 	margin-right: 5px;
 }
 
-.admSelectBox {
+.admSelectBox, .admSelectBoxSmall {
     width: auto;
 	max-width: 100%;
+}
+
+.admSelectBoxSmall {
+    padding: 1px 3px 1px 1px;
 }
 
 .admEditor {
@@ -513,7 +517,16 @@ a:hover, a:active {
 
 /* Module specific css layout */
 
-.admWeblinkItem {
+#login_registration_link, #login_admidio_link {
+    margin-top: 15px;
+}
+
+.admListsLink {
+    margin-left: 5px;
+    margin-right: 10px;
+}
+
+.admWeblinkItem, .admListsItem {
     padding-top: 15px;
 }
 

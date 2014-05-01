@@ -75,6 +75,7 @@ if ($getMode == 1)
         
         $fileSize = 0;
         $fileName = '';
+        $countUploadedFiles = 0;
         
         // now check every file
         for($currentFileNo = 0; isset($_FILES['userfile']['name'][$currentFileNo]) == true; $currentFileNo++)
@@ -129,6 +130,8 @@ if ($getMode == 1)
                         $message = $gL10n->get('DOW_EMAIL_NOTIFICATION_MESSAGE', $gCurrentOrganization->getValue('org_longname'), $fileName, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), date($gPreferences['system_date'], time()));
                         $notification = new Email();
                         $notification->adminNotfication($gL10n->get('DOW_EMAIL_NOTIFICATION_TITLE'), $message, $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME'), $gCurrentUser->getValue('EMAIL'));
+                        
+                        $countUploadedFiles++;
                     }
                     else
                     {
@@ -146,7 +149,7 @@ if ($getMode == 1)
         else
         {
             $gMessage->setForwardUrl($g_root_path.'/adm_program/system/back.php');
-            $gMessage->show($gL10n->get('DOW_FILES_UPLOADED', $currentFileNo));
+            $gMessage->show($gL10n->get('DOW_FILES_UPLOADED', $countUploadedFiles));
         }
     }
     catch(AdmException $e)

@@ -157,6 +157,19 @@ if($getMode == 'html' && $getStart == 0)
 
 if($getMode != 'csv')
 {
+    if($getShowMembers == 0)
+    {
+        $memberStatus = $gL10n->get('LST_ACTIVE_MEMBERS');
+    }
+    elseif($getShowMembers == 1)
+    {
+        $memberStatus = $gL10n->get('LST_FORMER_MEMBERS');
+    }
+    elseif($getShowMembers == 2)
+    {
+        $memberStatus = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+    }
+
     // Html-Kopf wird geschrieben
     if($getMode == 'print')
     {
@@ -178,7 +191,9 @@ if($getMode != 'csv')
                 @page { size:landscape; }
             </style>
         </head>
-        <body class="bodyPrint">';
+        <body class="bodyPrint">
+            <h1 class="moduleHeadline">'. $role->getValue('rol_name').' - '.$list->getValue('lst_name').'</h1>
+            <div class="admListShortInfo">'.$role->getValue('cat_name').' - '.$memberStatus.'</div>';
     }
     elseif($getMode == 'pdf')
     {
@@ -207,60 +222,30 @@ if($getMode != 'csv')
         $pdf_htmlHeadline = '<div style="text-align:center; font-size:16"><h1>' . $role->getValue('rol_name') . ' &#40;' . $role->getValue('cat_name') . '&#41;</h1></div>';
 
     }
-    else
+    elseif($getMode == 'html')
     {
-        $gLayout['title']    = $gL10n->get('LST_LIST').' - '. $role->getValue('rol_name');
-        $gLayout['includes'] = false;
-        $gLayout['header']   = '
-            <style type="text/css">
-                body {
-                    margin: 20px;
-                }
-            </style>
-
-            <script type="text/javascript"><!--
-                $(document).ready(function() {
+        // create html page object
+        $page = new HtmlPage();
+        
+        //$page->excludeThemeHtml();
+        $page->addJavascript('
                     $("#admSelectExportMode").change(function () {
                         if($(this).val().length > 1) {
                             self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
                                 "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
                         }
-                    })
-                });
-            //--></script>';
-        require(SERVER_PATH. '/adm_program/system/overall_header.php');
-    }
+                    })', true);
+                    
+        // show back link
+        $page->addHtml($gNavigation->getHtmlBackButton());
 
-    if($getShowMembers == 0)
-    {
-        $memberStatus = $gL10n->get('LST_ACTIVE_MEMBERS');
-    }
-    elseif($getShowMembers == 1)
-    {
-        $memberStatus = $gL10n->get('LST_FORMER_MEMBERS');
-    }
-    elseif($getShowMembers == 2)
-    {
-        $memberStatus = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
-    }
-
-    if($getMode == 'html' || $getMode == 'print')
-    {
-        echo '<h1 class="moduleHeadline">'. $role->getValue('rol_name'). ' &#40;'.$role->getValue('cat_name').'&#41;</h1>';
-        //Beschreibung der Rolle einblenden
-        if(strlen($role->getValue('rol_description')) > 0)
-        {
-            echo $role->getValue('rol_description'). ' - ';
-        }
-    
-        echo '<h3>'.$memberStatus.'</h3>';
-    }
-
-    if($getMode == 'html')
-    {
-        echo '<ul class="iconTextLinkList">
+        $page->setTitle($gL10n->get('LST_LIST').' - '. $role->getValue('rol_name'));
+        $page->addHeadline($role->getValue('rol_name').' - '.$list->getValue('lst_name'));
+        
+        $page->addHtml('<div class="admListShortInfo">'.$role->getValue('cat_name').' - '.$memberStatus.'</div>
+        <ul class="admIconTextLinkList">
             <li>
-                <span class="iconTextLink">';
+                <span class="admIconTextLink">');
                 // Navigationspunkt zum uebergeordneten Punkt dieser Liste
                 if(strpos($gNavigation->getPreviousUrl(), 'mylist') === false)
                 {
@@ -273,57 +258,45 @@ if($getMode != 'csv')
                     {
                         $url = $g_root_path.'/adm_program/system/back.php';
                     }
-                    echo '
+                    $page->addHtml('
                     <a href="'.$url.'"><img
                     src="'. THEME_PATH. '/icons/application_view_list.png" alt="'.$gL10n->get('LST_LIST_VIEW').'" title="'.$gL10n->get('LST_LIST_VIEW').'" /></a>
-                    <a href="'.$url.'">'.$gL10n->get('LST_LIST_VIEW').'</a>';
+                    <a href="'.$url.'">'.$gL10n->get('LST_LIST_VIEW').'</a>');
                 }
                 else
                 {
-                    echo '
+                    $page->addHtml('
                     <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $getListId. '&rol_id='. $getRoleId. '&show_members='.$getShowMembers.'"><img
                     src="'. THEME_PATH. '/icons/application_form.png" alt="'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'" title="'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $getListId. '&rol_id='. $getRoleId. '&show_members='.$getShowMembers.'">'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'</a>';
+                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $getListId. '&rol_id='. $getRoleId. '&show_members='.$getShowMembers.'">'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'</a>');
                 }
-            echo '</span>
-            </li>';
-
-            // link to mail module with this role and members status
-            if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
-            {
-                echo '<li>
-                    <span class="iconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$getRoleId.'&show_members='.$getShowMembers.'"><img
-                        src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'"  title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$getRoleId.'&show_members='.$getShowMembers.'">'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'</a>
-                    </span>
-                </li>';
-            }
+                $page->addHtml('</span>
+            </li>');
 
             // link to assign or remove members if you are allowed to do it
             if($role->allowedToAssignMembers($gCurrentUser))
             {
-                echo '<li>
-                    <span class="iconTextLink">
+                $page->addHtml('<li>
+                    <span class="admIconTextLink">
                         <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '"><img 
                             src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>
                         <a href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='. $role->getValue('rol_id'). '">'.$gL10n->get('SYS_ASSIGN_MEMBERS').'</a>
                     </span>
-                </li>';
+                </li>');
             }
             
             // link to print overlay and exports
-            echo '<li>
-                <span class="iconTextLink">
+            $page->addHtml('<li>
+                <span class="admIconTextLink">
                     <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=print&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'\', \'_blank\')"><img
                     src="'. THEME_PATH. '/icons/print.png" alt="'.$gL10n->get('LST_PRINT_PREVIEW').'" title="'.$gL10n->get('LST_PRINT_PREVIEW').'" /></a>
                     <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=print&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'\', \'_blank\')">'.$gL10n->get('LST_PRINT_PREVIEW').'</a>
                 </span>
             </li>
             <li>
-                <span class="iconTextLink">
+                <span class="admIconTextLink">
                     <img src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('LST_EXPORT_TO').'" />
-                    <select id="admSelectExportMode" size="1">
+                    <select id="admSelectExportMode" class="admSelectBoxSmall" size="1">
                         <option value="" selected="selected">'.$gL10n->get('LST_EXPORT_TO').' ...</option>
                         <option value="csv-ms">'.$gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')</option>
                         <option value="pdf">'.$gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')</option>
@@ -332,7 +305,7 @@ if($getMode != 'csv')
                     </select>
                 </span>
             </li>   
-        </ul>';
+        </ul>');
     }
 
     // Create table object for display
@@ -685,15 +658,8 @@ elseif($getMode == 'pdf')
 }
 else
 {
-    echo $table->getHtmlTable();
-
-    if($getMode != 'print')
-    {
-        // If neccessary show links to navigate to next and previous recordsets of the query
-        $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode='.$getMode.'&rol_id='.$getRoleId.'&show_members='.$getShowMembers;
-        echo admFuncGeneratePagination($base_url, $numMembers, $members_per_page, $getStart, TRUE);
-    }
-    
+    $htmlBox = '';
+     
     //INFOBOX zur Gruppe
     //nur anzeigen wenn zusatzfelder gefüllt sind
     if(strlen($role->getValue('rol_start_date')) > 0
@@ -703,14 +669,14 @@ else
     || strlen($role->getValue('rol_cost')) > 0
     || strlen($role->getValue('rol_max_members')) > 0)
     {
-        echo '
+        $htmlBox = '
         <div class="groupBox" id="infoboxListsBox">
             <div class="groupBoxHeadline">Infobox: '. $role->getValue('rol_name'). '</div>
             <div class="groupBoxBody">
                 <ul class="formFieldList">
                     <li>';
                         //Kategorie
-                        echo '
+                        $htmlBox .= '
                         <dl>
                             <dt>'.$gL10n->get('SYS_CATEGORY').':</dt>
                             <dd>'.$role->getValue('cat_name').'</dd>
@@ -720,7 +686,7 @@ else
                         //Beschreibung
                         if(strlen($role->getValue('rol_description')) > 0)
                         {
-                            echo'<li>
+                            $htmlBox .= '<li>
                                 <dl>
                                     <dt>'.$gL10n->get('SYS_DESCRIPTION').':</dt>
                                     <dd>'.$role->getValue('rol_description').'</dd>
@@ -731,7 +697,7 @@ else
                         //Zeitraum
                         if(strlen($role->getValue('rol_start_date')) > 0)
                         {
-                            echo'<li>
+                            $htmlBox .= '<li>
                                 <dl>
                                     <dt>'.$gL10n->get('SYS_PERIOD').':</dt>
                                     <dd>'.$gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])).'</dd>
@@ -742,20 +708,20 @@ else
                         //Termin
                         if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
                         {
-                            echo '<li>
+                            $htmlBox .= '<li>
                                 <dl>
                                     <dt>'.$gL10n->get('DAT_DATE').': </dt>
                                     <dd>'; 
                                         if($role->getValue('rol_weekday') > 0)
                                         {
-                                            echo DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
+                                            $htmlBox .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
                                         }
                                         if(strlen($role->getValue('rol_start_time')) > 0)
                                         {
-                                            echo $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
+                                            $htmlBox .= $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
                                         }
 
-                                    echo '</dd>
+                                    $htmlBox .= '</dd>
                                 </dl>
                             </li>';
                         }
@@ -763,7 +729,7 @@ else
                         //Treffpunkt
                         if(strlen($role->getValue('rol_location')) > 0)
                         {
-                            echo '<li>
+                            $htmlBox .= '<li>
                                 <dl>
                                     <dt>'.$gL10n->get('SYS_LOCATION').':</dt>
                                     <dd>'.$role->getValue('rol_location').'</dd>
@@ -774,7 +740,7 @@ else
                         //Beitrag
                         if(strlen($role->getValue('rol_cost')) > 0)
                         {
-                            echo '<li>
+                            $htmlBox .= '<li>
                                 <dl>
                                     <dt>'.$gL10n->get('SYS_CONTRIBUTION').':</dt>
                                     <dd>'. $role->getValue('rol_cost'). ' '.$gPreferences['system_currency'].'</dd>
@@ -785,7 +751,7 @@ else
                         //Beitragszeitraum
                         if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
                         {
-                            echo '<li>
+                            $htmlBox .= '<li>
                                 <dl>
                                     <dt>'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
                                     <dd>'.$role->getCostPeriods($role->getValue('rol_cost_period')).'</dd>
@@ -796,36 +762,34 @@ else
                         //maximale Teilnehmerzahl
                         if(strlen($role->getValue('rol_max_members')) > 0)
                         {
-                            echo'<li>
+                            $htmlBox .= '<li>
                                 <dl>
                                     <dt>'.$gL10n->get('SYS_MAX_PARTICIPANTS').':</dt>
                                     <dd>'. $role->getValue('rol_max_members'). '</dd>
                                 </dl>
                             </li>';
                         }
-                echo'</ul>
+                $htmlBox .= '</ul>
             </div>
         </div>';
     } // Ende Infobox
     
     if($getMode == 'print')
     {
-        echo '</body></html>';
+        echo $table->getHtmlTable().
+        $htmlBox.
+        '</body></html>';
     }
-    else
+    elseif($getMode == 'html')
     {    
-        echo '
-        <ul class="iconTextLinkList">
-            <li>
-                <span class="iconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                    src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-                </span>
-            </li>
-        </ul>';
-    
-        require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+        $page->addHtml($table->getHtmlTable());
+        
+        // If neccessary show links to navigate to next and previous recordsets of the query
+        $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode='.$getMode.'&rol_id='.$getRoleId.'&show_members='.$getShowMembers;
+        $page->addHtml(admFuncGeneratePagination($base_url, $numMembers, $members_per_page, $getStart, TRUE));
+        
+        // show complete html page
+        $page->show();
     }
 }
 

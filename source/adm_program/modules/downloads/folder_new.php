@@ -18,6 +18,8 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', null, true);
 
+$headline = $gL10n->get('DOW_CREATE_FOLDER');
+
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)
 {
@@ -37,7 +39,7 @@ if (!$gCurrentUser->editDownloadRight())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
 {
@@ -63,27 +65,24 @@ catch(AdmException $e)
 
 $parentFolderName = $folder->getValue('fol_name');
 
-
-// show html head
-$gLayout['title']  = $gL10n->get('DOW_CREATE_FOLDER');
-$gLayout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js"></script>';
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create html page object
+$page = new HtmlPage();
 
 // show back link
-echo $gNavigation->getHtmlBackButton();
+$page->addHtml($gNavigation->getHtmlBackButton());
 
 // show headline of module
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+$page->addHeadline($headline);
 
 // show form
-$form = new HtmlForm('new_folder_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId);
+$form = new HtmlForm('new_folder_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=3&amp;folder_id='.$getFolderId, $page);
 $form->addDescription($gL10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName));
 $form->addTextInput('new_folder', $gL10n->get('SYS_NAME'), $form_values['new_folder'], 255, FIELD_MANDATORY);
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, 255);
 $form->addSubmitButton('btn_create', $gL10n->get('DOW_CREATE_FOLDER'), THEME_PATH.'/icons/folder_create.png');
-$form->show();
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>
