@@ -99,7 +99,7 @@ switch ($getMode)
         $getMode            = 'pdf';
         break;
     case 'html':
-        $classTable         = 'tableList';
+        $classTable         = 'admTable';
         $classSubHeader     = 'tableSubHeader';
         $classSubHeaderFont = 'tableSubHeaderFont';
         break;
@@ -318,9 +318,8 @@ if($getMode != 'csv')
     }
 
     // Create table object for display
-    $table = new HtmlTableBasic('', $classTable);
-    $table->addAttribute('style', 'width: 100%;', 'table');
-    $table->addAttribute('cellspacing', '0', 'table');
+    $table = new HtmlTable('adm_lists_table', $classTable);
+
     if($getMode == 'pdf')
     {
         $table->addAttribute('border', '1');

@@ -28,11 +28,18 @@ class HtmlTable extends HtmlTableBasic
     protected $columnAlign;    ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center
 
     /** Constructor creates the table element
-     *  @param $id               Id of the table
+     *  @param $id    Id of the table
+     *  @param $class Optional an additional css classname. The class @b admTable
+     *                is set as default and need not set with this parameter.
      */
-    public function __construct($id)
-    {        
-        parent::__construct($id, 'admTable');
+    public function __construct($id, $class = '')
+    {
+        if(strlen($class) == 0)
+        {
+            $class = 'admTable';
+        }
+
+        parent::__construct($id, $class);
         $this->addAttribute('cellspacing', '0');
     }
 
