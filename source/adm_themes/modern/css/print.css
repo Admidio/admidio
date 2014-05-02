@@ -23,7 +23,11 @@
 	margin:			  20px;
 }
 
-.tableListPrint {
+.admListShortInfo {
+    margin-bottom: 20px;
+}
+
+.admTablePrint {
     width:            270mm;
     background-color: #ffffff;
     border:           1px solid #cccccc;
@@ -32,19 +36,19 @@
     margin:           auto;
 }
 
-.tableListPrint th {
+.admTablePrint th {
     color:            #000000;
     font-family:      arial, sans-serif;
     font-size:        10pt;
     background-color: #cccccc;
 }
 
-.tableSubHeaderPrint {
+.admTableSubHeader {
     background-color: #eeeeee;
     padding:          0px;
 }
 
-.tableSubHeaderFontPrint {
+.admTableSubHeader td {
     color:            #888888;
     font-size:        12pt;  
     font-weight:      bold;
@@ -52,7 +56,7 @@
     letter-spacing:   0.2em;
 }
 
-.tableListPrint td {
+.admTablePrint td {
     border-width:     0px;
     border-style:     solid;
 }

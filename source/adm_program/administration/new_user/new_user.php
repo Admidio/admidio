@@ -65,10 +65,10 @@ $gLayout['header'] = '
 $table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0', 'table');
 $table->addRow();
-$table->addColumn($gL10n->get('SYS_NAME'), 'colspan', '2', 'th');
-$table->addColumn($gL10n->get('SYS_USERNAME'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_EMAIL'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_FEATURES'), 'style', 'text-align: center;', 'th');
+$table->addColumn($gL10n->get('SYS_NAME'), array('colspan' => '2'), 'th');
+$table->addColumn($gL10n->get('SYS_USERNAME'), null, 'th');
+$table->addColumn($gL10n->get('SYS_EMAIL'), null, 'th');
+$table->addColumn($gL10n->get('SYS_FEATURES'), array('style' => 'text-align: center;'), 'th');
 $table->addTableBody();
 
 while($row = $gDb->fetch_array($usr_result))
@@ -96,7 +96,7 @@ while($row = $gDb->fetch_array($usr_result))
                             src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
                         <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
                             $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img 
-                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>', 'style', 'text-align: center;'); 
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>', array('style' => 'text-align: center;')); 
 
     }
 

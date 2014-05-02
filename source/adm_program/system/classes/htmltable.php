@@ -47,31 +47,41 @@ class HtmlTable extends HtmlTableBasic
      *  Each value of the array represents the heading text for each column.
      *  @param $arrayRowValues Array with the values for each column.
      *  @param $id             Optional set an unique id for the column.
+     *  @param $arrAttributes  Further attributes as array with key/value pairs
+     *  @param $startColspan   Number of column where the colspan should start. The first column of a table will be 1.
+     *  @param $colspan        Number of columns that should be join together.
      */
-    public function addRowHeadingByArray($arrayColumnValues, $id = null)
+    public function addRowHeadingByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
-        $attributes = array('class' => 'admTableRowHeading');
+        $arrAttributes['class'] = 'admTableRowHeading';
         
         // set an id to the column
         if($id != null)
         {
-            $attributes['id'] = $id;
+            $arrAttributes['id'] = $id;
         }
 
         $this->addTableHeader();
-        $this->addRow(null, $attributes);
+        $this->addRow(null, $arrAttributes);
         
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
         {
+            $columnAttributes = array();
+            
+            // set colspan if parameters are set
+            if(($key + 1) == $startColspan && $colspan > 0)
+            {
+                $columnAttributes['colspan'] = $colspan;
+            }
+            
             if(is_array($this->columnAlign))
             {
-                $this->addColumn($value, 'style', 'text-align: '.$this->columnAlign[$key], 'th');
+                $columnAttributes['style'] = 'text-align: '.$this->columnAlign[$key];
             }
-            else
-            {
-                $this->addColumn($value, '', '', 'th');
-            }
+
+            // now add column to row
+            $this->addColumn($value, $columnAttributes, 'th');
         }
     }
 
@@ -79,30 +89,49 @@ class HtmlTable extends HtmlTableBasic
      *  value of the array parameter.
      *  @param $arrayRowValues Array with the values for each column.
      *  @param $id             Optional set an unique id for the column.
+     *  @param $arrAttributes  Further attributes as array with key/value pairs
+     *  @param $startColspan   Number of column where the colspan should start. The first column of a table will be 1.
+     *  @param $colspan        Number of columns that should be join together.
      */
-    public function addRowByArray($arrayColumnValues, $id = null)
+    public function addRowByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
-        $attributes = array('class' => 'admTableRow');
+        if(is_array($arrAttributes) == false || array_key_exists('class', $arrAttributes) == false)
+        {
+            $arrAttributes['class'] = 'admTableRow';
+        }
         
         // set an id to the column
         if($id != null)
         {
-            $attributes['id'] = $id;
+            $arrAttributes['id'] = $id;
         }
         
-        $this->addRow(null, $attributes);
+        // if body area wasn't defined until now then do it
+        if($this->tbody == -1)
+        {
+            $this->addTableBody();
+        }
+        
+        $this->addRow(null, $arrAttributes);
         
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
         {
+            $columnAttributes = array();
+            
+            // set colspan if parameters are set
+            if(($key + 1) == $startColspan && $colspan > 0)
+            {
+                $columnAttributes['colspan'] = $colspan;
+            }
+            
             if(is_array($this->columnAlign))
             {
-                $this->addColumn($value, 'style', 'text-align: '.$this->columnAlign[$key], 'td');
+                $columnAttributes['style'] = 'text-align: '.$this->columnAlign[$key];
             }
-            else
-            {
-                $this->addColumn($value, '', '', 'td');
-            }
+
+            // now add column to row
+            $this->addColumn($value, $columnAttributes, 'td');
         }
     }
     

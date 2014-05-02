@@ -209,16 +209,16 @@ echo'
         	$success->addAttribute('cellpadding', '0', 'table');
         	$success->addAttribute('cellspacing', '0', 'table');
         	$success->addRow();
-        	$success->addColumn('', 'style', 'text-align: left;', 'td');
+        	$success->addColumn('', array('style' => 'text-align: left;'), 'td');
         	$success->addAttribute('colspan', '2', 'td');
         	$success->addData('<b>'.$gL10n->get("SYS_SENDER").':</b>');
         	$success->addRow();
-            $success->addColumn($ecard['name_sender'], 'style', 'padding-right:5px; text-align: left;', 'td');
-            $success->addColumn($ecard['email_sender'], 'style', 'text-align: left;', 'td');
+            $success->addColumn($ecard['name_sender'], array('style' => 'padding-right:5px; text-align: left;'), 'td');
+            $success->addColumn($ecard['email_sender'], array('style' => 'text-align: left;'), 'td');
             $success->addRow();
-            $success->addColumn('&nbsp;', 'style', 'text-align: left;', 'td');
+            $success->addColumn('&nbsp;', array('style' => 'text-align: left;'), 'td');
             $success->addRow();
-        	$success->addColumn('', 'style', 'text-align: left;', 'td');
+        	$success->addColumn('', array('style' => 'text-align: left;'), 'td');
         	$success->addAttribute('colspan', '2', 'td');
         	$success->addData('<b>'.$gL10n->get("SYS_RECIPIENT").':</b>');
         	$success->addRow();
@@ -230,11 +230,11 @@ echo'
 					{
 							if (!is_integer(($i+1)/2))
 							{   
-        		                $success->addColumn($item2.',', 'style', 'padding-right:5px; text-align: left;', 'td');
+        		                $success->addColumn($item2.',', array('style' => 'padding-right:5px; text-align: left;'), 'td');
 							}
 							else
 							{   
-        		                $success->addColumn($item2, 'style', 'padding-right:5px; text-align: left;', 'td');
+        		                $success->addColumn($item2, array('style' => 'padding-right:5px; text-align: left;'), 'td');
                                 $success->addRow();     
 							}
 							$i++;
@@ -246,7 +246,7 @@ echo'
 			{   
                 $success->addRow('&nbsp;');
                 $success->addRow();
-                $success->addColumn('', 'style', 'text-align: left;', 'td');
+                $success->addColumn('', array('style' => 'text-align: left;'), 'td');
                 $success->addAttribute('colspan', '2', 'td');
                 $success->addData('<b>'.$gL10n->get("ECA_MORE_RECIPIENTS").':</b>');
                 $success->addRow(); 
@@ -258,11 +258,11 @@ echo'
 					{   
 					    if (!is_integer(($i+1)/2))
 						{
-        		            $success->addColumn($item2, 'style', 'text-align: left;', 'td');
+        		            $success->addColumn($item2, array('style' => 'text-align: left;'), 'td');
 						}
 						else
 						{
-							$success->addColumn($item2, 'style', 'text-align: left;', 'td');
+							$success->addColumn($item2, array('style' => 'text-align: left;'), 'td');
                             $success->addRow();
 						}
 						$i++;

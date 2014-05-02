@@ -201,14 +201,14 @@ $table->addRow();
 
 if($getUserId == 0)
 {
-    $table->addColumn($gL10n->get('SYS_NAME'), '', '', 'th');
+    $table->addColumn($gL10n->get('SYS_NAME'), null, 'th');
 }
 
-$table->addColumn($gL10n->get('SYS_FIELD'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_NEW_VALUE'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_PREVIOUS_VALUE'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_EDITED_BY'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_CHANGED_AT'), '', '', 'th');         
+$table->addColumn($gL10n->get('SYS_FIELD'), null, 'th');
+$table->addColumn($gL10n->get('SYS_NEW_VALUE'), null, 'th');
+$table->addColumn($gL10n->get('SYS_PREVIOUS_VALUE'), null, 'th');
+$table->addColumn($gL10n->get('SYS_EDITED_BY'), null, 'th');
+$table->addColumn($gL10n->get('SYS_CHANGED_AT'), null, 'th');         
 $table->addTableBody();			
 
 while($row = $gDb->fetch_array($resultFieldHistory))

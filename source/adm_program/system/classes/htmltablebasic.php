@@ -53,7 +53,7 @@
  *  // define a new row
  *  $table->addRow(); // no data and no attributes for this row
  *  $table->addColumn('col1');
- *  $table->addColumn('col2', 'class', 'secondColumn'); // this col has a class attribute
+ *  $table->addColumn('col2', array('class' => 'secondColumn')); // this col has a class attribute
  *  $table->addColumn('col3');
  *  // also we can pass our Array at the end
  *  $table->addColumn($dataArray);
@@ -74,8 +74,8 @@
  *  // and Set a header element for the column (Default: 'td')
  *  $table->addTableHeader('class', 'head', 'Headline_1', 'th');
  *  // 2 more columns ...
- *  $table->addColumn('Headline_2', '', '', 'th'); // no attribute/value in this example
- *  $table->addColumn('Headline_3', '', '', 'th'); // no attribute/value in this example
+ *  $table->addColumn('Headline_2', null, 'th'); // no attribute/value in this example
+ *  $table->addColumn('Headline_3', null, 'th'); // no attribute/value in this example
  *  // Define the footer with a string in center position
  *  $table->addTableFooter();
  *  // First mention that we do not want to have fixed columns in the footer. So we clear the array and set the text to center positon!
@@ -83,7 +83,7 @@
  *  // Define a new table row
  *  $table->addRow();
  *  // Add the column with colspan attribute
- *  $table->addColumn('', 'colspan', '3'); // no data here, because first do the settings and after finishend pass the content !
+ *  $table->addColumn('', array('colspan' => '3')); // no data here, because first do the settings and after finishend pass the content !
  *  // Define center position for the text
  *  $table->addAttribute('align', 'center'); // ok, it is worse style! 
  *  // Now we can set the data if all settings are done!
@@ -169,11 +169,10 @@ class HtmlTableBasic extends HtmlElement {
      *  If all settings are done for the column use the addData(); to define your column content.
      *
      *  @param $data Content for the column as string, or array
-     *  @param $attribute Attribute
-     *  @param $value Value of the attribute
+     *  @param $arrAttributes Further attributes as array with key/value pairs
      *  @param $col Column element 'td' or 'th' (Default: 'td')
      */
-    public function addColumn($data = '', $attribute = '', $value = '', $col = 'td')
+    public function addColumn($data = '', $arrAttributes = null, $col = 'td')
     {
         if($col == 'td' || $col == 'th')
         {
@@ -185,11 +184,11 @@ class HtmlTableBasic extends HtmlElement {
             $this->addAttribute('style', 'width:' . $this->columnsWidth[$this->columnCount]);
         }
 
-        if($attribute != '' && $value != '')
+        // Check optional attributes in associative array and set all attributes
+        if($arrAttributes != null && is_array($arrAttributes))
         {
-            $this->addAttribute($attribute, $value);
+            $this->setAttributesFromArray($arrAttributes);
         }
-
 
         if($data != '')
         {
@@ -200,13 +199,11 @@ class HtmlTableBasic extends HtmlElement {
 
     /**
      *  @par Add new table row.
-     *  Starting the table table directly with a row, the class automatically defines 'thead' and 'tfoot' element with an empty row.
+     *  Starting the table directly with a row, the class automatically defines 'thead' and 'tfoot' element with an empty row.
      *  The method checks if a row is already defined and must be closed first.
      *  You can define 1 attribute/value pair for the row, calling the method. If you need further attributes for the new row, use method addAttribute(), before passing the content.
      *  The element and attributes are stored in buffer first and will be parsed and written in the output string if the content is defined.
      *  After all settings are done use addColumn(); to define your columns with content.
-     *
-     *
      *  @param $data          Content for the table row as string, or array
      *  @param $arrAttributes Further attributes as array with key/value pairs
      *  @param $col           Column element 'td' or 'th' (Default: 'td')
@@ -216,7 +213,7 @@ class HtmlTableBasic extends HtmlElement {
         // Clear column counter
         $this->columnCount = 0;
 
-        if($this->thead == -1)
+        /*if($this->thead == -1)
         {
             // if no table elements are defined then create it for semantic markup
             $this->addTableHeader();
@@ -238,7 +235,7 @@ class HtmlTableBasic extends HtmlElement {
         {
             $this->addTableBody();
             $this->tbody = 1;
-        }
+        }*/
         
         // If row is active we must close it first before starting new one
         if(in_array('tr', $this->arrParentElements))
@@ -258,7 +255,7 @@ class HtmlTableBasic extends HtmlElement {
 
             if($data != '')
             {
-                $this->addColumn($data, '', '', $col);
+                $this->addColumn($data, null, $col);
                 $this->closeParentElement('tr');
             }
 
@@ -280,13 +277,13 @@ class HtmlTableBasic extends HtmlElement {
                     foreach($data as $column)
                     {
                         $style = $this->columnsWidth[$this->columnCount];
-                        $this->addColumn($column, '', '', $col);
+                        $this->addColumn($column, null, $col);
                     }
                 }
                 else
                 {
                     // String
-                    $this->addColumn($data, '', '', $col);
+                    $this->addColumn($data, null, $col);
                 }
             }
         }
@@ -323,12 +320,12 @@ class HtmlTableBasic extends HtmlElement {
                     foreach($data as $column)
                     {
                         $style = $this->columnsWidth[$this->columnCount];
-                        $this->addColumn($column, '', '', $col);
+                        $this->addColumn($column, null, $col);
                     }
                 }
                 else
                 {
-                        $this->addColumn($data, '', '', $col);
+                        $this->addColumn($data, null, $col);
                 }
             }
         }
@@ -365,13 +362,13 @@ class HtmlTableBasic extends HtmlElement {
                     foreach($data as $column)
                     {
                         $style = $this->columnsWidth[$this->columnCount];
-                        $this->addColumn($column, '', '', $col);
+                        $this->addColumn($column, null, $col);
                     }
                 }
                 else
                 {
                     // String
-                    $this->addColumn($data, '', '', $col);
+                    $this->addColumn($data, null, $col);
                 }
             }
         }
@@ -392,7 +389,16 @@ class HtmlTableBasic extends HtmlElement {
             $this->closeParentElement('tr');
         }
 
-        $this->closeParentElement('tfoot');
+        if($this->tfoot == 1)
+        {
+            $this->closeParentElement('tfoot');
+        }
+
+        if($this->thead == 1)
+        {
+            $this->closeParentElement('thead');
+        }
+        
         $this->addParentElement('tbody');
         $this->tbody = 1 ;
         if($attribute != '' && $value != '')
@@ -437,6 +443,7 @@ class HtmlTableBasic extends HtmlElement {
             {
                 $this->addRow($data, null, $col);
             }
+            return true;
         }
         return false;
     }
@@ -467,6 +474,7 @@ class HtmlTableBasic extends HtmlElement {
             {
                 $this->addRow($data, null, $col);
             }
+            return true;
         }
         return false;
     }

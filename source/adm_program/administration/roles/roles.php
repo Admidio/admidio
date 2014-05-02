@@ -93,10 +93,10 @@ $table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0');
 $table->addTableHeader();
 $table->addRow();
-$table->addColumn($listDescription, '', '', 'th');
-$table->addColumn($gL10n->get('SYS_AUTHORIZATION'), '', '', 'th');
-$table->addColumn($gL10n->get('ROL_PREF'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_FEATURES'), 'style', 'text-align: center;', 'th');
+$table->addColumn($listDescription, null, 'th');
+$table->addColumn($gL10n->get('SYS_AUTHORIZATION'), null, 'th');
+$table->addColumn($gL10n->get('ROL_PREF'), null, 'th');
+$table->addColumn($gL10n->get('SYS_FEATURES'), array('style' => 'text-align: center;'), 'th');
 
 $cat_id = '';
 // list all roles group by category
@@ -131,7 +131,7 @@ while($row = $gDb->fetch_array($rol_result))
         }
         $table->addTableBody();
         $table->addRow();
-        $table->addColumn('', 'class', 'tableSubHeader');
+        $table->addColumn('', array('class' => 'tableSubHeader'));
         $table->addAttribute('colspan', '4');
         $table->addData('<a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
                         id="'.$block_id.'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name').' '.$image_hidden);
@@ -293,7 +293,7 @@ while($row = $gDb->fetch_array($rol_result))
                                     src="'. THEME_PATH. '/icons/light_off.png" alt="'.$gL10n->get('ROL_SET_ROLE_INVISIBLE').'" title="'.$gL10n->get('ROL_SET_ROLE_INVISIBLE').'" /></a>';
     }
 
-    $table->addColumn($linkAdministration, 'style', 'text-align: center;');
+    $table->addColumn($linkAdministration, array('style' => 'text-align: center;'));
 
 }
 

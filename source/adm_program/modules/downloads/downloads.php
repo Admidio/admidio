@@ -129,10 +129,8 @@ if (count($folderContent) == 0)
     {
         $colspan = '5';
     }
-
-    $downloadOverview->addTableBody();
-    $downloadOverview->addRow();
-    $downloadOverview->addColumn($gL10n->get('DOW_FOLDER_NO_FILES'), 'colspan', $colspan);
+    
+    $downloadOverview->addRowByArray(array($gL10n->get('DOW_FOLDER_NO_FILES')), null, null, 1, $colspan);
 }
 else
 {

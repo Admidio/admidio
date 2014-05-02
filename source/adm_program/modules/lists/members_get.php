@@ -181,14 +181,14 @@ if($gDb->num_rows($resultUser)>0)
     $table->addRow();
     $table->addColumn('<img class="iconInformation"
                         src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-                        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />','', '', 'th');
-    $table->addColumn($gL10n->get('SYS_MEMBER'), 'style', 'text-align: center;', 'th');
-    $table->addColumn($gL10n->get('SYS_LASTNAME'), '', '', 'th');
-    $table->addColumn($gL10n->get('SYS_FIRSTNAME'), '', '', 'th');
+                        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />', null, 'th');
+    $table->addColumn($gL10n->get('SYS_MEMBER'), array('style' => 'text-align: center;'), 'th');
+    $table->addColumn($gL10n->get('SYS_LASTNAME'), null, 'th');
+    $table->addColumn($gL10n->get('SYS_FIRSTNAME'), null, 'th');
     $table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/map.png"
-                        alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />', '', '', 'th');
-    $table->addColumn($gL10n->get('SYS_BIRTHDAY'), '', '', 'th');
-    $table->addColumn('', 'style', 'text-align: center;', 'th');
+                        alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />', null, 'th');
+    $table->addColumn($gL10n->get('SYS_BIRTHDAY'), null, 'th');
+    $table->addColumn('', array('style' => 'text-align: center;'), 'th');
 
                     $buffer = '';
                     
@@ -250,7 +250,7 @@ if($gDb->num_rows($resultUser)>0)
                 $table->addTableBody('block_head_id', $this_letter);
                 $table->addAttribute('class', 'letterBlockHead');
                 $table->addRow();
-                $table->addColumn('', 'class', 'tableSubHeader');
+                $table->addColumn('', array('class' => 'tableSubHeader'));
                 $table->addAttribute('colspan', '7', 'td');
                 $table->addData($this_letter);
                 $table->addTableBody('block_body_id', $this_letter);
@@ -290,7 +290,7 @@ if($gDb->num_rows($resultUser)>0)
         $table->addRow('', array('class' => 'tableMouseOver'));
         $table->addAttribute('user_id', $user['usr_id']);
         $table->addColumn('<img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />');
-        $table->addColumn('', 'style', 'text-align: center;');
+        $table->addColumn('', array('style', 'text-align: center;'));
 
                 //Haekchen setzen ob jemand Mitglied ist oder nicht
                 if($user['member_this_role'])
@@ -324,7 +324,7 @@ if($gDb->num_rows($resultUser)>0)
                 }
         
         $table->addColumn($buffer);
-        $table->addColumn('', 'style', 'text-align: center;');
+        $table->addColumn('', array('style' => 'text-align: center;'));
               
                 //Haekchen setzen ob jemand Leiter ist oder nicht
                 if($user['leader_this_role'])

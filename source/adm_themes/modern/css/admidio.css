@@ -398,7 +398,7 @@ a:hover, a:active {
     clear: both;
 }
 
-/* Layout for tables that will be used in list or download module */
+/* Layout for tables that will be used in lists or download module */
 
 .admTable {
     width: 100%;
@@ -410,9 +410,8 @@ a:hover, a:active {
 }
 
 .admTableRowHeading th, .admTableRow td {
-    padding: 5px 6px 5px 0px;
+    padding: 6px 6px 3px 0px;
     text-align: left;
-/*    vertical-align: top;*/
 }
 
 .admTableRowHeading th {
@@ -420,27 +419,33 @@ a:hover, a:active {
     border-bottom: 2px solid #409099;
 }
 
-/* Der SubHeader wird zur Gruppierung innerhalb von Tabellen genutzt
-   (z.B.: Kategorienanzeige bei Rollenzuordnung, Leiter-Mitglied bei Listen) */
+/* Subheader will be used to group data in a table (e.g.: Role Leader and Members) */
 
-.tableSubHeader {
-    background-color:   #c5c5c5;
-    padding:            1px;
-    font-size:          11pt;  
-    font-weight:        bold;
-    font-style:         italic;
-    letter-spacing:     0.2em;
-    background-repeat:  repeat-x;
-    background-image:   url(../images/sub_row_marker.png);   
+.admTableSubHeader td {
+    color: #515556;
+    font-weight: bold;
+    letter-spacing: 0.2em;
+    padding: 5px 5px 2px 0px;
+    border-bottom: 2px solid #a0cbd9;
 }
 
-/* aktuelle Zeile kann in Listen markiert werden */
 .admTableRow:hover {
     background-repeat:  repeat-x;
     background-color:   #a8d9df;
 	background-image:   -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
 	background-image:   -webkit-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
 	background-image:   -ms-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
+}
+
+/* Page navigation */
+
+.admPageNavigation {
+    margin-top:         20px;
+    margin-bottom:      20px;
+}
+
+.admPageNavigation .selected {
+    font-weight:        bold;
 }
 
 /* A simple box that looks like a tooltip */

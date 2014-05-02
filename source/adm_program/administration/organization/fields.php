@@ -112,14 +112,14 @@ $table->addTableHeader();
 $table->addRow();
 $table->addColumn($gL10n->get('SYS_FIELD').'<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DESCRIPTION&amp;inline=true">
                     <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ORG_FIELD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>', '', '', 'th');
-$table->addColumn('&nbsp;', '', '', 'th');
-$table->addColumn($gL10n->get('SYS_DESCRIPTION'), '', '', 'th');
-$table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />', '', '', 'th');
-$table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />', '', '', 'th');
-$table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_MANDATORY').'" />', '', '', 'th');
-$table->addColumn($gL10n->get('ORG_DATATYPE'), '', '', 'th');
-$table->addColumn('&nbsp;', 'style', 'width: 40px;', 'th');
+                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>', null, 'th');
+$table->addColumn('&nbsp;', null, 'th');
+$table->addColumn($gL10n->get('SYS_DESCRIPTION'), null, 'th');
+$table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />', null, 'th');
+$table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/textfield_key.png" alt="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" title="'.$gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')).'" />', null, 'th');
+$table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/asterisk_yellow.png" alt="'.$gL10n->get('ORG_FIELD_MANDATORY').'" title="'.$gL10n->get('ORG_FIELD_MANDATORY').'" />', null, 'th');
+$table->addColumn($gL10n->get('ORG_DATATYPE'), null, 'th');
+$table->addColumn('&nbsp;', array('style' => 'width: 40px;'), 'th');
     
 $categoryId = 0;
 $userField  = new TableUserField($gDb);
@@ -144,7 +144,7 @@ if($gDb->num_rows($result) > 0)
             
             $table->addTableBody();
             $table->addRow();
-            $table->addColumn('', 'class', 'tableSubHeader', 'td');
+            $table->addColumn('', array('class' => 'tableSubHeader'), 'td');
             $table->addAttribute('colspan', '8');
             $table->addData('<a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
                             id="'.$block_id.'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$userField->getValue('cat_name'));
@@ -158,7 +158,7 @@ if($gDb->num_rows($result) > 0)
         $table->addColumn('<a class="iconLink" href="javascript:moveCategory(\'up\', '.$userField->getValue('usf_id').')"><img
                                 src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
                             <a class="iconLink" href="javascript:moveCategory(\'down\', '.$userField->getValue('usf_id').')"><img
-                                src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('ORG_FIELD_DOWN').'" title="'.$gL10n->get('ORG_FIELD_DOWN').'" /></a>', 'style', 'text-align: right; width: 45px;');
+                                src="'. THEME_PATH. '/icons/arrow_down.png" alt="'.$gL10n->get('ORG_FIELD_DOWN').'" title="'.$gL10n->get('ORG_FIELD_DOWN').'" /></a>', array('style' => 'text-align: right; width: 45px;'));
         
         // cut long text strings and provide tooltip
         if(strlen($userField->getValue('usf_description')) > 22)
@@ -238,13 +238,13 @@ if($gDb->num_rows($result) > 0)
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
         }
         
-        $table->addColumn($usfSystem, 'style', 'text-align: right; width: 45px;');
+        $table->addColumn($usfSystem, array('style' => 'text-align: right; width: 45px;'));
     }
 }
 else
 {
     $table->addRow();
-    $table->addColumn('', 'colspan', '5');
+    $table->addColumn('', array('colspan' => '5'));
     $table->addAttribute('style', 'text-align: center;');
     $table->addData('<p>'.$gL10n->get('ORG_NO_FIELD_CREATED').'</p>');
 }

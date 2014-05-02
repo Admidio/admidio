@@ -132,8 +132,8 @@ $table->addAttribute('style', 'width: 400px;');
 $table->addAttribute('cellspacing', '0');
 $table->addTableHeader();
 $table->addRow();
-$table->addColumn($gL10n->get('SYS_TITLE'), '', '', 'th');
-$table->addColumn('&nbsp;', '', '', 'th');
+$table->addColumn($gL10n->get('SYS_TITLE'), null, 'th');
+$table->addColumn('&nbsp;', null, 'th');
 
     if(strlen($icon_login_user)== 0)
 {
@@ -144,9 +144,9 @@ else
     $icon = $icon_login_user;
 }
 
-$table->addColumn($icon, '', '', 'th');
-$table->addColumn('<img class="iconInformation" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />', '', '', 'th');
-$table->addColumn('&nbsp;', '', '', 'th');
+$table->addColumn($icon, null, 'th');
+$table->addColumn('<img class="iconInformation" src="'.THEME_PATH.'/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />', null, 'th');
+$table->addColumn('&nbsp;', null, 'th');
 
 $sql = 'SELECT * FROM '. TBL_CATEGORIES. '
             WHERE (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
@@ -236,7 +236,7 @@ while($cat_row = $gDb->fetch_array($cat_result))
 					                           src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
         }
 
-        $table->addColumn($categoryAdministration, 'style', 'text-align: right; width: 90px;');
+        $table->addColumn($categoryAdministration, array('style' => 'text-align: right; width: 90px;'));
     }
 
 require(SERVER_PATH. '/adm_program/system/overall_header.php');

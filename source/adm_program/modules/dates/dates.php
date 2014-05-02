@@ -304,11 +304,11 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             $compactTable->addAttribute('cellspacing', '0', 'table');
             $compactTable->addTableHeader();
             $compactTable->addRow();
-            $compactTable->addColumn('&nbsp;', '', '', 'th');
-            $compactTable->addColumn($gL10n->get('SYS_START'), 'colspan', '2', 'th');
-            $compactTable->addColumn($gL10n->get('DAT_DATE'), '', '', 'th');
-            $compactTable->addColumn($gL10n->get('SYS_PARTICIPANTS'), 'colspan', '2', 'th');
-            $compactTable->addColumn($gL10n->get('DAT_LOCATION'), '', '', 'th');
+            $compactTable->addColumn('&nbsp;', null, 'th');
+            $compactTable->addColumn($gL10n->get('SYS_START'), array('colspan' => '2'), 'th');
+            $compactTable->addColumn($gL10n->get('DAT_DATE'), null, 'th');
+            $compactTable->addColumn($gL10n->get('SYS_PARTICIPANTS'), array('colspan' => '2'), 'th');
+            $compactTable->addColumn($gL10n->get('DAT_LOCATION'), null, 'th');
             $compactTable->addTableBody();
         }
         foreach($datesResult['recordset'] as $row)
@@ -547,8 +547,8 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                     {
                         $eventDetails->addRow();
                     }
-                    $eventDetails->addColumn($element[0].':', 'style', 'width: 15%;');
-                    $eventDetails->addColumn($element[1], 'style', 'width: 35%;');
+                    $eventDetails->addColumn($element[0].':', array('style' => 'width: 15%;'));
+                    $eventDetails->addColumn($element[1], array('style' => 'width: 35%;'));
 
                     if($firstElement)
                     {
@@ -797,11 +797,11 @@ else
                     // Leaders are shown highlighted
                     if($memberDate['leader'] != 0)
                     {
-                        $dateParticipation->addColumn('<strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';', 'class', 'left', 'td');
+                        $dateParticipation->addColumn('<strong>'.$memberDate['surname'].' '.$memberDate['firstname'].'</strong>'.';', array('class' => 'left'), 'td');
                     }
                     else
                     {
-                        $dateParticipation->addColumn($memberDate['surname'].' '.$memberDate['firstname'].';', 'class', 'left', 'td');
+                        $dateParticipation->addColumn($memberDate['surname'].' '.$memberDate['firstname'].';', array('class' => 'left'), 'td');
                     }
                     $memberCount++;
                 }
@@ -851,7 +851,7 @@ else
     // Define thead
     $datePrint->addTableHeader();
     $datePrint->addRow();
-    $datePrint->addColumn($tableHead, 'colspan', '10', 'td');
+    $datePrint->addColumn($tableHead, array('colspan' => '10'), 'td');
     // Define tfoot
     $datePrint->addTableFooter();
     $datePrint->addRow();
@@ -869,11 +869,11 @@ else
         // No events found
         if($parameter['id'] > 0)
         {
-            $datePrint->addColumn($gL10n->get('SYS_NO_ENTRY'), 'colspan', '9');
+            $datePrint->addColumn($gL10n->get('SYS_NO_ENTRY'), array('colspan' => '9'));
         }
         else
         {   
-            $datePrint->addColumn($gL10n->get('SYS_NO_ENTRIES'), 'colspan', '9');
+            $datePrint->addColumn($gL10n->get('SYS_NO_ENTRIES'), array('colspan' => '9'));
         }
     }
     else

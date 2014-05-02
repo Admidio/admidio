@@ -60,10 +60,10 @@ $table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0');
 $table->addTableHeader();
 $table->addRow();
-$table->addColumn('&nbsp;', '', '', 'th');
-$table->addColumn($gL10n->get('ROL_ROLE'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_DESCRIPTION'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_LEADER'), '', '', 'th');
+$table->addColumn('&nbsp;', null, 'th');
+$table->addColumn($gL10n->get('ROL_ROLE'), null, 'th');
+$table->addColumn($gL10n->get('SYS_DESCRIPTION'), null, 'th');
+$table->addColumn($gL10n->get('SYS_LEADER'), null, 'th');
 
 if($getInline == 0)
 {
@@ -169,7 +169,7 @@ while($row = $gDb->fetch_array($result))
             $block_id = 'admCategory'.$role->getValue('cat_id');
             $table->addTableBody();
             $table->addRow();
-            $table->addColumn('', 'class', 'tableSubHeader');
+            $table->addColumn('', array('class' => 'tableSubHeader'));
             $table->addAttribute('colspan', '4', 'td');
             $table->addData('<a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\');"><img
                                 id="'.$block_id.'Image" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name'));

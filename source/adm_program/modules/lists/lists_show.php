@@ -85,28 +85,20 @@ switch ($getMode)
         $charset     = 'utf-8';
         break;
     case 'pdf':
-        $classTable         = 'table';
-        $classSubHeader     = 'tableSubHeader';
-        $classSubHeaderFont = 'tableSubHeaderFont';
-        $orientation        = 'P';
-        $getMode            = 'pdf';
+        $classTable  = 'table';
+        $orientation = 'P';
+        $getMode     = 'pdf';
         break;
     case 'pdfl':
-        $classTable         = 'table';
-        $classSubHeader     = 'tableSubHeader';
-        $classSubHeaderFont = 'tableSubHeaderFont';
-        $orientation        = 'L';
-        $getMode            = 'pdf';
+        $classTable  = 'table';
+        $orientation = 'L';
+        $getMode     = 'pdf';
         break;
     case 'html':
-        $classTable         = 'admTable';
-        $classSubHeader     = 'tableSubHeader';
-        $classSubHeaderFont = 'tableSubHeaderFont';
+        $classTable  = 'admTable';
         break;
     case 'print':
-        $classTable         = 'tableListPrint';
-        $classSubHeader     = 'tableSubHeaderPrint';
-        $classSubHeaderFont = 'tableSubHeaderFontPrint';
+        $classTable  = 'admTablePrint';
         break;
     default:
         break;
@@ -155,7 +147,14 @@ if($numMembers < $getStart)
 
 // define title (html) and headline
 $title    = $gL10n->get('LST_LIST').' - '. $role->getValue('rol_name');
-$headline = $role->getValue('rol_name').' - '.$list->getValue('lst_name');
+if(strlen($list->getValue('lst_name')) > 0)
+{
+    $headline = $role->getValue('rol_name').' - '.$list->getValue('lst_name');
+}
+else
+{
+    $headline = $role->getValue('rol_name');
+}
 
 
 if($getMode == 'html' && $getStart == 0)
@@ -201,7 +200,7 @@ if($getMode != 'csv')
             </style>
         </head>
         <body class="bodyPrint">
-            <h1 class="moduleHeadline">'. $role->getValue('rol_name').' - '.$list->getValue('lst_name').'</h1>
+            <h1 class="moduleHeadline">'.$headline.'</h1>
             <div class="admListShortInfo">'.$role->getValue('cat_name').' - '.$memberStatus.'</div>';
     }
     elseif($getMode == 'pdf')
@@ -228,7 +227,7 @@ if($getMode != 'csv')
         $pdf->AddPage();
 
         //headline for PDF
-        $pdf_htmlHeadline = '<div style="text-align:center; font-size:16"><h1>'.$headline.'</h1></div>';
+        $pdfHtmlHeadline = '<div style="text-align:center; font-size:16"><h1>'.$headline.'</h1></div>';
 
     }
     elseif($getMode == 'html')
@@ -325,42 +324,48 @@ if($getMode != 'csv')
         $table->addAttribute('border', '1');
         $table->addTableHeader();
         $table->addRow();
-        $table->addColumn('', 'colspan', $list->countColumns() + 1);
+        $table->addColumn('', array('colspan' => $list->countColumns() + 1));
         $table->addAttribute('align', 'center');
-        $table->addData($pdf_htmlHeadline);
-        $table->addTableHeader();
+        $table->addData($pdfHtmlHeadline);
+        $table->addRow();
     }
-    $table->addTableHeader();
-    $table->addRow();
 }
 
+// initialize array parameters for table and set the first column for the counter
+$columnAlign  = array('left');
+$columnValues = array($gL10n->get('SYS_ABR_NO'));
+
 // headlines for columns
-for($column_number = 1; $column_number <= $list->countColumns(); $column_number++)
+for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
 {
-    $column = $list->getColumnObject($column_number);
-    $align = 'left';
+    $column = $list->getColumnObject($columnNumber);
 
     // den Namen des Feldes ermitteln
     if($column->getValue('lsc_usf_id') > 0)
     {
         // benutzerdefiniertes Feld
         $usf_id = $column->getValue('lsc_usf_id');
-        $col_name = $gProfileFields->getPropertyById($usf_id, 'usf_name');
+        $columnHeader = $gProfileFields->getPropertyById($usf_id, 'usf_name');
 
         if($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
         || $gProfileFields->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
         {
-            $align = 'center';
+            $columnAlign[] = 'center';
         }
         elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'NUMERIC')
         {
-            $align = 'right';
+            $columnAlign[] = 'right';
+        }
+        else
+        {
+            $columnAlign[] = 'left';
         }
     }
     else
     {
         $usf_id = 0;
-        $col_name = $arr_col_name[$column->getValue('lsc_special_field')];
+        $columnHeader = $arr_col_name[$column->getValue('lsc_special_field')];
+        $columnAlign[] = 'left';
     }
 
     // versteckte Felder duerfen nur von Leuten mit entsprechenden Rechten gesehen werden
@@ -370,31 +375,25 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
     {
         if($getMode == 'csv')
         {
-            if($column_number == 1)
+            if($columnNumber == 1)
             {
                 // die Laufende Nummer noch davorsetzen
                 $str_csv = $str_csv. $valueQuotes. $gL10n->get('SYS_ABR_NO'). $valueQuotes;
             }
-            $str_csv = $str_csv. $separator. $valueQuotes. $col_name. $valueQuotes;
+            $str_csv = $str_csv. $separator. $valueQuotes. $columnHeader. $valueQuotes;
         }
         elseif($getMode == 'pdf')
         {
-            if($column_number == 1)
+            if($columnNumber == 1)
             {
-                $table->addColumn($gL10n->get('SYS_ABR_NO'), 'style', 'text-align: '.$align.';font-size:14;background-color:#C7C7C7;', 'th');
+                $table->addColumn($gL10n->get('SYS_ABR_NO'), array('style' => 'text-align: '.$columnAlign[$columnNumber-1].';font-size:14;background-color:#C7C7C7;'), 'th');
             }
             
-            $table->addColumn($col_name, 'style', 'text-align: '.$align.';font-size:14;background-color:#C7C7C7;', 'th');
+            $table->addColumn($columnHeader, array('style' => 'text-align: '.$columnAlign[$columnNumber-1].';font-size:14;background-color:#C7C7C7;'), 'th');
         }
-        else
+        elseif($getMode == 'html' || $getMode == 'print')
         {                
-            if($column_number == 1)
-            {
-                // die Laufende Nummer noch davorsetzen
-                $table->addColumn($gL10n->get('SYS_ABR_NO'), 'style', 'text-align: '.$align.';', 'th');
-            }
-            
-            $table->addColumn($col_name, 'style', 'text-align: '.$align.';', 'th');
+            $columnValues[] = $columnHeader;
         }
     }
 }  // End-For
@@ -402,6 +401,12 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
 if($getMode == 'csv')
 {
     $str_csv = $str_csv. "\n";
+}
+elseif($getMode == 'html' || $getMode == 'print')
+{
+    $table->setColumnAlignByArray($columnAlign);
+    $table->addRowHeadingByArray($columnValues);
+    $table->addTableBody();
 }
 else
 {
@@ -456,35 +461,22 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                     $listRowNumber = 1;
                     $title = $gL10n->get('SYS_PARTICIPANTS');
                 }
-                $table->addRow();
-                $table->addColumn('', 'class', $classSubHeader);
-                $table->addAttribute('colspan', ($list->countColumns() + 1));
-                $table->addData('<div class="'.$classSubHeaderFont.'" style="float: left;">&nbsp;'.$title.'</div>');
-
+                
+                $table->addRowByArray(array($title), null, array('class' => 'admTableSubHeader'), 1, ($list->countColumns() + 1));
                 $lastGroupHead = $row['mem_leader'];
             }
         }
 
-        if($getMode == 'html')
-        {
-            $table->addRow('', array('class' => 'tableMouseOver'));
-            $table->addAttribute('style', 'cursor: pointer', 'tr');
-            $table->addAttribute('', 'onclick="window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\'"', 'tr');
-        }
-        else if($getMode == 'print' || $getMode == 'pdf')
-        {
-            $table->addRow();
-            $table->addAttribute('nobr', 'true', 'tr');
-        }
+        $columnValues = array();
 
         // Felder zu Datensatz
-        for($column_number = 1; $column_number <= $list->countColumns(); $column_number++)
+        for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
         {
-            $column = $list->getColumnObject($column_number);
+            $column = $list->getColumnObject($columnNumber);
 
             // da im SQL noch mem_leader und usr_id vor die eigentlichen Spalten kommen,
             // muss der Index auf row direkt mit 2 anfangen
-            $sql_column_number = $column_number + 1;
+            $sqlColumnNumber = $columnNumber + 1;
 
             if($column->getValue('lsc_usf_id') > 0)
             {
@@ -504,31 +496,16 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
             || $gProfileFields->getPropertyById($usf_id, 'usf_hidden') == 0)
             {
                 if($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
-                {
-                    $align = 'left';
-                    if($b_user_field == true)
-                    {
-                        if($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'CHECKBOX'
-                        || $gProfileFields->getPropertyById($usf_id, 'usf_name_intern') == 'GENDER')
-                        {
-                            $align = 'center';
-                        }
-                        elseif($gProfileFields->getPropertyById($usf_id, 'usf_type') == 'NUMERIC')
-                        {
-                            $align = 'right';
-                        }
-                    }
-    
-                    if($column_number == 1)
+                {    
+                    if($columnNumber == 1)
                     {
                         // die Laufende Nummer noch davorsetzen
-                        $table->addColumn($listRowNumber, 'style', 'text-align: '.$align.';');
+                        $columnValues[] = $listRowNumber;
                     }
-                    $table->addColumn('', 'style', 'text-align: '.$align.';');
                 }
                 else
                 {
-                    if($column_number == 1)
+                    if($columnNumber == 1)
                     {
                         // erste Spalte zeigt lfd. Nummer an
                         $str_csv = $str_csv. $valueQuotes. $listRowNumber. $valueQuotes;
@@ -542,7 +519,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                 /*****************************************************************/
                 if($usf_id == $gProfileFields->getProperty('COUNTRY', 'usf_id') && $usf_id!=0)
                 {
-                    $content = $gL10n->getCountryByCode($row[$sql_column_number]);
+                    $content = $gL10n->getCountryByCode($row[$sqlColumnNumber]);
                 }
                 elseif($column->getValue('lsc_special_field') == 'usr_photo')
                 {
@@ -551,7 +528,7 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                     {
                         $content = '<img src="'.$g_root_path.'/adm_program/modules/profile/profile_photo_show.php?usr_id='.$row['usr_id'].'" style="vertical-align: middle;" alt="'.$gL10n->get('LST_USER_PHOTO').'" />';
                     }
-                    if ($getMode == 'csv' && $row[$sql_column_number] != NULL)
+                    if ($getMode == 'csv' && $row[$sqlColumnNumber] != NULL)
                     {
                         $content = $gL10n->get('LST_USER_PHOTO');
                     }
@@ -560,10 +537,10 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                 ||     $column->getValue('lsc_special_field') == 'mem_begin'
                 ||     $column->getValue('lsc_special_field') == 'mem_end') 
                 {
-                    if(strlen($row[$sql_column_number]) > 0)
+                    if(strlen($row[$sqlColumnNumber]) > 0)
                     {
                         // date must be formated
-                        $date = new DateTimeExtended($row[$sql_column_number], 'Y-m-d', 'date');
+                        $date = new DateTimeExtended($row[$sqlColumnNumber], 'Y-m-d', 'date');
                         $content = $date->format($gPreferences['system_date']);
                     }
                 }
@@ -571,16 +548,16 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                       || $gProfileFields->getPropertyById($usf_id, 'usf_type') == 'RADIO_BUTTON') 
                 && $getMode == 'csv')
                 {
-                    if(strlen($row[$sql_column_number]) > 0)
+                    if(strlen($row[$sqlColumnNumber]) > 0)
                     {
                         // show selected text of optionfield or combobox
                         $arrListValues = $gProfileFields->getPropertyById($usf_id, 'usf_value_list', 'text');
-                        $content       = $arrListValues[$row[$sql_column_number]];
+                        $content       = $arrListValues[$row[$sqlColumnNumber]];
                     }
                 }
                 else 
                 {
-                    $content = $row[$sql_column_number];
+                    $content = $row[$sqlColumnNumber];
                 }
 
                 // format value for csv export
@@ -595,11 +572,13 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                     // if empty string pass a whitespace
                     if(strlen($content) > 0)
                     {
-                        $table->addData($content);
+                        //$table->addData($content);
+                        $columnValues[] = $content;
                     }
                     else
                     {
-                        $table->addData('&nbsp;');
+                        //$table->addData('&nbsp;');
+                        $columnValues[] = '&nbsp;';
                     }
                 }
             }
@@ -608,6 +587,14 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
         if($getMode == 'csv')
         {
             $str_csv = $str_csv. "\n";
+        }
+        elseif($getMode == 'html')
+        {
+            $table->addRowByArray($columnValues, null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '\''));
+        }
+        elseif($getMode == 'print' || $getMode == 'pdf')
+        {
+            $table->addRowByArray($columnValues, null, array('nobr' => 'true'));
         }
 
         $listRowNumber++;

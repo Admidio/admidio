@@ -79,17 +79,17 @@ $backupMenu->show();
 $table = new HtmlTableBasic('', 'tableList');
 $table->addAttribute('cellspacing', '0');
 $table->addRow();
-$table->addColumn($gL10n->get('BAC_BACKUP_FILE'), '', '', 'th');
-$table->addColumn($gL10n->get('BAC_CREATION_DATE'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_SIZE'), '', '', 'th');
-$table->addColumn($gL10n->get('SYS_DELETE'), 'style', 'text-align: center;', 'th');
+$table->addColumn($gL10n->get('BAC_BACKUP_FILE'), null, 'th');
+$table->addColumn($gL10n->get('BAC_CREATION_DATE'), null, 'th');
+$table->addColumn($gL10n->get('SYS_SIZE'), null, 'th');
+$table->addColumn($gL10n->get('SYS_DELETE'), array('style' => 'text-align: center;'), 'th');
 
 flush();
 	
 if(count($old_backup_files) == 0)
 {   
     $table->addRow();
-    $table->addColumn($gL10n->get('BAC_NO_BACKUP_FILE_EXISTS'), 'colspan', '4');
+    $table->addColumn($gL10n->get('BAC_NO_BACKUP_FILE_EXISTS'), array('colspan' => '4'));
 }
 	
 $backup_size_sum = 0;
@@ -102,19 +102,19 @@ foreach($old_backup_files as $key => $old_backup_file)
                         <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" /></a>
                         <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">'. $old_backup_file. '</a>');
     $table->addColumn(date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)));    
-    $table->addColumn(round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB&nbsp;', 'style', 'text-align: right;');    
+    $table->addColumn(round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB&nbsp;', array('style' => 'text-align: right;'));    
     $table->addColumn('<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                         $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
-                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>', 'style', 'text-align: center;');    
+                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>', array('style' => 'text-align: center;'));    
 
 	$backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
 }
 
 $table->addRow();
-$table->addColumn('&nbsp;', '', '', 'th');
-$table->addColumn($gL10n->get('BAC_SUM'), '', '', 'th');
-$table->addColumn($backup_size_sum .' kB&nbsp;', 'style', 'text-align: right;', 'th');
-$table->addColumn('&nbsp;', '', '', 'th');
+$table->addColumn('&nbsp;', null, 'th');
+$table->addColumn($gL10n->get('BAC_SUM'), null, 'th');
+$table->addColumn($backup_size_sum .' kB&nbsp;', array('style' => 'text-align: right;'), 'th');
+$table->addColumn('&nbsp;', null, 'th');
 
 echo $table->getHtmlTable();
 

@@ -380,7 +380,7 @@ echo '
                                                 alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>';
                             }
                             $table->addRow();
-                            $table->addColumn($picture, 'align', 'center;');
+                            $table->addColumn($picture, array('align' => 'center;'));
                         }
                         echo $table->getHtmlTable();
                 echo'    

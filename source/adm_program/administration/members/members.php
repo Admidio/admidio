@@ -321,18 +321,18 @@ if($membersCount > 0)
     $tableMembers->addAttribute('cellspacing', '0', 'table');
     $tableMembers->addTableHeader();
     $tableMembers->addRow();
-    $tableMembers->addColumn($gL10n->get('SYS_ABR_NO'), '', '', 'th');
+    $tableMembers->addColumn($gL10n->get('SYS_ABR_NO'), null, 'th');
     $tableMembers->addColumn('<img class="iconInformation"
                                 src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-                                title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />', '', '', 'th');
-    $tableMembers->addColumn($gL10n->get('SYS_NAME'), '', '', 'th');
+                                title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />', null, 'th');
+    $tableMembers->addColumn($gL10n->get('SYS_NAME'), null, 'th');
     $tableMembers->addColumn('<img class="iconInformation"
-                                src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />', '', '', 'th');
+                                src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />', null, 'th');
     $tableMembers->addColumn('<img class="iconInformation"
-                                src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$gL10n->get('SYS_WEBSITE').'" title="'.$gL10n->get('SYS_WEBSITE').'" />', '', '', 'th');
-    $tableMembers->addColumn($gL10n->get('SYS_USER'), '', '', 'th');
-    $tableMembers->addColumn($gL10n->get('MEM_UPDATED_ON'), '', '', 'th');
-    $tableMembers->addColumn($gL10n->get('SYS_FEATURES'), 'style', 'text-align: center;', 'th');
+                                src="'. THEME_PATH. '/icons/weblinks.png" alt="'.$gL10n->get('SYS_WEBSITE').'" title="'.$gL10n->get('SYS_WEBSITE').'" />', null, 'th');
+    $tableMembers->addColumn($gL10n->get('SYS_USER'), null, 'th');
+    $tableMembers->addColumn($gL10n->get('MEM_UPDATED_ON'), null, 'th');
+    $tableMembers->addColumn($gL10n->get('SYS_FEATURES'), array('style' => 'text-align: center;'), 'th');
 
 	$irow = $getStart + 1;  // Zahler fuer die jeweilige Zeile
 
@@ -443,7 +443,7 @@ if($membersCount > 0)
 			$userAdministration .= '&nbsp;<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 		}
 		
-		$tableMembers->addColumn($userAdministration, 'style', 'text-align: center;');
+		$tableMembers->addColumn($userAdministration, array('style' => 'text-align: center;'));
 		$irow++;
 	}
 	

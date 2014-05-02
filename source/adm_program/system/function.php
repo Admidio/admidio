@@ -232,7 +232,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
             $page_string = '
                 <span class="admIconTextLink">
                     <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
-                        class="navigationArrow" src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
+                        src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
                     <a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a>
                 </span>
                 &nbsp;' . $page_string;
@@ -243,14 +243,14 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
             $page_string .= '&nbsp;
                 <span class="admIconTextLink">
                     <a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_NEXT').'</a>
-                    <a class="navigationArrow" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
+                    <a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '"><img 
                         src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" /></a>
                 </span>';
         }
 
     }
 
-    $page_string = '<div class="pageNavigation">'.$gL10n->get('SYS_PAGE').':&nbsp;&nbsp;' . $page_string. '</div>';
+    $page_string = '<div class="admPageNavigation">'.$gL10n->get('SYS_PAGE').':&nbsp;&nbsp;' . $page_string. '</div>';
 
     return $page_string;
 }
