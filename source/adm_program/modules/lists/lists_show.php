@@ -178,30 +178,17 @@ if($getMode != 'csv')
         $memberStatus = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
     }
 
-    // Html-Kopf wird geschrieben
     if($getMode == 'print')
     {
-        header('Content-type: text/html; charset=utf-8');
-        echo '
-        <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-        <html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="de" xml:lang="de">
-        <head>
-            <!-- (c) 2004 - 2013 The Admidio Team - http://www.admidio.org -->
-            
-            <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        // create html page object without the custom theme files
+        $page = new HtmlPage();
+        $page->clear();
+        $page->excludeThemeHtml();
         
-            <title>'. $gCurrentOrganization->getValue('org_longname'). $title. '</title>
-            
-            <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
-            <script type="text/javascript" src="'. $g_root_path. '/adm_program/system/js/common_functions.js"></script>
-
-            <style type="text/css">
-                @page { size:landscape; }
-            </style>
-        </head>
-        <body class="bodyPrint">
-            <h1 class="moduleHeadline">'.$headline.'</h1>
-            <div class="admListShortInfo">'.$role->getValue('cat_name').' - '.$memberStatus.'</div>';
+        $page->addCssFile(THEME_PATH. '/css/print.css');
+        
+        $page->setTitle($title);
+        $page->addHeadline($headline);
     }
     elseif($getMode == 'pdf')
     {
@@ -651,12 +638,12 @@ elseif($getMode == 'pdf')
     ignore_user_abort(true);
     unlink($filename);  
 }
-else
+elseif($getMode == 'html' || $getMode == 'print')
 {
     $htmlBox = '';
      
-    //INFOBOX zur Gruppe
-    //nur anzeigen wenn zusatzfelder gefüllt sind
+    // create a infobox for the role
+    // only show infobox if additional role information fields are filled
     if(strlen($role->getValue('rol_start_date')) > 0
     || $role->getValue('rol_weekday') > 0
     || strlen($role->getValue('rol_start_time')) > 0
@@ -665,127 +652,105 @@ else
     || strlen($role->getValue('rol_max_members')) > 0)
     {
         $htmlBox = '
-        <div class="groupBox" id="infoboxListsBox">
-            <div class="groupBoxHeadline">Infobox: '. $role->getValue('rol_name'). '</div>
-            <div class="groupBoxBody">
-                <ul class="formFieldList">
-                    <li>';
-                        //Kategorie
-                        $htmlBox .= '
-                        <dl>
-                            <dt>'.$gL10n->get('SYS_CATEGORY').':</dt>
-                            <dd>'.$role->getValue('cat_name').'</dd>
-                        </dl>
-                    </li>';
+        <div class="admGroupBox" id="adm_lists_infobox">
+            <div class="admGroupBoxHeadline">Infobox: '.$role->getValue('rol_name').'</div>
+            <div class="admGroupBoxBody">
+                <div class="admFieldViewList">
+                    <div class="admFieldRow">
+                        <div class="admFieldLabel">'.$gL10n->get('SYS_CATEGORY').':</div>
+                        <div class="admFieldElement">'.$role->getValue('cat_name').'</div>
+                    </div>';
 
-                        //Beschreibung
-                        if(strlen($role->getValue('rol_description')) > 0)
-                        {
-                            $htmlBox .= '<li>
-                                <dl>
-                                    <dt>'.$gL10n->get('SYS_DESCRIPTION').':</dt>
-                                    <dd>'.$role->getValue('rol_description').'</dd>
-                                </dl>
-                            </li>';
-                        }
+                    //Beschreibung
+                    if(strlen($role->getValue('rol_description')) > 0)
+                    {
+                        $htmlBox .= '<div class="admFieldRow">
+                            <div class="admFieldLabel">'.$gL10n->get('SYS_DESCRIPTION').':</div>
+                            <div class="admFieldElement">'.$role->getValue('rol_description').'</div>
+                        </div>';
+                    }
 
-                        //Zeitraum
-                        if(strlen($role->getValue('rol_start_date')) > 0)
-                        {
-                            $htmlBox .= '<li>
-                                <dl>
-                                    <dt>'.$gL10n->get('SYS_PERIOD').':</dt>
-                                    <dd>'.$gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])).'</dd>
-                                </dl>
-                            </li>';
-                        }
+                    //Zeitraum
+                    if(strlen($role->getValue('rol_start_date')) > 0)
+                    {
+                        $htmlBox .= '<div class="admFieldRow">
+                            <div class="admFieldLabel">'.$gL10n->get('SYS_PERIOD').':</div>
+                            <div class="admFieldElement">'.$gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])).'</div>
+                        </div>';
+                    }
 
-                        //Termin
-                        if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
-                        {
-                            $htmlBox .= '<li>
-                                <dl>
-                                    <dt>'.$gL10n->get('DAT_DATE').': </dt>
-                                    <dd>'; 
-                                        if($role->getValue('rol_weekday') > 0)
-                                        {
-                                            $htmlBox .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
-                                        }
-                                        if(strlen($role->getValue('rol_start_time')) > 0)
-                                        {
-                                            $htmlBox .= $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
-                                        }
+                    //Termin
+                    if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
+                    {
+                        $htmlBox .= '<div class="admFieldRow">
+                            <div class="admFieldLabel">'.$gL10n->get('DAT_DATE').': </div>
+                            <div class="admFieldElement">'; 
+                                if($role->getValue('rol_weekday') > 0)
+                                {
+                                    $htmlBox .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
+                                }
+                                if(strlen($role->getValue('rol_start_time')) > 0)
+                                {
+                                    $htmlBox .= $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
+                                }
 
-                                    $htmlBox .= '</dd>
-                                </dl>
-                            </li>';
-                        }
+                            $htmlBox .= '</div>
+                        </div>';
+                    }
 
-                        //Treffpunkt
-                        if(strlen($role->getValue('rol_location')) > 0)
-                        {
-                            $htmlBox .= '<li>
-                                <dl>
-                                    <dt>'.$gL10n->get('SYS_LOCATION').':</dt>
-                                    <dd>'.$role->getValue('rol_location').'</dd>
-                                </dl>
-                            </li>';
-                        }
+                    //Treffpunkt
+                    if(strlen($role->getValue('rol_location')) > 0)
+                    {
+                        $htmlBox .= '<div class="admFieldRow">
+                            <div class="admFieldLabel">'.$gL10n->get('SYS_LOCATION').':</div>
+                            <div class="admFieldElement">'.$role->getValue('rol_location').'</div>
+                        </div>';
+                    }
 
-                        //Beitrag
-                        if(strlen($role->getValue('rol_cost')) > 0)
-                        {
-                            $htmlBox .= '<li>
-                                <dl>
-                                    <dt>'.$gL10n->get('SYS_CONTRIBUTION').':</dt>
-                                    <dd>'. $role->getValue('rol_cost'). ' '.$gPreferences['system_currency'].'</dd>
-                                </dl>
-                            </li>';
-                        }
+                    //Beitrag
+                    if(strlen($role->getValue('rol_cost')) > 0)
+                    {
+                        $htmlBox .= '<div class="admFieldRow">
+                            <div class="admFieldLabel">'.$gL10n->get('SYS_CONTRIBUTION').':</div>
+                            <div class="admFieldElement">'. $role->getValue('rol_cost'). ' '.$gPreferences['system_currency'].'</div>
+                        </div>';
+                    }
 
-                        //Beitragszeitraum
-                        if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
-                        {
-                            $htmlBox .= '<li>
-                                <dl>
-                                    <dt>'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</dt>
-                                    <dd>'.$role->getCostPeriods($role->getValue('rol_cost_period')).'</dd>
-                                </dl>
-                            </li>';
-                        }
+                    //Beitragszeitraum
+                    if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
+                    {
+                        $htmlBox .= '<div class="admFieldRow">
+                            <div class="admFieldLabel">'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</div>
+                            <div class="admFieldElement">'.$role->getCostPeriods($role->getValue('rol_cost_period')).'</div>
+                        </div>';
+                    }
 
-                        //maximale Teilnehmerzahl
-                        if(strlen($role->getValue('rol_max_members')) > 0)
-                        {
-                            $htmlBox .= '<li>
-                                <dl>
-                                    <dt>'.$gL10n->get('SYS_MAX_PARTICIPANTS').':</dt>
-                                    <dd>'. $role->getValue('rol_max_members'). '</dd>
-                                </dl>
-                            </li>';
-                        }
-                $htmlBox .= '</ul>
+                    //maximale Teilnehmerzahl
+                    if(strlen($role->getValue('rol_max_members')) > 0)
+                    {
+                        $htmlBox .= '<div class="admFieldRow">
+                            <div class="admFieldLabel">'.$gL10n->get('SYS_MAX_PARTICIPANTS').':</div>
+                            <div class="admFieldElement">'. $role->getValue('rol_max_members'). '</div>
+                        </div>';
+                    }
+                $htmlBox .= '</div>
             </div>
         </div>';
-    } // Ende Infobox
+    } // end of infobox
     
-    if($getMode == 'print')
-    {
-        echo $table->getHtmlTable().
-        $htmlBox.
-        '</body></html>';
-    }
-    elseif($getMode == 'html')
+    // add table and the role information box to the pge
+    $page->addHtml($table->show(false));
+    $page->addHtml($htmlBox);
+
+    if($getMode == 'html')
     {    
-        $page->addHtml($table->getHtmlTable());
-        
         // If neccessary show links to navigate to next and previous recordsets of the query
         $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode='.$getMode.'&rol_id='.$getRoleId.'&show_members='.$getShowMembers;
         $page->addHtml(admFuncGeneratePagination($base_url, $numMembers, $members_per_page, $getStart, TRUE));
-        
-        // show complete html page
-        $page->show();
     }
+        
+    // show complete html page
+    $page->show();
 }
 
 ?>

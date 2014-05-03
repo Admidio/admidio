@@ -14,13 +14,13 @@
    Dieses braucht in der Regel nicht angepasst werden.
    Es ist für schwarz/weiß Drucker optimiert. */
 
-.bodyPrint {
-    color:            #000000;
-    font-family:      arial, sans-serif;
-    font-size:        10pt;
+.admBody {
+    color: #000000;
+    font-family: arial, sans-serif;
+    font-size: 10pt;
     background-color: #ffffff;
-    text-align:       center;
-	margin:			  20px;
+    text-align: center;
+	margin: 20px;
 }
 
 .admListShortInfo {
@@ -28,90 +28,87 @@
 }
 
 .admTablePrint {
-    width:            270mm;
+    width: 270mm;
     background-color: #ffffff;
-    border:           1px solid #cccccc;
-    padding:          0px;
-    border-spacing:   0px;
-    margin:           auto;
+    border: 1px solid #cccccc;
+    padding: 0px;
+    border-spacing: 0px;
+    margin: auto;
 }
 
 .admTablePrint th {
-    color:            #000000;
-    font-family:      arial, sans-serif;
-    font-size:        10pt;
+    color: #000000;
+    font-family: arial, sans-serif;
+    font-size: 10pt;
     background-color: #cccccc;
 }
 
 .admTableSubHeader {
     background-color: #eeeeee;
-    padding:          0px;
+    padding: 0px;
 }
 
 .admTableSubHeader td {
-    color:            #888888;
-    font-size:        12pt;  
-    font-weight:      bold;
-    font-style:       italic;
-    letter-spacing:   0.2em;
+    color: #888888;
+    font-size: 12pt;  
+    font-weight: bold;
+    font-style: italic;
+    letter-spacing: 0.2em;
 }
 
 .admTablePrint td {
-    border-width:     0px;
-    border-style:     solid;
+    border-width: 0px;
+    border-style: solid;
 }
 
 
 /* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
    z.B. die Infobox in Listen */
 
-.groupBox {
-    color:            #000000;
+.admGroupBox {
+    color: #000000;
     background-color: #ffffff;
-    border:           1px solid #cccccc;
-    padding:          5px 10px 5px 10px;
-    text-align:       left;
-    margin-top:       20px;
+    border: 1px solid #cccccc;
+    /*padding: 5px 10px 5px 10px;*/
+    text-align: left;
+    margin: auto;
+    margin-top: 20px;
 }
 
 /* Ueberschrift der rechteckigen Groupbox */
 
-.groupBoxHeadline {
-    color:            #000000;
-    font-weight:      bold;
-    padding-bottom:   5px;
+.admGroupBoxHeadline {
+    background-color: #cccccc;
+    color: #000000;
+    font-weight: bold;
+    padding: 2px 3px;
 }
 
 /* Ordnet Felder mit ihren Beschreibungen in Formularen.
    Diese werden in einer Liste untereinander und 
    mit Beschreibung + Feld nebenandern angeordnet */
 
-.formFieldList {
-    margin:            0px;
-    padding:           0px;
-    list-style-type:   none;
+.admFieldRow { 
+    clear: both;
 }
 
-.formFieldList li { 
-    display:           inline;
-    text-align:        center;
-}
-.formFieldList li dl {
-    margin:            8px 0px 8px 0px;
-    padding:           0px;
-}
-.formFieldList li dl dt {
-    width:             30%;
-    text-align:        left;
-    float:             left;
-    display:           block;
-}
-.formFieldList li dl dd {
-    margin-left:       31%;
-    text-align:        left;
+.admFieldLabel {
+    float: left;
+	display: inline-block;
+    width: 30%;
+    text-align: left;
+    padding: 3px;
 }
 
-#infoboxListsBox {
+.admFieldElement {
+    display: inline-block;
+    width: 65%;
+    text-align: left;
+    padding: 3px;
+    white-space: nowrap;
+}
+
+#adm_lists_infobox {
     width:             400px; 
 }
 

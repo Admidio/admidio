@@ -142,6 +142,21 @@ class HtmlPage
         }
     }
     
+    /** Initialize all member parameters of this class
+     */
+    public function clear()
+    {
+        $this->pageContent              = null;
+        $this->javascriptContent        = null;
+        $this->javascriptContentExecute = null;
+        $this->title                    = null;
+        $this->header                   = null;
+        $this->containThemeHtml         = true;
+        $this->cssFiles                 = array();
+        $this->jsFiles                  = array();
+        $this->rssFiles                 = array();
+    }
+    
     /** Every html page of Admidio contains three files of the custom theme.
      *  my_header.php, my_body_top.php and my_body_bottom.php
      *  With these files the webmaster can contain custom layout to Admidio.
@@ -267,7 +282,7 @@ class HtmlPage
             }
             
         $html .= '</head>
-        <body>';
+        <body class="admBody">';
         // <body'. $gLayout['onload']. '>';
             if($this->containThemeHtml)
             {
