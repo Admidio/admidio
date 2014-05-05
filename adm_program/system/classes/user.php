@@ -837,6 +837,7 @@ class User extends TableUsers
 			{
 				$member->delete();
 			}
+            $returnStatus = true;
 		}
 		else
 		{
@@ -849,12 +850,12 @@ class User extends TableUsers
 			{
 				$member->setValue('mem_leader', $leader);
 			}
-			$member->save();
+			$returnStatus = $member->save();
 		}
 
 		$this->db->endTransaction();
 		$this->renewRoleData();
-		return true;
+		return $returnStatus;
 	}
 	
     /** Set a new value for a column of the database table if the column has the praefix @b usr_ 

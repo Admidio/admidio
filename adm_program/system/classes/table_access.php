@@ -378,6 +378,7 @@ class TableAccess
 	 *  the changed columns. If the table has columns for creator or editor than these column
 	 *  with their timestamp will be updated.
 	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     *  @return If an update or insert into the database was done then return true, otherwise false.
 	 */
     public function save($updateFingerPrint = true)
     {
@@ -491,10 +492,12 @@ class TableAccess
                          WHERE '.$this->keyColumnName.' = \''. $this->dbColumns[$this->keyColumnName]. '\'';
                 $this->db->query($sql);
             }
+
+            $this->columnsValueChanged = false;
+            return true;
         }
 
-        $this->columnsValueChanged = false;
-        return 0;
+        return false;
     }
 
 	/** The method requires an array with all fields of one recordset of the table object.
