@@ -71,20 +71,21 @@ class TableMembers extends TableAccess
 	 *  the changed columns. If the table has columns for creator or editor than these column
 	 *  with their timestamp will be updated.
 	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
+     *  @return If an update or insert into the database was done then return true, otherwise false.
 	 */
     public function save($updateFingerPrint = true)
     {
         global $gCurrentSession;
-        $fields_changed = $this->columnsValueChanged;
+
+        $returnStatus = parent::save($updateFingerPrint);
         
-        parent::save($updateFingerPrint);
-        
-        if($fields_changed && is_object($gCurrentSession))
+        if($returnStatus == true && is_object($gCurrentSession))
         {
-            // einlesen des entsprechenden Userobjekts, da Aenderungen 
-            // bei den Rollen vorgenommen wurden 
+            // renew user object of the affected user because of edited role assignment
             $gCurrentSession->renewUserObject($this->getValue('mem_usr_id'));
         }
+        
+        return $returnStatus;
     } 
     
 	/** Starts a membership for the assigned role and user from now until 31.12.9999.

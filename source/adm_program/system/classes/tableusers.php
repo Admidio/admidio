@@ -38,6 +38,7 @@ class TableUsers extends TableAccess
 
         // new user should be valid (except registration)
         $this->setValue('usr_valid', 1);
+        $this->columnsValueChanged = false;
     }
 
 	/** Deletes the selected user of the table and all the many references in other tables. 
