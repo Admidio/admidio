@@ -201,20 +201,26 @@ if($getMode != 'csv')
         $pdf->SetTitle($role->getValue('rol_name') . ' - ' . $role->getValue('cat_name'));
 
         // remove default header/footer
-        $pdf->setPrintHeader(false);
+        $pdf->setPrintHeader(true);
         $pdf->setPrintFooter(false);
-        
+ 		// set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+		
         // set auto page breaks
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetHeaderMargin(0);
+        $pdf->SetFooterMargin(0);
 
+        //headline for PDF
+        $pdf->SetHeaderData('', '', $headline,'');
+		
         // set font
         $pdf->SetFont('times', '', 10);
 
         // add a page
         $pdf->AddPage();
-
-        //headline for PDF
-        $pdfHtmlHeadline = '<div style="text-align:center; font-size:16"><h1>'.$headline.'</h1></div>';
 
     }
     elseif($getMode == 'html')
