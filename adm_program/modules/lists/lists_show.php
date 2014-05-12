@@ -66,7 +66,6 @@ if($getListId == 0)
 }
 
 $pdf_orientation  = 'P';
-$pdf_linesOnPage  = 40;
 $separator   = ',';    // fuer CSV-Dateien
 $valueQuotes = '';
 $charset     = '';
@@ -88,7 +87,6 @@ switch ($getMode)
     case 'pdfl':
         $pdf_orientation  = 'L';
         $getMode          = 'pdf';
-        $pdf_linesOnPage  = 25;
         break;
     case 'html':
         $class_table           = 'tableList';
@@ -103,8 +101,6 @@ switch ($getMode)
     default:
         break;
 }
-
-$pdf_linesOnPageAll = $pdf_linesOnPage;
 
 // Array um den Namen der Tabellen sinnvolle Texte zuzuweisen
 $arr_col_name = array('usr_login_name' => $gL10n->get('SYS_USERNAME'),
@@ -154,7 +150,7 @@ if($getMode == 'html' && $getStart == 0)
 }
 
 if($getMode == 'pdf')
-    {
+    {	
         require_once(SERVER_PATH. '/adm_program/libs/tcpdf/tcpdf.php');
         $pdf = new TCPDF($pdf_orientation, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
@@ -164,23 +160,29 @@ if($getMode == 'pdf')
         $pdf->SetTitle($role->getValue('rol_name') . ' - ' . $role->getValue('cat_name'));
 
         // remove default header/footer
-        $pdf->setPrintHeader(false);
+        $pdf->setPrintHeader(true);
         $pdf->setPrintFooter(false);
+		// set header and footer fonts
+        $pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+        $pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
         
         // set auto page breaks
-        $pdf->SetAutoPageBreak(false, PDF_MARGIN_BOTTOM);
+        $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
+        $pdf->SetMargins(10, 10, 10);
+        $pdf->SetHeaderMargin(0);
+        $pdf->SetFooterMargin(0);
+		
+        //headline for PDF
+        $pdf_htmlHeadline = $role->getValue('rol_name') . ' (' . $role->getValue('cat_name') . ')';
+		$pdf->SetHeaderData('', '', $pdf_htmlHeadline,'');
 
         // set font
         $pdf->SetFont('times', '', 10);
 
         // add a page
         $pdf->AddPage();
-
-        //headline for PDF
-        $pdf_htmlHeadline = '<div style="text-align:center; font-size:16"><h1>' . $role->getValue('rol_name') . ' &#40;' . $role->getValue('cat_name') . '&#41;</h1></div>';
         
-        
-        $pdf_tableHeadline = '<table border="0.5" cellspacing="1" cellpadding="1"> <tr>';
+        $pdf_html = '<table border="0.5" cellspacing="1" cellpadding="1"> <thead> <tr nobr="true">';
 }
 
 if($getMode != 'csv' && $getMode != 'pdf')
@@ -387,10 +389,10 @@ for($column_number = 1; $column_number <= $list->countColumns(); $column_number+
         {
             if($column_number == 1)
             {
-                $pdf_tableHeadline .= '<th width="25"; bgcolor="#C7C7C7"><div style="font-size:14">' . $gL10n->get('SYS_ABR_NO') . '</div></th>';
+                $pdf_html .= '<th bgcolor="#C7C7C7"><div style="font-size:14">' . $gL10n->get('SYS_ABR_NO') . '</div></th>';
             }
             
-            $pdf_tableHeadline .= '<th bgcolor="#C7C7C7"><div style="font-size:14">'.$col_name.'</div></th>';
+            $pdf_html .= '<th bgcolor="#C7C7C7"><div style="font-size:14">'.$col_name.'</div></th>';
         }
         else
         {                
@@ -411,8 +413,7 @@ if($getMode == 'csv')
 }
 elseif($getMode == 'pdf')
 {
-    $pdf_tableHeadline .= '</tr>';
-    $pdf_html = $pdf_htmlHeadline.$pdf_tableHeadline;
+    $pdf_html .= '</tr> </thead>';
 }
 else
 {
@@ -538,21 +539,8 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                 elseif($getMode == 'pdf')
                 {
                     if($column_number == 1)
-                    {
-                        if($listRowNumber == $pdf_linesOnPageAll)
-                        {
-                            $pdf_linesOnPageAll = $pdf_linesOnPageAll + $pdf_linesOnPage;
-
-                            $pdf_html .= '</table>';
-                            $pdf->writeHTML($pdf_html, true, false, true, false, '');
-                            $pdf->AddPage();
-                            
-                            $pdf_html = $pdf_htmlHeadline;
-                            $pdf_html .= $pdf_tableHeadline;
-                            
-                        }
-                        
-                        $pdf_html .= '<tr>';
+                    {                      
+                        $pdf_html .= '<tr nobr="true">';
                         // erste Spalte zeigt lfd. Nummer an
                         $pdf_html .= '<td>' . $listRowNumber . '</td>';
                     }
