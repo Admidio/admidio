@@ -527,6 +527,8 @@ echo '
                 $list_name_flag   = '';
                 $optgroup_flag    = 0;
                 $counter_unsaved_lists = 0;
+                $tableList_global_flag = null;
+                $tableList_name_flag   = null;
                 $tableList = new TableLists($gDb);
                 
                 while($row = $gDb->fetch_array($lst_result))
