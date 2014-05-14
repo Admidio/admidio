@@ -409,7 +409,7 @@ a:hover, a:active {
     color: #333333;
 }
 
-.admTableRowHeading th, .admTableRow td {
+.admTableRowHeading th, .admTableRow td, .admTable td {
     padding: 6px 6px 3px 0px;
     text-align: left;
 }
