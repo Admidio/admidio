@@ -246,7 +246,7 @@ a:hover, a:active {
 
 /* Form elements */
 
-.admTextInput, .admTextInputSmall, .admMultilineTextInput, .admSelectBox, .admSelectBoxSmall, .admButton {
+.admTextInput, .admTextInputSmall, .admMultilineTextInput, .admSelectBox, .admSelectBoxSmall, .admButton, div.dataTables_filter input, div.dataTables_length select {
     border: 1px solid #888686;
     padding: 4px;
     font-size: 11pt;
@@ -281,7 +281,7 @@ a:hover, a:active {
 	max-width: 100%;
 }
 
-.admSelectBoxSmall {
+.admSelectBoxSmall, div.dataTables_filter input, div.dataTables_length select {
     padding: 1px 3px 1px 1px;
 }
 
@@ -429,6 +429,11 @@ a:hover, a:active {
     border-bottom: 2px solid #a0cbd9;
 }
 
+.admTableSubHeader.group {
+  cursor: pointer;
+}
+
+
 .admTableRow:hover {
     background-repeat:  repeat-x;
     background-color:   #a8d9df;
@@ -437,15 +442,19 @@ a:hover, a:active {
 	background-image:   -ms-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
 }
 
+.admTable.dataTable {
+    border-bottom: 2px solid #a0cbd9;
+}
+
 /* Page navigation */
 
 .admPageNavigation {
-    margin-top:         20px;
-    margin-bottom:      20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 .admPageNavigation .selected {
-    font-weight:        bold;
+    font-weight: bold;
 }
 
 /* A simple box that looks like a tooltip */

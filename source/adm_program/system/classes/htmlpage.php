@@ -3,21 +3,18 @@
 /** @class HtmlPage
  *  @brief Creates an Admidio specific complete html page
  *
- *  This class inherits the common HtmlFormBasic class and extends their elements
- *  with custom Admidio form elements. The class should be used to create the 
- *  html part of all Admidio forms. The Admidio elements will contain
- *  the label of fields and some other specific features like a identification
- *  of mandatory fields, help buttons and special css classes for every
- *  element.
+ *  This class creates a html page with head and body and integrates some Admidio
+ *  specific elements like css files, javascript files and javascript code. It
+ *  also provides some methods to easily add new html data to the page. The generated
+ *  page will automatically integrate the choosen theme. You can optional disable the 
+ *  integration of the theme files.
  *  @par Examples
- *  @code // create a simple form with one input field and a button
- *  $form = new HtmlForm('simple-form', 'next_page.php');
- *  $form->openGroupBox('gbSimpleForm', $gL10n->get('SYS_SIMPLE_FORM'));
- *  $form->addTextInput('name', $gL10n->get('SYS_NAME'), $formName, true);
- *  $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'), true, 'simple', true);
- *  $form->closeGroupBox();
- *  $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), 'layout/forward.png');
- *  $form->show();@endcode
+ *  @code // create a simple html page with some text
+ *  $page = new HtmlPage();
+ *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/tooltip/text_tooltip.js');
+ *  $page->addHeadline('A simple Html page');
+ *  $page->addHtml('<strong>This is a simple Html page!</strong>');
+ *  $page->show();@endcode
  */
 /*****************************************************************************
  *
@@ -283,7 +280,6 @@ class HtmlPage
             
         $html .= '</head>
         <body class="admBody">';
-        // <body'. $gLayout['onload']. '>';
             if($this->containThemeHtml)
             {
                 ob_start();
@@ -309,7 +305,6 @@ class HtmlPage
             }
         $html .= '</body>
         </html>';
-
 
         // now show the complete html of the page
         if($directOutput)

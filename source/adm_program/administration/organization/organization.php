@@ -1365,10 +1365,10 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="lists_members_per_page">'.$gL10n->get('LST_MEMBERS_PER_PAGE').':</label></dt>
-                            <dd>
-                                <input type="text" id="lists_members_per_page" name="lists_members_per_page" style="width: 50px;"
-                                    maxlength="4" value="'. $form_values['lists_members_per_page']. '" />
-                            </dd>
+                            <dd>';
+                                $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['lists_members_per_page'], 'lists_members_per_page');
+                            echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('LST_MEMBERS_PER_PAGE_DESC').'</li>

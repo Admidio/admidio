@@ -4,5 +4,6 @@
 	<step id="20">ALTER TABLE %PREFIX%_members ADD COLUMN mem_approved integer unsigned default null</step>
 	<step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(255)</step>
 	<step id="40">ALTER TABLE %PREFIX%_members ADD COLUMN mem_count_guests integer unsigned not null default '0'</step>
+	<step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name LIKE 'lists_members_per_page'</step>
     <step>stop</step>
 </update>

@@ -8,10 +8,10 @@
  *
  * Parameters:
  *
- * mode   : Ausgabeart   (html, print, csv-ms, csv-oo, pdf, pdfl)
- * lst_id : ID der Listenkonfiguration, die angezeigt werden soll
- *          Wird keine ID uebergeben, wird die Default-Konfiguration angezeigt
- * rol_id : Rolle, fuer die die Funktion dargestellt werden soll
+ * mode   : Output (html, print, csv-ms, csv-oo, pdf, pdfl)
+ * lst_id : Id of the list configuration that should be shown.
+ *          If id is null then the default list of the role will be shown.
+ * rol_id : Id of the role whose members should be shown
  * start  : Position of query recordset where the visual output should start
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
@@ -129,10 +129,19 @@ catch(AdmException $e)
     $e->showHtml();
 }
 
-// SQL-Statement der Liste ausfuehren und pruefen ob Daten vorhanden sind
-$resultList = $gDb->query($mainSql);
 
+// determine the number of users in this list
+$resultList = $gDb->query($mainSql);
 $numMembers = $gDb->num_rows($resultList);
+
+// check if role leaders exists and remember this 
+$roleLeadersExists = false;
+$row = $gDb->fetch_array($resultList);
+
+if($row['mem_leader'] != 0)
+{
+    $roleLeadersExists = true;
+}
 
 if($numMembers == 0)
 {
@@ -146,7 +155,7 @@ if($numMembers < $getStart)
 }
 
 // define title (html) and headline
-$title    = $gL10n->get('LST_LIST').' - '. $role->getValue('rol_name');
+$title = $gL10n->get('LST_LIST').' - '. $role->getValue('rol_name');
 if(strlen($list->getValue('lst_name')) > 0)
 {
     $headline = $role->getValue('rol_name').' - '.$list->getValue('lst_name');
@@ -214,7 +223,7 @@ if($getMode != 'csv')
         $pdf->SetFooterMargin(0);
 
         //headline for PDF
-        $pdf->SetHeaderData('', '', $headline,'');
+        $pdf->SetHeaderData('', '', $headline, '');
 		
         // set font
         $pdf->SetFont('times', '', 10);
@@ -228,14 +237,63 @@ if($getMode != 'csv')
         // create html page object
         $page = new HtmlPage();
         
+        $page->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/jquery.datatables.min.js');
+        $page->addCssFile(THEME_PATH.'/css/jquery.datatables.css');
+        $javascriptGroup = '';
+        $javascriptGroupFunction = '';
+        
+        // if role has role leaders then we must enable the grouping function in jquery datatables
+        if($roleLeadersExists == true)
+        {
+            $javascriptGroup = ', 
+                "columnDefs": [
+                    { "visible": false, "targets": 1 }
+                ],
+                "order": [[ 1, \'asc\' ]],
+                "drawCallback": function ( settings ) {
+                    var api = this.api();
+                    var rows = api.rows( {page:\'current\'} ).nodes();
+                    var last=null;
+         
+                    api.column(1, {page:\'current\'} ).data().each( function ( group, i ) {
+                        if ( last !== group ) {
+                            $(rows).eq( i ).before(
+                                \'<tr class="group admTableSubHeader"><td colspan="'.($list->countColumns()+1).'">\'+group+\'</td></tr>\'
+                            );
+         
+                            last = group;
+                        }
+                    } );
+                }';
+            $javascriptGroupFunction = '
+                // Order by the grouping
+                $("#adm_lists_table tbody").on( "click", "tr.group", function () {
+                    var currentOrder = table.order()[0];
+                    if ( currentOrder[0] === 1 && currentOrder[1] === "asc" ) {
+                        table.order( [ 1, "desc" ] ).draw();
+                    }
+                    else {
+                        table.order( [ 1, "asc" ] ).draw();
+                    }
+                } );';
+        }
+
         //$page->excludeThemeHtml();
         $page->addJavascript('
-                    $("#admSelectExportMode").change(function () {
-                        if($(this).val().length > 1) {
-                            self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-                                "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
-                        }
-                    })', true);
+            var table = $("#adm_lists_table").DataTable( {
+                "pageLength": '.$gPreferences['lists_members_per_page'].',
+                "language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/dataTables.'.$gPreferences['system_language'].'.lang"}
+                '.$javascriptGroup.'
+            });
+            
+            '.$javascriptGroupFunction.'
+
+            $("#admSelectExportMode").change(function () {
+                if($(this).val().length > 1) {
+                    self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
+                        "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
+                }
+            })', true);
                     
         // show back link
         $page->addHtml($gNavigation->getHtmlBackButton());
@@ -325,8 +383,17 @@ if($getMode != 'csv')
 }
 
 // initialize array parameters for table and set the first column for the counter
-$columnAlign  = array('left');
-$columnValues = array($gL10n->get('SYS_ABR_NO'));
+if($getMode == 'html' && $roleLeadersExists == true)
+{
+    // if leaders exists add a column to group them for jquery datatables plugin
+    $columnAlign  = array('left', 'left');
+    $columnValues = array($gL10n->get('SYS_ABR_NO'), $gL10n->get('INS_GROUPS'));
+}
+else
+{
+    $columnAlign  = array('left');
+    $columnValues = array($gL10n->get('SYS_ABR_NO'));
+}
 
 // headlines for columns
 for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
@@ -385,7 +452,7 @@ for($columnNumber = 1; $columnNumber <= $list->countColumns(); $columnNumber++)
             $table->addColumn($columnHeader, array('style' => 'text-align: '.$columnAlign[$columnNumber-1].';font-size:14;background-color:#C7C7C7;'), 'th');
         }
         elseif($getMode == 'html' || $getMode == 'print')
-        {                
+        {
             $columnValues[] = $columnHeader;
         }
     }
@@ -399,7 +466,6 @@ elseif($getMode == 'html' || $getMode == 'print')
 {
     $table->setColumnAlignByArray($columnAlign);
     $table->addRowHeadingByArray($columnValues);
-    $table->addTableBody();
 }
 else
 {
@@ -418,29 +484,20 @@ else
 
 $lastGroupHead = -1;             // Merker um Wechsel zwischen Leiter und Mitglieder zu merken
 
-if($getMode == 'html' && $gPreferences['lists_members_per_page'] > 0)
-{
-    $members_per_page = $gPreferences['lists_members_per_page'];     // Anzahl der Mitglieder, die auf einer Seite angezeigt werden
-}
-else
-{
-    $members_per_page = $numMembers;
-}
-
 // jetzt erst einmal zu dem ersten relevanten Datensatz springen
 if(!$gDb->data_seek($resultList, $getStart))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
+for($j = 0; $j + $getStart < $numMembers; $j++)
 {
     if($row = $gDb->fetch_array($resultList))
     {
-        if($getMode == 'html' || $getMode == 'print' || $getMode == 'pdf')
+        if($getMode == 'print' || $getMode == 'pdf')
         {
-            // erst einmal pruefen, ob es ein Leiter ist, falls es Leiter in der Gruppe gibt, 
-            // dann muss noch jeweils ein Gruppenkopf eingefuegt werden
+            // in print preview and pdf we group the role leaders and the members and 
+            // add a specific header for them
             if($lastGroupHead != $row['mem_leader']
             && ($row['mem_leader'] != 0 || $lastGroupHead != -1))
             {
@@ -494,6 +551,20 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
                     {
                         // die Laufende Nummer noch davorsetzen
                         $columnValues[] = $listRowNumber;
+                        
+                        // in html mode we add an additional column with leader information to
+                        // enable the grouping function of jquery datatables
+                        if($getMode == 'html' && $roleLeadersExists == true)
+                        {
+                            if($row['mem_leader'] == 1)
+                            {
+                                $columnValues[] = $gL10n->get('SYS_LEADER');
+                            }
+                            else
+                            {
+                                $columnValues[] = $gL10n->get('SYS_PARTICIPANTS');
+                            }
+                        }
                     }
                 }
                 else
@@ -747,13 +818,6 @@ elseif($getMode == 'html' || $getMode == 'print')
     // add table and the role information box to the pge
     $page->addHtml($table->show(false));
     $page->addHtml($htmlBox);
-
-    if($getMode == 'html')
-    {    
-        // If neccessary show links to navigate to next and previous recordsets of the query
-        $base_url = $g_root_path. '/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode='.$getMode.'&rol_id='.$getRoleId.'&show_members='.$getShowMembers;
-        $page->addHtml(admFuncGeneratePagination($base_url, $numMembers, $members_per_page, $getStart, TRUE));
-    }
         
     // show complete html page
     $page->show();

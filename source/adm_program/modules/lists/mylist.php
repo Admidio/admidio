@@ -12,9 +12,9 @@
  * rol_id : das Feld Rolle kann mit der entsprechenden Rolle vorbelegt werden
  * active_role  : 1 - (Default) aktive Rollen auflisten
  *                0 - Ehemalige Rollen auflisten
- * show_members : 0 - (Default) aktive Mitglieder der Rolle anzeigen
- *                1 - Ehemalige Mitglieder der Rolle anzeigen
- *                2 - Aktive und ehemalige Mitglieder der Rolle anzeigen
+ * show_members : 0 - (Default) show active members of role
+ *                1 - show former members of role
+ *                2 - show active and former members of role
  *
  *****************************************************************************/
 
