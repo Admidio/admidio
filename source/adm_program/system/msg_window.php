@@ -80,10 +80,10 @@ switch ($getMessageId)
 	// Eigene Listen
 
     case 'mylist_condition':
-        echo $gL10n->get('LST_MYLIST_CONDITION_DESC').'<br /><br />
-              '.$gL10n->get('SYS_EXAMPLES').':<br /><br />
-              <table class="tableList" style="width: 100%;" cellspacing="0">
-                 <tr>
+        echo '<p>'.$gL10n->get('LST_MYLIST_CONDITION_DESC').'</p>
+              <p>'.$gL10n->get('SYS_EXAMPLES').':</p>
+              <table class="admTable" style="width: 100%;" cellspacing="0">
+                 <tr class="admTableRowHeading">
                     <th style="width: 75px;">'.$gL10n->get('SYS_FIELD').'</th>
                     <th style="width: 110px;">'.$gL10n->get('SYS_CONDITION').'</th>
                     <th>'.$gL10n->get('SYS_DESCRIPTION').'</th>

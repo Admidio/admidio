@@ -409,7 +409,7 @@ a:hover, a:active {
     color: #333333;
 }
 
-.admTableRowHeading th, .admTableRow td, .admTable td {
+.admTableRowHeading th, .admTable td {
     padding: 6px 6px 3px 0px;
     text-align: left;
 }
@@ -434,12 +434,12 @@ a:hover, a:active {
 }
 
 
-.admTableRow:hover {
-    background-repeat:  repeat-x;
-    background-color:   #a8d9df;
-	background-image:   -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
-	background-image:   -webkit-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
-	background-image:   -ms-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
+.admTableRowHighlight:hover {
+    background-repeat: repeat-x;
+    background-color: #a8d9df;
+	background-image: -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
+	background-image: -webkit-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
+	background-image: -ms-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
 }
 
 .admTable.dataTable {

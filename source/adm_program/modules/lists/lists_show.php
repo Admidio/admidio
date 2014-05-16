@@ -380,6 +380,10 @@ if($getMode != 'csv')
         $table->addData($pdfHtmlHeadline);
         $table->addRow();
     }
+    elseif($getMode == 'html')
+    {
+        $table->highlightSelectedRow(true);
+    }
 }
 
 // initialize array parameters for table and set the first column for the counter

@@ -25,7 +25,8 @@
 
 class HtmlTable extends HtmlTableBasic
 {
-    protected $columnAlign;    ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center
+    protected $columnAlign;          ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
+    protected $highlightSelectedRow; ///< If set to true then the current selected row will be highlighted.
 
     /** Constructor creates the table element
      *  @param $id    Id of the table
@@ -41,6 +42,7 @@ class HtmlTable extends HtmlTableBasic
 
         parent::__construct($id, $class);
         $this->addAttribute('cellspacing', '0');
+        $this->highlightSelectedRow = false;
     }
 
     /** Adds a complete row with all columns to the table. This will be the column heading row.
@@ -100,6 +102,11 @@ class HtmlTable extends HtmlTableBasic
             $arrAttributes['class'] = 'admTableRow';
         }
         
+        if($this->highlightSelectedRow == true)
+        {
+            $arrAttributes['class'] .= ' admTableRowHighlight';
+        }
+        
         // set an id to the column
         if($id != null)
         {
@@ -132,6 +139,22 @@ class HtmlTable extends HtmlTableBasic
 
             // now add column to row
             $this->addColumn($value, $columnAttributes, 'td');
+        }
+    }
+    
+    /** If this flag will be set to true then the current selected row of the table will
+     *  be highlighted. Therefore the row element @b tr will get the css class @b admTableRowHighlight.
+     *  @param $highlight If set to true the current row of the table will be highlighted.
+     */
+    public function highlightSelectedRow($highlight)
+    {
+        If($highlight == true)
+        {
+            $this->highlightSelectedRow = true;
+        }
+        else
+        {
+            $this->highlightSelectedRow = false;
         }
     }
     
