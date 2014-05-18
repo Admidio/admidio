@@ -320,6 +320,7 @@ if($getMode != 'csv')
     elseif($getMode == 'html')
     {
         $table->highlightSelectedRow(true);
+        $table->setDatatablesRowsPerPage($gPreferences['lists_members_per_page']);
     }
 }
 

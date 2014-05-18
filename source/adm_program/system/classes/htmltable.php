@@ -32,6 +32,7 @@ class HtmlTable extends HtmlTableBasic
     private   $htmlPage;             ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     private   $datatables;           ///< A flag if the jQuery plugin DataTables should be used to show the table.
     private   $groupedColumn;        ///< The number of the column which should be used to group the table data.
+    private   $rowsPerPage;          ///< Number of rows that should be displayed on one page.
 
     /** Constructor creates the table element
      *  @param $id         Id of the table
@@ -57,6 +58,7 @@ class HtmlTable extends HtmlTableBasic
         $this->datatables    = $datatables;
         $this->groupedColumn = 0;
         $this->columnCount   = 0;
+        $this->rowsPerPage   = 25;
 
         if(is_object($htmlPage))
         {
@@ -210,6 +212,15 @@ class HtmlTable extends HtmlTableBasic
         $this->groupedColumn = $columnNumber - 1;
     }
     
+    /** Set the number of rows that should be displayed on one page if the jQuery plugin
+     *  DataTables is used.
+     *  @param $numberRows Number of rows that should be displayed on one page.
+     */
+    public function setDatatablesRowsPerPage($numberRows)
+    {
+        $this->rowsPerPage = $numberRows;
+    }
+    
 	/** This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
 	 *  is activated then the javascript for that plugin will be added. Call this method if you
 	 *  have finished your form layout.
@@ -266,7 +277,7 @@ class HtmlTable extends HtmlTableBasic
 
             $this->htmlPage->addJavascript('
                 var table = $("#'.$this->id.'").DataTable( {
-                    "pageLength": '.$gPreferences['lists_members_per_page'].',
+                    "pageLength": '.$this->rowsPerPage.',
                     "language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/dataTables.'.$gPreferences['system_language'].'.lang"}
                     '.$javascriptGroup.'
                 });

@@ -99,7 +99,7 @@ if($gCurrentUser->isWebmaster())
 }
 
 //Create table object
-$downloadOverview = new HtmlTable('tbl_downloads');
+$downloadOverview = new HtmlTable('tbl_downloads', true, $page);
 $downloadOverview->highlightSelectedRow(true);
 
 // create array with all column heading values
