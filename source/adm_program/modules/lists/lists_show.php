@@ -134,15 +134,6 @@ catch(AdmException $e)
 $resultList = $gDb->query($mainSql);
 $numMembers = $gDb->num_rows($resultList);
 
-// check if role leaders exists and remember this 
-$roleLeadersExists = false;
-$row = $gDb->fetch_array($resultList);
-
-if($row['mem_leader'] != 0)
-{
-    $roleLeadersExists = true;
-}
-
 if($numMembers == 0)
 {
     // Es sind keine Daten vorhanden !
@@ -174,6 +165,8 @@ if($getMode == 'html' && $getStart == 0)
 
 if($getMode != 'csv')
 {
+    $datatable = false;
+    
     if($getShowMembers == 0)
     {
         $memberStatus = $gL10n->get('LST_ACTIVE_MEMBERS');
@@ -234,66 +227,10 @@ if($getMode != 'csv')
     }
     elseif($getMode == 'html')
     {
+        $datatable = true;
+
         // create html page object
         $page = new HtmlPage();
-        
-        $page->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/jquery.datatables.min.js');
-        $page->addCssFile(THEME_PATH.'/css/jquery.datatables.css');
-        $javascriptGroup = '';
-        $javascriptGroupFunction = '';
-        
-        // if role has role leaders then we must enable the grouping function in jquery datatables
-        if($roleLeadersExists == true)
-        {
-            $javascriptGroup = ', 
-                "columnDefs": [
-                    { "visible": false, "targets": 1 }
-                ],
-                "order": [[ 1, \'asc\' ]],
-                "drawCallback": function ( settings ) {
-                    var api = this.api();
-                    var rows = api.rows( {page:\'current\'} ).nodes();
-                    var last=null;
-         
-                    api.column(1, {page:\'current\'} ).data().each( function ( group, i ) {
-                        if ( last !== group ) {
-                            $(rows).eq( i ).before(
-                                \'<tr class="group admTableSubHeader"><td colspan="'.($list->countColumns()+1).'">\'+group+\'</td></tr>\'
-                            );
-         
-                            last = group;
-                        }
-                    } );
-                }';
-            $javascriptGroupFunction = '
-                // Order by the grouping
-                $("#adm_lists_table tbody").on( "click", "tr.group", function () {
-                    var currentOrder = table.order()[0];
-                    if ( currentOrder[0] === 1 && currentOrder[1] === "asc" ) {
-                        table.order( [ 1, "desc" ] ).draw();
-                    }
-                    else {
-                        table.order( [ 1, "asc" ] ).draw();
-                    }
-                } );';
-        }
-
-        //$page->excludeThemeHtml();
-        $page->addJavascript('
-            var table = $("#adm_lists_table").DataTable( {
-                "pageLength": '.$gPreferences['lists_members_per_page'].',
-                "language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/dataTables.'.$gPreferences['system_language'].'.lang"}
-                '.$javascriptGroup.'
-            });
-            
-            '.$javascriptGroupFunction.'
-
-            $("#admSelectExportMode").change(function () {
-                if($(this).val().length > 1) {
-                    self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
-                        "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
-                }
-            })', true);
                     
         // show back link
         $page->addHtml($gNavigation->getHtmlBackButton());
@@ -368,7 +305,7 @@ if($getMode != 'csv')
     }
 
     // Create table object for display
-    $table = new HtmlTable('adm_lists_table', $classTable);
+    $table = new HtmlTable('adm_lists_table', $datatable, $page, $classTable);
 
     if($getMode == 'pdf')
     {
@@ -387,9 +324,9 @@ if($getMode != 'csv')
 }
 
 // initialize array parameters for table and set the first column for the counter
-if($getMode == 'html' && $roleLeadersExists == true)
+if($getMode == 'html')
 {
-    // if leaders exists add a column to group them for jquery datatables plugin
+    // in html mode we group leaders. Therefore we need a special hidden column.
     $columnAlign  = array('left', 'left');
     $columnValues = array($gL10n->get('SYS_ABR_NO'), $gL10n->get('INS_GROUPS'));
 }
@@ -521,6 +458,12 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
             }
         }
 
+        // if html mode and the role has leaders then group all data between leaders and members
+        if($getMode == 'html' && $row['mem_leader'] != 0)
+        {
+            $table->setDatatablesGroupColumn(2);
+        }
+
         $columnValues = array();
 
         // Felder zu Datensatz
@@ -556,9 +499,9 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                         // die Laufende Nummer noch davorsetzen
                         $columnValues[] = $listRowNumber;
                         
-                        // in html mode we add an additional column with leader information to
+                        // in html mode we add an additional column with leader/member information to
                         // enable the grouping function of jquery datatables
-                        if($getMode == 'html' && $roleLeadersExists == true)
+                        if($getMode == 'html')
                         {
                             if($row['mem_leader'] == 1)
                             {
@@ -818,6 +761,14 @@ elseif($getMode == 'html' || $getMode == 'print')
             </div>
         </div>';
     } // end of infobox
+    
+    // if member status (leader/member) is not a grouped column then hide this column
+    if($table->getDatatablesGroupColumn() == 0)
+    {
+        $page->addJavascript('$.extend( $.fn.dataTable.defaults, {
+                                  "columnDefs": [ { "visible": false, "targets": 1 } ]
+                              } );');
+    }
     
     // add table and the role information box to the pge
     $page->addHtml($table->show(false));
