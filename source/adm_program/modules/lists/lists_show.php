@@ -211,8 +211,8 @@ if($getMode != 'csv')
 		
         // set auto page breaks
         $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
-        $pdf->SetMargins(10, 10, 10);
-        $pdf->SetHeaderMargin(0);
+        $pdf->SetMargins(10, 20, 10);
+        $pdf->SetHeaderMargin(10);
         $pdf->SetFooterMargin(0);
 
         //headline for PDF
