@@ -678,8 +678,8 @@ $page->addHtml('
                 <th style="width: 37%;">'.$gL10n->get('SYS_CONTENT').'</th>
                 <th style="width: 18%;">'.$gL10n->get('SYS_ORDER').'</th>
                 <th style="width: 25%;">'.$gL10n->get('SYS_CONDITION').'
-                    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
-                        class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_SHOW_HELP').'" title="'.$gL10n->get('SYS_SHOW_HELP').'" /></a>
+                    <a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_condition&amp;inline=true"><img 
+                        src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_SHOW_HELP').'" title="'.$gL10n->get('SYS_SHOW_HELP').'" /></a>
                 </th>
             </tr>
         </thead>

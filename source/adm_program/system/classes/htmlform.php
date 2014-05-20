@@ -944,7 +944,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $this->addString('<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?'.$parameters.'\',this)" 
-                                   onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>');
+                                   onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>');
         }
 	}
     
