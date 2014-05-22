@@ -104,6 +104,7 @@ $downloadOverview->highlightSelectedRow(true);
 
 // create array with all column heading values
 $columnHeading = array(
+    $gL10n->get('SYS_TYPE'),
     '<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />',
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_DATE_MODIFIED'),
@@ -116,22 +117,13 @@ if ($gCurrentUser->editDownloadRight())
     $columnHeading[] = $gL10n->get('SYS_FEATURES');
 }
 
-$downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'right', 'right', 'left'));
+$downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'left'));
 $downloadOverview->addRowHeadingByArray($columnHeading);
 
 // If folder is empty
 if (count($folderContent) == 0)
 {
-    if ($gCurrentUser->editDownloadRight())
-    {
-        $colspan = '6';
-    }
-    else
-    {
-        $colspan = '5';
-    }
-    
-    $downloadOverview->addRowByArray(array($gL10n->get('DOW_FOLDER_NO_FILES')), null, null, 1, $colspan);
+    $htmlDownloadOverview = $gL10n->get('DOW_FOLDER_NO_FILES');
 }
 else
 {
@@ -150,6 +142,7 @@ else
             
             // create array with all column values
             $columnValues = array(
+                1, // Type folder
                 '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">
                                             <img src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').'" title="'.$gL10n->get('SYS_FOLDER').'" /></a>',
                 '<a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $nextFolder['fol_id']. '">'. $nextFolder['fol_name']. '</a>'.$folderDescription,
@@ -209,6 +202,7 @@ else
             
             // create array with all column values
             $columnValues = array(
+                2, // Type file
                 '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">
                     <img src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'.$gL10n->get('SYS_FILE').'" title="'.$gL10n->get('SYS_FILE').'" /></a>',     
                 '<a href="'.$g_root_path.'/adm_program/modules/downloads/get_file.php?file_id='. $nextFile['fil_id']. '">'. $nextFile['fil_name']. '</a>'.$fileDescription,
@@ -238,10 +232,13 @@ else
             $downloadOverview->addRowByArray($columnValues, 'row_file_'.$nextFile['fil_id']);
         }
     }
+    
+    //Create download table
+    $downloadOverview->setDatatablesHideColumns(array(1));
+    $downloadOverview->setDatatablesOrderColumns(array(1, 3));
+    $htmlDownloadOverview = $downloadOverview->show(false);
 }
 
-//Create download table
-$htmlDownloadOverview = $downloadOverview->show(false);
 
 /**************************************************************************/
 // Add Admin table to html page

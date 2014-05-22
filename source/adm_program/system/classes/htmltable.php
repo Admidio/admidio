@@ -32,7 +32,9 @@ class HtmlTable extends HtmlTableBasic
     private   $htmlPage;             ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     private   $datatables;           ///< A flag if the jQuery plugin DataTables should be used to show the table.
     private   $groupedColumn;        ///< The number of the column which should be used to group the table data.
+    private   $hiddenColumns;        ///< Array with the column numbers that should not be shown
     private   $rowsPerPage;          ///< Number of rows that should be displayed on one page.
+    private   $orderColumns;         ///< Array with the column number as key and the 'asc' or 'desc' as value.
 
     /** Constructor creates the table element
      *  @param $id         Id of the table
@@ -53,12 +55,16 @@ class HtmlTable extends HtmlTableBasic
 
         parent::__construct($id, $class);
         $this->addAttribute('cellspacing', '0');
+        
+        // initialize class member parameters
         $this->id = $id;
         $this->highlightSelectedRow = false;
         $this->datatables    = $datatables;
-        $this->groupedColumn = 0;
+        $this->groupedColumn = -1;
+        $this->hiddenColumns = array();
         $this->columnCount   = 0;
         $this->rowsPerPage   = 25;
+        $this->orderColumns  = array();
 
         if(is_object($htmlPage))
         {
@@ -212,6 +218,54 @@ class HtmlTable extends HtmlTableBasic
         $this->groupedColumn = $columnNumber - 1;
     }
     
+    /** Hide some columns for the user. This is useful if you want to use the column for ordering but
+     *  won't show the content if this column.
+     *  @param $arrayHideColumns An array which contain the columns that should be hidden. The columns
+     *                           of the table starts with 1 (not 0).
+     */
+    public function setDatatablesHideColumns($arrayHideColumns)
+    {
+        if(is_array($arrayHideColumns))
+        {
+            // internal datatable columns starts with 0
+            foreach($arrayHideColumns as $column)
+            {
+                $this->hiddenColumns[] = ($column-1);
+            }
+        }
+    }
+    
+    /** Set the order of the columns which should be used to sort the rows.
+     *  @param $arrayOrderColumns An array which could contain the columns that should be
+     *                            ascending ordered or contain arrays where each array 
+     *                            contain the column and the sorting 'asc' or 'desc'. The columns
+     *                            of the table starts with 1 (not 0).
+     *  @par Examples
+     *  @code $table = new HtmlTable('simple-table');
+     *  // sort all rows after first and third column ascending
+     *  $table->setDatatablesOrderColumns(array(1, 3));
+     *  // sort all rows after first column descending and third column ascending
+     *  $table->setDatatablesOrderColumns(array(array(1, 'desc'), array(3, 'asc')));@endcode
+     */
+    public function setDatatablesOrderColumns($arrayOrderColumns)
+    {
+        if(is_array($arrayOrderColumns))
+        {
+            // internal datatable columns starts with 0
+            foreach($arrayOrderColumns as $column)
+            {
+                if(is_array($column))
+                {
+                    $this->orderColumns[$column[0]] = $column[1];
+                }
+                else
+                {
+                    $this->orderColumns[($column-1)] = 'asc';
+                }
+            }
+        }
+    }
+    
     /** Set the number of rows that should be displayed on one page if the jQuery plugin
      *  DataTables is used.
      *  @param $numberRows Number of rows that should be displayed on one page.
@@ -234,13 +288,49 @@ class HtmlTable extends HtmlTableBasic
         
         if($this->datatables && is_object($this->htmlPage))
         {
-            $javascriptGroup = '';
+            $datatablesOrder  = '';
+            $datatablesHidden = '';
+            $javascriptGroup  = '';
             $javascriptGroupFunction = '';
             
             $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/jquery.datatables.min.js');
             $this->htmlPage->addCssFile(THEME_PATH.'/css/jquery.datatables.css');
+
+            // set order columns
+            if(count($this->orderColumns) > 0)
+            {
+                foreach($this->orderColumns as $columnNumber => $order)
+                {
+                    $datatablesOrder .= ', ['.$columnNumber.', \''.$order.'\']';
+                }
+                
+                // remove leading comma from string
+                $datatablesOrder = substr($datatablesOrder, 1);
+                
+                // grouped column must be first order column
+                if($this->groupedColumn >= 0)
+                {
+                    $datatablesOrder = ' ['.$this->groupedColumn.', \'asc\'], '.$datatablesOrder;
+                }
+                
+                $datatablesOrder = ' "order": ['.$datatablesOrder.'], ';
+            }
+
+            // hide columns
+            if(count($this->hiddenColumns) > 0)
+            {
+                foreach($this->hiddenColumns as $columnNumber)
+                {
+                    $datatablesHidden .= ', { "visible":false, "targets":['.$columnNumber.']}';
+                }
+                
+                // remove leading comma from string
+                $datatablesHidden = substr($datatablesHidden, 1);
+                
+                $datatablesHidden = ' "columnDefs": ['.$datatablesHidden.'], ';
+            }
             
-            if($this->groupedColumn > 0)
+            if($this->groupedColumn >= 0)
             {
                 $javascriptGroup = ', 
                     "columnDefs": [
@@ -248,9 +338,9 @@ class HtmlTable extends HtmlTableBasic
                     ],
                     "order": [[ '.$this->groupedColumn.', \'asc\' ]],
                     "drawCallback": function ( settings ) {
-                        var api = this.api();
+                        var api  = this.api();
                         var rows = api.rows( {page:\'current\'} ).nodes();
-                        var last=null;
+                        var last = null;
              
                         api.column('.$this->groupedColumn.', {page:\'current\'} ).data().each( function ( group, i ) {
                             if ( last !== group ) {
@@ -277,7 +367,9 @@ class HtmlTable extends HtmlTableBasic
 
             $this->htmlPage->addJavascript('
                 var table = $("#'.$this->id.'").DataTable( {
-                    "pageLength": '.$this->rowsPerPage.',
+                    "pageLength": '.$this->rowsPerPage.','.
+                    $datatablesHidden.
+                    $datatablesOrder.'
                     "language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/dataTables.'.$gPreferences['system_language'].'.lang"}
                     '.$javascriptGroup.'
                 });
