@@ -15,6 +15,7 @@
  *           5 - reload former role memberships
  *           6 - reload future role memberships
  *           7 - save membership data
+ *           8 - Export vCard of role
  * user_id : Id of the user to be edited
  * mem_id  : Id of role membership to should be edited
  *
@@ -25,10 +26,11 @@ require_once('../../system/login_valid.php');
 require_once('roles_functions.php');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
+$getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
+$getRoleId   = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getMemberId = admFuncVariableIsValid($_GET, 'mem_id', 'numeric');
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
-	
+
 // create user object
 $user = new User($gDb, $gProfileFields, $getUserId);
 
@@ -179,6 +181,46 @@ elseif($getMode == 7)
 	$user->editRoleMembership($getMemberId, $formatedStartDate, $formatedEndDate);
 
 	echo $gL10n->get('SYS_SAVE_DATA')."<SAVED/>";;
+}
+elseif ($getMode == 8)
+{
+    // Export vCard of user
+
+    $filename = 'role_export';
+    
+    // for IE the filename must have special chars in hexadecimal 
+    if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+    {
+        $filename = urlencode($filename);
+    }
+    
+    header('Content-Type: text/x-vcard; charset=iso-8859-1');
+    header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
+    
+    // neccessary for IE, because without it the download with SSL has problems
+	header('Cache-Control: private');
+	header('Pragma: public');
+
+	// Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
+    $sql    =  'SELECT 
+	                bm.mem_usr_id
+                FROM 
+				    '. TBL_MEMBERS. ' bm
+                WHERE
+                    bm.mem_rol_id = '.$getRoleId.' 
+					AND bm.mem_begin <= \''.DATE_NOW.'\' 
+					AND bm.mem_end > \''.DATE_NOW.'\'';
+	
+    $result   = $gDb->query($sql);
+
+    while($row = $gDb->fetch_array($result))
+    {
+       // create user object
+       $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
+	   // create vcard and check if user is allowed to edit profile, so he can see more data
+       echo $user->getVCard($gCurrentUser->editProfile($user));
+    }
+
 }
 
 ?>
