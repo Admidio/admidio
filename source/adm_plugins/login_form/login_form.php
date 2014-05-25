@@ -73,6 +73,7 @@ if(isset($plg_rank) == false)
 }
 
 // set database to admidio, sometimes the user has other database connections at the same time
+global $gDb;
 $gDb->setCurrentDB();
 
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
