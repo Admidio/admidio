@@ -18,7 +18,7 @@ require_once('common.php');
 require_once('login_valid.php');
 
 // Initialize and check the parameters
-$gMessage->setExcludeThemeBody();
+$gMessage->showThemeBody(false);
 $get_type          = admFuncVariableIsValid($_GET, 'type', 'string', null, true);
 $get_element_id    = admFuncVariableIsValid($_GET, 'element_id', 'string', null, true);
 $get_database_id   = admFuncVariableIsValid($_GET, 'database_id', 'string', null, true);
@@ -151,7 +151,7 @@ switch ($get_type)
 
 if(strlen($url) == 0)
 {
-    $gMessage->setExcludeThemeBody();
+    $gMessage->showThemeBody(false);
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 

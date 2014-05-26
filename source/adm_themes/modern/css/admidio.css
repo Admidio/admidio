@@ -129,11 +129,11 @@ a:hover, a:active {
 /* Different font sizes */
 
 .admBigFont {
-    font-size:          12pt;
-    font-weight:        bold;
+    font-size: 12pt;
+    font-weight: bold;
 }
 .admSmallFont {
-    font-size:          9pt;
+    font-size: 9pt;
 }
 
 /* Show a linklist with icon */
@@ -156,7 +156,7 @@ a:hover, a:active {
 
 /* Settings for all icons */
 
-.admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img {
+.admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation img {
     border: none;
     vertical-align: text-top;
     padding-right: 1px;
@@ -166,6 +166,12 @@ a:hover, a:active {
 
 .admIconHelpLink img {
 	padding-left: 5px;
+}
+
+.admIconInformation {
+    cursor: help;
+    padding-left: 2px;
+    padding-right: 2px;
 }
 
 /* Style for the navigation bar or the back link */

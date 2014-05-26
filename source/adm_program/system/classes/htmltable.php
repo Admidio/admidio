@@ -54,7 +54,6 @@ class HtmlTable extends HtmlTableBasic
         }
 
         parent::__construct($id, $class);
-        $this->addAttribute('cellspacing', '0');
         
         // initialize class member parameters
         $this->id = $id;

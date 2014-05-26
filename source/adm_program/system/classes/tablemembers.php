@@ -32,6 +32,9 @@ class TableMembers extends TableAccess
 	 */
     public function __construct(&$db, $mem_id = 0)
     {
+		// read also data of assigned category
+		$this->connectAdditionalTable(TBL_ROLES, 'rol_id', 'mem_rol_id');
+
         parent::__construct($db, TBL_MEMBERS, 'mem', $mem_id);
     }
     
@@ -147,10 +150,11 @@ class TableMembers extends TableAccess
     }
 
 	/** Stops a membership for the assigned role and user from now until 31.12.9999.
-	 *  If the user is the current user then initiate a refresh of his role cache.
+	 *  If the user is the current user then initiate a refresh of his role cache. If
+     *  the last membership of a webmaster role should be stopped then throw an exception.
 	 *  @param $roleId Stops the membership of this role
 	 *  @param $userId The user who should loose the member of the role.
-	 *  @return Return @b true if the membership removement was successful.
+	 *  @return Return @b true if the membership removal was successful.
 	 */
     public function stopMembership($roleId = 0, $userId = 0)
     {
@@ -173,6 +177,20 @@ class TableMembers extends TableAccess
             if(strcmp(date('Y-m-d', time()), $this->getValue('mem_begin', 'Y-m-d')) >= 0
             && strcmp($this->getValue('mem_end', 'Y-m-d'), $newEndDate) >= 0)
             {
+                // if role webmaster then check if this membership is the last one -> don't delete it
+                if($this->getValue('rol_webmaster') == true)
+                {
+                    $sql = 'SELECT mem_id FROM '.TBL_MEMBERS.'
+                             WHERE mem_rol_id  = '.$roleId.'
+                               AND mem_usr_id <> '.$userId.'
+                               AND \''.DATE_NOW.'\' BETWEEN mem_begin AND mem_end ';
+                    $this->db->query($sql);
+                    if($this->db->num_rows() == 0)
+                    {
+                        throw new AdmException('LST_MUST_HAVE_WEBMASTER');
+                    }
+                }
+            
 				// if start date is greater than end date than delete membership
 				if(strcmp($this->getValue('mem_begin', 'Y-m-d'), $newEndDate) >= 0)
 				{

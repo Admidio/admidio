@@ -8,20 +8,31 @@
  *
  * Parameters:
  *
- * rol_id   : role to which members should be assigned or removed
+ * mode    - html   : Default mode to show a html list with all users to add them to the role
+ *           assign : Add membership of a specific user to the role.
+ * rol_id           : Id of role to which members should be assigned or removed
+ * usr_id           : Id of the user whose membership should be assigned or removed
+ * mem_show_all - 1 : (Default) Show only active members of the current organization
+ *                0 : Show active and inactive members of all organizations in database
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
+if(isset($_GET['mode']) && $_GET['mode'] == 'assign')
+{
+    // ajax mode then only show text if error occurs
+    $gMessage->showTextOnly(true);
+}
+
 // Initialize and check the parameters
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true);
+$getMode           = admFuncVariableIsValid($_GET, 'mode', 'string', 'html', false, array('html', 'assign'));
+$getRoleId         = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', null, true, null, true);
+$getUserId         = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0, false, null, true);
+$getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'boolean', 0);
 
 $_SESSION['set_rol_id'] = $getRoleId;
-
-//URL auf Navigationstack ablegen, wenn werder selbstaufruf der Seite, noch interner Ankeraufruf
-$gNavigation->addUrl(CURRENT_URL);
 
 // create object of the commited role
 $role = new TableRoles($gDb, $getRoleId);
@@ -29,201 +40,376 @@ $role = new TableRoles($gDb, $getRoleId);
 // roles of other organizations can't be edited
 if($role->getValue('cat_org_id') != $gCurrentOrganization->getValue('org_id') && $role->getValue('cat_org_id') > 0)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 // check if user is allowed to assign members to this role
 if($role->allowedToAssignMembers($gCurrentUser) == false)
 {
-	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+    $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// output of html header
-$gLayout['title']  = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
-
-$gLayout['header'] ='
-<script type="text/javascript"><!--
-    //Erstmal warten bis Dokument fertig geladen ist
-    $(document).ready(function(){       
-        //Bei Seitenaufruf Daten laden
-        $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$getRoleId.'", $("#memserach_form").serialize(), function(result){
-            $("form#memlist_form").append(result).show();
-            $("#list_load_animation").hide();
-            return false;
-        });
-        
-        //Checkbox alle Benutzer anzeigen
-        $("input[type=checkbox]#mem_show_all").live("click", function(){
-            $("#list_load_animation").show();
-            $("form#memlist_form").hide().empty();
-            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$getRoleId.'", $("#memsearch_form").serialize(), function(result){
-                $("form#memlist_form").append(result).show();               
-                $("#list_load_animation").hide();
-                return false;
-            });
-            //Link zum Benutzer hinzufügen anzeigen oder verstecken
-            if($(this).is(":checked")){
-                $("#add_user_link").show();
-            }
-            else{
-                $("#add_user_link").hide();
-            }
-        });
-        
-        //Suchfeldeingabe
-        $("input[type=text]#mem_search").keyup(function(){
-            $("#list_load_animation").show();
-            $("form#memlist_form").hide().empty();
-            $.post("'.$g_root_path.'/adm_program/modules/lists/members_get.php?rol_id='.$getRoleId.'", $("#memsearch_form").serialize(), function(result){
-                $("form#memlist_form").empty().append(result).show();
-                $("#list_load_animation").hide();                               
-            });
-            return false;
-        });
+if($getMode == 'assign')
+{
+    // change membership of that user
+    // this must be called as ajax request
     
-        //Enter abfangen
-        $("input[type=text]#mem_search").keydown(function(e) {
-            if(e.keyCode === 13) {
-                e.preventDefault();
-                e.stopPropagation();
-                e.stopImmediatePropagation();
-                return;
+    try
+    {
+        $membership = 0;
+        $leadership = 0;
+
+        if(isset($_POST['member_'.$getUserId]) && $_POST['member_'.$getUserId]=='true')
+        {
+            $membership = 1;
+        }
+        if(isset($_POST['leader_'.$getUserId]) && $_POST['leader_'.$getUserId]=='true')
+        {
+            $membership = 1;    
+            $leadership = 1;
+        }
+
+        //Member
+        $member = new TableMembers($gDb);
+
+        //Datensatzupdate
+        $mem_count = $role->countMembers($getUserId);
+
+        //Wenn Rolle weniger mitglieder hätte als zugelassen oder Leiter hinzugefügt werden soll
+        if($leadership==1 || ($leadership==0 && $membership==1 && ($role->getValue('rol_max_members') > $mem_count || $role->getValue('rol_max_members') == 0 || $role->getValue('rol_max_members')==0)))
+        {
+            $member->startMembership($role->getValue('rol_id'), $getUserId, $leadership);
+            echo 'success';
+        }
+        elseif($leadership==0 && $membership==0)
+        {
+            $member->stopMembership($role->getValue('rol_id'), $getUserId);
+            echo 'success';
+        }
+        else
+        {
+            $gMessage->show($gL10n->get('SYS_ROLE_MAX_MEMBERS', $role->getValue('rol_name')));
+        }
+    }
+    catch(AdmException $e)
+    {
+        $e->showText();
+    } 
+}
+else
+{
+    // show html list with all users and their membership to this role
+    
+    // set headline of the script
+    $headline = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
+
+    // add current url to navigation stack
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+
+    // create sql for all relevant users
+    $memberCondition = '';
+
+    if($getMembersShowAll == 1)
+    {
+        // Falls gefordert, aufrufen alle Benutzer aus der Datenbank
+        $memberCondition = ' usr_valid = 1 ';
+    }
+    else
+    {
+        // Falls gefordert, nur Aufruf von aktiven Mitgliedern der Organisation
+        $memberCondition = ' EXISTS 
+            (SELECT 1
+               FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+              WHERE mem_usr_id = usr_id
+                AND mem_rol_id = rol_id
+                AND mem_begin <= \''.DATE_NOW.'\'
+                AND mem_end    > \''.DATE_NOW.'\'
+                AND rol_valid  = 1
+                AND rol_cat_id = cat_id
+                AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                    OR cat_org_id IS NULL )) ';
+    }
+
+     // SQL-Statement zusammensetzen
+    $sql = 'SELECT DISTINCT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name, birthday.usd_value as birthday,
+                   city.usd_value as city, address.usd_value as address, zip_code.usd_value as zip_code, country.usd_value as country,
+                   mem_usr_id as member_this_role, mem_leader as leader_this_role,
+                      (SELECT count(*)
+                         FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
+                        WHERE rol2.rol_valid   = 1
+                          AND rol2.rol_cat_id  = cat2.cat_id
+                          AND (  cat2.cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+                              OR cat2.cat_org_id IS NULL )
+                          AND mem2.mem_rol_id  = rol2.rol_id
+                          AND mem2.mem_begin  <= \''.DATE_NOW.'\'
+                          AND mem2.mem_end     > \''.DATE_NOW.'\'
+                          AND mem2.mem_usr_id  = usr_id) as member_this_orga
+            FROM '. TBL_USERS. '
+            LEFT JOIN '. TBL_USER_DATA. ' as last_name
+              ON last_name.usd_usr_id = usr_id
+             AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+            LEFT JOIN '. TBL_USER_DATA. ' as first_name
+              ON first_name.usd_usr_id = usr_id
+             AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+            LEFT JOIN '. TBL_USER_DATA. ' as birthday
+              ON birthday.usd_usr_id = usr_id
+             AND birthday.usd_usf_id = '. $gProfileFields->getProperty('BIRTHDAY', 'usf_id'). '
+            LEFT JOIN '. TBL_USER_DATA. ' as city
+              ON city.usd_usr_id = usr_id
+             AND city.usd_usf_id = '. $gProfileFields->getProperty('CITY', 'usf_id'). '
+            LEFT JOIN '. TBL_USER_DATA. ' as address
+              ON address.usd_usr_id = usr_id
+             AND address.usd_usf_id = '. $gProfileFields->getProperty('ADDRESS', 'usf_id'). '
+            LEFT JOIN '. TBL_USER_DATA. ' as zip_code
+              ON zip_code.usd_usr_id = usr_id
+             AND zip_code.usd_usf_id = '. $gProfileFields->getProperty('POSTCODE', 'usf_id'). '
+            LEFT JOIN '. TBL_USER_DATA. ' as country
+              ON country.usd_usr_id = usr_id
+             AND country.usd_usf_id = '. $gProfileFields->getProperty('COUNTRY', 'usf_id'). '
+            LEFT JOIN '. TBL_ROLES. ' rol
+              ON rol.rol_valid   = 1
+             AND rol.rol_id      = '.$getRoleId.'
+            LEFT JOIN '. TBL_MEMBERS. ' mem
+              ON mem.mem_rol_id  = rol.rol_id
+             AND mem.mem_begin  <= \''.DATE_NOW.'\'
+             AND mem.mem_end     > \''.DATE_NOW.'\'
+             AND mem.mem_usr_id  = usr_id
+            WHERE '. $memberCondition. '
+            ORDER BY last_name, first_name ';
+    $resultUser = $gDb->query($sql);
+
+    // create html page object
+    $page = new HtmlPage();
+
+    $javascriptCode = '';
+
+    if($getMembersShowAll == 1)
+    {
+        $javascriptCode .= '$("#mem_show_all").prop("checked", true);';
+    }
+
+    $javascriptCode .= '
+        $("a[rel=\'lnkNewUser\']").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+
+        // change mode of users that should be shown
+        $("#mem_show_all").click(function(){
+            if($("#mem_show_all").is(":checked")) {
+                window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$getRoleId.'&mem_show_all=1");
+            }
+            else {
+                window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$getRoleId.'&mem_show_all=0");
             }
         });
-        
-        //Buchstabennavigation
-        $(".pageNavigationLink").live("click", function(){
-            var letter = $(this).attr("letter");            
-            //Alle anzeigen
-            if(letter == "all"){
-                $(".letterBlockBody").show();
-                $(".letterBlockHead").show();
-            }
-            else{
-                $(".letterBlockBody[block_body_id!="+letter+"]").hide();
-                $(".letterBlockHead[block_head_id!="+letter+"]").hide();
-                $(".letterBlockBody[block_body_id="+letter+"]").show();
-                $(".letterBlockHead[block_head_id="+letter+"]").show();
-            }
-            return false;
-        });
-        
-        //beim anklicken einer Checkbox
-        $("input[type=checkbox].memlist_checkbox").live("click", function(){
-                 
-            //Checkbox ID
-            var checkboxtype = $(this).attr("checkboxtype");            
-            var checkbox_id = $(this).attr("id");
-            var userid = $(this).parent().parent().attr("user_id");
+
+        // if checkbox of user is clicked then change membership
+        $("input[type=checkbox].memlist_checkbox").click(function(){
+            var checkbox = $(this);            
+            // get user id
+            var row_id = $(this).parent().parent().attr("id");
+            var pos = row_id.search("_");
+            var userid = row_id.substring(pos+1);
 
             var member_checked = $("input[type=checkbox]#member_"+userid).prop("checked");
             var leader_checked = $("input[type=checkbox]#leader_"+userid).prop("checked");
 
             //Bei Leiter Checkbox setzten, muss Member mit gesetzt werden
-            if(checkboxtype=="leader" && leader_checked){                
+            if(checkbox.hasClass("memlist_leader") && leader_checked){                
                 $("input[type=checkbox]#member_"+userid).prop("checked", true);
                 member_checked = true;
             }
             
             //Bei entfernen der Mitgliedschaft endet auch das Leiterdasein
-            if(checkboxtype=="member" && member_checked==false){                
+            if(checkbox.hasClass("memlist_member") && member_checked==false){                
                 $("input[type=checkbox]#leader_"+userid).prop("checked", false);
                 leader_checked = false;
-            }';
-            
-            //Bei der Rolle Webmaster muss konrolliert werden ob noch mindestend ein User Mitglied bleibt
-            if($role->getValue('rol_webmaster') == 1)
-            {
-                $gLayout['header'] .='
-                if($("input[name^=\'member_\'].memlist_checkbox:checked").size()<1){
-                   //Checkbox wieder setzen. 
-                   $("input[type=checkbox]#member_"+userid).prop("checked", true);
-                   //Alarm schlagen
-                   jQueryAlert("LST_MUST_HAVE_WEBMASTER");
-                   return false;
-                }';
-            }                
-            
-            $gLayout['header'] .='                     
-            //Ladebalken an checkbox
-            $("#loadindicator_" + checkbox_id).append("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' alt=\'loadindicator\' />").show();
-                                 
-            //Datenbank schreiben
+            }
+
+            // change data in database
             $.ajax({
-                    url: "'.$g_root_path.'/adm_program/modules/lists/members_save.php?rol_id='.$getRoleId.'&usr_id="+userid,
-                    type: "POST",
-                    data: "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
-                    async: false,
-                    success: function(result){                    
-                       $("#loadindicator_" + checkbox_id).hide().empty();
-
-                       //Fehler Maximale Mitgliederzahl überschritten
-                       if(result=="max_mem_reached")
-                       {
-                            //Bei Leiter Checkbox deaktiviert, muss Member und Leiter wieder gesetzt werden                            
-                            if(checkboxtype=="leader" && $("input[type=checkbox]#leader_"+userid).prop("checked")==false){                
-                                $("input[type=checkbox]#leader_"+userid).prop("checked", true);
-                            }
-                            else{
+                url: "'.$g_root_path.'/adm_program/modules/lists/members.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
+                type: "POST",
+                data: "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
+                async: false,
+                success: function(data){
+                    // check if error occurs
+                    if(data != "success") {
+                        // reset checkbox status
+                        if(checkbox.prop("checked") == true) {
+                            checkbox.prop("checked", false);
+                            if(checkbox.hasClass("memlist_leader")) {
                                 $("input[type=checkbox]#member_"+userid).prop("checked", false);
-                            }                           
-                           jQueryAlert("SYS_ROLE_MAX_MEMBERS", "'.$role->getValue('rol_name').'");
-                       }
-                       else if(result=="success")
-                       {}                    
-                       else
-                       {
-                           jQueryAlert("SYS_INVALID_PAGE_VIEW");
-                       }
-                       return false;
+                            }
+                        }
+                        else {
+                            checkbox.prop("checked", true);
+                        }
+
+                        alert(data);
+                        return false;
                     }
+                    return true;
+                }
             });
-        });
+        });';
 
-        $("a[rel=\'lnkNewUser\']").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
-     });            
-//--></script>';
-        
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-echo '<h1>'. $gLayout['title']. '</h1>';
+    $page->addJavascript($javascriptCode, true);
 
-//Suchleiste
-echo '
-<form id="memsearch_form">
-    <ul class="iconTextLinkList">
-        <li>'.$gL10n->get('SYS_SEARCH').': <input type="text" name="mem_search" id="mem_search" /></li>
-        <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /><label for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label></li>
+    // show back link
+    $page->addHtml($gNavigation->getHtmlBackButton());
+
+    // add headline and title of module
+    $page->addHeadline($headline);
+
+    //Suchleiste
+    $page->addHtml('
+    <ul class="admIconTextLinkList">
         <li>
-	        <span class="iconTextLink" id="add_user_link" style="display: none;">
-		        <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MEM_CREATE_USER').'" /></a>
-		        <a rel="lnkNewUser" href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$gL10n->get('MEM_CREATE_USER').'</a>
-	        </span>
-        </li>
-    </ul>
-</form>';
-
-//ladebalken
-echo '<img src="'.THEME_PATH.'/images/loading_animation.gif" alt="'.$gL10n->get('SYS_PROGRESS_BAR').'" id="list_load_animation"/>';
-
-//Liste mit Namen zu abhaken
-echo '<form id="memlist_form"></form>';
-
-// Zurueck-Button nur anzeigen, wenn MyList nicht direkt aufgerufen wurde
-if($gNavigation->count() > 1)
-{
-    echo '
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
+            <span class="admIconTextLink" id="add_user_link">
+                <a href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MEM_CREATE_USER').'" /></a>
+                <a href="'.$g_root_path.'/adm_program/administration/members/members_new.php">'.$gL10n->get('MEM_CREATE_USER').'</a>
             </span>
         </li>
-    </ul>';
+        <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /><label for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label></li>
+    </ul>');
+
+    if($gDb->num_rows($resultUser)>0)
+    {
+        // create table object
+        $table = new HtmlTable('tbl_assign_role_membership', true, $page);
+        $table->highlightSelectedRow(true);
+
+        // create column header to assign role leaders
+        $htmlLeaderColumn = $gL10n->get('SYS_LEADER');
+        
+        // show icon that leaders have no additional rights
+        if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
+        {
+            $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/info.png"
+                alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
+        }
+
+        // show icon with edit user right if leader has this right
+        if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
+        || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+        {
+            $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
+                alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
+        }
+
+        // show icon with assign role right if leader has this right
+        if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
+        || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+        {
+            $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/roles.png"
+                alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+        }
+
+        
+        // create array with all column heading values
+        $columnHeading = array(
+            '<img class="iconInformation"
+                src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
+                title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
+            $gL10n->get('SYS_MEMBER'),
+            $gL10n->get('SYS_LASTNAME'),
+            $gL10n->get('SYS_FIRSTNAME'),
+            '<img class="iconInformation" src="'. THEME_PATH. '/icons/map.png"
+                alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
+            $gL10n->get('SYS_BIRTHDAY'),
+            $htmlLeaderColumn);
+            
+        $table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'center'));
+        $table->setDatatablesOrderColumns(array(3, 4));
+        $table->addRowHeadingByArray($columnHeading);
+
+        // show rows with all organization users
+        while($user = $gDb->fetch_array($resultUser))
+        {
+            $addressText  = '';
+            $htmlAddress  = '$nbsp;';
+            $htmlBirthday = '&nbsp;';
+            
+            // create string with user address
+            if(strlen($user['address']) > 0)
+            {
+                $addressText = $user['address'];
+            }
+            if(strlen($user['zip_code']) > 0 || strlen($user['city']) > 0)
+            {
+                $addressText = $addressText. ' - '. $user['zip_code']. ' '. $user['city'];
+            }
+            if(strlen($user['country']) > 0)
+            {
+                $addressText = $addressText. ' - '. $user['country'];
+            }
+
+            // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
+            if($user['member_this_orga'] > 0)
+            {
+                $icon = 'profile.png';
+                $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
+            }
+            else
+            {
+                $icon = 'no_profile.png';
+                $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
+            }
+
+            // Haekchen setzen ob jemand Mitglied ist oder nicht
+            if($user['member_this_role'])
+            {
+                $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
+            }
+            else
+            {
+                $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
+            }
+
+            if(strlen($addressText) > 0)
+            {
+                $htmlAddress = '<img class="iconInformation" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
+            }
+            
+            //Haekchen setzen ob jemand Leiter ist oder nicht
+            if($user['leader_this_role'])
+            {
+                $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
+            }
+            else
+            {
+                $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
+            }
+
+            
+            //Geburtstag nur ausgeben wenn bekannt
+            if(strlen($user['birthday']) > 0)
+            {
+                $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d', 'date');
+                $htmlBirthday = $birthdayDate->format($gPreferences['system_date']);
+            }
+
+            
+            // create array with all column values
+            $columnValues = array(
+                '<img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
+                $htmlMemberStatus,
+                $user['last_name'],
+                $user['first_name'],
+                $htmlAddress,
+                $htmlBirthday,
+                $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
+                
+            $table->addRowByArray($columnValues, 'userid_'.$user['usr_id']);        
+        }//End While
+
+        $page->addHtml($table->show(false));
+        $page->addHtml('<p>'.$gL10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>');
+    }
+    else
+    {
+        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES_FOUND').'</p>');
+    }
+
+    $page->show();
 }
-
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-
 ?>

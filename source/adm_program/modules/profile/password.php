@@ -20,7 +20,7 @@ require_once('../../system/login_valid.php');
 
 header('Content-type: text/html; charset=utf-8'); 
 
-$gMessage->setExcludeThemeBody();
+$gMessage->showThemeBody(false);
  
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
@@ -97,7 +97,7 @@ if($getMode == 1)
     }
 	if ($getInline == 0)
 	{
-		$gMessage->setExcludeThemeBody();
+		$gMessage->showThemeBody(false);
 		$gMessage->show($phrase);
 	}
 	else

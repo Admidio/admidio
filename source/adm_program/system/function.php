@@ -394,7 +394,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 				
 				if($objEnglishDate->valid() == false)
 				{
-					$errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT');
+					$errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
 				}
 			}
 		}
@@ -433,13 +433,10 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 	{
 	   if($directOutput == true)
 	   {
-	       echo $errorMessage;
-	       exit();
+           $gMessage->showTextOnly(true);
 	   }
-	   else
-	   {
-	       $gMessage->show($errorMessage);
-	   }
+       
+       $gMessage->show($errorMessage);
 	}
 	
 	return $defaultValue;

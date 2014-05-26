@@ -34,7 +34,8 @@ class Message
     private $inline;            // wird ermittelt, ob bereits eine Ausgabe an den Browser erfolgt ist
     private $forwardUrl;        // Url auf die durch den Weiter-Button verwiesen wird
     private $timer;             // Anzahl ms bis automatisch zu forwardUrl weitergeleitet wird
-    private $includeThemeBody;  // bindet header, body_top & body_bottom in der Anzeige mit ein
+    private $includeThemeBody;  ///< Includes the header and body of the theme to the message. This will be included as default.
+    private $showTextOnly;      ///< If set to true then no html elements will be shown, only the pure text message.
     
     private $showButtons;       // Buttons werden angezeigt
     private $showYesNoButtons;  // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
@@ -49,6 +50,7 @@ class Message
         $this->showYesNoButtons = false;
         $this->showCloseButton  = false;
         $this->includeThemeBody = true;
+        $this->showTextOnly     = false;
     }
 
     /** No button will be shown in the message window.
@@ -64,15 +66,6 @@ class Message
     public function setCloseButton()
     {
         $this->showCloseButton = true;
-    }
-    
-    /** If set no theme files like my_header.php, my_body_top.php and my_body_bottom.php 
-     *  will be integrated in the page. This setting is usefull if the message should be loaded in 
-     *  a small window.
-     */
-    public function setExcludeThemeBody()
-    {
-        $this->includeThemeBody = false;
     }
     
     /** Set a URL to which the user should be directed if he confirmed the message.
@@ -222,13 +215,42 @@ class Message
 			}
 		$html .= '</div>';
         
-        if($this->inline == false)
+        if($this->showTextOnly == true)
         {
-            // now show html page
+            // show the pure message text without any html
+            echo strip_tags($content);
+        }
+        elseif($this->inline == true)
+        {
+            // show the message in html but without the theme specific header and body
+            echo $html;
+        }
+        else
+        {
+            // show a Admidio html page with complete theme header and body
             $page->addHtml($html);
             $page->show();
-            exit();
         }
+        exit();
+    }
+     
+    /** If set no theme files like my_header.php, my_body_top.php and my_body_bottom.php 
+     *  will be integrated in the page. This setting is usefull if the message should be loaded in 
+     *  a small window.
+     *  @param $showTheme If set to true than theme body and header will be shown. Otherwise this will be hidden.
+     */
+    public function showThemeBody($showTheme)
+    {
+        $this->includeThemeBody = $showTheme;
+    }
+   
+    /** If this will be set then no html elements will be shown in the output,
+     *  only pure text. This is useful if you have a script that is used in ajax mode.
+     *  @param $showText If set to true than only the message text without any html will be shown.
+     */
+    public function showTextOnly($showText)
+    {
+        $this->showTextOnly = $showText;
     }
 }
 ?>
