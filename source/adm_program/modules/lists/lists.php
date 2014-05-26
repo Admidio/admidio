@@ -210,7 +210,7 @@ foreach($listsResult['recordset'] as $row)
         if($role->allowedToAssignMembers($gCurrentUser))
         {
             $page->addHtml('
-            <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$role->getValue('rol_id').'"><img 
+            <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img 
                 src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
         }
     $page->addHtml('</div>

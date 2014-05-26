@@ -194,10 +194,10 @@ else
         // change mode of users that should be shown
         $("#mem_show_all").click(function(){
             if($("#mem_show_all").is(":checked")) {
-                window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$getRoleId.'&mem_show_all=1");
+                window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=1");
             }
             else {
-                window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members.php?rol_id='.$getRoleId.'&mem_show_all=0");
+                window.location.replace("'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$getRoleId.'&mem_show_all=0");
             }
         });
 
@@ -226,7 +226,7 @@ else
 
             // change data in database
             $.ajax({
-                url: "'.$g_root_path.'/adm_program/modules/lists/members.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
+                url: "'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?mode=assign&rol_id='.$getRoleId.'&usr_id="+userid,
                 type: "POST",
                 data: "member_"+userid+"="+member_checked+"&leader_"+userid+"="+leader_checked,
                 async: false,
