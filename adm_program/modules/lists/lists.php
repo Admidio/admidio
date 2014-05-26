@@ -204,10 +204,10 @@ foreach($listsResult as $row)
 			// show link to export vCard if user is allowed to see members and the role has members
             if($row['num_members'] > 0 || $row['num_leader'] > 0)
             {
-                $page->addHtml('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
+                echo '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
                             src="'. THEME_PATH. '/icons/vcard.png"
                             alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
-                            title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"/></a>');
+                            title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"/></a>';
             }
 			
             //Mail an Rolle schicken
