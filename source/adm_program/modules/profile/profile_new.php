@@ -536,9 +536,9 @@ echo '
                                         <dt><label>'.$gL10n->get('SYS_PASSWORD').':</label></dt>
                                         <dd>
                                             <span class="iconTextLink">
-                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '&amp;inline=1"><img 
+                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '"><img 
                                                 	src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>
-                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '&amp;inline=1">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>
+                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>
                                             </span>
                                         </dd>
                                     </dl>

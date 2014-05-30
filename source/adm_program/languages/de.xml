@@ -39,6 +39,7 @@
     <text id="PHO_SAVE_ORIGINALS" development="new" translation="todo">Originale speichern</text>
     <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
+    <text id="PRO_EXPORT_VCARD" development="new" translation="todo">vCard exportieren</text>
     <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
@@ -980,7 +981,7 @@
     <text id="PRO_EDIT_PROFILE" development="new" translation="todo">Profil bearbeiten</text>
     <text id="PRO_EDIT_PROFILE_PIC_FROM" development="new" translation="todo">Profilfoto von %VAR1% %VAR2% bearbeiten</text>
     <text id="PRO_EXPORT_VCARD_FROM_VAR" development="new" translation="todo">vCard von %VAR1% exportieren</text>
-      <text id="PRO_FIELD_NUMERIC" development="new" translation="todo" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
+    <text id="PRO_FIELD_NUMERIC" development="new" translation="todo" description="nur auf Fett gesetzt">Das Feld %VAR1_BOLD% darf nur Zahlen enthalten.\nKorrigiere bitte deine Eingabe.</text>
     <text id="PRO_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften</text>
     <text id="PRO_LOCATION_PROFILE_PICTURES" development="new" translation="todo">Speicherort der Profilbilder</text>
     <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)</text>

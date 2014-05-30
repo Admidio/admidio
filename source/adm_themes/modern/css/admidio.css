@@ -159,6 +159,7 @@ a:hover, a:active {
 .admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation img {
     border: none;
     vertical-align: text-top;
+    padding-left: 1px;
     padding-right: 1px;
     width: 16px;
     height: 16px;
@@ -187,7 +188,7 @@ a:hover, a:active {
 
 /* Style for the popup messagebox and popup messagebox */
 
-.admMessage {
+.admMessage, .admPopupWindow {
     max-width: 600px;
 	text-align: left;
 }
@@ -203,7 +204,7 @@ a:hover, a:active {
     width: 80%;
 }
 
-.admPopupMessage  * .admIconTextLinkList {
+.admPopupWindow  * .admIconTextLinkList {
     margin-left: 20%;
 }
 
@@ -229,14 +230,15 @@ a:hover, a:active {
 
 .admFieldRow {
     clear: both;
-    margin: 10px 0px;
+    margin: 5px 0px;
+    text-align: left;
 }
    
 .admFieldLabel {
     float: left;
 	display: inline-block;
     width: 30%;
- 	padding-top: 10px;
+ 	padding-top: 5px;
 }
 
 .admFieldElement {
@@ -317,6 +319,8 @@ a:hover, a:active {
     vertical-align: text-top;
     border-width: 0px;
     margin-right: 5px;
+    width: 16px;
+    height: 16px;
 }
 
 .admFieldElement.admMandatory:after, .admMandatoryDefinition span:after {
@@ -539,6 +543,23 @@ a:hover, a:active {
 
 #login_registration_link, #login_admidio_link {
     margin-top: 15px;
+}
+
+#profile_master_data {
+	min-height: 200px;
+}
+
+.admProfileRolesBox .admFieldLabel {
+    width: 50% !important;
+}
+
+.admProfileRolesBox .admFieldElement  {
+    width: 50% !important;
+    text-align: right;
+}
+
+#password_form .admPasswordInput {
+    width: 85%;
 }
 
 .admListsLink {

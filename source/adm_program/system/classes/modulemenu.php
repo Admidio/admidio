@@ -94,6 +94,14 @@ class ModuleMenu
 		$this->items[$id] = $this->mkItem($id, 'link', $link, $text, $icon, $js);
 	}
     
+    /** Count the number of menu items.
+     *  @return Returns the number of menu items.
+     */
+    public function countItems()
+    {
+        return count($this->items);
+    }
+    
 	/** creates a drop down menu
 	 *  @param $ddIdName     html id name of drop down menu
 	 *  @param $ddSelectText pre select text of drop down menu 

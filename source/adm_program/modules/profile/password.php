@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Passwort neu vergeben
+ * Change password
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,10 +8,9 @@
  *
  * Parameters:
  *
- * usr_id     - Passwort der übergebenen User-Id aendern
- * mode   : 0 - (Default) Anzeige des Passwordaenderungsformulars
- *          1 - Passwortaenderung wird verarbeitet
- * inline : 1 - für z.B.: colorbox nur Content ohne Header wird angezeigt
+ * usr_id           : Id of the user whose password should be changed
+ * mode    - html   : Default mode to show a html form to change the password
+ *           change : Change password in database
  *
  *****************************************************************************/
  
@@ -24,17 +23,16 @@ $gMessage->showThemeBody(false);
  
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
-$getInline = admFuncVariableIsValid($_GET, 'inline', 'numeric', 1);
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', 'html', false, array('html', 'change'));
 
-// nur Webmaster duerfen fremde Passwoerter aendern
-if($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
+// only the own password could be individual set. Webmaster could only send a generated password.
+if($gCurrentUser->getValue('usr_id') != $getUserId)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
 
-if($getMode == 1)
+if($getMode == 'change')
 {
     /***********************************************************************/
     /* Formular verarbeiten */
@@ -46,11 +44,11 @@ if($getMode == 1)
     
     if( (strlen($_POST['old_password']) > 0 || $gCurrentUser->isWebmaster() )
     && strlen($_POST['new_password']) > 0
-    && strlen($_POST['new_password2']) > 0)
+    && strlen($_POST['new_password_confirm']) > 0)
     {
         if(strlen($_POST['new_password']) > 5)
         {
-            if ($_POST['new_password'] == $_POST['new_password2'])
+            if ($_POST['new_password'] == $_POST['new_password_confirm'])
             {
                 // pruefen, ob altes Passwort korrekt eingegeben wurde              
                 $user = new User($gDb, $gProfileFields, $getUserId);
@@ -95,80 +93,28 @@ if($getMode == 1)
     {
         $phrase = $gL10n->get('SYS_FIELDS_EMPTY');
     }
-	if ($getInline == 0)
-	{
-		$gMessage->showThemeBody(false);
-		$gMessage->show($phrase);
-	}
-	else
-	{
-		echo $phrase;
-	}
+
+    echo $phrase;
 }
-else
+elseif($getMode == 'html')
 {
     /***********************************************************************/
-    /* Passwortformular anzeigen */
+    /* Show password form */
     /***********************************************************************/
-    
-    // Html-Kopf ausgeben
-    $gLayout['title']    = $gL10n->get('PRO_EDIT_PASSWORD');
-    $gLayout['includes'] = false;
-    if ($getInline == 0)
-	{
-		require(SERVER_PATH. '/adm_program/system/overall_header.php');
-	}
 
-    // Html des Modules ausgeben
+    // show headline 
     echo '
-    <form id="passwordForm" action="'. $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $getUserId. '&amp;mode=1&amp;inline=1" method="post">
-    <div class="formLayout" id="password_form" style="width: 320px">
-        <div class="formHead">'. $gLayout['title']. '</div>
-        <div class="formBody">
-            <ul class="formFieldList">';
-                if($gCurrentUser->getValue('usr_id') == $getUserId )
-                {
-                echo'
-                    <li>
-                        <dl>
-                            <dt><label for="old_password">'.$gL10n->get('PRO_CURRENT_PASSWORD').':</label></dt>
-                            <dd><input type="password" id="old_password" name="old_password" size="12" />
-                                <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span></dd>
-                        </dl>
-                    </li>
-                    <li><hr /></li>';
-                }    
-                echo'
-                <li>
-                    <dl>
-                        <dt><label for="new_password">'.$gL10n->get('PRO_NEW_PASSWORD').':</label></dt>
-                        <dd><input type="password" id="new_password" name="new_password" size="12" />
-                            <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                            <img onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" />
-                        </dd>
-                    </dl>
-                </li>
-                <li>
-                    <dl>
-                        <dt><label for="new_password2">'.$gL10n->get('SYS_REPEAT').':</label></dt>
-                        <dd><input type="password" id="new_password2" name="new_password2" size="12" />
-                            <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span></dd>
-                    </dl>
-                </li>
-            </ul>
-
-            <hr />
-
-            <div class="formSubmit">
-                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-            </div>
-        </div>
-    </form>';
-    if ($getInline == 0)
-	{  
-		require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-	}
+    <div class="admPopupWindow">
+        <h1 class="admHeadline">'.$gL10n->get('PRO_EDIT_PASSWORD').'</h1>';
+        // show form
+        $form = new HtmlForm('password_form', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
+        $form->addPasswordInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), FIELD_MANDATORY, null, 'admTextInputSmall');
+        $form->addLine();
+        $form->addPasswordInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), FIELD_MANDATORY, 'PRO_PASSWORD_DESCRIPTION', 'admTextInputSmall');
+        $form->addPasswordInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), FIELD_MANDATORY);
+        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+        $form->show();
+    echo '</div>';
 }
 
 ?>

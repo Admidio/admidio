@@ -180,30 +180,22 @@ foreach($listsResult['recordset'] as $row)
         {
             $page->addHtml('<strong class="admBigFont admListsLink">'. $role->getValue('rol_name'). '</strong>');
         }
-		
-		// show link to export vCard if user is allowed to see members and the role has members
-        if($row['num_members'] > 0 || $row['num_leader'] > 0)
-        {
-            $page->addHtml('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
-                            src="'. THEME_PATH. '/icons/vcard.png"
-                            alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
-                            title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"/></a>');
-        }
 
-        //Mail an Rolle schicken
+        // send a mail to all role members
         if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
         {
             $page->addHtml('
             <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/mail/mail.php?rol_id='.$role->getValue('rol_id').'"><img
                 src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>');
         }
-
-        // edit roles of you are allowed to assign roles
-        if($gCurrentUser->manageRoles())
+		
+		// show link to export vCard if user is allowed to see members and the role has members
+        if($row['num_members'] > 0 || $row['num_leader'] > 0)
         {
-            $page->addHtml('
-            <a class="admIconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
-                src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('SYS_SETTINGS').'" title="'.$gL10n->get('SYS_SETTINGS').'" /></a>');
+            $page->addHtml('<a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
+                            src="'. THEME_PATH. '/icons/vcard.png"
+                            alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
+                            title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'" /></a>');
         }
 
         // link to assign or remove members if you are allowed to do it
@@ -212,6 +204,14 @@ foreach($listsResult['recordset'] as $row)
             $page->addHtml('
             <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img 
                 src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
+        }
+
+        // edit roles of you are allowed to assign roles
+        if($gCurrentUser->manageRoles())
+        {
+            $page->addHtml('
+            <a class="admIconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
+                src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('ROL_EDIT_ROLE').'" title="'.$gL10n->get('ROL_EDIT_ROLE').'" /></a>');
         }
     $page->addHtml('</div>
     

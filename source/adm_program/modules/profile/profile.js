@@ -22,7 +22,7 @@ function profileJSClass()
 	{
 		$("a[rel='colorboxContent']").colorbox({rel:'nofollow'});
 		$("a[rel='colorboxRoles']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadRolesAppend()}});
-		$("a[rel='colorboxPWContent']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
+		$("#menu_item_password span a").colorbox({width:'50%',rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
         $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',scrolling:false,onComplete:function(){$("#admButtonNo").focus();}});
 	}
 	this.reloadRoleMemberships = function()
@@ -155,8 +155,10 @@ function profileJSClass()
 	}
 	this.jQueryAjaxLoadPWAppend = function()
 	{
+        $("#password_form:first *:input[type!=hidden]:first").focus();
 		$("#cboxLoadedContent").append('\n<div id="colorBox_resultInfo"></div>');
-		$("#passwordForm").ajaxForm({ 
+        $.fn.colorbox.resize();
+		$("#password_form").ajaxForm({ 
 			target:        '#colorBox_resultInfo',  							 // target element(s) to be updated with server response 
 			beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 
 				$("#colorBox_resultInfo").css({ "display":"block" });
