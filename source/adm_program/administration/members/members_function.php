@@ -182,26 +182,26 @@ elseif($getMode == 4)
 
     if($gPreferences['enable_system_mails'] == 1)
     {
-        // neues Passwort generieren und abspeichern
-        $password = substr(md5(time()), 0, 8);
-        $user->setValue('usr_password', $password);
-        $user->save();
+        try
+        {
+            // neues Passwort generieren und abspeichern
+            $password = substr(md5(time()), 0, 8);
+            $user->setValue('usr_password', $password);
+            $user->save();
+    
+            // Mail an den User mit den Loginaten schicken
+            $sysmail = new SystemMail($gDb);
+            $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
+            $sysmail->setVariable(1, $password);
+            $sysmail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
 
-        // Mail an den User mit den Loginaten schicken
-        $sysmail = new SystemMail($gDb);
-        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-        $sysmail->setVariable(1, $password);
-        $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_NEW_PASSWORD', $user);
-        if($sendMailResult == true)
-        {
-            $phrase = $gL10n->get('SYS_EMAIL_SEND', $user->getValue('EMAIL'));
+            $gMessage->setForwardUrl($gNavigation->getUrl());
+            $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $user->getValue('EMAIL')));
         }
-        else
+        catch(AdmException $e)
         {
-            $phrase = $gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL'), $sendMailResult);
-        }
-        $gMessage->setForwardUrl($gNavigation->getUrl());
-        $gMessage->show($phrase);
+            $e->showText();
+        } 
     }
 }
 elseif($getMode == 5)

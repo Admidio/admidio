@@ -91,18 +91,19 @@ if($getMode == 1 || $getMode == 3)
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($gPreferences['enable_system_mails'] == 1)
     {
-        // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
-        $sysmail = new SystemMail($gDb);
-        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-        $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
-        if($sendMailResult == true)
+        try
         {
-            $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL'));
+            // Mail an den User schicken, um die Anmeldung bwz. die Zuordnung zur neuen Orga zu bestaetigen
+            $sysmail = new SystemMail($gDb);
+            $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
+            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $user);
+
+            $gMessage->show($gL10n->get('NWU_ASSIGN_LOGIN_EMAIL', $user->getValue('EMAIL')));
         }
-        else
+        catch(AdmException $e)
         {
-            $gMessage->show($gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL'), $sendMailResult));
-        }
+            $e->showText();
+        } 
     }
     else
     {

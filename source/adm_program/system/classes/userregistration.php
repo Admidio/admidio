@@ -92,11 +92,7 @@ class UserRegistration extends User
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
-            $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this);
-            if(strlen($sendMailResult) > 1)
-            {
-                throw new AdmException('SYS_EMAIL_NOT_SEND', $this->getValue('EMAIL'), $sendMailResult);
-            }
+            $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_USER', $this);
         }
 
 		return true;
@@ -140,11 +136,7 @@ class UserRegistration extends User
             // send mail to user that his registration was accepted
             $sysmail = new SystemMail($this->db);
             $sysmail->addRecipient($this->getValue('EMAIL'), $this->getValue('FIRST_NAME'). ' '. $this->getValue('LAST_NAME'));
-            $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this);
-            if(strlen($sendMailResult) > 1)
-            {
-                throw new AdmException('SYS_EMAIL_NOT_SEND', $userEmail, $sendMailResult);
-            }
+            $sysmail->sendSystemMail('SYSMAIL_REFUSE_REGISTRATION', $this);
         }        
         
         return $return;	
@@ -216,11 +208,7 @@ class UserRegistration extends User
                     $sysmail = new SystemMail($this->db);
                     $sysmail->addRecipient($row['email'], $row['first_name']. ' '. $row['last_name']);
 
-                    $sendMailResult = $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this);
-                    if(strlen($sendMailResult) > 1)
-                    {
-                        throw new AdmException('SYS_EMAIL_NOT_SEND', $row['email'], $sendMailResult);
-                    }
+                    $sysmail->sendSystemMail('SYSMAIL_REGISTRATION_WEBMASTER', $this);
                 }
             }
 		}

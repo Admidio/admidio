@@ -39,61 +39,63 @@ if($gValidLogin)
 
 if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
 {
-	// search for user with the email address that have a valid login and membership to a role
-    $sql = 'SELECT usr_id
-              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-              JOIN '. TBL_USER_DATA. ' as email
-                ON email.usd_usr_id = usr_id
-               AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
-               AND email.usd_value  = \''.$_POST['recipient_email'].'\'
-             WHERE rol_cat_id = cat_id
-               AND rol_valid   = 1
-               AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
-                   OR cat_org_id IS NULL )
-               AND rol_id     = mem_rol_id
-               AND mem_begin <= \''.DATE_NOW.'\'
-               AND mem_end    > \''.DATE_NOW.'\'
-               AND mem_usr_id = usr_id
-               AND usr_valid  = 1
-			   AND LENGTH(usr_login_name) > 0 
-			 GROUP BY usr_id';   
-    $result = $gDb->query($sql);
-	$count  = $gDb->num_rows();
-
-	// show error if no user found or more than one user found
-    if($count == 0)
+    try
     {
-        $gMessage->show($gL10n->get('SYS_LOSTPW_EMAIL_ERROR', $_POST['recipient_email']));    
-    }
-	elseif($count > 1)
-	{
-        $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));    
-	}
-
-    $row  = $gDb->fetch_array($result);
-    $user = new User($gDb, $gProfileFields, $row['usr_id']);
-
-	// create and save new password and activation id
-    $new_password  = generatePassword();
-    $activation_id = generateActivationId($user->getValue('EMAIL'));
-    $user->setValue('usr_new_password', $new_password);
-    $user->setValue('usr_activation_code', $activation_id);
+    	// search for user with the email address that have a valid login and membership to a role
+        $sql = 'SELECT usr_id
+                  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
+                  JOIN '. TBL_USER_DATA. ' as email
+                    ON email.usd_usr_id = usr_id
+                   AND email.usd_usf_id = '.$gProfileFields->getProperty('EMAIL', 'usf_id').'
+                   AND email.usd_value  = \''.$_POST['recipient_email'].'\'
+                 WHERE rol_cat_id = cat_id
+                   AND rol_valid   = 1
+                   AND (  cat_org_id = '.$gCurrentOrganization->getValue('org_id').'
+                       OR cat_org_id IS NULL )
+                   AND rol_id     = mem_rol_id
+                   AND mem_begin <= \''.DATE_NOW.'\'
+                   AND mem_end    > \''.DATE_NOW.'\'
+                   AND mem_usr_id = usr_id
+                   AND usr_valid  = 1
+    			   AND LENGTH(usr_login_name) > 0 
+    			 GROUP BY usr_id';   
+        $result = $gDb->query($sql);
+    	$count  = $gDb->num_rows();
     
-    $sysmail = new SystemMail($gDb);
-    $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-    $sysmail->setVariable(1, $new_password);
-    $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activation_id);
-    if($sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user) == true)
-    {
-        $user->save();
+    	// show error if no user found or more than one user found
+        if($count == 0)
+        {
+            $gMessage->show($gL10n->get('SYS_LOSTPW_EMAIL_ERROR', $_POST['recipient_email']));    
+        }
+    	elseif($count > 1)
+    	{
+            $gMessage->show($gL10n->get('SYS_LOSTPW_SEVERAL_EMAIL', $_POST['recipient_email']));    
+    	}
+    
+        $row  = $gDb->fetch_array($result);
+        $user = new User($gDb, $gProfileFields, $row['usr_id']);
+    
+    	// create and save new password and activation id
+        $new_password  = generatePassword();
+        $activation_id = generateActivationId($user->getValue('EMAIL'));
+        $user->setValue('usr_new_password', $new_password);
+        $user->setValue('usr_activation_code', $activation_id);
+        
+        $sysmail = new SystemMail($gDb);
+        $sysmail->addRecipient($user->getValue('EMAIL'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
+        $sysmail->setVariable(1, $new_password);
+        $sysmail->setVariable(2, $g_root_path.'/adm_program/system/password_activation.php?usr_id='.$user->getValue('usr_id').'&aid='.$activation_id);
+        $sysmail->sendSystemMail('SYSMAIL_ACTIVATION_LINK', $user);
 
+        $user->save();
+    
         $gMessage->setForwardUrl($g_root_path.'/adm_program/system/login.php');
         $gMessage->show($gL10n->get('SYS_LOSTPW_SEND',$_POST['recipient_email']));
     }
-    else
+    catch(AdmException $e)
     {
-        $gMessage->show($gL10n->get('SYS_LOSTPW_SEND_ERROR',$_POST['recipient_email'])); 
-    }
+        $e->showText();
+    } 
 }
 else
 {

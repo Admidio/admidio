@@ -172,10 +172,26 @@ if($gCurrentUser->editProfile($user))
 }
 
 // if user has right then show link to edit password
-if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id') || $gCurrentUser->isWebmaster())
+// webmasters could send a new password to members of their organization
+if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 {
 	$profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'), 
 						$gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');
+}
+elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id')) 
+&& strlen($user->getValue('usr_login_name')) > 0)
+{
+    // if user has no email or send email is disabled then webmaster could set a new password
+    if(strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
+    {
+    	$profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$user->getValue('usr_id').'&amp;mode=5', 
+    						$gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
+    }
+    else
+    {
+    	$profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'), 
+    						$gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');        
+    }
 }
 
 // show link to export the profile as vCard

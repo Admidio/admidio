@@ -115,7 +115,14 @@ class SystemMail extends Email
         $this->setSubject($this->smMailHeader);
         $this->setText($this->smMailText);
 
-        return $this->sendEmail();
+        $returnMessage = $this->sendEmail();
+        
+        // if something went wrong then throw an exception with the error message
+        if($returnMessage != true)
+        {
+            throw new AdmException('SYS_EMAIL_NOT_SEND', $user->getValue('EMAIL'), $this->sendEmail());
+        }
+        return true;
     }
 }
 ?>

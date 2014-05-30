@@ -26,7 +26,8 @@ $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', 'html', false, array('html', 'change'));
 
 // only the own password could be individual set. Webmaster could only send a generated password.
-if($gCurrentUser->getValue('usr_id') != $getUserId)
+if(($gCurrentUser->getValue('usr_id') != $getUserId && $gCurrentUser->isWebmaster() == false)
+ || isMember($getUserId) == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
