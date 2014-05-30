@@ -460,9 +460,16 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
         }
 
         // if html mode and the role has leaders then group all data between leaders and members
-        if($getMode == 'html' && $row['mem_leader'] != 0)
+        if($getMode == 'html')
         {
-            $table->setDatatablesGroupColumn(2);
+            if($row['mem_leader'] != 0)
+            {
+                $table->setDatatablesGroupColumn(2);
+            }
+            else
+            {
+                $table->setDatatablesHideColumns(2);                
+            }
         }
 
         $columnValues = array();

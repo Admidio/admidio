@@ -232,6 +232,10 @@ class HtmlTable extends HtmlTableBasic
                 $this->hiddenColumns[] = ($column-1);
             }
         }
+        elseif(is_numeric($arrayHideColumns))
+        {
+            $this->hiddenColumns[] = ($arrayHideColumns-1);            
+        }
     }
     
     /** Set the order of the columns which should be used to sort the rows.
@@ -239,6 +243,8 @@ class HtmlTable extends HtmlTableBasic
      *                            ascending ordered or contain arrays where each array 
      *                            contain the column and the sorting 'asc' or 'desc'. The columns
      *                            of the table starts with 1 (not 0).
+     *                            Optional this could also only be a numeric value than the
+     *                            datatable will be ordered by the number of this column ascending.
      *  @par Examples
      *  @code $table = new HtmlTable('simple-table');
      *  // sort all rows after first and third column ascending
@@ -300,7 +306,7 @@ class HtmlTable extends HtmlTableBasic
             {
                 foreach($this->orderColumns as $columnNumber => $order)
                 {
-                    $datatablesOrder .= ', ['.$columnNumber.', \''.$order.'\']';
+                    $datatablesOrder .= ', ['.$columnNumber.', "'.$order.'"]';
                 }
                 
                 // remove leading comma from string
@@ -309,7 +315,7 @@ class HtmlTable extends HtmlTableBasic
                 // grouped column must be first order column
                 if($this->groupedColumn >= 0)
                 {
-                    $datatablesOrder = ' ['.$this->groupedColumn.', \'asc\'], '.$datatablesOrder;
+                    $datatablesOrder = ' ['.$this->groupedColumn.', "asc"], '.$datatablesOrder;
                 }
                 
                 $datatablesOrder = ' "order": ['.$datatablesOrder.'], ';
