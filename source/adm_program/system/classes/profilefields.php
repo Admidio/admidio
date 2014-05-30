@@ -517,7 +517,7 @@ class ProfileFields
 			$returnCode = $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->setValue('usd_value', $fieldValue);
 		}
 		
-		if($returnCode && $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->columnsValueChanged)
+		if($returnCode && $this->mUserData[$this->mProfileFields[$fieldNameIntern]->getValue('usf_id')]->hasColumnsValueChanged())
 		{
             $this->columnsValueChanged = true;
 		}
