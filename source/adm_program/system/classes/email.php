@@ -86,6 +86,7 @@ class Email extends PHPMailer
         //Versandmethode festlegen        
         if($gPreferences['mail_send_method'] == 'SMTP')
         {
+			PHPMailerAutoload("smtp");
             $this->IsSMTP();
             try
             {
@@ -389,7 +390,7 @@ class Email extends PHPMailer
     public function sendEmail()
     {
         global $gPreferences, $gL10n;
-                        
+                      
         //Text in Nachricht einfügen
         if($this->emSendAsHTML)
         {
@@ -399,13 +400,13 @@ class Email extends PHPMailer
         {
             $this->Body = $this->emText;
         }
-        
+
         //Wenn es Bcc-Empfänger gibt
         if (isset($this->emBccArray))
         {
             //Bcc Array in Päckchen zerlegen
             $bccArrays =  array_chunk($this->emBccArray, $gPreferences['mail_bcc_count']);
-            
+
             foreach($bccArrays as $bccArray)
             {
                 //Alle BCCs entfernen
@@ -427,7 +428,6 @@ class Email extends PHPMailer
                 }
             }            
         }
-        
         //Einzelmailversand
         else
         {
@@ -440,7 +440,7 @@ class Email extends PHPMailer
                return $e->errorMessage();
             }    
         }    
-               
+     
         //Jetzt noch die Mail an den Kopieempfänger
         if ($this->emCopyToSender)
         {
