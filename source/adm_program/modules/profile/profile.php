@@ -587,9 +587,11 @@ $page->addHtml('
                                 calPopup.setCssPrefix("calendar");
                         </script>
                         <div style="text-align: right;">
-                            <a rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'">
-                                <img src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />
-                            </a>
+                            <span class="admIconTextLink">
+                                <a rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1"><img 
+                                    src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" /></a>
+                                <a rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1">'.$gL10n->get('SYS_EDIT').'</a>
+                            </span>
                         </div>');
                     }
             $page->addHtml('</div>

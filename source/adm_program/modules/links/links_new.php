@@ -78,7 +78,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('weblinks_edit_form', $g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$modeEditOrCreate);
+$form = new HtmlForm('weblinks_edit_form', $g_root_path.'/adm_program/modules/links/links_function.php?lnk_id='. $getLinkId. '&amp;headline='. $getHeadline. '&amp;mode='.$modeEditOrCreate, $page);
 $form->openGroupBox('gb_weblink_name');
 $form->addTextInput('lnk_name', $gL10n->get('LNK_LINK_NAME'), $link->getValue('lnk_name'), 250, FIELD_MANDATORY);
 $form->addTextInput('lnk_url', $gL10n->get('LNK_LINK_ADDRESS'), $link->getValue('lnk_url'), 250, FIELD_MANDATORY);

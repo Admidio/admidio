@@ -150,6 +150,10 @@ a:hover, a:active {
     font-size: 11pt;
 }
 
+.admIconTextLink {
+    font-weight: normal;
+}
+
 .admIconTextLink img {
     vertical-align: middle !important;
 }

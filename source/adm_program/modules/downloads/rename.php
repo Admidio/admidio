@@ -20,6 +20,16 @@ require_once('../../system/login_valid.php');
 $getFolderId = admFuncVariableIsValid($_GET, 'folder_id', 'numeric', 0);
 $getFileId   = admFuncVariableIsValid($_GET, 'file_id', 'numeric', 0);
 
+// set headline of the script
+if($getFileId > 0)
+{
+    $headline = $gL10n->get('DOW_EDIT_FILE');
+}
+else
+{
+    $headline = $gL10n->get('DOW_EDIT_FOLDER');
+}
+
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)
 {
@@ -48,7 +58,7 @@ if ( (!$getFileId && !$getFolderId) OR ($getFileId && $getFolderId) )
 }
 
 
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 if(isset($_SESSION['download_request']))
 {
@@ -61,7 +71,6 @@ else
    $form_values['new_description'] = null;
 }
 
-$extension ='';
 try
 {
     if ($getFileId) 
@@ -75,7 +84,6 @@ try
         if ($form_values['new_name'] == null) 
         {
             $form_values['new_name'] = admFuncGetFilenameWithoutExtension($originalName);
-            $extension = admFuncGetFilenameExtension($originalName);
         }
     
         if ($form_values['new_description'] == null) 
@@ -108,33 +116,23 @@ catch(AdmException $e)
 	$e->showHtml();
 }
 
-// show html head
-if($getFileId > 0)
-{
-    $gLayout['title']  = $gL10n->get('DOW_EDIT_FILE');
-}
-else
-{
-    $gLayout['title']  = $gL10n->get('DOW_EDIT_FOLDER');
-}
-$gLayout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js"></script>';
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create html page object
+$page = new HtmlPage();
 
 // show back link
-echo $gNavigation->getHtmlBackButton();
+$page->addHtml($gNavigation->getHtmlBackButton());
 
 // show headline of module
-echo '<h1 class="admHeadline">'.$gLayout['title'].'</h1>';
+$page->addHeadline($headline);
 
 // create html form
-$form = new HtmlForm('edit_download_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId);
+$form = new HtmlForm('edit_download_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId, $page);
 $form->addTextInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName, 0, FIELD_DISABLED);
 $form->addTextInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], 255, FIELD_MANDATORY, 'DOW_FILE_NAME_RULES');
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, 255);
 $form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
-$form->show();
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

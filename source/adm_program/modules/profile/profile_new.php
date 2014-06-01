@@ -30,6 +30,24 @@ $getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'boolean', 0);
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
+// set headline of the script
+if($getNewUser == 1)
+{
+    $headline = $gL10n->get('PRO_ADD_USER');
+}
+elseif($getNewUser == 2)
+{
+    $headline = $gL10n->get('SYS_REGISTRATION');
+}
+elseif($getUserId == $gCurrentUser->getValue('usr_id'))
+{
+    $headline = $gL10n->get('PRO_EDIT_MY_PROFILE');
+}
+else
+{
+    $headline = $gL10n->get('PRO_EDIT_PROFILE');
+}
+
 // if current user has no login then only show registration dialog
 if($gValidLogin == false)
 {
@@ -61,96 +79,71 @@ if($getUserId > 0 && $getNewUser != 0 && $getNewUser != 3)
  *  @param $getNewUser		The parameter @b new_user of the script @b profile_new.php
  *  @return Returns a string with the html of the profile field to add it to a html form
  */
-function getFieldCode($fieldNameIntern, $user, $getNewUser)
+function getFieldCode(&$form, $fieldNameIntern, $user, $getNewUser)
 {
     global $gPreferences, $g_root_path, $gCurrentUser, $gL10n, $gProfileFields;
-    $value    = '';
     
-	// disable field if this is configured in profile field configuration
-    $disabled = '';
+    $value         = '';
+    $fieldProperty = FIELD_DEFAULT;
+    $helpId        = null;
+    
     if($gProfileFields->getProperty($fieldNameIntern, 'usf_disabled') == 1 && $gCurrentUser->editUsers() == false && $getNewUser == 0)
     {
-		$disabled = ' disabled="disabled" ';
+    	// disable field if this is configured in profile field configuration
+        $fieldProperty = FIELD_DISABLED;
+    }
+    elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 1)
+    {
+        // set mandatory field
+        $fieldProperty = FIELD_MANDATORY;
+    }
+    
+    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_description')) > 0)
+    {
+        $helpId = array('user_field_description', $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'));
     }
 
     // code for different field types
     
     if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'COUNTRY')
     {
+        // get default country
+        $preassignedCountry = null;
+        
+		if($user->getValue('usr_id') == 0 && strlen($gPreferences['default_country']) > 0)
+		{
+    		$preassignedCountry = $gPreferences['default_country'];
+		}
+		elseif($user->getValue('usr_id') > 0 && strlen($user->getValue($fieldNameIntern)) > 0)
+		{
+    		$preassignedCountry = $user->getValue($fieldNameIntern);
+		}
+    
 		// create selectbox with all countries
-        $value = '
-		<select size="1" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" '.$disabled.'>
-			<option value="" ';
-                if(strlen($gPreferences['default_country']) == 0
-                && strlen($user->getValue($fieldNameIntern)) == 0)
-                {
-                    $value = $value. ' selected="selected" ';
-                }
-			$value = $value. '>- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-			
-			// first add default country to selectbox, so this country is very prominent to the user
-            if(strlen($gPreferences['default_country']) > 0)
-            {
-                $value = $value. ' <option value="">--------------------------------</option>
-				<option value="'. $gPreferences['default_country']. '">'. $gL10n->getCountryByCode($gPreferences['default_country']). '</option>
-                <option value="">--------------------------------</option>';
-            }
-			
-			// add all countries to selectbox and select the assigned or default country
-			foreach($gL10n->getCountries() as $key => $country_name)
-			{
-				$value = $value. '<option value="'.$key.'" ';
-				if($user->getValue('usr_id') == 0 && $key == $gPreferences['default_country'])
-				{
-					$value = $value. ' selected="selected" ';
-				}
-				if($user->getValue('usr_id') > 0 && $country_name == $user->getValue($fieldNameIntern))
-				{
-					$value = $value. ' selected="selected" ';
-				}
-				$value = $value. '>'.$country_name.'</option>';
-			}
-		$value = $value. '</select>';
+		$form->addSelectBox('usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'), $gProfileFields->getProperty($fieldNameIntern, 'usf_name'), 
+		    $gL10n->getCountries(), $fieldProperty, $preassignedCountry, true, $helpId);
     }
     elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'CHECKBOX')
     {
-        $mode = '';
-        if($user->getValue($fieldNameIntern) == 1)
-        {
-            $mode = ' checked="checked" ';
-        }
-        $value = '<input type="checkbox" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" '.$mode.' '.$disabled.' value="1" />';
+        $form->addCheckbox('usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'), $gProfileFields->getProperty($fieldNameIntern, 'usf_name'),
+            $user->getValue($fieldNameIntern), $fieldProperty, $helpId);
     }
     elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'DROPDOWN')
     {
-		$arrListValues = $gProfileFields->getProperty($fieldNameIntern, 'usf_value_list');
-		$position = 1;
-		$text     = '';
+		$arrListValues   = $gProfileFields->getProperty($fieldNameIntern, 'usf_value_list');
 		
-		$value = '<select size="1" name="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'" '.$disabled.'>
-			<option value="" ';
-                if(strlen($user->getValue($fieldNameIntern)) == 0)
-                {
-                    $value .= ' selected="selected" ';
-                }
-                if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 1)
-                {
-                    $text  .= '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -';
-                }
-			$value .= '>'.$text.'</option>';
-
-			// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
-			foreach($arrListValues as $key => $valueList)
-			{
-				$value .= '<option value="'.$position.'" '; 
-                if($user->getValue($fieldNameIntern, 'database') == $key) 
-				{
-					$value .= ' selected="selected"';
-				}
-				$value .= '>'.$valueList.'</option>';
-				$position++;
-			}
-		$value .= '</select>';
+        if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 1)
+        {
+            $setPleaseChoose = true;
+        }
+        else
+        {
+    		$setPleaseChoose = false;
+            $arrListValues = array('' => '')+$arrListValues;
+        }
+		
+		$form->addSelectBox('usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'), $gProfileFields->getProperty($fieldNameIntern, 'usf_name'), 
+		    $arrListValues, $fieldProperty, $user->getValue($fieldNameIntern, 'database'), $setPleaseChoose, $helpId);
 	}
     elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'RADIO_BUTTON')
     {
@@ -186,18 +179,8 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
     }
     elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'TEXT_BIG')
     {
-        $usfId = 'usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id');
-        $value = '<script type="text/javascript">
-                    $(document).ready(function(){
-                        $(\'#'.$usfId.'\').NobleCount(\'#'.$usfId.'_counter\',{
-                            max_chars: 255,
-                            on_negative: \'systeminfoBad\',
-                            block_negative: true
-                        });
-                    });
-                 </script>         
-        <textarea  name="'.$usfId.'" id="'.$usfId.'" '.$disabled.' style="width: 300px;" rows="2" cols="40">'. $user->getValue($fieldNameIntern).'</textarea>
-        (<span id="'.$usfId.'_counter" class="">255</span>)';
+        $form->addMultilineTextInput('usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'), $gProfileFields->getProperty($fieldNameIntern, 'usf_name'), 
+            $user->getValue($fieldNameIntern), 2, 255, $fieldProperty, $helpId);
     }
     else
     {
@@ -254,7 +237,8 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
         }
         else
         {
-            $value = '<input type="text" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" style="width: '.$width.';" maxlength="'.$maxlength.'" '.$disabled.' value="'. $user->getValue($fieldNameIntern). '" '.$disabled.' />';
+            $form->addTextInput('usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'), $gProfileFields->getProperty($fieldNameIntern, 'usf_name'),
+                $user->getValue($fieldNameIntern), $maxlength, $fieldProperty, $helpId);
         }
     }
     
@@ -264,32 +248,16 @@ function getFieldCode($fieldNameIntern, $user, $getNewUser)
     {
         $icon = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;';
     }
-        
-    // Kennzeichen fuer Pflichtfeld setzen
-    $mandatory = '';
-    if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 1)
-    {
-        $mandatory = '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
-    }
-    
-    // Fragezeichen mit Feldbeschreibung anzeigen, wenn diese hinterlegt ist
-    $description = '';
-    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_description')) > 0)
-    {
-        $description = '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'). '&amp;inline=true"><img 
-            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern'). '\',this)" onmouseout="ajax_hideTooltip()"
-            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>';
-    }
     
     // nun den Html-Code fuer das Feld zusammensetzen
-    $html = '<li>
+    /*$html = '<li>
                 <dl>
                     <dt><label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '">'. $icon. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). ':</label></dt>
                     <dd>'. $value. $mandatory. $description. '</dd>
                 </dl>
             </li>';
              
-    return $html;
+    return $html;*/
 }
 
 // read user data
@@ -328,7 +296,7 @@ switch($getNewUser)
         break;
 }
 
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Formular wurde ueber "Zurueck"-Funktion aufgerufen, also alle Felder mit den vorherigen Werten fuellen
 if(isset($_SESSION['profile_request']))
@@ -356,294 +324,161 @@ if(isset($_SESSION['profile_request']))
     unset($_SESSION['profile_request']);
 }
 
+// create html page object
+$page = new HtmlPage();
+$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/calendar/calendar-popup.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
+$page->addCssFile(THEME_PATH.'/css/calendar.css');
 
-// Html-Kopf ausgeben
-if($getNewUser == 1)
+$page->addJavascript('
+    var profileJS = new profileJSClass();
+    profileJS.init();', true);
+
+// show back link
+$page->addHtml($gNavigation->getHtmlBackButton());
+
+// show headline of module
+$page->addHeadline($headline);
+
+// create html form
+$form = new HtmlForm('edit_profile_form', $g_root_path.'/adm_program/modules/profile/profile_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser, $page);
+
+// *******************************************************************************
+// Schleife ueber alle Kategorien und Felder ausser den Stammdaten
+// *******************************************************************************
+
+$category = '';
+
+foreach($gProfileFields->mProfileFields as $field)
 {
-    $gLayout['title'] = $gL10n->get('PRO_ADD_USER');
+    $show_field = false;
+    
+    // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
+    // E-Mail ist Ausnahme und muss immer angezeigt werden
+    if($getNewUser == 2 
+    && $gPreferences['registration_mode'] == 1 
+    && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') == 'EMAIL'))
+    {
+        $show_field = true;
+    }
+    elseif($getNewUser == 2
+    && $gPreferences['registration_mode'] == 2)
+    {
+        // bei der vollstaendigen Registrierung alle Felder anzeigen
+        $show_field = true;
+    }
+    elseif($getNewUser != 2 
+    && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->editProfile($user)))
+    {
+        // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
+        // Leiter duerfen dies nicht !!!
+        $show_field = true;
+    }
+
+    // Kategorienwechsel den Kategorienheader anzeigen
+    // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
+    if($category != $field->getValue('cat_name')
+    && $show_field == true)
+    {
+        if(strlen($category) > 0)
+        {
+            // div-Container admGroupBoxBody und admGroupBox schliessen
+            $form->closeGroupBox();
+        }
+        $category = $field->getValue('cat_name');
+
+        $form->addString('<a name="cat-'. $field->getValue('cat_id'). '"></a>');
+        $form->openGroupBox('gb_category_name', $field->getValue('cat_name'));
+                
+        if($field->getValue('cat_name_intern') == 'MASTER_DATA')
+        {
+            if($getUserId > 0 || $getNewUser == 2)
+            {
+                // add username to form
+                $fieldProperty = FIELD_DEFAULT;
+                $fieldHelpId   = null;
+                
+                if($gCurrentUser->isWebmaster() == false && $getNewUser == 0)
+                {
+                    $fieldProperty = FIELD_DISABLED;
+                }
+                elseif($getNewUser > 0)
+                {
+                    $fieldProperty = FIELD_MANDATORY;
+                    $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
+                }
+            
+                $form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), 35, $fieldProperty, $fieldHelpId, 'admTextInputSmall');
+
+                if($getNewUser == 2)
+                {
+                    // at registration add password and password confirm to form
+                    $form->addPasswordInput('usr_password', $gL10n->get('SYS_PASSWORD'), FIELD_MANDATORY, 'PRO_PASSWORD_DESCRIPTION', 'admTextInputSmall');
+                    $form->addPasswordInput('new_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), FIELD_MANDATORY, null, 'admTextInputSmall');
+
+                    // show selectbox with all organizations of database
+                    if($gPreferences['system_organization_select'] == 1)
+                    {
+                        $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
+                        $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, FIELD_MANDATORY, $registrationOrgId, true);
+                    }
+                }
+                else
+                {
+                    // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
+                    if($gCurrentUser->isWebmaster() || $gCurrentUser->getValue("usr_id") == $getUserId )
+                    {
+                        $form->addIconTextLink('password_link', $gL10n->get('SYS_PASSWORD'), 'password.php?usr_id='.$getUserId, 'key.png', $gL10n->get('SYS_CHANGE_PASSWORD'));
+                    }
+                }
+                $form->addLine();
+            }
+        }
+    }
+
+    // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
+    if($show_field == true)
+    {
+        // Html des Feldes ausgeben
+        getFieldCode($form, $field->getValue('usf_name_intern'), $user, $getNewUser);
+    }
 }
-elseif($getNewUser == 2)
+
+// div-Container admGroupBoxBody und admGroupBox schliessen
+$form->closeGroupBox();
+
+// if captchas are enabled then visitors of the website must resolve this
+if($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
 {
-    $gLayout['title'] = $gL10n->get('SYS_REGISTRATION');
+    $form->openGroupBox('gb_confirmation_of_input', $gL10n->get('SYS_CONFIRMATION_OF_INPUT'));
+    $form->addCaptcha('captcha', $gPreferences['captcha_type']);
+    $form->closeGroupBox();
 }
-elseif($getUserId == $gCurrentUser->getValue('usr_id'))
+
+// Bild und Text fuer den Speichern-Button
+if($getNewUser == 2)
 {
-    $gLayout['title'] = $gL10n->get('PRO_EDIT_MY_PROFILE');
+    // Registrierung
+    $btn_image = 'email.png';
+    $btn_text  = $gL10n->get('SYS_SEND');
 }
 else
 {
-    $gLayout['title'] = $gL10n->get('PRO_EDIT_PROFILE');
+    $btn_image = 'disk.png';
+    $btn_text  = $gL10n->get('SYS_SAVE');
 }
 
-$gLayout['header'] = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.noblecount.min.js"></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js"></script>
-	<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
-    <link rel="stylesheet" href="'.THEME_PATH.'/css/calendar.css" type="text/css" />';
-
-$gLayout['header'] .= '
-        <script type="text/javascript"><!--
-			var profileJS = new profileJSClass();
-			$(document).ready(function() 
-            {
-				profileJS.init();
-				';
-
-// setzt den Focus bei Neuanlagen/Registrierung auf das erste Feld im Dialog
-if($getNewUser == 1 || $getNewUser == 2)
+if($getNewUser == 0)
 {
-    if($getNewUser == 1)
-    {
-    	$first_field = reset($gProfileFields->mProfileFields);
-        $focusField = 'usf-'.$first_field->getValue('usf_id');
-    }
-    else
-    {
-        $focusField = 'usr_login_name';
-    }
-	$gLayout['header'] .= '$("#'.$focusField.'").focus();';
+    // show informations about user who creates the recordset and changed it
+    $form->addString(admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')));
 }
-$gLayout['header'] .= '}); 
-        //--></script>';
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
-echo '
-<form action="'.$g_root_path.'/adm_program/modules/profile/profile_save.php?user_id='.$getUserId.'&amp;new_user='.$getNewUser.'" method="post">
-<div class="formLayout" id="edit_profile_form">
-    <div class="formHead">'. $gLayout['title']. '</div>
-    <div class="formBody">'; 
-        // *******************************************************************************
-        // Schleife ueber alle Kategorien und Felder ausser den Stammdaten
-        // *******************************************************************************
+$form->addSubmitButton('btn_save', $btn_text, THEME_PATH.'/icons/'.$btn_image);
 
-        $category = '';
-        
-        foreach($gProfileFields->mProfileFields as $field)
-        {
-            $show_field = false;
-            
-            // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-            // E-Mail ist Ausnahme und muss immer angezeigt werden
-            if($getNewUser == 2 
-            && $gPreferences['registration_mode'] == 1 
-            && ($field->getValue('usf_mandatory') == 1 || $field->getValue('usf_name_intern') == 'EMAIL'))
-            {
-                $show_field = true;
-            }
-            elseif($getNewUser == 2
-            && $gPreferences['registration_mode'] == 2)
-            {
-                // bei der vollstaendigen Registrierung alle Felder anzeigen
-                $show_field = true;
-            }
-            elseif($getNewUser != 2 
-            && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->editProfile($user)))
-            {
-                // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
-                // Leiter duerfen dies nicht !!!
-                $show_field = true;
-            }
-        
-            // Kategorienwechsel den Kategorienheader anzeigen
-            // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-            if($category != $field->getValue('cat_name')
-            && $show_field == true)
-            {
-                if(strlen($category) > 0)
-                {
-                    // div-Container groupBoxBody und groupBox schliessen
-                    echo '</ul></div></div>';
-                }
-                $category = $field->getValue('cat_name');
-
-                echo '<a name="cat-'. $field->getValue('cat_id'). '"></a>
-                <div class="groupBox">
-                    <div class="groupBoxHeadline">'. $field->getValue('cat_name'). '</div>
-                    <div class="groupBoxBody">
-                        <ul class="formFieldList">';
-                        
-                if($field->getValue('cat_name_intern') == 'MASTER_DATA')
-                {
-                    // bei den Stammdaten erst einmal Benutzername und Passwort anzeigen
-                    if($getUserId > 0 || $getNewUser == 2)
-                    {
-                        echo '<li>
-                            <dl>
-                                <dt><label for="usr_login_name">'.$gL10n->get('SYS_USERNAME').':</label></dt>
-                                <dd>
-                                    <input type="text" id="usr_login_name" name="usr_login_name" style="width: 200px;" maxlength="35" value="'. $user->getValue('usr_login_name'). '" ';
-                                    if($gCurrentUser->isWebmaster() == false && $getNewUser == 0)
-                                    {
-                                        echo ' disabled="disabled" ';
-                                    }
-                                    echo ' />';
-                                    if($getNewUser > 0)
-                                    {
-                                        echo '<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_USERNAME_DESCRIPTION&amp;inline=true"><img 
-                                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_USERNAME_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>';
-                                    }
-                                echo '</dd>
-                            </dl>
-                        </li>';
-
-                        if($getNewUser == 2)
-                        {
-                            echo '<li>
-                                <dl>
-                                    <dt><label for="usr_password">'.$gL10n->get('SYS_PASSWORD').':</label></dt>
-                                    <dd>
-                                        <input type="password" id="usr_password" name="usr_password" style="width: 130px;" />
-                                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_PASSWORD_DESCRIPTION&amp;inline=true"><img 
-                                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_PASSWORD_DESCRIPTION\',this)" onmouseout="ajax_hideTooltip()"
-                                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>
-                                    </dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="password2">'.$gL10n->get('SYS_CONFIRM_PASSWORD').':</label></dt>
-                                    <dd>
-                                        <input type="password" id="password2" name="password2" style="width: 130px;" />
-                                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                                    </dd>
-                                </dl>
-                            </li>';
-
-                			// show selectbox with all organizations of database
-                			if($gPreferences['system_organization_select'] == 1)
-                			{
-                				echo '<li>
-                					<dl>
-                						<dt><label for="reg_org_id">'.$gL10n->get('SYS_ORGANIZATION').':</label></dt>
-                						<dd>'.FormElements::generateOrganizationSelectBox($registrationOrgId, 'reg_org_id').'</dd>
-                					</dl>
-                				</li>';
-                			}
-                            
-                        }
-                        else
-                        {
-                            // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-                            if($gCurrentUser->isWebmaster() || $gCurrentUser->getValue("usr_id") == $getUserId )
-                            {
-                                echo '<li>
-                                    <dl>
-                                        <dt><label>'.$gL10n->get('SYS_PASSWORD').':</label></dt>
-                                        <dd>
-                                            <span class="iconTextLink">
-                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '"><img 
-                                                	src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>
-                                                <a rel="colorboxPWContent" href="password.php?usr_id='. $getUserId. '">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>
-                                            </span>
-                                        </dd>
-                                    </dl>
-                                </li>';
-                            }
-                        }
-                        echo '<li><hr /></li>';
-                    }
-                }
-            }
-
-            // bei schneller Registrierung duerfen nur die Pflichtfelder ausgegeben werden
-            if($show_field == true)
-            {
-                // Html des Feldes ausgeben
-                echo getFieldCode($field->getValue('usf_name_intern'), $user, $getNewUser);
-            }
-        }
-        
-        // div-Container groupBoxBody und groupBox schliessen
-        echo '</ul></div></div>';
-
-        // User, die sich registrieren wollen, bekommen jetzt noch das Captcha praesentiert,
-        // falls es in den Orgaeinstellungen aktiviert wurde...
-        if ($getNewUser == 2 && $gPreferences['enable_registration_captcha'] == 1)
-        {
-            echo '
-            <ul class="formFieldList">
-                <li>
-                    <dl>
-                        <dt>&nbsp;</dt>
-						<dd>
-						';
-			if($gPreferences['captcha_type']=='pic')
-			{
-				echo '<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />';
-				$captcha_label = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
-				$captcha_description = 'SYS_CAPTCHA_DESCRIPTION';
-			}
-			else if($gPreferences['captcha_type']=='calc')
-			{
-				$captcha = new Captcha();
-				$captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4'));
-				$captcha_label = $gL10n->get('SYS_CAPTCHA_CALC');
-				$captcha_description = 'SYS_CAPTCHA_CALC_DESCRIPTION';
-			}
-			echo '
-                    </dd>
-					</dl>
-                </li>
-                <li>
-                    <dl>
-                        <dt>'.$captcha_label.':</dt>
-                        <dd>
-                            <input type="text" id="captcha" name="captcha" style="width: 200px;" maxlength="8" value="" />
-                            <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id='.$captcha_description.'&amp;inline=true"><img 
-					            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id='.$captcha_description.'\',this)" onmouseout="ajax_hideTooltip()"
-					            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" title="" /></a>
-                        </dd>
-                    </dl>
-                </li>
-            </ul>
-            <hr />';
-        }
-
-        // Bild und Text fuer den Speichern-Button
-        if($getNewUser == 2)
-        {
-            // Registrierung
-            $btn_image = 'email.png';
-            $btn_text  = $gL10n->get('SYS_SEND');
-        }
-        else
-        {
-            $btn_image = 'disk.png';
-            $btn_text  = $gL10n->get('SYS_SAVE');
-        }
-
-        if($getNewUser == 0)
-        {
-            // show informations about user who creates the recordset and changed it
-            echo admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change'));
-        }
-
-        echo '
-        <div class="formSubmit">
-            <button id="btnSave" type="submit"><img 
-                src="'. THEME_PATH. '/icons/'. $btn_image. '" alt="'. $btn_text. '" />
-                &nbsp;'. $btn_text. '</button>
-        </div>
-    </div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'. $g_root_path. '/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'. $g_root_path. '/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

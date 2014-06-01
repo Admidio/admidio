@@ -58,19 +58,23 @@ class HtmlForm extends HtmlFormBasic
         {
             $this->addAttribute('enctype', 'multipart/form-data');
         }        
-        
-		// first field of form should get focus
-		$js = '<script type="text/javascript"><!--
-			       $(document).ready(function() { $("form:first *:input[type!=hidden]:first").focus();});
-			   //--></script>';
-		$this->addString($js);
-		
+        		
         $this->flagMandatoryFields = false;
         $this->flagFieldListOpen   = false;
         
         if(is_object($htmlPage))
         {
             $this->htmlPage =& $htmlPage;
+    		// first field of form should get focus
+            $this->htmlPage->addJavascript('$("form:first *:input[type!=hidden]:first").focus();', true);
+        }
+        else
+        {
+    		// first field of form should get focus
+    		$js = '<script type="text/javascript"><!--
+    			       $(document).ready(function() { $("form:first *:input[type!=hidden]:first").focus();});
+    			   //--></script>';
+    		$this->addString($js);            
         }
     }
     
@@ -337,6 +341,36 @@ class HtmlForm extends HtmlFormBasic
         }
 		$this->setHelpText($helpTextId);
         $this->addString('</span>');
+        $this->closeFieldStructure();
+    }
+    
+    /** Add an icon link with text to the form. This can be used to allow the user to 
+     *  open a new html page.
+     *  @param $id         Id of the text link.
+     *  @param $label      The label of the text link.
+     *  @param $url        The url that should be called if the user click on the icon or text.
+     *  @param $icon       An icon that will be shown in front of the text.
+     *  @param $linkText   The text of the link that will be shown after the icon
+     *  @param $class      Optional an additional css classname. The class @b admIconTextLink
+     *                     is set as default and need not set with this parameter.     
+     */
+    public function addIconTextLink($id, $label, $url, $icon, $linkText, $class = '')
+    {
+        $attributes = array('class' => 'admIconTextLink');
+    
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+
+        $this->openFieldStructure($id, $label, FIELD_DEFAULT, 'admIconTextLinkRow');
+        $this->addString('
+            <span id="'.$id.'" class="'.$attributes['class'].'">
+                <a href="'.$url.'"><img 
+                	src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$linkText.'" title="'.$linkText.'" /></a>
+                <a href="'.$url.'">'.$linkText.'</a>
+            </span>');
         $this->closeFieldStructure();
     }
 

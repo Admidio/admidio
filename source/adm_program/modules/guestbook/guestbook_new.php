@@ -124,7 +124,7 @@ else
 }
 
 // show form
-$form = new HtmlForm('guestbook_edit_form', $g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode);
+$form = new HtmlForm('guestbook_edit_form', $g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode, $page);
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
