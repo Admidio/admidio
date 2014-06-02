@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de_sie">
+<version id="3.0.0" translator="Stefan Weiss">
+	<text id="SYS_PM" development="new" translation="todo">Private Nachricht</text>
+	<text id="PMS_MESSAGE" development="new" translation="todo">Private Nachrichten</text>
+	<text id="PMS_SEND_PM" development="new" translation="todo">Private Nachricht senden</text>
+	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Nachricht wurde gesendet an:</text>
+	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="todo">Fehler - Nachricht wurde nicht gesendet an:</text>
+</version>
 <version id="2.4.5" translator="Markus Faßbender">
     <text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</text>
     <text id="SYS_CSV" development="new" translation="todo">CSV</text>

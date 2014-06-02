@@ -32,6 +32,26 @@
             $moduleMenu->addItem('email', '/adm_program/modules/mail/mail.php',
                                 $gL10n->get('SYS_EMAIL'), '/icons/email.png');
         }
+        if($gPreferences['enable_mail_module'] == 1 && $gValidLogin)
+        {
+        $sql = 'SELECT *
+        FROM '. TBL_PM. '
+         WHERE (pm_usrid1 = '. $gCurrentUser->getValue('usr_id') .' and pm_user1read=1)
+         or (pm_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and pm_user2read=1)';
+
+            $result = $gDb->query($sql);
+            $row = $gDb->num_rows($result);
+            if ($row > 0)
+            {
+                $moduleMenu->addItem('private message', '/adm_program/modules/mail/pm_list.php',
+                                $gL10n->get('SYS_PM').' ('.$row.')', '/icons/email.png');
+            }
+            else
+            {
+                $moduleMenu->addItem('private message', '/adm_program/modules/mail/pm_list.php',
+                                $gL10n->get('SYS_PM'), '/icons/email.png');
+            }
+        }
         if($gPreferences['enable_photo_module'] == 1 
         || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
         {

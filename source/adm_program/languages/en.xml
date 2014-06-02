@@ -36,6 +36,11 @@
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="edited"></text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="edited"></text>
     <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Mandatory fields</text>
+	<text id="SYS_PM" development="new" translation="todo">Private Message</text>
+	<text id="PMS_MESSAGE" development="new" translation="todo">Private Messages</text>
+	<text id="PMS_SEND_PM" development="new" translation="todo">send Private Message</text>
+	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Message was sent to:</text>
+	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="todo">Error - Message could not be send:</text>
 </version>
 <version id="2.4.5" translator="Stefanie Schima">
     <text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain "Undisclosed Recipients". If this results in an error you can use this option to fill the recipient addresses into the TO field. The other addresses will remain in the BCC field. (Default: Deactivated)</text>

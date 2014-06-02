@@ -234,7 +234,14 @@ $page->addHtml('
                             <div class="admFieldElement"><i>');
                                 if(strlen($user->getValue('usr_login_name')) > 0)
                                 {
-                                    $page->addHtml($user->getValue('usr_login_name'));
+                                    if ($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id'))
+                                    {
+                                        $page->addHtml('<a href='.$g_root_path.'/adm_program/modules/mail/pm.php?usr_id='.$user->getValue('usr_id').'>'.$user->getValue('usr_login_name').'</a>');
+                                    }
+                                    else
+                                    {
+                                        $page->addHtml($user->getValue('usr_login_name'));
+                                    }
                                 }
                                 else
                                 {
