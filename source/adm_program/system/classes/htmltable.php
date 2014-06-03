@@ -261,7 +261,7 @@ class HtmlTable extends HtmlTableBasic
             {
                 if(is_array($column))
                 {
-                    $this->orderColumns[$column[0]] = $column[1];
+                    $this->orderColumns[($column[0]-1)] = $column[1];
                 }
                 else
                 {
