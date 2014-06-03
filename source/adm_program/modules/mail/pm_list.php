@@ -97,7 +97,7 @@ if(isset($result1))
 }
 
 //special settings for the table
-$table->setDatatablesOrderColumns(array(array(2, 'asc')));
+$table->setDatatablesOrderColumns(array(array(3, 'asc')));
 
 // add table to the form
 $page->addHtml($table->show(false));
