@@ -375,7 +375,7 @@ class HtmlTable extends HtmlTableBasic
                     "pageLength": '.$this->rowsPerPage.','.
                     $datatablesHidden.
                     $datatablesOrder.'
-                    "language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/dataTables.'.$gPreferences['system_language'].'.lang"}
+                    "language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/datatables.'.$gPreferences['system_language'].'.lang"}
                     '.$javascriptGroup.'
                 });
                 '.$javascriptGroupFunction, true);
