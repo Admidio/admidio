@@ -171,8 +171,7 @@ if($gCurrentUser->editProfile($user))
 						$gL10n->get('PRO_EDIT_PROFILE'), 'edit.png');
 }
 
-// if user has right then show link to edit password
-// webmasters could send a new password to members of their organization
+// Password of own user could be changed
 if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 {
 	$profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'), 
@@ -181,14 +180,17 @@ if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
 elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id')) 
 && strlen($user->getValue('usr_login_name')) > 0)
 {
-    // if user has no email or send email is disabled then webmaster could set a new password
+    // Webmasters can change or send password if login is configured and user is member of current organization
+    
     if(strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
     {
+        // if email is set and systemmails are activated then webmaster can send a new password to user
     	$profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$user->getValue('usr_id').'&amp;mode=5', 
     						$gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
     }
     else
     {
+        // if user has no email or send email is disabled then webmaster could set a new password
     	$profileMenu->addItem('menu_item_password', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='. $user->getValue('usr_id'), 
     						$gL10n->get('SYS_CHANGE_PASSWORD'), 'key.png');        
     }

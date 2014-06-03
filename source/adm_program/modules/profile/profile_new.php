@@ -74,6 +74,7 @@ if($getUserId > 0 && $getNewUser != 0 && $getNewUser != 3)
 /** This function creates the html code for one profile field that is set in the parameters.
  *  The html output will consider the configuration of the profile field and creates the 
  *  neccessary html element. Also the data will be filled and the correct format will be set.
+ *  @param $form	        A reference to a HtmlForm object. This must be set to add the fields to the current form
  *  @param $fieldNameIntern	Internal name of the profile field for which the html should be generated e.g. @b LAST_NAME or @b EMAIL
  *  @param $user			An object of the @b User class of the user that should be edited
  *  @param $getNewUser		The parameter @b new_user of the script @b profile_new.php
@@ -427,8 +428,13 @@ foreach($gProfileFields->mProfileFields as $field)
                 }
                 else
                 {
-                    // eigenes Passwort aendern, nur Webmaster duerfen Passwoerter von anderen aendern
-                    if($gCurrentUser->isWebmaster() || $gCurrentUser->getValue("usr_id") == $getUserId )
+                    // only show link if user is member of this organization.
+                    // Password of own user could be changed.
+                    // Webmasters are allowed to change password if no login was configured or no email is set to send a generated password.
+                    if( isMember($user->getValue('usr_id')) 
+                    && (  $gCurrentUser->getValue('usr_id') == $user->getValue('usr_id') 
+                       || (   $gCurrentUser->isWebmaster() 
+                          && (strlen($user->getValue('usr_login_name')) == 0 || strlen($user->getValue('EMAIL')) == 0))))
                     {
                         $form->addIconTextLink('password_link', $gL10n->get('SYS_PASSWORD'), 'password.php?usr_id='.$getUserId, 'key.png', $gL10n->get('SYS_CHANGE_PASSWORD'));
                     }

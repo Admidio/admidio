@@ -25,9 +25,12 @@ $gMessage->showThemeBody(false);
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', 'html', false, array('html', 'change'));
 
+$user = new User($gDb, $gProfileFields, $getUserId);
+
 // only the own password could be individual set. Webmaster could only send a generated password.
-if(($gCurrentUser->getValue('usr_id') != $getUserId && $gCurrentUser->isWebmaster() == false)
- || isMember($getUserId) == false)
+if(isMember($getUserId) == false
+|| ($gCurrentUser->isWebmaster() == false && $gCurrentUser->getValue('usr_id') != $getUserId)
+|| ($gCurrentUser->isWebmaster() == true  && strlen($user->getValue('usr_login_name')) > 0 && strlen($user->getValue('EMAIL')) > 0) && $gPreferences['enable_system_mails'] == 1)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -51,10 +54,8 @@ if($getMode == 'change')
         {
             if ($_POST['new_password'] == $_POST['new_password_confirm'])
             {
-                // pruefen, ob altes Passwort korrekt eingegeben wurde              
-                $user = new User($gDb, $gProfileFields, $getUserId);
-
-                // Webmaster duerfen fremde Passwörter so aendern
+                // check if old password is correct. 
+                // Webmaster could change password of other users without this verification.
                 if($user->checkPassword($_POST['old_password']) || $gCurrentUser->isWebmaster() && $gCurrentUser->getValue('usr_id') != $getUserId )
                 {
                     $user->setValue('usr_password', $_POST['new_password']);
