@@ -36,10 +36,13 @@
     <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="todo">Gib im folgenden Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die du nun hinzufügen möchtest. Im nächsten Schritt wird die Organisation mit ihren dazugehörigen Stammdaten angelegt.</text>
     <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="todo">Die Organisation %VAR1_BOLD% wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</text>
     <text id="ORG_LAST_UPDATE_STEP" development="new" translation="todo">Letzter Update-Schritt</text>
+    <text id="PRO_CHOOSE_PHOTO" development="new" translation="todo">Foto auswählen</text>
     <text id="PHO_SAVE_ORIGINALS" development="new" translation="todo">Originale speichern</text>
     <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
+    <text id="PRO_SELECT_NEW_PIC_HERE" development="deleted" translation="todo"></text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
     <text id="PRO_EXPORT_VCARD" development="new" translation="todo">vCard exportieren</text>
+    <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
     <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
@@ -1016,7 +1019,6 @@
     <text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="todo">Die hochgeladene Datei darf nicht größer als %VAR1% MB sein.</text>
     <text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="todo">Rollenmitgliedschaften anderer Organisationen</text>
     <text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="todo">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
-    <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="todo">Bitte hier ein neues Foto auswählen</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften anzeigen</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="todo">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Standard: ja)</text>
     <text id="PRO_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>

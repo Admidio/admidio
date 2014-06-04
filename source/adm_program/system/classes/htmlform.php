@@ -196,6 +196,28 @@ class HtmlForm extends HtmlFormBasic
         $this->closeFieldStructure();
     }
     
+    
+    /** Add custom html content to the form within the default field structure. The Label will be set 
+     *  but instead of an form control you can define any html. If you don't need the field structure
+     *  and want to add html then use the method addString()
+     *  @param $id         Id of the custom content.
+     *  @param $label      The label of the custom content.
+     *  @param $content    A simple Text or html that would be placed instead of an form element.
+     *  @param $class      Optional an additional css classname.
+     */
+    public function addCustomContent($id, $label, $content, $class = '')
+    {
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+
+        $this->openFieldStructure($id, $label, FIELD_DEFAULT, 'admCustomContentRow');
+        $this->addString($content);
+        $this->closeFieldStructure();
+    }
+    
     /** Add a line with a custom description to the form. No form elements will be 
      *  displayed in this line.
      *  @param $text The (html) text that should be displayed.

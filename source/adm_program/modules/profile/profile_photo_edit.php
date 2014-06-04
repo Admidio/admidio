@@ -8,27 +8,27 @@
  *
  * Parameters:
  *
- * usr_id   : id of user whose photo should be changed
- * job      : the current mode of this script
- *   - save      : save new photo in user recordset
- *   - dont_save : delete photo in session and show message
- *   - upload    : save new photo in session and show dialog with old and new photo
- *   - delete    : delete current photo in database
+ * usr_id           : id of user whose photo should be changed
+ * mode - choose    : default mode to choose the photo file you want to upload
+ *        save      : save new photo in user recordset
+ *        dont_save : delete photo in session and show message
+ *        upload    : save new photo in session and show dialog with old and new photo
+ *        delete    : delete current photo in database
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
+// Initialize and check the parameters
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
+$getMode    = admFuncVariableIsValid($_GET, 'mode', 'string', 'choose', false, array('choose', 'save', 'dont_save', 'upload', 'delete'));
+
 // checks if the server settings for file_upload are set to ON
 if (ini_get('file_uploads') != '1')
 {
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
-
-// Initialize and check the parameters
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
-$getJob    = admFuncVariableIsValid($_GET, 'job', 'string', '', false, array('save', 'dont_save', 'upload', 'delete'));
 
 // read user data and show error if user doesn't exists
 $user = new User($gDb, $gProfileFields, $getUserId);
@@ -55,7 +55,7 @@ if($user->getValue('usr_id') == 0)
 	$gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-if($getJob=='save')
+if($getMode == 'save')
 {
     /*****************************Foto speichern*************************************/
     
@@ -97,7 +97,7 @@ if($getJob=='save')
     header('Location: '.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId);
     exit();
 }    
-elseif($getJob=='dont_save')
+elseif($getMode == 'dont_save')
 {
     /*****************************Foto nicht speichern*************************************/
     //Ordnerspeicherung
@@ -118,7 +118,7 @@ elseif($getJob=='dont_save')
     $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$getUserId, 2000);
     $gMessage->show($gL10n->get('SYS_PROCESS_CANCELED'));
 }
-elseif($getJob=='delete')
+elseif($getMode == 'delete')
 {
     /***************************** Foto loeschen *************************************/
     //Ordnerspeicherung, Datei löschen
@@ -141,10 +141,9 @@ elseif($getJob=='delete')
 
 
 /*****************************Foto hochladen*************************************/    
-if(strlen($getJob) == 0)
+if($getMode == 'choose')
 {
-    $gNavigation->addUrl(CURRENT_URL);
-
+    // set headline
     if($getUserId == $gCurrentUser->getValue('usr_id'))
     {
         $headline = $gL10n->get('PRO_EDIT_MY_PROFILE_PICTURE');
@@ -153,70 +152,46 @@ if(strlen($getJob) == 0)
     {
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
     }
-
-    $gLayout['title']  = $headline;
-    $gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $("#foto_upload_file").focus();
-        }); 
-    //--></script>';
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
     
-    echo '
-    <form method="post" action="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=upload&amp;usr_id='.$getUserId.'" enctype="multipart/form-data">
-    <div class="formLayout" id="profile_photo_upload_form">
-        <div class="formHead">'.$headline.'</div>
-        <div class="formBody">
-            <p>'.$gL10n->get('PRO_CURRENT_PICTURE').':</p>
-            <img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />
-            <p>'.$gL10n->get('PRO_SELECT_NEW_PIC_HERE').':</p>
-            <p><input type="file" id="foto_upload_file" name="foto_upload_file" size="40" value="'.$gL10n->get('SYS_BROWSE').'" /></p>
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 
-            <hr />
-
-            <div class="formSubmit">
-                <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PRO_UPLOAD_PHOTO').'" />&nbsp;'.$gL10n->get('PRO_UPLOAD_PHOTO').'</button>
-            </div>
-        </div>
-    </div>
-    </form>
+    // create html page object
+    $page = new HtmlPage();
     
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-            </span>
-        </li>
-        <li>
-            <span class="iconTextLink">
-                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_photo_up_help&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true"><img src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_HELP').'" /></a>
-                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=profile_photo_up_help&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true">'.$gL10n->get('SYS_HELP').'</a>
-            </span>        
-        </li>
-    </ul>';    
+    // show back link
+    $page->addHtml($gNavigation->getHtmlBackButton());
+
+    // show headline of module
+    $page->addHeadline($headline);
+
+    // show form
+    $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, true);
+    $form->addCustomContent('current_image', $gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+    $form->addFileUpload('foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'), ($gPreferences['max_file_upload_size'] * 1024), false, null, false, FIELD_DEFAULT, 'profile_photo_up_help');
+    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), THEME_PATH.'/icons/photo_upload.png');
+
+    // add form to html page and show page
+    $page->addHtml($form->show(false));
+    $page->show();
 }
-elseif($getJob == 'upload')
+elseif($getMode == 'upload')
 {
     /*****************************Foto zwischenspeichern bestaetigen***********************************/
     
     //Dateigroesse
-    if ($_FILES['foto_upload_file']['error']==1)
+    if ($_FILES['userfile']['error'][0]==1)
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FILE_TO_LARGE', round(admFuncMaxUploadSize()/pow(1024, 2))));
     }
 
     //Kontrolle ob Fotos ausgewaehlt wurden
-    if(file_exists($_FILES['foto_upload_file']['tmp_name']) == false)
+    if(file_exists($_FILES['userfile']['tmp_name'][0]) == false)
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_NOT_CHOOSEN'));
     }
 
     //Dateiendung
-    $image_properties = getimagesize($_FILES['foto_upload_file']['tmp_name']);
+    $image_properties = getimagesize($_FILES['userfile']['tmp_name'][0]);
     if ($image_properties['mime'] != 'image/jpeg' && $image_properties['mime'] != 'image/png')
     {
         $gMessage->show($gL10n->get('PRO_PHOTO_FORMAT_INVALID'));
@@ -230,7 +205,7 @@ elseif($getJob == 'upload')
     }
 	
     // Foto auf entsprechende Groesse anpassen
-    $user_image = new Image($_FILES['foto_upload_file']['tmp_name']);
+    $user_image = new Image($_FILES['userfile']['tmp_name'][0]);
     $user_image->setImageType('jpeg');
     $user_image->scale(130, 170);
     
@@ -243,9 +218,9 @@ elseif($getJob == 'upload')
     else
     {
         //Foto in PHP-Temp-Ordner übertragen
-        $user_image->copyToFile(null, ($_FILES['foto_upload_file']['tmp_name']));
+        $user_image->copyToFile(null, ($_FILES['userfile']['tmp_name'][0]));
         // Foto aus PHP-Temp-Ordner einlesen
-        $user_image_data = fread(fopen($_FILES['foto_upload_file']['tmp_name'], 'r'), $_FILES['foto_upload_file']['size']);
+        $user_image_data = fread(fopen($_FILES['userfile']['tmp_name'][0], 'r'), $_FILES['userfile']['size'][0]);
         
         // Zwischenspeichern des neuen Fotos in der Session
         $gCurrentSession->setValue('ses_binary', $user_image_data);
@@ -264,40 +239,25 @@ elseif($getJob == 'upload')
         $headline = $gL10n->get('PRO_EDIT_PROFILE_PIC_FROM', $user->getValue('FIRST_NAME'), $user->getValue('LAST_NAME'));
     }
     
-    $gLayout['title'] = $headline;
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');    
+    // create html page object
+    $page = new HtmlPage();
+    $page->addJavascript('$("#btn_cancel").click(function() {
+        self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=dont_save&usr_id='.$getUserId.'\';
+    });', true);
     
-    echo '
-    <div class="formLayout" id="profile_photo_after_upload_form">
-        <div class="formHead">'.$headline.'</div>
-        <div class="formBody">';
-            $table = new HtmlTableBasic();
-            $table->addAttribute('style', 'border: none; width: 100%; padding: 5px;');
-            $table->addRow('', array('style' => 'text-align: center;'));
-            $table->addColumn($gL10n->get('PRO_CURRENT_PICTURE'));
-            $table->addColumn($gL10n->get('PRO_NEW_PICTURE'));
-            $table->addRow('', array('style' => 'text-align: center;'));
-            $table->addColumn('<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" /></td>');
-            $table->addColumn('<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" /></td>');
-                
-            echo $table->getHtmlTable();
-            echo'
-            <hr />
-            
-            <div class="formSubmit">
-                <button id="btnCancel" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=dont_save&amp;usr_id='.$getUserId.'\'">
-                    <img src="'.THEME_PATH.'/icons/error.png" alt="'.$gL10n->get('SYS_ABORT').'" />
-                    &nbsp;'.$gL10n->get('SYS_ABORT').'
-                </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                <button id="btnUpdate" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?job=save&amp;usr_id='.$getUserId.'\'">
-                    <img src="'.THEME_PATH.'/icons/database_in.png" alt="'.$gL10n->get('SYS_UPDATE').'" />
-                    &nbsp;'.$gL10n->get('PRO_ACCEPT_NEW_PICTURE').'
-                </button>
-            </div>
-        </div>
-    </div>';
+    // show headline of module
+    $page->addHeadline($headline);
+
+    // show form
+    $form = new HtmlForm('show_new_profile_picture_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=save&amp;usr_id='.$getUserId, $page);
+    $form->addCustomContent('current_image', $gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
+    $form->addCustomContent('new_image', $gL10n->get('PRO_NEW_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'&new_photo=1" alt="'.$gL10n->get('PRO_NEW_PICTURE').'" />');
+    $form->addLine();
+    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), THEME_PATH.'/icons/database_in.png');
+    $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), THEME_PATH.'/icons/error.png');
+
+    // add form to html page and show page
+    $page->addHtml($form->show(false));
+    $page->show();
 }
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-
 ?>

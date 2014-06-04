@@ -395,13 +395,13 @@ $page->addHtml('
                     // Nur berechtigte User duerfen das Profilfoto editieren
                     if($gCurrentUser->editProfile($user) == true)
                     {
-                        $picture = '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
+                        $picture = '<a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
                                         src="'.THEME_PATH.'/icons/photo_upload.png" alt="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_CHANGE_PROFILE_PICTURE').'" /></a>';
                         //Dass Bild kann natürlich nur gelöscht werden, wenn entsprechende Rechte bestehen
                         if((strlen($user->getValue('usr_photo')) > 0 && $gPreferences['profile_photo_storage'] == 0)
                             || file_exists(SERVER_PATH. '/adm_my_files/user_profile_photos/'.$user->getValue('usr_id').'.jpg') && $gPreferences['profile_photo_storage'] == 1 )
                         {
-                            $picture .= '<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
+                            $picture .= '<a class="admIconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pro_pho&amp;element_id=no_element'.
                                             '&amp;database_id='.$user->getValue('usr_id').'"><img src="'. THEME_PATH. '/icons/delete.png" 
                                             alt="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" title="'.$gL10n->get('PRO_DELETE_PROFILE_PICTURE').'" /></a>';
                         }
