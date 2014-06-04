@@ -65,7 +65,7 @@ $page->addHtml($gNavigation->getHtmlBackButton());
 // show headline for Table
 $page->addHeadline($headline);
 
-$table = new HtmlTable('adm_lists_table', true, $page, 'table');
+$table = new HtmlTable('adm_lists_table', true, $page);
 
 $table->addAttribute('border', '1');
 $table->addTableHeader();
