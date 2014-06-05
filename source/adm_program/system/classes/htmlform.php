@@ -37,6 +37,7 @@ class HtmlForm extends HtmlFormBasic
     protected $flagMandatoryFields; ///< Flag if this form has mandatory fields. Then a notice must be written at the end of the form
     private   $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
     private   $htmlPage;            ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    private   $countElements;         ///< Number of elements in this form
     
     /** Constructor creates the form element
      *  @param $id               Id of the form
@@ -61,6 +62,7 @@ class HtmlForm extends HtmlFormBasic
         		
         $this->flagMandatoryFields = false;
         $this->flagFieldListOpen   = false;
+        $this->countFields         = 0;
         
         if(is_object($htmlPage))
         {
@@ -92,6 +94,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addButton($id, $text, $icon = '', $link = '', $class = '', $type = 'button')
     {
+        $this->countElements++;
         // add text and icon to button
         $value = $text;
         
@@ -122,7 +125,9 @@ class HtmlForm extends HtmlFormBasic
     public function addCaptcha($id, $type, $property = FIELD_MANDATORY, $class = '')
     {
         global $gL10n, $g_root_path;
+        
         $attributes = array('class' => 'admCaptcha');
+        $this->countElements++;
 
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -169,6 +174,7 @@ class HtmlForm extends HtmlFormBasic
     public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $class = null)
     {
         $attributes = array('class' => 'admCheckbox');
+        $this->countElements++;
 
         // disable field
         if($property == FIELD_DISABLED)
@@ -207,6 +213,8 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addCustomContent($id, $label, $content, $class = '')
     {
+        $this->countElements++;
+    
         // set specific css class for this field
         if(strlen($class) > 0)
         {
@@ -245,6 +253,7 @@ class HtmlForm extends HtmlFormBasic
 	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = '')
 	{
         $attributes = array('class' => 'admEditor');
+        $this->countElements++;
 
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -294,6 +303,7 @@ class HtmlForm extends HtmlFormBasic
     public function addFileUpload($id, $label, $maxUploadSize, $enableMultiUploads = false, $multiUploadLabel = null, $hideUploadField = false, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
         $attributes = array('class' => 'admUploadButton');
+        $this->countElements++;
 
         // disable field
         if($property == FIELD_DISABLED)
@@ -365,36 +375,6 @@ class HtmlForm extends HtmlFormBasic
         $this->addString('</span>');
         $this->closeFieldStructure();
     }
-    
-    /** Add an icon link with text to the form. This can be used to allow the user to 
-     *  open a new html page.
-     *  @param $id         Id of the text link.
-     *  @param $label      The label of the text link.
-     *  @param $url        The url that should be called if the user click on the icon or text.
-     *  @param $icon       An icon that will be shown in front of the text.
-     *  @param $linkText   The text of the link that will be shown after the icon
-     *  @param $class      Optional an additional css classname. The class @b admIconTextLink
-     *                     is set as default and need not set with this parameter.     
-     */
-    public function addIconTextLink($id, $label, $url, $icon, $linkText, $class = '')
-    {
-        $attributes = array('class' => 'admIconTextLink');
-    
-        // set specific css class for this field
-        if(strlen($class) > 0)
-        {
-            $attributes['class'] .= ' '.$class;
-        }
-
-        $this->openFieldStructure($id, $label, FIELD_DEFAULT, 'admIconTextLinkRow');
-        $this->addString('
-            <span id="'.$id.'" class="'.$attributes['class'].'">
-                <a href="'.$url.'"><img 
-                	src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$linkText.'" title="'.$linkText.'" /></a>
-                <a href="'.$url.'">'.$linkText.'</a>
-            </span>');
-        $this->closeFieldStructure();
-    }
 
 	/** Add a simple line to the form. This could be used to structure a form.
 	 *  The line has only a visual effect.
@@ -424,7 +404,9 @@ class HtmlForm extends HtmlFormBasic
     public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
         global $gL10n, $g_root_path;
+
         $attributes = array('class' => 'admMultilineTextInput');
+        $this->countElements++;
 
         // disable field
         if($property == FIELD_DISABLED)
@@ -492,6 +474,7 @@ class HtmlForm extends HtmlFormBasic
     public function addPasswordInput($id, $label, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
         $attributes = array('class' => 'admTextInput admPasswordInput');
+        $this->countElements++;
 
         // disable field
         if($property == FIELD_DISABLED)
@@ -513,13 +496,82 @@ class HtmlForm extends HtmlFormBasic
         $this->closeFieldStructure();
     }
     
+    /** Add a new radio button with a label to the form. The radio button could have different status 
+     *  which could be defined with an array.
+     *  @param $id           Id of the radio button. This will also be the name of the radio button.
+     *  @param $label        The label of the radio button.
+	 *  @param $values       Array with all entries of the radio button; 
+	 *                       Array key will be the internal value of the entry
+	 *                       Array value will be the visual value of the entry
+     *  @param $property     With this param you can set the following properties: 
+     *                       @b FIELD_DEFAULT The field can accept an input.
+     *                       @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                       @b FIELD_DISABLED The field will be disabled and could not accept an input.
+     *  @param $defaultValue This is the value of that radio button that is preselected.
+     *  @param $setDummyButton If set to true than one radio with no value will be set in front of the other array. 
+     *                         This could be used if the user should also be able to set no radio to value.
+	 *  @param $helpTextId   If set a help icon will be shown after the radio button and on mouseover the translated text 
+	 *                       of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+     *  @param $class        Optional an additional css classname. The class @b admRadioInput
+     *                       is set as default and need not set with this parameter.
+     */
+    public function addRadioButton($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setDummyButton = false, $helpTextId = null, $class = '')
+    {
+        $attributes = array('class' => 'admRadioInput');
+        $this->countElements++;
+
+        // disable field
+        if($property == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+            $attributes['class']   .= ' admDisabled';
+        }
+        
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+        
+        $this->openFieldStructure($id, $label, $property, 'admRadioInputRow');
+        
+        // set one radio button with no value will be set in front of the other array.
+        if($setDummyButton == true)
+        {
+	        if(strlen($defaultValue) == 0)
+	        {
+	            $attributes['checked'] = 'checked';
+	        }
+            
+	        $this->addInput('radio', $id, ($id.'_0'), null, $attributes);
+	        $this->addString('<label for="'.($id.'_0').'">---</label>');
+        }
+        
+		// for each entry of the array create an input radio field
+		foreach($values as $key => $value)
+		{
+	        unset($attributes['checked']);
+	        
+	        if($defaultValue == $key)
+	        {
+	            $attributes['checked'] = 'checked';
+	        }
+	        
+	        $this->addInput('radio', $id, ($id.'_'.$key), $key, $attributes);
+	        $this->addString('<label for="'.($id.'_'.$key).'">'.$value.'</label>');
+		}
+        
+		$this->setHelpText($helpTextId);
+        $this->closeFieldStructure();
+    }
+    
     /** Add a new selectbox with a label to the form. The selectbox could have
      *  different values and a default value could be set.
-     *  @param $id     Id of the selectbox. This will also be the name of the selectbox.
-     *  @param $label  The label of the selectbox.
-	 *  @param $values Array with all entries of the select box; 
-	 *                 Array key will be the internal value of the entry
-	 *                 Array value will be the visual value of the entry
+     *  @param $id         Id of the selectbox. This will also be the name of the selectbox.
+     *  @param $label      The label of the selectbox.
+	 *  @param $values     Array with all entries of the select box; 
+	 *                     Array key will be the internal value of the entry
+	 *                     Array value will be the visual value of the entry
      *  @param $property   With this param you can set the following properties: 
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
@@ -537,6 +589,7 @@ class HtmlForm extends HtmlFormBasic
         global $gL10n;
 
         $attributes = array('class' => 'admSelectBox');
+        $this->countElements++;
 
         // disable field
         if($property == FIELD_DISABLED)
@@ -830,7 +883,7 @@ class HtmlForm extends HtmlFormBasic
     public function addSubmitButton($id, $text, $icon = '', $link = '', $class = '', $type = 'submit')
     {
         $class .= ' admSubmitButton';
-        
+
         // first check if a field list was opened
         if($this->flagFieldListOpen == true)
         {
@@ -851,14 +904,29 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
+     *  @param $type       Set the type if the field. Default will be text. Possible values are @b TEXT, @b DATE or @b BIRTHDAY
+     *                     If date or birthday where set than a small dialog to choose the date will be shown behind the field.
+     *                     The difference between date and birthday is the range of years that will be shown.
 	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
 	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-    public function addTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
+    public function addTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $type = 'TEXT', $helpTextId = null, $class = '', $icon = null)
     {
-        $attributes = array('class' => 'admTextInput');
+        global $gL10n, $gPreferences, $g_root_path;
+        
+        $this->countElements++;
+
+        if($type == 'TEXT')
+        {
+            $attributes = array('class' => 'admTextInput');
+        }
+        else
+        {
+            $attributes = array('class' => 'admDateInput');
+        }
 
         // set max input length
         if($maxLength > 0)
@@ -879,8 +947,51 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, 'admTextInputRow');
+        // add the javascript to show a small dialog to select the date
+        if($type != 'TEXT')
+        {
+            // set different date range for date or birthday
+            if($type == 'DATE')
+            {
+                $startOffset = 50;
+                $endOffset   = 10;
+            }
+            else
+            {
+                $startOffset = 110;
+                $endOffset   = 0;
+            }
+            
+            $calendarObjekt = 'calDate'.$this->countElements;
+            $javascriptCode = '
+                var '.$calendarObjekt.' = new CalendarPopup("calendar_popup");
+                '.$calendarObjekt.'.setCssPrefix("calendar");
+                '.$calendarObjekt.'.showNavigationDropdowns();
+                '.$calendarObjekt.'.setYearSelectStartOffset('.$startOffset.');
+                '.$calendarObjekt.'.setYearSelectEndOffset('.$endOffset.');';
+
+            // if a htmlPage object was set then add code to the page, otherwise to the current string
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/calendar/calendar-popup.js');
+                $this->htmlPage->addJavascript($javascriptCode);
+            }
+            else
+            {
+                $this->addString('<script type="text/javascript">'.$javascriptCode.'</script>');
+            }
+        }
+        
+        // now create html for the field
+        $this->openFieldStructure($id, $label, $property, 'admTextInputRow', $icon);
         $this->addInput('text', $id, $id, $value, $attributes);
+        if($type != 'TEXT')
+        {
+            $this->addString('
+                <a class="iconLink" id="anchor_'.$id.'" href="javascript:'.$calendarObjekt.'.select(document.getElementById(\''.$id.'\'),\'anchor_'.$id.'\',\''.$gPreferences['system_date'].'\');"><img 
+                    src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
+                <span id="calendar_popup" style="position: absolute; visibility: hidden;"></span>');
+        }
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
@@ -915,14 +1026,16 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $class     Optional an additional css classname for the row. The class @b admFieldRow
-     *                    is set as default and need not set with this parameter.
+     *  @param $class      Optional an additional css classname for the row. The class @b admFieldRow
+     *                     is set as default and need not set with this parameter.
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-    protected function openFieldStructure($id, $label, $property = FIELD_DEFAULT, $class = '')
+    protected function openFieldStructure($id, $label, $property = FIELD_DEFAULT, $class = '', $icon = null)
     {
         $cssClassRow       = '';
         $cssClassMandatory = '';
 		$htmlLabel         = '';
+		$htmlIcon          = '';
 
         // set specific css class for this row
         if(strlen($class) > 0)
@@ -949,11 +1062,24 @@ class HtmlForm extends HtmlFormBasic
 		{
 			$htmlLabel = '<label for="'.$id.'">'.$label.':</label>';
 		}
+		
+		if(strlen($icon) > 0)
+		{
+			// create html for icon
+			if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
+			{
+				$htmlIcon = '<img class="admIconInformation" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+			}
+			elseif(admStrIsValidFileName($icon, true))
+			{
+				$htmlIcon = '<img class="admIconInformation" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+			}
+		}
         
         // create html
         $this->addString('
         <div class="admFieldRow'.$cssClassRow.'">
-            <div class="admFieldLabel'.$cssClassMandatory.'">'.$htmlLabel.'</div>
+            <div class="admFieldLabel'.$cssClassMandatory.'">'.$htmlIcon.$htmlLabel.'</div>
             <div class="admFieldElement'.$cssClassMandatory.'">');
     }
 	

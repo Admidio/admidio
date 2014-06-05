@@ -160,7 +160,7 @@ a:hover, a:active {
 
 /* Settings for all icons */
 
-.admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation img {
+.admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation {
     border: none;
     vertical-align: text-top;
     padding-left: 1px;
@@ -258,7 +258,7 @@ a:hover, a:active {
 
 /* Form elements */
 
-.admTextInput, .admTextInputSmall, .admMultilineTextInput, .admSelectBox, .admSelectBoxSmall, .admButton, div.dataTables_filter input, div.dataTables_length select {
+.admTextInput, .admTextInputSmall, .admMultilineTextInput, .admDateInput, .admSelectBox, .admSelectBoxSmall, .admButton, div.dataTables_filter input, div.dataTables_length select {
     border: 1px solid #888686;
     padding: 4px;
     font-size: 11pt;
@@ -266,7 +266,7 @@ a:hover, a:active {
     border-radius: 5px;
 }
 
-.admTextInput:focus, .admTextInputSmall:focus, .admMultilineTextInput:focus, .admSelectBox:focus, .admSelectBoxSmall:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
+.admTextInput:focus, .admTextInputSmall:focus, .admMultilineTextInput:focus, admDateInput, .admSelectBox:focus, .admSelectBoxSmall:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
     background-color: #fff8a0;
 }
 
@@ -276,6 +276,10 @@ a:hover, a:active {
 
 .admTextInputSmall {
     width: 50%;
+}
+
+.admDateInput {
+    width: 100px;
 }
 
 .admUploadInput {

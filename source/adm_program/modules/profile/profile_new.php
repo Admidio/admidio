@@ -84,7 +84,6 @@ function getFieldCode(&$form, $fieldNameIntern, $user, $getNewUser)
 {
     global $gPreferences, $g_root_path, $gCurrentUser, $gL10n, $gProfileFields;
     
-    $value         = '';
     $fieldProperty = FIELD_DEFAULT;
     $helpId        = null;
     
@@ -148,35 +147,16 @@ function getFieldCode(&$form, $fieldNameIntern, $user, $getNewUser)
 	}
     elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'RADIO_BUTTON')
     {
-		$arrListValues = $gProfileFields->getProperty($fieldNameIntern, 'usf_value_list');
-		$position = 1;
-		$value = '';
-
-        if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 0)
-        {
-	        $htmlChecked = '';
-            if(strlen($user->getValue($fieldNameIntern, 'database')) == 0)
-	        {
-	            $htmlChecked = ' checked="checked" ';
-	        }
-	        $value .= '<input type="radio" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-0" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" value="" '.$htmlChecked.' '.$disabled.' />
-	            <label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-0">---</label>&nbsp;&nbsp;';
-        }
-
-		// fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
-		foreach($arrListValues as $key => $valueList)
+		$arrListValues        = $gProfileFields->getProperty($fieldNameIntern, 'usf_value_list');
+		$showDummyRadioButton = false;
+		
+		if($gProfileFields->getProperty($fieldNameIntern, 'usf_mandatory') == 0)
 		{
-	        $htmlChecked = '';
-	        if($user->getValue($fieldNameIntern) == $valueList)
-	        {
-	            $htmlChecked = ' checked="checked" ';
-	        }
-	        
-	        $value .= '<input type="radio" id="usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-'.$position.'" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" value="'.$position.'" '.$htmlChecked.' '.$disabled.' />
-	            <label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id').'-'.$position.'">'.$valueList.'</label>&nbsp;&nbsp;';
-			$position++;
+    		$showDummyRadioButton = true;
 		}
 		
+		$form->addRadioButton('usf-'.$gProfileFields->getProperty($fieldNameIntern, 'usf_id'), $gProfileFields->getProperty($fieldNameIntern, 'usf_name'),
+		    $arrListValues, $fieldProperty, $user->getValue($fieldNameIntern, 'database'), $showDummyRadioButton, $helpId);
     }
     elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'TEXT_BIG')
     {
@@ -185,80 +165,34 @@ function getFieldCode(&$form, $fieldNameIntern, $user, $getNewUser)
     }
     else
     {
+        $fieldType = 'TEXT';
+        
         if($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'DATE')
         {
-            $width = '80px';
+            $fieldType = 'DATE';
             $maxlength = '10';
+            
+            if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
+            {
+                $fieldType = 'BIRTHDAY';
+            }
         }
         elseif($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'EMAIL' || $gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'URL')
         {
-            $width     = '300px';
             $maxlength = '255';
         }
         elseif($gProfileFields->getProperty($fieldNameIntern, 'cat_name_intern') == 'SOCIAL_NETWORKS')
         {
-            $width = '200px';
             $maxlength = '255';
         }
         else
         {
-            $width = '200px';
             $maxlength = '50';
         }
-        if($gProfileFields->getProperty($fieldNameIntern, 'usf_type') == 'DATE')
-        {
-            if($gProfileFields->getProperty($fieldNameIntern, 'usf_name_intern') == 'BIRTHDAY')
-            {
-                $value = '<script type="text/javascript">
-                            var calBirthday = new CalendarPopup("calendardiv");
-                            calBirthday.setCssPrefix("calendar");
-                            calBirthday.showNavigationDropdowns();
-                            calBirthday.setYearSelectStartOffset(90);
-                            calBirthday.setYearSelectEndOffset(0);
-                        </script>';
-                $calObject = 'calBirthday';
-            }
-            else
-            {
-                $value = '<script type="text/javascript">
-                            var calDate = new CalendarPopup("calendardiv");
-                            calDate.setCssPrefix("calendar");
-                            calDate.showNavigationDropdowns();
-                            calDate.setYearSelectStartOffset(50);
-                            calDate.setYearSelectEndOffset(10);
-                        </script>';
-                $calObject = 'calDate';
-            }
-            $value .= '
-                    <input type="text" id="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" name="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" style="width: '.$width.';" 
-                        maxlength="'.$maxlength.'" '.$disabled.' value="'. $user->getValue($fieldNameIntern, $gPreferences['system_date']). '" '.$disabled.' />
-                    <a class="iconLink" id="anchor_'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '" href="javascript:'.$calObject.'.select(document.getElementById(\'usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '\'),\'anchor_'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '\',\''.$gPreferences['system_date'].'\');"><img 
-                    	src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-                    <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
-        }
-        else
-        {
-            $form->addTextInput('usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'), $gProfileFields->getProperty($fieldNameIntern, 'usf_name'),
-                $user->getValue($fieldNameIntern), $maxlength, $fieldProperty, $helpId);
-        }
+
+        $form->addTextInput('usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'), $gProfileFields->getProperty($fieldNameIntern, 'usf_name'),
+            $user->getValue($fieldNameIntern), $maxlength, $fieldProperty, $fieldType, $helpId, null, $gProfileFields->getProperty($fieldNameIntern, 'usf_icon', 'database'));
     }
-    
-    // display icon of field
-    $icon = '';
-    if(strlen($gProfileFields->getProperty($fieldNameIntern, 'usf_icon')) > 0)
-    {
-        $icon = $gProfileFields->getProperty($fieldNameIntern, 'usf_icon').'&nbsp;';
-    }
-    
-    // nun den Html-Code fuer das Feld zusammensetzen
-    /*$html = '<li>
-                <dl>
-                    <dt><label for="usf-'. $gProfileFields->getProperty($fieldNameIntern, 'usf_id'). '">'. $icon. $gProfileFields->getProperty($fieldNameIntern, 'usf_name'). ':</label></dt>
-                    <dd>'. $value. $mandatory. $description. '</dd>
-                </dl>
-            </li>';
-             
-    return $html;*/
 }
 
 // read user data
@@ -328,7 +262,6 @@ if(isset($_SESSION['profile_request']))
 // create html page object
 $page = new HtmlPage();
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/calendar/calendar-popup.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 $page->addCssFile(THEME_PATH.'/css/calendar.css');
@@ -411,13 +344,13 @@ foreach($gProfileFields->mProfileFields as $field)
                     $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
                 }
             
-                $form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), 35, $fieldProperty, $fieldHelpId, 'admTextInputSmall');
+                $form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), 35, $fieldProperty, 'TEXT', $fieldHelpId, 'admTextInputSmall');
 
                 if($getNewUser == 2)
                 {
                     // at registration add password and password confirm to form
                     $form->addPasswordInput('usr_password', $gL10n->get('SYS_PASSWORD'), FIELD_MANDATORY, 'PRO_PASSWORD_DESCRIPTION', 'admTextInputSmall');
-                    $form->addPasswordInput('new_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), FIELD_MANDATORY, null, 'admTextInputSmall');
+                    $form->addPasswordInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), FIELD_MANDATORY, null, 'admTextInputSmall');
 
                     // show selectbox with all organizations of database
                     if($gPreferences['system_organization_select'] == 1)
@@ -436,7 +369,12 @@ foreach($gProfileFields->mProfileFields as $field)
                        || (   $gCurrentUser->isWebmaster() 
                           && (strlen($user->getValue('usr_login_name')) == 0 || strlen($user->getValue('EMAIL')) == 0))))
                     {
-                        $form->addIconTextLink('password_link', $gL10n->get('SYS_PASSWORD'), 'password.php?usr_id='.$getUserId, 'key.png', $gL10n->get('SYS_CHANGE_PASSWORD'));
+                        $form->addCustomContent('password_link', $gL10n->get('SYS_PASSWORD'), '            
+                            <span class="admIconTextLink" id="password_link">
+                                <a href="password.php?usr_id='.$getUserId.'"><img 
+                                	src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>
+                                <a href="password.php?usr_id='.$getUserId.'">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>
+                            </span>');
                     }
                 }
                 $form->addLine();

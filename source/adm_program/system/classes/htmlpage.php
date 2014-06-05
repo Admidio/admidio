@@ -64,7 +64,10 @@ class HtmlPage
      */
     public function addCssFile($file)
     {
-        $this->cssFiles[] = $file;
+        if(in_array($file, $this->cssFiles) == false)
+        {
+            $this->cssFiles[] = $file;
+        }
     }
     
     public function addHeader($header)
@@ -119,7 +122,10 @@ class HtmlPage
      */
     public function addJavascriptFile($file)
     {
-        $this->jsFiles[] = $file;
+        if(in_array($file, $this->jsFiles) == false)
+        {
+            $this->jsFiles[] = $file;
+        }
     }
     
     /** Adds a RSS file to the html page.

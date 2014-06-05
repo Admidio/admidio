@@ -124,9 +124,8 @@ class HtmlFormBasic extends HtmlElement
      *  @param $id Optional ID for the input
      *  @param $value         Value of the field (Default: empty)
      *  @param $arrAttributes Further attributes as array with key/value pairs
-     *  @param $status        Optional Status like "readonly", "disabled", etc. can be set
      */
-    public function addInput($type , $name, $id = null, $value ='', $arrAttributes = null, $status = null)
+    public function addInput($type , $name, $id = null, $value ='', $arrAttributes = null)
     {
         $this->addElement('input', '', '', '',  true);
         
@@ -145,11 +144,6 @@ class HtmlFormBasic extends HtmlElement
         if($arrAttributes != null && is_array($arrAttributes))
         {
             $this->setAttributesFromArray($arrAttributes);
-        }
-        // set optional status
-        if($status != null)
-        {
-            $this->currentElementAttributes .= ' ' . $status;
         }
         
         $this->addData(' ',true);

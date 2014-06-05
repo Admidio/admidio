@@ -180,11 +180,11 @@ class ProfileFields
                                 // create html for optionbox entry
                                 if(strpos(admStrToLower($listValueImage), 'http') === 0 && strValidCharacters($listValueImage, 'url'))
                                 {
-                                    $listValue = '<img src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    $listValue = '<img class="admIconInformation" src="'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                 }
                                 elseif(admStrIsValidFileName($listValueImage, true))
                                 {
-                                    $listValue = '<img src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
+                                    $listValue = '<img class="admIconInformation" src="'.THEME_PATH.'/icons/'.$listValueImage.'" title="'.$listValueText.'" alt="'.$listValueText.'" />';
                                 }
                             }
                             catch(AdmException $e)

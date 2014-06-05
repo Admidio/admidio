@@ -184,7 +184,7 @@ elseif($getMode == 3)  // Enter database access information
     $form->addTextInput('user', $gL10n->get('SYS_USERNAME'), $user, 50, FIELD_MANDATORY);
     $form->addPasswordInput('password', $gL10n->get('SYS_PASSWORD'), FIELD_MANDATORY);
     $form->addTextInput('database', $gL10n->get('SYS_DATABASE'), $database, 50, FIELD_MANDATORY);
-    $form->addTextInput('prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, 10, FIELD_MANDATORY, null, 'admTextInputSmall');
+    $form->addTextInput('prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, 10, FIELD_MANDATORY, 'TEXT', null, 'admTextInputSmall');
     $form->addDescription('<img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA'));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), 'layout/forward.png', null, null, 'button');
@@ -266,7 +266,7 @@ elseif($getMode == 4)  // Creating organization
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=5');
     $form->setFormDescription($gL10n->get('INS_NAME_OF_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
-    $form->addTextInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, 10, FIELD_MANDATORY, null, 'admTextInputSmall');
+    $form->addTextInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, 10, FIELD_MANDATORY, 'TEXT', null, 'admTextInputSmall');
     $form->addTextInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, 50, FIELD_MANDATORY);
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), 'layout/forward.png', null, null, 'button');
