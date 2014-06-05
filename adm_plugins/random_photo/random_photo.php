@@ -2,7 +2,7 @@
 /******************************************************************************
  * Random Photo
  *
- * Version 1.6.0
+ * Version 1.6.1
  *
  * Plugin zeigt ein zufaellig ausgewaehltes Foto aus dem Fotomodul an und 
  * und verlinkt neben dem Bild das dazugehörige Album
@@ -84,7 +84,7 @@ $gDb->setCurrentDB();
 echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">';
 if($plg_show_headline==1)
 {
-    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_RANDOM_PHOTOS_HEADLINE').'</h3></div>';
+    echo '<div class="admPluginHeader"><h3>'.$gL10n->get('PLG_RANDOM_PHOTO_HEADLINE').'</h3></div>';
 }
 echo '<div class="admPluginBody">';
 
