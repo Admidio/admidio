@@ -186,43 +186,46 @@ elseif($getMode == 7)
 }
 elseif ($getMode == 8)
 {
-    // Export vCard of user
-
-    $filename = 'role_export';
-    
-    // for IE the filename must have special chars in hexadecimal 
-    if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+    // Export every member of a role into one vCard file
+    if($gCurrentUser->viewRole($getRoleId))
     {
-        $filename = urlencode($filename);
-    }
+        // create filename of organization name and role name
+        $role     = new TableRoles($gDb, $getRoleId);
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.vcf';
+        
+        // for IE the filename must have special chars in hexadecimal 
+        if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+        {
+            $filename = urlencode($filename);
+        }
+        
+        header('Content-Type: text/x-vcard; charset=iso-8859-1');
+        header('Content-Disposition: attachment; filename="'.$filename.'"');
+        
+        // neccessary for IE, because without it the download with SSL has problems
+    	header('Cache-Control: private');
+    	header('Pragma: public');
     
-    header('Content-Type: text/x-vcard; charset=iso-8859-1');
-    header('Content-Disposition: attachment; filename="'.$filename.'.vcf"');
+    	// Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
+        $sql    =  'SELECT 
+    	                bm.mem_usr_id
+                    FROM 
+    				    '. TBL_MEMBERS. ' bm
+                    WHERE
+                        bm.mem_rol_id = '.$getRoleId.' 
+    					AND bm.mem_begin <= \''.DATE_NOW.'\' 
+    					AND bm.mem_end > \''.DATE_NOW.'\'';
+    	
+        $result   = $gDb->query($sql);
     
-    // neccessary for IE, because without it the download with SSL has problems
-	header('Cache-Control: private');
-	header('Pragma: public');
-
-	// Ein Leiter darf nur Rollen zuordnen, bei denen er auch Leiter ist
-    $sql    =  'SELECT 
-	                bm.mem_usr_id
-                FROM 
-				    '. TBL_MEMBERS. ' bm
-                WHERE
-                    bm.mem_rol_id = '.$getRoleId.' 
-					AND bm.mem_begin <= \''.DATE_NOW.'\' 
-					AND bm.mem_end > \''.DATE_NOW.'\'';
-	
-    $result   = $gDb->query($sql);
-
-    while($row = $gDb->fetch_array($result))
-    {
-       // create user object
-       $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
-	   // create vcard and check if user is allowed to edit profile, so he can see more data
-       echo $user->getVCard($gCurrentUser->editProfile($user));
+        while($row = $gDb->fetch_array($result))
+        {
+           // create user object
+           $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
+    	   // create vcard and check if user is allowed to edit profile, so he can see more data
+           echo $user->getVCard($gCurrentUser->editProfile($user));
+        }
     }
-
 }
 
 ?>
