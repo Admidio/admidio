@@ -47,12 +47,12 @@ if ($getUserId == 0)
 // Update the read status of the message
 if ($getPMId > 0)
 {
-	$sql = 'UPDATE '. TBL_PM. " SET  pm_user1read = '0'
-            WHERE pm_id2 = 0 and pm_id1 = ".$getPMId." and pm_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
+	$sql = 'UPDATE '. TBL_MESSAGES. " SET  msg_user1read = '0'
+            WHERE msg_id2 = 0 and msg_id1 = ".$getPMId." and msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
     $gDb->query($sql);
 	
-	$sql = 'UPDATE '. TBL_PM. " SET  pm_user2read = '0'
-            WHERE pm_id2 = 0 and pm_id1 = ".$getPMId." and pm_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
+	$sql = 'UPDATE '. TBL_MESSAGES. " SET  msg_user2read = '0'
+            WHERE msg_id2 = 0 and msg_id1 = ".$getPMId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
     $gDb->query($sql);
 }
 
@@ -72,10 +72,10 @@ if((  $gCurrentUser->editUsers() == false
 
 if ($getPMId > 0)
 {
-    $sql = 'SELECT pm_id1, pm_subject, pm_usrid1, pm_usrid2, pm_message, pm_timestamp 
-              FROM '. TBL_PM. '
-             WHERE pm_id2 > 0 AND pm_id1 = '. $getPMId .'
-             ORDER BY pm_id2 DESC';
+    $sql = 'SELECT msg_id1, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp 
+              FROM '. TBL_MESSAGES. '
+             WHERE msg_id2 > 0 AND msg_id1 = '. $getPMId .'
+             ORDER BY msg_id2 DESC';
 
     $result = $gDb->query($sql);
 }
@@ -115,11 +115,11 @@ $formParam .= '&'.'pm_id='.$getPMId;
 }
 
 // show form
-$form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/mail/pm_send.php?'.$formParam, $page, true);
+$form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, true);
 $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
 // Username to send the PM to
-$form->addTextInput('pm_to', $gL10n->get('SYS_TO'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 50, FIELD_DISABLED);
+$form->addTextInput('msg_to', $gL10n->get('SYS_TO'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 50, FIELD_DISABLED);
 
 $form->closeGroupBox();
 
@@ -148,7 +148,7 @@ if(isset($result))
 {
     while ($row = $gDb->fetch_array($result)) {
 	
-		if ($row['pm_usrid1'] == $gCurrentUser->getValue('usr_id'))
+		if ($row['msg_usrid1'] == $gCurrentUser->getValue('usr_id'))
 		{
 			$sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
 		}
@@ -159,20 +159,20 @@ if(isset($result))
 
 		
 	    $page->addHtml('
-        <div class="admBoxLayout" id="gbo_'.$row['pm_id1'].'">
+        <div class="admBoxLayout" id="gbo_'.$row['msg_id1'].'">
             <div class="admBoxHead">
                 <div class="admBoxHeadLeft">
                     <img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser);
 
                 $page->addHtml('</div>
 
-                <div class="admBoxHeadRight">'.$row['pm_timestamp']. '&nbsp;');
+                <div class="admBoxHeadRight">'.$row['msg_timestamp']. '&nbsp;');
 
                 $page->addHtml('</div>
             </div>
 
             <div class="admBoxBody">'.
-                nl2br($row['pm_message']));
+                nl2br($row['msg_message']));
 
             $page->addHtml('</div>
         </div>');

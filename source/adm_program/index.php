@@ -91,21 +91,21 @@ if($gPreferences['enable_mail_module'] == 1)
 if($gPreferences['enable_mail_module'] == 1 && $gValidLogin)
         {
         $sql = 'SELECT *
-        FROM '. TBL_PM. '
-         WHERE (pm_usrid1 = '. $gCurrentUser->getValue('usr_id') .' and pm_user1read=1)
-         or (pm_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and pm_user2read=1)';
+        FROM '. TBL_MESSAGES. '
+         WHERE (msg_usrid1 = '. $gCurrentUser->getValue('usr_id') .' and msg_user1read=1)
+         or (msg_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and msg_user2read=1)';
 
             $result = $gDb->query($sql);
             $row = $gDb->num_rows($result);
             if ($row > 0)
             {
-                $moduleMenu->addItem('private message', '/adm_program/modules/mail/pm_list.php',
+                $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
                                 $gL10n->get('SYS_PM').' ('.$row.' '.$gL10n->get('SYS_PM_UNREAD').')', '/icons/email.png',
                                 $gL10n->get('MAI_EMAIL_DESC'));
             }
             else
             {
-                $moduleMenu->addItem('private message', '/adm_program/modules/mail/pm_list.php',
+                $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
                                 $gL10n->get('SYS_PM'), '/icons/email.png',
                                 $gL10n->get('MAI_EMAIL_DESC'));
             }

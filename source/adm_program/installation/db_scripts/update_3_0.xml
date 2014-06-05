@@ -5,7 +5,7 @@
 	<step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(255)</step>
 	<step id="40">ALTER TABLE %PREFIX%_members ADD COLUMN mem_count_guests integer unsigned not null default '0'</step>
 	<step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name LIKE 'lists_members_per_page'</step>
-	<step id="60">CREATE TABLE IF NOT EXISTS %PREFIX%_pm (pm_id1 bigint(20) NOT NULL, pm_id2 int(10) NOT NULL, pm_subject varchar(256) COLLATE utf8_unicode_ci NOT NULL, pm_usrid1 int(10) NOT NULL, pm_usrid2 int(10) DEFAULT NULL, pm_message text COLLATE utf8_unicode_ci NOT NULL,
-  pm_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, pm_user1read tinyint(1) NOT NULL DEFAULT '0', pm_user2read tinyint(1) NOT NULL DEFAULT '0') ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;</step>
+	<step id="60">CREATE TABLE IF NOT EXISTS %PREFIX%_messages (msg_type varchar(10) NOT NULL, msg_id1 bigint(20) NOT NULL, msg_id2 int(10) NOT NULL, msg_subject varchar(256) NOT NULL, msg_usrid1 int(10) NOT NULL, msg_usrid2 int(10) DEFAULT NULL, msg_message text NOT NULL,
+  msg_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, msg_user1read tinyint(1) NOT NULL DEFAULT '0', msg_user2read tinyint(1) NOT NULL DEFAULT '0') ENGINE=InnoDB default character set = utf8 COLLATE=utf8_unicode_ci;</step>
     <step>stop</step>
 </update>
