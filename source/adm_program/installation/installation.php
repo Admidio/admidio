@@ -393,7 +393,7 @@ elseif($getMode == 6)  // Creating configuration file
         // if user doesn't has write access then create a page with a download link for the config file
         $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
         $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath.'/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
-        $form->addString('
+        $form->addHtml('
             <span class="admIconTextLink">
                 <a href="installation.php?mode=7"><img
                 src="layout/page_white_download.png" alt="'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'" /></a>

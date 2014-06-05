@@ -76,7 +76,7 @@ class HtmlForm extends HtmlFormBasic
     		$js = '<script type="text/javascript"><!--
     			       $(document).ready(function() { $("form:first *:input[type!=hidden]:first").focus();});
     			   //--></script>';
-    		$this->addString($js);            
+    		$this->addHtml($js);            
         }
     }
     
@@ -139,14 +139,14 @@ class HtmlForm extends HtmlFormBasic
         $this->openFieldStructure('captcha_puzzle', null, FIELD_DEFAULT, 'admCaptchaPuzzleRow');
         if($type == 'pic')
         {
-            $this->addString('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&amp;type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
+            $this->addHtml('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&amp;type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
             $captchaLabel = $gL10n->get('SYS_CAPTCHA_CONFIRMATION_CODE');
             $captchaDescription = 'SYS_CAPTCHA_DESCRIPTION';
         }
         elseif($type == 'calc')
         {
             $captcha = new Captcha();
-            $this->addString($captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),
+            $this->addHtml($captcha->getCaptchaCalc($gL10n->get('SYS_CAPTCHA_CALC_PART1'),$gL10n->get('SYS_CAPTCHA_CALC_PART2'),
                                                       $gL10n->get('SYS_CAPTCHA_CALC_PART3_THIRD'),$gL10n->get('SYS_CAPTCHA_CALC_PART3_HALF'),$gL10n->get('SYS_CAPTCHA_CALC_PART4')));
             $captchaLabel = $gL10n->get('SYS_CAPTCHA_CALC');
             $captchaDescription = 'SYS_CAPTCHA_CALC_DESCRIPTION';
@@ -197,7 +197,7 @@ class HtmlForm extends HtmlFormBasic
         
         $this->openFieldStructure($id, null, $property, 'admCheckboxRow');
         $this->addInput('checkbox', $id, $id, '1', $attributes);
-		$this->addString('<label for="'.$id.'">'.$label.'</label>');
+		$this->addHtml('<label for="'.$id.'">'.$label.'</label>');
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
@@ -205,7 +205,7 @@ class HtmlForm extends HtmlFormBasic
     
     /** Add custom html content to the form within the default field structure. The Label will be set 
      *  but instead of an form control you can define any html. If you don't need the field structure
-     *  and want to add html then use the method addString()
+     *  and want to add html then use the method addHtml()
      *  @param $id         Id of the custom content.
      *  @param $label      The label of the custom content.
      *  @param $content    A simple Text or html that would be placed instead of an form element.
@@ -222,7 +222,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         $this->openFieldStructure($id, $label, FIELD_DEFAULT, 'admCustomContentRow');
-        $this->addString($content);
+        $this->addHtml($content);
         $this->closeFieldStructure();
     }
     
@@ -232,7 +232,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addDescription($text)
     {
-        $this->addString('<div class="admFieldRow"><div class="admDescription">'.$text.'</div></div>');
+        $this->addHtml('<div class="admFieldRow"><div class="admDescription">'.$text.'</div></div>');
     }
 	
     /** Add a new CKEditor element to the form. 
@@ -276,7 +276,7 @@ class HtmlForm extends HtmlFormBasic
 		$ckEditor = new CKEditorSpecial();
 
         $this->openFieldStructure($id, $label, $property, 'admEditorRow');
-		$this->addString('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
+		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
 	}
@@ -343,7 +343,7 @@ class HtmlForm extends HtmlFormBasic
             }
             else
             {
-                $this->addString('
+                $this->addHtml('
                 <script type="text/javascript"><!--
                     $(document).ready(function() {
                         '.$javascriptCode.'
@@ -365,14 +365,14 @@ class HtmlForm extends HtmlFormBasic
         if($enableMultiUploads)
         {
             // show button to add new upload field to form
-            $this->addString('
+            $this->addHtml('
                 <span id="admAddAttachment" class="admIconTextLink" style="display: block;">
     				<a class="admLinkAddAttachment"><img
     				src="'. THEME_PATH. '/icons/add.png" alt="'.$multiUploadLabel.'" /></a>
     				<a class="admLinkAddAttachment">'.$multiUploadLabel.'</a>');
         }
 		$this->setHelpText($helpTextId);
-        $this->addString('</span>');
+        $this->addHtml('</span>');
         $this->closeFieldStructure();
     }
 
@@ -381,7 +381,7 @@ class HtmlForm extends HtmlFormBasic
 	 */
 	public function addLine()
 	{
-        $this->addString('<hr />');
+        $this->addHtml('<hr />');
 	}
 	
     
@@ -439,7 +439,7 @@ class HtmlForm extends HtmlFormBasic
             }
             else
             {
-                $this->addString('<script type="text/javascript">
+                $this->addHtml('<script type="text/javascript">
                         $(document).ready(function(){
                             '.$javascriptCode.'
                         });
@@ -453,7 +453,7 @@ class HtmlForm extends HtmlFormBasic
         if($maxLength > 0)
         {
             // if max field length is set then show a counter how many characters still available
-            $this->addString('<div class="admCharactersCount">('.$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="'.$id.'_counter" class="">255</span>').')</div>');
+            $this->addHtml('<div class="admCharactersCount">('.$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="'.$id.'_counter" class="">255</span>').')</div>');
         }
         $this->closeFieldStructure();
     }
@@ -544,7 +544,7 @@ class HtmlForm extends HtmlFormBasic
 	        }
             
 	        $this->addInput('radio', $id, ($id.'_0'), null, $attributes);
-	        $this->addString('<label for="'.($id.'_0').'">---</label>');
+	        $this->addHtml('<label for="'.($id.'_0').'">---</label>');
         }
         
 		// for each entry of the array create an input radio field
@@ -558,7 +558,7 @@ class HtmlForm extends HtmlFormBasic
 	        }
 	        
 	        $this->addInput('radio', $id, ($id.'_'.$key), $key, $attributes);
-	        $this->addString('<label for="'.($id.'_'.$key).'">'.$value.'</label>');
+	        $this->addHtml('<label for="'.($id.'_'.$key).'">'.$value.'</label>');
 		}
         
 		$this->setHelpText($helpTextId);
@@ -887,7 +887,7 @@ class HtmlForm extends HtmlFormBasic
         // first check if a field list was opened
         if($this->flagFieldListOpen == true)
         {
-            $this->addString('</div>');
+            $this->addHtml('</div>');
             $this->flagFieldListOpen = false;
         }
 
@@ -978,7 +978,7 @@ class HtmlForm extends HtmlFormBasic
             }
             else
             {
-                $this->addString('<script type="text/javascript">'.$javascriptCode.'</script>');
+                $this->addHtml('<script type="text/javascript">'.$javascriptCode.'</script>');
             }
         }
         
@@ -987,7 +987,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addInput('text', $id, $id, $value, $attributes);
         if($type != 'TEXT')
         {
-            $this->addString('
+            $this->addHtml('
                 <a class="iconLink" id="anchor_'.$id.'" href="javascript:'.$calendarObjekt.'.select(document.getElementById(\''.$id.'\'),\'anchor_'.$id.'\',\''.$gPreferences['system_date'].'\');"><img 
                     src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
                 <span id="calendar_popup" style="position: absolute; visibility: hidden;"></span>');
@@ -1000,7 +1000,7 @@ class HtmlForm extends HtmlFormBasic
      */
     protected function closeFieldStructure()
     {
-        $this->addString('</div></div>');
+        $this->addHtml('</div></div>');
     }
     
     /** Close all html elements of a groupbox that was created before.
@@ -1010,11 +1010,11 @@ class HtmlForm extends HtmlFormBasic
         // first check if a field list was opened
         if($this->flagFieldListOpen == true)
         {
-            $this->addString('</div>');
+            $this->addHtml('</div>');
             $this->flagFieldListOpen = false;
         }
 
-        $this->addString('</div></div>');
+        $this->addHtml('</div></div>');
     }
     
     /** Creates a html structure for a form field. This structure contains the label
@@ -1054,7 +1054,7 @@ class HtmlForm extends HtmlFormBasic
         // create a div tag for the field list
         if($this->flagFieldListOpen == false)
         {
-            $this->addString('<div class="admFieldEditList">');
+            $this->addHtml('<div class="admFieldEditList">');
             $this->flagFieldListOpen = true;
         }
 		
@@ -1077,7 +1077,7 @@ class HtmlForm extends HtmlFormBasic
 		}
         
         // create html
-        $this->addString('
+        $this->addHtml('
         <div class="admFieldRow'.$cssClassRow.'">
             <div class="admFieldLabel'.$cssClassMandatory.'">'.$htmlIcon.$htmlLabel.'</div>
             <div class="admFieldElement'.$cssClassMandatory.'">');
@@ -1090,13 +1090,13 @@ class HtmlForm extends HtmlFormBasic
      */
     public function openGroupBox($id, $headline = '')
     {
-        $this->addString('<div id="'.$id.'" class="admGroupBox">');
+        $this->addHtml('<div id="'.$id.'" class="admGroupBox">');
         // add headline to groupbox
         if(strlen($headline) > 0)
         {
-            $this->addString('<div class="admGroupBoxHeadline">'.$headline.'</div>');
+            $this->addHtml('<div class="admGroupBoxHeadline">'.$headline.'</div>');
         }
-        $this->addString('<div class="admGroupBoxBody">');
+        $this->addHtml('<div class="admGroupBoxBody">');
     }
 	
 	/** Add a small help icon to the form at the current element which shows the
@@ -1124,7 +1124,7 @@ class HtmlForm extends HtmlFormBasic
         
         if($parameters != null)
         {
-            $this->addString('<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
+            $this->addHtml('<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?'.$parameters.'\',this)" 
                                    onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>');
         }

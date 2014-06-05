@@ -93,14 +93,14 @@
  *  HtmlElement::addElement('input');
  *  HtmlElement::addAttribute('type', 'text');
  *  HtmlElement::addAttribute('name', 'input');
- *  HtmlElement::addString('Inputfield:');
+ *  HtmlElement::addHtml('Inputfield:');
  *  // pass a whitespace because element has no content
  *  HtmlElement::addData(' ', true); // true for self closing element (default: false)
  *  // add a checkbox
  *  HtmlElement::addElement('input');
  *  HtmlElement::addAttribute('type', 'checkbox');
  *  HtmlElement::addAttribute('name', 'checkbox');
- *  HtmlElement::addString('Checkbox:');
+ *  HtmlElement::addHtml('Checkbox:');
  *  // pass a whitespace because element has no content
  *  HtmlElement::addData(' ', true); // true for self closing element (default: false)
  *  // add a submit button
@@ -339,7 +339,7 @@ abstract class HtmlElement {
      *  html string than this will be done before your string will be added.
      *  @param $string Text as string in current string position
      */
-    public function addString($string = '')
+    public function addHtml($string = '')
     {
         // If first child is set start writing the html beginning with main element and attributes
         if($this->currentElement == $this->mainElement && $this->mainElement != '' && $this->mainElementWritten == false)
