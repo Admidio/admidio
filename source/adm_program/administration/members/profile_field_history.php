@@ -8,7 +8,6 @@
  *
  * Parameters:
  *
- * start     : Number of query recordset where the visual output should start
  * usr_id    : If set only show the profile field history of that user
  * date_from : is set to actual date, 
  *             if no date information is delivered
@@ -21,17 +20,25 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getUserId   = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', '1970-01-01', false);
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date', DATE_NOW, false);
 
-// Initialize local parameteres
-$membersPerPage = 25; // Number of recordsets that will be shown per page
-$sqlConditions  = '';
-
 // create a user object from the user parameter
 $user = new User($gDb, $gProfileFields, $getUserId);
+
+// set headline of the script
+if($getUserId > 0)
+{
+	$headline = $gL10n->get('MEM_CHANGE_HISTORY_OF', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
+}
+else
+{
+	$headline = $gL10n->get('MEM_CHANGE_HISTORY');
+}
+
+// Initialize local parameteres
+$sqlConditions  = '';
 
 // if profile log is activated and current user is allowed to edit users 
 // then the profile field history will be shown otherwise show error
@@ -43,7 +50,7 @@ if ($gPreferences['profile_log_edit_fields'] == 0
 }
 
 // add page to navigation history
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // date_from and date_to can have differnt formats 
 // now we try to get a default format for intern use and html output
@@ -107,8 +114,7 @@ $sql = 'SELECT usl_usr_id, last_name.usd_value as last_name, first_name.usd_valu
            AND create_first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id').'
 		 WHERE usl_timestamp_create BETWEEN \''.$dateFromIntern.' 00:00:00\' AND \''.$dateToIntern.' 23:59:59\' '.
 		       $sqlConditions.'
-	     ORDER BY usl_timestamp_create DESC 
-		 LIMIT '.$membersPerPage.' OFFSET '.$getStart;
+	     ORDER BY usl_timestamp_create DESC ';
 $resultFieldHistory = $gDb->query($sql);
 
 if($gDb->num_rows($resultFieldHistory) == 0)
@@ -127,17 +133,18 @@ if($gDb->num_rows($resultFieldHistory) == 0)
     }
 }
 
-$gLayout['header'] = ' 
-<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
-<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
-<link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
+// create html page object
+$page = new HtmlPage();
+$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/calendar/calendar-popup.js');
+$page->addCssFile(THEME_PATH.'/css/calendar.css');
 
-<script type="text/javascript"><!--
+$page->addJavascript('
 	function send()
 	{
-		document.getElementById("admDateForm").action = "'.$g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId.'&start='.$getStart.'&date_from=" + $("#admDateFrom").val() + "&date_to=" + $("#admDateTo").val();
+		document.getElementById("admDateForm").action = "'.$g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId.'&date_from=" + $("#admDateFrom").val() + "&date_to=" + $("#admDateTo").val();
 		document.getElementById("admDateForm").submit();
-		//$("#admDateForm").action = "'.$g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId.'&start='.$getStart.'&date_from=" + $("#admDateFrom").val() + "&date_to=" + $("#admDateTo").val();
+		//$("#admDateForm").action = "'.$g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId.'&date_from=" + $("#admDateFrom").val() + "&date_to=" + $("#admDateTo").val();
 		//$("#admDateForm").submit();
 	}
 				
@@ -155,25 +162,18 @@ $gLayout['header'] = '
 	}
 
 	var calPopup = new CalendarPopup("calendardiv");
-	calPopup.setCssPrefix("calendar"); 
-//--></script>';
+	calPopup.setCssPrefix("calendar");');
 
-// show html header
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// show back link
+$page->addHtml($gNavigation->getHtmlBackButton());
 
-if($getUserId > 0)
-{
-	echo '<h1 class="moduleHeadline">'.$gL10n->get('MEM_CHANGE_HISTORY_OF', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')).'</h1>';
-}
-else
-{
-	echo '<h1 class="moduleHeadline">'.$gL10n->get('MEM_CHANGE_HISTORY').'</h1>';
-}
+// show headline of module
+$page->addHeadline($headline);
 
  //Input for Startdate and Enddate
-	
-echo '
-<div class="navigationPath">
+
+$page->addHtml('
+<div class="admNavigationPath">
 	<form id="admDateForm" method="post">
 		<label for="admDateFrom" style="margin-left: 10px;">'.$gL10n->get('SYS_START').':</label>
 		<input type="text" id="admDateFrom" name="admDateFrom" size="10" maxlength="10" value="'.$dateFromHtml.'" />
@@ -192,58 +192,67 @@ echo '
 			
 		<input type="button" onclick="send()" value="OK"> 
 	</form> 
-</div>';
+</div>');
 
-$table = new HtmlTableBasic('', 'tableList');
-$table->addAttribute('cellspacing', '0');
-$table->addTableHeader();
-$table->addRow();
+$table = new HtmlTable('profile_field_history_table', true, $page);
+$table->highlightSelectedRow(true);
+
+$columnHeading = array();
 
 if($getUserId == 0)
 {
-    $table->addColumn($gL10n->get('SYS_NAME'), null, 'th');
+    $table->setDatatablesOrderColumns(array(array(6, 'desc')));
+    $columnHeading[] = $gL10n->get('SYS_NAME');
+}
+else
+{
+    $table->setDatatablesOrderColumns(array(array(5, 'desc')));
 }
 
-$table->addColumn($gL10n->get('SYS_FIELD'), null, 'th');
-$table->addColumn($gL10n->get('SYS_NEW_VALUE'), null, 'th');
-$table->addColumn($gL10n->get('SYS_PREVIOUS_VALUE'), null, 'th');
-$table->addColumn($gL10n->get('SYS_EDITED_BY'), null, 'th');
-$table->addColumn($gL10n->get('SYS_CHANGED_AT'), null, 'th');         
-$table->addTableBody();			
+$columnHeading[] = $gL10n->get('SYS_FIELD');
+$columnHeading[] = $gL10n->get('SYS_NEW_VALUE');
+$columnHeading[] = $gL10n->get('SYS_PREVIOUS_VALUE');
+$columnHeading[] = $gL10n->get('SYS_EDITED_BY');
+$columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
+
+//$table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'center'));
+$table->addRowHeadingByArray($columnHeading);
+	
 
 while($row = $gDb->fetch_array($resultFieldHistory))
 {
 	$timestampCreate = new DateTimeExtended($row['usl_timestamp_create'], 'Y-m-d H:i:s');
-
-	$table->addRow('', array('class' => 'tableMouseOver'));
+    $columnValues    = array();
 	
 	if($getUserId == 0)
 	{
-        $table->addColumn($row['last_name'].', '.$row['first_name']);
+        $columnValues[] = $row['last_name'].', '.$row['first_name'];
 	}
 	
-	$table->addColumn($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name'));
-	$table->addColumn($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html'));
-	$table->addColumn($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html'));
-	$table->addColumn($row['create_last_name'].', '.$row['create_first_name']);
-	$table->addColumn($timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']));
+	$columnValues[] = $gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name');
+    if(strlen($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html')) > 0)
+    {
+        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_new'], 'html');
+    }
+    else
+    {
+        $columnValues[] = '&nbsp;';
+    }
+
+    if(strlen($gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html')) > 0)
+    {
+        $columnValues[] = $gProfileFields->getHtmlValue($gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name_intern'), $row['usl_value_old'], 'html');
+    }
+    else
+    {
+        $columnValues[] = '&nbsp;';
+    }
+    
+	$columnValues[] = $row['create_last_name'].', '.$row['create_first_name'];
+	$columnValues[] = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $table->addRowByArray($columnValues);
 }
-echo $table->getHtmlTable();
 
-// If neccessary show links to navigate to next and previous recordsets of the query
-$base_url = $g_root_path.'/adm_program/administration/members/profile_field_history.php?start='.$getStart.'&usr_id='.$getUserId.'&date_from='.$getDateFrom.'&date_to='.$getDateTo;
-echo admFuncGeneratePagination($base_url, $countChanges, $membersPerPage, $getStart, TRUE);
-
-echo '
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+$page->addHtml($table->show(false));
+$page->show();
 ?>

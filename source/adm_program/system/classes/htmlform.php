@@ -170,10 +170,12 @@ class HtmlForm extends HtmlFormBasic
 	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class      Optional an additional css classname. The class @b admCheckbox
      *                     is set as default and need not set with this parameter.
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
      */
-    public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $class = null)
+    public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $class = null, $icon = null)
     {
         $attributes = array('class' => 'admCheckbox');
+        $htmlIcon   = '';
         $this->countElements++;
 
         // disable field
@@ -195,9 +197,22 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
+		if(strlen($icon) > 0)
+		{
+			// create html for icon
+			if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
+			{
+				$htmlIcon = '<img class="admIconInformation" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+			}
+			elseif(admStrIsValidFileName($icon, true))
+			{
+				$htmlIcon = '<img class="admIconInformation" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+			}
+		}
+
         $this->openFieldStructure($id, null, $property, 'admCheckboxRow');
         $this->addInput('checkbox', $id, $id, '1', $attributes);
-		$this->addHtml('<label for="'.$id.'">'.$label.'</label>');
+		$this->addHtml($htmlIcon.'<label for="'.$id.'">'.$label.'</label>');
 		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
@@ -211,7 +226,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $content    A simple Text or html that would be placed instead of an form element.
      *  @param $class      Optional an additional css classname.
      */
-    public function addCustomContent($id, $label, $content, $class = '')
+    public function addCustomContent($id, $label, $content, $class = null)
     {
         $this->countElements++;
     
@@ -250,7 +265,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = '')
+	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = null)
 	{
         $attributes = array('class' => 'admEditor');
         $this->countElements++;
@@ -400,8 +415,9 @@ class HtmlForm extends HtmlFormBasic
 	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-    public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
+    public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = null, $icon = null)
     {
         global $gL10n, $g_root_path;
 
@@ -447,7 +463,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openFieldStructure($id, $label, $property, 'admMultilineTextInputRow');
+        $this->openFieldStructure($id, $label, $property, 'admMultilineTextInputRow', $icon);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
 		$this->setHelpText($helpTextId);
         if($maxLength > 0)
@@ -581,10 +597,11 @@ class HtmlForm extends HtmlFormBasic
      *                          the list with the caption "Please choose".
 	 *  @param $helpTextId      If set a help icon will be shown after the selectbox and on mouseover the translated text 
 	 *                          of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
-     *  @param $class  Optional an additional css classname. The class @b admSelectbox
-     *                 is set as default and need not set with this parameter.
+     *  @param $class      Optional an additional css classname. The class @b admSelectbox
+     *                     is set as default and need not set with this parameter.
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setPleaseChoose = false, $helpTextId = null, $class = '')
+    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setPleaseChoose = false, $helpTextId = null, $class = null, $icon = null)
     {
         global $gL10n;
 
@@ -604,7 +621,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, 'admSelectboxRow');
+        $this->openFieldStructure($id, $label, $property, 'admSelectboxRow', $icon);
         $this->addSelect($id, $id, $attributes);
 
         if($setPleaseChoose == true)
@@ -700,9 +717,10 @@ class HtmlForm extends HtmlFormBasic
 	 *                          of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class           Optional an additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
+     *  @param $icon            Opional an icon can be set. This will be placed in front of the label.
      */
     public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= '', 
-                                        $setPleaseChoose = false, $helpTextId = null, $class = '')
+                                        $setPleaseChoose = false, $helpTextId = null, $class = null, $icon = null)
     {
         $selectboxEntries = array();
     
@@ -724,7 +742,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class, $icon);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
@@ -745,9 +763,10 @@ class HtmlForm extends HtmlFormBasic
 	 *                       of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
      *  @param $class        Optional an additional css classname. The class @b admSelectbox
      *                       is set as default and need not set with this parameter.
+     *  @param $icon         Opional an icon can be set. This will be placed in front of the label.
      */
     public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= '', 
-                                        $setPleaseChoose = false, $helpTextId = null, $class = '')
+                                        $setPleaseChoose = false, $helpTextId = null, $class = null, $icon = null)
     {
         $selectboxEntries = array();
         
@@ -764,7 +783,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class, $icon);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must
@@ -973,6 +992,7 @@ class HtmlForm extends HtmlFormBasic
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
             {
+                $this->htmlPage->addCssFile(THEME_PATH.'/css/calendar.css');
                 $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/calendar/calendar-popup.js');
                 $this->htmlPage->addJavascript($javascriptCode);
             }

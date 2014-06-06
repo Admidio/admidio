@@ -140,7 +140,6 @@ $page = new HtmlPage();
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
-$page->addCssFile(THEME_PATH.'/css/calendar.css');
 
 $page->addJavascript('
     var profileJS = new profileJSClass();
@@ -283,45 +282,47 @@ foreach($gProfileFields->mProfileFields as $field)
     
         // code for different field types
         
-        if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'COUNTRY')
-        {
-            // get default country
-            $preassignedCountry = null;
-            
-    		if($user->getValue('usr_id') == 0 && strlen($gPreferences['default_country']) > 0)
-    		{
-        		$preassignedCountry = $gPreferences['default_country'];
-    		}
-    		elseif($user->getValue('usr_id') > 0 && strlen($user->getValue($field->getValue('usf_name_intern'))) > 0)
-    		{
-        		$preassignedCountry = $user->getValue($field->getValue('usf_name_intern'));
-    		}
-        
-    		// create selectbox with all countries
-    		$form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-    		    $gL10n->getCountries(), $fieldProperty, $preassignedCountry, true, $helpId);
-        }
-        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'CHECKBOX')
+        if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'CHECKBOX')
         {
             $form->addCheckbox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
-                $user->getValue($field->getValue('usf_name_intern')), $fieldProperty, $helpId);
+                $user->getValue($field->getValue('usf_name_intern')), $fieldProperty, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
         }
-        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DROPDOWN')
+        elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DROPDOWN'
+            || $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'COUNTRY')
         {
-    		$arrListValues   = $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_value_list');
-    		
+            // set array with values and set default value
+            if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'COUNTRY')
+            {
+                $arrListValues = $gL10n->getCountries();
+                
+                if($user->getValue('usr_id') == 0 && strlen($gPreferences['default_country']) > 0)
+                {
+                    $defaultValue = $gPreferences['default_country'];
+                }
+                elseif($user->getValue('usr_id') > 0 && strlen($user->getValue($field->getValue('usf_name_intern'))) > 0)
+                {
+                    $defaultValue = $user->getValue($field->getValue('usf_name_intern'), 'database');
+                }
+            }
+            else
+            {
+                $arrListValues = $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_value_list');
+                $defaultValue  = $user->getValue($field->getValue('usf_name_intern'), 'database');
+    		}
+
+            // if mandatory field then first entry should be "Please choose" otherwise only an empty entry will be shown first
             if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_mandatory') == 1)
             {
                 $setPleaseChoose = true;
             }
             else
             {
-        		$setPleaseChoose = false;
-                $arrListValues = array('' => '')+$arrListValues;
+                $setPleaseChoose = false;
+                $arrListValues   = array('' => '')+$arrListValues;
             }
     		
     		$form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-    		    $arrListValues, $fieldProperty, $user->getValue($field->getValue('usf_name_intern'), 'database'), $setPleaseChoose, $helpId);
+    		    $arrListValues, $fieldProperty, $defaultValue, $setPleaseChoose, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
     	}
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'RADIO_BUTTON')
         {
