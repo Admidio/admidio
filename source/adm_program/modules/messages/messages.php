@@ -23,7 +23,7 @@ $formerMembers = 0;
 $getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getSubject     = admFuncVariableIsValid($_GET, 'subject', 'string', '');
 $getBody        = admFuncVariableIsValid($_GET, 'body', 'html', '');
-$getPMId        = admFuncVariableIsValid($_GET, 'pm_id', 'numeric', 0);
+$getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric', 0);
 
 // check if the call of the page was allowed
 if ($gPreferences['enable_mail_module'] != 1)
@@ -45,14 +45,14 @@ if ($getUserId == 0)
 }
 
 // Update the read status of the message
-if ($getPMId > 0)
+if ($getMsgId > 0)
 {
 	$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user1read = '0'
-            WHERE msg_id2 = 0 and msg_id1 = ".$getPMId." and msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
+            WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
     $gDb->query($sql);
 	
 	$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user2read = '0'
-            WHERE msg_id2 = 0 and msg_id1 = ".$getPMId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
+            WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
     $gDb->query($sql);
 }
 
@@ -70,11 +70,11 @@ if((  $gCurrentUser->editUsers() == false
     $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
 }
 
-if ($getPMId > 0)
+if ($getMsgId > 0)
 {
     $sql = "SELECT msg_id1, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp 
               FROM ". TBL_MESSAGES. "
-             WHERE msg_id2 > 0 AND msg_id1 = ". $getPMId ."
+             WHERE msg_id2 > 0 AND msg_id1 = ". $getMsgId ."
 			 and msg_type = 'PM'
              ORDER BY msg_id2 DESC";
 
@@ -105,14 +105,14 @@ $page->addHtml($gNavigation->getHtmlBackButton());
 // show headline of module
 $page->addHeadline($headline);
 
-$formParam = '';
+$formParam = 'msg_type=PM';
 
 // id must be send to the next script
-$formParam .= 'usr_id='.$getUserId;
+$formParam .= '&usr_id='.$getUserId;
 
-if ($getPMId > 0)
+if ($getMsgId > 0)
 {
-$formParam .= '&'.'pm_id='.$getPMId;
+$formParam .= '&'.'msg_id='.$getMsgId;
 }
 
 // show form
@@ -135,7 +135,7 @@ else
 $form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), '', 77, FIELD_MANDATORY);
 }
 
-$form->addMultilineTextInput('pm_body', $gL10n->get('SYS_PM'), null, 10, 254);
+$form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), null, 10, 254);
 
 $form->closeGroupBox();
 

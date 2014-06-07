@@ -132,14 +132,14 @@ elseif ($getRoleId > 0 || (strlen($getRoleName) > 0 && strlen($getCategory) > 0)
     $formerMembers = $row['former'];
 }
 
-// Wenn die letzte URL in der Zuruecknavigation die des Scriptes mail_send.php ist,
+// Wenn die letzte URL in der Zuruecknavigation die des Scriptes message_send.php ist,
 // dann soll das Formular gefuellt werden mit den Werten aus der Session
-if (strpos($gNavigation->getUrl(),'mail_send.php') > 0 && isset($_SESSION['mail_request']))
+if (strpos($gNavigation->getUrl(),'message_send.php') > 0 && isset($_SESSION['message_request']))
 {
     // Das Formular wurde also schon einmal ausgefüllt,
     // da der User hier wieder gelandet ist nach der Mailversand-Seite
-    $form_values = strStripSlashesDeep($_SESSION['mail_request']);
-    unset($_SESSION['mail_request']);
+    $form_values = strStripSlashesDeep($_SESSION['message_request']);
+    unset($_SESSION['message_request']);
     $gNavigation->deleteLastUrl();
 }
 else
@@ -227,7 +227,7 @@ if (strlen($getSubject) > 0)
 
 
 // show form
-$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/mail/mail_send.php?'.$formParam, $page, true);
+$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, true);
 $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 if ($getUserId > 0)
 {
