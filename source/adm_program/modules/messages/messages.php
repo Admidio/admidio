@@ -47,11 +47,11 @@ if ($getUserId == 0)
 // Update the read status of the message
 if ($getPMId > 0)
 {
-	$sql = 'UPDATE '. TBL_MESSAGES. " SET  msg_user1read = '0'
+	$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user1read = '0'
             WHERE msg_id2 = 0 and msg_id1 = ".$getPMId." and msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
     $gDb->query($sql);
 	
-	$sql = 'UPDATE '. TBL_MESSAGES. " SET  msg_user2read = '0'
+	$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user2read = '0'
             WHERE msg_id2 = 0 and msg_id1 = ".$getPMId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
     $gDb->query($sql);
 }
@@ -72,10 +72,11 @@ if((  $gCurrentUser->editUsers() == false
 
 if ($getPMId > 0)
 {
-    $sql = 'SELECT msg_id1, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp 
-              FROM '. TBL_MESSAGES. '
-             WHERE msg_id2 > 0 AND msg_id1 = '. $getPMId .'
-             ORDER BY msg_id2 DESC';
+    $sql = "SELECT msg_id1, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp 
+              FROM ". TBL_MESSAGES. "
+             WHERE msg_id2 > 0 AND msg_id1 = ". $getPMId ."
+			 and msg_type = 'PM'
+             ORDER BY msg_id2 DESC";
 
     $result = $gDb->query($sql);
 }

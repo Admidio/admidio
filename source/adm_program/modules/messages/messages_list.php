@@ -27,26 +27,26 @@ if (!$gValidLogin)
 }
 
 //SQL to find all unread messages
-$sql = 'SELECT msg_id1, msg_subject, msg_timestamp,
-			CASE WHEN msg_usrid1 = '. $gCurrentUser->getValue('usr_id') .' THEN msg_usrid2
+$sql = "SELECT msg_id1, msg_subject, msg_timestamp,
+			CASE WHEN msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usrid2
 			ELSE msg_usrid1 
 			END AS user
-        FROM '. TBL_MESSAGES. '
-         WHERE msg_id2 = 0 and ((msg_usrid1 = '. $gCurrentUser->getValue('usr_id') .' and msg_user1read= 1)
-		 or (msg_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and msg_user2read= 1))
-		 ORDER BY msg_id1 DESC';
+        FROM ". TBL_MESSAGES. "
+         WHERE msg_type = 'PM' and msg_id2 = 0 and ((msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." and msg_user1read= 1)
+		 or (msg_usrid2 = ". $gCurrentUser->getValue('usr_id') ." and msg_user2read= 1))
+		 ORDER BY msg_id1 DESC";
 
 $result = $gDb->query($sql);
 
 //SQL to find all read messages
-$sql = 'SELECT msg_id1, msg_subject, msg_timestamp,
-			CASE WHEN msg_usrid1 = '. $gCurrentUser->getValue('usr_id') .' THEN msg_usrid2
+$sql = "SELECT msg_id1, msg_subject, msg_timestamp,
+			CASE WHEN msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usrid2
 			ELSE msg_usrid1 
 			END AS user
-        FROM '. TBL_MESSAGES. '
-         WHERE msg_id2 = 0 and ((msg_usrid1 = '. $gCurrentUser->getValue('usr_id') .' and msg_user1read= 0)
-		 or (msg_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and msg_user2read= 0))
-		 ORDER BY msg_id1 DESC';
+        FROM ". TBL_MESSAGES. "
+         WHERE msg_type = 'PM' and msg_id2 = 0 and ((msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." and msg_user1read= 0)
+		 or (msg_usrid2 = ". $gCurrentUser->getValue('usr_id') ." and msg_user2read= 0))
+		 ORDER BY msg_id1 DESC";
 
 $result1 = $gDb->query($sql);
 

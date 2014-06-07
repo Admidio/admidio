@@ -74,40 +74,40 @@ $gNavigation->addUrl(CURRENT_URL);
 
 if ($getPMId == 0)
 {
-    $sql = 'SELECT msg_id1, count(*) 
-              FROM '. TBL_MESSAGES. '
-             GROUP BY msg_id1';
+    $sql = "SELECT msg_id1, count(*) 
+              FROM ". TBL_MESSAGES. "
+             GROUP BY msg_id1";
 
     $result = $gDb->query($sql);
 	$getPMId = $gDb->num_rows($result) + 1;
 	$PMId2 = 1;
 	
-	$sql = 'INSERT INTO '. TBL_MESSAGES. " (msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-        VALUES ('".$getPMId."', 0, '".$postSubject."', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '', CURRENT_TIMESTAMP, '0', '1')";
+	$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
+        VALUES ('PM', '".$getPMId."', 0, '".$postSubject."', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '', CURRENT_TIMESTAMP, '0', '1')";
 	
 	$gNavigation->deleteLastUrl();
 }
 else
 {
-	$sql = 'SELECT * 
-              FROM '. TBL_MESSAGES. '
-			  WHERE msg_id1 = '.$getPMId;
+	$sql = "SELECT * 
+              FROM ". TBL_MESSAGES. "
+			  WHERE msg_id1 = ".$getPMId;
 
     $result = $gDb->query($sql);
 	$PMId2 = $gDb->num_rows($result);
 	
-	$sql = 'UPDATE '. TBL_MESSAGES. " SET  msg_user2read = '1', msg_timestamp = CURRENT_TIMESTAMP
+	$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user2read = '1', msg_timestamp = CURRENT_TIMESTAMP
             WHERE msg_id2 = 0 and msg_id1 = ".$getPMId." and msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
     $gDb->query($sql);
 	
-	$sql = 'UPDATE '. TBL_MESSAGES. " SET  msg_user1read = '1', msg_timestamp = CURRENT_TIMESTAMP
+	$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user1read = '1', msg_timestamp = CURRENT_TIMESTAMP
             WHERE msg_id2 = 0 and msg_id1 = ".$getPMId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
 }
 
 $gDb->query($sql);
 	
-$sql = 'INSERT INTO '. TBL_MESSAGES. " (msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-        VALUES ('".$getPMId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '".$postBody."', CURRENT_TIMESTAMP, '0', '0')";
+$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
+        VALUES ('PM', '".$getPMId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '".$postBody."', CURRENT_TIMESTAMP, '0', '0')";
 
 if (!$gDb->query($sql)) {
   $gMessage->setForwardUrl($gNavigation->getUrl());
