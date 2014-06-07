@@ -664,26 +664,6 @@ collate = utf8_unicode_ci;
 
 create unique index IDX_USR_LOGIN_NAME on %PREFIX%_users (usr_login_name);
 
-/*==============================================================*/
-/* Table: adm_messages                                          */
-/*==============================================================*/
-
-CREATE TABLE %PREFIX%_messages
-(
-  msg_type				varchar(10) 	NOT NULL,
-  msg_id1 				bigint(20) 		unsigned NOT NULL,
-  msg_id2 				int(10) 		NOT NULL DEFAULT '0',
-  msg_subject 			varchar(256) 	NOT NULL,
-  msg_usrid1 			int(10) 		NOT NULL,
-  msg_usrid2 			int(10) 		DEFAULT NULL,
-  msg_message 			text 			NOT NULL,
-  msg_timestamp 		timestamp 		NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  msg_user1read 		tinyint(1) 		NOT NULL DEFAULT '0',
-  msg_user2read 		tinyint(1) 		NOT NULL DEFAULT '0'
-)
-engine = InnoDB
-default character set = utf8
-collate = utf8_unicode_ci;
 
 /*==============================================================*/
 /* Constraints                                                  */
