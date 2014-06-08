@@ -51,7 +51,7 @@
 	  <table  border="0" cellpadding="0" style="height:270px; min-height:400px; width:400px; " cellspacing="2">
 	   <tbody>
        <tr>
-	    <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
+	    <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/messages/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
 	   </tr>
        <tr>
          <td style="height:10px;"></td>

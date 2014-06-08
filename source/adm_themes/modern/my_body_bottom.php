@@ -33,7 +33,7 @@
 			}
 			if($gPreferences['enable_mail_module'] == 1)
 			{
-				$moduleMenu->addItem('email', '/adm_program/modules/mail/mail.php',
+				$moduleMenu->addItem('email', '/adm_program/modules/messages/mail.php',
 									$gL10n->get('SYS_EMAIL'), '/icons/email.png');
 			}
             if($gPreferences['enable_photo_module'] == 1 

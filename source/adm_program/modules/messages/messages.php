@@ -8,10 +8,9 @@
  *
  * Parameters:
  *
- * usr_id    - PM to the given user ID
- * subject   - subject of the PM
- * body      - boby of the PM
- * pm_id     - ID of the PM
+ * usr_id    - send message to the given user ID
+ * subject   - subject of the message
+ * msg_id    - ID of the message -> just for answers
  *
  *****************************************************************************/
 
@@ -22,7 +21,6 @@ $formerMembers = 0;
 // Initialize and check the parameters
 $getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getSubject     = admFuncVariableIsValid($_GET, 'subject', 'string', '');
-$getBody        = admFuncVariableIsValid($_GET, 'body', 'html', '');
 $getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric', 0);
 
 // check if the call of the page was allowed

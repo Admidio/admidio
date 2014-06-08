@@ -9,7 +9,7 @@
 </head>
 <body>
     <div align="center" style="margin-top:30px;">
-        <%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/mail/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b>
+        <%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/messages/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b>
     </div>
     <hr style="border: 1px solid black; width: 80%;">
     <div align="center">
