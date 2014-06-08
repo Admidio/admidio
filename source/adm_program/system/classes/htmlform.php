@@ -154,7 +154,7 @@ class HtmlForm extends HtmlFormBasic
         $this->closeFieldStructure();
         
         // now add a row with a text field where the user can write the solution for the puzzle
-        $this->addTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, $captchaDescription, 'admTextInputSmall');
+        $this->addTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, 'TEXT', $captchaDescription, 'admTextInputSmall');
     }
     
     /** Add a new checkbox with a label to the form.
