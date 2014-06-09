@@ -132,7 +132,7 @@ class ProfileFields
         				    $value2 = $this->mUserId;
     				    }
     				    
-						$emailLink = $g_root_path.'/adm_program/modules/messages/mail.php?usr_id='. $value2;
+						$emailLink = $g_root_path.'/adm_program/modules/messages/messages.php?usr_id='. $value2;
 					}
 					if(strlen($value) > 30)
 					{

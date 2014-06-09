@@ -138,7 +138,7 @@ echo '
                         {
                             if($gPreferences['enable_mail_module'] == 1)
                             {
-                                echo '<a href="'.$g_root_path.'/adm_program/modules/messages/mail.php?usr_id='.$row->usr_id.'">'.$row->email.'</a><br />';
+                                echo '<a href="'.$g_root_path.'/adm_program/modules/messages/messages.php?usr_id='.$row->usr_id.'">'.$row->email.'</a><br />';
                             }
                             else
                             {

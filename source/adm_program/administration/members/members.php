@@ -367,7 +367,7 @@ if($membersCount > 0)
 			}
 			else
 			{
-				$mail_link = $g_root_path.'/adm_program/modules/messages/mail.php?usr_id='. $row['usr_id'];
+				$mail_link = $g_root_path.'/adm_program/modules/messages/messages.php?usr_id='. $row['usr_id'];
 			}
 			
 			$tableMembers->addColumn('<a class="iconLink" href="'.$mail_link.'"><img src="'. THEME_PATH. '/icons/email.png"

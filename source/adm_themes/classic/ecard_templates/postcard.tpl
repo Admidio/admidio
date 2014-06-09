@@ -17,7 +17,7 @@
 	  <table  border="0" cellpadding="0" cellspacing="2">
 	   <tbody>
        <tr>
-	    <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/messages/mail.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
+	    <td><%ecard_greeting_card_from%>: <b><a href="<%g_root_path%>/adm_program/modules/messages/messages.php?usr_id=<%ecard_sender_id%>" target="_blank"><%ecard_sender_name%></a></b></td>
 	   </tr>
 	   <tr>
 	    <td align="center"><img src="<%ecard_image_name%>" style="border: 0px; margin: 10pt 10px 10px 10pt; padding: 4px;" alt="<%ecard_greeting_card_string%>"></td>

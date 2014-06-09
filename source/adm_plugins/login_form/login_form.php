@@ -314,7 +314,7 @@ else
             && $roleWebmaster->getValue('rol_mail_this_role') == 3)
             {
                 // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-                $emailLink = $g_root_path.'/adm_program/modules/messages/mail.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+                $emailLink = $g_root_path.'/adm_program/modules/messages/messages.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
             }
             else
             {
@@ -441,7 +441,7 @@ else
                             && $roleWebmaster->getValue('rol_mail_this_role') == 3)
                             {
                                 // Mailmodul aufrufen mit Webmaster als Ansprechpartner
-                                $mail_link = $g_root_path.'/adm_program/modules/messages/mail.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
+                                $mail_link = $g_root_path.'/adm_program/modules/messages/messages.php?rol_id='. $roleWebmaster->getValue('rol_id'). '&amp;subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
                             }
                             else
                             {

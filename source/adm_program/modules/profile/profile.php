@@ -238,7 +238,7 @@ $page->addHtml('
                                 {
                                     if ($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id'))
                                     {
-                                        $page->addHtml('<a href='.$g_root_path.'/adm_program/modules/messages/messages.php?usr_id='.$user->getValue('usr_id').'>'.$user->getValue('usr_login_name').'</a>');
+                                        $page->addHtml('<a href='.$g_root_path.'/adm_program/modules/messages/messages.php?msg_type=PM&usr_id='.$user->getValue('usr_id').'>'.$user->getValue('usr_login_name').'</a>');
                                     }
                                     else
                                     {

@@ -27,7 +27,7 @@ if (!$gValidLogin)
 }
 
 //SQL to find all unread messages
-$sql = "SELECT msg_id1, msg_subject, msg_timestamp,
+$sql = "SELECT msg_type, msg_id1, msg_subject, msg_timestamp,
 			CASE WHEN msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usrid2
 			ELSE msg_usrid1 
 			END AS user
@@ -39,7 +39,7 @@ $sql = "SELECT msg_id1, msg_subject, msg_timestamp,
 $result = $gDb->query($sql);
 
 //SQL to find all read messages
-$sql = "SELECT msg_id1, msg_subject, msg_timestamp,
+$sql = "SELECT msg_type, msg_id1, msg_subject, msg_timestamp,
 			CASE WHEN msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usrid2
 			ELSE msg_usrid1 
 			END AS user
@@ -79,9 +79,9 @@ if(isset($result))
     while ($row = $gDb->fetch_array($result)) {
         $user = new User($gDb, $gProfileFields, $row['user']);
 		$table->addRow();
-		$table->addColumn($row['msg_subject'], array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-        $table->addColumn($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-		$table->addColumn($row['msg_timestamp'], array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
+		$table->addColumn($row['msg_subject'], array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
+        $table->addColumn($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
+		$table->addColumn($row['msg_timestamp'], array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
     }
 }
 
@@ -90,9 +90,9 @@ if(isset($result1))
 	while ($row = $gDb->fetch_array($result1)) {
         $user = new User($gDb, $gProfileFields, $row['user']);
 		$table->addRow();
-		$table->addColumn($row['msg_subject'], array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-        $table->addColumn($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-		$table->addColumn($row['msg_timestamp'], array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
+		$table->addColumn($row['msg_subject'], array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
+        $table->addColumn($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
+		$table->addColumn($row['msg_timestamp'], array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
     }
 }
 
