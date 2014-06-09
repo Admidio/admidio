@@ -26,6 +26,8 @@ $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
+$html       = '';
+
 // if user is allowed to assign at least one role then allow access
 if($gCurrentUser->assignRoles() == false)
 {
@@ -33,9 +35,13 @@ if($gCurrentUser->assignRoles() == false)
 }
 
 $user = new User($gDb, $gProfileFields, $getUserId);
+
+// set headline of the script
+$headline = $gL10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('FIRST_NAME'),$user->getValue('LAST_NAME'));
+
 if($getInline == 0)
 {
-    $gNavigation->addUrl(CURRENT_URL);
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 }
 //Testen ob Feste Rolle gesetzt ist
 if(isset($_SESSION['set_rol_id']))
@@ -48,36 +54,40 @@ else
     $setRoleId = NULL;
 }
 
-// Html-Kopf ausgeben
-$gLayout['title']  = $gL10n->get('ROL_ROLE_ASSIGNMENT',$user->getValue('LAST_NAME'),$user->getValue('FIRST_NAME'));
-$gLayout['header'] = '<script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/profile/profile.js"></script>
-<script type="text/javascript">
-    var profileJS = new profileJSClass();
-	profileJS.init();
-</script>';
-// Create table
-$table = new HtmlTableBasic('', 'tableList');
-$table->addAttribute('cellspacing', '0');
-$table->addTableHeader();
-$table->addRow();
-$table->addColumn('&nbsp;', null, 'th');
-$table->addColumn($gL10n->get('ROL_ROLE'), null, 'th');
-$table->addColumn($gL10n->get('SYS_DESCRIPTION'), null, 'th');
-$table->addColumn($gL10n->get('SYS_LEADER'), null, 'th');
-
-if($getInline == 0)
+if($getInline == true)
 {
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    header('Content-type: text/html; charset=utf-8');
+    $html .= '<div class="admPopupWindow">';
 }
 else
 {
-    header('Content-type: text/html; charset=utf-8'); 
+    // create html page object
+    $page = new HtmlPage();
+    $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
+    
+    $page->addJavascript('
+        var profileJS = new profileJSClass();
+        profileJS.init();', true);
+
+    // show back link
+    $page->addHtml($gNavigation->getHtmlBackButton());
 }
 
-echo '
-<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>
+// show headline of module
+$html .= '<h1 class="admHeadline">'.$headline.'</h1>';
 
-<form id="rolesForm" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
+
+$html .= '<form id="roles_assignment_form" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
+
+// Create table
+$table = new HtmlTable('role_assignment_table');
+$columnHeading = array(
+    '&nbsp;',
+    $gL10n->get('ROL_ROLE'),
+    $gL10n->get('SYS_DESCRIPTION'),
+    $gL10n->get('SYS_LEADER'));
+$table->addRowHeadingByArray($columnHeading);
+$table->setColumnAlignByArray(array('center', 'left', 'left', 'left'));
 
 if($gCurrentUser->manageRoles())
 {
@@ -127,6 +137,7 @@ $role     = new TableRoles($gDb);
 
 while($row = $gDb->fetch_array($result))
 {
+	$columnValues   = array();
 	$memberChecked  = '';
 	$memberDisabled = '';
 	$leaderChecked  = '';
@@ -163,25 +174,27 @@ while($row = $gDb->fetch_array($result))
 			$leaderDisabled = ' disabled="disabled" ';
 		}
 
+        $columnValues = array(
+            '<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
+                $memberChecked.$memberDisabled.' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />',
+            '<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>',
+            $role->getValue('rol_description'));
+        
 		// if new category than display a category header
         if($category != $role->getValue('cat_id'))
         {
             $block_id = 'admCategory'.$role->getValue('cat_id');
+
             $table->addTableBody();
-            $table->addRow();
-            $table->addColumn('', array('class' => 'tableSubHeader'));
+            $table->addRow('', array('class' => 'admTableSubHeader'));
+            $table->addColumn();
             $table->addAttribute('colspan', '4', 'td');
-            $table->addData('<a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\');"><img
+            $table->addData('<a href="javascript:showHideBlock(\''.$block_id.'\');"><img
                                 id="'.$block_id.'Image" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name'));
             $table->addTableBody('id', $block_id);
     
             $category = $role->getValue('cat_id');
         }
-        $table->addRow('', array('class' => 'tableMouseOver'));
-        $table->addColumn('<input type="checkbox" id="role-'.$role->getValue('rol_id').'" name="role-'.$role->getValue('rol_id').'" '.
-					        $memberChecked.$memberDisabled.' onclick="javascript:profileJS.unMarkLeader(this);" value="1" />', 'style', 'text-align: center;');
-        $table->addColumn('<label for="role-'.$role->getValue('rol_id').'">'.$role->getValue('rol_name').'</label>');
-        $table->addColumn($role->getValue('rol_description'));
 
 		$leaderRights = '<input type="checkbox" id="leader-'.$role->getValue('rol_id').'" name="leader-'.$role->getValue('rol_id').'" '.
 					       $leaderChecked.$leaderDisabled.' onclick="javascript:profileJS.markLeader(this);" value="1" />';
@@ -215,30 +228,26 @@ while($row = $gDb->fetch_array($result))
 		{
 			$leaderRights .= '<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 		}
-    	$table->addColumn($leaderRights);
+		$columnValues[] = $leaderRights;
+		
+    	$table->addRowByArray($columnValues);
     }
 }
-echo $table->getHtmlTable();
-echo'
-    <div class="formSubmit">
-        <button id="btnSave" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-    </div>';
-    if($getInline == 0)
-    {
-        echo '
-		<ul class="iconTextLinkList">
-			<li>
-				<span class="iconTextLink">
-					<a href="$g_root_path/adm_program/system/back.php"><img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-					<a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-				</span>
-			</li>
-		</ul>';
-    }
-echo '</form>';
+$html .= $table->show(false);
 
-if($getInline == 0)
+$html .= '
+    <div class="formSubmit">
+        <button class="admButton" id="btn_save" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+    </div>
+</form>';
+
+if($getInline == true)
 {
-    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+    echo $html.'</div>';
+}
+else
+{
+    $page->addHtml($html);
+    $page->show();
 }
 ?>

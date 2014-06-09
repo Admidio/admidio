@@ -43,12 +43,12 @@
             $row = $gDb->num_rows($result);
             if ($row > 0)
             {
-                $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
+                $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages_list.php',
                                 $gL10n->get('SYS_PM').' ('.$row.')', '/icons/email.png');
             }
             else
             {
-                $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
+                $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages_list.php',
                                 $gL10n->get('SYS_PM'), '/icons/email.png');
             }
         }

@@ -42,6 +42,7 @@
     <text id="PRO_SELECT_NEW_PIC_HERE" development="deleted" translation="todo"></text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
     <text id="PRO_EXPORT_VCARD" development="new" translation="todo">vCard exportieren</text>
+    <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="todo">Rollenzuordnung für %VAR1% %VAR2%</text>
     <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
     <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
@@ -1080,7 +1081,6 @@
     <text id="ROL_ROLE" development="new" translation="todo">Rolle</text>
     <text id="ROL_ROLE_ADMINISTRATION" development="new" translation="todo">Rollenverwaltung</text>
     <text id="ROL_ROLE_ADMINISTRATION_DESC" development="new" translation="todo">Rollen, dies können Gruppen, Kurse oder Abteilungen sein, können hier erstellt und bearbeitet werden. Auch die Rechte der einzelnen Rollen werden hier festgelegt.</text>
-    <text id="ROL_ROLE_ASSIGNMENT" development="new" translation="todo">Rollenzuordnung für "%VAR1% %VAR2%"</text>
     <text id="ROL_ROLE_DELETE" development="new" translation="todo">Rolle löschen</text>
     <text id="ROL_ROLE_DELETE_DESC" development="new" translation="todo">Willst du die Rolle %VAR1% wirklich löschen?\n\nEs werden damit auch alle Mitgliedschaften entgütig entfernt.</text>
     <text id="ROL_ROLE_DEPENDENCIES" development="new" translation="todo">Ein Mitglied der abhängigen Rollen soll auch automatisch Mitglied der %VAR1% sein!\n\nBeim Setzten dieser Abhängigkeit werden auch bereits existierende Mitglieder der abhängigen Rolle Mitglied der %VAR1%. Beim Entfernen einer Abhängigkeit werden Mitgliedschaften nicht aufgehoben!</text>
