@@ -30,35 +30,26 @@ $getMsgType      = admFuncVariableIsValid($_GET, 'msg_type', 'string', '');
 // Check form values
 $postFrom        = admFuncVariableIsValid($_POST, 'mailfrom', 'string', '');
 $postName        = admFuncVariableIsValid($_POST, 'name', 'string', '');
-$postSubject     = admFuncVariableIsValid($_POST, 'subject', 'string', '');
+$postSubject     = stripslashes($_POST['subject']);
+$postSubjectSQL  = admFuncVariableIsValid($_POST, 'subject', 'string', '');
 $postTo          = admFuncVariableIsValid($_POST, 'msg_to', 'string', '');
 $postBody        = admFuncVariableIsValid($_POST, 'msg_body', 'html', '');
+$postBodySQL     = admFuncVariableIsValid($_POST, 'msg_body', 'string', '');
 $postRoleId      = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
 $postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean', 0);
 $postCaptcha     = admFuncVariableIsValid($_POST, 'captcha', 'string');
 $postShowMembers = admFuncVariableIsValid($_POST, 'show_members', 'numeric', 0);
 
-if ($getMsgType != 'PM')
+//if no valid login, or message not PM it must be Email
+if (!$gValidLogin || $getMsgType != 'PM')
 {
-    // Check form values
-    $postTo          = admFuncVariableIsValid($_POST, 'mailto', 'string', '');
-    $postBody        = admFuncVariableIsValid($_POST, 'mail_body', 'html', '');
-	
-    // subject for emails should not be checked because we want accept special chars like & ' or "
-    // subject will not be parsed as html in emails so no xss is possible
-    $postSubject     = stripslashes($_POST['subject']);
+	$getMsgType      = 'EMAIL';
 }
 
 //just logged-in Users are allowed to give userid to this module...
 if ($getUserId > 0 && !$gValidLogin)
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-//if no valid login, it must be Email
-if (!$gValidLogin)
-{
-    $getMsgType = 'EMAIL';
 }
 
 // allow option to send a copy to your email address only for registered users because of spam abuse
@@ -388,7 +379,7 @@ if ($getMsgType != 'PM')
 	$email->setText($postBody);
 
 	//Nun kann die Mail endgueltig versendet werden...
-	$sendMailResult = $email->sendEmail();
+	$sendResult = $email->sendEmail();
 
 }
 else
@@ -406,26 +397,29 @@ else
 
 	if ($getMsgId == 0)
 	{
-		$sql = "SELECT msg_id1, count(*) 
-				  FROM ". TBL_MESSAGES. "
-				 GROUP BY msg_id1";
-
-		$result = $gDb->query($sql);
-		$getMsgId = $gDb->num_rows($result) + 1;
 		$PMId2 = 1;
 		
+		$sql = "SELECT MAX(msg_id1) as max_id
+			  FROM ". TBL_MESSAGES;
+	
+		$result = $gDb->query($sql);
+		$row = $gDb->fetch_array($result);
+		$getMsgId = $row['max_id'] + 1;
+		
 		$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-			VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubject."', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '', CURRENT_TIMESTAMP, '0', '1')";
+			VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '', CURRENT_TIMESTAMP, '0', '1')";
+	
+		$gDb->query($sql);	
 		
 	}
 	else
 	{
-		$sql = "SELECT * 
-				  FROM ". TBL_MESSAGES. "
-				  WHERE msg_id1 = ".$getMsgId;
-
+		$sql = "SELECT MAX(msg_id2) as max_id
+			  FROM ". TBL_MESSAGES;
+	
 		$result = $gDb->query($sql);
-		$PMId2 = $gDb->num_rows($result);
+		$row = $gDb->fetch_array($result);
+		$PMId2 = $row['max_id'] + 1;
 		
 		$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user2read = '1', msg_timestamp = CURRENT_TIMESTAMP
 				WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
@@ -433,22 +427,40 @@ else
 		
 		$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user1read = '1', msg_timestamp = CURRENT_TIMESTAMP
 				WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
+		
+		$gDb->query($sql);
 	}
-
-	$gDb->query($sql);
 		
 	$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-			VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '".$postBody."', CURRENT_TIMESTAMP, '0', '0')";
-
+			VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0', '0')";
+	$postBodySQL = '';
+	
 	if ($gDb->query($sql)) {
-	  $sendMailResult = TRUE;
+	  $sendResult = TRUE;
 	}
-
 }
 
-if ($sendMailResult === TRUE)
+// message if send/save is OK
+if ($sendResult === TRUE)
 {
-	// Der CaptchaCode wird bei erfolgreichem Mailversand aus der Session geloescht
+	// save mail also to database
+	if ($getMsgType != 'PM')
+    {
+	     $sql = "SELECT MAX(msg_id1) as max_id
+	      FROM ". TBL_MESSAGES;
+	
+		$result = $gDb->query($sql);
+		$row = $gDb->fetch_array($result);
+		$getMsgId = $row['max_id'] + 1;
+			
+		$sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
+			VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0', '1')";
+		
+		$gDb->query($sql);	
+	}
+
+	
+	// Delete CaptchaCode if send/save was correct
 	if (isset($_SESSION['captchacode']))
 	{
 		unset($_SESSION['captchacode']);
@@ -486,11 +498,11 @@ else
 {
 	if ($getMsgType != 'PM' && $role->getValue('rol_id') > 0)
 	{
-		$gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name')), $sendMailResult));
+		$gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name')), $sendResult));
 	}
 	else
 	{
-		$gMessage->show($sendMailResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $postTo, $sendMailResult));
+		$gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $postTo, $sendResult));
 	}
 }
 

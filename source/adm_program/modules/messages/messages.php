@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * PM main page
+ * messages main page
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -20,7 +20,7 @@ $formerMembers = 0;
 
 // Initialize and check the parameters
 $getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getSubject     = admFuncVariableIsValid($_GET, 'subject', 'string', '');
+$getSubject     = admFuncVariableIsValid($_GET, 'subject', 'html', '');
 $getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric', 0);
 
 // check if the call of the page was allowed

@@ -147,7 +147,7 @@ else
     $form_values['name']         = '';
     $form_values['mailfrom']     = '';
     $form_values['subject']      = $getSubject;
-    $form_values['mail_body']    = $getBody;
+    $form_values['msg_body']    = $getBody;
     $form_values['rol_id']       = 0;
     $form_values['carbon_copy']  = $getCarbonCopy;
     $form_values['delivery_confirmation']  = $getDeliveryConfirmation;
@@ -232,7 +232,7 @@ $form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'
 if ($getUserId > 0)
 {
 	// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-    $form->addTextInput('mailto', $gL10n->get('SYS_TO'), $userEmail, 50, FIELD_DISABLED);
+    $form->addTextInput('msg_to', $gL10n->get('SYS_TO'), $userEmail, 50, FIELD_DISABLED);
 }
 elseif ($getRoleId > 0 || (strlen($getRoleName) > 0 && strlen($getCategory) > 0) )
 {
@@ -315,11 +315,11 @@ if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_g
 // add textfield or ckeditor to form
 if($gValidLogin == true && $gPreferences['mail_html_registered_users'] == 1)
 {
-    $form->addEditor('mail_body', null, $form_values['mail_body']);
+    $form->addEditor('msg_body', null, $form_values['msg_body']);
 }
 else
 {
-    $form->addMultilineTextInput('mail_body', $gL10n->get('SYS_TEXT'), null, 10);
+    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_TEXT'), null, 10);
 }
 
 $form->closeGroupBox();

@@ -50,7 +50,7 @@ function admStrStripTagsSpecial($srcArray)
         && $key != 'gbc_text'
         && $key != 'gbo_text'
         && $key != 'lnk_description'
-        && $key != 'mail_body'
+        && $key != 'msg_body'
         && $key != 'plugin_CKEditor'
         && $key != 'room_description'
         && $key != 'usf_description')
