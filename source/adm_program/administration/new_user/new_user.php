@@ -23,9 +23,11 @@ if($gPreferences['registration_mode'] == 0)
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
+// set headline of the script
+$headline = $gL10n->get('NWU_NEW_REGISTRATIONS');
+
 // Navigation in module starts here
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 // Select new Members of the group
 $sql    = 'SELECT usr_id, usr_login_name, reg_timestamp, last_name.usd_value as last_name,
@@ -53,36 +55,33 @@ if ($member_found == 0)
     $gMessage->show($gL10n->get('NWU_NO_REGISTRATIONS'), $gL10n->get('SYS_REGISTRATION'));
 }
 
-// Html-Head output
-$gLayout['title']  = $gL10n->get('NWU_NEW_REGISTRATIONS');
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\', onComplete:function(){$("#admButtonNo").focus();}});
-        }); 
-    //--></script>';
+// create html page object
+$page = new HtmlPage();
 
-$table = new HtmlTableBasic('', 'tableList');
-$table->addAttribute('cellspacing', '0', 'table');
-$table->addRow();
-$table->addColumn($gL10n->get('SYS_NAME'), array('colspan' => '2'), 'th');
-$table->addColumn($gL10n->get('SYS_USERNAME'), null, 'th');
-$table->addColumn($gL10n->get('SYS_EMAIL'), null, 'th');
-$table->addColumn($gL10n->get('SYS_FEATURES'), array('style' => 'text-align: center;'), 'th');
-$table->addTableBody();
+$page->addJavascript('$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', height: \'280px\', onComplete:function(){$("#admButtonNo").focus();}});', true);
+
+// add headline and title of module
+$page->addHeadline($headline);
+
+$table = new HtmlTable('new_user_table', true, $page);
+$table->highlightSelectedRow(true);
+
+// create array with all column heading values
+$columnHeading = array(
+    $gL10n->get('SYS_NAME'),
+    $gL10n->get('SYS_REGISTRATION'),
+    $gL10n->get('SYS_USERNAME'),
+    $gL10n->get('SYS_EMAIL'),
+    $gL10n->get('SYS_FEATURES'));
+$table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'center'));
+$table->setDatatablesOrderColumns(1);
+$table->addRowHeadingByArray($columnHeading);
 
 while($row = $gDb->fetch_array($usr_result))
 {
     $timestampCreate = new DateTimeExtended($row['reg_timestamp'], 'Y-m-d H:i:s');
     $datetimeCreate  = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
-    
-    $table->addRow('', array('class' => 'tableMouseOver'));
-    $table->addAttribute('id', 'row_user_'.$row['usr_id']);
-    $table->addColumn('<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>');
-    $table->addColumn('<img class="iconInformation" src="'. THEME_PATH. '/icons/calendar_time.png"
-                            alt="'.$gL10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" title="'.$gL10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" />');
-    $table->addColumn($row['usr_login_name']);
-    $mailLink = '';
+
     if($gPreferences['enable_mail_module'] == 1)
     {
         $mailLink = '<a href="'.$g_root_path.'/adm_program/modules/messages/messages.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
@@ -91,18 +90,23 @@ while($row = $gDb->fetch_array($usr_result))
     {
         $mailLink  = '<a href="mailto:'.$row['email'].'">'.$row['email'].'</a>';
     }
-    $table->addColumn($mailLink);
-    $table->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/new_user/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
+
+    // create array with all column values
+    $columnValues = array(
+        '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>',
+        '<img class="iconInformation" src="'. THEME_PATH. '/icons/calendar_time.png"
+                            alt="'.$gL10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" title="'.$gL10n->get('NWU_REGISTERED_ON', $datetimeCreate).'" />',
+        $row['usr_login_name'],
+        $mailLink,
+        '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/new_user/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
                             src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
                         <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
                             $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img 
-                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>', array('style' => 'text-align: center;')); 
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+        
+    $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);        
+}
 
-    }
-
-// Write html output
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>'. $table->getHtmlTable();
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-
+$page->addHtml($table->show(false));
+$page->show();
 ?>

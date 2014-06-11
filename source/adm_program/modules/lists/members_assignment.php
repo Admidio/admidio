@@ -272,143 +272,137 @@ else
         <li><input type="checkbox" name="mem_show_all" id="mem_show_all" /><label for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label></li>
     </ul>');
 
-    if($gDb->num_rows($resultUser)>0)
+    // create table object
+    $table = new HtmlTable('tbl_assign_role_membership', true, $page);
+    $table->highlightSelectedRow(true);
+    $table->setMessageIfNoRowsFound('SYS_NO_ENTRIES_FOUND');
+
+    // create column header to assign role leaders
+    $htmlLeaderColumn = $gL10n->get('SYS_LEADER');
+    
+    // show icon that leaders have no additional rights
+    if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
     {
-        // create table object
-        $table = new HtmlTable('tbl_assign_role_membership', true, $page);
-        $table->highlightSelectedRow(true);
-
-        // create column header to assign role leaders
-        $htmlLeaderColumn = $gL10n->get('SYS_LEADER');
-        
-        // show icon that leaders have no additional rights
-        if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
-        {
-            $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/info.png"
-                alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
-        }
-
-        // show icon with edit user right if leader has this right
-        if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
-        || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-        {
-            $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
-                alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
-        }
-
-        // show icon with assign role right if leader has this right
-        if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
-        || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
-        {
-            $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/roles.png"
-                alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
-        }
-
-        
-        // create array with all column heading values
-        $columnHeading = array(
-            '<img class="iconInformation"
-                src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-                title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
-            $gL10n->get('SYS_MEMBER'),
-            $gL10n->get('SYS_LASTNAME'),
-            $gL10n->get('SYS_FIRSTNAME'),
-            '<img class="iconInformation" src="'. THEME_PATH. '/icons/map.png"
-                alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
-            $gL10n->get('SYS_BIRTHDAY'),
-            $htmlLeaderColumn);
-            
-        $table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'center'));
-        $table->setDatatablesOrderColumns(array(3, 4));
-        $table->addRowHeadingByArray($columnHeading);
-
-        // show rows with all organization users
-        while($user = $gDb->fetch_array($resultUser))
-        {
-            $addressText  = '';
-            $htmlAddress  = '$nbsp;';
-            $htmlBirthday = '&nbsp;';
-            
-            // create string with user address
-            if(strlen($user['address']) > 0)
-            {
-                $addressText = $user['address'];
-            }
-            if(strlen($user['zip_code']) > 0 || strlen($user['city']) > 0)
-            {
-                $addressText = $addressText. ' - '. $user['zip_code']. ' '. $user['city'];
-            }
-            if(strlen($user['country']) > 0)
-            {
-                $addressText = $addressText. ' - '. $user['country'];
-            }
-
-            // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
-            if($user['member_this_orga'] > 0)
-            {
-                $icon = 'profile.png';
-                $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
-            }
-            else
-            {
-                $icon = 'no_profile.png';
-                $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
-            }
-
-            // Haekchen setzen ob jemand Mitglied ist oder nicht
-            if($user['member_this_role'])
-            {
-                $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
-            }
-            else
-            {
-                $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
-            }
-
-            if(strlen($addressText) > 0)
-            {
-                $htmlAddress = '<img class="iconInformation" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
-            }
-            
-            //Haekchen setzen ob jemand Leiter ist oder nicht
-            if($user['leader_this_role'])
-            {
-                $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
-            }
-            else
-            {
-                $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
-            }
-
-            
-            //Geburtstag nur ausgeben wenn bekannt
-            if(strlen($user['birthday']) > 0)
-            {
-                $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d', 'date');
-                $htmlBirthday = $birthdayDate->format($gPreferences['system_date']);
-            }
-
-            
-            // create array with all column values
-            $columnValues = array(
-                '<img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
-                $htmlMemberStatus,
-                $user['last_name'],
-                $user['first_name'],
-                $htmlAddress,
-                $htmlBirthday,
-                $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
-                
-            $table->addRowByArray($columnValues, 'userid_'.$user['usr_id']);        
-        }//End While
-
-        $page->addHtml($table->show(false));
-        $page->addHtml('<p>'.$gL10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>');
+        $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/info.png"
+            alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
     }
-    else
+
+    // show icon with edit user right if leader has this right
+    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
+    || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES_FOUND').'</p>');
+        $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
+            alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
     }
+
+    // show icon with assign role right if leader has this right
+    if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
+    || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
+    {
+        $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/roles.png"
+            alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
+    }
+
+    
+    // create array with all column heading values
+    $columnHeading = array(
+        '<img class="iconInformation"
+            src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
+            title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
+        $gL10n->get('SYS_MEMBER'),
+        $gL10n->get('SYS_LASTNAME'),
+        $gL10n->get('SYS_FIRSTNAME'),
+        '<img class="iconInformation" src="'. THEME_PATH. '/icons/map.png"
+            alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
+        $gL10n->get('SYS_BIRTHDAY'),
+        $htmlLeaderColumn);
+        
+    $table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'center'));
+    $table->setDatatablesOrderColumns(array(3, 4));
+    $table->addRowHeadingByArray($columnHeading);
+
+    // show rows with all organization users
+    while($user = $gDb->fetch_array($resultUser))
+    {
+        $addressText  = '';
+        $htmlAddress  = '$nbsp;';
+        $htmlBirthday = '&nbsp;';
+        
+        // create string with user address
+        if(strlen($user['address']) > 0)
+        {
+            $addressText = $user['address'];
+        }
+        if(strlen($user['zip_code']) > 0 || strlen($user['city']) > 0)
+        {
+            $addressText = $addressText. ' - '. $user['zip_code']. ' '. $user['city'];
+        }
+        if(strlen($user['country']) > 0)
+        {
+            $addressText = $addressText. ' - '. $user['country'];
+        }
+
+        // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
+        if($user['member_this_orga'] > 0)
+        {
+            $icon = 'profile.png';
+            $iconText = $gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
+        }
+        else
+        {
+            $icon = 'no_profile.png';
+            $iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
+        }
+
+        // Haekchen setzen ob jemand Mitglied ist oder nicht
+        if($user['member_this_role'])
+        {
+            $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
+        }
+        else
+        {
+            $htmlMemberStatus = '<input type="checkbox" id="member_'.$user['usr_id'].'" name="member_'.$user['usr_id'].'" class="memlist_checkbox memlist_member" /><b id="loadindicator_member_'.$user['usr_id'].'"></b>';
+        }
+
+        if(strlen($addressText) > 0)
+        {
+            $htmlAddress = '<img class="iconInformation" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
+        }
+        
+        //Haekchen setzen ob jemand Leiter ist oder nicht
+        if($user['leader_this_role'])
+        {
+            $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" checked="checked" class="memlist_checkbox memlist_leader" />';
+        }
+        else
+        {
+            $htmlRoleLeader = '<input type="checkbox" id="leader_'.$user['usr_id'].'" name="leader_'.$user['usr_id'].'" class="memlist_checkbox memlist_leader" />';
+        }
+
+        
+        //Geburtstag nur ausgeben wenn bekannt
+        if(strlen($user['birthday']) > 0)
+        {
+            $birthdayDate = new DateTimeExtended($user['birthday'], 'Y-m-d', 'date');
+            $htmlBirthday = $birthdayDate->format($gPreferences['system_date']);
+        }
+
+        
+        // create array with all column values
+        $columnValues = array(
+            '<img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
+            $htmlMemberStatus,
+            $user['last_name'],
+            $user['first_name'],
+            $htmlAddress,
+            $htmlBirthday,
+            $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
+            
+        $table->addRowByArray($columnValues, 'userid_'.$user['usr_id']);        
+    }//End While
+
+    $page->addHtml($table->show(false));
+    $page->addHtml('<p>'.$gL10n->get('SYS_CHECKBOX_AUTOSAVE').'</p>');
 
     $page->show();
 }

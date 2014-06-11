@@ -215,9 +215,7 @@ $columnHeading[] = $gL10n->get('SYS_PREVIOUS_VALUE');
 $columnHeading[] = $gL10n->get('SYS_EDITED_BY');
 $columnHeading[] = $gL10n->get('SYS_CHANGED_AT');
 
-//$table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'center'));
 $table->addRowHeadingByArray($columnHeading);
-	
 
 while($row = $gDb->fetch_array($resultFieldHistory))
 {
@@ -226,7 +224,7 @@ while($row = $gDb->fetch_array($resultFieldHistory))
 	
 	if($getUserId == 0)
 	{
-        $columnValues[] = $row['last_name'].', '.$row['first_name'];
+        $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usl_usr_id'].'">'.$row['last_name'].', '.$row['first_name'].'</a>';
 	}
 	
 	$columnValues[] = $gProfileFields->getPropertyById($row['usl_usf_id'], 'usf_name');
@@ -248,7 +246,7 @@ while($row = $gDb->fetch_array($resultFieldHistory))
         $columnValues[] = '&nbsp;';
     }
     
-	$columnValues[] = $row['create_last_name'].', '.$row['create_first_name'];
+    $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='.$row['usl_usr_id_create'].'">'.$row['create_last_name'].', '.$row['create_first_name'].'</a>';
 	$columnValues[] = $timestampCreate->format($gPreferences['system_date'].' '.$gPreferences['system_time']);
     $table->addRowByArray($columnValues);
 }

@@ -112,17 +112,17 @@
 
 class HtmlTableBasic extends HtmlElement {
 
-    private $border;                     ///< String with border attribute and value of the table
-    private $lineChange;                ///< Integer value for class change mode for table rows.
-    private $class_1;                    ///< Class name for standard design of table rows 
-    private $class_2;                    ///< Class name for changed design of table rows 
-    private $changeClass;                ///< Class name for the next table row using class change mode
-    private $columnsWidth;               ///< Array with values for the columns width
+    protected $border;                   ///< String with border attribute and value of the table
+    protected $lineChange;               ///< Integer value for class change mode for table rows.
+    protected $class_1;                  ///< Class name for standard design of table rows 
+    protected $class_2;                  ///< Class name for changed design of table rows 
+    protected $changeClass;              ///< Class name for the next table row using class change mode
+    protected $columnsWidth;             ///< Array with values for the columns width
     protected $thead;                    ///< Internal Flag for setted thead element
     protected $tfoot;                    ///< Internal Flag for setted tfoot element
     protected $tbody;                    ///< Internal Flag for setted tbody element
-    private $columnCount;                ///< Counter for setted columns
-    private $rowCount;                   ///< Counter for setted rows in body element
+    protected $columnCount;              ///< Counter for setted columns
+    protected $rowCount;                 ///< Counter for setted rows in body element
     
     /**
      * Constructor initializing all class variables
@@ -141,7 +141,7 @@ class HtmlTableBasic extends HtmlElement {
         $this->tfoot        = -1;
         $this->tbody        = -1;
         $this->columnCount  = 0;
-        $this->rowCount     = 1;
+        $this->rowCount     = 0;
         
         parent::__construct('table', '', '', true);
         
@@ -212,30 +212,6 @@ class HtmlTableBasic extends HtmlElement {
     {
         // Clear column counter
         $this->columnCount = 0;
-
-        /*if($this->thead == -1)
-        {
-            // if no table elements are defined then create it for semantic markup
-            $this->addTableHeader();
-            $this->addElement('tr', '' ,'', '<td></td>');
-            $this->closeParentElement('thead');
-            $this->thead = 1;
-
-            $this->addTableFooter();
-            $this->addElement('tr', '' ,'', '<td></td>');
-            $this->closeParentElement('tfoot');
-            $this->tfoot = 1;
-
-            $this->thead = 1;
-            $this->tfoot = 1;
-        }
-
-        // now add tbody element if this was not set until now
-        if($this->tbody == -1)
-        {
-            $this->addTableBody();
-            $this->tbody = 1;
-        }*/
         
         // If row is active we must close it first before starting new one
         if(in_array('tr', $this->arrParentElements))
@@ -310,7 +286,6 @@ class HtmlTableBasic extends HtmlElement {
                 }    
                 $modulo = $this->changeclass;
                 $this->addAttribute('class', $modulo, 'tr');
-                $this->rowCount ++;
             }
 
             if($data != '')
@@ -352,7 +327,6 @@ class HtmlTableBasic extends HtmlElement {
                 }
                 $modulo = $this->changeclass;
                 $this->addAttribute('class', $modulo, 'tr');
-                $this->rowCount ++;
             }
 
             if($data != '')
@@ -372,6 +346,8 @@ class HtmlTableBasic extends HtmlElement {
                 }
             }
         }
+        
+        $this->rowCount++;
     }
 
     /**

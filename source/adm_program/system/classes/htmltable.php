@@ -25,16 +25,17 @@
 
 class HtmlTable extends HtmlTableBasic
 {
-    private   $id;                   ///< Html id attribute of the table.
+    protected $id;                   ///< Html id attribute of the table.
     protected $columnAlign;          ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
     protected $columnCount;          ///< Number of columns in this table. This will be set after columns were added to the table.
     protected $highlightSelectedRow; ///< If set to true then the current selected row will be highlighted.
-    private   $htmlPage;             ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    private   $datatables;           ///< A flag if the jQuery plugin DataTables should be used to show the table.
-    private   $groupedColumn;        ///< The number of the column which should be used to group the table data.
-    private   $hiddenColumns;        ///< Array with the column numbers that should not be shown
-    private   $rowsPerPage;          ///< Number of rows that should be displayed on one page.
-    private   $orderColumns;         ///< Array with the column number as key and the 'asc' or 'desc' as value.
+    protected $messageIdNoRowsFound; ///< Id of the text that should be shown if no row was added to the table
+    protected $htmlPage;             ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    protected $datatables;           ///< A flag if the jQuery plugin DataTables should be used to show the table.
+    protected $groupedColumn;        ///< The number of the column which should be used to group the table data.
+    protected $hiddenColumns;        ///< Array with the column numbers that should not be shown
+    protected $rowsPerPage;          ///< Number of rows that should be displayed on one page.
+    protected $orderColumns;         ///< Array with the column number as key and the 'asc' or 'desc' as value.
 
     /** Constructor creates the table element
      *  @param $id         Id of the table
@@ -56,8 +57,9 @@ class HtmlTable extends HtmlTableBasic
         parent::__construct($id, $class);
         
         // initialize class member parameters
-        $this->id = $id;
         $this->highlightSelectedRow = false;
+        $this->messageIdNoRowsFound = 'SYS_NO_DATA_FOUND';
+        $this->id            = $id;
         $this->datatables    = $datatables;
         $this->groupedColumn = -1;
         $this->hiddenColumns = array();
@@ -280,114 +282,138 @@ class HtmlTable extends HtmlTableBasic
         $this->rowsPerPage = $numberRows;
     }
     
+    /** Set a text id of the translation files that should be shown if table has no rows.
+     *  @param $messageId Text id of the translation file.
+     */
+    public function setMessageIfNoRowsFound($messageId)
+    {
+        $this->messageIdNoRowsFound = $messageId;
+    }
+    
 	/** This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
 	 *  is activated then the javascript for that plugin will be added. Call this method if you
-	 *  have finished your form layout.
+	 *  have finished your form layout. If table has no rows then a message will be shown.
      *  @param $directOutput If set to @b true (default) the table html will be directly send
      *                       to the browser. If set to @b false the html will be returned.
      *  @return If $directOutput is set to @b false this method will return the html code of the table.
 	 */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gPreferences;
+        global $g_root_path, $gPreferences, $gL10n;
         
-        if($this->datatables && is_object($this->htmlPage))
+        if($this->rowCount == 0)
         {
-            $datatablesOrder  = '';
-            $datatablesHidden = '';
-            $javascriptGroup  = '';
-            $javascriptGroupFunction = '';
-            
-            $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/jquery.datatables.min.js');
-            $this->htmlPage->addCssFile(THEME_PATH.'/css/jquery.datatables.css');
-
-            // set order columns
-            if(count($this->orderColumns) > 0)
+            // if table contains no rows then show message and not the table
+            if($directOutput)
             {
-                foreach($this->orderColumns as $columnNumber => $order)
-                {
-                    $datatablesOrder .= ', ['.$columnNumber.', "'.$order.'"]';
-                }
-                
-                // remove leading comma from string
-                $datatablesOrder = substr($datatablesOrder, 1);
-                
-                // grouped column must be first order column
-                if($this->groupedColumn >= 0)
-                {
-                    $datatablesOrder = ' ['.$this->groupedColumn.', "asc"], '.$datatablesOrder;
-                }
-                
-                $datatablesOrder = ' "order": ['.$datatablesOrder.'], ';
+                echo '<p>'.$gL10n->get($this->messageIdNoRowsFound).'</p>';
             }
-
-            // hide columns
-            if(count($this->hiddenColumns) > 0)
+            else
             {
-                foreach($this->hiddenColumns as $columnNumber)
-                {
-                    $datatablesHidden .= ', { "visible":false, "targets":['.$columnNumber.']}';
-                }
-                
-                // remove leading comma from string
-                $datatablesHidden = substr($datatablesHidden, 1);
-                
-                $datatablesHidden = ' "columnDefs": ['.$datatablesHidden.'], ';
+                return '<p>'.$gL10n->get($this->messageIdNoRowsFound).'</p>';
             }
-            
-            if($this->groupedColumn >= 0)
-            {
-                $javascriptGroup = ', 
-                    "columnDefs": [
-                        { "visible": false, "targets": '.$this->groupedColumn.' }
-                    ],
-                    "order": [[ '.$this->groupedColumn.', \'asc\' ]],
-                    "drawCallback": function ( settings ) {
-                        var api  = this.api();
-                        var rows = api.rows( {page:\'current\'} ).nodes();
-                        var last = null;
-             
-                        api.column('.$this->groupedColumn.', {page:\'current\'} ).data().each( function ( group, i ) {
-                            if ( last !== group ) {
-                                $(rows).eq( i ).before(
-                                    \'<tr class="group admTableSubHeader"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
-                                );
-             
-                                last = group;
-                            }
-                        } );
-                    }';
-                $javascriptGroupFunction = '
-                    // Order by the grouping
-                    $("#'.$this->id.' tbody").on( "click", "tr.group", function () {
-                        var currentOrder = table.order()[0];
-                        if ( currentOrder[0] === '.$this->groupedColumn.' && currentOrder[1] === "asc" ) {
-                            table.order( [ '.$this->groupedColumn.', "desc" ] ).draw();
-                        }
-                        else {
-                            table.order( [ '.$this->groupedColumn.', "asc" ] ).draw();
-                        }
-                    } );';                
-            }
-
-            $this->htmlPage->addJavascript('
-                var table = $("#'.$this->id.'").DataTable( {
-                    "pageLength": '.$this->rowsPerPage.','.
-                    $datatablesHidden.
-                    $datatablesOrder.'
-                    "language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/datatables.'.$gPreferences['system_language'].'.lang"}
-                    '.$javascriptGroup.'
-                });
-                '.$javascriptGroupFunction, true);
-        }
-    
-        if($directOutput)
-        {
-            echo $this->getHtmlTable();
         }
         else
         {
-            return $this->getHtmlTable();
+            // show table content
+            if($this->datatables && is_object($this->htmlPage))
+            {
+                $datatablesOrder  = '';
+                $datatablesHidden = '';
+                $javascriptGroup  = '';
+                $javascriptGroupFunction = '';
+                
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/jquery.datatables.min.js');
+                $this->htmlPage->addCssFile(THEME_PATH.'/css/jquery.datatables.css');
+
+                // set order columns
+                if(count($this->orderColumns) > 0)
+                {
+                    foreach($this->orderColumns as $columnNumber => $order)
+                    {
+                        $datatablesOrder .= ', ['.$columnNumber.', "'.$order.'"]';
+                    }
+                    
+                    // remove leading comma from string
+                    $datatablesOrder = substr($datatablesOrder, 1);
+                    
+                    // grouped column must be first order column
+                    if($this->groupedColumn >= 0)
+                    {
+                        $datatablesOrder = ' ['.$this->groupedColumn.', "asc"], '.$datatablesOrder;
+                    }
+                    
+                    $datatablesOrder = ' "order": ['.$datatablesOrder.'], ';
+                }
+
+                // hide columns
+                if(count($this->hiddenColumns) > 0)
+                {
+                    foreach($this->hiddenColumns as $columnNumber)
+                    {
+                        $datatablesHidden .= ', { "visible":false, "targets":['.$columnNumber.']}';
+                    }
+                    
+                    // remove leading comma from string
+                    $datatablesHidden = substr($datatablesHidden, 1);
+                    
+                    $datatablesHidden = ' "columnDefs": ['.$datatablesHidden.'], ';
+                }
+                
+                if($this->groupedColumn >= 0)
+                {
+                    $javascriptGroup = ', 
+                        "columnDefs": [
+                            { "visible": false, "targets": '.$this->groupedColumn.' }
+                        ],
+                        "order": [[ '.$this->groupedColumn.', \'asc\' ]],
+                        "drawCallback": function ( settings ) {
+                            var api  = this.api();
+                            var rows = api.rows( {page:\'current\'} ).nodes();
+                            var last = null;
+                 
+                            api.column('.$this->groupedColumn.', {page:\'current\'} ).data().each( function ( group, i ) {
+                                if ( last !== group ) {
+                                    $(rows).eq( i ).before(
+                                        \'<tr class="group admTableSubHeader"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
+                                    );
+                 
+                                    last = group;
+                                }
+                            } );
+                        }';
+                    $javascriptGroupFunction = '
+                        // Order by the grouping
+                        $("#'.$this->id.' tbody").on( "click", "tr.group", function () {
+                            var currentOrder = table.order()[0];
+                            if ( currentOrder[0] === '.$this->groupedColumn.' && currentOrder[1] === "asc" ) {
+                                table.order( [ '.$this->groupedColumn.', "desc" ] ).draw();
+                            }
+                            else {
+                                table.order( [ '.$this->groupedColumn.', "asc" ] ).draw();
+                            }
+                        } );';                
+                }
+
+                $this->htmlPage->addJavascript('
+                    var table = $("#'.$this->id.'").DataTable( {
+                        "pageLength": '.$this->rowsPerPage.','.
+                        $datatablesHidden.
+                        $datatablesOrder.'
+                        "language": {"url": "'.$g_root_path.'/adm_program/libs/datatables/language/datatables.'.$gPreferences['system_language'].'.lang"}
+                        '.$javascriptGroup.'
+                    });
+                    '.$javascriptGroupFunction, true);
+            }
+        
+            if($directOutput)
+            {
+                echo $this->getHtmlTable();
+            }
+            else
+            {
+                return $this->getHtmlTable();
+            }
         }
     }
 }
