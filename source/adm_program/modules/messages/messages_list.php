@@ -59,15 +59,12 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // show headline for Table
 $page->addHeadline($headline);
 
 $table = new HtmlTable('adm_lists_table', true, $page);
 
-$table->addAttribute('border', '1');
+$table->addAttribute('border', '0');
 $table->addTableHeader();
 $table->addColumn($gL10n->get('MAI_SUBJECT'), '');
 $table->addColumn($gL10n->get('SYS_SENDER'), ''); 
