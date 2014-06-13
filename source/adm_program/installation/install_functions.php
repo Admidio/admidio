@@ -26,6 +26,7 @@ function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
     $form->setFormDescription($message);
     $form->addSubmitButton('next_page', $buttonText, $buttonIcon, null, null, 'button');
     $form->show();
+    exit();
 }
 
 // prueft, ob die Mindestvoraussetzungen bei PHP und MySQL eingehalten werden
