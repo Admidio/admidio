@@ -63,33 +63,28 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 $table = new HtmlTable('adm_lists_table', true, $page);
+$table->highlightSelectedRow(true);
 
 $table->addAttribute('border', '0');
 $table->addTableHeader();
-$table->addColumn($gL10n->get('MAI_SUBJECT'), '');
-$table->addColumn($gL10n->get('SYS_SENDER'), ''); 
-$table->addColumn($gL10n->get('SYS_DATE'), '');
+$table->addRowHeadingByArray(array($gL10n->get('MAI_SUBJECT'), $gL10n->get('SYS_SENDER'), $gL10n->get('SYS_DATE')));
 $table->addTableBody();
 
 if(isset($result))
 {
     while ($row = $gDb->fetch_array($result)) {
         $user = new User($gDb, $gProfileFields, $row['user']);
-		$table->addRow();
-		$table->addColumn($row['msg_subject'], array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-        $table->addColumn($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-		$table->addColumn($row['msg_timestamp'], array('style' => 'cursor: pointer; font-weight:bold', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-    }
+
+		$table->addRowByArray(array($row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp']), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
+   }
 }
 
 if(isset($result1))
 {
 	while ($row = $gDb->fetch_array($result1)) {
         $user = new User($gDb, $gProfileFields, $row['user']);
-		$table->addRow();
-		$table->addColumn($row['msg_subject'], array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-        $table->addColumn($user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
-		$table->addColumn($row['msg_timestamp'], array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
+		
+		$table->addRowByArray(array($row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp']), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
     }
 }
 
