@@ -88,7 +88,7 @@ if($gPreferences['enable_mail_module'] == 1)
                         $gL10n->get('SYS_EMAIL'), '/icons/email_big.png',
                         $gL10n->get('MAI_EMAIL_DESC'));
 }
-if($gPreferences['enable_mail_module'] == 1 && $gValidLogin)
+if($gPreferences['enable_pm_module'] == 1 && $gValidLogin)
         {
         $sql = 'SELECT *
         FROM '. TBL_MESSAGES. '

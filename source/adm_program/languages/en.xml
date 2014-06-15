@@ -41,7 +41,9 @@
 	<text id="PMS_SEND_PM" development="new" translation="todo">send Private Message</text>
 	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Message was sent to:</text>
 	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="todo">Error - Message could not be send:</text>
-</version>
+    <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">Activating Private Messaging module</text>
+    <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">PM module can be deactivated by unchecking the check box. After deactivation, the module will be unavailable in the module overview panel as well. (default: deactivated)</text>
+	</version>
 <version id="2.4.5" translator="Stefanie Schima">
     <text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">If an email is send to a role all recipient addresses will be placed in the BCC field. The TO field will then contain "Undisclosed Recipients". If this results in an error you can use this option to fill the recipient addresses into the TO field. The other addresses will remain in the BCC field. (Default: Deactivated)</text>
     <text id="SYS_CSV" development="new" translation="edited">CSV</text>

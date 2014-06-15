@@ -95,6 +95,7 @@ case 1:
                        ,'enable_download_module'
                        ,'enable_intial_comments_loading'
                        ,'enable_mail_module'
+					   ,'enable_pm_module'
                        ,'enable_guestbook_captcha'
                        ,'enable_ecard_module'
                        ,'enable_forum_interface'

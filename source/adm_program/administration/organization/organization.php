@@ -1397,9 +1397,9 @@ echo '
             // Preferences mail module
             /**************************************************************************************/
 
-            echo '<h3 id="SYS_EMAIL" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" /></a>
-                <a href="#">'.$gL10n->get('SYS_EMAIL').'</a>
+            echo '<h3 id="SYS_MESSAGE" class="iconTextLink" >
+                <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_MESSAGE').'" title="'.$gL10n->get('SYS_MESSAGE').'" /></a>
+                <a href="#">'.$gL10n->get('SYS_MESSAGE').'</a>
             </h3>
             <div class="groupBoxBody" style="display: none;">
                 <ul class="formFieldList">
@@ -1416,7 +1416,21 @@ echo '
                             </dd>
                         </dl>
                     </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_ACTIVATE_EMAIL_MODULE_DESC').'</li>                    
+                    <li class="smallFontSize">'.$gL10n->get('MAI_ACTIVATE_EMAIL_MODULE_DESC').'</li>
+					<li>
+                        <dl>
+                            <dt><label for="enable_pm_module">'.$gL10n->get('MSG_ACTIVATE_PM_MODULE').':</label></dt>
+                            <dd>
+                                <input type="checkbox" id="enable_pm_module" name="enable_pm_module" ';
+                                if(isset($form_values['enable_pm_module']) && $form_values['enable_pm_module'] == 1)
+                                {
+                                    echo ' checked="checked" ';
+                                }
+                                echo ' value="1" />
+                            </dd>
+                        </dl>
+                    </li>
+                    <li class="smallFontSize">'.$gL10n->get('MSG_ACTIVATE_PM_MODULE_DESC').'</li>                    
                     <li>
                         <dl>
                             <dt><label for="enable_mail_captcha">'.$gL10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>

@@ -15,12 +15,7 @@
  *****************************************************************************/
 
 require_once('../../system/common.php');
-
-//Stop if mail module is disabled
-if($gPreferences['enable_mail_module'] != 1)
-{
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-}
+require_once('../../system/template.php');
 
 // Initialize and check the parameters
 $getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
@@ -40,10 +35,22 @@ $postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmati
 $postCaptcha     = admFuncVariableIsValid($_POST, 'captcha', 'string');
 $postShowMembers = admFuncVariableIsValid($_POST, 'show_members', 'numeric', 0);
 
-//if no valid login, or message not PM it must be Email
-if (!$gValidLogin || $getMsgType != 'PM')
+//if message not PM it must be Email
+if ($getMsgType != 'PM')
 {
 	$getMsgType      = 'EMAIL';
+}
+
+//Stop if mail module is disabled
+if($gPreferences['enable_mail_module'] != 1 && $getMsgType == 'EMAIL')
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+}
+
+//Stop if mail module is disabled
+if($gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM')
+{
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
 //just logged-in Users are allowed to give userid to this module...
@@ -99,7 +106,7 @@ if ($getUserId > 0)
 }
 	
 // check if PM or Email and to steps:
-if ($getMsgType != 'PM')
+if ($getMsgType == 'EMAIL')
 {
 	// if User ID is delivered
 	if ($getUserId > 0)
@@ -375,8 +382,12 @@ if ($getMsgType != 'PM')
 	// prepare body of email with note of sender and homepage
 	$email->setSenderInText($postName, $postFrom, $role->getValue('rol_name'), $postShowMembers);
 
+	// load the template and set the new email body with template
+	$emailTemplate = admReadTemplateFile("template.html");
+	$emailTemplate = str_replace("#message#",$postBody,$emailTemplate);
+
 	//set Text
-	$email->setText($postBody);
+	$email->setText($emailTemplate);
 
 	//Nun kann die Mail endgueltig versendet werden...
 	$sendResult = $email->sendEmail();

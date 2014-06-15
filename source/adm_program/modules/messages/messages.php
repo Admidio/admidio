@@ -36,7 +36,14 @@ $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
 
 
 // check if the call of the page was allowed by settings
-if ($gPreferences['enable_mail_module'] != 1)
+if ($gPreferences['enable_mail_module'] != 1 && $getMsgType != 'PM')
+{
+    // message if the sending of PM is not allowed
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+}
+
+// check if the call of the page was allowed by settings
+if ($gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM')
 {
     // message if the sending of PM is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
