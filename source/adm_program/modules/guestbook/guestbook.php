@@ -240,9 +240,9 @@ else
         $guestbook->setArray($row);
 
         $page->addHtml('
-        <div class="admBoxLayout" id="gbo_'.$guestbook->getValue('gbo_id').'">
-            <div class="admBoxHead">
-                <div class="admBoxHeadLeft">
+        <div class="panel panel-primary" id="gbo_'.$guestbook->getValue('gbo_id').'">
+            <div class="panel-heading">
+                <span class="panel-heading-left">
                     <img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$guestbook->getValue('gbo_name').'" />'.$guestbook->getValue('gbo_name'));
 
                     // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
@@ -260,9 +260,9 @@ else
                         <a class="admIconLink" href="mailto:'.$guestbook->getValue('gbo_email').'"><img src="'. THEME_PATH. '/icons/email.png"
                             alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" /></a>');
                     }
-                $page->addHtml('</div>
+                $page->addHtml('</span>
 
-                <div class="admBoxHeadRight">'. $guestbook->getValue('gbo_timestamp_create'). '&nbsp;');
+                <span class="panel-heading-right">'. $guestbook->getValue('gbo_timestamp_create'). '&nbsp;');
 
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($gCurrentUser->editGuestbookRight())
@@ -275,10 +275,10 @@ else
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                     }
 
-                $page->addHtml('</div>
+                $page->addHtml('</span>
             </div>
 
-            <div class="admBoxBody">'.
+            <div class="panel-body">'.
                 $guestbook->getValue('gbo_text'));
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
@@ -287,26 +287,15 @@ else
                     $page->addHtml('
                     <ul class="admIconTextLinkList">
                         <li>
-                            <span class="admIconTextLink">
-                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
-                                    $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" /></a>
-                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
-                                    $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'">'.$gL10n->get('SYS_UNLOCK').'</a>
-                            </span>
+                            <a class="icon-text-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                                $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
                         </li>
                         <li>
-                            <span class="admIconTextLink">
-                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
-                                    $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" /></a>
-                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
-                                    $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'">'.$gL10n->get('SYS_REMOVE').'</a>
-                            </span>
+                            <a class="icon-text-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                                $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
                         </li>
                     </ul>');
                 }
-
-                // show informations about user who edit the recordset
-                $page->addHtml(admFuncShowCreateChangeInfoById(0, '', $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')));
 
                 $conditions = '';
 
@@ -351,21 +340,15 @@ else
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     $page->addHtml('
                     <div id="admCommentsVisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
-                        <span class="admIconTextLink">
-                            <a href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
-                            alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" title="'.$gL10n->get('GBO_HIDE_COMMENTS').'" /></a>
-                            <a href="javascript:toggleComments('. $gboId. ')">'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>
-                        </span>
+                        <a class="icon-text-link" href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                            alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" title="'.$gL10n->get('GBO_HIDE_COMMENTS').'" />'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>
                     </div>');
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                     $page->addHtml('
                     <div id="admCommentsInvisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
-                        <span class="admIconTextLink">
-                            <a href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
-                            alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" title="'.$gL10n->get('GBO_SHOW_COMMENTS').'" /></a>
-                            <a href="javascript:toggleComments('. $gboId. ')">'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $gDb->num_rows($comment_result)).'</a>
-                        </span>
+                        <a class="icon-text-link" class="icon-text-link" href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                            alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" title="'.$gL10n->get('GBO_SHOW_COMMENTS').'" />'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $gDb->num_rows($comment_result)).'</a>
                         <div id="comments_'. $gboId. '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
                     </div>');
 
@@ -394,11 +377,8 @@ else
                     $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$guestbook->getValue('gbo_id');
                     $page->addHtml('
                     <div class="admCommentLink">
-                        <span class="admIconTextLink">
-                            <a href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png"
-                            alt="'.$gL10n->get('GBO_WRITE_COMMENT').'" title="'.$gL10n->get('GBO_WRITE_COMMENT').'" /></a>
-                            <a href="'.$load_url.'">'.$gL10n->get('GBO_WRITE_COMMENT').'</a>
-                        </span>
+                        <a class="icon-text-link" href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png"
+                            alt="'.$gL10n->get('GBO_WRITE_COMMENT').'" title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</a>
                     </div>');
                 }
 
@@ -412,8 +392,14 @@ else
                     $page->addHtml(ob_get_contents());
                     ob_end_clean();
                 }
-            $page->addHtml('</div>
-        </div>');
+            $page->addHtml('</div>');
+            
+            // show informations about user who edit the recordset
+            if(strlen($guestbook->getValue('gbo_usr_id_change')) > 0)
+            {
+                $page->addHtml('<div class="panel-footer">'.admFuncShowCreateChangeInfoById(0, '', $guestbook->getValue('gbo_usr_id_change'), $guestbook->getValue('gbo_timestamp_change')).'</div>');
+            }            
+        $page->addHtml('</div>');
     }  // Ende While-Schleife
 }
 

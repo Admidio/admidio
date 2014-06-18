@@ -536,11 +536,8 @@ class TableFolder extends TableAccess
                 $rootFolderId = $rootFolderRow->fol_id;
 
                 $navigationPrefix = '
-                    <span class="admIconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img 
-                            src="'.THEME_PATH.'/icons/application_view_list.png" alt="Downloads" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '">'.$gL10n->get('DOW_DOWNLOADS').'</a>
-                    </span>';
+                <li><a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='. $rootFolderRow->fol_id. '"><img 
+                    src="'.THEME_PATH.'/icons/application_view_list.png" alt="Downloads" />'.$gL10n->get('DOW_DOWNLOADS').'</a></li>';
 
                 $currentNavigation = $this->getNavigationForDownload($parentId, $currentNavigation);
             }
@@ -561,8 +558,8 @@ class TableFolder extends TableAccess
 
             if ($currentFolderRow->fol_fol_id_parent) 
 			{
-                $currentNavigation = ' &gt; <a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.
-                                       $currentFolderRow->fol_id. '">'. $currentFolderRow->fol_name. '</a>'. $currentNavigation;
+                $currentNavigation = '<li><a href="'.$g_root_path.'/adm_program/modules/downloads/downloads.php?folder_id='.
+                                       $currentFolderRow->fol_id. '">'. $currentFolderRow->fol_name. '</a></li>'. $currentNavigation;
 
 
                 //naechster Aufruf mit ParentFolder
@@ -576,7 +573,12 @@ class TableFolder extends TableAccess
 
         if ($originalCall) 
 		{
-            $link = '<div class="admNavigation admNavigationBar">'.$navigationPrefix.' '.$currentNavigation.' &gt; '. $this->getValue('fol_name'). '</div>';
+            $link = '
+            <ol class="breadcrumb">'.
+                $navigationPrefix.
+                $currentNavigation.
+                '<li>'. $this->getValue('fol_name'). '</li>
+            </ol>';
 
             return $link;
         }

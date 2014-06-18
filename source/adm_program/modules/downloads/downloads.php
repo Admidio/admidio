@@ -99,8 +99,7 @@ if($gCurrentUser->isWebmaster())
 }
 
 //Create table object
-$downloadOverview = new HtmlTable('tbl_downloads', true, $page);
-$downloadOverview->highlightSelectedRow(true);
+$downloadOverview = new HtmlTable('tbl_downloads', $page, true, true);
 
 // create array with all column heading values
 $columnHeading = array(
@@ -252,7 +251,7 @@ if ($gCurrentUser->editDownloadRight())
                                     </h2>';
 
         //Create table object
-        $adminTable = new HtmlTable('tbl_downloads');
+        $adminTable = new HtmlTable('tbl_downloads', $page, true);
 
         // create array with all column heading values
         $columnHeading = array('<img class="iconInformation" src="'. THEME_PATH. '/icons/download.png" alt="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" title="'.$gL10n->get('SYS_FOLDER').' / '.$gL10n->get('DOW_FILE_TYPE').'" />',

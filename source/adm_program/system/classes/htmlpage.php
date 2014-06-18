@@ -48,13 +48,15 @@ class HtmlPage
         $this->title = $title;
         $this->containThemeHtml = true;
         
-        $this->cssFiles = array(THEME_PATH.'/css/admidio.css', 
+        $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css', 
+                                THEME_PATH.'/css/admidio.css', 
                                 THEME_PATH.'/css/colorbox.css');
         $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js', 
                                 $g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js',
                                 $g_root_path. '/adm_program/system/js/common_functions.js',
                                 $g_root_path. '/adm_program/system/js/jquery.ddslick.js',
-                                $g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js');
+                                $g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js',
+                                $g_root_path.'/adm_program/libs/bootstrap/js/ bootstrap.min.js');
         $this->rssFiles = array();
         $this->addJavascript('$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'});', true);
     }

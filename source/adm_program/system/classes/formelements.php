@@ -226,7 +226,7 @@ class FormElements
         || ($countCategories > 0 && $showCategoryChoice == false ) )
         {
     		$selectBoxHtml = '
-    		<select class="admSelectBoxSmall" size="1" id="'.$fieldId.'" name="'.$fieldId.'">
+    		<select class="form-control" size="1" id="'.$fieldId.'" name="'.$fieldId.'">
     			<option value=" "';
     				if($defaultCategory == 0 || strlen($defaultCategory) == 0)
     				{

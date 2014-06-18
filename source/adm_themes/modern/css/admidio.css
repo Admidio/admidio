@@ -13,8 +13,8 @@
     color: #606465;
     padding: 15px;
     margin: auto;
-    font-size: 11pt;
-    font-family: Helvetica, Verdana, Arial, sans-serif;
+    /*font-size: 11pt;
+    font-family: Helvetica, Verdana, Arial, sans-serif;*/
     background-color: #96c4cb; 
     background-repeat: repeat-x;
     background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
@@ -160,6 +160,10 @@ a:hover, a:active {
 
 /* Settings for all icons */
 
+.navbar-link img, .icon-text-link img, .btn img {
+    margin-right: 5px;
+}
+
 .admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation {
     border: none;
     vertical-align: text-top;
@@ -170,7 +174,7 @@ a:hover, a:active {
 }
 
 .admIconHelpLink img {
-	padding-left: 5px;
+	margin-left: 5px;
 }
 
 .admIconInformation {
@@ -251,14 +255,22 @@ a:hover, a:active {
     padding-top: 5px;
     white-space: nowrap;
 }
-
+/*
 .admFieldElement label {
     white-space: normal;
+}*/
+
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.col-sm-offset-3.btn {
+    margin-left: 26%;
 }
 
 /* Form elements */
 
-.admTextInput, .admTextInputSmall, .admMultilineTextInput, .admDateInput, .admSelectBox, .admSelectBoxSmall, .admButton, div.dataTables_filter input, div.dataTables_length select {
+.admTextInput, .admTextInputSmall, .admMultilineTextInput, .admDateInput, .admSelectBox, .admSelectBoxSmall, .admButton, /*div.dataTables_filter input, div.dataTables_length select*/ {
     border: 1px solid #888686;
     padding: 4px;
     font-size: 11pt;
@@ -269,10 +281,10 @@ a:hover, a:active {
 .admTextInput:focus, .admTextInputSmall:focus, .admMultilineTextInput:focus, admDateInput, .admSelectBox:focus, .admSelectBoxSmall:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
     background-color: #fff8a0;
 }
-
+/*
 .admTextInput, .admMultilineTextInput {
     width: 95%;
-}
+}*/
 
 .admTextInputSmall {
     width: 50%;
@@ -297,13 +309,18 @@ a:hover, a:active {
 	max-width: 100%;
 }
 
-.admSelectBoxSmall, div.dataTables_filter input, div.dataTables_length select {
+.admSelectBoxSmall, /*div.dataTables_filter input, div.dataTables_length select*/ {
     padding: 1px 3px 1px 1px;
 }
 
+.form-horizontal .form-group-editor {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
 .admEditor {
-	display: inline-block;
-    width: 98%;
+	display: block;
+    /*width: 98%;*/
 }
 
 .admEditorRow  .admFieldLabel {
@@ -331,17 +348,19 @@ a:hover, a:active {
     height: 16px;
 }
 
-.admFieldElement.admMandatory:after, .admMandatoryDefinition span:after {
+.control-mandatory label:after, .control-mandatory-definition span:after {
     content: url(../icons/bullet_red.png);
     white-space: nowrap;
     vertical-align: top;
 }
 
-.admMandatoryDefinition {
+.control-mandatory-definition {
     font-size: 9pt;
     margin-top: 5px;
 	margin-bottom: -10px;
 	text-align: right;
+    width: 100%;
+    display: inline-block;
 }
 
 .admCharactersCount {
@@ -381,7 +400,7 @@ a:hover, a:active {
 }
 
 /* Layout for some boxes that is used in announcements or events module */
-
+/*
 .admBoxLayout {
     margin: 30px 0px 10px 0px;
 }
@@ -392,50 +411,52 @@ a:hover, a:active {
     font-size: 12pt;
     font-weight: bold;
     border-bottom: 2px solid #449ba6;
-}
+}*/
 
 .admBoxHighlighted .admBoxHead {
     color: #FF9C00;
 }
 
-.admBoxHeadLeft img {
+.panel-heading-left img {
     margin-right: 5px;
     vertical-align: bottom;
     border-width: 0px;
 }
-
+/*
 .admBoxHeadLeft{
     float: left;
-}
+    display: block;
+}*/
 
-.admBoxHeadRight{
+.panel-heading-right{
     float: right;
 }
 
+.panel-footer .admCreateEditInformations {
+    margin-top: 0px;
+}
+/*
 .admBoxBody {
     clear: both;
-}
+}*/
 
 /* Layout for tables that will be used in lists or download module */
-
+/*
 .admTable {
     width: 100%;
     margin: auto;
-}
+}*/
 
-.admTableRowHeading {
+.table > thead > tr > th {
     color: #333333;
-}
-
-.admTableRowHeading th, .admTable td {
-    padding: 6px 6px 3px 0px;
-    text-align: left;
-}
-
-.admTableRowHeading th {
     padding-bottom: 0px;
     border-bottom: 2px solid #409099;
 }
+/*
+.table th, .table td {
+    padding: 6px 6px 3px 0px;
+    text-align: left;
+}*/
 
 /* Subheader will be used to group data in a table (e.g.: Role Leader and Members) */
 
@@ -452,7 +473,7 @@ a:hover, a:active {
 }
 
 
-.admTableRowHighlight:hover {
+.admTableRowHighlight:hover, .table-hover > tbody > tr:hover > td {
     background-repeat: repeat-x;
     background-color: #a8d9df;
 	background-image: -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	

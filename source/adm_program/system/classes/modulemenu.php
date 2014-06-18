@@ -159,12 +159,16 @@ class ModuleMenu
 	    }
 	    
 	    // add html of menu item
-		$html .= '<li id="'.$menuEntry['id'].'">
+/*		$html .= '<li id="'.$menuEntry['id'].'">
 		              <span class="admIconTextLink">
 				          <a href="'.$menuEntry['link'].'"><img 
 				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" /></a>
 				          <a href="'.$menuEntry['link'].'">'.$menuEntry['text'].'</a>
 				      </span>
+				  </li>';*/
+		$html .= '<li id="'.$menuEntry['id'].'">
+				          <a class="navbar-link" href="'.$menuEntry['link'].'"><img 
+				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" />'.$menuEntry['text'].'</a>
 				  </li>';
         return $html;
 	}
@@ -251,7 +255,22 @@ class ModuleMenu
 
 		global $gL10n;
 		
-		$html = '<ul id="'.$this->id.'" class="admIconTextLinkList">';
+		$html = '
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                  </button>
+                  <a class="navbar-brand" href="#">Menu</a>
+                </div>
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav" id="'.$this->id.'">';
+                //<ul class="admIconTextLinkList">';
 
 		$linkCnt = 0;		
 
@@ -298,7 +317,10 @@ class ModuleMenu
 					}); 
 				//--></script>
 
-			   <li id="'.$menuEntry['id'].'">'.$menuEntry['text'].':&nbsp;&nbsp;'.$calendarSelectBox;
+                <li id="'.$menuEntry['id'].'">
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <label for"'.$menuEntry['id'].'SelectBox">'.$menuEntry['text'].'</label>'.$calendarSelectBox;
 
 					if($menuEntry['admin'] == true)
 					{
@@ -306,7 +328,7 @@ class ModuleMenu
 						$html .= '&nbsp;<a class="admIconLink" href="'.$this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'&amp;title='.$menuEntry['text'].'"><img
 							src="'. THEME_PATH. '/icons/edit.png" alt="'.$textManageCategories.'" title="'.$textManageCategories.'" /></a>';
 					}
-				$html .= '</li>';
+				$html .= '</div></form></li>';
 			}
 			else if($menuEntry['type'] == 'link')
 			{
@@ -330,7 +352,7 @@ class ModuleMenu
 			$html .= $this->createDropDown('linkItemDropDown', $dropDownText);
 		}
 			
-		$html .= '</ul>';
+		$html .= '</ul></div></div></nav>';
 		
         // now show the complete html of the menu
         if($directOutput)

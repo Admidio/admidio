@@ -28,7 +28,6 @@ class HtmlTable extends HtmlTableBasic
     protected $id;                   ///< Html id attribute of the table.
     protected $columnAlign;          ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
     protected $columnCount;          ///< Number of columns in this table. This will be set after columns were added to the table.
-    protected $highlightSelectedRow; ///< If set to true then the current selected row will be highlighted.
     protected $messageIdNoRowsFound; ///< Id of the text that should be shown if no row was added to the table
     protected $htmlPage;             ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     protected $datatables;           ///< A flag if the jQuery plugin DataTables should be used to show the table.
@@ -47,11 +46,16 @@ class HtmlTable extends HtmlTableBasic
      *  @param $class      Optional an additional css classname. The class @b admTable
      *                     is set as default and need not set with this parameter.
      */
-    public function __construct($id, $datatables = false, &$htmlPage = null, $class = '')
+    public function __construct($id, &$htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
     {
         if(strlen($class) == 0)
         {
-            $class = 'admTable';
+            $class = 'table';
+        }
+        
+        if($hoverRows == true)
+        {
+            $class .= ' table-hover';
         }
 
         parent::__construct($id, $class);
@@ -92,7 +96,7 @@ class HtmlTable extends HtmlTableBasic
         }
 
         $this->addTableHeader();
-        $this->addRow(null, $arrAttributes);
+        $this->addRow(null, $arrAttributes, 'th');
         
         // now add each column to the row
         foreach($arrayColumnValues as $key => $value)
@@ -182,23 +186,7 @@ class HtmlTable extends HtmlTableBasic
     {
         return $this->groupedColumn;
     }
-    
-    /** If this flag will be set to true then the current selected row of the table will
-     *  be highlighted. Therefore the row element @b tr will get the css class @b admTableRowHighlight.
-     *  @param $highlight If set to true the current row of the table will be highlighted.
-     */
-    public function highlightSelectedRow($highlight)
-    {
-        If($highlight == true)
-        {
-            $this->highlightSelectedRow = true;
-        }
-        else
-        {
-            $this->highlightSelectedRow = false;
-        }
-    }
-    
+        
     /** Set the align for each column of the current table. This method must be called
      *  before a row is added to the table. Each entry of the array represents a column.
      *  @param $arrayColumnAlign An array which contains the align for each column of the table.
@@ -300,7 +288,7 @@ class HtmlTable extends HtmlTableBasic
     public function show($directOutput = true)
     {
         global $g_root_path, $gPreferences, $gL10n;
-        
+
         if($this->rowCount == 0)
         {
             // if table contains no rows then show message and not the table

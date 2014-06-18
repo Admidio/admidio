@@ -52,7 +52,9 @@ class HtmlForm extends HtmlFormBasic
         parent::__construct($action, $id, 'post');
         
         // set specific Admidio css form class
-        $this->addAttribute('class', 'admForm');
+        //$this->addAttribute('class', 'admForm');
+        $this->addAttribute('role', 'form');
+        $this->addAttribute('class', 'form-horizontal');
 		
         // Set specific parameters that are necessary for file upload with a form
         if($enableFileUpload == true)
@@ -103,7 +105,7 @@ class HtmlForm extends HtmlFormBasic
             $value = '<img src="'.$icon.'" alt="'.$text.'" />'.$value;
         }
         $this->addElement('button');
-        $this->addAttribute('class', 'admButton');
+        $this->addAttribute('class', 'btn');
         if(strlen($class) > 0)
         {
             $this->addAttribute('class', $class);
@@ -136,7 +138,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // add a row with the captcha puzzle
-        $this->openFieldStructure('captcha_puzzle', null, FIELD_DEFAULT, 'admCaptchaPuzzleRow');
+        $this->openFieldStructure('captcha_puzzle', null, FIELD_DEFAULT, null, 'admCaptchaPuzzleRow');
         if($type == 'pic')
         {
             $this->addHtml('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&amp;type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
@@ -166,16 +168,19 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId If set a help icon will be shown after the checkbox and on mouseover the translated text 
-	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class      Optional an additional css classname. The class @b admCheckbox
      *                     is set as default and need not set with this parameter.
      *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
      */
     public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $class = null, $icon = null)
     {
-        $attributes = array('class' => 'admCheckbox');
-        $htmlIcon   = '';
+        $attributes   = array('class' => 'admCheckbox');
+        $htmlIcon     = '';
+        $htmlHelpIcon = '';
         $this->countElements++;
 
         // disable field
@@ -209,11 +214,16 @@ class HtmlForm extends HtmlFormBasic
 				$htmlIcon = '<img class="admIconInformation" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 		}
+        
+        if(strlen($helpTextId) > 0)
+        {
+            $htmlHelpIcon = $this->getHelpTextIcon($helpTextId);
+        }
 
-        $this->openFieldStructure($id, null, $property, 'admCheckboxRow');
+        $this->openFieldStructure($id, null, $property);
+        $this->addHtml('<div class="checkbox"><label>');
         $this->addInput('checkbox', $id, $id, '1', $attributes);
-		$this->addHtml($htmlIcon.'<label for="'.$id.'">'.$label.'</label>');
-		$this->setHelpText($helpTextId);
+		$this->addHtml($htmlIcon.$label.$htmlHelpIcon.'</label></div>');
         $this->closeFieldStructure();
     }
     
@@ -224,9 +234,13 @@ class HtmlForm extends HtmlFormBasic
      *  @param $id         Id of the custom content.
      *  @param $label      The label of the custom content.
      *  @param $content    A simple Text or html that would be placed instead of an form element.
+	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class      Optional an additional css classname.
      */
-    public function addCustomContent($id, $label, $content, $class = null)
+    public function addCustomContent($id, $label, $content, $helpTextId, $class = null)
     {
         $this->countElements++;
     
@@ -236,7 +250,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
 
-        $this->openFieldStructure($id, $label, FIELD_DEFAULT, 'admCustomContentRow');
+        $this->openFieldStructure($id, $label, FIELD_DEFAULT, $helpTextId, 'form-custom-content');
         $this->addHtml($content);
         $this->closeFieldStructure();
     }
@@ -260,12 +274,15 @@ class HtmlForm extends HtmlFormBasic
      *  @param $toolbar    Optional set a predefined toolbar for the editor. Possible values are 
      *                     @b AdmidioDefault, @b Admidio Guestbook, @b AdmidioEcard and @b AdmidioPlugin_WC
      *  @param $height     Optional set the height in pixel of the editor. The default will be 300px.
-	 *  @param $helpTextId If set a help icon will be shown after the password field and on mouseover the translated text 
-	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = null)
+	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = null, $icon = null)
 	{
         $attributes = array('class' => 'admEditor');
         $this->countElements++;
@@ -290,9 +307,8 @@ class HtmlForm extends HtmlFormBasic
 
 		$ckEditor = new CKEditorSpecial();
 
-        $this->openFieldStructure($id, $label, $property, 'admEditorRow');
+        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, true, 'form-group-editor');
 		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
-		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
 	}
     
@@ -310,14 +326,16 @@ class HtmlForm extends HtmlFormBasic
      *                        @b FIELD_DEFAULT The field can accept an input.
      *                        @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                        @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId    If set a help icon will be shown after the input field and on mouseover the translated text 
-	 *                        of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                        If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                        If you need an additional parameter for the text you can add an array. The first entry must
+     *                        be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class         Optional an additional css classname. The class @b admTextInput
      *                        is set as default and need not set with this parameter.
      */
     public function addFileUpload($id, $label, $maxUploadSize, $enableMultiUploads = false, $multiUploadLabel = null, $hideUploadField = false, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
     {
-        $attributes = array('class' => 'admUploadButton');
+        $attributes = array('class' => 'form-control');
         $this->countElements++;
 
         // disable field
@@ -338,16 +356,16 @@ class HtmlForm extends HtmlFormBasic
         if($enableMultiUploads)
         {
             $javascriptCode = '
-        		$(".admLinkAddAttachment").css("cursor", "pointer");
+        		$(".add-attachement-link").css("cursor", "pointer");
         		
         		// add new line to add new attachment to this mail
-        		$(".admLinkAddAttachment").click(function () {
+        		$(".add-attachement-link").click(function () {
         			newAttachment = document.createElement("input");
         			$(newAttachment).attr("type", "file");
         			$(newAttachment).attr("name", "userfile[]");
-        			$(newAttachment).attr("class", "admTextInput admUploadInput");
+        			$(newAttachment).attr("class", "'.$attributes['class'].'");
         			$(newAttachment).hide();
-        			$("#admAddAttachment").before(newAttachment);
+        			$("#adm_add_attachment").before(newAttachment);
         			$(newAttachment).show("slow");
         		});';
             
@@ -367,27 +385,25 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openFieldStructure($id, $label, $property, 'admUploadButtonRow');
+        $this->openFieldStructure($id, $label, $property, $helpTextId, null, false, 'form-upload');
         $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $maxUploadSize);
         
         // if multi uploads are enabled then the file upload field could be hidden
         // until the user will click on the button to add a new upload field
         if($hideUploadField == false || $enableMultiUploads == false)
         {
-            $this->addInput('file', 'userfile[]', null, null, array('class' => 'admTextInput admUploadInput'));
+            $this->addInput('file', 'userfile[]', null, null, $attributes);
         }
 
         if($enableMultiUploads)
         {
             // show button to add new upload field to form
             $this->addHtml('
-                <span id="admAddAttachment" class="admIconTextLink" style="display: block;">
-    				<a class="admLinkAddAttachment"><img
-    				src="'. THEME_PATH. '/icons/add.png" alt="'.$multiUploadLabel.'" /></a>
-    				<a class="admLinkAddAttachment">'.$multiUploadLabel.'</a>');
+                <span id="adm_add_attachment" style="display: block;">
+    				<a class="icon-text-link add-attachement-link"><img
+                        src="'. THEME_PATH. '/icons/add.png" alt="'.$multiUploadLabel.'" />'.$multiUploadLabel.'</a>
+                </span>');
         }
-		$this->setHelpText($helpTextId);
-        $this->addHtml('</span>');
         $this->closeFieldStructure();
     }
 
@@ -411,8 +427,10 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
-	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
@@ -421,7 +439,7 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gL10n, $g_root_path;
 
-        $attributes = array('class' => 'admMultilineTextInput');
+        $attributes = array('class' => 'form-control');
         $this->countElements++;
 
         // disable field
@@ -463,9 +481,8 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openFieldStructure($id, $label, $property, 'admMultilineTextInputRow', $icon);
+        $this->openFieldStructure($id, $label, $property, null, $icon);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
-		$this->setHelpText($helpTextId);
         if($maxLength > 0)
         {
             // if max field length is set then show a counter how many characters still available
@@ -482,8 +499,10 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId If set a help icon will be shown after the password field and on mouseover the translated text 
-	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
@@ -505,10 +524,9 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, 'admPasswordInputRow');
+        $this->openFieldStructure($id, $label, $property, $helpTextId);
         $this->addInput('password', $id, $id, null, $attributes);
         $this->addAttribute('class', 'admTextInput');
-		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
@@ -526,8 +544,10 @@ class HtmlForm extends HtmlFormBasic
      *  @param $defaultValue This is the value of that radio button that is preselected.
      *  @param $setDummyButton If set to true than one radio with no value will be set in front of the other array. 
      *                         This could be used if the user should also be able to set no radio to value.
-	 *  @param $helpTextId   If set a help icon will be shown after the radio button and on mouseover the translated text 
-	 *                       of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                       If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                       If you need an additional parameter for the text you can add an array. The first entry must
+     *                       be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class        Optional an additional css classname. The class @b admRadioInput
      *                       is set as default and need not set with this parameter.
      */
@@ -549,7 +569,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, 'admRadioInputRow');
+        $this->openFieldStructure($id, $label, $property, $helpTextId);
         
         // set one radio button with no value will be set in front of the other array.
         if($setDummyButton == true)
@@ -577,7 +597,6 @@ class HtmlForm extends HtmlFormBasic
 	        $this->addHtml('<label for="'.($id.'_'.$key).'">'.$value.'</label>');
 		}
         
-		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
@@ -595,8 +614,10 @@ class HtmlForm extends HtmlFormBasic
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
-	 *  @param $helpTextId      If set a help icon will be shown after the selectbox and on mouseover the translated text 
-	 *                          of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class      Optional an additional css classname. The class @b admSelectbox
      *                     is set as default and need not set with this parameter.
      *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
@@ -621,7 +642,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, 'admSelectboxRow', $icon);
+        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon);
         $this->addSelect($id, $id, $attributes);
 
         if($setPleaseChoose == true)
@@ -684,7 +705,6 @@ class HtmlForm extends HtmlFormBasic
         }
         
         $this->closeSelect();
-		$this->setHelpText($helpTextId);
         $this->closeFieldStructure();
     }
     
@@ -713,8 +733,10 @@ class HtmlForm extends HtmlFormBasic
      *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
-	 *  @param $helpTextId      If set a help icon will be shown after the selectbox and on mouseover the translated text 
-	 *                          of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId      A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                          If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                          If you need an additional parameter for the text you can add an array. The first entry must
+     *                          be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $class           Optional an additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
      *  @param $icon            Opional an icon can be set. This will be placed in front of the label.
@@ -747,23 +769,25 @@ class HtmlForm extends HtmlFormBasic
     
     /** Add a new selectbox with a label to the form. The selectbox could have
      *  different values and a default value could be set.
-     *  @param $id           Id of the selectbox. This will also be the name of the selectbox.
-     *  @param $label        The label of the selectbox.
-	 *  @param $xmlFile      Serverpath to the xml file
-	 *  @param $xmlValueTag  Name of the xml tag that should contain the internal value of a selectbox entry
-	 *  @param $xmlViewTag   Name of the xml tag that should contain the visual value of a selectbox entry
-     *  @param $property   With this param you can set the following properties: 
-     *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue This is the value the selectbox shows when loaded.
+     *  @param $id          Id of the selectbox. This will also be the name of the selectbox.
+     *  @param $label       The label of the selectbox.
+	 *  @param $xmlFile     Serverpath to the xml file
+	 *  @param $xmlValueTag Name of the xml tag that should contain the internal value of a selectbox entry
+	 *  @param $xmlViewTag  Name of the xml tag that should contain the visual value of a selectbox entry
+     *  @param $property    With this param you can set the following properties: 
+     *                      @b FIELD_DEFAULT The field can accept an input.
+     *                      @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                      @b FIELD_DISABLED The field will be disabled and could not accept an input.
+     *  @param $defaultValue    This is the value the selectbox shows when loaded.
      *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
      *                          the list with the caption "Please choose".
-	 *  @param $helpTextId   If set a help icon will be shown after the selectbox and on mouseover the translated text 
-	 *                       of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
-     *  @param $class        Optional an additional css classname. The class @b admSelectbox
-     *                       is set as default and need not set with this parameter.
-     *  @param $icon         Opional an icon can be set. This will be placed in front of the label.
+	 *  @param $helpTextId  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                      If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                      If you need an additional parameter for the text you can add an array. The first entry must
+     *                      be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $class       Optional an additional css classname. The class @b admSelectbox
+     *                      is set as default and need not set with this parameter.
+     *  @param $icon        Opional an icon can be set. This will be placed in front of the label.
      */
     public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= '', 
                                         $setPleaseChoose = false, $helpTextId = null, $class = null, $icon = null)
@@ -799,8 +823,10 @@ class HtmlForm extends HtmlFormBasic
 	 *  @param $defaultValue	   Id of category that should be selected per default.
      *  @param $setPleaseChoose    If set to @b true a new entry will be added to the top of 
      *                             the list with the caption "Please choose".
-	 *  @param $helpTextId         If set a help icon will be shown after the selectbox and on mouseover the translated text 
-	 *                             of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId         A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                             If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                             If you need an additional parameter for the text you can add an array. The first entry must
+     *                             be the unique text id and the second entry will be a parameter of the text id.     
 	 *  @param $showCategoryChoice This mode shows only categories with elements and if default category will be selected 
 	 *                             there must be at least more then one category to select
 	 *  @param $showSystemCategory Show user defined and system categories
@@ -866,7 +892,7 @@ class HtmlForm extends HtmlFormBasic
 		    if($countCategories == 1)
 		    {
 		        $row = $databaseObject->fetch_array($result);
-                $defaultValue = $row['car_id'];
+                $defaultValue = $row['cat_id'];
             }
             // if several categories exist than select default category
             elseif($countCategories > 1)
@@ -880,6 +906,9 @@ class HtmlForm extends HtmlFormBasic
                 }
             }
 		}
+        
+        // now remove the 3. column so the selectbox could be generated from this sql
+        $sql = str_replace('DISTINCT cat_id, cat_name, cat_default', 'DISTINCT cat_id, cat_name', $sql);
         
         // now call method to create selectbox from sql
         $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class);
@@ -899,16 +928,16 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class Optional an additional css classname. The class @b admButton
      *                is set as default and need not set with this parameter.
      */
-    public function addSubmitButton($id, $text, $icon = '', $link = '', $class = '', $type = 'submit')
+    public function addSubmitButton($id, $text, $icon = null, $link = null, $class = null, $type = 'submit')
     {
-        $class .= ' admSubmitButton';
+        $class .= ' btn-primary';
 
         // first check if a field list was opened
-        if($this->flagFieldListOpen == true)
+        /*if($this->flagFieldListOpen == true)
         {
             $this->addHtml('</div>');
             $this->flagFieldListOpen = false;
-        }
+        }*/
 
         // now add button to form
         $this->addButton($id, $text, $icon, $link, $class, $type);
@@ -926,25 +955,29 @@ class HtmlForm extends HtmlFormBasic
      *  @param $type       Set the type if the field. Default will be text. Possible values are @b TEXT, @b DATE or @b BIRTHDAY
      *                     If date or birthday where set than a small dialog to choose the date will be shown behind the field.
      *                     The difference between date and birthday is the range of years that will be shown.
-	 *  @param $helpTextId If set a help icon will be shown after the input field and on mouseover the translated text 
-	 *                     of this id will be displayed e.g. SYS_ENTRY_MULTI_ORGA.
+	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $showHelpTextInline If set to @b true then the help text will be shown below the control within the form.
+     *                             Otherwise a small help icon will be shown after the label where the user get the text if he click on the icon.
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-    public function addTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $type = 'TEXT', $helpTextId = null, $class = '', $icon = null)
+    public function addTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $type = 'text', $helpTextId = null, $showHelpTextInline = false, $icon = null, $class = '')
     {
         global $gL10n, $gPreferences, $g_root_path;
         
         $this->countElements++;
 
-        if($type == 'TEXT')
+        if($type == 'DATE')
         {
-            $attributes = array('class' => 'admTextInput');
+            $attributes = array('class' => 'admDateInput');
         }
         else
         {
-            $attributes = array('class' => 'admDateInput');
+            $attributes = array('class' => 'form-control');
         }
 
         // set max input length
@@ -967,7 +1000,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // add the javascript to show a small dialog to select the date
-        if($type != 'TEXT')
+        if($type == 'DATE' || $type == 'BIRTHDAY')
         {
             // set different date range for date or birthday
             if($type == 'DATE')
@@ -1003,16 +1036,34 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now create html for the field
-        $this->openFieldStructure($id, $label, $property, 'admTextInputRow', $icon);
-        $this->addInput('text', $id, $id, $value, $attributes);
-        if($type != 'TEXT')
+        if($showHelpTextInline)
+        {
+            $this->openFieldStructure($id, $label, $property, null, $icon);
+        }
+        else
+        {
+            $this->openFieldStructure($id, $label, $property, $helpTextId, $icon);
+        }
+        $this->addInput($type, $id, $id, $value, $attributes);
+        if($type == 'DATE' || $type == 'BIRTHDAY')
         {
             $this->addHtml('
                 <a class="iconLink" id="anchor_'.$id.'" href="javascript:'.$calendarObjekt.'.select(document.getElementById(\''.$id.'\'),\'anchor_'.$id.'\',\''.$gPreferences['system_date'].'\');"><img 
                     src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
                 <span id="calendar_popup" style="position: absolute; visibility: hidden;"></span>');
         }
-		$this->setHelpText($helpTextId);
+        
+        if($showHelpTextInline)
+        {
+            if(is_array($helpTextId))
+            {
+                $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1]).'</span>');
+            }
+            else
+            {
+                $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId).'</span>');
+            }
+        }
         $this->closeFieldStructure();
     }
     
@@ -1046,16 +1097,23 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
+	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
+     *  @param $labelVertical If set to @b true then the label will be display above the control and the control get a width of 100%.
+     *                        Otherwise the label will be displayed in front of the control.
      *  @param $class      Optional an additional css classname for the row. The class @b admFieldRow
      *                     is set as default and need not set with this parameter.
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-    protected function openFieldStructure($id, $label, $property = FIELD_DEFAULT, $class = '', $icon = null)
+    protected function openFieldStructure($id, $label, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $labelVertical = false, $class = '')
     {
         $cssClassRow       = '';
         $cssClassMandatory = '';
 		$htmlLabel         = '';
 		$htmlIcon          = '';
+        $htmlHelpIcon      = '';
 
         // set specific css class for this row
         if(strlen($class) > 0)
@@ -1066,24 +1124,12 @@ class HtmlForm extends HtmlFormBasic
         // if necessary set css class for a mandatory element
         if($property == FIELD_MANDATORY)
         {
-			$cssClassMandatory = ' admMandatory';
+			$cssClassMandatory = ' control-mandatory';
             $cssClassRow .= $cssClassMandatory;
             $this->flagMandatoryFields = true;
         }
-        
-        // create a div tag for the field list
-        if($this->flagFieldListOpen == false)
-        {
-            $this->addHtml('<div class="admFieldEditList">');
-            $this->flagFieldListOpen = true;
-        }
 		
-		if(strlen($label) > 0)
-		{
-			$htmlLabel = '<label for="'.$id.'">'.$label.':</label>';
-		}
-		
-		if(strlen($icon) > 0)
+		if($icon != null)
 		{
 			// create html for icon
 			if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
@@ -1096,11 +1142,31 @@ class HtmlForm extends HtmlFormBasic
 			}
 		}
         
-        // create html
-        $this->addHtml('
-        <div class="admFieldRow'.$cssClassRow.'">
-            <div class="admFieldLabel'.$cssClassMandatory.'">'.$htmlIcon.$htmlLabel.'</div>
-            <div class="admFieldElement'.$cssClassMandatory.'">');
+        if($helpTextId != null)
+        {
+            $htmlHelpIcon = $this->getHelpTextIcon($helpTextId);
+        }
+		
+        $this->addHtml('<div class="form-group'.$cssClassRow.'">');
+        
+        // add label element
+        if($labelVertical)
+        {
+            $this->addHtml('<label for="'.$id.'">'.$htmlIcon.$label.$htmlHelpIcon.'</label>');
+        }
+        else
+        {
+            if(strlen($label) > 0)
+            {
+                $this->addHtml('<label for="'.$id.'" class="col-sm-3 control-label">'.$htmlIcon.$label.$htmlHelpIcon.'</label>
+                    <div class="col-sm-9">');
+            }
+            else
+            {
+                $this->addHtml('<div class="col-sm-offset-3 col-sm-9">');
+            }
+        }
+            error_log('text::'.$htmlIcon.'::'.$label.'::'.$htmlHelpIcon.'::');
     }
 	
     /** Add a new groupbox to the form. This could be used to group some elements 
@@ -1124,8 +1190,9 @@ class HtmlForm extends HtmlFormBasic
 	 *  @param $textId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                 If you need an additional parameter for the text you can add an array. The first entry must
      *                 be the unique text id and the second entry will be a parameter of the text id.
+     *  @return Return a html snippet that contains a help icon with a link to a popup box that shows the message.
 	 */
-	protected function setHelpText($textId)
+	protected function getHelpTextIcon($textId)
 	{
         global $g_root_path;
         $parameters = null;
@@ -1144,9 +1211,9 @@ class HtmlForm extends HtmlFormBasic
         
         if($parameters != null)
         {
-            $this->addHtml('<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
+            return '<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?'.$parameters.'\',this)" 
-                                   onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>');
+                                   onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
         }
 	}
     
@@ -1165,7 +1232,7 @@ class HtmlForm extends HtmlFormBasic
 	    // If mandatory fields were set than a notice which marker represents the mandatory will be shown.
         if($this->flagMandatoryFields)
         {
-            $html .= '<div class="admMandatoryDefinition"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
+            $html .= '<div class="control-mandatory-definition"><span>'.$gL10n->get('SYS_MANDATORY_FIELDS').'</span></div>';
         }
 		
 		// now get whole form html code

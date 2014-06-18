@@ -108,13 +108,13 @@ else
         $announcement->clear();
         $announcement->setArray($row);
         $page->addHtml('
-        <div class="admBoxLayout" id="ann_'.$announcement->getValue('ann_id').'">
-            <div class="admBoxHead">
-                <div class="admBoxHeadLeft">
+        <div class="panel panel-primary" id="ann_'.$announcement->getValue('ann_id').'">
+            <div class="panel-heading">
+                <span class="panel-heading-left">
                     <img src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
                     $announcement->getValue('ann_headline'). '
-                </div>
-                <div class="admBoxHeadRight">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'&nbsp;');
+                </span>
+                <span class="panel-heading-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'&nbsp;');
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())
@@ -135,12 +135,14 @@ else
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                         }    
                     }
-                    $page->addHtml('</div>
+                $page->addHtml('</span>
             </div>
 
-            <div class="admBoxBody">'.
+            <div class="panel-body">'.
                 $announcement->getValue('ann_description').
 
+            '</div>
+            <div class="panel-footer">'.
                 // show informations about user who creates the recordset and changed it
                 admFuncShowCreateChangeInfoByName($row['create_name'], $announcement->getValue('ann_timestamp_create'), 
                     $row['change_name'], $announcement->getValue('ann_timestamp_change'), $announcement->getValue('ann_usr_id_create'), $announcement->getValue('ann_usr_id_change')).'

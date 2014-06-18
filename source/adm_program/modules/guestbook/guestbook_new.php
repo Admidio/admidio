@@ -125,7 +125,6 @@ else
 
 // show form
 $form = new HtmlForm('guestbook_edit_form', $g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='. $getGboId. '&amp;headline='. $getHeadline. '&amp;mode='.$mode, $page);
-$form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name
@@ -135,12 +134,9 @@ else
 {
     $form->addTextInput('gbo_name', $gL10n->get('SYS_NAME'), $guestbook->getValue('gbo_name'), 60, FIELD_MANDATORY);
 }
-$form->addTextInput('gbo_email', $gL10n->get('SYS_EMAIL'), $guestbook->getValue('gbo_email'), 50);
-$form->addTextInput('gbo_homepage', $gL10n->get('SYS_WEBSITE'), $guestbook->getValue('gbo_homepage'), 50);
-$form->closeGroupBox();
-$form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'));
-$form->addEditor('gbo_text', null, $guestbook->getValue('gbo_text'), FIELD_MANDATORY, 'AdmidioGuestbook');
-$form->closeGroupBox();
+$form->addTextInput('gbo_email', $gL10n->get('SYS_EMAIL'), $guestbook->getValue('gbo_email'), 50, FIELD_DEFAULT, 'email');
+$form->addTextInput('gbo_homepage', $gL10n->get('SYS_WEBSITE'), $guestbook->getValue('gbo_homepage'), 50, FIELD_DEFAULT, 'url');
+$form->addEditor('gbo_text', $gL10n->get('SYS_MESSAGE'), $guestbook->getValue('gbo_text'), FIELD_MANDATORY, 'AdmidioGuestbook');
 
 // if captchas are enabled then visitors of the website must resolve this
 if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)

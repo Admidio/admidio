@@ -59,9 +59,9 @@ if (isset($comment_result))
         $getGbcId = $gbComment->getValue('gbc_gbo_id');
 
         echo '
-        <div class="admBoxLayout" id="gbc_'.$gbComment->getValue('gbc_id').'" style="overflow: hidden; margin-left: 20px; margin-right: 20px;">
-            <div class="admBoxHead">
-                <div class="admBoxHeadLeft">
+        <div class="panel panel-info" id="gbc_'.$gbComment->getValue('gbc_id').'" style="overflow: hidden; margin-left: 20px; margin-right: 20px;">
+            <div class="panel-heading">
+                <span class="panel-heading-left">
                     <img src="'. THEME_PATH. '/icons/comments.png" style="vertical-align: top;" alt="'.$gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name')).'" />&nbsp;'.
                     $gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'));
 
@@ -72,9 +72,9 @@ if (isset($comment_result))
                             alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" /></a>';
                     }
                 echo '
-                </div>
+                </span>
 
-                <div class="admBoxHeadRight">'. $gbComment->getValue('gbc_timestamp_create', $gPreferences['system_date'].' '.$gPreferences['system_time']);
+                <span class="panel-heading-right">'. $gbComment->getValue('gbc_timestamp_create', $gPreferences['system_date'].' '.$gPreferences['system_time']);
 
                 // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
                 if ($gCurrentUser->editGuestbookRight())
@@ -87,10 +87,10 @@ if (isset($comment_result))
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }
 
-                echo '</div>
+                echo '</span>
             </div>
 
-            <div class="admBoxBody">'.
+            <div class="panel-body">'.
                 $gbComment->getValue('gbc_text');
 
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
@@ -99,28 +99,23 @@ if (isset($comment_result))
                     echo '
                     <ul class="admIconTextLinkList">
                         <li>
-                            <span class="admIconTextLink">
-                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
-                                    $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" /></a>
-                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
-                                    $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'">'.$gL10n->get('SYS_UNLOCK').'</a>
-                            </span>
+                            <a class="icon-text-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
+                                $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
                         </li>
                         <li>
-                            <span class="admIconTextLink">
-                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
-                                    $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" /></a>
-                                <a rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
-                                    $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'">'.$gL10n->get('SYS_REMOVE').'</a>
-                            </span>
+                            <a class="icon-text-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
+                                $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
                         </li>
                     </ul>';
                 }
+            echo '</div>';
 
-                // show informations about user who edit the recordset
-                echo admFuncShowCreateChangeInfoById(0, '', $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')).'
-            </div>
-        </div>';
+            // show informations about user who edit the recordset
+            if(strlen($gbComment->getValue('gbc_usr_id_change')) > 0)
+            {
+                echo '<div class="panel-footer">'.admFuncShowCreateChangeInfoById(0, '', $gbComment->getValue('gbc_usr_id_change'), $gbComment->getValue('gbc_timestamp_change')).'</div>';
+            }            
+        echo '</div>';
     }
 
     if (($gCurrentUser->commentGuestbookRight() || $gPreferences['enable_gbook_comments4all'] == 1)

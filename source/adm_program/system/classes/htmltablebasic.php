@@ -347,7 +347,11 @@ class HtmlTableBasic extends HtmlElement {
             }
         }
         
-        $this->rowCount++;
+        // only increase rowcount if this is a data row and not the header
+        if($col == 'td')
+        {
+            $this->rowCount++;
+        }
     }
 
     /**

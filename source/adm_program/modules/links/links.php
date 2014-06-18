@@ -141,19 +141,17 @@ else
             {
                 $page->addHtml('</div></div>');
             }
-            $page->addHtml('<div class="admBoxLayout">
-                <div class="admBoxHead">'.$weblink->getValue('cat_name').'</div>
-                <div class="admBoxBody">');
+            $page->addHtml('<div class="panel panel-primary">
+                <div class="panel-heading">'.$weblink->getValue('cat_name').'</div>
+                <div class="panel-body">');
         }
 
         $page->addHtml('<div class="admWeblinkItem" id="lnk_'.$weblink->getValue('lnk_id').'">');
             // show weblink
             $page->addHtml('
-            <span class="admIconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                    alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" /></a>
-                <a href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '">'.$weblink->getValue('lnk_name').'</a>
-            </span>');
+            <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
+                alt="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" title="'.$gL10n->get('LNK_GO_TO', $weblink->getValue('lnk_name')).'" />'.$weblink->getValue('lnk_name').'</a>');
+
             // change and delete only users with rights
             if ($gCurrentUser->editWeblinksRight())
             {
