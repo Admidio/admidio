@@ -35,9 +35,10 @@ define('FIELD_DISABLED', 2);
 class HtmlForm extends HtmlFormBasic
 {
     protected $flagMandatoryFields; ///< Flag if this form has mandatory fields. Then a notice must be written at the end of the form
-    private   $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
-    private   $htmlPage;            ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
-    private   $countElements;         ///< Number of elements in this form
+    protected $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
+    protected $htmlPage;            ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
+    protected $countElements;       ///< Number of elements in this form
+    protected $labelVertical;       ///< If set to @b true than the label of all controls will be shown above the control.
     
     /** Constructor creates the form element
      *  @param $id               Id of the form
@@ -45,8 +46,10 @@ class HtmlForm extends HtmlFormBasic
      *  @param $htmlPage         Optional a HtmlPage object that will be used to add javascript code 
      *                           or files to the html output page.
      *  @param $enableFileUpload Set specific parameters that are necessary for file upload with a form
+     *  @param $labelVertical    If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
+     *                           Otherwise (default) the label will be displayed in front of the control.
      */
-    public function __construct($id, $action, &$htmlPage = null, $enableFileUpload = false)
+    public function __construct($id, $action, &$htmlPage = null, $enableFileUpload = false, $labelVertical = false)
     {        
         
         parent::__construct($action, $id, 'post');
@@ -65,6 +68,7 @@ class HtmlForm extends HtmlFormBasic
         $this->flagMandatoryFields = false;
         $this->flagFieldListOpen   = false;
         $this->countFields         = 0;
+        $this->labelVertical       = $labelVertical;
         
         if(is_object($htmlPage))
         {
@@ -172,16 +176,22 @@ class HtmlForm extends HtmlFormBasic
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
      *  @param $class      Optional an additional css classname. The class @b admCheckbox
      *                     is set as default and need not set with this parameter.
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
      */
-    public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $class = null, $icon = null)
+    public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $class = null)
     {
-        $attributes   = array('class' => 'admCheckbox');
+        $attributes   = array();
         $htmlIcon     = '';
         $htmlHelpIcon = '';
+        $cssClasses   = 'checkbox';
         $this->countElements++;
+        
+        if($this->labelVertical == false)
+        {
+            $cssClasses .= ' col-sm-offset-3 col-sm-9';
+        }
 
         // disable field
         if($property == FIELD_DISABLED)
@@ -220,11 +230,9 @@ class HtmlForm extends HtmlFormBasic
             $htmlHelpIcon = $this->getHelpTextIcon($helpTextId);
         }
 
-        $this->openFieldStructure($id, null, $property);
-        $this->addHtml('<div class="checkbox"><label>');
+        $this->addHtml('<div class="'.$cssClasses.'"><label>');
         $this->addInput('checkbox', $id, $id, '1', $attributes);
 		$this->addHtml($htmlIcon.$label.$htmlHelpIcon.'</label></div>');
-        $this->closeFieldStructure();
     }
     
     
@@ -238,9 +246,10 @@ class HtmlForm extends HtmlFormBasic
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
      *  @param $class      Optional an additional css classname.
      */
-    public function addCustomContent($id, $label, $content, $helpTextId, $class = null)
+    public function addCustomContent($id, $label, $content, $helpTextId = null, $icon = null, $class = null)
     {
         $this->countElements++;
     
@@ -250,7 +259,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
 
-        $this->openFieldStructure($id, $label, FIELD_DEFAULT, $helpTextId, 'form-custom-content');
+        $this->openFieldStructure($id, $label, FIELD_DEFAULT, $helpTextId, $icon, $this->labelVertical, 'form-custom-content');
         $this->addHtml($content);
         $this->closeFieldStructure();
     }
@@ -261,7 +270,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addDescription($text)
     {
-        $this->addHtml('<div class="admFieldRow"><div class="admDescription">'.$text.'</div></div>');
+        $this->addHtml('<p>'.$text.'</p>');
     }
 	
     /** Add a new CKEditor element to the form. 
@@ -278,11 +287,14 @@ class HtmlForm extends HtmlFormBasic
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
+     *  @param $labelVertical If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
+     *                        Otherwise the label will be displayed in front of the control.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', $helpTextId = null, $class = null, $icon = null)
+	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', 
+	                          $helpTextId = null, $icon = null, $labelVertical = true, $class = null)
 	{
         $attributes = array('class' => 'admEditor');
         $this->countElements++;
@@ -307,7 +319,7 @@ class HtmlForm extends HtmlFormBasic
 
 		$ckEditor = new CKEditorSpecial();
 
-        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, true, 'form-group-editor');
+        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $labelVertical, 'form-group-editor');
 		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
         $this->closeFieldStructure();
 	}
@@ -330,10 +342,12 @@ class HtmlForm extends HtmlFormBasic
      *                        If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                        If you need an additional parameter for the text you can add an array. The first entry must
      *                        be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $class         Optional an additional css classname. The class @b admTextInput
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
+     *  @param $class         Optional an additional css classname. The class @b admTextInput       
      *                        is set as default and need not set with this parameter.
      */
-    public function addFileUpload($id, $label, $maxUploadSize, $enableMultiUploads = false, $multiUploadLabel = null, $hideUploadField = false, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
+    public function addFileUpload($id, $label, $maxUploadSize, $enableMultiUploads = false, $multiUploadLabel = null, 
+                                  $hideUploadField = false, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $class = '')
     {
         $attributes = array('class' => 'form-control');
         $this->countElements++;
@@ -385,7 +399,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openFieldStructure($id, $label, $property, $helpTextId, null, false, 'form-upload');
+        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical, 'form-upload');
         $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $maxUploadSize);
         
         // if multi uploads are enabled then the file upload field could be hidden
@@ -431,11 +445,12 @@ class HtmlForm extends HtmlFormBasic
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-    public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, $helpTextId = null, $class = null, $icon = null)
+    public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, 
+                                          $helpTextId = null, $icon = null, $class = null)
     {
         global $gL10n, $g_root_path;
 
@@ -481,7 +496,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openFieldStructure($id, $label, $property, null, $icon);
+        $this->openFieldStructure($id, $label, $property, null, $icon, $this->labelVertical);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
         if($maxLength > 0)
         {
@@ -524,7 +539,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, $helpTextId);
+        $this->openFieldStructure($id, $label, $property, $helpTextId, null, $this->labelVertical);
         $this->addInput('password', $id, $id, null, $attributes);
         $this->addAttribute('class', 'admTextInput');
         $this->closeFieldStructure();
@@ -548,10 +563,11 @@ class HtmlForm extends HtmlFormBasic
      *                       If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                       If you need an additional parameter for the text you can add an array. The first entry must
      *                       be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon         Opional an icon can be set. This will be placed in front of the label.
      *  @param $class        Optional an additional css classname. The class @b admRadioInput
      *                       is set as default and need not set with this parameter.
      */
-    public function addRadioButton($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setDummyButton = false, $helpTextId = null, $class = '')
+    public function addRadioButton($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setDummyButton = false, $helpTextId = null, $icon = null, $class = '')
     {
         $attributes = array('class' => 'admRadioInput');
         $this->countElements++;
@@ -569,7 +585,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, $helpTextId);
+        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
         
         // set one radio button with no value will be set in front of the other array.
         if($setDummyButton == true)
@@ -618,11 +634,11 @@ class HtmlForm extends HtmlFormBasic
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      *  @param $class      Optional an additional css classname. The class @b admSelectbox
      *                     is set as default and need not set with this parameter.
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      */
-    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setPleaseChoose = false, $helpTextId = null, $class = null, $icon = null)
+    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setPleaseChoose = false, $helpTextId = null, $icon = null, $class = null)
     {
         global $gL10n;
 
@@ -642,7 +658,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon);
+        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
         $this->addSelect($id, $id, $attributes);
 
         if($setPleaseChoose == true)
@@ -737,12 +753,12 @@ class HtmlForm extends HtmlFormBasic
      *                          If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                          If you need an additional parameter for the text you can add an array. The first entry must
      *                          be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon            Opional an icon can be set. This will be placed in front of the label.
      *  @param $class           Optional an additional css classname. The class @b admSelectbox
      *                          is set as default and need not set with this parameter.
-     *  @param $icon            Opional an icon can be set. This will be placed in front of the label.
      */
     public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= '', 
-                                        $setPleaseChoose = false, $helpTextId = null, $class = null, $icon = null)
+                                        $setPleaseChoose = false, $helpTextId = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
     
@@ -764,7 +780,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class, $icon);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
@@ -785,12 +801,12 @@ class HtmlForm extends HtmlFormBasic
      *                      If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                      If you need an additional parameter for the text you can add an array. The first entry must
      *                      be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon        Opional an icon can be set. This will be placed in front of the label.
      *  @param $class       Optional an additional css classname. The class @b admSelectbox
      *                      is set as default and need not set with this parameter.
-     *  @param $icon        Opional an icon can be set. This will be placed in front of the label.
      */
     public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= '', 
-                                        $setPleaseChoose = false, $helpTextId = null, $class = null, $icon = null)
+                                        $setPleaseChoose = false, $helpTextId = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
         
@@ -807,7 +823,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class, $icon);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must
@@ -911,7 +927,7 @@ class HtmlForm extends HtmlFormBasic
         $sql = str_replace('DISTINCT cat_id, cat_name, cat_default', 'DISTINCT cat_id, cat_name', $sql);
         
         // now call method to create selectbox from sql
-        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextId, $class);
+        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextId, null, $class);
 	}
     
     /** Add a new button with a custom text to the form. This button could have 
@@ -1038,11 +1054,11 @@ class HtmlForm extends HtmlFormBasic
         // now create html for the field
         if($showHelpTextInline)
         {
-            $this->openFieldStructure($id, $label, $property, null, $icon);
+            $this->openFieldStructure($id, $label, $property, null, $icon, $this->labelVertical);
         }
         else
         {
-            $this->openFieldStructure($id, $label, $property, $helpTextId, $icon);
+            $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
         }
         $this->addInput($type, $id, $id, $value, $attributes);
         if($type == 'DATE' || $type == 'BIRTHDAY')
@@ -1078,14 +1094,14 @@ class HtmlForm extends HtmlFormBasic
      */
     public function closeGroupBox()
     {
-        // first check if a field list was opened
-        if($this->flagFieldListOpen == true)
+        if($this->labelVertical)
         {
-            $this->addHtml('</div>');
-            $this->flagFieldListOpen = false;
+            $this->addHtml('</div>');            
         }
-
-        $this->addHtml('</div></div>');
+        else
+        {
+            $this->addHtml('</div></div>');
+        }
     }
     
     /** Creates a html structure for a form field. This structure contains the label
@@ -1152,7 +1168,10 @@ class HtmlForm extends HtmlFormBasic
         // add label element
         if($labelVertical)
         {
-            $this->addHtml('<label for="'.$id.'">'.$htmlIcon.$label.$htmlHelpIcon.'</label>');
+            if(strlen($label) > 0)
+            {
+                $this->addHtml('<label for="'.$id.'">'.$htmlIcon.$label.$htmlHelpIcon.'</label>');
+            }
         }
         else
         {
@@ -1166,7 +1185,6 @@ class HtmlForm extends HtmlFormBasic
                 $this->addHtml('<div class="col-sm-offset-3 col-sm-9">');
             }
         }
-            error_log('text::'.$htmlIcon.'::'.$label.'::'.$htmlHelpIcon.'::');
     }
 	
     /** Add a new groupbox to the form. This could be used to group some elements 
@@ -1176,13 +1194,13 @@ class HtmlForm extends HtmlFormBasic
      */
     public function openGroupBox($id, $headline = '')
     {
-        $this->addHtml('<div id="'.$id.'" class="admGroupBox">');
+        $this->addHtml('<div id="'.$id.'" class="panel panel-default">');
         // add headline to groupbox
         if(strlen($headline) > 0)
         {
-            $this->addHtml('<div class="admGroupBoxHeadline">'.$headline.'</div>');
+            $this->addHtml('<div class="panel-heading">'.$headline.'</div>');
         }
-        $this->addHtml('<div class="admGroupBoxBody">');
+        $this->addHtml('<div class="panel-body">');
     }
 	
 	/** Add a small help icon to the form at the current element which shows the

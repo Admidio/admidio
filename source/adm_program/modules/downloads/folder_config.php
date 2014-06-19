@@ -105,12 +105,14 @@ $page = new HtmlPage();
 // show back link
 $page->addHtml($gNavigation->getHtmlBackButton());
 
+$page->addJavascript('$("#fol_public").click(function() {showHideBlock("adm_roles_box", "", "");});
+                      $("#btn_save").click(function () {absenden();});', true);
 $page->addJavascript('
         // Scripts fuer Rollenbox
         function hinzufuegen()
         {
-            var allowed_roles = document.getElementById("admAllowedRoles");
-            var denied_roles  = document.getElementById("admDeniedRoles");
+            var allowed_roles = document.getElementById("adm_allowed_roles");
+            var denied_roles  = document.getElementById("adm_denied_roles");
 
             if (denied_roles.selectedIndex >= 0) {
                 NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
@@ -121,8 +123,8 @@ $page->addJavascript('
 
         function entfernen()
         {
-            var allowed_roles = document.getElementById("admAllowedRoles");
-            var denied_roles  = document.getElementById("admDeniedRoles");
+            var allowed_roles = document.getElementById("adm_allowed_roles");
+            var denied_roles  = document.getElementById("adm_denied_roles");
 
             if (allowed_roles.selectedIndex >= 0)
             {
@@ -134,7 +136,7 @@ $page->addJavascript('
 
         function absenden()
         {
-            var allowed_roles = document.getElementById("admAllowedRoles");
+            var allowed_roles = document.getElementById("adm_allowed_roles");
 
             allowed_roles.multiple = true;
 
@@ -143,115 +145,79 @@ $page->addJavascript('
                 allowed_roles.options[i].selected = true;
             }
 
-            $("#admFormFolderRights").submit();
+            $("#adm_form_folder_rights").submit();
         }');
 
 // show headline of module
 $page->addHeadline($headline);
 
-// Html des Modules ausgeben
-$page->addHtml('
-<form id="admFormFolderRights" method="post" action="'.$g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId.'">
-<div class="formLayout" id="edit_download_folder_form" >
-    <div class="formBody">
-        <div class="groupBox">
-            <div class="groupBoxBody" >
-                <ul class="formFieldList">
-                    <li>
-                        <div>
-                            <input type="checkbox" id="fol_public" name="fol_public" ');
-                            if($folder->getValue('fol_public') == 0)
-                            {
-                                $page->addHtml(' checked="checked" ');
-                            }
-                            if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
-                            {
-                                $page->addHtml(' disabled="disabled" ');
-                            }
-                            $page->addHtml(' value="0" onclick="showHideBlock(\'admRolesBox\', \'\', \'\');" />
-                            <label for="fol_public"><img src="'. THEME_PATH. '/icons/lock.png" alt="'.$gL10n->get('DOW_NO_PUBLIC_ACCESS').'" /></label>&nbsp;
-                            <label for="fol_public">'.$gL10n->get('DOW_NO_PUBLIC_ACCESS').'</label>
-                            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_PUBLIC_DOWNLOAD_FLAG&amp;inline=true"><img 
-                                onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DOW_PUBLIC_DOWNLOAD_FLAG\',this)" onmouseout="ajax_hideTooltip()"
-                                class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>');
+// show form
+$form = new HtmlForm('adm_form_folder_rights', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page, false, true);
+$fieldMode = FIELD_DEFAULT;
 
-                            //Der Wert der DisabledCheckbox muss mit einem versteckten Feld uebertragen werden.
-                            if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
-                            {
-                                $page->addHtml('<input type=hidden id="fol_public_hidden" name="fol_public" value='. $parentFolder->getValue('fol_public'). ' />');
-                            }
+if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)
+{
+    $fieldMode = FIELD_DISABLED;
+}
 
-                        $page->addHtml('
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
+if($folder->getValue('fol_public') == 0)
+{
+    $checkboxValue = 1;
+}
+else
+{
+    $checkboxValue = 0;
+    $page->addJavascript('$("#adm_roles_box").hide();', true);
+}
 
-        <div class="groupBox" id="admRolesBox" ');
-            if($folder->getValue('fol_public') == 1)
+$htmlRoleSelection = '
+    <div class="col-sm-5">
+        <div><img class="admIconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</div>
+        <div>
+            <select id="adm_denied_roles" name="DeniedRoles" class="form-control" size="8" style="max-width: 300px;">';
+            for($i=0; $i < count($parentRoleSet); $i++) 
             {
-                $page->addHtml(' style="display: none;" ');
+                $nextRole = $parentRoleSet[$i];
+
+                if ($roleSet == null || in_array($nextRole, $roleSet) == false) 
+                {
+                    $htmlRoleSelection .= '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
+                }
             }
-            $page->addHtml('>
-            <div class="groupBoxHeadline">'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS').'</div>
-            <div class="groupBoxBody" ><p>'.$gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC').'</p>
-                <div style="text-align: left; float: left;">
-                    <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</div>
-                    <div>
-                        <select id="admDeniedRoles" size="8" style="width: 200px;">');
-                        for($i=0; $i < count($parentRoleSet); $i++) 
-                        {
-                            $nextRole = $parentRoleSet[$i];
 
-                            if ($roleSet == null || in_array($nextRole, $roleSet) == false) 
-                            {
-                                $page->addHtml('<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>');
-                            }
-                        }
-
-                        $page->addHtml('
-                        </select>
-                    </div>
-                </div>
-                <div style="float: left;" class="verticalIconList">
-                    <ul>
-                        <li>
-                            <a class="iconLink" href="javascript:hinzufuegen()"><img 
-                                src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_ADD_ROLE').'" title="'.$gL10n->get('SYS_ADD_ROLE').'" /></a>
-                        </li>
-                        <li>
-                            <a class="iconLink" href="javascript:entfernen()"><img
-                                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_REMOVE_ROLE').'" title="'.$gL10n->get('SYS_REMOVE_ROLE').'" /></a>
-                        </li>
-                    </ul>
-                </div>
-                <div>
-                    <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" title="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" />'.$gL10n->get('DOW_ACCESS_ALLOWED').'</div>
-                    <div>
-                        <select id="admAllowedRoles" name="AllowedRoles[]" size="8" style="width: 200px;">');
-                        for($i=0; $i<count($roleSet); $i++) {
-
-                            $nextRole = $roleSet[$i];
-                            $page->addHtml('<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>');
-                        }
-                        $page->addHtml('
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="formSubmit">
-            <button id="btnSave" type="button" onclick="absenden()">
-            <img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />
-            &nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+            $htmlRoleSelection .= '
+            </select>
         </div>
     </div>
-</div>
-</form>');
+    <div class="col-sm-2" style="text-align: center;">
+        <br /><br /><br />
+        <a class="admIconLink" href="javascript:entfernen()"><img
+            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_REMOVE_ROLE').'" title="'.$gL10n->get('SYS_REMOVE_ROLE').'" /></a>
+        <a class="admIconLink" href="javascript:hinzufuegen()"><img 
+            src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_ADD_ROLE').'" title="'.$gL10n->get('SYS_ADD_ROLE').'" /></a>
+    </div>
+    <div class="col-sm-5">
+        <div><img class="admIconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" title="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" />'.$gL10n->get('DOW_ACCESS_ALLOWED').'</div>
+        <div>
+            <select id="adm_allowed_roles" name="AllowedRoles[]" class="form-control" size="8" style="max-width: 300px;">';
+            for($i=0; $i<count($roleSet); $i++) {
 
+                $nextRole = $roleSet[$i];
+                $htmlRoleSelection .= '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
+            }
+            $htmlRoleSelection .= '
+            </select>
+        </div>
+    </div>';
+
+$form->addCheckbox('fol_public', $gL10n->get('DOW_NO_PUBLIC_ACCESS'), $checkboxValue, $fieldMode, 'DOW_PUBLIC_DOWNLOAD_FLAG', THEME_PATH. '/icons/lock.png');
+$form->openGroupBox('adm_roles_box', $gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS'));
+$form->addDescription($gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'));
+$form->addCustomContent('adm_roles_selection', null, $htmlRoleSelection);
+$form->closeGroupBox();
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+
+// add form to html page and show page
+$page->addHtml($form->show(false));
 $page->show();
-
 ?>

@@ -167,9 +167,9 @@ a:hover, a:active {
 .admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation {
     border: none;
     vertical-align: text-top;
-    padding-left: 1px;
-    padding-right: 1px;
-    width: 16px;
+    margin-left: 1px;
+    margin-right: 1px;
+    /*width: 16px;*/
     height: 16px;
 }
 
@@ -281,10 +281,10 @@ a:hover, a:active {
 .admTextInput:focus, .admTextInputSmall:focus, .admMultilineTextInput:focus, admDateInput, .admSelectBox:focus, .admSelectBoxSmall:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
     background-color: #fff8a0;
 }
-/*
-.admTextInput, .admMultilineTextInput {
-    width: 95%;
-}*/
+
+.checkbox {
+    margin-bottom: 10px !important;
+}
 
 .admTextInputSmall {
     width: 50%;

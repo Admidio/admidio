@@ -322,7 +322,7 @@ foreach($gProfileFields->mProfileFields as $field)
             }
     		
     		$form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-    		    $arrListValues, $fieldProperty, $defaultValue, $setPleaseChoose, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+    		    $arrListValues, $fieldProperty, $defaultValue, $setPleaseChoose, $helpId, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
     	}
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'RADIO_BUTTON')
         {
@@ -335,12 +335,12 @@ foreach($gProfileFields->mProfileFields as $field)
     		}
     		
     		$form->addRadioButton('usf-'.$gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
-    		    $arrListValues, $fieldProperty, $user->getValue($field->getValue('usf_name_intern'), 'database'), $showDummyRadioButton, $helpId);
+    		    $arrListValues, $fieldProperty, $user->getValue($field->getValue('usf_name_intern'), 'database'), $showDummyRadioButton, $helpId, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
         }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'TEXT_BIG')
         {
             $form->addMultilineTextInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-                $user->getValue($field->getValue('usf_name_intern')), 2, 255, $fieldProperty, $helpId);
+                $user->getValue($field->getValue('usf_name_intern')), 2, 255, $fieldProperty, $helpId, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
         }
         else
         {
