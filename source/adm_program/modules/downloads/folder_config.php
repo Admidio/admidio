@@ -106,42 +106,34 @@ $page = new HtmlPage();
 $page->addHtml($gNavigation->getHtmlBackButton());
 
 $page->addJavascript('$("#fol_public").click(function() {showHideBlock("adm_roles_box", "", "");});
-                      $("#btn_save").click(function () {absenden();});', true);
+                      $("#btn_save").click(function () {sendForm();});', true);
 $page->addJavascript('
-        // Scripts fuer Rollenbox
-        function hinzufuegen()
-        {
-            var allowed_roles = document.getElementById("adm_allowed_roles");
-            var denied_roles  = document.getElementById("adm_denied_roles");
-
-            if (denied_roles.selectedIndex >= 0) {
-                NeuerEintrag = new Option(denied_roles.options[denied_roles.selectedIndex].text, denied_roles.options[denied_roles.selectedIndex].value, false, true);
-                denied_roles.options[denied_roles.selectedIndex] = null;
-                allowed_roles.options[allowed_roles.length] = NeuerEintrag;
-            }
+        // add all selected roles from the denied box to the allowed box
+        function addRoles() {
+            $("#adm_denied_roles option:selected").each(function () {
+                $("#adm_allowed_roles").append(
+                    $("<option></option>").val(this.value).html(this.text)
+                );
+                this.remove();
+            });
         }
 
-        function entfernen()
-        {
-            var allowed_roles = document.getElementById("adm_allowed_roles");
-            var denied_roles  = document.getElementById("adm_denied_roles");
-
-            if (allowed_roles.selectedIndex >= 0)
-            {
-                NeuerEintrag = new Option(allowed_roles.options[allowed_roles.selectedIndex].text, allowed_roles.options[allowed_roles.selectedIndex].value, false, true);
-                allowed_roles.options[allowed_roles.selectedIndex] = null;
-                denied_roles.options[denied_roles.length] = NeuerEintrag;
-            }
+        // add all selected roles from the allowed box to the denied box
+        function removeRoles() {
+            $("#adm_allowed_roles option:selected").each(function () {
+                $("#adm_denied_roles").append(
+                    $("<option></option>").val(this.value).html(this.text)
+                );
+                this.remove();
+            });
         }
 
-        function absenden()
-        {
+        function sendForm() {
             var allowed_roles = document.getElementById("adm_allowed_roles");
 
             allowed_roles.multiple = true;
 
-            for (var i = 0; i < allowed_roles.options.length; i++)
-            {
+            for (var i = 0; i < allowed_roles.options.length; i++) {
                 allowed_roles.options[i].selected = true;
             }
 
@@ -171,43 +163,39 @@ else
 }
 
 $htmlRoleSelection = '
-    <div class="col-sm-5">
-        <div><img class="admIconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</div>
-        <div>
-            <select id="adm_denied_roles" name="DeniedRoles" class="form-control" size="8" style="max-width: 300px;">';
-            for($i=0; $i < count($parentRoleSet); $i++) 
+    <div class="col-sm-5 form-group">
+        <label for="adm_denied_roles"><img class="admIconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</label>
+        <select id="adm_denied_roles" name="DeniedRoles" class="form-control" multiple="multiple" size="8" style="max-width: 300px;">';
+        for($i=0; $i < count($parentRoleSet); $i++) 
+        {
+            $nextRole = $parentRoleSet[$i];
+
+            if ($roleSet == null || in_array($nextRole, $roleSet) == false) 
             {
-                $nextRole = $parentRoleSet[$i];
-
-                if ($roleSet == null || in_array($nextRole, $roleSet) == false) 
-                {
-                    $htmlRoleSelection .= '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
-                }
+                $htmlRoleSelection .= '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
             }
+        }
 
-            $htmlRoleSelection .= '
-            </select>
-        </div>
+        $htmlRoleSelection .= '
+        </select>
     </div>
     <div class="col-sm-2" style="text-align: center;">
         <br /><br /><br />
-        <a class="admIconLink" href="javascript:entfernen()"><img
+        <a class="admIconLink" href="javascript:removeRoles()"><img
             src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_REMOVE_ROLE').'" title="'.$gL10n->get('SYS_REMOVE_ROLE').'" /></a>
-        <a class="admIconLink" href="javascript:hinzufuegen()"><img 
+        <a class="admIconLink" href="javascript:addRoles()"><img 
             src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_ADD_ROLE').'" title="'.$gL10n->get('SYS_ADD_ROLE').'" /></a>
     </div>
-    <div class="col-sm-5">
-        <div><img class="admIconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" title="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" />'.$gL10n->get('DOW_ACCESS_ALLOWED').'</div>
-        <div>
-            <select id="adm_allowed_roles" name="AllowedRoles[]" class="form-control" size="8" style="max-width: 300px;">';
-            for($i=0; $i<count($roleSet); $i++) {
+    <div class="col-sm-5 form-group">
+        <label for="adm_allowed_roles"><img class="admIconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" title="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" />'.$gL10n->get('DOW_ACCESS_ALLOWED').'</label>
+        <select id="adm_allowed_roles" name="AllowedRoles[]" class="form-control" multiple="multiple" size="8" style="max-width: 300px;">';
+        for($i=0; $i<count($roleSet); $i++) {
 
-                $nextRole = $roleSet[$i];
-                $htmlRoleSelection .= '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
-            }
-            $htmlRoleSelection .= '
-            </select>
-        </div>
+            $nextRole = $roleSet[$i];
+            $htmlRoleSelection .= '<option value="'. $nextRole['rol_id']. '">'. $nextRole['rol_name']. '</option>';
+        }
+        $htmlRoleSelection .= '
+        </select>
     </div>';
 
 $form->addCheckbox('fol_public', $gL10n->get('DOW_NO_PUBLIC_ACCESS'), $checkboxValue, $fieldMode, 'DOW_PUBLIC_DOWNLOAD_FLAG', THEME_PATH. '/icons/lock.png');

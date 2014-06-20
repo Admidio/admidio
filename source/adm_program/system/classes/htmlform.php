@@ -55,9 +55,11 @@ class HtmlForm extends HtmlFormBasic
         parent::__construct($action, $id, 'post');
         
         // set specific Admidio css form class
-        //$this->addAttribute('class', 'admForm');
         $this->addAttribute('role', 'form');
-        $this->addAttribute('class', 'form-horizontal');
+        if($labelVertical == false)
+        {
+            $this->addAttribute('class', 'form-horizontal');
+        }
 		
         // Set specific parameters that are necessary for file upload with a form
         if($enableFileUpload == true)
