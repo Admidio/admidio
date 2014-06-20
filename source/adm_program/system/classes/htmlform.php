@@ -184,7 +184,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $class = null)
     {
-        $attributes   = array();
+        $attributes   = array('class' => '');
         $htmlIcon     = '';
         $htmlHelpIcon = '';
         $cssClasses   = 'checkbox';
