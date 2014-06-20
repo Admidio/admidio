@@ -62,13 +62,8 @@ $page = new HtmlPage();
 // show headline for Table
 $page->addHeadline($headline);
 
-$table = new HtmlTable('adm_lists_table', true, $page);
-$table->highlightSelectedRow(true);
-
-$table->addAttribute('border', '0');
-$table->addTableHeader();
+$table = new HtmlTable('adm_lists_table', $page, true, true);
 $table->addRowHeadingByArray(array($gL10n->get('MAI_SUBJECT'), $gL10n->get('SYS_SENDER'), $gL10n->get('SYS_DATE')));
-$table->addTableBody();
 
 if(isset($result))
 {

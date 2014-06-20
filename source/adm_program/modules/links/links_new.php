@@ -84,8 +84,8 @@ $form->addTextInput('lnk_url', $gL10n->get('LNK_LINK_ADDRESS'), $link->getValue(
 $form->addSelectBoxForCategories('lnk_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', FIELD_MANDATORY, $link->getValue('lnk_cat_id'), true);
 $form->addEditor('lnk_description', $gL10n->get('SYS_DESCRIPTION'), $link->getValue('lnk_description'), FIELD_DEFAULT, 'AdmidioDefault', '150px');
 
-$form->addHtml(admFuncShowCreateChangeInfoById($link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'), $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')));
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addHtml(admFuncShowCreateChangeInfoById($link->getValue('lnk_usr_id_create'), $link->getValue('lnk_timestamp_create'), $link->getValue('lnk_usr_id_change'), $link->getValue('lnk_timestamp_change')));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

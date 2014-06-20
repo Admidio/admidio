@@ -219,13 +219,13 @@ foreach($gProfileFields->mProfileFields as $field)
                     $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
                 }
             
-                $form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), 35, $fieldProperty, 'TEXT', $fieldHelpId, 'admTextInputSmall');
+                $form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), 35, $fieldProperty, 'text', $fieldHelpId, false, null, 'form-control-small');
 
                 if($getNewUser == 2)
                 {
                     // at registration add password and password confirm to form
-                    $form->addPasswordInput('usr_password', $gL10n->get('SYS_PASSWORD'), FIELD_MANDATORY, 'PRO_PASSWORD_DESCRIPTION', 'admTextInputSmall');
-                    $form->addPasswordInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), FIELD_MANDATORY, null, 'admTextInputSmall');
+                    $form->addTextInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', 'PRO_PASSWORD_DESCRIPTION', false, null, 'form-control-small');
+                    $form->addTextInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, false, null, 'form-control-small');
 
                     // show selectbox with all organizations of database
                     if($gPreferences['system_organization_select'] == 1)
@@ -344,11 +344,11 @@ foreach($gProfileFields->mProfileFields as $field)
         }
         else
         {
-            $fieldType = 'TEXT';
+            $fieldType = 'text';
             
             if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DATE')
             {
-                $fieldType = 'DATE';
+                $fieldType = 'date';
                 $maxlength = '10';
                 
                 if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'BIRTHDAY')
@@ -356,8 +356,14 @@ foreach($gProfileFields->mProfileFields as $field)
                     $fieldType = 'BIRTHDAY';
                 }
             }
-            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'EMAIL' || $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'URL')
+            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'EMAIL')
             {
+                $fieldType = 'email';
+                $maxlength = '255';
+            }
+            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'URL')
+            {
+                $fieldType = 'url';
                 $maxlength = '255';
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'cat_name_intern') == 'SOCIAL_NETWORKS')
@@ -399,13 +405,13 @@ else
     $btn_text  = $gL10n->get('SYS_SAVE');
 }
 
+$form->addSubmitButton('btn_save', $btn_text, THEME_PATH.'/icons/'.$btn_image);
+
 if($getNewUser == 0)
 {
     // show informations about user who creates the recordset and changed it
     $form->addHtml(admFuncShowCreateChangeInfoById($user->getValue('usr_usr_id_create'), $user->getValue('usr_timestamp_create'), $user->getValue('usr_usr_id_change'), $user->getValue('usr_timestamp_change')));
 }
-
-$form->addSubmitButton('btn_save', $btn_text, THEME_PATH.'/icons/'.$btn_image);
 
 $page->addHtml($form->show(false));
 $page->show();

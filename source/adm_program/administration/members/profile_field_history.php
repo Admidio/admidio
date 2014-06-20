@@ -194,8 +194,7 @@ $page->addHtml('
 	</form> 
 </div>');
 
-$table = new HtmlTable('profile_field_history_table', true, $page);
-$table->highlightSelectedRow(true);
+$table = new HtmlTable('profile_field_history_table', $page, true, true);
 
 $columnHeading = array();
 

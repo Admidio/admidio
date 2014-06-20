@@ -197,7 +197,7 @@ a:hover, a:active {
 /* Style for the popup messagebox and popup messagebox */
 
 .admMessage, .admPopupWindow {
-    max-width: 600px;
+    max-width: 650px;
 	text-align: left;
 }
 
@@ -286,11 +286,11 @@ a:hover, a:active {
     margin-bottom: 10px !important;
 }
 
-.admTextInputSmall {
+.form-control-small {
     width: 50%;
 }
 
-.admDateInput {
+input[type="date"] {
     width: 100px;
 }
 

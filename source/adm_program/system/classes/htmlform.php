@@ -162,7 +162,7 @@ class HtmlForm extends HtmlFormBasic
         $this->closeFieldStructure();
         
         // now add a row with a text field where the user can write the solution for the puzzle
-        $this->addTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, 'TEXT', $captchaDescription, 'admTextInputSmall');
+        $this->addTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, 'text', $captchaDescription, false, null, 'form-control-small');
     }
     
     /** Add a new checkbox with a label to the form.
@@ -508,45 +508,6 @@ class HtmlForm extends HtmlFormBasic
         $this->closeFieldStructure();
     }
     
-    /** Add a new password field with a label to the form. The password field has not a limit of characters.
-     *  You could not set a value to a password field.
-     *  @param $id         Id of the password field. This will also be the name of the password field.
-     *  @param $label      The label of the password field.
-     *  @param $property   With this param you can set the following properties: 
-     *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
-     *                     If you need an additional parameter for the text you can add an array. The first entry must
-     *                     be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $class      Optional an additional css classname. The class @b admTextInput
-     *                     is set as default and need not set with this parameter.
-     */
-    public function addPasswordInput($id, $label, $property = FIELD_DEFAULT, $helpTextId = null, $class = '')
-    {
-        $attributes = array('class' => 'admTextInput admPasswordInput');
-        $this->countElements++;
-
-        // disable field
-        if($property == FIELD_DISABLED)
-        {
-            $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
-        }
-        
-        // set specific css class for this field
-        if(strlen($class) > 0)
-        {
-            $attributes['class'] .= ' '.$class;
-        }
-        
-        $this->openFieldStructure($id, $label, $property, $helpTextId, null, $this->labelVertical);
-        $this->addInput('password', $id, $id, null, $attributes);
-        $this->addAttribute('class', 'admTextInput');
-        $this->closeFieldStructure();
-    }
-    
     /** Add a new radio button with a label to the form. The radio button could have different status 
      *  which could be defined with an array.
      *  @param $id           Id of the radio button. This will also be the name of the radio button.
@@ -644,14 +605,14 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gL10n;
 
-        $attributes = array('class' => 'admSelectBox');
+        $attributes = array('class' => 'form-control');
         $this->countElements++;
 
         // disable field
         if($property == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
+//            $attributes['class']   .= ' admDisabled';
         }
         
         // set specific css class for this field
@@ -950,13 +911,6 @@ class HtmlForm extends HtmlFormBasic
     {
         $class .= ' btn-primary';
 
-        // first check if a field list was opened
-        /*if($this->flagFieldListOpen == true)
-        {
-            $this->addHtml('</div>');
-            $this->flagFieldListOpen = false;
-        }*/
-
         // now add button to form
         $this->addButton($id, $text, $icon, $link, $class, $type);
     }
@@ -1018,10 +972,10 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // add the javascript to show a small dialog to select the date
-        if($type == 'DATE' || $type == 'BIRTHDAY')
+        if($type == 'date' || $type == 'BIRTHDAY')
         {
             // set different date range for date or birthday
-            if($type == 'DATE')
+            if($type == 'date')
             {
                 $startOffset = 50;
                 $endOffset   = 10;
@@ -1030,6 +984,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $startOffset = 110;
                 $endOffset   = 0;
+                $type        = 'date';
             }
             
             $calendarObjekt = 'calDate'.$this->countElements;
@@ -1063,10 +1018,10 @@ class HtmlForm extends HtmlFormBasic
             $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
         }
         $this->addInput($type, $id, $id, $value, $attributes);
-        if($type == 'DATE' || $type == 'BIRTHDAY')
+        if($type == 'date' || $type == 'BIRTHDAY')
         {
             $this->addHtml('
-                <a class="iconLink" id="anchor_'.$id.'" href="javascript:'.$calendarObjekt.'.select(document.getElementById(\''.$id.'\'),\'anchor_'.$id.'\',\''.$gPreferences['system_date'].'\');"><img 
+                <a class="icon-text-link" id="anchor_'.$id.'" href="javascript:'.$calendarObjekt.'.select(document.getElementById(\''.$id.'\'),\'anchor_'.$id.'\',\''.$gPreferences['system_date'].'\');"><img 
                     src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
                 <span id="calendar_popup" style="position: absolute; visibility: hidden;"></span>');
         }

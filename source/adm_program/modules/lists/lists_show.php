@@ -95,7 +95,7 @@ switch ($getMode)
         $getMode     = 'pdf';
         break;
     case 'html':
-        $classTable  = 'admTable';
+        $classTable  = 'table table-condensed';
         break;
     case 'print':
         $classTable  = 'admTablePrint';
@@ -166,6 +166,7 @@ if($getMode == 'html' && $getStart == 0)
 if($getMode != 'csv')
 {
     $datatable = false;
+    $hoverRows = false;
     
     if($getShowMembers == 0)
     {
@@ -228,6 +229,7 @@ if($getMode != 'csv')
     elseif($getMode == 'html')
     {
         $datatable = true;
+        $hoverRows = true;
 
         // create html page object
         $page = new HtmlPage();
@@ -305,7 +307,7 @@ if($getMode != 'csv')
     }
 
     // Create table object for display
-    $table = new HtmlTable('adm_lists_table', $datatable, $page, $classTable);
+    $table = new HtmlTable('adm_lists_table', $page, $hoverRows, $datatable, $classTable);
 
     if($getMode == 'pdf')
     {
@@ -319,7 +321,6 @@ if($getMode != 'csv')
     }
     elseif($getMode == 'html')
     {
-        $table->highlightSelectedRow(true);
         $table->setDatatablesRowsPerPage($gPreferences['lists_members_per_page']);
     }
 }

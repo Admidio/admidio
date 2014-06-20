@@ -39,8 +39,8 @@ $page->addHeadline($headline);
 
 // show form
 $form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check.php', $page);
-$form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), null, 35, FIELD_MANDATORY, 'TEXT', null, 'admTextInputSmall');
-$form->addPasswordInput('usr_password', $gL10n->get('SYS_PASSWORD'), FIELD_MANDATORY, null, 'admTextInputSmall');
+$form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), null, 35, FIELD_MANDATORY, 'text', null, false, null, 'form-control-small');
+$form->addTextInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, false, null, 'form-control-small');
 // show selectbox with all organizations of database
 if($gPreferences['system_organization_select'] == 1)
 {

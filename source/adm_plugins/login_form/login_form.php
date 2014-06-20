@@ -255,7 +255,7 @@ else
     
         $form = new HtmlForm('plugin-login-form-form', $g_root_path.'/adm_program/system/login_check.php');
         $form->addTextInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, 35);
-        $form->addPasswordInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'));
+        $form->addTextInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_DEFAULT, 'password');
         
         // show selectbox with all organizations of database
         if($gPreferences['system_organization_select'] == 1)
