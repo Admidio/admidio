@@ -114,7 +114,7 @@ elseif($getMode == 'html')
         $form->addLine();
         $form->addTextInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', 'PRO_PASSWORD_DESCRIPTION');
         $form->addTextInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, 0, FIELD_MANDATORY, 'password');
-        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
         $form->show();
     echo '</div>';
 }

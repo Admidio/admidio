@@ -174,7 +174,7 @@ $gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("#admMenuItemNewUser > span > a").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+            $("#admMenuItemNewUser").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
             
             var options = {
                         script:"'.$g_root_path.'/adm_program/administration/members/query_suggestions.php?members='.$getMembers.'&",

@@ -189,7 +189,7 @@ else
     }
 
     $javascriptCode .= '
-        $("a[rel=\'lnkNewUser\']").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+        $("#adm_new_user_link").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function(){
@@ -264,7 +264,7 @@ else
     $page->addHtml('
     <ul class="admIconTextLinkList">
         <li>
-            <a class="icon-text-link" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img 
+            <a id="adm_new_user_link" class="icon-text-link" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img 
                 src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MEM_CREATE_USER').'" />'.$gL10n->get('MEM_CREATE_USER').'</a>
         </li>
         <li>

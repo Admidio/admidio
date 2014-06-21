@@ -245,11 +245,8 @@ foreach($gProfileFields->mProfileFields as $field)
                           && (strlen($user->getValue('usr_login_name')) == 0 || strlen($user->getValue('EMAIL')) == 0))))
                     {
                         $form->addCustomContent('password_link', $gL10n->get('SYS_PASSWORD'), '            
-                            <span class="admIconTextLink" id="password_link">
-                                <a href="password.php?usr_id='.$getUserId.'"><img 
-                                	src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" /></a>
-                                <a href="password.php?usr_id='.$getUserId.'">'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>
-                            </span>');
+                            <a id="password_link" class="icon-text-link" href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_PATH. '/icons/key.png" 
+                            	alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }
                 $form->addLine();
@@ -353,7 +350,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 
                 if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'BIRTHDAY')
                 {
-                    $fieldType = 'BIRTHDAY';
+                    $fieldType = 'birthday';
                 }
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'EMAIL')

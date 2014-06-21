@@ -26,6 +26,7 @@ class DateTimeExtended extends DateTime
 {
     private $errorCode;
     private $year, $month, $day, $hour, $minute, $second;
+    protected $format; ///< The format of the date of this element. The syntax is similar to PHP date()
 
     // es muss das Datum und das dazugehoerige Format uebergeben werden
     // date : String mit dem Datum
@@ -40,6 +41,7 @@ class DateTimeExtended extends DateTime
         $this->hour   = 0;
         $this->minute = 0;
         $this->second = 0;
+        $this->format = $format;
         
         // je nach Type das Format erweitern, da nur Datetime verarbeitet werden kann
         if($type == 'date')
@@ -86,6 +88,70 @@ class DateTimeExtended extends DateTime
             $age--;
         }
         return $age;
+    }
+    
+    /** The method will convert a date format with the syntax of date() 
+     *  to a syntax that is known by the bootstrap datepicker plugin.
+     *  e.g.: input: 'd.m.Y' output: 'dd.mm.yyyy'
+     *  e.g.: input: 'j.n.y' output: 'd.m.yy'
+     *  @param $format Optional a format could be given in the date() syntax 
+     *                 that should be transformed. If no format is set then 
+     *                 the format of the class constructor will be used.
+     *  @return Return the transformed format that is valid for the datepicker.
+     */
+    public static function getDateFormatForDatepicker($format = null)
+    {
+        if($format == null)
+        {
+            $format = $this->format;
+        }
+        
+        $formatLength = strlen($format);
+        $destFormat   = '';
+        
+        for($position = 0; $position < $formatLength; $position++)
+        {
+            $formatChar = substr($format, $position, 1);
+            
+            switch($formatChar)
+            {
+                case 'd':
+                    $destFormat .= 'dd';
+                    break;
+                case 'j':
+                    $destFormat .= 'd';
+                    break;
+               case 'l':
+                    $destFormat .= 'DD';
+                    break;
+                case 'D':
+                    $destFormat .= 'D';
+                    break;
+                case 'm':
+                    $destFormat .= 'mm';
+                    break;
+                case 'n':
+                    $destFormat .= 'm';
+                    break;
+               case 'F':
+                    $destFormat .= 'MM';
+                    break;
+               case 'M':
+                    $destFormat .= 'M';
+                    break;
+               case 'Y':
+                    $destFormat .= 'yyyy';
+                    break;
+               case 'y':
+                    $destFormat .= 'yy';
+                    break;
+                    
+                default:
+                    $destFormat .= $formatChar;
+                    break;
+            }
+        }
+        return $destFormat;
     }
 
     // liefert das gesetzte DateTime im Format 'Y-m-d H:i:s' zurueck

@@ -39,6 +39,7 @@ class HtmlForm extends HtmlFormBasic
     protected $htmlPage;            ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     protected $countElements;       ///< Number of elements in this form
     protected $labelVertical;       ///< If set to @b true than the label of all controls will be shown above the control.
+    protected $datepickerInitialized; ///< Flag if datepicker is already initialized
     
     /** Constructor creates the form element
      *  @param $id               Id of the form
@@ -71,6 +72,7 @@ class HtmlForm extends HtmlFormBasic
         $this->flagFieldListOpen   = false;
         $this->countFields         = 0;
         $this->labelVertical       = $labelVertical;
+        $this->datepickerInitialized = false;
         
         if(is_object($htmlPage))
         {
@@ -134,7 +136,7 @@ class HtmlForm extends HtmlFormBasic
     {
         global $gL10n, $g_root_path;
         
-        $attributes = array('class' => 'admCaptcha');
+        $attributes = array('class' => 'captcha');
         $this->countElements++;
 
         // set specific css class for this field
@@ -144,7 +146,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // add a row with the captcha puzzle
-        $this->openFieldStructure('captcha_puzzle', null, FIELD_DEFAULT, null, 'admCaptchaPuzzleRow');
+        $this->openFieldStructure('captcha_puzzle');
         if($type == 'pic')
         {
             $this->addHtml('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&amp;type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
@@ -199,7 +201,6 @@ class HtmlForm extends HtmlFormBasic
         if($property == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
         }
         
         // if value = 1 then set checkbox checked
@@ -298,7 +299,7 @@ class HtmlForm extends HtmlFormBasic
 	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', 
 	                          $helpTextId = null, $icon = null, $labelVertical = true, $class = null)
 	{
-        $attributes = array('class' => 'admEditor');
+        $attributes = array('class' => 'editor');
         $this->countElements++;
 
         // set specific css class for this field
@@ -358,7 +359,6 @@ class HtmlForm extends HtmlFormBasic
         if($property == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
         }
 
         // set specific css class for this field
@@ -463,7 +463,6 @@ class HtmlForm extends HtmlFormBasic
         if($property == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
         }
 
         // set specific css class for this field
@@ -532,14 +531,13 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addRadioButton($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setDummyButton = false, $helpTextId = null, $icon = null, $class = '')
     {
-        $attributes = array('class' => 'admRadioInput');
+        $attributes = array('class' => '');
         $this->countElements++;
 
         // disable field
         if($property == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
         }
         
         // set specific css class for this field
@@ -558,8 +556,9 @@ class HtmlForm extends HtmlFormBasic
 	            $attributes['checked'] = 'checked';
 	        }
             
+	        $this->addHtml('<label for="'.($id.'_0').'" class="radio-inline">');
 	        $this->addInput('radio', $id, ($id.'_0'), null, $attributes);
-	        $this->addHtml('<label for="'.($id.'_0').'">---</label>');
+	        $this->addHtml('---</label>');
         }
         
 		// for each entry of the array create an input radio field
@@ -572,8 +571,9 @@ class HtmlForm extends HtmlFormBasic
 	            $attributes['checked'] = 'checked';
 	        }
 	        
+	        $this->addHtml('<label for="'.($id.'_'.$key).'" class="radio-inline">');
 	        $this->addInput('radio', $id, ($id.'_'.$key), $key, $attributes);
-	        $this->addHtml('<label for="'.($id.'_'.$key).'">'.$value.'</label>');
+	        $this->addHtml($value.'</label>');
 		}
         
         $this->closeFieldStructure();
@@ -612,7 +612,6 @@ class HtmlForm extends HtmlFormBasic
         if($property == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
-//            $attributes['class']   .= ' admDisabled';
         }
         
         // set specific css class for this field
@@ -943,9 +942,9 @@ class HtmlForm extends HtmlFormBasic
         
         $this->countElements++;
 
-        if($type == 'DATE')
+        if($type == 'date')
         {
-            $attributes = array('class' => 'admDateInput');
+            $attributes = array('class' => 'form-control admDateInput');
         }
         else
         {
@@ -962,7 +961,6 @@ class HtmlForm extends HtmlFormBasic
         if($property == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
-            $attributes['class']   .= ' admDisabled';
         }
 
         // set specific css class for this field
@@ -971,36 +969,41 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        // add the javascript to show a small dialog to select the date
-        if($type == 'date' || $type == 'BIRTHDAY')
+        // add a nice modern datepicker to date inputs
+        if($type == 'date' || $type == 'birthday')
         {
+            $datepickerOptions = '';
+            
             // set different date range for date or birthday
-            if($type == 'date')
+            if($type == 'birthday')
             {
-                $startOffset = 50;
-                $endOffset   = 10;
-            }
-            else
-            {
-                $startOffset = 110;
-                $endOffset   = 0;
-                $type        = 'date';
+                //$datepickerOptions = 'endDate: "06/06/2014", minViewMode: 2,';
+                $type              = 'date';
             }
             
-            $calendarObjekt = 'calDate'.$this->countElements;
-            $javascriptCode = '
-                var '.$calendarObjekt.' = new CalendarPopup("calendar_popup");
-                '.$calendarObjekt.'.setCssPrefix("calendar");
-                '.$calendarObjekt.'.showNavigationDropdowns();
-                '.$calendarObjekt.'.setYearSelectStartOffset('.$startOffset.');
-                '.$calendarObjekt.'.setYearSelectEndOffset('.$endOffset.');';
+            $attributes['data-provide'] = 'datepicker';
+            $javascriptCode             = '';
+            
+
+            if($this->datepickerInitialized == false)
+            {
+                $javascriptCode = '
+                    $("input[type=\'date\']").datepicker({
+                        language: "'.$gPreferences['system_language'].'",
+                        format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
+                        '.$datepickerOptions.'
+                        todayHighlight: "true"
+                    })';
+                $this->datepickerInitialized = true;
+            }
 
             // if a htmlPage object was set then add code to the page, otherwise to the current string
             if(is_object($this->htmlPage))
             {
-                $this->htmlPage->addCssFile(THEME_PATH.'/css/calendar.css');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/calendar/calendar-popup.js');
-                $this->htmlPage->addJavascript($javascriptCode);
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
+                $this->htmlPage->addJavascript($javascriptCode, true);
             }
             else
             {
@@ -1017,13 +1020,19 @@ class HtmlForm extends HtmlFormBasic
         {
             $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
         }
-        $this->addInput($type, $id, $id, $value, $attributes);
-        if($type == 'date' || $type == 'BIRTHDAY')
+        
+        if($type == 'date')
         {
-            $this->addHtml('
-                <a class="icon-text-link" id="anchor_'.$id.'" href="javascript:'.$calendarObjekt.'.select(document.getElementById(\''.$id.'\'),\'anchor_'.$id.'\',\''.$gPreferences['system_date'].'\');"><img 
-                    src="'. THEME_PATH. '/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-                <span id="calendar_popup" style="position: absolute; visibility: hidden;"></span>');
+            // special html for the datepicker
+            $this->addHtml('<div class="input-group date">');
+        }
+
+        $this->addInput($type, $id, $id, $value, $attributes);
+
+        if($type == 'date')
+        {
+            // special html for the datepicker
+            $this->addHtml('<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span></div>');
         }
         
         if($showHelpTextInline)

@@ -290,8 +290,8 @@ a:hover, a:active {
     width: 50%;
 }
 
-input[type="date"] {
-    width: 100px;
+.input-group.date {
+    width: 150px;
 }
 
 .admUploadInput {

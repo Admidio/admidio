@@ -22,8 +22,8 @@ function profileJSClass()
 	{
 		$("a[rel='colorboxContent']").colorbox({rel:'nofollow'});
 		$("a[rel='colorboxRoles']").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadRolesAppend()}});
-		$("#menu_item_password span a").colorbox({width:'50%',rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
-		$("#password_link a").colorbox({width:'50%',rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
+		$("#menu_item_password a").colorbox({width:'50%',rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
+		$("#password_link").colorbox({width:'50%',rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
         $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',scrolling:false,onComplete:function(){$("#admButtonNo").focus();}});
 	}
 	this.reloadRoleMemberships = function()
