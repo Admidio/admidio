@@ -7,5 +7,6 @@
 	<step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name LIKE 'lists_members_per_page'</step>
 	<step id="60">CREATE TABLE IF NOT EXISTS %PREFIX%_messages (msg_type varchar(10) NOT NULL, msg_id1 bigint(20) NOT NULL, msg_id2 int(10) NOT NULL, msg_subject varchar(256) NOT NULL, msg_usrid1 int(10) NOT NULL, msg_usrid2 int(10) DEFAULT NULL, msg_message text NOT NULL,
   msg_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, msg_user1read tinyint(1) NOT NULL DEFAULT '0', msg_user2read tinyint(1) NOT NULL DEFAULT '0') ENGINE=InnoDB default character set = utf8 COLLATE=utf8_unicode_ci;</step>
-    <step>stop</step>
+    <step id="70">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name LIKE 'enable_pm_module'</step>
+	<step>stop</step>
 </update>

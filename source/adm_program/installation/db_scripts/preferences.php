@@ -112,6 +112,7 @@ $orga_preferences = array(
 
     // Systemmails
     'enable_system_mails'       => '1',
+    'enable_pm_module'          => '1',
     'email_administrator'       => 'webmaster@'. $_SERVER['HTTP_HOST'],
 	'enable_email_notification'	=> '0',
 
