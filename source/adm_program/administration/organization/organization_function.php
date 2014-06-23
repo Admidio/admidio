@@ -11,6 +11,7 @@
  * mode     : 1 - Save organization preferences
  *            2 - show welcome dialog for new organization
  *            3 - create new organization
+ * form         - The name of the form preferences that were submitted.
  *
  *****************************************************************************/
 
@@ -18,7 +19,13 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
+$getForm = admFuncVariableIsValid($_GET, 'form', 'string');
+
+if($getMode == 1)
+{
+    $gMessage->showTextOnly(true);
+}
 
 // only webmasters are allowed to edit organization preferences or create new organizations
 if($gCurrentUser->isWebmaster() == false)
@@ -30,11 +37,106 @@ switch($getMode)
 {
 case 1:
     $_SESSION['organization_request'] = $_POST;
+    
+    // first check the fields of the submitted form
+    
+    switch($getForm)
+    {
+        case "common":
+            if(strlen($_POST['theme']) == 0)
+            {
+                $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_ADMIDIO_THEME'), $gL10n->get('SYS_COMMON')));
+            }
+        
+            if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
+            {
+                $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $gL10n->get('SYS_COMMON')));
+            }
+            
+            // check every checkbox if a value was committed
+            // if no value is found then set 0 because 0 will not be committed in a html checkbox element
+        
+            $checkboxes = array('enable_rss','enable_auto_login','enable_password_recovery','system_js_editor_enabled','system_search_similar');
+        
+            foreach($checkboxes as $key => $value)
+            {
+                if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+                {
+                    $_POST[$value] = 0;
+                }
+            }
+            
+            if($key == 'enable_auto_login' && $value == 0 && $gPreferences['enable_auto_login'] == 1)
+            {
+                // if deactivate auto login than delete all saved logins
+                $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
+                $gDb->query($sql);
+                $gPreferences[$key] = $value;
+            }
+            break;
+        
+        default:
+            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
+    
+    // then update the database with the new values
+
+    foreach($_POST as $key => $value)
+    {
+        // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
+        if($key != 'save')
+        {
+            if(strpos($key, 'org_') === 0)
+            {
+                $gCurrentOrganization->setValue($key, $value);
+            }
+            elseif(strpos($key, 'SYSMAIL_') === 0)
+            {
+                $text = new TableText($gDb);
+                $text->readDataByColumns(array('txt_org_id' => $gCurrentOrganization->getValue('org_id'), 'txt_name' => $key));
+                $text->setValue('txt_text', $value);
+                $text->save();
+            }
+            elseif($key == 'forum_pw' && $value == '0000')
+            {
+                // Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
+                // 0000 bedeutet, dass das PW sich nicht veraendert hat
+                $gPreferences[$key] = $gPreferences[$key];
+            }
+            else
+            {
+                $gPreferences[$key] = $value;
+            }
+        }
+    }
+
+    // alle Daten nun speichern
+    $ret_code = $gCurrentOrganization->save();
+    if($ret_code != 0)
+    {
+        $gCurrentOrganization->clear();
+        $gMessage->show($gL10n->get('SYS_ERROR_DATABASE_ACCESS', $ret_code));
+    }
+
+    $gCurrentOrganization->setPreferences($gPreferences);
+
+    // refresh language if neccessary
+    if($gL10n->getLanguage() != $gPreferences['system_language'])
+    {
+        $gL10n->setLanguage($gPreferences['system_language']);
+    }
+
+    // clean up
+    unset($_SESSION['organization_request']);
+    unset($_SESSION['gForum']);
+    $gCurrentSession->renewOrganizationObject();
+
+    echo "success";
 
     // *******************************************************************************
     // Pruefen, ob alle notwendigen Felder gefuellt sind
     // *******************************************************************************
-
+/*
     if(strlen($_POST['org_longname']) == 0)
     {
         $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('SYS_NAME'), $gL10n->get('SYS_COMMON')));
@@ -62,15 +164,6 @@ case 1:
         }
     }
 
-    if(strlen($_POST['theme']) == 0)
-    {
-        $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_ADMIDIO_THEME'), $gL10n->get('SYS_COMMON')));
-    }
-
-    if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
-    {
-        $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $gL10n->get('SYS_COMMON')));
-    }
 
     if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
     {
@@ -230,6 +323,7 @@ case 1:
     // zur Ausgangsseite zurueck
     $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
+    */
     break;
     
 case 2:

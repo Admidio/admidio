@@ -219,13 +219,13 @@ foreach($gProfileFields->mProfileFields as $field)
                     $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
                 }
             
-                $form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), 35, $fieldProperty, 'text', $fieldHelpId, false, null, 'form-control-small');
+                $form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), 35, $fieldProperty, 'text', $fieldHelpId, null, null, 'form-control-small');
 
                 if($getNewUser == 2)
                 {
                     // at registration add password and password confirm to form
-                    $form->addTextInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', 'PRO_PASSWORD_DESCRIPTION', false, null, 'form-control-small');
-                    $form->addTextInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, false, null, 'form-control-small');
+                    $form->addTextInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', 'PRO_PASSWORD_DESCRIPTION', null, null, 'form-control-small');
+                    $form->addTextInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, nul, null, 'form-control-small');
 
                     // show selectbox with all organizations of database
                     if($gPreferences['system_organization_select'] == 1)
@@ -319,7 +319,7 @@ foreach($gProfileFields->mProfileFields as $field)
             }
     		
     		$form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-    		    $arrListValues, $fieldProperty, $defaultValue, $setPleaseChoose, $helpId, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+    		    $arrListValues, $fieldProperty, $defaultValue, $setPleaseChoose, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
     	}
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'RADIO_BUTTON')
         {
@@ -362,6 +362,11 @@ foreach($gProfileFields->mProfileFields as $field)
             {
                 $fieldType = 'url';
                 $maxlength = '255';
+            }
+            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'NUMERIC')
+            {
+                $fieldType = 'number';
+                $maxlength = '50';
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'cat_name_intern') == 'SOCIAL_NETWORKS')
             {

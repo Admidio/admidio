@@ -286,11 +286,15 @@ a:hover, a:active {
     margin-bottom: 10px !important;
 }
 
+select.form-control {
+    width: auto;
+}
+
 .form-control-small {
     width: 50%;
 }
 
-.input-group.date {
+.input-group.date, input[type="number"] {
     width: 150px;
 }
 
@@ -316,6 +320,10 @@ a:hover, a:active {
 .form-horizontal .form-group-editor {
     margin-left: 0px;
     margin-right: 0px;
+}
+
+.form-alert {
+    margin-top: 15px;
 }
 
 .admEditor {

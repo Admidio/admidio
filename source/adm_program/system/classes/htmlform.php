@@ -176,26 +176,26 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
-     *                     If you need an additional parameter for the text you can add an array. The first entry must
-     *                     be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set the complete text will be shown after the form element.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
      *  @param $class      Optional an additional css classname. The class @b admCheckbox
      *                     is set as default and need not set with this parameter.
      */
-    public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $class = null)
+    public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
+        global $gL10n;
         $attributes   = array('class' => '');
         $htmlIcon     = '';
         $htmlHelpIcon = '';
         $cssClasses   = 'checkbox';
         $this->countElements++;
-        
-        if($this->labelVertical == false)
-        {
-            $cssClasses .= ' col-sm-offset-3 col-sm-9';
-        }
 
         // disable field
         if($property == FIELD_DISABLED)
@@ -228,14 +228,17 @@ class HtmlForm extends HtmlFormBasic
 			}
 		}
         
-        if(strlen($helpTextId) > 0)
+        if(strlen($helpTextIdLabel) > 0)
         {
-            $htmlHelpIcon = $this->getHelpTextIcon($helpTextId);
+            $htmlHelpIcon = $this->getHelpTextIcon($helpTextIdLabel);
         }
-
+        
+        // now create html for the field
+        $this->openFieldStructure($id, null, null, null, null, $this->labelVertical);
         $this->addHtml('<div class="'.$cssClasses.'"><label>');
         $this->addInput('checkbox', $id, $id, '1', $attributes);
 		$this->addHtml($htmlIcon.$label.$htmlHelpIcon.'</label></div>');
+		$this->closeFieldStructure($helpTextIdInline);
     }
     
     
@@ -590,18 +593,23 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue    This is the value the selectbox shows when loaded.
-     *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
-     *                          the list with the caption "Please choose".
-	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
-     *                     If you need an additional parameter for the text you can add an array. The first entry must
-     *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $defaultValue     This is the value the selectbox shows when loaded.
+     *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
+     *                           the list with the caption "Please choose".
+	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set the complete text will be shown after the form element.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      *  @param $class      Optional an additional css classname. The class @b admSelectbox
      *                     is set as default and need not set with this parameter.
      */
-    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setPleaseChoose = false, $helpTextId = null, $icon = null, $class = null)
+    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setPleaseChoose = false, 
+                                 $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         global $gL10n;
 
@@ -620,7 +628,9 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
+        // now create html for the field
+        $this->openFieldStructure($id, $label, $property, $helpTextIdLabel, $icon, $this->labelVertical);
+        
         $this->addSelect($id, $id, $attributes);
 
         if($setPleaseChoose == true)
@@ -683,7 +693,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         $this->closeSelect();
-        $this->closeFieldStructure();
+        $this->closeFieldStructure($helpTextIdInline);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from a sql statement.
@@ -699,28 +709,32 @@ class HtmlForm extends HtmlFormBasic
      *  $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, false, $gL10n->get('SYS_SURNAME'), true);
      *  $form->show();@endcode
      *  @param $id              Id of the selectbox. This will also be the name of the selectbox.
-     *  @param $label           The label of the selectbox.
-     *  @param $databaseObject  A Admidio database object that contains a valid connection to a database
-	 *  @param $sql             Any SQL statement that return 2 columns. The first column will be the internal value of the
-     *                          selectbox item and will be submitted with the form. The second column represents the
-     *                          displayed value of the item. Each row of the result will be a new selectbox entry.
-     *  @param $property        With this param you can set the following properties: 
-     *                          @b FIELD_DEFAULT The field can accept an input.
-     *                          @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                          @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue    This is the value the selectbox shows when loaded.
-     *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
-     *                          the list with the caption "Please choose".
-	 *  @param $helpTextId      A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                          If set a help icon will be shown where the user can see the text if he hover over the icon.
-     *                          If you need an additional parameter for the text you can add an array. The first entry must
-     *                          be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon            Opional an icon can be set. This will be placed in front of the label.
-     *  @param $class           Optional an additional css classname. The class @b admSelectbox
-     *                          is set as default and need not set with this parameter.
+     *  @param $label            The label of the selectbox.
+     *  @param $databaseObject   A Admidio database object that contains a valid connection to a database
+	 *  @param $sql              Any SQL statement that return 2 columns. The first column will be the internal value of the
+     *                           selectbox item and will be submitted with the form. The second column represents the
+     *                           displayed value of the item. Each row of the result will be a new selectbox entry.
+     *  @param $property         With this param you can set the following properties: 
+     *                           @b FIELD_DEFAULT The field can accept an input.
+     *                           @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                           @b FIELD_DISABLED The field will be disabled and could not accept an input.
+     *  @param $defaultValue     This is the value the selectbox shows when loaded.
+     *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
+     *                           the list with the caption "Please choose".
+	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set the complete text will be shown after the form element.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon             Opional an icon can be set. This will be placed in front of the label.
+     *  @param $class            Optional an additional css classname. The class @b admSelectbox
+     *                           is set as default and need not set with this parameter.
      */
     public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= '', 
-                                        $setPleaseChoose = false, $helpTextId = null, $icon = null, $class = null)
+                                        $setPleaseChoose = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
     
@@ -742,7 +756,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdLabel, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
@@ -756,19 +770,23 @@ class HtmlForm extends HtmlFormBasic
      *                      @b FIELD_DEFAULT The field can accept an input.
      *                      @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                      @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue    This is the value the selectbox shows when loaded.
-     *  @param $setPleaseChoose If set to @b true a new entry will be added to the top of 
-     *                          the list with the caption "Please choose".
-	 *  @param $helpTextId  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                      If set a help icon will be shown where the user can see the text if he hover over the icon.
-     *                      If you need an additional parameter for the text you can add an array. The first entry must
-     *                      be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $defaultValue     This is the value the selectbox shows when loaded.
+     *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
+     *                           the list with the caption "Please choose".
+	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set the complete text will be shown after the form element.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $icon        Opional an icon can be set. This will be placed in front of the label.
      *  @param $class       Optional an additional css classname. The class @b admSelectbox
      *                      is set as default and need not set with this parameter.
      */
     public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= '', 
-                                        $setPleaseChoose = false, $helpTextId = null, $icon = null, $class = null)
+                                        $setPleaseChoose = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
         
@@ -785,7 +803,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextId, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdLabel, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must
@@ -801,8 +819,12 @@ class HtmlForm extends HtmlFormBasic
 	 *  @param $defaultValue	   Id of category that should be selected per default.
      *  @param $setPleaseChoose    If set to @b true a new entry will be added to the top of 
      *                             the list with the caption "Please choose".
-	 *  @param $helpTextId         A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                             If set a help icon will be shown where the user can see the text if he hover over the icon.
+	 *  @param $helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                             If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                             If you need an additional parameter for the text you can add an array. The first entry must
+     *                             be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                             If set the complete text will be shown after the form element.
      *                             If you need an additional parameter for the text you can add an array. The first entry must
      *                             be the unique text id and the second entry will be a parameter of the text id.     
 	 *  @param $showCategoryChoice This mode shows only categories with elements and if default category will be selected 
@@ -812,7 +834,7 @@ class HtmlForm extends HtmlFormBasic
      *                             is set as default and need not set with this parameter.
 	 */
 	public function addSelectBoxForCategories($id, $label, &$databaseObject, $categoryType, $property = FIELD_DEFAULT, $defaultValue = 0, $setPleaseChoose = false, 
-	                                          $helpTextId = null, $showCategoryChoice = false, $showSystemCategory = true, $class = '')
+	                                          $helpTextIdLabel = null, $helpTextIdInline = null, $showCategoryChoice = false, $showSystemCategory = true, $class = '')
 	{
 		global $gCurrentOrganization, $gValidLogin;
 
@@ -889,7 +911,7 @@ class HtmlForm extends HtmlFormBasic
         $sql = str_replace('DISTINCT cat_id, cat_name, cat_default', 'DISTINCT cat_id, cat_name', $sql);
         
         // now call method to create selectbox from sql
-        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextId, null, $class);
+        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdLabel, null, $class);
 	}
     
     /** Add a new button with a custom text to the form. This button could have 
@@ -912,6 +934,7 @@ class HtmlForm extends HtmlFormBasic
 
         // now add button to form
         $this->addButton($id, $text, $icon, $link, $class, $type);
+        $this->addHtml('<div class="form-alert" style="display: none">Test</div>');
     }
     
     /** Add a new input field with a label to the form.
@@ -926,17 +949,20 @@ class HtmlForm extends HtmlFormBasic
      *  @param $type       Set the type if the field. Default will be text. Possible values are @b TEXT, @b DATE or @b BIRTHDAY
      *                     If date or birthday where set than a small dialog to choose the date will be shown behind the field.
      *                     The difference between date and birthday is the range of years that will be shown.
-	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
-     *                     If you need an additional parameter for the text you can add an array. The first entry must
-     *                     be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $showHelpTextInline If set to @b true then the help text will be shown below the control within the form.
-     *                             Otherwise a small help icon will be shown after the label where the user get the text if he click on the icon.
+	 *  @param $helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                             If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                             If you need an additional parameter for the text you can add an array. The first entry must
+     *                             be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                             If set the complete text will be shown after the form element.
+     *                             If you need an additional parameter for the text you can add an array. The first entry must
+     *                             be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-    public function addTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $type = 'text', $helpTextId = null, $showHelpTextInline = false, $icon = null, $class = '')
+    public function addTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $type = 'text', 
+                                 $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
     {
         global $gL10n, $gPreferences, $g_root_path;
         
@@ -992,7 +1018,8 @@ class HtmlForm extends HtmlFormBasic
                         language: "'.$gPreferences['system_language'].'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
                         '.$datepickerOptions.'
-                        todayHighlight: "true"
+                        todayHighlight: "true",
+                        autoclose: "true"
                     })';
                 $this->datepickerInitialized = true;
             }
@@ -1012,14 +1039,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now create html for the field
-        if($showHelpTextInline)
-        {
-            $this->openFieldStructure($id, $label, $property, null, $icon, $this->labelVertical);
-        }
-        else
-        {
-            $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
-        }
+        $this->openFieldStructure($id, $label, $property, $helpTextIdLabel, $icon, $this->labelVertical);
         
         if($type == 'date')
         {
@@ -1034,25 +1054,31 @@ class HtmlForm extends HtmlFormBasic
             // special html for the datepicker
             $this->addHtml('<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span></div>');
         }
+        $this->closeFieldStructure($helpTextIdInline);
+    }
+    
+    /** Closes a field structure that was added with the method openFieldStructure.
+     *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set the complete text will be shown after the form element.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+     */
+    protected function closeFieldStructure($helpTextId = null)
+    {
+        global $gL10n;
         
-        if($showHelpTextInline)
+        if($helpTextId != null)
         {
             if(is_array($helpTextId))
             {
-                $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1]).'</span>');
+                $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1])).'</span>');
             }
             else
             {
                 $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId).'</span>');
             }
         }
-        $this->closeFieldStructure();
-    }
-    
-    /** Closes a field structure that was added with the method openFieldStructure.
-     */
-    protected function closeFieldStructure()
-    {
+        
         $this->addHtml('</div></div>');
     }
     

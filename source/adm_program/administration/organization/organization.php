@@ -20,15 +20,16 @@ require_once('../../system/login_valid.php');
 $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 $showOptionGenJs = '';
 
+$headline = $gL10n->get('ORG_ORGANIZATION_PROPERTIES');
+
 // only webmasters are allowed to edit organization preferences
 if($gCurrentUser->isWebmaster() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Navigation faengt hier im Modul an
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
+// Navigation of the module starts here
+$gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 $html_icon_warning = '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />';
 
@@ -94,8 +95,39 @@ if( strlen($showOption) > 0 )
     }
 }
 
+// create html page object
+$page = new HtmlPage();
+
+$page->addJavascript('
+    $("#common_preferences_form").submit(function(event) {
+        var id = $(this).attr("id");
+        $("#"+id+" .form-alert").hide();
+
+        // disable default form submit
+        event.preventDefault();
+        
+        $.ajax({
+            type:    "POST",
+            url:     "'.$g_root_path.'/adm_program/administration/organization/organization_function.php?form=common",
+            data:    $(this).serialize(),
+            success: function(data) {
+                if(data == "success") {
+                    $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
+                    $("#"+id+" .form-alert").html("<strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                    $("#"+id+" .form-alert").fadeIn("slow");
+                    $("#"+id+" .form-alert").animate({opacity: 1.0}, 2500);
+                    $("#"+id+" .form-alert").fadeOut("slow");
+                }
+                else {
+                    $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
+                    $("#"+id+" .form-alert").fadeIn();
+                    $("#"+id+" .form-alert").html(data);
+                }
+            }
+        });    
+    });', true);
+
 // zusaetzliche Daten fuer den Html-Kopf setzen
-$gLayout['title']  = $gL10n->get('ORG_ORGANIZATION_PROPERTIES');
 $gLayout['header'] =  '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/administration/organization/organization.js" ></script>
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.core.js" ></script>
@@ -126,12 +158,89 @@ $gLayout['header'] =  '
     //--></script>
     <link rel="stylesheet" type="text/css" href="'.THEME_PATH.'/css/jquery.css">';
 
-// Html-Kopf ausgeben
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// add headline and title of module
+$page->addHeadline($headline);
 
+$page->addHtml('
+<ul class="nav nav-tabs">
+  <li class="active"><a href="#tabs-common" data-toggle="tab">'.$gL10n->get('SYS_COMMON').'</a></li>
+  <li><a href="#tabs-modules" data-toggle="tab">'.$gL10n->get('SYS_MODULES').'</a></li>
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane active" id="tabs-common">
+        <div class="panel-group" id="accordion">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            <img src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" title="'.$gL10n->get('SYS_COMMON').'" />'.$gL10n->get('SYS_COMMON').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=common', $page);
+                        
+                        // search all available themes in theme folder
+                        $themes_path = SERVER_PATH. '/adm_themes';
+                        $dir_handle  = opendir($themes_path);
+                        $themes      = array();
+
+                        while (false !== ($filename = readdir($dir_handle)))
+                        {
+                            if(is_file($filename) == false
+                            && strpos($filename, '.') !== 0)
+                            {
+                                $themes[$filename] = $filename;
+                            }
+                        }
+                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, FIELD_DEFAULT, $form_values['theme'], true, null, 'ORG_ADMIDIO_THEME_DESC');
+                        $form->addTextInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'], 
+                            250, FIELD_DEFAULT, 'text', null, 'ORG_HOMEPAGE_VISITORS');
+                        $form->addTextInput('homepage_login', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')', $form_values['homepage_login'], 
+                            250, FIELD_DEFAULT, 'text', null, 'ORG_HOMEPAGE_REGISTERED_USERS');
+                        $form->addCheckbox('enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), $form_values['enable_rss'], FIELD_DEFAULT, null, 'ORG_ENABLE_RSS_FEEDS_DESC');
+                        $form->addCheckbox('enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), $form_values['enable_auto_login'], FIELD_DEFAULT, null, 'ORG_LOGIN_AUTOMATICALLY_DESC');
+                        $form->addTextInput('logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $form_values['logout_minutes'], 
+                            4, FIELD_DEFAULT, 'number', null, array('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', 'SYS_REMEMBER_ME'));
+                        $form->addCheckbox('enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), $form_values['enable_password_recovery'], FIELD_DEFAULT, null, 'ORG_SEND_PASSWORD_DESC');
+                        $form->addCheckbox('system_search_similar', $gL10n->get('ORG_SEARCH_SIMILAR_NAMES'), $form_values['system_search_similar'], FIELD_DEFAULT, null, 'ORG_SEARCH_SIMILAR_NAMES_DESC');
+                        $selectBoxEntries = array(0 => $gL10n->get('SYS_DONT_SHOW'), 1 => $gL10n->get('SYS_FIRSTNAME_LASTNAME'), 2 => $gL10n->get('SYS_USERNAME'));
+                        $form->addSelectBox('system_show_create_edit', $gL10n->get('ORG_SHOW_CREATE_EDIT'), $selectBoxEntries, FIELD_DEFAULT, $form_values['system_show_create_edit'], false, null, 'ORG_SHOW_CREATE_EDIT_DESC');
+                        $form->addCheckbox('system_js_editor_enabled', $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'), $form_values['system_js_editor_enabled'], FIELD_DEFAULT, null, 'ORG_JAVASCRIPT_EDITOR_ENABLE_DESC');
+                        $form->addTextInput('system_js_editor_color', $gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR'), $form_values['system_js_editor_color'], 
+                            10, FIELD_DEFAULT, 'text', null, array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', 'SYS_REMEMBER_ME'), null, 'form-control-small');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $page->addHtml($form->show(false));
+
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            <img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                    $page->addHtml('</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane" id="tabs-modules">...</div>
+</div>
+');
+
+$page->show();
+
+exit();
 echo '
-<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>
-
 <div class="formLayout" id="admOrganizationMenu">
     <div class="formBody">
     <form action="'.$g_root_path.'/adm_program/administration/organization/organization_function.php" method="post">

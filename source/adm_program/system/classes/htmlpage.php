@@ -56,7 +56,7 @@ class HtmlPage
                                 $g_root_path. '/adm_program/system/js/common_functions.js',
                                 $g_root_path. '/adm_program/system/js/jquery.ddslick.js',
                                 $g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js',
-                                $g_root_path.'/adm_program/libs/bootstrap/js/ bootstrap.min.js');
+                                $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
         $this->rssFiles = array();
         $this->addJavascript('$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'});', true);
     }
