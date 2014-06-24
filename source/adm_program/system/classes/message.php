@@ -36,6 +36,7 @@ class Message
     private $timer;             // Anzahl ms bis automatisch zu forwardUrl weitergeleitet wird
     private $includeThemeBody;  ///< Includes the header and body of the theme to the message. This will be included as default.
     private $showTextOnly;      ///< If set to true then no html elements will be shown, only the pure text message.
+    private $showHtmlTextOnly;  ///< If set to true then only the message with their html elements will be shown.
     
     private $showButtons;       // Buttons werden angezeigt
     private $showYesNoButtons;  // Anstelle von Weiter werden Ja/Nein-Buttons angezeigt
@@ -220,6 +221,11 @@ class Message
             // show the pure message text without any html
             echo strip_tags($content);
         }
+        elseif($this->showHtmlTextOnly == true)
+        {
+            // show the pure message text with their html
+            echo $content;
+        }
         elseif($this->inline == true)
         {
             // show the message in html but without the theme specific header and body
@@ -233,6 +239,16 @@ class Message
         }
         exit();
     }
+    
+    /** If this will be set then only the text message will be shown. If this message contains html elements
+     *  then these will also be shown in the output,
+     *  @param $showText If set to true than only the message text with their html elements will be shown.
+     */
+    public function showHtmlTextOnly($showText)
+    {
+        $this->showHtmlTextOnly = $showText;
+    }
+
      
     /** If set no theme files like my_header.php, my_body_top.php and my_body_bottom.php 
      *  will be integrated in the page. This setting is usefull if the message should be loaded in 

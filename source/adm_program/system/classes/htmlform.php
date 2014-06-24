@@ -49,8 +49,10 @@ class HtmlForm extends HtmlFormBasic
      *  @param $enableFileUpload Set specific parameters that are necessary for file upload with a form
      *  @param $labelVertical    If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
      *                           Otherwise (default) the label will be displayed in front of the control.
+     *  @param $class            Optional an additional css classname. The class @b form-horizontal
+     *                           is set as default and need not set with this parameter.
      */
-    public function __construct($id, $action, $htmlPage = null, $enableFileUpload = false, $labelVertical = false)
+    public function __construct($id, $action, $htmlPage = null, $enableFileUpload = false, $labelVertical = false, $class = null)
     {        
         
         parent::__construct($action, $id, 'post');
@@ -59,7 +61,12 @@ class HtmlForm extends HtmlFormBasic
         $this->addAttribute('role', 'form');
         if($labelVertical == false)
         {
-            $this->addAttribute('class', 'form-horizontal');
+            $class .= ' form-horizontal';
+        }
+        
+        if(strlen($class) > 0)
+        {
+            $this->addAttribute('class', $class);            
         }
 		
         // Set specific parameters that are necessary for file upload with a form
@@ -733,13 +740,19 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class            Optional an additional css classname. The class @b admSelectbox
      *                           is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromSql($id, $label, &$databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= '', 
+    public function addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= '', 
                                         $setPleaseChoose = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
     
         // execute the sql statement
         $result = $databaseObject->query($sql);
+        
+        // of no mandatory field then insert a blank row with no value
+        if($property == FIELD_DEFAULT && $setPleaseChoose == false)
+        {
+            $selectboxEntries[' '] = '';
+        }
         
         // create array from sql result
         while($row = $databaseObject->fetch_array($result))
@@ -756,7 +769,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdLabel, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
@@ -803,7 +816,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdLabel, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must
@@ -911,7 +924,7 @@ class HtmlForm extends HtmlFormBasic
         $sql = str_replace('DISTINCT cat_id, cat_name, cat_default', 'DISTINCT cat_id, cat_name', $sql);
         
         // now call method to create selectbox from sql
-        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdLabel, null, $class);
+        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdInline, null, $class);
 	}
     
     /** Add a new static control to the form. A static control is only a simple text instead of an input field. This 

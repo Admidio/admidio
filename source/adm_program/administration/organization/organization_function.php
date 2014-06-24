@@ -24,7 +24,7 @@ $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
 if($getMode == 1)
 {
-    $gMessage->showTextOnly(true);
+    $gMessage->showHtmlTextOnly(true);
 }
 
 // only webmasters are allowed to edit organization preferences or create new organizations
@@ -42,41 +42,64 @@ case 1:
     
     switch($getForm)
     {
-        case "common":
+        case 'common':
+            $checkboxes = array('enable_rss','enable_auto_login','enable_password_recovery','system_js_editor_enabled','system_search_similar');
+            
             if(strlen($_POST['theme']) == 0)
             {
-                $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_ADMIDIO_THEME'), $gL10n->get('SYS_COMMON')));
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_ADMIDIO_THEME')));
             }
         
             if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
             {
-                $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $gL10n->get('SYS_COMMON')));
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER')));
             }
             
-            // check every checkbox if a value was committed
-            // if no value is found then set 0 because 0 will not be committed in a html checkbox element
-        
-            $checkboxes = array('enable_rss','enable_auto_login','enable_password_recovery','system_js_editor_enabled','system_search_similar');
-        
-            foreach($checkboxes as $key => $value)
+            if(isset($_POST['enable_auto_login']) == false && $gPreferences['enable_auto_login'] == 1)
             {
-                if(isset($_POST[$value]) == false || $_POST[$value] != 1)
-                {
-                    $_POST[$value] = 0;
-                }
-            }
-            
-            if($key == 'enable_auto_login' && $value == 0 && $gPreferences['enable_auto_login'] == 1)
-            {
-                // if deactivate auto login than delete all saved logins
+                // if auto login was deactivated than delete all saved logins
                 $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
                 $gDb->query($sql);
                 $gPreferences[$key] = $value;
             }
             break;
+
+        case 'regional_settings':
+            $checkboxes = array('system_organization_select','system_show_all_users');
+
+            if(strlen($_POST['org_longname']) == 0)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+            }
+
+            if(strlen($_POST['system_language']) != 2)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
+            }
+
+            if(strlen($_POST['system_date']) == 0)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATE_FORMAT')));
+            }
+
+            if(strlen($_POST['system_time']) == 0)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
+            }
+            break;
         
         default:
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+    }
+    
+    // check every checkbox if a value was committed
+    // if no value is found then set 0 because 0 will not be committed in a html checkbox element
+    foreach($checkboxes as $key => $value)
+    {
+        if(isset($_POST[$value]) == false || $_POST[$value] != 1)
+        {
+            $_POST[$value] = 0;
+        }
     }
     
     // then update the database with the new values
@@ -137,10 +160,6 @@ case 1:
     // Pruefen, ob alle notwendigen Felder gefuellt sind
     // *******************************************************************************
 /*
-    if(strlen($_POST['org_longname']) == 0)
-    {
-        $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('SYS_NAME'), $gL10n->get('SYS_COMMON')));
-    }
 
     if(strlen($_POST['email_administrator']) == 0)
     {

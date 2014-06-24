@@ -99,8 +99,9 @@ if( strlen($showOption) > 0 )
 $page = new HtmlPage();
 
 $page->addJavascript('
-    $("#common_preferences_form").submit(function(event) {
+    $(".form-preferences").submit(function(event) {
         var id = $(this).attr("id");
+        var action = $(this).attr("action");
         $("#"+id+" .form-alert").hide();
 
         // disable default form submit
@@ -108,7 +109,7 @@ $page->addJavascript('
         
         $.ajax({
             type:    "POST",
-            url:     "'.$g_root_path.'/adm_program/administration/organization/organization_function.php?form=common",
+            url:     action,
             data:    $(this).serialize(),
             success: function(data) {
                 if(data == "success") {
@@ -178,10 +179,10 @@ $page->addHtml('
                         </a>
                     </h4>
                 </div>
-                <div id="collapseOne" class="panel-collapse collapse in">
+                <div id="collapseOne" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=common', $page);
+                        $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=common', $page, false, false, 'form-preferences');
                         
                         // search all available themes in theme folder
                         $themes_path = SERVER_PATH. '/adm_themes';
@@ -221,13 +222,54 @@ $page->addHtml('
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
                             <img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'
                         </a>
                     </h4>
                 </div>
-                <div id="collapseOne" class="panel-collapse collapse">
+                <div id="collapseTwo" class="panel-collapse collapse">
                     <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=regional_settings', $page, false, false, 'form-preferences');
+                        $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], 
+                            null, null, null, 'form-control-small');
+                        $form->addTextInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], 60);
+                        $form->addTextInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], 60, FIELD_DEFAULT, 'url');
+                        $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 
+                            'ISOCODE', 'NAME', FIELD_DEFAULT, $form_values['system_language'], true);
+                        $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $form_values['default_country'], true, null, 'PRO_DEFAULT_COUNTRY_DESC');
+                        $form->addTextInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], 20, FIELD_DEFAULT, 'text', 
+                            null, array('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), null, 'form-control-small');
+                        $form->addTextInput('system_time', $gL10n->get('ORG_TIME_FORMAT'), $form_values['system_time'], 20, FIELD_DEFAULT, 'text', 
+                            null, array('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), null, 'form-control-small');
+                        $form->addTextInput('system_currency', $gL10n->get('ORG_CURRENCY'), $form_values['system_currency'], 20, FIELD_DEFAULT, 'text', 
+                            null, 'ORG_CURRENCY_DESC', null, 'form-control-small');
+                            
+                        //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
+                        if($gCurrentOrganization->hasChildOrganizations() == false)
+                        {
+                            $sql = 'SELECT org_id, org_longname FROM '. TBL_ORGANIZATIONS.'
+                                     WHERE org_id <> '. $gCurrentOrganization->getValue('org_id'). '
+				                       AND org_org_id_parent is NULL
+				                     ORDER BY org_longname ASC, org_shortname ASC';
+				            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, FIELD_DEFAULT, 
+				                $form_values['org_org_id_parent'], false, null, 'ORG_PARENT_ORGANIZATION_DESC');
+                        }
+
+                        if($gCurrentOrganization->countAllRecords() > 1)
+                        {
+                            $form->addCheckbox('system_organization_select', $gL10n->get('ORG_SHOW_ORGANIZATION_SELECT'), $form_values['system_organization_select'], 
+                                FIELD_DEFAULT, null, 'ORG_SHOW_ORGANIZATION_SELECT_DESC');
+                        }
+                        
+                        $form->addCheckbox('system_show_all_users', $gL10n->get('ORG_SHOW_ALL_USERS'), $form_values['system_show_all_users'], 
+                            FIELD_DEFAULT, null, 'ORG_SHOW_ALL_USERS_DESC');
+                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/organization/organization_function.php?mode=2"><img
+                                    src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
+                        $form->addCustomContent('add_another_organization', $gL10n->get('ORG_NEW_ORGANIZATION'), $html);
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $page->addHtml($form->show(false));
+                                                
                     $page->addHtml('</div>
                 </div>
             </div>
