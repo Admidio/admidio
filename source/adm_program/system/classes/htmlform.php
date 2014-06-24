@@ -50,7 +50,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $labelVertical    If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
      *                           Otherwise (default) the label will be displayed in front of the control.
      */
-    public function __construct($id, $action, &$htmlPage = null, $enableFileUpload = false, $labelVertical = false)
+    public function __construct($id, $action, $htmlPage = null, $enableFileUpload = false, $labelVertical = false)
     {        
         
         parent::__construct($action, $id, 'post');
@@ -146,7 +146,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // add a row with the captcha puzzle
-        $this->openFieldStructure('captcha_puzzle');
+        $this->openControlStructure('captcha_puzzle');
         if($type == 'pic')
         {
             $this->addHtml('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&amp;type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
@@ -161,7 +161,7 @@ class HtmlForm extends HtmlFormBasic
             $captchaLabel = $gL10n->get('SYS_CAPTCHA_CALC');
             $captchaDescription = 'SYS_CAPTCHA_CALC_DESCRIPTION';
         }
-        $this->closeFieldStructure();
+        $this->closeControlStructure();
         
         // now add a row with a text field where the user can write the solution for the puzzle
         $this->addTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, 'text', $captchaDescription, false, null, 'form-control-small');
@@ -234,11 +234,11 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now create html for the field
-        $this->openFieldStructure($id, null, null, null, null, $this->labelVertical);
+        $this->openControlStructure($id, null, null, null, null, $this->labelVertical);
         $this->addHtml('<div class="'.$cssClasses.'"><label>');
         $this->addInput('checkbox', $id, $id, '1', $attributes);
 		$this->addHtml($htmlIcon.$label.$htmlHelpIcon.'</label></div>');
-		$this->closeFieldStructure($helpTextIdInline);
+		$this->closeControlStructure($helpTextIdInline);
     }
     
     
@@ -265,9 +265,9 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
 
-        $this->openFieldStructure($id, $label, FIELD_DEFAULT, $helpTextId, $icon, $this->labelVertical, 'form-custom-content');
+        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextId, $icon, $this->labelVertical, 'form-custom-content');
         $this->addHtml($content);
-        $this->closeFieldStructure();
+        $this->closeControlStructure();
     }
     
     /** Add a line with a custom description to the form. No form elements will be 
@@ -325,9 +325,9 @@ class HtmlForm extends HtmlFormBasic
 
 		$ckEditor = new CKEditorSpecial();
 
-        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $labelVertical, 'form-group-editor');
+        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, $labelVertical, 'form-group-editor');
 		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
-        $this->closeFieldStructure();
+        $this->closeControlStructure();
 	}
     
     /** Add a field for file upload. If necessary multiple files could be uploaded. The fields for multiple upload could 
@@ -404,7 +404,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical, 'form-upload');
+        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical, 'form-upload');
         $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $maxUploadSize);
         
         // if multi uploads are enabled then the file upload field could be hidden
@@ -423,7 +423,7 @@ class HtmlForm extends HtmlFormBasic
                         src="'. THEME_PATH. '/icons/add.png" alt="'.$multiUploadLabel.'" />'.$multiUploadLabel.'</a>
                 </span>');
         }
-        $this->closeFieldStructure();
+        $this->closeControlStructure();
     }
 
 	/** Add a simple line to the form. This could be used to structure a form.
@@ -500,14 +500,14 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openFieldStructure($id, $label, $property, null, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, $property, null, $icon, $this->labelVertical);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
         if($maxLength > 0)
         {
             // if max field length is set then show a counter how many characters still available
             $this->addHtml('<div class="admCharactersCount">('.$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="'.$id.'_counter" class="">255</span>').')</div>');
         }
-        $this->closeFieldStructure();
+        $this->closeControlStructure();
     }
     
     /** Add a new radio button with a label to the form. The radio button could have different status 
@@ -549,7 +549,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openFieldStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
         
         // set one radio button with no value will be set in front of the other array.
         if($setDummyButton == true)
@@ -579,7 +579,7 @@ class HtmlForm extends HtmlFormBasic
 	        $this->addHtml($value.'</label>');
 		}
         
-        $this->closeFieldStructure();
+        $this->closeControlStructure();
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
@@ -629,7 +629,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now create html for the field
-        $this->openFieldStructure($id, $label, $property, $helpTextIdLabel, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon, $this->labelVertical);
         
         $this->addSelect($id, $id, $attributes);
 
@@ -693,7 +693,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         $this->closeSelect();
-        $this->closeFieldStructure($helpTextIdInline);
+        $this->closeControlStructure($helpTextIdInline);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from a sql statement.
@@ -914,6 +914,40 @@ class HtmlForm extends HtmlFormBasic
         $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdLabel, null, $class);
 	}
     
+    /** Add a new static control to the form. A static control is only a simple text instead of an input field. This 
+     *  could be used if the value should not be changed by the user.
+     *  @param $id         Id of the static control. This will also be the name of the static control.
+     *  @param $label      The label of the static control.
+	 *  @param $value      A value of the static control. The control will be created with this value.
+	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set the complete text will be shown after the form element.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
+     *  @param $sclass      Optional an additional css classname. The class @b form-control-static
+     *                     is set as default and need not set with this parameter.
+     */
+    public function addStaticControl($id, $label, $value, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
+    {
+        $attributes = array('class' => 'form-control-static');
+        $this->countElements++;
+
+        // set specific css class for this field
+        if(strlen($class) > 0)
+        {
+            $attributes['class'] .= ' '.$class;
+        }
+
+        // now create html for the field
+        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon, $this->labelVertical);
+        $this->addHtml('<p class="form-control-static">'.$value.'</p>');
+        $this->closeControlStructure($helpTextIdInline);
+    }
+    
     /** Add a new button with a custom text to the form. This button could have 
      *  an icon in front of the text. Different to addButton this method adds an
      *  additional @b div around the button and the type of the button is @b submit.
@@ -1039,7 +1073,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now create html for the field
-        $this->openFieldStructure($id, $label, $property, $helpTextIdLabel, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon, $this->labelVertical);
         
         if($type == 'date')
         {
@@ -1054,16 +1088,16 @@ class HtmlForm extends HtmlFormBasic
             // special html for the datepicker
             $this->addHtml('<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span></div>');
         }
-        $this->closeFieldStructure($helpTextIdInline);
+        $this->closeControlStructure($helpTextIdInline);
     }
     
-    /** Closes a field structure that was added with the method openFieldStructure.
+    /** Closes a field structure that was added with the method openControlStructure.
      *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                     If set the complete text will be shown after the form element.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
      */
-    protected function closeFieldStructure($helpTextId = null)
+    protected function closeControlStructure($helpTextId = null)
     {
         global $gL10n;
         
@@ -1079,7 +1113,14 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->addHtml('</div></div>');
+        if($this->labelVertical)
+        {
+            $this->addHtml('</div>');            
+        }
+        else
+        {
+            $this->addHtml('</div></div>');
+        }
     }
     
     /** Close all html elements of a groupbox that was created before.
@@ -1098,7 +1139,7 @@ class HtmlForm extends HtmlFormBasic
     
     /** Creates a html structure for a form field. This structure contains the label
      *  and the div for the form element. After the form element is added the 
-     *  method closeFieldStructure must be called.
+     *  method closeControlStructure must be called.
      *  @param $id        The id of this field structure.
      *  @param $label     The label of the field. This string should already be translated.
      *  @param $property   With this param you can set the following properties: 
@@ -1115,7 +1156,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class      Optional an additional css classname for the row. The class @b admFieldRow
      *                     is set as default and need not set with this parameter.
      */
-    protected function openFieldStructure($id, $label, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $labelVertical = false, $class = '')
+    protected function openControlStructure($id, $label, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $labelVertical = false, $class = '')
     {
         $cssClassRow       = '';
         $cssClassMandatory = '';

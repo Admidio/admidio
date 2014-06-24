@@ -26,46 +26,29 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-$page->addCssFile(THEME_PATH. '/css/overview_modules.css');
-
 // show headline of script
 $page->addHeadline($headline);
 
 // menu of the page
-$page->addHtml('<ul class="admIconTextLinkList">');
+$moduleMenu = new ModuleMenu('adm_menu_overview');
 
-    if($gValidLogin == 1)
-    {
-        $page->addHtml('<li>
-            <span class="admIconTextLink">
-                <a href="'.$g_root_path.'/adm_program/system/logout.php"><img
-                src="'.THEME_PATH.'/icons/door_in.png" alt="'.$gL10n->get('SYS_LOGOUT').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/logout.php">'.$gL10n->get('SYS_LOGOUT').'</a>
-            </span>
-        </li>');
-    }
-    else
-    {
-        $page->addHtml('<li>
-            <span class="admIconTextLink">
-                <a href="'.$g_root_path.'/adm_program/system/login.php"><img
-                src="'.THEME_PATH.'/icons/key.png" alt="'.$gL10n->get('SYS_LOGIN').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/login.php">'.$gL10n->get('SYS_LOGIN').'</a>
-            </span>
-        </li>');
+if($gValidLogin == 1)
+{
+    // show logout link
+    $moduleMenu->addItem('adm_menu_item_logout', $g_root_path.'/adm_program/system/logout.php', $gL10n->get('SYS_LOGOUT'), 'door_in.png');
+}
+else
+{
+    // show login link
+    $moduleMenu->addItem('adm_menu_item_login', $g_root_path.'/adm_program/system/login.php', $gL10n->get('SYS_LOGIN'), 'key.png');
 
-        if($gPreferences['registration_mode'] > 0)
-        {
-            $page->addHtml('<li>
-                <span class="admIconTextLink">
-                    <a href="'.$g_root_path.'/adm_program/system/registration.php"><img
-                    src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/system/registration.php">'.$gL10n->get('SYS_REGISTRATION').'</a>
-                </span>
-            </li>');
-        }
+    if($gPreferences['registration_mode'] > 0)
+    {
+        // show registration link
+        $moduleMenu->addItem('adm_menu_item_registration', $g_root_path.'/adm_program/system/registration.php', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png');
     }
-$page->addHtml('</ul>');
+}
+$page->addHtml($moduleMenu->show(false));
 
 // menu with links to all modules of Admidio
 $moduleMenu = new Menu('modules', $gL10n->get('SYS_MODULES'));

@@ -199,8 +199,36 @@ class HtmlPage
     {
         global $g_root_path, $gL10n, $gDb, $gCurrentSession, $gCurrentOrganization, $gCurrentUser, $gPreferences, $gValidLogin;
         
-        $newLayout = true;
-        $headerContent = '';
+        $newLayout        = true;
+        $headerContent    = '';
+        $htmlMyHeader     = '';
+        $htmlMyBodyTop    = '';
+        $htmlMyBodyBottom = '';
+        
+        // load content of theme files
+        if($this->containThemeHtml)
+        {
+            ob_start();
+            include(THEME_SERVER_PATH. '/my_header_new.php');
+            $htmlMyHeader = ob_get_contents();
+            ob_end_clean();
+
+            ob_start();
+            include(THEME_SERVER_PATH. '/my_body_top_new.php');
+            $htmlMyBodyTop = ob_get_contents();
+            ob_end_clean();
+
+            // if user had set another db in theme content then switch back to admidio db
+            $gDb->setCurrentDB();
+
+            ob_start();
+            include(THEME_SERVER_PATH. '/my_body_bottom_new.php');
+            $htmlMyBodyBottom = ob_get_contents();
+            ob_end_clean();
+
+            // if user had set another db in theme content then switch back to admidio db
+            $gDb->setCurrentDB();
+        }
         
         // add css files to page
         foreach($this->cssFiles as $file)
@@ -277,41 +305,14 @@ class HtmlPage
             {
                 $html .= $this->header;
             }
-        
-            if($this->containThemeHtml)
-            {
-                ob_start();
-                include(THEME_SERVER_PATH. '/my_header_new.php');
-                $html .= ob_get_contents();
-                ob_end_clean();
-            }
             
-        $html .= '</head>
-        <body class="admBody">';
-            if($this->containThemeHtml)
-            {
-                ob_start();
-                include(THEME_SERVER_PATH. '/my_body_top_new.php');
-                $html .= ob_get_contents();
-                ob_end_clean();
-                
-                if(isset($gDb))
-                {
-                    // falls Anwender andere DB nutzt, hier zur Sicherheit wieder zu Admidio-DB wechseln
-                    $gDb->setCurrentDB();
-                }
-            }
-            
-            $html .= '<div class="admContent">'.$this->pageContent.'</div>';
-          
-            if($this->containThemeHtml)
-            {
-                ob_start();
-                include(THEME_SERVER_PATH. '/my_body_bottom_new.php');
-                $html .= ob_get_contents();
-                ob_end_clean();
-            }
-        $html .= '</body>
+            $html .= $htmlMyHeader.'
+        </head>
+        <body class="admBody">'.
+            $htmlMyBodyTop.'
+            <div class="admContent">'.$this->pageContent.'</div>'.
+            $htmlMyBodyBottom.'          
+        </body>
         </html>';
 
         // now show the complete html of the page

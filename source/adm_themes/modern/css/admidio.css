@@ -150,8 +150,9 @@ a:hover, a:active {
     font-size: 11pt;
 }
 
-.admIconTextLink {
+.icon-text-link {
     font-weight: normal;
+    white-space: nowrap;
 }
 
 .admIconTextLink img {

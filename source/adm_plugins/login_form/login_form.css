@@ -7,103 +7,23 @@
  *
  *****************************************************************************/
 
-#plgLoginFormFieldList {
-    margin:             0px;
-    padding:            0px;
-    list-style-type:    none;
-}
- 
-#plgLoginFormFieldList li { 
-    display:            inline;
-    text-align:         left;
-    float:              none;       /* left : Alles in einer Zeile anzeigen */
-    overflow:           hidden;
-}
-
-#plgLoginFormFieldList li dl {
-    padding:            0px;
-    margin-top:         3px;
-    margin-bottom:      3px;
-}
-
-#plgLoginFormFieldList li dl dt {
-    text-align:         left;
-    float:              left;       /* none : Label und Feld untereinander */
-}
-
-#plgLoginFormFieldList li dl dd {
-    margin-left:        110px;      /* 0px  : Label und Feld untereinander */
-    text-align:         left;
-    font-weight:        bold;
-}
-
-#plgRowLoginButton dd {
-    padding-bottom:     10px;
-}
-
-/* new CSS */
-
 /* special css adjustments for login form */
 
-#plugin-login-form-form * .admFieldRow {
-    margin: 8px 0px 0px 0px;
+#plugin_login_form .form-group {
+    margin-bottom: 5px;
 }
 
-#plugin-login-form-form * .admFieldLabel {
-	display: inline-block;
-    width: 90%;
-	padding-top: 0px;
+#plugin_login_form label {
+    margin-bottom: 0px;
 }
 
-#plugin-login-form-form * .admFieldElement {
-	display: inline-block;
-    width: 100%;
-	padding-top: 2px;
-}
-
-#plugin-login-form-form * .admCheckboxRow  .admFieldLabel {
-	display: inline;
-    width: auto;
-}
-
-#plugin-login-form-form * .admCheckboxRow  .admFieldElement {
-	display: inline;
-}
-
-#plugin-login-form-form * .admCheckbox {
-	margin-top: 3px;
-}
-
-#plugin-login-form-form * .admSelectBox {
-    width: 100%;
-}
-
-#plugin-login-form-form * .admButton {
-	display: block;
-    margin: 8px 0px 15px 0px;
-}
-
-/* special css adjustments for informations of registered user */
-
-#adm-plugin-form-informations .admFieldRow {
-	margin: 0px;
-}
-
-#adm-plugin-form-informations * .admFieldLabel {
-    width: 45%;
-	white-space: normal;
- 	padding-top: 5px;
-}
-
-#adm-plugin-form-informations * .admFieldElement {
-    width: 55%;
-	white-space: normal;
+#plugin_login_form button[type="submit"] {
+    margin-bottom: 10px;
 }
 
 /* layout of links with icons */
 
-.admPluginContent * .admIconTextLink  {
-	clear: both;
+#plugin_login_form .icon-text-link  {
     display: block;
     margin-top: 7px;
 }

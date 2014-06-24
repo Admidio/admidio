@@ -108,7 +108,7 @@ class Message
     public function show($content, $headline = null)
     {
         // noetig, da dies bei den includes benoetigt wird
-        global $gForum, $gLayout, $gDb, $gDbConnection, $g_adm_db, $gL10n;
+        global $gForum, $gLayout, $gDb, $gDbConnection, $g_adm_db, $gL10n, $page;
         global $gValidLogin, $g_root_path, $gPreferences, $gHomepage, $gMessages, $gProfileFields;
         global $g_organization, $gCurrentOrganization, $gCurrentUser, $gCurrentSession;
 		
