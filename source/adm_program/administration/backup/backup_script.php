@@ -134,66 +134,7 @@ $starttime = getmicrotime();
 				fwrite($fp, $fileheaderline, strlen($fileheaderline));
 			}
 			
-			// Begin original backupDB
-
-			OutputInformation('', null, 'Checking tables...<br><br>');
-			$TableErrors = array();
-			foreach ($SelectedTables as $dbname => $selectedtablesarray) {
-				mysql_select_db($dbname);
-				$repairresult = '';
-				$CanContinue = true;
-				foreach ($selectedtablesarray as $selectedtablename) {
-					OutputInformation('statusinfo', 'Checking table <b>'.htmlentities($dbname.'.'.$selectedtablename).'</b>');
-					@set_time_limit(60);
-					$SQLquery = 'CHECK TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR;
-					$result = $gDb->query($SQLquery);
-					while ($row = $gDb->fetch_assoc($result)) {
-						@set_time_limit(60);
-						if ($row['Msg_text'] == 'OK') {
-
-							$SQLquery = 'OPTIMIZE TABLE '.BACKTICKCHAR.$selectedtablename.BACKTICKCHAR;
-							$gDb->query($SQLquery);
-
-						} else {
-
-							OutputInformation('statusinfo', 'Repairing table <b>'.htmlentities($selectedtablename).'</b>');
-							$SQLquery  = 'REPAIR TABLE '.BACKTICKCHAR.$gDb->escape_string($selectedtablename).BACKTICKCHAR.' EXTENDED';
-							$fixresult = $gDb->query($SQLquery);
-							$repairresult .= $SQLquery.($gDb->db_error() ? LINE_TERMINATOR.$gDb->db_error() : '').LINE_TERMINATOR;
-							$ThisCanContinue = false;
-							while (is_resource($fixresult) && ($fixrow = $gDb->fetch_assoc($fixresult))) {
-								$thisMessage = $fixrow['Msg_type'].': '.$fixrow['Msg_text'];
-								$repairresult .= $thisMessage.LINE_TERMINATOR;
-								switch ($thisMessage) {
-									case 'status: OK':
-									case 'error: The handler for the table doesn\'t support repair':
-										$ThisCanContinue = true;
-										break;
-								}
-							}
-							if (!$ThisCanContinue) {
-								$CanContinue = false;
-							}
-
-							$repairresult .= LINE_TERMINATOR.str_repeat('-', 60).LINE_TERMINATOR.LINE_TERMINATOR;
-
-						}
-					}
-				}
-
-				if (!empty($repairresult)) {
-					mail(ADMIN_EMAIL, 'backupDB: MySQL Table Error Report', $repairresult);
-					echo '<pre>'.$repairresult.'</pre>';
-					if (!$CanContinue) {
-						if ($SuppressHTMLoutput) {
-							ob_end_clean();
-							echo 'errors';
-						}
-						exit;
-					}
-				}
-			}
-			OutputInformation('statusinfo', '');
+			// Begin original backupDB (removed table optimize and repair part because some user database had problems with this)
 
 			OutputInformation('', '<br><span id="topprogress" style="font-weight: bold;">Overall Progress:</span><br>');
 			$overallrows = 0;
