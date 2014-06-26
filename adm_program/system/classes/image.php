@@ -20,7 +20,7 @@
  *                  - gibt das Bild direkt aus, so dass es im Browser dargestellt werden kann
  * getMimeType()    - gibt den Mime-Type (image/png) des Bildes zurueck
  * rotate($direction = "right")
- *                  - dreht das Bild um 90° in eine Richtung ("left"/"right")
+ *                  - dreht das Bild um 90Â° in eine Richtung ("left"/"right")
  * scaleLargerSide($new_max_size)
  *                  - skaliert die laengere Seite des Bildes auf den uebergebenen Pixelwert
  * scale($newXSize, $newYSize, $maintainAspectRatio = true)
@@ -179,7 +179,7 @@ class Image
         }
     }
 
-    // Methode dreht das Bild um 90° in eine Richtung
+    // Methode dreht das Bild um 90Â° in eine Richtung
     // direction : 'right' o. 'left' Richtung, in die gedreht wird
     public function rotate($direction = 'right')
     {
