@@ -55,48 +55,24 @@ else
     $form_values['forum_pw'] = '0000';
 }
 
-// Je nach übergebenen string werden die Tabs gewechselt
-// und die jeweilige Sektion des Accordion automatisch aufgeklappt 
-if( strlen($showOption) > 0 )
-{
-    switch((string)$showOption)
-    {
-        case 'SYS_COMMON':
-        case 'ORG_ORGANIZATION_REGIONAL_SETTINGS':
-        case 'SYS_REGISTRATION':
-        case 'SYS_SYSTEM_MAILS':
-        case 'SYS_CAPTCHA':
-        case 'ORG_SYSTEM_INFORMATIONS':
-        {
-            // Erstes Tab für Allgemeine Einstellungen + Sektion aufklappen
-            $showOptionGenJs .= '$("#tabs").bind("tabscreate", function(event, ui) {
-                $("#tabs").tabs("select" , 0 );
-                $("#accordion-common").accordion("activate", $("#'.$showOption.'"));
-            });';           
-        } break;
-        case 'ANN_ANNOUNCEMENTS':
-        case 'DOW_DOWNLOADS':
-        case 'PHO_PHOTOS':
-        case 'SYS_FORUM':
-        case 'GBO_GUESTBOOK':
-        case 'LST_LISTS':
-        case 'SYS_EMAIL':
-        case 'ECA_GREETING_CARDS':
-        case 'PRO_PROFILE':
-        case 'DAT_DATES':
-        case 'LNK_WEBLINKS':
-        {
-            // Zweites Tab für Modul Einstellungen + Sektion aufklappen
-            $showOptionGenJs .= '$("#tabs").bind("tabscreate", function(event, ui) {
-                $("#tabs").tabs("select" , 1 );
-                $("#accordion-modules").accordion("activate", $("#'.$showOption.'"));
-            });';
-        } break;
-    }
-}
-
 // create html page object
 $page = new HtmlPage();
+
+// open the modules tab if the options of a module should be shown 
+if($showOption == 'announcements'
+|| $showOption == 'downloads')
+{
+    //$page->addJavascript('$("#preferences_tabs a[href=\'#tabs_modules\']").tab("show");', true);
+    $page->addJavascript('$("#tabs_nav_modules").attr("class", "active");
+        $("#tabs-modules").attr("class", "tab-pane active");
+        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");', true);
+}
+else
+{
+    $page->addJavascript('$("#tabs_nav_common").attr("class", "active");
+        $("#tabs-common").attr("class", "tab-pane active");
+        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");', true);
+}
 
 $page->addJavascript('
     $(".form-preferences").submit(function(event) {
@@ -163,23 +139,23 @@ $gLayout['header'] =  '
 $page->addHeadline($headline);
 
 $page->addHtml('
-<ul class="nav nav-tabs">
-  <li class="active"><a href="#tabs-common" data-toggle="tab">'.$gL10n->get('SYS_COMMON').'</a></li>
-  <li><a href="#tabs-modules" data-toggle="tab">'.$gL10n->get('SYS_MODULES').'</a></li>
+<ul class="nav nav-tabs" id="preferences_tabs">
+  <li id="tabs_nav_common"><a href="#tabs-common" data-toggle="tab">'.$gL10n->get('SYS_COMMON').'</a></li>
+  <li id="tabs_nav_modules"><a href="#tabs-modules" data-toggle="tab">'.$gL10n->get('SYS_MODULES').'</a></li>
 </ul>
 
 <div class="tab-content">
-    <div class="tab-pane active" id="tabs-common">
-        <div class="panel-group" id="accordion">
+    <div class="tab-pane" id="tabs-common">
+        <div class="panel-group" id="accordion_common">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_common">
                             <img src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" title="'.$gL10n->get('SYS_COMMON').'" />'.$gL10n->get('SYS_COMMON').'
                         </a>
                     </h4>
                 </div>
-                <div id="collapseOne" class="panel-collapse collapse">
+                <div id="collapse_common" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=common', $page, false, false, 'form-preferences');
@@ -222,12 +198,12 @@ $page->addHtml('
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_regional_settings">
                             <img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'
                         </a>
                     </h4>
                 </div>
-                <div id="collapseTwo" class="panel-collapse collapse">
+                <div id="collapse_regional_settings" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=regional_settings', $page, false, false, 'form-preferences');
@@ -275,325 +251,60 @@ $page->addHtml('
             </div>
         </div>
     </div>
-    <div class="tab-pane" id="tabs-modules">...</div>
+    <div class="tab-pane" id="tabs-modules">
+        <div class="panel-group" id="accordion_modules">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_announcements">
+                            <img src="'.THEME_PATH.'/icons/announcements.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" title="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" />'.$gL10n->get('ANN_ANNOUNCEMENTS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_announcements" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('announcements_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=announcements', $page, false, false, 'form-preferences');
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                        $form->addSelectBox('enable_announcements_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_announcements_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $form->addTextInput('announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['announcements_per_page'], 4, FIELD_DEFAULT, 'number', 
+                            null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', null, 'form-control-small');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_downloads">
+                            <img src="'.THEME_PATH.'/icons/download.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" title="'.$gL10n->get('DOW_DOWNLOADS').'" />'.$gL10n->get('DOW_DOWNLOADS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_downloads" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('downloads_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=downloads', $page, false, false, 'form-preferences');
+                        $form->addCheckbox('enable_download_module', $gL10n->get('DOW_ENABLE_DOWNLOAD_MODULE'), $form_values['enable_download_module'], 
+                            FIELD_DEFAULT, null, 'DOW_ENABLE_DOWNLOAD_MODULE_DESC');
+                        $form->addTextInput('max_file_upload_size', $gL10n->get('DOW_MAXIMUM_FILE_SIZE').' (KB)', $form_values['max_file_upload_size'], 10, FIELD_DEFAULT, 'number', 
+                            null, 'DOW_MAXIMUM_FILE_SIZE_DESC', null, 'form-control-small');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    
+                    $page->addHtml('</div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 ');
 
 $page->show();
 
 exit();
-echo '
-<div class="formLayout" id="admOrganizationMenu">
-    <div class="formBody">
-    <form action="'.$g_root_path.'/adm_program/administration/organization/organization_function.php" method="post">
-    <div id="tabs">
-        <ul>
-            <li><a href="#tabs-common">'.$gL10n->get('SYS_COMMON').'</a></li>
-            <li><a href="#tabs-modules">'.$gL10n->get('SYS_MODULES').'</a></li>
-        </ul>
-        <div id="tabs-common">
-            <div id="accordion-common">';
-            /**************************************************************************************/
-            // Common settings
-            /**************************************************************************************/
-            
-            echo '<h3 id="SYS_COMMON" class="iconTextLink">
-                <a href="#"><img src="'.THEME_PATH.'/icons/options.png" alt="'.$gL10n->get('SYS_COMMON').'" title="'.$gL10n->get('SYS_COMMON').'" /></a>
-                <a href="#">'.$gL10n->get('SYS_COMMON').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="theme">'.$gL10n->get('ORG_ADMIDIO_THEME').':</label></dt>
-                            <dd>
-                                <select size="1" id="theme" name="theme">
-                                    <option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-                                    $themes_path = SERVER_PATH. '/adm_themes';
-                                    $dir_handle  = opendir($themes_path);
-
-                                    while (false !== ($filename = readdir($dir_handle)))
-                                    {
-                                        if(is_file($filename) == false
-                                        && strpos($filename, '.') !== 0)
-                                        {
-                                            echo '<option value="'.$filename.'" ';
-                                            if($form_values['theme'] == $filename)
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                            echo '>'.$filename.'</option>';
-                                        }
-                                    }
-                                echo '</select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ADMIDIO_THEME_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="homepage_logout">'.$gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('SYS_VISITORS').'):</label></dt>
-                            <dd><input type="text" id="homepage_logout" name="homepage_logout" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_logout']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_HOMEPAGE_VISITORS').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="homepage_login">'.$gL10n->get('SYS_HOMEPAGE').' ('.$gL10n->get('ORG_REGISTERED_USERS').'):</label></dt>
-                            <dd><input type="text" id="homepage_login" name="homepage_login" style="width: 200px;" maxlength="250" value="'. $form_values['homepage_login']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_HOMEPAGE_REGISTERED_USERS').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_rss">'.$gL10n->get('ORG_ENABLE_RSS_FEEDS').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_rss" name="enable_rss" ';
-                                if(isset($form_values['enable_rss']) && $form_values['enable_rss'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ENABLE_RSS_FEEDS_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_auto_login">'.$gL10n->get('ORG_LOGIN_AUTOMATICALLY').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_auto_login" name="enable_auto_login" ';
-                                if(isset($form_values['enable_auto_login']) && $form_values['enable_auto_login'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_LOGIN_AUTOMATICALLY_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="logout_minutes">'.$gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER').':</label></dt>
-                            <dd><input type="text" id="logout_minutes" name="logout_minutes" style="width: 50px;" maxlength="4" value="'. $form_values['logout_minutes']. '" /> '.$gL10n->get('SYS_MINUTES').'</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER_DESC', $gL10n->get('SYS_REMEMBER_ME')).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_password_recovery">'.$gL10n->get('ORG_SEND_PASSWORD').':</label>
-                            </dt>
-                            <dd>
-                                <input type="checkbox" id="enable_password_recovery" name="enable_password_recovery" ';
-                                if(isset($form_values['enable_password_recovery']) && $form_values['enable_password_recovery'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_SEND_PASSWORD_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="system_search_similar">'.$gL10n->get('ORG_SEARCH_SIMILAR_NAMES').':</label>
-                            </dt>
-                            <dd>
-                                <input type="checkbox" id="system_search_similar" name="system_search_similar" ';
-                                if(isset($form_values['system_search_similar']) && $form_values['system_search_similar'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_SEARCH_SIMILAR_NAMES_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="system_show_create_edit">'.$gL10n->get('ORG_SHOW_CREATE_EDIT').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array(0 => $gL10n->get('SYS_DONT_SHOW'), 1 => $gL10n->get('SYS_FIRSTNAME_LASTNAME'), 2 => $gL10n->get('SYS_USERNAME'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['system_show_create_edit'], 'system_show_create_edit');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_SHOW_CREATE_EDIT_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="system_js_editor_enabled">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="system_js_editor_enabled" name="system_js_editor_enabled" ';
-                                if(isset($form_values['system_js_editor_enabled']) && $form_values['system_js_editor_enabled'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="system_js_editor_color">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR').':</label></dt>
-                            <dd><input type="text" id="system_js_editor_color" name="system_js_editor_color" style="width: 100px;" maxlength="10" value="'. $form_values['system_js_editor_color']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR_DESC').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-            
-            /**************************************************************************************/
-            // Organization and regional settings
-            /**************************************************************************************/
-            
-            echo '<h3 id="ORG_ORGANIZATION_REGIONAL_SETTINGS" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" /></a>
-                <a href="#">'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="org_shortname">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
-                            <dd><input type="text" id="org_shortname" name="org_shortname" disabled="disabled" style="width: 100px;" maxlength="10" value="'. $form_values['org_shortname']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="org_longname">'.$gL10n->get('SYS_NAME').':</label></dt>
-                            <dd><input type="text" id="org_longname" name="org_longname" style="width: 200px;" maxlength="60" value="'. $form_values['org_longname']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="org_homepage">'.$gL10n->get('SYS_WEBSITE').':</label></dt>
-                            <dd><input type="text" id="org_homepage" name="org_homepage" style="width: 200px;" maxlength="60" value="'. $form_values['org_homepage']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="system_language">'.$gL10n->get('SYS_LANGUAGE').':</label></dt>
-                            <dd>'. FormElements::generateXMLSelectBox(SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', 'system_language', $form_values['system_language']).'</dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="default_country">'.$gL10n->get('PRO_DEFAULT_COUNTRY').':</label></dt>
-                            <dd>
-                                <select size="1" id="default_country" name="default_country">
-                                    <option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-                                    foreach($gL10n->getCountries() as $key => $value)
-                                    {
-                                        echo '<option value="'.$key.'" ';
-                                        if($key == $form_values['default_country'])
-                                        {
-                                            echo ' selected="selected" ';
-                                        }
-                                        echo '>'.$value.'</option>';
-                                    }
-                                echo '</select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_DEFAULT_COUNTRY_DESC').'</li>
-
-                    <li>
-                        <dl>
-                            <dt><label for="system_date">'.$gL10n->get('ORG_DATE_FORMAT').':</label></dt>
-                            <dd><input type="text" id="system_date" name="system_date" style="width: 100px;" maxlength="20" value="'. $form_values['system_date']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="system_time">'.$gL10n->get('ORG_TIME_FORMAT').':</label></dt>
-                            <dd><input type="text" id="system_time" name="system_time" style="width: 100px;" maxlength="20" value="'. $form_values['system_time']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="system_currency">'.$gL10n->get('ORG_CURRENCY').':</label></dt>
-                            <dd><input type="text" id="system_currency" name="system_currency" style="width: 100px;" maxlength="20" value="'. $form_values['system_currency']. '" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_CURRENCY_DESC').'</li>';
-
-                    //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
-                    if($gCurrentOrganization->hasChildOrganizations() == false)
-                    {
-                        $organizationSelectBox = FormElements::generateOrganizationSelectBox($form_values['org_org_id_parent'], 'org_org_id_parent', 1);
-
-                        if(strlen($organizationSelectBox) > 0)
-                        {
-                            // Auswahlfeld fuer die uebergeordnete Organisation
-                            echo '
-                            <li>
-                                <dl>
-                                    <dt><label for="org_org_id_parent">'.$gL10n->get('ORG_PARENT_ORGANIZATION').':</label></dt>
-                                    <dd>'.$organizationSelectBox.'</dd>
-                                </dl>
-                            </li>
-                            <li class="smallFontSize">'.$gL10n->get('ORG_PARENT_ORGANIZATION_DESC').'</li>';
-                        }
-                    }
-                    
-                    if($gCurrentOrganization->countAllRecords() > 1)
-                    {
-                        echo '<li>
-                            <dl>
-                                <dt><label for="system_organization_select">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT').':</label></dt>
-                                <dd>
-                                    <input type="checkbox" id="system_organization_select" name="system_organization_select" ';
-                                    if(isset($form_values['system_organization_select']) && $form_values['system_organization_select'] == 1)
-                                    {
-                                        echo ' checked="checked" ';
-                                    }
-                                    echo ' value="1" />
-                                </dd>
-                            </dl>
-                        </li>
-                        <li class="smallFontSize">'.$gL10n->get('ORG_SHOW_ORGANIZATION_SELECT_DESC').'</li>';
-                    }
-                    echo '<li>
-                        <dl>
-                            <dt><label for="system_show_all_users">'.$gL10n->get('ORG_SHOW_ALL_USERS').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="system_show_all_users" name="system_show_all_users" ';
-                                if(isset($form_values['system_show_all_users']) && $form_values['system_show_all_users'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_SHOW_ALL_USERS_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt>
-                                <div class="iconTextLink">
-                                    <a href="'. $g_root_path. '/adm_program/administration/organization/organization_function.php?mode=2"><img
-                                    src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" /></a>
-                                    <a href="'. $g_root_path. '/adm_program/administration/organization/organization_function.php?mode=2">'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>
-                                </div>
-                            </dt>
-                            <dd>&nbsp;</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ADD_ORGANIZATION_DESC').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-            
             /**************************************************************************************/
             // Preferences registration
             /**************************************************************************************/
@@ -1047,83 +758,6 @@ echo '
         </div>
         <div id="tabs-modules">
             <div id="accordion-modules">';
-            /**************************************************************************************/
-            // preferences announcements module
-            /**************************************************************************************/
-            
-            echo '<h3 id="ANN_ANNOUNCEMENTS" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/announcements.png" alt="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" title="'.$gL10n->get('ANN_ANNOUNCEMENTS').'" /></a>
-                <a href="#">'.$gL10n->get('ANN_ANNOUNCEMENTS').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_announcements_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_announcements_module'], 'enable_announcements_module');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="announcements_per_page">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
-                            <dd>
-                                <input type="text" id="announcements_per_page" name="announcements_per_page"
-                                     style="width: 50px;" maxlength="4" value="'. $form_values['announcements_per_page']. '" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-            
-            /**************************************************************************************/
-            // Preferences downloads module
-            /**************************************************************************************/
-
-            echo '<h3 id="DOW_DOWNLOADS" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/download.png" alt="'.$gL10n->get('DOW_DOWNLOADS').'" title="'.$gL10n->get('DOW_DOWNLOADS').'" /></a>
-                <a href="#">'.$gL10n->get('DOW_DOWNLOADS').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_download_module">'.$gL10n->get('DOW_ENABLE_DOWNLOAD_MODULE').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_download_module" name="enable_download_module" ';
-                                if(isset($form_values['enable_download_module']) && $form_values['enable_download_module'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DOW_ENABLE_DOWNLOAD_MODULE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="max_file_upload_size">'.$gL10n->get('DOW_MAXIMUM_FILE_SIZE').':</label></dt>
-                            <dd>
-                                <input type="text" id="max_file_upload_size" name="max_file_upload_size" style="width: 50px;"
-                                    maxlength="10" value="'. $form_values['max_file_upload_size']. '" /> KB
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DOW_MAXIMUM_FILE_SIZE_DESC').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
 
             /**************************************************************************************/
             // Preferences photo module

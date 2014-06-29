@@ -87,6 +87,13 @@ case 1:
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
             }
             break;
+
+        case 'downloads':
+            $checkboxes = array('enable_download_module');
+            break;
+            
+        case 'announcements':
+            break;
         
         default:
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
