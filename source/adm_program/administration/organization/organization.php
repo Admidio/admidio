@@ -303,6 +303,56 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_notification">
+                            <img src="'.THEME_PATH.'/icons/system_notification.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" title="'.$gL10n->get('SYS_SYSTEM_MAILS').'" />'.$gL10n->get('SYS_SYSTEM_MAILS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_system_notification" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $text = new TableText($gDb);
+                        $form = new HtmlForm('system_notification_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=system_notification', $page, false, false, 'form-preferences');
+                        $form->addCheckbox('enable_system_mails', $gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS'), $form_values['enable_system_mails'], 
+                            FIELD_DEFAULT, null, 'ORG_ACTIVATE_SYSTEM_MAILS_DESC');
+                        $form->addTextInput('email_administrator', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $form_values['email_administrator'], 50, FIELD_DEFAULT, 'email', 
+                            null, array('ORG_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']));
+                        $form->addCheckbox('enable_email_notification', $gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES'), $form_values['enable_email_notification'], 
+                            FIELD_DEFAULT, null, array('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<i>'.$gPreferences['email_administrator'].'</i>'));
+                        $form->addCustomContent('system_mail_text_description', $gL10n->get('ORG_SYSTEM_MAIL_TEXTS'), 
+                            '<p>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':</p>
+                            <p><strong>%user_first_name%</strong> - '.$gL10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
+                            <strong>%user_last_name%</strong> - '.$gL10n->get('ORG_VARIABLE_LAST_NAME').'<br />
+                            <strong>%user_login_name%</strong> - '.$gL10n->get('ORG_VARIABLE_USERNAME').'<br />
+                            <strong>%user_email%</strong> - '.$gL10n->get('ORG_VARIABLE_EMAIL').'<br />
+                            <strong>%webmaster_email%</strong> - '.$gL10n->get('ORG_VARIABLE_EMAIL_ORGANIZATION').'<br />
+                            <strong>%organization_short_name%</strong> - '.$gL10n->get('ORG_VARIABLE_SHORTNAME_ORGANIZATION').'<br />
+                            <strong>%organization_long_name%</strong> - '.$gL10n->get('ORG_VARIABLE_NAME_ORGANIZATION').'<br />
+                            <strong>%organization_homepage%</strong> - '.$gL10n->get('ORG_VARIABLE_URL_ORGANIZATION').'</p>');
+                            
+                        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+                        $form->addMultilineTextInput('SYSMAIL_REGISTRATION_WEBMASTER', $gL10n->get('ORG_NOTIFY_WEBMASTER'), $text->getValue('txt_text'), 7);
+                        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+                        $form->addMultilineTextInput('SYSMAIL_REGISTRATION_USER', $gL10n->get('ORG_CONFIRM_REGISTRATION'), $text->getValue('txt_text'), 7);
+                        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REFUSE_REGISTRATION', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+                        $form->addMultilineTextInput('SYSMAIL_REFUSE_REGISTRATION', $gL10n->get('ORG_REFUSE_REGISTRATION'), $text->getValue('txt_text'), 7);
+                        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+                        $form->addMultilineTextInput('SYSMAIL_NEW_PASSWORD', $gL10n->get('ORG_SEND_NEW_PASSWORD'), $text->getValue('txt_text'), 7, 0, FIELD_DEFAULT, null,
+                            $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br /><strong>%variable1%</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD'));
+                        $text->readDataByColumns(array('txt_name' => 'SYSMAIL_ACTIVATION_LINK', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
+                        $form->addMultilineTextInput('SYSMAIL_ACTIVATION_LINK', $gL10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK'), $text->getValue('txt_text'), 7, 0, FIELD_DEFAULT, null,
+                            $gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
+                            <strong>%variable1%</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
+                            <strong>%variable2%</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK'));
+                        
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="tab-pane" id="tabs-modules">
@@ -367,85 +417,7 @@ exit();
                 <a href="#">'.$gL10n->get('SYS_SYSTEM_MAILS').'</a>
             </h3>        
             <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_system_mails">'.$gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_system_mails" name="enable_system_mails" ';
-                                if(isset($form_values['enable_system_mails']) && $form_values['enable_system_mails'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACTIVATE_SYSTEM_MAILS_DESC').'</li>                  
-                    <li>
-                        <dl>
-                            <dt><label for="email_administrator">'.$gL10n->get('ORG_SYSTEM_MAIL_ADDRESS').':</label></dt>
-                            <dd><input type="text" id="email_administrator" name="email_administrator" style="width: 200px;" maxlength="50" value="'. $form_values['email_administrator'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_SYSTEM_MAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_email_notification">'.$gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_email_notification" name="enable_email_notification" ';
-                                if(isset($form_values['enable_email_notification']) && $form_values['enable_email_notification'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC', '<i>'.$gPreferences['email_administrator'].'</i>').'</li>
-                    <li>
-                        <dl>
-                            <dt><label>'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS').':</label></dt>
-                            <dd><br /></dd>
-                        </dl>
-                    </li>
-                    <li  class="smallFontSize">'.$gL10n->get('ORG_SYSTEM_MAIL_TEXTS_DESC').':<br />
-                        <strong>%user_first_name%</strong> - '.$gL10n->get('ORG_VARIABLE_FIRST_NAME').'<br />
-                        <strong>%user_last_name%</strong> - '.$gL10n->get('ORG_VARIABLE_LAST_NAME').'<br />
-                        <strong>%user_login_name%</strong> - '.$gL10n->get('ORG_VARIABLE_USERNAME').'<br />
-                        <strong>%user_email%</strong> - '.$gL10n->get('ORG_VARIABLE_EMAIL').'<br />
-                        <strong>%webmaster_email%</strong> - '.$gL10n->get('ORG_VARIABLE_EMAIL_ORGANIZATION').'<br />
-                        <strong>%organization_short_name%</strong> - '.$gL10n->get('ORG_VARIABLE_SHORTNAME_ORGANIZATION').'<br />
-                        <strong>%organization_long_name%</strong> - '.$gL10n->get('ORG_VARIABLE_NAME_ORGANIZATION').'<br />
-                        <strong>%organization_homepage%</strong> - '.$gL10n->get('ORG_VARIABLE_URL_ORGANIZATION').'<br /><br />
-                    </li>';
-
-                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_WEBMASTER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
-                    echo '<li>
-                        <br />'.$gL10n->get('ORG_NOTIFY_WEBMASTER').':<br />
-                        <textarea id="SYSMAIL_REGISTRATION_WEBMASTER" name="SYSMAIL_REGISTRATION_WEBMASTER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
-                    </li>';
-                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REGISTRATION_USER', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
-                    echo '<li>
-                        '.$gL10n->get('ORG_CONFIRM_REGISTRATION').':<br />
-                        <textarea id="SYSMAIL_REGISTRATION_USER" name="SYSMAIL_REGISTRATION_USER" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
-                    </li>';
-                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_REFUSE_REGISTRATION', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
-                    echo '<li>
-                        <br />'.$gL10n->get('ORG_REFUSE_REGISTRATION').':<br />
-                        <textarea id="SYSMAIL_REFUSE_REGISTRATION" name="SYSMAIL_REFUSE_REGISTRATION" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
-                    </li>';
-                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_NEW_PASSWORD', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
-                    echo '<li>
-                        <br />'.$gL10n->get('ORG_SEND_NEW_PASSWORD').':<br />
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
-                        <strong>%variable1%</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
-                    </li>
-                    <li>
-                        <textarea id="SYSMAIL_NEW_PASSWORD" name="SYSMAIL_NEW_PASSWORD" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
-                    </li>';
+                <ul class="formFieldList">';
                     $text->readDataByColumns(array('txt_name' => 'SYSMAIL_ACTIVATION_LINK', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
                     echo '<li>
                         <br />'.$gL10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK').':<br />

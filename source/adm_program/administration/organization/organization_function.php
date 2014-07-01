@@ -95,6 +95,10 @@ case 1:
         case 'email_dispatch':
             $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth');
             break;
+            
+        case 'system_notification':
+            $checkboxes = array('enable_system_mails', 'enable_email_notification');
+            break;
 
         case 'downloads':
             $checkboxes = array('enable_download_module');

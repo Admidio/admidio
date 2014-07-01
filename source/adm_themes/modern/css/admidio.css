@@ -309,21 +309,20 @@ select.form-control {
 /* A simple groupbox to group some elements. This is often used in forms. */
 
 .panel-default {
-    color: #555555;
-    background-color: transparent;
     border: 2px solid #bad8e2;
     border-radius: 10px;
-    padding: 5px 10px 5px 10px;
-    text-align: left;
-    margin-top: 12px;
 }
 
 .panel-default .panel-heading {
-    color: #333333;
-    background-color: transparent;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    background-color: #bad8e2;
     font-weight: bold;
-    border-color: transparent;
-    padding: 5px 5px 10px 15px;
+    color: #333333;
+}
+
+.panel-group .panel {
+    border-radius: 10px !important;
 }
 
 /* Information block with user and timestamp who created and edited the data */

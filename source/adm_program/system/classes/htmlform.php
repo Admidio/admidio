@@ -241,7 +241,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now create html for the field
-        $this->openControlStructure($id, null, null, null, null, $this->labelVertical);
+        $this->openControlStructure($id, null, null);
         $this->addHtml('<div class="'.$cssClasses.'"><label>');
         $this->addInput('checkbox', $id, $id, '1', $attributes);
 		$this->addHtml($htmlIcon.$label.$htmlHelpIcon.'</label></div>');
@@ -272,7 +272,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
 
-        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextId, $icon, $this->labelVertical, 'form-custom-content');
+        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextId, $icon, 'form-custom-content');
         $this->addHtml($content);
         $this->closeControlStructure();
     }
@@ -310,6 +310,8 @@ class HtmlForm extends HtmlFormBasic
 	                          $helpTextId = null, $icon = null, $labelVertical = true, $class = null)
 	{
         $attributes = array('class' => 'editor');
+        $flagLabelVertical   = $this->labelVertical;
+        $this->labelVertical = $labelVertical;
         $this->countElements++;
 
         // set specific css class for this field
@@ -332,9 +334,11 @@ class HtmlForm extends HtmlFormBasic
 
 		$ckEditor = new CKEditorSpecial();
 
-        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, $labelVertical, 'form-group-editor');
+        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, 'form-group-editor');
 		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
         $this->closeControlStructure();
+        
+        $this->labelVertical = $flagLabelVertical;
 	}
     
     /** Add a field for file upload. If necessary multiple files could be uploaded. The fields for multiple upload could 
@@ -411,7 +415,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical, 'form-upload');
+        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, 'form-upload');
         $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $maxUploadSize);
         
         // if multi uploads are enabled then the file upload field could be hidden
@@ -453,16 +457,20 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
-     *                     If you need an additional parameter for the text you can add an array. The first entry must
-     *                     be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set the complete text will be shown after the form element.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
     public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, 
-                                          $helpTextId = null, $icon = null, $class = null)
+                                          $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         global $gL10n, $g_root_path;
 
@@ -507,14 +515,14 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openControlStructure($id, $label, $property, null, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
         if($maxLength > 0)
         {
             // if max field length is set then show a counter how many characters still available
             $this->addHtml('<div class="admCharactersCount">('.$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="'.$id.'_counter" class="">255</span>').')</div>');
         }
-        $this->closeControlStructure();
+        $this->closeControlStructure($helpTextIdInline);
     }
     
     /** Add a new radio button with a label to the form. The radio button could have different status 
@@ -556,7 +564,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
         
-        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, $property, $helpTextId, $icon);
         
         // set one radio button with no value will be set in front of the other array.
         if($setDummyButton == true)
@@ -636,7 +644,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now create html for the field
-        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
         
         $this->addSelect($id, $id, $attributes);
 
@@ -956,7 +964,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // now create html for the field
-        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon);
         $this->addHtml('<p class="form-control-static">'.$value.'</p>');
         $this->closeControlStructure($helpTextIdInline);
     }
@@ -1086,7 +1094,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now create html for the field
-        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon, $this->labelVertical);
+        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
         
         if($type == 'date')
         {
@@ -1118,11 +1126,27 @@ class HtmlForm extends HtmlFormBasic
         {
             if(is_array($helpTextId))
             {
-                $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1])).'</span>');
+                // if text is a translation-id then translate it
+    			if(strpos($helpTextId[1], '_') == 3)
+                {
+                    $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1])).'</span>');
+                }
+                else
+                {
+                    $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1]).'</span>');
+                }
             }
             else
             {
-                $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId).'</span>');
+                // if text is a translation-id then translate it
+    			if(strpos($helpTextId, '_') == 3)
+                {
+                    $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId).'</span>');
+                }
+                else
+                {
+                    $this->addHtml('<span class="help-block">'.$helpTextId.'</span>');                    
+                }
             }
         }
         
@@ -1164,12 +1188,10 @@ class HtmlForm extends HtmlFormBasic
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
-     *  @param $labelVertical If set to @b true then the label will be display above the control and the control get a width of 100%.
-     *                        Otherwise the label will be displayed in front of the control.
      *  @param $class      Optional an additional css classname for the row. The class @b admFieldRow
      *                     is set as default and need not set with this parameter.
      */
-    protected function openControlStructure($id, $label, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $labelVertical = false, $class = '')
+    protected function openControlStructure($id, $label, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $class = '')
     {
         $cssClassRow       = '';
         $cssClassMandatory = '';
@@ -1212,7 +1234,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<div class="form-group'.$cssClassRow.'">');
         
         // add label element
-        if($labelVertical)
+        if($this->labelVertical)
         {
             if(strlen($label) > 0)
             {
