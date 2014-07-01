@@ -87,6 +87,14 @@ case 1:
                 $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
             }
             break;
+            
+        case 'registration':
+            $checkboxes = array('enable_registration_captcha', 'enable_registration_admin_mail');
+            break;
+
+        case 'email_dispatch':
+            $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth');
+            break;
 
         case 'downloads':
             $checkboxes = array('enable_download_module');

@@ -981,7 +981,7 @@ class HtmlForm extends HtmlFormBasic
 
         // now add button to form
         $this->addButton($id, $text, $icon, $link, $class, $type);
-        $this->addHtml('<div class="form-alert" style="display: none">Test</div>');
+        $this->addHtml('<div class="form-alert" style="display: none">&nbsp;</div>');
     }
     
     /** Add a new input field with a label to the form.

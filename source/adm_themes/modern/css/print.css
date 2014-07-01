@@ -43,12 +43,12 @@
     background-color: #cccccc;
 }
 
-.admTableSubHeader {
+.group-heading {
     background-color: #eeeeee;
     padding: 0px;
 }
 
-.admTableSubHeader td {
+.group-heading td {
     color: #888888;
     font-size: 12pt;  
     font-weight: bold;

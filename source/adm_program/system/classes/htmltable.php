@@ -61,7 +61,6 @@ class HtmlTable extends HtmlTableBasic
         parent::__construct($id, $class);
         
         // initialize class member parameters
-        $this->highlightSelectedRow = false;
         $this->messageIdNoRowsFound = 'SYS_NO_DATA_FOUND';
         $this->id            = $id;
         $this->datatables    = $datatables;
@@ -134,11 +133,6 @@ class HtmlTable extends HtmlTableBasic
         if(is_array($arrAttributes) == false || array_key_exists('class', $arrAttributes) == false)
         {
             $arrAttributes['class'] = 'admTableRow';
-        }
-        
-        if($this->highlightSelectedRow == true)
-        {
-            $arrAttributes['class'] .= ' admTableRowHighlight';
         }
         
         // set an id to the column
@@ -311,8 +305,9 @@ class HtmlTable extends HtmlTableBasic
                 $javascriptGroup  = '';
                 $javascriptGroupFunction = '';
                 
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/jquery.datatables.min.js');
-                $this->htmlPage->addCssFile(THEME_PATH.'/css/jquery.datatables.css');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.js');
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/datatables.bootstrap.css');
 
                 // set order columns
                 if(count($this->orderColumns) > 0)
@@ -363,7 +358,7 @@ class HtmlTable extends HtmlTableBasic
                             api.column('.$this->groupedColumn.', {page:\'current\'} ).data().each( function ( group, i ) {
                                 if ( last !== group ) {
                                     $(rows).eq( i ).before(
-                                        \'<tr class="group admTableSubHeader"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
+                                        \'<tr class="group-heading"><td colspan="'.$this->columnCount.'">\'+group+\'</td></tr>\'
                                     );
                  
                                     last = group;

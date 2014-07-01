@@ -62,7 +62,6 @@ $page = new HtmlPage();
 if($showOption == 'announcements'
 || $showOption == 'downloads')
 {
-    //$page->addJavascript('$("#preferences_tabs a[href=\'#tabs_modules\']").tab("show");', true);
     $page->addJavascript('$("#tabs_nav_modules").attr("class", "active");
         $("#tabs-modules").attr("class", "tab-pane active");
         $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");', true);
@@ -191,7 +190,6 @@ $page->addHtml('
                             10, FIELD_DEFAULT, 'text', null, array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', 'SYS_REMEMBER_ME'), null, 'form-control-small');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
-
                     $page->addHtml('</div>
                 </div>
             </div>
@@ -245,7 +243,63 @@ $page->addHtml('
                         $form->addCustomContent('add_another_organization', $gL10n->get('ORG_NEW_ORGANIZATION'), $html);
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
-                                                
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_registration">
+                            <img src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" title="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_registration" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('registration_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=registration', $page, false, false, 'form-preferences');
+                        $selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
+                        $form->addSelectBox('registration_mode', $gL10n->get('SYS_REGISTRATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['registration_mode'], false, null, 'ORG_REGISTRATION_MODE');
+                        $form->addCheckbox('enable_registration_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_registration_captcha'], 
+                            FIELD_DEFAULT, null, 'ORG_CAPTCHA_REGISTRATION');
+                        $form->addCheckbox('enable_registration_admin_mail', $gL10n->get('ORG_EMAIL_ALERTS'), $form_values['enable_registration_admin_mail'], 
+                            FIELD_DEFAULT, null, array('ORG_EMAIL_ALERTS_DESC', 'ROL_RIGHT_APPROVE_USERS'));
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_email_dispatch">
+                            <img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$gL10n->get('SYS_MAIL_DISPATCH').'" title="'.$gL10n->get('SYS_MAIL_DISPATCH').'" />'.$gL10n->get('SYS_MAIL_DISPATCH').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_email_dispatch" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('email_dispatch_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=email_dispatch', $page, false, false, 'form-preferences');
+                        $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
+                        $form->addSelectBox('mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_send_method'], false, null, 'MAI_SEND_METHOD_DESC');
+                        $form->addTextInput('mail_bcc_count', $gL10n->get('MAI_COUNT_BCC'), $form_values['mail_bcc_count'], 6, FIELD_DEFAULT, 'number', null, 'MAI_COUNT_BCC_DESC');
+                        $form->addCheckbox('mail_sender_into_to', $gL10n->get('MAI_SENDER_INTO_TO'), $form_values['mail_sender_into_to'], 
+                            FIELD_DEFAULT, null, 'MAI_SENDER_INTO_TO_DESC');
+                        $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
+                        $form->addSelectBox('mail_character_encoding', $gL10n->get('MAI_CHARACTER_ENCODING'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_character_encoding'], false, null, 'MAI_CHARACTER_ENCODING_DESC');
+                        $form->addTextInput('mail_smtp_host', $gL10n->get('MAI_SMTP_HOST'), $form_values['mail_smtp_host'], 50, FIELD_DEFAULT, 'text', null, 'MAI_SMTP_HOST_DESC');
+                        $form->addCheckbox('mail_smtp_auth', $gL10n->get('MAI_SMTP_AUTH'), $form_values['mail_smtp_auth'], 
+                            FIELD_DEFAULT, null, 'MAI_SMTP_AUTH_DESC');
+                        $form->addTextInput('mail_smtp_port', $gL10n->get('MAI_SMTP_PORT'), $form_values['mail_smtp_port'], 4, FIELD_DEFAULT, 'number', null, 'MAI_SMTP_PORT_DESC');
+                        $selectBoxEntries = array('' => $gL10n->get('MAI_SMTP_SECURE_NO'), 'ssl' => $gL10n->get('MAI_SMTP_SECURE_SSL'), 'tls' => $gL10n->get('MAI_SMTP_SECURE_TLS'));
+                        $form->addSelectBox('mail_smtp_secure', $gL10n->get('MAI_SMTP_SECURE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_smtp_secure'], false, null, 'MAI_SMTP_SECURE_DESC');
+                        $selectBoxEntries = array('LOGIN' => $gL10n->get('MAI_SMTP_AUTH_LOGIN'), 'PLAIN' => $gL10n->get('MAI_SMTP_AUTH_PLAIN'), 'NTLM' => $gL10n->get('MAI_SMTP_AUTH_NTLM'));
+                        $form->addSelectBox('mail_smtp_authentication_type', $gL10n->get('MAI_SMTP_AUTH_TYPE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_smtp_authentication_type'], false, null, 'MAI_SMTP_AUTH_TYPE_DESC');
+                        $form->addTextInput('mail_smtp_user', $gL10n->get('MAI_SMTP_USER'), $form_values['mail_smtp_user'], 100, FIELD_DEFAULT, 'text', null, 'MAI_SMTP_USER_DESC');
+                        $form->addTextInput('mail_smtp_password', $gL10n->get('MAI_SMTP_PASSWORD'), $form_values['mail_smtp_password'], 50, FIELD_DEFAULT, 'password', null, 'MAI_SMTP_PASSWORD_DESC');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
             </div>
@@ -268,10 +322,9 @@ $page->addHtml('
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('enable_announcements_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_announcements_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
                         $form->addTextInput('announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['announcements_per_page'], 4, FIELD_DEFAULT, 'number', 
-                            null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC', null, 'form-control-small');
+                            null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
-                    
                     $page->addHtml('</div>
                 </div>
             </div>
@@ -290,10 +343,9 @@ $page->addHtml('
                         $form->addCheckbox('enable_download_module', $gL10n->get('DOW_ENABLE_DOWNLOAD_MODULE'), $form_values['enable_download_module'], 
                             FIELD_DEFAULT, null, 'DOW_ENABLE_DOWNLOAD_MODULE_DESC');
                         $form->addTextInput('max_file_upload_size', $gL10n->get('DOW_MAXIMUM_FILE_SIZE').' (KB)', $form_values['max_file_upload_size'], 10, FIELD_DEFAULT, 'number', 
-                            null, 'DOW_MAXIMUM_FILE_SIZE_DESC', null, 'form-control-small');
+                            null, 'DOW_MAXIMUM_FILE_SIZE_DESC');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
-                    
                     $page->addHtml('</div>
                 </div>
             </div>
@@ -305,184 +357,6 @@ $page->addHtml('
 $page->show();
 
 exit();
-            /**************************************************************************************/
-            // Preferences registration
-            /**************************************************************************************/
-            
-            echo '<h3 id="SYS_REGISTRATION" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" title="'.$gL10n->get('SYS_REGISTRATION').'" /></a>
-                <a href="#">'.$gL10n->get('SYS_REGISTRATION').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="registration_mode">'.$gL10n->get('SYS_REGISTRATION').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['registration_mode'], 'registration_mode');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_REGISTRATION_MODE').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_registration_captcha">'.$gL10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_registration_captcha" name="enable_registration_captcha" ';
-                                if(isset($form_values['enable_registration_captcha']) && $form_values['enable_registration_captcha'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_CAPTCHA_REGISTRATION').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_registration_admin_mail">'.$gL10n->get('ORG_EMAIL_ALERTS').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_registration_admin_mail" name="enable_registration_admin_mail" ';
-                                if(isset($form_values['enable_registration_admin_mail']) && $form_values['enable_registration_admin_mail'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_EMAIL_ALERTS_DESC', $gL10n->get('ROL_RIGHT_APPROVE_USERS')).'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-            /**************************************************************************************/
-            // Preferences send mail
-            /**************************************************************************************/
-            $text = new TableText($gDb);
-            echo '<h3 id="SYS_MAIL_DISPATCH" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/system_mail.png" alt="'.$gL10n->get('SYS_MAIL_DISPATCH').'" title="'.$gL10n->get('SYS_MAIL_DISPATCH').'" /></a>
-                <a href="#">'.$gL10n->get('SYS_MAIL_DISPATCH').'</a>
-            </h3>        
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="mail_send_method">'.$gL10n->get('MAI_SEND_METHOD').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_send_method'], 'mail_send_method');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SEND_METHOD_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_bcc_count">'.$gL10n->get('MAI_COUNT_BCC').':</label>
-                            </dt>
-                            <dd>
-                                <input type="text" id="mail_bcc_count" name="mail_bcc_count" style="width: 50px;" maxlength="6" value="'. $form_values['mail_bcc_count']. '" />
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_COUNT_BCC_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_sender_into_to">'.$gL10n->get('MAI_SENDER_INTO_TO').':</label>
-                            </dt>
-                            <dd>
-                                <input type="checkbox" id="mail_sender_into_to" name="mail_sender_into_to" ';
-                                if(isset($form_values['mail_sender_into_to']) && $form_values['mail_sender_into_to'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_INTO_TO_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_character_encoding">'.$gL10n->get('MAI_CHARACTER_ENCODING').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_character_encoding'], 'mail_character_encoding');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_CHARACTER_ENCODING_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_host">'.$gL10n->get('MAI_SMTP_HOST').':</label></dt>
-                            <dd><input type="text" id="mail_smtp_host" name="mail_smtp_host" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_host'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_HOST_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_auth">'.$gL10n->get('MAI_SMTP_AUTH').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="mail_smtp_auth" name="mail_smtp_auth" ';
-                                if(isset($form_values['mail_smtp_auth']) && $form_values['mail_smtp_auth'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_AUTH_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_port">'.$gL10n->get('MAI_SMTP_PORT').':</label></dt>
-                            <dd><input type="text" id="mail_smtp_port" name="mail_smtp_port" style="width: 50px;" maxlength="5" value="'. $form_values['mail_smtp_port'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_PORT_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_secure">'.$gL10n->get('MAI_SMTP_SECURE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('' => $gL10n->get('MAI_SMTP_SECURE_NO'), 'ssl' => $gL10n->get('MAI_SMTP_SECURE_SSL'), 'tls' => $gL10n->get('MAI_SMTP_SECURE_TLS'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_smtp_secure'], 'mail_smtp_secure');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_SECURE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_authentication_type">'.$gL10n->get('MAI_SMTP_AUTH_TYPE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('LOGIN' => $gL10n->get('MAI_SMTP_AUTH_LOGIN'), 'PLAIN' => $gL10n->get('MAI_SMTP_AUTH_PLAIN'), 'NTLM' => $gL10n->get('MAI_SMTP_AUTH_NTLM'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_smtp_authentication_type'], 'mail_smtp_authentication_type');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_AUTH_TYPE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_user">'.$gL10n->get('MAI_SMTP_USER').':</label></dt>
-                            <dd><input type="text" id="mail_smtp_user" name="mail_smtp_user" style="width: 200px;" maxlength="100" value="'. $form_values['mail_smtp_user'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_USER_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_smtp_password">'.$gL10n->get('MAI_SMTP_PASSWORD').':</label></dt>
-                            <dd><input type="password" id="mail_smtp_password" name="mail_smtp_password" style="width: 200px;" maxlength="50" value="'. $form_values['mail_smtp_password'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SMTP_PASSWORD_DESC').'</li>
-
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
             
             /**************************************************************************************/
             // Preferences for system notification

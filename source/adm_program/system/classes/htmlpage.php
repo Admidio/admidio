@@ -49,7 +49,6 @@ class HtmlPage
         $this->containThemeHtml = true;
         
         $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css', 
-                                THEME_PATH.'/css/admidio.css', 
                                 THEME_PATH.'/css/colorbox.css');
         $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js', 
                                 $g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js',
@@ -204,6 +203,9 @@ class HtmlPage
         $htmlMyHeader     = '';
         $htmlMyBodyTop    = '';
         $htmlMyBodyBottom = '';
+        
+        // add admidio css file at last because there the user can redefine all css
+        $this->addCssFile(THEME_PATH.'/css/admidio.css');
         
         // load content of theme files
         if($this->containThemeHtml)

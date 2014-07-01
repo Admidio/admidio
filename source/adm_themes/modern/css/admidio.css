@@ -27,7 +27,7 @@
     text-align: center;
     margin: 0px auto;
     max-width: 1200px;
-}
+}*
 
 #header-block {
     margin-top: 0px;
@@ -71,22 +71,10 @@
 	text-align: left;
     border: 1px solid #7d7d7d;
     border-radius: 15px;
+    padding: 15px 15px 20px 15px;
     background-color: #ffffff; 
     background-repeat: repeat-x;
     background-image: -moz-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #CBDDE3 95%);	
-}
-
-#left-block {
-    float: left;
-    width: 72%;
-    padding: 15px 15px 20px 15px;
-}
-
-#right-block {
-    float: right;
-    width: 20%;
-	min-width: 100px;
-    padding: 1.5%;
 }
 
 /* Headlines */
@@ -161,17 +149,18 @@ a:hover, a:active {
 
 /* Settings for all icons */
 
-.navbar-link img, .icon-text-link img, .btn img {
-    margin-right: 5px;
-}
-
-.admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation {
+.admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation, .btn img {
     border: none;
     vertical-align: text-top;
     margin-left: 1px;
     margin-right: 1px;
     /*width: 16px;*/
     height: 16px;
+}
+
+
+.navbar-link img, .icon-text-link img, .btn img {
+    margin-right: 5px;
 }
 
 .admIconHelpLink img {
@@ -219,47 +208,13 @@ a:hover, a:active {
 
 /* form layout */
 
-.admForm {
-    width: 100%;
-    margin: auto;
-}
-
-.admForm hr, .admBoxBody hr {
+form hr, .admBoxBody hr {
     border: 1px solid #bad8e2;
     width: 100%;
-    margin-top: 10px; 
-    margin-bottom: 10px; 
+    margin-bottom: 15px; 
 }
 
-/* set structure of fields and their labels in a form */
-   
-.admFieldEditList, .admFieldViewList, .admFieldInformations {
-    width: 100%;
-}
-
-.admFieldRow {
-    clear: both;
-    margin: 5px 0px;
-    text-align: left;
-}
-   
-.admFieldLabel {
-    float: left;
-	display: inline-block;
-    width: 30%;
- 	padding-top: 5px;
-}
-
-.admFieldElement {
-    display: inline-block;
-    width: 70%;
-    padding-top: 5px;
-    white-space: nowrap;
-}
-/*
-.admFieldElement label {
-    white-space: normal;
-}*/
+/* Customized layout for forms and their elements */
 
 .form-horizontal .control-label {
     text-align: left;
@@ -269,18 +224,10 @@ a:hover, a:active {
     margin-left: 26%;
 }
 
-/* Form elements */
-
-.admTextInput, .admTextInputSmall, .admMultilineTextInput, .admDateInput, .admSelectBox, .admSelectBoxSmall, .admButton, /*div.dataTables_filter input, div.dataTables_length select*/ {
-    border: 1px solid #888686;
-    padding: 4px;
-    font-size: 11pt;
-    background-color: #ffffff;
-    border-radius: 5px;
-}
-
-.admTextInput:focus, .admTextInputSmall:focus, .admMultilineTextInput:focus, admDateInput, .admSelectBox:focus, .admSelectBoxSmall:focus, .admCheckbox:focus, .admButton:hover, .admButton:active {
+.form-control:focus {
+    border-color: #409099;
     background-color: #fff8a0;
+    box-shadow: none;
 }
 
 .checkbox {
@@ -297,21 +244,6 @@ select.form-control {
 
 .input-group.date, input[type="number"] {
     width: 150px;
-}
-
-.admUploadInput {
-    margin-bottom: 5px;
-    padding: 2px;
-}
-
-.admCheckbox {
-	vertical-align: bottom;
-	margin-right: 5px;
-}
-
-.admSelectBox, .admSelectBoxSmall {
-    width: auto;
-	max-width: 100%;
 }
 
 .admSelectBoxSmall, /*div.dataTables_filter input, div.dataTables_length select*/ {
@@ -344,17 +276,15 @@ select.form-control {
 	padding-top: 2px;
 }
 
-.admButton {
-    margin-top: 20px;
-    margin-right: 20px;
+.btn-primary {
+    background-color: #409099;
+    border-color: #409099;
+    color: #ffffff;
 }
 
-.admButton img {
-    vertical-align: text-top;
-    border-width: 0px;
-    margin-right: 5px;
-    width: 16px;
-    height: 16px;
+.btn-primary:hover, .btn-primary:focus {
+    background-color: #387F87;
+    border-color: #387F87;
 }
 
 .control-mandatory label:after, .control-mandatory-definition span:after {
@@ -378,23 +308,22 @@ select.form-control {
 
 /* A simple groupbox to group some elements. This is often used in forms. */
 
-.admGroupBox {
+.panel-default {
     color: #555555;
+    background-color: transparent;
     border: 2px solid #bad8e2;
+    border-radius: 10px;
     padding: 5px 10px 5px 10px;
     text-align: left;
     margin-top: 12px;
-    border-radius: 10px;
 }
 
-.admGroupBoxHeadline {
+.panel-default .panel-heading {
     color: #333333;
+    background-color: transparent;
     font-weight: bold;
-}
-
-.admGroupBoxBody {
-    padding-top: 7px;
-    clear: both;
+    border-color: transparent;
+    padding: 5px 5px 10px 15px;
 }
 
 /* Information block with user and timestamp who created and edited the data */
@@ -409,18 +338,20 @@ select.form-control {
 }
 
 /* Layout for some boxes that is used in announcements or events module */
-/*
-.admBoxLayout {
-    margin: 30px 0px 10px 0px;
+
+.panel-primary {
+    background-color: transparent;
+    border-color: transparent;
 }
 
-.admBoxHead {
+.panel-primary .panel-heading {
     color: #333333;
+    background-color: transparent;
 	min-height: 20px;
     font-size: 12pt;
     font-weight: bold;
     border-bottom: 2px solid #449ba6;
-}*/
+}
 
 .admBoxHighlighted .admBoxHead {
     color: #FF9C00;
@@ -450,39 +381,25 @@ select.form-control {
 }*/
 
 /* Layout for tables that will be used in lists or download module */
-/*
-.admTable {
-    width: 100%;
-    margin: auto;
-}*/
 
-.table > thead > tr > th {
+.table thead > tr > th {
     color: #333333;
-    padding-bottom: 0px;
+    padding: 5px !important;
     border-bottom: 2px solid #409099;
 }
-/*
-.table th, .table td {
-    padding: 6px 6px 3px 0px;
-    text-align: left;
-}*/
 
-/* Subheader will be used to group data in a table (e.g.: Role Leader and Members) */
-
-.admTableSubHeader td {
+.group-heading td {
     color: #515556;
     font-weight: bold;
     letter-spacing: 0.2em;
-    padding: 5px 5px 2px 0px;
     border-bottom: 2px solid #a0cbd9;
 }
 
-.admTableSubHeader.group {
+.group-heading {
   cursor: pointer;
 }
 
-
-.admTableRowHighlight:hover, .table-hover > tbody > tr:hover > td {
+.table-hover > tbody > tr:hover > td {
     background-repeat: repeat-x;
     background-color: #a8d9df;
 	background-image: -moz-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
@@ -490,7 +407,7 @@ select.form-control {
 	background-image: -ms-linear-gradient(top, #ddeff2 0%, #7dbec8 90%);	
 }
 
-.admTable.dataTable {
+.dataTable {
     border-bottom: 2px solid #a0cbd9;
 }
 

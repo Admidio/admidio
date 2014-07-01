@@ -186,7 +186,7 @@ while($row = $gDb->fetch_array($result))
             $block_id = 'admCategory'.$role->getValue('cat_id');
 
             $table->addTableBody();
-            $table->addRow('', array('class' => 'admTableSubHeader'));
+            $table->addRow('', array('class' => 'group-heading'));
             $table->addColumn();
             $table->addAttribute('colspan', '4', 'td');
             $table->addData('<a href="javascript:showHideBlock(\''.$block_id.'\');"><img
