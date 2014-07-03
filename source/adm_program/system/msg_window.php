@@ -82,12 +82,15 @@ switch ($getMessageId)
     case 'mylist_condition':
         echo '<p>'.$gL10n->get('LST_MYLIST_CONDITION_DESC').'</p>
               <p>'.$gL10n->get('SYS_EXAMPLES').':</p>
-              <table class="admTable" style="width: 100%;" cellspacing="0">
-                 <tr class="admTableRowHeading">
+              <table class="table table-condensed">
+                <thead>
+                 <tr>
                     <th style="width: 75px;">'.$gL10n->get('SYS_FIELD').'</th>
                     <th style="width: 110px;">'.$gL10n->get('SYS_CONDITION').'</th>
                     <th>'.$gL10n->get('SYS_DESCRIPTION').'</th>
                  </tr>
+                </thead>
+                <tbody>
                  <tr>
                     <td>'.$gL10n->get('SYS_LASTNAME').'</td>
                     <td><b>'.$gL10n->get('LST_SEARCH_LASTNAME_EXAMPLE').'</b></td>
@@ -143,6 +146,7 @@ switch ($getMessageId)
                     <td><b>'.$gL10n->get('SYS_NOT_EMPTY').'</b></td>
                     <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
                  </tr>
+                </tbody
               </table>';
         break;
 

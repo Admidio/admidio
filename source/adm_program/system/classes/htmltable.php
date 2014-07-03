@@ -43,7 +43,7 @@ class HtmlTable extends HtmlTableBasic
      *                     table and other features are possible.
      *  @param $htmlPage   Optional a HtmlPage object that will be used to add javascript code 
      *                     or files to the html output page.
-     *  @param $class      Optional an additional css classname. The class @b admTable
+     *  @param $class      Optional an additional css classname. The class @b table
      *                     is set as default and need not set with this parameter.
      */
     public function __construct($id, &$htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
@@ -86,8 +86,6 @@ class HtmlTable extends HtmlTableBasic
      */
     public function addRowHeadingByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
-        $arrAttributes['class'] = 'admTableRowHeading';
-        
         // set an id to the column
         if($id != null)
         {
@@ -130,11 +128,6 @@ class HtmlTable extends HtmlTableBasic
      */
     public function addRowByArray($arrayColumnValues, $id = null, $arrAttributes = null, $startColspan = 0, $colspan = 0)
     {
-        if(is_array($arrAttributes) == false || array_key_exists('class', $arrAttributes) == false)
-        {
-            $arrAttributes['class'] = 'admTableRow';
-        }
-        
         // set an id to the column
         if($id != null)
         {

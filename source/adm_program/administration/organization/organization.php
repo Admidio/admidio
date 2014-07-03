@@ -106,11 +106,6 @@ $page->addJavascript('
 // zusaetzliche Daten fuer den Html-Kopf setzen
 $gLayout['header'] =  '
     <script type="text/javascript" src="'.$g_root_path.'/adm_program/administration/organization/organization.js" ></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.core.js" ></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.widget.js" ></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.tabs.js" ></script>      
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.accordion.js" ></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.ui.scrollTo.js" ></script>
     <script type="text/javascript"><!--
         var organizationJS = new organizationClass();
         organizationJS.ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
@@ -131,8 +126,7 @@ $gLayout['header'] =  '
             organizationJS.init();
             organizationJS.drawForumAccessDataTable();                      
         });
-    //--></script>
-    <link rel="stylesheet" type="text/css" href="'.THEME_PATH.'/css/jquery.css">';
+    //--></script>';
 
 // add headline and title of module
 $page->addHeadline($headline);

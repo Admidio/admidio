@@ -100,7 +100,7 @@ class FormElements
 		// Selectbox mit allen selektierten Rollen zusammensetzen
 		$act_category = '';
 		$selectBoxHtml = '
-		<select class="admSelectBox" size="1" id="'.$fieldId.'" name="'.$fieldId.'">
+		<select class="form-control" size="1" id="'.$fieldId.'" name="'.$fieldId.'">
 			<option value="0" ';
 			if($defaultRole == 0)
 			{

@@ -964,7 +964,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // now create html for the field
-        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon);
+        $this->openControlStructure(null, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon);
         $this->addHtml('<p class="form-control-static">'.$value.'</p>');
         $this->closeControlStructure($helpTextIdInline);
     }
@@ -1198,6 +1198,7 @@ class HtmlForm extends HtmlFormBasic
 		$htmlLabel         = '';
 		$htmlIcon          = '';
         $htmlHelpIcon      = '';
+        $htmlIdFor         = '';
 
         // set specific css class for this row
         if(strlen($class) > 0)
@@ -1211,6 +1212,11 @@ class HtmlForm extends HtmlFormBasic
 			$cssClassMandatory = ' control-mandatory';
             $cssClassRow .= $cssClassMandatory;
             $this->flagMandatoryFields = true;
+        }
+        
+        if(strlen($id) > 0)
+        {
+            $htmlIdFor = ' for="'.$id.'"';
         }
 		
 		if($icon != null)
@@ -1238,14 +1244,14 @@ class HtmlForm extends HtmlFormBasic
         {
             if(strlen($label) > 0)
             {
-                $this->addHtml('<label for="'.$id.'">'.$htmlIcon.$label.$htmlHelpIcon.'</label>');
+                $this->addHtml('<label'.$htmlIdFor.'>'.$htmlIcon.$label.$htmlHelpIcon.'</label>');
             }
         }
         else
         {
             if(strlen($label) > 0)
             {
-                $this->addHtml('<label for="'.$id.'" class="col-sm-3 control-label">'.$htmlIcon.$label.$htmlHelpIcon.'</label>
+                $this->addHtml('<label'.$htmlIdFor.' class="col-sm-3 control-label">'.$htmlIcon.$label.$htmlHelpIcon.'</label>
                     <div class="col-sm-9">');
             }
             else

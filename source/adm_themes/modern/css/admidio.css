@@ -206,6 +206,12 @@ a:hover, a:active {
     margin-left: 20%;
 }
 
+/* Customize css for module menu */
+
+.navbar-brand:link, .navbar-brand:visited, .navbar-brand:hover, .navbar-brand:active  {
+    text-decoration: none !important;
+}
+
 /* form layout */
 
 form hr, .admBoxBody hr {
@@ -309,19 +315,27 @@ select.form-control {
 /* A simple groupbox to group some elements. This is often used in forms. */
 
 .panel-default {
-    border: 2px solid #bad8e2;
-    border-radius: 10px;
+    border: 1px solid #7d7d7d;
 }
 
 .panel-default .panel-heading {
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
-    background-color: #bad8e2;
-    font-weight: bold;
     color: #333333;
+    font-weight: bold;
+    letter-spacing: 0.1em;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    background-color: #96c4cb;
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55B6C5 0%, #347078 95%);	    
 }
 
-.panel-group .panel {
+.panel-heading a:link, .panel-heading  a:visited {
+    color: #222222;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.panel-group .panel, .panel-default {
     border-radius: 10px !important;
 }
 

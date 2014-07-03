@@ -117,7 +117,7 @@
                     $adminMenu->addItem('dbback', '/adm_program/administration/backup/backup.php',
                                         $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup.png');
                     $adminMenu->addItem('orgprop', '/adm_program/administration/organization/organization.php',
-                                        $gL10n->get('ORG_ORGANIZATION_PROPERTIES'), '/icons/options.png');
+                                        $gL10n->get('SYS_SETTINGS'), '/icons/options.png');
                 }
             }
             

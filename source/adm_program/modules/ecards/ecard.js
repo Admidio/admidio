@@ -51,7 +51,7 @@ function ecardJSClass()
 
 			$("#btnPreview").click(function(event){
 				event.preventDefault();
-				$("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").attr("value","preview");
+				$("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").val("preview");
 				$("#" + ecardJS.ecardformid + " textarea[name='admEcardMessage']").text( CKEDITOR.instances.admEcardMessage.getData() );	
 
 				$.ajax({ // create an AJAX call...
@@ -225,7 +225,7 @@ function ecardJSClass()
 		else
 		{
 			$("#" + this.ecardformid).attr("onsubmit","");
-			$("#" + this.ecardformid + " input[name='ecard[submit_action]']").attr("value","");
+			$("#" + this.ecardformid + " input[name='ecard[submit_action]']").val("");
 		}
 	}
 	
@@ -241,11 +241,11 @@ function ecardJSClass()
 	{
 		if($("#" + id).val() == "" && type == 1)
 		{
-			$("#" + id).attr("value","< "+ this.recipientName_Text +" >");
+			$("#" + id).val("< "+ this.recipientName_Text +" >");
 		}
 		else if($("#" + id).val() == "" && type == 2)
 		{
-			$("#" + id).attr("value","< "+ this.recipientEmail_Text +" >");
+			$("#" + id).val("< "+ this.recipientEmail_Text +" >");
 			$("#" + id).css("color","black");
 			$("#" + this.menueDiv_id).css("height","49px");
 			$("#" + this.wrongDiv_id).css("display","none");
