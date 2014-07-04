@@ -673,8 +673,7 @@ $page->addHtml('
             {
                 $page->addHtml('
                 <a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=mylist_config_webmaster&amp;inline=true"><img 
-                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=mylist_config_webmaster\',this)" onmouseout="ajax_hideTooltip()"
-                    src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>');
+                    src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get('SYS_SHOW_HELP').'" title="'.$gL10n->get('SYS_SHOW_HELP').'" /></a>');
             }
         $page->addHtml('</div>
     </div>

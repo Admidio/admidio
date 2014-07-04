@@ -84,7 +84,11 @@ $form->addTextInput('ann_headline', $gL10n->get('SYS_TITLE'), $announcement->get
 // if current organization has a parent organization or is child organizations then show option to set this announcement to global
 if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
 {
-	$form->addCheckbox('ann_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $announcement->getValue('ann_global'), FIELD_DEFAULT, 'SYS_DATA_GLOBAL');
+    // show all organizations where this organization is mother or child organization
+    $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
+    $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
+    
+	$form->addCheckbox('ann_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $announcement->getValue('ann_global'), FIELD_DEFAULT, array('SYS_DATA_GLOBAL', $organizations));
 }
 $form->addEditor('ann_description', $gL10n->get('SYS_TEXT'), $announcement->getValue('ann_description'), FIELD_MANDATORY);
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');

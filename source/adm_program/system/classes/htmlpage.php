@@ -53,8 +53,6 @@ class HtmlPage
         $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js', 
                                 $g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js',
                                 $g_root_path. '/adm_program/system/js/common_functions.js',
-                                $g_root_path. '/adm_program/system/js/jquery.ddslick.js',
-                                $g_root_path.'/adm_program/libs/tooltip/ajax-tooltip.js',
                                 $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
         $this->rssFiles = array();
         $this->addJavascript('$("a[rel=\'colorboxHelp\']").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'});', true);
@@ -280,6 +278,7 @@ class HtmlPage
         {
             $headerContent .= '<script type="text/javascript"><!-- 
                 $(document).ready(function(){
+                    $("[data-toggle=tooltip]").tooltip();
                     '.$this->javascriptContentExecute.'
                 });
             --></script>';
@@ -288,7 +287,7 @@ class HtmlPage
         $html = '<!DOCTYPE html>
         <html>
         <head>
-            <!-- (c) 2004 - 2013 The Admidio Team - http://www.admidio.org -->
+            <!-- (c) 2004 - 2014 The Admidio Team - http://www.admidio.org -->
             
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
             
@@ -297,8 +296,6 @@ class HtmlPage
             <script type="text/javascript"><!-- 
         		var gRootPath  = "'. $g_root_path. '"; 
         		var gThemePath = "'. THEME_PATH. '";
-        		var gMonthNames = new Array("'.$gL10n->get('SYS_JANUARY').'","'.$gL10n->get('SYS_FEBRUARY').'","'.$gL10n->get('SYS_MARCH').'","'.$gL10n->get('SYS_APRIL').'","'.$gL10n->get('SYS_MAY').'","'.$gL10n->get('SYS_JUNE').'","'.$gL10n->get('SYS_JULY').'","'.$gL10n->get('SYS_AUGUST').'","'.$gL10n->get('SYS_SEPTEMBER').'","'.$gL10n->get('SYS_OCTOBER').'","'.$gL10n->get('SYS_NOVEMBER').'","'.$gL10n->get('SYS_DECEMBER').'","'.$gL10n->get('SYS_JAN').'","'.$gL10n->get('SYS_FEB').'","'.$gL10n->get('SYS_MAR').'","'.$gL10n->get('SYS_APR').'","'.$gL10n->get('SYS_MAY').'","'.$gL10n->get('SYS_JUN').'","'.$gL10n->get('SYS_JUL').'","'.$gL10n->get('SYS_AUG').'","'.$gL10n->get('SYS_SEP').'","'.$gL10n->get('SYS_OCT').'","'.$gL10n->get('SYS_NOV').'","'.$gL10n->get('SYS_DEC').'");
-                var gTranslations = new Array("'.$gL10n->get('SYS_MON').'","'.$gL10n->get('SYS_TUE').'","'.$gL10n->get('SYS_WED').'","'.$gL10n->get('SYS_THU').'","'.$gL10n->get('SYS_FRI').'","'.$gL10n->get('SYS_SAT').'","'.$gL10n->get('SYS_SUN').'","'.$gL10n->get('SYS_TODAY').'","'.$gL10n->get('SYS_LOADING_CONTENT').'");
         	--></script>';
             
             $html .= $headerContent;

@@ -235,7 +235,7 @@ class HtmlForm extends HtmlFormBasic
 			}
 		}
         
-        if(strlen($helpTextIdLabel) > 0)
+        if($helpTextIdLabel != null)
         {
             $htmlHelpIcon = $this->getHelpTextIcon($helpTextIdLabel);
         }
@@ -1286,26 +1286,35 @@ class HtmlForm extends HtmlFormBasic
 	 */
 	protected function getHelpTextIcon($textId)
 	{
-        global $g_root_path;
+        global $g_root_path, $gL10n, $gProfileFields;
         $parameters = null;
+        $text       = null;
         
         if(is_array($textId))
         {
             $parameters = 'message_id='.$textId[0].'&amp;message_var1='.$textId[1];
+            if($textId[0] == 'user_field_description')
+            {
+                $text = $gProfileFields->getProperty($textId[1], 'usf_description');
+            }
+            else
+            {
+                $text = $gL10n->get($textId[0], $textId[1]);
+            }
         }
         else
         {
             if(strlen($textId) > 0)
             {
                 $parameters = 'message_id='.$textId;
+                $text = $gL10n->get($textId);
             }
         }
         
         if($parameters != null)
         {
-            return '<a class="admIconHelpLink" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
-                                   onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?'.$parameters.'\',this)" 
-                                   onmouseout="ajax_hideTooltip()" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
+            return '<a title="" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true" 
+                        data-toggle="tooltip" data-html="true" data-original-title="'.$text.'"><img src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
         }
 	}
     
