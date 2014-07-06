@@ -122,15 +122,11 @@ if (isset($comment_result))
     && $getModeration == 0)
     {
         // Bei Kommentierungsrechten, wird der Link zur Kommentarseite angezeigt...
-        $load_url = $g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$getGbcId;
-
         echo '
         <div class="admCommentLink">
-            <span class="admIconTextLink">
-                <a href="'.$load_url.'"><img src="'. THEME_PATH. '/icons/comment_new.png" 
-                alt="'.$gL10n->get('GBO_WRITE_COMMENT').'" title="'.$gL10n->get('GBO_WRITE_COMMENT').'" /></a>
-                <a href="'.$load_url.'">'.$gL10n->get('GBO_WRITE_COMMENT').'</a>
-            </span>
+            <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?id='.$getGbcId.'"><img 
+                src="'. THEME_PATH. '/icons/comment_new.png" alt="'.$gL10n->get('GBO_WRITE_COMMENT').'"
+                title="'.$gL10n->get('GBO_WRITE_COMMENT').'" />'.$gL10n->get('GBO_WRITE_COMMENT').'</a>
         </div>';
     }
 

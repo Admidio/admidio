@@ -88,7 +88,7 @@ $page->addHtml($gNavigation->getHtmlBackButton());
 $page->addHeadline($headline);
 
 // show form
-$form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$getFolderId, $page, true);
+$form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=1&amp;folder_id='.$getFolderId, $page, 'default', true);
 $form->addDescription($gL10n->get('DOW_UPLOAD_TO_FOLDER', $parentFolderName));
 $form->addFileUpload('add_files', $gL10n->get('DOW_CHOOSE_FILE'), ($gPreferences['max_file_upload_size'] * 1024), true, $gL10n->get('DOW_UPLOAD_ANOTHER_FILE'), false);
 $form->addSubmitButton('btn_upload', $gL10n->get('SYS_UPLOAD'), THEME_PATH.'/icons/page_white_upload.png', null, ' col-sm-offset-3');

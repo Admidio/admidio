@@ -159,13 +159,6 @@ class ModuleMenu
 	    }
 	    
 	    // add html of menu item
-/*		$html .= '<li id="'.$menuEntry['id'].'">
-		              <span class="admIconTextLink">
-				          <a href="'.$menuEntry['link'].'"><img 
-				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" /></a>
-				          <a href="'.$menuEntry['link'].'">'.$menuEntry['text'].'</a>
-				      </span>
-				  </li>';*/
 		$html .= '<li id="'.$menuEntry['id'].'">
 				          <a class="navbar-link" href="'.$menuEntry['link'].'"><img 
 				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" />'.$menuEntry['text'].'</a>
@@ -270,7 +263,6 @@ class ModuleMenu
                 </div>
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav" id="'.$this->id.'">';
-                //<ul class="admIconTextLinkList">';
 
 		$linkCnt = 0;		
 

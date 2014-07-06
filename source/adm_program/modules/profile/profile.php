@@ -345,11 +345,9 @@ $page->addHtml('
                                                     if($gPreferences['profile_show_map_link'] && strlen($user->getValue('ADDRESS')) > 0 
                                                     && (strlen($user->getValue('POSTCODE')) > 0 || strlen($user->getValue('CITY')) > 0))
                                                     {
-                                                        $page->addHtml('<span class="admIconTextLink">
-                                                            <a href="'. $map_url. '" target="_blank"><img
-                                                                src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_MAP').'" /></a>
-                                                            <a href="'. $map_url. '" target="_blank">'.$gL10n->get('SYS_MAP').'</a>
-                                                        </span>');
+                                                        $page->addHtml('
+                                                        <a class="icon-text-link" href="'. $map_url. '" target="_blank"><img src="'. THEME_PATH. '/icons/map.png" 
+                                                            alt="'.$gL10n->get('SYS_MAP').'" />'.$gL10n->get('SYS_MAP').'</a>');
 
                                                         // show route link if its not the profile of CurrentUser
                                                         if($gCurrentUser->getValue('usr_id') != $user->getValue('usr_id'))
@@ -589,11 +587,8 @@ $page->addHtml('
                                 calPopup.setCssPrefix("calendar");
                         </script>
                         <div style="text-align: right;">
-                            <span class="admIconTextLink">
-                                <a rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1"><img 
-                                    src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" /></a>
-                                <a rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1">'.$gL10n->get('SYS_EDIT').'</a>
-                            </span>
+                            <a class="icon-text-link" rel="colorboxRoles" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1"><img 
+                                src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />'.$gL10n->get('SYS_EDIT').'</a>
                         </div>');
                     }
             $page->addHtml('</div>

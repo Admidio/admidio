@@ -141,7 +141,7 @@ if ($getMsgType == 'PM')
 	}
 
 	// show form
-	$form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, true);
+	$form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, 'default', true);
 	$form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
 	// Username to send the PM to
@@ -348,7 +348,7 @@ else
 
 
 	// show form
-	$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, true);
+	$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, 'default', true);
 	$form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 	if ($getUserId > 0)
 	{

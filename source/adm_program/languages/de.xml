@@ -30,6 +30,7 @@
     <text id="DOW_UPLOAD_ANOTHER_FILE" development="new" translation="todo">Weitere Datei hochladen</text>
     <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="todo">Die Datei konnte nicht hochgeladen werden oder die Seite wurde ungültig aufgerufen.\n\nVermutlich wurde die maximale Dateigröße für Uploads überschritten. Diese ist auf deinem Server auf %VAR1%B eingestellt.</text>
     <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="todo">Die Datei wird in den Ordner %VAR1_BOLD% hochgeladen.</text>
+    <text id="LST_CATEGORY_NO_LISTS" development="deleted" translation="todo"></text>
     <text id="LST_MEMBER_STATUS" development="new" translation="todo">Mitgliedsstatus</text>
     <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Standard: 25)</text>
     <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="todo">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</text>
@@ -46,6 +47,7 @@
     <text id="PRO_EXPORT_VCARD" development="new" translation="todo">vCard exportieren</text>
     <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="todo">Rollenzuordnung für %VAR1% %VAR2%</text>
     <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
+    <text id="SYS_FILTER" development="new" translation="todo">Filter</text>
     <text id="SYS_NO_DATA_FOUND" development="new" translation="todo">Es wurden keine Daten gefunden.</text>
     <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
@@ -54,6 +56,38 @@
     <text id="SYS_MANDATORY_FIELDS" development="new" translation="todo">Pflichtfelder</text>
     <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="todo">Die Online-Mitgliederverwaltung</text>
 	<text id="SYS_PM" development="new" translation="todo">Private Nachricht</text>
+    <text id="SYS_JANUARY" development="deleted" translation="todo">Januar</text>
+    <text id="SYS_FEBRUARY" development="deleted" translation="todo">Februar</text>
+    <text id="SYS_MARCH" development="deleted" translation="todo">März</text>
+    <text id="SYS_APRIL" development="deleted" translation="todo">April</text>
+    <text id="SYS_MAY" development="deleted" translation="todo">Mai</text>
+    <text id="SYS_JUNE" development="deleted" translation="todo">Juni</text>
+    <text id="SYS_JULY" development="deleted" translation="todo">Juli</text>
+    <text id="SYS_AUGUST" development="deleted" translation="todo">August</text>
+    <text id="SYS_SEPTEMBER" development="deleted" translation="todo">September</text>
+    <text id="SYS_OCTOBER" development="deleted" translation="todo">Oktober</text>
+    <text id="SYS_NOVEMBER" development="deleted" translation="todo">November</text>
+    <text id="SYS_DECEMBER" development="deleted" translation="todo">Dezember</text>
+    <text id="SYS_JAN" development="deleted" translation="todo" description="Abbr. for January">Jan</text>
+    <text id="SYS_FEB" development="deleted" translation="todo" description="Abbr. for February">Feb</text>
+    <text id="SYS_MAR" development="deleted" translation="todo" description="Abbr. for March">Mar</text>
+    <text id="SYS_APR" development="deleted" translation="todo" description="Abbr. for April">Apr</text>
+    <text id="SYS_MAY" development="deleted" translation="todo" description="Abbr. for May">Mai</text>
+    <text id="SYS_JUN" development="deleted" translation="todo" description="Abbr. for June">Jun</text>
+    <text id="SYS_JUL" development="deleted" translation="todo" description="Abbr. for July">Jul</text>
+    <text id="SYS_AUG" development="deleted" translation="todo" description="Abbr. for August">Aug</text>
+    <text id="SYS_SEP" development="deleted" translation="todo" description="Abbr. for September">Sep</text>
+    <text id="SYS_OCT" development="deleted" translation="todo" description="Abbr. for October">Okt</text>
+    <text id="SYS_NOV" development="deleted" translation="todo" description="Abbr. for November">Nov</text>
+    <text id="SYS_DEC" development="deleted" translation="todo" description="Abbr. for December">Dez</text>
+    <text id="SYS_MON" development="deleted" translation="todo" description="Abbr. for Monday">Mo</text>
+    <text id="SYS_TUE" development="deleted" translation="todo" description="Abbr. for Tuesday">Di</text>
+    <text id="SYS_WED" development="deleted" translation="todo" description="Abbr. for Wednesday">Mi</text>
+    <text id="SYS_THU" development="deleted" translation="todo" description="Abbr. for Thursday">Do</text>
+    <text id="SYS_FRI" development="deleted" translation="todo" description="Abbr. for Friday">Fr</text>
+    <text id="SYS_SAT" development="deleted" translation="todo" description="Abbr. for Saturday">Sa</text>
+    <text id="SYS_SUN" development="deleted" translation="todo" description="Abbr. for Monday">So</text>
+    <text id="SYS_TODAY" development="deleted" translation="todo">Heute</text>
 	<text id="PMS_MESSAGE" development="new" translation="todo">Private Nachrichten</text>
 	<text id="PMS_SEND_PM" development="new" translation="todo">Private Nachricht senden</text>
 	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Nachricht wurde gesendet an:</text>
@@ -283,38 +317,6 @@
     <text id="SYS_LOADING_CONTENT" development="new" translation="todo">Inhalt wird geladen ...</text>
     <text id="SYS_REGISTRATION_SAVED" development="new" translation="todo">Deine Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Deine Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung wirst du per E-Mail benachrichtigt.</text>
     <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="todo">RSS-Feed für %VAR1%</text>
-    <text id="SYS_JANUARY" development="new" translation="todo">Januar</text>
-    <text id="SYS_FEBRUARY" development="new" translation="todo">Februar</text>
-    <text id="SYS_MARCH" development="new" translation="todo">März</text>
-    <text id="SYS_APRIL" development="new" translation="todo">April</text>
-    <text id="SYS_MAY" development="new" translation="todo">Mai</text>
-    <text id="SYS_JUNE" development="new" translation="todo">Juni</text>
-    <text id="SYS_JULY" development="new" translation="todo">Juli</text>
-    <text id="SYS_AUGUST" development="new" translation="todo">August</text>
-    <text id="SYS_SEPTEMBER" development="new" translation="todo">September</text>
-    <text id="SYS_OCTOBER" development="new" translation="todo">Oktober</text>
-    <text id="SYS_NOVEMBER" development="new" translation="todo">November</text>
-    <text id="SYS_DECEMBER" development="new" translation="todo">Dezember</text>
-    <text id="SYS_JAN" development="new" translation="todo" description="Abbr. for January">Jan</text>
-    <text id="SYS_FEB" development="new" translation="todo" description="Abbr. for February">Feb</text>
-    <text id="SYS_MAR" development="new" translation="todo" description="Abbr. for March">Mar</text>
-    <text id="SYS_APR" development="new" translation="todo" description="Abbr. for April">Apr</text>
-    <text id="SYS_MAY" development="new" translation="todo" description="Abbr. for May">Mai</text>
-    <text id="SYS_JUN" development="new" translation="todo" description="Abbr. for June">Jun</text>
-    <text id="SYS_JUL" development="new" translation="todo" description="Abbr. for July">Jul</text>
-    <text id="SYS_AUG" development="new" translation="todo" description="Abbr. for August">Aug</text>
-    <text id="SYS_SEP" development="new" translation="todo" description="Abbr. for September">Sep</text>
-    <text id="SYS_OCT" development="new" translation="todo" description="Abbr. for October">Okt</text>
-    <text id="SYS_NOV" development="new" translation="todo" description="Abbr. for November">Nov</text>
-    <text id="SYS_DEC" development="new" translation="todo" description="Abbr. for December">Dez</text>
-    <text id="SYS_MON" development="new" translation="todo" description="Abbr. for Monday">Mo</text>
-    <text id="SYS_TUE" development="new" translation="todo" description="Abbr. for Tuesday">Di</text>
-    <text id="SYS_WED" development="new" translation="todo" description="Abbr. for Wednesday">Mi</text>
-    <text id="SYS_THU" development="new" translation="todo" description="Abbr. for Thursday">Do</text>
-    <text id="SYS_FRI" development="new" translation="todo" description="Abbr. for Friday">Fr</text>
-    <text id="SYS_SAT" development="new" translation="todo" description="Abbr. for Saturday">Sa</text>
-    <text id="SYS_SUN" development="new" translation="todo" description="Abbr. for Monday">So</text>
-    <text id="SYS_TODAY" development="new" translation="todo">Heute</text>
 </version>
 <version id="2.2.0" translator="Markus Faßbender">
     <!-- Phrases only in Announcementmodule -->
@@ -633,7 +635,6 @@
     <text id="LST_ACTIVE_MEMBERS" development="new" translation="todo">Aktive Mitglieder</text>
     <text id="LST_ACTIVE_ROLES" development="new" translation="todo">Übersicht der aktiven Rollen</text>
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="todo">Weitere Spalte hinzufügen</text>
-    <text id="LST_CATEGORY_NO_LISTS" development="new" translation="todo">Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="todo">Möchtest du eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="todo">Wähle eine Rolle aus, von der du die konfigurierte Mitgliederliste anzeigen möchtest.</text>
     <text id="LST_COLUMN" development="new" translation="todo">Spalte</text>    

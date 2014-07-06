@@ -149,7 +149,7 @@ a:hover, a:active {
 
 /* Settings for all icons */
 
-.admIconTextLink img, .menu img, .admIconLink img, .admIconHelpLink img, .admIconInformation, .btn img {
+.admIconTextLink img, .menu img, .icon-link img, .admIconHelpLink img, .admIconInformation, .btn img {
     border: none;
     vertical-align: text-top;
     margin-left: 1px;
@@ -244,12 +244,20 @@ select.form-control {
     width: auto;
 }
 
+select[multiple] {
+    min-width: 250px;
+}
+
 .form-control-small {
     width: 50%;
 }
 
-.input-group.date, input[type="number"] {
-    width: 150px;
+input[type="date"] {
+    width: 100px !important;
+}
+
+input[type="number"] {
+    width: 150px !important;
 }
 
 .admSelectBoxSmall, /*div.dataTables_filter input, div.dataTables_length select*/ {
@@ -318,7 +326,7 @@ select.form-control {
     border: 1px solid #7d7d7d;
 }
 
-.panel-default .panel-heading {
+.panel-default > .panel-heading {
     color: #333333;
     font-weight: bold;
     letter-spacing: 0.1em;
@@ -357,41 +365,32 @@ select.form-control {
     border-color: transparent;
 }
 
-.panel-primary .panel-heading {
+.panel-primary > .panel-heading {
     color: #333333;
-    background-color: transparent;
-	min-height: 20px;
     font-size: 12pt;
     font-weight: bold;
+    letter-spacing: 0.1em;
+    background-color: transparent;
     border-bottom: 2px solid #449ba6;
+}
+
+.panel-primary > .panel-body {
+    padding: 15px 0px;
 }
 
 .admBoxHighlighted .admBoxHead {
     color: #FF9C00;
 }
 
-.panel-heading-left img {
-    margin-right: 5px;
-    vertical-align: bottom;
+.panel-heading-icon {
+    margin-right: 8px;
+    vertical-align: middle;
     border-width: 0px;
-}
-/*
-.admBoxHeadLeft{
-    float: left;
-    display: block;
-}*/
-
-.panel-heading-right{
-    float: right;
 }
 
 .panel-footer .admCreateEditInformations {
     margin-top: 0px;
 }
-/*
-.admBoxBody {
-    clear: both;
-}*/
 
 /* Layout for tables that will be used in lists or download module */
 
@@ -487,13 +486,13 @@ select.form-control {
     display: block;
 }
 
-.admMenuLargeIcons li .admIconTextLink img {
+.admMenuLargeIcons li .icon-text-link img {
     width: 32px;
     height: 32px;
     vertical-align: middle !important;
 }
 
-.admMenuLargeIcons li .admIconTextLink a:link, .admMenuLargeIcons li .admIconTextLink a:visited {
+.admMenuLargeIcons li .icon-text-link:link, .admMenuLargeIcons li .icon-text-link:visited {
     color: #409099;
     text-decoration: none;
 }

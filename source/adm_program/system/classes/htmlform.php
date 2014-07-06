@@ -47,21 +47,49 @@ class HtmlForm extends HtmlFormBasic
      *  @param $htmlPage         Optional a HtmlPage object that will be used to add javascript code 
      *                           or files to the html output page.
      *  @param $enableFileUpload Set specific parameters that are necessary for file upload with a form
-     *  @param $labelVertical    If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
-     *                           Otherwise (default) the label will be displayed in front of the control.
+     *  @param $type             Set the form type. Every type has some special features:
+     *                           default  : A form that can be used to edit and save data of a database table. This form
+     *                                      has a horizontal orientation.
+     *                           vertical : A form that can be used to edit and save data but has a vertical orientation.
+     *                                      The label is positioned above the form element.
+     *                           filter   : A form that should be used to filter data in a script. The form content will
+     *                                      be send with the 'GET' method and this form should not get a default focus.
      *  @param $class            Optional an additional css classname. The class @b form-horizontal
      *                           is set as default and need not set with this parameter.
      */
-    public function __construct($id, $action, $htmlPage = null, $enableFileUpload = false, $labelVertical = false, $class = null)
+    public function __construct($id, $action, $htmlPage = null, $type = 'default', $enableFileUpload = false, $class = null)
     {        
-        
-        parent::__construct($action, $id, 'post');
+        // filter forms should send the data as GET
+        if($type == 'filter')
+        {
+            parent::__construct($action, $id, 'get');
+        }
+        else
+        {
+            parent::__construct($action, $id, 'post');            
+        }
+
+        $this->labelVertical         = false;
+        $this->flagMandatoryFields   = false;
+        $this->flagFieldListOpen     = false;
+        $this->countFields           = 0;
+        $this->datepickerInitialized = false;
         
         // set specific Admidio css form class
         $this->addAttribute('role', 'form');
-        if($labelVertical == false)
+        
+        if($type == 'default')
         {
-            $class .= ' form-horizontal';
+            $class .= ' form-horizontal form-dialog';
+        }
+        elseif($type == 'vertical')
+        {
+            $this->labelVertical = true;
+            $class .= ' form-dialog';
+        }
+        elseif($type == 'filter')
+        {
+            $class .= ' form-horizontal form-filter';
         }
         
         if(strlen($class) > 0)
@@ -74,26 +102,26 @@ class HtmlForm extends HtmlFormBasic
         {
             $this->addAttribute('enctype', 'multipart/form-data');
         }        
-        		
-        $this->flagMandatoryFields = false;
-        $this->flagFieldListOpen   = false;
-        $this->countFields         = 0;
-        $this->labelVertical       = $labelVertical;
-        $this->datepickerInitialized = false;
-        
+
         if(is_object($htmlPage))
         {
             $this->htmlPage =& $htmlPage;
-    		// first field of form should get focus
-            $this->htmlPage->addJavascript('$("form:first *:input[type!=hidden]:first").focus();', true);
         }
-        else
+        
+		// first field of form should get focus
+        if($type != 'filter')
         {
-    		// first field of form should get focus
-    		$js = '<script type="text/javascript"><!--
-    			       $(document).ready(function() { $("form:first *:input[type!=hidden]:first").focus();});
-    			   //--></script>';
-    		$this->addHtml($js);            
+            if(is_object($htmlPage))
+            {
+                $this->htmlPage->addJavascript('$(".form-dialog:first *:input:enabled:first").focus();', true);
+            }
+            else
+            {
+        		$js = '<script type="text/javascript"><!--
+        			       $(document).ready(function() { $(".form-dialog:first *:input:enabled:first").focus();});
+        			   //--></script>';
+        		$this->addHtml($js);
+            }
         }
     }
     
@@ -1023,14 +1051,7 @@ class HtmlForm extends HtmlFormBasic
         
         $this->countElements++;
 
-        if($type == 'date')
-        {
-            $attributes = array('class' => 'form-control admDateInput');
-        }
-        else
-        {
-            $attributes = array('class' => 'form-control');
-        }
+        $attributes = array('class' => 'form-control');
 
         // set max input length
         if($maxLength > 0)
@@ -1072,10 +1093,9 @@ class HtmlForm extends HtmlFormBasic
                     $("input[type=\'date\']").datepicker({
                         language: "'.$gPreferences['system_language'].'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
-                        '.$datepickerOptions.'
-                        todayHighlight: "true",
+                        '.$datepickerOptions.'todayHighlight: "true",
                         autoclose: "true"
-                    })';
+                    });';
                 $this->datepickerInitialized = true;
             }
 
@@ -1095,20 +1115,7 @@ class HtmlForm extends HtmlFormBasic
         
         // now create html for the field
         $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
-        
-        if($type == 'date')
-        {
-            // special html for the datepicker
-            $this->addHtml('<div class="input-group date">');
-        }
-
         $this->addInput($type, $id, $id, $value, $attributes);
-
-        if($type == 'date')
-        {
-            // special html for the datepicker
-            $this->addHtml('<span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span></div>');
-        }
         $this->closeControlStructure($helpTextIdInline);
     }
     
@@ -1164,14 +1171,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function closeGroupBox()
     {
-        if($this->labelVertical)
-        {
-            $this->addHtml('</div>');            
-        }
-        else
-        {
-            $this->addHtml('</div></div>');
-        }
+        $this->addHtml('</div></div>');
     }
     
     /** Creates a html structure for a form field. This structure contains the label

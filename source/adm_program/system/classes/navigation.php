@@ -119,11 +119,9 @@ class Navigation
         // if no page was found then show the default homepage
         if(strlen($url) > 0)
         {
-            $html = '<span class="admIconTextLink">
-                <a href="'.$url.'"><img
-                    src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-                <a href="'.$url.'">'.$gL10n->get('SYS_BACK').'</a>
-            </span>';
+            $html = '
+            <a class="icon-text-link" href="'.$url.'"><img src="'. THEME_PATH. '/icons/back.png" 
+                alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>';
 
         }
         

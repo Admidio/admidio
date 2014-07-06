@@ -70,8 +70,13 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
+if($gPreferences['lists_hide_overview_details'] == 0)
+{
+    $page->addJavascript('$(".collapse").collapse();', true);
+}
+
 $page->addJavascript('
-	$(".admSelectBoxListSelection").change(function () {
+	$(".panel-collapse select").change(function () {
 		elementId = $(this).attr("id");
 		roleId    = elementId.substr(elementId.search(/_/)+1);
 
@@ -115,7 +120,7 @@ if($lists->getCategorySelection() == 1 || $gCurrentUser->manageRoles())
 }
 
 $previousCategoryId   = 0;
-$countCategoryEntries = 0;
+
 
 //Get Lists
 $getStart = $lists->getStartElement();
@@ -123,6 +128,21 @@ $listsResult = $lists->getDataSet($getStart);
 
 //Get list configurations
 $listConfigurations = $lists->getListConfigurations();
+
+foreach($listConfigurations as &$rowConfigurations)
+{
+    if($rowConfigurations[2] == 0)
+    {
+       $rowConfigurations[2] = $gL10n->get('LST_YOUR_LISTS');
+    }
+    else
+    {
+       $rowConfigurations[2] = $gL10n->get('LST_GENERAL_LISTS');                        
+    }
+}
+
+// add list item for own list
+$listConfigurations[] = array('mylist', $gL10n->get('LST_CREATE_OWN_LIST'), $gL10n->get('LST_CONFIGURATION'));
 
 // Rollenobjekt anlegen
 $role = new TableRoles($gDb);
@@ -136,192 +156,110 @@ foreach($listsResult['recordset'] as $row)
     if($previousCategoryId != $role->getValue('cat_id'))
     {
         //close only if previous category is not 0
-        if($previousCategoryId!=0)
+        if($previousCategoryId != 0)
         {
-            if($countCategoryEntries == 0)
-            {
-                $page->addHtml($gL10n->get('LST_CATEGORY_NO_LISTS'));
-            }
-            $page->addHtml('</div></div>');
+            $page->addHtml('</div></div></div>');
         }
-        $page->addHtml('<div class="admBoxLayout">
-            <div class="admBoxHead">'. $role->getValue('cat_name'). '</div>
-            <div class="admBoxBody">');
+        $page->addHtml('<div class="panel panel-primary">
+            <div class="panel-heading">'. $role->getValue('cat_name'). '</div>
+            <div class="panel-body">
+                <div class="panel-group" id="accordion_'.$role->getValue('cat_id').'">');
         $previousCategoryId = $role->getValue('cat_id');
-        $countCategoryEntries = 0;
     }
 
-    if($countCategoryEntries > 0)
-    {
-        $page->addHtml('<hr />');
-    }
     $page->addHtml('
-    <div class="admListsItem">');
-        //Dreieck zum ein und ausblenden der Details
-        if($gPreferences['lists_hide_overview_details']==1)
-        {
-            $icon = THEME_PATH. '/icons/triangle_close.gif';
-            $iconText = $gL10n->get('SYS_FADE_IN');
-        }
-        else
-        {
-            $icon = THEME_PATH. '/icons/triangle_open.gif';
-            $iconText = $gL10n->get('SYS_HIDE');
-        }
-        $page->addHtml('<a class="admIconLink" href="javascript:showHideBlock(\'admRoleDetails'.$role->getValue('rol_id').'\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')">
-            <img id="admRoleDetails'.$role->getValue('rol_id').'Image"  src="'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" /></a>');
+    <div class="panel panel-default" id="admRoleDetails'.$role->getValue('rol_id').'">
+        <div class="panel-heading row">
+            <div class="col-sm-9">
+                <h4 class="panel-title">
+                    <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_'.$role->getValue('cat_id').'" href="#collapse_'.$role->getValue('rol_id').'">
+                        '. $role->getValue('rol_name'). '</a></h4>
+            </div>
+            <div class="col-sm-3 text-right">');
+                // send a mail to all role members
+                if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
+                {
+                    $page->addHtml('
+                    <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?rol_id='.$role->getValue('rol_id').'"><img
+                        src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>&nbsp;');
+                }
+        		
+        		// show link to export vCard if user is allowed to see members and the role has members
+                if($row['num_members'] > 0 || $row['num_leader'] > 0)
+                {
+                    $page->addHtml('<a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
+                                    src="'. THEME_PATH. '/icons/vcard.png"
+                                    alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
+                                    title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'" /></a>');
+                }
+        
+                // link to assign or remove members if you are allowed to do it
+                if($role->allowedToAssignMembers($gCurrentUser))
+                {
+                    $page->addHtml('
+                    <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img 
+                        src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
+                }
+        
+                // edit roles of you are allowed to assign roles
+                if($gCurrentUser->manageRoles())
+                {
+                    $page->addHtml('
+                    <a class="admIconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
+                        src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('ROL_EDIT_ROLE').'" title="'.$gL10n->get('ROL_EDIT_ROLE').'" /></a>');
+                }
+            $page->addHtml('</div>
+        </div>        
+        <div id="collapse_'.$role->getValue('rol_id').'" class="panel-collapse collapse">
+            <div class="panel-body" id="admRoleDetails'.$role->getValue('rol_id').'">');    
+                // create a static form
+                $form = new HtmlForm('plugin-login-static-form', null);
 
-        // show link if user is allowed to see members and the role has members
-        if($row['num_members'] > 0 || $row['num_leader'] > 0)
-        {
-            $page->addHtml('<a class="admBigFont admListsLink" href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '">'. $role->getValue('rol_name'). '</a>');
-        }
-        else
-        {
-            $page->addHtml('<strong class="admBigFont admListsLink">'. $role->getValue('rol_name'). '</strong>');
-        }
-
-        // send a mail to all role members
-        if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
-        {
-            $page->addHtml('
-            <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?rol_id='.$role->getValue('rol_id').'"><img
-                src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>');
-        }
-		
-		// show link to export vCard if user is allowed to see members and the role has members
-        if($row['num_members'] > 0 || $row['num_leader'] > 0)
-        {
-            $page->addHtml('<a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/profile/profile_function.php?mode=8&amp;rol_id='. $role->getValue('rol_id').'"><img
-                            src="'. THEME_PATH. '/icons/vcard.png"
-                            alt="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'"
-                            title="'.$gL10n->get('PRO_EXPORT_VCARD_FROM_VAR', $role->getValue('rol_name')).'" /></a>');
-        }
-
-        // link to assign or remove members if you are allowed to do it
-        if($role->allowedToAssignMembers($gCurrentUser))
-        {
-            $page->addHtml('
-            <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$role->getValue('rol_id').'"><img 
-                src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>');
-        }
-
-        // edit roles of you are allowed to assign roles
-        if($gCurrentUser->manageRoles())
-        {
-            $page->addHtml('
-            <a class="admIconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
-                src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('ROL_EDIT_ROLE').'" title="'.$gL10n->get('ROL_EDIT_ROLE').'" /></a>');
-        }
-    $page->addHtml('</div>
+                // show combobox with lists if user is allowed to see members and the role has members
+                if($row['num_members'] > 0 || $row['num_leader'] > 0)
+                {                
+                    $form->addSelectBox('admSelectRoleList_'.$role->getValue('rol_id'), $gL10n->get('LST_SHOW_LIST'), $listConfigurations, FIELD_DEFAULT, null, true);
+                }
+        
+                if(strlen($role->getValue('rol_description')) > 0)
+                {
+                    $form->addStaticControl('list_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
+                }
+        
+                if(strlen($role->getValue('rol_start_date')) > 0)
+                {
+                    $form->addStaticControl('list_date_from_to', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
+                }
     
-    <div id="admRoleDetails'.$role->getValue('rol_id').'" ');
-        if($gPreferences['lists_hide_overview_details']==1)
-        {
-            $page->addHtml(' style="display: none;" '); 
-        }
-        $page->addHtml(' class="admFieldViewList">');
-
-        // show combobox with lists if user is allowed to see members and the role has members
-        if($row['num_members'] > 0 || $row['num_leader'] > 0)
-        {
-            $page->addHtml('
-            <div class="admFieldRow">
-                <div class="admFieldLabel">'.$gL10n->get('LST_SHOW_LIST').':</div>
-                <div class="admFieldElement">
-                    <select class="admSelectBoxSmall admSelectBoxListSelection" id="admSelectRoleList_'.$role->getValue('rol_id').'">
-                        <option value="" selected="selected">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>');
-                        
-                        // alle globalen Listenkonfigurationen auflisten
-                        $list_global_flag = '';
-                        
-                        foreach($listConfigurations as $rowConfigurations)
-                        {
-                            if($list_global_flag != $rowConfigurations['lst_global'])
-                            {
-                                if($rowConfigurations['lst_global'] == 0)
-                                {
-                                    $page->addHtml('<optgroup label="'.$gL10n->get('LST_YOUR_LISTS').'">');
-                                }
-                                else
-                                {
-                                    if($list_global_flag > 0)
-                                    {
-                                        $page->addHtml('</optgroup>');
-                                    }
-                                    $page->addHtml('<optgroup label="'.$gL10n->get('LST_GENERAL_LISTS').'">');
-                                }
-                                $list_global_flag = $rowConfigurations['lst_global'];
-                            }
-                            $page->addHtml('<option value="'.$rowConfigurations['lst_id'].'">'.$rowConfigurations['lst_name'].'</option>');
-                        }
-                        
-                        // Link zu den eigenen Listen setzen
-                        $page->addHtml('</optgroup>
-                        <optgroup label="'.$gL10n->get('LST_CONFIGURATION').'">
-                            <option value="mylist">'.$gL10n->get('LST_CREATE_OWN_LIST').'</option>
-                        </optgroup>
-                    </select>
-                </div>
-            </div>');
-        }
-
-        if(strlen($role->getValue('rol_description')) > 0)
-        {
-            $page->addHtml('
-            <div class="admFieldRow">
-                <div class="admFieldLabel">'.$gL10n->get('SYS_DESCRIPTION').':</div>
-                <div class="admFieldElement">'.$role->getValue('rol_description').'</div>
-            </div>');
-        }
-
-        if(strlen($role->getValue('rol_start_date')) > 0)
-        {
-            $page->addHtml('
-            <div class="admFieldRow">
-                <div class="admFieldLabel">'.$gL10n->get('SYS_PERIOD').':</div>
-                <div class="admFieldElement">'.$gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])).'</div>
-            </div>');
-        }
-        if($role->getValue('rol_weekday') > 0
-        || strlen($role->getValue('rol_start_time')) > 0 )
-        {
-            $page->addHtml('
-            <div class="admFieldRow">
-                <div class="admFieldLabel">'.$gL10n->get('DAT_DATE').':</div>
-                <div class="admFieldElement">');
-                        if($role->getValue('rol_weekday') > 0)
-                        {
-                            $page->addHtml(DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ');
-                        }
-                        if(strlen($role->getValue('rol_start_time')) > 0)
-                        {
-                            $page->addHtml($gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time'])));
-                        }
-                $page->addHtml('</div>
-            </div>');
-        }
-        //Treffpunkt
-        if(strlen($role->getValue('rol_location')) > 0)
-        {
-            $page->addHtml('
-            <div class="admFieldRow">
-                <div class="admFieldLabel">'.$gL10n->get('SYS_LOCATION').':</div>
-                <div class="admFieldElement">'.$role->getValue('rol_location').'</div>
-            </div>');
-        }
-        //Teinehmer
-        $page->addHtml('
-        <div class="admFieldRow">
-            <div class="admFieldLabel">'.$gL10n->get('SYS_PARTICIPANTS').':</div>
-            <div class="admFieldElement">'.$row['num_members']);
+                if($role->getValue('rol_weekday') > 0
+                || strlen($role->getValue('rol_start_time')) > 0 )
+                {
+                    if($role->getValue('rol_weekday') > 0)
+                    {
+                        $html = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
+                    }
+                    if(strlen($role->getValue('rol_start_time')) > 0)
+                    {
+                        $html = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
+                    }
+                    $form->addStaticControl('list_date', $gL10n->get('DAT_DATE'), $html);
+                }
+    
+                //Treffpunkt
+                if(strlen($role->getValue('rol_location')) > 0)
+                {
+                    $form->addStaticControl('list_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
+                }
+    
+                // add count of participants to role
+                $html = $row['num_members'];
                 if($role->getValue('rol_max_members') > 0)
                 {
-                    $page->addHtml('&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members')));
+                    $html .= '&nbsp;'.$gL10n->get('LST_MAX', $role->getValue('rol_max_members'));
                 }
                 if($lists->getActiveRole() && $row['num_former'] > 0)
                 {
-                    // Anzahl Ehemaliger anzeigen
+                    // show former members
                     if($row['num_former'] == 1)
                     {
                         $textFormerMembers = $gL10n->get('SYS_FORMER');
@@ -331,58 +269,39 @@ foreach($listsResult['recordset'] as $row)
                         $textFormerMembers = $gL10n->get('SYS_FORMER_PL');
                     }
                     
-                    $page->addHtml('&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row['num_former'].' '.$textFormerMembers.'</a>) ');
+                    $html .= '&nbsp;&nbsp;(<a href="'.$g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $role->getValue('rol_id'). '&amp;show_members=1">'.$row['num_former'].' '.$textFormerMembers.'</a>) ';
                 }
+                $form->addStaticControl('list_participants', $gL10n->get('SYS_PARTICIPANTS'), $html);
+        
+                //Leiter
+                if($row['num_leader']>0)
+                {
+                    $form->addStaticControl('list_leader', $gL10n->get('SYS_LEADER'), $row['num_leader']);
+                }
+        
+                //Beitrag
+                if(strlen($role->getValue('rol_cost')) > 0)
+                {
+                    $form->addStaticControl('list_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost').' '.$gPreferences['system_currency']);
+                }
+        
+                //Beitragszeitraum
+                if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
+                {
+                    $form->addStaticControl('list_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods($role->getValue('rol_cost_period')));
+                }
+                
+                $page->addHtml($form->show(false));
             $page->addHtml('</div>
-        </div>');
-
-        //Leiter
-        if($row['num_leader']>0)
-        {
-            $page->addHtml('
-            <div class="admFieldRow">
-                <div class="admFieldLabel">'.$gL10n->get('SYS_LEADER').':</div>
-                <div class="admFieldElement">'.$row['num_leader'].'</div>
-            </div>');
-        }
-
-        //Beitrag
-        if(strlen($role->getValue('rol_cost')) > 0)
-        {
-            $page->addHtml('
-            <div class="admFieldRow">
-                <div class="admFieldLabel">'.$gL10n->get('SYS_CONTRIBUTION').':</div>
-                <div class="admFieldElement">'.$role->getValue('rol_cost').' '.$gPreferences['system_currency'].'</div>
-            </div>');
-        }
-
-        //Beitragszeitraum
-        if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
-        {
-            $page->addHtml('
-            <div class="admFieldRow">
-                <div class="admFieldLabel">'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</div>
-                <div class="admFieldElement">'.$role->getCostPeriods($role->getValue('rol_cost_period')).'</div>
-            </div>');
-        }
-
-    $page->addHtml('</div>');
-    $countCategoryEntries++;  
+        </div>
+    </div>');
 }
 
-// show message if no role was found
-if($countCategoryEntries == 0)
-{
-    $page->addHtml($gL10n->get('LST_CATEGORY_NO_LISTS'));
-}
-else
-{
-    $page->addHtml('</div></div>');
+$page->addHtml('</div></div></div>');
 
-    // If neccessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $lists->getCatId(). '&category-selection='. $lists->getCategorySelection(). '&active_role='.$lists->getActiveRole();
-    $page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, TRUE));
-}
+// If neccessary show links to navigate to next and previous recordsets of the query
+$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $lists->getCatId(). '&category-selection='. $lists->getCategorySelection(). '&active_role='.$lists->getActiveRole();
+$page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, TRUE));
 
 $page->addHtml('</div>');
 $page->show();

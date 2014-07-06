@@ -109,12 +109,12 @@ else
         $announcement->setArray($row);
         $page->addHtml('
         <div class="panel panel-primary" id="ann_'.$announcement->getValue('ann_id').'">
-            <div class="panel-heading">
-                <span class="panel-heading-left">
-                    <img src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
+            <div class="panel-heading row">
+                <div class="col-sm-8">
+                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
                     $announcement->getValue('ann_headline'). '
-                </span>
-                <span class="panel-heading-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'&nbsp;');
+                </div>
+                <div class="col-sm-4 text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'&nbsp;');
                     
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if($gCurrentUser->editAnnouncements())
@@ -135,7 +135,7 @@ else
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                         }    
                     }
-                $page->addHtml('</span>
+                $page->addHtml('</div>
             </div>
 
             <div class="panel-body">'.

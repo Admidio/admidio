@@ -9,9 +9,9 @@
  * Parameters:
  *
  * usr_id    : If set only show the profile field history of that user
- * date_from : is set to actual date, 
+ * filter_date_from : is set to actual date, 
  *             if no date information is delivered
- * date_to   : is set to 31.12.9999, 
+ * filter_date_to   : is set to 31.12.9999, 
  *             if no date information is delivered
  *
  *****************************************************************************/
@@ -21,8 +21,8 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date', '1970-01-01', false);
-$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date', DATE_NOW, false);
+$getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', '1970-01-01', false);
+$getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', DATE_NOW, false);
 
 // create a user object from the user parameter
 $user = new User($gDb, $gProfileFields, $getUserId);
@@ -52,7 +52,7 @@ if ($gPreferences['profile_log_edit_fields'] == 0
 // add page to navigation history
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// date_from and date_to can have differnt formats 
+// filter_date_from and filter_date_to can have differnt formats 
 // now we try to get a default format for intern use and html output
 $objDateFrom = new DateTimeExtended($getDateFrom, 'Y-m-d', 'date');
 if($objDateFrom->valid() == false)
@@ -139,31 +139,6 @@ $page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js'
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/calendar/calendar-popup.js');
 $page->addCssFile(THEME_PATH.'/css/calendar.css');
 
-$page->addJavascript('
-	function send()
-	{
-		document.getElementById("admDateForm").action = "'.$g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId.'&date_from=" + $("#admDateFrom").val() + "&date_to=" + $("#admDateTo").val();
-		document.getElementById("admDateForm").submit();
-		//$("#admDateForm").action = "'.$g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId.'&date_from=" + $("#admDateFrom").val() + "&date_to=" + $("#admDateTo").val();
-		//$("#admDateForm").submit();
-	}
-				
-	function Datefilter () 
-	{ 
-		var field_error = "'.$gL10n->get('ECA_FIELD_ERROR').'";
-		
-		if (document.Formular.date_from.value == "" 
-			|| document.Formular.date_to.value == "") 
-		{
-			alert(field_error);
-			document.Formular.date_from.focus();
-			return false;
-		} 
-	}
-
-	var calPopup = new CalendarPopup("calendardiv");
-	calPopup.setCssPrefix("calendar");');
-
 // show back link
 $page->addHtml($gNavigation->getHtmlBackButton());
 
@@ -173,26 +148,29 @@ $page->addHeadline($headline);
  //Input for Startdate and Enddate
 
 $page->addHtml('
-<div class="admNavigationPath">
-	<form id="admDateForm" method="post">
-		<label for="admDateFrom" style="margin-left: 10px;">'.$gL10n->get('SYS_START').':</label>
-		<input type="text" id="admDateFrom" name="admDateFrom" size="10" maxlength="10" value="'.$dateFromHtml.'" />
-		<a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'admDateFrom\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'admDateFrom\',\'admDateTo\');"><img
-			src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-		<span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
-
-			&nbsp;&nbsp;
-
-		<label for="admDateTo">'.$gL10n->get('SYS_END').':</label>
-		<input type="text" id="admDateTo" name="admDateTo" size="10" maxlength="10" value="'.$dateToHtml.'" />
-		<a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'admDateTo\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'admDateFrom\',\'admDateTo\');"><img
-			src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-			
-			&nbsp;&nbsp;
-			
-		<input type="button" onclick="send()" value="OK"> 
-	</form> 
-</div>');
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-filter-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">'.$gL10n->get('SYS_FILTER').'</a>
+        </div>
+        
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
+            $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId, $page, 'filter', false, 'navbar-form navbar-left');
+            $form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, 10, FIELD_DEFAULT, 'date');
+            $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, 10, FIELD_DEFAULT, 'date');
+            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+            $page->addHtml($form->show(false));
+        $page->addHtml('</div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>');
 
 $table = new HtmlTable('profile_field_history_table', $page, true, true);
 

@@ -124,9 +124,8 @@ class Menu
 		{
             $html .= '
             <li id="lmenu_'.$this->id.'_' .$this->items[$key]['id'].'">
-                <span class="admIconTextLink'.$cssFontClass.'"><a href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
-                    alt="'.$this->items[$key]['text'].'" title="'.$this->items[$key]['text'].'" /></a>
-                    <a href="'.$this->items[$key]['link'].'">'.$this->items[$key]['text'].'</a></span>';
+                <a class="icon-text-link'.$cssFontClass.'" href="'.$this->items[$key]['link'].'"><img src="'.$this->items[$key]['icon'].'"
+                    alt="'.$this->items[$key]['text'].'" title="'.$this->items[$key]['text'].'" />'.$this->items[$key]['text'].'</a>';
 
 			if ($type == 'complex')
 			{

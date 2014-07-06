@@ -144,7 +144,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // show form
-$form = new HtmlForm('adm_form_folder_rights', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page, false, true);
+$form = new HtmlForm('adm_form_folder_rights', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page, 'vertical');
 $fieldMode = FIELD_DEFAULT;
 
 if($folder->getValue('fol_fol_id_parent') && $parentFolder->getValue('fol_public') == 0)

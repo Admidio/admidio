@@ -363,7 +363,7 @@ class ModuleLists extends Modules
         $configurations=array();
         while($row = $gDb->fetch_array($result))
         {
-            $configurations[]=$row;
+            $configurations[] = array($row['lst_id'], $row['lst_name'], $row['lst_global']);
         }        
         return $configurations;
     }
