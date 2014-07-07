@@ -1,6 +1,6 @@
 <?php
  /******************************************************************************
- * Photoresizer
+ * Show user photo
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,18 +8,19 @@
  *
  * Parameters:
  *
- * usr_id : die ID des Users dessen Bild angezeigt werden soll
+ * usr_id : Id of the user whose photo should be shown
  *
  *****************************************************************************/
+
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true, null, true);
-$user = new User($gDb, $gProfileFields, $getUserId);
 
+$user      = new User($gDb, $gProfileFields, $getUserId);
 $userPhoto = $user->getValue('usr_photo');
 
-// wurde kein Userbild gefunden oder hat der User nicht das recht das Bild zu sehen, dann immer das Default-Bild ausgeben
+// if user has no photo or current user is not allowed to see photos then show default photo
 if(strlen($userPhoto)==0 || !$gCurrentUser->viewProfile($user))
 {
     header('Content-Type: image/png');
@@ -30,7 +31,5 @@ else
 	header('Content-Type: image/jpeg');
     echo $userPhoto;
 }
-
-
 
 ?>

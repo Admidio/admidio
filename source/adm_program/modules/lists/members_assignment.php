@@ -285,7 +285,7 @@ else
     // show icon that leaders have no additional rights
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
     {
-        $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/info.png"
+        $htmlLeaderColumn .= '<img class="icon-information" src="'.THEME_PATH.'/icons/info.png"
             alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />';
     }
 
@@ -293,7 +293,7 @@ else
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
+        $htmlLeaderColumn .= '<img class="icon-information" src="'.THEME_PATH.'/icons/profile_edit.png"
             alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
     }
 
@@ -301,7 +301,7 @@ else
     if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
     || $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
     {
-        $htmlLeaderColumn .= '<img class="admIconInformation" src="'.THEME_PATH.'/icons/roles.png"
+        $htmlLeaderColumn .= '<img class="icon-information" src="'.THEME_PATH.'/icons/roles.png"
             alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
     }
 

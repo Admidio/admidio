@@ -164,7 +164,7 @@ else
 
 $htmlRoleSelection = '
     <div class="col-sm-5 form-group">
-        <label for="adm_denied_roles"><img class="admIconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</label>
+        <label for="adm_denied_roles"><img class="icon-information" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DOW_NO_ACCESS').'" title="'.$gL10n->get('DOW_NO_ACCESS').'" />'.$gL10n->get('DOW_NO_ACCESS').'</label>
         <select id="adm_denied_roles" name="DeniedRoles" class="form-control" multiple="multiple" size="8" style="max-width: 300px;">';
         for($i=0; $i < count($parentRoleSet); $i++) 
         {
@@ -187,7 +187,7 @@ $htmlRoleSelection = '
             src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_ADD_ROLE').'" title="'.$gL10n->get('SYS_ADD_ROLE').'" /></a>
     </div>
     <div class="col-sm-5 form-group">
-        <label for="adm_allowed_roles"><img class="admIconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" title="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" />'.$gL10n->get('DOW_ACCESS_ALLOWED').'</label>
+        <label for="adm_allowed_roles"><img class="icon-information" src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" title="'.$gL10n->get('DOW_ACCESS_ALLOWED').'" />'.$gL10n->get('DOW_ACCESS_ALLOWED').'</label>
         <select id="adm_allowed_roles" name="AllowedRoles[]" class="form-control" multiple="multiple" size="8" style="max-width: 300px;">';
         for($i=0; $i<count($roleSet); $i++) {
 

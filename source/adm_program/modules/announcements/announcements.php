@@ -109,33 +109,35 @@ else
         $announcement->setArray($row);
         $page->addHtml('
         <div class="panel panel-primary" id="ann_'.$announcement->getValue('ann_id').'">
-            <div class="panel-heading row">
-                <div class="col-sm-8">
-                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
-                    $announcement->getValue('ann_headline'). '
-                </div>
-                <div class="col-sm-4 text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']).'&nbsp;');
-                    
-                    // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                    if($gCurrentUser->editAnnouncements())
-                    {
-                        if($announcement->editRight() == true)
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
+                        $announcement->getValue('ann_headline'). '
+                    </div>
+                    <div class="col-sm-4 text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']));
+                        
+                        // aendern & loeschen duerfen nur User mit den gesetzten Rechten
+                        if($gCurrentUser->editAnnouncements())
                         {
-                            $page->addHtml('
-                            <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$announcements->getHeadline().'"><img 
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
-                        }
+                            if($announcement->editRight() == true)
+                            {
+                                $page->addHtml('
+                                <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$announcements->getHeadline().'"><img 
+                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
+                            }
 
-                        // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
-                        if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
-                        {
-                            $page->addHtml('
-                            <a class="admIconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
-                                $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
-                        }    
-                    }
-                $page->addHtml('</div>
+                            // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
+                            if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
+                            {
+                                $page->addHtml('
+                                <a class="icon-link" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
+                                    $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img 
+                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                            }    
+                        }
+                    $page->addHtml('</div>
+                </div>
             </div>
 
             <div class="panel-body">'.

@@ -135,9 +135,6 @@ if($gDb->num_rows($resultFieldHistory) == 0)
 
 // create html page object
 $page = new HtmlPage();
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/calendar/calendar-popup.js');
-$page->addCssFile(THEME_PATH.'/css/calendar.css');
 
 // show back link
 $page->addHtml($gNavigation->getHtmlBackButton());
@@ -168,8 +165,8 @@ $page->addHtml('
             $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, 10, FIELD_DEFAULT, 'date');
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
             $page->addHtml($form->show(false));
-        $page->addHtml('</div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
+        $page->addHtml('</div>
+    </div>
 </nav>');
 
 $table = new HtmlTable('profile_field_history_table', $page, true, true);

@@ -255,11 +255,11 @@ class HtmlForm extends HtmlFormBasic
 			// create html for icon
 			if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
 			{
-				$htmlIcon = '<img class="admIconInformation" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="icon-information" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 			elseif(admStrIsValidFileName($icon, true))
 			{
-				$htmlIcon = '<img class="admIconInformation" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 		}
         
@@ -1224,11 +1224,11 @@ class HtmlForm extends HtmlFormBasic
 			// create html for icon
 			if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
 			{
-				$htmlIcon = '<img class="admIconInformation" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="icon-information" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 			elseif(admStrIsValidFileName($icon, true))
 			{
-				$htmlIcon = '<img class="admIconInformation" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
 			}
 		}
         
@@ -1313,7 +1313,7 @@ class HtmlForm extends HtmlFormBasic
         
         if($parameters != null)
         {
-            return '<a title="" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true" 
+            return '<a class="icon-link" title="" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true" 
                         data-toggle="tooltip" data-html="true" data-original-title="'.$text.'"><img src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
         }
 	}

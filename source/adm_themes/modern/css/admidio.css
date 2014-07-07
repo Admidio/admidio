@@ -143,34 +143,22 @@ a:hover, a:active {
     white-space: nowrap;
 }
 
-.admIconTextLink img {
-    vertical-align: middle !important;
-}
-
 /* Settings for all icons */
 
-.admIconTextLink img, .menu img, .icon-link img, .admIconHelpLink img, .admIconInformation, .btn img {
+.menu img, .icon-link img, .icon-information, .btn img {
     border: none;
     vertical-align: text-top;
-    margin-left: 1px;
-    margin-right: 1px;
-    /*width: 16px;*/
+    margin-left: 3px;
     height: 16px;
 }
-
 
 .navbar-link img, .icon-text-link img, .btn img {
     margin-right: 5px;
 }
 
-.admIconHelpLink img {
-	margin-left: 5px;
-}
-
-.admIconInformation {
+.icon-information {
     cursor: help;
-    padding-left: 2px;
-    padding-right: 2px;
+    margin-right: 2px;
 }
 
 /* Style for the navigation bar or the back link */
@@ -275,7 +263,6 @@ input[type="number"] {
 
 .admEditor {
 	display: block;
-    /*width: 98%;*/
 }
 
 .admEditorRow  .admFieldLabel {
@@ -372,6 +359,7 @@ input[type="number"] {
     letter-spacing: 0.1em;
     background-color: transparent;
     border-bottom: 2px solid #449ba6;
+    padding: 3px 0px;
 }
 
 .panel-primary > .panel-body {
@@ -384,12 +372,17 @@ input[type="number"] {
 
 .panel-heading-icon {
     margin-right: 8px;
-    vertical-align: middle;
+    vertical-align: text-top;
     border-width: 0px;
 }
 
 .panel-footer .admCreateEditInformations {
     margin-top: 0px;
+}
+
+.panel-comment {
+    overflow: hidden; 
+    margin: 10px 20px; 
 }
 
 /* Layout for tables that will be used in lists or download module */
