@@ -150,22 +150,8 @@ if ($userFound >= 1)
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
         $gCurrentUser->updateLoginData();
 
-        // Parallel im Forum einloggen
-        if($gPreferences['enable_forum_interface'])
-        {
-            $set_admin = false;
-            if($gPreferences['forum_set_admin'] == 1 && $gCurrentUser->isWebmaster())
-            {
-                $set_admin = true;
-            }
-            $gForum->userLogin($loginname, $password, $gCurrentUser->getValue('EMAIL'), $set_admin);
-            $login_message = $gForum->message;
-        }
-        else
-        {
-            // User gibt es im Forum nicht, also eine reine Admidio-Anmeldung.
-            $login_message = 'SYS_LOGIN_SUCCESSFUL';
-        }
+        // User gibt es im Forum nicht, also eine reine Admidio-Anmeldung.
+        $login_message = 'SYS_LOGIN_SUCCESSFUL';
 
         // bei einer Beta-Version noch einen Hinweis ausgeben !
         if(BETA_VERSION > 0 && $gDebug == false)

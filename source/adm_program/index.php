@@ -136,21 +136,6 @@ if( $gPreferences['enable_weblinks_module'] == 1
                         $gL10n->get('LNK_WEBLINKS_DESC'));
 }
 
-// If a forum is connected to Admidio then show a link to this forum
-if($gPreferences['enable_forum_interface'])
-{
-    if($gForum->session_valid)
-    {
-        $forumstext = $gL10n->get('SYS_FORUM_LOGIN_DESC', $gForum->user, $gForum->sitename, $gForum->getUserPM($gCurrentUser->getValue('usr_login_name')));
-    }
-    else
-    {
-        $forumstext = $gL10n->get('SYS_FORUM_DESC');
-    }
-    $moduleMenu->addItem('forum', $gForum->url,
-                        $gL10n->get('SYS_FORUM'), '/icons/forum_big.png',
-                        $forumstext);
-}
 $page->addHtml($moduleMenu->show('complex', false));
 
 // menu with links to all administration pages of Admidio if the user has the right to administrate

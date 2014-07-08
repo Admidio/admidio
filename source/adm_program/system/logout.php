@@ -45,13 +45,6 @@ $gHomepage = $g_root_path. '/'. $gPreferences['homepage_logout'];
 
 $message_code = 'SYS_LOGOUT_SUCCESSFUL';
 
-// if session of forum is active then delete that session
-if($gPreferences['enable_forum_interface'] && $gForum->session_valid)
-{
-    $gForum->userLogoff();
-    $message_code = 'SYS_FORUM_LOGOUT';
-}
-
 // message logout successful and go to homepage
 $gMessage->setForwardUrl($gHomepage, 2000);
 $gMessage->show($gL10n->get($message_code));

@@ -33,12 +33,30 @@
     <text id="LST_CATEGORY_NO_LISTS" development="deleted" translation="todo"></text>
     <text id="LST_MEMBER_STATUS" development="new" translation="todo">Mitgliedsstatus</text>
     <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Standard: 25)</text>
+    <text id="ORG_ACCESS_DATA_ADMIDIO" development="deleted" translation="todo">Zugangsdaten von Admidio verwenden</text>
+    <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="deleted" translation="todo">Läuft das Forum über dieselbe Datenbank, wie Admidio, so kann dieses Flag gesetzt werden und die Zugangsdaten müssen nicht mehr eingegeben werden. (Standard: nein)</text>
+    <text id="ORG_ACCESS_FORUM_DATABASE" development="deleted" translation="todo">Zugangsdaten zur Datenbank des Forums</text>
+    <text id="ORG_ACCESS_FORUM_DATABASE_DESC" development="deleted" translation="todo">Läuft das Forum auf einer anderen Datenbank als Admidio, so müssen die Zugangsdaten zu dieser Datenbank angegeben werden.</text>
+    <text id="ORG_ACTIVATE_FORUM" development="deleted" translation="todo">Forum aktivieren</text>
+    <text id="ORG_ACTIVATE_FORUM_DESC" development="deleted" translation="todo">%VAR1% Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0) eingebunden werden. (Standard: nein)</text>
+    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="deleted" translation="todo">Forum Link Intern aktivieren</text>
+    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="deleted" translation="todo">Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)\nDeaktiviert: Forum wird in einem neuen Browserfenster angezeigt.</text>
     <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="todo">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</text>
     <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="todo">Abweichende Datenbankversion</text>
+    <text id="ORG_EXPORT_ADMIDIO_USER" development="deleted" translation="todo">Admidiobenutzer exportieren</text>
+    <text id="ORG_EXPORT_ADMIDIO_USER_DESC" development="deleted" translation="todo">Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Benutzers ins Forum exportiert und dort als Forumsbenutzer angelegt. (Standard: ja)</text>
+    <text id="ORG_EXPORT_WEBMASTER_STATUS" development="deleted" translation="todo">Webmasterstatus ins Forum exportieren</text>
+    <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="deleted" translation="todo">Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators. (Standard: ja)</text>
+    <text id="ORG_LAST_UPDATE_STEP" development="new" translation="todo">Letzter Update-Schritt</text>
+    <text id="ORG_FORUM_TABLE_PREFIX" development="deleted" translation="todo">Forum-Tabellen-Präfix</text>
+    <text id="ORG_FORUM_TABLE_PREFIX_DESC" development="deleted" translation="todo">Hier wird das Präfix der Tabellen des phpBB-Forums angegeben. Hier muss dasselbe Präfix angegeben werden, welches im phpBB-Forum eingestellt wurde. (Beispiel: phpbb)</text>
+    <text id="ORG_FORUM_WIDTH" development="deleted" translation="todo">Forum Breite</text>
+    <text id="ORG_FORUM_WIDTH_DESC" development="deleted" translation="todo">%VAR1% Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)</text>
     <text id="ORG_NEW_ORGANIZATION" development="new" translation="todo">Neue Organisation</text>
     <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="todo">Gib im folgenden Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die du nun hinzufügen möchtest. Im nächsten Schritt wird die Organisation mit ihren dazugehörigen Stammdaten angelegt.</text>
     <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="todo">Die Organisation %VAR1_BOLD% wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</text>
-    <text id="ORG_LAST_UPDATE_STEP" development="new" translation="todo">Letzter Update-Schritt</text>
+    <text id="ORG_USED_FORUM" development="deleted" translation="todo">Genutztes Forum</text>
+    <text id="ORG_WHICH_FORUM_USED" development="deleted" translation="todo">Welches Forum soll genutzt werden?</text>
     <text id="PRO_CHOOSE_PHOTO" development="new" translation="todo">Foto auswählen</text>
     <text id="PHO_SAVE_ORIGINALS" development="new" translation="todo">Originale speichern</text>
     <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
@@ -51,6 +69,18 @@
     <text id="SYS_NO_DATA_FOUND" development="new" translation="todo">Es wurden keine Daten gefunden.</text>
     <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
+    <text id="SYS_FORUM" development="deleted" translation="todo">Forum</text>
+    <text id="SYS_FORUM_LOGIN_DESC" development="deleted" translation="todo">Du bist als %VAR1_BOLD% im Forum %VAR2_BOLD% angemeldet und hast %VAR3_BOLD% neue Nachrichten.</text>
+    <text id="SYS_FORUM_DESC" development="deleted" translation="todo">Der virtuelle Treffpunkt zum Austausch von Gedanken und Erfahrungen.</text>
+    <text id="SYS_FORUM_ACCESS_DATA" development="deleted" translation="todo">Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!</text>
+    <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="deleted" translation="todo">Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!</text>
+    <text id="SYS_FORUM_LOGIN_ADMIN" development="deleted" translation="todo">Dein Administrator-Account vom Forum %VAR2% wurde auf den Admidio-Account zurückgesetzt.\nVerwende beim nächsten Login im Forum bitte deinen Admidio-Benutzernamen und dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
+    <text id="SYS_FORUM_LOGIN_NEW" development="deleted" translation="todo">Dein Admidio-Account wurde in das Forum %VAR2% exportiert und angelegt.\nVerwende beim nächsten Login im Forum bitte deinen Admidio-Benutzernamen und dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
+    <text id="SYS_FORUM_LOGIN_PASSWORD" development="deleted" translation="todo">Dein Password im Forum %VAR2% wurde auf das Admidio-Passwort zurückgesetzt.\nVerwende beim nächsten Login im Forum bitte dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
+    <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="deleted" translation="todo">Du hast dich erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1_BOLD% angemeldet.</text>
+    <text id="SYS_FORUM_LOGOUT" development="deleted" translation="todo">Du wurdest erfolgreich auf Admidio und im Forum abgemeldet.</text>
+    <text id="SYS_FORUM_USER_DELETE" development="deleted" translation="todo">Der gewählte Benutzername wurde im Forum und in Admidio gelöscht.</text>
+    <text id="SYS_FORUM_USER_EXIST" development="deleted" translation="todo">Der gewählte Benutzername existiert im Forum schon.\n\nWähle bitte einen anderen Namen.</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
     <text id="SYS_MANDATORY_FIELDS" development="new" translation="todo">Pflichtfelder</text>
@@ -793,16 +823,8 @@
     <text id="NWU_USER_VALID_LOGIN" development="new" translation="todo">Dieser Benutzer besitzt schon ein gültiges Login.</text>
 
     <!-- Phrases only in Organizationadministration -->
-    <text id="ORG_ACCESS_DATA_ADMIDIO" development="new" translation="todo">Zugangsdaten von Admidio verwenden</text>
-    <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="new" translation="todo">Läuft das Forum über dieselbe Datenbank, wie Admidio, so kann dieses Flag gesetzt werden und die Zugangsdaten müssen nicht mehr eingegeben werden. (Standard: nein)</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank des Forums</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE_DESC" development="new" translation="todo">Läuft das Forum auf einer anderen Datenbank als Admidio, so müssen die Zugangsdaten zu dieser Datenbank angegeben werden.</text>
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="todo">Zugriff auf Modul</text>
     <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="todo">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der RSS-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</text>
-    <text id="ORG_ACTIVATE_FORUM" development="new" translation="todo">Forum aktivieren</text>
-    <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="todo">%VAR1% Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0) eingebunden werden. (Standard: nein)</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="todo">Forum Link Intern aktivieren</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="todo">Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)\nDeaktiviert: Forum wird in einem neuen Browserfenster angezeigt.</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="todo">Zusätzliche Variablen</text>
     <text id="ORG_ADMIDIO_THEME" development="new" translation="todo">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
@@ -840,10 +862,6 @@
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="todo">Captcha aktivieren</text>
     <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="todo">RSS-Feeds aktivieren</text>
     <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="todo">Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER" development="new" translation="todo">Admidiobenutzer exportieren</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER_DESC" development="new" translation="todo">Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Benutzers ins Forum exportiert und dort als Forumsbenutzer angelegt. (Standard: ja)</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS" development="new" translation="todo">Webmasterstatus ins Forum exportieren</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="new" translation="todo">Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators. (Standard: ja)</text>
     <text id="ORG_FAST_REGISTRATION" development="new" translation="todo">Schnelle Registrierung</text>
     <text id="ORG_FIELD_DESCRIPTION" development="new" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
@@ -857,10 +875,6 @@
     <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="todo">Feld für alle Benutzer sichtbar</text>
     <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="todo">Feld muss nicht zwingend ausgefüllt werden</text>
     <text id="ORG_FIELD_UP" development="new" translation="todo">Profilfeld nach oben verschieben</text>
-    <text id="ORG_FORUM_TABLE_PREFIX" development="new" translation="todo">Forum-Tabellen-Präfix</text>
-    <text id="ORG_FORUM_TABLE_PREFIX_DESC" development="new" translation="todo">Hier wird das Präfix der Tabellen des phpBB-Forums angegeben. Hier muss dasselbe Präfix angegeben werden, welches im phpBB-Forum eingestellt wurde. (Beispiel: phpbb)</text>
-    <text id="ORG_FORUM_WIDTH" development="new" translation="todo">Forum Breite</text>
-    <text id="ORG_FORUM_WIDTH_DESC" development="new" translation="todo">%VAR1% Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)</text>
     <text id="ORG_HOMEPAGE_REGISTERED_USERS" development="new" translation="todo">Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</text>
     <text id="ORG_HOMEPAGE_VISITORS" development="new" translation="todo">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</text>
     <text id="ORG_LOGIN_AUTOMATICALLY" development="new" translation="todo">Automatisch anmelden</text>
@@ -890,7 +904,6 @@
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>
-    <text id="ORG_USED_FORUM" development="new" translation="todo">Genutztes Forum</text>
     <text id="ORG_VARIABLE_ACTIVATION_LINK" development="new" translation="todo">Aktivierungslink für das neue Passwort</text>
     <text id="ORG_VARIABLE_EMAIL" development="new" translation="todo">E-Mail des Benutzers aus dem jeweiligen Mailkontext</text>
     <text id="ORG_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="todo">Systememailadresse der Organisation</text>
@@ -901,7 +914,6 @@
     <text id="ORG_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="todo">Kurzbezeichnung der Organisation</text>
     <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="todo">URL der Webseite der Organisation</text>
     <text id="ORG_VARIABLE_USERNAME" development="new" translation="todo">Benutzername des Benutzers aus dem jeweiligen Mailkontext</text>
-    <text id="ORG_WHICH_FORUM_USED" development="new" translation="todo">Welches Forum soll genutzt werden?</text>
     
     <!-- Phrases only in Updatecheck -->
     <text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
@@ -1237,18 +1249,6 @@
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="todo">Ich habe mein Passwort vergessen!</text>
-    <text id="SYS_FORUM" development="new" translation="todo">Forum</text>
-    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="todo">Du bist als %VAR1_BOLD% im Forum %VAR2_BOLD% angemeldet und hast %VAR3_BOLD% neue Nachrichten.</text>
-    <text id="SYS_FORUM_DESC" development="new" translation="todo">Der virtuelle Treffpunkt zum Austausch von Gedanken und Erfahrungen.</text>
-    <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="todo">Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!</text>
-    <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="todo">Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfe bitte die Zugangsdaten auf Richtigkeit!</text>
-    <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="todo">Dein Administrator-Account vom Forum %VAR2% wurde auf den Admidio-Account zurückgesetzt.\nVerwende beim nächsten Login im Forum bitte deinen Admidio-Benutzernamen und dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
-    <text id="SYS_FORUM_LOGIN_NEW" development="new" translation="todo">Dein Admidio-Account wurde in das Forum %VAR2% exportiert und angelegt.\nVerwende beim nächsten Login im Forum bitte deinen Admidio-Benutzernamen und dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
-    <text id="SYS_FORUM_LOGIN_PASSWORD" development="new" translation="todo">Dein Password im Forum %VAR2% wurde auf das Admidio-Passwort zurückgesetzt.\nVerwende beim nächsten Login im Forum bitte dein Admidio-Passwort.\n\nDu wurdest erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
-    <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="new" translation="todo">Du hast dich erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1_BOLD% angemeldet.</text>
-    <text id="SYS_FORUM_LOGOUT" development="new" translation="todo">Du wurdest erfolgreich auf Admidio und im Forum abgemeldet.</text>
-    <text id="SYS_FORUM_USER_DELETE" development="new" translation="todo">Der gewählte Benutzername wurde im Forum und in Admidio gelöscht.</text>
-    <text id="SYS_FORUM_USER_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert im Forum schon.\n\nWähle bitte einen anderen Namen.</text>
     <text id="SYS_FRIDAY" development="new" translation="todo">Freitag</text>
     <text id="SYS_GENDER" development="new" translation="todo">Geschlecht</text>
     <text id="SYS_HEADLINE" development="new" translation="todo">Überschrift</text>

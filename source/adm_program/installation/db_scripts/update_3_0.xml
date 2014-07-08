@@ -5,8 +5,19 @@
 	<step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(255)</step>
 	<step id="40">ALTER TABLE %PREFIX%_members ADD COLUMN mem_count_guests integer unsigned not null default '0'</step>
 	<step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name LIKE 'lists_members_per_page'</step>
-	<step id="60">CREATE TABLE IF NOT EXISTS %PREFIX%_messages (msg_type varchar(10) NOT NULL, msg_id1 bigint(20) NOT NULL, msg_id2 int(10) NOT NULL, msg_subject varchar(256) NOT NULL, msg_usrid1 int(10) NOT NULL, msg_usrid2 int(10) DEFAULT NULL, msg_message text NOT NULL,
-  msg_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, msg_user1read tinyint(1) NOT NULL DEFAULT '0', msg_user2read tinyint(1) NOT NULL DEFAULT '0') ENGINE=InnoDB default character set = utf8 COLLATE=utf8_unicode_ci;</step>
+	<step id="60">CREATE TABLE IF NOT EXISTS %PREFIX%_messages 
+        (msg_type varchar(10) NOT NULL, 
+         msg_id1 bigint(20) NOT NULL, 
+         msg_id2 int(10) NOT NULL, 
+         msg_subject varchar(256) NOT NULL, 
+         msg_usrid1 int(10) NOT NULL, 
+         msg_usrid2 int(10) DEFAULT NULL, 
+         msg_message text NOT NULL,
+         msg_timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, 
+         msg_user1read tinyint(1) NOT NULL DEFAULT '0',
+         msg_user2read tinyint(1) NOT NULL DEFAULT '0') 
+         ENGINE=InnoDB default character set = utf8 COLLATE=utf8_unicode_ci;</step>
     <step id="70">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name LIKE 'enable_pm_module'</step>
+	<step id="80">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_forum_interface', 'forum_version', 'forum_export_user', 'forum_praefix', 'forum_sqldata_from_admidio', 'forum_db', 'forum_srv', 'forum_usr', 'forum_pw', 'forum_set_admin', 'forum_link_intern', 'forum_width')</step>
 	<step>stop</step>
 </update>

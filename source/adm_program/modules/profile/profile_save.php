@@ -226,24 +226,6 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
                     $gMessage->show($gL10n->get('PRO_LOGIN_NAME_EXIST'));
                 }
             }
-
-            // pruefen, ob der Benutzername bereits im Forum vergeben ist, 
-            // Benutzernamenswechsel und diese Dinge
-            if($gPreferences['enable_forum_interface'])
-            {
-                // pruefen, ob der Benutzername bereits im Forum vergeben ist
-                if($gForum->userExists($_POST['usr_login_name']))
-                {
-                    $gMessage->show($gL10n->get('SYS_FORUM_USER_EXIST'));
-                }
-                
-                // bisherigen Loginnamen merken, damit dieser spaeter im Forum geaendert werden kann
-                $forum_old_username = '';
-                if(strlen($user->getValue('usr_login_name')) > 0)
-                {
-                    $forum_old_username = $user->getValue('usr_login_name');
-                }
-            }
         }
 
         $login_name_changed = true;
@@ -303,18 +285,6 @@ catch(AdmException $e)
     unset($_SESSION['profile_request']);
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
 	$e->showHtml();
-}
-
-// wurde der Loginname vergeben oder geaendert, so muss ein Forumaccount gepflegt werden
-// bei einer Bestaetigung der Registrierung muss der Account aktiviert werden
-if($gPreferences['enable_forum_interface'] && ($login_name_changed || $getNewUser == 3))
-{
-    $set_admin = false;
-    if($gPreferences['forum_set_admin'] == 1 && $user->isWebmaster())
-    {
-        $set_admin = true;
-    }
-    $gForum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('EMAIL'), $forum_old_username, $getNewUser, $set_admin);
 }
 
 $gDb->endTransaction();

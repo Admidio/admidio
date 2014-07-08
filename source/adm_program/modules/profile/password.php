@@ -61,12 +61,6 @@ if($getMode == 'change')
                     $user->setValue('usr_password', $_POST['new_password']);
                     $user->save();
 
-                    // Paralell im Forum aendern, wenn Forum aktiviert ist
-                    if($gPreferences['enable_forum_interface'])
-                    {
-                        $gForum->userSave($user->getValue('usr_login_name'), $user->getValue('usr_password'), $user->getValue('EMAIL'), '', 3);
-                    }
-
                     // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren
                     if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
                     {

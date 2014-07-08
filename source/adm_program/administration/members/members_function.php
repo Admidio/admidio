@@ -153,17 +153,7 @@ elseif($getMode == 3)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 
-    // Paralell im Forum loeschen, wenn g_forum gesetzt ist
-    if($gPreferences['enable_forum_interface'])
-    {
-        $gForum->userDelete($user->getValue('usr_login_name'));
-        
-        $phrase = $gL10n->get('SYS_FORUM_USER_DELETE');
-    }
-    else
-    {
-        $phrase = $gL10n->get('SYS_DELETE_DATA');
-    }
+    $phrase = $gL10n->get('SYS_DELETE_DATA');
     
     // User aus der Admidio Datenbank loeschen
     $user->delete();

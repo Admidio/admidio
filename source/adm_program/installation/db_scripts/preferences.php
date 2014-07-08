@@ -62,20 +62,6 @@ $orga_preferences = array(
     'photo_keep_original'   => '0',
     'photo_download_enabled' => '0',
 
-    // Forum
-    'enable_forum_interface'=> '0',
-    'forum_version'         => 'phpbb2',
-    'forum_export_user'     => '1',
-    'forum_praefix'         => 'phpbb',
-    'forum_sqldata_from_admidio'        => '0',
-    'forum_db'              => '',
-    'forum_srv'             => '',
-    'forum_usr'             => '',
-    'forum_pw'              => '',
-    'forum_set_admin'       => '1',
-    'forum_link_intern'     => '1',
-    'forum_width'           => '570',
-
     // Guestbook
     'enable_guestbook_module'           => '1',
     'guestbook_entries_per_page'        => '10',

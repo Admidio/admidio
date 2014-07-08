@@ -112,19 +112,10 @@ $gLayout['header'] =  '
                     "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
                     "dates-module", "links-module", "systeminfo", "captcha");
         organizationJS.ecard_CCRecipients = "'.$form_values["ecard_cc_recipients"].'";
-        organizationJS.forum_Server = "'.$form_values["forum_srv"].'";
-        organizationJS.forum_User = "'.$form_values["forum_usr"].'";
-        organizationJS.forum_PW = "'.$form_values["forum_pw"].'";
-        organizationJS.forum_DB = "'.$form_values["forum_db"].'";
-        organizationJS.text_Server = "'.$gL10n->get('SYS_SERVER').':";
-        organizationJS.text_User = "'.$gL10n->get('SYS_LOGIN').':";
-        organizationJS.text_PW = "'.$gL10n->get('SYS_PASSWORD').':";
-        organizationJS.text_DB = "'.$gL10n->get('SYS_DATABASE').':";
         $(document).ready(function()
         {
             '.$showOptionGenJs.'
             organizationJS.init();
-            organizationJS.drawForumAccessDataTable();                      
         });
     //--></script>';
 
@@ -729,139 +720,6 @@ exit();
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('PHO_KEEP_ORIGINAL_DESC', $gL10n->get('PHO_DOWNLOAD_ENABLED')).'</li>
                  </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-
-            /**************************************************************************************/
-            // Preferences forum
-            /**************************************************************************************/
-
-            echo '<h3 id="SYS_FORUM" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/forum.png" alt="'.$gL10n->get('SYS_FORUM').'" title="'.$gL10n->get('SYS_FORUM').'" /></a>
-                <a href="#">'.$gL10n->get('SYS_FORUM').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_forum_interface">'.$gL10n->get('ORG_ACTIVATE_FORUM').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_forum_interface" name="enable_forum_interface" ';
-                                if(isset($form_values['enable_forum_interface']) && $form_values['enable_forum_interface'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACTIVATE_FORUM_DESC', $html_icon_warning).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="forum_version">'.$gL10n->get('ORG_USED_FORUM').':</label></dt>
-                            <dd>
-                                <select size="1" id="forum_version" name="forum_version">
-                                    <option value="phpBB2" ';
-                                    if($form_values['forum_version'] == 'phpBB2')
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>phpBB2</option>
-                                </select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_WHICH_FORUM_USED').'<br/>
-                        <table summary="Forum_Auflistung" border="0">
-                            <tr><td>1) "phpbb2"</td><td> - PHP Bulletin Board 2.x (Standard)</td></tr>
-                        </table>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="forum_link_intern">'.$gL10n->get('ORG_ACTIVATE_FORUM_LINK_INTERN').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="forum_link_intern" name="forum_link_intern" ';
-                                if(isset($form_values['forum_link_intern']) && $form_values['forum_link_intern'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACTIVATE_FORUM_LINK_INTERN_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="forum_width">'.$gL10n->get('ORG_FORUM_WIDTH').':</label></dt>
-                            <dd>
-                                <input type="text" id="forum_width" name="forum_width" maxlength="4" style="width: 50px;" value="'. $form_values['forum_width']. '" /> '.$gL10n->get('ORG_PIXEL').'
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_FORUM_WIDTH_DESC', $html_icon_warning).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="forum_export_user">'.$gL10n->get('ORG_EXPORT_ADMIDIO_USER').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="forum_export_user" name="forum_export_user" ';
-                                if(isset($form_values['forum_export_user']) && $form_values['forum_export_user'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_EXPORT_ADMIDIO_USER_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="forum_set_admin">'.$gL10n->get('ORG_EXPORT_WEBMASTER_STATUS').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="forum_set_admin" name="forum_set_admin" ';
-                                if(isset($form_values['forum_set_admin']) && $form_values['forum_set_admin'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_EXPORT_WEBMASTER_STATUS_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="forum_praefix">'.$gL10n->get('ORG_FORUM_TABLE_PREFIX').':</label></dt>
-                            <dd>
-                                <input type="text" id="forum_praefix" name="forum_praefix" style="width: 50px;" value="'. $form_values['forum_praefix']. '" />
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_FORUM_TABLE_PREFIX_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><strong>'.$gL10n->get('ORG_ACCESS_FORUM_DATABASE').'</strong></dt>
-                            <dd>&nbsp;</dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="forum_sqldata_from_admidio">'.$gL10n->get('ORG_ACCESS_DATA_ADMIDIO').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="forum_sqldata_from_admidio" name="forum_sqldata_from_admidio" onclick="javascript:organizationJS.drawForumAccessDataTable();" ';
-                                if(isset($form_values['forum_sqldata_from_admidio']) && $form_values['forum_sqldata_from_admidio'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_DATA_ADMIDIO_DESC').'</li>
-                    <li id="forum_access_data"></li>
-                    <li id="forum_access_data_text" class="smallFontSize">'.$gL10n->get('ORG_ACCESS_FORUM_DATABASE_DESC').'</li>
-                </ul>
                 <br />
                 <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>

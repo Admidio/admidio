@@ -88,12 +88,6 @@
                                     $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png');
             }
 
-            if($gPreferences['enable_forum_interface'])
-            {
-                $moduleMenu->addItem('forum', $g_forum->url,
-                                    $gL10n->get('SYS_FORUM'), '/icons/forum.png');
-            }
-
             if($gCurrentUser ->isWebmaster() || $gCurrentUser ->manageRoles() || $gCurrentUser ->approveUsers() || $gCurrentUser ->editUsers())
             {
                 

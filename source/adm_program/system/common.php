@@ -71,9 +71,6 @@ if($gDb->connect($g_adm_srv, $g_adm_usr, $g_adm_pw, $g_adm_db) == false)
     die('<div style="color: #CC0000;">Error: Wrong database connection parameters!</div>');
 }
 
-// determine forum script and include it before session is created
-Forum::includeForumScript($gDb);
-
 // create an installation unique cookie prefix and remove special characters
 $gCookiePraefix = 'ADMIDIO_'.$g_organization.'_'.$g_adm_db.'_'.$g_tbl_praefix;
 $gCookiePraefix = strtr($gCookiePraefix, ' .,;:','_____');
@@ -308,49 +305,6 @@ if($gValidLogin)
 else
 {
     $gHomepage = $g_root_path. '/'. $gPreferences['homepage_logout'];
-}
-
-/*********************************************************************************
- Create connection to forum database and load functions and routines for forum
-/********************************************************************************/
-
-if($gPreferences['enable_forum_interface']) 
-{
-	// set Admidio database connection if this is set
-    if($gPreferences['forum_sqldata_from_admidio']) 
-    {
-        $gPreferences['forum_srv'] = $gDb->server;
-        $gPreferences['forum_usr'] = $gDb->user;
-        $gPreferences['forum_pw']  = $gDb->password;
-        $gPreferences['forum_db']  = $gDb->dbName;
-    }
-    
-	// save forum object in Admidio session
-    if(isset($_SESSION['gForum']))
-    {
-        $gForum =& $_SESSION['gForum'];
-    }
-    else
-    {
-        $gForum = Forum::createForumObject($gPreferences['forum_version']);
-        $_SESSION['gForum'] =& $gForum;
-    }
-        
-    if(!$gForum->connect($gPreferences['forum_srv'], $gPreferences['forum_usr'], $gPreferences['forum_pw'], $gPreferences['forum_db'], $gDb))
-    {
-		// connection to forum database failed -> deactivate forum
-        $gPreferences['enable_forum_interface'] = 0;
-    }
-    else
-    {
-		// read forum preferences
-        if(!$gForum->initialize(session_id(), $gPreferences['forum_praefix'], $gPreferences['forum_export_user'], $gPreferences['forum_link_intern'], $gCurrentUser->getValue('usr_login_name')))
-        {
-            echo '<div style="color: #CC0000;">Verbindungsfehler zum Forum !<br />
-                Das eingegebene Forumpräfix <strong>'. $gPreferences['forum_praefix'].'</strong> ist nicht korrekt oder<br />
-                es wurde die falsche Datenbankverbindung zum Forum angegeben.</div>';
-        }
-    }    
 }
 
 ?>

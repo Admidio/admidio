@@ -43,16 +43,8 @@ else
         $_SESSION['login_forward_url'] = $gHomepage;
     }
     $gMessage->setForwardUrl($_SESSION['login_forward_url'], $show_time);
-    unset($_SESSION['login_forward_url']);  
-    
-    if($gPreferences['enable_forum_interface'])
-    {
-        // Je nach Forumsaktion, Meldung ausgeben und weiter zur ForwardUrl - Seite
-        $gMessage->show($gL10n->get($getMessageCode, $gCurrentUser->getValue('usr_login_name'), $gForum->sitename));
-    }
-    else
-    {
-        $gMessage->show($gL10n->get($getMessageCode));
-    }
+    unset($_SESSION['login_forward_url']);
+
+    $gMessage->show($gL10n->get($getMessageCode));
 }
 ?>
