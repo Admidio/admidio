@@ -183,25 +183,20 @@ if ($getMsgType == 'PM')
 				$sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
 			}
 
-			
 			$page->addHtml('
-			<div class="admBoxLayout" id="gbo_'.$row['msg_id1'].'">
-				<div class="admBoxHead">
-					<div class="admBoxHeadLeft">
-						<img src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser);
+			<div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser.'
+                    </div>
+                    <div class="col-sm-4 text-right">'.$row['msg_timestamp']);
 
-					$page->addHtml('</div>
-
-					<div class="admBoxHeadRight">'.$row['msg_timestamp']. '&nbsp;');
-
-					$page->addHtml('</div>
-				</div>
-
-				<div class="admBoxBody">'.
-					nl2br($row['msg_message']));
-
-				$page->addHtml('</div>
-			</div>');
+                    $page->addHtml('</div>
+                </div>
+            </div>
+			<div class="panel-footer">'.
+                nl2br($row['msg_message']).'
+            </div>');
 			
 		}
 	}
