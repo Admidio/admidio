@@ -775,14 +775,14 @@
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>    
     <text id="ORG_CAPTCHA" development="new" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Hintergrundfarbe</text>
-    <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (standard: #FFEFC4)</text>
-    <text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (standard: Theme-Schriftart)</text>
-    <text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (standard: 20)</text>
+    <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (Standard: #FFEFC4)</text>
+    <text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</text>
+    <text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (Standard: 20)</text>
     <text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha-Vorschau</text>    
     <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">Hier kann eine Vorschau des Captchas aufgerufen werden. Ungespeicherte Angaben werden nicht berücksichtigt!</text>
     <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="todo">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha Untertitel</text>
-    <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (standard: 9)</text>
+    <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (Standard: 9)</text>
     <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
     <text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Zulässige Captcha-Zeichen</text>
     <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</text>
@@ -790,7 +790,7 @@
     <text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Captcha Art</text>
     <text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Rechenaufgabe</text>
     <text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Bildchen</text>
-    <text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (standard: Bildchen)</text>
+    <text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (Standard: Bildchen)</text>
     <text id="ORG_CONFIRM_REGISTRATION" development="new" translation="todo">Bestätigung der Anmeldung nach der manuellen Freigabe</text>
     <text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
     <text id="ORG_CURRENCY" development="new" translation="todo">Währung</text>

@@ -11,6 +11,7 @@
  * mode     : 1 - Save organization preferences
  *            2 - show welcome dialog for new organization
  *            3 - create new organization
+ *            4 - show phpinfo()
  * form         - The name of the form preferences that were submitted.
  *
  *****************************************************************************/
@@ -37,6 +38,7 @@ switch($getMode)
 {
 case 1:
     $_SESSION['organization_request'] = $_POST;
+    $checkboxes = array();
     
     // first check the fields of the submitted form
     
@@ -98,6 +100,9 @@ case 1:
             
         case 'system_notification':
             $checkboxes = array('enable_system_mails', 'enable_email_notification');
+            break;
+
+        case 'captcha':
             break;
 
         case 'downloads':
@@ -453,6 +458,10 @@ case 3:
     
     // clean up
     unset($_SESSION['add_organization_request']);
+    break;
+    
+case 4:
+    echo phpinfo();
     break;
 }
 ?>

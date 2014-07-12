@@ -181,7 +181,7 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // add a row with the captcha puzzle
-        $this->openControlStructure('captcha_puzzle');
+        $this->openControlStructure('captcha_puzzle', null);
         if($type == 'pic')
         {
             $this->addHtml('<img src="'.$g_root_path.'/adm_program/system/classes/captcha.php?id='. time(). '&amp;type=pic" alt="'.$gL10n->get('SYS_CAPTCHA').'" />');
@@ -283,14 +283,18 @@ class HtmlForm extends HtmlFormBasic
      *  @param $id         Id of the custom content.
      *  @param $label      The label of the custom content.
      *  @param $content    A simple Text or html that would be placed instead of an form element.
-	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
-     *                     If you need an additional parameter for the text you can add an array. The first entry must
-     *                     be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
+	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                           If set the complete text will be shown after the form element.
+     *                           If you need an additional parameter for the text you can add an array. The first entry must
+     *                           be the unique text id and the second entry will be a parameter of the text id.     
      *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
      *  @param $class      Optional an additional css classname.
      */
-    public function addCustomContent($id, $label, $content, $helpTextId = null, $icon = null, $class = null)
+    public function addCustomContent($id, $label, $content, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $this->countElements++;
     
@@ -300,9 +304,9 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
 
-        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextId, $icon, 'form-custom-content');
+        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon, 'form-custom-content');
         $this->addHtml($content);
-        $this->closeControlStructure();
+        $this->closeControlStructure($helpTextIdInline);
     }
     
     /** Add a line with a custom description to the form. No form elements will be 

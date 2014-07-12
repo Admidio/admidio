@@ -42,6 +42,13 @@
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="deleted" translation="todo">Forum Link Intern aktivieren</text>
     <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="deleted" translation="todo">Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)\nDeaktiviert: Forum wird in einem neuen Browserfenster angezeigt.</text>
     <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="todo">Fügt eine neue Organisation mit ihren Stammdaten in der Datenbank hinzu. Der aktuelle Benutzer wird dort automatisch zum Webmaster ernannt und kann die weitere Einrichtung durchführen. Benutzer, die sich dann am System anmelden, müssen die entsprechende Organisation auswählen.</text>
+    <text id="ORG_CAPTCHA" development="deleted" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
+    <text id="ORG_CAPTCHA_SCALING" development="deleted" translation="todo">Skalierung des Captchas (Breite x Höhe)</text>
+    <text id="ORG_CAPTCHA_SIZE" development="deleted" translation="edited">Define captcha size.</text>
+    <text id="ORG_CAPTCHA_WIDTH" development="new" translation="todo">Captcha-Breite</text>
+    <text id="ORG_CAPTCHA_HEIGHT" development="new" translation="todo">Captcha-Höhe</text>
+    <text id="ORG_CAPTCHA_WIDTH_DESC" development="new" translation="todo">Angabe der Breite des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Höhe des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 250)</text>
+    <text id="ORG_CAPTCHA_HEIGHT_DESC" development="new" translation="todo">Angabe der Höhe des Captcha-Bildchens. Hierdurch können zusammen mit der Angabe der Breite des Captcha-Bildchens die Zeichen im Captcha gestreckt oder gestaucht werden. (Standard: 60)</text>
     <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="todo">Abweichende Datenbankversion</text>
     <text id="ORG_EXPORT_ADMIDIO_USER" development="deleted" translation="todo">Admidiobenutzer exportieren</text>
     <text id="ORG_EXPORT_ADMIDIO_USER_DESC" development="deleted" translation="todo">Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Benutzers ins Forum exportiert und dort als Forumsbenutzer angelegt. (Standard: ja)</text>
@@ -831,24 +838,22 @@
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="todo">Erweiterte Registrierung</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Automatischer Logout nach</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>    
-    <text id="ORG_CAPTCHA" development="new" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Hintergrundfarbe</text>
-    <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (standard: #FFEFC4)</text>
-    <text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (standard: Theme-Schriftart)</text>
-    <text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (standard: 20)</text>
+    <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (Standard: #FFEFC4)</text>
+    <text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</text>
+    <text id="ORG_CAPTCHA_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse für den Captcha-Code ausgewählt werden. (Standard: 20)</text>
     <text id="ORG_CAPTCHA_PREVIEW" development="new" translation="todo">Captcha-Vorschau</text>    
     <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="todo">Hier kann eine Vorschau des Captchas aufgerufen werden. Ungespeicherte Angaben werden nicht berücksichtigt!</text>
     <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="todo">Bei der Registrierung wird für alle Benutzer bei aktiviertem Captcha ein alphanumerischer Code oder eine einfache Rechenaufgabe eingeblendet. Diesen muss der Benutzer vor der Registrierung korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="todo">Captcha Untertitel</text>
-    <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (standard: 9)</text>
+    <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="todo">Hier kann die Schriftgrösse des Captcha Untertitel festgelegt werden. (Standard: 9)</text>
     <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
     <text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Zulässige Captcha-Zeichen</text>
     <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</text>
-    <text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Skalierung des Captchas (Breite x Höhe)</text>
     <text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Captcha Art</text>
     <text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Rechenaufgabe</text>
     <text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Bildchen</text>
-    <text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (standard: Bildchen)</text>
+    <text id="ORG_CAPTCHA_TYPE_TEXT" development="new" translation="todo">Hier kann die Art des Captchas gewählt werden. Das Captcha kann mit den weiteren Einstellungen als generiertes Bildchen ausgegeben werden oder als einfache Rechenaufgabe im Textformat. (Standard: Bildchen)</text>
     <text id="ORG_CONFIRM_REGISTRATION" development="new" translation="todo">Bestätigung der Anmeldung nach der manuellen Freigabe</text>
     <text id="ORG_CREATE_PROFILE_FIELD" development="new" translation="todo">Profilfeld anlegen</text>
     <text id="ORG_CURRENCY" development="new" translation="todo">Währung</text>

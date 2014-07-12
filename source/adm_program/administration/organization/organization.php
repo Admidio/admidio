@@ -18,7 +18,6 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
-$showOptionGenJs = '';
 
 $headline = $gL10n->get('ORG_ORGANIZATION_PROPERTIES');
 
@@ -101,23 +100,17 @@ $page->addJavascript('
                 }
             }
         });    
-    });', true);
-
-// zusaetzliche Daten fuer den Html-Kopf setzen
-$gLayout['header'] =  '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/administration/organization/organization.js" ></script>
-    <script type="text/javascript"><!--
-        var organizationJS = new organizationClass();
-        organizationJS.ids = new Array("general", "register", "announcement-module", "download-module", "photo-module", "forum",
-                    "guestbook-module", "list-module", "mail-module", "system-mail", "ecard-module", "profile-module",
-                    "dates-module", "links-module", "systeminfo", "captcha");
-        organizationJS.ecard_CCRecipients = "'.$form_values["ecard_cc_recipients"].'";
-        $(document).ready(function()
-        {
-            '.$showOptionGenJs.'
-            organizationJS.init();
+    });
+    
+    $("#link_check_for_update").click(function() {
+        $("#admidio_version_content").empty();
+        $("#admidio_version_content").prepend("<img src=\''.THEME_PATH.'/icons/loader_inline.gif\' id=\'loadindicator\'/>").show();
+        $.get("'.$g_root_path.'/adm_program/administration/organization/update_check.php", {mode:"2"}, function(htmlVersion){
+            $("#admidio_version_content").empty();
+            $("#admidio_version_content").append(htmlVersion);               
         });
-    //--></script>';
+        return false;
+    });    ', true);
 
 // add headline and title of module
 $page->addHeadline($headline);
@@ -145,18 +138,7 @@ $page->addHtml('
                         $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=common', $page, 'default', false, 'form-preferences');
                         
                         // search all available themes in theme folder
-                        $themes_path = SERVER_PATH. '/adm_themes';
-                        $dir_handle  = opendir($themes_path);
-                        $themes      = array();
-
-                        while (false !== ($filename = readdir($dir_handle)))
-                        {
-                            if(is_file($filename) == false
-                            && strpos($filename, '.') !== 0)
-                            {
-                                $themes[$filename] = $filename;
-                            }
-                        }
+                        $themes = getDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
                         $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, FIELD_DEFAULT, $form_values['theme'], true, null, 'ORG_ADMIDIO_THEME_DESC');
                         $form->addTextInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'], 
                             250, FIELD_DEFAULT, 'text', null, 'ORG_HOMEPAGE_VISITORS');
@@ -338,6 +320,160 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_captcha">
+                            <img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$gL10n->get('SYS_CAPTCHA').'" title="'.$gL10n->get('SYS_CAPTCHA').'" />'.$gL10n->get('SYS_CAPTCHA').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_captcha" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('captcha_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=captcha', $page, 'default', false, 'form-preferences');
+                        $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
+                        $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_type'], false, null, 'ORG_CAPTCHA_TYPE_TEXT');
+                        
+                        $fonts = getDirectoryEntries('../../system/fonts/');
+                        $fonts['Theme'] = 'Theme';
+                        asort($fonts);
+                        $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, FIELD_DEFAULT, $form_values['captcha_fonts'], false, null, 'ORG_CAPTCHA_FONT');
+                        $selectBoxEntries = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
+                        $form->addSelectBox('captcha_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_font_size'], false, null, 'ORG_CAPTCHA_FONT_SIZE');
+                        $form->addTextInput('captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $form_values['captcha_background_color'], 7, FIELD_DEFAULT, 'text', null, 'ORG_CAPTCHA_BACKGROUND_COLOR_TEXT', null, 'form-control-small');
+                        $form->addTextInput('captcha_width', $gL10n->get('ORG_CAPTCHA_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_width'], 4, FIELD_DEFAULT, 'number', null, 'ORG_CAPTCHA_WIDTH_DESC');
+                        $form->addTextInput('captcha_height', $gL10n->get('ORG_CAPTCHA_HEIGHT').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_height'], 4, FIELD_DEFAULT, 'number', null, 'ORG_CAPTCHA_HEIGHT_DESC');
+                        $form->addTextInput('captcha_signs', $gL10n->get('ORG_CAPTCHA_SIGNS'), $form_values['captcha_signs'], 80, FIELD_DEFAULT, 'text', null, 'ORG_CAPTCHA_SIGNS_TEXT');
+                        $form->addTextInput('captcha_signature', $gL10n->get('ORG_CAPTCHA_SIGNATURE'), $form_values['captcha_signature'], 60, FIELD_DEFAULT, 'text', null, 'ORG_CAPTCHA_SIGNATURE_TEXT');
+                        $selectBoxEntries = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
+                        $form->addSelectBox('captcha_signature_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_signature_font_size'], false, null, 'ORG_CAPTCHA_SIGNATURE_FONT_SIZE');
+
+                        if($gPreferences['captcha_type']=='pic')
+                        {
+                            $captcha_parameter = '&amp;type=pic';
+                        }
+                        else
+                        {
+                            $captcha_parameter = '';
+                        }
+                        $html = '<a class="icon-text-link" rel="colorboxHelp" href="captcha_preview.php?inline=true'.$captcha_parameter.'"><img
+                                    src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />'.$gL10n->get('SYS_PREVIEW').'</a>';
+                        $form->addCustomContent('preview_captcha', $gL10n->get('ORG_CAPTCHA_PREVIEW'), $html, null, 'ORG_CAPTCHA_PREVIEW_TEXT');
+
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_informations">
+                            <img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" title="'.$gL10n->get('ORG_SYSTEM_INFOS').'" />'.$gL10n->get('ORG_SYSTEM_INFOS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_system_informations" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // create a static form
+                        $form = new HtmlForm('system_informations_preferences_form', null, $page);
+                        $html = '<span id="admidio_version_content">'.ADMIDIO_VERSION. BETA_VERSION_TEXT.'
+                                    <a id="link_check_for_update" href="#link_check_for_update" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
+                                 </span>';
+                        $form->addCustomContent('admidio_version', $gL10n->get('SYS_ADMIDIO_VERSION'), $html);
+                        
+                        // if database version is different to file version, then show database version
+                        if(strcmp(ADMIDIO_VERSION, $gSystemComponent->getValue('com_version')) != 0)
+                        {
+                            $form->addStaticControl('database_version', $gL10n->get('ORG_DIFFERENT_DATABASE_VERSION'), $gSystemComponent->getValue('com_version'));
+                        }
+                        $form->addStaticControl('last_update_step', $gL10n->get('ORG_LAST_UPDATE_STEP'), $gSystemComponent->getValue('com_update_step'));
+
+                        if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
+                        {
+                            $html = '<span class="text-danger"><strong>'.phpversion().'</strong></span> &rarr; '.$gL10n->get('SYS_PHP_VERSION_REQUIRED', MIN_PHP_VERSION);
+                        }
+                        else
+                        {
+                            $html = '<span class="text-success"><strong>'.phpversion().'</strong></span>';
+                        }
+                        $form->addCustomContent('php_version', $gL10n->get('SYS_PHP_VERSION'), $html);
+
+                        if(version_compare($gDb->getVersion(), $gDb->getMinVersion()) == -1)
+                        {
+                            $html = '<span class="text-danger"><strong>'.$gDb->getVersion().'</strong></span> &rarr; '.$gL10n->get('SYS_DATABASE_VERSION_REQUIRED', $gDb->getMinVersion());
+                        }
+                        else
+                        {
+                            $html = '<span class="text-success"><strong>'.$gDb->getVersion().'</strong></span>';
+                        }
+                        $form->addCustomContent('database_version', $gDb->getName().'-'.$gL10n->get('SYS_VERSION'), $html);
+                        
+                        if(ini_get('safe_mode') == 1)
+                        {
+                            $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span> &rarr; '.$gL10n->get('SYS_SAFE_MODE_PROBLEM');
+                        }
+                        else
+                        {
+                            $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
+                        }
+                        $form->addCustomContent('safe_mode', $gL10n->get('SYS_SAFE_MODE'), $html);
+                        
+                        if(ini_get('post_max_size')!='')
+                        {
+                            $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), ini_get('post_max_size'));
+                        }
+                        else
+                        {
+                            $form->addStaticControl('post_max_size', $gL10n->get('SYS_POST_MAX_SIZE'), $gL10n->get('SYS_NOT_SET'));
+                        }
+
+                        if(ini_get('memory_limit')!='')
+                        {
+                            $form->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), ini_get('memory_limit'));
+                        }
+                        else
+                        {
+                            $form->addStaticControl('memory_limit', $gL10n->get('SYS_MEMORY_LIMIT'), $gL10n->get('SYS_NOT_SET'));
+                        }
+
+                        if(ini_get('file_uploads') == 1)
+                        {
+                            $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
+                        }
+                        else
+                        {
+                            $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
+                        }
+                        $form->addCustomContent('file_uploads', $gL10n->get('SYS_FILE_UPLOADS'), $html);
+        
+                        if(ini_get('upload_max_filesize')!='')
+                        {
+                            $form->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), ini_get('upload_max_filesize'));
+                        }
+                        else
+                        {
+                            $form->addStaticControl('upload_max_filesize', $gL10n->get('SYS_UPLOAD_MAX_FILESIZE'), $gL10n->get('SYS_NOT_SET'));
+                        }
+
+                        $form->addStaticControl('max_processable_image_size', $gL10n->get('SYS_MAX_PROCESSABLE_IMAGE_SIZE'), round((admFuncProcessableImageSize()/1000000), 2).' '.$gL10n->get('SYS_MEGA_PIXEL'));
+                        $html = '<a href="organization_function.php?mode=4" target="_blank">phpinfo()</a>';
+                        $form->addCustomContent('php_info', $gL10n->get('SYS_PHP_INFO'), $html);
+
+                        if(isset($gDebug))
+                        {
+                            $html = '<span class="text-danger"><strong>'.$gL10n->get('SYS_ON').'</strong></span>';
+                        }
+                        else
+                        {
+                            $html = '<span class="text-success"><strong>'.$gL10n->get('SYS_OFF').'</strong></span>';
+                        }
+                        $form->addCustomContent('debug_modus', $gL10n->get('SYS_DEBUG_MODUS'), $html);
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
         </div>
     </div>
     <div class="tab-pane" id="tabs-modules">
@@ -393,203 +529,6 @@ $page->show();
 
 exit();
             
-            /**************************************************************************************/
-            // Preferences for system notification
-            /**************************************************************************************/
-            $text = new TableText($gDb);
-            echo '<h3 id="SYS_SYSTEM_MAILS" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/system_notification.png" alt="'.$gL10n->get('SYS_SYSTEM_MAILS').'" title="'.$gL10n->get('SYS_SYSTEM_MAILS').'" /></a>
-                <a href="#">'.$gL10n->get('SYS_SYSTEM_MAILS').'</a>
-            </h3>        
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">';
-                    $text->readDataByColumns(array('txt_name' => 'SYSMAIL_ACTIVATION_LINK', 'txt_org_id' => $gCurrentOrganization->getValue('org_id')));
-                    echo '<li>
-                        <br />'.$gL10n->get('ORG_NEW_PASSWORD_ACTIVATION_LINK').':<br />
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get('ORG_ADDITIONAL_VARIABLES').':<br />
-                        <strong>%variable1%</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
-                        <strong>%variable2%</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK').'<br />
-                    </li>
-                    <li>
-                        <textarea id="SYSMAIL_ACTIVATION_LINK" name="SYSMAIL_ACTIVATION_LINK" style="width: 100%;" rows="7" cols="40">'.$text->getValue('txt_text').'</textarea>
-                    </li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-            /**************************************************************************************/
-            // Preferences captcha
-            /**************************************************************************************/
-        
-            echo '<h3 id="SYS_CAPTCHA" class="iconTextLink">
-                <a href="#"><img src="'.THEME_PATH.'/icons/captcha.png" alt="'.$gL10n->get('SYS_CAPTCHA').'" title="'.$gL10n->get('SYS_CAPTCHA').'" /></a>
-                <a href="#">'.$gL10n->get('SYS_CAPTCHA').'</a>
-            </h3>        
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li class="smallFontSize">'.$gL10n->get("ORG_CAPTCHA").'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="captcha_type">'.$gL10n->get('ORG_CAPTCHA_TYPE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['captcha_type'], 'captcha_type');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ORG_CAPTCHA_TYPE_TEXT").'
-                    </li>
-                    ';
-            if($gPreferences['captcha_type'] == 'pic')
-            {
-                echo '  <li>
-                        <dl>
-                            <dt><label for="captcha_fonts">'.$gL10n->get("SYS_FONT").':</label></dt>
-                            <dd>
-                                <select size="1" id="captcha_fonts" name="captcha_fonts" style="width:120px;">
-                                ';
-                                $fonts = getFileNames('../../system/fonts/');
-                                array_push($fonts,'Theme');
-                                asort($fonts);
-                                foreach($fonts as $myfonts)
-                                {
-                                    if($myfonts == $form_values['captcha_fonts']){
-                                       $select = ' selected="selected"';
-                                    }
-                                    else {
-                                       $select = '';
-                                    }
-                                    echo '<option value="'.$myfonts.'"'.$select.'>'.$myfonts.'</option>
-                                    ';
-                                }
-                             echo '</select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get('ORG_CAPTCHA_FONT').'
-                    </li>                   
-                    <li>
-                        <dl>
-                            <dt><label for="captcha_font_size">'.$gL10n->get('SYS_FONT_SIZE').':</label></dt>
-                            <dd>';
-                                echo getMenueSettings(array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30'),'captcha_font_size',$form_values['captcha_font_size'],'120','false','false');
-                             echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                       '.$gL10n->get("ORG_CAPTCHA_FONT_SIZE").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="captcha_background_color">'.$gL10n->get("ORG_CAPTCHA_BACKGROUND_COLOR").':</label></dt>
-                            <dd>
-                                <input type="text" id="captcha_background_color" name="captcha_background_color" style="width: 60px;" maxlength="7" value="'.$form_values['captcha_background_color'].'" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ORG_CAPTCHA_BACKGROUND_COLOR_TEXT").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="captcha_width">'.$gL10n->get("ORG_CAPTCHA_SCALING").':</label></dt>
-                            <dd><input type="text" id="captcha_width" name="captcha_width" style="width: 50px;" maxlength="4" value="'.$form_values['captcha_width'].'" />
-                                x
-                                <input type="text" id="captcha_height" name="captcha_height" style="width: 50px;" maxlength="4" value="'.$form_values['captcha_height'].'" />
-                                '.$gL10n->get('ORG_PIXEL').'
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ORG_CAPTCHA_SIZE").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="captcha_signs">'.$gL10n->get("ORG_CAPTCHA_SIGNS").':</label></dt>
-                            <dd>
-                                <input type="text" id="captcha_signs" name="captcha_signs" maxlength="80" size="35" value="'.$form_values['captcha_signs'].'" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ORG_CAPTCHA_SIGNS_TEXT").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="captcha_signature">'.$gL10n->get("ORG_CAPTCHA_SIGNATURE").':</label></dt>
-                            <dd>
-                                <input type="text" id="captcha_signature" name="captcha_signature" maxlength="60" size="35" value="'.$form_values['captcha_signature'].'" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ORG_CAPTCHA_SIGNATURE_TEXT").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="captcha_signature_font_size">'.$gL10n->get("SYS_FONT_SIZE").':</label></dt>
-                            <dd>';
-                                echo getMenueSettings(array ("9","10","11","12","13","14","15","16","17","18","20","22","24","30"),'captcha_signature_font_size',$form_values["captcha_signature_font_size"],'120','false','false');
-                             echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                       '.$gL10n->get("ORG_CAPTCHA_SIGNATURE_FONT_SIZE").'
-                    </li>';
-            }
-                        
-            if($gPreferences['captcha_type']=='pic')
-            {
-                $captcha_parameter = '&amp;type=pic';
-            }
-            else
-            {
-                $captcha_parameter = '';
-            }
-
-            echo '
-                    <li>
-                        <dl>
-                            <dt><label><a rel="colorboxHelp" href="captcha_preview.php?inline=true'.$captcha_parameter.'">'.$gL10n->get("ORG_CAPTCHA_PREVIEW").'</a></label></dt>
-                            <dd>&nbsp;</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_CAPTCHA_PREVIEW_TEXT').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-
-            /**************************************************************************************/
-            // System inforamtions
-            /**************************************************************************************/
-
-            echo '<h3 id="ORG_SYSTEM_INFORMATIONS" class="iconTextLink">
-                <a href="#"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('ORG_SYSTEM_INFOS').'" title="'.$gL10n->get('ORG_SYSTEM_INFOS').'" /></a>
-                <a href="#">'.$gL10n->get('ORG_SYSTEM_INFORMATIONS').'</a>
-            </h3>  
-            <div class="groupBoxBody" style="display: none;">';
-                require_once('systeminfo.php');
-                echo'<br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-            
-            // ENDE accordion-common
-            echo'</div>
-        </div>
-        <div id="tabs-modules">
-            <div id="accordion-modules">';
-
             /**************************************************************************************/
             // Preferences photo module
             /**************************************************************************************/
@@ -1069,7 +1008,7 @@ exit();
                         <dl>
                             <dt><label for="ecard_template">'.$gL10n->get('ECA_TEMPLATE').':</label></dt>
                             <dd>';
-                                echo getMenueSettings(getFileNames(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
+                                echo getMenueSettings(getDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
                              echo '</dd>
                         </dl>
                     </li>
@@ -1397,22 +1336,31 @@ exit();
     </div>
 </div>';
 
-function getFileNames($directory)
+/** Search all files or directories in the specified directory.
+ *  @param $directory  The directory where the files or directories should be searched.
+ *  @param $searchType This could be @b file or @b dir and represent the type of entries that should be searched.
+ *  @return Returns an array with all found entries.
+ */
+function getDirectoryEntries($directory, $searchType = 'file')
 {
-    $array_files    = array();
-    $i                = 0;
+    $array_files = array();
+    
     if($curdir = opendir($directory))
     {
-        while($file = readdir($curdir))
+        while($filename = readdir($curdir))
         {
-            if($file != '.' && $file != '..')
+            if(strpos($filename, '.') !== 0)
             {
-                $array_files[$i] = $file;
-                $i++;
+                if(($searchType == 'file' && is_file($directory.'/'.$filename) == true)
+                || ($searchType == 'dir'  && is_dir($directory.'/'.$filename) == true))
+                {
+                    $array_files[$filename] = $filename;
+                }
             }
         }
     }
     closedir($curdir);
+    asort($array_files);
     return $array_files;
 }
 

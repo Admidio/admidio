@@ -225,7 +225,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 {
                     // at registration add password and password confirm to form
                     $form->addTextInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', 'PRO_PASSWORD_DESCRIPTION', null, null, 'form-control-small');
-                    $form->addTextInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, nul, null, 'form-control-small');
+                    $form->addTextInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, null, null, 'form-control-small');
 
                     // show selectbox with all organizations of database
                     if($gPreferences['system_organization_select'] == 1)
