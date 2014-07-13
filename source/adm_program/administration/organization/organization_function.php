@@ -104,12 +104,24 @@ case 1:
 
         case 'captcha':
             break;
+            
+        case 'announcements':
+            break;
 
         case 'downloads':
             $checkboxes = array('enable_download_module');
             break;
-            
-        case 'announcements':
+
+        case 'guestbook':
+            $checkboxes = array('enable_guestbook_captcha', 'enable_gbook_comments4all', 'enable_intial_comments_loading');
+            break;
+
+        case 'lists':
+            $checkboxes = array('lists_hide_overview_details');
+            break;
+        
+        case 'messages':
+            $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha', 'mail_html_registered_users');
             break;
         
         default:

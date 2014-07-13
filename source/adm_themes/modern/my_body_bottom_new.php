@@ -29,12 +29,12 @@
                 $moduleMenu->addItem('download', '/adm_program/modules/downloads/downloads.php',
                                     $gL10n->get('DOW_DOWNLOADS'), '/icons/download.png');
             }
-            if($gPreferences['enable_mail_module'] == 1)
+            if($gPreferences['enable_mail_module'] == 1 && $gValidLogin == false)
             {
                 $moduleMenu->addItem('email', '/adm_program/modules/messages/messages.php',
                                     $gL10n->get('SYS_EMAIL'), '/icons/email.png');
             }
-            if($gPreferences['enable_pm_module'] == 1 && $gValidLogin)
+            if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
             {
             $sql = 'SELECT *
             FROM '. TBL_MESSAGES. '
@@ -46,12 +46,12 @@
                 if ($row > 0)
                 {
                     $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages_list.php',
-                                    $gL10n->get('SYS_PM').' ('.$row.')', '/icons/email.png');
+                                    $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$row.'</span>', '/icons/email.png');
                 }
                 else
                 {
                     $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages_list.php',
-                                    $gL10n->get('SYS_PM'), '/icons/email.png');
+                                    $gL10n->get('SYS_MESSAGES'), '/icons/email.png');
                 }
             }
             if($gPreferences['enable_photo_module'] == 1 

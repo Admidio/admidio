@@ -209,7 +209,7 @@ if($getModeration == 0 && $gCurrentUser->editGuestbookRight() && $gPreferences['
 if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of announcements
-	$guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=GBO_GUESTBOOK', 
+	$guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=guestbook', 
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 }
 

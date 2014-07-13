@@ -195,7 +195,6 @@
     <text id="SYS_ICON" development="new" translation="edited">Icona</text>
     <text id="SYS_INTERNAL_NAME" development="new" translation="edited">Nome interno</text>
     <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="edited">Il nome interno è usato come uno specifico identificatore di un campo. Ai fini dell'uso del programma, comunque, esso è irrilevante. Durante lo sviluppo del software questo nome è stato usato al fine di poter usare il metodo getValue. Il nome interno sarà acquisito in automatico durante la creazione di un campo.</text>
-    <text id="SYS_MESSAGE" development="new" translation="edited">Messaggio</text>
     <text id="SYS_ORGANIZATION" development="new" translation="edited">Organizzazione</text>
     <text id="SYS_PERIOD" development="new" translation="edited">Intervallo di tempo</text>
     <text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="edited">Admidio richiede %VAR1% o più alto</text>        

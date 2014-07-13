@@ -83,7 +83,7 @@ if($gPreferences['enable_pm_module'] == 1 && $gValidLogin)
             if ($row > 0)
             {
                 $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
-                                $gL10n->get('SYS_PM').' ('.$row.' '.$gL10n->get('SYS_PM_UNREAD').')', '/icons/email.png',
+                                $gL10n->get('SYS_PM').'<span class="badge">'.$row.'</span>', '/icons/email.png',
                                 $gL10n->get('MAI_EMAIL_DESC'));
             }
             else

@@ -194,7 +194,6 @@
     <text id="SYS_ICON" development="new" translation="edited">Ikon</text>
     <text id="SYS_INTERNAL_NAME" development="new" translation="edited">Internt navn</text>
     <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="edited">Det interne navn bliver brugt som en specifik identifikation for et felt. Når Admidio kører og bliver brugt er det irrelevant. Men under udviklingen af Admidio skal dette navn tages med for at kunne bruge getValue metoden. Det interne navn bliver automatisk udfyldt ved oprettelsen af et felt.</text>
-    <text id="SYS_MESSAGE" development="new" translation="edited">Besked</text>
     <text id="SYS_ORGANIZATION" development="new" translation="edited">Organisation</text>
     <text id="SYS_PERIOD" development="new" translation="edited">Periode</text>
     <text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="edited">Admidio kræver %VAR1% eller højere</text>        

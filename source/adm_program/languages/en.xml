@@ -239,7 +239,6 @@
     <text id="SYS_ICON" development="new" translation="edited">Icon</text>
     <text id="SYS_INTERNAL_NAME" development="new" translation="edited">Internal name</text>
     <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="edited">The internal name is being used as a specific identifier of a field. In terms of the program usage, however, it is irrelevant. During software development this name has to be taken in order to be able to use the getValue method. The internal name will be filled in automatically during creation of a field.</text>
-    <text id="SYS_MESSAGE" development="new" translation="edited">Message</text>
     <text id="SYS_ORGANIZATION" development="new" translation="edited">Organisation</text>
     <text id="SYS_PERIOD" development="new" translation="edited">Time frame</text>
     <text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="edited">Admidio requires %VAR1% or higher</text>        

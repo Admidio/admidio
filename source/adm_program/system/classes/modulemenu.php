@@ -161,7 +161,7 @@ class ModuleMenu
 	    // add html of menu item
 		$html .= '<li id="'.$menuEntry['id'].'">
 				          <a class="navbar-link" href="'.$menuEntry['link'].'"><img 
-				              src="'.$menuEntry['icon'].'" alt="'.$menuEntry['text'].'" title="'.$menuEntry['text'].'" />'.$menuEntry['text'].'</a>
+				              src="'.$menuEntry['icon'].'" alt="'.strip_tags($menuEntry['text']).'" />'.$menuEntry['text'].'</a>
 				  </li>';
         return $html;
 	}

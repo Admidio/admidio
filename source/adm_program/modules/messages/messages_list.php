@@ -72,6 +72,8 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $EmailMenu = new ModuleMenu('admMenuEmail');
 $EmailMenu->addItem('admMenuItemNewEmail', $g_root_path.'/adm_program/modules/messages/messages.php', $gL10n->get('SYS_EMAIL'), '/email.png');
 $EmailMenu->addItem('admMenuItemNewPm', $g_root_path.'/adm_program/modules/messages/messages.php', $gL10n->get('PMS_MESSAGE'), '/email.png');
+$EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=messages', 
+					$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 
 // create html page object
 $page = new HtmlPage();

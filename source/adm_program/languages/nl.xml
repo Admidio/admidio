@@ -59,7 +59,6 @@
     <text id="SYS_ICON" development="new" translation="edited">Icoon</text>
     <text id="SYS_INTERNAL_NAME" development="new" translation="edited">Interne naam</text>
     <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="edited">De interne naam wordt gebruikt om een bepaald veld te identificeren. Het is echter niet relevant tijdens het gebruik van het programma. Tijdens de software ontwikkeling moet deze naam echter gebruikt worden om bijvoorbeeld een veld middels de getValue methode aan te spreken. De interne naam wordt automatisch ingevuld tijdens het maken van een veld.</text>
-    <text id="SYS_MESSAGE" development="new" translation="edited">Bericht</text>
     <text id="SYS_ORGANIZATION" development="new" translation="edited">Organisatie</text>
     <text id="SYS_PERIOD" development="new" translation="edited">Tijdvlak</text>
     <text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="edited">Admidio heeft %VAR1% of hoger nodig</text>        

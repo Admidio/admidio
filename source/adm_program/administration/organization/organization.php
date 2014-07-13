@@ -59,7 +59,10 @@ $page = new HtmlPage();
 
 // open the modules tab if the options of a module should be shown 
 if($showOption == 'announcements'
-|| $showOption == 'downloads')
+|| $showOption == 'downloads'
+|| $showOption == 'guestbook'
+|| $showOption == 'lists'
+|| $showOption == 'messages')
 {
     $page->addJavascript('$("#tabs_nav_modules").attr("class", "active");
         $("#tabs-modules").attr("class", "tab-pane active");
@@ -520,6 +523,79 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_guestbook">
+                            <img src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" title="'.$gL10n->get('GBO_GUESTBOOK').'" />'.$gL10n->get('GBO_GUESTBOOK').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_guestbook" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('guestbook_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=guestbook', $page, 'default', false, 'form-preferences');
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                        $form->addSelectBox('enable_guestbook_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_guestbook_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $form->addTextInput('guestbook_entries_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['guestbook_entries_per_page'], 4, FIELD_DEFAULT, 'number', null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
+                        $form->addCheckbox('enable_guestbook_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_guestbook_captcha'], FIELD_DEFAULT, null, 'GBO_CAPTCHA_DESC');
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_NOBODY'), '1' => $gL10n->get('GBO_ONLY_VISITORS'), '2' => $gL10n->get('SYS_ALL'));
+                        $form->addSelectBox('enable_guestbook_moderation', $gL10n->get('GBO_GUESTBOOK_MODERATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_guestbook_moderation'], false, null, 'GBO_GUESTBOOK_MODERATION_DESC');
+                        $form->addCheckbox('enable_gbook_comments4all', $gL10n->get('GBO_COMMENTS4ALL'), $form_values['enable_gbook_comments4all'], FIELD_DEFAULT, null, 'GBO_COMMENTS4ALL_DESC');
+                        $form->addCheckbox('enable_intial_comments_loading', $gL10n->get('GBO_INITIAL_COMMENTS_LOADING'), $form_values['enable_intial_comments_loading'], FIELD_DEFAULT, null, 'GBO_INITIAL_COMMENTS_LOADING_DESC');
+                        $form->addTextInput('flooding_protection_time', $gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL'), $form_values['flooding_protection_time'], 4, FIELD_DEFAULT, 'number', null, 'GBO_FLOODING_PROTECTION_INTERVALL_DESC');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_lists">
+                            <img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_LISTS').'" title="'.$gL10n->get('LST_LISTS').'" />'.$gL10n->get('LST_LISTS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_lists" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('lists_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=lists', $page, 'default', false, 'form-preferences');
+                        $form->addTextInput('lists_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $form_values['lists_roles_per_page'], 10, FIELD_DEFAULT, 'number', null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
+                        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+                        $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['lists_members_per_page'], false, null, 'LST_MEMBERS_PER_PAGE_DESC');
+                        $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), $form_values['lists_hide_overview_details'], FIELD_DEFAULT, null, 'LST_HIDE_DETAILS_DESC');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_messages">
+                            <img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_MESSAGES').'" title="'.$gL10n->get('SYS_MESSAGES').'" />'.$gL10n->get('SYS_MESSAGES').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_messages" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('messages_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=messages', $page, 'default', false, 'form-preferences');
+                        $form->addCheckbox('enable_mail_module', $gL10n->get('MAI_ACTIVATE_EMAIL_MODULE'), $form_values['enable_mail_module'], FIELD_DEFAULT, null, 'MAI_ACTIVATE_EMAIL_MODULE_DESC');
+                        $form->addCheckbox('enable_pm_module', $gL10n->get('MSG_ACTIVATE_PM_MODULE'), $form_values['enable_pm_module'], FIELD_DEFAULT, null, 'MSG_ACTIVATE_PM_MODULE_DESC');
+                        $form->addCheckbox('enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_mail_captcha'], FIELD_DEFAULT, null, 'MAI_SHOW_CAPTCHA_DESC');
+                        $form->addTextInput('max_email_attachment_size', $gL10n->get('MAI_ATTACHMENT_SIZE').' (KB)', $form_values['max_email_attachment_size'], 6, FIELD_DEFAULT, 'number', null, 'MAI_ATTACHMENT_SIZE_DESC');
+                        $form->addTextInput('mail_sendmail_address', $gL10n->get('MAI_SENDER_EMAIL'), $form_values['mail_sendmail_address'], 50, FIELD_DEFAULT, 'text', null, array('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']));
+                        $form->addTextInput('mail_sendmail_name', $gL10n->get('MAI_SENDER_NAME'), $form_values['mail_sendmail_name'], 50, FIELD_DEFAULT, 'text', null, 'MAI_SENDER_NAME_DESC');
+                        $form->addCheckbox('mail_html_registered_users', $gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS'), $form_values['mail_html_registered_users'], FIELD_DEFAULT, null, 'MAI_HTML_MAILS_REGISTERED_USERS_DESC');
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                        $form->addSelectBox('mail_delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_delivery_confirmation'], false, null, 'MAI_DELIVERY_CONFIRMATION_DESC');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -528,6 +604,7 @@ $page->addHtml('
 $page->show();
 
 exit();
+            
             
             /**************************************************************************************/
             // Preferences photo module
@@ -665,263 +742,6 @@ exit();
                 </div>
             </div>';
 
-            /**************************************************************************************/
-            // Preferences guestbook module
-            /**************************************************************************************/
-
-            echo '<h3 id="GBO_GUESTBOOK" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/guestbook.png" alt="'.$gL10n->get('GBO_GUESTBOOK').'" title="'.$gL10n->get('GBO_GUESTBOOK').'" /></a>
-                <a href="#">'.$gL10n->get('GBO_GUESTBOOK').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_guestbook_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_guestbook_module'], 'enable_guestbook_module');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="guestbook_entries_per_page">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
-                            <dd>
-                                <input type="text" id="guestbook_entries_per_page" name="guestbook_entries_per_page"
-                                     style="width: 50px;" maxlength="4" value="'. $form_values['guestbook_entries_per_page']. '" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_guestbook_captcha">'.$gL10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_guestbook_captcha" name="enable_guestbook_captcha" ';
-                                if(isset($form_values['enable_guestbook_captcha']) && $form_values['enable_guestbook_captcha'] == 1)
-                                {
-                                    echo " checked=\"checked\" ";
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('GBO_CAPTCHA_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_guestbook_moderation">'.$gL10n->get('GBO_GUESTBOOK_MODERATION').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('SYS_NOBODY'), '1' => $gL10n->get('GBO_ONLY_VISITORS'), '2' => $gL10n->get('SYS_ALL'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_guestbook_moderation'], 'enable_guestbook_moderation');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('GBO_GUESTBOOK_MODERATION_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_gbook_comments4all">'.$gL10n->get('GBO_COMMENTS4ALL').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_gbook_comments4all" name="enable_gbook_comments4all" ';
-                                if(isset($form_values['enable_gbook_comments4all']) && $form_values['enable_gbook_comments4all'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('GBO_COMMENTS4ALL_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="enable_intial_comments_loading">'.$gL10n->get('GBO_INITIAL_COMMENTS_LOADING').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_intial_comments_loading" name="enable_intial_comments_loading" ';
-                                if(isset($form_values['enable_intial_comments_loading']) && $form_values['enable_intial_comments_loading'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('GBO_INITIAL_COMMENTS_LOADING_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="flooding_protection_time">'.$gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL').':</label></dt>
-                            <dd>
-                                <input type="text" id="flooding_protection_time" name="flooding_protection_time" style="width: 50px;" 
-                                    maxlength="4" value="'. $form_values['flooding_protection_time']. '" /> '.$gL10n->get('SYS_SECONDS').'
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL_DESC').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-
-            /**************************************************************************************/
-            // Preferences lists module
-            /**************************************************************************************/
-    
-            echo '<h3 id="LST_LISTS" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/list.png" alt="'.$gL10n->get('LST_LISTS').'" title="'.$gL10n->get('LST_LISTS').'" /></a>
-                <a href="#">'.$gL10n->get('LST_LISTS').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="lists_roles_per_page">'.$gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE').':</label></dt>
-                            <dd>
-                                <input type="text" id="lists_roles_per_page" name="lists_roles_per_page"
-                                     style="width: 50px;" maxlength="4" value="'. $form_values['lists_roles_per_page']. '" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="lists_members_per_page">'.$gL10n->get('LST_MEMBERS_PER_PAGE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['lists_members_per_page'], 'lists_members_per_page');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('LST_MEMBERS_PER_PAGE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="lists_hide_overview_details">'.$gL10n->get('LST_HIDE_DETAILS').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="lists_hide_overview_details" name="lists_hide_overview_details" ';
-                                if(isset($form_values['lists_hide_overview_details']) && $form_values['lists_hide_overview_details'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('LST_HIDE_DETAILS_DESC').'</li>                 
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-
-            /**************************************************************************************/
-            // Preferences mail module
-            /**************************************************************************************/
-
-            echo '<h3 id="SYS_MESSAGE" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/email.png" alt="'.$gL10n->get('SYS_MESSAGE').'" title="'.$gL10n->get('SYS_MESSAGE').'" /></a>
-                <a href="#">'.$gL10n->get('SYS_MESSAGE').'</a>
-            </h3>
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_mail_module">'.$gL10n->get('MAI_ACTIVATE_EMAIL_MODULE').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_mail_module" name="enable_mail_module" ';
-                                if(isset($form_values['enable_mail_module']) && $form_values['enable_mail_module'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_ACTIVATE_EMAIL_MODULE_DESC').'</li>
-					<li>
-                        <dl>
-                            <dt><label for="enable_pm_module">'.$gL10n->get('MSG_ACTIVATE_PM_MODULE').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_pm_module" name="enable_pm_module" ';
-                                if(isset($form_values['enable_pm_module']) && $form_values['enable_pm_module'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MSG_ACTIVATE_PM_MODULE_DESC').'</li>                    
-                    <li>
-                        <dl>
-                            <dt><label for="enable_mail_captcha">'.$gL10n->get('ORG_ENABLE_CAPTCHA').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_mail_captcha" name="enable_mail_captcha" ';
-                                if(isset($form_values['enable_mail_captcha']) && $form_values['enable_mail_captcha'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SHOW_CAPTCHA_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="max_email_attachment_size">'.$gL10n->get('MAI_ATTACHMENT_SIZE').':</label></dt>
-                            <dd>
-                                <input type="text" id="max_email_attachment_size" name="max_email_attachment_size" style="width: 50px;" maxlength="6" value="'.$form_values['max_email_attachment_size'].'" /> KB
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_ATTACHMENT_SIZE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_sendmail_address">'.$gL10n->get('MAI_SENDER_EMAIL').':</label></dt>
-                            <dd><input type="text" id="mail_sendmail_address" name="mail_sendmail_address" style="width: 200px;" maxlength="50" value="'. $form_values['mail_sendmail_address'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_sendmail_name">'.$gL10n->get('MAI_SENDER_NAME').':</label></dt>
-                            <dd><input type="text" id="mail_sendmail_name" name="mail_sendmail_name" style="width: 200px;" maxlength="50" value="'. $form_values['mail_sendmail_name'].'" /></dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_SENDER_NAME_DESC', $_SERVER['HTTP_HOST']).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_html_registered_users">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="mail_html_registered_users" name="mail_html_registered_users" ';
-                                if(isset($form_values['mail_html_registered_users']) && $form_values['mail_html_registered_users'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="mail_delivery_confirmation">'.$gL10n->get("MAI_DELIVERY_CONFIRMATION").':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['mail_delivery_confirmation'], 'mail_delivery_confirmation');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("MAI_DELIVERY_CONFIRMATION_DESC").'
-                    </li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
             /**************************************************************************************/
             // Preferences ecards module
             /**************************************************************************************/

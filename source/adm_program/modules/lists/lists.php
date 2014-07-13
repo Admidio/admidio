@@ -112,7 +112,7 @@ if($lists->getCategorySelection() == 1 || $gCurrentUser->manageRoles())
 	if($gCurrentUser->isWebmaster())
 	{
 		// show link to system preferences of roles
-		$ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=LST_LISTS', 
+		$ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=lists', 
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 	}
 

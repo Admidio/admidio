@@ -197,15 +197,15 @@ function deleteEntry()
 
         <ul class="admIconTextLinkList">
             <li id="admButtonYesRow">
-                <button id="admButtonYes" class="admButton" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
+                <button id="admButtonYes" class="btn" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
                     alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
             </li>
             <li id="admButtonNoRow">
-                <button id="admButtonNo" class="admButton" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
+                <button id="admButtonNo" class="btn" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
                     alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
             </li>
             <li id="admButtonCloseRow" style="display: none;">
-                <button id="admButtonClose" class="admButton" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
+                <button id="admButtonClose" class="btn" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
                     alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
             </li>
         </ul>

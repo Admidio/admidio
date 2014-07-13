@@ -77,6 +77,10 @@
     background-image: -moz-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #CBDDE3 95%);	
 }
 
+.badge {
+    margin-left: 4px;
+}
+
 /* Headlines */
 
 .admHeadline, .admHeadline2, .admHeadline3 {
