@@ -50,13 +50,7 @@ if ($gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM')
 }
 
 // check for valid login
-if (!$gValidLogin && $getMsgType == 'PM')
-{
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
-
-// check for valid call of PM system
-if ($getUserId == 0 && $getMsgType == 'PM')
+if (!$gValidLogin && $getUserId == 0 && $getMsgType == 'PM')
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -77,6 +71,23 @@ if ($getMsgId > 0)
 	$sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user2read = '0'
             WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
     $gDb->query($sql);
+	
+	if($getMsgType == 'PM')
+	{
+		$checker = ">";
+	}
+	else
+	{
+        $checker = "=";
+	}
+	
+	$sql = "SELECT msg_id1, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp 
+				  FROM ". TBL_MESSAGES. "
+				 WHERE msg_id2 ".$checker." 0 AND msg_id1 = ". $getMsgId ."
+				 and msg_type = '".$getMsgType."'
+				 ORDER BY msg_id2 DESC";
+
+	$message_result = $gDb->query($sql);
 }
 
 if ($getUserId > 0)
@@ -93,30 +104,21 @@ if ($getUserId > 0)
 	}
 }
 
+if (strlen($getSubject) > 0)
+{
+	$headline = $gL10n->get('MAI_SUBJECT').': '.$getSubject;
+}
+else
+{
+	$headline = $gL10n->get('PMS_SEND_PM');
+}
+
 if ($getMsgType == 'PM')
 {
-	if ($getMsgId > 0)
-	{
-		$sql = "SELECT msg_id1, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp 
-				  FROM ". TBL_MESSAGES. "
-				 WHERE msg_id2 > 0 AND msg_id1 = ". $getMsgId ."
-				 and msg_type = 'PM'
-				 ORDER BY msg_id2 DESC";
-
-		$result = $gDb->query($sql);
-	}
-
 	$form_values['name']         = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
 	$form_values['subject']      = $getSubject;
 		
-	if (strlen($getSubject) > 0)
-	{
-		$headline = $gL10n->get('MAI_SUBJECT').': '.$getSubject;
-	}
-	else
-	{
-		$headline = $gL10n->get('PMS_SEND_PM');
-	}
+	
 
 	// add current url to navigation stack
 	$gNavigation->addUrl(CURRENT_URL, $headline);
@@ -170,9 +172,9 @@ if ($getMsgType == 'PM')
 	$page->addHtml($form->show(false));
 
 	// list history of this PM
-	if(isset($result))
+	if(isset($message_result))
 	{
-		while ($row = $gDb->fetch_array($result)) {
+		while ($row = $gDb->fetch_array($message_result)) {
 		
 			if ($row['msg_usrid1'] == $gCurrentUser->getValue('usr_id'))
 			{
@@ -200,6 +202,53 @@ if ($getMsgType == 'PM')
 			
 		}
 	}
+}
+else if (isset($message_result))
+{
+	// add current url to navigation stack
+	$gNavigation->addUrl(CURRENT_URL, $headline);
+
+	// create html page object
+	$page = new HtmlPage();
+
+	// show back link
+	$page->addHtml($gNavigation->getHtmlBackButton());
+
+	// show headline of module
+	$page->addHeadline($headline);
+	
+	// show email to user
+	if (isset($message_result))
+	{
+		while ($row = $gDb->fetch_array($message_result)) 
+		{
+			if ($row['msg_usrid1'] == $gCurrentUser->getValue('usr_id'))
+			{
+				$sentUser = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
+			}
+			else
+			{
+				$sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+			}
+
+			$page->addHtml('
+			<div class="panel-heading">
+                <div class="row">
+                    <div class="col-sm-8">
+                        <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser.'
+                    </div>
+                    <div class="col-sm-4 text-right">'.$row['msg_timestamp']);
+
+                    $page->addHtml('</div>
+                </div>
+            </div>
+			<div class="panel-footer">'.
+                nl2br($row['msg_message']).'
+            </div>');
+			
+		}
+	}
+	
 }
 else
 {
@@ -288,6 +337,11 @@ else
 
 	// create html page object
 	$page = new HtmlPage();
+	
+	// add additional libs for functions
+	$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-selectize/selectize.js');
+	$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-selectize/selectize.contacts.css');
+	$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-selectize/selectize.bootstrap3.css');
 
 	if($gValidLogin == true)
 	{
@@ -340,11 +394,11 @@ else
 	{
 		$formParam .= 'subject='.$getSubject.'&';
 	}
-
-
+	
 	// show form
 	$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, 'default', true);
 	$form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
+
 	if ($getUserId > 0)
 	{
 		// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
@@ -354,6 +408,13 @@ else
 	{
 		// Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
 		$form->addSelectBox('rol_id', $gL10n->get('SYS_TO'), array($rollenID => $rollenName), FIELD_MANDATORY, $rollenID);
+		
+		// add a selectbox where you can choose to which members (active, former) you want to send the mail
+		if ($formerMembers > 0)
+		{
+			$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+			$form->addSelectBox('show_members', null, $selectBoxEntries, FIELD_DEFAULT, $form_values['show_members']);
+		}
 	}
 	else
 	{
@@ -381,16 +442,40 @@ else
 					   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 					 ORDER BY cat_sequence, rol_name ';
 		}
-		$form->addSelectBoxFromSql('rol_id', $gL10n->get('SYS_TO'), $gDb, $sql, FIELD_MANDATORY, $form_values['rol_id'], true, 'MAI_SEND_MAIL_TO_ROLE');
+		
+		$result = $gDb->query($sql);
+		$list = '';
+		
+		while ($row = $gDb->fetch_array($result)) {
+		    if(strlen($list) > 0)
+			{
+			    $list .= ',';
+			}
+			
+			if ($gValidLogin)
+			{
+			    $list .= '{ class: "Groups", email: "groupID: 0-' .$row['rol_id']. '" , name: "' .$row['rol_name']. ' - ' .$gL10n->get('LST_ACTIVE_MEMBERS'). '"},';
+				$list .= '{ class: "Groups", email: "groupID: 1-' .$row['rol_id']. '" , name: "' .$row['rol_name']. ' - ' .$gL10n->get('LST_FORMER_MEMBERS'). '"},';
+				$list .= '{ class: "Groups", email: "groupID: 2-' .$row['rol_id']. '" , name: "' .$row['rol_name']. ' - ' .$gL10n->get('LST_ACTIVE_FORMER_MEMBERS'). '"},';
+				$list .= '{ class: "Groups", email: "groupID: 15" , name: "test"}';
+			}
+			else
+			{
+                $list .= '{ class: "Groups", email: "groupID: ' .$row['rol_id']. '" , name: "' .$row['rol_name']. '"}';
+			}
+        }
+		$list1 = '{ class: "Groups", email: "groupID: 15" , name: "test"}';
+		$form->addSelectBoxFromSql('rol_id', $gL10n->get('SYS_TO'), $gDb, $sql, FIELD_MANDATORY, $form_values['rol_id'], true, 'MAI_SEND_MAIL_TO_ROLE', null, null, 'contacts');
+
 	}
 
 	// add a selectbox where you can choose to which members (active, former) you want to send the mail
-	if (($getUserId == 0 && $gValidLogin == true && $getRoleId == 0)
-	||  ($getRoleId  > 0 && $formerMembers > 0))
-	{
-		$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-		$form->addSelectBox('show_members', null, $selectBoxEntries, FIELD_DEFAULT, $form_values['show_members']);
-	}
+	//if (($getUserId == 0 && $gValidLogin == true && $getRoleId == 0)
+	//||  ($getRoleId  > 0 && $formerMembers > 0))
+	//{
+	//	$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
+	//	$form->addSelectBox('show_members', null, $selectBoxEntries, FIELD_DEFAULT, $form_values['show_members']);
+	//}
 
 	$form->addLine();
 
@@ -453,6 +538,82 @@ else
 	// add form to html page and show page
 	$page->addHtml($form->show(false));
 }
+
+// add JS code for the drop down to find email addresses and groups
+if(isset($list))
+	{
+		$page->addHtml(
+		'<script>
+			
+			var REGEX_EMAIL = "([a-z0-9!#$%&\"*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\"*+/=?^_`{|}~-]+)*@" +
+						  "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
+
+			$("#rol_id").selectize({
+			persist: false,
+			maxItems: 2,
+			valueField: "email",
+			labelField: "name",
+			optgroups: [{value: "Groups", label: "Group"},
+				{value: "Mitglieder", label: "Mitglied"},
+			],
+			optgroupField: "class",
+			addOption:['.$list1.'],
+			setValue:['.$list1.'],
+			searchField: ["name", "email"],
+			options: ['.$list.'],
+			render: {
+				item: function(item, escape) {
+					return "<div>" +
+						(item.name ? "<span class=name>" + escape(item.name) + "</span>" : "") +
+						(item.email ? "<span class=email>" + escape(item.email) + "</span>" : "") +
+					"</div>";
+				},
+				option: function(item, escape) {
+					var label = item.name || item.email;
+					var caption = item.name ? item.email : null;
+					return "<div>" +
+						"<span class=drop_label>" + escape(label) + "</span>" +
+						(caption ? "<span class=caption>" + escape(caption) + "</span>" : "") +
+					"</div>";
+				},
+				optgroup_header: function(data, escape) {
+					return "<div class=optgroup-header>" + escape(data.label) + "</div>";
+				}
+			},
+			createFilter: function(input) {
+				var match, regex;
+
+				// email@address.com
+				regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
+				match = input.match(regex);
+				if (match) return !this.options.hasOwnProperty(match[0]);
+
+				// name <email@address.com>
+				regex = new RegExp("^([^<]*)\<" + REGEX_EMAIL + "\>$", "i");
+				match = input.match(regex);
+				if (match) return !this.options.hasOwnProperty(match[2]);
+
+				return false;
+			},
+			create: function(input) {
+				if ((new RegExp("^" + REGEX_EMAIL + "$", "i")).test(input)) {
+					return {email: input};
+				}
+				var match = input.match(new RegExp("^([^<]*)\<" + REGEX_EMAIL + "\>$", "i"));
+				if (match) {
+					return {
+						email : match[2],
+						name  : $.trim(match[1])
+					};
+				}
+				alert("Invalid email address.");
+				return false;
+			}
+			});
+
+		</script>');
+	}
+
 // show page
 $page->show();
 

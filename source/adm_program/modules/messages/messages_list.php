@@ -14,9 +14,9 @@
 require_once('../../system/common.php');
 
 // check if the call of the page was allowed
-if ($gPreferences['enable_mail_module'] != 1)
+if ($gPreferences['enable_pm_module'] != 1 && $gPreferences['enable_mail_module'] != 1)
 {
-    // message if the sending of PM is not allowed
+    // message if the sending of messages is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
@@ -70,8 +70,16 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create module menu for emails
 $EmailMenu = new ModuleMenu('admMenuEmail');
-$EmailMenu->addItem('admMenuItemNewEmail', $g_root_path.'/adm_program/modules/messages/messages.php', $gL10n->get('SYS_EMAIL'), '/email.png');
-$EmailMenu->addItem('admMenuItemNewPm', $g_root_path.'/adm_program/modules/messages/messages.php', $gL10n->get('PMS_MESSAGE'), '/email.png');
+// link to write new email
+if ($gPreferences['enable_mail_module'] == 1 )
+{
+    $EmailMenu->addItem('admMenuItemNewEmail', $g_root_path.'/adm_program/modules/messages/messages.php', $gL10n->get('MAI_SEND_EMAIL'), '/email.png');
+}
+// link to write new PM
+if ($gPreferences['enable_pm_module'] == 1 )
+{
+    $EmailMenu->addItem('admMenuItemNewPm', $g_root_path.'/adm_program/modules/messages/messages.php?msg_type=PM', $gL10n->get('PMS_SEND_PM'), '/email.png');
+}
 $EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=messages', 
 					$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 
@@ -97,7 +105,7 @@ if(isset($resultMail))
     while ($row = $gDb->fetch_array($resultMail)) {
         $user = new User($gDb, $gProfileFields, $row['user']);
 
-		$table->addRowByArray(array( '<img class="iconInformation" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp']), null, array('style' => 'cursor: pointer'));
+		$table->addRowByArray(array( '<img class="iconInformation" src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_EMAIL').'" title="'.$gL10n->get('SYS_EMAIL').'" />' ,$row['msg_subject'], $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $row['msg_timestamp']), null, array('style' => 'cursor: pointer', 'onclick' => 'window.location.href=\''. $g_root_path. '/adm_program/modules/messages/messages.php?msg_type='.$row['msg_type'].'&usr_id='.$row['user'].'&subject='.addslashes($row['msg_subject']).'&msg_id='. $row['msg_id1']. '\''));
    }
 }
 
