@@ -33,7 +33,7 @@ define('SERVER_PATH', substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1));
 if(strpos($_SERVER['SCRIPT_FILENAME'], "/adm_") !== false && isset($g_root_path) == true)
 {
     // current called url (only this way possible, because SSL-Proxies couldn't be read with _SERVER parameter)
-    define('CURRENT_URL',$g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strpos($_SERVER['SCRIPT_FILENAME'], "/adm_")). '?'. $_SERVER['QUERY_STRING']);
+    define('CURRENT_URL',$g_root_path. substr($_SERVER['SCRIPT_FILENAME'], strrpos($_SERVER['SCRIPT_FILENAME'], "/adm_")). '?'. $_SERVER['QUERY_STRING']);
 }
 else
 {
