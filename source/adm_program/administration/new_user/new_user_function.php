@@ -115,8 +115,6 @@ elseif($getMode == 4)
     try
     {
         // delete registration
-    	// there is no need to delete user in forum because only registered Admidio 
-    	// users are registered in the forum
         $registrationUser->delete();
     }
     catch(AdmException $e)
@@ -160,8 +158,6 @@ elseif($getMode == 6)
     try
     {
         // delete registration
-    	// there is no need to delete user in forum because only registered Admidio 
-    	// users are registered in the forum
         $registrationUser->delete();
     }
     catch(AdmException $e)

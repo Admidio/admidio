@@ -31,7 +31,7 @@ else
     
     $show_time = 2000;
 
-    if($getMessageCode != 'SYS_LOGIN_SUCCESSFUL' && $getMessageCode != 'SYS_FORUM_LOGIN_SUCCESSFUL')
+    if($getMessageCode != 'SYS_LOGIN_SUCCESSFUL')
     {
         // Wenn es eine andere Meldung, als eine Standard-Meldung ist, dem User mehr Zeit zum lesen lassen
         $show_time = 0;

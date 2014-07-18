@@ -49,9 +49,6 @@ else
     {
         $form_values[$key] = $value;
     }
-
-    // Forumpassword immer auf 0000 setzen, damit es nicht ausgelesen werden kann
-    $form_values['forum_pw'] = '0000';
 }
 
 // create html page object

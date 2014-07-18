@@ -65,34 +65,33 @@ if($gPreferences['enable_download_module'] == 1)
                         $gL10n->get('DOW_DOWNLOADS'), '/icons/download_big.png',
                         $gL10n->get('DOW_DOWNLOADS_DESC'));
 }
-if($gPreferences['enable_mail_module'] == 1)
+if($gPreferences['enable_mail_module'] == 1 && $gValidLogin == false)
 {
     $moduleMenu->addItem('email', '/adm_program/modules/messages/messages.php',
                         $gL10n->get('SYS_EMAIL'), '/icons/email_big.png',
                         $gL10n->get('MAI_EMAIL_DESC'));
 }
-if($gPreferences['enable_pm_module'] == 1 && $gValidLogin)
-        {
-        $sql = 'SELECT *
-        FROM '. TBL_MESSAGES. '
-         WHERE (msg_usrid1 = '. $gCurrentUser->getValue('usr_id') .' and msg_user1read=1)
-         or (msg_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and msg_user2read=1)';
-
-            $result = $gDb->query($sql);
-            $row = $gDb->num_rows($result);
-            if ($row > 0)
-            {
-                $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
-                                $gL10n->get('SYS_PM').'<span class="badge">'.$row.'</span>', '/icons/email.png',
-                                $gL10n->get('MAI_EMAIL_DESC'));
-            }
-            else
-            {
-                $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
-                                $gL10n->get('SYS_PM'), '/icons/email.png',
-                                $gL10n->get('MAI_EMAIL_DESC'));
-            }
-        }
+if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
+{
+    $sql = 'SELECT * FROM '. TBL_MESSAGES. '
+             WHERE (   msg_usrid1 = '. $gCurrentUser->getValue('usr_id') .' and msg_user1read=1)
+                   OR (msg_usrid2 = '. $gCurrentUser->getValue('usr_id') .' and msg_user2read=1)';
+    $result = $gDb->query($sql);
+    $row = $gDb->num_rows($result);
+    
+    if ($row > 0)
+    {
+        $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
+                        $gL10n->get('SYS_PM').'<span class="badge">'.$row.'</span>', '/icons/email.png',
+                        $gL10n->get('MAI_EMAIL_DESC'));
+    }
+    else
+    {
+        $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
+                        $gL10n->get('SYS_PM'), '/icons/email.png',
+                        $gL10n->get('MAI_EMAIL_DESC'));
+    }
+}
 if($gPreferences['enable_photo_module'] == 1 
 || ($gPreferences['enable_photo_module'] == 2 && $gValidLogin))
 {

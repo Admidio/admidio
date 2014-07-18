@@ -202,9 +202,6 @@ foreach($gProfileFields->mProfileFields as $field)
 	}
 }
 
-$login_name_changed = false;
-$forum_old_username = '';
-
 if($gCurrentUser->isWebmaster() || $getNewUser > 0)
 {
     // Loginname darf nur vom Webmaster bzw. bei Neuanlage geaendert werden    
@@ -228,7 +225,6 @@ if($gCurrentUser->isWebmaster() || $getNewUser > 0)
             }
         }
 
-        $login_name_changed = true;
         if(!$user->setValue('usr_login_name', $_POST['usr_login_name']))
 		{
 			$gMessage->show($gL10n->get('SYS_FIELD_INVALID_CHAR', $gL10n->get('SYS_USERNAME')));

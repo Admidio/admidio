@@ -156,12 +156,6 @@ case 1:
                 $text->setValue('txt_text', $value);
                 $text->save();
             }
-            elseif($key == 'forum_pw' && $value == '0000')
-            {
-                // Forumpassword hier gesondert behandeln, da es nicht angezeigt werden soll
-                // 0000 bedeutet, dass das PW sich nicht veraendert hat
-                $gPreferences[$key] = $gPreferences[$key];
-            }
             else
             {
                 $gPreferences[$key] = $value;

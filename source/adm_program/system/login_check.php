@@ -150,7 +150,7 @@ if ($userFound >= 1)
         // Logins zaehlen und aktuelles Login-Datum aktualisieren
         $gCurrentUser->updateLoginData();
 
-        // User gibt es im Forum nicht, also eine reine Admidio-Anmeldung.
+        // show successful login message
         $login_message = 'SYS_LOGIN_SUCCESSFUL';
 
         // bei einer Beta-Version noch einen Hinweis ausgeben !
