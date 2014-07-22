@@ -60,9 +60,33 @@ $datesTotalCount = $dates->getDataSetCount();
 // get parameter
 $parameter = $dates->getParameter();
 
+// set headline
+if($parameter['cat_id'] > 0)
+{
+    $headline = $parameter['headline']. ' - '. $calendar->getValue('cat_name');
+}
+else
+{
+    $headline = $parameter['headline'];
+}
+
+// check time period if old dates are choosen, then set headline to previous dates
+// Define a prefix
+if($parameter['daterange']['english']['start_date'] < DATE_NOW 
+    && $parameter['daterange']['english']['end_date'] < DATE_NOW
+    || $parameter['mode'] == 'old')
+{
+    $headline = $gL10n->get('DAT_PREVIOUS_DATES', ' ').$headline;
+}
+
+if($parameter['view_mode'] == 'print')
+{
+    $headline = $gCurrentOrganization->getValue('org_longname').' - '.$headline;
+}
+
 // Fill input fields only if user values exist
 $dateFromHtmlOutput = $dates->getFormValue($parameter['daterange']['system']['start_date'], DATE_NOW);
-$dateToHtmlOutput = $dates->getFormValue($parameter['daterange']['system']['end_date'], '9999-12-31');
+$dateToHtmlOutput   = $dates->getFormValue($parameter['daterange']['system']['end_date'], '9999-12-31');
 
 if($parameter['cat_id'] > 0)
 {
@@ -72,7 +96,7 @@ if($parameter['cat_id'] > 0)
 if($parameter['id']  == 0 || $parameter['view_mode'] == 'compact' && $parameter['id'] > 0)
 {
     $gNavigation->clear();
-    $gNavigation->addUrl(CURRENT_URL);
+    $gNavigation->addUrl(CURRENT_URL, $headline);
 }
 
 // Number of events each page for default view 'html' or 'compact' view
@@ -128,79 +152,50 @@ if($datesTotalCount != 0)
     }
 }
 
+// create html page object
+$page = new HtmlPage();
+
 if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
 {
-    // check time period if old dates are choosen, then set headline to previous dates
-    // Define a prefix
-    if($parameter['daterange']['english']['start_date'] < DATE_NOW 
-        && $parameter['daterange']['english']['end_date'] < DATE_NOW
-        || $parameter['mode'] == 'old')
-    {
-        $gLayout['title_prefix'] = $gL10n->get('DAT_PREVIOUS_DATES', ' ');
-    }
-    else
-    {
-        $gLayout['title_prefix'] = '';
-    }
-    
-    // Html-Head output
-    if($parameter['cat_id'] > 0)
-    {
-        $gLayout['title'] = $gLayout['title_prefix'] . $parameter['headline']. ' - '. $calendar->getValue('cat_name');
-    }
-    else
-    {
-        $gLayout['title'] = $gLayout['title_prefix'] . $parameter['headline'];
-    }
     
     if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1)
     {
-        $gLayout['header'] =  '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$parameter['headline']).'"
-            href="'.$g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$parameter['headline'].'" />';
+        $page->addRssFile($g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$parameter['headline'], $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$parameter['headline']));
     };
 
-    $gLayout['header'] .= '
-        <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
-        <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
-        <link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />';
+    $page->addJavascript('
+        $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
 
-    $gLayout['header'] .= '
-    <script type="text/javascript"><!--
-        $(document).ready(function()
-        {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+        $("#admCalendar").change(function () {
+            var calendarId = "";
+            if ($("#admCalendar").selectedIndex != 0) {
+                var calendarId = $("#admCalendar").val();
+            }
+            self.location.href = "dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date'].'&cat_id=" + calendarId;
+        });', true);
 
-            $("#admCalendar").change(function () {
-                var calendarId = "";
-                if ($("#admCalendar").selectedIndex != 0) {
-                    var calendarId = $("#admCalendar").val();
-                }
-                self.location.href = "dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date'].'&cat_id=" + calendarId;
-            });
-        });
-
-        function Datefilter ()
-        {
+    $page->addJavascript('
+        function Datefilter() {
             var field_error = "'.$gL10n->get('ECA_FIELD_ERROR').'";
 
             if (document.Formular.date_from.value == ""
-                || document.Formular.date_to.value == "")
-            {
+            ||  document.Formular.date_to.value   == "") {
                 alert(field_error);
                 document.Formular.date_from.focus();
                 return false;
             }
-        }
+        }');
 
-        var calPopup = new CalendarPopup("calendardiv");
-        calPopup.setCssPrefix("calendar");
-    //--></script>';
 
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    // If default view mode is set to compact we need a back navigation if one date is selected for detail view
+    if($gPreferences['dates_viewmode'] == 'compact' && $parameter['view_mode'] == 'html' && $parameter['id'] > 0)
+    {
+        // show back link
+        $page->addHtml($gNavigation->getHtmlBackButton());
+    }
 
-    // Html Output
-
-    echo '<h1 class="moduleHeadline">'. $gLayout['title']. '</h1>';
+    // set headline
+    $page->addHeadline($headline);
 
     //Check if box must be shown, when more dates available
     if((($parameter['calendar-selection'] == 1) && ($parameter['id'] == 0)) || $gCurrentUser->editDates())
@@ -247,13 +242,39 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             if($gCurrentUser->isWebmaster())
             {
                 // show link to system preferences of weblinks
-                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=DAT_DATES',
+                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=events',
                                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
             }
 
-            $DatesMenu->show();
+            $page->addHtml($DatesMenu->show(false));
         }
 
+        // Input elements for Startdate and Enddate
+        $page->addHtml('
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-filter-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">'.$gL10n->get('SYS_FILTER').'</a>
+                </div>
+                
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
+                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php', $page, 'filter', false, 'navbar-form navbar-left');
+                    $form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtmlOutput, 10, FIELD_DEFAULT, 'date');
+                    $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtmlOutput, 10, FIELD_DEFAULT, 'date');
+                    $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+                    $page->addHtml($form->show(false));
+                $page->addHtml('</div>
+            </div>
+        </nav>');
+/*
          //Input for Startdate and Enddate
         echo '
         <div class="navigationPath">
@@ -278,7 +299,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 <span style="margin-left: 5px;">&nbsp;</span>
                 <input type="button" onclick="window.location.href = \''.$g_root_path.'/adm_program/modules/dates/dates.php\'" value="'.$gL10n->get('SYS_DELETE').'">
             </form>
-        </div>';
+        </div>';*/
     }
 
     if($datesTotalCount == 0)
@@ -286,22 +307,24 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
         // No events found
         if($parameter['id'] > 0)
         {
-            echo '<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>';
+            $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>');
         }
         else
         {
-            echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
+            $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
         }
     }
+
     // List events
     if($datesTotalCount > 0)
     {
         // Output table header for compact view
         if ($parameter['view_mode'] == 'compact')
         {
-            $compactTable = new HtmlTableBasic('', 'tableList');
-            $compactTable->addAttribute('style', 'width: 100%;', 'table');
-            $compactTable->addAttribute('cellspacing', '0', 'table');
+            $compactTable = new HtmlTable('events_compact_table', $page, true, true);
+            $columnHeading = array('&nbsp;', $gL10n->get('SYS_START'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
+            $compactTable->addRowHeadingByArray($columnHeading);
+/*
             $compactTable->addTableHeader();
             $compactTable->addRow();
             $compactTable->addColumn('&nbsp;', null, 'th');
@@ -309,25 +332,26 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             $compactTable->addColumn($gL10n->get('DAT_DATE'), null, 'th');
             $compactTable->addColumn($gL10n->get('SYS_PARTICIPANTS'), array('colspan' => '2'), 'th');
             $compactTable->addColumn($gL10n->get('DAT_LOCATION'), null, 'th');
-            $compactTable->addTableBody();
+            $compactTable->addTableBody();*/
         }
+        
         foreach($datesResult['recordset'] as $row)
         {
             // Initialize object and write new data
             $date->readDataById($row['dat_id']);
 
-            $endDate='';
+            $endDate = '';
             if($date->getValue('dat_begin', $gPreferences['system_date']) != $date->getValue('dat_end', $gPreferences['system_date']))
             {
-                $endDate=$date->getValue('dat_end', $gPreferences['system_date']);
+                $endDate = ' - '.$date->getValue('dat_end', $gPreferences['system_date']);
             }
 
             //ical Download
-            $icalIcon="";
+            $icalIcon = '';
             if($gPreferences['enable_dates_ical'] == 1)
             {
                 $icalIcon = '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='. $date->getValue('dat_id'). '&amp;mode=6"><img
-                src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
+                    src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('DAT_EXPORT_ICAL').'" title="'.$gL10n->get('DAT_EXPORT_ICAL').'" /></a>';
             }
 
             // change and delete is only for users with additional rights
@@ -357,18 +381,15 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             }
 
             // Initialize variables
-            $registerIcon='&nbsp;';
-            $registerText='';
-            $participantIcon='';
-            $participantText='';
-            $mgrpartIcon='';
-            $mgrpartText='';
+            $registerLink    = '';
+            $participantLink = '';
+            $mgrpartLink  = '';
             $dateElements = array();
             $firstElement = true;
-            $maxMembers='';
-            $numMembers='';
-            $leadersHtml='';
-            $locationHtml='';
+            $maxMembers   = '';
+            $numMembers   = '';
+            $leadersHtml  = '';
+            $locationHtml = '';
 
             if ($date->getValue('dat_all_day') == 0)
             {
@@ -430,9 +451,8 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                             $route_url .= ',%20'. $date->getValue('dat_country');
                         }
                         $locationHtml .= '
-                            <span class="iconTextLink">&nbsp;&nbsp;<a href="'. $route_url. '" target="_blank"><img
-                                src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>
-                            </span>';
+                        <a class="icon-link" href="'. $route_url. '" target="_blank"><img
+                            src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>';
                     }
                 }
                 else
@@ -481,13 +501,21 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                     if($row['member_date_role'] > 0)
                     {
                         $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id');
-                        $registerIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>';
-                        $registerText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_CANCEL').'</a>';
+
+                        if ($parameter['view_mode'] == 'html')
+                        {
+                            $registerLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</a>';
+                        }
+                        else
+                        {
+                            $registerLink = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" /></a>';
+                        }                            
                     }
                     else
                     {
                         $available_signin = true;
                         $non_available_rols = array();
+
                         if($date->getValue('dat_max_members'))
                         {
                             // Check limit of participants
@@ -500,12 +528,19 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                         if($available_signin)
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
-                            $registerIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" /></a>';
-                            $registerText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_ATTEND').'</a>';
+
+                            if ($parameter['view_mode'] == 'html')
+                            {
+                                $registerLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</a>';
+                            }
+                            else
+                            {
+                                $registerLink = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" /></a>';
+                            }                            
                         }
                         else
                         {
-                            $registerText = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
+                            $registerLink = $gL10n->get('DAT_REGISTRATION_NOT_POSSIBLE');
                         }
                     }
 
@@ -515,8 +550,15 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                         if ($leadersHtml + $numMembers > 0)
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
-                            $participantIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
-                            $participantText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
+                            
+                            if ($parameter['view_mode'] == 'html')
+                            {
+                                $participantLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
+                            }
+                            else
+                            {
+                                $participantLink = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" /></a>';
+                            }                            
                         }
                     }
 
@@ -524,16 +566,28 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                     if($row['mem_leader'] == 1)
                     {
                         $buttonURL = $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$date->getValue('dat_rol_id');
-                        $mgrpartIcon = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
-                        $mgrpartText = '<a href="'.$buttonURL.'">'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>';
+
+                        if ($parameter['view_mode'] == 'html')
+                        {
+                            $mgrpartLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>';
+                        }
+                        else
+                        {
+                            $mgrpartLink = '<a href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" /></a>';
+                        }                            
                     }
                 }
             }
 
             if ($parameter['view_mode'] == 'html')
             {
+                $cssClassHighlight = '';
+
                 // Change css if date is highlighted
-                $cssClass = ($row['dat_highlight'] == 1) ? 'boxHeadHighlighted' : 'boxHead';
+                if($row['dat_highlight'] == 1)
+                {
+                    $cssClassHighlight = ' panel-highlight';
+                }
 
                 // Output of elements
                 // always 2 then line break
@@ -561,51 +615,33 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 }
                 $tableEventDetails = $eventDetails->getHtmlTable();
 
-                echo '
-                <div class="boxLayout" id="dat_'.$date->getValue('dat_id').'">
-                    <div class="'.$cssClass.'">
-                        <div class="boxHeadLeft">
-                            <img src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
-                            $date->getValue('dat_begin', $gPreferences['system_date']);
-                            echo $endDate ? ' - ' : '';
-                            echo $endDate . ' ' . $date->getValue('dat_headline') . '
+                $page->addHtml('
+                <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
+                    <div class="panel-heading">
+                        <div class="pull-left">
+                            <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/dates.png" alt="'. $date->getValue('dat_headline'). '" />' .
+                            $date->getValue('dat_begin', $gPreferences['system_date']).$endDate.' '.$date->getValue('dat_headline') . '
                         </div>
-                        <div class="boxHeadRight">' .
+                        <div class="pull-right text-right">' .
                             $icalIcon . $copyIcon . $editIcon . $deleteIcon . '
                         </div>
                     </div>
 
-                    <div class="boxBody">
-                    ' . $tableEventDetails . '
-                        <div class="date_description" style="clear: left;">' . $date->getValue('dat_description') . '</div>
-                    <div>';
-                        if ($registerText)
+                    <div class="panel-body">
+                        ' . $tableEventDetails . '
+                        <div class="date_description" style="clear: left;">' . $date->getValue('dat_description') . '</div>');
+                                            
+                        if (strlen($registerLink) > 0 || strlen($participantLink) > 0 || strlen($mgrpartLink) > 0)
                         {
-                            echo '
-                            <span class="iconTextLink">
-                                ' . $registerIcon .' '. $registerText . '
-                            </span>&nbsp;';
+                            $page->addHtml('<div class="btn-group">'.$registerLink.$participantLink.$mgrpartLink.'</div>');
                         }
-                        if ($participantText)
-                        {
-                            echo '
-                            <span class="iconTextLink">
-                                ' . $participantIcon .' '. $participantText . '
-                            </span>&nbsp;';
-                        }
-                        if ($mgrpartText)
-                        {
-                            echo '
-                            <span class="iconTextLink">
-                                ' . $mgrpartIcon .' '. $mgrpartText . '
-                            </span>';
-                        }
-                        echo '</div>';
+                    $page->addHtml('</div>
+                    <div class="panel-footer">'.
                         // show information about user who created the recordset and changed it
-                        echo admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'),
+                        admFuncShowCreateChangeInfoByName($row['create_name'], $date->getValue('dat_timestamp_create'),
                            $row['change_name'], $date->getValue('dat_timestamp_change'), $date->getValue('dat_usr_id_create'), $date->getValue('dat_usr_id_change')).'
                     </div>
-                </div>';
+                </div>');
             }
             else
             {
@@ -623,47 +659,67 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 {
                     $timeBegin = '&nbsp;';
                 }
+                
+                $columnValues = array();
+                
+                if(strlen($registerLink) > 0)
+                {
+                    $columnValues[] = $registerLink;                    
+                }
+                else
+                {
+                    $columnValues[] = '&nbsp;';
+                }
 
+                $columnValues[] = $dateBegin.' '.$timeBegin;
+                $columnValues[] = '<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>';
+                
+                $participants = '';
+                
+                if($leadersHtml > 0)
+                {
+                    $participants = $leadersHtml.'+';
+                }
+                $participants = $numMembers .'/'. $maxMembers;                    
+                if($leadersHtml+$numMembers)
+                {
+                    $participants = $participantLink;
+                }
+                $columnValues[] = $participants;
 
+                if(strlen($locationHtml) > 0)
+                {
+                    $columnValues[] = $locationHtml;                    
+                }
+                else
+                {
+                    $columnValues[] = '&nbsp;';
+                }
+
+                $compactTable->addRowByArray($columnValues);
+                                /*
                 $compactTable->addRow('', array('class' => 'tableMouseOver'));
-                $compactTable->addColumn($registerIcon);
+                $compactTable->addColumn($registerLink);
                 $compactTable->addColumn($dateBegin);
                 $compactTable->addColumn($timeBegin);
                 $compactTable->addColumn('<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>', 'style', 'font-weight:'. $cssWeight .'');
                 $compactTable->addColumn(($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers);
-                $compactTable->addColumn(($leadersHtml+$numMembers > 0 ? $participantIcon : '&nbsp;'));
-                $compactTable->addColumn($locationHtml);
+                $compactTable->addColumn(($leadersHtml+$numMembers > 0 ? $participantLink : '&nbsp;'));
+                $compactTable->addColumn($locationHtml);*/
             }
         }  // End foreach
 
         // Output table bottom for compact view
         if ($parameter['view_mode'] == 'compact')
         {
-            $htmlCompactTable = $compactTable->getHtmlTable();
-            echo $htmlCompactTable;
+            $page->addHtml($compactTable->show(false));
         }
     }
 
     // If neccessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date'].'&view_mode='.$parameter['view_mode'];
-    echo admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $parameter['startelement'], TRUE);
-
-    // If default view mode is set to compact we need a back navigation if one date is selected for detail view
-    if($gPreferences['dates_viewmode'] == 'compact' && $parameter['view_mode'] == 'html' && $parameter['id'] > 0)
-    {
-        echo'
-        <ul class="iconTextLinkList">
-            <li>
-                <span class="iconTextLink">
-                    <a href="'.$gNavigation->getUrl().'"><img
-                    src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-                    <a href="'.$gNavigation->getUrl().'">'.$gL10n->get('SYS_BACK').'</a>
-                </span>
-            </li>
-        </ul>';
-    }
-    
-    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+    $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $parameter['startelement'], TRUE));
+    $page->show();
 }
 else
 {
@@ -690,7 +746,7 @@ else
     }
     
     // Define header and footer content for the html table
-    $tableHead = '<h1>'. $gCurrentOrganization->getValue('org_longname'). ' - ' .$gL10n->get('DAT_DATES'). ' ' . $calendar->getValue('cat_name') . '</h1>
+    $tableHead = '<h1>'.$headline.'</h1>
                     <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$parameter['daterange']['system']['start_date']. ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$parameter['daterange']['system']['end_date'].
                         '<span class="form" style="margin-left: 40px;">'.
                         // Selectbox for table content

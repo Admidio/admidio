@@ -106,6 +106,15 @@
     font-size: 11pt;
 }
 
+.alert, .btn-group {
+    margin-top: 15px;
+}
+
+.alert-small {
+    margin-top: 5px;
+    padding: 5px;
+}
+
 /* Links */
 
 a:link, a:visited {
@@ -151,7 +160,7 @@ a:hover, a:active {
     height: 16px;
 }
 
-.navbar-link img, .icon-text-link img, .btn img {
+.navbar-link img, .icon-text-link img, .btn img, .alert .glyphicon {
     margin-right: 5px;
 }
 
@@ -261,10 +270,6 @@ input[type="number"] {
     margin-right: 0px;
 }
 
-.form-alert {
-    margin-top: 15px;
-}
-
 .admEditor {
 	display: block;
 }
@@ -323,9 +328,18 @@ input[type="number"] {
     letter-spacing: 0.1em;
     border-top-left-radius: 9px;
     border-top-right-radius: 9px;
-    background-color: #96c4cb;
+    background-color: #96c4cb; 
     background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55B6C5 0%, #347078 95%);	    
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+}
+
+.panel-default.in > .panel-heading {
+    background-image: -moz-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55B6C5 0%, #347078 95%);    
+}
+
+.panel-heading {
+    display: inline-block;
+    width: 100%;
 }
 
 .panel-heading a:link, .panel-heading  a:visited {

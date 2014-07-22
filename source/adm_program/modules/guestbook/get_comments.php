@@ -61,32 +61,30 @@ if (isset($comment_result))
         echo '
         <div class="panel panel-info panel-comment" id="gbc_'.$gbComment->getValue('gbc_id').'">
             <div class="panel-heading">
-                <div class="row">
-                    <div class="col-sm-7">
-                        <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/comments.png" style="vertical-align: top;" alt="'.$gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name')).'" />&nbsp;'.
-                        $gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'));
+                <div class="pull-left">
+                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/comments.png" style="vertical-align: top;" alt="'.$gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name')).'" />&nbsp;'.
+                    $gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'));
 
-                        // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
-                        if(strlen($gbComment->getValue('gbc_email')) > 0)
-                        {
-                            echo '<a class="icon-link" href="mailto:'.$gbComment->getValue('gbc_email').'"><img src="'. THEME_PATH. '/icons/email.png" 
-                                alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" /></a>';
-                        }
-                    echo '</div>
-                    <div class="col-sm-5 text-right">'. $gbComment->getValue('gbc_timestamp_create', $gPreferences['system_date'].' '.$gPreferences['system_time']);
+                    // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
+                    if(strlen($gbComment->getValue('gbc_email')) > 0)
+                    {
+                        echo '<a class="icon-link" href="mailto:'.$gbComment->getValue('gbc_email').'"><img src="'. THEME_PATH. '/icons/email.png" 
+                            alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $gbComment->getValue('gbc_email')).'" /></a>';
+                    }
+                echo '</div>
+                <div class="pull-right text-right">'. $gbComment->getValue('gbc_timestamp_create', $gPreferences['system_date'].' '.$gPreferences['system_time']);
 
-                        // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
-                        if ($gCurrentUser->editGuestbookRight())
-                        {
-                            echo '
-                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$gbComment->getValue('gbc_id').'"><img 
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                            <a class="icon-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.
-                                $gbComment->getValue('gbc_id').'&amp;database_id='.$gbComment->getValue('gbc_id').'&amp;database_id_2='.$gbComment->getValue('gbo_id').'&amp;name='.urlencode($gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'))).'"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
-                        }
-                    echo '</div>
-                </div>
+                    // aendern und loeschen von Kommentaren duerfen nur User mit den gesetzten Rechten
+                    if ($gCurrentUser->editGuestbookRight())
+                    {
+                        echo '
+                        <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_comment_new.php?cid='.$gbComment->getValue('gbc_id').'"><img 
+                            src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                        <a class="icon-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc&amp;element_id=gbc_'.
+                            $gbComment->getValue('gbc_id').'&amp;database_id='.$gbComment->getValue('gbc_id').'&amp;database_id_2='.$gbComment->getValue('gbo_id').'&amp;name='.urlencode($gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'))).'"><img 
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
+                    }
+                echo '</div>
             </div>
 
             <div class="panel-body">'.

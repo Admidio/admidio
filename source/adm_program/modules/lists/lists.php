@@ -169,13 +169,13 @@ foreach($listsResult['recordset'] as $row)
 
     $page->addHtml('
     <div class="panel panel-default" id="admRoleDetails'.$role->getValue('rol_id').'">
-        <div class="panel-heading row">
-            <div class="col-sm-9">
+        <div class="panel-heading">
+            <div class="pull-left">
                 <h4 class="panel-title">
                     <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_'.$role->getValue('cat_id').'" href="#collapse_'.$role->getValue('rol_id').'">
                         '. $role->getValue('rol_name'). '</a></h4>
             </div>
-            <div class="col-sm-3 text-right">');
+            <div class="pull-right text-right">');
                 // send a mail to all role members
                 if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
                 {

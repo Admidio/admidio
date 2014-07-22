@@ -584,7 +584,6 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Nombre d'entrées par page</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Définir le nombre d'éléments affichés sur une page. La pagination est fournie si nombre d'éléments dépasse la valeur définie. Aperçu avant impression et la fonctionnalité d'exportation ne sont pas affectés. Si la valeur est 0, tous les éléments seront cotées et la pagination est désactivée. (Par défaut: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Pour les utilisateurs connectés uniquement</text>
-    <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="edited">Préférences des organisations</text>
     <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Gérer les préférences de l'organisation générale ou préférences module ici.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Organisation parent</text>
     <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="edited">Définissez ici l'organisation mère. Les organisations mères sont capables de créer des événements et des annonces par exemple qui sera affiché dans sélectionnés (enfant) l'organisation.</text>

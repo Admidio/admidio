@@ -31,7 +31,7 @@ class ModuleMenu
 	/** creates the object of the module menu and initialize all class parameters
 	 *  @param $id Html id of the module menu
 	 */
-	public function __construct($id, $maxMenuLinkItem = 4)
+	public function __construct($id, $maxMenuLinkItem = 6)
 	{
 		global $g_root_path;
 		$this->id		= $id;

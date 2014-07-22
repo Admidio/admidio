@@ -703,7 +703,6 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Aantal items per pagina</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Alleen voor ingelogde gebruikers</text>
-    <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="edited">Voorkeursinstellingen</text>
     <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Hoofd organisatie</text>
     <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="edited">Bepaal hier de hoofd organisatie. Hoofd organisatie kan bijvoorbeeld evenementen en mededelingen maken, die woden getoond in de geselecteerde (sub) organizatie.</text>

@@ -142,8 +142,7 @@ $page->addHtml($gNavigation->getHtmlBackButton());
 // show headline of module
 $page->addHeadline($headline);
 
- //Input for Startdate and Enddate
-
+// Input elements for Startdate and Enddate
 $page->addHtml('
 <nav class="navbar navbar-default" role="navigation">
     <div class="container-fluid">

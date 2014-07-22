@@ -123,6 +123,17 @@ case 1:
         case 'messages':
             $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha', 'mail_html_registered_users');
             break;
+
+        case 'profile':
+            $checkboxes = array('profile_log_edit_fields', 'profile_show_map_link', 'profile_show_roles', 'profile_show_former_roles', 'profile_show_extern_roles');
+            break;
+
+        case 'events':
+            $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_calendar_select');
+            break;
+
+        case 'links':
+            break;
         
         default:
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));

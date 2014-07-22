@@ -242,40 +242,38 @@ else
         $page->addHtml('
         <div class="panel panel-primary" id="gbo_'.$guestbook->getValue('gbo_id').'">
             <div class="panel-heading">
-                <div class="row">
-                    <div class="col-sm-7">
-                        <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$guestbook->getValue('gbo_name').'" />'.$guestbook->getValue('gbo_name'));
+                <div class="pull-left">
+                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$guestbook->getValue('gbo_name').'" />'.$guestbook->getValue('gbo_name'));
 
-                        // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
-                        if (strlen($guestbook->getValue('gbo_homepage')) > 0)
-                        {
+                    // Falls eine Homepage des Users angegeben wurde, soll der Link angezeigt werden...
+                    if (strlen($guestbook->getValue('gbo_homepage')) > 0)
+                    {
+                        $page->addHtml('
+                        <a class="icon-link" href="'.$guestbook->getValue('gbo_homepage').'" target="_blank"><img src="'. THEME_PATH. '/icons/weblinks.png"
+                            alt="'.$guestbook->getValue('gbo_homepage').'" title="'.$guestbook->getValue('gbo_homepage').'" /></a>');
+                    }
+
+                    // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
+                    if (strlen($guestbook->getValue('gbo_email')) > 0)
+                    {
+                        $page->addHtml('
+                        <a class="icon-link" href="mailto:'.$guestbook->getValue('gbo_email').'"><img src="'. THEME_PATH. '/icons/email.png"
+                            alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" /></a>');
+                    }
+                $page->addHtml('</div>
+                <div class="pull-right text-right">'. $guestbook->getValue('gbo_timestamp_create'));
+
+                    // aendern & loeschen duerfen nur User mit den gesetzten Rechten
+                    if ($gCurrentUser->editGuestbookRight())
+                    {
                             $page->addHtml('
-                            <a class="icon-link" href="'.$guestbook->getValue('gbo_homepage').'" target="_blank"><img src="'. THEME_PATH. '/icons/weblinks.png"
-                                alt="'.$guestbook->getValue('gbo_homepage').'" title="'.$guestbook->getValue('gbo_homepage').'" /></a>');
-                        }
-
-                        // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...
-                        if (strlen($guestbook->getValue('gbo_email')) > 0)
-                        {
-                            $page->addHtml('
-                            <a class="icon-link" href="mailto:'.$guestbook->getValue('gbo_email').'"><img src="'. THEME_PATH. '/icons/email.png"
-                                alt="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" title="'.$gL10n->get('SYS_SEND_EMAIL_TO', $guestbook->getValue('gbo_email')).'" /></a>');
-                        }
-                    $page->addHtml('</div>
-                    <div class="col-sm-5 text-right">'. $guestbook->getValue('gbo_timestamp_create'));
-
-                        // aendern & loeschen duerfen nur User mit den gesetzten Rechten
-                        if ($gCurrentUser->editGuestbookRight())
-                        {
-                                $page->addHtml('
-                                <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
-                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                                <a class="icon-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
-                                    $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
-                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
-                        }
-                    $page->addHtml('</div>
-                </div>
+                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
+                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                            <a class="icon-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
+                                $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                    }
+                $page->addHtml('</div>
             </div>
 
             <div class="panel-body">'.

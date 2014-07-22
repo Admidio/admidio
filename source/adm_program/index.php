@@ -82,13 +82,13 @@ if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'
     if ($row > 0)
     {
         $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
-                        $gL10n->get('SYS_PM').'<span class="badge">'.$row.'</span>', '/icons/email.png',
+                        $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$row.'</span>', '/icons/email.png',
                         $gL10n->get('MAI_EMAIL_DESC'));
     }
     else
     {
         $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages_list.php',
-                        $gL10n->get('SYS_PM'), '/icons/email.png',
+                        $gL10n->get('SYS_MESSAGES'), '/icons/email.png',
                         $gL10n->get('MAI_EMAIL_DESC'));
     }
 }
@@ -168,7 +168,7 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser
                             $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup_big.png',
                             $gL10n->get('BAC_DATABASE_BACKUP_DESC'));
         $adminMenu->addItem('orgprop', '/adm_program/administration/organization/organization.php',
-                            $gL10n->get('ORG_ORGANIZATION_PROPERTIES'), '/icons/options_big.png',
+                            $gL10n->get('SYS_SETTINGS'), '/icons/options_big.png',
                             $gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
     }
     $page->addHtml($adminMenu->show('complex', false));

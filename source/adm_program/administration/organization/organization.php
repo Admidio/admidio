@@ -19,7 +19,7 @@ require_once('../../system/login_valid.php');
 // Initialize and check the parameters
 $showOption = admFuncVariableIsValid($_GET, 'show_option', 'string');
 
-$headline = $gL10n->get('ORG_ORGANIZATION_PROPERTIES');
+$headline = $gL10n->get('SYS_SETTINGS');
 
 // only webmasters are allowed to edit organization preferences
 if($gCurrentUser->isWebmaster() == false)
@@ -53,13 +53,10 @@ else
 
 // create html page object
 $page = new HtmlPage();
+$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'lists', 'messages', 'profile', 'events', 'links');
 
 // open the modules tab if the options of a module should be shown 
-if($showOption == 'announcements'
-|| $showOption == 'downloads'
-|| $showOption == 'guestbook'
-|| $showOption == 'lists'
-|| $showOption == 'messages')
+if(in_array($showOption, $showOptionValidModules) == true)
 {
     $page->addJavascript('$("#tabs_nav_modules").attr("class", "active");
         $("#tabs-modules").attr("class", "tab-pane active");
@@ -88,7 +85,7 @@ $page->addJavascript('
             success: function(data) {
                 if(data == "success") {
                     $("#"+id+" .form-alert").attr("class", "alert alert-success form-alert");
-                    $("#"+id+" .form-alert").html("<strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                     $("#"+id+" .form-alert").fadeIn("slow");
                     $("#"+id+" .form-alert").animate({opacity: 1.0}, 2500);
                     $("#"+id+" .form-alert").fadeOut("slow");
@@ -96,7 +93,7 @@ $page->addJavascript('
                 else {
                     $("#"+id+" .form-alert").attr("class", "alert alert-danger form-alert");
                     $("#"+id+" .form-alert").fadeIn();
-                    $("#"+id+" .form-alert").html(data);
+                    $("#"+id+" .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
                 }
             }
         });    
@@ -207,7 +204,8 @@ $page->addHtml('
                             FIELD_DEFAULT, null, 'ORG_SHOW_ALL_USERS_DESC');
                         $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/organization/organization_function.php?mode=2"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
-                        $form->addCustomContent('add_another_organization', $gL10n->get('ORG_NEW_ORGANIZATION'), $html);
+                        $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+                        $form->addCustomContent('add_another_organization', $gL10n->get('ORG_NEW_ORGANIZATION'), $html, null, $htmlDesc);
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
@@ -593,6 +591,94 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_profile">
+                            <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('PRO_PROFILE').'" title="'.$gL10n->get('PRO_PROFILE').'" />'.$gL10n->get('PRO_PROFILE').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_profile" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('profile_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=profile', $page, 'default', false, 'form-preferences');
+                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
+                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" />'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
+                        $htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+                        $form->addCustomContent('maintain_profile_fields', $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), $html, null, $htmlDesc);
+                        $form->addCheckbox('profile_log_edit_fields', $gL10n->get('PRO_LOG_EDIT_FIELDS'), $form_values['profile_log_edit_fields'], FIELD_DEFAULT, null, 'PRO_LOG_EDIT_FIELDS_DESC');
+                        $form->addCheckbox('profile_show_map_link', $gL10n->get('PRO_SHOW_MAP_LINK'), $form_values['profile_show_map_link'], FIELD_DEFAULT, null, 'PRO_SHOW_MAP_LINK_DESC');
+                        $form->addCheckbox('profile_show_roles', $gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP'), $form_values['profile_show_roles'], FIELD_DEFAULT, null, 'PRO_SHOW_ROLE_MEMBERSHIP_DESC');
+                        $form->addCheckbox('profile_show_former_roles', $gL10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP'), $form_values['profile_show_former_roles'], FIELD_DEFAULT, null, 'PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC');
+
+                        if($gCurrentOrganization->getValue('org_org_id_parent') > 0
+                        || $gCurrentOrganization->hasChildOrganizations() )
+                        {
+                            $form->addCheckbox('profile_show_extern_roles', $gL10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS'), $form_values['profile_show_extern_roles'], FIELD_DEFAULT, null, 'PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC');
+                        }
+
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
+                        $form->addSelectBox('profile_photo_storage', $gL10n->get('PRO_LOCATION_PROFILE_PICTURES'), $selectBoxEntries, FIELD_DEFAULT, $form_values['profile_photo_storage'], false, null, 'PRO_LOCATION_PROFILE_PICTURES_DESC');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_events">
+                            <img src="'.THEME_PATH.'/icons/dates.png" alt="'.$gL10n->get('DAT_DATES').'" title="'.$gL10n->get('DAT_DATES').'" />'.$gL10n->get('DAT_DATES').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_events" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('events_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=events', $page, 'default', false, 'form-preferences');
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                        $form->addSelectBox('enable_dates_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_dates_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $selectBoxEntries = array('html' => $gL10n->get('DAT_VIEW_MODE_DETAIL'), 'compact' => $gL10n->get('DAT_VIEW_MODE_COMPACT'));
+                        $form->addSelectBox('dates_viewmode', $gL10n->get('DAT_VIEW_MODE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['dates_viewmode'], false, null, array('DAT_VIEW_MODE_DESC', 'DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT'));
+                        $form->addTextInput('dates_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['dates_per_page'], 4, FIELD_DEFAULT, 'number', null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
+                        $form->addCheckbox('enable_dates_ical', $gL10n->get('DAT_ENABLE_ICAL'), $form_values['enable_dates_ical'], FIELD_DEFAULT, null, 'DAT_ENABLE_ICAL_DESC');
+                        $form->addTextInput('dates_ical_days_past', $gL10n->get('DAT_ICAL_DAYS_PAST'), $form_values['dates_ical_days_past'], 4, FIELD_DEFAULT, 'number', null, 'DAT_ICAL_DAYS_PAST_DESC');
+                        $form->addTextInput('dates_ical_days_future', $gL10n->get('DAT_ICAL_DAYS_FUTURE'), $form_values['dates_ical_days_future'], 4, FIELD_DEFAULT, 'number', null, 'DAT_ICAL_DAYS_FUTURE_DESC');
+                        $form->addCheckbox('dates_show_map_link', $gL10n->get('DAT_SHOW_MAP_LINK'), $form_values['dates_show_map_link'], FIELD_DEFAULT, null, 'DAT_SHOW_MAP_LINK_DESC');
+                        $form->addCheckbox('dates_show_calendar_select', $gL10n->get('DAT_SHOW_CALENDAR_SELECTION'), $form_values['dates_show_calendar_select'], FIELD_DEFAULT, null, 'DAT_SHOW_CALENDAR_SELECTION_DESC');
+                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
+                                    src="'. THEME_PATH. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
+                        $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+                        $form->addCustomContent('edit_rooms', $gL10n->get('DAT_EDIT_ROOMS'), $html, null, $htmlDesc);
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_links">
+                            <img src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" title="'.$gL10n->get('LNK_WEBLINKS').'" />'.$gL10n->get('LNK_WEBLINKS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_links" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('links_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=links', $page, 'default', false, 'form-preferences');
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                        $form->addSelectBox('enable_weblinks_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_weblinks_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $form->addTextInput('weblinks_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['weblinks_per_page'], 4, FIELD_DEFAULT, 'number', null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
+                        $selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
+                        $form->addSelectBox('weblinks_target', $gL10n->get('LNK_LINK_TARGET'), $selectBoxEntries, FIELD_DEFAULT, $form_values['weblinks_target'], false, null, 'LNK_LINK_TARGET_DESC');
+                        $form->addTextInput('weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $form_values['weblinks_redirect_seconds'], 4, FIELD_DEFAULT, 'number', null, 'LNK_DISPLAY_REDIRECT_DESC');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -837,313 +923,8 @@ exit();
                 <div class="formSubmit">    
                     <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
                 </div>
-            </div>';        
+            </div>        
 
-            /**************************************************************************************/
-            // Preferences profile module
-            /**************************************************************************************/
-
-            echo '<h3 id="PRO_PROFILE" class="iconTextLink">
-                <a href="#"><img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('PRO_PROFILE').'" title="'.$gL10n->get('PRO_PROFILE').'" /></a>
-                <a href="#">'.$gL10n->get('PRO_PROFILE').'</a>
-            </h3>               
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label>'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS').':</label></dt>
-                            <dd>
-                                <div class="iconTextLink">
-                                    <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
-                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" /></a>
-                                    <a href="'. $g_root_path. '/adm_program/administration/organization/fields.php">'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>
-                                </div>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="profile_log_edit_fields">'.$gL10n->get('PRO_LOG_EDIT_FIELDS').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="profile_log_edit_fields" name="profile_log_edit_fields" ';
-                                if(isset($form_values['profile_log_edit_fields']) && $form_values['profile_log_edit_fields'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_LOG_EDIT_FIELDS_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="profile_show_map_link">'.$gL10n->get('PRO_SHOW_MAP_LINK').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="profile_show_map_link" name="profile_show_map_link" ';
-                                if(isset($form_values['profile_show_map_link']) && $form_values['profile_show_map_link'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_SHOW_MAP_LINK_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="profile_show_roles">'.$gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="profile_show_roles" name="profile_show_roles" ';
-                                if(isset($form_values['profile_show_roles']) && $form_values['profile_show_roles'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_SHOW_ROLE_MEMBERSHIP_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="profile_show_former_roles">'.$gL10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="profile_show_former_roles" name="profile_show_former_roles" ';
-                                if(isset($form_values['profile_show_former_roles']) && $form_values['profile_show_former_roles'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC').'</li>';
-
-                    if($gCurrentOrganization->getValue('org_org_id_parent') > 0
-                    || $gCurrentOrganization->hasChildOrganizations() )
-                    {
-                        echo '
-                        <li>
-                            <dl>
-                                <dt><label for="profile_show_extern_roles">'.$gL10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS').':</label></dt>
-                                <dd>
-                                    <input type="checkbox" id="profile_show_extern_roles" name="profile_show_extern_roles" ';
-                                    if(isset($form_values['profile_show_extern_roles']) && $form_values['profile_show_extern_roles'] == 1)
-                                    {
-                                        echo ' checked="checked" ';
-                                    }
-                                    echo ' value="1" />
-                                </dd>
-                            </dl>
-                        </li>
-                        <li class="smallFontSize">'.$gL10n->get('PRO_SHOW_ROLES_OTHER_ORGANIZATIONS_DESC').'</li>';
-                    }
-                    echo '
-                    <li>
-                        <dl>
-                            <dt><label for="profile_photo_storage">'.$gL10n->get('PRO_LOCATION_PROFILE_PICTURES').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['profile_photo_storage'], 'profile_photo_storage', true);
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PRO_LOCATION_PROFILE_PICTURES_DESC').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
-
-            /**************************************************************************************/
-            // Preferences event module
-            /**************************************************************************************/
-
-            echo '<h3 id="DAT_DATES" class="iconTextLink">
-                <a href="#"><img src="'.THEME_PATH.'/icons/dates.png" alt="'.$gL10n->get('DAT_DATES').'" title="'.$gL10n->get('DAT_DATES').'" /></a>
-                <a href="#">'.$gL10n->get('DAT_DATES').'</a>
-            </h3>  
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_dates_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_dates_module'], 'enable_dates_module');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="dates_viewmode">'.$gL10n->get('DAT_VIEW_MODE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('html' => $gL10n->get('DAT_VIEW_MODE_DETAIL'), 'compact' => $gL10n->get('DAT_VIEW_MODE_COMPACT'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['dates_viewmode'], 'dates_viewmode');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_VIEW_MODE_DESC', $gL10n->get('DAT_VIEW_MODE_DETAIL'), $gL10n->get('DAT_VIEW_MODE_COMPACT')).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="dates_per_page">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
-                            <dd>
-                                <input type="text" id="dates_per_page" name="dates_per_page"
-                                     style="width: 50px;" maxlength="4" value="'. $form_values['dates_per_page']. '" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>                    
-                    <li>
-                        <dl>
-                            <dt><label for="enable_dates_ical">'.$gL10n->get('DAT_ENABLE_ICAL').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_dates_ical" name="enable_dates_ical" ';
-                                if(isset($form_values['enable_dates_ical']) && $form_values['enable_dates_ical'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_ENABLE_ICAL_DESC').'</li>                    
-                    <li>
-                        <dl>
-                            <dt><label for="dates_ical_days_past">'.$gL10n->get('DAT_ICAL_DAYS_PAST').':</label></dt>
-                            <dd>
-                                <input type="text" id="dates_ical_days_past" name="dates_ical_days_past"
-                                     style="width: 50px;" maxlength="4" value="'. $form_values['dates_ical_days_past']. '" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_ICAL_DAYS_PAST_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="dates_ical_days_future">'.$gL10n->get('DAT_ICAL_DAYS_FUTURE').':</label></dt>
-                            <dd>
-                                <input type="text" id="dates_ical_days_future" name="dates_ical_days_future"
-                                     style="width: 50px;" maxlength="4" value="'. $form_values['dates_ical_days_future']. '" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_ICAL_DAYS_FUTURE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="dates_show_map_link">'.$gL10n->get('DAT_SHOW_MAP_LINK').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="dates_show_map_link" name="dates_show_map_link" ';
-                                if(isset($form_values['dates_show_map_link']) && $form_values['dates_show_map_link'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_SHOW_MAP_LINK_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="dates_show_calendar_select">'.$gL10n->get('DAT_SHOW_CALENDAR_SELECTION').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="dates_show_calendar_select" name="dates_show_calendar_select" ';
-                                if($form_values['dates_show_calendar_select'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1"/>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_SHOW_CALENDAR_SELECTION_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="dates_show_rooms">'.$gL10n->get('DAT_ROOM_SELECTABLE').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="dates_show_rooms" name="dates_show_rooms" ';
-                                if($form_values['dates_show_rooms'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1"/>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_ROOM_SELECTABLE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label>'.$gL10n->get('DAT_EDIT_ROOMS').':</label></dt>
-                            <dd>
-                                <div class="iconTextLink">
-                                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
-                                    src="'. THEME_PATH. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" /></a>
-                                    <a href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php">'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>
-                                </div>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('DAT_EDIT_ROOMS_DESC', '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>                
-            </div>';
-
-            /**************************************************************************************/
-            // Preferences weblinks module
-            /**************************************************************************************/
-
-            echo '<h3 id="LNK_WEBLINKS" class="iconTextLink">
-                <a href="#"><img src="'.THEME_PATH.'/icons/weblinks.png" alt="'.$gL10n->get('LNK_WEBLINKS').'" title="'.$gL10n->get('LNK_WEBLINKS').'" /></a>
-                <a href="#">'.$gL10n->get('LNK_WEBLINKS').'</a>
-            </h3>  
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_weblinks_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_weblinks_module'], 'enable_weblinks_module');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="weblinks_per_page">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE').':</label></dt>
-                            <dd>
-                                <input type="text" id="weblinks_per_page" name="weblinks_per_page"
-                                     style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_per_page']. '" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="weblinks_target">'.$gL10n->get('LNK_LINK_TARGET').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['weblinks_target'], 'weblinks_target');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('LNK_LINK_TARGET_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="weblinks_redirect_seconds">'.$gL10n->get('LNK_DISPLAY_REDIRECT').':</label></dt>
-                            <dd><input type="text" id="weblinks_redirect_seconds" name="weblinks_redirect_seconds" style="width: 50px;" maxlength="4" value="'. $form_values['weblinks_redirect_seconds']. '" /> '.$gL10n->get('SYS_SECONDS').'</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('LNK_DISPLAY_REDIRECT_DESC').'</li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
             </div>';
             // ENDE accordion-modules
             echo'</div>

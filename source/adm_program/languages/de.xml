@@ -24,6 +24,7 @@
     <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="deleted" translation="todo"></text>
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="deleted" translation="todo"></text>
     <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="deleted" translation="todo"></text>
+    <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="todo">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</text>
     <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="todo">Der neue Ordner wird im bestehenden Ordner %VAR1_BOLD% angelegt.</text>
     <text id="DOW_FILE_NAME_INVALID" development="deleted" translation="todo"></text>
     <text id="DOW_FILES_UPLOADED" development="new" translation="todo">%VAR1% Dateien wurden erfolgreich hochgeladen.</text>
@@ -61,6 +62,8 @@
     <text id="ORG_FORUM_WIDTH_DESC" development="deleted" translation="todo">%VAR1% Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)</text>
     <text id="ORG_NEW_ORGANIZATION" development="new" translation="todo">Neue Organisation</text>
     <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="todo">Gib im folgenden Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die du nun hinzufügen möchtest. Im nächsten Schritt wird die Organisation mit ihren dazugehörigen Stammdaten angelegt.</text>
+    <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="todo">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</text>
+    <text id="ORG_ORGANIZATION_PROPERTIES" development="deleted" translation="todo"></text>
     <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="todo">Die Organisation %VAR1_BOLD% wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</text>
     <text id="ORG_USED_FORUM" development="deleted" translation="todo">Genutztes Forum</text>
     <text id="ORG_WHICH_FORUM_USED" development="deleted" translation="todo">Welches Forum soll genutzt werden?</text>
@@ -70,6 +73,7 @@
     <text id="PRO_SELECT_NEW_PIC_HERE" development="deleted" translation="todo"></text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
     <text id="PRO_EXPORT_VCARD" development="new" translation="todo">vCard exportieren</text>
+    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</text>
     <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="todo">Rollenzuordnung für %VAR1% %VAR2%</text>
     <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
     <text id="SYS_FILTER" development="new" translation="todo">Filter</text>
@@ -405,7 +409,6 @@
     <text id="DAT_DATES" development="new" translation="todo">Termine</text>
     <text id="DAT_DATES_DESC" development="new" translation="todo">Termine können hier angelegt und angeschaut werden. Benutzer können sich auf Wunsch zu diesen Terminen anmelden.</text>
     <text id="DAT_EDIT_ROOMS" development="new" translation="todo">Räume bearbeiten</text>
-    <text id="DAT_EDIT_ROOMS_DESC" development="new" translation="todo">Hier können Räume angelegt und bearbeitet werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
     <text id="DAT_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neuer Termin wurde angelegt</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART1" development="new" translation="todo">Es wurde ein neuer Termin bei %VAR1% angelegt.\n\nTitel: %VAR2%\nDatum: %VAR3%\nKalender: %VAR4%\n</text>
     <text id="DAT_EMAIL_NOTIFICATION_MESSAGE_PART2" development="new" translation="todo">Ort: %VAR1%\nRaum: %VAR2%\nTeilnehmer: %VAR3%\nAngelegt von: %VAR4%\n</text>
@@ -890,7 +893,6 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="todo">Anzahl Einträge pro Seite</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Einträge die auf einer Seite dargestellt werden. Gibt es mehr Einträge so kann zwischen diesen geblättert werden. Bei dem Wert 0 werden alle Einträge auf einer Seite aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="todo">Nur für angemeldete Benutzer</text>
-    <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="todo">Organisationseinstellungen</text>
     <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="todo">Allgemeine Admidio-Einstellungen, sowie Einstellungen zu den einzelnen Modulen, können hier festgelegt werden.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="todo">Übergeordnete Organisation</text>
     <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="todo">Hier kannst du die übergeordnete Organisation festlegen. Diese haben zum Beispiel die Möglichkeit Termine und Ankündigungen anzulegen, die auch in der aktuellen Organisation sichtbar sind.</text>
@@ -1019,7 +1021,6 @@
     <text id="PRO_LOCATION_PROFILE_PICTURES_DESC" development="new" translation="todo">Hier kann ausgewählt werden, ob die Profilbilder in der Datenbank oder im Ordner adm_my_files gespeichert werden. Beim Wechsel zwischen den Einstellungen werden die bisherigen Bilder nicht übernommen. (Standard: Datenbank)</text>
     <text id="PRO_LOGIN_NAME_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert schon.\n\nWähle bitte einen anderen Namen.</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS" development="new" translation="todo">Profilfelder pflegen</text>
-    <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="new" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.\n%VAR1% Alle nicht gespeicherten Organisationseinstellungen gehen dabei verloren.</text>
     <text id="PRO_MY_PROFILE" development="new" translation="todo">Mein Profil</text>
     <text id="PRO_MY_PROFILE_DESC" development="new" translation="todo">Das eigene Benutzerprofil kann hier angeschaut und bearbeitet werden.</text>
     <text id="PRO_NEW_PASSWORD" development="new" translation="todo">Neues Passwort</text>

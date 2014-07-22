@@ -833,7 +833,6 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Numero di voci per pagina</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Definizione del numero di elementi visualizzati in una pagina. L'impaginazione viene fornita se il numero di elementi supera il valore definito. Anteprima di stampa e funzionalità di esportazione non sono interessati. Se il valore è 0, tutti gli articoli saranno elencati e l'impaginazione è disattivata. (predefinito: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Solo per gli utenti registrati</text>
-    <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="edited">Preferenze organizzazione</text>
     <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Gestisci le preferenze organizzative generali o le preferenze del modulo qui.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Organizzazione madre</text>
     <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="edited">Definisci l'organizzazione madre qui. Le organizzazioni madre sono in grado di creare eventi e annunci, per esempio, che saranno visualizzati nelle organizzazioni (figlie) selezionate.</text>
