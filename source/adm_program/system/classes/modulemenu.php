@@ -80,6 +80,24 @@ class ModuleMenu
 			}
 			';
 	}
+
+    /** add a new entry to menu that contains the html as content
+     *  @param $id   Html id of the element
+     *  @param $html A html code that will be added to the menu
+     */
+    public function addForm($id, $formHtml)
+    {
+        $this->items[$id] = array('id' => $id, 'type' => 'form', 'content' => $formHtml);
+    }
+    
+    /** add a new entry to menu that contains the html as content
+     *  @param $id   Html id of the element
+     *  @param $html A html code that will be added to the menu
+     */
+    public function addHtml($id, $html)
+    {
+        $this->items[$id] = array('id' => $id, 'type' => 'html', 'content' => $html);
+    }
     
 	/** add new entry to menu
 	 *  @param $id Html id of the element
@@ -212,7 +230,7 @@ class ModuleMenu
 	 */
 	private function mkItem($id, $type, $link, $text, $icon, $js = '')
 	{
-	    if(strlen($link) > 0)
+	    if(strlen($link) > 1)
 	    {
     		// add root path to link unless the full URL is given
     		if (preg_match('/^http(s?):\/\//', $link)==0)
@@ -247,6 +265,7 @@ class ModuleMenu
 			return;
 
 		global $gL10n;
+        $formHtml = '';
 		
 		$html = '
         <nav class="navbar navbar-default" role="navigation">
@@ -322,6 +341,14 @@ class ModuleMenu
 					}
 				$html .= '</div></form></li>';
 			}
+			else if($menuEntry['type'] == 'form')
+            {
+                $formHtml .= $menuEntry['content'];
+            }
+			else if($menuEntry['type'] == 'html')
+            {
+                $html .= $menuEntry['content'];
+            }
 			else if($menuEntry['type'] == 'link')
 			{
 				// if the count of link elements greater equal then the maxMenuLinkItem variable add drop down entry
@@ -344,7 +371,14 @@ class ModuleMenu
 			$html .= $this->createDropDown('linkItemDropDown', $dropDownText);
 		}
 			
-		$html .= '</ul></div></div></nav>';
+		$html .= '</ul>';
+        
+        if(strlen($formHtml) > 0)
+        {
+            $html .= $formHtml;
+        }
+        
+        $html .= '</div></div></nav>';
 		
         // now show the complete html of the menu
         if($directOutput)

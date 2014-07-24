@@ -40,6 +40,7 @@ class HtmlForm extends HtmlFormBasic
     protected $countElements;       ///< Number of elements in this form
     protected $labelVertical;       ///< If set to @b true than the label of all controls will be shown above the control.
     protected $datepickerInitialized; ///< Flag if datepicker is already initialized
+    protected $type;                ///< Form type. Possible values are @b default, @b vertical or @b filter.
     
     /** Constructor creates the form element
      *  @param $id               Id of the form
@@ -74,20 +75,21 @@ class HtmlForm extends HtmlFormBasic
         $this->flagFieldListOpen     = false;
         $this->countFields           = 0;
         $this->datepickerInitialized = false;
+        $this->type                  = $type;
         
         // set specific Admidio css form class
         $this->addAttribute('role', 'form');
         
-        if($type == 'default')
+        if($this->type == 'default')
         {
             $class .= ' form-horizontal form-dialog';
         }
-        elseif($type == 'vertical')
+        elseif($this->type == 'vertical')
         {
             $this->labelVertical = true;
             $class .= ' form-dialog';
         }
-        elseif($type == 'filter')
+        elseif($this->type == 'filter')
         {
             $class .= ' form-horizontal form-filter';
         }
@@ -109,7 +111,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
 		// first field of form should get focus
-        if($type != 'filter')
+        if($this->type != 'filter')
         {
             if(is_object($htmlPage))
             {
@@ -1161,7 +1163,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        if($this->labelVertical)
+        if($this->labelVertical || $this->type == 'filter')
         {
             $this->addHtml('</div>');            
         }
@@ -1244,7 +1246,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<div class="form-group'.$cssClassRow.'">');
         
         // add label element
-        if($this->labelVertical)
+        if($this->labelVertical || $this->type == 'filter')
         {
             if(strlen($label) > 0)
             {

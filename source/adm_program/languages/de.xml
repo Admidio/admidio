@@ -93,9 +93,11 @@
     <text id="SYS_FORUM_LOGOUT" development="deleted" translation="todo">Du wurdest erfolgreich auf Admidio und im Forum abgemeldet.</text>
     <text id="SYS_FORUM_USER_DELETE" development="deleted" translation="todo">Der gewählte Benutzername wurde im Forum und in Admidio gelöscht.</text>
     <text id="SYS_FORUM_USER_EXIST" development="deleted" translation="todo">Der gewählte Benutzername existiert im Forum schon.\n\nWähle bitte einen anderen Namen.</text>
+    <text id="SYS_FULL_SCREEN" development="new" translation="todo">Vollbild</text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
     <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="todo"></text>
     <text id="SYS_MANDATORY_FIELDS" development="new" translation="todo">Pflichtfelder</text>
+    <text id="SYS_NORMAL_PICTURE" development="new" translation="todo">Normalbild</text>
     <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="todo">Die Online-Mitgliederverwaltung</text>
 	<text id="SYS_PM" development="new" translation="todo">Private Nachricht</text>
     <text id="SYS_JANUARY" development="deleted" translation="todo">Januar</text>

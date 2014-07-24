@@ -16,6 +16,8 @@
  * show_members : 0 - (Default) show active members of role
  *                1 - show former members of role
  *                2 - show active and former members of role
+ * full_screen  : 0 - (Default) show sidebar, head and page bottom of html page
+ *                1 - Only show the list without any other html unnecessary elements
  *
  *****************************************************************************/
  
@@ -27,6 +29,7 @@ $getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
 $getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getStart       = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
 $getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
+$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'numeric', 0);
 
 
 // Initialize the content of this parameter (otherwise some servers will keep the content)
@@ -156,10 +159,9 @@ else
     $headline = $role->getValue('rol_name');
 }
 
-
-if($getMode == 'html' && $getStart == 0)
+// if html mode and last url was not a list view then save this url to navigation stack
+if($getMode == 'html' && $getStart == 0 && strpos($gNavigation->getUrl(), 'lists_show.php') === false)
 {
-    // Url fuer die Zuruecknavigation merken, aber nur in der Html-Ansicht
     $gNavigation->addUrl(CURRENT_URL);
 }
 
@@ -233,77 +235,63 @@ if($getMode != 'csv')
 
         // create html page object
         $page = new HtmlPage();
-                    
+
+        if($getFullScreen == true)
+        {
+            $page->excludeThemeHtml();
+        }
+
         // show back link
         $page->addHtml($gNavigation->getHtmlBackButton());
 
         $page->setTitle($title);
         $page->addHeadline($headline);
         
-        $page->addHtml('<div class="admListShortInfo">'.$role->getValue('cat_name').' - '.$memberStatus.'</div>
-        <ul class="admIconTextLinkList">
-            <li>
-                <span class="admIconTextLink">');
-                // Navigationspunkt zum uebergeordneten Punkt dieser Liste
-                if(strpos($gNavigation->getPreviousUrl(), 'mylist') === false)
-                {
-                    // wenn nicht aus Listenuebersicht aufgerufen, dann wird hier die Listenuebersicht ohne Parameter aufgerufen
-                    if(strpos($gNavigation->getPreviousUrl(), 'lists.php') === false)
-                    {
-                        $url = $g_root_path.'/adm_program/modules/lists/lists.php';
-                    }
-                    else
-                    {
-                        $url = $g_root_path.'/adm_program/system/back.php';
-                    }
-                    $page->addHtml('
-                    <a href="'.$url.'"><img
-                    src="'. THEME_PATH. '/icons/application_view_list.png" alt="'.$gL10n->get('LST_LIST_VIEW').'" title="'.$gL10n->get('LST_LIST_VIEW').'" /></a>
-                    <a href="'.$url.'">'.$gL10n->get('LST_LIST_VIEW').'</a>');
+        $page->addHtml('<div class="admListShortInfo">'.$role->getValue('cat_name').' - '.$memberStatus.'</div>');
+        $page->addJavascript('
+            $("#export_list_to").change(function () {
+                if($(this).val().length > 1) {
+                    self.location.href = "'. $g_root_path. '/adm_program/modules/lists/lists_show.php?" +
+                        "lst_id='. $getListId. '&rol_id='. $getRoleId. '&mode=" + $(this).val() + "&show_members='.$getShowMembers.'";
                 }
-                else
-                {
-                    $page->addHtml('
-                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $getListId. '&rol_id='. $getRoleId. '&show_members='.$getShowMembers.'"><img
-                    src="'. THEME_PATH. '/icons/application_form.png" alt="'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'" title="'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'" /></a>
-                    <a href="'.$g_root_path.'/adm_program/modules/lists/mylist.php?lst_id='. $getListId. '&rol_id='. $getRoleId. '&show_members='.$getShowMembers.'">'.$gL10n->get('LST_KONFIGURATION_OWN_LIST').'</a>');
-                }
-                $page->addHtml('</span>
-            </li>');
-
-            // link to assign or remove members if you are allowed to do it
-            if($role->allowedToAssignMembers($gCurrentUser))
-            {
-                $page->addHtml('<li>
-                    <span class="admIconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'). '"><img 
-                            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" title="'.$gL10n->get('SYS_ASSIGN_MEMBERS').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'). '">'.$gL10n->get('SYS_ASSIGN_MEMBERS').'</a>
-                    </span>
-                </li>');
-            }
+            });
             
-            // link to print overlay and exports
-            $page->addHtml('<li>
-                <span class="admIconTextLink">
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=print&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'\', \'_blank\')"><img
-                    src="'. THEME_PATH. '/icons/print.png" alt="'.$gL10n->get('LST_PRINT_PREVIEW').'" title="'.$gL10n->get('LST_PRINT_PREVIEW').'" /></a>
-                    <a href="#" onclick="window.open(\''.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=print&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'\', \'_blank\')">'.$gL10n->get('LST_PRINT_PREVIEW').'</a>
-                </span>
-            </li>
-            <li>
-                <span class="admIconTextLink">
-                    <img src="'. THEME_PATH. '/icons/database_out.png" alt="'.$gL10n->get('LST_EXPORT_TO').'" />
-                    <select id="admSelectExportMode" class="admSelectBoxSmall" size="1">
-                        <option value="" selected="selected">'.$gL10n->get('LST_EXPORT_TO').' ...</option>
-                        <option value="csv-ms">'.$gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')</option>
-                        <option value="pdf">'.$gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')</option>
-                        <option value="pdfl">'.$gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')</option>
-                        <option value="csv-oo">'.$gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')</option>
-                    </select>
-                </span>
-            </li>   
-        </ul>');
+            $("#menu_item_print_view").click(function () {
+                window.open("'.$g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&mode=print&rol_id='.$getRoleId.'&show_members='.$getShowMembers.'", "_blank");
+            });', true);
+        
+        // create module menu
+        $listsMenu = new ModuleMenu('menu_lists_list');
+
+        if($getFullScreen == true)
+        {
+            $listsMenu->addItem('menu_item_normal_picture', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=0', 
+                $gL10n->get('SYS_NORMAL_PICTURE'), 'arrow_in.png');
+        }
+        else
+        {
+            $listsMenu->addItem('menu_item_full_screen', $g_root_path.'/adm_program/modules/lists/lists_show.php?lst_id='.$getListId.'&amp;mode=html&amp;rol_id='.$getRoleId.'&amp;show_members='.$getShowMembers.'&amp;full_screen=1', 
+                $gL10n->get('SYS_FULL_SCREEN'), 'arrow_out.png');
+        }
+        
+        // link to assign or remove members if you are allowed to do it
+        if($role->allowedToAssignMembers($gCurrentUser))
+        {
+            $listsMenu->addItem('menu_item_assign_members', $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='. $role->getValue('rol_id'), 
+                $gL10n->get('SYS_ASSIGN_MEMBERS'), 'add.png');
+        }
+        
+        // link to print overlay and exports
+        $listsMenu->addItem('menu_item_print_view', '#', $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
+        
+        $form = new HtmlForm('navbar_export_to_form', '', $page, 'filter', false, 'navbar-form navbar-left');
+        $selectBoxEntries = array('' => $gL10n->get('LST_EXPORT_TO').' ...', 'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')', 'pdf' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')', 
+                                  'pdfl' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')', 'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')');
+        $form->addSelectBox('export_list_to', null, $selectBoxEntries);
+        $listsMenu->addForm('menu_item_export_list_to', $form->show(false));
+
+        // show module menu
+        $page->addHtml($listsMenu->show(false));
     }
 
     // Create table object for display

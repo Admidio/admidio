@@ -66,7 +66,7 @@ else
 }
 
 // create module menu
-$announcementsMenu = new ModuleMenu('admMenuAnnouncements');
+$announcementsMenu = new ModuleMenu('menu_announcements_list');
 
 if($gCurrentUser->editAnnouncements())
 {
