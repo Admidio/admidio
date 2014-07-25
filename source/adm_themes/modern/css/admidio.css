@@ -227,6 +227,15 @@ form hr, .admBoxBody hr {
     text-align: left;
 }
 
+.navbar-form .form-group {
+    margin-left: 0px;
+    margin-right: 10px;
+}
+
+.navbar-form label {
+    margin-right: 5px;
+}
+
 .col-sm-offset-3.btn {
     margin-left: 26%;
 }

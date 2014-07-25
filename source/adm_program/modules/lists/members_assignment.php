@@ -103,8 +103,11 @@ else
     // set headline of the script
     $headline = $gL10n->get('LST_MEMBER_ASSIGNMENT').' - '. $role->getValue('rol_name');
 
-    // add current url to navigation stack
-    $gNavigation->addUrl(CURRENT_URL, $headline);
+    // add current url to navigation stack if last url was not the same page
+    if(strpos($gNavigation->getUrl(), 'members_assignment.php') === false)
+    {
+        $gNavigation->addUrl(CURRENT_URL, $headline);
+    }
 
     // create sql for all relevant users
     $memberCondition = '';

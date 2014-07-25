@@ -159,7 +159,7 @@ $page->addHtml('
         
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
-            $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId, $page, 'filter', false, 'navbar-form navbar-left');
+            $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/administration/members/profile_field_history.php?usr_id='.$getUserId, $page, 'navbar');
             $form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, 10, FIELD_DEFAULT, 'date');
             $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, 10, FIELD_DEFAULT, 'date');
             $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));

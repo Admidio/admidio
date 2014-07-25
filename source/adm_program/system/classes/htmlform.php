@@ -38,9 +38,8 @@ class HtmlForm extends HtmlFormBasic
     protected $flagFieldListOpen;   ///< Flag if a field list was created. This must be closed later
     protected $htmlPage;            ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     protected $countElements;       ///< Number of elements in this form
-    protected $labelVertical;       ///< If set to @b true than the label of all controls will be shown above the control.
     protected $datepickerInitialized; ///< Flag if datepicker is already initialized
-    protected $type;                ///< Form type. Possible values are @b default, @b vertical or @b filter.
+    protected $type;                ///< Form type. Possible values are @b default, @b vertical or @b navbar.
     
     /** Constructor creates the form element
      *  @param $id               Id of the form
@@ -53,15 +52,15 @@ class HtmlForm extends HtmlFormBasic
      *                                      has a horizontal orientation.
      *                           vertical : A form that can be used to edit and save data but has a vertical orientation.
      *                                      The label is positioned above the form element.
-     *                           filter   : A form that should be used to filter data in a script. The form content will
+     *                           navbar   : A form that should be used in a navbar. The form content will
      *                                      be send with the 'GET' method and this form should not get a default focus.
      *  @param $class            Optional an additional css classname. The class @b form-horizontal
      *                           is set as default and need not set with this parameter.
      */
     public function __construct($id, $action, $htmlPage = null, $type = 'default', $enableFileUpload = false, $class = null)
     {        
-        // filter forms should send the data as GET
-        if($type == 'filter')
+        // navbar forms should send the data as GET
+        if($type == 'navbar')
         {
             parent::__construct($action, $id, 'get');
         }
@@ -70,7 +69,6 @@ class HtmlForm extends HtmlFormBasic
             parent::__construct($action, $id, 'post');            
         }
 
-        $this->labelVertical         = false;
         $this->flagMandatoryFields   = false;
         $this->flagFieldListOpen     = false;
         $this->countFields           = 0;
@@ -86,12 +84,11 @@ class HtmlForm extends HtmlFormBasic
         }
         elseif($this->type == 'vertical')
         {
-            $this->labelVertical = true;
             $class .= ' form-dialog';
         }
-        elseif($this->type == 'filter')
+        elseif($this->type == 'navbar')
         {
-            $class .= ' form-horizontal form-filter';
+            $class .= ' form-horizontal navbar-form navbar-left';
         }
         
         if(strlen($class) > 0)
@@ -111,7 +108,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
 		// first field of form should get focus
-        if($this->type != 'filter')
+        if($this->type != 'navbar')
         {
             if(is_object($htmlPage))
             {
@@ -343,10 +340,14 @@ class HtmlForm extends HtmlFormBasic
 	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', 
 	                          $helpTextId = null, $icon = null, $labelVertical = true, $class = null)
 	{
-        $attributes = array('class' => 'editor');
-        $flagLabelVertical   = $this->labelVertical;
-        $this->labelVertical = $labelVertical;
         $this->countElements++;
+        $attributes = array('class' => 'editor');
+        $flagLabelVertical = $this->type;
+        
+        if($labelVertical == true)
+        {
+            $this->type = 'vertical';
+        }
 
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -372,7 +373,7 @@ class HtmlForm extends HtmlFormBasic
 		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
         $this->closeControlStructure();
         
-        $this->labelVertical = $flagLabelVertical;
+        $this->type = $flagLabelVertical;
 	}
     
     /** Add a field for file upload. If necessary multiple files could be uploaded. The fields for multiple upload could 
@@ -1163,7 +1164,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        if($this->labelVertical || $this->type == 'filter')
+        if($this->type == 'vertical' || $this->type == 'navbar')
         {
             $this->addHtml('</div>');            
         }
@@ -1246,7 +1247,7 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<div class="form-group'.$cssClassRow.'">');
         
         // add label element
-        if($this->labelVertical || $this->type == 'filter')
+        if($this->type == 'vertical' || $this->type == 'navbar')
         {
             if(strlen($label) > 0)
             {

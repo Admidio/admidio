@@ -266,7 +266,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
-                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php', $page, 'filter', false, 'navbar-form navbar-left');
+                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php', $page, 'navbar');
                     $form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtmlOutput, 10, FIELD_DEFAULT, 'date');
                     $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtmlOutput, 10, FIELD_DEFAULT, 'date');
                     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
