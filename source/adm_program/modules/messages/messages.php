@@ -23,6 +23,7 @@
 require_once('../../system/common.php');
 
 $formerMembers = 0;
+$recept_number = 3;
 
 // Initialize and check the parameters
 $getMsgType     = admFuncVariableIsValid($_GET, 'msg_type', 'string', '');
@@ -88,6 +89,50 @@ if ($getMsgId > 0)
 				 ORDER BY msg_id2 DESC";
 
 	$message_result = $gDb->query($sql);
+	
+}
+
+$list = '';
+
+if ($getMsgType == 'PM')
+{
+
+	$recept_number = 1;
+
+	$sql = "SELECT usr_id, CONCAT(row1id1.usd_value, ' ', row2id2.usd_value) as name, usr_login_name
+                  FROM demo_roles, demo_categories, demo_members, demo_users
+                        LEFT JOIN demo_user_data row1id1
+                                           ON row1id1.usd_usr_id = usr_id
+                                          AND row1id1.usd_usf_id = 1 LEFT JOIN demo_user_data row2id2
+                                           ON row2id2.usd_usr_id = usr_id
+                                          AND row2id2.usd_usf_id = 2
+                 WHERE rol_id IN (2)
+                   AND rol_cat_id = cat_id
+                   AND ( cat_org_id = 1
+                       OR cat_org_id IS NULL )
+                   AND mem_rol_id = rol_id
+                   AND mem_usr_id = usr_id
+                   AND usr_valid  = 1
+                        AND usr_login_name IS NOT NULL";
+
+	$drop_result = $gDb->query($sql);
+	
+	if ($gValidLogin)
+		{
+			$list .= '{ text: "Mitglieder", children: [';
+
+			$next = false;
+			while ($row = $gDb->fetch_array($drop_result)) {
+				if($next == true)
+				{
+					$list .= ',';
+				}
+				$next = true;
+				$list .= '{ id: "' .$row['usr_id']. '" , text: "' .$row['name']. ' (' .$row['usr_login_name']. ')"}';
+			}
+
+			$list .= ']}';
+		}
 }
 
 if ($getUserId > 0)
@@ -96,7 +141,7 @@ if ($getUserId > 0)
 	$user = new User($gDb, $gProfileFields, $getUserId);
 
 	// if an User ID is given, we need to check if the actual user is alowed to contact this user  
-	if((  $gCurrentUser->editUsers() == false
+	if (($gCurrentUser->editUsers() == false
 	   && isMember($user->getValue('usr_id')) == false)
 	|| strlen($user->getValue('usr_id')) == 0 )
 	{
@@ -113,29 +158,33 @@ else
 	$headline = $gL10n->get('PMS_SEND_PM');
 }
 
+// create html page object
+$page = new HtmlPage();
+	
+// add additional libs for functions
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/select2/select2.js');
+$page->addCssFile($g_root_path.'/adm_program/libs/select2/select2.css');
+$page->addCssFile($g_root_path.'/adm_program/libs/select2/select2-bootstrap.css');
+
 if ($getMsgType == 'PM')
 {
-	$form_values['name']         = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
-	$form_values['subject']      = $getSubject;
-		
-	
+
+	$formParam = 'msg_type=PM';
+
+    if ($getUserId > 0)
+	{
+	    $form_values['name']         = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
+	    $form_values['subject']      = $getSubject;
+	}
 
 	// add current url to navigation stack
 	$gNavigation->addUrl(CURRENT_URL, $headline);
 
-	// create html page object
-	$page = new HtmlPage();
-
 	// show back link
 	$page->addHtml($gNavigation->getHtmlBackButton());
-
+	
 	// show headline of module
 	$page->addHeadline($headline);
-
-	$formParam = 'msg_type=PM';
-
-	// id must be send to the next script
-	$formParam .= '&usr_id='.$getUserId;
 
 	if ($getMsgId > 0)
 	{
@@ -146,8 +195,15 @@ if ($getMsgType == 'PM')
 	$form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, 'default', true);
 	$form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
-	// Username to send the PM to
-	$form->addTextInput('msg_to', $gL10n->get('SYS_TO'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 50, FIELD_DISABLED);
+	if ($getUserId > 0)
+	{
+	    // Username to send the PM to
+	    $form->addTextInput('msg_to', $gL10n->get('SYS_TO'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 50, FIELD_DISABLED);
+	}
+	else
+	{
+		$form->addTextInput('rol_id', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden');
+	}
 
 	$form->closeGroupBox();
 
@@ -208,9 +264,6 @@ else if (isset($message_result))
 	// add current url to navigation stack
 	$gNavigation->addUrl(CURRENT_URL, $headline);
 
-	// create html page object
-	$page = new HtmlPage();
-
 	// show back link
 	$page->addHtml($gNavigation->getHtmlBackButton());
 
@@ -243,7 +296,7 @@ else if (isset($message_result))
                 </div>
             </div>
 			<div class="panel-footer">'.
-                nl2br($row['msg_message']).'
+                htmlspecialchars_decode($row['msg_message']).'
             </div>');
 			
 		}
@@ -313,7 +366,7 @@ else
 		$form_values['mailfrom']     = '';
 		$form_values['subject']      = $getSubject;
 		$form_values['msg_body']     = '';
-		$form_values['rol_id']       = 0;
+		$form_values['msg_to']       = 0;
 		$form_values['carbon_copy']  = $getCarbonCopy;
 		$form_values['delivery_confirmation']  = $getDeliveryConfirmation;
 		$form_values['show_members'] = $getShowMembers;
@@ -335,44 +388,6 @@ else
 	}
 	$gNavigation->addUrl(CURRENT_URL, $headline);
 
-	// create html page object
-	$page = new HtmlPage();
-	
-	// add additional libs for functions
-	$page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-selectize/selectize.js');
-	$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-selectize/selectize.contacts.css');
-	$page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-selectize/selectize.bootstrap3.css');
-
-	if($gValidLogin == true)
-	{
-		$page->addJavascript('
-			// if role has former members show select box where user can choose to write email also to former members
-			function showMembers(initialize) {
-				fadeIn = "";
-				if(initialize == false) {
-					fadeIn = "slow";
-				}
-				
-				if($("#rol_id").val() > 0) {
-					// check if role has former members
-					$.get("'.$g_root_path.'/adm_program/administration/roles/roles_function.php?mode=9&rol_id="+ $("#rol_id").val(), function(data) {
-						if(data == "1") {
-							$("#admShowMembers").show(fadeIn);
-						} 
-						else {
-							$("#admShowMembers").hide(fadeIn);
-						}
-					});
-				}
-				else {
-					$("#admShowMembers").hide(fadeIn);
-				}
-			}');
-		$page->addJavascript('
-			$("#rol_id").change(function() {showMembers(false)});    
-			showMembers(true);', true);
-	}
-
 	// show back link
 	if($getUserId > 0 || $getRoleId > 0)
 	{
@@ -384,11 +399,6 @@ else
 
 	$formParam = '';
 
-	// if user id is set then this id must be send to the next script
-	if($getUserId > 0)
-	{
-		$formParam .= 'usr_id='.$getUserId.'&';
-	}
 	// if subject was set as param then send this subject to next script
 	if (strlen($getSubject) > 0)
 	{
@@ -399,83 +409,101 @@ else
 	$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, 'default', true);
 	$form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
+	// keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
+	if ($gValidLogin)
+	{
+		// alle Rollen auflisten,
+		// an die im eingeloggten Zustand Mails versendet werden duerfen
+		$sql = 'SELECT rol_id, rol_name, cat_name 
+				  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+				 WHERE rol_valid   = 1
+				   AND rol_cat_id  = cat_id
+				   AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+				 ORDER BY cat_sequence, rol_name ';
+	}
+	else
+	{
+		$recept_number = 1;
+		// alle Rollen auflisten,
+		// an die im nicht eingeloggten Zustand Mails versendet werden duerfen
+		$sql = 'SELECT rol_id, rol_name, cat_name 
+				  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+				 WHERE rol_mail_this_role = 3
+				   AND rol_valid  = 1
+				   AND rol_cat_id = cat_id
+				   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
+				 ORDER BY cat_sequence, rol_name ';
+	}
+	
 	if ($getUserId > 0)
 	{
 		// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-		$form->addTextInput('msg_to', $gL10n->get('SYS_TO'), $userEmail, 50, FIELD_DISABLED);
+		$preload_data = '{ id: "' .$getUserId. '", text: "' .$userEmail. '", locked: true}';
 	}
 	elseif ($getRoleId > 0)
 	{
 		// Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-		$form->addSelectBox('rol_id', $gL10n->get('SYS_TO'), array($rollenID => $rollenName), FIELD_MANDATORY, $rollenID);
-		
-		// add a selectbox where you can choose to which members (active, former) you want to send the mail
-		if ($formerMembers > 0)
+		$preload_data = '{ id: "groupID: ' .$rollenID. '", text: "' .$rollenName. '", locked: true}';
+	}
+	
+	$form->addTextInput('msg_to', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden', 'MAI_SEND_MAIL_TO_ROLE');
+	
+	// add a selectbox where you can choose to which groups (active, former) you want to send the mail
+	if ($gValidLogin && $formerMembers > 0)
+	{
+		for ($act_or = 0; $act_or <= 2; $act_or++)
 		{
-			$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-			$form->addSelectBox('show_members', null, $selectBoxEntries, FIELD_DEFAULT, $form_values['show_members']);
+			if ($act_or == 1)
+			{
+				$act_group = $gL10n->get('LST_FORMER_MEMBERS');
+				$act_number = '-1';
+			}
+			else if ($act_or == 2)
+			{
+				$act_group = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+				$act_number = '-2';
+			}
+			else
+			{
+				$act_group = $gL10n->get('LST_ACTIVE_MEMBERS');
+				$act_number = '';
+			}
+			
+			if(strlen($list) > 0)
+			{
+				$list .= ',';
+			}
+			
+			$list .= '{ text: "'.$act_group.'", children: [';
+			
+			$next = false;
+			$result = $gDb->query($sql);
+			while ($row = $gDb->fetch_array($result)) {
+				if($next == true)
+				{
+					$list .= ',';
+				}
+				$next = true;
+				$list .= '{ id: "groupID: ' .$row['rol_id']. ''.$act_number.'" , text: "' .$row['rol_name']. '"}';
+			}
+
+			$list .= ']}';
 		}
 	}
 	else
 	{
-		// keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
-		if ($gValidLogin)
-		{
-			// alle Rollen auflisten,
-			// an die im eingeloggten Zustand Mails versendet werden duerfen
-			$sql = 'SELECT rol_id, rol_name, cat_name 
-					  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-					 WHERE rol_valid   = 1
-					   AND rol_cat_id  = cat_id
-					   AND cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-					 ORDER BY cat_sequence, rol_name ';
-		}
-		else
-		{
-			// alle Rollen auflisten,
-			// an die im nicht eingeloggten Zustand Mails versendet werden duerfen
-			$sql = 'SELECT rol_id, rol_name, cat_name 
-					  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-					 WHERE rol_mail_this_role = 3
-					   AND rol_valid  = 1
-					   AND rol_cat_id = cat_id
-					   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
-					 ORDER BY cat_sequence, rol_name ';
-		}
-		
+		$next = false;
 		$result = $gDb->query($sql);
-		$list = '';
-		
-		while ($row = $gDb->fetch_array($result)) {
-		    if(strlen($list) > 0)
+		while ($row = $gDb->fetch_array($result)) 
+		{
+			if($next == true)
 			{
-			    $list .= ',';
+				$list .= ',';
 			}
-			
-			if ($gValidLogin)
-			{
-			    $list .= '{ class: "Groups", email: "groupID: 0-' .$row['rol_id']. '" , name: "' .$row['rol_name']. ' - ' .$gL10n->get('LST_ACTIVE_MEMBERS'). '"},';
-				$list .= '{ class: "Groups", email: "groupID: 1-' .$row['rol_id']. '" , name: "' .$row['rol_name']. ' - ' .$gL10n->get('LST_FORMER_MEMBERS'). '"},';
-				$list .= '{ class: "Groups", email: "groupID: 2-' .$row['rol_id']. '" , name: "' .$row['rol_name']. ' - ' .$gL10n->get('LST_ACTIVE_FORMER_MEMBERS'). '"},';
-				$list .= '{ class: "Groups", email: "groupID: 15" , name: "test"}';
-			}
-			else
-			{
-                $list .= '{ class: "Groups", email: "groupID: ' .$row['rol_id']. '" , name: "' .$row['rol_name']. '"}';
-			}
-        }
-		$list1 = '{ class: "Groups", email: "groupID: 15" , name: "test"}';
-		$form->addSelectBoxFromSql('rol_id', $gL10n->get('SYS_TO'), $gDb, $sql, FIELD_MANDATORY, $form_values['rol_id'], true, 'MAI_SEND_MAIL_TO_ROLE', null, null, 'contacts');
-
+			$next = true;
+			$list .= '{ id: "groupID: ' .$row['rol_id']. '" , text: "' .$row['rol_name']. '"}';
+		}
 	}
-
-	// add a selectbox where you can choose to which members (active, former) you want to send the mail
-	//if (($getUserId == 0 && $gValidLogin == true && $getRoleId == 0)
-	//||  ($getRoleId  > 0 && $formerMembers > 0))
-	//{
-	//	$selectBoxEntries = array(0 => $gL10n->get('LST_ACTIVE_MEMBERS'), 1 => $gL10n->get('LST_FORMER_MEMBERS'), 2 => $gL10n->get('LST_ACTIVE_FORMER_MEMBERS'));
-	//	$form->addSelectBox('show_members', null, $selectBoxEntries, FIELD_DEFAULT, $form_values['show_members']);
-	//}
 
 	$form->addLine();
 
@@ -539,77 +567,60 @@ else
 	$page->addHtml($form->show(false));
 }
 
+$preload = '';
+
+if (isset($preload_data))
+{
+  $preload = '$("#msg_to").select2("data", ['.$preload_data.'] )';
+}
+
 // add JS code for the drop down to find email addresses and groups
 if(isset($list))
 	{
+	
 		$page->addHtml(
 		'<script>
-			
-			var REGEX_EMAIL = "([a-z0-9!#$%&\"*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&\"*+/=?^_`{|}~-]+)*@" +
-						  "(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)";
 
-			$("#rol_id").selectize({
-			persist: false,
-			maxItems: 2,
-			valueField: "email",
-			labelField: "name",
-			optgroups: [{value: "Groups", label: "Group"},
-				{value: "Mitglieder", label: "Mitglied"},
-			],
-			optgroupField: "class",
-			addOption:['.$list1.'],
-			setValue:['.$list1.'],
-			searchField: ["name", "email"],
-			options: ['.$list.'],
-			render: {
-				item: function(item, escape) {
-					return "<div>" +
-						(item.name ? "<span class=name>" + escape(item.name) + "</span>" : "") +
-						(item.email ? "<span class=email>" + escape(item.email) + "</span>" : "") +
-					"</div>";
-				},
-				option: function(item, escape) {
-					var label = item.name || item.email;
-					var caption = item.name ? item.email : null;
-					return "<div>" +
-						"<span class=drop_label>" + escape(label) + "</span>" +
-						(caption ? "<span class=caption>" + escape(caption) + "</span>" : "") +
-					"</div>";
-				},
-				optgroup_header: function(data, escape) {
-					return "<div class=optgroup-header>" + escape(data.label) + "</div>";
-				}
-			},
-			createFilter: function(input) {
-				var match, regex;
-
-				// email@address.com
-				regex = new RegExp("^" + REGEX_EMAIL + "$", "i");
-				match = input.match(regex);
-				if (match) return !this.options.hasOwnProperty(match[0]);
-
-				// name <email@address.com>
-				regex = new RegExp("^([^<]*)\<" + REGEX_EMAIL + "\>$", "i");
-				match = input.match(regex);
-				if (match) return !this.options.hasOwnProperty(match[2]);
-
-				return false;
-			},
-			create: function(input) {
-				if ((new RegExp("^" + REGEX_EMAIL + "$", "i")).test(input)) {
-					return {email: input};
-				}
-				var match = input.match(new RegExp("^([^<]*)\<" + REGEX_EMAIL + "\>$", "i"));
-				if (match) {
-					return {
-						email : match[2],
-						name  : $.trim(match[1])
-					};
-				}
-				alert("Invalid email address.");
-				return false;
-			}
-			});
+			$(document).ready(function () {
+				$("#msg_to").select2({
+					placeholder: "Select a Email/Group",
+					allowClear: true,
+					maximumSelectionSize: '.$recept_number.',
+					multiple: true,
+					separator: ";",
+					closeOnSelect: false,
+					query: function (query) {
+					  var data = {results: ['.$list.']}
+						,term = query.term
+						,callback = query.callback
+						,collection = { results: [] }
+						,text = function (item) { return item.text }
+						,process = function(optgroup, collection) {
+						  var results, x
+						  if (query.matcher(term, text(optgroup), optgroup))
+							collection.push(optgroup)
+						  else if (optgroup.children) {
+							results = {}
+							for (x in optgroup) {
+							  if (optgroup.hasOwnProperty(x)) results[x] = optgroup[x]
+							}
+							results.children=[]
+							$(optgroup.children).each(function(i, child) { process(child, results.children) })
+							if (results.children.length || query.matcher(term, text(results), optgroup))
+							  collection.push(results)
+						  }
+						}
+					  if (term === "") collection.results = data.results
+					  else {
+						$(data.results).each(function(i, optgroup) {
+						  process(optgroup, collection.results)
+						})
+					  }
+					  callback(collection)
+					}
+				});'
+				.$preload.
+			'});
 
 		</script>');
 	}
