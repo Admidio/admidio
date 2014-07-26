@@ -124,20 +124,9 @@ if(!($gCurrentUser->getValue('usr_id')>0 && $gPreferences['mail_delivery_confirm
     $postDeliveryConfirmation = 0;
 }
 
-//put values into SESSION
-$_SESSION['message_request'] = array(
-    'name'          => $postName,
-    'msgfrom'       => $postFrom,
-    'subject'       => $postSubject,
-    'msg_body'      => $postBody,
-    'rol_id'        => $postRoleId,
-    'carbon_copy'   => $postCarbonCopy,
-    'delivery_confirmation' => $postDeliveryConfirmation,
-    'show_members' => $postShowMembers);
-
 if ($getUserId > 0)
 {
-        //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+    //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($gDb, $gProfileFields, $getUserId);
 
     // darf auf die User-Id zugegriffen werden    
@@ -151,10 +140,21 @@ if ($getUserId > 0)
 if ($getMsgType == 'EMAIL')
 {
 
+	//put values into SESSION
+	$_SESSION['message_request'] = array(
+		'name'          => $postName,
+		'msgfrom'       => $postFrom,
+		'subject'       => $postSubject,
+		'msg_body'      => $postBody,
+		'rol_id'        => $postRoleId,
+		'carbon_copy'   => $postCarbonCopy,
+		'delivery_confirmation' => $postDeliveryConfirmation,
+		'show_members' => $postShowMembers
+	);
+
     if ($postTo <> '')
     {
-        $reseiver = array();
-		$receiver = array();
+        $receiver = array();
    
         //Erst mal ein neues Emailobjekt erstellen...
         $email = new Email();
@@ -172,10 +172,12 @@ if ($getMsgType == 'EMAIL')
                 
                 if (strpos($groupsplit[1],'-') == true)
                 {
+					echo $groupsplit[1];
                     $group = explode( '-', $groupsplit[1]);
                 }
                 else
                 {
+					echo $groupsplit[1];
                     $group[0] = $groupsplit[1];
                     $group[1] = 0;
                 }
@@ -193,22 +195,22 @@ if ($getMsgType == 'EMAIL')
                 // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
                 // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
                 // Rollen muessen zur aktuellen Organisation gehoeren
-                if(($gValidLogin == false && $row['rol_mail_this_role'] != 3)
-                || ($gValidLogin == true  && $gCurrentUser->mailRole($row['rol_id']) == false)
+                if((!$gValidLogin && $row['rol_mail_this_role'] != 3)
+                || ($gValidLogin  && !$gCurrentUser->mailRole($row['rol_id']))
                 || $row['rol_id']  == null)
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
-                
+
                 $role->readDataById($group[1]);
 
                 // Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
-                if ($gValidLogin == true && !$gCurrentUser->mailRole($group[0]))
+                if ($gValidLogin && !$gCurrentUser->mailRole($row['rol_id']))
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
                 // Falls der User nicht eingeloggt ist, muss der Wert 3 sein
-                if ($gValidLogin == false && $role->getValue('rol_mail_this_role') != 3)
+                if (!$gValidLogin && $role->getValue('rol_mail_this_role') != 3)
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
@@ -278,13 +280,13 @@ if ($getMsgType == 'EMAIL')
                     // all role members will be attached as BCC
                     while ($row = $gDb->fetch_object($result))
                     {
-                        $reseiver[] = array($row->email , $row->first_name.' '.$row->last_name);
-						$receiver[] = $row->email;
+                        $receiver[] = array($row->email , $row->first_name.' '.$row->last_name);
                     }
 
                 }
                 else
                 {
+					echo $groupsplit[1];
                     // Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
                     // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
                     $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));
@@ -304,8 +306,7 @@ if ($getMsgType == 'EMAIL')
                     $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
                 }
                 
-                $reseiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
-				$receiver[] = $user->getValue('EMAIL');
+                $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
             }
         }
         
@@ -416,17 +417,11 @@ if ($getMsgType == 'EMAIL')
             $email->setListRecipientsFlag();
         }
     }
-    
-    $sendresult = array_unique($receiver);
-    foreach ($sendresult as $address)
-    {
-		echo 'mail '.$address;
-        $email->addRecipient($address);
-    }
-	$sendesult = array_unique($reseiver);
+	
+	$sendresult = array_map("unserialize", array_unique(array_map("serialize", $receiver)));
 	foreach ($sendresult as $address)
     {
-		echo ' mail: '.$address[0].' '.$address[1];
+		$email->addRecipient($address[0], $address[1]);
     }
 	
     // Falls eine Lesebestätigung angefordert wurde
@@ -451,6 +446,15 @@ if ($getMsgType == 'EMAIL')
 }
 else
 {
+	
+	//usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+    $user = new User($gDb, $gProfileFields, $postTo);
+
+    // darf auf die User-Id zugegriffen werden    
+    if(($gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)|| strlen($user->getValue('usr_id')) == 0 )
+    {
+            $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
+    }
 
     // check if receiver of message has valid login
     if(strlen($user->getValue('usr_login_name')) == 0)

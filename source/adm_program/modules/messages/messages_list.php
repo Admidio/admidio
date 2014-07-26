@@ -91,12 +91,10 @@ $page->addHeadline($headline);
 
 $page->addHtml($EmailMenu->show(false));
 
-$table = new HtmlTable('adm_lists_email_table', $page, true, true);
+$table = new HtmlTable('adm_lists_table', $page, true, true);
 
 $table->addAttribute('border', '0');
 $table->addTableHeader();
-
-$table = new HtmlTable('adm_lists_table', $page, true, true);
 
 $table->addRowHeadingByArray(array( 'Typ' ,$gL10n->get('MAI_SUBJECT'), $gL10n->get('SYS_SENDER'), $gL10n->get('SYS_DATE')));
 
@@ -128,7 +126,7 @@ if(isset($result1))
 }
 
 //special settings for the table
-$table->setDatatablesOrderColumns(array(array(3, 'asc')));
+$table->setDatatablesOrderColumns(array(array(4, 'desc')));
 
 // add table to the form
 $page->addHtml($table->show(false));

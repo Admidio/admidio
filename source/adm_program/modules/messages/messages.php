@@ -173,7 +173,6 @@ if ($getMsgType == 'PM')
 
     if ($getUserId > 0)
 	{
-	    $form_values['name']         = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
 	    $form_values['subject']      = $getSubject;
 	}
 
@@ -198,12 +197,10 @@ if ($getMsgType == 'PM')
 	if ($getUserId > 0)
 	{
 	    // Username to send the PM to
-	    $form->addTextInput('msg_to', $gL10n->get('SYS_TO'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), 50, FIELD_DISABLED);
+		$preload_data = '{ id: "' .$getUserId. '", text: "' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')'. '", locked: true}';
 	}
-	else
-	{
-		$form->addTextInput('rol_id', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden');
-	}
+
+	$form->addTextInput('msg_to', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden', 'MAI_SEND_MAIL_TO_ROLE');
 
 	$form->closeGroupBox();
 
@@ -449,7 +446,7 @@ else
 	$form->addTextInput('msg_to', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden', 'MAI_SEND_MAIL_TO_ROLE');
 	
 	// add a selectbox where you can choose to which groups (active, former) you want to send the mail
-	if ($gValidLogin && $formerMembers > 0)
+	if ($gValidLogin)
 	{
 		for ($act_or = 0; $act_or <= 2; $act_or++)
 		{
