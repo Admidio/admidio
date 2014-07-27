@@ -18,6 +18,12 @@ require_once('../../system/common.php');
 
 unset($_SESSION['links_request']);
 
+// Initialize and check the parameters
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('LNK_WEBLINKS'));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
+$getLinkId   = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+
 // check if the module is enabled for use
 if ($gPreferences['enable_weblinks_module'] == 0)
 {
@@ -36,9 +42,9 @@ $weblinksCount = $weblinks->getDataSetCount();
 
 // Output head
 $headline = $weblinks->getHeadline();
-if($weblinks->getCatId() > 0)
+if($getCatId > 0)
 {
-    $category = new TableCategory($gDb, $weblinks->getCatId());
+    $category  = new TableCategory($gDb, $getCatId);
     $headline .= ' - '.$category->getValue('cat_name');
 }
 
@@ -81,20 +87,32 @@ if($weblinks->getId() == 0)
 	if($gCurrentUser->editWeblinksRight())
 	{
 		// show link to create new announcement
-		$LinksMenu->addItem('admMenuItemNewLink', $g_root_path.'/adm_program/modules/links/links_new.php?headline='. $weblinks->getHeadline(), 
+		$LinksMenu->addItem('menu_item_new_link', $g_root_path.'/adm_program/modules/links/links_new.php?headline='. $weblinks->getHeadline(), 
 							$gL10n->get('LNK_CREATE_LINK'), 'add.png');
 	}
 	
-	// show selectbox with all link categories
-	$LinksMenu->addCategoryItem('admMenuItemCategory', 'LNK', $weblinks->getCatId(), 'links.php?headline='.$weblinks->getHeadline().'&cat_id=', 
-								$gL10n->get('SYS_CATEGORY'), $gCurrentUser->editWeblinksRight());
-
 	if($gCurrentUser->isWebmaster())
 	{
 		// show link to system preferences of weblinks
-		$LinksMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=links', 
+		$LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=links', 
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 	}
+	elseif($gCurrentUser->editWeblinksRight())
+	{
+		// show link to maintain categories
+		$LinksMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/administration/categories/categories.php?type=LNK&title='. $weblinks->getHeadline(), 
+							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');    	
+	}
+	
+    $page->addJavascript('
+        $("#cat_id").change(function () {
+           $("#navbar_cat_id_form").submit();
+        });', true);
+	
+    $form = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/links/links.php?headline='. $weblinks->getHeadline(), $page, 'navbar');
+    $form->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getCatId);
+    $LinksMenu->addForm('menu_item_export_list_to', $form->show(false));
+
 
 	$page->addHtml($LinksMenu->show(false));
 

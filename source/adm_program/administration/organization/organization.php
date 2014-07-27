@@ -27,9 +27,6 @@ if($gCurrentUser->isWebmaster() == false)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-// Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $headline);
-
 $html_icon_warning = '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />';
 
 if(isset($_SESSION['organization_request']))
@@ -60,13 +57,28 @@ if(in_array($showOption, $showOptionValidModules) == true)
 {
     $page->addJavascript('$("#tabs_nav_modules").attr("class", "active");
         $("#tabs-modules").attr("class", "tab-pane active");
-        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");', true);
+        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");
+        location.hash = "#" + "panel_'.$showOption.'";', true);
 }
 else
 {
     $page->addJavascript('$("#tabs_nav_common").attr("class", "active");
         $("#tabs-common").attr("class", "tab-pane active");
-        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");', true);
+        $("#collapse_'.$showOption.'").attr("class", "panel-collapse collapse in");
+        location.hash = "#" + "panel_'.$showOption.'";', true);
+}
+
+if(strlen($showOption) > 0)
+{
+    // add current url to navigation stack
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+    // show back link
+    $page->addHtml($gNavigation->getHtmlBackButton());
+}
+else
+{
+    // Navigation of the module starts here
+    $gNavigation->addStartUrl(CURRENT_URL, $headline);
 }
 
 $page->addJavascript('
@@ -121,7 +133,7 @@ $page->addHtml('
 <div class="tab-content">
     <div class="tab-pane" id="tabs-common">
         <div class="panel-group" id="accordion_common">
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_common">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_common">
@@ -157,7 +169,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_regional_settings">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_regional_settings">
@@ -211,7 +223,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_registration">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_registration">
@@ -234,7 +246,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_email_dispatch">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_email_dispatch">
@@ -268,7 +280,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_system_notification">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_notification">
@@ -318,7 +330,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_captcha">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_captcha">
@@ -364,7 +376,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_system_informations">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_system_informations">
@@ -476,7 +488,7 @@ $page->addHtml('
     </div>
     <div class="tab-pane" id="tabs-modules">
         <div class="panel-group" id="accordion_modules">
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_announcements">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_announcements">
@@ -497,7 +509,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_downloads">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_downloads">
@@ -518,7 +530,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_guestbook">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_guestbook">
@@ -544,7 +556,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_lists">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_lists">
@@ -565,7 +577,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_messages">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_messages">
@@ -591,7 +603,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_profile">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_profile">
@@ -625,7 +637,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_events">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_events">
@@ -646,7 +658,10 @@ $page->addHtml('
                         $form->addTextInput('dates_ical_days_past', $gL10n->get('DAT_ICAL_DAYS_PAST'), $form_values['dates_ical_days_past'], 4, FIELD_DEFAULT, 'number', null, 'DAT_ICAL_DAYS_PAST_DESC');
                         $form->addTextInput('dates_ical_days_future', $gL10n->get('DAT_ICAL_DAYS_FUTURE'), $form_values['dates_ical_days_future'], 4, FIELD_DEFAULT, 'number', null, 'DAT_ICAL_DAYS_FUTURE_DESC');
                         $form->addCheckbox('dates_show_map_link', $gL10n->get('DAT_SHOW_MAP_LINK'), $form_values['dates_show_map_link'], FIELD_DEFAULT, null, 'DAT_SHOW_MAP_LINK_DESC');
-                        $form->addCheckbox('dates_show_calendar_select', $gL10n->get('DAT_SHOW_CALENDAR_SELECTION'), $form_values['dates_show_calendar_select'], FIELD_DEFAULT, null, 'DAT_SHOW_CALENDAR_SELECTION_DESC');
+                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR').'"><img
+                                    src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
+                        $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+                        $form->addCustomContent('manage_calendars', $gL10n->get('DAT_MANAGE_CALENDARS'), $html, null, $htmlDesc);
                         $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
                                     src="'. THEME_PATH. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
@@ -656,7 +671,7 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default">
+            <div class="panel panel-default" id="panel_links">
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_links">
@@ -674,6 +689,10 @@ $page->addHtml('
                         $selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
                         $form->addSelectBox('weblinks_target', $gL10n->get('LNK_LINK_TARGET'), $selectBoxEntries, FIELD_DEFAULT, $form_values['weblinks_target'], false, null, 'LNK_LINK_TARGET_DESC');
                         $form->addTextInput('weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $form_values['weblinks_redirect_seconds'], 4, FIELD_DEFAULT, 'number', null, 'LNK_DISPLAY_REDIRECT_DESC');
+                        $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/categories/categories.php?type=LNK"><img
+                                    src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
+                        $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
+                        $form->addCustomContent('maintain_links_categories', $gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, null, $htmlDesc);
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>

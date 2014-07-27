@@ -24,6 +24,10 @@
     <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="deleted" translation="todo"></text>
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="deleted" translation="todo"></text>
     <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="deleted" translation="todo"></text>
+    <text id="DAT_EDIT_CALENDAR_DESC" development="new" translation="todo">Hier können Kalender angelegt und bearbeitet werden.</text>
+    <text id="DAT_SHOW_CALENDAR_SELECTION" development="deleted" translation="todo"></text>
+    <text id="DAT_SHOW_CALENDAR_SELECTION_DESC" development="deleted" translation="todo"></text>
+    <text id="DAT_SWITCH_TO_CALENDAR_ADMINISTRATION" development="new" translation="todo">Wechsel zur Kalenderverwaltung</text>
     <text id="DAT_EDIT_ROOMS_DESC" development="changed" translation="todo">Hier können Räume für Veranstaltungen angelegt und bearbeitet werden.</text>
     <text id="DOW_CREATE_FOLDER_DESC" development="changed" translation="todo">Der neue Ordner wird im bestehenden Ordner %VAR1_BOLD% angelegt.</text>
     <text id="DOW_FILE_NAME_INVALID" development="deleted" translation="todo"></text>
@@ -77,9 +81,11 @@
     <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="todo">Rollenzuordnung für %VAR1% %VAR2%</text>
     <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
     <text id="SYS_FILTER" development="new" translation="todo">Filter</text>
+    <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="todo">Hier können Kategorien angelegt und bearbeitet werden.</text>
     <text id="SYS_MESSAGES" development="new" translation="todo">Nachrichten</text>
     <text id="SYS_NO_DATA_FOUND" development="new" translation="todo">Es wurden keine Daten gefunden.</text>
     <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>
+    <text id="SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION" development="new" translation="todo">Wechsel zur Kategorienverwaltung</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="todo">Es wurde kein Dateiname angegeben!</text>
     <text id="SYS_FORUM" development="deleted" translation="todo">Forum</text>
     <text id="SYS_FORUM_LOGIN_DESC" development="deleted" translation="todo">Du bist als %VAR1_BOLD% im Forum %VAR2_BOLD% angemeldet und hast %VAR3_BOLD% neue Nachrichten.</text>
@@ -436,13 +442,11 @@
     <text id="DAT_QUOTA_EXCEEDED" development="new" translation="todo">Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (Kontigentierung) sein wie Teilnehmer insgesamt (Teilnehmerbegrenzung).</text>
     <text id="DAT_QUOTA_FOR_ROLE" development="new" translation="todo">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</text>
     <text id="DAT_QUOTA_WITH_MAXIMUM" development="new" translation="todo">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION" development="new" translation="todo">Kalenderauswahlbox anzeigen</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION_DESC" development="new" translation="todo">Eine Auswahlbox für die einzelnen Kalender wird angezeigt, um dem Besucher eine schnelle Suche nach einem Termin zu ermöglichen. (Standard: ja)</text>
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="todo">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="todo">Auf Karte zeigen</text>
     <text id="DAT_SHOW_PARTICIPANTS" development="new" translation="todo">Teilnehmer anzeigen</text>
-    <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="todo">Zur Raumadministration wechseln</text>
+    <text id="DAT_SWITCH_TO_ROOM_ADMINISTRATION" development="new" translation="todo">Wechsel zur Raumverwaltung</text>
     <text id="DAT_VISIBLE_TO" development="new" translation="todo">Sichtbar für</text>
 
     <!-- Phrases only in Downloadsmodule -->

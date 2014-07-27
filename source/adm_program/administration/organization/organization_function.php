@@ -129,7 +129,7 @@ case 1:
             break;
 
         case 'events':
-            $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_calendar_select');
+            $checkboxes = array('enable_dates_ical', 'dates_show_map_link');
             break;
 
         case 'links':

@@ -126,7 +126,6 @@ $orga_preferences = array(
     'dates_per_page'             => '10',
     'dates_viewmode'             => 'html',
     'dates_show_map_link'        => '1',
-    'dates_show_calendar_select' => '1',
     'dates_show_rooms'           => '0',
     'enable_dates_ical'          => '1',
     'dates_ical_days_past'      => '60',

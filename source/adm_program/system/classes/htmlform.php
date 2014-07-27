@@ -868,13 +868,14 @@ class HtmlForm extends HtmlFormBasic
      *  @param $label              The label of the selectbox.
      *  @param $databaseObject     A Admidio database object that contains a valid connection to a database
 	 *  @param $categoryType	   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+	 *  @param $selectboxModus     The selectbox could be shown in 2 different modus.
+	 *                             @b EDIT_CATEGORIES First entry will be "Please choose" and default category will be preselected.
+	 *                             @b FILTER_CATEGORIES First entry will be "All" and only categories with childs will be shown.
      *  @param $property   With this param you can set the following properties: 
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
 	 *  @param $defaultValue	   Id of category that should be selected per default.
-     *  @param $setPleaseChoose    If set to @b true a new entry will be added to the top of 
-     *                             the list with the caption "Please choose".
 	 *  @param $helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                             If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
      *                             If you need an additional parameter for the text you can add an array. The first entry must
@@ -883,24 +884,25 @@ class HtmlForm extends HtmlFormBasic
      *                             If set the complete text will be shown after the form element.
      *                             If you need an additional parameter for the text you can add an array. The first entry must
      *                             be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $showCategoryChoice This mode shows only categories with elements and if default category will be selected 
-	 *                             there must be at least more then one category to select
 	 *  @param $showSystemCategory Show user defined and system categories
      *  @param $class              Optional an additional css classname. The class @b admSelectbox
      *                             is set as default and need not set with this parameter.
 	 */
-	public function addSelectBoxForCategories($id, $label, &$databaseObject, $categoryType, $property = FIELD_DEFAULT, $defaultValue = 0, $setPleaseChoose = false, 
-	                                          $helpTextIdLabel = null, $helpTextIdInline = null, $showCategoryChoice = false, $showSystemCategory = true, $class = '')
+	public function addSelectBoxForCategories($id, $label, $databaseObject, $categoryType, $selectboxModus, $property = FIELD_DEFAULT, $defaultValue = 0, 
+	                                          $helpTextIdLabel = null, $helpTextIdInline = null, $showSystemCategory = true, $class = '')
 	{
-		global $gCurrentOrganization, $gValidLogin;
+		global $gCurrentOrganization, $gValidLogin, $gL10n;
 
-        $sqlTables      = TBL_CATEGORIES;
-        $sqlCondidtions = '';
-        $selectBoxHtml  = '';
+        $sqlTables        = TBL_CATEGORIES;
+        $sqlCondidtions   = '';
+        $setPleaseChoose  = true;
+        $categoriesArray  = array();
 
 		// create sql conditions if category must have child elements
-		if($showCategoryChoice)
+		if($selectboxModus == 'FILTER_CATEGORIES')
 		{
+            $setPleaseChoose  = false;
+            
             if($categoryType == 'DAT')
             {
                 $sqlTables = TBL_CATEGORIES.', '.TBL_DATES;
@@ -924,7 +926,7 @@ class HtmlForm extends HtmlFormBasic
 		{
 			 $sqlCondidtions .= ' AND cat_system = 0 ';
 		}
-		
+				
 		if($gValidLogin == false)
 		{
 			 $sqlCondidtions .= ' AND cat_hidden = 0 ';
@@ -941,33 +943,34 @@ class HtmlForm extends HtmlFormBasic
 		$result = $databaseObject->query($sql);
 		$countCategories = $databaseObject->num_rows($result);
 		
-		// if no default value was set then try to set one
-		if($defaultValue == null)
-		{
-    		// if only one category exists then select this
-		    if($countCategories == 1)
-		    {
-		        $row = $databaseObject->fetch_array($result);
-                $defaultValue = $row['cat_id'];
-            }
-            // if several categories exist than select default category
-            elseif($countCategories > 1)
+		// if only one category exists then select this
+	    if($countCategories == 1 && $defaultValue == null)
+	    {
+	        $row = $databaseObject->fetch_array($result);
+            $defaultValue = $row['cat_id'];
+            $categoriesArray['cat_id'] = $row['cat_name'];
+        }
+        // if several categories exist than select default category
+        elseif($countCategories > 1)
+        {
+    		if($selectboxModus == 'FILTER_CATEGORIES')
+    		{
+                $categoriesArray[0] = $gL10n->get('SYS_ALL');
+    		}
+        
+            while($row = $databaseObject->fetch_array($result))
             {
-                while($row = $databaseObject->fetch_array($result))
+                $categoriesArray[$row['cat_id']] = $row['cat_name'];
+
+                if($row['cat_default'] == 1 && $defaultValue == null)
                 {
-                    if($row['cat_default'] == 1)
-                    {
-                        $defaultValue = $row['cat_id'];
-                    }
+                    $defaultValue = $row['cat_id'];
                 }
             }
-		}
+        }
         
-        // now remove the 3. column so the selectbox could be generated from this sql
-        $sql = str_replace('DISTINCT cat_id, cat_name, cat_default', 'DISTINCT cat_id, cat_name', $sql);
-        
-        // now call method to create selectbox from sql
-        $this->addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdInline, null, $class);
+        // now call method to create selectbox from array
+        $this->addSelectBox($id, $label, $categoriesArray, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdInline, null, $class);
 	}
     
     /** Add a new static control to the form. A static control is only a simple text instead of an input field. This 

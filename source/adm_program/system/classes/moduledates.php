@@ -134,7 +134,10 @@
 class ModuleDates extends Modules
 {    
     protected $showMode; ///< String with show mode ( Default: "all" )
-
+    protected $dateFrom;
+    protected $dateTo;
+    protected $catId;
+    
     /** Constuctor that will create an object of a recordset of the specified dates.
      *  Initialize parameters 
      */
@@ -307,6 +310,13 @@ class ModuleDates extends Modules
         }
     }
     
+    public function setFilterData($dateFrom, $dateTo, $categoryId)
+    {
+        $this->dateFrom = $dateFrom;
+        $this->dateTo   = $dateTo;
+        $this->catId    = $categoryId;
+    }
+    
     /** Check date value to reference and set html output.
      *  If value matches to reference, value is cleared to get an empty string.
      */
@@ -463,8 +473,8 @@ class ModuleDates extends Modules
         else
         {
             // add 1 second to end date because full time events to until next day
-            $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$this->daterange['english']['start_date'].' 00:00:00\' AND \''.$this->daterange['english']['end_date'].' 23:59:59\'
-                                    OR dat_end   BETWEEN \''.$this->daterange['english']['start_date'].' 00:00:01\' AND \''.$this->daterange['english']['end_date'].' 23:59:59\')';
+            $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$this->dateFrom.' 00:00:00\' AND \''.$this->dateTo.' 23:59:59\'
+                                    OR dat_end   BETWEEN \''.$this->dateFrom.' 00:00:01\' AND \''.$this->dateTo.' 23:59:59\')';
         
             // show all events from category                
             if($this->catId > 0)

@@ -190,7 +190,7 @@ class DBPostgreSQL extends DBCommon
 				$sql = substr(strtolower($sql), 0, strrpos($sql, ')') + 1);
 			}
 
-			// PostgreSQL kennt unsigned nicht
+			// PostgreSQL doesn't know unsigned
 			$sql = str_replace('unsigned', '', $sql);
 
 			// Boolean macht Probleme, da PostgreSQL es als String behandelt

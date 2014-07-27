@@ -20,8 +20,6 @@
  * id        - Show only one event
  * date      - All events for a date are listed
  *             Format : YYYYMMDD
- * calendar-selection - 1 : The box is shown
- *                      0 : The box is not shown
  * show      - all               : (Default) show all events
  *           - maybe_participate : Show only events where the current user participates or could participate
  *           - only_participate  : Show only events where the current user participates
@@ -38,6 +36,9 @@ require_once('../../system/common.php');
 unset($_SESSION['dates_request']);
 
 $getShow = admFuncVariableIsValid($_GET, 'show', 'string', 'all', false, array('all', 'maybe_participate', 'only_participate'));
+$getFilterCatId    = admFuncVariableIsValid($_GET, 'filter_cat_id', 'numeric', 0);
+$getFilterDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date');
+$getFilterDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date');
 
 
 // check if module is active
@@ -55,8 +56,6 @@ elseif($gPreferences['enable_dates_module'] == 2)
 // create object and get recordset of available dates
 $dates = new ModuleDates();
 $dates->setShowMode($getShow);
-$datesResult = $dates->getDataset();
-$datesTotalCount = $dates->getDataSetCount();
 // get parameter
 $parameter = $dates->getParameter();
 
@@ -84,19 +83,57 @@ if($parameter['view_mode'] == 'print')
     $headline = $gCurrentOrganization->getValue('org_longname').' - '.$headline;
 }
 
-// Fill input fields only if user values exist
-$dateFromHtmlOutput = $dates->getFormValue($parameter['daterange']['system']['start_date'], DATE_NOW);
-$dateToHtmlOutput   = $dates->getFormValue($parameter['daterange']['system']['end_date'], '9999-12-31');
+$filterDateFromEnglish = '1970-01-01';
+$filterDateToEnglish = '9999-12-31';
+
+// check filter dates
+if(strlen($getFilterDateFrom) > 0)
+{
+    $date = new DateTimeExtended($getFilterDateFrom, $gPreferences['system_date'], 'date');
+    if($date->valid() == false)
+    {
+        if($this->noValueCheck != true)
+        {                        
+            $getFilterDateFrom = '';
+        }
+    }
+    else
+    {
+        $filterDateFromEnglish = $date->format('Y-m-d');
+    }
+}
+
+if(strlen($getFilterDateTo) > 0)
+{
+    $date = new DateTimeExtended($getFilterDateTo, $gPreferences['system_date'], 'date');
+    if($date->valid() == false)
+    {
+        if($this->noValueCheck != true)
+        {                        
+            $getFilterDateTo = '';
+        }
+    }
+    else
+    {
+        $filterDateToEnglish = $date->format('Y-m-d');
+    }
+}
+
+$dates->setFilterData($filterDateFromEnglish, $filterDateToEnglish, $getFilterCatId);
+
+// read relevant events from database
+$datesResult = $dates->getDataset();
+$datesTotalCount = $dates->getDataSetCount();
 
 if($parameter['cat_id'] > 0)
 {
     $calendar = new TableCategory($gDb, $parameter['cat_id']);
 }
-// Navigation starts here
+
 if($parameter['id']  == 0 || $parameter['view_mode'] == 'compact' && $parameter['id'] > 0)
 {
-    $gNavigation->clear();
-    $gNavigation->addUrl(CURRENT_URL, $headline);
+    // Navigation of the module starts here
+    $gNavigation->addStartUrl(CURRENT_URL, $headline);
 }
 
 // Number of events each page for default view 'html' or 'compact' view
@@ -198,7 +235,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
     $page->addHeadline($headline);
 
     //Check if box must be shown, when more dates available
-    if((($parameter['calendar-selection'] == 1) && ($parameter['id'] == 0)) || $gCurrentUser->editDates())
+    if($parameter['id'] == 0 || $gCurrentUser->editDates())
     {
         // create module menu
         $DatesMenu = new ModuleMenu('admMenuDates');
@@ -213,20 +250,6 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
 
         if($parameter['id'] == 0)
         {
-            if($parameter['calendar-selection'] == 1)
-            {
-                // show selectbox with all calendars
-                $DatesMenu->addCategoryItem('admMenuItemCategory', 'DAT', $parameter['cat_id'], 'dates.php?headline='.$parameter['headline'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date'].'&cat_id=',
-                                    $gL10n->get('DAT_CALENDAR'), $gCurrentUser->editDates());
-            }
-            elseif($gCurrentUser->editDates())
-            {
-                // if no calendar selectbox is shown, then show link to edit calendars
-                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR'),
-                                    $gL10n->get('DAT_MANAGE_CALENDARS'), 'edit.png');
-            }
-
-
             //ical Download
             if($gPreferences['enable_dates_ical'] == 1)
             {
@@ -244,6 +267,12 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 // show link to system preferences of weblinks
                 $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=events',
                                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+            }
+            elseif($gCurrentUser->editDates())
+            {
+                // if no calendar selectbox is shown, then show link to edit calendars
+                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR'),
+                                    $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png');
             }
 
             $page->addHtml($DatesMenu->show(false));
@@ -266,9 +295,10 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
-                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php', $page, 'navbar');
-                    $form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtmlOutput, 10, FIELD_DEFAULT, 'date');
-                    $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtmlOutput, 10, FIELD_DEFAULT, 'date');
+                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'], $page, 'navbar');
+                    $form->addSelectBoxForCategories('filter_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getFilterCatId);
+                    $form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $getFilterDateFrom, 10, FIELD_DEFAULT, 'date');
+                    $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $getFilterDateTo, 10, FIELD_DEFAULT, 'date');
                     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
                     $page->addHtml($form->show(false));
                 $page->addHtml('</div>
@@ -314,9 +344,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
         }
     }
-
-    // List events
-    if($datesTotalCount > 0)
+    else
     {
         // Output table header for compact view
         if ($parameter['view_mode'] == 'compact')
@@ -385,7 +413,6 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             $participantLink = '';
             $mgrpartLink  = '';
             $dateElements = array();
-            $firstElement = true;
             $maxMembers   = '';
             $numMembers   = '';
             $leadersHtml  = '';
@@ -591,18 +618,18 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
 
                 // Output of elements
                 // always 2 then line break
-                $eventDetails = new HtmlTableBasic();
-                $eventDetails->addAttribute('style', 'width: 100%,');
-                $eventDetails->addAttribute('border-width', '0px;');
+                $firstElement = true;
+                $htmlDateElements = '';
 
                 foreach($dateElements as $element)
                 {
                     if($firstElement)
                     {
-                        $eventDetails->addRow();
+                        $htmlDateElements .= '<div class="row">';
                     }
-                    $eventDetails->addColumn($element[0].':', array('style' => 'width: 15%;'));
-                    $eventDetails->addColumn($element[1], array('style' => 'width: 35%;'));
+                    
+                    $htmlDateElements .= '<div class="col-sm-2 col-xs-4">'.$element[0].'</div>
+                        <div class="col-sm-4 col-xs-8">'.$element[1].'</div>';
 
                     if($firstElement)
                     {
@@ -610,10 +637,16 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                     }
                     else
                     {
+                        $htmlDateElements .= '</div>';
                         $firstElement = true;
                     }
                 }
-                $tableEventDetails = $eventDetails->getHtmlTable();
+                
+                if($firstElement == false)
+                {
+                    $htmlDateElements .= '</div>';
+                    
+                }
 
                 $page->addHtml('
                 <div class="panel panel-primary'.$cssClassHighlight.'" id="dat_'.$date->getValue('dat_id').'">
@@ -628,7 +661,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                     </div>
 
                     <div class="panel-body">
-                        ' . $tableEventDetails . '
+                        ' . $htmlDateElements . '
                         <div class="date_description" style="clear: left;">' . $date->getValue('dat_description') . '</div>');
                                             
                         if (strlen($registerLink) > 0 || strlen($participantLink) > 0 || strlen($mgrpartLink) > 0)
