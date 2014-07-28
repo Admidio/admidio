@@ -46,7 +46,7 @@ if ($gPreferences['enable_dates_ical'] != 1)
 //create Object
 $dates = new ModuleDates();
 // get parameters fom $_GET Array stored in class
-$parameter = $dates->getParameter();
+$parameter = $dates->getParameters();
 // set mode, viewmode, startdate and enddate manually
 $parameter['mode'] = 2; 
 $parameter['view_mode'] = 'period';

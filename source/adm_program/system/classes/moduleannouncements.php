@@ -199,7 +199,7 @@ class ModuleAnnouncements extends Modules
         }
        
         // Push parameter to array
-        $announcements['parameter'] = $this->getParameter();
+        $announcements['parameter'] = $this->getParameters();
         return $announcements;
     }
     

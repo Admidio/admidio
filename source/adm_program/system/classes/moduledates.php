@@ -132,12 +132,7 @@
  *******************************************************************************/
   
 class ModuleDates extends Modules
-{    
-    protected $showMode; ///< String with show mode ( Default: "all" )
-    protected $dateFrom;
-    protected $dateTo;
-    protected $catId;
-    
+{       
     /** Constuctor that will create an object of a recordset of the specified dates.
      *  Initialize parameters 
      */
@@ -151,9 +146,7 @@ class ModuleDates extends Modules
         parent::__construct();
         // call class methods different to main class
         $this->setHeadline();
-        $this->setMode();
         $this->setViewMode(); 
-        $this->setShowMode('all');
     }
     
     /** Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
@@ -253,7 +246,7 @@ class ModuleDates extends Modules
             $dates['recordset'][] = $row;
         }
         // Push parameter to array
-        $dates['parameter'] = $this->getParameter();
+        $dates['parameter'] = $this->getParameters();
         return $dates;
     }
     
@@ -310,11 +303,86 @@ class ModuleDates extends Modules
         }
     }
     
-    public function setFilterData($dateFrom, $dateTo, $categoryId)
+    
+    /** Set a date range in which the dates should be searched. The method will fill
+     *  4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish, 
+     *  @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
+     *  getParameter and could be used in the script.
+     *  @param $dateRangeStart A date in english or Admidio format that will be the start date of the range.
+     *  @param $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
+     *  @return Returns false if invalid date format is submitted 
+     */
+    public function setDateRange($dateRangeStart, $dateRangeEnd)
     {
-        $this->dateFrom = $dateFrom;
-        $this->dateTo   = $dateTo;
-        $this->catId    = $categoryId;
+        global $gPreferences;
+
+        if(strlen($dateRangeStart) == 0)
+        {
+            //set date_from and date_to regarding to current mode
+            switch($this->mode)
+            {
+                case 'actual':
+                    $dateRangeStart  = DATE_NOW;
+                    $dateRangeEnd    = '9999-12-31';
+                    break;
+                case 'old':
+                    $dateRangeStart  = '1970-01-01';
+                    $dateRangeEnd    = DATE_NOW;
+                    $this->order     = 'DESC';
+                    break;
+                case 'all':
+                    $dateRangeStart  = '1970-01-01';
+                    $dateRangeEnd    = '9999-12-31';
+                    break;
+            }
+        }
+            
+        // Create date object and format date_from in English format and sytem format and push to daterange array
+        $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d', 'date');
+        if($objDate->valid())
+        {
+            $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+            $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
+        }                                             
+        else
+        {
+            // check if date_from  has system format
+            $objDate = new DateTimeExtended($dateRangeStart, $gPreferences['system_date'], 'date');
+
+            if($objDate->valid())
+            {
+                $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+                $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        // Create date object and format date_to in English format and sytem format and push to daterange array
+        $objDate = new DateTimeExtended($dateRangeEnd, 'Y-m-d', 'date');
+        if($objDate->valid())
+        {
+            $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+            $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
+        }
+        else
+        {
+            // check if date_from  has system format
+            $objDate = new DateTimeExtended($dateRangeEnd, $gPreferences['system_date'], 'date');
+
+            if($objDate->valid())
+            {
+                $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+                $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
     }
     
     /** Check date value to reference and set html output.
@@ -332,60 +400,6 @@ class ModuleDates extends Modules
             $this->date = $date;
         }
         return $date;
-    }
-    
-    /** Set current mode.
-     *  This function defines the mode of the current instance. 
-     *  This method checks valid mode value and validates the date values.
-     */ 
-    protected function setMode()
-    {   
-            $this->mode = '';
-            $this->validModes       = array('actual', 'old', 'all', 'period', 'day');
-        
-            parent::setMode();  
-            //set date_from and date_to regarding to current mode
-            switch($this->mode)
-            {
-                case 'actual':
-                    $this->properties['date_from']  = DATE_NOW;
-                    $this->properties['date_to']    = '9999-12-31';
-                    break;
-                case 'old':
-                    $this->properties['date_from']  = '1970-01-01';
-                    $this->properties['date_to']    = DATE_NOW;
-                    $this->order                    = 'DESC';
-                    $this->setDaterange();
-                    break;
-                case 'all':
-                    $this->properties['date_from']  = '1970-01-01';
-                    $this->properties['date_to']    = '9999-12-31';
-                    $this->setDaterange();
-                    break;
-                case 'period':
-                    break;
-                case 'day':
-                    $this->properties['date_from']  = DATE_NOW;
-                    $this->properties['date_to']    = DATE_NOW;
-                    $this->setDaterange();
-                    break;
-                    return TRUE;            
-            }
-            return FALSE;    
-    }
-    
-    /** Set current show mode.
-     *  This method checks valid valid mode value and sets the current show mode.
-     *  @param $show Possible values are @b all (Default) show all events, 
-     *               @b maybe_participate show only events where the current user participates or could participate and
-     *               @b only_participate show only events where the current user participates
-     */
-    public function setShowMode($show)
-    {
-        if(in_array($show, array('all', 'maybe_participate', 'only_participate')))
-        {
-            $this->showMode = $show;
-        }
     }
     
     /** Set current view mode.
@@ -473,8 +487,8 @@ class ModuleDates extends Modules
         else
         {
             // add 1 second to end date because full time events to until next day
-            $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$this->dateFrom.' 00:00:00\' AND \''.$this->dateTo.' 23:59:59\'
-                                    OR dat_end   BETWEEN \''.$this->dateFrom.' 00:00:01\' AND \''.$this->dateTo.' 23:59:59\')';
+            $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'
+                                    OR dat_end   BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:01\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\')';
         
             // show all events from category                
             if($this->catId > 0)
@@ -487,7 +501,7 @@ class ModuleDates extends Modules
         // add conditions for role permission
         if($gCurrentUser->getValue('usr_id') > 0)
         {
-            if($this->showMode == 'all')
+            if($this->parameters['show'] == 'all')
             {
                 $sqlConditions .= '
                 AND (  dtr_rol_id IS NULL 
@@ -497,7 +511,7 @@ class ModuleDates extends Modules
                                          AND mem2.mem_begin  <= dat_begin
                                          AND mem2.mem_end    >= dat_end) ) ';
             }
-            elseif($this->showMode == 'maybe_participate')
+            elseif($this->parameters['show'] == 'maybe_participate')
             {
                 $sqlConditions .= '
                 AND dat_rol_id IS NOT NULL
@@ -508,7 +522,7 @@ class ModuleDates extends Modules
                                          AND mem2.mem_begin  <= dat_begin
                                          AND mem2.mem_end    >= dat_end) ) ';
             }
-            elseif($this->showMode == 'only_participate')
+            elseif($this->parameters['show'] == 'only_participate')
             {
                 $sqlConditions .= '
                 AND dat_rol_id IS NOT NULL

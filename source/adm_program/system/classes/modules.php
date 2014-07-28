@@ -23,7 +23,6 @@
  *        'order'               => 'ASC'
  *        'startelement'        => 0
  *        'view_mode'           => 'string',
- *        'date'                => 'string',
  *        'daterange'           =>  array(
  *                                          [english] (date_from => 'string', date_to => 'string'),
  *                                          [sytem] (date_from => 'string', date_to => 'string'))
@@ -46,11 +45,8 @@ abstract class Modules
     protected $activeRole;          ///< Boolean 0/1 for active role
     public    $arrParameter;        ///< Array with validated parameters 
     protected $headline;            ///< String with headline expression
-    protected $calendarSelection;   ///< Boolean 0/1 to show calendar selection
-    protected $categorySelection;   ///< Boolean 0/1 to show category selection
     protected $catId;               ///< ID as integer for choosen category
     protected $id;                  ///< ID as integer to choose record
-    protected $date;                ///< String with date value
     protected $daterange;           ///< Array with date settings in English format and system format
     protected $mode;                ///< String with current mode ( Default: "Default" )
     protected $order;               ///< String with order ASC/DESC( Default: "ASC" )
@@ -59,6 +55,7 @@ abstract class Modules
     protected $validModes;          ///< Array with valid modes ( Deafault: "Default" )
     protected $validViewModes;      ///< Array with valid view modes ( Deafault: "Default" )
     protected $viewMode;            ///< String with view mode ( Default: "Default" )
+    protected $parameters;          ///< Array with all parameters of the module that were added to this class.
     
     abstract public function getDataSet($startElement=0, $limit=NULL);
     abstract public function getDataSetCount();
@@ -68,12 +65,11 @@ abstract class Modules
      */
     public function __construct()
     {
+        $parameters = array();
+    
         $this->activeRole           = '';
         $this->arrParameters        = array();
-        $this->calendarSelection    = '';
         $this->catId                = 0;
-        $this->categorySelection    = '';
-        $this->date                 = '';
         $this->daterange            = array();
         $this->headline             = '';
         $this->id                   = 0;
@@ -87,11 +83,7 @@ abstract class Modules
         
         // Set parameters
         $this->setActiveRole();
-        $this->setCalendarSelection();
         $this->setCatId();
-        $this->setCategorySelection();
-        $this->setDate();
-        $this->setDaterange();
         $this->setHeadline();
         $this->setId();
         $this->setMode();
@@ -110,39 +102,12 @@ abstract class Modules
     }
     
     /**
-     *  Return Calendar Selection
-     *  @return Returns boolean calendar selection
-     */
-    public function getCalendarSelection()
-    {
-        return $this->calendarSelection;
-    }
-    
-    /**
      *  Return category ID
      *  @return Returns the category ID 
      */
     public function getCatId()
     {
         return $this->catId;
-    }
-    
-    /**
-     *  Return Category Selection
-     *  @return Returns boolean for category selection
-     */
-    public function getCategorySelection()
-    {
-        return $this->categorySelection;
-    }
-    
-    /**
-     *  Return Date
-     *  @return Returns the explicit date in English format
-     */
-    public function getDate()
-    {
-        return $this->date;
     }
     
     /**
@@ -190,6 +155,20 @@ abstract class Modules
         return $this->order;
     }
     
+    /** Returns a module parameter from the class
+     *  @param $parameterName  The name of the parameter whose value should be returned. 
+     *  @return Returns the parameter value of the 
+     */
+    public function getParameter($parameterName)
+    {
+        if(strlen($parameterName) > 0 && array_key_exists($parameterName, $this->parameters))
+        {
+            return $this->parameters[$parameterName];
+        }
+        return null;
+    }    
+
+    
     /**
      *  Return start element
      *  @return Returns Integer value for the start element
@@ -212,14 +191,11 @@ abstract class Modules
      *  Return parameter set as Array
      *  @return Returns an Array with all needed parameters as Key/Value pair 
      */
-    public function getParameter()
+    public function getParameters()
     {    
         // Set Array
         $this->arrParameter['active_role']          = $this->activeRole;
-        $this->arrParameter['calendar-selection']   = $this->calendarSelection;
         $this->arrParameter['cat_id']               = $this->catId;
-        $this->arrParameter['category-selection']   = $this->categorySelection;
-        $this->arrParameter['date']                 = $this->date;
         $this->arrParameter['daterange']            = $this->daterange;
         $this->arrParameter['headline']             = $this->headline;
         $this->arrParameter['id']                   = $this->id;
@@ -239,17 +215,6 @@ abstract class Modules
     {
         $this->activeRole = admFuncVariableIsValid($this->properties, 'active_role', 'boolean', 1);
     }
-    
-    /**
-     *  Set calendar selection
-     * 
-     *  Set Calendar selection boolean 0/1. Default $gPreferences 
-     */
-    protected function setCalendarSelection()
-    {
-        global $gPreferences;
-        $this->calendarSelection = admFuncVariableIsValid($this->properties, 'calendar-selection', 'boolean', $gPreferences['dates_show_calendar_select']);
-    }
      
     /**
      *  Set category ID
@@ -260,112 +225,9 @@ abstract class Modules
     protected function setCatId()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->catId = admFuncVariableIsValid($this->properties, 'cat_id', 'numeric', 0);
+        //$this->catId = admFuncVariableIsValid($this->properties, 'cat_id', 'numeric', 0);
     }
-    
-    /**
-     *  Set category selection
-     *
-     *  Set category selection boolean 0/1. Default 1
-     */
-    protected function setCategorySelection()
-    {
-        $this->categorySelection = admFuncVariableIsValid($this->properties, 'category-selection', 'boolean', 1);
-    }
-    
-    /**
-     *  Set date value and convert in English format if necessary
-     */
-    protected function setDate()
-    {
-        global $gPreferences;
-        $date = '';
-        
-        // check optional user parameter and make secure. Otherwise set default value
-        $date = admFuncVariableIsValid($this->properties, 'date', 'date', '', false);
-        
-        // Create date object and format date in English format 
-        $objDate = new DateTimeExtended($date, 'Y-m-d', 'date');
-        
-        if($objDate->valid())
-        {
-            $this->date = substr($objDate->getDateTimeEnglish(), 0, 10);
-        }
-        else
-        {
-            // check if date has system format then convert it in English format
-            $objDate = new DateTimeExtended($date, $gPreferences['system_date'], 'date');
-            if($objDate->valid())
-            {
-                $this->date = substr($objDate->getDateTimeEnglish(), 0, 10);
-            }
-        }
-    }
-    
-    /**
-     *  Set daterange in an array with values for English format and system format
-     *  @return Returns false if invald date format is submitted 
-     */
-    protected function setDaterange()
-    {
-        global $gPreferences;
-        $start  = '';
-        $end    = '';
-        
-        // check optional user parameter and make secure. Otherwise set default value
-        $start = admFuncVariableIsValid($this->properties, 'date_from', 'date', DATE_NOW, false);
-        
-        // Create date object and format date_from in English format and sytem format and push to daterange array
-        $objDate = new DateTimeExtended($start, 'Y-m-d', 'date');
-        if($objDate->valid())
-        {
-            $this->daterange['english']['start_date'] = substr($objDate->getDateTimeEnglish(), 0, 10);
-            $this->daterange['system']['start_date'] = $objDate->format($gPreferences['system_date']);
-        }                                             
-        else
-        {
-            // check if date_from  has system format
-            $objDate = new DateTimeExtended($start, $gPreferences['system_date'], 'date');
-
-            if($objDate->valid())
-            {
-                $this->daterange['english']['start_date'] = substr($objDate->getDateTimeEnglish(), 0, 10);
-                $this->daterange['system']['start_date'] = $objDate->format($gPreferences['system_date']);
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        // check optional user parameter and make secure. Otherwise set default value
-        $end = admFuncVariableIsValid($this->properties, 'date_to', 'date', '9999-12-31', false);
-
-        // Create date object and format date_to in English format and sytem format and push to daterange array
-        $objDate = new DateTimeExtended($end, 'Y-m-d', 'date');
-        if($objDate->valid())
-        {
-            $this->daterange['english']['end_date'] = substr($objDate->getDateTimeEnglish(), 0, 10);
-            $this->daterange['system']['end_date'] = $objDate->format($gPreferences['system_date']);
-        }
-        else
-        {
-            // check if date_from  has system format
-            $objDate = new DateTimeExtended($end, $gPreferences['system_date'], 'date');
-
-            if($objDate->valid())
-            {
-                $this->daterange['english']['end_date'] = substr($objDate->getDateTimeEnglish(), 0, 10);
-                $this->daterange['system']['end_date'] = $objDate->format($gPreferences['system_date']);
-            }
-            else
-            {
-                return false;
-            }
-        }
-        
-    }
-    
+   
     /**
      *  Set headline
      * 
@@ -395,7 +257,7 @@ abstract class Modules
     protected function setMode()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->mode = admFuncVariableIsValid($this->properties, 'mode', 'string', $this->validModes[0], false, $this->validModes);
+        //$this->mode = admFuncVariableIsValid($this->properties, 'mode', 'string', $this->validModes[0], false, $this->validModes);
     }
     
     /**
@@ -407,6 +269,28 @@ abstract class Modules
     {
         // check optional user parameter and make secure. Otherwise set default value
         $this->order = admFuncVariableIsValid($this->properties, 'order', 'string', 'ASC', false, array('ASC', 'DESC'));
+    }    
+    
+    /** add a module parameter to the class
+     *  @param $parameterName  The name of the parameter that should be added. 
+     *  @param $parameterValue The value of the parameter that should be added. 
+     */
+    public function setParameter($parameterName, $parameterValue)
+    {
+        if(strlen($parameterName) > 0)
+        {
+            $this->parameters[$parameterName] = $parameterValue;
+            
+            if($parameterName == 'cat_id')
+            {
+                $this->catId = $parameterValue;
+            error_log($this->parameters['cat_id'].':V:');
+            }
+            elseif($parameterName == 'mode')
+            {
+                $this->mode = $parameterValue;
+            }
+        }
     }
     
     /**

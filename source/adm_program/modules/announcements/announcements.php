@@ -36,7 +36,7 @@ elseif($gPreferences['enable_announcements_module'] == 2)
 // create object for announcements
 $announcements = new ModuleAnnouncements();
 // get parameters and number of recordsets
-$parameter = $announcements->getParameter();
+$parameter = $announcements->getParameters();
 $announcementsCount = $announcements->getDataSetCount();
 
 // Navigation of the module starts here

@@ -10,16 +10,12 @@
  *
  * mode      - actual : (Default) shows actual dates and all events in future
  *             old    : shows events in the past
- *             period : shows all events in a specified period (date_from/date_to)
- *             day    : shows all events of a specified day (date_from)
  *             all    : shows all events in past and future
  * start     - Position of query recordset where the visual output should start
  * headline  - Headline shown over events
  *             (Default) Dates
  * cat_id    - show all events of calendar with this id
  * id        - Show only one event
- * date      - All events for a date are listed
- *             Format : YYYYMMDD
  * show      - all               : (Default) show all events
  *           - maybe_participate : Show only events where the current user participates or could participate
  *           - only_participate  : Show only events where the current user participates
@@ -35,11 +31,11 @@ require_once('../../system/common.php');
 
 unset($_SESSION['dates_request']);
 
-$getShow = admFuncVariableIsValid($_GET, 'show', 'string', 'all', false, array('all', 'maybe_participate', 'only_participate'));
-$getFilterCatId    = admFuncVariableIsValid($_GET, 'filter_cat_id', 'numeric', 0);
-$getFilterDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date');
-$getFilterDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date');
-
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old', 'all'));
+$getShow     = admFuncVariableIsValid($_GET, 'show', 'string', 'all', false, array('all', 'maybe_participate', 'only_participate'));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
+$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -54,13 +50,23 @@ elseif($gPreferences['enable_dates_module'] == 2)
 }
 
 // create object and get recordset of available dates
+
 $dates = new ModuleDates();
-$dates->setShowMode($getShow);
+$dates->setParameter('mode', $getMode);
+$dates->setParameter('cat_id', $getCatId);
+$dates->setParameter('show', $getShow);
+$dates->setDateRange($getDateFrom, $getDateTo);
+
 // get parameter
-$parameter = $dates->getParameter();
+$parameter = $dates->getParameters();
+
+if($parameter['cat_id'] > 0)
+{
+    $calendar = new TableCategory($gDb, $parameter['cat_id']);
+}
 
 // set headline
-if($parameter['cat_id'] > 0)
+if($dates->getParameter('cat_id') > 0)
 {
     $headline = $parameter['headline']. ' - '. $calendar->getValue('cat_name');
 }
@@ -71,8 +77,8 @@ else
 
 // check time period if old dates are choosen, then set headline to previous dates
 // Define a prefix
-if($parameter['daterange']['english']['start_date'] < DATE_NOW 
-    && $parameter['daterange']['english']['end_date'] < DATE_NOW
+if($dates->getParameter('dateStartFormatEnglish') < DATE_NOW 
+    && $dates->getParameter('dateEndFormatEnglish') < DATE_NOW
     || $parameter['mode'] == 'old')
 {
     $headline = $gL10n->get('DAT_PREVIOUS_DATES', ' ').$headline;
@@ -83,52 +89,9 @@ if($parameter['view_mode'] == 'print')
     $headline = $gCurrentOrganization->getValue('org_longname').' - '.$headline;
 }
 
-$filterDateFromEnglish = '1970-01-01';
-$filterDateToEnglish = '9999-12-31';
-
-// check filter dates
-if(strlen($getFilterDateFrom) > 0)
-{
-    $date = new DateTimeExtended($getFilterDateFrom, $gPreferences['system_date'], 'date');
-    if($date->valid() == false)
-    {
-        if($this->noValueCheck != true)
-        {                        
-            $getFilterDateFrom = '';
-        }
-    }
-    else
-    {
-        $filterDateFromEnglish = $date->format('Y-m-d');
-    }
-}
-
-if(strlen($getFilterDateTo) > 0)
-{
-    $date = new DateTimeExtended($getFilterDateTo, $gPreferences['system_date'], 'date');
-    if($date->valid() == false)
-    {
-        if($this->noValueCheck != true)
-        {                        
-            $getFilterDateTo = '';
-        }
-    }
-    else
-    {
-        $filterDateToEnglish = $date->format('Y-m-d');
-    }
-}
-
-$dates->setFilterData($filterDateFromEnglish, $filterDateToEnglish, $getFilterCatId);
-
 // read relevant events from database
 $datesResult = $dates->getDataset();
 $datesTotalCount = $dates->getDataSetCount();
-
-if($parameter['cat_id'] > 0)
-{
-    $calendar = new TableCategory($gDb, $parameter['cat_id']);
-}
 
 if($parameter['id']  == 0 || $parameter['view_mode'] == 'compact' && $parameter['id'] > 0)
 {
@@ -208,7 +171,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             if ($("#admCalendar").selectedIndex != 0) {
                 var calendarId = $("#admCalendar").val();
             }
-            self.location.href = "dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date'].'&cat_id=" + calendarId;
+            self.location.href = "dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&date_from='.$dates->getParameter('dateStartFormatAdmidio').'&date_to='.$dates->getParameter('dateEndFormatAdmidio').'&cat_id=" + calendarId;
         });', true);
 
     $page->addJavascript('
@@ -259,7 +222,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
 
             // show print button
             $DatesMenu->addItem('admMenuItemPrint', '',
-                                $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$parameter['daterange']['english']['start_date'].'&date_to='.$parameter['daterange']['english']['end_date'].'&view_mode=print\', \'_blank\')' );
+                                $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode=print\', \'_blank\')' );
 
 
             if($gCurrentUser->isWebmaster())
@@ -295,10 +258,11 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
-                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'], $page, 'navbar');
-                    $form->addSelectBoxForCategories('filter_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getFilterCatId);
-                    $form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $getFilterDateFrom, 10, FIELD_DEFAULT, 'date');
-                    $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $getFilterDateTo, 10, FIELD_DEFAULT, 'date');
+                error_log($dates->getParameter('cat_id').':::');
+                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$parameter['headline'], $page, 'navbar');
+                    $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', FIELD_DEFAULT, $dates->getParameter('cat_id'));
+                    $form->addTextInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
+                    $form->addTextInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
                     $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
                     $page->addHtml($form->show(false));
                 $page->addHtml('</div>
@@ -750,14 +714,14 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
     }
 
     // If neccessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date'].'&view_mode='.$parameter['view_mode'];
+    $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$parameter['view_mode'];
     $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $parameter['startelement'], TRUE));
     $page->show();
 }
 else
 {
     // create print output in a new window and set view_mode back to default 'html' for back navigation in main window
-    $gNavigation->addUrl($g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$parameter['daterange']['system']['start_date'].'&date_to='.$parameter['daterange']['system']['end_date']);
+    $gNavigation->addUrl($g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish'));
 
     $tableDatePrint = '';
     
@@ -780,7 +744,7 @@ else
     
     // Define header and footer content for the html table
     $tableHead = '<h1>'.$headline.'</h1>
-                    <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$parameter['daterange']['system']['start_date']. ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$parameter['daterange']['system']['end_date'].
+                    <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$dates->getParameter('dateStartFormatAdmidio'). ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$dates->getParameter('dateEndFormatAdmidio').
                         '<span class="form" style="margin-left: 40px;">'.
                         // Selectbox for table content
                         FormElements::generateDynamicSelectBox($selectBoxEntries, $defaultEntry = '0', $fieldId = 'admSelectBox', $createFirstEntry = false).'

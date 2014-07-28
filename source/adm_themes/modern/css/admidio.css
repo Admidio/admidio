@@ -262,12 +262,8 @@ select[multiple] {
     width: 50%;
 }
 
-input[type="date"] {
-    width: 100px !important;
-}
-
-input[type="number"] {
-    width: 150px !important;
+input[type="date"], input[type="number"] {
+    width: 130px !important;
 }
 
 .admSelectBoxSmall, /*div.dataTables_filter input, div.dataTables_length select*/ {

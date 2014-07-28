@@ -183,7 +183,7 @@ class ModuleWeblinks extends Modules
         }
 
         // Push parameter to array
-        $weblinks['parameter'] = $this->getParameter();
+        $weblinks['parameter'] = $this->getParameters();
 
         return $weblinks;
     }

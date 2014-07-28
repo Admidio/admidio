@@ -308,7 +308,7 @@ class ModuleLists extends Modules
             $lists['recordset'] = array();
         }        
         // Push parameter to array
-        $lists['parameter'] = $this->getParameter();        
+        $lists['parameter'] = $this->getParameters();        
         return $lists;
     }
     
