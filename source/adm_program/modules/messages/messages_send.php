@@ -286,7 +286,6 @@ if ($getMsgType == 'EMAIL')
                 }
                 else
                 {
-					echo $groupsplit[1];
                     // Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
                     // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
                     $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));

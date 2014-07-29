@@ -100,10 +100,10 @@ if ($getMsgType == 'PM')
 	$recept_number = 1;
 
 	$sql = "SELECT usr_id, CONCAT(row1id1.usd_value, ' ', row2id2.usd_value) as name, usr_login_name
-                  FROM demo_roles, demo_categories, demo_members, demo_users
-                        LEFT JOIN demo_user_data row1id1
+                  FROM ".TBL_ROLES.", ".TBL_CATEGORIES.", ".TBL_MEMBERS.", ".TBL_USERS."
+                        LEFT JOIN ".TBL_USER_DATA." row1id1
                                            ON row1id1.usd_usr_id = usr_id
-                                          AND row1id1.usd_usf_id = 1 LEFT JOIN demo_user_data row2id2
+                                          AND row1id1.usd_usf_id = 1 LEFT JOIN ".TBL_USER_DATA." row2id2
                                            ON row2id2.usd_usr_id = usr_id
                                           AND row2id2.usd_usf_id = 2
                  WHERE rol_id IN (2)
@@ -405,7 +405,20 @@ else
 	// show form
 	$form = new HtmlForm('mail_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, 'default', true);
 	$form->openGroupBox('gb_mail_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
-
+	
+	if ($getUserId > 0)
+	{
+		// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
+		$preload_data = '{ id: "' .$getUserId. '", text: "' .$userEmail. '", locked: true}';
+	}
+	elseif ($getRoleId > 0)
+	{
+		// Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
+		$preload_data = '{ id: "groupID: ' .$rollenID. '", text: "' .$rollenName. '", locked: true}';
+	}
+	
+	$form->addTextInput('msg_to', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden', 'MAI_SEND_MAIL_TO_ROLE');
+	
 	// keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
 	if ($gValidLogin)
 	{
@@ -430,34 +443,36 @@ else
 				   AND rol_cat_id = cat_id
 				   AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
 				 ORDER BY cat_sequence, rol_name ';
+		
+		$next = false;
+		$result = $gDb->query($sql);
+		while ($row = $gDb->fetch_array($result)) 
+		{
+			if($next == true)
+			{
+				$list .= ',';
+			}
+			$next = true;
+			$list .= '{ id: "groupID: ' .$row['rol_id']. '" , text: "' .$row['rol_name']. '"}';
+		}
 	}
-	
-	if ($getUserId > 0)
-	{
-		// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-		$preload_data = '{ id: "' .$getUserId. '", text: "' .$userEmail. '", locked: true}';
-	}
-	elseif ($getRoleId > 0)
-	{
-		// Rolle wurde uebergeben, dann E-Mails nur an diese Rolle schreiben
-		$preload_data = '{ id: "groupID: ' .$rollenID. '", text: "' .$rollenName. '", locked: true}';
-	}
-	
-	$form->addTextInput('msg_to', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden', 'MAI_SEND_MAIL_TO_ROLE');
 	
 	// add a selectbox where you can choose to which groups (active, former) you want to send the mail
 	if ($gValidLogin)
 	{
 		for ($act_or = 0; $act_or <= 2; $act_or++)
 		{
+			$act_group_short = '';
 			if ($act_or == 1)
 			{
 				$act_group = $gL10n->get('LST_FORMER_MEMBERS');
+				$act_group_short = $gL10n->get('MSG_FORMER_SHORT');
 				$act_number = '-1';
 			}
 			else if ($act_or == 2)
 			{
 				$act_group = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
+				$act_group_short = $gL10n->get('MSG_ACTIVE_FORMER_SHORT');
 				$act_number = '-2';
 			}
 			else
@@ -481,25 +496,54 @@ else
 					$list .= ',';
 				}
 				$next = true;
-				$list .= '{ id: "groupID: ' .$row['rol_id']. ''.$act_number.'" , text: "' .$row['rol_name']. '"}';
+				$list .= '{ id: "groupID: ' .$row['rol_id']. ''.$act_number.'" , text: "' .$row['rol_name'].' '.$act_group_short. '"}';
 			}
 
 			$list .= ']}';
 		}
-	}
-	else
-	{
+		
+		if(strlen($list) > 0)
+		{
+			$list .= ',';
+		}
+		
+		$sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, 
+                                 email.usd_value as email
+                            FROM '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
+                            JOIN '. TBL_USER_DATA. ' as email
+                              ON email.usd_usr_id = usr_id
+                             AND LENGTH(email.usd_value) > 0
+                            JOIN '.TBL_USER_FIELDS.' as field
+                              ON field.usf_id = email.usd_usf_id
+                             AND field.usf_type = \'EMAIL\'
+                            LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                              ON last_name.usd_usr_id = usr_id
+                             AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+                            LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                              ON first_name.usd_usr_id = usr_id
+                             AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+                           WHERE (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                                 OR cat_org_id IS NULL )
+                             AND mem_usr_id  = usr_id
+                             AND usr_valid   = 1 
+                             AND mem_end < \''.DATE_NOW.'\' 
+						   GROUP BY usr_id, first_name, last_name, email';
+
+		$list .= '{ text: "Aktive Mitglieder", children: [';
+			
 		$next = false;
 		$result = $gDb->query($sql);
-		while ($row = $gDb->fetch_array($result)) 
-		{
+		while ($row = $gDb->fetch_array($result)) {
 			if($next == true)
 			{
 				$list .= ',';
 			}
 			$next = true;
-			$list .= '{ id: "groupID: ' .$row['rol_id']. '" , text: "' .$row['rol_name']. '"}';
+			$list .= '{ id: "' .$row['usr_id']. '" , text: "' .$row['first_name'].' '.$row['last_name']. ' <' .$row['email']. '>"}';
 		}
+
+		$list .= ']}';
+		
 	}
 
 	$form->addLine();
