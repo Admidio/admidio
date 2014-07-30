@@ -443,17 +443,6 @@ input[type="date"], input[type="number"] {
     border-bottom: 2px solid #a0cbd9;
 }
 
-/* Page navigation */
-
-.admPageNavigation {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.admPageNavigation .selected {
-    font-weight: bold;
-}
-
 /* The module and administration menu on the main page */
 
 .admMenu {
