@@ -466,13 +466,13 @@ else
 			if ($act_or == 1)
 			{
 				$act_group = $gL10n->get('LST_FORMER_MEMBERS');
-				$act_group_short = $gL10n->get('MSG_FORMER_SHORT');
+				$act_group_short = '('.$gL10n->get('MSG_FORMER_SHORT').')';
 				$act_number = '-1';
 			}
 			else if ($act_or == 2)
 			{
 				$act_group = $gL10n->get('LST_ACTIVE_FORMER_MEMBERS');
-				$act_group_short = $gL10n->get('MSG_ACTIVE_FORMER_SHORT');
+				$act_group_short = '('.$gL10n->get('MSG_ACTIVE_FORMER_SHORT').')';
 				$act_number = '-2';
 			}
 			else
@@ -502,10 +502,7 @@ else
 			$list .= ']}';
 		}
 		
-		if(strlen($list) > 0)
-		{
-			$list .= ',';
-		}
+		// active Users
 		
 		$sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, 
                                  email.usd_value as email
@@ -526,23 +523,81 @@ else
                                  OR cat_org_id IS NULL )
                              AND mem_usr_id  = usr_id
                              AND usr_valid   = 1 
-                             AND mem_end < \''.DATE_NOW.'\' 
-						   GROUP BY usr_id, first_name, last_name, email';
-
-		$list .= '{ text: "Aktive Mitglieder", children: [';
+                             AND mem_begin  <= \''.DATE_NOW.'\'
+                             AND mem_end     > \''.DATE_NOW.'\'
+			   GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value';		
 			
-		$next = false;
+		
 		$result = $gDb->query($sql);
-		while ($row = $gDb->fetch_array($result)) {
-			if($next == true)
+		$num_rows = mysql_num_rows($result);
+		
+		if ($num_rows > 0)
+		{
+			if(strlen($list) > 0)
 			{
 				$list .= ',';
 			}
-			$next = true;
-			$list .= '{ id: "' .$row['usr_id']. '" , text: "' .$row['first_name'].' '.$row['last_name']. ' <' .$row['email']. '>"}';
+			$list .= '{ text: "Aktive Mitglieder ('.$num_rows.')", children: [';
+			$next = false;
+			while ($row = $gDb->fetch_array($result)) {
+				if($next == true)
+				{
+					$list .= ',';
+				}
+				$next = true;
+				$list .= '{ id: "' .$row['usr_id']. '" , text: "' .$row['first_name'].' '.$row['last_name']. ' <' .$row['email']. '>"}';
+			}
+	
+			$list .= ']}';
 		}
+		
+		// old Users
+		
+		$sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, 
+                                 email.usd_value as email
+                            FROM '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
+                            JOIN '. TBL_USER_DATA. ' as email
+                              ON email.usd_usr_id = usr_id
+                             AND LENGTH(email.usd_value) > 0
+                            JOIN '.TBL_USER_FIELDS.' as field
+                              ON field.usf_id = email.usd_usf_id
+                             AND field.usf_type = \'EMAIL\'
+                            LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                              ON last_name.usd_usr_id = usr_id
+                             AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+                            LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                              ON first_name.usd_usr_id = usr_id
+                             AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+                           WHERE (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                                 OR cat_org_id IS NULL )
+                             AND mem_usr_id  = usr_id
+                             AND usr_valid   = 1
+                             AND usr_id  <> 1							 
+                             AND mem_end < \''.DATE_NOW.'\'
+			   GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value';		
 
-		$list .= ']}';
+		$result = $gDb->query($sql);
+		$num_rows = mysql_num_rows($result);
+		
+		if ($num_rows > 0 )
+		{
+			if(strlen($list) > 0)
+			{
+				$list .= ',';
+			}
+			$list .= '{ text: "Inactive Mitglieder ('.$num_rows.')", children: [';
+			$next = false;
+			while ($row = $gDb->fetch_array($result)) {
+				if($next == true)
+				{
+					$list .= ',';
+				}
+				$next = true;
+				$list .= '{ id: "' .$row['usr_id']. '" , text: "' .$row['first_name'].' '.$row['last_name']. ' <' .$row['email']. '>"}';
+			}
+	
+			$list .= ']}';
+		}
 		
 	}
 
