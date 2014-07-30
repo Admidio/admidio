@@ -171,11 +171,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
         for($i = 1; $i < $init_page_max + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<span class="selected">'. $i. '</span>' : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
-            if ( $i <  $init_page_max )
-            {
-                $page_string .= "&nbsp;&nbsp;";
-            }
+            $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
         }
 
         if ( $total_pages > 3 )
@@ -189,11 +185,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
                 for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
                 {
-                    $page_string .= ($i == $on_page) ? '<span class="selected">'. $i. '</span>' : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
-                    if ( $i <  $init_page_max + 1 )
-                    {
-                        $page_string .= '&nbsp;&nbsp;';
-                    }
+                    $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
                 }
 
                 $page_string .= ( $on_page < $total_pages - 4 ) ? ' ... ' : '&nbsp;&nbsp;';
@@ -205,11 +197,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
             for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
             {
-                $page_string .= ( $i == $on_page ) ? '<span class="selected">'. $i. '</span>'  : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
-                if( $i <  $total_pages )
-                {
-                    $page_string .= "&nbsp;&nbsp;";
-                }
+                $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>'  : '<li><a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
             }
         }
     }
@@ -217,11 +205,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     {
         for($i = 1; $i < $total_pages + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<span class="selected">'. $i. '</span>' : '<a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a>';
-            if ( $i <  $total_pages )
-            {
-                $page_string .= '&nbsp;&nbsp;';
-            }
+            $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
         }
     }
 
@@ -230,21 +214,24 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
         if ( $on_page > 1 )
         {
             $page_string = '
+            <li>
                 <a class="icon-text-link" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
                     src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>
-                &nbsp;' . $page_string;
+            </li>' . $page_string;
         }
 
         if ( $on_page < $total_pages )
         {
-            $page_string .= '&nbsp;
+            $page_string .= '
+            <li>
                 <a class="icon-text-link" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_NEXT').'<img 
-                    src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" /></a>';
+                    src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" /></a>
+            </li>';
         }
 
     }
 
-    $page_string = '<div class="admPageNavigation">'.$gL10n->get('SYS_PAGE').':&nbsp;&nbsp;' . $page_string. '</div>';
+    $page_string = '<ul class="pagination">' . $page_string. '</ul>';
 
     return $page_string;
 }
