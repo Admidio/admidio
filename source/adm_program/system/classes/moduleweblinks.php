@@ -113,9 +113,6 @@ class ModuleWeblinks extends Modules
         global $gValidLogin;
         global $gL10n;
         
-        // define constant for headline
-        define('HEADLINE', $gL10n->get('LNK_WEBLINKS'));
-        
         // get parent instance with all parameters from $_GET Array
         parent::__construct();
            
@@ -205,5 +202,22 @@ class ModuleWeblinks extends Modules
         $row    = $gDb->fetch_array($result);             
         return $row['count'];
     }
+    
+    /** Returns a module specific headline
+     *  @param $headline  The initiale headline of the module. 
+     *  @return Returns the full headline of the module
+     */
+    public function getHeadline($headline)
+    {
+        global $gDb;
+        
+        // set headline with category name
+        if($this->getParameter('cat_id') > 0)
+        {
+            $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
+            $headline .= ' - '. $calendar->getValue('cat_name');
+        }
+        return $headline;
+    }   
 }
 ?>

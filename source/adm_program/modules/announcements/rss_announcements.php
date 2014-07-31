@@ -12,12 +12,15 @@
  *
  * Parameters:
  *
- * headline  - Ueberschrift fuer den RSS-Feed
- *             (Default) Ankuendigungen
+ * headline  - Headline for RSS-Feed
+ *             (Default) Announcements
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
+
+// Initialize and check the parameters
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($gPreferences['enable_rss'] != 1)
@@ -39,7 +42,7 @@ $announcements = new ModuleAnnouncements();
 /*** ab hier wird der RSS-Feed zusammengestellt**/
 
 // create RSS feed object with channel information
-$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$announcements->getHeadline(), 
+$rss = new RSSfeed($gCurrentOrganization->getValue('org_longname').' - '.$getHeadline, 
             $gCurrentOrganization->getValue('org_homepage'), 
             $gL10n->get('ANN_RECENT_ANNOUNCEMENTS_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
@@ -59,7 +62,7 @@ if($announcements->getDataSetCount()>0)
         // set data for attributes of this entry
         $title       = $announcement->getValue('ann_headline');
         $description = $announcement->getValue('ann_description');
-        $link        = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$announcements->getHeadline();
+        $link        = $g_root_path.'/adm_program/modules/announcements/announcements.php?id='.$announcement->getValue('ann_id').'&headline='.$getHeadline;
         $author      = $row['create_name'];
         $pubDate     = date('r',strtotime($announcement->getValue('ann_timestamp_create')));
     

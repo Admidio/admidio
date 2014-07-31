@@ -13,7 +13,7 @@
  *             all    : shows all events in past and future
  * start     - Position of query recordset where the visual output should start
  * headline  - Headline shown over events
- *             (Default) Dates
+ *             (Default) Events
  * cat_id    - show all events of calendar with this id
  * id        - Show only one event
  * show      - all               : (Default) show all events
@@ -31,11 +31,17 @@ require_once('../../system/common.php');
 
 unset($_SESSION['dates_request']);
 
+// Initialize and check the parameters
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old', 'all'));
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));   
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
+$getId       = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
 $getShow     = admFuncVariableIsValid($_GET, 'show', 'string', 'all', false, array('all', 'maybe_participate', 'only_participate'));
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
+$getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', $gPreferences['dates_viewmode'], false, array('html', 'compact', 'print'));
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -54,59 +60,34 @@ elseif($gPreferences['enable_dates_module'] == 2)
 $dates = new ModuleDates();
 $dates->setParameter('mode', $getMode);
 $dates->setParameter('cat_id', $getCatId);
+$dates->setParameter('id', $getId);
 $dates->setParameter('show', $getShow);
+$dates->setParameter('view_mode', $getViewMode);
 $dates->setDateRange($getDateFrom, $getDateTo);
 
-// get parameter
-$parameter = $dates->getParameters();
-
-if($parameter['cat_id'] > 0)
+if($getCatId > 0)
 {
-    $calendar = new TableCategory($gDb, $parameter['cat_id']);
-}
-
-// set headline
-if($dates->getParameter('cat_id') > 0)
-{
-    $headline = $parameter['headline']. ' - '. $calendar->getValue('cat_name');
-}
-else
-{
-    $headline = $parameter['headline'];
-}
-
-// check time period if old dates are choosen, then set headline to previous dates
-// Define a prefix
-if($dates->getParameter('dateStartFormatEnglish') < DATE_NOW 
-    && $dates->getParameter('dateEndFormatEnglish') < DATE_NOW
-    || $parameter['mode'] == 'old')
-{
-    $headline = $gL10n->get('DAT_PREVIOUS_DATES', ' ').$headline;
-}
-
-if($parameter['view_mode'] == 'print')
-{
-    $headline = $gCurrentOrganization->getValue('org_longname').' - '.$headline;
-}
-
-// read relevant events from database
-$datesResult = $dates->getDataset();
-$datesTotalCount = $dates->getDataSetCount();
-
-if($parameter['id']  == 0 || $parameter['view_mode'] == 'compact' && $parameter['id'] > 0)
-{
-    // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+    $calendar = new TableCategory($gDb, $getCatId);
 }
 
 // Number of events each page for default view 'html' or 'compact' view
-if($gPreferences['dates_per_page'] > 0 && ( $parameter['view_mode'] == 'html' || $parameter['view_mode'] == 'compact'))
+if($gPreferences['dates_per_page'] > 0 && ( $getViewMode == 'html' || $getViewMode == 'compact'))
 {
-    $dates_per_page = $gPreferences['dates_per_page'];
+    $datesPerPage = $gPreferences['dates_per_page'];
 }
 else
 {
-    $dates_per_page = $dates->getDataSetCount();
+    $datesPerPage = $dates->getDataSetCount();
+}
+
+// read relevant events from database
+$datesResult     = $dates->getDataset($getStart, $datesPerPage);
+$datesTotalCount = $dates->getDataSetCount();
+
+if($getId  == 0 || $getViewMode == 'compact' && $getId > 0)
+{
+    // Navigation of the module starts here
+    $gNavigation->addStartUrl(CURRENT_URL, $dates->getHeadline($getHeadline));
 }
 
 // read all events for output
@@ -140,7 +121,7 @@ if($datesTotalCount != 0)
         }
 
         // For print view also read the participants and push the result to the array with index 'dat_rol_id'
-        if($parameter['view_mode'] == 'print')
+        if($getViewMode == 'print')
         {
             if($date->getValue('dat_rol_id') > 0)
             {
@@ -155,12 +136,12 @@ if($datesTotalCount != 0)
 // create html page object
 $page = new HtmlPage();
 
-if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
+if($getViewMode == 'html'  || $getViewMode == 'compact')
 {
     
     if($gPreferences['enable_rss'] == 1 && $gPreferences['enable_dates_module'] == 1)
     {
-        $page->addRssFile($g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$parameter['headline'], $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$parameter['headline']));
+        $page->addRssFile($g_root_path.'/adm_program/modules/dates/rss_dates.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline));
     };
 
     $page->addJavascript('
@@ -171,7 +152,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
             if ($("#admCalendar").selectedIndex != 0) {
                 var calendarId = $("#admCalendar").val();
             }
-            self.location.href = "dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&date_from='.$dates->getParameter('dateStartFormatAdmidio').'&date_to='.$dates->getParameter('dateEndFormatAdmidio').'&cat_id=" + calendarId;
+            self.location.href = "dates.php?mode='.$getMode.'&headline='.$getHeadline.'&date_from='.$dates->getParameter('dateStartFormatAdmidio').'&date_to='.$dates->getParameter('dateEndFormatAdmidio').'&cat_id=" + calendarId;
         });', true);
 
     $page->addJavascript('
@@ -188,17 +169,17 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
 
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
-    if($gPreferences['dates_viewmode'] == 'compact' && $parameter['view_mode'] == 'html' && $parameter['id'] > 0)
+    if($gPreferences['dates_viewmode'] == 'compact' && $getViewMode == 'html' && $getId > 0)
     {
         // show back link
         $page->addHtml($gNavigation->getHtmlBackButton());
     }
 
     // set headline
-    $page->addHeadline($headline);
+    $page->addHeadline($dates->getHeadline($getHeadline));
 
     //Check if box must be shown, when more dates available
-    if($parameter['id'] == 0 || $gCurrentUser->editDates())
+    if($getId == 0 || $gCurrentUser->editDates())
     {
         // create module menu
         $DatesMenu = new ModuleMenu('admMenuDates');
@@ -207,22 +188,22 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
         //Add new event
         if($gCurrentUser->editDates())
         {
-            $DatesMenu->addItem('admMenuItemAdd', $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$parameter['headline'],
-                                $gL10n->get('SYS_CREATE_VAR', $parameter['headline']), 'add.png' );
+            $DatesMenu->addItem('admMenuItemAdd', $g_root_path.'/adm_program/modules/dates/dates_new.php?headline='.$getHeadline,
+                                $gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png' );
         }
 
-        if($parameter['id'] == 0)
+        if($getId == 0)
         {
             //ical Download
             if($gPreferences['enable_dates_ical'] == 1)
             {
-                $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'],
+                $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&cat_id='.$getCatId,
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png' );
             }
 
             // show print button
             $DatesMenu->addItem('admMenuItemPrint', '',
-                                $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode=print\', \'_blank\')' );
+                                $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode=print\', \'_blank\')' );
 
 
             if($gCurrentUser->isWebmaster())
@@ -259,7 +240,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
                 error_log($dates->getParameter('cat_id').':::');
-                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$parameter['headline'], $page, 'navbar');
+                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$getHeadline, $page, 'navbar');
                     $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', FIELD_DEFAULT, $dates->getParameter('cat_id'));
                     $form->addTextInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
                     $form->addTextInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
@@ -299,7 +280,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
     if($datesTotalCount == 0)
     {
         // No events found
-        if($parameter['id'] > 0)
+        if($getId > 0)
         {
             $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>');
         }
@@ -311,7 +292,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
     else
     {
         // Output table header for compact view
-        if ($parameter['view_mode'] == 'compact')
+        if ($getViewMode == 'compact')
         {
             $compactTable = new HtmlTable('events_compact_table', $page, true, true);
             $columnHeading = array('&nbsp;', $gL10n->get('SYS_START'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
@@ -355,10 +336,10 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 if($date->editRight() == true)
                 {
                     $copyIcon = '
-                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$parameter['headline'].'"><img
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;copy=1&amp;headline='.$getHeadline.'"><img
                         src="'. THEME_PATH. '/icons/application_double.png" alt="'.$gL10n->get('SYS_COPY').'" title="'.$gL10n->get('SYS_COPY').'" /></a>';
                     $editIcon = '
-                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$parameter['headline'].'"><img
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/dates/dates_new.php?dat_id='. $date->getValue('dat_id'). '&amp;headline='.$getHeadline.'"><img
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                 }
 
@@ -493,7 +474,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                     {
                         $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=4&amp;dat_id='.$date->getValue('dat_id');
 
-                        if ($parameter['view_mode'] == 'html')
+                        if ($getViewMode == 'html')
                         {
                             $registerLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('DAT_CANCEL').'" />'.$gL10n->get('DAT_CANCEL').'</a>';
                         }
@@ -520,7 +501,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/dates/dates_function.php?mode=3&amp;dat_id='.$date->getValue('dat_id');
 
-                            if ($parameter['view_mode'] == 'html')
+                            if ($getViewMode == 'html')
                             {
                                 $registerLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('DAT_ATTEND').'" />'.$gL10n->get('DAT_ATTEND').'</a>';
                             }
@@ -542,7 +523,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                         {
                             $buttonURL = $g_root_path.'/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='.$date->getValue('dat_rol_id');
                             
-                            if ($parameter['view_mode'] == 'html')
+                            if ($getViewMode == 'html')
                             {
                                 $participantLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/list.png" alt="'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'" />'.$gL10n->get('DAT_SHOW_PARTICIPANTS').'</a>';
                             }
@@ -558,7 +539,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                     {
                         $buttonURL = $g_root_path.'/adm_program/modules/lists/members_assignment.php?rol_id='.$date->getValue('dat_rol_id');
 
-                        if ($parameter['view_mode'] == 'html')
+                        if ($getViewMode == 'html')
                         {
                             $mgrpartLink = '<a class="btn btn-default icon-text-link" href="'.$buttonURL.'"><img src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'" />'.$gL10n->get('DAT_ASSIGN_PARTICIPANTS').'</a>';
                         }
@@ -570,7 +551,7 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
                 }
             }
 
-            if ($parameter['view_mode'] == 'html')
+            if ($getViewMode == 'html')
             {
                 $cssClassHighlight = '';
 
@@ -707,25 +688,25 @@ if($parameter['view_mode'] == 'html'  || $parameter['view_mode'] == 'compact')
         }  // End foreach
 
         // Output table bottom for compact view
-        if ($parameter['view_mode'] == 'compact')
+        if ($getViewMode == 'compact')
         {
             $page->addHtml($compactTable->show(false));
         }
     }
 
     // If neccessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$parameter['view_mode'];
-    $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $parameter['startelement'], TRUE));
+    $base_url = $g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode='.$getViewMode;
+    $page->addHtml(admFuncGeneratePagination($base_url, $datesTotalCount, $datesResult['limit'], $getStart, TRUE));
     $page->show();
 }
 else
 {
     // create print output in a new window and set view_mode back to default 'html' for back navigation in main window
-    $gNavigation->addUrl($g_root_path.'/adm_program/modules/dates/dates.php?mode='.$parameter['mode'].'&headline='.$parameter['headline'].'&cat_id='.$parameter['cat_id'].'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish'));
+    $gNavigation->addUrl($g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish'));
 
     $tableDatePrint = '';
     
-    $calendar = new TableCategory($gDb, $parameter['cat_id']);
+    $calendar = new TableCategory($gDb, $getCatId);
     
     // Get a copy of date results if recordsets are found
     if($datesTotalCount > 0)
@@ -743,7 +724,7 @@ else
     }
     
     // Define header and footer content for the html table
-    $tableHead = '<h1>'.$headline.'</h1>
+    $tableHead = '<h1>'.$dates->getHeadline($getHeadline).'</h1>
                     <h3>'.$gL10n->get('SYS_START').':&nbsp;'.$dates->getParameter('dateStartFormatAdmidio'). ' - ' .$gL10n->get('SYS_END').':&nbsp;'.$dates->getParameter('dateEndFormatAdmidio').
                         '<span class="form" style="margin-left: 40px;">'.
                         // Selectbox for table content
@@ -920,7 +901,7 @@ else
     {
         $datePrint->addRow();
         // No events found
-        if($parameter['id'] > 0)
+        if($getId > 0)
         {
             $datePrint->addColumn($gL10n->get('SYS_NO_ENTRY'), array('colspan' => '9'));
         }

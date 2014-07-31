@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * ical - Feed fuer Termine
+ * ical - Feed for events
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -12,17 +12,22 @@
  *
  * Parameters:
  *
- * headline: - Ueberschrift fuer den Ics-Feed
- *             (Default) Termine
- * mode:     1 - Textausgabe
- *           2 - Download
- * cat_id    - show all dates of calendar with this id
+ * headline - Headline für Ics-Feed
+ *            (Default) Events
+ * mode   1 - Textausgabe
+ *        2 - Download
+ * cat_id   - show all dates of calendar with this id
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 
 unset($_SESSION['dates_request']);
+
+// Initialize and check the parameters
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old', 'all'));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));   
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
 
 // prüfen ob das Modul überhaupt aktiviert ist
 if($gPreferences['enable_dates_module'] == 0)

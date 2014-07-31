@@ -84,21 +84,6 @@ class ModuleAnnouncements extends Modules
     protected $getConditions;   ///< String with SQL condition
     
     /**
-     *  Constructor setting default module headline as constant
-     *  and initializing all parameters  
-     */    
-    public function __construct()
-    {   
-        global $gL10n;
-        // define constant for headline
-        define('HEADLINE', $gL10n->get('ANN_ANNOUNCEMENTS'));
-        // get parent instance with all parameters from $_GET Array
-        parent::__construct();
-        // set SQL condition
-        $this->setCondition($this->id, $this->date);           
-    }
-    
-    /**
      * Get number of available announcements
      * @Return Returns the total count and push it in the array
      */
@@ -133,6 +118,17 @@ class ModuleAnnouncements extends Modules
         if($limit == NULL)
         {
             $announcementsPerPage = $gPreferences['announcements_per_page'];
+        }
+        
+        //Bedingungen
+        if($this->getParameter('id') > 0)
+        {
+            $this->getConditions = 'AND ann_id ='. $this->getParameter('id');
+        }
+        // Search announcements to date 
+        elseif(strlen($this->getParameter('dateStartFormatEnglish')) > 0)
+        {
+            $this->getConditions = 'AND ann_timestamp_create BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'';
         }
         
         if($gPreferences['system_show_create_edit'] == 1)
@@ -201,23 +197,72 @@ class ModuleAnnouncements extends Modules
         // Push parameter to array
         $announcements['parameter'] = $this->getParameters();
         return $announcements;
-    }
+    }  
     
-    /**
-     * Set SQL condition for ID and required date 
+    /** Set a date range in which the dates should be searched. The method will fill
+     *  4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish, 
+     *  @b dateEndFormatEnglish and @b dateEndFormatAdmidio that could be read with
+     *  getParameter and could be used in the script.
+     *  @param $dateRangeStart A date in english or Admidio format that will be the start date of the range.
+     *  @param $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
+     *  @return Returns false if invalid date format is submitted 
      */
-    private function setCondition($annId=0, $date='')
+    public function setDateRange($dateRangeStart, $dateRangeEnd)
     {
-        //Bedingungen
-        if($annId > 0)
+        global $gPreferences;
+
+        if(strlen($dateRangeStart) == 0)
         {
-            $this->getConditions = 'AND ann_id ='. $annId;
+            $dateRangeStart  = '1970-01-01';
+            $dateRangeEnd    = DATE_NOW;
         }
-        // Search announcements to date 
-        elseif(strlen($date) > 0)
+            
+        // Create date object and format date_from in English format and sytem format and push to daterange array
+        $objDate = new DateTimeExtended($dateRangeStart, 'Y-m-d', 'date');
+        if($objDate->valid())
         {
-            $this->getConditions = 'AND DATE_FORMAT(ann_timestamp_create, \'%Y-%m-%d\') = \''.$this->date.'\'';
+            $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+            $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
+        }                                             
+        else
+        {
+            // check if date_from  has system format
+            $objDate = new DateTimeExtended($dateRangeStart, $gPreferences['system_date'], 'date');
+
+            if($objDate->valid())
+            {
+                $this->setParameter('dateStartFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+                $this->setParameter('dateStartFormatAdmidio', $objDate->format($gPreferences['system_date']));
+            }
+            else
+            {
+                return false;
+            }
         }
+
+        // Create date object and format date_to in English format and sytem format and push to daterange array
+        $objDate = new DateTimeExtended($dateRangeEnd, 'Y-m-d', 'date');
+        if($objDate->valid())
+        {
+            $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+            $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
+        }
+        else
+        {
+            // check if date_from  has system format
+            $objDate = new DateTimeExtended($dateRangeEnd, $gPreferences['system_date'], 'date');
+
+            if($objDate->valid())
+            {
+                $this->setParameter('dateEndFormatEnglish', substr($objDate->getDateTimeEnglish(), 0, 10));
+                $this->setParameter('dateEndFormatAdmidio', $objDate->format($gPreferences['system_date']));
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
     }
 }      
 ?>

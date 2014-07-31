@@ -12,12 +12,15 @@
  *
  * Parameters:
  *
- * headline  - Ueberschrift fuer den RSS-Feed
- *             (Default) Termine
+ * headline  - Headline for the rss feed
+ *             (Default) Events
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
+
+// Initialize and check the parameters
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));   
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist bzw. das Modul oeffentlich zugaenglich ist
 if ($gPreferences['enable_rss'] != 1)
@@ -42,7 +45,7 @@ $datesResult = $dates->getDataset(0, 10);
 // ab hier wird der RSS-Feed zusammengestellt
 
 // create RSS feed object with channel information
-$rss  = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '. $dates->getHeadline(), 
+$rss  = new RSSfeed($gCurrentOrganization->getValue('org_longname'). ' - '. $getHeadline, 
             $gCurrentOrganization->getValue('org_homepage'), 
             $gL10n->get('DAT_CURRENT_DATES_OF_ORGA', $gCurrentOrganization->getValue('org_longname')),
             $gCurrentOrganization->getValue('org_longname'));
@@ -71,6 +74,7 @@ if($datesResult['numResults'] > 0)
         $pubDate 	 = date('r',strtotime($date->getValue('dat_timestamp_create')));
     	
     	// add additional informations about the event to the description
+        $description  = '';
     	$descDateTo   = '';
     	$descDateFrom = $date->getValue('dat_begin', $gPreferences['system_date']);
     

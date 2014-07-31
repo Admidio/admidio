@@ -133,22 +133,6 @@
   
 class ModuleDates extends Modules
 {       
-    /** Constuctor that will create an object of a recordset of the specified dates.
-     *  Initialize parameters 
-     */
-    public function __construct()
-    {
-        global $gL10n;
-        // define constant for headline
-        define('HEADLINE', $gL10n->get('DAT_DATES')); 
-        
-        // get parent instance with all parameters from $_GET Array
-        parent::__construct();
-        // call class methods different to main class
-        $this->setHeadline();
-        $this->setViewMode(); 
-    }
-    
     /** Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
      *  @param $date Date to be validated and formated if needed
      */
@@ -232,7 +216,7 @@ class ModuleDates extends Modules
         }
         if($startElement != 0)
         {
-            $sql .= ' OFFSET '.$this->start;
+            $sql .= ' OFFSET '.$startElement;
         }
 
         $result = $gDb->query($sql);
@@ -249,6 +233,37 @@ class ModuleDates extends Modules
         $dates['parameter'] = $this->getParameters();
         return $dates;
     }
+    
+    /** Returns a module specific headline
+     *  @param $headline  The initiale headline of the module. 
+     *  @return Returns the full headline of the module
+     */
+    public function getHeadline($headline)
+    {
+        global $gL10n, $gCurrentOrganization, $gDb;
+        
+        // set headline with category name
+        if($this->getParameter('cat_id') > 0)
+        {
+            $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
+            $headline .= ' - '. $calendar->getValue('cat_name');
+        }
+
+        // check time period if old dates are choosen, then set headline to previous dates
+        // Define a prefix
+        if($this->getParameter('dateStartFormatEnglish') < DATE_NOW 
+            && $this->getParameter('dateEndFormatEnglish') < DATE_NOW
+            || $this->getParameter('mode') == 'old')
+        {
+            $headline = $gL10n->get('DAT_PREVIOUS_DATES', ' ').$headline;
+        }
+
+        if($this->getParameter('view_mode') == 'print')
+        {
+            $headline = $gCurrentOrganization->getValue('org_longname').' - '.$headline;
+        }
+        return $headline;
+    }   
     
     /**
      *  Get number of available dates.
@@ -302,7 +317,6 @@ class ModuleDates extends Modules
             return $checkedDate;
         }
     }
-    
     
     /** Set a date range in which the dates should be searched. The method will fill
      *  4 parameters @b dateStartFormatEnglish, @b dateStartFormatEnglish, 
@@ -402,19 +416,6 @@ class ModuleDates extends Modules
         return $date;
     }
     
-    /** Set current view mode.
-     *  This method checks valid valid mode value and sets the current view mode.
-     */
-    protected function setViewMode()
-    {
-        global $gPreferences;
-        
-        $this->viewMode         = '';
-        $this->validViewModes   = array($gPreferences['dates_viewmode'], 'html', 'compact', 'print');
-        
-        parent::setViewMode();
-    }
-    
     /**
      *  Get additional tables for sql statement
      *  @param $type of sql statement: @b data is joining tables to get more data from them
@@ -479,9 +480,9 @@ class ModuleDates extends Modules
         }
 
         // In case ID was permitted and user has rights
-        if($this->id > 0)
+        if($this->parameters['id'] > 0)
         {
-            $sqlConditions .= ' AND dat_id = '.$this->id;
+            $sqlConditions .= ' AND dat_id = '.$this->parameters['id'];
         }
         //...otherwise get all additional events for a group
         else
@@ -491,10 +492,10 @@ class ModuleDates extends Modules
                                     OR dat_end   BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:01\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\')';
         
             // show all events from category                
-            if($this->catId > 0)
+            if($this->parameters['cat_id'] > 0)
             {                 
                 // show all events from category
-                $sqlConditions .= ' AND cat_id  = '.$this->catId;
+                $sqlConditions .= ' AND cat_id  = '.$this->parameters['cat_id'];
             }
         }
 

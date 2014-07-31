@@ -12,14 +12,23 @@
  * headline  - Title of the announcements module. This will be shown in the whole module.
  *             (Default) ANN_ANNOUNCEMENTS
  * id        - Id of a single announcement that should be shown.
- * date      - If set all announcements of that date will be shown.
- *             Format: YYYYMMDD
+ * date_from - is set to 01.01.1970,
+ *             if no date information is delivered
+ * date_to   - is set to actual date,
+ *             if no date information is delivered
  *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 
 unset($_SESSION['announcements_request']);
+
+// Initialize and check the parameters
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
+$getId       = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
+$getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 
 // check if module is enabled
 if ($gPreferences['enable_announcements_module'] == 0)
@@ -35,12 +44,14 @@ elseif($gPreferences['enable_announcements_module'] == 2)
 
 // create object for announcements
 $announcements = new ModuleAnnouncements();
+$announcements->setParameter('id', $getId);
+$announcements->setDateRange($getDateFrom, $getDateTo);
+
 // get parameters and number of recordsets
-$parameter = $announcements->getParameters();
 $announcementsCount = $announcements->getDataSetCount();
 
 // Navigation of the module starts here
-$gNavigation->addStartUrl(CURRENT_URL, $announcements->getHeadline());
+$gNavigation->addStartUrl(CURRENT_URL, $getHeadline);
 
 // create html page object
 $page = new HtmlPage();
@@ -48,12 +59,12 @@ $page = new HtmlPage();
 // add rss feed to announcements
 if($gPreferences['enable_rss'] == 1)
 {
-    $page->addRssFile($g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$announcements->getHeadline(), $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$announcements->getHeadline()));
+    $page->addRssFile($g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 };
 
 $page->addJavascript('$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
 
-$page->addHeadline($announcements->getHeadline());
+$page->addHeadline($getHeadline);
 
 // number of announcements per page
 if($gPreferences['announcements_per_page'] > 0)
@@ -71,8 +82,8 @@ $announcementsMenu = new ModuleMenu('menu_announcements_list');
 if($gCurrentUser->editAnnouncements())
 {
 	// show link to create new announcement
-	$announcementsMenu->addItem('admMenuItemNewAnnouncement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$announcements->getHeadline(), 
-								$gL10n->get('SYS_CREATE_VAR', $announcements->getHeadline()), 'add.png');
+	$announcementsMenu->addItem('admMenuItemNewAnnouncement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline, 
+								$gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
 }
 
 if($gCurrentUser->isWebmaster())
@@ -87,7 +98,7 @@ $page->addHtml($announcementsMenu->show(false));
 if($announcementsCount == 0)
 {
     // no announcements found
-    if($parameter['id'] > 0)
+    if($getId > 0)
     {
         $page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRY').'</p>');
     }
@@ -99,7 +110,7 @@ if($announcementsCount == 0)
 else
 {
     // get all recordsets 
-    $announcementsArray = $announcements->getDataSet($parameter['startelement'], $announcementsPerPage);    
+    $announcementsArray = $announcements->getDataSet($getStart, $announcementsPerPage);    
     $announcement = new TableAnnouncement($gDb);
     
     // show all announcements
@@ -111,7 +122,7 @@ else
         <div class="panel panel-primary" id="ann_'.$announcement->getValue('ann_id').'">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue("ann_headline"). '" />'.
+                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/announcements.png" alt="'. $announcement->getValue('ann_headline'). '" />'.
                     $announcement->getValue('ann_headline'). '
                 </div>
                 <div class="pull-right text-right">'.$announcement->getValue('ann_timestamp_create', $gPreferences['system_date']));
@@ -122,7 +133,7 @@ else
                         if($announcement->editRight() == true)
                         {
                             $page->addHtml('
-                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$announcements->getHeadline().'"><img 
+                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/announcements/announcements_new.php?ann_id='. $announcement->getValue('ann_id'). '&amp;headline='.$getHeadline.'"><img 
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>');
                         }
 
@@ -151,8 +162,8 @@ else
     }  // Ende foreach
     
     // If neccessary show links to navigate to next and previous recordsets of the query
-    $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$announcements->getHeadline();
-    $page->addHtml(admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $parameter['startelement'], TRUE));
+    $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;
+    $page->addHtml(admFuncGeneratePagination($base_url, $announcementsCount, $announcementsPerPage, $getStart, TRUE));
 }
 
 // show html of complete page

@@ -53,8 +53,6 @@ abstract class Modules
     protected $start;               ///< Integer for start element
     protected $properties;          ///< Array Clone of $_GET Array
     protected $validModes;          ///< Array with valid modes ( Deafault: "Default" )
-    protected $validViewModes;      ///< Array with valid view modes ( Deafault: "Default" )
-    protected $viewMode;            ///< String with view mode ( Default: "Default" )
     protected $parameters;          ///< Array with all parameters of the module that were added to this class.
     
     abstract public function getDataSet($startElement=0, $limit=NULL);
@@ -78,18 +76,14 @@ abstract class Modules
         $this->properties           = $_GET;
         $this->start                = '';
         $this->validModes           = array('Default');
-        $this->viewMode             = 'Default';
-        $this->validViewModes       = array('Default');
         
         // Set parameters
         $this->setActiveRole();
         $this->setCatId();
-        $this->setHeadline();
         $this->setId();
         $this->setMode();
         $this->setOrder();
         $this->setStartElement();
-        $this->setViewMode();
     }
     
     /**
@@ -117,15 +111,6 @@ abstract class Modules
     public function getDaterange()
     {
         return $this->daterange;
-    }
-    
-    /**
-     *  Return Headline
-     *  @return Returns headline as string
-     */
-    public function getHeadline()
-    {
-        return $this->headline;
     }
     
     /**
@@ -179,15 +164,6 @@ abstract class Modules
     }
     
     /**
-     *  Return view mode
-     *  @return Returns view mode as string
-     */
-    public function getViewMode()
-    {
-        return $this->viewMode;
-    }
-    
-    /**
      *  Return parameter set as Array
      *  @return Returns an Array with all needed parameters as Key/Value pair 
      */
@@ -202,7 +178,6 @@ abstract class Modules
         $this->arrParameter['mode']                 = $this->mode;
         $this->arrParameter['order']                = $this->order;
         $this->arrParameter['startelement']         = $this->start;
-        $this->arrParameter['view_mode']            = $this->viewMode;
         return $this->arrParameter;
     }
     
@@ -226,18 +201,6 @@ abstract class Modules
     {
         // check optional user parameter and make secure. Otherwise set default value
         //$this->catId = admFuncVariableIsValid($this->properties, 'cat_id', 'numeric', 0);
-    }
-   
-    /**
-     *  Set headline
-     * 
-     *  @par If user string is set in $_GET Array the string is validated by Admidio function and set as headline in the modules. Otherwise the headline is set from language file
-     *  
-     */
-    protected function setHeadline()
-    {   
-        // check optional user parameter and make secure. Otherwise set default value
-        $this->headline = admFuncVariableIsValid($this->properties, 'headline', 'string', HEADLINE);   
     }
     
     /**
@@ -302,17 +265,6 @@ abstract class Modules
     {
         // check optional user parameter and make secure. Otherwise set default value
         $this->start = admFuncVariableIsValid($this->properties, 'start', 'numeric', 0);
-    }
-    
-    /**
-     *  Set viewmode
-     * 
-     *  @par If user string is set in $_GET Array the string is validated by Admidio function and set as viewmode in the modules. Otherwise mode is set to default
-     */
-    protected function setViewMode()
-    {
-        // check optional user parameter and make secure. Otherwise set default value
-        $this->viewMode = admFuncVariableIsValid($this->properties, 'view_mode', 'string', $this->validViewModes[0], false, $this->validViewModes);
     }
 }
 ?>
