@@ -478,7 +478,7 @@ class ProfileFields
                 else
                 {
                     // numbers don't have leading zero
-                    $fieldValue = preg_replace('/\\b0*/','',$fieldValue);
+                    $fieldValue = ltrim($fieldValue, '0');
                 }
             }
             elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'URL')
