@@ -104,9 +104,9 @@ if($weblinks->getId() == 0)
            $("#navbar_cat_id_form").submit();
         });', true);
 	
-    $form = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline, $page, 'navbar');
-    $form->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getCatId);
-    $LinksMenu->addForm('menu_item_export_list_to', $form->show(false));
+    $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline, $page, 'navbar');
+    $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getCatId);
+    $LinksMenu->addForm('menu_item_export_list_to', $navbarForm->show(false));
 
 
 	$page->addHtml($LinksMenu->show(false));

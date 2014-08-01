@@ -10,8 +10,6 @@
  *
  * start    : Position of query recordset where the visual output should start
  * cat_id   : show only roles of this category id, if id is not set than show all roles
- * category-selection: 1 - (Default) Anzeige der Combobox mit den verschiedenen Rollen-Kategorien
- *                     0 - Combobox nicht anzeigen
  * active_role : 1 - (Default) aktive Rollen auflisten
  *               0 - inaktive Rollen auflisten
  *
@@ -21,9 +19,14 @@ require_once('../../system/common.php');
 
 unset($_SESSION['mylist_request']);
 
+// Initialize and check the parameters
+$getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
+$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
+
 //New Modulelist object
 $lists = new ModuleLists();
-
+$lists->setParameter('cat_id', $getCatId);
 //get Number of roles
 $numberOfRoles = $lists->getDataSetCount();
 
@@ -32,7 +35,7 @@ if($numberOfRoles == 0)
     if($gValidLogin == true)
     {
         // wenn User eingeloggt, dann Meldung, falls doch keine Rollen zur Verfuegung stehen
-        if($lists->getActiveRole() == 0)
+        if($getActiveRole == 0)
         {
             $gMessage->show($gL10n->get('LST_NO_ROLES_REMOVED'));
         }
@@ -49,18 +52,18 @@ if($numberOfRoles == 0)
 }
 
 // set headline
-if($lists->getActiveRole())
+if($getActiveRole)
 {
-    $headline = $lists->getHeadline();
+    $headline = $gL10n->get('LST_ACTIVE_ROLES');
 }
 else
 {
     $headline = $gL10n->get('LST_INACTIVE_ROLES');
 }
 
-if($lists->getCatId() > 0)
+if($getCatId > 0)
 {
-    $category = new TableCategory($gDb, $lists->getCatId());
+    $category = new TableCategory($gDb, $getCatId);
     $headline .= ' - '.$category->getValue('cat_name');
 }
 
@@ -81,7 +84,7 @@ $page->addJavascript('
 		roleId    = elementId.substr(elementId.search(/_/)+1);
 
 		if($(this).val() == "mylist") {
-			self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$lists->getActiveRole().'";
+			self.location.href = gRootPath + "/adm_program/modules/lists/mylist.php?rol_id=" + roleId + "&active_role='.$getActiveRole.'";
 		}
 		else {
 			self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_id=" + roleId;
@@ -92,32 +95,39 @@ $page->addJavascript('
 $page->addHtml('<div id="lists_overview">');
 $page->addHeadline($headline);
 
-// Kategorienauswahlbox soll angezeigt werden oder der User darf neue Rollen anlegen
-if($lists->getCategorySelection() == 1 || $gCurrentUser->manageRoles())
+// create module menu
+$ListsMenu = new ModuleMenu('admMenuLists');
+
+if($gCurrentUser->manageRoles())
 {
-	// create module menu
-	$ListsMenu = new ModuleMenu('admMenuLists');
-
-	if($gCurrentUser->manageRoles())
-	{
-		// show link to create new role
-		$ListsMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administration/roles/roles_new.php', 
-							$gL10n->get('SYS_CREATE_ROLE'), 'add.png');
-	}
-	
-	// show selectbox with all roles categories
-	$ListsMenu->addCategoryItem('admMenuItemCategory', 'ROL', $lists->getCatId(), 'lists.php?category-selection='. $lists->getCategorySelection(). '&active_role='.$lists->getActiveRole().'&cat_id=', 
-								$gL10n->get('SYS_CATEGORY'), $gCurrentUser->manageRoles());
-
-	if($gCurrentUser->isWebmaster())
-	{
-		// show link to system preferences of roles
-		$ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=lists', 
-							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
-	}
-
-	$page->addHtml($ListsMenu->show(false));
+    // show link to create new role
+    $ListsMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administration/roles/roles_new.php', 
+                        $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 }
+
+if($gCurrentUser->isWebmaster())
+{
+    // show link to system preferences of roles
+    $ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=lists', 
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+}
+elseif($gCurrentUser->manageRoles())
+{
+    // if no calendar selectbox is shown, then show link to edit calendars
+    $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=ROL',
+                        $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
+}
+
+$page->addJavascript('
+    $("#cat_id").change(function () {
+       $("#navbar_cat_id_form").submit();
+    });', true);
+
+$navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, 'navbar');
+$navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getCatId);
+$ListsMenu->addForm('menu_item_export_list_to', $navbarForm->show(false));
+// show module menu
+$page->addHtml($ListsMenu->show(false));
 
 $previousCategoryId   = 0;
 
@@ -300,7 +310,7 @@ foreach($listsResult['recordset'] as $row)
 $page->addHtml('</div></div></div>');
 
 // If neccessary show links to navigate to next and previous recordsets of the query
-$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='. $lists->getCatId(). '&category-selection='. $lists->getCategorySelection(). '&active_role='.$lists->getActiveRole();
+$base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='.$getCatId.'&active_role='.$getActiveRole;
 $page->addHtml(admFuncGeneratePagination($base_url, $numberOfRoles, $gPreferences['lists_roles_per_page'], $getStart, TRUE));
 
 $page->addHtml('</div>');

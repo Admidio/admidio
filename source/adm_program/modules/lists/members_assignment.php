@@ -192,7 +192,7 @@ else
     }
 
     $javascriptCode .= '
-        $("#adm_new_user_link").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+        $("#menu_item_create_user a").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function(){
@@ -263,20 +263,14 @@ else
     // add headline and title of module
     $page->addHeadline($headline);
 
-    //Suchleiste
-    $page->addHtml('
-    <ul class="admIconTextLinkList">
-        <li>
-            <a id="adm_new_user_link" class="icon-text-link" href="'.$g_root_path.'/adm_program/administration/members/members_new.php"><img 
-                src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('MEM_CREATE_USER').'" />'.$gL10n->get('MEM_CREATE_USER').'</a>
-        </li>
-        <li>
-            <div class="checkbox">
-                <input type="checkbox" name="mem_show_all" id="mem_show_all" />
-                <label for="mem_show_all">'.$gL10n->get('MEM_SHOW_ALL_USERS').'</label>
-            </div>
-        </li>
-    </ul>');
+    // create module menu
+    $membersAssignmentMenu = new ModuleMenu('menu_members_assignment');
+    $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/administration/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
+    $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, 'navbar');
+    $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), 0);
+    $membersAssignmentMenu->addForm('menu_item_show_all_users', $navbarForm->show(false));
+    // show module menu
+    $page->addHtml($membersAssignmentMenu->show(false));
 
     // create table object
     $table = new HtmlTable('tbl_assign_role_membership', $page, true, true, 'table table-condensed');

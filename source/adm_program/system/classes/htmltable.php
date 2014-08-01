@@ -6,13 +6,20 @@
  *  This class inherits the common HtmlTableBasic class and extends their elements
  *  with custom Admidio table methods. The class should be used to create the 
  *  html part of all Admidio tables. It has simple methods to add complete rows with
- *  their column values to the table.
+ *  their column values to the table. It's also possible to add the jQuery plugin Datatables 
+ *  to each table. Therefore you only need to set a flag when creating the object.
  *  @par Examples
  *  @code // create a simple table with one input field and a button
  *  $table = new HtmlTable('simple-table');
  *  $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Address', 'Phone', 'E-Mail'));
  *  $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '+49 342 59433', 'h.mustermann@example.org'));
  *  $table->addRowByArray(array('Anne', 'Musterfrau', 'Seestraße 6', '+34 7433 7433', 'a.musterfrau@example.org'));
+ *  $table->show();@endcode
+ *  @code // create a table with jQuery datatables and align columns to center or right
+ *  $table = new HtmlTable('simple-table', null, true, true);
+ *  $table->setColumnAlignByArray(array('left', 'left', 'center', 'right'));
+ *  $table->addRowHeadingByArray(array('Firstname', 'Lastname', 'Birthday', 'Membership fee'));
+ *  $table->addRowByArray(array('Hans', 'Mustermann', 'Sonnenallee 22', '14.07.1995', '38,50'));
  *  $table->show();@endcode
  */
 /*****************************************************************************
@@ -38,15 +45,17 @@ class HtmlTable extends HtmlTableBasic
 
     /** Constructor creates the table element
      *  @param $id         Id of the table
+     *  @param $htmlPage   Optional a HtmlPage object that will be used to add javascript code 
+     *                     or files to the html output page.
+     *  @param $hoverRows  If set to @b true then the active selected row will be marked with 
+     *                     special css code
      *  @param $datatables If set to @b true then the jQuery plugin Datatables will be
      *                     used to create the table. Then column sort, search within the
      *                     table and other features are possible.
-     *  @param $htmlPage   Optional a HtmlPage object that will be used to add javascript code 
-     *                     or files to the html output page.
      *  @param $class      Optional an additional css classname. The class @b table
      *                     is set as default and need not set with this parameter.
      */
-    public function __construct($id, &$htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
+    public function __construct($id, $htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
     {
         if(strlen($class) == 0)
         {
