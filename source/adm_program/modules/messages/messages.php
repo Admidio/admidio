@@ -424,7 +424,12 @@ else
 	{
 		// alle Rollen auflisten,
 		// an die im eingeloggten Zustand Mails versendet werden duerfen
-		$sql = 'SELECT rol_id, rol_name, cat_name 
+		$sql = 'SELECT rol_id, rol_name, cat_name,
+					(SELECT COUNT(1)
+						 FROM '.TBL_MEMBERS.'
+						WHERE mem_rol_id = rol_id
+						 AND (  mem_begin > \''.DATE_NOW.'\'
+						OR mem_end   < \''.DATE_NOW.'\')) as former
 				  FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
 				 WHERE rol_valid   = 1
 				   AND rol_cat_id  = cat_id
@@ -462,6 +467,7 @@ else
 	{
 		for ($act_or = 0; $act_or <= 2; $act_or++)
 		{
+			$act_group = '';
 			$act_group_short = '';
 			if ($act_or == 1)
 			{
@@ -481,22 +487,28 @@ else
 				$act_number = '';
 			}
 			
-			if(strlen($list) > 0)
-			{
-				$list .= ',';
-			}
-			
-			$list .= '{ text: "'.$act_group.'", children: [';
-			
 			$next = false;
 			$result = $gDb->query($sql);
-			while ($row = $gDb->fetch_array($result)) {
-				if($next == true)
+			while ($row = $gDb->fetch_array($result)) 
+			{
+				if($act_number == '' || $row['former'] > 0)
 				{
-					$list .= ',';
+					if($next == true)
+					{
+						$list .= ',';
+					}
+					else
+					{
+						if(strlen($list) > 0)
+						{
+							$list .= ',';
+						}
+						
+						$list .= '{ text: "'.$act_group.'", children: [';
+					}
+					$next = true;
+					$list .= '{ id: "groupID: ' .$row['rol_id']. ''.$act_number.'" , text: "' .$row['rol_name'].' '.$act_group_short. '"}';
 				}
-				$next = true;
-				$list .= '{ id: "groupID: ' .$row['rol_id']. ''.$act_number.'" , text: "' .$row['rol_name'].' '.$act_group_short. '"}';
 			}
 
 			$list .= ']}';
