@@ -95,7 +95,7 @@ if($gValidLogin && $getMode == 1)
     echo '</optgroup>
     </select>
     <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'" >*</span>
-    <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ECA_SEND_ECARD_TO_ROLE&amp;inline=true"><img 
+    <a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ECA_SEND_ECARD_TO_ROLE&amp;inline=true"><img 
         onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=ECA_SEND_ECARD_TO_ROLE\',this)" onmouseout="ajax_hideTooltip()"
         class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="'.$gL10n->get("SYS_HELP").'" title="" /></a>';                  
 }

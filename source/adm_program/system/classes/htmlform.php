@@ -794,7 +794,7 @@ class HtmlForm extends HtmlFormBasic
         // of no mandatory field then insert a blank row with no value
         if($property == FIELD_DEFAULT && $setPleaseChoose == false)
         {
-            $selectboxEntries[' '] = '';
+            $selectboxEntries[' '] = '-';
         }
         
         // create array from sql result
@@ -1039,9 +1039,9 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $type       Set the type if the field. Default will be text. Possible values are @b TEXT, @b DATE or @b BIRTHDAY
-     *                     If date or birthday where set than a small dialog to choose the date will be shown behind the field.
-     *                     The difference between date and birthday is the range of years that will be shown.
+     *  @param $type       Set the type if the field. Default will be @b text. Possible values are @b text, @b number, @b date 
+     *                     or @datetime. If @b date or @datetime are set than a small calendar will be shown if the date field
+     *                     will be selected.
 	 *  @param $helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                             If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
      *                             If you need an additional parameter for the text you can add an array. The first entry must
@@ -1064,7 +1064,7 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'form-control');
 
         // set max input length
-        if($maxLength > 0)
+        if($maxLength > 0 && $type != 'date')
         {
             $attributes['maxlength'] = $maxLength;
         }
@@ -1082,16 +1082,9 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // add a nice modern datepicker to date inputs
-        if($type == 'date' || $type == 'birthday')
+        if($type == 'date' || $type == 'datetime')
         {
             $datepickerOptions = '';
-            
-            // set different date range for date or birthday
-            if($type == 'birthday')
-            {
-                //$datepickerOptions = 'endDate: "06/06/2014", minViewMode: 2,';
-                $type              = 'date';
-            }
             
             $attributes['data-provide'] = 'datepicker';
             $javascriptCode             = '';
@@ -1100,7 +1093,7 @@ class HtmlForm extends HtmlFormBasic
             if($this->datepickerInitialized == false)
             {
                 $javascriptCode = '
-                    $("input[type=\'date\']").datepicker({
+                    $("input[data-provide=\'datepicker\']").datepicker({
                         language: "'.$gPreferences['system_language'].'",
                         format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
                         '.$datepickerOptions.'todayHighlight: "true",
@@ -1125,7 +1118,32 @@ class HtmlForm extends HtmlFormBasic
         
         // now create html for the field
         $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
-        $this->addInput($type, $id, $id, $value, $attributes);
+        
+        // if datetime then add a time field behind the date field
+        if($type == 'datetime')
+        {
+            // first try to split datetime to a date and a time value
+            $datetime = new DateTimeExtended($value, $gPreferences['system_date'].' '.$gPreferences['system_time']);
+            $dateValue = $datetime->format($gPreferences['system_date']);
+            $timeValue = $datetime->format($gPreferences['system_time']);
+        
+            // now add a date and a time field to the form
+            $attributes['class']    .= ' datetime-date-control';
+            $this->addInput('text', $id, $id, $dateValue, $attributes);  
+            $attributes['class']    .= ' datetime-time-control';
+            $attributes['maxlength'] = '5';
+            $attributes['data-provide'] = '';
+            $this->addInput('text', $id.'_time', $id.'_time', $timeValue, $attributes);        
+        }
+        else
+        {
+            // a date type has some problems with chrome so we set it as text type
+            if($type == 'date')
+            {
+                $type = 'text';
+            }
+            $this->addInput($type, $id, $id, $value, $attributes);        
+        }
         $this->closeControlStructure($helpTextIdInline);
     }
     
@@ -1227,6 +1245,11 @@ class HtmlForm extends HtmlFormBasic
         if(strlen($id) > 0)
         {
             $htmlIdFor = ' for="'.$id.'"';
+            $this->addHtml('<div id="'.$id.'_group" class="form-group'.$cssClassRow.'">');
+        }
+        else
+        {
+            $this->addHtml('<div class="form-group'.$cssClassRow.'">');        
         }
 		
 		if($icon != null)
@@ -1246,9 +1269,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $htmlHelpIcon = $this->getHelpTextIcon($helpTextId);
         }
-		
-        $this->addHtml('<div class="form-group'.$cssClassRow.'">');
-        
+		        
         // add label element
         if($this->type == 'vertical' || $this->type == 'navbar')
         {
@@ -1323,7 +1344,7 @@ class HtmlForm extends HtmlFormBasic
         
         if($parameters != null)
         {
-            return '<a class="icon-link" title="" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true" 
+            return '<a class="icon-link colorbox-dialog" title="" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true" 
                         data-toggle="tooltip" data-html="true" data-original-title="'.$text.'"><img src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
         }
 	}

@@ -699,7 +699,7 @@ $page->addHtml('
                     {
                         $page->addHtml('<div class="admGroupBox admProfileRolesBox" id="profile_roles_box_other_orga">
                             <div class="admGroupBoxHeadline">'.$gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'&nbsp;
-                                <a class="icon-link" rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS&amp;inline=true"><img 
+                                <a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS&amp;inline=true"><img 
                                     onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS\',this)" onmouseout="ajax_hideTooltip()"
                                     src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
                             </div>

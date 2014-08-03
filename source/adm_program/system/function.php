@@ -213,22 +213,21 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     {
         if ( $on_page > 1 )
         {
-            $page_string = '
-            <li>
-                <a class="icon-text-link" href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '"><img 
-                    src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>
-            </li>' . $page_string;
+            $page_string = '<li><a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;
+        }
+        else
+        {
+            $page_string = '<li class="disabled"><a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;            
         }
 
         if ( $on_page < $total_pages )
         {
-            $page_string .= '
-            <li>
-                <a class="icon-text-link" href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_NEXT').'<img 
-                    src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" /></a>
-            </li>';
+            $page_string .= '<li><a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';
         }
-
+        else
+        {
+            $page_string .= '<li class="disabled"><a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';            
+        }
     }
 
     $page_string = '<ul class="pagination">' . $page_string. '</ul>';

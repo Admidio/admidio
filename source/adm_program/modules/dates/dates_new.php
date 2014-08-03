@@ -39,7 +39,17 @@ if(!$gCurrentUser->editDates())
 $dateRegistrationPossible = 0;
 $dateCurrentUserAssigned  = 0;
 
-$gNavigation->addUrl(CURRENT_URL);
+// set headline of the script
+if($getDateId > 0)
+{
+    $headline = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
+}
+else
+{
+    $headline = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
+}
+
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Terminobjekt anlegen
 $date = new TableDate($gDb);
@@ -61,26 +71,16 @@ if($getDateId > 0)
         $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
     }
 }
-else
-{
-    // bei neuem Termin Datum mit aktuellen Daten vorbelegen
-    $date->setValue('dat_begin', date('Y-m-d H:00:00', time()));
-    $date->setValue('dat_end', date('Y-m-d H:00:00', time()+3600));
-    
-    // wurde ein Kalender uebergeben, dann diesen vorbelegen
-    if(strlen($getHeadline) > 0)
-    {
-        $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' WHERE cat_name = \''.$getHeadline.'\'';
-        $gDb->query($sql);
-        $row = $gDb->fetch_array();
-        $date->setValue('dat_cat_id', $row['cat_id']);
-    }
-}
 
 if(isset($_SESSION['dates_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
+
+    // first set date and time field to a datetime and add this to date class
+    $_SESSION['dates_request']['dat_begin'] = $_SESSION['dates_request']['date_from'].' '.$_SESSION['dates_request']['date_from_time'];
+    $_SESSION['dates_request']['dat_end']   = $_SESSION['dates_request']['date_to'].' '.$_SESSION['dates_request']['date_to_time'];
+
 	$date->setArray($_SESSION['dates_request']);
 
     // ausgewaehlte Rollen vorbelegen
@@ -93,11 +93,6 @@ if(isset($_SESSION['dates_request']))
     }
     $date->setVisibleRoles($arrRoles);
     
-    $date_from  = $_SESSION['dates_request']['date_from'];
-    $time_from  = $_SESSION['dates_request']['time_from'];
-    $date_to    = $_SESSION['dates_request']['date_to'];
-    $time_to    = $_SESSION['dates_request']['time_to'];
-	
 	// check if a registration to this event is possible
     if(array_key_exists('dateRegistrationPossible', $_SESSION['dates_request']))
     {
@@ -114,17 +109,13 @@ if(isset($_SESSION['dates_request']))
 }
 else
 {
-    // Zeitangaben von/bis aus Datetime-Feld aufsplitten
-    $date_from = $date->getValue('dat_begin', $gPreferences['system_date']);
-    $time_from = $date->getValue('dat_begin', $gPreferences['system_time']);
-
-    // Datum-Bis nur anzeigen, wenn es sich von Datum-Von unterscheidet
-    $date_to = $date->getValue('dat_end', $gPreferences['system_date']);
-    $time_to = $date->getValue('dat_end', $gPreferences['system_time']);
-
     // read all roles that could see this event
     if($getDateId == 0)
     {
+        // bei neuem Termin Datum mit aktuellen Daten vorbelegen
+        $date->setValue('dat_begin', date('Y-m-d H:00:00', time()+3600));
+        $date->setValue('dat_end', date('Y-m-d H:00:00', time()+7200));
+    
         if($getCopy == 0)
         {
             // a new event will be visible for all users per default
@@ -145,19 +136,6 @@ else
 	$dateCurrentUserAssigned = $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id'));
 }
 
-// create an object of ckeditor and replace textarea-element
-$ckEditor = new CKEditorSpecial();
-
-// Html-Kopf ausgeben
-if($getDateId > 0)
-{
-    $gLayout['title'] = $gL10n->get('SYS_EDIT_VAR', $getHeadline);
-}
-else
-{
-    $gLayout['title'] = $gL10n->get('SYS_CREATE_VAR', $getHeadline);
-}
-
 if($date->getValue('dat_rol_id') > 0)
 {
 	$dateRoleID = $date->getValue('dat_rol_id');
@@ -167,32 +145,33 @@ else
 	$dateRoleID = '0';
 }
 
-$gLayout['header'] = '
-<script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/date-functions.js"></script>
-<script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/calendar/calendar-popup.js"></script>
-<link rel="stylesheet" href="'.THEME_PATH. '/css/calendar.css" type="text/css" />
-<script type="text/javascript"><!--
+
+// create html page object
+$page = new HtmlPage();
+
+$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
+$page->addJavascript('
     // Funktion blendet Zeitfelder ein/aus
     function setAllDay() {
 		if ($("#dat_all_day:checked").val() !== undefined) {
-			$("#time_from").hide();
-			$("#time_to").hide();
+			$("#date_from_time").hide();
+			$("#date_to_time").hide();
         }
         else {
-			$("#time_from").show("slow");
-			$("#time_to").show("slow");
+			$("#date_from_time").show("slow");
+			$("#date_to_time").show("slow");
         }
     }
 	
 	
 	function setDateParticipation() {
-		if ($("#dateRegistrationPossible:checked").val() !== undefined) {
-			$("#admAssignYourself").css("display", "block");
-			$("#admMaxMembers").css("display", "block");
+		if ($("#date_registration_possible:checked").val() !== undefined) {
+			$("#date_current_user_assigned_group").css("display", "block");
+			$("#dat_max_members_group").css("display", "block");
 		}
 		else {
-			$("#admAssignYourself").css("display", "none");
-			$("#admMaxMembers").css("display", "none");
+			$("#date_current_user_assigned_group").css("display", "none");
+			$("#dat_max_members_group").css("display", "none");
 		}
 	}
 
@@ -206,8 +185,6 @@ $gLayout['header'] = '
         }
     }
 
-    var calPopup = new CalendarPopup("calendardiv");
-    calPopup.setCssPrefix("calendar");
     var numberRoleSelect = 1;
 
     function addRoleSelection(roleID) {
@@ -232,222 +209,125 @@ $gLayout['header'] = '
 	
 	function setLocationCountry() {
 		if($("#dat_location").val().length > 0) {
-			$("#admDateCountry").show("slow");
+			$("#dat_country_group").show("slow");
+			$("#dat_country").focus();
 		}
 		else {
-			$("#admDateCountry").hide();
+			$("#dat_country_group").hide();
 		}
-	}
+	}');
+	
+// add all roles that should see this event
+$htmlRoleSelection = '';
+foreach($date->getVisibleRoles() as $key => $roleID)
+{
+    $htmlRoleSelection .= 'addRoleSelection('.$roleID.');';
+}
 
-    $(document).ready(function() 
-    {
-		var dateRoleID = '.$dateRoleID.';
-		
-        setAllDay();
-		setDateParticipation();
-		setLocationCountry();
-        $("#dat_headline").focus();
-		
-		$("#dateRegistrationPossible").click(function() {setDateParticipation();});
-		$("#dat_all_day").click(function() {setAllDay();});
-		$("#dat_location").change(function() {setLocationCountry();});';
-
-        // alle Rollen anzeigen, die diesen Termin sehen duerfen
-        foreach($date->getVisibleRoles() as $key => $roleID)
-        {
-            $gLayout['header'] .= 'addRoleSelection('.$roleID.');';
-        }
-
-		$gLayout['header'] .= '
-		// if date participation should be removed than ask user
-		$("#admButtonSave").click(function () {
-			if(dateRoleID > 0 && $("#dateRegistrationPossible").is(":checked") == false) {
-				var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
-				if(msg_result) {
-					$("#formDate").submit();
-				}
-			}
-			else {
+	
+$page->addJavascript('
+	var dateRoleID = '.$dateRoleID.';
+	
+    setAllDay();
+	setDateParticipation();
+	setLocationCountry();
+	
+	$("#date_registration_possible").click(function() {setDateParticipation();});
+	$("#dat_all_day").click(function() {setAllDay();});
+	$("#dat_location").change(function() {setLocationCountry();});
+	$("#date_from").change(function() {setDateTo();});'.
+	$htmlRoleSelection.'
+	
+	// if date participation should be removed than ask user
+	$("#admButtonSave").click(function () {
+		if(dateRoleID > 0 && $("#dateRegistrationPossible").is(":checked") == false) {
+			var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
+			if(msg_result) {
 				$("#formDate").submit();
 			}
-		});
-	}); 
-//--></script>';
+		}
+		else {
+			$("#formDate").submit();
+		}
+	});', true);
 
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// show back link
+$page->addHtml($gNavigation->getHtmlBackButton());
+
+// add headline and title of module
+$page->addHeadline($headline);
  
+// show form
+$form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode=1', $page);
+$form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
+    $form->addTextInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), 100, FIELD_MANDATORY);
+    
+    // if a map link should be shown in the event then show help text and a field where the user could choose the country
+    if($gPreferences['dates_show_map_link'] == true)
+    {
+        $form->addTextInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), 50, FIELD_DEFAULT, 'text', 'DAT_LOCATION_LINK');
+    
+    	if(strlen($date->getValue('dat_country')) == 0 && $getDateId == 0)
+    	{
+    		$date->setValue('dat_country', $gPreferences['default_country']);
+    	}
+        $form->addSelectBox('dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $date->getValue('dat_country'), true);
+    }
+    else
+    {
+        $form->addTextInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), 50, FIELD_DEFAULT);
+    }
+    
+    // if room selection is activated then show a selectbox with all rooms
+    if($gPreferences['dates_show_rooms'] == true)
+    {
+        if($gDbType == 'mysql')
+        {
+    	    $sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';        
+        }
+        else
+        {
+    	    $sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
+        }
+        $form->addSelectBoxFromSql('dat_room_id', $gL10n->get('SYS_ROOM'), $gDb, $sql, FIELD_DEFAULT, $date->getValue('dat_room_id'));
+    }
+$form->closeGroupBox();
+$form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
+    $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
+    $form->addTextInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin'), 0, FIELD_MANDATORY, 'datetime');
+    $form->addTextInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end'), 0, FIELD_MANDATORY, 'datetime');
+    $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES', FIELD_MANDATORY, $date->getValue('dat_cat_id'));
+$form->closeGroupBox();
+$form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
+    $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
+    // if current organization has a parent organization or is child organizations then show option to set this announcement to global
+	if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
+	{
+        // show all organizations where this organization is mother or child organization
+        $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
+        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
+
+        $form->addCheckbox('dat_global', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $date->getValue('dat_global'), FIELD_DEFAULT, array('SYS_DATA_GLOBAL', $organizations));
+	}
+    $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, FIELD_DEFAULT, 'DAT_LOGIN_POSSIBLE');
+    $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, FIELD_DEFAULT, 'DAT_PARTICIPATE_AT_DATE_DESC');
+    $form->addTextInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), 5, FIELD_MANDATORY, 'number', 'DAT_MAX_MEMBERS');
+$form->closeGroupBox();
+$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
+    $form->addEditor('dat_description', null, $date->getValue('dat_description'), FIELD_MANDATORY);
+$form->closeGroupBox();
+
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addHtml(admFuncShowCreateChangeInfoById($date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'), $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')));
+
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
+exit();
+
 // Html des Modules ausgeben
 echo '
-<form method="post" id="formDate" action="'.$g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode=1">
-<div class="formLayout" id="edit_dates_form">
-    <div class="formHead">'. $gLayout['title']. '</div>
-    <div class="formBody">
-		<div class="groupBox" id="admTitleLocation">
-			<div class="groupBoxHeadline" id="admTitleLocationHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admTitleLocationBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admTitleLocationBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION').'
-			</div>
-
-			<div class="groupBoxBody" id="admTitleLocationBody">
-				<ul class="formFieldList">
-					<li>
-						<dl>
-							<dt><label for="dat_headline">'.$gL10n->get('SYS_TITLE').':</label></dt>
-							<dd>
-								<input type="text" id="dat_headline" name="dat_headline" style="width: 90%;" maxlength="100" value="'. $date->getValue('dat_headline'). '" />
-								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-							</dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="dat_location">'.$gL10n->get('DAT_LOCATION').':</label></dt>
-							<dd>
-								<input type="text" id="dat_location" name="dat_location" style="width: 90%;" maxlength="50" value="'. $date->getValue('dat_location'). '" />';
-								if($gPreferences['dates_show_map_link'])
-								{
-									echo '<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK&amp;inline=true"><img 
-										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_LOCATION_LINK\',this)" 
-										onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
-								}
-							echo '</dd>
-						</dl>
-					</li>';
-
-					if($gPreferences['dates_show_map_link'])
-					{
-						if(strlen($date->getValue('dat_country')) == 0 && $getDateId == 0)
-						{
-							$date->setValue('dat_country', $gPreferences['default_country']);
-						}
-						echo '<li id="admDateCountry">
-							<dl>
-								<dt><label for="dat_location">'.$gL10n->get('SYS_COUNTRY').':</label></dt>
-								<dd>
-									<select size="1" id="dat_country" name="dat_country">
-										<option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-										foreach($gL10n->getCountries() as $key => $value)
-										{
-											echo '<option value="'.$key.'" ';
-											if($value == $date->getValue('dat_country'))
-											{
-												echo ' selected="selected" ';
-											}
-											echo '>'.$value.'</option>';
-										}
-									echo '</select>
-								</dd>
-							</dl>
-						</li>';
-					}
-
-					if($gPreferences['dates_show_rooms']==1) //nur wenn Raumauswahl aktiviert ist
-					{
-						echo'<li>
-								<dl>
-									<dt><label for="dat_room_id">'.$gL10n->get('SYS_ROOM').':</label></dt>
-									<dd>
-										<select id="dat_room_id" name="dat_room_id" size="1">
-											<option value="0"';
-											if($date->getValue('dat_room_id') == 0)
-											{
-												echo ' selected="selected" ';
-											}
-											echo '>'.$gL10n->get('SYS_NONE').'</option>';
-				
-											$sql = 'SELECT room_id, room_name, room_capacity, room_overhang 
-													  FROM '.TBL_ROOMS.'
-													 ORDER BY room_name';
-											$result = $gDb->query($sql);
-				
-											while($row = $gDb->fetch_array($result))
-											{
-												echo '<option value="'.$row['room_id'].'"';
-													if($date->getValue('dat_room_id') == $row['room_id'])
-													{
-														echo ' selected="selected" ';
-													}
-												echo '>'.$row['room_name'].' ('.$row['room_capacity'].'+'.$row['room_overhang'].')</option>';
-											}
-										echo '</select>
-									</dd>
-								</dl>
-							</li>';
-					}
-				echo '</ul>
-			</div>
-		</div>
-
-		<div class="groupBox" id="admPeriodCalendar">
-			<div class="groupBoxHeadline" id="admPeriodCalendarHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admPeriodCalendarBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admPeriodCalendarBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR').'
-			</div>
-
-			<div class="groupBoxBody" id="admPeriodCalendarBody">
-				<ul class="formFieldList">
-					<li>
-						<dl>
-							<dt><label for="date_from">'.$gL10n->get('SYS_START').':</label></dt>
-							<dd>
-								<span>
-									<input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$date_from.'" />
-									<a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
-										src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-									<span id="calendardiv" style="position: absolute; visibility: hidden; "></span>
-								</span>
-								<span style="margin-left: 10px;">
-									<input type="text" id="time_from" name="time_from" size="5" maxlength="5" value="'.$time_from.'" />
-									<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-								</span>
-								<span style="margin-left: 15px;">
-									<input type="checkbox" id="dat_all_day" name="dat_all_day" ';
-									if($date->getValue('dat_all_day') == 1)
-									{
-										echo ' checked="checked" ';
-									}
-									echo ' value="1" />
-									<label for="dat_all_day">'.$gL10n->get('DAT_ALL_DAY').'</label>
-								</span>
-							</dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="date_to">'.$gL10n->get('SYS_END').':</label></dt>
-							<dd>
-								<span>
-									<input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$date_to.'" />
-									<a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\',\'time_from\',\'time_to\');"><img 
-										src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-								</span>
-								<span style="margin-left: 10px;">
-									<input type="text" id="time_to" name="time_to" size="5" maxlength="5" value="'.$time_to.'" />
-									<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'" id="timeToMandatory"';
-									if($date->getValue('dat_repeat_type') != 0)
-									{
-										echo ' style="visibility: hidden;"';
-									}
-									echo '>*</span>
-								</span>
-							</dd>
-						</dl>
-					</li>
-					<li>
-						<dl>
-							<dt><label for="dat_cat_id">'.$gL10n->get('DAT_CALENDAR').':</label></dt>
-							<dd>
-								'.FormElements::generateCategorySelectBox('DAT', $date->getValue('dat_cat_id'), 'dat_cat_id').'
-								<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-							</dd>
-						</dl>
-					</li>
-				</ul>
-			</div>
-		</div>';
-	  
-		echo'
-		<div class="groupBox" id="admVisibilityRegistration">
+	<div class="groupBox" id="admVisibilityRegistration">
 			<div class="groupBoxHeadline" id="admVisibilityRegistrationHead">
 				<a class="iconShowHide" href="javascript:showHideBlock(\'admVisibilityRegistrationBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
 				id="admVisibilityRegistrationBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION').'
@@ -553,39 +433,6 @@ echo '
 					</li>
 				</ul>
 			</div>
-		</div>
-		<div class="groupBox" id="admDescription">
-			<div class="groupBoxHeadline" id="admDescriptionHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_DESCRIPTION').'
-			</div>
+		</div>';
 
-			<div class="groupBoxBody" id="admDescriptionBody">
-                <ul class="formFieldList">
-                    <li>'.$ckEditor->createEditor('dat_description', $date->getValue('dat_description'), 'AdmidioDefault', 150).'</li>
-                </ul>
-            </div>
-        </div>';
-
-        // show informations about user who creates the recordset and changed it
-        echo admFuncShowCreateChangeInfoById($date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'), $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')).'
-
-        <div class="formSubmit">
-            <button id="admButtonSave" type="button"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-        </div>
-    </div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

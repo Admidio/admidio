@@ -252,9 +252,9 @@ echo '
     </li>
     <li>
         <span class="iconTextLink">
-            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_HELP_DESC&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true"><img 
+            <a class="colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_HELP_DESC&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true"><img 
             	src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
-            <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_HELP_DESC&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true">'.$gL10n->get('SYS_HELP').'</a>
+            <a class="colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_HELP_DESC&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true">'.$gL10n->get('SYS_HELP').'</a>
         </span>
     </li>
 </ul>';

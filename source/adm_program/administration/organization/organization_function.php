@@ -129,7 +129,7 @@ case 1:
             break;
 
         case 'events':
-            $checkboxes = array('enable_dates_ical', 'dates_show_map_link');
+            $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_rooms');
             break;
 
         case 'links':
@@ -229,59 +229,6 @@ case 1:
         $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('LNK_DISPLAY_REDIRECT'), $gL10n->get('LNK_WEBLINKS')));
     }
 
-    // check every checkbox if a value was committed
-    // if no value is found then set 0 because 0 will not be committed in a html checkbox element
-
-    $checkboxes = array('dates_show_calendar_select'
-                       ,'dates_show_map_link'
-                       ,'dates_show_rooms'
-                       ,'enable_system_mails'
-                       ,'enable_email_notification'
-                       ,'enable_mail_captcha'
-                       ,'enable_registration_captcha'
-                       ,'enable_registration_admin_mail'
-                       ,'enable_rss'
-                       ,'enable_dates_ical'
-                       ,'enable_auto_login'
-                       ,'enable_password_recovery'
-                       ,'enable_download_module'
-                       ,'enable_intial_comments_loading'
-                       ,'enable_mail_module'
-					   ,'enable_pm_module'
-                       ,'enable_guestbook_captcha'
-                       ,'enable_ecard_module'
-                       ,'enable_forum_interface'
-                       ,'enable_gbook_comments4all'
-                       ,'enable_ecard_module'
-                       ,'forum_export_user'
-                       ,'forum_link_intern'
-                       ,'forum_set_admin'
-                       ,'forum_sqldata_from_admidio'
-                       ,'lists_hide_overview_details'
-                       ,'mail_html_registered_users'
-                       ,'mail_sender_into_to'
-                       ,'mail_smtp_auth'
-                       ,'photo_download_enabled'
-                       ,'photo_keep_original'
-                       ,'photo_upload_mode'
-                       ,'profile_log_edit_fields'
-                       ,'profile_show_map_link'
-                       ,'profile_show_roles'
-                       ,'profile_show_former_roles'
-                       ,'profile_show_extern_roles'
-                       ,'system_js_editor_enabled'
-                       ,'system_organization_select'
-                       ,'system_search_similar'
-                       ,'system_show_all_users'
-                       );
-
-    foreach($checkboxes as $key => $value)
-    {
-        if(isset($_POST[$value]) == false || $_POST[$value] != 1)
-        {
-            $_POST[$value] = 0;
-        }
-    }
 
     // *******************************************************************************
     // Organisation updaten
@@ -478,6 +425,7 @@ case 3:
     break;
     
 case 4:
+    // show php info page
     echo phpinfo();
     break;
 }

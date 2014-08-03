@@ -266,8 +266,17 @@ select[multiple] {
     width: 50%;
 }
 
-input[type="date"], input[type="number"] {
+input[data-provide="datepicker"], input[type="number"] {
     width: 130px !important;
+}
+
+.datetime-date-control {
+    display: inline;    
+}
+
+.datetime-time-control {
+    width: 100px !important;
+    margin-left: 20px;
 }
 
 .admSelectBoxSmall, /*div.dataTables_filter input, div.dataTables_length select*/ {
@@ -277,22 +286,6 @@ input[type="date"], input[type="number"] {
 .form-horizontal .form-group-editor {
     margin-left: 0px;
     margin-right: 0px;
-}
-
-.admEditor {
-	display: block;
-}
-
-.admEditorRow  .admFieldLabel {
-	display: inline-block;
-    width: 90%;
-	padding-top: 0px;
-}
-
-.admEditorRow  .admFieldElement {
-	display: inline-block;
-    width: 100%;
-	padding-top: 2px;
 }
 
 .btn-primary {

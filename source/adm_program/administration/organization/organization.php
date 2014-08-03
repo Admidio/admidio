@@ -367,7 +367,7 @@ $page->addHtml('
                         {
                             $captcha_parameter = '';
                         }
-                        $html = '<a class="icon-text-link" rel="colorboxHelp" href="captcha_preview.php?inline=true'.$captcha_parameter.'"><img
+                        $html = '<a class="icon-text-link colorbox-dialog" href="captcha_preview.php?inline=true'.$captcha_parameter.'"><img
                                     src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />'.$gL10n->get('SYS_PREVIEW').'</a>';
                         $form->addCustomContent('preview_captcha', $gL10n->get('ORG_CAPTCHA_PREVIEW'), $html, null, 'ORG_CAPTCHA_PREVIEW_TEXT');
 
@@ -662,6 +662,7 @@ $page->addHtml('
                                     src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_CALENDAR_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_CALENDAR_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent('manage_calendars', $gL10n->get('DAT_MANAGE_CALENDARS'), $html, null, $htmlDesc);
+                        $form->addCheckbox('dates_show_rooms', $gL10n->get('DAT_ROOM_SELECTABLE'), $form_values['dates_show_rooms'], FIELD_DEFAULT, null, 'DAT_ROOM_SELECTABLE_DESC');
                         $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/rooms/rooms.php"><img
                                     src="'. THEME_PATH. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';

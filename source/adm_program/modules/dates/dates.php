@@ -438,7 +438,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             {
                 // if active, then show room information
                 $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
-                $locationHtml = '<strong><a rel="colorboxHelp" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
+                $locationHtml = '<strong><a class="colorbox-dialog" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
                 $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
             }
 

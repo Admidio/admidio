@@ -82,11 +82,11 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_END')));
     }
-    if(strlen($_POST['time_from']) == 0 && isset($_POST['dat_all_day']) == false)
+    if(strlen($_POST['date_from_time']) == 0 && isset($_POST['dat_all_day']) == false)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_START')));
     }
-    if(strlen($_POST['time_to']) == 0 && isset($_POST['dat_all_day']) == false)
+    if(strlen($_POST['date_to_time']) == 0 && isset($_POST['dat_all_day']) == false)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_TIME').' '.$gL10n->get('SYS_END')));
     }
@@ -97,8 +97,8 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 
     if(isset($_POST['dat_all_day']))
     {
-        $_POST['time_from'] = '00:00';
-        $_POST['time_to']   = '00:00'; // Ganztägig ist nur logisch bei 23:59 Uhr (rn)
+        $_POST['date_from_time'] = '00:00';
+        $_POST['date_to_time']   = '00:00'; // Ganztägig ist nur logisch bei 23:59 Uhr (rn)
         $date->setValue('dat_all_day', 1);
     }
     else
@@ -121,7 +121,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     // Datum und Uhrzeit auf Gueltigkeit pruefen
     // ------------------------------------------------
 
-    $startDateTime = new DateTimeExtended($_POST['date_from'].' '.$_POST['time_from'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $startDateTime = new DateTimeExtended($_POST['date_from'].' '.$_POST['date_from_time'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     if($startDateTime->valid())
     {
@@ -149,10 +149,10 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     }
     if(strlen($_POST['time_to']) == 0)
     {
-        $_POST['time_to'] = $_POST['time_from'];
+        $_POST['date_to_time'] = $_POST['date_from_time'];
     }
     
-    $endDateTime = new DateTimeExtended($_POST['date_to'].' '.$_POST['time_to'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
+    $endDateTime = new DateTimeExtended($_POST['date_to'].' '.$_POST['date_to_time'], $gPreferences['system_date'].' '.$gPreferences['system_time']);
 
     if($endDateTime->valid())
     {
