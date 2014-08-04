@@ -100,6 +100,19 @@ case 1:
             
         case 'system_notification':
             $checkboxes = array('enable_system_mails', 'enable_email_notification');
+
+            if(strlen($_POST['email_administrator']) == 0)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+            }
+            else
+            {
+                $_POST['email_administrator'] = admStrToLower($_POST['email_administrator']);
+                if(!strValidCharacters($_POST['email_administrator'], 'email'))
+                {
+                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+                }
+            }
             break;
 
         case 'captcha':
@@ -122,6 +135,15 @@ case 1:
         
         case 'messages':
             $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha', 'mail_html_registered_users');
+
+            if(strlen($_POST['mail_sendmail_address']) > 0)
+            {
+                $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
+                if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
+                {
+                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
+                }
+            }
             break;
 
         case 'profile':
@@ -133,6 +155,10 @@ case 1:
             break;
 
         case 'links':
+            if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
+            {
+                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_DISPLAY_REDIRECT')));
+            }
             break;
         
         default:
@@ -163,92 +189,6 @@ case 1:
             elseif(strpos($key, 'SYSMAIL_') === 0)
             {
                 $text = new TableText($gDb);
-                $text->readDataByColumns(array('txt_org_id' => $gCurrentOrganization->getValue('org_id'), 'txt_name' => $key));
-                $text->setValue('txt_text', $value);
-                $text->save();
-            }
-            else
-            {
-                $gPreferences[$key] = $value;
-            }
-        }
-    }
-
-    // alle Daten nun speichern
-    $ret_code = $gCurrentOrganization->save();
-    if($ret_code != 0)
-    {
-        $gCurrentOrganization->clear();
-        $gMessage->show($gL10n->get('SYS_ERROR_DATABASE_ACCESS', $ret_code));
-    }
-
-    $gCurrentOrganization->setPreferences($gPreferences);
-
-    // refresh language if neccessary
-    if($gL10n->getLanguage() != $gPreferences['system_language'])
-    {
-        $gL10n->setLanguage($gPreferences['system_language']);
-    }
-
-    // clean up
-    unset($_SESSION['organization_request']);
-    $gCurrentSession->renewOrganizationObject();
-
-    echo 'success';
-
-    // *******************************************************************************
-    // Pruefen, ob alle notwendigen Felder gefuellt sind
-    // *******************************************************************************
-/*
-
-    if(strlen($_POST['email_administrator']) == 0)
-    {
-        $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $gL10n->get('SYS_SYSTEM_MAILS')));
-    }
-    else
-    {
-        $_POST['email_administrator'] = admStrToLower($_POST['email_administrator']);
-        if(!strValidCharacters($_POST['email_administrator'], 'email'))
-        {
-            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
-        }
-    }
-
-    if(strlen($_POST['mail_sendmail_address']) > 0)
-    {
-        $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
-        if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
-        {
-            $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
-        }
-    }
-
-
-    if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
-    {
-        $gMessage->show($gL10n->get('ORG_FIELD_EMPTY_AREA', $gL10n->get('LNK_DISPLAY_REDIRECT'), $gL10n->get('LNK_WEBLINKS')));
-    }
-
-
-    // *******************************************************************************
-    // Organisation updaten
-    // *******************************************************************************
-
-    $text = new TableText($gDb);
-
-    // Einstellungen speichern
-
-    foreach($_POST as $key => $value)
-    {
-        // Elmente, die nicht in adm_preferences gespeichert werden hier aussortieren
-        if($key != 'version' && $key != 'save')
-        {
-            if(strpos($key, 'org_') === 0)
-            {
-                $gCurrentOrganization->setValue($key, $value);
-            }
-            elseif(strpos($key, 'SYSMAIL_') === 0)
-            {
                 $text->readDataByColumns(array('txt_org_id' => $gCurrentOrganization->getValue('org_id'), 'txt_name' => $key));
                 $text->setValue('txt_text', $value);
                 $text->save();
@@ -287,10 +227,7 @@ case 1:
     unset($_SESSION['organization_request']);
     $gCurrentSession->renewOrganizationObject();
 
-    // zur Ausgangsseite zurueck
-    $gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
-    $gMessage->show($gL10n->get('SYS_SAVE_DATA'));
-    */
+    echo 'success';
     break;
     
 case 2:
@@ -305,49 +242,30 @@ case 2:
         $formValues['orgaLongName']  = '';
     }
 
-    // show html header
-    $gLayout['title'] = $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION');
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    $headline = $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION');
 
-    // show individual module html content
-    echo '
-    <div class="formLayout" id="user_delete_message_form">
-        <div class="formHead">'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</div>
-        <div class="formBody">
-            '.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'
+    // create html page object
+    $page = new HtmlPage();
+    
+    // add current url to navigation stack
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+    // show back link
+    $page->addHtml($gNavigation->getHtmlBackButton());
+    
+    // add headline and title of module
+    $page->addHeadline($headline);
+    
+    $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
-            <form action="organization_function.php?mode=3" method="post">
-                <div class="groupBox">
-                    <div class="groupBoxHeadline">'.$gL10n->get('INS_NAME_OF_ORGANIZATION').'</div>
-                    <div class="groupBoxBody">
-                        <ul class="formFieldList">
-                            <li>
-                                <dl>
-                                    <dt><label for="orgaShortName">'.$gL10n->get('SYS_NAME_ABBREVIATION').':</label></dt>
-                                    <dd><input type="text" name="orgaShortName" id="orgaShortName" style="width: 80px;" maxlength="10" value="'.$formValues['orgaShortName'].'" /></dd>
-                                </dl>
-                            </li>
-                            <li>
-                                <dl>
-                                    <dt><label for="orgaLongName">'.$gL10n->get('SYS_NAME').':</label></dt>
-                                    <dd><input type="text" name="orgaLongName" id="orgaLongName" style="width: 250px;" maxlength="60" value="'.$formValues['orgaLongName'].'" /></dd>
-                                </dl>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="formSubmit">
-                    <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <button id="btnForward" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('INS_SET_UP_ORGANIZATION').'" />&nbsp;'.$gL10n->get('INS_SET_UP_ORGANIZATION').'</button>
-                </div>
-            </form>
-        </div>
-    </div>';
-
-    // show html footer
-    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+    // show form
+    $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?mode=3', $page);
+    $form->addTextInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'], 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
+    $form->addTextInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'], 50, FIELD_MANDATORY);
+    $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'), THEME_PATH.'/icons/database_in.png', null, ' col-sm-offset-3');
+    
+    // add form to html page and show page
+    $page->addHtml($form->show(false));
+    $page->show();
     break;
     
 case 3:
@@ -402,23 +320,23 @@ case 3:
 	}
 
     $gDb->endTransaction();
+    
+    // create html page object
+    $page = new HtmlPage();
+    
+    // add headline and title of module
+    $page->addHeadline($gL10n->get('INS_SETUP_WAS_SUCCESSFUL'));
+    
+    $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>');
 
-    // show html header
-    $gLayout['title'] = $gL10n->get('INS_SETUP_WAS_SUCCESSFUL');
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    // show form
+    $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/administration/organization/organization.php', $page);
+    $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), THEME_PATH.'/icons/forward.png');
+    
+    // add form to html page and show page
+    $page->addHtml($form->show(false));
+    $page->show();
 
-    // show individual module html content
-    echo '
-    <div class="formLayout" id="user_delete_message_form" style="width: 400px">
-        <div class="formHead">'.$gL10n->get('INS_SETUP_WAS_SUCCESSFUL').'</div>
-        <div class="formBody">
-            <p align="left"> '.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>
-            <button id="btnForward" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/organization.php\'"><img src="'.THEME_PATH.'/icons/forward.png" alt="'.$gL10n->get('SYS_FORWARD').'" />&nbsp;'.$gL10n->get('SYS_FORWARD').'</button>
-        </div>
-    </div>';
-
-    // show html footer
-    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
     
     // clean up
     unset($_SESSION['add_organization_request']);

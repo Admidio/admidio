@@ -555,7 +555,7 @@ class HtmlForm extends HtmlFormBasic
         if($maxLength > 0)
         {
             // if max field length is set then show a counter how many characters still available
-            $this->addHtml('<div class="admCharactersCount">('.$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="'.$id.'_counter" class="">255</span>').')</div>');
+            $this->addHtml('<small class="characters-count">('.$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="'.$id.'_counter" class="">255</span>').')</small>');
         }
         $this->closeControlStructure($helpTextIdInline);
     }

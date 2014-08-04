@@ -60,6 +60,7 @@
     <text id="ORG_EXPORT_WEBMASTER_STATUS" development="deleted" translation="todo">Webmasterstatus ins Forum exportieren</text>
     <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="deleted" translation="todo">Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators. (Standard: ja)</text>
     <text id="ORG_LAST_UPDATE_STEP" development="new" translation="todo">Letzter Update-Schritt</text>
+    <text id="ORG_FIELD_EMPTY_AREA" development="deleted" translation="todo"></text>
     <text id="ORG_FORUM_TABLE_PREFIX" development="deleted" translation="todo">Forum-Tabellen-Präfix</text>
     <text id="ORG_FORUM_TABLE_PREFIX_DESC" development="deleted" translation="todo">Hier wird das Präfix der Tabellen des phpBB-Forums angegeben. Hier muss dasselbe Präfix angegeben werden, welches im phpBB-Forum eingestellt wurde. (Beispiel: phpbb)</text>
     <text id="ORG_FORUM_WIDTH" development="deleted" translation="todo">Forum Breite</text>
@@ -880,7 +881,6 @@
     <text id="ORG_FIELD_DESCRIPTION" development="new" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
     <text id="ORG_FIELD_DOWN" development="new" translation="todo">Profilfeld nach unten verschieben</text>
-    <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="todo">Das Feld %VAR1_BOLD% im Bereich %VAR2_BOLD% ist nicht gefüllt.</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="todo">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</text>
     <text id="ORG_FIELD_MANDATORY" development="new" translation="todo">Pflichtfeld, muss immer ausgefüllt werden</text>

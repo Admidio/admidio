@@ -214,20 +214,23 @@ class TableDate extends TableAccess
             $value = parent::getValue($columnName, $format);
         }
 
-        if($columnName == 'dat_country' && strlen($value) > 0)
+        if($format != 'database')
         {
-            // beim Land die sprachabhaengige Bezeichnung auslesen
-            global $gL10n;
-            $value = $gL10n->getCountryByCode($value);
+            if($columnName == 'dat_country' && strlen($value) > 0)
+            {
+                // beim Land die sprachabhaengige Bezeichnung auslesen
+                global $gL10n;
+                $value = $gL10n->getCountryByCode($value);
+            }
+        	elseif($columnName == 'cat_name')
+        	{
+        		// if text is a translation-id then translate it
+        		if(strpos($value, '_') == 3)
+        		{
+        			$value = $gL10n->get(admStrToUpper($value));
+        		}
+        	}
         }
-		elseif($columnName == 'cat_name' && $format != 'database')
-		{
-			// if text is a translation-id then translate it
-			if(strpos($value, '_') == 3)
-			{
-				$value = $gL10n->get(admStrToUpper($value));
-			}
-		}
 
         return $value;
     }

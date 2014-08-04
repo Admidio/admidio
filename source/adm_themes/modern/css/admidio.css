@@ -81,6 +81,10 @@
     margin-left: 4px;
 }
 
+.lead {
+    font-size: 12pt;
+}
+
 /* Headlines */
 
 .admHeadline, .admHeadline2, .admHeadline3 {
@@ -279,10 +283,6 @@ input[data-provide="datepicker"], input[type="number"] {
     margin-left: 20px;
 }
 
-.admSelectBoxSmall, /*div.dataTables_filter input, div.dataTables_length select*/ {
-    padding: 1px 3px 1px 1px;
-}
-
 .form-horizontal .form-group-editor {
     margin-left: 0px;
     margin-right: 0px;
@@ -312,10 +312,6 @@ input[data-provide="datepicker"], input[type="number"] {
 	text-align: right;
     width: 100%;
     display: inline-block;
-}
-
-.admCharactersCount {
-    font-size:          9pt;
 }
 
 /* A simple groupbox to group some elements. This is often used in forms. */
