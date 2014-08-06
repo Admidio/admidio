@@ -46,6 +46,7 @@ class HtmlPage
         $this->pageContent = '';
         $this->header = '';
         $this->title = $title;
+		$this->bodyOnload = '';
         $this->containThemeHtml = true;
         
         $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css', 
@@ -185,6 +186,14 @@ class HtmlPage
     {
         $this->title = $title;
     }
+	
+	/** Set an additonal onload JS execution to the Body of the html page.
+     *  @param $JScode A string that contains the JS code for the onload command in the body.
+     */
+    public function setBodyOnload($JScode)
+    {
+        $this->bodyOnload = $JScode;
+    }
   
 	/** This method send the whole html code of the page to the browser. Call this method
 	 *  if you have finished your page layout.
@@ -254,6 +263,16 @@ class HtmlPage
                 $headerContent .= '<link rel="alternate" type="application/rss+xml" href="'.$file.'" />';                
             }
         }
+		
+		// add JS for onload of the body
+        if(strlen($this->bodyOnload) > 0)
+        {
+            $this->bodyOnload = 'onload="'.$this->bodyOnload.'"';
+        }
+        else
+        {
+            $this->bodyOnload = '';
+        }
         
         // add organization name to title
         if(strlen($this->title) > 0)
@@ -308,7 +327,7 @@ class HtmlPage
             
             $html .= $htmlMyHeader.'
         </head>
-        <body class="admBody">'.
+        <body class="admBody" '.$this->bodyOnload.'>'.
             $htmlMyBodyTop.'
             <div class="admContent">'.$this->pageContent.'</div>'.
             $htmlMyBodyBottom.'          
