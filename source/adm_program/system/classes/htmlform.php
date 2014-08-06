@@ -526,10 +526,12 @@ class HtmlForm extends HtmlFormBasic
         
         if($maxLength > 0)
         {
+			$attributes['maxlength'] = $maxLength;
+			
             // if max field length is set then show a counter how many characters still available
             $javascriptCode = '
                 $(\'#'.$id.'\').NobleCount(\'#'.$id.'_counter\',{
-                    max_chars: 255,
+                    max_chars: '.$maxLength.',
                     on_negative: \'systeminfoBad\',
                     block_negative: true
                 });';
