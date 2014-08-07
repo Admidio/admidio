@@ -553,12 +553,14 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
             if ($getViewMode == 'html')
             {
+                // show panel view of events
+            
                 $cssClassHighlight = '';
 
                 // Change css if date is highlighted
                 if($row['dat_highlight'] == 1)
                 {
-                    $cssClassHighlight = ' panel-highlight';
+                    $cssClassHighlight = ' event-highlight';
                 }
 
                 // Output of elements
@@ -623,8 +625,14 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             }
             else
             {
-                // Change css if date is highlighted
-                $cssWeight = ($row['dat_highlight'] == 1) ? 'bold' : 'normal';
+                // show table view of events
+            
+                // Change css class if date is highlighted
+                $cssClass = '';
+                if($row['dat_highlight'] == true)
+                {
+                    $cssClass = 'event-highlight';
+                }
 
                 $objDateBegin = new DateTime ($row['dat_begin']);
                 $dateBegin = $objDateBegin->format($gPreferences['system_date']);
@@ -674,16 +682,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                     $columnValues[] = '&nbsp;';
                 }
 
-                $compactTable->addRowByArray($columnValues);
-                                /*
-                $compactTable->addRow('', array('class' => 'tableMouseOver'));
-                $compactTable->addColumn($registerLink);
-                $compactTable->addColumn($dateBegin);
-                $compactTable->addColumn($timeBegin);
-                $compactTable->addColumn('<a href="'.$g_root_path.'/adm_program/modules/dates/dates.php?id='.$date->getValue('dat_id').'&amp;view_mode=html&amp;headline='.$date->getValue('dat_headline').'">'.$date->getValue('dat_headline').'</a>', 'style', 'font-weight:'. $cssWeight .'');
-                $compactTable->addColumn(($leadersHtml > 0 ? $leadersHtml .'+' : '' ) .$numMembers .'/'. $maxMembers);
-                $compactTable->addColumn(($leadersHtml+$numMembers > 0 ? $participantLink : '&nbsp;'));
-                $compactTable->addColumn($locationHtml);*/
+                $compactTable->addRowByArray($columnValues, null, array('class' => $cssClass));
             }
         }  // End foreach
 

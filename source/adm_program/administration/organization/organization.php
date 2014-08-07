@@ -29,23 +29,16 @@ if($gCurrentUser->isWebmaster() == false)
 
 $html_icon_warning = '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />';
 
-if(isset($_SESSION['organization_request']))
+// read organization values into form array
+foreach($gCurrentOrganization->dbColumns as $key => $value)
 {
-    $form_values = strStripSlashesDeep($_SESSION['organization_request']);
-    unset($_SESSION['organization_request']);
+    $form_values[$key] = $value;
 }
-else
-{
-    foreach($gCurrentOrganization->dbColumns as $key => $value)
-    {
-        $form_values[$key] = $value;
-    }
 
-    // alle Systemeinstellungen in das form-Array schreiben
-    foreach($gPreferences as $key => $value)
-    {
-        $form_values[$key] = $value;
-    }
+// read all system preferences into form array
+foreach($gPreferences as $key => $value)
+{
+    $form_values[$key] = $value;
 }
 
 // create html page object
@@ -148,7 +141,7 @@ $page->addHtml('
                         
                         // search all available themes in theme folder
                         $themes = getDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
-                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, FIELD_DEFAULT, $form_values['theme'], true, null, 'ORG_ADMIDIO_THEME_DESC');
+                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, FIELD_DEFAULT, $form_values['theme'], true, false, null, 'ORG_ADMIDIO_THEME_DESC');
                         $form->addTextInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'], 
                             250, FIELD_DEFAULT, 'text', null, 'ORG_HOMEPAGE_VISITORS');
                         $form->addTextInput('homepage_login', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')', $form_values['homepage_login'], 
@@ -160,7 +153,7 @@ $page->addHtml('
                         $form->addCheckbox('enable_password_recovery', $gL10n->get('ORG_SEND_PASSWORD'), $form_values['enable_password_recovery'], FIELD_DEFAULT, null, 'ORG_SEND_PASSWORD_DESC');
                         $form->addCheckbox('system_search_similar', $gL10n->get('ORG_SEARCH_SIMILAR_NAMES'), $form_values['system_search_similar'], FIELD_DEFAULT, null, 'ORG_SEARCH_SIMILAR_NAMES_DESC');
                         $selectBoxEntries = array(0 => $gL10n->get('SYS_DONT_SHOW'), 1 => $gL10n->get('SYS_FIRSTNAME_LASTNAME'), 2 => $gL10n->get('SYS_USERNAME'));
-                        $form->addSelectBox('system_show_create_edit', $gL10n->get('ORG_SHOW_CREATE_EDIT'), $selectBoxEntries, FIELD_DEFAULT, $form_values['system_show_create_edit'], false, null, 'ORG_SHOW_CREATE_EDIT_DESC');
+                        $form->addSelectBox('system_show_create_edit', $gL10n->get('ORG_SHOW_CREATE_EDIT'), $selectBoxEntries, FIELD_DEFAULT, $form_values['system_show_create_edit'], false, false, null, 'ORG_SHOW_CREATE_EDIT_DESC');
                         $form->addCheckbox('system_js_editor_enabled', $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'), $form_values['system_js_editor_enabled'], FIELD_DEFAULT, null, 'ORG_JAVASCRIPT_EDITOR_ENABLE_DESC');
                         $form->addTextInput('system_js_editor_color', $gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR'), $form_values['system_js_editor_color'], 
                             10, FIELD_DEFAULT, 'text', null, array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', 'SYS_REMEMBER_ME'), null, 'form-control-small');
@@ -187,7 +180,7 @@ $page->addHtml('
                         $form->addTextInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], 60, FIELD_DEFAULT, 'url');
                         $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 
                             'ISOCODE', 'NAME', FIELD_DEFAULT, $form_values['system_language'], true);
-                        $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $form_values['default_country'], true, null, 'PRO_DEFAULT_COUNTRY_DESC');
+                        $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $form_values['default_country'], true, false, null, 'PRO_DEFAULT_COUNTRY_DESC');
                         $form->addTextInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], 20, FIELD_DEFAULT, 'text', 
                             null, array('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), null, 'form-control-small');
                         $form->addTextInput('system_time', $gL10n->get('ORG_TIME_FORMAT'), $form_values['system_time'], 20, FIELD_DEFAULT, 'text', 
@@ -203,7 +196,7 @@ $page->addHtml('
 				                       AND org_org_id_parent is NULL
 				                     ORDER BY org_longname ASC, org_shortname ASC';
 				            $form->addSelectBoxFromSql('org_org_id_parent', $gL10n->get('ORG_PARENT_ORGANIZATION'), $gDb, $sql, FIELD_DEFAULT, 
-				                $form_values['org_org_id_parent'], false, null, 'ORG_PARENT_ORGANIZATION_DESC');
+				                $form_values['org_org_id_parent'], false, false, null, 'ORG_PARENT_ORGANIZATION_DESC');
                         }
 
                         if($gCurrentOrganization->countAllRecords() > 1)
@@ -236,7 +229,7 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('registration_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=registration', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array(0 => $gL10n->get('SYS_DEACTIVATED'), 1 => $gL10n->get('ORG_FAST_REGISTRATION'), 2 => $gL10n->get('ORG_ADVANCED_REGISTRATION'));
-                        $form->addSelectBox('registration_mode', $gL10n->get('SYS_REGISTRATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['registration_mode'], false, null, 'ORG_REGISTRATION_MODE');
+                        $form->addSelectBox('registration_mode', $gL10n->get('SYS_REGISTRATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['registration_mode'], false, false, null, 'ORG_REGISTRATION_MODE');
                         $form->addCheckbox('enable_registration_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_registration_captcha'], 
                             FIELD_DEFAULT, null, 'ORG_CAPTCHA_REGISTRATION');
                         $form->addCheckbox('enable_registration_admin_mail', $gL10n->get('ORG_EMAIL_ALERTS'), $form_values['enable_registration_admin_mail'], 
@@ -259,20 +252,20 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('email_dispatch_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=email_dispatch', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
-                        $form->addSelectBox('mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_send_method'], false, null, 'MAI_SEND_METHOD_DESC');
+                        $form->addSelectBox('mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_send_method'], false, false, null, 'MAI_SEND_METHOD_DESC');
                         $form->addTextInput('mail_bcc_count', $gL10n->get('MAI_COUNT_BCC'), $form_values['mail_bcc_count'], 6, FIELD_DEFAULT, 'number', null, 'MAI_COUNT_BCC_DESC');
                         $form->addCheckbox('mail_sender_into_to', $gL10n->get('MAI_SENDER_INTO_TO'), $form_values['mail_sender_into_to'], 
                             FIELD_DEFAULT, null, 'MAI_SENDER_INTO_TO_DESC');
                         $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-                        $form->addSelectBox('mail_character_encoding', $gL10n->get('MAI_CHARACTER_ENCODING'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_character_encoding'], false, null, 'MAI_CHARACTER_ENCODING_DESC');
+                        $form->addSelectBox('mail_character_encoding', $gL10n->get('MAI_CHARACTER_ENCODING'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_character_encoding'], false, false, null, 'MAI_CHARACTER_ENCODING_DESC');
                         $form->addTextInput('mail_smtp_host', $gL10n->get('MAI_SMTP_HOST'), $form_values['mail_smtp_host'], 50, FIELD_DEFAULT, 'text', null, 'MAI_SMTP_HOST_DESC');
                         $form->addCheckbox('mail_smtp_auth', $gL10n->get('MAI_SMTP_AUTH'), $form_values['mail_smtp_auth'], 
                             FIELD_DEFAULT, null, 'MAI_SMTP_AUTH_DESC');
                         $form->addTextInput('mail_smtp_port', $gL10n->get('MAI_SMTP_PORT'), $form_values['mail_smtp_port'], 4, FIELD_DEFAULT, 'number', null, 'MAI_SMTP_PORT_DESC');
                         $selectBoxEntries = array('' => $gL10n->get('MAI_SMTP_SECURE_NO'), 'ssl' => $gL10n->get('MAI_SMTP_SECURE_SSL'), 'tls' => $gL10n->get('MAI_SMTP_SECURE_TLS'));
-                        $form->addSelectBox('mail_smtp_secure', $gL10n->get('MAI_SMTP_SECURE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_smtp_secure'], false, null, 'MAI_SMTP_SECURE_DESC');
+                        $form->addSelectBox('mail_smtp_secure', $gL10n->get('MAI_SMTP_SECURE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_smtp_secure'], false, false, null, 'MAI_SMTP_SECURE_DESC');
                         $selectBoxEntries = array('LOGIN' => $gL10n->get('MAI_SMTP_AUTH_LOGIN'), 'PLAIN' => $gL10n->get('MAI_SMTP_AUTH_PLAIN'), 'NTLM' => $gL10n->get('MAI_SMTP_AUTH_NTLM'));
-                        $form->addSelectBox('mail_smtp_authentication_type', $gL10n->get('MAI_SMTP_AUTH_TYPE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_smtp_authentication_type'], false, null, 'MAI_SMTP_AUTH_TYPE_DESC');
+                        $form->addSelectBox('mail_smtp_authentication_type', $gL10n->get('MAI_SMTP_AUTH_TYPE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_smtp_authentication_type'], false, false, null, 'MAI_SMTP_AUTH_TYPE_DESC');
                         $form->addTextInput('mail_smtp_user', $gL10n->get('MAI_SMTP_USER'), $form_values['mail_smtp_user'], 100, FIELD_DEFAULT, 'text', null, 'MAI_SMTP_USER_DESC');
                         $form->addTextInput('mail_smtp_password', $gL10n->get('MAI_SMTP_PASSWORD'), $form_values['mail_smtp_password'], 50, FIELD_DEFAULT, 'password', null, 'MAI_SMTP_PASSWORD_DESC');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
@@ -343,21 +336,21 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('captcha_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=captcha', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
-                        $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_type'], false, null, 'ORG_CAPTCHA_TYPE_TEXT');
+                        $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_type'], false, false, null, 'ORG_CAPTCHA_TYPE_TEXT');
                         
                         $fonts = getDirectoryEntries('../../system/fonts/');
                         $fonts['Theme'] = 'Theme';
                         asort($fonts);
-                        $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, FIELD_DEFAULT, $form_values['captcha_fonts'], false, null, 'ORG_CAPTCHA_FONT');
+                        $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, FIELD_DEFAULT, $form_values['captcha_fonts'], false, false, null, 'ORG_CAPTCHA_FONT');
                         $selectBoxEntries = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
-                        $form->addSelectBox('captcha_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_font_size'], false, null, 'ORG_CAPTCHA_FONT_SIZE');
+                        $form->addSelectBox('captcha_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_font_size'], false, false, null, 'ORG_CAPTCHA_FONT_SIZE');
                         $form->addTextInput('captcha_background_color', $gL10n->get('ORG_CAPTCHA_BACKGROUND_COLOR'), $form_values['captcha_background_color'], 7, FIELD_DEFAULT, 'text', null, 'ORG_CAPTCHA_BACKGROUND_COLOR_TEXT', null, 'form-control-small');
                         $form->addTextInput('captcha_width', $gL10n->get('ORG_CAPTCHA_WIDTH').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_width'], 4, FIELD_DEFAULT, 'number', null, 'ORG_CAPTCHA_WIDTH_DESC');
                         $form->addTextInput('captcha_height', $gL10n->get('ORG_CAPTCHA_HEIGHT').' ('.$gL10n->get('ORG_PIXEL').')', $form_values['captcha_height'], 4, FIELD_DEFAULT, 'number', null, 'ORG_CAPTCHA_HEIGHT_DESC');
                         $form->addTextInput('captcha_signs', $gL10n->get('ORG_CAPTCHA_SIGNS'), $form_values['captcha_signs'], 80, FIELD_DEFAULT, 'text', null, 'ORG_CAPTCHA_SIGNS_TEXT');
                         $form->addTextInput('captcha_signature', $gL10n->get('ORG_CAPTCHA_SIGNATURE'), $form_values['captcha_signature'], 60, FIELD_DEFAULT, 'text', null, 'ORG_CAPTCHA_SIGNATURE_TEXT');
                         $selectBoxEntries = array ('9','10','11','12','13','14','15','16','17','18','20','22','24','30');
-                        $form->addSelectBox('captcha_signature_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_signature_font_size'], false, null, 'ORG_CAPTCHA_SIGNATURE_FONT_SIZE');
+                        $form->addSelectBox('captcha_signature_font_size', $gL10n->get('SYS_FONT_SIZE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_signature_font_size'], false, false, null, 'ORG_CAPTCHA_SIGNATURE_FONT_SIZE');
 
                         if($gPreferences['captcha_type']=='pic')
                         {
@@ -501,7 +494,7 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('announcements_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=announcements', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                        $form->addSelectBox('enable_announcements_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_announcements_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $form->addSelectBox('enable_announcements_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_announcements_module'], false, false, null, 'ORG_ACCESS_TO_MODULE_DESC');
                         $form->addTextInput('announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['announcements_per_page'], 4, FIELD_DEFAULT, 'number', 
                             null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
@@ -543,11 +536,11 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('guestbook_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=guestbook', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                        $form->addSelectBox('enable_guestbook_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_guestbook_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $form->addSelectBox('enable_guestbook_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_guestbook_module'], false, false, null, 'ORG_ACCESS_TO_MODULE_DESC');
                         $form->addTextInput('guestbook_entries_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['guestbook_entries_per_page'], 4, FIELD_DEFAULT, 'number', null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
                         $form->addCheckbox('enable_guestbook_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_guestbook_captcha'], FIELD_DEFAULT, null, 'GBO_CAPTCHA_DESC');
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_NOBODY'), '1' => $gL10n->get('GBO_ONLY_VISITORS'), '2' => $gL10n->get('SYS_ALL'));
-                        $form->addSelectBox('enable_guestbook_moderation', $gL10n->get('GBO_GUESTBOOK_MODERATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_guestbook_moderation'], false, null, 'GBO_GUESTBOOK_MODERATION_DESC');
+                        $form->addSelectBox('enable_guestbook_moderation', $gL10n->get('GBO_GUESTBOOK_MODERATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_guestbook_moderation'], false, false, null, 'GBO_GUESTBOOK_MODERATION_DESC');
                         $form->addCheckbox('enable_gbook_comments4all', $gL10n->get('GBO_COMMENTS4ALL'), $form_values['enable_gbook_comments4all'], FIELD_DEFAULT, null, 'GBO_COMMENTS4ALL_DESC');
                         $form->addCheckbox('enable_intial_comments_loading', $gL10n->get('GBO_INITIAL_COMMENTS_LOADING'), $form_values['enable_intial_comments_loading'], FIELD_DEFAULT, null, 'GBO_INITIAL_COMMENTS_LOADING_DESC');
                         $form->addTextInput('flooding_protection_time', $gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL'), $form_values['flooding_protection_time'], 4, FIELD_DEFAULT, 'number', null, 'GBO_FLOODING_PROTECTION_INTERVALL_DESC');
@@ -570,7 +563,7 @@ $page->addHtml('
                         $form = new HtmlForm('lists_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=lists', $page, 'default', false, 'form-preferences');
                         $form->addTextInput('lists_roles_per_page', $gL10n->get('LST_NUMBER_OF_ROLES_PER_PAGE'), $form_values['lists_roles_per_page'], 10, FIELD_DEFAULT, 'number', null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
-                        $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['lists_members_per_page'], false, null, 'LST_MEMBERS_PER_PAGE_DESC');
+                        $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['lists_members_per_page'], false, false, null, 'LST_MEMBERS_PER_PAGE_DESC');
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), $form_values['lists_hide_overview_details'], FIELD_DEFAULT, null, 'LST_HIDE_DETAILS_DESC');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
@@ -597,7 +590,7 @@ $page->addHtml('
                         $form->addTextInput('mail_sendmail_name', $gL10n->get('MAI_SENDER_NAME'), $form_values['mail_sendmail_name'], 50, FIELD_DEFAULT, 'text', null, 'MAI_SENDER_NAME_DESC');
                         $form->addCheckbox('mail_html_registered_users', $gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS'), $form_values['mail_html_registered_users'], FIELD_DEFAULT, null, 'MAI_HTML_MAILS_REGISTERED_USERS_DESC');
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                        $form->addSelectBox('mail_delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_delivery_confirmation'], false, null, 'MAI_DELIVERY_CONFIRMATION_DESC');
+                        $form->addSelectBox('mail_delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_delivery_confirmation'], false, false, null, 'MAI_DELIVERY_CONFIRMATION_DESC');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
@@ -631,7 +624,7 @@ $page->addHtml('
                         }
 
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
-                        $form->addSelectBox('profile_photo_storage', $gL10n->get('PRO_LOCATION_PROFILE_PICTURES'), $selectBoxEntries, FIELD_DEFAULT, $form_values['profile_photo_storage'], false, null, 'PRO_LOCATION_PROFILE_PICTURES_DESC');
+                        $form->addSelectBox('profile_photo_storage', $gL10n->get('PRO_LOCATION_PROFILE_PICTURES'), $selectBoxEntries, FIELD_DEFAULT, $form_values['profile_photo_storage'], false, false, null, 'PRO_LOCATION_PROFILE_PICTURES_DESC');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
@@ -650,9 +643,9 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('events_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=events', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                        $form->addSelectBox('enable_dates_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_dates_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $form->addSelectBox('enable_dates_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_dates_module'], false, false, null, 'ORG_ACCESS_TO_MODULE_DESC');
                         $selectBoxEntries = array('html' => $gL10n->get('DAT_VIEW_MODE_DETAIL'), 'compact' => $gL10n->get('DAT_VIEW_MODE_COMPACT'));
-                        $form->addSelectBox('dates_viewmode', $gL10n->get('DAT_VIEW_MODE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['dates_viewmode'], false, null, array('DAT_VIEW_MODE_DESC', 'DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT'));
+                        $form->addSelectBox('dates_viewmode', $gL10n->get('DAT_VIEW_MODE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['dates_viewmode'], false, false, null, array('DAT_VIEW_MODE_DESC', 'DAT_VIEW_MODE_DETAIL', 'DAT_VIEW_MODE_COMPACT'));
                         $form->addTextInput('dates_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['dates_per_page'], 4, FIELD_DEFAULT, 'number', null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
                         $form->addCheckbox('enable_dates_ical', $gL10n->get('DAT_ENABLE_ICAL'), $form_values['enable_dates_ical'], FIELD_DEFAULT, null, 'DAT_ENABLE_ICAL_DESC');
                         $form->addTextInput('dates_ical_days_past', $gL10n->get('DAT_ICAL_DAYS_PAST'), $form_values['dates_ical_days_past'], 4, FIELD_DEFAULT, 'number', null, 'DAT_ICAL_DAYS_PAST_DESC');
@@ -685,10 +678,10 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('links_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=links', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                        $form->addSelectBox('enable_weblinks_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_weblinks_module'], false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $form->addSelectBox('enable_weblinks_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_weblinks_module'], false, false, null, 'ORG_ACCESS_TO_MODULE_DESC');
                         $form->addTextInput('weblinks_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['weblinks_per_page'], 4, FIELD_DEFAULT, 'number', null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
                         $selectBoxEntries = array('_self' => $gL10n->get('LNK_SAME_WINDOW'), '_blank' => $gL10n->get('LNK_NEW_WINDOW'));
-                        $form->addSelectBox('weblinks_target', $gL10n->get('LNK_LINK_TARGET'), $selectBoxEntries, FIELD_DEFAULT, $form_values['weblinks_target'], false, null, 'LNK_LINK_TARGET_DESC');
+                        $form->addSelectBox('weblinks_target', $gL10n->get('LNK_LINK_TARGET'), $selectBoxEntries, FIELD_DEFAULT, $form_values['weblinks_target'], false, false, null, 'LNK_LINK_TARGET_DESC');
                         $form->addTextInput('weblinks_redirect_seconds', $gL10n->get('LNK_DISPLAY_REDIRECT'), $form_values['weblinks_redirect_seconds'], 4, FIELD_DEFAULT, 'number', null, 'LNK_DISPLAY_REDIRECT_DESC');
                         $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/categories/categories.php?type=LNK"><img
                                     src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';

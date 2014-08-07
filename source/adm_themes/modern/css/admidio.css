@@ -248,10 +248,10 @@ form hr, .admBoxBody hr {
     margin-left: 26%;
 }
 
-.form-control:focus {
-    border-color: #409099;
-    background-color: #fff8a0;
-    box-shadow: none;
+.form-control:focus, .select2-container-active, .select2-choices, .select2-drop {
+    border-color: #409099 !important;
+    background-color: #fff8a0 !important;
+    box-shadow: none !important;
 }
 
 .checkbox {
@@ -264,6 +264,10 @@ select.form-control {
 
 select[multiple] {
     min-width: 250px;
+}
+
+.select2-results {
+    text-align: left;
 }
 
 .form-control-small {
@@ -382,10 +386,6 @@ input[data-provide="datepicker"], input[type="number"] {
     padding: 15px 0px;
 }
 
-.admBoxHighlighted .admBoxHead {
-    color: #FF9C00;
-}
-
 .panel-heading-icon {
     margin-right: 8px;
     vertical-align: text-top;
@@ -497,4 +497,9 @@ input[data-provide="datepicker"], input[type="number"] {
 
 .admWeblinkDescription {
     padding: 5px 0px;
+}
+
+tr.event-highlight, .event-highlight .panel-heading {
+    font-weight: bold;
+    color: #409099;
 }

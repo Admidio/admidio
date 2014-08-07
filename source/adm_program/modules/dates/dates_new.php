@@ -83,26 +83,19 @@ if(isset($_SESSION['dates_request']))
 
 	$date->setArray($_SESSION['dates_request']);
 
-    // ausgewaehlte Rollen vorbelegen
-    $numberRoleSelect = 1;
-    $arrRoles = array();
-    while(isset($_SESSION['dates_request']['role_'.$numberRoleSelect]))
-    {
-        $arrRoles[] = $_SESSION['dates_request']['role_'.$numberRoleSelect];
-        $numberRoleSelect++;
-    }
-    $date->setVisibleRoles($arrRoles);
+    // get the selected roles for visibility
+    $dateRoles = $_SESSION['dates_request']['date_roles'];
     
 	// check if a registration to this event is possible
-    if(array_key_exists('dateRegistrationPossible', $_SESSION['dates_request']))
+    if(array_key_exists('date_registration_possible', $_SESSION['dates_request']))
     {
-        $dateRegistrationPossible = $_SESSION['dates_request']['dateRegistrationPossible'];
+        $dateRegistrationPossible = $_SESSION['dates_request']['date_registration_possible'];
     }
 	
 	// check if current user is assigned to this date
-    if(array_key_exists('dateCurrentUserAssigned', $_SESSION['dates_request']))
+    if(array_key_exists('date_current_user_assigned', $_SESSION['dates_request']))
     {
-        $dateCurrentUserAssigned = $_SESSION['dates_request']['dateCurrentUserAssigned'];
+        $dateCurrentUserAssigned = $_SESSION['dates_request']['date_current_user_assigned'];
     }
     
     unset($_SESSION['dates_request']);
@@ -119,12 +112,14 @@ else
         if($getCopy == 0)
         {
             // a new event will be visible for all users per default
-            $date->setVisibleRoles(array('-1'));
+            $date->setVisibleRoles(array('0'));
+            $dateRoles = array(0);
         }
     }
     else
     {
-        $date->getVisibleRoles();
+        // get the saved roles for visibility
+        $dateRoles = $date->getVisibleRoles();
     }
 	
 	// check if a registration to this event is possible
@@ -163,15 +158,14 @@ $page->addJavascript('
         }
     }
 	
-	
 	function setDateParticipation() {
 		if ($("#date_registration_possible:checked").val() !== undefined) {
-			$("#date_current_user_assigned_group").css("display", "block");
-			$("#dat_max_members_group").css("display", "block");
+			$("#date_current_user_assigned_group").show("slow");
+			$("#dat_max_members_group").show("slow");
 		}
 		else {
-			$("#date_current_user_assigned_group").css("display", "none");
-			$("#dat_max_members_group").css("display", "none");
+			$("#date_current_user_assigned_group").hide();
+			$("#dat_max_members_group").hide();
 		}
 	}
 
@@ -184,46 +178,16 @@ $page->addJavascript('
             $("#date_to").val($("#date_from").val());
         }
     }
-
-    var numberRoleSelect = 1;
-
-    function addRoleSelection(roleID) {
-        $.ajax({url: "dates_function.php?mode=5&number_role_select=" + numberRoleSelect + "&rol_id=" + roleID, type: "GET", async: false, 
-            success: function(data){
-                if(numberRoleSelect == 1) {
-                    $("#liRoles").html($("#liRoles").html() + data);
-                }
-                else {
-                    number = numberRoleSelect - 1;
-                    $("#roleID_"+number).after(data);
-                }
-            }});
-        numberRoleSelect++;
-    }
-    
-    function removeRoleSelection(id) {
-        $("#"+id).hide("slow");
-        $("#"+id).remove();
-		numberRoleSelect = numberRoleSelect - 1;
-    }
 	
 	function setLocationCountry() {
 		if($("#dat_location").val().length > 0) {
-			$("#dat_country_group").show("slow");
+			$("#dat_country_group").show();
 			$("#dat_country").focus();
 		}
 		else {
 			$("#dat_country_group").hide();
 		}
 	}');
-	
-// add all roles that should see this event
-$htmlRoleSelection = '';
-foreach($date->getVisibleRoles() as $key => $roleID)
-{
-    $htmlRoleSelection .= 'addRoleSelection('.$roleID.');';
-}
-
 	
 $page->addJavascript('
 	var dateRoleID = '.$dateRoleID.';
@@ -235,19 +199,20 @@ $page->addJavascript('
 	$("#date_registration_possible").click(function() {setDateParticipation();});
 	$("#dat_all_day").click(function() {setAllDay();});
 	$("#dat_location").change(function() {setLocationCountry();});
-	$("#date_from").change(function() {setDateTo();});'.
-	$htmlRoleSelection.'
+	$("#date_from").change(function() {setDateTo();});
 	
 	// if date participation should be removed than ask user
-	$("#admButtonSave").click(function () {
-		if(dateRoleID > 0 && $("#dateRegistrationPossible").is(":checked") == false) {
+	$("#btn_save").click(function (event) {
+        event.preventDefault();
+        
+		if(dateRoleID > 0 && $("#date_registration_possible").is(":checked") == false) {
 			var msg_result = confirm("'.$gL10n->get('DAT_REMOVE_APPLICATION').'");
 			if(msg_result) {
-				$("#formDate").submit();
+				$("#dates_edit_form").submit();
 			}
 		}
 		else {
-			$("#formDate").submit();
+			$("#dates_edit_form").submit();
 		}
 	});', true);
 
@@ -299,7 +264,26 @@ $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n
     $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES', FIELD_MANDATORY, $date->getValue('dat_cat_id'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION'));
+    // add a multiselectbox to the form where the user can choose all roles that should see this event
+    // first read all relevant roles from database and create an array with them
+    $sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+             WHERE rol_valid   = 1
+               AND rol_visible = 1
+               AND rol_cat_id  = cat_id
+               AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+                   OR cat_org_id IS NULL )
+             ORDER BY cat_sequence, rol_name';
+    $resultList = $gDb->query($sql);
+    $roles = array(array('0', $gL10n->get('SYS_ALL').' ('.$gL10n->get('SYS_ALSO_VISITORS').')', null));
+
+    while($row = $gDb->fetch_array($resultList))
+    {
+        $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
+    }
+    $form->addSelectBox('date_roles', $gL10n->get('DAT_VISIBLE_TO'), $roles, FIELD_MANDATORY, $dateRoles, false, true);
+    
     $form->addCheckbox('dat_highlight', $gL10n->get('DAT_HIGHLIGHT_DATE'), $date->getValue('dat_highlight'));
+    
     // if current organization has a parent organization or is child organizations then show option to set this announcement to global
 	if($gCurrentOrganization->getValue('org_org_id_parent') > 0 || $gCurrentOrganization->hasChildOrganizations())
 	{

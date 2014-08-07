@@ -37,134 +37,141 @@ if($gCurrentUser->isWebmaster() == false)
 switch($getMode)
 {
 case 1:
-    $_SESSION['organization_request'] = $_POST;
     $checkboxes = array();
     
-    // first check the fields of the submitted form
-    
-    switch($getForm)
+    try
     {
-        case 'common':
-            $checkboxes = array('enable_rss','enable_auto_login','enable_password_recovery','system_js_editor_enabled','system_search_similar');
-            
-            if(strlen($_POST['theme']) == 0)
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_ADMIDIO_THEME')));
-            }
+        // first check the fields of the submitted form
         
-            if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER')));
-            }
-            
-            if(isset($_POST['enable_auto_login']) == false && $gPreferences['enable_auto_login'] == 1)
-            {
-                // if auto login was deactivated than delete all saved logins
-                $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
-                $gDb->query($sql);
-                $gPreferences[$key] = $value;
-            }
-            break;
-
-        case 'regional_settings':
-            $checkboxes = array('system_organization_select','system_show_all_users');
-
-            if(strlen($_POST['org_longname']) == 0)
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
-            }
-
-            if(strlen($_POST['system_language']) != 2)
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
-            }
-
-            if(strlen($_POST['system_date']) == 0)
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATE_FORMAT')));
-            }
-
-            if(strlen($_POST['system_time']) == 0)
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
-            }
-            break;
-            
-        case 'registration':
-            $checkboxes = array('enable_registration_captcha', 'enable_registration_admin_mail');
-            break;
-
-        case 'email_dispatch':
-            $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth');
-            break;
-            
-        case 'system_notification':
-            $checkboxes = array('enable_system_mails', 'enable_email_notification');
-
-            if(strlen($_POST['email_administrator']) == 0)
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
-            }
-            else
-            {
-                $_POST['email_administrator'] = admStrToLower($_POST['email_administrator']);
-                if(!strValidCharacters($_POST['email_administrator'], 'email'))
+        switch($getForm)
+        {
+            case 'common':
+                $checkboxes = array('enable_rss','enable_auto_login','enable_password_recovery','system_js_editor_enabled','system_search_similar');
+                
+                if(admStrIsValidFileName($_POST['theme']) == false
+                || file_exists(SERVER_PATH. '/adm_themes/'.$_POST['theme'].'/index.html') == false)
                 {
-                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+                    $gMessage->show($gL10n->get('ORG_INVALID_THEME'));
                 }
-            }
-            break;
-
-        case 'captcha':
-            break;
             
-        case 'announcements':
-            break;
-
-        case 'downloads':
-            $checkboxes = array('enable_download_module');
-            break;
-
-        case 'guestbook':
-            $checkboxes = array('enable_guestbook_captcha', 'enable_gbook_comments4all', 'enable_intial_comments_loading');
-            break;
-
-        case 'lists':
-            $checkboxes = array('lists_hide_overview_details');
-            break;
-        
-        case 'messages':
-            $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha', 'mail_html_registered_users');
-
-            if(strlen($_POST['mail_sendmail_address']) > 0)
-            {
-                $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
-                if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
+                if(is_numeric($_POST['logout_minutes']) == false || $_POST['logout_minutes'] <= 0)
                 {
-                    $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
+                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER')));
                 }
-            }
-            break;
+                
+                if(isset($_POST['enable_auto_login']) == false && $gPreferences['enable_auto_login'] == 1)
+                {
+                    // if auto login was deactivated than delete all saved logins
+                    $sql = 'DELETE FROM '.TBL_AUTO_LOGIN;
+                    $gDb->query($sql);
+                    $gPreferences[$key] = $value;
+                }
+                break;
 
-        case 'profile':
-            $checkboxes = array('profile_log_edit_fields', 'profile_show_map_link', 'profile_show_roles', 'profile_show_former_roles', 'profile_show_extern_roles');
-            break;
+            case 'regional_settings':
+                $checkboxes = array('system_organization_select','system_show_all_users');
 
-        case 'events':
-            $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_rooms');
-            break;
+                if(strlen($_POST['org_longname']) == 0)
+                {
+                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
+                }
 
-        case 'links':
-            if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
-            {
-                $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_DISPLAY_REDIRECT')));
-            }
-            break;
-        
-        default:
-            $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                if(admStrIsValidFileName($_POST['system_language']) == false
+                || file_exists(SERVER_PATH. '/adm_program/languages/'.$_POST['system_language'].'.xml') == false)
+                {
+                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_LANGUAGE')));
+                }
+
+                if(strlen($_POST['system_date']) == 0)
+                {
+                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_DATE_FORMAT')));
+                }
+
+                if(strlen($_POST['system_time']) == 0)
+                {
+                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_TIME_FORMAT')));
+                }
+                break;
+                
+            case 'registration':
+                $checkboxes = array('enable_registration_captcha', 'enable_registration_admin_mail');
+                break;
+
+            case 'email_dispatch':
+                $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth');
+                break;
+                
+            case 'system_notification':
+                $checkboxes = array('enable_system_mails', 'enable_email_notification');
+
+                if(strlen($_POST['email_administrator']) == 0)
+                {
+                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+                }
+                else
+                {
+                    $_POST['email_administrator'] = admStrToLower($_POST['email_administrator']);
+                    if(!strValidCharacters($_POST['email_administrator'], 'email'))
+                    {
+                        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS')));
+                    }
+                }
+                break;
+
+            case 'captcha':
+                break;
+                
+            case 'announcements':
+                break;
+
+            case 'downloads':
+                $checkboxes = array('enable_download_module');
+                break;
+
+            case 'guestbook':
+                $checkboxes = array('enable_guestbook_captcha', 'enable_gbook_comments4all', 'enable_intial_comments_loading');
+                break;
+
+            case 'lists':
+                $checkboxes = array('lists_hide_overview_details');
+                break;
+            
+            case 'messages':
+                $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha', 'mail_html_registered_users');
+
+                if(strlen($_POST['mail_sendmail_address']) > 0)
+                {
+                    $_POST['mail_sendmail_address'] = admStrToLower($_POST['mail_sendmail_address']);
+                    if(!strValidCharacters($_POST['mail_sendmail_address'], 'email'))
+                    {
+                        $gMessage->show($gL10n->get('SYS_EMAIL_INVALID', $gL10n->get('MAI_SENDER_EMAIL')));
+                    }
+                }
+                break;
+
+            case 'profile':
+                $checkboxes = array('profile_log_edit_fields', 'profile_show_map_link', 'profile_show_roles', 'profile_show_former_roles', 'profile_show_extern_roles');
+                break;
+
+            case 'events':
+                $checkboxes = array('enable_dates_ical', 'dates_show_map_link', 'dates_show_rooms');
+                break;
+
+            case 'links':
+                if(is_numeric($_POST['weblinks_redirect_seconds']) == false || $_POST['weblinks_redirect_seconds'] < 0)
+                {
+                    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('LNK_DISPLAY_REDIRECT')));
+                }
+                break;
+            
+            default:
+                $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+        }
     }
-    
+	catch(AdmException $e)
+	{
+		echo $e->showText();
+	}    
     // check every checkbox if a value was committed
     // if no value is found then set 0 because 0 will not be committed in a html checkbox element
     foreach($checkboxes as $key => $value)
@@ -224,7 +231,6 @@ case 1:
     }
 
     // clean up
-    unset($_SESSION['organization_request']);
     $gCurrentSession->renewOrganizationObject();
 
     echo 'success';

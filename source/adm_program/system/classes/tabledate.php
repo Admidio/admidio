@@ -249,7 +249,7 @@ class TableDate extends TableAccess
             {
                 if($row['dtr_rol_id'] == null)
                 {
-                    $this->visibleRoles[] = -1;
+                    $this->visibleRoles[] = 0;
                 }
                 else
                 {
@@ -288,7 +288,7 @@ class TableDate extends TableAccess
 
             foreach($this->visibleRoles as $key => $roleID)
             {
-                if($roleID != 0)
+                if(is_numeric($roleID) == true)
                 {
                     if($roleID > 0)
                     {

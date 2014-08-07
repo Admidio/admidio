@@ -645,9 +645,13 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue     This is the value the selectbox shows when loaded.
+     *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
+     *                           an array with all default values could be set.
      *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
      *                           the list with the caption "Please choose".
+     *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
+     *                           where the user could select multiple values from the selectbox. Then an array will be 
+     *                           created within the $_POST array.
 	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
      *                           If you need an additional parameter for the text you can add an array. The first entry must
@@ -660,18 +664,30 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class      Optional an additional css classname. The class @b admSelectbox
      *                     is set as default and need not set with this parameter.
      */
-    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setPleaseChoose = false, 
-                                 $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = null, $setPleaseChoose = false, 
+                                 $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
-        global $gL10n;
+        global $gL10n, $g_root_path, $gPreferences;
 
         $attributes = array('class' => 'form-control');
+        $name       = $id;
         $this->countElements++;
 
         // disable field
         if($property == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
+        }
+        
+        if($multiselect == true)
+        {
+            $attributes['multiple'] = 'multiple';
+            $name                   = $id.'[]';
+            
+            if($defaultValue != null && is_array($defaultValue) == false)
+            {
+                $defaultValue = array($defaultValue);
+            }
         }
         
         // set specific css class for this field
@@ -683,12 +699,12 @@ class HtmlForm extends HtmlFormBasic
         // now create html for the field
         $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
         
-        $this->addSelect($id, $id, $attributes);
+        $this->addSelect($name, $id, $attributes);
 
         if($setPleaseChoose == true)
         {
             $defaultEntry = false;
-            if($defaultValue == '')
+            if($defaultValue == null)
             {
                 $defaultEntry = true;
             }
@@ -718,7 +734,7 @@ class HtmlForm extends HtmlFormBasic
     			}
     			
     			// add option
-                if($defaultValue == $values[$arrayCount][0])
+                if($multiselect == false && $defaultValue == $values[$arrayCount][0])
                 {
                     $defaultEntry = true;
                 }
@@ -728,7 +744,7 @@ class HtmlForm extends HtmlFormBasic
             else
             {
                 // array has only key and value then create a normal selectbox without optiongroups
-                if($defaultValue == key($values))
+                if($multiselect == false && $defaultValue == key($values))
                 {
                     $defaultEntry = true;
                 }
@@ -742,6 +758,38 @@ class HtmlForm extends HtmlFormBasic
         if($optionGroup != null)
         {
             $this->closeOptionGroup();
+        }
+        
+        if($multiselect == true)
+        {
+            $javascriptCode = '$("#'.$id.'").select2();';
+
+            // add default values to multi select
+            if(array_count_values($defaultValue) > 0)
+            {
+                $htmlDefaultValues = '';
+                foreach($defaultValue as $key => $htmlDefaultValue)
+                {
+                    $htmlDefaultValues .= '"'.$htmlDefaultValue.'",';
+                }
+                $htmlDefaultValues = substr($htmlDefaultValues, 0, strlen($htmlDefaultValues)-1);
+                
+                $javascriptCode .= ' $("#'.$id.'").val(['.$htmlDefaultValues.']).trigger("change");';
+            }
+
+            // if a htmlPage object was set then add code to the page, otherwise to the current string
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/select2.css');
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/select2/select2-bootstrap.css');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/select2.min.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/select2/select2_locale_'.$gPreferences['system_language'].'.js');
+                $this->htmlPage->addJavascript($javascriptCode, true);
+            }
+            else
+            {
+                $this->addHtml('<script type="text/javascript">'.$javascriptCode.'</script>');
+            }
         }
         
         $this->closeSelect();
@@ -770,9 +818,13 @@ class HtmlForm extends HtmlFormBasic
      *                           @b FIELD_DEFAULT The field can accept an input.
      *                           @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                           @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue     This is the value the selectbox shows when loaded.
+     *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
+     *                           an array with all default values could be set.
      *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
      *                           the list with the caption "Please choose".
+     *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
+     *                           where the user could select multiple values from the selectbox. Then an array will be 
+     *                           created within the $_POST array.
 	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
      *                           If you need an additional parameter for the text you can add an array. The first entry must
@@ -785,8 +837,8 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class            Optional an additional css classname. The class @b admSelectbox
      *                           is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= '', 
-                                        $setPleaseChoose = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= null, $setPleaseChoose = false, 
+                                        $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
     
@@ -814,7 +866,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
@@ -828,9 +880,13 @@ class HtmlForm extends HtmlFormBasic
      *                      @b FIELD_DEFAULT The field can accept an input.
      *                      @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                      @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue     This is the value the selectbox shows when loaded.
+     *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
+     *                           an array with all default values could be set.
      *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
      *                           the list with the caption "Please choose".
+     *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
+     *                           where the user could select multiple values from the selectbox. Then an array will be 
+     *                           created within the $_POST array.
 	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
      *                           If you need an additional parameter for the text you can add an array. The first entry must
@@ -843,8 +899,8 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class       Optional an additional css classname. The class @b admSelectbox
      *                      is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= '', 
-                                        $setPleaseChoose = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= null, $setPleaseChoose = false, 
+                                        $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
         
@@ -861,7 +917,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must

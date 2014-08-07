@@ -13,7 +13,6 @@
  *          2 - Termin loeschen
  *          3 - zum Termin anmelden
  *          4 - vom Termin abmelden
- *          5 - Eintrag fuer Sichtbarkeit erzeugen
  *          6 - Termin im iCal-Format exportieren
  * rol_id : vorselektierte Rolle der Rollenauswahlbox
  * number_role_select : Nummer der Rollenauswahlbox, die angezeigt werden soll
@@ -106,7 +105,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $date->setValue('dat_all_day', 0);
     }
     
-    if(isset($_POST['role_1']) == false || $_POST['role_1'] == 0)
+    if(isset($_POST['date_roles']) == false || array_count_values($_POST['date_roles']) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('DAT_VISIBLE_TO')));
     }
@@ -147,7 +146,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['date_to'] = $_POST['date_from'];
     }
-    if(strlen($_POST['time_to']) == 0)
+    if(strlen($_POST['date_to_time']) == 0)
     {
         $_POST['date_to_time'] = $_POST['date_from_time'];
     }
@@ -191,9 +190,9 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     {
         $_POST['dat_all_day'] = 0;
     }
-    if(isset($_POST['dateRegistrationPossible']) == false)
+    if(isset($_POST['date_registration_possible']) == false)
     {
-        $_POST['dateRegistrationPossible'] = 0;
+        $_POST['date_registration_possible'] = 0;
     }
     if(isset($_POST['dat_room_id']) == false)
     {
@@ -243,11 +242,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         }
     }
 
-    // -----------------------------------
-    // Termin in Datenbank schreiben
-    // -----------------------------------
-
-    // POST Variablen in das Termin-Objekt schreiben
+    // write all POST parameters into the date object
     foreach($_POST as $key => $value)
     {
         if(strpos($key, 'dat_') === 0)
@@ -256,20 +251,10 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         }
     }
 
-    // nun alle Rollenzuordnungen wegschreiben
-    $roleCount = 1;
-    $arrRoles  = array();
-    while(isset($_POST['role_'.$roleCount]))
-    {
-        if($_POST['role_'.$roleCount] != 0)
-        {
-            $arrRoles[] = $_POST['role_'.$roleCount];
-        }
-        $roleCount++;
-    }
-
-    // Termin in Datenbank speichern
-    $date->setVisibleRoles($arrRoles);
+    // now save array with all roles that should see this event to date object
+    $date->setVisibleRoles($_POST['date_roles']);
+    
+    // save event in database
     $return_code = $date->save();
 	
 	if($return_code == 0 && $gPreferences['enable_email_notification'] == 1)
@@ -292,7 +277,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         }
 		else
 		{
-		    $zeit = $_POST['time_from']. ' - '. $_POST['time_to'];
+		    $zeit = $_POST['date_from_time']. ' - '. $_POST['date_to_time'];
         }
 		
 		$sql_cal = 'SELECT cat_name FROM '.TBL_CATEGORIES.' 
@@ -335,7 +320,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     // ggf. Rolle fuer Anmeldungen wegschreiben
     // ----------------------------------------         
 
-    if($_POST['dateRegistrationPossible'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
+    if($_POST['date_registration_possible'] == 1 && strlen($date->getValue('dat_rol_id')) == 0)
     {
         // Kategorie fuer Terminbestaetigungen einlesen
         $sql = 'SELECT cat_id FROM '.TBL_CATEGORIES.' 
@@ -370,7 +355,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
     }
-    elseif($_POST['dateRegistrationPossible'] == 0 && $date->getValue('dat_rol_id') > 0)
+    elseif($_POST['date_registration_possible'] == 0 && $date->getValue('dat_rol_id') > 0)
     {
     	// date participation was deselected -> delete flag in event and than delete role
         $role = new TableRoles($gDb, $date->getValue('dat_rol_id'));
@@ -378,7 +363,7 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
         $date->save();
         $role->delete();
 	}
-    elseif($_POST['dateRegistrationPossible'] == 1 && $date->getValue('dat_rol_id') > 0)
+    elseif($_POST['date_registration_possible'] == 1 && $date->getValue('dat_rol_id') > 0)
     {
         // if event exists and you could register to this event then we must check
         // if the data of the role must be changed
@@ -395,14 +380,14 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
     }
 
 	// check if flag is set that current user wants to participate as leader to the date
-	if(isset($_POST['dateCurrentUserAssigned']) && $_POST['dateCurrentUserAssigned'] == 1 
+	if(isset($_POST['date_current_user_assigned']) && $_POST['date_current_user_assigned'] == 1 
 	&& $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')) == false)
 	{
 		// user wants to participate -> add him to date
 		$member = new TableMembers($gDb);
 		$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
 	}
-	elseif(isset($_POST['dateCurrentUserAssigned']) == false 
+	elseif(isset($_POST['date_current_user_assigned']) == false 
 	&& $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == true)
 	{
 		// user does't want to participate -> remove him from date
@@ -443,27 +428,6 @@ elseif($getMode == 4)  // Benutzer vom Termin abmelden
 
     $gMessage->setForwardUrl($gNavigation->getUrl());
     $gMessage->show($gL10n->get('DAT_CANCEL_DATE', $date->getValue('dat_headline'), $date->getValue('dat_begin')), $gL10n->get('DAT_ATTEND'));
-}
-elseif($getMode == 5)  // Eintrag fuer Sichtbarkeit erzeugen
-{
-    $label = '';
-    header('Content-type: text/html; charset=utf-8');
-
-    if($getNumberRoleSelect == 1)
-    {
-        $label = $gL10n->get('DAT_VISIBLE_TO').':';
-    }
-    echo '<dl id="roleID_'.$getNumberRoleSelect.'">
-        <dt>'.$label.'</dt>
-        <dd>'.FormElements::generateRoleSelectBox($getRoleId, 'role_'.$getNumberRoleSelect, 0, 1);
-            if($getNumberRoleSelect > 1)
-            {
-                echo '<a href="javascript:removeRoleSelection(\'roleID_'.$getNumberRoleSelect.'\')"><img 
-                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('DAT_ADD_ROLE').'" /></a>';
-            }
-        echo '</dd>
-    </dl>';
-    exit();
 }
 elseif($getMode == 6)  // Termin im iCal-Format exportieren
 {
