@@ -8,10 +8,10 @@
  *
  * Parameters:
  *
- * dat_id   - ID des Termins, der bearbeitet werden soll
- * headline - Ueberschrift, die ueber den Terminen steht
- *            (Default) Termine
- * copy : true - der uebergebene ID-Termin wird kopiert und kann neu gespeichert werden
+ * dat_id   - ID of the event that should be edited
+ * headline - Headline for the event
+ *            (Default) Events
+ * copy : true - The event of the dat_id will be copied and the base for this new event
  *
  *****************************************************************************/
 
@@ -51,26 +51,8 @@ else
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// Terminobjekt anlegen
+// create date object
 $date = new TableDate($gDb);
-
-if($getDateId > 0)
-{
-    $date->readDataById($getDateId);
-    
-    if($getCopy)
-    {
-        $date->getVisibleRoles();
-        $date->setValue('dat_id', 0);
-        $getDateId = 0;
-    }
-    
-    // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
-    if($date->editRight() == false)
-    {
-        $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
-    }
-}
 
 if(isset($_SESSION['dates_request']))
 {
@@ -109,7 +91,7 @@ else
         $date->setValue('dat_begin', date('Y-m-d H:00:00', time()+3600));
         $date->setValue('dat_end', date('Y-m-d H:00:00', time()+7200));
     
-        if($getCopy == 0)
+        if($getCopy == false)
         {
             // a new event will be visible for all users per default
             $date->setVisibleRoles(array('0'));
@@ -118,8 +100,22 @@ else
     }
     else
     {
+        $date->readDataById($getDateId);
+
         // get the saved roles for visibility
         $dateRoles = $date->getVisibleRoles();
+        
+        if($getCopy)
+        {
+            $date->setValue('dat_id', 0);
+            $getDateId = 0;
+        }
+        
+        // Pruefung, ob der Termin zur aktuellen Organisation gehoert bzw. global ist
+        if($date->editRight() == false)
+        {
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+        }
     }
 	
 	// check if a registration to this event is possible

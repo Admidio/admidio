@@ -249,32 +249,6 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 $page->addHtml('</div>
             </div>
         </nav>');
-/*
-         //Input for Startdate and Enddate
-        echo '
-        <div class="navigationPath">
-            <form name="Formular" action="'.$g_root_path.'/adm_program/modules/dates/dates.php" onsubmit="return Datefilter()">
-                <label for="date_from" style="margin-left: 10px;">'.$gL10n->get('SYS_START').':</label>
-                    <input type="text" id="date_from" name="date_from" onchange="javascript:setDateTo();" size="10" maxlength="10" value="'.$dateFromHtmlOutput.'" />
-                    <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'date_from\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
-                    src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-                    <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
-
-                    &nbsp;&nbsp;
-
-                <label for="date_to">'.$gL10n->get('SYS_END').':</label>
-
-                    <input type="text" id="date_to" name="date_to" size="10" maxlength="10" value="'.$dateToHtmlOutput.'" />
-                    <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'date_to\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'date_from\',\'date_to\');"><img
-                    src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-
-                <span style="margin-left: 5px;">&nbsp;</span>
-                <input type="hidden" id="cat_id" name="cat_id" value="'.$parameter['cat_id'].'">
-                <input type="submit" value="OK">
-                <span style="margin-left: 5px;">&nbsp;</span>
-                <input type="button" onclick="window.location.href = \''.$g_root_path.'/adm_program/modules/dates/dates.php\'" value="'.$gL10n->get('SYS_DELETE').'">
-            </form>
-        </div>';*/
     }
 
     if($datesTotalCount == 0)
@@ -297,15 +271,6 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             $compactTable = new HtmlTable('events_compact_table', $page, true, true);
             $columnHeading = array('&nbsp;', $gL10n->get('SYS_START'), $gL10n->get('DAT_DATE'), $gL10n->get('SYS_PARTICIPANTS'), $gL10n->get('DAT_LOCATION'));
             $compactTable->addRowHeadingByArray($columnHeading);
-/*
-            $compactTable->addTableHeader();
-            $compactTable->addRow();
-            $compactTable->addColumn('&nbsp;', null, 'th');
-            $compactTable->addColumn($gL10n->get('SYS_START'), array('colspan' => '2'), 'th');
-            $compactTable->addColumn($gL10n->get('DAT_DATE'), null, 'th');
-            $compactTable->addColumn($gL10n->get('SYS_PARTICIPANTS'), array('colspan' => '2'), 'th');
-            $compactTable->addColumn($gL10n->get('DAT_LOCATION'), null, 'th');
-            $compactTable->addTableBody();*/
         }
         
         foreach($datesResult['recordset'] as $row)

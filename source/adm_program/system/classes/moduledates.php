@@ -132,7 +132,17 @@
  *******************************************************************************/
   
 class ModuleDates extends Modules
-{       
+{
+    /** Constuctor that will create an object of a parameter set needed in modules to get the recordsets.
+     *  Initialize parameters
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        
+        $this->setParameter('mode', 'actual');
+    }
+    
     /** Method validates all date inputs and formats them to date format 'Y-m-d' needed for database queries
      *  @param $date Date to be validated and formated if needed
      */
@@ -229,8 +239,7 @@ class ModuleDates extends Modules
         {
             $dates['recordset'][] = $row;
         }
-        // Push parameter to array
-        $dates['parameter'] = $this->getParameters();
+        
         return $dates;
     }
     
@@ -326,7 +335,7 @@ class ModuleDates extends Modules
      *  @param $dateRangeEnd   A date in english or Admidio format that will be the end date of the range.
      *  @return Returns false if invalid date format is submitted 
      */
-    public function setDateRange($dateRangeStart, $dateRangeEnd)
+    public function setDateRange($dateRangeStart = null, $dateRangeEnd = null)
     {
         global $gPreferences;
 
@@ -480,29 +489,34 @@ class ModuleDates extends Modules
         }
 
         // In case ID was permitted and user has rights
-        if($this->parameters['id'] > 0)
+        if($this->getParameter('id') > 0)
         {
-            $sqlConditions .= ' AND dat_id = '.$this->parameters['id'];
+            $sqlConditions .= ' AND dat_id = '.$this->getParameter('id');
         }
         //...otherwise get all additional events for a group
         else
         {
+            if(strlen($this->getParameter('dateStartFormatEnglish') == 0))
+            {
+                $this->setDateRange();
+            }
+            
             // add 1 second to end date because full time events to until next day
             $sqlConditions .= ' AND (  dat_begin BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:00\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\'
                                     OR dat_end   BETWEEN \''.$this->getParameter('dateStartFormatEnglish').' 00:00:01\' AND \''.$this->getParameter('dateEndFormatEnglish').' 23:59:59\')';
         
             // show all events from category                
-            if($this->parameters['cat_id'] > 0)
+            if($this->getParameter('cat_id') > 0)
             {                 
                 // show all events from category
-                $sqlConditions .= ' AND cat_id  = '.$this->parameters['cat_id'];
+                $sqlConditions .= ' AND cat_id  = '.$this->getParameter('cat_id');
             }
         }
 
         // add conditions for role permission
         if($gCurrentUser->getValue('usr_id') > 0)
         {
-            if($this->parameters['show'] == 'all')
+            if($this->getParameter('show') == 'all')
             {
                 $sqlConditions .= '
                 AND (  dtr_rol_id IS NULL 
@@ -512,7 +526,7 @@ class ModuleDates extends Modules
                                          AND mem2.mem_begin  <= dat_begin
                                          AND mem2.mem_end    >= dat_end) ) ';
             }
-            elseif($this->parameters['show'] == 'maybe_participate')
+            elseif($this->getParameter('show') == 'maybe_participate')
             {
                 $sqlConditions .= '
                 AND dat_rol_id IS NOT NULL
@@ -523,7 +537,7 @@ class ModuleDates extends Modules
                                          AND mem2.mem_begin  <= dat_begin
                                          AND mem2.mem_end    >= dat_end) ) ';
             }
-            elseif($this->parameters['show'] == 'only_participate')
+            elseif($this->getParameter('show') == 'only_participate')
             {
                 $sqlConditions .= '
                 AND dat_rol_id IS NOT NULL

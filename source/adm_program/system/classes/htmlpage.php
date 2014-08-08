@@ -135,7 +135,7 @@ class HtmlPage
      */
     public function addRssFile($file, $title = null)
     {
-        if($title <> null)
+        if($title != null)
         {
             $this->rssFiles[$title] = $file;
         }

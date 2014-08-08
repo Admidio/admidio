@@ -36,6 +36,11 @@ elseif($gPreferences['enable_weblinks_module'] == 2)
     require_once('../../system/login_valid.php');
 }
 
+// Create Link object
+$weblinks = new ModuleWeblinks();
+$weblinks->setParameter('cat_id', $getCatId);
+$weblinksCount = $weblinks->getDataSetCount();
+
 // number of weblinks per page
 if($gPreferences['weblinks_per_page'] > 0)
 {
@@ -45,11 +50,6 @@ else
 {
     $weblinksPerPage = $weblinksCount;
 }
-
-// Create Link object
-$weblinks = new ModuleWeblinks();
-$weblinks->setParameter('cat_id', $getCatId);
-$weblinksCount = $weblinks->getDataSetCount($getStart, $weblinksPerPage);
 
 // Output head
 $headline = $weblinks->getHeadline($getHeadline);

@@ -146,7 +146,7 @@ abstract class Modules
      */
     public function getParameter($parameterName)
     {
-        if(strlen($parameterName) > 0 && array_key_exists($parameterName, $this->parameters))
+        if(strlen($parameterName) > 0 && is_array($this->parameters) && array_key_exists($parameterName, $this->parameters))
         {
             return $this->parameters[$parameterName];
         }
@@ -247,7 +247,6 @@ abstract class Modules
             if($parameterName == 'cat_id')
             {
                 $this->catId = $parameterValue;
-            error_log($this->parameters['cat_id'].':V:');
             }
             elseif($parameterName == 'mode')
             {
