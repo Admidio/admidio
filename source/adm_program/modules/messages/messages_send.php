@@ -35,7 +35,7 @@ $postFrom        = admFuncVariableIsValid($_POST, 'mailfrom', 'string', '');
 $postName        = admFuncVariableIsValid($_POST, 'name', 'string', '');
 $postSubject     = stripslashes($_POST['subject']);
 $postSubjectSQL  = admFuncVariableIsValid($_POST, 'subject', 'string', '');
-$postTo          = admFuncVariableIsValid($_POST, 'msg_to', 'string', '');
+$postTo          = $_POST['msg_to'];
 $postBody        = admFuncVariableIsValid($_POST, 'msg_body', 'html', '');
 $postBodySQL     = admFuncVariableIsValid($_POST, 'msg_body', 'string', '');
 $postRoleId      = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
@@ -73,7 +73,7 @@ if ($getMsgType != 'PM')
     // if User ID is delivered
     if ($getUserId > 0)
     {
-        $postTo = $getUserId;
+        $postTo = array($getUserId);
     }
     elseif ($postRoleId > 0)
     {
@@ -82,7 +82,7 @@ if ($getMsgType != 'PM')
         {
             $actmember = '-'.$postShowMembers;
         }
-        $postTo = 'groupID: '.$postRoleId.$actmember;
+        $postTo = array('groupID: '.$postRoleId.$actmember);
     }
     
     // Falls Attachmentgroesse die max_post_size aus der php.ini uebertrifft, ist $_POST komplett leer.
@@ -152,7 +152,7 @@ if ($getMsgType == 'EMAIL')
 		'show_members' => $postShowMembers
 	);
 
-    if ($postTo <> '')
+    if (isset($postTo))
     {
         $receiver = array();
    
@@ -162,9 +162,7 @@ if ($getMsgType == 'EMAIL')
         // und ein Dummy Rollenobjekt dazu
         $role = new TableRoles($gDb);
         
-        $single = explode ( ';', $postTo);
-        
-        foreach ($single as $value)
+        foreach ($postTo as $value)
         {
             if (strpos($value,':') == true) 
             {
@@ -172,12 +170,10 @@ if ($getMsgType == 'EMAIL')
                 
                 if (strpos($groupsplit[1],'-') == true)
                 {
-					echo $groupsplit[1];
                     $group = explode( '-', $groupsplit[1]);
                 }
                 else
                 {
-					echo $groupsplit[1];
                     $group[0] = $groupsplit[1];
                     $group[1] = 0;
                 }
@@ -510,7 +506,6 @@ else
     }
 }
 
-echo ' test: '.$_POST['msg_to'];
 // message if send/save is OK
 if ($sendResult === TRUE)
 {

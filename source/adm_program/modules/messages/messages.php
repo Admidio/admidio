@@ -89,10 +89,10 @@ if ($getMsgId > 0)
                  ORDER BY msg_id2 DESC";
 
     $message_result = $gDb->query($sql);
-    
+
 }
 
-$list = '';
+$list = array();
 
 if ($getMsgType == 'PM')
 {
@@ -118,21 +118,12 @@ if ($getMsgType == 'PM')
     $drop_result = $gDb->query($sql);
     
     if ($gValidLogin)
-        {
-            $list .= '{ text: "Mitglieder", children: [';
-
-            $next = false;
-            while ($row = $gDb->fetch_array($drop_result)) {
-                if($next == true)
-                {
-                    $list .= ',';
-                }
-                $next = true;
-                $list .= '{ id: "' .$row['usr_id']. '" , text: "' .$row['name']. ' (' .$row['usr_login_name']. ')"}';
-            }
-
-            $list .= ']}';
+    {
+        while ($row = $gDb->fetch_array($drop_result))
+		{
+            $list[] = array($row['usr_id'], $row['name'].' (' .$row['usr_login_name'].')', '');
         }
+    }
 }
 
 if ($getUserId > 0)
@@ -186,12 +177,12 @@ if ($getMsgType == 'PM')
 
     if ($getUserId > 0)
     {
-        $form_values['subject']      = $getSubject;
+        $form_values['subject'] = $getSubject;
     }
 
     if ($getMsgId > 0)
     {
-    $formParam .= '&'.'msg_id='.$getMsgId;
+        $formParam .= '&'.'msg_id='.$getMsgId;
     }
 
     // show form
@@ -204,7 +195,7 @@ if ($getMsgType == 'PM')
         $preload_data = '{ id: "' .$getUserId. '", text: "' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')'. '", locked: true}';
     }
 
-    $form->addTextInput('msg_to', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden', 'MAI_SEND_MAIL_TO_ROLE');
+	$form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, FIELD_MANDATORY, array(), false, true, 'MAI_SEND_MAIL_TO_ROLE');
 
     $form->closeGroupBox();
 
@@ -388,8 +379,6 @@ else
         $preload_data = '{ id: "groupID: ' .$rollenID. '", text: "' .$rollenName. '", locked: true}';
     }
     
-    $form->addTextInput('msg_to', $gL10n->get('SYS_TO'), '', 0, FIELD_MANDATORY, 'hidden', 'MAI_SEND_MAIL_TO_ROLE');
-    
     // keine Uebergabe, dann alle Rollen entsprechend Login/Logout auflisten
     if ($gValidLogin)
     {
@@ -430,31 +419,15 @@ else
                 $act_number = '';
             }
             
-            $next = false;
             $result = $gDb->query($sql);
             while ($row = $gDb->fetch_array($result)) 
             {
                 if($act_number == '' || $row['former'] > 0)
                 {
-                    if($next == true)
-                    {
-                        $list .= ',';
-                    }
-                    else
-                    {
-                        if(strlen($list) > 0)
-                        {
-                            $list .= ',';
-                        }
-                        
-                        $list .= '{ text: "'.$act_group.'", children: [';
-                    }
-                    $next = true;
-                    $list .= '{ id: "groupID: ' .$row['rol_id']. ''.$act_number.'" , text: "' .$row['rol_name'].' '.$act_group_short. '"}';
+					$list[] = array('groupID: '.$row['rol_id'].$act_number, $row['rol_name'].' '.$act_group_short, $act_group);
                 }
             }
 
-            $list .= ']}';
         }
         
         // select Users
@@ -486,32 +459,19 @@ else
                ORDER BY former';        
 
         $result = $gDb->query($sql);
-        
-        if(strlen($list) > 0)
-        {
-            $list .= ',';
-        }
-        $next = false;
-        $next1 = true;
-        $list .= '{ text: "Aktive Mitglieder", children: [';
+
+        $next = true;
+		$test = "Aktive Mitglieder";
         
         while ($row = $gDb->fetch_array($result)) {
-            if ($row['former'] == 1 && $next1 == true)
+            if ($row['former'] == 1 && $next == true)
             {
-                $list .= ']},{ text: "Inactive Mitglieder", children: [';
+				$test = "Inactive Mitglieder";
                 $next = false;
-                $next1 = false;
             }
-            
-            if($next == true)
-            {
-                $list .= ',';
-            }
-            $next = true;
-            $list .= '{ id: "' .$row['usr_id']. '" , text: "' .$row['first_name'].' '.$row['last_name']. ' <' .$row['email']. '>"}';
+
+			$list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $test);
         }
-    
-            $list .= ']}';
 
     }
     else
@@ -526,19 +486,16 @@ else
                    AND rol_cat_id = cat_id
                    AND cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                  ORDER BY cat_sequence, rol_name ';
-        
-        $next = false;
+
         $result = $gDb->query($sql);
-        while ($row = $gDb->fetch_array($result)) 
-        {
-            if($next == true)
-            {
-                $list .= ',';
-            }
-            $next = true;
-            $list .= '{ id: "groupID: ' .$row['rol_id']. '" , text: "' .$row['rol_name']. '"}';
-        }
+		while($row = $gDb->fetch_array($result))
+		{
+			$list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], '');
+		}
+		
     }
+	
+	$form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, FIELD_MANDATORY, array(), false, true, 'MAI_SEND_MAIL_TO_ROLE');
 
     $form->addLine();
 
@@ -621,38 +578,8 @@ if(isset($list))
                     placeholder: "Select a Email/Group",
                     allowClear: true,
                     maximumSelectionSize: '.$recept_number.',
-                    multiple: true,
                     separator: ";",
-                    closeOnSelect: false,
-                    query: function (query) {
-                      var data = {results: ['.$list.']}
-                        ,term = query.term
-                        ,callback = query.callback
-                        ,collection = { results: [] }
-                        ,text = function (item) { return item.text }
-                        ,process = function(optgroup, collection) {
-                          var results, x
-                          if (query.matcher(term, text(optgroup), optgroup))
-                            collection.push(optgroup)
-                          else if (optgroup.children) {
-                            results = {}
-                            for (x in optgroup) {
-                              if (optgroup.hasOwnProperty(x)) results[x] = optgroup[x]
-                            }
-                            results.children=[]
-                            $(optgroup.children).each(function(i, child) { process(child, results.children) })
-                            if (results.children.length || query.matcher(term, text(results), optgroup))
-                              collection.push(results)
-                          }
-                        }
-                      if (term === "") collection.results = data.results
-                      else {
-                        $(data.results).each(function(i, optgroup) {
-                          process(optgroup, collection.results)
-                        })
-                      }
-                      callback(collection)
-                    }
+                    closeOnSelect: false
                 });'
                 .$preload.
             '});
