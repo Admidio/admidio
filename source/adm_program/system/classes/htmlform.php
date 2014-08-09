@@ -160,13 +160,10 @@ class HtmlForm extends HtmlFormBasic
      *  @param $id         Id of the captcha field. This will also be the name of the captcha field.
      *  @param $type       The of captcha that should be shown. This can be characters in a image or 
      *                     simple mathematical calculation. Possible values are @b pic or @b calc.
-     *  @param $property   With this param you can set the following properties: 
-     *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-    public function addCaptcha($id, $type, $property = FIELD_MANDATORY, $class = '')
+    public function addCaptcha($id, $type, $class = '')
     {
         global $gL10n, $g_root_path;
         
@@ -236,6 +233,10 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
+		else if ($property == FIELD_MANDATORY)
+		{
+		    $attributes['required'] = 'required';
+		}
         
         // if value = 1 then set checkbox checked
         if($value == '1')
@@ -348,6 +349,11 @@ class HtmlForm extends HtmlFormBasic
         {
             $this->type = 'vertical';
         }
+		
+		if ($property == FIELD_MANDATORY)
+		{
+		    $attributes['required'] = 'required';
+		}
 
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -409,6 +415,10 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
+		else if ($property == FIELD_MANDATORY)
+		{
+		    $attributes['required'] = 'required';
+		}
 
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -517,6 +527,10 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
+		else if ($property == FIELD_MANDATORY)
+		{
+		    $attributes['required'] = 'required';
+		}
 
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -594,6 +608,10 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
+		else if ($property == FIELD_MANDATORY)
+		{
+		    $attributes['required'] = 'required';
+		}
         
         // set specific css class for this field
         if(strlen($class) > 0)
@@ -678,6 +696,10 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
+		else if ($property == FIELD_MANDATORY)
+		{
+		    $attributes['required'] = 'required';
+		}
         
         if($multiselect == true)
         {
@@ -1132,6 +1154,10 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
+		else if ($property == FIELD_MANDATORY)
+		{
+		    $attributes['required'] = 'required';
+		}
 
         // set specific css class for this field
         if(strlen($class) > 0)
