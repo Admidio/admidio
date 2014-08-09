@@ -8,46 +8,28 @@
  *
  * Parameters:
  *
- * usr_id    - Send message to this user
- * subject   - set message subject
+ * msg_id    - set message id for conversations
  * msg_type  - set message type
- *
- 
- *202;groupID: 3
- *202;groupID: 3-1
- *202;groupID: 3-2
- *202
- *groupID: 3-1
- *202;groupID: 3-1;202;groupID: 3-1
- 
+ * 
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/template.php');
 
 // Initialize and check the parameters
-$getUserId       = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getMsgId        = admFuncVariableIsValid($_GET, 'msg_id', 'numeric', 0);
 $getMsgType      = admFuncVariableIsValid($_GET, 'msg_type', 'string', '');
 
 // Check form values
 $postFrom        = admFuncVariableIsValid($_POST, 'mailfrom', 'string', '');
 $postName        = admFuncVariableIsValid($_POST, 'name', 'string', '');
-$postSubject     = stripslashes($_POST['subject']);
+$postSubject     = admFuncVariableIsValid($_POST, 'subject', 'html', '');
 $postSubjectSQL  = admFuncVariableIsValid($_POST, 'subject', 'string', '');
 $postTo          = $_POST['msg_to'];
 $postBody        = admFuncVariableIsValid($_POST, 'msg_body', 'html', '');
 $postBodySQL     = admFuncVariableIsValid($_POST, 'msg_body', 'string', '');
-$postRoleId      = admFuncVariableIsValid($_POST, 'rol_id', 'numeric', 0);
 $postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean', 0);
 $postCaptcha     = admFuncVariableIsValid($_POST, 'captcha', 'string');
-$postShowMembers = admFuncVariableIsValid($_POST, 'show_members', 'numeric', 0);
-
-//just logged-in Users are allowed to give userid to this module...
-if ($getUserId > 0 && !$gValidLogin)
-{
-    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-}
 
 //if message not PM it must be Email and then directly check the parameters
 if ($getMsgType != 'PM')
@@ -70,12 +52,8 @@ if ($getMsgType != 'PM')
         $postCarbonCopy = 0;
     }
     
-    // if User ID is delivered
-    if ($getUserId > 0)
-    {
-        $postTo = array($getUserId);
-    }
-    elseif ($postRoleId > 0)
+    // if Role ID is delivered
+	if ($postRoleId > 0)
     {
         $actmember = '';
         if ($postShowMembers > 0)
@@ -123,18 +101,6 @@ if(!($gCurrentUser->getValue('usr_id')>0 && $gPreferences['mail_delivery_confirm
 {
     $postDeliveryConfirmation = 0;
 }
-
-if ($getUserId > 0)
-{
-    //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($gDb, $gProfileFields, $getUserId);
-
-    // darf auf die User-Id zugegriffen werden    
-    if(($gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)|| strlen($user->getValue('usr_id')) == 0 )
-    {
-            $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
-    }
-}
     
 // check if PM or Email and to steps:
 if ($getMsgType == 'EMAIL')
@@ -149,7 +115,6 @@ if ($getMsgType == 'EMAIL')
 		'rol_id'        => $postRoleId,
 		'carbon_copy'   => $postCarbonCopy,
 		'delivery_confirmation' => $postDeliveryConfirmation,
-		'show_members' => $postShowMembers
 	);
 
     if (isset($postTo))
@@ -198,7 +163,7 @@ if ($getMsgType == 'EMAIL')
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
 
-                $role->readDataById($group[1]);
+                $role->readDataById($group[0]);
 
                 // Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
                 if ($gValidLogin && !$gCurrentUser->mailRole($row['rol_id']))
@@ -443,7 +408,7 @@ else
 {
 	
 	//usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
-    $user = new User($gDb, $gProfileFields, $postTo);
+    $user = new User($gDb, $gProfileFields, $postTo[0]);
 
     // darf auf die User-Id zugegriffen werden    
     if(($gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)|| strlen($user->getValue('usr_id')) == 0 )
@@ -454,7 +419,7 @@ else
     // check if receiver of message has valid login
     if(strlen($user->getValue('usr_login_name')) == 0)
     {
-        $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' schitt '.$user->getValue('LAST_NAME')));
+        $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 
     // aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
@@ -473,7 +438,7 @@ else
         $getMsgId = $row['max_id'] + 1;
         
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '', CURRENT_TIMESTAMP, '0', '1')";
+            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '', CURRENT_TIMESTAMP, '0', '1')";
     
         $gDb->query($sql);    
         
@@ -498,7 +463,7 @@ else
     }
         
     $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0', '0')";
+            VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0', '0')";
     $postBodySQL = '';
     
     if ($gDb->query($sql)) {
@@ -520,7 +485,7 @@ if ($sendResult === TRUE)
         $getMsgId = $row['max_id'] + 1;
             
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$getUserId."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0', '1')";
+            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', '".$postBodySQL."', CURRENT_TIMESTAMP, '0', '1')";
         
         $gDb->query($sql);    
     }

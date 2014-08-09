@@ -190,7 +190,7 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
                 {
                     $page->addHtml('
-                    <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/messages/messages.php?rol_id='.$role->getValue('rol_id').'"><img
+                    <a class="admIconLink" href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'. THEME_PATH. '/icons/email.png"  alt="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" title="'.$gL10n->get('LST_EMAIL_TO_MEMBERS').'" /></a>&nbsp;');
                 }
         		

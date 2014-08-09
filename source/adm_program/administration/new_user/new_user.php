@@ -84,7 +84,7 @@ while($row = $gDb->fetch_array($usr_result))
 
     if($gPreferences['enable_mail_module'] == 1)
     {
-        $mailLink = '<a href="'.$g_root_path.'/adm_program/modules/messages/messages.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
+        $mailLink = '<a href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a>';
     }
     else
     {

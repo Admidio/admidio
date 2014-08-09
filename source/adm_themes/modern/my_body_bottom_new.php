@@ -31,7 +31,7 @@
             }
             if($gPreferences['enable_mail_module'] == 1 && $gValidLogin == false)
             {
-                $moduleMenu->addItem('email', '/adm_program/modules/messages/messages.php',
+                $moduleMenu->addItem('email', '/adm_program/modules/messages/messages_write.php',
                                     $gL10n->get('SYS_EMAIL'), '/icons/email.png');
             }
             if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'] == 1) && $gValidLogin)
@@ -43,12 +43,12 @@
                 $row = $gDb->num_rows($result);
                 if ($row > 0)
                 {
-                    $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages_list.php',
+                    $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
                                     $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$row.'</span>', '/icons/email.png');
                 }
                 else
                 {
-                    $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages_list.php',
+                    $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
                                     $gL10n->get('SYS_MESSAGES'), '/icons/email.png');
                 }
             }
