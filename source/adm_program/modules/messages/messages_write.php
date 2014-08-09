@@ -65,12 +65,8 @@ if ($gValidLogin && $getMsgType != 'PM' && strlen($gCurrentUser->getValue('EMAIL
 // Update the read status of the message
 if ($getMsgId > 0)
 {
-    $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user1read = '0'
-            WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
-    $gDb->query($sql);
-    
-    $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user2read = '0'
-            WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
+    $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '0' 
+            WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid2 = ".$gCurrentUser->getValue('usr_id');
     $gDb->query($sql);
     
     if($getMsgType == 'PM')

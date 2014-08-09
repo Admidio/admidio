@@ -52,17 +52,6 @@ if ($getMsgType != 'PM')
         $postCarbonCopy = 0;
     }
     
-    // if Role ID is delivered
-	if ($postRoleId > 0)
-    {
-        $actmember = '';
-        if ($postShowMembers > 0)
-        {
-            $actmember = '-'.$postShowMembers;
-        }
-        $postTo = array('groupID: '.$postRoleId.$actmember);
-    }
-    
     // Falls Attachmentgroesse die max_post_size aus der php.ini uebertrifft, ist $_POST komplett leer.
     // Deswegen muss dies ueberprueft werden...
     if (empty($_POST))
@@ -112,7 +101,6 @@ if ($getMsgType == 'EMAIL')
 		'msgfrom'       => $postFrom,
 		'subject'       => $postSubject,
 		'msg_body'      => $postBody,
-		'rol_id'        => $postRoleId,
 		'carbon_copy'   => $postCarbonCopy,
 		'delivery_confirmation' => $postDeliveryConfirmation,
 	);
@@ -369,10 +357,8 @@ if ($getMsgType == 'EMAIL')
     {
         $email->setCopyToSenderFlag();
 
-        // if mail was send to user than show recipient in copy of mail if current user has a valid login
-        // or if the user has the right to view the role then show the recipient list in the copy of the mail
-        if(($postRoleId == 0 && $gValidLogin == true)
-        || ($postRoleId  > 0 && $gCurrentUser->viewRole($postRoleId) == true))
+        // if mail was send to user than show recipients in copy of mail if current user has a valid login
+        if($gValidLogin)
         {
             $email->setListRecipientsFlag();
         }
@@ -389,9 +375,6 @@ if ($getMsgType == 'EMAIL')
     {
         $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
     }
-
-    // prepare body of email with note of sender and homepage
-    $email->setSenderInText($postName, $postFrom, $role->getValue('rol_name'), $postShowMembers);
 
     // load the template and set the new email body with template
     $emailTemplate = admReadTemplateFile("template.html");
@@ -437,8 +420,8 @@ else
         $row = $gDb->fetch_array($result);
         $getMsgId = $row['max_id'] + 1;
         
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '', CURRENT_TIMESTAMP, '0', '1')";
+        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
+            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '', CURRENT_TIMESTAMP, '1')";
     
         $gDb->query($sql);    
         
@@ -446,25 +429,22 @@ else
     else
     {
         $sql = "SELECT MAX(msg_id2) as max_id
-              FROM ". TBL_MESSAGES;
+              FROM ".TBL_MESSAGES." 
+			  where msg_id1 = ".$getMsgId;
     
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
         $PMId2 = $row['max_id'] + 1;
         
-        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user2read = '1', msg_timestamp = CURRENT_TIMESTAMP
-                WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."'";
+        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."', msg_usrid2 = '".$postTo[0]."'
+                WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId;
+
         $gDb->query($sql);
-        
-        $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_user1read = '1', msg_timestamp = CURRENT_TIMESTAMP
-                WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId." and msg_usrid2 = '".$gCurrentUser->getValue('usr_id')."'";
-        
-        $gDb->query($sql);
+
     }
         
-    $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0', '0')";
-    $postBodySQL = '';
+    $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
+            VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
     
     if ($gDb->query($sql)) {
       $sendResult = TRUE;
@@ -484,8 +464,8 @@ if ($sendResult === TRUE)
         $row = $gDb->fetch_array($result);
         $getMsgId = $row['max_id'] + 1;
             
-        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_user1read, msg_user2read) 
-            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', '".$postBodySQL."', CURRENT_TIMESTAMP, '0', '1')";
+        $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
+            VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
         
         $gDb->query($sql);    
     }
@@ -498,41 +478,39 @@ if ($sendResult === TRUE)
 
     // Bei erfolgreichem Versenden wird aus dem NaviObjekt die am Anfang hinzugefuegte URL wieder geloescht...
     $gNavigation->deleteLastUrl();
-    
     // remove also the send-page if not an conversation
-    if ($getMsgId == 0)
-    {
-        $gNavigation->deleteLastUrl();
-    }
+    $gNavigation->deleteLastUrl();
+
     
     // Meldung ueber erfolgreichen Versand und danach weiterleiten
     if($gNavigation->count() > 0)
     {
         $gMessage->setForwardUrl($gNavigation->getUrl());
+		//$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     }
     else
     {
-        $gMessage->setForwardUrl($gHomepage);
+        $gMessage->setForwardUrl($gHomepage, 2000);
     }
     
-    if ($getMsgType != 'PM' && $role->getValue('rol_id') > 0)
+    if ($getMsgType != 'PM')
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name'))));
+        $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
     }
     else
     {
-        $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $postTo));
+        $gMessage->show($gL10n->get('SYS_EMAIL_SEND', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 }
 else
 {
-    if ($getMsgType != 'PM' && $role->getValue('rol_id') > 0)
+    if ($getMsgType != 'PM')
     {
-        $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $gL10n->get('MAI_TO_ROLE', $role->getValue('rol_name')), $sendResult));
+        $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $sendResult));
     }
     else
     {
-        $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $postTo, $sendResult));
+        $gMessage->show($sendResult.'<br />'.$gL10n->get('SYS_EMAIL_NOT_SEND', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'), $sendResult));
     }
 }
 

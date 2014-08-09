@@ -29,11 +29,10 @@ if (!$gValidLogin)
 //SQL to find all unread PM messages
 $sql = "SELECT msg_type, msg_id1, msg_subject, msg_timestamp,
 			CASE WHEN msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usrid2
-			ELSE msg_usrid1 
+			ELSE msg_usrid1
 			END AS user
         FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_id2 = 0 and ((msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." and msg_user1read= 1)
-		 or (msg_usrid2 = ". $gCurrentUser->getValue('usr_id') ." and msg_user2read= 1))
+         WHERE msg_type = 'PM' and msg_id2 = 0 and (msg_usrid2 = ". $gCurrentUser->getValue('usr_id') ." and msg_read= 1)
 		 ORDER BY msg_id1 DESC";
 
 $result = $gDb->query($sql);
@@ -44,17 +43,14 @@ $sql = "SELECT msg_type, msg_id1, msg_subject, msg_timestamp,
 			ELSE msg_usrid1 
 			END AS user
         FROM ". TBL_MESSAGES. "
-         WHERE msg_type = 'PM' and msg_id2 = 0 and ((msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." and msg_user1read= 0)
-		 or (msg_usrid2 = ". $gCurrentUser->getValue('usr_id') ." and msg_user2read= 0))
+         WHERE msg_type = 'PM' and msg_id2 = 0 and ((msg_usrid2 = ". $gCurrentUser->getValue('usr_id') ." and msg_read= 0)
+		 or msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." )
 		 ORDER BY msg_id1 DESC";
 
 $result1 = $gDb->query($sql);
 
 //SQL to find all own Email messages
-$sql = "SELECT msg_type, msg_id1, msg_subject, msg_timestamp,
-			CASE WHEN msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ." THEN msg_usrid2
-			ELSE msg_usrid1 
-			END AS user
+$sql = "SELECT msg_type, msg_id1, msg_subject, msg_timestamp, msg_usrid1 AS user
         FROM ". TBL_MESSAGES. "
          WHERE msg_type = 'EMAIL' and (msg_usrid1 = ". $gCurrentUser->getValue('usr_id') ."
 		 or msg_usrid2 = ". $gCurrentUser->getValue('usr_id') ." )

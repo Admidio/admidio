@@ -703,8 +703,7 @@ CREATE TABLE %PREFIX%_messages
   msg_usrid2 			int(10) 		DEFAULT NULL,
   msg_message 			text 			NOT NULL,
   msg_timestamp 		timestamp 		NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  msg_user1read 		tinyint(1) 		NOT NULL DEFAULT '0',
-  msg_user2read 		tinyint(1) 		NOT NULL DEFAULT '0'
+  msg_read 		        tinyint(1) 		NOT NULL DEFAULT '0'
 )
 engine = InnoDB
 default character set = utf8

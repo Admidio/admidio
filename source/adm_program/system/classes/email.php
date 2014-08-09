@@ -246,53 +246,6 @@ class Email extends PHPMailer
         return TRUE;
     }
     
-    // write a short text with sender informations in text of email
-    public function setSenderInText($senderName, $senderEmail, $roleName, $roleMemberStatus)
-    {
-        global $gL10n, $gValidLogin, $gCurrentOrganization;
-        
-        if($this->emSendAsHTML)
-        {
-            $senderCode = '<a href="mailto:'.$senderEmail.'">'.$senderName.'</a>';
-        }
-        else
-        {
-            $senderCode = $senderName.' ('.$senderEmail.')';
-        }
-        
-        if(strlen($roleName) > 0)
-        {
-            switch($roleMemberStatus)
-            {
-                case 0:
-                    $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ACTIVE', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $roleName);
-                    break;
-                case 1:
-                    $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_FORMER', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $roleName);
-                    break;
-                case 2:
-                    $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_ROLE_ALL', $senderCode, $gCurrentOrganization->getValue('org_homepage'), $roleName);
-                    break;        
-            }            
-        }
-        else
-        {
-            $senderText = $gL10n->get('MAI_EMAIL_SEND_TO_USER', $senderCode, $gCurrentOrganization->getValue('org_homepage'));
-        }
-        
-        if($gValidLogin == false)
-        {
-            $senderText = $senderText."\r\n".$gL10n->get('MAI_SENDER_NOT_LOGGED_IN');
-        }
-    
-        $senderText = $senderText."\r\n".
-        '*****************************************************************************************************************************'.
-        "\r\n"."\r\n";
-        
-        $this->emText = $this->emText.$senderText;
-        $this->emHtmlText = $this->emHtmlText.nl2br($senderText);
-    }
-    
     /** Set the subject of the email
      *  @param $subject A text that should be the subject of the email
      *  @return Returns @b false if the parameter has no text
