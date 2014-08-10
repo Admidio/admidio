@@ -253,6 +253,8 @@ $page->addHtml('
                         $form = new HtmlForm('email_dispatch_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=email_dispatch', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
                         $form->addSelectBox('mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_send_method'], false, false, null, 'MAI_SEND_METHOD_DESC');
+						$form->addCheckbox('mail_into_to', $gL10n->get('MAI_INTO_TO'), $form_values['mail_into_to'], 
+                            FIELD_DEFAULT, null, 'MAI_INTO_TO_DESC');
                         $form->addTextInput('mail_bcc_count', $gL10n->get('MAI_COUNT_BCC'), $form_values['mail_bcc_count'], 6, FIELD_DEFAULT, 'number', null, 'MAI_COUNT_BCC_DESC');
                         $form->addCheckbox('mail_sender_into_to', $gL10n->get('MAI_SENDER_INTO_TO'), $form_values['mail_sender_into_to'], 
                             FIELD_DEFAULT, null, 'MAI_SENDER_INTO_TO_DESC');

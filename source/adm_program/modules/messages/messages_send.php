@@ -339,9 +339,17 @@ if ($getMsgType == 'EMAIL')
     }
 
 	$sendresult = array_map("unserialize", array_unique(array_map("serialize", $receiver)));
+	$receivers = count($sendresult);
 	foreach ($sendresult as $address)
     {
-		$email->addRecipient($address[0], $address[1]);
+        if ( $gPreferences['mail_into_to'] == 1 || $receivers == 1)
+        {
+		    $email->addRecipient($address[0], $address[1]);
+        }
+		else
+		{
+		    $email->addBlindCopy($address[0], $address[1]);
+		}
     }
 
     // add confirmation mail to the sender

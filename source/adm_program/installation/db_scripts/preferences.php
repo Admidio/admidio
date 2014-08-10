@@ -83,6 +83,7 @@ $orga_preferences = array(
 	'mail_bcc_count'			    => '50',
 	'mail_character_encoding'       => 'utf-8',
 	'mail_html_registered_users'    => '1',
+	'mail_into_to'		            => '0',
 	'mail_sender_into_to'		    => '0',
     'mail_sendmail_address'         => '',
     'mail_sendmail_name'            => '',
