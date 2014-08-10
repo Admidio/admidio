@@ -31,17 +31,17 @@ $postBodySQL     = admFuncVariableIsValid($_POST, 'msg_body', 'string', '');
 $postDeliveryConfirmation  = admFuncVariableIsValid($_POST, 'delivery_confirmation', 'boolean', 0);
 $postCaptcha     = admFuncVariableIsValid($_POST, 'captcha', 'string');
 
-//if message not PM it must be Email and then directly check the parameters
+// if message not PM it must be Email and then directly check the parameters
 if ($getMsgType != 'PM')
 {
     $getMsgType      = 'EMAIL';
-    
-    //Stop if mail should be send and mail module is disabled
+
+    // Stop if mail should be send and mail module is disabled
     if($gPreferences['enable_mail_module'] != 1)
     {
             $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
     }
-    
+
     // allow option to send a copy to your email address only for registered users because of spam abuse
     if($gValidLogin)
     {
@@ -51,16 +51,14 @@ if ($getMsgType != 'PM')
     {
         $postCarbonCopy = 0;
     }
-    
-    // Falls Attachmentgroesse die max_post_size aus der php.ini uebertrifft, ist $_POST komplett leer.
-    // Deswegen muss dies ueberprueft werden...
+
+    // if Attachmentsize is higher than max_post_size from php.ini, then $_POST is empty.
     if (empty($_POST))
     {
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
-    
-    // Falls der User nicht eingeloggt ist, aber ein Captcha geschaltet ist,
-    // muss natuerlich der Code ueberprueft werden
+
+    // Check Captcha if enabled and user logged out
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
     {
         if ( !isset($_SESSION['captchacode']) || admStrToUpper($_SESSION['captchacode']) != admStrToUpper($postCaptcha) )
@@ -72,30 +70,30 @@ if ($getMsgType != 'PM')
     
 }
 
-//Stop if pm should be send pm module is disabled
+// Stop if pm should be send pm module is disabled
 if($gPreferences['enable_pm_module'] != 1 && $getMsgType == 'PM')
 {
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
-//if user is logged in then show sender name and email
+// if user is logged in then show sender name and email
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     $postName = $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME');
     $postFrom = $gCurrentUser->getValue('EMAIL');
 }
 
-//if no User is set, he is not able to ask for delivery confirmation 
+// if no User is set, he is not able to ask for delivery confirmation 
 if(!($gCurrentUser->getValue('usr_id')>0 && $gPreferences['mail_delivery_confirmation']==2) && $gPreferences['mail_delivery_confirmation']!=1)
 {
     $postDeliveryConfirmation = 0;
 }
-    
+
 // check if PM or Email and to steps:
 if ($getMsgType == 'EMAIL')
 {
 
-	//put values into SESSION
+	// put values into SESSION
 	$_SESSION['message_request'] = array(
 		'name'          => $postName,
 		'msgfrom'       => $postFrom,
@@ -108,19 +106,17 @@ if ($getMsgType == 'EMAIL')
     if (isset($postTo))
     {
         $receiver = array();
-   
-        //Erst mal ein neues Emailobjekt erstellen...
+
+        // Create new Email Object
         $email = new Email();
-        
-        // und ein Dummy Rollenobjekt dazu
-        $role = new TableRoles($gDb);
-        
+
         foreach ($postTo as $value)
         {
+            // check if role or user is given
             if (strpos($value,':') == true) 
             {
                 $groupsplit = explode( ':', $value);
-                
+
                 if (strpos($groupsplit[1],'-') == true)
                 {
                     $group = explode( '-', $groupsplit[1]);
@@ -131,7 +127,7 @@ if ($getMsgType == 'EMAIL')
                     $group[1] = 0;
                 }
 
-                // wird eine bestimmte Rolle aufgerufen, dann pruefen, ob die Rechte dazu vorhanden sind
+                // check if role rights are granted to the User
                 $sql = 'SELECT rol_mail_this_role, rol_name, rol_id 
                           FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                          WHERE rol_cat_id    = cat_id
@@ -140,10 +136,10 @@ if ($getMsgType == 'EMAIL')
                            AND rol_id = '.$group[0];
                 $result = $gDb->query($sql);
                 $row    = $gDb->fetch_array($result);
-        
-                // Ausgeloggte duerfen nur an Rollen mit dem Flag "alle Besucher der Seite" Mails schreiben
-                // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
-                // Rollen muessen zur aktuellen Organisation gehoeren
+
+                // logged in user is just allowed to send to role with permission
+                // logged out ones just to role with permission level "all visitors"
+                // role must be from actual Organisation
                 if((!$gValidLogin && $row['rol_mail_this_role'] != 3)
                 || ($gValidLogin  && !$gCurrentUser->mailRole($row['rol_id']))
                 || $row['rol_id']  == null)
@@ -151,22 +147,6 @@ if ($getMsgType == 'EMAIL')
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
 
-                $role->readDataById($group[0]);
-
-                // Falls der User eingeloggt ist checken ob er das recht hat der Rolle eine Mail zu schicken
-                if ($gValidLogin && !$gCurrentUser->mailRole($row['rol_id']))
-                {
-                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-                }
-                // Falls der User nicht eingeloggt ist, muss der Wert 3 sein
-                if (!$gValidLogin && $role->getValue('rol_mail_this_role') != 3)
-                {
-                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
-                }
-                
-                // Rolle wurde uebergeben, dann alle Mitglieder auslesen (ausser dem Sender selber)
-                // je nach Einstellung mit oder nur Ehemalige
-                
                 if($group[1] == 1)
                 {
                     // only former members
@@ -183,7 +163,7 @@ if ($getMsgType == 'EMAIL')
                     $sqlConditions = ' AND mem_begin  <= \''.DATE_NOW.'\'
                                        AND mem_end     > \''.DATE_NOW.'\' ';
                 }
-                
+
                 $sql   = 'SELECT first_name.usd_value as first_name, last_name.usd_value as last_name, 
                                  email.usd_value as email, rol_name
                             FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
@@ -207,15 +187,16 @@ if ($getMsgType == 'EMAIL')
                              AND mem_usr_id  = usr_id
                              AND usr_valid   = 1 '.
                                  $sqlConditions;
-        
+
                 // Wenn der User eingeloggt ist, wird die UserID im Statement ausgeschlossen, 
-                //damit er die Mail nicht an sich selber schickt.
+                // damit er die Mail nicht an sich selber schickt.
+				// *******************************************************
                 if ($gValidLogin)
                 {
                     $sql =$sql. ' AND usr_id <> '. $gCurrentUser->getValue('usr_id');
-                } 
+                }
                 $result = $gDb->query($sql);
-        
+
                 if($gDb->num_rows($result) > 0)
                 {
                     // normaly we need no To-address and set "undisclosed recipients", but if 
@@ -225,7 +206,7 @@ if ($getMsgType == 'EMAIL')
                         // always fill recipient if preference is set to prevent problems with provider
                         $email->addRecipient($postFrom,$postName);
                     }
-                    
+
                     // all role members will be attached as BCC
                     while ($row = $gDb->fetch_object($result))
                     {
@@ -235,20 +216,16 @@ if ($getMsgType == 'EMAIL')
                 }
                 else
                 {
-                    // Falls in der Rolle kein User mit gueltiger Mailadresse oder die Rolle gar nicht in der Orga
-                    // existiert, muss zumindest eine brauchbare Fehlermeldung präsentiert werden...
+                    // error if role has no email addresses or role ID is not existing
                     $gMessage->show($gL10n->get('MAI_ROLE_NO_EMAILS'));
                 }
 
-                
-                
-                
             }
             else
             {
                 $user = new User($gDb, $gProfileFields, $value);
                 
-                // besitzt der User eine gueltige E-Mail-Adresse
+                // error if no valid Email for given user ID
                 if (!strValidCharacters($user->getValue('EMAIL'), 'email'))
                 {
                     $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
@@ -257,7 +234,6 @@ if ($getMsgType == 'EMAIL')
                 $receiver[] = array($user->getValue('EMAIL'), $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME'));
             }
         }
-        
     }
     else
     {
@@ -265,18 +241,16 @@ if ($getMsgType == 'EMAIL')
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    // aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
-    // Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
+    // save page in navigation - to have a check for a navigation back.
     $gNavigation->addUrl(CURRENT_URL);
 
-
-    //Nun der Mail die Absenderangaben,den Betreff und das Attachment hinzufuegen...
+    // check if name is given
     if(strlen($postName) == 0)
     {
         $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
     }
 
-    //Absenderangaben checken falls der User eingeloggt ist, damit ein paar schlaue User nicht einfach die Felder aendern koennen...
+    // check sending attributes for user, to be sure that they are correct
     if ( $gValidLogin 
     && (  $postFrom != $gCurrentUser->getValue('EMAIL') 
        || $postName != $gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME')) )
@@ -284,46 +258,46 @@ if ($getMsgType == 'EMAIL')
         $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
     }
 
-    //Absenderangaben setzen
+    // set sending address
     if ($email->setSender($postFrom,$postName))
     {
-        //Betreff setzen
+        // set subject
         if ($email->setSubject($postSubject))
         {
-            //Pruefen ob moeglicher Weise ein Attachment vorliegt
+            // check for attachment
             if (isset($_FILES['userfile']))
             {
-                //noch mal schnell pruefen ob der User wirklich eingelogt ist...
+                // final check if user is logged in
                 if (!$gValidLogin)
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
                 }
                 $attachmentSize = 0;
-                // Nun jedes Attachment
+                // add now every attachment
                 for($currentAttachmentNo = 0; isset($_FILES['userfile']['name'][$currentAttachmentNo]) == true; $currentAttachmentNo++)
                 {
-                    //Pruefen ob ein Fehler beim Upload vorliegt
+                    // check if Upload was OK
                     if (($_FILES['userfile']['error'][$currentAttachmentNo] != 0) &&  ($_FILES['userfile']['error'][$currentAttachmentNo] != 4))
                     {
                         $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                     }
-                    //Wenn ein Attachment vorliegt dieses der Mail hinzufuegen
+                    
                     if ($_FILES['userfile']['error'][$currentAttachmentNo] == 0)
                     {
-                        // pruefen, ob die Anhanggroesse groesser als die zulaessige Groesse ist
+                        // check the size of the attachment
                         $attachmentSize = $attachmentSize + $_FILES['userfile']['size'][$currentAttachmentNo];
                         if($attachmentSize > $email->getMaxAttachementSize("b"))
                         {
                             $gMessage->show($gL10n->get('MAI_ATTACHMENT_TO_LARGE'));
                         }
-                        
-                        //Falls der Dateityp nicht bestimmt ist auf Standard setzen
+
+                        // set filetyp to standart if not given
                         if (strlen($_FILES['userfile']['type'][$currentAttachmentNo]) <= 0)
                         {
                             $_FILES['userfile']['type'][$currentAttachmentNo] = 'application/octet-stream';                        
                         }
-                        
-                        //Datei anhängen
+
+                        // add the attachment to the mail
                         try
                         {
                             $email->AddAttachment($_FILES['userfile']['tmp_name'][$currentAttachmentNo], $_FILES['userfile']['name'][$currentAttachmentNo], $encoding = 'base64', $_FILES['userfile']['type'][$currentAttachmentNo]);
@@ -331,7 +305,7 @@ if ($getMsgType == 'EMAIL')
                         catch (phpmailerException $e)
                         {
                             $gMessage->show($e->errorMessage());
-                        }                  
+                        }             
                     }
                 }
             }
@@ -352,7 +326,7 @@ if ($getMsgType == 'EMAIL')
         $email->sendDataAsHtml();
     }
 
-    // Falls eine Kopie benoetigt wird, das entsprechende Flag im Mailobjekt setzen
+    // set flag if copy should be send to sender
     if (isset($postCarbonCopy) && $postCarbonCopy == true)
     {
         $email->setCopyToSenderFlag();
@@ -363,14 +337,14 @@ if ($getMsgType == 'EMAIL')
             $email->setListRecipientsFlag();
         }
     }
-	
+
 	$sendresult = array_map("unserialize", array_unique(array_map("serialize", $receiver)));
 	foreach ($sendresult as $address)
     {
 		$email->addRecipient($address[0], $address[1]);
     }
-	
-    // Falls eine Lesebestätigung angefordert wurde
+
+    // add confirmation mail to the sender
     if($postDeliveryConfirmation == 1)
     {
         $email->ConfirmReadingTo = $gCurrentUser->getValue('EMAIL');
@@ -380,20 +354,21 @@ if ($getMsgType == 'EMAIL')
     $emailTemplate = admReadTemplateFile("template.html");
     $emailTemplate = str_replace("#message#",$postBody,$emailTemplate);
 
-    //set Text
+    // set Text
     $email->setText($emailTemplate);
 
-    //Nun kann die Mail endgueltig versendet werden...
+    // finally send the mail
     $sendResult = $email->sendEmail();
 
 }
+// ***** PM *****
 else
 {
-	
-	//usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
+
+	// get user data from Database
     $user = new User($gDb, $gProfileFields, $postTo[0]);
 
-    // darf auf die User-Id zugegriffen werden    
+    // check if it is allowed to send to this user    
     if(($gCurrentUser->editUsers() == false && isMember($user->getValue('usr_id')) == false)|| strlen($user->getValue('usr_id')) == 0 )
     {
             $gMessage->show($gL10n->get('SYS_USER_ID_NOT_FOUND'));
@@ -405,47 +380,44 @@ else
         $gMessage->show($gL10n->get('SYS_USER_NO_EMAIL', $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME')));
     }
 
-    // aktuelle Seite im NaviObjekt speichern. Dann kann in der Vorgaengerseite geprueft werden, ob das
-    // Formular mit den in der Session gespeicherten Werten ausgefuellt werden soll...
+    // save page in navigation - to have a check for a navigation back.
     $gNavigation->addUrl(CURRENT_URL);
 
     if ($getMsgId == 0)
     {
         $PMId2 = 1;
-        
+
         $sql = "SELECT MAX(msg_id1) as max_id
               FROM ". TBL_MESSAGES;
-    
+
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
         $getMsgId = $row['max_id'] + 1;
-        
+
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
             VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '', CURRENT_TIMESTAMP, '1')";
-    
-        $gDb->query($sql);    
-        
+
+        $gDb->query($sql);
     }
     else
     {
         $sql = "SELECT MAX(msg_id2) as max_id
               FROM ".TBL_MESSAGES." 
 			  where msg_id1 = ".$getMsgId;
-    
+
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
         $PMId2 = $row['max_id'] + 1;
-        
+
         $sql = "UPDATE ". TBL_MESSAGES. " SET  msg_read = '1', msg_timestamp = CURRENT_TIMESTAMP, msg_usrid1 = '".$gCurrentUser->getValue('usr_id')."', msg_usrid2 = '".$postTo[0]."'
                 WHERE msg_id2 = 0 and msg_id1 = ".$getMsgId;
 
         $gDb->query($sql);
-
     }
-        
+
     $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
             VALUES ('".$getMsgType."', '".$getMsgId."', '".$PMId2."', '', '".$gCurrentUser->getValue('usr_id')."', '".$postTo[0]."', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
-    
+
     if ($gDb->query($sql)) {
       $sendResult = TRUE;
     }
@@ -459,14 +431,14 @@ if ($sendResult === TRUE)
     {
          $sql = "SELECT MAX(msg_id1) as max_id
           FROM ". TBL_MESSAGES;
-    
+
         $result = $gDb->query($sql);
         $row = $gDb->fetch_array($result);
         $getMsgId = $row['max_id'] + 1;
-            
+
         $sql = "INSERT INTO ". TBL_MESSAGES. " (msg_type, msg_id1, msg_id2, msg_subject, msg_usrid1, msg_usrid2, msg_message, msg_timestamp, msg_read) 
             VALUES ('".$getMsgType."', '".$getMsgId."', 0, '".$postSubjectSQL."', '".$gCurrentUser->getValue('usr_id')."', '', '".$postBodySQL."', CURRENT_TIMESTAMP, '0')";
-        
+
         $gDb->query($sql);    
     }
 
@@ -476,23 +448,20 @@ if ($sendResult === TRUE)
         unset($_SESSION['captchacode']);
     }
 
-    // Bei erfolgreichem Versenden wird aus dem NaviObjekt die am Anfang hinzugefuegte URL wieder geloescht...
+    // after sending remove the actual Page from the NaviObject and remove also the send-page
     $gNavigation->deleteLastUrl();
-    // remove also the send-page if not an conversation
     $gNavigation->deleteLastUrl();
-
     
-    // Meldung ueber erfolgreichen Versand und danach weiterleiten
+    // message if sending was OK
     if($gNavigation->count() > 0)
     {
-        $gMessage->setForwardUrl($gNavigation->getUrl());
-		//$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
+		$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
     }
     else
     {
         $gMessage->setForwardUrl($gHomepage, 2000);
     }
-    
+
     if ($getMsgType != 'PM')
     {
         $gMessage->show($gL10n->get('SYS_EMAIL_SEND'));
