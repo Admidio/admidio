@@ -23,7 +23,6 @@
 require_once('../../system/common.php');
 
 $formerMembers = 0;
-$recept_number = 3;
 
 // Initialize and check the parameters
 $getMsgType     = admFuncVariableIsValid($_GET, 'msg_type', 'string', '');
@@ -86,6 +85,12 @@ if ($getMsgId > 0)
 
     $message_result = $gDb->query($sql);
 
+}
+
+$recept_number = 1;
+if ($gPreferences['mail_max_receiver'] > 0)
+{
+    $recept_number = $gPreferences['mail_max_receiver'];
 }
 
 $list = array();
