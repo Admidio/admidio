@@ -146,6 +146,8 @@
 	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="todo">Fehler - Nachricht wurde nicht gesendet an:</text>
     <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="todo">Private Nachrichten aktivieren</text>
     <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="todo">Private Nachrichten können über diese Einstellung komplett deaktiviert werden. Das Modul ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: Deaktiviert)</text>
+	<text id="MAI_INTO_TO" development="new" translation="edited">Senden in TO Feld und nicht im Feld BCC</text>
+    <text id="MAI_INTO_TO_DESC" development="new" translation="edited">Wenn eine Email an mehr als eine Person geht dann werden mit diesem Setting die Adressen ins TO Feld anstatt BCC geschrieben.</text>
 </version>
 <version id="2.4.5" translator="Markus Faßbender">
     <text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</text>

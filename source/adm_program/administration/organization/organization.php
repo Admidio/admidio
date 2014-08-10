@@ -253,8 +253,6 @@ $page->addHtml('
                         $form = new HtmlForm('email_dispatch_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=email_dispatch', $page, 'default', false, 'form-preferences');
                         $selectBoxEntries = array('phpmail' => $gL10n->get('MAI_PHP_MAIL'), 'SMTP' => $gL10n->get('MAI_SMTP'));
                         $form->addSelectBox('mail_send_method', $gL10n->get('MAI_SEND_METHOD'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_send_method'], false, false, null, 'MAI_SEND_METHOD_DESC');
-						$form->addCheckbox('mail_into_to', $gL10n->get('MAI_INTO_TO'), $form_values['mail_into_to'], 
-                            FIELD_DEFAULT, null, 'MAI_INTO_TO_DESC');
                         $form->addTextInput('mail_bcc_count', $gL10n->get('MAI_COUNT_BCC'), $form_values['mail_bcc_count'], 6, FIELD_DEFAULT, 'number', null, 'MAI_COUNT_BCC_DESC');
                         $form->addCheckbox('mail_sender_into_to', $gL10n->get('MAI_SENDER_INTO_TO'), $form_values['mail_sender_into_to'], 
                             FIELD_DEFAULT, null, 'MAI_SENDER_INTO_TO_DESC');
@@ -587,6 +585,7 @@ $page->addHtml('
                         $form->addCheckbox('enable_mail_module', $gL10n->get('MAI_ACTIVATE_EMAIL_MODULE'), $form_values['enable_mail_module'], FIELD_DEFAULT, null, 'MAI_ACTIVATE_EMAIL_MODULE_DESC');
                         $form->addCheckbox('enable_pm_module', $gL10n->get('MSG_ACTIVATE_PM_MODULE'), $form_values['enable_pm_module'], FIELD_DEFAULT, null, 'MSG_ACTIVATE_PM_MODULE_DESC');
                         $form->addCheckbox('enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_mail_captcha'], FIELD_DEFAULT, null, 'MAI_SHOW_CAPTCHA_DESC');
+						$form->addCheckbox('mail_into_to', $gL10n->get('MAI_INTO_TO'), $form_values['mail_into_to'], FIELD_DEFAULT, null, 'MAI_INTO_TO_DESC');
                         $form->addTextInput('max_email_attachment_size', $gL10n->get('MAI_ATTACHMENT_SIZE').' (KB)', $form_values['max_email_attachment_size'], 6, FIELD_DEFAULT, 'number', null, 'MAI_ATTACHMENT_SIZE_DESC');
                         $form->addTextInput('mail_sendmail_address', $gL10n->get('MAI_SENDER_EMAIL'), $form_values['mail_sendmail_address'], 50, FIELD_DEFAULT, 'text', null, array('MAI_SENDER_EMAIL_ADDRESS_DESC', $_SERVER['HTTP_HOST']));
                         $form->addTextInput('mail_sendmail_name', $gL10n->get('MAI_SENDER_NAME'), $form_values['mail_sendmail_name'], 50, FIELD_DEFAULT, 'text', null, 'MAI_SENDER_NAME_DESC');

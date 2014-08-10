@@ -98,7 +98,7 @@ case 1:
                 break;
 
             case 'email_dispatch':
-                $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth', 'mail_into_to');
+                $checkboxes = array('mail_sender_into_to', 'mail_smtp_auth');
                 break;
                 
             case 'system_notification':
@@ -137,7 +137,7 @@ case 1:
                 break;
             
             case 'messages':
-                $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha', 'mail_html_registered_users');
+                $checkboxes = array('enable_mail_module', 'enable_pm_module', 'enable_mail_captcha', 'mail_html_registered_users', 'mail_into_to');
 
                 if(strlen($_POST['mail_sendmail_address']) > 0)
                 {
