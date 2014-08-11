@@ -330,17 +330,21 @@ class TableFolder extends TableAccess
             }
 
             //Jetzt noch pruefen ob der Ordner physikalisch vorhanden ist
-            if (file_exists(SERVER_PATH. $row_folders->fol_path. '/'. $row_folders->fol_name)) {
+            if (file_exists(SERVER_PATH. $row_folders->fol_path. '/'. $row_folders->fol_name)) 
+            {
                 $folderExists = true;
             }
-            else {
+            else 
+            {
                 $folderExists = false;
 
-                if ($gCurrentUser->editDownloadRight()) {
+                if ($gCurrentUser->editDownloadRight()) 
+                {
                     //falls der Ordner physikalisch nicht existiert wird er nur im Falle von AdminRechten dem Array hinzugefuegt
                     $addToArray = true;
                 }
-                else {
+                else 
+                {
                     $addToArray = false;
                 }
             }

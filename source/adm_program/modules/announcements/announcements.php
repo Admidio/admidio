@@ -62,7 +62,7 @@ if($gPreferences['enable_rss'] == 1)
     $page->addRssFile($g_root_path.'/adm_program/modules/announcements/rss_announcements.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 };
 
-$page->addJavascript('$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
+$page->addJavascript('$("icon-link-delete").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
 
 $page->addHeadline($getHeadline);
 
@@ -141,7 +141,7 @@ else
                         if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
                         {
                             $page->addHtml('
-                            <a class="icon-link" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
+                            <a class="icon-link icon-link-delete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
                                 $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                         }    

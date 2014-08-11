@@ -279,8 +279,7 @@ class HtmlPage
         {
             $headerContent .= '<script type="text/javascript"><!-- 
                 $(document).ready(function(){
-                    $("[data-toggle=tooltip]").tooltip();
-                    $(".icon-information").tooltip();
+                    $(".icon-information, .icon-link img, [data-toggle=tooltip]").tooltip();
                     '.$this->javascriptContentExecute.'
                 });
             --></script>';

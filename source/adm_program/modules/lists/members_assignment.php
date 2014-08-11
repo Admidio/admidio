@@ -305,13 +305,13 @@ else
     
     // create array with all column heading values
     $columnHeading = array(
-        '<img class="iconInformation"
+        '<img class="icon-information"
             src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
             title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
         $gL10n->get('SYS_MEMBER'),
         $gL10n->get('SYS_LASTNAME'),
         $gL10n->get('SYS_FIRSTNAME'),
-        '<img class="iconInformation" src="'. THEME_PATH. '/icons/map.png"
+        '<img class="icon-information" src="'. THEME_PATH. '/icons/map.png"
             alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
         $gL10n->get('SYS_BIRTHDAY'),
         $htmlLeaderColumn);
@@ -365,7 +365,7 @@ else
 
         if(strlen($addressText) > 0)
         {
-            $htmlAddress = '<img class="iconInformation" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
+            $htmlAddress = '<img class="icon-information" src="'. THEME_PATH.'/icons/map.png" alt="'.$addressText.'" title="'.$addressText.'" />';
         }
         
         //Haekchen setzen ob jemand Leiter ist oder nicht
@@ -389,7 +389,7 @@ else
         
         // create array with all column values
         $columnValues = array(
-            '<img class="iconInformation" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
+            '<img class="icon-information" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
             $htmlMemberStatus,
             $user['last_name'],
             $user['first_name'],
