@@ -196,9 +196,8 @@ foreach($_POST as $key => $value)
 
 // alle Daten nun speichern
 $ret_code = $gCurrentOrganization->save();
-if($ret_code != 0)
+if($ret_code = 0)
 {
-    $gCurrentOrganization->clear();
     $gMessage->show($gL10n->get('SYS_ERROR_DATABASE_ACCESS', $ret_code));
 }
 
