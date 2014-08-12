@@ -420,6 +420,11 @@ input[data-provide="datepicker"], input[type="number"] {
   cursor: pointer;
 }
 
+.table tbody > tr > td {
+	word-break:         break-all;
+	word-wrap:          break-word;
+}
+
 .table-hover > tbody > tr:hover > td {
     background-repeat: repeat-x;
     background-color: #a8d9df;
