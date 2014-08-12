@@ -191,7 +191,7 @@ case 1:
         {
             if(strpos($key, 'org_') === 0)
             {
-                $gCurrentOrganization->setValue($key, $value);
+				$gCurrentOrganization->setValue($key, $value);
             }
             elseif(strpos($key, 'SYSMAIL_') === 0)
             {
@@ -216,9 +216,8 @@ case 1:
 
     // alle Daten nun speichern
     $ret_code = $gCurrentOrganization->save();
-    if($ret_code != 0)
+    if($ret_code = 0)
     {
-        $gCurrentOrganization->clear();
         $gMessage->show($gL10n->get('SYS_ERROR_DATABASE_ACCESS', $ret_code));
     }
 
