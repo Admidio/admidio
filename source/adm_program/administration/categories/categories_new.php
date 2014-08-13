@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Kategorien anlegen und bearbeiten
+ * Create and edit categories
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,13 +8,13 @@
  *
  * Parameters:
  *
- * cat_id: ID der Rollen-Kategorien, die bearbeitet werden soll
- * type  : Typ der Kategorie, die angelegt werden sollen
- *         ROL = Rollenkategorien
- *         LNK = Linkkategorien
- *         USF = Profilfelder
- *         DAT = Termine
- * title : Übergabe des Synonyms für Kategorie.
+ * cat_id: Id of the category that should be edited
+ * type  : Type of categories that could be maintained
+ *         ROL = Categories for roles
+ *         LNK = Categories for weblinks
+ *         USF = Categories for profile fields
+ *         DAT = Calendars for events
+ * title : Parameter for the synonym of the categorie
  *
  ****************************************************************************/
 
@@ -44,7 +44,17 @@ elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$gNavigation->addUrl(CURRENT_URL);
+// set headline of the script
+if($getCatId > 0)
+{
+    $headline = $gL10n->get('SYS_EDIT_VAR', $getTitle);
+}
+else
+{
+    $headline = $gL10n->get('SYS_CREATE_VAR', $getTitle);
+}
+
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // UserField-objekt anlegen
 $category = new TableCategory($gDb);
@@ -73,136 +83,56 @@ if(isset($_SESSION['categories_request']))
     unset($_SESSION['categories_request']);
 }
 
-// Systemkategorien duerfen nicht umbenannt werden
-$html_disabled = '';
-$field_focus   = 'cat_name';
+// create html page object
+$page = new HtmlPage();
+
+// show back link
+$page->addHtml($gNavigation->getHtmlBackButton());
+
+// add headline and title of module
+$page->addHeadline($headline);
+
+// show form
+$form = new HtmlForm('categories_edit_form', $g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
+
+// systemcategories should not be renamed
+$fieldTypeCatName = FIELD_MANDATORY;
 if($category->getValue('cat_system') == 1)
 {
-    $html_disabled = ' disabled="disabled" ';
-    $field_focus   = 'btn_save';
+    $fieldTypeCatName = FIELD_DISABLED;
 }
 
-// Html-Kopf ausgeben
-if($getCatId > 0)
+$form->addTextInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'), 100, $fieldTypeCatName);
+
+if($getType == 'USF')
 {
-    $gLayout['title']  = $gL10n->get('SYS_EDIT_VAR', $getTitle);
+    // if current organization has a parent organization or is child organizations then show option to set this category to global
+    if($category->getValue('cat_system') == 0
+    && $gCurrentOrganization->countAllRecords() > 1)
+    {
+        // show all organizations where this organization is mother or child organization
+        $organizations = '- '.$gCurrentOrganization->getValue('org_longname').',<br />- ';
+        $organizations .= implode(',<br />- ', $gCurrentOrganization->getOrganizationsInRelationship(true, true, true));
+        
+        $value = 0;
+        if($category->getValue('cat_org_id') == 0)
+        {
+            $value = 1;
+        }
+        
+        $form->addCheckbox('show_in_several_organizations', $gL10n->get('SYS_ENTRY_MULTI_ORGA'), $value, FIELD_DEFAULT, array('SYS_DATA_GLOBAL', $organizations));
+    }
 }
 else
 {
-    $gLayout['title']  = $gL10n->get('SYS_CREATE_VAR', $getTitle);
+    $form->addCheckbox('cat_hidden', $gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle), $category->getValue('cat_hidden'), FIELD_DEFAULT, null, null, 'user_key.png');
 }
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $("#'.$field_focus.'").focus();
-        }); 
-    //--></script>';
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+$form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $getTitle), $category->getValue('cat_default'), FIELD_DEFAULT, null, null, 'star.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addHtml(admFuncShowCreateChangeInfoById($category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'), $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')));
 
-// Html des Modules ausgeben
-echo '
-<form action="'.$g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1" method="post">
-<div class="formLayout" id="edit_categories_form">
-    <div class="formHead">'. $gLayout['title']. '</div>
-    <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt><label for="cat_name">'.$gL10n->get('SYS_NAME').':</label></dt>
-                    <dd>
-                        <input type="text" id="cat_name" name="cat_name" '.$html_disabled.' style="width: 90%;" maxlength="100" value="'. $category->getValue('cat_name', 'database'). '" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>';
-
-            if($getType == 'USF')
-            {
-                // besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Kategorie fuer alle Organisationen sichtbar gemacht werden
-                if($category->getValue('cat_system') == 0
-                && $gCurrentOrganization->countAllRecords() > 1)
-                {
-                    echo '
-                    <li>
-                        <dl>
-                            <dt>&nbsp;</dt>
-                            <dd>
-                                <input type="checkbox" id="show_in_several_organizations" name="show_in_several_organizations" ';
-                                if($category->getValue('cat_org_id') == 0)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                                <label for="show_in_several_organizations">'.$gL10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
-                                <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=CAT_CATEGORY_GLOBAL&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=CAT_CATEGORY_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
-                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
-                            </dd>
-                        </dl>
-                    </li>';
-                }
-            }
-            else
-            {
-                echo '
-                <li>
-                    <dl>
-                        <dt>
-                            <label for="cat_hidden"><img src="'. THEME_PATH. '/icons/user_key.png" alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'" /></label>
-                        </dt>
-                        <dd>
-                            <input type="checkbox" id="cat_hidden" name="cat_hidden" ';
-                                if($category->getValue('cat_hidden') == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            <label for="cat_hidden">'.$gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle).'</label>
-                        </dd>
-                    </dl>
-                </li>';
-            }
-			echo '
-			<li>
-				<dl>
-					<dt>
-						<label for="cat_default"><img src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" /></label>
-					</dt>
-					<dd>
-						<input type="checkbox" id="cat_default" name="cat_default" ';
-							if($category->getValue('cat_default') == 1)
-							{
-								echo ' checked="checked" ';
-							}
-							echo ' value="1" />
-						<label for="cat_default">'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'</label>
-					</dd>
-				</dl>
-			</li>
-		</ul>
-        <hr />';
-
-        // show informations about user who creates the recordset and changed it
-        echo admFuncShowCreateChangeInfoById($category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'), $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')).'
-        
-        <div class="formSubmit">
-            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-        </div>
-    </div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

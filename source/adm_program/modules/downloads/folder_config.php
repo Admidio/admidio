@@ -181,9 +181,9 @@ $htmlRoleSelection = '
     </div>
     <div class="col-sm-2" style="text-align: center;">
         <br /><br /><br />
-        <a class="admIconLink" href="javascript:removeRoles()"><img
+        <a class="icon-link" href="javascript:removeRoles()"><img
             src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_REMOVE_ROLE').'" title="'.$gL10n->get('SYS_REMOVE_ROLE').'" /></a>
-        <a class="admIconLink" href="javascript:addRoles()"><img 
+        <a class="icon-link" href="javascript:addRoles()"><img 
             src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_ADD_ROLE').'" title="'.$gL10n->get('SYS_ADD_ROLE').'" /></a>
     </div>
     <div class="col-sm-5 form-group">

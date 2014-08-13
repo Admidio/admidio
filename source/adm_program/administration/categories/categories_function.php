@@ -8,16 +8,16 @@
  *
  * Parameters:
  *
- * cat_id: ID der Rollen-Kategorien
- * type :  Typ der Kategorie, die angelegt werden sollen
- *         ROL = Rollenkategorien
- *         LNK = Linkkategorien
- *         USF = Profilfelder
- *         DAT = Termine
- * mode:   1 - Kategorie anlegen oder updaten
- *         2 - Kategorie loeschen
- *         4 - Reihenfolge fuer die uebergebene usf_id anpassen
- * sequence: neue Reihenfolge fuer die uebergebene usf_id
+ * cat_id: Id of the category that should be edited
+ * type  : Type of categories that could be maintained
+ *         ROL = Categories for roles
+ *         LNK = Categories for weblinks
+ *         USF = Categories for profile fields
+ *         DAT = Calendars for events
+ * mode  : 1 - Create or edit categories
+ *         2 - Delete category
+ *         4 - Change sequence for parameter cat_id
+ * sequence: New sequence for the parameter cat_id
  *
  *****************************************************************************/
 

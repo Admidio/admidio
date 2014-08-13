@@ -620,7 +620,7 @@ $page->addHtml('
             || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
             {
                 $page->addHtml('
-                <a class="admIconLink" href="javascript:send(\'save\');"><img
+                <a class="icon-link" href="javascript:send(\'save\');"><img
                     src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" title="'.$gL10n->get('LST_SAVE_CONFIGURATION').'" /></a>');
             }
 
@@ -639,7 +639,7 @@ $page->addHtml('
                     $icon_text = $gL10n->get('LST_SAVE_CONFIGURATION');
                 }
                 $page->addHtml('
-                <a class="admIconLink" href="javascript:send(\'save_as\');"><img
+                <a class="icon-link" href="javascript:send(\'save_as\');"><img
                     src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$icon_text.'" title="'.$icon_text.'" /></a>');
             }
 
@@ -648,7 +648,7 @@ $page->addHtml('
             || ($gCurrentUser->getValue('usr_id') == $list->getValue('lst_usr_id') && strlen($list->getValue('lst_name')) > 0))
             {
                 $page->addHtml('
-                <a class="admIconLink" href="javascript:send(\'delete\');"><img
+                <a class="icon-link" href="javascript:send(\'delete\');"><img
                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" title="'.$gL10n->get('LST_DELETE_CONFIGURATION').'" /></a>');
             }
 
@@ -656,7 +656,7 @@ $page->addHtml('
             if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 0 && strlen($list->getValue('lst_name')) > 0)
             {
                 $page->addHtml('
-                <a class="admIconLink" href="javascript:send(\'system\');"><img
+                <a class="icon-link" href="javascript:send(\'system\');"><img
                     src="'. THEME_PATH. '/icons/list_global.png" alt="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" title="'.$gL10n->get('LST_CONFIGURATION_ALL_USERS').'" /></a>');
             }
             
@@ -664,7 +664,7 @@ $page->addHtml('
             if($gCurrentUser->isWebmaster() && $list->getValue('lst_global') == 1)
             {
                 $page->addHtml('
-                <a class="admIconLink" href="javascript:send(\'default\');"><img
+                <a class="icon-link" href="javascript:send(\'default\');"><img
                     src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" title="'.$gL10n->get('LST_NEW_DEFAULT_CONFIGURATION').'" /></a>');
             }
             
