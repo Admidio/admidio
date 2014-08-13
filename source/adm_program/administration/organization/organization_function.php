@@ -213,16 +213,12 @@ case 1:
             }
         }
     }
-
+	
     // alle Daten nun speichern
-    $ret_code = $gCurrentOrganization->save();
-    if($ret_code = 0)
-    {
-        $gMessage->show($gL10n->get('SYS_ERROR_DATABASE_ACCESS', $ret_code));
-    }
-
-    $gCurrentOrganization->setPreferences($gPreferences);
-
+	$gCurrentOrganization->save();
+	
+	$gCurrentOrganization->setPreferences($gPreferences);
+	
     // refresh language if neccessary
     if($gL10n->getLanguage() != $gPreferences['system_language'])
     {
