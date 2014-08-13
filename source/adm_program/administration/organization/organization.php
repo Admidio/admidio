@@ -584,6 +584,7 @@ $page->addHtml('
                         $form = new HtmlForm('messages_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=messages', $page, 'default', false, 'form-preferences');
                         $form->addCheckbox('enable_mail_module', $gL10n->get('MAI_ACTIVATE_EMAIL_MODULE'), $form_values['enable_mail_module'], FIELD_DEFAULT, null, 'MAI_ACTIVATE_EMAIL_MODULE_DESC');
                         $form->addCheckbox('enable_pm_module', $gL10n->get('MSG_ACTIVATE_PM_MODULE'), $form_values['enable_pm_module'], FIELD_DEFAULT, null, 'MSG_ACTIVATE_PM_MODULE_DESC');
+						$form->addCheckbox('enable_chat_module', $gL10n->get('MSG_ACTIVATE_CHAT_MODULE'), $form_values['enable_chat_module'], FIELD_DEFAULT, null, 'MSG_ACTIVATE_CHAT_MODULE_DESC');
                         $form->addCheckbox('enable_mail_captcha', $gL10n->get('ORG_ENABLE_CAPTCHA'), $form_values['enable_mail_captcha'], FIELD_DEFAULT, null, 'MAI_SHOW_CAPTCHA_DESC');
 						$form->addTextInput('mail_max_receiver', $gL10n->get('MAI_MAX_RECEIVER'), $form_values['mail_max_receiver'], 4, FIELD_DEFAULT, 'number', null, 'MAI_MAX_RECEIVER_DESC');
 						$form->addCheckbox('mail_into_to', $gL10n->get('MAI_INTO_TO'), $form_values['mail_into_to'], FIELD_DEFAULT, null, 'MAI_INTO_TO_DESC');

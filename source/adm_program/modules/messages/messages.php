@@ -14,7 +14,7 @@
 require_once('../../system/common.php');
 
 // check if the call of the page was allowed
-if ($gPreferences['enable_pm_module'] != 1 && $gPreferences['enable_mail_module'] != 1)
+if ($gPreferences['enable_pm_module'] != 1 && $gPreferences['enable_mail_module'] != 1 && $gPreferences['enable_chat_module'] != 1)
 {
     // message if the sending of messages is not allowed
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
@@ -76,6 +76,13 @@ if ($gPreferences['enable_pm_module'] == 1 )
 {
     $EmailMenu->addItem('admMenuItemNewPm', $g_root_path.'/adm_program/modules/messages/messages_write.php?msg_type=PM', $gL10n->get('PMS_SEND_PM'), '/email.png');
 }
+
+// link to Chat
+if ($gPreferences['enable_chat_module'] == 1 )
+{
+    $EmailMenu->addItem('admMenuItemNewChat', $g_root_path.'/adm_program/modules/messages/messages_chat.php', $gL10n->get('MSG_CHAT'), '/chat.png');
+}
+
 $EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=messages', 
 					$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 

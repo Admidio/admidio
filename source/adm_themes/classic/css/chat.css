@@ -1,0 +1,27 @@
+
+#chat-area {
+    height: 350px;
+    overflow: auto;
+    border: 1px solid #666;
+    padding: 20px;
+    background: white; }
+	
+#chat-area span {
+    color: white;
+    background: #333;
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin: 0 5px 0 0; }
+	
+#chat-area time {
+	font-size: 75%;
+    padding: 4px 8px;
+    border-radius: 5px;
+    margin: 0 5px 0 0; }
+	
+#chat-area p {
+    padding: 8px 0;
+    border-bottom: 1px solid #ccc; }
+
+#sendie_group {	
+	margin-top: 20px; }
