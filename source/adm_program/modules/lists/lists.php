@@ -178,7 +178,7 @@ foreach($listsResult['recordset'] as $row)
     }
 
     $page->addHtml('
-    <div class="panel panel-default" id="admRoleDetails'.$role->getValue('rol_id').'">
+    <div class="panel panel-default" id="role_details_panel_'.$role->getValue('rol_id').'">
         <div class="panel-heading">
             <div class="pull-left">
                 <h4 class="panel-title">
@@ -223,7 +223,7 @@ foreach($listsResult['recordset'] as $row)
         <div id="collapse_'.$role->getValue('rol_id').'" class="panel-collapse collapse">
             <div class="panel-body" id="admRoleDetails'.$role->getValue('rol_id').'">');    
                 // create a static form
-                $form = new HtmlForm('plugin-login-static-form', null);
+                $form = new HtmlForm('lists_static_form', null);
 
                 // show combobox with lists if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)

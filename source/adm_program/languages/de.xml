@@ -76,10 +76,13 @@
     <text id="PRO_CHOOSE_PHOTO" development="new" translation="todo">Foto auswählen</text>
     <text id="PHO_SAVE_ORIGINALS" development="new" translation="todo">Originale speichern</text>
     <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
-    <text id="PRO_SELECT_NEW_PIC_HERE" development="deleted" translation="todo"></text>
+    <text id="PRO_CHANGE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild hochladen</text>
+    <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild löschen</text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
     <text id="PRO_EXPORT_VCARD" development="new" translation="todo">vCard exportieren</text>
     <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</text>
+    <text id="PRO_SELECT_NEW_PIC_HERE" development="deleted" translation="todo"></text>
+    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="deleted" translation="todo"></text>
     <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="todo">Rollenzuordnung für %VAR1% %VAR2%</text>
     <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
     <text id="SYS_FILTER" development="new" translation="todo">Filter</text>
@@ -1015,12 +1018,10 @@
     <text id="PRO_ADD_USER" development="new" translation="todo">Benutzer anlegen</text>
     <text id="PRO_CANCEL_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft beenden</text>
     <text id="PRO_CHANGE_DATE" development="new" translation="todo">Datum ändern</text>
-    <text id="PRO_CHANGE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto ändern</text>
     <text id="PRO_CONFIRMATION_CODE" development="new" translation="todo">Bestätigungscode</text>
     <text id="PRO_CURRENT_PASSWORD" development="new" translation="todo">Aktuelles Passwort</text>
     <text id="PRO_CURRENT_PICTURE" development="new" translation="todo">Aktuelles Profilfoto</text>
     <text id="PRO_DEFAULT_COUNTRY" development="new" translation="todo">Standard-Land</text>
-    <text id="PRO_DELETE_PROFILE_PICTURE" development="new" translation="todo">Profilfoto löschen</text>
     <text id="PRO_EDIT_MY_PROFILE" development="new" translation="todo">Mein Profil bearbeiten</text>
     <text id="PRO_EDIT_MY_PROFILE_PICTURE" development="new" translation="todo">Mein Profilfoto bearbeiten</text>
     <text id="PRO_EDIT_PASSWORD" development="new" translation="todo">Passwort bearbeiten</text>
@@ -1078,7 +1079,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="todo">Alle Besucher der Seite</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="todo">Alle angemeldeten Benutzer</text>
     <text id="ROL_ANNUALLY" development="new" translation="todo">Jährlich</text>
-    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten!\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
     <text id="ROL_HINT_DELETE_ROLE" development="new" translation="todo">Wenn du %VAR1_BOLD% auswählst, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="todo">Abhängigkeiten</text>
     <text id="ROL_DEPENDENT" development="new" translation="todo">Abhängig</text>

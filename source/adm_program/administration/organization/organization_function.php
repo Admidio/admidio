@@ -23,6 +23,7 @@ require_once('../../system/login_valid.php');
 $getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
 $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
+// in ajax mode only return simple text on error
 if($getMode == 1)
 {
     $gMessage->showHtmlTextOnly(true);

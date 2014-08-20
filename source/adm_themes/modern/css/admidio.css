@@ -85,6 +85,18 @@
     font-size: 12pt;
 }
 
+.list-roles-assignment li {
+    padding: 0px 0px 15px 0px;
+}
+
+.list-roles-assignment-pos {
+    margin-bottom: -5px;
+}
+
+.list-roles-assignment-pos li {
+    padding: 0px 0px 5px 0px;
+}
+
 /* Headlines */
 
 .admHeadline, .admHeadline2, .admHeadline3 {
@@ -143,17 +155,23 @@ a:hover, a:active {
 
 /* Show a linklist with icon */
 
-.admIconTextLinkList {
+.icon-text-link-list {
     list-style-type: none;
     padding: 0px;
     margin: 25px 0px 25px 0px;
 }
 
-.admIconTextLinkList li{   
+.icon-text-link-list-horizontal li{   
     padding-right: 15px;   
     display: inline-block;
     font-size: 11pt;
 }
+
+.icon-text-link-list-vertical li {
+    margin-top: 7px;
+    display: block;
+}
+
 
 /* Settings for all icons */
 
@@ -356,12 +374,11 @@ input[data-provide="datepicker"], input[type="number"] {
 
 /* Information block with user and timestamp who created and edited the data */
 
-.admCreateEditInformations {
+.info-created-edited {
     font-size: 8pt;
-    margin-top: 8px;
 }
 
-.admInformationCreated{
+.info-created{
     display: block;
 }
 
@@ -439,13 +456,8 @@ input[data-provide="datepicker"], input[type="number"] {
 
 /* The module and administration menu on the main page */
 
-.admMenu {
+.admidio-menu {
     margin-top: -10px;
-}
-
-.admMenu li {
-    margin-top: 7px;
-    display: block;
 }
 
 .admMenuLargeIcons li .icon-text-link img {
@@ -474,33 +486,39 @@ input[data-provide="datepicker"], input[type="number"] {
     margin-top: 15px;
 }
 
-#profile_master_data {
-	min-height: 200px;
+#profile_photo {
+    display: inline;
 }
 
-.admProfileRolesBox .admFieldLabel {
-    width: 50% !important;
+#profile_picture_links {
+    margin-top: -10px;
 }
 
-.admProfileRolesBox .admFieldElement  {
-    width: 50% !important;
-    text-align: right;
+.list-roles-assignment li, .list-roles-assignment-pos li {
+    border-width: 0px;
+}
+
+.list-roles-assignment li {
+    padding: 0px 0px 15px 0px;
+}
+
+.list-roles-assignment, .list-roles-assignment-pos {
+    margin-bottom: -5px;
+}
+
+.list-roles-assignment-pos li {
+    padding: 0px 0px 5px 0px;
 }
 
 #password_form .admPasswordInput {
     width: 85%;
 }
 
-.admListsLink {
-    margin-left: 5px;
-    margin-right: 10px;
-}
-
-.admWeblinkItem, .admListsItem {
+.weblink-item {
     padding-top: 15px;
 }
 
-.admWeblinkDescription {
+.weblink-description {
     padding: 5px 0px;
 }
 

@@ -117,7 +117,7 @@ class Menu
 			$html .= '<h3 class="admHeadline3" id="head_'.$this->id.'">'.$this->title.'</h3>';			// Title of the menu
 		}
 
-        $html .= '<ul class="admIconTextLinkList admMenu'.$cssMenuClass.'" id="menu_'.$this->id.'">';		// Wraps all menu items
+        $html .= '<ul class="icon-text-link-list icon-text-link-list-vertical admidio-menu'.$cssMenuClass.'" id="menu_'.$this->id.'">';		// Wraps all menu items
 		
         // now create each menu item
 		foreach($this->items as $key => $value)

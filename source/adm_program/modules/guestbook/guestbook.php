@@ -283,7 +283,7 @@ else
                 if($getModeration == 1 && $guestbook->getValue('gbo_locked') == 1)
                 {
                     $page->addHtml('
-                    <ul class="admIconTextLinkList">
+                    <ul class="icon-text-link-list icon-text-link-list-horizontal">
                         <li>
                             <a class="icon-text-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
                                 $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>

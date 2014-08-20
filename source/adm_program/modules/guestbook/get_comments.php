@@ -94,7 +94,7 @@ if (isset($comment_result))
                 if($getModeration == 1)
                 {
                     echo '
-                    <ul class="admIconTextLinkList">
+                    <ul class="icon-text-link-list icon-text-link-list-horizontal">
                         <li>
                             <a class="icon-text-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbc_mod&amp;element_id=gbc_'.$gbComment->getValue('gbc_id').'&amp;database_id='.
                                 $gbComment->getValue('gbc_id').'&amp;name='.urlencode($gbComment->getValue('gbc_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>

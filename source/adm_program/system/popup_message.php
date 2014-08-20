@@ -103,11 +103,11 @@ switch ($get_type)
         $url = 'photo_album_function.php?job=delete&pho_id='.$get_database_id;
         break;
     case 'pro_pho':
-        $url = 'profile_photo_edit.php?job=delete&usr_id='.$get_database_id;
+        $url = 'profile_photo_edit.php?mode=delete&usr_id='.$get_database_id;
         $callbackSuccess = '
-           var img_src = $("#profile_picture").attr("src");
+           var img_src = $("#profile_photo").attr("src");
            var timestamp = new Date().getTime();
-           $("#profile_picture").attr("src",img_src+"&"+timestamp);';
+           $("#profile_photo").attr("src",img_src+"&"+timestamp);';
         $text = 'PRO_WANT_DELETE_PHOTO';
         break;
     case 'pro_role':
@@ -169,9 +169,8 @@ function deleteEntry()
     $.get("'.$url.'", function(data) {
         if(data == "done") {
             $.colorbox.close();
-            $(entryDeleted).fadeOut("slow", function() { 
+            $(entryDeleted).fadeOut("slow");
 			'.$callbackSuccess.'
-            });
         }
         else {
 			// entry could not be deleted, than show content of data or an common error message
@@ -195,7 +194,7 @@ function deleteEntry()
         <div class="admPopupIcon"><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
         <div class="admPopupMessageText">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 
-        <ul class="admIconTextLinkList">
+        <ul class="icon-text-link-list icon-text-link-list-horizontal">
             <li id="admButtonYesRow">
                 <button id="admButtonYes" class="btn" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
                     alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>

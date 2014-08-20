@@ -155,7 +155,7 @@ else
                 <div class="panel-body">');
         }
 
-        $page->addHtml('<div class="admWeblinkItem" id="lnk_'.$weblink->getValue('lnk_id').'">');
+        $page->addHtml('<div class="weblink-item" id="lnk_'.$weblink->getValue('lnk_id').'">');
             // show weblink
             $page->addHtml('
             <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/links/links_redirect.php?lnk_id='.$weblink->getValue('lnk_id').'" target="'. $gPreferences['weblinks_target']. '"><img src="'. THEME_PATH. '/icons/weblinks.png"
@@ -175,7 +175,7 @@ else
             // get available description
             if(strlen($weblink->getValue('lnk_description')) > 0)
             {
-                $page->addHtml('<div class="admWeblinkDescription">'.$weblink->getValue('lnk_description').'</div>');
+                $page->addHtml('<div class="weblink-description">'.$weblink->getValue('lnk_description').'</div>');
             }
             
             $page->addHtml('<div class="admSmallFont">'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</div>

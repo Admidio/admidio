@@ -31,6 +31,12 @@ $getRoleId   = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 $getMemberId = admFuncVariableIsValid($_GET, 'mem_id', 'numeric');
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
 
+// in ajax mode only return simple text on error
+if($getMode == 7)
+{
+    $gMessage->showHtmlTextOnly(true);
+}
+
 // create user object
 $user = new User($gDb, $gProfileFields, $getUserId);
 
@@ -128,6 +134,9 @@ elseif($getMode == 6)
 elseif($getMode == 7)
 {
 	// save membership date changes
+    $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'date', null, true);
+    $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId, 'date', null, true);
+
 	$member = new TableMembers($gDb, $getMemberId);
 	$role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));
 
@@ -141,7 +150,7 @@ elseif($getMode == 7)
 	$formatedEndDate   = '';
 	
 	//Check das Beginn Datum
-	$startDate = new DateTimeExtended($_GET['rol_begin'], $gPreferences['system_date'], 'date');
+	$startDate = new DateTimeExtended($getMembershipStart, $gPreferences['system_date'], 'date');
 	if($startDate->valid())
 	{
 		// Datum formatiert zurueckschreiben
@@ -153,9 +162,9 @@ elseif($getMode == 7)
 	}
 
 	//Falls gesetzt wird das Enddatum gecheckt
-	if(strlen($_GET['rol_end']) > 0) 
+	if(strlen($getMembershipEnd) > 0) 
 	{
-		$endDate = new DateTimeExtended($_GET['rol_end'], $gPreferences['system_date'], 'date');
+		$endDate = new DateTimeExtended($getMembershipEnd, $gPreferences['system_date'], 'date');
 		if($endDate->valid())
 		{
 			// Datum formatiert zurueckschreiben
@@ -180,7 +189,7 @@ elseif($getMode == 7)
 	// save role membership
 	$user->editRoleMembership($getMemberId, $formatedStartDate, $formatedEndDate);
 
-	echo $gL10n->get('SYS_SAVE_DATA')."<SAVED/>";;
+	echo 'success';
 }
 elseif ($getMode == 8)
 {

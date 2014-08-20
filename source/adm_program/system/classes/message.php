@@ -163,7 +163,7 @@ class Message
                 
 			if($this->showButtons == true)
 			{
-				$html .= '<ul class="admIconTextLinkList">';
+				$html .= '<ul class="icon-text-link-list icon-text-link-list-horizontal">';
 					if(strlen($this->forwardUrl) > 0)
 					{
 						if($this->showYesNoButtons == true)

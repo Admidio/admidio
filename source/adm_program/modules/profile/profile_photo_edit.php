@@ -22,7 +22,13 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
-$getMode    = admFuncVariableIsValid($_GET, 'mode', 'string', 'choose', false, array('choose', 'save', 'dont_save', 'upload', 'delete'));
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', 'choose', false, array('choose', 'save', 'dont_save', 'upload', 'delete'));
+
+// in ajax mode only return simple text on error
+if($getMode == 'delete')
+{
+    $gMessage->showHtmlTextOnly(true);
+}
 
 // checks if the server settings for file_upload are set to ON
 if (ini_get('file_uploads') != '1')

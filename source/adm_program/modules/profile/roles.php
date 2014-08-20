@@ -202,7 +202,7 @@ while($row = $gDb->fetch_array($result))
 		// show icon that leaders have no additional rights
 		if($role->getValue('rol_leader_rights') == ROLE_LEADER_NO_RIGHTS)
 		{
-			$leaderRights .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/info.png"
+			$leaderRights .= '<img class="icon-information" src="'.THEME_PATH.'/icons/info.png"
 							     alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
 							         <img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 		}
@@ -211,7 +211,7 @@ while($row = $gDb->fetch_array($result))
 		if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_EDIT 
 		|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
 		{
-		    $leaderRights .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/profile_edit.png"
+		    $leaderRights .= '<img class="icon-information" src="'.THEME_PATH.'/icons/profile_edit.png"
 							     alt="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_EDIT_MEMBERS').'" />';
 		}
 
@@ -219,14 +219,14 @@ while($row = $gDb->fetch_array($result))
 		if($role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN 
 		|| $role->getValue('rol_leader_rights') == ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
 		{
-			$leaderRights .= '<img class="iconInformation" src="'.THEME_PATH.'/icons/roles.png"
+			$leaderRights .= '<img class="icon-information" src="'.THEME_PATH.'/icons/roles.png"
 							     alt="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" title="'.$gL10n->get('ROL_LEADER_ASSIGN_MEMBERS').'" />';
 		}
 						
 		// show dummy icon if leader has not all rights
 		if($role->getValue('rol_leader_rights') != ROLE_LEADER_MEMBERS_ASSIGN_EDIT)
 		{
-			$leaderRights .= '<img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+			$leaderRights .= '<img class="icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 		}
 		$columnValues[] = $leaderRights;
 		

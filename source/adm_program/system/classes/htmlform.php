@@ -48,8 +48,8 @@ class HtmlForm extends HtmlFormBasic
      *                           or files to the html output page.
      *  @param $enableFileUpload Set specific parameters that are necessary for file upload with a form
      *  @param $type             Set the form type. Every type has some special features:
-     *                           default  : A form that can be used to edit and save data of a database table. This form
-     *                                      has a horizontal orientation.
+     *                           default  : A form that can be used to edit and save data of a database table. The label
+     *                                      and the element have a horizontal orientation.
      *                           vertical : A form that can be used to edit and save data but has a vertical orientation.
      *                                      The label is positioned above the form element.
      *                           navbar   : A form that should be used in a navbar. The form content will

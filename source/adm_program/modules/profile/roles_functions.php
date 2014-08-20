@@ -78,7 +78,8 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
     $countShowRoles  = 0;
     $member = new TableMembers($gDb);
 	$role   = new TableRoles($gDb);
-    $roleMemHTML = '<div class="admFieldViewList" id="'.$htmlListId.'">';
+    $roleMemHTML = '';
+    $roleMemHTML = '<ul class="list-group list-roles-assignment" id="'.$htmlListId.'">';
 
     while($row = $gDb->fetch_array($result_role))
     {
@@ -116,108 +117,100 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
 
 			// create list entry for one role
             $roleMemHTML .= '
-            <div class="admFieldRow" id="role_'. $row['mem_rol_id']. '">
-                <div class="admFieldLabel">'.
-                    $role->getValue('cat_name'). ' - ';
-                    
-                    if($gCurrentUser->viewRole($member->getValue('mem_rol_id')))
-                    {
-                        $roleMemHTML .= '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
-                    }
-                    else
-                    {
-                        echo $role->getValue('rol_name');
-                    }
-                    if($member->getValue('mem_leader') == 1)
-                    {
-                        $roleMemHTML .= ' - '.$gL10n->get('SYS_LEADER');
-                    }
-                    
-                    $roleMemHTML .= '&nbsp;
-                </div>
-                <div class="admFieldElement">';
-                    if($showRoleEndDate == true)
-                    {
-                        $roleMemHTML .= $gL10n->get('SYS_SINCE_TO',$member->getValue('mem_begin', $gPreferences['system_date']),$member->getValue('mem_end', $gPreferences['system_date']));
-                    }
-                    elseif($futureMembership == true)
-                    {
-                        $roleMemHTML .= $gL10n->get('SYS_FROM',$member->getValue('mem_begin', $gPreferences['system_date']));
-                    }
-                    else
-                    {
-                        $roleMemHTML .= $gL10n->get('SYS_SINCE',$member->getValue('mem_begin', $gPreferences['system_date']));
-                    }
-
-                    if($role->allowedToAssignMembers($gCurrentUser))
-                    {
-                        // You are not allowed to delete your own webmaster membership, other roles could be deleted
-                        if (($role->getValue('rol_webmaster') == 1 && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id')) 
-                        || ($role->getValue('rol_webmaster') == 0))
-                        {
-                            $roleMemHTML .= '
-                            <a class="admIconLink" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
-                                $role->getValue('rol_id'). '&amp;database_id='.$member->getValue('mem_id').'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
-                        }
-                        else
-                        {
-                            $roleMemHTML .= '
-                            <a class="admIconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
-                        }
-
-                        // do not edit webmaster role
-                        if ($row['rol_webmaster'] == 0)
-                        {
-                            $roleMemHTML .= '<a class="admIconLink" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$member->getValue('mem_id').')"><img
-                                src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('PRO_CHANGE_DATE').'" title="'.$gL10n->get('PRO_CHANGE_DATE').'" /></a>';
-                        }
-                        else
-                        {
-                            $roleMemHTML .= '<a class="admIconLink"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
-                        }
-
-                    }
-
-                    // only show info if system setting is activated
-                    if($gPreferences['system_show_create_edit'] > 0)
-                    {
-                        $roleMemHTML .= '<a class="admIconLink admMemberInfo" id="member_info_'.$member->getValue('mem_id').'" href="javascript:"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>';
-                    }
-                $roleMemHTML .= '</div>
-            </div>
-            <div class="admFieldRow" id="admMemberId_'.$member->getValue('mem_id').'" style="text-align: right; visibility: hidden; display: none;">
-                <form action="roles_function.php" method="post">
-                    <div>
-                        <label for="admMemberStartDate'.$member->getValue('mem_id').'">'.$gL10n->get('SYS_START').':</label>
-                        <input type="text" id="admMemberStartDate'.$member->getValue('mem_id').'" name="rol_begin" size="10" maxlength="20" value="'.$member->getValue('mem_begin', $gPreferences['system_date']).'"/>
-                        <a class="admIconLink" id="admRoleAnchorStart'.$role->getValue('rol_id').'" href="javascript:calPopup.select(document.getElementById(\'admMemberStartDate'.$member->getValue('mem_id').'\'),\'admRoleAnchorStart'.$role->getValue('rol_id').'\',\''.$gPreferences['system_date'].'\',\'admMemberStartDate'.$member->getValue('mem_id').'\',\'admMemberEndDate'.$member->getValue('mem_id').'\');"><img 
-                        src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;
-
-                        <label for="admMemberEndDate'.$member->getValue('mem_id').'">'.$gL10n->get('SYS_END').':</label>
-                        <input type="text" id="admMemberEndDate'.$member->getValue('mem_id').'" name="rol_end" size="10" maxlength="20" value="'.$member->getValue('mem_end', $gPreferences['system_date']).'"/>
-                        <a class="admIconLink" id="admRoleAnchorEnd'.$role->getValue('rol_id').'" href="javascript:calPopup.select(document.getElementById(\'admMemberEndDate'.$member->getValue('mem_id').'\'),\'admRoleAnchorEnd'.$role->getValue('rol_id').'\',\''.$gPreferences['system_date'].'\',\'admMemberStartDate'.$member->getValue('mem_id').'\',\'admMemberEndDate'.$member->getValue('mem_id').'\');"><img 
-                        src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-
-                        <a class="admIconLink" href="javascript:profileJS.changeRoleDates('.$member->getValue('mem_id').')" id="admSaveMembership'.$role->getValue('rol_id').'"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" title="'.$gL10n->get('SYS_SAVE').'"/></a>
-                        <a class="admIconLink" href="javascript:profileJS.toggleDetailsOff('.$member->getValue('mem_id').')"><img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_ABORT').'" title="'.$gL10n->get('SYS_ABORT').'"/></a>
-                    </div>
-                </form>
-            </div>
-            <div class="admFieldRow" id="member_info_'.$member->getValue('mem_id').'_Content" style="display: none;">';
-                // show informations about user who creates the recordset and changed it
-                $roleMemHTML .= admFuncShowCreateChangeInfoById($member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'), $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change')).'
-            </div>';
+            <li class="list-group-item" id="role_'. $row['mem_rol_id']. '">
+                <ul class="list-group list-roles-assignment-pos">
+                    <li class="list-group-item">
+                        <span>'.
+                            $role->getValue('cat_name'). ' - ';
+                            
+                            if($gCurrentUser->viewRole($member->getValue('mem_rol_id')))
+                            {
+                                $roleMemHTML .= '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
+                            }
+                            else
+                            {
+                                echo $role->getValue('rol_name');
+                            }
+                            if($member->getValue('mem_leader') == 1)
+                            {
+                                $roleMemHTML .= ' - '.$gL10n->get('SYS_LEADER');
+                            }
+                            
+                            $roleMemHTML .= '&nbsp;
+                        </span>
+                        <span class="pull-right text-right">';
+                            if($showRoleEndDate == true)
+                            {
+                                $roleMemHTML .= $gL10n->get('SYS_SINCE_TO',$member->getValue('mem_begin', $gPreferences['system_date']),$member->getValue('mem_end', $gPreferences['system_date']));
+                            }
+                            elseif($futureMembership == true)
+                            {
+                                $roleMemHTML .= $gL10n->get('SYS_FROM',$member->getValue('mem_begin', $gPreferences['system_date']));
+                            }
+                            else
+                            {
+                                $roleMemHTML .= $gL10n->get('SYS_SINCE',$member->getValue('mem_begin', $gPreferences['system_date']));
+                            }
+        
+                            if($role->allowedToAssignMembers($gCurrentUser))
+                            {
+                                // You are not allowed to delete your own webmaster membership, other roles could be deleted
+                                if (($role->getValue('rol_webmaster') == 1 && $gCurrentUser->getValue('usr_id') != $user->getValue('usr_id')) 
+                                || ($role->getValue('rol_webmaster') == 0))
+                                {
+                                    $roleMemHTML .= '
+                                    <a class="icon-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
+                                        $role->getValue('rol_id'). '&amp;database_id='.$member->getValue('mem_id').'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
+                                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
+                                }
+                                else
+                                {
+                                    $roleMemHTML .= '
+                                    <a class="icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
+                                }
+        
+                                // do not edit webmaster role
+                                if ($row['rol_webmaster'] == 0)
+                                {
+                                    $roleMemHTML .= '<a class="icon-link" style="cursor:pointer;" onclick="profileJS.toggleDetailsOn('.$member->getValue('mem_id').')"><img
+                                        src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('PRO_CHANGE_DATE').'" title="'.$gL10n->get('PRO_CHANGE_DATE').'" /></a>';
+                                }
+                                else
+                                {
+                                    $roleMemHTML .= '<a class="icon-link"><img src="'.THEME_PATH.'/icons/dummy.png" alt=""/></a>';
+                                }
+        
+                            }
+        
+                            // only show info if system setting is activated
+                            if($gPreferences['system_show_create_edit'] > 0)
+                            {
+                                $roleMemHTML .= '<a class="icon-link admMemberInfo" id="member_info_'.$member->getValue('mem_id').'" href="javascript:"><img src="'.THEME_PATH.'/icons/info.png" alt="'.$gL10n->get('SYS_INFORMATIONS').'" title="'.$gL10n->get('SYS_INFORMATIONS').'"/></a>';
+                            }
+                        $roleMemHTML .= '</span>
+                    </li>
+                    <li class="list-group-item" id="membership_period_'.$member->getValue('mem_id').'" style="visibility: hidden; display: none;"><div class="collapse navbar-collapse">';
+                        $form = new HtmlForm('membership_period_form_'.$member->getValue('mem_id'), $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=7&user_id='.$user->getValue('usr_id').'&mem_id='.$row['mem_id'], null, 'navbar', false, 'form-membership-period');
+                        $form->addTextInput('membership_start_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']), 10, FIELD_DEFAULT, 'date');
+                        $form->addTextInput('membership_end_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']), 10, FIELD_DEFAULT, 'date');
+                        $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+                        $roleMemHTML .= $form->show(false);
+                    $roleMemHTML .= '</div></li>
+                    <li class="list-group-item" id="member_info_'.$member->getValue('mem_id').'_Content" style="display: none;">';
+                        // show informations about user who creates the recordset and changed it
+                        $roleMemHTML .= admFuncShowCreateChangeInfoById($member->getValue('mem_usr_id_create'), $member->getValue('mem_timestamp_create'), $member->getValue('mem_usr_id_change'), $member->getValue('mem_timestamp_change')).'
+                    </li>
+                </ul>
+            </li>';
             $countShowRoles++;
         }
     }
     if($countShowRoles == 0)
     {
-        $roleMemHTML .= '<div class="admFieldRow">'.$gL10n->get('PRO_NO_ROLES_VISIBLE').'</div>';
+        $roleMemHTML .= '<div class="block-padding">'.$gL10n->get('PRO_NO_ROLES_VISIBLE').'</div>';
     }
             
-    $roleMemHTML .= '</div>
-    <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>';
+    $roleMemHTML .= '</ul>';
 
     if($directOutput)
     {
