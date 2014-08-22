@@ -292,7 +292,7 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
 	}
     $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, FIELD_DEFAULT, 'DAT_LOGIN_POSSIBLE');
     $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, FIELD_DEFAULT, 'DAT_PARTICIPATE_AT_DATE_DESC');
-    $form->addTextInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), 5, FIELD_MANDATORY, 'number', 'DAT_MAX_MEMBERS');
+    $form->addTextInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), 5, FIELD_DEFAULT, 'number', 'DAT_MAX_MEMBERS');
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
     $form->addEditor('dat_description', null, $date->getValue('dat_description'), FIELD_MANDATORY);
@@ -304,116 +304,5 @@ $form->addHtml(admFuncShowCreateChangeInfoById($date->getValue('dat_usr_id_creat
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-exit();
-
-// Html des Modules ausgeben
-echo '
-	<div class="groupBox" id="admVisibilityRegistration">
-			<div class="groupBoxHeadline" id="admVisibilityRegistrationHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admVisibilityRegistrationBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admVisibilityRegistrationBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('DAT_VISIBILITY').' & '.$gL10n->get('SYS_REGISTRATION').'
-			</div>
-
-			<div class="groupBoxBody" id="admVisibilityRegistrationBody">
-				<ul class="formFieldList">
-					<li id="liRoles"></li>
-					<li>
-						<dl>
-							<dt>&nbsp;</dt>
-							<dd><span id="add_attachment" class="iconTextLink">
-									<a href="javascript:addRoleSelection(0)"><img
-									src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('DAT_ADD_ROLE').'" /></a>
-									<a href="javascript:addRoleSelection(0)">'.$gL10n->get('DAT_ADD_ROLE').'</a>
-								</span></dd>
-						</dl>
-					</li>
-                    <li>
-						<dl>
-							<dt>&nbsp;</dt>
-							<dd>
-								<input type="checkbox" id="dat_highlight" name="dat_highlight"';
-								if($date->getValue('dat_highlight') == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-								<label for="dat_highlight">'.$gL10n->get('DAT_HIGHLIGHT_DATE').'</label>
-							</dd>
-						</dl>
-					</li>';
-
-					// besitzt die Organisation eine Elternorga oder hat selber Kinder, so kann die Ankuendigung auf "global" gesetzt werden
-					if($gCurrentOrganization->getValue('org_org_id_parent') > 0
-						|| $gCurrentOrganization->hasChildOrganizations())
-					{
-						echo '
-						<li>
-							<dl>
-								<dt>&nbsp;</dt>
-								<dd>
-									<input type="checkbox" id="dat_global" name="dat_global" ';
-									if($date->getValue('dat_global') == 1)
-									{
-										echo ' checked="checked" ';
-									}
-									echo ' value="1" />
-									<label for="dat_global">'.$gL10n->get('SYS_ENTRY_MULTI_ORGA').'</label>
-									<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL&amp;inline=true"><img 
-										onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=SYS_DATA_GLOBAL\',this)" onmouseout="ajax_hideTooltip()"
-										class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-								</dd>
-							</dl>
-						</li>';
-					}
-
-					echo '
-					<li>
-						<dl>
-							<dt>&nbsp;</dt>
-							<dd>
-								<input type="checkbox" id="dateRegistrationPossible" name="dateRegistrationPossible"';
-								if($dateRegistrationPossible == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-								<label for="dateRegistrationPossible">'.$gL10n->get('DAT_REGISTRATION_POSSIBLE').'</label>
-								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE&amp;inline=true"><img 
-									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_LOGIN_POSSIBLE\',this)" 
-									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-							</dd>
-						</dl>
-					</li>
-					<li id="admAssignYourself">
-						<dl>
-							<dt>&nbsp;</dt>
-							<dd>
-								<input type="checkbox" id="dateCurrentUserAssigned" name="dateCurrentUserAssigned"';
-								if($dateCurrentUserAssigned == 1)
-								{
-									echo ' checked="checked" ';
-								}
-								echo ' value="1" />
-								<label for="dateCurrentUserAssigned">'.$gL10n->get('DAT_PARTICIPATE_AT_DATE').'</label>
-								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC&amp;inline=true"><img 
-									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_PARTICIPATE_AT_DATE_DESC\',this)" 
-									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-							</dd>
-						</dl>
-					</li>
-					<li id="admMaxMembers">
-						<dl>
-							<dt><label for="dat_max_members">'.$gL10n->get('DAT_PARTICIPANTS_LIMIT').':</label></dt>
-							<dd>
-								<input type="text" id="dat_max_members" name="dat_max_members" style="width: 50px;" maxlength="5" value="'.($date->getValue('dat_max_members')).'" />
-								<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DAT_MAX_MEMBERS&amp;inline=true"><img 
-									onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=DAT_MAX_MEMBERS\',this)" 
-									onmouseout="ajax_hideTooltip()" class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>
-							</dd>
-						</dl>
-					</li>
-				</ul>
-			</div>
-		</div>';
 
 ?>

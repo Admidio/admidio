@@ -110,7 +110,7 @@ class Menu
 		{
 			$html .= '<h2 class="admHeadline2" id="head_'.$this->id.'">'.$this->title.'</h2>';			// Title of the menu
             $cssMenuClass = ' admMenuLargeIcons';
-            $cssFontClass = ' admBigFont';
+            $cssFontClass = ' h4';
 		}
 		else
 		{
@@ -142,7 +142,7 @@ class Menu
 					$html .= ' &#93;</div>';
 				}
 				
-				$html .= '<div class="admMenuDescription admSmallFont">'.$this->items[$key]['desc'].'</div>';
+				$html .= '<div class="admMenuDescription"><small>'.$this->items[$key]['desc'].'</small></div>';
 			}
             $html .= '</li>';
 		}

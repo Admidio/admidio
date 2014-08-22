@@ -57,8 +57,8 @@ $page->addHtml($form->show(false));
 
 if($gPreferences['registration_mode'] > 0)
 {
-    $page->addHtml('<div id="login_registration_link" class="admSmallFont">
-        <a href="'.$g_root_path.'/adm_program/system/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a>
+    $page->addHtml('<div id="login_registration_link">
+        <small><a href="'.$g_root_path.'/adm_program/system/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a></small>
     </div>');
 }
 
@@ -81,11 +81,11 @@ else
     $mail_link = 'mailto:'. $gPreferences['email_administrator']. '?subject='.$gL10n->get('SYS_LOGIN_PROBLEMS');
 }
 
-$page->addHtml('<div id="login_forgot_password_link" class="admSmallFont">
-    <a href="'.$mail_link.'">'.$gL10n->get('SYS_FORGOT_MY_PASSWORD').'</a>
+$page->addHtml('<div id="login_forgot_password_link">
+    <small><a href="'.$mail_link.'">'.$gL10n->get('SYS_FORGOT_MY_PASSWORD').'</a></small>
 </div>
-<div id="login_admidio_link" class="admSmallFont">
-    Powered by <a href="http://www.admidio.org">Admidio</a>
+<div id="login_admidio_link">
+    <small>Powered by <a href="http://www.admidio.org">Admidio</a></small>
 </div>');
 
 $page->show();

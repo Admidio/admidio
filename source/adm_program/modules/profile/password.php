@@ -25,6 +25,12 @@ $gMessage->showThemeBody(false);
 $getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', null, true);
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', 'html', false, array('html', 'change'));
 
+// in ajax mode only return simple text on error
+if($getMode == 'change')
+{
+    $gMessage->showHtmlTextOnly(true);
+}
+
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // only the own password could be individual set. Webmaster could only send a generated password.
@@ -64,11 +70,10 @@ if($getMode == 'change')
                     // wenn das PW des eingeloggten Users geaendert wird, dann Session-Variablen aktualisieren
                     if($user->getValue('usr_id') == $gCurrentUser->getValue('usr_id'))
                     {
-                        $gCurrentUser->setValue('usr_password', $user->getValue('usr_password'));
+                        $gCurrentUser->setValue('usr_password', $_POST['new_password']);
                     }
 
-                    $gMessage->setForwardUrl('javascript:self.parent.tb_remove()');
-                    $phrase = $gL10n->get('PRO_PASSWORD_CHANGED')."<SAVED/>";
+                    $phrase = 'success';
                 }
                 else
                 {
@@ -99,7 +104,39 @@ elseif($getMode == 'html')
     /***********************************************************************/
 
     // show headline 
-    echo '
+    echo '<script type="text/javascript"><!--
+    $(document).ready(function(){
+        $("#password_form").submit(function(event) {
+            var action = $(this).attr("action");
+            $("#password_form .form-alert").hide();
+        
+            // disable default form submit
+            event.preventDefault();
+            
+            $.ajax({
+                type:    "POST",
+                url:     action,
+                data:    $(this).serialize(),
+                success: function(data) {
+                    if(data == "success") {
+                        $("#password_form .form-alert").attr("class", "alert alert-success form-alert");
+                        $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
+                        $("#password_form .form-alert").fadeIn("slow");
+                        $.fn.colorbox.resize();
+                        setTimeout("$.fn.colorbox.close()",2000);	
+                    }
+                    else {
+                        $("#password_form .form-alert").attr("class", "alert alert-danger form-alert");
+                        $("#password_form .form-alert").fadeIn();
+                        $.fn.colorbox.resize();
+                        $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                    }
+                }
+            });    
+        });
+    });
+    --></script>
+
     <div class="admPopupWindow">
         <h1 class="admHeadline">'.$gL10n->get('PRO_EDIT_PASSWORD').'</h1>';
         // show form

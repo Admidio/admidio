@@ -26,6 +26,12 @@ $getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
 $getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
 $getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
 
+// in ajax mode only return simple text on error
+if($getInline == true)
+{
+    $gMessage->showHtmlTextOnly(true);
+}
+
 // if user is allowed to assign at least one role then allow access
 if($gCurrentUser->assignRoles() == false)
 {
@@ -247,21 +253,21 @@ if(strpos($gNavigation->getUrl(), 'new_user_assign.php') > 0)
     $gNavigation->deleteLastUrl();
 }
 
-if($getNewUser == 3)
+if($getInline == true)
 {
-	$messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+	echo 'success';
 }
 else
 {
-	$messageId = 'SYS_SAVE_DATA';
-}
+    if($getNewUser == 3)
+    {
+    	$messageId = 'PRO_ASSIGN_REGISTRATION_SUCCESSFUL';
+    }
+    else
+    {
+    	$messageId = 'SYS_SAVE_DATA';
+    }
 
-if($getInline == 0)
-{
 	$gMessage->setForwardUrl($gNavigation->getUrl(), 2000);
 	$gMessage->show($gL10n->get($messageId));
-}
-else
-{
-	echo $gL10n->get('SYS_SAVE_DATA').'<SAVED/>';
 }

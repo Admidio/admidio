@@ -143,16 +143,6 @@ a:hover, a:active {
     color: #FF9C00 !important;
 }
 
-/* Different font sizes */
-
-.admBigFont {
-    font-size: 12pt;
-    font-weight: bold;
-}
-.admSmallFont {
-    font-size: 9pt;
-}
-
 /* Show a linklist with icon */
 
 .icon-text-link-list {
@@ -308,6 +298,10 @@ input[data-provide="datepicker"], input[type="number"] {
 .form-horizontal .form-group-editor {
     margin-left: 0px;
     margin-right: 0px;
+}
+
+.btn {
+    margin-right: 20px;
 }
 
 .btn-primary {

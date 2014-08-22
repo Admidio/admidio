@@ -172,9 +172,9 @@ class TableUsers extends TableAccess
         // encode Passwort with phpAss
         if(($columnName == 'usr_password' || $columnName == 'usr_new_password') && strlen($newValue) < 30)
         {
-            $checkValue    = false;
+            $checkValue     = false;
             $passwordHasher = new PasswordHash(9, false); // use Bcrypt and if PHP < 5.3 use md5 hashes
-            $newValue    = $passwordHasher->HashPassword($newValue);
+            $newValue       = $passwordHasher->HashPassword($newValue);
         }
 		// username should not contain special characters
 		elseif($columnName == 'usr_login_name')

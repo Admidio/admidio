@@ -57,7 +57,44 @@ else
 if($getInline == true)
 {
     header('Content-type: text/html; charset=utf-8');
-    $html .= '<div class="admPopupWindow">';
+
+    $html .= '<script type="text/javascript"><!--
+    $(document).ready(function(){
+        $("#roles_assignment_form").submit(function(event) {
+            var action = $(this).attr("action");
+            $("#roles_assignment_form .form-alert").hide();
+        
+            // disable default form submit
+            event.preventDefault();
+            
+            $.ajax({
+                type:    "POST",
+                url:     action,
+                data:    $(this).serialize(),
+                success: function(data) {
+                    if(data == "success") {
+                        $("#roles_assignment_form .form-alert").attr("class", "alert alert-success form-alert");
+                        $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
+                        $("#roles_assignment_form .form-alert").fadeIn("slow");
+                        $.fn.colorbox.resize();
+                        setTimeout("$.fn.colorbox.close()",2000);	
+						profileJS.reloadRoleMemberships();
+						profileJS.reloadFormerRoleMemberships();
+						profileJS.reloadFutureRoleMemberships();
+                    }
+                    else {
+                        $("#roles_assignment_form .form-alert").attr("class", "alert alert-danger form-alert");
+                        $("#roles_assignment_form .form-alert").fadeIn();
+                        $.fn.colorbox.resize();
+                        $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                    }
+                }
+            });    
+        });
+    });
+    --></script>
+
+    <div class="admPopupWindow">';
 }
 else
 {
@@ -74,10 +111,9 @@ else
 }
 
 // show headline of module
-$html .= '<h1 class="admHeadline">'.$headline.'</h1>';
+$html .= '<h1 class="admHeadline">'.$headline.'</h1>
 
-
-$html .= '<form id="roles_assignment_form" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
+<form id="roles_assignment_form" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
 
 // Create table
 $table = new HtmlTable('role_assignment_table');
@@ -236,9 +272,8 @@ while($row = $gDb->fetch_array($result))
 $html .= $table->show(false);
 
 $html .= '
-    <div class="formSubmit">
-        <button class="admButton" id="btn_save" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-    </div>
+    <button class="btn-primary btn" id="btn_save" type="submit"><img src="'.THEME_PATH.'/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
+    <div class="form-alert" style="display: none">&nbsp;</div>
 </form>';
 
 if($getInline == true)

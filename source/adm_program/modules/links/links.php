@@ -178,7 +178,7 @@ else
                 $page->addHtml('<div class="weblink-description">'.$weblink->getValue('lnk_description').'</div>');
             }
             
-            $page->addHtml('<div class="admSmallFont">'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</div>
+            $page->addHtml('<div class="weblink-counter"><small>'.$gL10n->get('LNK_COUNTER'). ': '.$weblink->getValue('lnk_counter').'</small></div>
 		</div>');
 
         $j++;

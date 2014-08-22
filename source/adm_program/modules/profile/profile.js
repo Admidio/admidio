@@ -20,9 +20,9 @@ function profileJSClass()
 	this.init = function()
 	{
 		$("a[rel='colorboxContent']").colorbox({rel:'nofollow'});
-		$("#edit_roles_link").colorbox({rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadRolesAppend()}});
-		$("#menu_item_password a").colorbox({width:'50%',rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
-		$("#password_link").colorbox({width:'50%',rel:'nofollow',onComplete:function(){profileJS.jQueryAjaxLoadPWAppend()}});
+		$("#edit_roles_link").colorbox({rel:'nofollow'});
+		$("#menu_item_password a").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
+		$("#password_link").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
         $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',scrolling:false,onComplete:function(){$("#admButtonNo").focus();}});
 	}
 	this.reloadRoleMemberships = function()
@@ -101,47 +101,5 @@ function profileJSClass()
 	this.toggleDetailsOff = function(member_id)
 	{
 		$("#membership_period_" + member_id).css({"visibility":"hidden","display":"none"});
-	}
-	this.jQueryAjaxLoadRolesAppend = function()
-	{
-		$("#cboxLoadedContent").append('\n<div id="colorBox_resultInfo"></div>');
-
-		$("#rolesForm").ajaxForm({ 
-			target:        '#colorBox_resultInfo',  							 // target element(s) to be updated with server response 
-			beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 
-				$("#colorBox_resultInfo").css({ "display":"block" });
-				return true; 
-			},  													
-			success:       function(responseText, statusText){		 // post-submit callback
-				$.fn.colorbox.resize();
-				if(responseText.match(/<SAVED\/>/gi))
-				{
-						profileJS.reloadRoleMemberships();
-						profileJS.reloadFormerRoleMemberships();
-						profileJS.reloadFutureRoleMemberships();
-						setTimeout("$.fn.colorbox.close()",1000);	
-				}
-			}	 
-		});
-	}
-	this.jQueryAjaxLoadPWAppend = function()
-	{
-        $("#password_form:first *:input[type!=hidden]:first").focus();
-		$("#cboxLoadedContent").append('\n<div id="colorBox_resultInfo"></div>');
-        $.fn.colorbox.resize();
-		$("#password_form").ajaxForm({ 
-			target:        '#colorBox_resultInfo',  							 // target element(s) to be updated with server response 
-			beforeSubmit:  function(formData, jqForm, options){		 // pre-submit callback 
-				$("#colorBox_resultInfo").css({ "display":"block" });
-				return true; 
-			},  													
-			success:       function(responseText, statusText){		 // post-submit callback
-				$.fn.colorbox.resize();
-				if(responseText.match(/<SAVED\/>/gi))
-				{
-						setTimeout("$.fn.colorbox.close()",1000);	
-				}
-			}	 
-		});
 	}
 }

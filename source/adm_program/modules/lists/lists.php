@@ -307,7 +307,10 @@ foreach($listsResult['recordset'] as $row)
     </div>');
 }
 
-$page->addHtml('</div></div></div>');
+if($listsResult['numResults'] >0)
+{
+    $page->addHtml('</div></div></div>');
+}
 
 // If neccessary show links to navigate to next and previous recordsets of the query
 $base_url = $g_root_path.'/adm_program/modules/lists/lists.php?cat_id='.$getCatId.'&active_role='.$getActiveRole;
