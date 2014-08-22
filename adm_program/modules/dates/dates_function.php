@@ -404,16 +404,19 @@ if($getMode == 1)  // Neuen Termin anlegen/aendern
 	if(isset($_POST['dateCurrentUserAssigned']) && $_POST['dateCurrentUserAssigned'] == 1 
 	&& $gCurrentUser->isLeaderOfRole($date->getValue('dat_rol_id')) == false)
 	{
-		// user wants to participate -> add him to date
+		// user wants to participate as leader -> add him to date
 		$member = new TableMembers($gDb);
 		$member->startMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'), 1);
 	}
 	elseif(isset($_POST['dateCurrentUserAssigned']) == false 
 	&& $gCurrentUser->isMemberOfRole($date->getValue('dat_rol_id')) == true)
 	{
-		// user does't want to participate -> remove him from date
+		// user does't want to participate as leader -> remove his participation as leader from the event, 
+		// dont remove the participation itself!
 		$member = new TableMembers($gDb);
-		$member->stopMembership($role->getValue('rol_id'), $gCurrentUser->getValue('usr_id'));
+		$member->readDataByColumns(array('mem_rol_id' => $role->getValue('rol_id'), 'mem_usr_id' => $gCurrentUser->getValue('usr_id')));
+		$member->setValue('mem_leader', 0);
+		$member->save();
 	}
 
     unset($_SESSION['dates_request']);

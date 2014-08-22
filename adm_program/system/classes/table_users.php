@@ -174,8 +174,9 @@ class TableUsers extends TableAccess
         if(($columnName == 'usr_password' || $columnName == 'usr_new_password') && strlen($newValue) < 30)
         {
             $checkValue    = false;
-            $passwordHasher = new PasswordHash(9, true);
+            $passwordHasher = new PasswordHash(9, true); // only use private hash because of compatibility
             $newValue    = $passwordHasher->HashPassword($newValue);
+            error_log('hash::'.$newValue);
         }
 		// username should not contain special characters
 		elseif($columnName == 'usr_login_name')

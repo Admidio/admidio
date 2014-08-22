@@ -101,9 +101,10 @@ class User extends TableUsers
     public function checkPassword($password)
     {
         // if password is stored with phpass hash, then use phpass
-        if(substr($this->getValue('usr_password'), 0, 1) == '$')
+        if(substr($this->getValue('usr_password'), 0, 1) == '$'     // private hash
+        || substr($this->getValue('usr_password'), 0, 1) == '_')    // BSDI-style extended DES-based hashes
         {
-            $passwordHasher = new PasswordHash(9, true);
+            $passwordHasher = new PasswordHash(9, true); // only use private hash because of compatibility
             if($passwordHasher->CheckPassword($password, $this->getValue('usr_password')) == true)
             {
                 return true;
