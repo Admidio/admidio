@@ -158,7 +158,7 @@ class Message
         }
         
         $html .= '
-		<div class="admMessage admPopupWindow">
+		<div class="admMessage popup-window">
 			<p>'. $content.'</p>';
                 
 			if($this->showButtons == true)

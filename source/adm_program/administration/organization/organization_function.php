@@ -70,7 +70,7 @@ case 1:
                 break;
 
             case 'regional_settings':
-                $checkboxes = array('system_organization_select','system_show_all_users');
+                $checkboxes = array('system_organization_select');
 
                 if(strlen($_POST['org_longname']) == 0)
                 {
@@ -123,6 +123,10 @@ case 1:
                 break;
                 
             case 'announcements':
+                break;
+
+            case 'user_management':
+                $checkboxes = array('user_management_show_all_users');
                 break;
 
             case 'downloads':

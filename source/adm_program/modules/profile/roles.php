@@ -94,7 +94,7 @@ if($getInline == true)
     });
     --></script>
 
-    <div class="admPopupWindow">';
+    <div class="popup-window">';
 }
 else
 {

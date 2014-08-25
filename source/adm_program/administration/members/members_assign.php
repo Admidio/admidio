@@ -6,24 +6,32 @@
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Parameters:
- *
- * lastname  : (Optional) Last name of new user (Script will search for existing names)
- * firstname : (Optional) First name of new user (Script will search for existing names)
- *
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-$getLastname  = admFuncVariableIsValid($_GET, 'lastname', 'string', null, true);
-$getFirstname = admFuncVariableIsValid($_GET, 'firstname', 'string', null, true);
+// this script should return errors in ajax mode
+$gMessage->showHtmlTextOnly(true);
 
-// nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
+// only legitimate users are allowed to call the user management
 if (!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
+
+if(strlen($_POST['lastname']) == 0)
+{
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_LASTNAME')));
+}
+if(strlen($_POST['firstname']) == 0)
+{
+    $gMessage->show($gL10n->get('SYS_FIELD_EMPTY',$gL10n->get('SYS_FIRSTNAME')));
+}
+
+// Initialize and check the parameters
+$getLastname  = admFuncVariableIsValid($_POST, 'lastname', 'string', null, true);
+$getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', null, true);
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
 if($gPreferences['system_search_similar'] == 1 && $gDbType == 'mysql')
@@ -74,106 +82,76 @@ $member_found = $gDb->num_rows($result_usr);
 
 if($member_found == 0)
 {
-    // kein User mit dem Namen gefunden, dann direkt neuen User erzeugen und dieses Script verlassen
-    header('Location: '.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname);
+    // no user with that name found so go back and allow to create a new user
+    echo 'success';
     exit();
 }
 
-$gNavigation->addUrl(CURRENT_URL);
-
-// Html-Kopf ausgeben
-$gLayout['title'] = $gL10n->get('MEM_CREATE_USER');
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-
-// Html des Modules ausgeben
+// html output
 echo '
-<div class="formLayout" id="assign_users_form" style="width: 400px;">
-    <div class="formHead">'.$gL10n->get('MEM_CREATE_USER').'</div>
-    <div class="formBody">
-        '.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $getFirstname. ' '. $getLastname).'<br />
+<h1 class="admHeadline">'.$gL10n->get('MEM_CREATE_USER').'</h1>
 
-        <div class="groupBox">
-            <div class="groupBoxHeadline">'. $gL10n->get('SYS_USERS_FOUND'). '</div>
-            <div class="groupBoxBody">';
-                // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
-                $i = 0;
-                while($row = $gDb->fetch_array($result_usr))
+<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $getFirstname. ' '. $getLastname).'</p>
+
+<div class="panel panel-default">
+    <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
+    <div class="panel-body">';
+
+        // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
+        $i = 0;
+        while($row = $gDb->fetch_array($result_usr))
+        {
+            if($i > 0)
+            {
+                echo '<hr />';
+            }
+            echo '<div style="margin-left: 20px;">
+				<a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img 
+                     src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" />'.$row['first_name'].' '.$row['last_name'].'</a><br />';
+                if(strlen($row['address']) > 0)
                 {
-                    if($i > 0)
-                    {
-                        echo '<hr />';
-                    }
-                    echo '<div style="margin-left: 20px;">
-						<a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'"><img 
-                             src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_SHOW_PROFILE').'" /></a>
-                        <a href="'. $g_root_path. '/adm_program/modules/profile/profile.php?user_id='.$row['usr_id'].'">'.
-                            $row['first_name'].' '.$row['last_name'].'</a><br />';
-                        if(strlen($row['address']) > 0)
-                        {
-                            echo $row['address'].'<br />';
-                        }
-                        if(strlen($row['zip_code']) > 0 || strlen($row['city']) > 0)
-                        {
-                            echo $row['zip_code'].' '.$row['city'].'<br />';
-                        }
-                        if(strlen($row['email']) > 0)
-                        {
-                            if($gPreferences['enable_mail_module'] == 1)
-                            {
-                                echo '<a href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a><br />';
-                            }
-                            else
-                            {
-                                echo '<a href="mailto:'.$row['email'].'">'.$row['email'].'</a><br />';
-                            }
-                        }
-
-                        if(isMember($row['usr_id']) == false)
-                        {
-                            // gefundene User ist noch KEIN Mitglied dieser Organisation
-                            $link = $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$row['usr_id'];
-
-                            // KEINE Logindaten vorhanden
-                            echo '<br />'.$gL10n->get('MEM_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'<br />
-                            
-                            <span class="iconTextLink">
-                                <a href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('MEM_ASSIGN_ROLES').'" /></a>
-                                <a href="'.$link.'">'.$gL10n->get('MEM_ASSIGN_ROLES').'</a>
-                            </span>';
-                        }
-                    echo '</div>';
-                    $i++;
+                    echo $row['address'].'<br />';
                 }
-            echo '</div>
-        </div>
+                if(strlen($row['zip_code']) > 0 || strlen($row['city']) > 0)
+                {
+                    echo $row['zip_code'].' '.$row['city'].'<br />';
+                }
+                if(strlen($row['email']) > 0)
+                {
+                    if($gPreferences['enable_mail_module'] == 1)
+                    {
+                        echo '<a href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?usr_id='.$row['usr_id'].'">'.$row['email'].'</a><br />';
+                    }
+                    else
+                    {
+                        echo '<a href="mailto:'.$row['email'].'">'.$row['email'].'</a><br />';
+                    }
+                }
 
-        <div class="groupBox">
-            <div class="groupBoxHeadline">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
-            <div class="groupBoxBody">
-                <div style="margin-left: 20px;">
-                    '. $gL10n->get('SYS_CREATE_NOT_FOUND_USER'). '<br />
+                if(isMember($row['usr_id']) == false)
+                {
+                    // gefundene User ist noch KEIN Mitglied dieser Organisation
+                    $link = $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$row['usr_id'];
+
+                    // KEINE Logindaten vorhanden
+                    echo '<br />'.$gL10n->get('MEM_NO_MEMBERSHIP', $gCurrentOrganization->getValue('org_shortname')).'<br />
                     
-                    <span class="iconTextLink">
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1"><img
-                        src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1">'.$gL10n->get('SYS_CREATE_NEW_USER').'</a>
-                    </span>
-                </div>
-            </div>
-        </div>
-    </div>
+                    <a class="icon-text-link" href="'.$link.'"><img src="'. THEME_PATH. '/icons/new_registrations.png" 
+                        alt="'.$gL10n->get('MEM_ASSIGN_ROLES').'" />'.$gL10n->get('MEM_ASSIGN_ROLES').'</a>';
+                }
+            echo '</div>';
+            $i++;
+        }
+    echo '</div>
 </div>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+<div class="panel panel-default">
+    <div class="panel-heading">'.$gL10n->get('SYS_CREATE_NEW_USER').'</div>
+    <div class="panel-body">
+        <p>'. $gL10n->get('SYS_CREATE_NOT_FOUND_USER').'</p>
+        
+        <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname='. $getLastname.'&firstname='. $getFirstname.'&remove_url=1"><img
+            src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_NEW_USER').'" />'.$gL10n->get('SYS_CREATE_NEW_USER').'</a>
+    </div>
+</div>';
 
 ?>

@@ -37,7 +37,12 @@
     <text id="DOW_UPLOAD_TO_FOLDER" development="new" translation="todo">Die Datei wird in den Ordner %VAR1_BOLD% hochgeladen.</text>
     <text id="LST_CATEGORY_NO_LISTS" development="deleted" translation="todo"></text>
     <text id="LST_MEMBER_STATUS" development="new" translation="todo">Mitgliedsstatus</text>
-    <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Standard: 25)</text>
+    <text id="LST_MEMBERS_PER_PAGE_DESC" development="changed" translation="todo">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Standard: 25)</text>
+    <text id="MEM_USER_COULD_BE_CREATED" development="new" translation="todo">Der Benutzer kann angelegt werden.</text>
+    <text id="MEM_DAYS_FIELD_HISTORY" development="new" translation="todo">Standardzeitraum in der Änderungshistorie (Tage)</text>
+    <text id="MEM_DAYS_FIELD_HISTORY_DESC" development="new" translation="todo">Zeitraum in Tagen in denen in der Änderungshistorie der Profilfelder die Veränderungen angezeigt werden. Dies ist der Standardfilter, welcher durch den Benutzer nachher beliebig geändert werden kann. Bei großen Datenbanken dient dies dazu die Datenmenge bei normalen Aufruf der Änderungshistorie einzuschränken. (Standard: 365)</text>
+    <text id="MEM_USERS_PER_PAGE" development="new" translation="todo">Anzahl Benutzer pro Seite</text>
+    <text id="MEM_USERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</text>
     <text id="ORG_ACCESS_DATA_ADMIDIO" development="deleted" translation="todo">Zugangsdaten von Admidio verwenden</text>
     <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="deleted" translation="todo">Läuft das Forum über dieselbe Datenbank, wie Admidio, so kann dieses Flag gesetzt werden und die Zugangsdaten müssen nicht mehr eingegeben werden. (Standard: nein)</text>
     <text id="ORG_ACCESS_FORUM_DATABASE" development="deleted" translation="todo">Zugangsdaten zur Datenbank des Forums</text>
@@ -721,7 +726,6 @@
     <text id="LST_LIST_VIEW" development="new" translation="todo">Listenübersicht</text>
     <text id="LST_MAX" development="new" translation="todo">von max. %VAR1%</text>
     <text id="LST_MEMBERS_PER_PAGE" development="new" translation="todo">Anzahl Teilnehmer pro Seite</text>
-    <text id="LST_MEMBERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Teilnehmer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Teilnehmer zu einer Rolle, so kann man in der Liste blättern. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. Bei dem Wert 0 werden alle Teilnehmer aufgelistet und die Blättern-Funktion deaktiviert. (Standard: 20)</text>
     <text id="LST_MEMBER_ASSIGNMENT" development="new" translation="todo">Mitgliederzuordnung</text>
     <text id="LST_MEMBERSHIP_END" development="new" translation="todo">Mitgliedschaftsende</text>
     <text id="LST_MEMBERSHIP_START" development="new" translation="todo">Mitgliedschaftsbeginn</text>

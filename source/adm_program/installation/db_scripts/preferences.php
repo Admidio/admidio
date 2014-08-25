@@ -30,7 +30,6 @@ $orga_preferences = array(
     'system_language'               => 'de',
     'system_organization_select'    => '0',
     'system_search_similar'         => '1',
-    'system_show_all_users'         => '1',
     'system_time'                   => 'H:i',
 
     // Registration
@@ -41,6 +40,11 @@ $orga_preferences = array(
     // Announcements
     'enable_announcements_module' => '1',
     'announcements_per_page'      => '10',
+
+    // User management
+    'user_management_members_per_page'   => '25',
+    'user_management_days_field_history' => '365',
+    'user_management_show_all_users'     => '1',
 
     // Downloads
     'enable_download_module' => '1',
@@ -73,7 +77,7 @@ $orga_preferences = array(
 
     // Lists
     'lists_roles_per_page'   => '10',
-    'lists_members_per_page' => '20',
+    'lists_members_per_page' => '25',
     'lists_hide_overview_details' => '0',
 
     // Mail

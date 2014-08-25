@@ -187,7 +187,7 @@ function deleteEntry()
 }
 //--></script>
 
-<div class="admMessage admPopupWindow">
+<div class="admMessage popup-window">
     <h1 class="admHeadline">'.$gL10n->get('SYS_NOTE').'</h1>
 
     <div class="admMessageText">

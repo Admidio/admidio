@@ -19,6 +19,11 @@
     <step id="70">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name LIKE 'enable_pm_module'</step>
 	<step id="80">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('enable_forum_interface', 'forum_version', 'forum_export_user', 'forum_praefix', 'forum_sqldata_from_admidio', 'forum_db', 'forum_srv', 'forum_usr', 'forum_pw', 'forum_set_admin', 'forum_link_intern', 'forum_width')</step>
 	<step id="90">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('dates_show_calendar_select')</step>
-	<step id="100">UPDATE %PREFIX%_preferences SET prf_value = '0' WHERE prf_name LIKE 'enable_chat_module'</step>
+	<step id="100">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'system_show_all_users' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'user_management_show_all_users'</step>
+	<step id="110">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('system_show_all_users')</step>
+	<step id="120" database="mysql">ALTER TABLE %PREFIX%_preferences MODIFY COLUMN prf_name varchar(50) NOT NULL</step>
+	<step id="130" database="postgresql">ALTER TABLE %PREFIX%_preferences ALTER COLUMN prf_name TYPE varchar(50)</step>
+	<step id="140">UPDATE %PREFIX%_preferences SET prf_name = 'user_management_members_per_page' WHERE prf_name LIKE 'user_management_members_per_pa'</step>
+	<step id="150">UPDATE %PREFIX%_preferences SET prf_name = 'user_management_days_field_history' WHERE prf_name LIKE 'user_management_days_field_his'</step>
 	<step>stop</step>
 </update>

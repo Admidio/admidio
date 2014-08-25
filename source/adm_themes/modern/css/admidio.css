@@ -73,8 +73,6 @@
     border-radius: 15px;
     padding: 15px 15px 20px 15px;
     background-color: #ffffff; 
-    background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #CBDDE3 95%);	
 }
 
 .badge {
@@ -203,9 +201,10 @@ a:hover, a:active {
 
 /* Style for the popup messagebox and popup messagebox */
 
-.admMessage, .admPopupWindow {
+.admMessage, .popup-window {
     max-width: 650px;
 	text-align: left;
+	margin: 15px;
 }
 
 .admPopupIcon {
@@ -219,7 +218,7 @@ a:hover, a:active {
     width: 80%;
 }
 
-.admPopupWindow  * .admIconTextLinkList {
+.popup-window  * .admIconTextLinkList {
     margin-left: 20%;
 }
 
@@ -308,6 +307,7 @@ input[data-provide="datepicker"], input[type="number"] {
     background-color: #409099;
     border-color: #409099;
     color: #ffffff;
+    margin-bottom: 10px;
 }
 
 .btn-primary:hover, .btn-primary:focus {

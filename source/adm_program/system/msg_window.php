@@ -26,7 +26,7 @@ header('Content-type: text/html; charset=utf-8');
 if($getInlineView)
 {
     echo '
-	<div class="admMessage admPopupWindow">
+	<div class="admMessage popup-window">
 		<h1 class="admHeadline" id="message-window">'.$gL10n->get($getMessageTitle).'</h1>
 		<div class="admMessageText">';
 }

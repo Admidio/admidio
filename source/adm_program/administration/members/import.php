@@ -23,100 +23,79 @@ if (ini_get('file_uploads') != '1')
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
+$headline = $gL10n->get('MEM_IMPORT_USERS');
+
+// add current url to navigation stack
+$gNavigation->addUrl(CURRENT_URL, $headline);
+
 if(isset($_SESSION['import_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-    $form = $_SESSION['import_request'];
+    $form_values = $_SESSION['import_request'];
     unset($_SESSION['import_request']);
 }
 else
 {
-	$form['user_import_mode'] = 1;
-	$form['import_coding']    = 'iso-8859-1';
-	$form['import_role_id']   = 0;
+	$form_values['user_import_mode'] = 1;
+	$form_values['import_coding']    = 'iso-8859-1';
+	$form_values['import_role_id']   = 0;
 }
 
-// Html-Kopf ausgeben
-$gLayout['title']  = $gL10n->get('MEM_IMPORT_USERS');
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $("#userfile").focus();
-        }); 
-    //--></script>';
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create html page object
+$page = new HtmlPage();
 
-// Html des Modules ausgeben
-echo '
-<form id="form_import" action="'.$g_root_path.'/adm_program/administration/members/import_function.php" method="post" enctype="multipart/form-data">
-<div class="formLayout" id="import_form">
-    <div class="formHead">'.$gLayout['title'].'</div>
-    <div class="formBody">
-        <ul class="formFieldList">
-            <li>
-                <dl>
-                    <dt>'.$gL10n->get('MEM_FORMAT').':</dt>
-                    <dd>CSV</dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="userfile">'.$gL10n->get('MEM_CHOOSE_FILE').':</label></dt>
-                    <dd><input type="file" id="userfile" name="userfile" style="width: 90%" /></dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="coding">'.$gL10n->get('MEM_CODING').':</label></dt>
-					<dd>';
-						$selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-						echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form['import_coding'], 'import_coding');
-					echo '</dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="import_role_id">'.$gL10n->get('MEM_ASSIGN_ROLE').':</label></dt>
-                    <dd>';
-                        // Combobox mit allen Rollen ausgeben, die der Benutzer sehen darf
-                        // Rollen mit der Rollenzuordnungsberechtigung werden nur angezeigt, wenn der User die Rechte schon hat
-                        echo FormElements::generateRoleSelectBox($form['import_role_id'],'import_role_id',1);
+// show back link
+$page->addHtml($gNavigation->getHtmlBackButton());
 
-                        echo '&nbsp;
-                        <a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_ASSIGN_ROLE_FOR_IMPORT&amp;inline=true"><img 
-                            onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_ASSIGN_ROLE_FOR_IMPORT\',this)" onmouseout="ajax_hideTooltip()"
-                            class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="user_import_mode">'.$gL10n->get('MEM_EXISTING_USERS').':</label>&nbsp;</dt>
-                    <dd>';
-                    	$selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
-						echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form['user_import_mode'], 'user_import_mode');
-						echo '&nbsp;
-						<a rel="colorboxHelp" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS&amp;inline=true"><img 
-							onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=MEM_IDENTIFY_USERS\',this)" onmouseout="ajax_hideTooltip()"
-							class="iconHelpLink" src="'. THEME_PATH. '/icons/help.png" alt="help" title="" /></a>
-					</dd>
-                </dl>
-            </li>
-        </ul>
+// add headline and title of module
+$page->addHeadline($headline);
 
-        <hr />
+// show form
+$form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/administration/members/import_function.php', $page, 'default', true);
+$form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
+$form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), ($gPreferences['max_file_upload_size'] * 1024), false, null, false, FIELD_MANDATORY);
+$selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
+$form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, FIELD_MANDATORY, $form_values['import_coding']);
 
-        <div class="formSubmit">
-            <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnForward" type="submit">'.$gL10n->get('SYS_NEXT').'&nbsp;<img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" /></button>
-        </div>
-    </div>
-</div>
-</form>';
-    
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add a selectbox to the form where the user can choose a role from all roles he could see
+// first read all relevant roles from database and create an array with them
+$condition = '';
+
+if($gCurrentUser->manageRoles() == false)
+{
+	// keine Rollen mit Rollenzuordnungsrecht anzeigen
+	$condition .= ' AND rol_assign_roles = 0 ';
+}
+if($gCurrentUser->isWebmaster() == false)
+{
+	// Webmasterrolle nicht anzeigen
+	$condition .= ' AND rol_webmaster = 0 ';
+}
+
+$sql = 'SELECT * FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+         WHERE rol_valid   = 1
+           AND rol_visible = 1
+           AND rol_cat_id  = cat_id
+           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               OR cat_org_id IS NULL )'.
+               $condition.'
+         ORDER BY cat_sequence, rol_name';
+$resultList = $gDb->query($sql);
+$roles = array();
+
+while($row = $gDb->fetch_array($resultList))
+{
+    $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
+}
+$form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, FIELD_MANDATORY, $form_values['import_role_id'], true, false, 'MEM_ASSIGN_ROLE_FOR_IMPORT');
+
+$selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
+$form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, FIELD_MANDATORY, $form_values['user_import_mode'], false, false, 'MEM_IDENTIFY_USERS');
+$form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), THEME_PATH.'/icons/forward.png', null, ' col-sm-offset-3');
+
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

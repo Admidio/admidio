@@ -27,8 +27,6 @@ if($gCurrentUser->isWebmaster() == false)
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$html_icon_warning = '<img class="iconHelpLink" src="'.THEME_PATH.'/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />';
-
 // read organization values into form array
 foreach($gCurrentOrganization->dbColumns as $key => $value)
 {
@@ -43,7 +41,7 @@ foreach($gPreferences as $key => $value)
 
 // create html page object
 $page = new HtmlPage();
-$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'lists', 'messages', 'profile', 'events', 'links');
+$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'lists', 'messages', 'profile', 'events', 'links', 'user_management');
 
 // open the modules tab if the options of a module should be shown 
 if(in_array($showOption, $showOptionValidModules) == true)
@@ -205,8 +203,6 @@ $page->addHtml('
                                 FIELD_DEFAULT, null, 'ORG_SHOW_ORGANIZATION_SELECT_DESC');
                         }
                         
-                        $form->addCheckbox('system_show_all_users', $gL10n->get('ORG_SHOW_ALL_USERS'), $form_values['system_show_all_users'], 
-                            FIELD_DEFAULT, null, 'ORG_SHOW_ALL_USERS_DESC');
                         $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/organization/organization_function.php?mode=2"><img
                                     src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
                         $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
@@ -497,6 +493,28 @@ $page->addHtml('
                         $form->addSelectBox('enable_announcements_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_announcements_module'], false, false, null, 'ORG_ACCESS_TO_MODULE_DESC');
                         $form->addTextInput('announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['announcements_per_page'], 4, FIELD_DEFAULT, 'number', 
                             null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default" id="panel_user_management">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_user_management">
+                            <img src="'.THEME_PATH.'/icons/user_administration.png" alt="'.$gL10n->get('MEM_USER_MANAGEMENT').'" title="'.$gL10n->get('MEM_USER_MANAGEMENT').'" />'.$gL10n->get('MEM_USER_MANAGEMENT').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_user_management" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('user_management_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=user_management', $page, 'default', false, 'form-preferences');
+                        $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
+                        $form->addSelectBox('user_management_members_per_page', $gL10n->get('MEM_USERS_PER_PAGE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['user_management_members_per_page'], false, false, null, 'MEM_USERS_PER_PAGE_DESC');
+                        $form->addTextInput('user_management_days_field_history', $gL10n->get('MEM_DAYS_FIELD_HISTORY'), $form_values['user_management_days_field_history'], 10, FIELD_DEFAULT, 'number', null, 'MEM_DAYS_FIELD_HISTORY_DESC');
+                        $form->addCheckbox('user_management_show_all_users', $gL10n->get('ORG_SHOW_ALL_USERS'), $form_values['user_management_show_all_users'], 
+                            FIELD_DEFAULT, null, 'ORG_SHOW_ALL_USERS_DESC');
                         $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>

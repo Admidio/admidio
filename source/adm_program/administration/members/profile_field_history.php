@@ -19,9 +19,13 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
+// calculate default date from which the profile fields history should be shown
+$filterDateFrom = new DateTimeExtended(DATE_NOW, 'Y-m-d', 'date');
+$filterDateFrom->modify('-'.$gPreferences['user_management_days_field_history'].' day');
+
 // Initialize and check the parameters
 $getUserId   = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', '1970-01-01', false);
+$getDateFrom = admFuncVariableIsValid($_GET, 'filter_date_from', 'date', $filterDateFrom->format($gPreferences['system_date']), false);
 $getDateTo   = admFuncVariableIsValid($_GET, 'filter_date_to', 'date', DATE_NOW, false);
 
 // create a user object from the user parameter

@@ -22,6 +22,11 @@ if(count($_SESSION['file_lines']) == 0)
     $gMessage->show($gL10n->get('SYS_FILE_NOT_EXIST'));
 }
 
+$headline = $gL10n->get('MEM_ASSIGN_FIELDS');
+
+// add current url to navigation stack
+$gNavigation->addUrl(CURRENT_URL, $headline);
+
 // feststellen, welches Trennzeichen in der Datei verwendet wurde
 $count_comma     = 0;
 $count_semicolon = 0;
@@ -57,133 +62,113 @@ if(isset($_SESSION['import_csv_request']))
 {
     // durch fehlerhafte Eingabe ist der User zu diesem Formular zurueckgekehrt
     // nun die vorher eingegebenen Inhalte ins Objekt schreiben
-    $form = $_SESSION['import_csv_request'];
+    $form_values = $_SESSION['import_csv_request'];
     unset($_SESSION['import_csv_request']);
 	if(isset($form['first_row']) == false)
 	{
-		$form['first_row'] = 0;
+		$form_values['first_row'] = 0;
 	}
 }
 else
 {
-	$form['first_row'] = 1;
-	$form['import_coding']    = 'iso-8859-1';
-	$form['import_role_id']   = 0;
+	$form_values['first_row'] = 1;
+	$form_values['import_coding']    = 'iso-8859-1';
+	$form_values['import_role_id']   = 0;
 }
 
-// Html-Kopf ausgeben
-$gLayout['title']  = $gL10n->get('MEM_ASSIGN_FIELDS');
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
+// create html page object
+$page = new HtmlPage();
+
+// show back link
+$page->addHtml($gNavigation->getHtmlBackButton());
+
+// add headline and title of module
+$page->addHeadline($headline);
+
+$page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
+
+// show form
+$form = new HtmlForm('import_assign_fields_form', $g_root_path. '/adm_program/administration/members/import_csv.php', $page, 'vertical');
+$form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $form_values['first_row']);
+$htmlFieldTable = '
+   <table class="table table-condensed">
+        <thead>
+            <tr>
+                <th>'.$gL10n->get('MEM_PROFILE_FIELD').'</th>
+                <th>'.$gL10n->get('MEM_FILE_COLUMN').'</th>
+            </tr>
+        </thead>';
+
+        $line = reset($_SESSION['file_lines']);
+        $arrayCsvColumns = explode($_SESSION['value_separator'], $line);
+        $category = '';
+
+        // jedes Benutzerfeld aus der Datenbank auflisten
+        
+        foreach($gProfileFields->mProfileFields as $field)
         {
-            $("#first_row").focus();
-        }); 
-    //--></script>';
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-
-// Html des Modules ausgeben
-echo '
-<form action="'. $g_root_path. '/adm_program/administration/members/import_csv.php" method="post">
-<div class="formLayout" id="import_csv_form">
-    <div class="formHead">'.$gLayout['title'].'</div>
-    <div class="formBody"><p>'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>
-        <p style="margin-bottom: 10px;">
-            <input type="checkbox" id="first_row" name="first_row" style="vertical-align: middle;" ';
-			if($form['first_row'] == 1)
-			{
-				echo ' checked="checked" ';
-			}
-			echo 'value="1" />&nbsp;
-            <label for="first_row">'.$gL10n->get('MEM_FIRST_LINE_COLUMN_NAME').'</label>
-        </p>
-
-        <table class="tableList" style="width: 80%;" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>'.$gL10n->get('MEM_PROFILE_FIELD').'</th>
-                    <th>'.$gL10n->get('MEM_FILE_COLUMN').'</th>
-                </tr>
-            </thead>';
-
-            $line = reset($_SESSION['file_lines']);
-            $arrayCsvColumns = explode($_SESSION['value_separator'], $line);
-            $category = '';
-
-            // jedes Benutzerfeld aus der Datenbank auflisten
-            
-            foreach($gProfileFields->mProfileFields as $field)
+            if($category != $field->getValue('cat_id'))
             {
-                if($category != $field->getValue('cat_id'))
+                if(strlen($category) > 0)
                 {
-                    if(strlen($category) > 0)
-                    {
-                        echo '</tbody>';
-                    }
-                    $block_id = 'admCategory'. $field->getValue('cat_id');
-                    echo '<tbody>
-                        <tr>
-                            <td class="tableSubHeader" colspan="4">
-                                <a class="iconShowHide" href="javascript:showHideBlock(\''. $block_id. '\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img 
-                                id="'. $block_id. 'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'. $field->getValue('cat_name'). '
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tbody id="'.$block_id.'">';
+                    $htmlFieldTable .= '</tbody>';
+                }
+                $block_id = 'admCategory'. $field->getValue('cat_id');
+                $htmlFieldTable .= '<tbody>
+                    <tr class="group-heading">
+                        <td colspan="4">'.$field->getValue('cat_name').'</td>
+                    </tr>
+                </tbody>
+                <tbody id="'.$block_id.'">';
 
-                    $category = $field->getValue('cat_id');
-                }             
-                echo '<tr>
-                    <td><label for="usf-'. $field->getValue('usf_id'). '">'. $field->getValue('usf_name'). ':</label></td>
-                    <td>
-                        <select size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 90%;">';
-							if(isset($form['usf-'.$field->getValue('usf_id')]) && $form['usf-'. $field->getValue('usf_id')] > 0)
+                $category = $field->getValue('cat_id');
+            }             
+            $htmlFieldTable .= '<tr>
+                <td><label for="usf-'. $field->getValue('usf_id'). '">'.$field->getValue('usf_name');
+                    // Lastname und first name are mandatory fields
+                    if($field->getValue('usf_name_intern') == 'LAST_NAME' || $field->getValue('usf_name_intern') == 'FIRST_NAME')
+                    {
+                        $htmlFieldTable .= '&nbsp;&nbsp;<span class="text-danger">('.$gL10n->get('SYS_MANDATORY_FIELD').')</span>';
+                    }
+                    $htmlFieldTable .= '</label></td>
+                <td>
+                    <select class="form-control" size="1" id="usf-'. $field->getValue('usf_id'). '" name="usf-'. $field->getValue('usf_id'). '" style="width: 90%;">';
+						if(isset($form_values['usf-'.$field->getValue('usf_id')]) && $form_values['usf-'. $field->getValue('usf_id')] > 0)
+						{
+							$htmlFieldTable .= '<option value=""></option>';
+						}
+						else
+						{
+							$htmlFieldTable .= '<option value="" selected="selected"></option>';
+						}
+
+                        // Alle Spalten aus der Datei in Combobox auflisten
+                        foreach($arrayCsvColumns as $col_key => $col_value)
+                        {
+                            $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
+
+							if(isset($form_values['usf-'. $field->getValue('usf_id')]) 
+							&& strlen($form_values['usf-'. $field->getValue('usf_id')]) > 0
+							&& $form_values['usf-'. $field->getValue('usf_id')] == $col_key)
 							{
-								echo '<option value=""></option>';
+								$htmlFieldTable .= '<option value="'.$col_key.'" selected="selected">'.$col_value.'</option>';
 							}
 							else
 							{
-								echo '<option value="" selected="selected"></option>';
+								$htmlFieldTable .= '<option value="'.$col_key.'">'.$col_value.'</option>';
 							}
-
-                            // Alle Spalten aus der Datei in Combobox auflisten
-                            foreach($arrayCsvColumns as $col_key => $col_value)
-                            {
-                                $col_value = trim(strip_tags(str_replace('"', '', $col_value)));
-
-								if(isset($form['usf-'. $field->getValue('usf_id')]) 
-								&& strlen($form['usf-'. $field->getValue('usf_id')]) > 0
-								&& $form['usf-'. $field->getValue('usf_id')] == $col_key)
-								{
-									echo '<option value="'.$col_key.'" selected="selected">'.$col_value.'</option>';
-								}
-								else
-								{
-									echo '<option value="'.$col_key.'">'.$col_value.'</option>';
-								}
-                            }
-                        echo '</select>';
-
-                        // Lastname und first name are mandatory fields
-                        if($field->getValue('usf_name_intern') == 'LAST_NAME' || $field->getValue('usf_name_intern') == 'FIRST_NAME')
-                        {
-                            echo '&nbsp;<span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>';
                         }
-                    echo '</td>
-                </tr>';
-            }
-        echo '</tbody>
-        </table>
+                    $htmlFieldTable .= '</select>
+                </td>
+            </tr>';
+        }
+    $htmlFieldTable .= '</tbody>
+    </table>';
+$form->addDescription($htmlFieldTable);
+$form->addSubmitButton('btn_forward', $gL10n->get('MEM_IMPORT'), THEME_PATH.'/icons/database_in.png');
 
-        <div class="formSubmit">
-            <button id="btnBack" type="button" onclick="history.back()"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnForward" type="submit"><img src="'. THEME_PATH. '/icons/database_in.png" alt="'.$gL10n->get('MEM_IMPORT').'" />&nbsp;'.$gL10n->get('MEM_IMPORT').'</button>
-        </div>
-    </div>
-</div>
-</form>';
-    
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
 
 ?>

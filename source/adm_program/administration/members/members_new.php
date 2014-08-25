@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Anlegen neuer Mitglieder
+ * Enter firstname and surname and checks if member already exists
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -11,7 +11,7 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-// nur berechtigte User duerfen die Mitgliederverwaltung aufrufen
+// only legitimate users are allowed to call the user management
 if (!$gCurrentUser->editUsers())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -19,53 +19,56 @@ if (!$gCurrentUser->editUsers())
 
 echo '
 <script type="text/javascript"><!--
-function send()
-{
-    lastname = document.getElementById("lastname").value;
-    firstname = document.getElementById("firstname").value;
-    if(lastname.length > 0 && firstname.length > 0)
-    {
-        document.getElementById("admFormMembersCreateUser").action  = gRootPath + "/adm_program/administration/members/members_assign.php?lastname=" + lastname + "&firstname=" + firstname;
-        document.getElementById("admFormMembersCreateUser").submit();
-    }
-    else
-    {
-		jQueryAlert("SYS_FIELDS_EMPTY");
-    }
-}
+$(document).ready(function(){
+    $("#form_members_create_user").submit(function(event) {
+        var action = $(this).attr("action");
+        $("#form_members_create_user .form-alert").hide();
+    
+        // disable default form submit
+        event.preventDefault();
+        
+        $.ajax({
+            type:    "POST",
+            url:     action,
+            data:    $(this).serialize(),
+            success: function(data) {
+                if(data == "success") {
+                    $("#form_members_create_user .form-alert").attr("class", "alert alert-success form-alert");
+                    $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
+                    $("#form_members_create_user .form-alert").fadeIn("slow");
+                    $.fn.colorbox.resize();
+                    setTimeout(function () {
+                        self.location.href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
+                    },2500);	
+                }
+                else {
+                    if(data.length > 1000) {
+                        $("#popup_members_new").html(data);
+                        $.fn.colorbox.resize();
+                    }
+                    else {
+                        $("#form_members_create_user .form-alert").attr("class", "alert alert-danger form-alert");
+                        $("#form_members_create_user .form-alert").fadeIn();
+                        $.fn.colorbox.resize();
+                        $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
+                    }
+                }
+            }
+        });    
+    });
+});
 //--></script>
 
-<form id="admFormMembersCreateUser" method="post" action="'.$g_root_path.'/adm_program/administration/members/members_assign.php" >
-<div class="formLayout">
-    <div class="formHead">'. $gL10n->get('MEM_CREATE_USER'). '</div>
-    <div class="formBody">
-        <ul class="formFieldList">
-            <li>'.$gL10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</li>
-            <li>
-                <dl>
-                    <dt><label for="lastname">'.$gL10n->get('SYS_LASTNAME').':</label></dt>
-                    <dd>
-                        <input type="text" id="lastname" name="lastname" style="width: 300px;" maxlength="100" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-            <li>
-                <dl>
-                    <dt><label for="firstname">'.$gL10n->get('SYS_FIRSTNAME').':</label></dt>
-                    <dd>
-                        <input type="text" id="firstname" name="firstname" style="width: 300px;" maxlength="100" />
-                        <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-                    </dd>
-                </dl>
-            </li>
-        </ul>
+<div class="popup-window" id="popup_members_new">
+    <h1 class="admHeadline">'.$gL10n->get('MEM_CREATE_USER').'</h1>
+    
+    <p class="lead">'.$gL10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</p>';
+    
+    $form = new HtmlForm('form_members_create_user', $g_root_path.'/adm_program/administration/members/members_assign.php');
+    $form->addTextInput('lastname', $gL10n->get('SYS_LASTNAME'), null, 100, FIELD_MANDATORY, 'text');
+    $form->addTextInput('firstname', $gL10n->get('SYS_FIRSTNAME'), null, 100, FIELD_MANDATORY, 'text');
+    $form->addSubmitButton('btn_add', $gL10n->get('MEM_CREATE_USER'), THEME_PATH.'/icons/add.png', null, ' col-sm-offset-3');
+    $form->show();
+echo '</div>';
 
-        <hr />
-
-        <div class="formSubmit">
-            <button id="btnAdd" type="button" onclick="send()"><img src="'.THEME_PATH.'/icons/add.png" alt="'.$gL10n->get('MEM_CREATE_USER').'" />&nbsp;'.$gL10n->get('MEM_CREATE_USER').'</button>
-        </div>
-    </div>
-</form>';
 ?>

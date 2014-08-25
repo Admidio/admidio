@@ -13,7 +13,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $postImportCoding   = admFuncVariableIsValid($_POST, 'import_coding', 'string', null, true, array('iso-8859-1', 'utf-8'));
-$postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id', 'numeric', null, true);
+$postRoleId         = admFuncVariableIsValid($_POST, 'import_role_id', 'numeric', null);
 $postUserImportMode = admFuncVariableIsValid($_POST, 'user_import_mode', 'numeric', null, true);
 
 $_SESSION['import_request'] = $_POST;
@@ -25,11 +25,11 @@ if(!$gCurrentUser->editUsers())
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-if(strlen($_FILES['userfile']['tmp_name']) == 0)
+if(strlen($_FILES['userfile']['tmp_name'][0]) == 0)
 {
     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_FILE')));
 }
-else if($_FILES['userfile']['error'] == 1)
+else if($_FILES['userfile']['error'][0] == 1)
 {
     //Dateigroesse ueberpruefen Servereinstellungen
     $gMessage->show($gL10n->get('SYS_FILE_TO_LARGE_SERVER', $gPreferences['max_file_upload_size']));
@@ -51,7 +51,7 @@ if($gCurrentUser->viewRole($role->getValue('rol_id')) == false
 
 // read file in an array; auto-detect the line endings of different os
 ini_set('auto_detect_line_endings', 1);
-$_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name']);
+$_SESSION['file_lines']       = file($_FILES['userfile']['tmp_name'][0]);
 $_SESSION['rol_id']           = $role->getValue('rol_id');
 $_SESSION['user_import_mode'] = $postUserImportMode;
 

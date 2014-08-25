@@ -57,9 +57,8 @@ else
     $headline = $gL10n->get('DOW_DOWNLOADS').' - '.$currentFolder->getValue('fol_name');
 }
 
-// Session handling
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL, $headline);
+// Navigation of the module starts here
+$gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 $getFolderId = $currentFolder->getValue('fol_id');
 
@@ -72,7 +71,6 @@ $navigationBar = $currentFolder->getNavigationForDownload();
 // create html page object
 $page = new HtmlPage();
 
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/tooltip/text_tooltip.js');
 $page->addJavascript('$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
     
 // create module menu
@@ -131,7 +129,7 @@ if (isset($folderContent['folders']))
         $folderDescription = '';
         if($nextFolder['fol_description'] != '')
         {
-            $folderDescription = '<a class="icon-link" title="'.$nextFolder['fol_description'].'" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$gL10n->get('SYS_FOLDER').'"/></a>';
+            $folderDescription = '<a class="icon-link" href="#"><img src="'. THEME_PATH. '/icons/info.png" alt="'.$nextFolder['fol_description'].'" title="'.$nextFolder['fol_description'].'" /></a>';
         }
         // create array with all column values
         $columnValues = array(

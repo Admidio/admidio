@@ -11,7 +11,7 @@
  *  @par Examples
  *  @code // create a simple html page with some text
  *  $page = new HtmlPage();
- *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/tooltip/text_tooltip.js');
+ *  $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery/jquery.js');
  *  $page->addHeadline('A simple Html page');
  *  $page->addHtml('<strong>This is a simple Html page!</strong>');
  *  $page->show();@endcode
@@ -56,7 +56,7 @@ class HtmlPage
                                 $g_root_path. '/adm_program/system/js/common_functions.js',
                                 $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
         $this->rssFiles = array();
-        $this->addJavascript('$(".colorbox-dialog").colorbox({preloading:true,photo:false,speed:300,rel:\'nofollow\'});', true);
+        $this->addJavascript('$(".colorbox-dialog").colorbox({rel:\'nofollow\'});', true);
     }
 
     /** Adds a cascading style sheets file to the html page.
