@@ -338,14 +338,14 @@ else
                     // Dieses div wird erst gemeinsam mit den Kommentaren ueber Javascript eingeblendet
                     $page->addHtml('
                     <div id="admCommentsVisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_others. '; display: '. $display_others. ';">
-                        <a class="icon-text-link" href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                        <a class="icon-text-link" href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comment.png"
                             alt="'.$gL10n->get('GBO_HIDE_COMMENTS').'" title="'.$gL10n->get('GBO_HIDE_COMMENTS').'" />'.$gL10n->get('GBO_HIDE_COMMENTS').'</a>
                     </div>');
 
                     // Dieses div wird ausgeblendet wenn die Kommetare angezeigt werden
                     $page->addHtml('
                     <div id="admCommentsInvisible_'. $gboId. '" class="commentLink" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';">
-                        <a class="icon-text-link" class="icon-text-link" href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comments.png"
+                        <a class="icon-text-link" class="icon-text-link" href="javascript:toggleComments('. $gboId. ')"><img src="'. THEME_PATH. '/icons/comment.png"
                             alt="'.$gL10n->get('GBO_SHOW_COMMENTS').'" title="'.$gL10n->get('GBO_SHOW_COMMENTS').'" />'.$gL10n->get('GBO_SHOW_COMMENTS_ON_ENTRY', $gDb->num_rows($comment_result)).'</a>
                         <div id="comments_'. $gboId. '" style="visibility: '. $visibility_show_comments. '; display: '. $display_show_comments. ';"></div>
                     </div>');

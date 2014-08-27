@@ -81,13 +81,13 @@ if(($gPreferences['enable_pm_module'] == 1 || $gPreferences['enable_mail_module'
     if ($row > 0)
     {
         $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages.php',
-                        $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$row.'</span>', '/icons/email.png',
+                        $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$row.'</span>', '/icons/messages_big.png',
                         $gL10n->get('MAI_EMAIL_DESC'));
     }
     else
     {
         $moduleMenu->addItem('private message', '/adm_program/modules/messages/messages.php',
-                        $gL10n->get('SYS_MESSAGES'), '/icons/email.png',
+                        $gL10n->get('SYS_MESSAGES'), '/icons/messages_big.png',
                         $gL10n->get('MAI_EMAIL_DESC'));
     }
 }

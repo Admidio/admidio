@@ -43,12 +43,12 @@
                 if ($row > 0)
                 {
                     $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                                    $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$row.'</span>', '/icons/email.png');
+                                    $gL10n->get('SYS_MESSAGES').'<span class="badge">'.$row.'</span>', '/icons/messages.png');
                 }
                 else
                 {
                     $moduleMenu->addItem('private_message', '/adm_program/modules/messages/messages.php',
-                                    $gL10n->get('SYS_MESSAGES'), '/icons/email.png');
+                                    $gL10n->get('SYS_MESSAGES'), '/icons/messages.png');
                 }
             }
             if($gPreferences['enable_photo_module'] == 1 

@@ -197,7 +197,7 @@ while($row = $gDb->fetch_array($rol_result))
     // If allowed to write anonymous guestbook entries, then we don´t need to set rights for the roles
     if($role->getValue('rol_guestbook_comments') == 1  && $gPreferences['enable_guestbook_module'] > 0 && $gPreferences['enable_gbook_comments4all'] == false)
     {
-        $assignRoles .= '<img class="iconInformation" src="'. THEME_PATH. '/icons/comments.png"
+        $assignRoles .= '<img class="iconInformation" src="'. THEME_PATH. '/icons/comment.png"
                             alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />';
     }
     if($role->getValue('rol_weblinks') == 1 && $gPreferences['enable_weblinks_module'] > 0)

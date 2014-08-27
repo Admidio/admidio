@@ -62,7 +62,7 @@ if (isset($comment_result))
         <div class="panel panel-info panel-comment" id="gbc_'.$gbComment->getValue('gbc_id').'">
             <div class="panel-heading">
                 <div class="pull-left">
-                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/comments.png" style="vertical-align: top;" alt="'.$gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name')).'" />&nbsp;'.
+                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/comment.png" style="vertical-align: top;" alt="'.$gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name')).'" />&nbsp;'.
                     $gL10n->get('GBO_COMMENT_BY', $gbComment->getValue('gbc_name'));
 
                     // Falls eine Mailadresse des Users angegeben wurde, soll ein Maillink angezeigt werden...

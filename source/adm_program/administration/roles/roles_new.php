@@ -608,7 +608,7 @@ echo '
                                         echo ' checked="checked" ';
                                     }
                                     echo ' value="1" />
-                                    <label for="rol_guestbook_comments"><img src="'. THEME_PATH. '/icons/comments.png" alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" /></label>&nbsp;
+                                    <label for="rol_guestbook_comments"><img src="'. THEME_PATH. '/icons/comment.png" alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" /></label>&nbsp;
                                     <label for="rol_guestbook_comments">'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'</label>
                                 </div>
                             </li>';

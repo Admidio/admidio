@@ -569,7 +569,7 @@ if($gPreferences['profile_show_roles'] == 1)
             }
             if($user->checkRolesRight('rol_guestbook_comments') == 1 && $gPreferences['enable_guestbook_module'] > 0)
             {
-                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/comments.png"
+                $page->addHtml('<img onmouseover="profileJS.showInfo(\''.substr($berechtigungs_Herkunft['rol_guestbook_comments'],2).'\')" class="icon-information" src="'.THEME_PATH.'/icons/comment.png"
                 alt="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" title="'.$gL10n->get('ROL_RIGHT_GUESTBOOK_COMMENTS').'" />');
             }
             if($user->checkRolesRight('rol_weblinks') == 1 && $gPreferences['enable_weblinks_module'] > 0)
