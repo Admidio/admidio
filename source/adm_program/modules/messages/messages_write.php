@@ -160,11 +160,13 @@ $page = new HtmlPage();
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // show headline of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$messagesWriteMenu = new HtmlNavbar('menu_messages_write');
+$messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($messagesWriteMenu->show(false));
 
 if ($getMsgType == 'PM')
 {

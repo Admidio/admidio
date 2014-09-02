@@ -62,11 +62,10 @@ $parameter['date_to'] = date('Y-m-d',time()+$gPreferences['dates_ical_days_futur
 $datesResult = $dates->getDataset();
 
 //Headline für Dateinamen
-$headline = $dates->getHeadline();
 if($dates->getCatId() > 0)
 {
     $calendar = new TableCategory($gDb, $dates->getCatId());
-    $headline.= '_'. $calendar->getValue('cat_name');
+    $getHeadline.= '_'. $calendar->getValue('cat_name');
 }
 
 $date = new TableDate($gDb);
@@ -90,11 +89,11 @@ if($parameter['mode'] == 2)
     // for IE the filename must have special chars in hexadecimal 
     if (isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
     {
-        $headline = urlencode($headline);
+        $getHeadline = urlencode($getHeadline);
     }
 
     header('Content-Type: text/calendar; charset=utf-8');
-    header('Content-Disposition: attachment; filename="'. $headline. '.ics"');
+    header('Content-Disposition: attachment; filename="'. $getHeadline. '.ics"');
     
 	// neccessary for IE, because without it the download with SSL has problems
     header('Cache-Control: private');

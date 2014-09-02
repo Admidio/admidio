@@ -45,11 +45,13 @@ else
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // add headline and title of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$importMenu = new HtmlNavbar('menu_import');
+$importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($importMenu->show(false));
 
 // show form
 $form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/administration/members/import_function.php', $page, 'default', true);

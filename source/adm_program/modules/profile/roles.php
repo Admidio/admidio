@@ -94,7 +94,8 @@ if($getInline == true)
     });
     --></script>
 
-    <div class="popup-window">';
+    <div class="popup-window">
+        <h1 class="admHeadline">'.$headline.'</h1>';
 }
 else
 {
@@ -108,12 +109,17 @@ else
 
     // show back link
     $page->addHtml($gNavigation->getHtmlBackButton());
+    
+    // create module menu with back link
+    $rolesMenu = new HtmlNavbar('menu_roles');
+    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $page->addHtml($rolesMenu->show(false));
+    
+    $page->addHeadline($headline);
 }
 
 // show headline of module
-$html .= '<h1 class="admHeadline">'.$headline.'</h1>
-
-<form id="roles_assignment_form" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
+$html .= '<form id="roles_assignment_form" action="'.$g_root_path.'/adm_program/modules/profile/roles_save.php?usr_id='.$getUserId.'&amp;new_user='.$getNewUser.'&amp;inline='.$getInline.'" method="post">';
 
 // Create table
 $table = new HtmlTable('role_assignment_table');

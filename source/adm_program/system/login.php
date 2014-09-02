@@ -31,11 +31,13 @@ $roleWebmaster = new TableRoles($gDb, $row['rol_id']);
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // show headline of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$loginMenu = new HtmlNavbar('menu_login');
+$loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($loginMenu->show(false));
 
 // show form
 $form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check.php', $page);

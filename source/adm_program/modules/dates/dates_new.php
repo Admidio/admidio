@@ -213,12 +213,14 @@ $page->addJavascript('
 		}
 	});', true);
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // add headline and title of module
 $page->addHeadline($headline);
- 
+
+// create module menu with back link
+$datesMenu = new HtmlNavbar('menu_dates_create');
+$datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($datesMenu->show(false));
+
 // show form
 $form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));

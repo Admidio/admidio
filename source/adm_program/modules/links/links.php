@@ -77,7 +77,7 @@ $page->addHtml('<div id="links_overview">');
 if($weblinks->getId() == 0)
 {	
 	// create module menu
-	$LinksMenu = new ModuleMenu('admMenuWeblinks');
+	$LinksMenu = new HtmlNavbar('menu_weblinks');
 
 	if($gCurrentUser->editWeblinksRight())
 	{
@@ -90,7 +90,7 @@ if($weblinks->getId() == 0)
 	{
 		// show link to system preferences of weblinks
 		$LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=links', 
-							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 	}
 	elseif($gCurrentUser->editWeblinksRight())
 	{
@@ -99,14 +99,11 @@ if($weblinks->getId() == 0)
 							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');    	
 	}
 	
-    $page->addJavascript('
-        $("#cat_id").change(function () {
-           $("#navbar_cat_id_form").submit();
-        });', true);
+    $page->addJavascript('$("#cat_id").change(function () { $("#navbar_cat_id_form").submit();});', true);
 	
     $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/links/links.php?headline='. $getHeadline, $page, 'navbar');
     $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'LNK', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getCatId);
-    $LinksMenu->addForm('menu_item_export_list_to', $navbarForm->show(false));
+    $LinksMenu->addForm($navbarForm->show(false));
 
 
 	$page->addHtml($LinksMenu->show(false));

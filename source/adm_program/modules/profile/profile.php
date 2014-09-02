@@ -181,19 +181,18 @@ $page->addJavascript('
             }
         });    
     });', true);
-
-// show back link
-if($gNavigation->count() > 1)
-{
-    $page->addHtml($gNavigation->getHtmlBackButton());
-}
     
 // add headline and title of module
 $page->addHeadline($headline);
 
 // create module menu
-$profileMenu = new ModuleMenu('menu_profile');
+$profileMenu = new HtmlNavbar('menu_profile');
 
+// show back link
+if($gNavigation->count() > 1)
+{
+    $profileMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+}
 
 // if user has right then show link to edit profile
 if($gCurrentUser->editProfile($user))
@@ -227,15 +226,38 @@ elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id'))
     }
 }
 
-// show link to export the profile as vCard
-$profileMenu->addItem('menu_item_vcard', $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue('usr_id'), 
-                        $gL10n->get('PRO_EXPORT_VCARD'), 'vcard.png');
-
 // show link to view profile field change history
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
 	$profileMenu->addItem('menu_item_change_history', $g_root_path. '/adm_program/administration/members/profile_field_history.php?usr_id='. $user->getValue('usr_id'), 
                         $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
+}
+
+$profileMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+
+// show link to export the profile as vCard
+$profileMenu->addItem('menu_item_vcard', $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=1&amp;user_id='. $user->getValue('usr_id'), 
+                        $gL10n->get('PRO_EXPORT_VCARD'), 'vcard.png', 'right', 'menu_item_extras');
+
+// if you have the right to assign roles then show the link to assign new roles to this user
+if($gCurrentUser->assignRoles())
+{
+    $profileMenu->addItem('menu_item_role_memberships_change', $g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1', 
+                            $gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE'), 'roles.png', 'right', 'menu_item_extras');
+/*    $page->addHtml('
+    <a class="icon-text-link" id="edit_roles_link" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1"><img 
+        src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />'.$gL10n->get('SYS_EDIT').'</a>');*/
+}
+
+if($gCurrentUser->isWebmaster())
+{
+	// show link to maintain profile fields
+	$profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/administration/organization/fields.php', 
+								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
+
+	// show link to system preferences of weblinks
+	$profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=profile', 
+						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
 $page->addHtml($profileMenu->show(false));
@@ -600,16 +622,7 @@ if($gPreferences['profile_show_roles'] == 1)
     $page->addHtml('
     <div class="panel panel-default" id="profile_roles_box">
         <div class="panel-heading">
-            <div class="pull-left">'.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'</div>
-            <div class="pull-right">');
-                // Moderatoren & Gruppenleiter duerfen neue Rollen zuordnen
-                if($gCurrentUser->assignRoles())
-                {
-                    $page->addHtml('
-                    <a class="icon-text-link" id="edit_roles_link" href="'.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$user->getValue('usr_id').'&amp;inline=1"><img 
-                        src="'.THEME_PATH.'/icons/edit.png" title="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" alt="'.$gL10n->get('ROL_ROLE_MEMBERSHIPS_CHANGE').'" />'.$gL10n->get('SYS_EDIT').'</a>');
-                }
-            $page->addHtml('</div>
+            '.$gL10n->get('ROL_ROLE_MEMBERSHIPS').'
         </div>
         <div class="panel-body" id="profile_roles_box_body">
             '.getRoleMemberships('role_list', $user, $result_role, $count_role, false).'

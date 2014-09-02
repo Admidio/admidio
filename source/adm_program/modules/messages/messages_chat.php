@@ -69,11 +69,13 @@ $headline = 'Admidio Chat';
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // show headline of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$messagesChatMenu = new HtmlNavbar('menu_messages_chat');
+$messagesChatMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($messagesChatMenu->show(false));
 
 $page->addHtml('<div id="chat-wrap"><div id="chat-area"></div></div>');
 

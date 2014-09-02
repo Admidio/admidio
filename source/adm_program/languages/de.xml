@@ -92,6 +92,7 @@
     <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
     <text id="SYS_FILTER" development="new" translation="todo">Filter</text>
     <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="todo">Hier können Kategorien angelegt und bearbeitet werden.</text>
+    <text id="SYS_MENU" development="new" translation="todo">Menü</text>
     <text id="SYS_MESSAGES" development="new" translation="todo">Nachrichten</text>
     <text id="SYS_NO_DATA_FOUND" development="new" translation="todo">Es wurden keine Daten gefunden.</text>
     <text id="SYS_STILL_X_CHARACTERS" development="new" translation="todo">noch %VAR1% Zeichen</text>

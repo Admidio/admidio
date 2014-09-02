@@ -86,11 +86,13 @@ if(isset($_SESSION['categories_request']))
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // add headline and title of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$categoryCreateMenu = new HtmlNavbar('menu_category_create');
+$categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($categoryCreateMenu->show(false));
 
 // show form
 $form = new HtmlForm('categories_edit_form', $g_root_path.'/adm_program/administration/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);

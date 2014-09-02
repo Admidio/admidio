@@ -107,11 +107,13 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // add headline and title of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$guestbookCreateMenu = new HtmlNavbar('menu_guestbook_create');
+$guestbookCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($guestbookCreateMenu->show(false));
 
 // Html des Modules ausgeben
 if ($getGboId > 0)

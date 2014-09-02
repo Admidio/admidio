@@ -10,7 +10,12 @@
 /* special css adjustments for login form */
 
 #plugin_login_form .form-group {
-    margin-bottom: 5px;
+    margin-bottom: 7px;
+}
+
+#plugin_login_form .form-control-static {
+    padding-top: 0px;
+    padding-bottom: 0px;
 }
 
 #plugin_login_form label {

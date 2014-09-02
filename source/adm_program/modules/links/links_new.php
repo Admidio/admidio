@@ -61,11 +61,13 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // show headline of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$linksCreateMenu = new HtmlNavbar('menu_links_create');
+$linksCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($linksCreateMenu->show(false));
 
 // Html des Modules ausgeben
 if($getLinkId > 0)

@@ -65,7 +65,7 @@ $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create module menu for emails
-$EmailMenu = new ModuleMenu('admMenuEmail');
+$EmailMenu = new HtmlNavbar('admMenuEmail');
 // link to write new email
 if ($gPreferences['enable_mail_module'] == 1 )
 {
@@ -84,7 +84,7 @@ if ($gPreferences['enable_chat_module'] == 1 )
 }
 
 $EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=messages', 
-					$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+					$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 
 // create html page object
 $page = new HtmlPage();

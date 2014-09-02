@@ -74,7 +74,7 @@ $page = new HtmlPage();
 $page->addJavascript('$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
     
 // create module menu
-$DownloadsMenu = new ModuleMenu('admMenuDownloads');
+$DownloadsMenu = new HtmlNavbar('menu_downloads');
 
 if ($gCurrentUser->editDownloadRight())
 {
@@ -93,7 +93,7 @@ if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of weblinks
 	$DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=downloads', 
-						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 //Create table object

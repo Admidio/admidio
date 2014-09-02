@@ -167,22 +167,23 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             }
         }');
 
+    // set headline
+    $page->addHeadline($dates->getHeadline($getHeadline));
 
     // If default view mode is set to compact we need a back navigation if one date is selected for detail view
     if($gPreferences['dates_viewmode'] == 'compact' && $getViewMode == 'html' && $getId > 0)
     {
-        // show back link
-        $page->addHtml($gNavigation->getHtmlBackButton());
+        // create module menu with back link
+        $datesMenu = new HtmlNavbar('menu_dates');
+        $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+        $page->addHtml($datesMenu->show(false));
     }
-
-    // set headline
-    $page->addHeadline($dates->getHeadline($getHeadline));
 
     //Check if box must be shown, when more dates available
     if($getId == 0 || $gCurrentUser->editDates())
     {
         // create module menu
-        $DatesMenu = new ModuleMenu('admMenuDates');
+        $DatesMenu = new HtmlNavbar('menu_dates_list');
 
 
         //Add new event
@@ -202,15 +203,14 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             }
 
             // show print button
-            $DatesMenu->addItem('admMenuItemPrint', '',
-                                $gL10n->get('LST_PRINT_PREVIEW'), 'print.png', 'window.open(\''.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode=print\', \'_blank\')' );
-
+            $DatesMenu->addItem('menu_item_print', null, $gL10n->get('LST_PRINT_PREVIEW'), 'print.png');
+            $page->addJavascript('$("#menu_item_print").click(function() {window.open("'.$g_root_path.'/adm_program/modules/dates/dates.php?mode='.$getMode.'&headline='.$getHeadline.'&cat_id='.$getCatId.'&date_from='.$dates->getParameter('dateStartFormatEnglish').'&date_to='.$dates->getParameter('dateEndFormatEnglish').'&view_mode=print", "_blank")});', true);
 
             if($gCurrentUser->isWebmaster())
             {
                 // show link to system preferences of weblinks
                 $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=events',
-                                    $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+                                    $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
             }
             elseif($gCurrentUser->editDates())
             {
@@ -222,33 +222,15 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             $page->addHtml($DatesMenu->show(false));
         }
 
-        // Input elements for Startdate and Enddate
-        $page->addHtml('
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="container-fluid">
-                <!-- Brand and toggle get grouped for better mobile display -->
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-filter-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">'.$gL10n->get('SYS_FILTER').'</a>
-                </div>
-                
-                <!-- Collect the nav links, forms, and other content for toggling -->
-                <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
-                error_log($dates->getParameter('cat_id').':::');
-                    $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$getHeadline, $page, 'navbar');
-                    $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', FIELD_DEFAULT, $dates->getParameter('cat_id'));
-                    $form->addTextInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
-                    $form->addTextInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
-                    $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-                    $page->addHtml($form->show(false));
-                $page->addHtml('</div>
-            </div>
-        </nav>');
+        // create filter menu with elements for calendar and start-/enddate
+        $FilterNavbar = new HtmlNavbar('menu_dates_list', null, 'filter');
+        $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$getHeadline, $page, 'navbar');
+        $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', FIELD_DEFAULT, $dates->getParameter('cat_id'));
+        $form->addTextInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
+        $form->addTextInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
+        $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+        $FilterNavbar->addForm($form->show(false));
+        $page->addHtml($FilterNavbar->show(false));
     }
 
     if($datesTotalCount == 0)

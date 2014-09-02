@@ -192,7 +192,7 @@ else
     }
 
     $javascriptCode .= '
-        $("#menu_item_create_user a").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+        $("#menu_item_create_user").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function(){
@@ -257,18 +257,16 @@ else
 
     $page->addJavascript($javascriptCode, true);
 
-    // show back link
-    $page->addHtml($gNavigation->getHtmlBackButton());
-
     // add headline and title of module
     $page->addHeadline($headline);
 
     // create module menu
-    $membersAssignmentMenu = new ModuleMenu('menu_members_assignment');
+    $membersAssignmentMenu = new HtmlNavbar('menu_members_assignment');
+    $membersAssignmentMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $membersAssignmentMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/administration/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, 'navbar');
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), 0);
-    $membersAssignmentMenu->addForm('menu_item_show_all_users', $navbarForm->show(false));
+    $membersAssignmentMenu->addForm($navbarForm->show(false));
     // show module menu
     $page->addHtml($membersAssignmentMenu->show(false));
 

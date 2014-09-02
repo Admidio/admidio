@@ -10,7 +10,7 @@
  *****************************************************************************/
  
 .admBody {
-    color: #606465;
+    color: #474b4c;
     padding: 15px;
     margin: auto;
     /*font-size: 11pt;
@@ -188,6 +188,61 @@ a:hover, a:active {
     margin: 0px 5px;
 }
 
+/* Settings for navigationbars */
+
+.navbar {
+    min-height: 0px;
+    margin-left: -15px;
+    margin-right: -15px;
+    border-radius: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    border-color: #7d7d7d;
+    background-color: #96c4cb; 
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
+}
+
+.nav > li > a {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    color: #474b4c !important;
+}
+
+.navbar .form-control, .navbar .btn {
+    height: 28px;
+    padding: 3px 8px;
+}
+
+.navbar-brand {
+    height: 40px;
+    padding-top: 10px;
+}
+
+.navbar .checkbox {
+    padding-top: 2px;
+    margin-bottom: 0px;
+}
+
+.navbar .checkbox input {
+    margin-right: 5px;
+}
+
+@media (min-width: 768px) {
+    .navbar-collapse {
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+    
+    .nav > li:first-child > a {
+        padding-left: 0px;
+    }
+    
+    /*.nav > li:last-child > a {
+        padding-right: 0px;
+    }*/
+}
+
 /* Style for the navigation bar or the back link */
 
 .admNavigation {
@@ -261,10 +316,6 @@ form hr, .admBoxBody hr {
     box-shadow: none !important;
 }
 
-.checkbox {
-    margin-bottom: 10px !important;
-}
-
 select.form-control {
     width: auto;
 }
@@ -307,7 +358,6 @@ input[data-provide="datepicker"], input[type="number"] {
     background-color: #409099;
     border-color: #409099;
     color: #ffffff;
-    margin-bottom: 10px;
 }
 
 .btn-primary:hover, .btn-primary:focus {
@@ -370,6 +420,7 @@ input[data-provide="datepicker"], input[type="number"] {
 
 .info-created-edited {
     font-size: 8pt;
+    margin-top: 8px;
 }
 
 .info-created{

@@ -59,19 +59,6 @@ else
         location.hash = "#" + "panel_'.$showOption.'";', true);
 }
 
-if(strlen($showOption) > 0)
-{
-    // add current url to navigation stack
-    $gNavigation->addUrl(CURRENT_URL, $headline);
-    // show back link
-    $page->addHtml($gNavigation->getHtmlBackButton());
-}
-else
-{
-    // Navigation of the module starts here
-    $gNavigation->addStartUrl(CURRENT_URL, $headline);
-}
-
 $page->addJavascript('
     $(".form-preferences").submit(function(event) {
         var id = $(this).attr("id");
@@ -114,6 +101,22 @@ $page->addJavascript('
 
 // add headline and title of module
 $page->addHeadline($headline);
+
+if(strlen($showOption) > 0)
+{
+    // add current url to navigation stack
+    $gNavigation->addUrl(CURRENT_URL, $headline);
+
+    // create module menu with back link
+    $preferencesMenu = new HtmlNavbar('menu_dates_create');
+    $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $page->addHtml($preferencesMenu->show(false));
+}
+else
+{
+    // Navigation of the module starts here
+    $gNavigation->addStartUrl(CURRENT_URL, $headline);
+}
 
 $page->addHtml('
 <ul class="nav nav-tabs" id="preferences_tabs">
@@ -630,7 +633,7 @@ $page->addHtml('
                         // show form
                         $form = new HtmlForm('profile_preferences_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?form=profile', $page, 'default', false, 'form-preferences');
                         $html = '<a class="icon-text-link" href="'. $g_root_path. '/adm_program/administration/organization/fields.php"><img
-                                    src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" />'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
+                                    src="'. THEME_PATH. '/icons/application_form_edit.png" alt="'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'" />'.$gL10n->get('PRO_SWITCH_TO_MAINTAIN_PROFILE_FIELDS').'</a>';
                         $htmlDesc = $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent('maintain_profile_fields', $gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), $html, null, $htmlDesc);
                         $form->addCheckbox('profile_log_edit_fields', $gL10n->get('PRO_LOG_EDIT_FIELDS'), $form_values['profile_log_edit_fields'], FIELD_DEFAULT, null, 'PRO_LOG_EDIT_FIELDS_DESC');

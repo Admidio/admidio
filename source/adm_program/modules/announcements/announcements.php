@@ -77,20 +77,20 @@ else
 }
 
 // create module menu
-$announcementsMenu = new ModuleMenu('menu_announcements_list');
+$announcementsMenu = new HtmlNavbar('menu_announcements_list');
 
 if($gCurrentUser->editAnnouncements())
 {
 	// show link to create new announcement
-	$announcementsMenu->addItem('admMenuItemNewAnnouncement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline, 
+	$announcementsMenu->addItem('menu_item_new_announcement', $g_root_path.'/adm_program/modules/announcements/announcements_new.php?headline='.$getHeadline, 
 								$gL10n->get('SYS_CREATE_VAR', $getHeadline), 'add.png');
 }
 
 if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of announcements
-	$announcementsMenu->addItem('admMenuItemPreferencesAnnouncements', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=announcements', 
-								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+	$announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=announcements', 
+								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 $page->addHtml($announcementsMenu->show(false));

@@ -164,11 +164,13 @@ if($getMode == 'choose')
     // create html page object
     $page = new HtmlPage();
     
-    // show back link
-    $page->addHtml($gNavigation->getHtmlBackButton());
-
     // show headline of module
     $page->addHeadline($headline);
+
+    // create module menu with back link
+    $profilePhotoMenu = new HtmlNavbar('menu_profile_photo');
+    $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $page->addHtml($profilePhotoMenu->show(false));
 
     // show form
     $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, 'default', true);

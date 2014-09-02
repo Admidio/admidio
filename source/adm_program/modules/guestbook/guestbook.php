@@ -167,7 +167,7 @@ $sql = 'SELECT *
 $guestbook_result = $gDb->query($sql);
 
 // create module menu
-$guestbookMenu = new ModuleMenu('menu_guestbook');
+$guestbookMenu = new HtmlNavbar('menu_guestbook');
 
 if($getGboId == 0 && $getModeration == 0)
 {
@@ -210,7 +210,7 @@ if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of announcements
 	$guestbookMenu->addItem('admMenuItemPreferencesGuestbook', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=guestbook', 
-							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
 $page->addHtml($guestbookMenu->show(false));

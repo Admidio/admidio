@@ -102,9 +102,6 @@ $roleSet = $folder->getRoleArrayOfFolder();
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 $page->addJavascript('$("#fol_public").click(function() {showHideBlock("adm_roles_box", "", "");});
                       $("#btn_save").click(function () {sendForm();});', true);
 $page->addJavascript('
@@ -142,6 +139,11 @@ $page->addJavascript('
 
 // show headline of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$folderConfigMenu = new HtmlNavbar('menu_folder_config');
+$folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($folderConfigMenu->show(false));
 
 // show form
 $form = new HtmlForm('adm_form_folder_rights', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=7&amp;folder_id='.$getFolderId, $page, 'vertical');

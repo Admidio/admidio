@@ -114,22 +114,7 @@ class ModuleWeblinks extends Modules
         global $gL10n;
         
         // get parent instance with all parameters from $_GET Array
-        parent::__construct();
-           
-        //Bedingungen
-        if($this->id > 0)
-        {
-            $this->getConditions = ' AND lnk_id = '. $this->id;
-        }
-        if($this->catId > 0)
-        {
-            $this->getConditions = ' AND cat_id = '. $this->catId;
-        }
-        if($gValidLogin == false)
-        {
-            // if user isn't logged in, then don't show hidden categories
-            $this->getConditions .= ' AND cat_hidden = 0 ';
-        }       
+        parent::__construct();           
     }
     
     /** Function returns a set of links with corresponding informations
@@ -140,16 +125,29 @@ class ModuleWeblinks extends Modules
     
     public function getDataSet($startElement=0, $limit=NULL)
     {
-        global $gCurrentOrganization;
-        global $gPreferences;
-        global $gProfileFields;
-        global $gDb;
+        global $gCurrentOrganization, $gPreferences, $gProfileFields, $gDb, $gValidLogin;
 
         //Parameter
         if($limit == NULL)
         {
             $limit = $gPreferences['weblinks_per_page'];
         }
+        
+        //Bedingungen
+        if($this->getParameter('id') > 0)
+        {
+            $this->getConditions = ' AND lnk_id = '. $this->getParameter('id');
+        }
+        if($this->getParameter('cat_id') > 0)
+        {
+            $this->getConditions = ' AND cat_id = '. $this->getParameter('cat_id');
+        }
+        if($gValidLogin == false)
+        {
+            // if user isn't logged in, then don't show hidden categories
+            $this->getConditions .= ' AND cat_hidden = 0 ';
+        }       
+        
 
         //Ankuendigungen aus der DB fischen...
         $sql = 'SELECT cat.*, lnk.*
@@ -215,7 +213,7 @@ class ModuleWeblinks extends Modules
         if($this->getParameter('cat_id') > 0)
         {
             $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
-            $headline .= ' - '. $calendar->getValue('cat_name');
+            $headline .= ' - '. $category->getValue('cat_name');
         }
         return $headline;
     }   

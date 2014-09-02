@@ -89,14 +89,14 @@ $page->addJavascript('
 		else {
 			self.location.href = gRootPath + "/adm_program/modules/lists/lists_show.php?mode=html&lst_id=" + $(this).val() + "&rol_id=" + roleId;
 		}
-	})', true);
+	});', true);
 
 // add headline and title of module
 $page->addHtml('<div id="lists_overview">');
 $page->addHeadline($headline);
 
 // create module menu
-$ListsMenu = new ModuleMenu('admMenuLists');
+$ListsMenu = new HtmlNavbar('menu_lists');
 
 if($gCurrentUser->manageRoles())
 {
@@ -109,7 +109,7 @@ if($gCurrentUser->isWebmaster())
 {
     // show link to system preferences of roles
     $ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=lists', 
-                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+                        $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 elseif($gCurrentUser->manageRoles())
 {
@@ -118,14 +118,11 @@ elseif($gCurrentUser->manageRoles())
                         $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
 }
 
-$page->addJavascript('
-    $("#cat_id").change(function () {
-       $("#navbar_cat_id_form").submit();
-    });', true);
-
+$page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit();});', true);
 $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, 'navbar');
 $navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getCatId);
-$ListsMenu->addForm('menu_item_export_list_to', $navbarForm->show(false));
+$ListsMenu->addForm($navbarForm->show(false));
+
 // show module menu
 $page->addHtml($ListsMenu->show(false));
 

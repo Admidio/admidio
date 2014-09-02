@@ -117,9 +117,6 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // Html-Kopf ausgeben
 if($getGboId > 0)
 {
@@ -133,6 +130,11 @@ else
     $mode = '8';
     $page->addHeadline($gL10n->get('GBO_EDIT_COMMENT'));
 }
+
+// create module menu with back link
+$guestbookCommentCreateMenu = new HtmlNavbar('menu_guestbook_comment_create');
+$guestbookCommentCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($guestbookCommentCreateMenu->show(false));
 
 // show form
 $form = new HtmlForm('guestbook_comment_edit_form', $g_root_path.'/adm_program/modules/guestbook/guestbook_function.php?id='.$id.'&amp;headline='.$getHeadline.'&amp;mode='.$mode, $page);

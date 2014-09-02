@@ -71,11 +71,14 @@ if(isset($_SESSION['announcements_request']))
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // add headline and title of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$announcementsMenu = new HtmlNavbar('menu_announcements_create');
+$announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($announcementsMenu->show(false));
+
 
 // show form
 $form = new HtmlForm('announcements_edit_form', $g_root_path.'/adm_program/modules/announcements/announcements_function.php?ann_id='.$getAnnId.'&amp;headline='. $getHeadline. '&amp;mode=1', $page);

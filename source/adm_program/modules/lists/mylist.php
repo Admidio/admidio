@@ -501,13 +501,17 @@ $page->addJavascript('$(document).ready(function() {
     }
 });', true);
 
+$page->addHeadline($headline);
+
 // if mylist was not called directly then show link to navigate to previous page
 if($gNavigation->count() > 1)
 {
-    $page->addHtml($gNavigation->getHtmlBackButton());
-}
+    // create module menu with back link
+    $myListMenu = new HtmlNavbar('menu_my_list');
+    $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $page->addHtml($myListMenu->show(false));
 
-$page->addHeadline($headline);
+}
 
 $page->addHtml(' 
 <form id="form_mylist" class="form-horizontal" action="'. $g_root_path. '/adm_program/modules/lists/mylist_prepare.php" method="post">

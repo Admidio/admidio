@@ -104,11 +104,13 @@ else
     // create html page object
     $page = new HtmlPage();
     
-    // show back link
-    $page->addHtml($gNavigation->getHtmlBackButton());
-    
     // show headline of module
     $page->addHeadline($headline);
+
+    // create module menu with back link
+    $lostPasswordMenu = new HtmlNavbar('menu_lost_password');
+    $lostPasswordMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $page->addHtml($lostPasswordMenu->show(false));
 
     // show form
     $form = new HtmlForm('lost_password_form', $g_root_path.'/adm_program/system/lost_password.php', $page);

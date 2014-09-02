@@ -140,17 +140,12 @@ else
 $page = new HtmlPage();
 
 $page->addJavascript('
-    $("#menu_item_create_user a").colorbox({maxWidth:\'700px\',rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+    $("#menu_item_create_user").colorbox({maxWidth:\'700px\',rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
     
     // change mode of users that should be shown
     $("#mem_show_all").click(function(){
         window.location.replace("'.$g_root_path.'/adm_program/administration/members/members.php?members='.$flagShowMembers.'");
     });
-/*
-    // code for checkbox to show all members
-    $("input[type=checkbox]#mem_show_all").live("click", function(){
-        window.location.href = $("#mem_show_all").attr("link");
-    });*/
     
     if($("#mem_show_all").is(":checked")){
         $("#mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_USERS').'");
@@ -164,45 +159,43 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu
-$membersAdministrationMenu = new ModuleMenu('admMenuMembersAdministration');
+$membersAdministrationMenu = new HtmlNavbar('menu_members_administration');
 
-// show link to import users
-$membersAdministrationMenu->addItem('admMenuItemImportUsers', $g_root_path.'/adm_program/administration/members/import.php', 
-							$gL10n->get('MEM_IMPORT_USERS'), 'database_in.png');
+$membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/administration/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
 
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
 	// show link to view profile field change history
-	$membersAdministrationMenu->addItem('admMenuItemChangeHistory', $g_root_path.'/adm_program/administration/members/profile_field_history.php', 
+	$membersAdministrationMenu->addItem('menu_item_change_history', $g_root_path.'/adm_program/administration/members/profile_field_history.php', 
 								$gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
 }
-							
-if($gCurrentUser->isWebmaster())
-{
-	// show link to maintain profile fields
-	$membersAdministrationMenu->addItem('admMenuItemMaintainProfileFields', $g_root_path. '/adm_program/administration/organization/fields.php', 
-								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'edit.png');
 
-	// show link to system preferences of weblinks
-	$membersAdministrationMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=user_management', 
-						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
-}
-
-$page->addHtml($membersAdministrationMenu->show(false));
-
-
-// create module menu
-$newMembersMenu = new ModuleMenu('menu_members_assignment');
-$newMembersMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/administration/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
 // show checkbox to select all users or only active members
 if($gPreferences['user_management_show_all_users'] == 1)
 {
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, 'navbar');
     $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers);
-    $newMembersMenu->addForm('menu_item_show_all_users', $navbarForm->show(false));
+    $membersAdministrationMenu->addForm($navbarForm->show(false));
 }
-// show module menu
-$page->addHtml($newMembersMenu->show(false));
+
+$membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
+
+// show link to import users
+$membersAdministrationMenu->addItem('menu_item_import_users', $g_root_path.'/adm_program/administration/members/import.php', 
+							$gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras');
+							
+if($gCurrentUser->isWebmaster())
+{
+	// show link to maintain profile fields
+	$membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/administration/organization/fields.php', 
+								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
+
+	// show link to system preferences of weblinks
+	$membersAdministrationMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=user_management', 
+						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
+}
+
+$page->addHtml($membersAdministrationMenu->show(false));
 
 //Create table object
 $membersTable = new HtmlTable('tbl_members', $page, true, true, 'table table-condensed');

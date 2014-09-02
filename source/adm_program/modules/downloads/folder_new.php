@@ -68,11 +68,13 @@ $parentFolderName = $folder->getValue('fol_name');
 // create html page object
 $page = new HtmlPage();
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 // show headline of module
 $page->addHeadline($headline);
+
+// create module menu with back link
+$folderNewMenu = new HtmlNavbar('menu_folder_new');
+$folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($folderNewMenu->show(false));
 
 $page->addHtml('<p class="lead">'.$gL10n->get('DOW_CREATE_FOLDER_DESC', $parentFolderName).'</p>');
 

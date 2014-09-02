@@ -255,7 +255,7 @@ class ModuleDates extends Modules
         if($this->getParameter('cat_id') > 0)
         {
             $category  = new TableCategory($gDb, $this->getParameter('cat_id'));
-            $headline .= ' - '. $calendar->getValue('cat_name');
+            $headline .= ' - '. $category->getValue('cat_name');
         }
 
         // check time period if old dates are choosen, then set headline to previous dates

@@ -241,13 +241,10 @@ if($getMode != 'csv')
             $page->excludeThemeHtml();
         }
 
-        // show back link
-        $page->addHtml($gNavigation->getHtmlBackButton());
-
         $page->setTitle($title);
         $page->addHeadline($headline);
         
-        $page->addHtml('<div class="admListShortInfo">'.$role->getValue('cat_name').' - '.$memberStatus.'</div>');
+        $page->addHtml('<h5>'.$role->getValue('cat_name').' - '.$memberStatus.'</h5>');
         $page->addJavascript('
             $("#export_list_to").change(function () {
                 if($(this).val().length > 1) {
@@ -261,7 +258,9 @@ if($getMode != 'csv')
             });', true);
         
         // create module menu
-        $listsMenu = new ModuleMenu('menu_lists_list');
+        $listsMenu = new HtmlNavbar('menu_lists_list');
+
+        $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
         if($getFullScreen == true)
         {
@@ -288,7 +287,7 @@ if($getMode != 'csv')
         $selectBoxEntries = array('' => $gL10n->get('LST_EXPORT_TO').' ...', 'csv-ms' => $gL10n->get('LST_MICROSOFT_EXCEL').' ('.$gL10n->get('SYS_ISO_8859_1').')', 'pdf' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_PORTRAIT').')', 
                                   'pdfl' => $gL10n->get('SYS_PDF').' ('.$gL10n->get('SYS_LANDSCAPE').')', 'csv-oo' => $gL10n->get('SYS_CSV').' ('.$gL10n->get('SYS_UTF8').')');
         $form->addSelectBox('export_list_to', null, $selectBoxEntries);
-        $listsMenu->addForm('menu_item_export_list_to', $form->show(false));
+        $listsMenu->addForm($form->show(false));
 
         // show module menu
         $page->addHtml($listsMenu->show(false));

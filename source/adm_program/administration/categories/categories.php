@@ -100,9 +100,6 @@ $page->addJavascript('
 	}');
 $page->addJavascript('$("icon-link-delete").colorbox({rel:\'nofollow\', height: \'320px\', onComplete:function(){$("#admButtonNo").focus();}});', true);
 
-// show back link
-$page->addHtml($gNavigation->getHtmlBackButton());
-
 $page->addHeadline($headline);
 
 $htmlIconLoginUser = '&nbsp;';
@@ -112,7 +109,10 @@ if($getType != 'USF')
 }
 
 // create module menu
-$categoriesMenu = new ModuleMenu('admMenuCategories');
+$categoriesMenu = new HtmlNavbar('admMenuCategories');
+
+// show back link
+$categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new category
 $categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
