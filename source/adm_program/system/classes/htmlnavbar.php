@@ -152,6 +152,8 @@ class HtmlNavbar
 	 */
 	public function show($directOutput = true)
 	{
+	    $showNavbar = false;
+	    
 	    // default navbar should not show the brand, only in xs mode
 	    if($this->type == 'default')
 	    {
@@ -163,9 +165,7 @@ class HtmlNavbar
     	    $cssClassBrand  = '';
     	    $cssClassNavbar = 'navbar-filter';
 	    }
-	    
-	    error_log(print_r($this->rightItems, true));
-	    
+
 	    // add html for navbar
 		$html = '
         <nav class="navbar '.$cssClassNavbar.'" role="navigation">
@@ -185,6 +185,7 @@ class HtmlNavbar
         // add left item block to navbar
         if(count($this->leftItems) > 0)
         {
+            $showNavbar = true;
             $html .= '<ul class="nav navbar-nav">';
             
             foreach($this->leftItems as $key => $menuEntry)
@@ -223,12 +224,14 @@ class HtmlNavbar
         // add form to navbar        
         if(strlen($this->htmlForm) > 0)
         {
+            $showNavbar = true;
             $html .= $this->htmlForm;
         }
         
         // add right item block to navbar
         if(count($this->rightItems) > 0)
         {
+            $showNavbar = true;
             $html .= '<ul class="nav navbar-nav navbar-right">';
             
             foreach($this->rightItems as $key => $menuEntry)
@@ -265,6 +268,12 @@ class HtmlNavbar
         }
         
         $html .= '</div></div></nav>';
+        
+        // dont show navbar if no menu item or form was added
+        if($showNavbar == false)
+        {
+            $html = '';
+        }
 		
         // now show the complete html of the menu
         if($directOutput)
