@@ -535,12 +535,10 @@ elseif ($getMode == 7)
             if(array_key_exists('AllowedRoles', $_POST))
             {
                 $sentAllowedRoles = $_POST['AllowedRoles'];
-                error_log(print_r($sentAllowedRoles, true));
     
                 //fuege alle neuen Rollen hinzu
                 foreach ($sentAllowedRoles as $newRole)
                 {
-                    error_log('2::'.$newRole);
                     $rolesArray[] = array('rol_id'        => $newRole,
                                           'rol_name'      => '');
                 }

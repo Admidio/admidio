@@ -88,7 +88,6 @@ if($getPhotoNr == null)
     $quantity = $photo_album->getValue('pho_quantity');
 
     $zipname = tempnam($tempfolder, 'zip');
-    error_log($zipname, 0);
     $nicename = $photo_album->getValue('pho_name').' - '.$photo_album->getValue('pho_photographers').'.zip';
 
     $zip = new ZipArchive;

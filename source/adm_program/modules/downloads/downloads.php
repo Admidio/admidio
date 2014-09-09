@@ -125,7 +125,6 @@ if (isset($folderContent['folders']))
     for($i=0; $i<count($folderContent['folders']); $i++) 
     {
         $nextFolder = $folderContent['folders'][$i];
-        error_log($nextFolder['fol_id'].'::'.$nextFolder['fol_name'].'::'.$nextFolder['fol_exists']);
         $folderDescription = '';
         if($nextFolder['fol_description'] != '')
         {
