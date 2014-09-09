@@ -112,7 +112,6 @@ function checkVersions(&$db, &$message)
     $message = '';
 
     // Datenbank pruefen
-    error_log($db->getVersion().'::'.$db->getMinVersion());
     if(version_compare($db->getVersion(), $db->getMinVersion()) == -1)
     {
         $message = $message. ' 
