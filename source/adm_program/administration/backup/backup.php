@@ -2,7 +2,7 @@
 /******************************************************************************
  * Show list with avaiable backup files and button to create a new backup
  *
- * Copyright    : (c) 2004 - 2013 The Admidio Team
+ * Copyright    : (c) 2004 - 2014 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
@@ -13,7 +13,6 @@
  *
  *****************************************************************************/
 require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
 require_once('backup.functions.php');
 
 
@@ -55,36 +54,34 @@ if ($handle = opendir($backupabsolutepath))
 // Sortiert die Backupfiles nach Dateiname / Datum
 sort($old_backup_files);
 
-$gLayout['title']  = $gL10n->get('BAC_DATABASE_BACKUP');
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
+// create html page object
+$page = new HtmlPage();
+
+$page->addHeadline($gL10n->get('BAC_DATABASE_BACKUP'));
+
+$page->addJavascript('
         $(document).ready(function() {
             $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-        }); 
-    //--></script>';
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
+        }); ', true);
 
 // create module menu
-$backupMenu = new ModuleMenu('admMenuBackup');
+$backupMenu = new HtmlNavbar('admMenuBackup');
 
 // show link to create new backup
 $backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/administration/backup/backup_script.php', 
 							$gL10n->get('BAC_START_BACKUP'), 'database_save.png');
-$backupMenu->show();
 
+$page->addHtml($backupMenu->show(false));
 
 //Define table
-$table = new HtmlTableBasic('', 'tableList');
+$table = new HtmlTable('tableList', $page, true);
 $table->addAttribute('cellspacing', '0');
+$table->addTableHeader();
 $table->addRow();
 $table->addColumn($gL10n->get('BAC_BACKUP_FILE'), null, 'th');
 $table->addColumn($gL10n->get('BAC_CREATION_DATE'), null, 'th');
 $table->addColumn($gL10n->get('SYS_SIZE'), null, 'th');
 $table->addColumn($gL10n->get('SYS_DELETE'), array('style' => 'text-align: center;'), 'th');
-
-flush();
 	
 if(count($old_backup_files) == 0)
 {   
@@ -97,7 +94,6 @@ $backup_size_sum = 0;
 foreach($old_backup_files as $key => $old_backup_file)
 {
     $table->addRow('', array('id' => 'row_file_'.$key));
-    $table->addAttribute('class', 'tableMouseOver');
     $table->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">
                         <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" /></a>
                         <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">'. $old_backup_file. '</a>');
@@ -116,7 +112,9 @@ $table->addColumn($gL10n->get('BAC_SUM'), null, 'th');
 $table->addColumn($backup_size_sum .' kB&nbsp;', array('style' => 'text-align: right;'), 'th');
 $table->addColumn('&nbsp;', null, 'th');
 
-echo $table->getHtmlTable();
+$page->addHtml($table->show(false));
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+// show html of complete page
+$page->show();
+
 ?>

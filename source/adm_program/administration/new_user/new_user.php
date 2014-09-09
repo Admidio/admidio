@@ -2,14 +2,13 @@
 /******************************************************************************
  * Show list with new user registrations
  *
- * Copyright    : (c) 2004 - 2013 The Admidio Team
+ * Copyright    : (c) 2004 - 2014 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
  *****************************************************************************/
  
 require_once('../../system/common.php');
-require_once('../../system/login_valid.php');
 
 // Only Webmasters can confirm new users. Otherwise exit.
 if($gCurrentUser->approveUsers() == false)
@@ -63,8 +62,7 @@ $page->addJavascript('$("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', heig
 // add headline and title of module
 $page->addHeadline($headline);
 
-$table = new HtmlTable('new_user_table', true, $page);
-$table->highlightSelectedRow(true);
+$table = new HtmlTable('new_user_table', $page, true);
 
 // create array with all column heading values
 $columnHeading = array(
