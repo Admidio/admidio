@@ -39,6 +39,13 @@ $gLayout['title']  = $gL10n->get('ROL_ROLE_ADMINISTRATION');
 // per default show active and visible roles
 $sqlRolesStatus   = ' AND rol_valid   = \'1\'
 					  AND rol_visible = \'1\' ';
+$gLayout['header'] = '
+    <script type="text/javascript"><!--
+        $(document).ready(function() 
+        {                      
+            $(".group-heading").click(function() {showHideBlock($(this).attr("id"));});
+        }
+    //--></script>';
 
 if($getInactive == true)
 {
@@ -131,10 +138,9 @@ while($row = $gDb->fetch_array($rol_result))
         }
         $table->addTableBody();
         $table->addRow();
-        $table->addColumn('', array('class' => 'tableSubHeader'));
+        $table->addColumn('', array('class' => 'group-heading', 'id' => 'group_'.$block_id));
         $table->addAttribute('colspan', '4');
-        $table->addData('<a class="iconShowHide" href="javascript:showHideBlock(\''.$block_id.'\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-                        id="'.$block_id.'Image" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name').' '.$image_hidden);
+        $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$role->getValue('cat_name').' '.$image_hidden);
         // next body element
         $table->addTableBody('id', $block_id);
         

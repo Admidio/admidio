@@ -60,6 +60,8 @@ if($getInline == true)
 
     $html .= '<script type="text/javascript"><!--
     $(document).ready(function(){
+        $(".group-heading").click(function() {showHideBlock($(this).attr("id"));});
+    
         $("#roles_assignment_form").submit(function(event) {
             var action = $(this).attr("action");
             $("#roles_assignment_form .form-alert").hide();
@@ -228,11 +230,10 @@ while($row = $gDb->fetch_array($result))
             $block_id = 'admCategory'.$role->getValue('cat_id');
 
             $table->addTableBody();
-            $table->addRow('', array('class' => 'group-heading'));
+            $table->addRow('', array('class' => 'group-heading', 'id' => 'group_'.$block_id));
             $table->addColumn();
             $table->addAttribute('colspan', '4', 'td');
-            $table->addData('<a href="javascript:showHideBlock(\''.$block_id.'\');"><img
-                                id="'.$block_id.'Image" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$role->getValue('cat_name'));
+            $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$role->getValue('cat_name'));
             $table->addTableBody('id', $block_id);
     
             $category = $role->getValue('cat_id');

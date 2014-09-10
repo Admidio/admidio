@@ -129,6 +129,21 @@
     padding: 5px;
 }
 
+.caret, .caret-right {
+    margin-right: 3px;
+}
+
+.caret-right {
+    border-bottom: 4px solid transparent;
+    border-top: 4px solid transparent;
+    border-left: 4px solid;
+    display: inline-block;
+    height: 0;
+    /*opacity: 0.3;*/
+    vertical-align: middle;
+    width: 0;
+}
+
 /* Links */
 
 a:link, a:visited {
@@ -348,10 +363,6 @@ input[data-provide="datepicker"], input[type="number"] {
 .form-horizontal .form-group-editor {
     margin-left: 0px;
     margin-right: 0px;
-}
-
-.btn {
-    margin-right: 20px;
 }
 
 .btn-primary {

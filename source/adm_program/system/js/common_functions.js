@@ -1,6 +1,5 @@
 /******************************************************************************
- * Allgemeine JavaScript-Funktionen, die an diversen Stellen in Admidio 
- * benoetigt werden
+ * Common JavaScript functions that are used in multiple Admidio scripts.
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -8,31 +7,27 @@
  *
  *****************************************************************************/
 
-// das uebergebene Element wird optisch schick ein- und ausgeblendet
-// soll ein Pfeil-Icon veraendert werden, muss dies die ID des Elements
-// mit dem Suffix 'Image' besitzen. Der Text des Icons wird mit uebergeben
-function showHideBlock(elementID, textFadeIn, textHide)
+/** The function can be used to show or hide a element. Therefore a small
+ *  caret is used that will change his orientation if the element is hidden.
+ *  @param elementId This is the id of the element you must click to show or hide
+ *                   another element. The elements have the same id but the element
+ *                   to click has a prefix @b group_
+ */
+function showHideBlock(elementID)
 {
-	var iconID = elementID + 'Image';
+    var showHideElementId = elementID.substring(6);
+    var caretId = "caret_" + showHideElementId;
     
-    if($("#" + elementID).css("display") == "none")
-    {
-        $("#" + elementID).show("slow");
-        if($("#" + iconID).length > 0)
-        {
-            $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_open.gif");
-            $("#" + iconID).attr("title", textHide);
-            $("#" + iconID).attr("alt",   textHide);
+    if($("#" + showHideElementId).css("display") == "none") {
+        $("#" + showHideElementId).show("slow");
+        if($("#" + caretId).length > 0) {
+            $("#" + caretId).attr("class", "caret");
         }
     }
-    else
-    {
-        $("#" + elementID).hide("slow");
-        if($("#" + iconID).length > 0)
-        {    
-            $("#" + iconID).attr("src",   gThemePath + "/icons/triangle_close.gif");
-            $("#" + iconID).attr("title", textFadeIn);
-            $("#" + iconID).attr("alt",   textFadeIn);
+    else {
+        $("#" + showHideElementId).hide("slow");
+        if($("#" + caretId).length > 0) {    
+            $("#" + caretId).attr("class", "caret-right");
         }
     }
 }

@@ -42,6 +42,7 @@ elseif($getType == 'DAT' && $gCurrentUser->editDates() == false)
 	$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
+// set module headline
 $headline = $gL10n->get('SYS_ADMINISTRATION_VAR', $getTitle);
 
 $gNavigation->addUrl(CURRENT_URL, $headline);
@@ -49,7 +50,6 @@ unset($_SESSION['categories_request']);
 
 // create html page object
 $page = new HtmlPage();
-
 
 $page->addJavascript('
 	function moveCategory(direction, catID) {

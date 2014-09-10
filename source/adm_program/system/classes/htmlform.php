@@ -40,6 +40,7 @@ class HtmlForm extends HtmlFormBasic
     protected $countElements;       ///< Number of elements in this form
     protected $datepickerInitialized; ///< Flag if datepicker is already initialized
     protected $type;                ///< Form type. Possible values are @b default, @b vertical or @b navbar.
+    protected $buttonGroupOpen;     ///< Flag that indicates if a bootstrap button-group is open and should be closed later
     
     /** Constructor creates the form element
      *  @param $id               Id of the form
@@ -74,6 +75,7 @@ class HtmlForm extends HtmlFormBasic
         $this->countFields           = 0;
         $this->datepickerInitialized = false;
         $this->type                  = $type;
+        $this->buttonGroupOpen       = false;
         
         // set specific Admidio css form class
         $this->addAttribute('role', 'form');
@@ -147,7 +149,7 @@ class HtmlForm extends HtmlFormBasic
             $value = '<img src="'.$icon.'" alt="'.$text.'" />'.$value;
         }
         $this->addElement('button');
-        $this->addAttribute('class', 'btn');
+        $this->addAttribute('class', 'btn btn-default');
         if(strlen($class) > 0)
         {
             $this->addAttribute('class', $class);
@@ -730,7 +732,7 @@ class HtmlForm extends HtmlFormBasic
             {
                 $defaultEntry = true;
             }
-            $this->addOption(' ', '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
+            $this->addOption('', '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
         }
 
         $value = reset($values);
@@ -1107,7 +1109,11 @@ class HtmlForm extends HtmlFormBasic
 
         // now add button to form
         $this->addButton($id, $text, $icon, $link, $class, $type);
-        $this->addHtml('<div class="form-alert" style="display: none">&nbsp;</div>');
+        
+        if($this->buttonGroupOpen == false)
+        {
+            $this->addHtml('<div class="form-alert" style="display: none">&nbsp;</div>');
+        }
     }
     
     /** Add a new input field with a label to the form.
@@ -1231,6 +1237,15 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure($helpTextIdInline);
     }
     
+    /** Close an open bootstrap btn-group
+     */
+    public function closeButtonGroup()
+    {
+        $this->buttonGroupOpen = false;
+        $this->addHtml('</div>
+        <div class="form-alert" style="display: none">&nbsp;</div>');
+    }
+    
     /** Closes a field structure that was added with the method openControlStructure.
      *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                     If set the complete text will be shown after the form element.
@@ -1284,6 +1299,14 @@ class HtmlForm extends HtmlFormBasic
     public function closeGroupBox()
     {
         $this->addHtml('</div></div>');
+    }
+    
+    /** Open a bootstrap btn-group if the form need more than one button.
+     */
+    public function openButtonGroup()
+    {
+        $this->buttonGroupOpen = true;
+        $this->addHtml('<div class="btn-group">');
     }
     
     /** Creates a html structure for a form field. This structure contains the label
@@ -1375,7 +1398,7 @@ class HtmlForm extends HtmlFormBasic
             }
         }
     }
-	
+    
     /** Add a new groupbox to the form. This could be used to group some elements 
      *  together. There is also the option to set a headline to this group box.
      *  @param $id       Id the the groupbox.
