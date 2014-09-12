@@ -159,7 +159,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                                 || ($role->getValue('rol_webmaster') == 0))
                                 {
                                     $roleMemHTML .= '
-                                    <a class="icon-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
+                                    <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type='.$deleteMode.'&amp;element_id=role_'.
                                         $role->getValue('rol_id'). '&amp;database_id='.$member->getValue('mem_id').'&amp;name='.urlencode($role->getValue('rol_name')).'"><img
                                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" title="'.$gL10n->get('PRO_CANCEL_MEMBERSHIP').'" /></a>';
                                 }

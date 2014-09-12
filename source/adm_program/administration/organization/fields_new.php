@@ -187,30 +187,4 @@ $form->addHtml(admFuncShowCreateChangeInfoById($userField->getValue('usf_usr_id_
 $page->addHtml($form->show(false));
 $page->show();
 
-/*
-echo '
-		<div class="groupBox" id="admDescription">
-			<div class="groupBoxHeadline" id="admDescriptionHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admDescriptionBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admDescriptionBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_DESCRIPTION').'
-			</div>
-
-			<div class="groupBoxBody" id="admDescriptionBody">
-                <ul class="formFieldList">
-                    <li>'.$ckEditor->createEditor('usf_description', $userField->getValue('usf_description'), 'AdmidioDefault', 200).'</li>
-                </ul>
-			</div>
-		</div>';
-
-        // show informations about user who creates the recordset and changed it
-        echo admFuncShowCreateChangeInfoById($userField->getValue('usf_usr_id_create'), $userField->getValue('usf_timestamp_create'), $userField->getValue('usf_usr_id_change'), $userField->getValue('usf_timestamp_change')).'
-        
-        <div class="formSubmit">
-            <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-        </div>
-    </div>
-</div>
-</form>
-
-*/
 ?>

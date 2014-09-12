@@ -21,7 +21,7 @@ $gLayout['header'] = '
     <script type="text/javascript"><!--
         $(document).ready(function() 
         {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+            $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); 
     //--></script>'; 
 
@@ -114,7 +114,7 @@ else
                             
                         //Löschen
                         echo '
-                        <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
+                        <a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
                             $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img 
                             src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                     }

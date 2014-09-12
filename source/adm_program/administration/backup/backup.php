@@ -61,7 +61,7 @@ $page->addHeadline($gL10n->get('BAC_DATABASE_BACKUP'));
 
 $page->addJavascript('
         $(document).ready(function() {
-            $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+            $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
         }); ', true);
 
 // create module menu
@@ -99,7 +99,7 @@ foreach($old_backup_files as $key => $old_backup_file)
                         <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">'. $old_backup_file. '</a>');
     $table->addColumn(date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)));    
     $table->addColumn(round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB&nbsp;', array('style' => 'text-align: right;'));    
-    $table->addColumn('<a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
+    $table->addColumn('<a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                         $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>', array('style' => 'text-align: center;'));    
 

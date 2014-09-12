@@ -23,7 +23,7 @@ function profileJSClass()
 		$("#menu_item_role_memberships_change").colorbox({rel:'nofollow'});
 		$("#menu_item_password a").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
 		$("#password_link").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
-        $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',scrolling:false,onComplete:function(){$("#admButtonNo").focus();}});
+        $(".icon-link-popup").colorbox({rel:'nofollow',scrolling:false,onComplete:function(){$("#admButtonNo").focus();}});
 	}
 	this.reloadRoleMemberships = function()
 	{
@@ -33,7 +33,7 @@ function profileJSClass()
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_roles_box_body").html(responseText);
-                $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});
+                $(".icon-link-popup").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});
     			$(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
 			}
 		});
@@ -46,7 +46,7 @@ function profileJSClass()
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_future_roles_box_body").html(responseText);
-                $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});
+                $(".icon-link-popup").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});
 			}
 		});
 	}
@@ -58,7 +58,7 @@ function profileJSClass()
 			dataType: "html",
 			success: function(responseText, statusText){
 				$("#profile_former_roles_box_body").html(responseText);
-                $("a[rel='lnkPopupWindow']").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});				               
+                $(".icon-link-popup").colorbox({rel:'nofollow',onComplete:function(){$("#admButtonNo").focus();}});				               
 			}
 		});
 	}

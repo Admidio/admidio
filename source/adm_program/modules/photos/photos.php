@@ -123,7 +123,7 @@ if($gCurrentUser->editPhotoRight())
         <script type="text/javascript"><!--
             $(document).ready(function() 
             {
-                $("a[rel=\'lnkDelete\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+                $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
             }); 
         //--></script>
         <script type="text/javascript"><!--
@@ -144,6 +144,10 @@ if($gPreferences['photo_show_mode']==1)
     $gLayout['header'] = $gLayout['header']. '
         <script type="text/javascript"><!--
             $(document).ready(function(){
+          /*      $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
+                                                           slideshowAuto:false,
+                                                           slideshowSpeed:'.($gPreferences['photo_slideshow_speed']*1000).',
+                                                           preloading:true});*/
                 $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
                                                            slideshowAuto:false,
                                                            slideshowSpeed:'.($gPreferences['photo_slideshow_speed']*1000).',
@@ -375,7 +379,7 @@ echo '<div class="photoModuleContainer">';
                                 src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
                             <a class="iconLink" href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'right\')"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
-                            <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=imgli_id_'.
+                            <a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=imgli_id_'.
                                 $bild.'&amp;database_id='.$bild.'&amp;database_id_2='.$getPhotoId.'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 
@@ -637,7 +641,7 @@ echo '<div class="photoModuleContainer">';
                                 }
 
                                 echo '
-                                <a class="iconLink" rel="lnkDelete" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=pho_'.
+                                <a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=pho_'.
                                     $sub_photo_album->getValue('pho_id').'&amp;name='.urlencode($sub_photo_album->getValue('pho_name')).'&amp;database_id='.$sub_photo_album->getValue('pho_id').'"><img 
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                             }

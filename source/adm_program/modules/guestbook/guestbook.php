@@ -62,7 +62,7 @@ if($gPreferences['enable_rss'] == 1)
     $page->addRssFile($g_root_path.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 };
 
-$page->addJavascript('$("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
+$page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
 $page->addJavascript('
         function getComments(commentId) {
             // RequestObjekt abschicken und Kommentar laden
@@ -70,7 +70,7 @@ $page->addJavascript('
             function(data) {
                 var objectId = "admCommentSection_" + commentId;
                 document.getElementById(objectId).innerHTML = data;
-                $("a[rel=\'lnkPopupWindow\']").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+                $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
                 toggleComments(commentId);
             });            
         }
@@ -269,7 +269,7 @@ else
                             $page->addHtml('
                             <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                            <a class="icon-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
+                            <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
                                 $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                     }
@@ -285,11 +285,11 @@ else
                     $page->addHtml('
                     <ul class="icon-text-link-list icon-text-link-list-horizontal">
                         <li>
-                            <a class="icon-text-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                            <a class="icon-text-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
                                 $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
                         </li>
                         <li>
-                            <a class="icon-text-link" rel="lnkPopupWindow" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                            <a class="icon-text-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
                                 $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
                         </li>
                     </ul>');

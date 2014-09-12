@@ -50,9 +50,9 @@ class HtmlPage
         $this->containThemeHtml = true;
         
         $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css', 
-                                THEME_PATH.'/css/colorbox.css');
+                                $g_root_path.'/adm_program/libs/colorbox/colorbox.css');
         $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js', 
-                                $g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js',
+                                $g_root_path.'/adm_program/libs/colorbox/jquery.colorbox-min.js',
                                 $g_root_path. '/adm_program/system/js/common_functions.js',
                                 $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
         $this->rssFiles = array();
