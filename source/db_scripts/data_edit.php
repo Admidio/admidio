@@ -42,25 +42,25 @@ $sql = 'UPDATE '.TBL_MEMBERS.' SET mem_begin = \''.addDaysToDate(-1).'\'
 		 WHERE mem_id = 504 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_REGISTRATIONS.' SET reg_timestamp = \''.addDaysToDate(-2).'\'
+$sql = 'UPDATE '.TBL_REGISTRATIONS.' SET reg_timestamp = \''.addDaysToDate(-2).' 13:45:23\'
 		 WHERE reg_id IN (1, 3) ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_REGISTRATIONS.' SET reg_timestamp = \''.addDaysToDate(-1).'\'
+$sql = 'UPDATE '.TBL_REGISTRATIONS.' SET reg_timestamp = \''.addDaysToDate(-1).' 20:54:12\'
 		 WHERE reg_id IN (2) ';
 $db->query($sql);
 
 // set date of announcements
-$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(-7).'\'
+$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(-7).' 09:12:34\'
 		 WHERE ann_id = 1 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(-3).'\'
-                                       , ann_timestamp_change = \''.addDaysToDate(-2).'\'
+$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(-3).' 11:30:59\'
+                                       , ann_timestamp_change = \''.addDaysToDate(-2).' 19:21:32\'
 		 WHERE ann_id = 2 ';
 $db->query($sql);
 
-$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(0).'\'
+$sql = 'UPDATE '.TBL_ANNOUNCEMENTS.' SET ann_timestamp_create = \''.addDaysToDate(0).' 21:45:33\'
 		 WHERE ann_id = 3 ';
 $db->query($sql);
 

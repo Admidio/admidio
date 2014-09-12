@@ -58,7 +58,7 @@ $sql = "SELECT msg_type, msg_id1, msg_subject, msg_timestamp, msg_usrid1 AS user
 
 $resultMail = $gDb->query($sql);
 
-$headline = 'Message History';
+$headline = $gL10n->get('SYS_MESSAGES');;
 
 // add current url to navigation stack
 $gNavigation->clear();

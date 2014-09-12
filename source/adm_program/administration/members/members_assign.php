@@ -97,7 +97,7 @@ echo '
     <div class="panel-heading">'.$gL10n->get('SYS_USERS_FOUND').'</div>
     <div class="panel-body">';
 
-        // Alle gefundenen Benutzer mit Adresse ausgeben und einem Link zur weiteren moeglichen Verarbeitung
+        // show all found users with their address who have a similar name and show link for further handling
         $i = 0;
         while($row = $gDb->fetch_array($result_usr))
         {
