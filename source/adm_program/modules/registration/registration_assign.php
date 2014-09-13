@@ -90,7 +90,7 @@ if($gCurrentUser->editUsers())
 }
 else
 {
-	$urlCreateNewUser = $g_root_path.'/adm_program/modules/registration/new_user_function.php?mode=5&new_user_id='.$getNewUserId;
+	$urlCreateNewUser = $g_root_path.'/adm_program/modules/registration/registration_function.php?mode=5&new_user_id='.$getNewUserId;
 }
 
 if($member_found == 0)
@@ -161,7 +161,7 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                         {
                             $page->addHtml('<br />'.$gL10n->get('NWU_REMINDER_SEND_LOGIN').'<br />
 
-                            <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/registration/new_user_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6"><img
+                            <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=6"><img
                                 src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('NWU_SEND_LOGIN').'" />'.$gL10n->get('NWU_SEND_LOGIN').'</a>');
                         }
                     }
@@ -170,14 +170,14 @@ $page->addHtml('<p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $new_us
                         // Logindaten sind NICHT vorhanden -> diese nun zuordnen
                         $page->addHtml('<br />'.$gL10n->get('NWU_USER_NO_VALID_LOGIN').'<br />
 
-                        <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/registration/new_user_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1"><img
+                        <a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=1"><img
                             src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_LOGIN').'" />'.$gL10n->get('NWU_ASSIGN_LOGIN').'</a>');
                     }
                 }
                 else
                 {
                     // gefundene User ist noch KEIN Mitglied dieser Organisation
-                    $link = $g_root_path.'/adm_program/modules/registration/new_user_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=2';
+                    $link = $g_root_path.'/adm_program/modules/registration/registration_function.php?new_user_id='.$getNewUserId.'&amp;user_id='.$row->usr_id.'&amp;mode=2';
 
                     if(strlen($row->usr_login_name) > 0)
                     {

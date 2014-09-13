@@ -60,7 +60,9 @@ class Navigation
     }
     
     /** Add a new url to the navigation stack. If a html navigation bar should be
-     *  created later than you should fill the text and maybe the icon.
+     *  created later than you should fill the text and maybe the icon. Before the
+     *  url will be added to the stack the method checks if the current url was 
+     *  already added to the url.
      *  @param $url  The url that should be added to the navigation stack.
      *  @param $text A text that should be shown in the html navigation stack and 
      *               would be linked with the $url.
@@ -69,11 +71,20 @@ class Navigation
      */
     public function addUrl($url, $text = null, $icon = null)
     {
-        // Url nur hinzufuegen, wenn sie nicht schon als letzte im Array steht
         if($this->count == 0 || $url != $this->urlStack[$this->count-1]['url'])
         {
-            $this->urlStack[$this->count] = array('url' => $url, 'text' => $text, 'icon' => $icon);
-            $this->count++;
+            if($this->count > 1 && $url == $this->urlStack[$this->count-2]['url'])
+            {
+                // if the last but one url is equal to the current url then only remove the last url
+                array_pop($this->urlStack);
+                $this->count--;
+            }
+            else
+            {
+                // if the current url will not be the last or the last but one then add the current url to stack
+                $this->urlStack[$this->count] = array('url' => $url, 'text' => $text, 'icon' => $icon);
+                $this->count++;
+            }
         }
     }
 

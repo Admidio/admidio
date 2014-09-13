@@ -45,7 +45,7 @@ else
     if($gPreferences['registration_mode'] > 0)
     {
         // show registration link
-        $moduleMenu->addItem('adm_menu_item_registration', $g_root_path.'/adm_program/system/registration.php', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png');
+        $moduleMenu->addItem('adm_menu_item_registration', $g_root_path.'/adm_program/modules/registration/registration.php', $gL10n->get('SYS_REGISTRATION'), 'new_registrations.png');
     }
 }
 $page->addHtml($moduleMenu->show(false));
@@ -142,9 +142,9 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser
     $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
     if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
     {
-        $adminMenu->addItem('newreg', '/adm_program/modules/registration/new_user.php',
+        $adminMenu->addItem('newreg', '/adm_program/modules/registration/registration.php',
                             $gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations_big.png',
-                            $gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS'));
+                            $gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS_DESC'));
     }
 
     if($gCurrentUser->editUsers())
@@ -166,7 +166,7 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser
         $adminMenu->addItem('dbback', '/adm_program/modules/backup/backup.php',
                             $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup_big.png',
                             $gL10n->get('BAC_DATABASE_BACKUP_DESC'));
-        $adminMenu->addItem('orgprop', '/adm_program/modules/preferences/organization.php',
+        $adminMenu->addItem('orgprop', '/adm_program/modules/preferences/preferences.php',
                             $gL10n->get('SYS_SETTINGS'), '/icons/options_big.png',
                             $gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
     }

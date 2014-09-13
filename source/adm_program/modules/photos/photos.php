@@ -241,7 +241,7 @@ if($gPreferences['photo_download_enabled']==1 && $getPhotoId > 0)
 if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of photos
-	$photosMenu->addItem('admMenuItemPreferencesPhotos', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=PHO_PHOTOS', 
+	$photosMenu->addItem('admMenuItemPreferencesPhotos', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=PHO_PHOTOS', 
 								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
 }
 

@@ -60,7 +60,7 @@ $page->addHtml($form->show(false));
 if($gPreferences['registration_mode'] > 0)
 {
     $page->addHtml('<div id="login_registration_link">
-        <small><a href="'.$g_root_path.'/adm_program/system/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a></small>
+        <small><a href="'.$g_root_path.'/adm_program/modules/registration/registration.php">'.$gL10n->get('SYS_WANT_REGISTER').'</a></small>
     </div>');
 }
 

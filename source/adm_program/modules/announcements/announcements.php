@@ -89,7 +89,7 @@ if($gCurrentUser->editAnnouncements())
 if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of announcements
-	$announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=announcements', 
+	$announcementsMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=announcements', 
 								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 

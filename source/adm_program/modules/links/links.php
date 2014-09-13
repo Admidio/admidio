@@ -89,7 +89,7 @@ if($weblinks->getId() == 0)
 	if($gCurrentUser->isWebmaster())
 	{
 		// show link to system preferences of weblinks
-		$LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=links', 
+		$LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=links', 
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 	}
 	elseif($gCurrentUser->editWeblinksRight())

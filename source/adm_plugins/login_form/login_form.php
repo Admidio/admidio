@@ -194,12 +194,12 @@ else
         if($plg_show_icons)
         {
             echo '
-            <a class="icon-text-link" href="'. $g_root_path. '/adm_program/system/registration.php"><img 
+            <a class="icon-text-link" href="'. $g_root_path. '/adm_program/modules/registration/registration.php"><img 
                 src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('SYS_REGISTRATION').'" />'.$gL10n->get('SYS_REGISTRATION').'</a>';
         }
         else
         {
-            echo '<a href="'. $g_root_path. '/adm_program/system/registration.php" '. $plg_link_target. '>'.$gL10n->get('SYS_REGISTRATION').'</a>';
+            echo '<a href="'. $g_root_path. '/adm_program/modules/registration/registration.php" '. $plg_link_target. '>'.$gL10n->get('SYS_REGISTRATION').'</a>';
         }
     }
 

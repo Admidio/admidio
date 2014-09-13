@@ -746,14 +746,14 @@
     <text id="NWU_ASSIGN_LOGIN_EMAIL" development="new" translation="todo">Die Logindaten wurden erfolgreich zugeordnet und der Benutzer ist darüber per E-Mail benachrichtigt worden.</text>
     <text id="NWU_ASSIGN_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft zuweisen</text>
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="todo">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</text>
-    <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="todo">Anmeldung zuordnen</text>
-    <text id="NWU_DELETE_REGISTRATION" development="new" translation="todo">Anmeldung löschen</text>
-    <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen verwalten.</text>
+    <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="todo">Registrierung zuordnen</text>
+    <text id="NWU_DELETE_REGISTRATION" development="new" translation="todo">Registrierung löschen</text>
+    <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="todo">Neue Registrierungen verwalten.</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="todo">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</text>
-    <text id="NWU_NEW_REGISTRATIONS" development="new" translation="todo">Neue Anmeldungen</text>
+    <text id="NWU_NEW_REGISTRATIONS" development="new" translation="todo">Neue Registrierungen</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%, besitzt aber bereits Logindaten.</text>
     <text id="NWU_NO_MEMBERSHIP_NO_LOGIN" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1% und besitzt auch keine Logindaten.</text>
-    <text id="NWU_NO_REGISTRATIONS" development="new" translation="todo">Es sind keine Anmeldungen vorhanden.</text>
+    <text id="NWU_NO_REGISTRATIONS" development="new" translation="todo">Es sind keine Registrierungen vorhanden.</text>
     <text id="NWU_REGISTERED_ON" development="new" translation="todo">Registriert am %VAR1%</text>
     <text id="NWU_REMINDER_SEND_LOGIN" development="new" translation="todo">Möchten Sie ihm seinen Loginnamen mit Passwort als Erinnerung zuschicken?</text>
     <text id="NWU_SEND_LOGIN" development="new" translation="todo">Zugangsdaten zuschicken</text>

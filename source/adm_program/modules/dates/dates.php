@@ -209,7 +209,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             if($gCurrentUser->isWebmaster())
             {
                 // show link to system preferences of weblinks
-                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=events',
+                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=events',
                                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
             }
             elseif($gCurrentUser->editDates())

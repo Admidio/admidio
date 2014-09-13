@@ -90,7 +90,7 @@
                 
                 if($gCurrentUser ->approveUsers() && $gPreferences['registration_mode'] > 0)
                 {
-                    $adminMenu->addItem('newreg', '/adm_program/modules/registration/new_user.php',
+                    $adminMenu->addItem('newreg', '/adm_program/modules/registration/registration.php',
                                         $gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations.png');
                 }
                 if($gCurrentUser ->editUsers())
@@ -107,7 +107,7 @@
                 {
                     $adminMenu->addItem('dbback', '/adm_program/modules/backup/backup.php',
                                         $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup.png');
-                    $adminMenu->addItem('orgprop', '/adm_program/modules/preferences/organization.php',
+                    $adminMenu->addItem('orgprop', '/adm_program/modules/preferences/preferences.php',
                                         $gL10n->get('SYS_SETTINGS'), '/icons/options.png');
                 }
             }
