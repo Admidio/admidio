@@ -79,14 +79,14 @@ if($getMode == 2)
 {
     // User existiert bereits, ist aber bisher noch kein Mitglied der aktuellen Orga,
     // deshalb erst einmal Rollen zuordnen und dann spaeter eine Mail schicken
-    $gNavigation->addUrl($g_root_path.'/adm_program/administration/new_user/new_user_function.php?mode=3&user_id='.$getUserId.'&new_user_id='.$getNewUserId);
+    $gNavigation->addUrl($g_root_path.'/adm_program/modules/registration/new_user_function.php?mode=3&user_id='.$getUserId.'&new_user_id='.$getNewUserId);
     header('Location: '.$g_root_path.'/adm_program/modules/profile/roles.php?usr_id='.$getUserId);
     exit();
 }
 
 if($getMode == 1 || $getMode == 3)
 {
-    $gMessage->setForwardUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');
+    $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/registration/new_user.php');
 
     // nur ausfuehren, wenn E-Mails auch unterstuetzt werden
     if($gPreferences['enable_system_mails'] == 1)
@@ -167,8 +167,8 @@ elseif($getMode == 6)
     }
 
     // Zugangsdaten neu verschicken
-    $gNavigation->addUrl($g_root_path.'/adm_program/administration/new_user/new_user.php');
-    header('Location: '.$g_root_path.'/adm_program/administration/members/members_function.php?mode=4&usr_id='.$getUserId);
+    $gNavigation->addUrl($g_root_path.'/adm_program/modules/registration/new_user.php');
+    header('Location: '.$g_root_path.'/adm_program/modules/members/members_function.php?mode=4&usr_id='.$getUserId);
     exit();
 }
 

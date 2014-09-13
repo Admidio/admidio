@@ -68,7 +68,7 @@ $page->addJavascript('
 $backupMenu = new HtmlNavbar('admMenuBackup');
 
 // show link to create new backup
-$backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/administration/backup/backup_script.php', 
+$backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/modules/backup/backup_script.php', 
 							$gL10n->get('BAC_START_BACKUP'), 'database_save.png');
 
 $page->addHtml($backupMenu->show(false));
@@ -94,9 +94,9 @@ $backup_size_sum = 0;
 foreach($old_backup_files as $key => $old_backup_file)
 {
     $table->addRow('', array('id' => 'row_file_'.$key));
-    $table->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">
+    $table->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">
                         <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" /></a>
-                        <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">'. $old_backup_file. '</a>');
+                        <a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">'. $old_backup_file. '</a>');
     $table->addColumn(date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)));    
     $table->addColumn(round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB&nbsp;', array('style' => 'text-align: right;'));    
     $table->addColumn('<a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.

@@ -215,7 +215,7 @@ elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id'))
     if(strlen($user->getValue('EMAIL')) > 0 && $gPreferences['enable_system_mails'] == 1)
     {
         // if email is set and systemmails are activated then webmaster can send a new password to user
-    	$profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$user->getValue('usr_id').'&amp;mode=5', 
+    	$profileMenu->addItem('menu_item_send_password', $g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$user->getValue('usr_id').'&amp;mode=5', 
     						$gL10n->get('ORG_SEND_NEW_PASSWORD'), 'key.png');
     }
     else
@@ -229,7 +229,7 @@ elseif($gCurrentUser->isWebmaster() && isMember($user->getValue('usr_id'))
 // show link to view profile field change history
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
-	$profileMenu->addItem('menu_item_change_history', $g_root_path. '/adm_program/administration/members/profile_field_history.php?usr_id='. $user->getValue('usr_id'), 
+	$profileMenu->addItem('menu_item_change_history', $g_root_path. '/adm_program/modules/members/profile_field_history.php?usr_id='. $user->getValue('usr_id'), 
                         $gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
 }
 
@@ -252,11 +252,11 @@ if($gCurrentUser->assignRoles())
 if($gCurrentUser->isWebmaster())
 {
 	// show link to maintain profile fields
-	$profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/administration/organization/fields.php', 
+	$profileMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php', 
 								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
 	// show link to system preferences of weblinks
-	$profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=profile', 
+	$profileMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=profile', 
 						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 

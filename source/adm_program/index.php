@@ -142,31 +142,31 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->manageRoles() || $gCurrentUser
     $adminMenu = new Menu('administration', $gL10n->get('SYS_ADMINISTRATION'));
     if($gCurrentUser->approveUsers() && $gPreferences['registration_mode'] > 0)
     {
-        $adminMenu->addItem('newreg', '/adm_program/administration/new_user/new_user.php',
+        $adminMenu->addItem('newreg', '/adm_program/modules/registration/new_user.php',
                             $gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations_big.png',
                             $gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS'));
     }
 
     if($gCurrentUser->editUsers())
     {
-        $adminMenu->addItem('usrmgt', '/adm_program/administration/members/members.php',
+        $adminMenu->addItem('usrmgt', '/adm_program/modules/members/members.php',
                             $gL10n->get('MEM_USER_MANAGEMENT'), '/icons/user_administration_big.png',
                             $gL10n->get('MEM_USER_MANAGEMENT_DESC'));
     }
 
     if($gCurrentUser->manageRoles())
     {
-        $adminMenu->addItem('roladm', '/adm_program/administration/roles/roles.php',
+        $adminMenu->addItem('roladm', '/adm_program/modules/roles/roles.php',
                             $gL10n->get('ROL_ROLE_ADMINISTRATION'), '/icons/roles_big.png',
                             $gL10n->get('ROL_ROLE_ADMINISTRATION_DESC'));
     }
     
     if($gCurrentUser->isWebmaster())
     {
-        $adminMenu->addItem('dbback', '/adm_program/administration/backup/backup.php',
+        $adminMenu->addItem('dbback', '/adm_program/modules/backup/backup.php',
                             $gL10n->get('BAC_DATABASE_BACKUP'), '/icons/backup_big.png',
                             $gL10n->get('BAC_DATABASE_BACKUP_DESC'));
-        $adminMenu->addItem('orgprop', '/adm_program/administration/organization/organization.php',
+        $adminMenu->addItem('orgprop', '/adm_program/modules/preferences/organization.php',
                             $gL10n->get('SYS_SETTINGS'), '/icons/options_big.png',
                             $gL10n->get('ORG_ORGANIZATION_PROPERTIES_DESC'));
     }

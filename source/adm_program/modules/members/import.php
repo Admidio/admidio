@@ -54,7 +54,7 @@ $importMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->g
 $page->addHtml($importMenu->show(false));
 
 // show form
-$form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/administration/members/import_function.php', $page, 'default', true);
+$form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/modules/members/import_function.php', $page, 'default', true);
 $form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
 $form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), ($gPreferences['max_file_upload_size'] * 1024), false, null, false, FIELD_MANDATORY);
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));

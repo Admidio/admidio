@@ -111,7 +111,7 @@ $profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl()
 $page->addHtml($profileFieldsEditMenu->show(false));
 
 // show form
-$form = new HtmlForm('profile_fields_edit_form', $g_root_path.'/adm_program/administration/organization/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1', $page);
+$form = new HtmlForm('profile_fields_edit_form', $g_root_path.'/adm_program/modules/preferences/fields_function.php?usf_id='.$getUsfId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     if($userField->getValue('usf_system') == 1)
     {

@@ -65,7 +65,7 @@ if($postImportCoding == 'iso-8859-1')
 }
     
 // CSV-Import (im Moment gibt es nur diesen, spaeter muss hier dann unterschieden werden)
-header('Location: '.$g_root_path.'/adm_program/administration/members/import_csv_config.php');
+header('Location: '.$g_root_path.'/adm_program/modules/members/import_csv_config.php');
 exit();
 
 ?>

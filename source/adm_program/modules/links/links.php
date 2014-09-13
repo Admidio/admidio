@@ -89,13 +89,13 @@ if($weblinks->getId() == 0)
 	if($gCurrentUser->isWebmaster())
 	{
 		// show link to system preferences of weblinks
-		$LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=links', 
+		$LinksMenu->addItem('menu_items_links_preferences', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=links', 
 							$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 	}
 	elseif($gCurrentUser->editWeblinksRight())
 	{
 		// show link to maintain categories
-		$LinksMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/administration/categories/categories.php?type=LNK&title='. $getHeadline, 
+		$LinksMenu->addItem('menu_item_maintain_categories', $g_root_path.'/adm_program/modules/categories/categories.php?type=LNK&title='. $getHeadline, 
 							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');    	
 	}
 	

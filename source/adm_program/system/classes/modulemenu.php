@@ -311,7 +311,7 @@ class ModuleMenu
 				    if($menuEntry['admin'] == true)
 				    {
     				    $menuEntry['icon'] = THEME_PATH.'/icons/edit.png';
-    				    $menuEntry['link'] = $this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'&title='.$menuEntry['text'];
+    				    $menuEntry['link'] = $this->root_path.'/adm_program/modules/categories/categories.php?type='.$menuEntry['categoryType'].'&title='.$menuEntry['text'];
     				    $menuEntry['text'] = $textManageCategories;
     				    $html .= $this->createIconTextLink($menuEntry);
                     }
@@ -336,7 +336,7 @@ class ModuleMenu
 					if($menuEntry['admin'] == true)
 					{
     				    // show link to manage categorie
-						$html .= '&nbsp;<a class="icon-link" href="'.$this->root_path.'/adm_program/administration/categories/categories.php?type='.$menuEntry['categoryType'].'&amp;title='.$menuEntry['text'].'"><img
+						$html .= '&nbsp;<a class="icon-link" href="'.$this->root_path.'/adm_program/modules/categories/categories.php?type='.$menuEntry['categoryType'].'&amp;title='.$menuEntry['text'].'"><img
 							src="'. THEME_PATH. '/icons/edit.png" alt="'.$textManageCategories.'" title="'.$textManageCategories.'" /></a>';
 					}
 				$html .= '</div></form></li>';

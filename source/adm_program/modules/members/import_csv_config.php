@@ -90,7 +90,7 @@ $page->addHtml($importCsvConfigMenu->show(false));
 $page->addHtml('<p class="lead">'.$gL10n->get('MEM_ASSIGN_FIELDS_DESC').'</p>');
 
 // show form
-$form = new HtmlForm('import_assign_fields_form', $g_root_path. '/adm_program/administration/members/import_csv.php', $page, 'vertical');
+$form = new HtmlForm('import_assign_fields_form', $g_root_path. '/adm_program/modules/members/import_csv.php', $page, 'vertical');
 $form->addCheckbox('first_row', $gL10n->get('MEM_FIRST_LINE_COLUMN_NAME'), $form_values['first_row']);
 $htmlFieldTable = '
    <table class="table table-condensed">

@@ -230,7 +230,7 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 // Html des Modules ausgeben
 echo '
-<form id="formRole" action="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=2" method="post">
+<form id="formRole" action="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=2" method="post">
 <div class="formLayout" id="edit_roles_form">
     <div class="formHead">'.$gLayout['title'].'</div>
     <div class="formBody">

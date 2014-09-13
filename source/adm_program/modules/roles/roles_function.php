@@ -72,11 +72,11 @@ if($getMode == 1)
                 '.$gL10n->get('ROL_HINT_DELETE_ROLE', $gL10n->get('SYS_DELETE')).'
             </p>
             <button id="btnDelete" type="button"
-                onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$getRoleId.'&mode=4\'"><img
+                onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&mode=4\'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <button id="btnInactive" type="button"
-                onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$getRoleId.'&mode=3\'"><img
+                onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&mode=3\'"><img
                 src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />&nbsp;'.$gL10n->get('ROL_INACTIV_ROLE').'</button>
 
             <ul class="iconTextLinkList">
@@ -380,7 +380,7 @@ elseif($getMode == 5)
 elseif($getMode == 6)
 {
     // Fragen, ob die inaktive Rolle geloescht werden soll
-    $gMessage->setForwardYesNo($g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=4');
+    $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&amp;mode=4');
     $gMessage->show($gL10n->get('ROL_ROLE_DELETE_DESC', $role->getValue('rol_name')));
 }
 elseif($getMode == 7)

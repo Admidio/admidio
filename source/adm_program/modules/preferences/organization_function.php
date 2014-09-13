@@ -267,7 +267,7 @@ case 2:
     $page->addHtml('<p class="lead">'.$gL10n->get('ORG_NEW_ORGANIZATION_DESC').'</p>');
 
     // show form
-    $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/administration/organization/organization_function.php?mode=3', $page);
+    $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/organization_function.php?mode=3', $page);
     $form->addTextInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'], 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
     $form->addTextInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'], 50, FIELD_MANDATORY);
     $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'), THEME_PATH.'/icons/database_in.png', null, ' col-sm-offset-3');
@@ -339,7 +339,7 @@ case 3:
     $page->addHtml('<p class="lead">'.$gL10n->get('ORG_ORGANIZATION_SUCCESSFULL_ADDED', $_POST['orgaLongName']).'</p>');
 
     // show form
-    $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/administration/organization/organization.php', $page);
+    $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/organization.php', $page);
     $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), THEME_PATH.'/icons/forward.png');
     
     // add form to html page and show page

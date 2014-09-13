@@ -272,6 +272,6 @@ $_SESSION['user_import_mode'] = '';
 $_SESSION['file_lines']       = '';
 $_SESSION['value_separator']  = '';
 
-$gMessage->setForwardUrl($g_root_path.'/adm_program/administration/members/members.php');
+$gMessage->setForwardUrl($g_root_path.'/adm_program/modules/members/members.php');
 $gMessage->show($gL10n->get('MEM_IMPORT_SUCCESSFUL', $countImportNewUser, $countImportEditUser, $countImportEditRole));
 ?>

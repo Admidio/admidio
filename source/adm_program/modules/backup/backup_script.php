@@ -77,9 +77,9 @@ OutputInformation('', '
 <ul class="iconTextLinkList" id="cancel_link">
     <li>
         <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php"><img
+            <a href="'.$g_root_path.'/adm_program/modules/backup/backup.php"><img
             src="'. THEME_PATH. '/icons/error.png" alt="'.$gL10n->get('SYS_ABORT').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/administration/backup/backup.php">'.$gL10n->get('SYS_ABORT').'</a>
+            <a href="'.$g_root_path.'/adm_program/modules/backup/backup.php">'.$gL10n->get('SYS_ABORT').'</a>
         </span>
     </li>
 </ul>');
@@ -491,7 +491,7 @@ $starttime = getmicrotime();
 
 echo '<p>'.$gL10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</p>
 
-<p>'.$gL10n->get('BAC_BACKUP_FILE').': <a href="'.$g_root_path.'/adm_program/administration/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+<p>'.$gL10n->get('BAC_BACKUP_FILE').': <a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
 ('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</p>
 
 <ul class="iconTextLinkList">

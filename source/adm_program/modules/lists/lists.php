@@ -101,20 +101,20 @@ $ListsMenu = new HtmlNavbar('menu_lists');
 if($gCurrentUser->manageRoles())
 {
     // show link to create new role
-    $ListsMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administration/roles/roles_new.php', 
+    $ListsMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/modules/roles/roles_new.php', 
                         $gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 }
 
 if($gCurrentUser->isWebmaster())
 {
     // show link to system preferences of roles
-    $ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=lists', 
+    $ListsMenu->addItem('admMenuItemPreferencesLists', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=lists', 
                         $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 elseif($gCurrentUser->manageRoles())
 {
     // if no calendar selectbox is shown, then show link to edit calendars
-    $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=ROL',
+    $DatesMenu->addItem('admMenuItemCategories', '/adm_program/modules/categories/categories.php?type=ROL',
                         $gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_view_tile.png');
 }
 
@@ -212,7 +212,7 @@ foreach($listsResult['recordset'] as $row)
                 if($gCurrentUser->manageRoles())
                 {
                     $page->addHtml('
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
+                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'"><img
                         src="'.THEME_PATH.'/icons/edit.png" alt="'.$gL10n->get('ROL_EDIT_ROLE').'" title="'.$gL10n->get('ROL_EDIT_ROLE').'" /></a>');
                 }
             $page->addHtml('</div>

@@ -209,13 +209,13 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             if($gCurrentUser->isWebmaster())
             {
                 // show link to system preferences of weblinks
-                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=events',
+                $DatesMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=events',
                                     $gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
             }
             elseif($gCurrentUser->editDates())
             {
                 // if no calendar selectbox is shown, then show link to edit calendars
-                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/administration/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR'),
+                $DatesMenu->addItem('admMenuItemCategories', '/adm_program/modules/categories/categories.php?type=DAT&title='.$gL10n->get('DAT_CALENDAR'),
                                     $gL10n->get('DAT_MANAGE_CALENDARS'), 'application_view_tile.png');
             }
 

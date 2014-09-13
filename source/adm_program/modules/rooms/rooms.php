@@ -36,9 +36,9 @@ require(SERVER_PATH. '/adm_program/system/overall_header.php');
  // Html des Modules ausgeben
 echo '<h1 class="moduleHeadline">'.$gL10n->get('ROO_ROOM_MANAGEMENT').'</h1>
 <span class="iconTextLink">
-    <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?headline='.$req_headline.'"><img 
+    <a href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$req_headline.'"><img 
         src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_VAR', $req_headline).'" /></a>
-    <a href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?headline='.$req_headline.'">'.$gL10n->get('SYS_CREATE_VAR', $req_headline).'</a>
+    <a href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$req_headline.'">'.$gL10n->get('SYS_CREATE_VAR', $req_headline).'</a>
 </span>
 <br/>';
 
@@ -109,7 +109,7 @@ else
                     {
                         //Bearbeiten
                         echo '
-                        <a class="iconLink" href="'.$g_root_path.'/adm_program/administration/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$req_headline.'"><img 
+                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$req_headline.'"><img 
                             src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                             
                         //Löschen

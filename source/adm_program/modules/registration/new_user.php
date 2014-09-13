@@ -95,7 +95,7 @@ while($row = $gDb->fetch_array($usr_result))
         $datetimeCreate,
         $row['usr_login_name'],
         $mailLink,
-        '<a class="icon-link" href="'.$g_root_path.'/adm_program/administration/new_user/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
+        '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/registration/new_user_assign.php?new_user_id='.$row['usr_id'].'"><img 
                             src="'. THEME_PATH. '/icons/new_registrations.png" alt="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" title="'.$gL10n->get('NWU_ASSIGN_REGISTRATION').'" /></a>
         <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=nwu&amp;element_id=row_user_'.
             $row['usr_id'].'&amp;name='.urlencode($row['first_name'].' '.$row['last_name']).'&amp;database_id='.$row['usr_id'].'"><img 

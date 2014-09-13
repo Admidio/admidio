@@ -95,7 +95,7 @@ $page->addJavascript('
 
 		if(secondSequence > 0) {
 			// Nun erst mal die neue Position von der gewaehlten Kategorie aktualisieren
-			$.get(gRootPath + "/adm_program/administration/categories/categories_function.php?cat_id=" + catID + "&type='. $getType. '&mode=4&sequence=" + direction);
+			$.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catID + "&type='. $getType. '&mode=4&sequence=" + direction);
 		}
 	}');
 $page->addJavascript('$("icon-link-popup").colorbox({rel:\'nofollow\', height: \'320px\', onComplete:function(){$("#admButtonNo").focus();}});', true);
@@ -115,7 +115,7 @@ $categoriesMenu = new HtmlNavbar('admMenuCategories');
 $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new category
-$categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/administration/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
+$categoriesMenu->addItem('admMenuItemNewCategory', $g_root_path.'/adm_program/modules/categories/categories_new.php?type='.$getType.'&amp;title='.$getTitle,
 							$gL10n->get('SYS_CREATE_VAR', $getTitle), 'add.png');
 $page->addHtml($categoriesMenu->show(false));
 
@@ -195,7 +195,7 @@ while($cat_row = $gDb->fetch_array($categoryResult))
         $htmlDefaultCategory = '<img class="icon-information" src="'. THEME_PATH. '/icons/star.png" alt="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" title="'.$gL10n->get('CAT_DEFAULT_VAR', $getTitle).'" />';
     }
 
-    $categoryAdministration = '<a class="icon-link" href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
+    $categoryAdministration = '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'"><img
                                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
     if($category->getValue('cat_system') == 1)
     {
@@ -210,7 +210,7 @@ while($cat_row = $gDb->fetch_array($categoryResult))
     
     // create array with all column values
     $columnValues = array(
-        '<a href="'.$g_root_path.'/adm_program/administration/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
+        '<a href="'.$g_root_path.'/adm_program/modules/categories/categories_new.php?cat_id='. $category->getValue('cat_id'). '&amp;type='.$getType.'&amp;title='.$getTitle.'">'. $category->getValue('cat_name'). '</a>',
         $htmlMoveRow,
         $htmlHideCategory,
         $htmlDefaultCategory,

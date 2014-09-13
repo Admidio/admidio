@@ -81,10 +81,10 @@ if($getMode == 1)
             </p>
             <button id="btnBack" type="button" onclick="history.back()"><img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnDelete" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $getUserId. '&mode=3\'"><img 
+            <button id="btnDelete" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3\'"><img 
                 src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnFormer" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$getUserId.'&mode=2\'"><img 
+            <button id="btnFormer" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$getUserId.'&mode=2\'"><img 
                 src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />&nbsp;'.$gL10n->get('SYS_FORMER').'</button>
         </div>
     </div>';
@@ -197,7 +197,7 @@ elseif($getMode == 4)
 elseif($getMode == 5)
 {
     // Fragen, ob Zugangsdaten verschickt werden sollen
-    $gMessage->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $getUserId. '&mode=4');
+    $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=4');
     $gMessage->show($gL10n->get('MEM_SEND_NEW_LOGIN', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME')));
 }
 elseif($getMode == 6)
@@ -206,20 +206,20 @@ elseif($getMode == 6)
     {
         // nur Webmaster duerfen dies
         // User ist NUR Mitglied der aktuellen Orga -> dann fragen, ob Ehemaliger oder ganz loeschen
-        header('Location: '.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $getUserId. '&mode=1');
+        header('Location: '.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=1');
         exit();
     }
     elseif($this_orga == false && $other_orga == 0 && $gCurrentUser->isWebmaster())
     {
         // nur Webmaster duerfen dies
         // User ist in keiner Orga mehr Mitglied -> kann komplett geloescht werden
-        $gMessage->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $getUserId. '&mode=3');
+        $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3');
         $gMessage->show($gL10n->get('MEM_USER_DELETE', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')),$gL10n->get('SYS_DELETE'));
     }
     else
     {
         // User kann nur aus dieser Orga entfernt werden
-        $gMessage->setForwardYesNo($g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $getUserId. '&mode=2');
+        $gMessage->setForwardYesNo($g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=2');
         $gMessage->show($gL10n->get('MEM_REMOVE_MEMBERSHIP', $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'), $gCurrentOrganization->getValue('org_longname')),$gL10n->get('SYS_REMOVE'));
     }
 }

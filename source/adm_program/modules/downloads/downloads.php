@@ -92,7 +92,7 @@ if ($gCurrentUser->editDownloadRight())
 if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of weblinks
-	$DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=downloads', 
+	$DownloadsMenu->addItem('admMenuItemPreferencesLinks', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=downloads', 
 						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 

@@ -84,16 +84,16 @@ else
 $rolesMenu = new ModuleMenu('admMenuRoles');
 
 // define link to create new profile field
-$rolesMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/administration/roles/roles_new.php', 
+$rolesMenu->addItem('admMenuItemNewRole', $g_root_path.'/adm_program/modules/roles/roles_new.php', 
 							$gL10n->get('SYS_CREATE_ROLE'), 'add.png');
 // define link to maintain categories
-$rolesMenu->addItem('admMenuItemMaintainCategory', $g_root_path.'/adm_program/administration/categories/categories.php?type=ROL', 
+$rolesMenu->addItem('admMenuItemMaintainCategory', $g_root_path.'/adm_program/modules/categories/categories.php?type=ROL', 
 							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'edit.png');
 // define link to show inactive roles
-$rolesMenu->addItem('admMenuItemInactiveRole', $g_root_path.'/adm_program/administration/roles/roles.php?inactive='.$activeRolesFlag, 
+$rolesMenu->addItem('admMenuItemInactiveRole', $g_root_path.'/adm_program/modules/roles/roles.php?inactive='.$activeRolesFlag, 
 							$activeRolesLinkDescription, $activeRolesImage);
 // define link to show hidden roles
-$rolesMenu->addItem('admMenuItemHiddenRole', $g_root_path.'/adm_program/administration/roles/roles.php?invisible='.$visibleRolesFlag, 
+$rolesMenu->addItem('admMenuItemHiddenRole', $g_root_path.'/adm_program/modules/roles/roles.php?invisible='.$visibleRolesFlag, 
 							$visibleRolesLinkDescription, $visibleRolesImage);
 // Create table
 $table = new HtmlTableBasic('', 'tableList');
@@ -148,7 +148,7 @@ while($row = $gDb->fetch_array($rol_result))
     }
     
     $table->addRow('', array('class', 'tableMouseOver'));
-    $table->addColumn('&nbsp;<a href="'.$g_root_path.'/adm_program/administration/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'" title="'.$role->getValue('rol_description').'">'.$role->getValue('rol_name').'</a>');
+    $table->addColumn('&nbsp;<a href="'.$g_root_path.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'" title="'.$role->getValue('rol_description').'">'.$role->getValue('rol_name').'</a>');
                 
     if($role->getValue('rol_assign_roles') == 1)
     {
@@ -262,7 +262,7 @@ while($row = $gDb->fetch_array($rol_result))
 
     if($getInactive == true)
     {
-        $linkAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=5"><img
+        $linkAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=5"><img
                                     src="'.THEME_PATH.'/icons/roles.png" alt="'.$gL10n->get('ROL_ENABLE_ROLE').'" title="'.$gL10n->get('ROL_ENABLE_ROLE').'" /></a>';
     }
     else
@@ -284,23 +284,23 @@ while($row = $gDb->fetch_array($rol_result))
     {
         if($getInactive == true)
         {
-            $linkAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=6"><img
+            $linkAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=6"><img
                                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
         }
         else
         {
-            $linkAdministration .='<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=1"><img
+            $linkAdministration .='<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=1"><img
                                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" title="'.$gL10n->get('ROL_ROLE_DELETE').'" /></a>';
         }
     }
     if($getInvisible == true)
     {
-        $linkAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=8"><img
+        $linkAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=8"><img
                                     src="'. THEME_PATH. '/icons/light_on.png" alt="'.$gL10n->get('ROL_SET_ROLE_VISIBLE').'" title="'.$gL10n->get('ROL_SET_ROLE_VISIBLE').'" /></a>';
     }
     else
     {
-        $linkAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/administration/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=7"><img
+        $linkAdministration .= '<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$role->getValue('rol_id').'&amp;mode=7"><img
                                     src="'. THEME_PATH. '/icons/light_off.png" alt="'.$gL10n->get('ROL_SET_ROLE_INVISIBLE').'" title="'.$gL10n->get('ROL_SET_ROLE_INVISIBLE').'" /></a>';
     }
 

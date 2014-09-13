@@ -73,7 +73,7 @@ $page->addJavascript('
 
         if(secondSequence > 0) {
             // Nun erst mal die neue Position von dem gewaehlten Feld aktualisieren
-            $.get(gRootPath + "/adm_program/administration/organization/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
+            $.get(gRootPath + "/adm_program/modules/preferences/fields_function.php?usf_id=" + usfID + "&mode=4&sequence=" + direction);
         }
     }');
 
@@ -86,10 +86,10 @@ $fieldsMenu = new HtmlNavbar('menu_profile_fields');
 $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 
 // define link to create new profile field
-$fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/administration/organization/fields_new.php', 
+$fieldsMenu->addItem('menu_item_new_field', $g_root_path.'/adm_program/modules/preferences/fields_new.php', 
 							$gL10n->get('ORG_CREATE_PROFILE_FIELD'), 'add.png');
 // define link to maintain categories
-$fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/administration/categories/categories.php?type=USF', 
+$fieldsMenu->addItem('menu_item_maintain_category', $g_root_path.'/adm_program/modules/categories/categories.php?type=USF', 
 							$gL10n->get('SYS_MAINTAIN_CATEGORIES'), 'application_double.png');
 $page->addHtml($fieldsMenu->show(false));
 
@@ -200,7 +200,7 @@ while($row = $gDb->fetch_array($result))
                             'URL'      => $gL10n->get('ORG_URL'),
                             'NUMERIC'  => $gL10n->get('SYS_NUMBER'));
     
-    $usfSystem = '<a class="icon-link" href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$userField->getValue('usf_id').'"><img
+    $usfSystem = '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'"><img
                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';     
 
     if($userField->getValue('usf_system') == 1)
@@ -216,7 +216,7 @@ while($row = $gDb->fetch_array($result))
     
     // create array with all column values
     $columnValues = array(
-        '<a href="'.$g_root_path.'/adm_program/administration/organization/fields_new.php?usf_id='.$userField->getValue('usf_id').'">'.$userField->getValue('usf_name').'</a>',
+        '<a href="'.$g_root_path.'/adm_program/modules/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'">'.$userField->getValue('usf_name').'</a>',
         '<a class="iconLink" href="javascript:moveCategory(\'up\', '.$userField->getValue('usf_id').')"><img
             src="'. THEME_PATH. '/icons/arrow_up.png" alt="'.$gL10n->get('ORG_FIELD_UP').'" title="'.$gL10n->get('ORG_FIELD_UP').'" /></a>
         <a class="iconLink" href="javascript:moveCategory(\'down\', '.$userField->getValue('usf_id').')"><img

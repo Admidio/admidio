@@ -59,7 +59,7 @@ else
 require(SERVER_PATH. '/adm_program/system/overall_header.php');
 
 echo '
-<form method="post" action="'.$g_root_path.'/adm_program/administration/rooms/rooms_function.php?room_id='.$getRoomId.'&amp;mode=1">
+<form method="post" action="'.$g_root_path.'/adm_program/modules/rooms/rooms_function.php?room_id='.$getRoomId.'&amp;mode=1">
 <div class="formLayout" id="edit_dates_form">
     <div class="formHead">'. $gLayout['title']. '</div>
     <div class="formBody">

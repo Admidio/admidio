@@ -143,7 +143,7 @@ $page->addJavascript('
     
     // change mode of users that should be shown
     $("#mem_show_all").click(function(){
-        window.location.replace("'.$g_root_path.'/adm_program/administration/members/members.php?members='.$flagShowMembers.'");
+        window.location.replace("'.$g_root_path.'/adm_program/modules/members/members.php?members='.$flagShowMembers.'");
     });
     
     if($("#mem_show_all").is(":checked")){
@@ -160,12 +160,12 @@ $page->addHeadline($headline);
 // create module menu
 $membersAdministrationMenu = new HtmlNavbar('menu_members_administration');
 
-$membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/administration/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
+$membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
 
 if($gPreferences['profile_log_edit_fields'] == 1)
 {
 	// show link to view profile field change history
-	$membersAdministrationMenu->addItem('menu_item_change_history', $g_root_path.'/adm_program/administration/members/profile_field_history.php', 
+	$membersAdministrationMenu->addItem('menu_item_change_history', $g_root_path.'/adm_program/modules/members/profile_field_history.php', 
 								$gL10n->get('MEM_CHANGE_HISTORY'), 'clock.png');
 }
 
@@ -180,17 +180,17 @@ if($gPreferences['user_management_show_all_users'] == 1)
 $membersAdministrationMenu->addItem('menu_item_extras', null, $gL10n->get('SYS_MORE_FEATURES'), null, 'right');
 
 // show link to import users
-$membersAdministrationMenu->addItem('menu_item_import_users', $g_root_path.'/adm_program/administration/members/import.php', 
+$membersAdministrationMenu->addItem('menu_item_import_users', $g_root_path.'/adm_program/modules/members/import.php', 
 							$gL10n->get('MEM_IMPORT_USERS'), 'database_in.png', 'right', 'menu_item_extras');
 							
 if($gCurrentUser->isWebmaster())
 {
 	// show link to maintain profile fields
-	$membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/administration/organization/fields.php', 
+	$membersAdministrationMenu->addItem('menu_item_maintain_profile_fields', $g_root_path. '/adm_program/modules/preferences/fields.php', 
 								$gL10n->get('PRO_MAINTAIN_PROFILE_FIELDS'), 'application_form_edit.png', 'right', 'menu_item_extras');
 
 	// show link to system preferences of weblinks
-	$membersAdministrationMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/administration/organization/organization.php?show_option=user_management', 
+	$membersAdministrationMenu->addItem('menu_item_preferences_links', $g_root_path.'/adm_program/modules/preferences/organization.php?show_option=user_management', 
 						$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right', 'menu_item_extras');
 }
 
@@ -288,7 +288,7 @@ while($row = $gDb->fetch_array($result_mgl))
 	  && $gPreferences['enable_system_mails'] == 1
 	  && $row['usr_id'] != $gCurrentUser->getValue('usr_id'))
 	{
-        $userAdministration = '<a class="icon-link" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
+        $userAdministration = '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $row['usr_id']. '&amp;mode=5"><img
 						         src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" title="'.$gL10n->get('MEM_SEND_USERNAME_PASSWORD').'" /></a>';
     }
 	else
@@ -328,7 +328,7 @@ while($row = $gDb->fetch_array($result_mgl))
 		|| $row['member_this_orga'] > 0)                              // aktive Mitglieder duerfen von berechtigten Usern entfernt werden
 		&& $row['usr_id'] != $gCurrentUser->getValue('usr_id'))       // das eigene Profil darf keiner entfernen
 	{
-		$userAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/administration/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
+		$userAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$row['usr_id'].'&amp;mode=6"><img
 			                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
 	}
 	else
