@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Show list with new user registrations
+ * Show registration dialog or the list with new registrations
  *
  * Copyright    : (c) 2004 - 2014 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -23,7 +23,7 @@ if($gValidLogin == false)
     exit();
 }
 
-// Only Webmasters can confirm registrations. Otherwise exit.
+// Only Users with the right "approve users" can confirm registrations. Otherwise exit.
 if($gCurrentUser->approveUsers() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

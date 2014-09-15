@@ -29,14 +29,15 @@ if($myFilesBackup->checkSettings() == false)
     $gMessage->show($gL10n->get($myFilesBackup->errorText, $myFilesBackup->errorPath, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
 }
 
+$headline = $gL10n->get('BAC_DATABASE_BACKUP');
+
 $backupabsolutepath = $myFilesBackup->getFolder().'/'; // make sure to include trailing slash
 
 $old_backup_files = array();
 $old_backup_files_cp = array();
 
 // Navigation faengt hier im Modul an
-$gNavigation->clear();
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 //Liste der alten Backup Dateien bestimmen
 if ($handle = opendir($backupabsolutepath)) 
@@ -57,12 +58,9 @@ sort($old_backup_files);
 // create html page object
 $page = new HtmlPage();
 
-$page->addHeadline($gL10n->get('BAC_DATABASE_BACKUP'));
+$page->addHeadline($headline);
 
-$page->addJavascript('
-        $(document).ready(function() {
-            $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-        }); ', true);
+$page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
 
 // create module menu
 $backupMenu = new HtmlNavbar('admMenuBackup');
@@ -75,42 +73,40 @@ $page->addHtml($backupMenu->show(false));
 
 //Define table
 $table = new HtmlTable('tableList', $page, true);
-$table->addAttribute('cellspacing', '0');
-$table->addTableHeader();
-$table->addRow();
-$table->addColumn($gL10n->get('BAC_BACKUP_FILE'), null, 'th');
-$table->addColumn($gL10n->get('BAC_CREATION_DATE'), null, 'th');
-$table->addColumn($gL10n->get('SYS_SIZE'), null, 'th');
-$table->addColumn($gL10n->get('SYS_DELETE'), array('style' => 'text-align: center;'), 'th');
-	
-if(count($old_backup_files) == 0)
-{   
-    $table->addRow();
-    $table->addColumn($gL10n->get('BAC_NO_BACKUP_FILE_EXISTS'), array('colspan' => '4'));
-}
+$table->setMessageIfNoRowsFound('BAC_NO_BACKUP_FILE_EXISTS');
+
+// create array with all column heading values
+$columnHeading = array(
+    $gL10n->get('BAC_BACKUP_FILE'),
+    $gL10n->get('BAC_CREATION_DATE'),
+    $gL10n->get('SYS_SIZE'),
+    $gL10n->get('SYS_DELETE'));
+$table->setColumnAlignByArray(array('left', 'left', 'right', 'center'));
+$table->addRowHeadingByArray($columnHeading);
 	
 $backup_size_sum = 0;
 	
 foreach($old_backup_files as $key => $old_backup_file)
 {
-    $table->addRow('', array('id' => 'row_file_'.$key));
-    $table->addColumn('<a class="iconLink" href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">
-                        <img src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" /></a>
-                        <a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '">'. $old_backup_file. '</a>');
-    $table->addColumn(date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)));    
-    $table->addColumn(round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB&nbsp;', array('style' => 'text-align: right;'));    
-    $table->addColumn('<a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
-                        $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
-                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>', array('style' => 'text-align: center;'));    
+    // create array with all column values
+    $columnValues = array(
+        '<a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='. $old_backup_file. '"><img 
+            src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
+        date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)),
+        round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB',
+        '<a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
+            $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
+            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+    $table->addRowByArray($columnValues, 'row_file_'.$key);
 
 	$backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
 }
 
-$table->addRow();
-$table->addColumn('&nbsp;', null, 'th');
-$table->addColumn($gL10n->get('BAC_SUM'), null, 'th');
-$table->addColumn($backup_size_sum .' kB&nbsp;', array('style' => 'text-align: right;'), 'th');
-$table->addColumn('&nbsp;', null, 'th');
+if(count($old_backup_files) > 0)
+{   
+    $columnValues = array('&nbsp;', $gL10n->get('BAC_SUM'), $backup_size_sum .' kB', '&nbsp;');
+    $table->addRowByArray($columnValues);
+}
 
 $page->addHtml($table->show(false));
 

@@ -144,16 +144,7 @@ $page->addJavascript('
     // change mode of users that should be shown
     $("#mem_show_all").click(function(){
         window.location.replace("'.$g_root_path.'/adm_program/modules/members/members.php?members='.$flagShowMembers.'");
-    });
-    
-    if($("#mem_show_all").is(":checked")){
-        $("#mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_USERS').'");
-        $("#lbl_mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_USERS').'");
-    }
-    else{
-        $("#mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_MEMBERS').'");
-        $("#lbl_mem_show_all").attr("title", "'.$gL10n->get('MEM_SHOW_MEMBERS').'");
-    }', true);
+    });', true);
 
 $page->addHeadline($headline);
 
@@ -173,7 +164,7 @@ if($gPreferences['profile_log_edit_fields'] == 1)
 if($gPreferences['user_management_show_all_users'] == 1)
 {
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, 'navbar');
-    $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers);
+    $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, FIELD_DEFAULT, 'MEM_SHOW_USERS_DESC');
     $membersAdministrationMenu->addForm($navbarForm->show(false));
 }
 
