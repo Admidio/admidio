@@ -138,7 +138,7 @@ elseif($getMode == 'html')
     --></script>
 
     <div class="popup-window">
-        <h1 class="admHeadline">'.$gL10n->get('PRO_EDIT_PASSWORD').'</h1>';
+        <h1>'.$gL10n->get('PRO_EDIT_PASSWORD').'</h1>';
         // show form
         $form = new HtmlForm('password_form', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
         $form->addTextInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, 0, FIELD_MANDATORY, 'password');

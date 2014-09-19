@@ -154,12 +154,12 @@ class Message
         else
         {
             header('Content-type: text/html; charset=utf-8'); 
-            $html .= '<h1 class="admHeadline">'.$headline.'</h1>';
+            $html .= '<h1>'.$headline.'</h1>';
         }
         
         $html .= '
-		<div class="admMessage popup-window">
-			<p>'. $content.'</p>';
+		<div class="message">
+			<p class="lead">'. $content.'</p>';
                 
 			if($this->showButtons == true)
 			{

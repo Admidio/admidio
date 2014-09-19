@@ -110,7 +110,8 @@ $columnHeading = array(
     $gL10n->get('ROL_PREF'),
     $gL10n->get('SYS_FEATURES'));
 $table->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-//$table->setDatatablesOrderColumns(1);
+$table->setColumnWidth(3, '40%');
+$table->disableDatatablesColumnsSort(array(3,4,5));
 $table->setDatatablesGroupColumn(1);
 $table->addRowHeadingByArray($columnHeading);
 
@@ -134,28 +135,17 @@ while($row = $gDb->fetch_array($rol_result))
     $assignRoles        = '';
     $listView           = '';
     $linkAdministration = '';
+
     // Add data to role object
     $role->setArray($row);
-       /* 
-    if($cat_id != $role->getValue('cat_id'))
+
+    $categoryName = $role->getValue('cat_name');
+    
+    if($role->getValue('cat_hidden') == 1)
     {
-        $image_hidden = '';
-        $block_id     = 'admCategory'.$role->getValue('cat_id');
-        if($role->getValue('cat_hidden') == 1)
-        {
-            $image_hidden = '<img class="icon-information" src="'. THEME_PATH. '/icons/user_key.png"
-                                 alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_ROLE')).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_ROLE')).'" />';
-        }
-        $table->addTableBody();
-        $table->addRow();
-        $table->addColumn('', array('class' => 'group-heading', 'id' => 'group_'.$block_id));
-        $table->addAttribute('colspan', '4');
-        $table->addData('<span id="caret_'.$block_id.'" class="caret"></span>'.$role->getValue('cat_name').' '.$image_hidden);
-        // next body element
-        $table->addTableBody('id', $block_id);
-        
-        $cat_id = $role->getValue('cat_id');
-    }*/
+        $categoryName .= '<img class="icon-information" src="'. THEME_PATH. '/icons/user_key.png"
+                             alt="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_ROLE')).'" title="'.$gL10n->get('SYS_VISIBLE_TO_USERS', $gL10n->get('SYS_ROLE')).'" />';
+    }
     
     if($role->getValue('rol_assign_roles') == 1)
     {
@@ -309,7 +299,7 @@ while($row = $gDb->fetch_array($rol_result))
 
     // create array with all column values
     $columnValues = array(
-        $role->getValue('cat_name'),
+        $categoryName,
         '<a href="'.$g_root_path.'/adm_program/modules/roles/roles_new.php?rol_id='.$role->getValue('rol_id').'" title="'.$role->getValue('rol_description').'">'.$role->getValue('rol_name').'</a>',
         $assignRoles,
         $listView,

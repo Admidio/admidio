@@ -97,7 +97,7 @@ if($getInline == true)
     --></script>
 
     <div class="popup-window">
-        <h1 class="admHeadline">'.$headline.'</h1>';
+        <h1>'.$headline.'</h1>';
 }
 else
 {

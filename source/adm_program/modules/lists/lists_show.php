@@ -456,7 +456,7 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
             }
             else
             {
-                $table->setDatatablesHideColumns(2);                
+                $table->setDatatablesColumnsHide(2);                
             }
         }
 
@@ -579,12 +579,10 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
                     // if empty string pass a whitespace
                     if(strlen($content) > 0)
                     {
-                        //$table->addData($content);
                         $columnValues[] = $content;
                     }
                     else
                     {
-                        //$table->addData('&nbsp;');
                         $columnValues[] = '&nbsp;';
                     }
                 }
@@ -672,89 +670,64 @@ elseif($getMode == 'html' || $getMode == 'print')
     || strlen($role->getValue('rol_max_members')) > 0)
     {
         $htmlBox = '
-        <div class="admGroupBox" id="adm_lists_infobox">
-            <div class="admGroupBoxHeadline">Infobox: '.$role->getValue('rol_name').'</div>
-            <div class="admGroupBoxBody">
-                <div class="admFieldViewList">
-                    <div class="admFieldRow">
-                        <div class="admFieldLabel">'.$gL10n->get('SYS_CATEGORY').':</div>
-                        <div class="admFieldElement">'.$role->getValue('cat_name').'</div>
-                    </div>';
+        <div class="panel panel-default" id="adm_lists_infobox">
+            <div class="panel-heading">'.$gL10n->get('LST_INFOBOX').': '.$role->getValue('rol_name').'</div>
+            <div class="panel-body">';
+                $form = new HtmlForm('list_infobox_items', null);
+                $form->addStaticControl('infobox_category', $gL10n->get('SYS_CATEGORY'), $role->getValue('cat_name'));
 
-                    //Beschreibung
-                    if(strlen($role->getValue('rol_description')) > 0)
+                //Beschreibung
+                if(strlen($role->getValue('rol_description')) > 0)
+                {
+                    $form->addStaticControl('infobox_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'));
+                }
+
+                //Zeitraum
+                if(strlen($role->getValue('rol_start_date')) > 0)
+                {
+                    $form->addStaticControl('infobox_period', $gL10n->get('SYS_PERIOD'), $gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])));
+                }
+
+                //Termin
+                if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
+                {
+                    if($role->getValue('rol_weekday') > 0)
                     {
-                        $htmlBox .= '<div class="admFieldRow">
-                            <div class="admFieldLabel">'.$gL10n->get('SYS_DESCRIPTION').':</div>
-                            <div class="admFieldElement">'.$role->getValue('rol_description').'</div>
-                        </div>';
+                        $value = DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
+                    }
+                    if(strlen($role->getValue('rol_start_time')) > 0)
+                    {
+                        $value = $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
                     }
 
-                    //Zeitraum
-                    if(strlen($role->getValue('rol_start_date')) > 0)
-                    {
-                        $htmlBox .= '<div class="admFieldRow">
-                            <div class="admFieldLabel">'.$gL10n->get('SYS_PERIOD').':</div>
-                            <div class="admFieldElement">'.$gL10n->get('SYS_DATE_FROM_TO', $role->getValue('rol_start_date', $gPreferences['system_date']), $role->getValue('rol_end_date', $gPreferences['system_date'])).'</div>
-                        </div>';
-                    }
+                    $form->addStaticControl('infobox_date', $gL10n->get('DAT_DATE'), $value);
+                }
 
-                    //Termin
-                    if($role->getValue('rol_weekday') > 0 || strlen($role->getValue('rol_start_time')) > 0)
-                    {
-                        $htmlBox .= '<div class="admFieldRow">
-                            <div class="admFieldLabel">'.$gL10n->get('DAT_DATE').': </div>
-                            <div class="admFieldElement">'; 
-                                if($role->getValue('rol_weekday') > 0)
-                                {
-                                    $htmlBox .= DateTimeExtended::getWeekdays($role->getValue('rol_weekday')).' ';
-                                }
-                                if(strlen($role->getValue('rol_start_time')) > 0)
-                                {
-                                    $htmlBox .= $gL10n->get('LST_FROM_TO', $role->getValue('rol_start_time', $gPreferences['system_time']), $role->getValue('rol_end_time', $gPreferences['system_time']));
-                                }
+                //Treffpunkt
+                if(strlen($role->getValue('rol_location')) > 0)
+                {
+                    $form->addStaticControl('infobox_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'));
+                }
 
-                            $htmlBox .= '</div>
-                        </div>';
-                    }
+                //Beitrag
+                if(strlen($role->getValue('rol_cost')) > 0)
+                {
+                    $form->addStaticControl('infobox_contribution', $gL10n->get('SYS_CONTRIBUTION'), $role->getValue('rol_cost'). ' '.$gPreferences['system_currency']);
+                }
 
-                    //Treffpunkt
-                    if(strlen($role->getValue('rol_location')) > 0)
-                    {
-                        $htmlBox .= '<div class="admFieldRow">
-                            <div class="admFieldLabel">'.$gL10n->get('SYS_LOCATION').':</div>
-                            <div class="admFieldElement">'.$role->getValue('rol_location').'</div>
-                        </div>';
-                    }
+                //Beitragszeitraum
+                if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
+                {
+                    $form->addStaticControl('infobox_contribution_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods($role->getValue('rol_cost_period')));
+                }
 
-                    //Beitrag
-                    if(strlen($role->getValue('rol_cost')) > 0)
-                    {
-                        $htmlBox .= '<div class="admFieldRow">
-                            <div class="admFieldLabel">'.$gL10n->get('SYS_CONTRIBUTION').':</div>
-                            <div class="admFieldElement">'. $role->getValue('rol_cost'). ' '.$gPreferences['system_currency'].'</div>
-                        </div>';
-                    }
-
-                    //Beitragszeitraum
-                    if(strlen($role->getValue('rol_cost_period')) > 0 && $role->getValue('rol_cost_period') != 0)
-                    {
-                        $htmlBox .= '<div class="admFieldRow">
-                            <div class="admFieldLabel">'.$gL10n->get('SYS_CONTRIBUTION_PERIOD').':</div>
-                            <div class="admFieldElement">'.$role->getCostPeriods($role->getValue('rol_cost_period')).'</div>
-                        </div>';
-                    }
-
-                    //maximale Teilnehmerzahl
-                    if(strlen($role->getValue('rol_max_members')) > 0)
-                    {
-                        $htmlBox .= '<div class="admFieldRow">
-                            <div class="admFieldLabel">'.$gL10n->get('SYS_MAX_PARTICIPANTS').':</div>
-                            <div class="admFieldElement">'. $role->getValue('rol_max_members'). '</div>
-                        </div>';
-                    }
-                $htmlBox .= '</div>
-            </div>
+                //maximale Teilnehmerzahl
+                if(strlen($role->getValue('rol_max_members')) > 0)
+                {
+                    $form->addStaticControl('infobox_max_participants', $gL10n->get('SYS_MAX_PARTICIPANTS'), $role->getValue('rol_max_members'));
+                }
+                $htmlBox .= $form->show(false);
+            $htmlBox .= '</div>
         </div>';
     } // end of infobox
     
@@ -766,7 +739,7 @@ elseif($getMode == 'html' || $getMode == 'print')
                               } );');
     }
     
-    // add table and the role information box to the pge
+    // add table and the role information box to the page
     $page->addHtml($table->show(false));
     $page->addHtml($htmlBox);
         

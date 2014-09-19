@@ -156,7 +156,7 @@ else
 if(strlen($installedDbVersion) == 0)
 {
 	$message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
-				<h2 class="admHeadline2">'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</h2>'.
+				<h2>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</h2>'.
 				$gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION);
     showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 }
@@ -169,20 +169,20 @@ if($getMode == 1)
     if(version_compare($installedDbVersion, ADMIDIO_VERSION) < 0
 	||(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep > $currentUpdateStep))
     {
-        $message = '<h2 class="admHeadline2"><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
+        $message = '<h2><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
                     '.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $installedDbVersion, ADMIDIO_VERSION).'</h2>';
     }
 	// if versions are equal > no update
     elseif(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep == $currentUpdateStep)
     {
-        $message = '<h2 class="admHeadline2"><img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</h2>
+        $message = '<h2><img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</h2>
                     '.$gL10n->get('INS_DATABASE_IS_UP_TO_DATE');
         showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
     }
 	// if source version smaller then database -> show error
 	else
 	{
-        $message = '<h2 class="admHeadline2"><img style="vertical-align: top;" src="layout/warning.png" /> '.$gL10n->get('SYS_ERROR').'</h2>
+        $message = '<h2><img style="vertical-align: top;" src="layout/warning.png" /> '.$gL10n->get('SYS_ERROR').'</h2>
                     '.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $installedDbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
         showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 	}

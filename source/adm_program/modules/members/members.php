@@ -206,6 +206,7 @@ $columnHeading = array(
 );
 
 $membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
+$membersTable->disableDatatablesColumnsSort(8);
 $membersTable->addRowHeadingByArray($columnHeading);
 $membersTable->setDatatablesRowsPerPage($gPreferences['user_management_members_per_page']);
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');

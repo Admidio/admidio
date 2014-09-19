@@ -89,7 +89,7 @@ if($member_found == 0)
 
 // html output
 echo '
-<h1 class="admHeadline">'.$gL10n->get('MEM_CREATE_USER').'</h1>
+<h1>'.$gL10n->get('MEM_CREATE_USER').'</h1>
 
 <p class="lead">'.$gL10n->get('SYS_SIMILAR_USERS_FOUND', $getFirstname. ' '. $getLastname).'</p>
 

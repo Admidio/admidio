@@ -108,13 +108,13 @@ class Menu
 
 		if ($type == 'complex')
 		{
-			$html .= '<h2 class="admHeadline2" id="head_'.$this->id.'">'.$this->title.'</h2>';			// Title of the menu
+			$html .= '<h2 id="head_'.$this->id.'">'.$this->title.'</h2>';			// Title of the menu
             $cssMenuClass = ' admMenuLargeIcons';
             $cssFontClass = ' h4';
 		}
 		else
 		{
-			$html .= '<h3 class="admHeadline3" id="head_'.$this->id.'">'.$this->title.'</h3>';			// Title of the menu
+			$html .= '<h3 id="head_'.$this->id.'">'.$this->title.'</h3>';			// Title of the menu
 		}
 
         $html .= '<ul class="icon-text-link-list icon-text-link-list-vertical admidio-menu'.$cssMenuClass.'" id="menu_'.$this->id.'">';		// Wraps all menu items

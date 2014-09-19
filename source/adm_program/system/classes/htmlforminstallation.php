@@ -130,14 +130,14 @@ class HtmlFormInstallation extends HtmlForm
         </head>
         <body>
             <div class="admContent" id="adm_content">&nbsp;
-                <img id="adm-logo" src="layout/logo.png" alt="Logo" />
-                <h1 class="admHeadline">'. $this->headline. '</h1>';
+                <img id="admidio-logo" src="layout/logo.png" alt="Logo" />
+                <h1>'. $this->headline. '</h1>';
                 // if set then show description
                 if(strlen($this->descriptionText) > 0)
                 {
                     if(strlen($this->descriptionTitle) > 0)
                     {
-                        $html .= '<h3 class="admHeadline3">'.$this->descriptionTitle.'</h3>';
+                        $html .= '<h3>'.$this->descriptionTitle.'</h3>';
                     }
                     $html .= $this->descriptionText;
                 }

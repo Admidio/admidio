@@ -114,7 +114,8 @@ if ($gCurrentUser->editDownloadRight())
     $columnHeading[] = $gL10n->get('SYS_FEATURES');
 }
 
-$downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'left'));
+$downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));
+$downloadOverview->disableDatatablesColumnsSort(7);
 $downloadOverview->addRowHeadingByArray($columnHeading);
 $downloadOverview->setMessageIfNoRowsFound('DOW_FOLDER_NO_FILES');
 
@@ -227,7 +228,7 @@ if (isset($folderContent['files']))
 }
     
 //Create download table
-$downloadOverview->setDatatablesHideColumns(array(1));
+$downloadOverview->setDatatablesColumnsHide(array(1));
 $downloadOverview->setDatatablesOrderColumns(array(1, 3));
 $htmlDownloadOverview = $downloadOverview->show(false);
 
@@ -243,12 +244,12 @@ if ($gCurrentUser->editDownloadRight())
     if (isset($folderContent['additionalFolders']) || isset($folderContent['additionalFiles']))
     {
 
-        $htmlAdminTableHeadline = '<h2 class="admHeadline2">
+        $htmlAdminTableHeadline = '<h2>
                                     '.$gL10n->get('DOW_UNMANAGED_FILES').'
                                     <a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES&amp;inline=true"
                                         data-toggle="tooltip" data-html="true" data-original-title="'.$gL10n->get('DOW_ADDITIONAL_FILES').'"><img 
                                         src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>            
-                                    </h2>';
+                                </h2>';
 
         //Create table object
         $adminTable = new HtmlTable('tbl_downloads', $page, true);

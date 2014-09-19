@@ -26,9 +26,9 @@ header('Content-type: text/html; charset=utf-8');
 if($getInlineView)
 {
     echo '
-	<div class="admMessage popup-window">
-		<h1 class="admHeadline" id="message-window">'.$gL10n->get($getMessageTitle).'</h1>
-		<div class="admMessageText">';
+	<div class="popup-window">
+		<h1 id="message-window">'.$gL10n->get($getMessageTitle).'</h1>
+		<div class="message">';
 }
 
 switch ($getMessageId)
@@ -151,9 +151,9 @@ switch ($getMessageId)
         break;
 
     case 'mylist_config_webmaster':
-        echo '<h3 class="admHeadline3">'.$gL10n->get('LST_PRESET_CONFIGURATION').'</h3>
+        echo '<h3>'.$gL10n->get('LST_PRESET_CONFIGURATION').'</h3>
             '.$gL10n->get('LST_PRESET_CONFIGURATION_DESC', '<img src="'. THEME_PATH. '/icons/list_global.png" alt="list_global" />').'
-            <h3 class="admHeadline3">'.$gL10n->get('LST_DEFAULT_CONFIGURATION').'</h3>
+            <h3>'.$gL10n->get('LST_DEFAULT_CONFIGURATION').'</h3>
             '.$gL10n->get('LST_DEFAULT_CONFIGURATION_DESC', '<img src="'. THEME_PATH. '/icons/star.png" alt="star" />');
         break;
 
@@ -165,7 +165,7 @@ switch ($getMessageId)
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_2').'</li>
                 <li>'.$gL10n->get('PHO_UPLOAD_HELP_3', $gL10n->get('PHO_UPLOAD_PHOTOS')).'</li>
             </ul>  
-            <h3 class="admHeadline3">'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
+            <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
             <ul>
                 <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_1').'</li>
                 <li>'.$gL10n->get('PHO_RESTRICTIONS_HELP_2', round(admFuncProcessableImageSize()/1000000, 2)).'</li>
@@ -181,7 +181,7 @@ switch ($getMessageId)
 
     case 'profile_photo_up_help':
         echo '
-        <h3 class="admHeadline3">'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
+        <h3>'.$gL10n->get('SYS_RESTRICTIONS').'</h3>
         <ul>
             <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_1').'</li>
             <li>'.$gL10n->get('PRO_RESTRICTIONS_HELP_2').'</li>

@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="col-sm-3">
-            <div id="right-block" class="admFrame">
+            <div id="right-block" class="admidio-container">
             <?php
 
             include(SERVER_PATH. '/adm_plugins/login_form/login_form.php');

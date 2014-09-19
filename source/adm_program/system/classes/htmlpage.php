@@ -86,7 +86,7 @@ class HtmlPage
             $this->setTitle($headline);
         }
         
-        $this->addHtml('<h1 class="admHeadline">'.$headline.'</h1>');
+        $this->addHtml('<h1>'.$headline.'</h1>');
     }
     
     /** Adds any html content to the page. The content will be added in the order
@@ -308,7 +308,7 @@ class HtmlPage
             
             $html .= $htmlMyHeader.'
         </head>
-        <body class="admBody">'.
+        <body>'.
             $htmlMyBodyTop.'
             <div class="admContent">'.$this->pageContent.'</div>'.
             $htmlMyBodyBottom.'          

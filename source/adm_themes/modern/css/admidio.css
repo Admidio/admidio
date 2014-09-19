@@ -9,12 +9,10 @@
  *
  *****************************************************************************/
  
-.admBody {
+body {
     color: #474b4c;
     padding: 15px;
     margin: auto;
-    /*font-size: 11pt;
-    font-family: Helvetica, Verdana, Arial, sans-serif;*/
     background-color: #96c4cb; 
     background-repeat: repeat-x;
     background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
@@ -46,7 +44,7 @@
     margin-left: 350px;
 }
 
-#adm-logo {
+#admidio-logo {
     top: -10px;
     position: relative;
     visibility: inherit;
@@ -67,7 +65,7 @@
     background-image: -moz-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55B6C5 0%, #347078 95%);	
 }
 
-.admFrame {
+.admidio-container {
 	text-align: left;
     border: 1px solid #7d7d7d;
     border-radius: 15px;
@@ -75,49 +73,37 @@
     background-color: #ffffff; 
 }
 
+/* Headlines */
+
+h1, h2, h3, h4, h5 {
+    color: #333333;
+    font-weight: bold;
+    margin: 20px 0px 15px 0px;
+}
+
+h1 {
+    font-size: 170%;
+    letter-spacing: 0.2em;
+    border-bottom: 2px solid #409099;
+}
+
+h2 {
+    font-size: 130%;
+    border-bottom: 2px solid #449ba6;
+}
+
+h3 {
+    font-size: 110%;
+}
+
+/* Other styles */
+
 .badge {
     margin-left: 4px;
 }
 
 .lead {
     font-size: 12pt;
-}
-
-.list-roles-assignment li {
-    padding: 0px 0px 15px 0px;
-}
-
-.list-roles-assignment-pos {
-    margin-bottom: -5px;
-}
-
-.list-roles-assignment-pos li {
-    padding: 0px 0px 5px 0px;
-}
-
-/* Headlines */
-
-.admHeadline, .admHeadline2, .admHeadline3 {
-    font-weight: bold;
-    margin: 20px 0px 15px 0px;
-}
-
-.admHeadline {
-    color: #333333;
-    font-size: 18pt;
-    letter-spacing: 0.2em;
-    border-bottom: 2px solid #409099;
-}
-
-.admHeadline2 {
-    color: #333333;
-    font-size: 14pt;
-    border-bottom: 2px solid #449ba6;
-}
-
-.admHeadline3 {
-    color: #333333;
-    font-size: 11pt;
 }
 
 .alert, .btn-group {
@@ -139,7 +125,6 @@
     border-left: 4px solid;
     display: inline-block;
     height: 0;
-    /*opacity: 0.3;*/
     vertical-align: middle;
     width: 0;
 }
@@ -252,10 +237,6 @@ a:hover, a:active {
     .nav > li:first-child > a {
         padding-left: 0px;
     }
-    
-    /*.nav > li:last-child > a {
-        padding-right: 0px;
-    }*/
 }
 
 /* Style for the navigation bar or the back link */
@@ -271,25 +252,22 @@ a:hover, a:active {
 
 /* Style for the popup messagebox and popup messagebox */
 
-.admMessage, .popup-window {
+.popup-window, .message {
     max-width: 650px;
 	text-align: left;
 	margin: 15px;
 }
 
-.admPopupIcon {
+.message {
+    display: inline-block;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+.popup-window-icon {
     float: left;
     display: inline-block;
     width: 20%;
-}
-
-.admPopupMessageText {
-    display: inline-block;
-    width: 80%;
-}
-
-.popup-window  * .admIconTextLinkList {
-    margin-left: 20%;
 }
 
 /* Customize css for module menu */
@@ -300,7 +278,7 @@ a:hover, a:active {
 
 /* form layout */
 
-form hr, .admBoxBody hr {
+form hr {
     border: 1px solid #bad8e2;
     width: 100%;
     margin-bottom: 15px; 
@@ -310,6 +288,10 @@ form hr, .admBoxBody hr {
 
 .form-horizontal .control-label {
     text-align: left;
+}
+
+.form-group {
+    margin-bottom: 7px;
 }
 
 .navbar-form .form-group {
@@ -508,6 +490,10 @@ input[data-provide="datepicker"], input[type="number"] {
 
 .dataTable {
     border-bottom: 2px solid #a0cbd9;
+}
+
+.dt-bootstrap {
+    margin-bottom: 20px;
 }
 
 /* The module and administration menu on the main page */

@@ -187,12 +187,12 @@ function deleteEntry()
 }
 //--></script>
 
-<div class="admMessage popup-window">
-    <h1 class="admHeadline">'.$gL10n->get('SYS_NOTE').'</h1>
+<div class="popup-window">
+    <h1>'.$gL10n->get('SYS_NOTE').'</h1>
 
-    <div class="admMessageText">
-        <div class="admPopupIcon"><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
-        <div class="admPopupMessageText">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
+    <div class="message">
+        <div class="popup-window-icon"><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
+        <div class="popup-window-text">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 
         <ul class="icon-text-link-list icon-text-link-list-horizontal">
             <li id="admButtonYesRow">

@@ -109,8 +109,8 @@ class HtmlForm extends HtmlFormBasic
             $this->htmlPage =& $htmlPage;
         }
         
-		// first field of form should get focus
-        if($this->type != 'navbar')
+		// if its not a navbar form and not a static form then first field of form should get focus
+        if($this->type != 'navbar' && strlen($action) > 0)
         {
             if(is_object($htmlPage))
             {
@@ -118,10 +118,9 @@ class HtmlForm extends HtmlFormBasic
             }
             else
             {
-        		$js = '<script type="text/javascript"><!--
-        			       $(document).ready(function() { $(".form-dialog:first *:input:enabled:first").focus();});
-        			   //--></script>';
-        		$this->addHtml($js);
+        		$this->addHtml('<script type="text/javascript"><!--
+                    $(document).ready(function() { $(".form-dialog:first *:input:enabled:first").focus();});
+                //--></script>');
             }
         }
     }
@@ -1452,7 +1451,7 @@ class HtmlForm extends HtmlFormBasic
         if($parameters != null)
         {
             return '<a class="icon-link colorbox-dialog" title="" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true" 
-                        data-toggle="tooltip" data-html="true" data-original-title="'.$text.'"><img src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
+                        data-toggle="tooltip" data-html="true" data-original-title="'.str_replace('"', '\'', $text).'"><img src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
         }
 	}
     

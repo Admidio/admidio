@@ -14,7 +14,7 @@
    Dieses braucht in der Regel nicht angepasst werden.
    Es ist für schwarz/weiß Drucker optimiert. */
 
-.admBody {
+body {
     color: #000000;
     font-family: arial, sans-serif;
     font-size: 10pt;

@@ -179,7 +179,7 @@ class HtmlTableBasic extends HtmlElement {
             $this->addElement($col);
         }
 
-        if(!empty($this->columnsWidth))
+        if(!empty($this->columnsWidth) && isset($this->columnsWidth[$this->columnCount]))
         {
             $this->addAttribute('style', 'width:' . $this->columnsWidth[$this->columnCount]);
         }
@@ -497,10 +497,9 @@ class HtmlTableBasic extends HtmlElement {
         $this->class_2 = $class_2;
     }
 
-    /**
-     * Set columns width as array
-     * 
-     * @param $array Array with values for each column width
+    /** Set a specific width for all columns of the table. This is useful if the automatically 
+     *  that will be set by the browser doesn't fit your needs.
+     *  @param $array Array with all width values of each column. Here you can set all valid CSS values e.g. '100%' or '300px'
      */
     public function setColumnsWidth($array)
     {
@@ -519,6 +518,21 @@ class HtmlTableBasic extends HtmlElement {
             }
         }
         return false; 
+    } 
+    
+    
+    /** Set a specific width for one column of the table. This is useful if you have one column
+     *  that will not get a useful width automatically by the browser.
+     *  @param $column The column number where you want to set the width. The columns of the table starts with 1 (not 0).
+     *  @param $width  The new width of the column. Here you can set all valid CSS values e.g. '100%' or '300px'
+     */
+    public function setColumnWidth($column, $width)
+    {
+        if($column > 0 && strlen($width) > 0)
+        {
+            // internal datatable columns starts with 0
+            $this->columnsWidth[$column-1] = $width;
+        }
     } 
 } 
 

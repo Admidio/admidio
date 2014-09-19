@@ -87,11 +87,11 @@ echo '<div id="plugin_'. $plugin_folder. '" class="admPluginContent">
 <div class="admPluginHeader">';
     if($gValidLogin)
     {
-        echo '<h3 class="admHeadline3">'.$gL10n->get('SYS_REGISTERED_AS').'</h3>';
+        echo '<h3>'.$gL10n->get('SYS_REGISTERED_AS').'</h3>';
     }
     else
     {
-        echo '<h3 class="admHeadline3">'.$gL10n->get('SYS_LOGIN').'</h3>';
+        echo '<h3>'.$gL10n->get('SYS_LOGIN').'</h3>';
     }
 echo '</div>
 <div class="admPluginBody">';

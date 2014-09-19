@@ -129,11 +129,11 @@ abstract class HtmlElement {
     protected   $currentElementAttributes;      ///< Attributes of the current element
     protected   $currentElementDataWritten;     ///< Flag if an element is added but the data is not added
     protected   $htmlString;                    ///< String with prepared html
-    private     $mainElement;                   ///< String with main element as string
-    private     $mainElementAttributes;         ///< String with attributes of the main element
-    private     $nesting;                       ///< Flag enables nesting of main elements, e.g div blocks ( Default : false )
+    protected   $mainElement;                   ///< String with main element as string
+    protected   $mainElementAttributes;         ///< String with attributes of the main element
+    protected   $nesting;                       ///< Flag enables nesting of main elements, e.g div blocks ( Default : false )
     protected   $parentFlag;                    ///< Flag for setted parent Element
-    private     $mainElementWritten;              ///< Flag if the main element was written in the html string
+    protected   $mainElementWritten;            ///< Flag if the main element was written in the html string
     
     /**
      * Constructor initializing all class variables
@@ -187,7 +187,7 @@ abstract class HtmlElement {
 
         if($element == $this->mainElement)
         {
-            if(array_key_exists($attribute, $this->mainElementAttributes) == true)
+            if(is_array($this->mainElementAttributes) && array_key_exists($attribute, $this->mainElementAttributes) == true)
             {
                 $this->mainElementAttributes[$attribute] = $this->mainElementAttributes[$attribute].' '.$value;
             }
@@ -198,7 +198,7 @@ abstract class HtmlElement {
         }
         else
         {
-            if(array_key_exists($attribute, $this->currentElementAttributes) == true)
+            if(is_array($this->currentElementAttributes) && array_key_exists($attribute, $this->currentElementAttributes) == true)
             {
                 $this->currentElementAttributes[$attribute] = $this->currentElementAttributes[$attribute].' '.$value;
             }

@@ -60,7 +60,7 @@ $(document).ready(function(){
 //--></script>
 
 <div class="popup-window" id="popup_members_new">
-    <h1 class="admHeadline">'.$gL10n->get('MEM_CREATE_USER').'</h1>
+    <h1>'.$gL10n->get('MEM_CREATE_USER').'</h1>
     
     <p class="lead">'.$gL10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</p>';
     
