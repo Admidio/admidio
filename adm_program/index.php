@@ -162,7 +162,7 @@ if($gCurrentUser->isWebmaster() || $gCurrentUser->assignRoles() || $gCurrentUser
 	{
 		$adminMenu->addItem('newreg', '/adm_program/administration/new_user/new_user.php',
 							$gL10n->get('NWU_NEW_REGISTRATIONS'), '/icons/new_registrations_big.png',
-							$gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS'));
+							$gL10n->get('NWU_MANAGE_NEW_REGISTRATIONS_DESC'));
 	}
 
 	if($gCurrentUser->editUsers())
