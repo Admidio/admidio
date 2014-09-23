@@ -177,7 +177,7 @@ else
     if($gPreferences['system_organization_select'] == 1)
     {
         $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
-        $form->addSelectBoxFromSql('plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, FIELD_DEFAULT, $gCurrentOrganization->getValue('org_id'), true);
+        $form->addSelectBoxFromSql('plg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, FIELD_DEFAULT, $gCurrentOrganization->getValue('org_id'));
     }
 
     if($gPreferences['enable_auto_login'] == 1)

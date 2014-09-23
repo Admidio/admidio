@@ -235,7 +235,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
     	{
     		$date->setValue('dat_country', $gPreferences['default_country']);
     	}
-        $form->addSelectBox('dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $date->getValue('dat_country', 'database'), true);
+        $form->addSelectBox('dat_country', $gL10n->get('SYS_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $date->getValue('dat_country', 'database'));
     }
     else
     {

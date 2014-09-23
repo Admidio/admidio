@@ -233,7 +233,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     if($gPreferences['system_organization_select'] == 1)
                     {
                         $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
-                        $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, FIELD_MANDATORY, $registrationOrgId, true);
+                        $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, FIELD_MANDATORY, $registrationOrgId);
                     }
                 }
                 else
@@ -309,19 +309,8 @@ foreach($gProfileFields->mProfileFields as $field)
                 $defaultValue  = $user->getValue($field->getValue('usf_name_intern'), 'database');
     		}
 
-            // if mandatory field then first entry should be "Please choose" otherwise only an empty entry will be shown first
-            if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_mandatory') == 1)
-            {
-                $setPleaseChoose = true;
-            }
-            else
-            {
-                $setPleaseChoose = false;
-                $arrListValues   = array('' => '')+$arrListValues;
-            }
-    		
     		$form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-    		    $arrListValues, $fieldProperty, $defaultValue, $setPleaseChoose, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+    		    $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
     	}
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'RADIO_BUTTON')
         {

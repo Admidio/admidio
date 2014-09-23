@@ -116,7 +116,7 @@ if($getMode == 1)  // (Default) Choose language
     // the possible languages will be read from a xml file
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=2');
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
-    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', FIELD_MANDATORY, null, true);
+    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', FIELD_MANDATORY);
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), 'layout/forward.png', null, null, 'button');
     $form->show();

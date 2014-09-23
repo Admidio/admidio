@@ -102,40 +102,50 @@ $roleSet = $folder->getRoleArrayOfFolder();
 // create html page object
 $page = new HtmlPage();
 
-$page->addJavascript('$("#fol_public").click(function() {showHideBlock("adm_roles_box", "", "");});
+$page->addJavascript('$("#fol_public").click(function() {showBlock("adm_roles_box");});
                       $("#btn_save").click(function () {sendForm();});', true);
 $page->addJavascript('
-        // add all selected roles from the denied box to the allowed box
-        function addRoles() {
-            $("#adm_denied_roles option:selected").each(function () {
-                $("#adm_allowed_roles").append(
-                    $("<option></option>").val(this.value).html(this.text)
-                );
-                this.remove();
-            });
+    function showBlock(elementID) {
+        if($("#" + elementID).css("display") == "none") {
+            $("#" + elementID).show("slow");
+        }
+        else {
+            $("#" + elementID).hide("slow");
+        }
+    }
+
+
+    // add all selected roles from the denied box to the allowed box
+    function addRoles() {
+        $("#adm_denied_roles option:selected").each(function () {
+            $("#adm_allowed_roles").append(
+                $("<option></option>").val(this.value).html(this.text)
+            );
+            this.remove();
+        });
+    }
+
+    // add all selected roles from the allowed box to the denied box
+    function removeRoles() {
+        $("#adm_allowed_roles option:selected").each(function () {
+            $("#adm_denied_roles").append(
+                $("<option></option>").val(this.value).html(this.text)
+            );
+            this.remove();
+        });
+    }
+
+    function sendForm() {
+        var allowed_roles = document.getElementById("adm_allowed_roles");
+
+        allowed_roles.multiple = true;
+
+        for (var i = 0; i < allowed_roles.options.length; i++) {
+            allowed_roles.options[i].selected = true;
         }
 
-        // add all selected roles from the allowed box to the denied box
-        function removeRoles() {
-            $("#adm_allowed_roles option:selected").each(function () {
-                $("#adm_denied_roles").append(
-                    $("<option></option>").val(this.value).html(this.text)
-                );
-                this.remove();
-            });
-        }
-
-        function sendForm() {
-            var allowed_roles = document.getElementById("adm_allowed_roles");
-
-            allowed_roles.multiple = true;
-
-            for (var i = 0; i < allowed_roles.options.length; i++) {
-                allowed_roles.options[i].selected = true;
-            }
-
-            $("#adm_form_folder_rights").submit();
-        }');
+        $("#adm_form_folder_rights").submit();
+    }');
 
 // show headline of module
 $page->addHeadline($headline);

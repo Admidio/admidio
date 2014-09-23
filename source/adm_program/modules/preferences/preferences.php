@@ -142,11 +142,11 @@ $page->addHtml('
                         
                         // search all available themes in theme folder
                         $themes = getDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
-                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, FIELD_DEFAULT, $form_values['theme'], true, false, null, 'ORG_ADMIDIO_THEME_DESC');
+                        $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, FIELD_MANDATORY, $form_values['theme'], true, false, null, 'ORG_ADMIDIO_THEME_DESC');
                         $form->addTextInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'], 
-                            250, FIELD_DEFAULT, 'text', null, 'ORG_HOMEPAGE_VISITORS');
+                            250, FIELD_MANDATORY, 'text', null, 'ORG_HOMEPAGE_VISITORS');
                         $form->addTextInput('homepage_login', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('ORG_REGISTERED_USERS').')', $form_values['homepage_login'], 
-                            250, FIELD_DEFAULT, 'text', null, 'ORG_HOMEPAGE_REGISTERED_USERS');
+                            250, FIELD_MANDATORY, 'text', null, 'ORG_HOMEPAGE_REGISTERED_USERS');
                         $form->addCheckbox('enable_rss', $gL10n->get('ORG_ENABLE_RSS_FEEDS'), $form_values['enable_rss'], FIELD_DEFAULT, null, 'ORG_ENABLE_RSS_FEEDS_DESC');
                         $form->addCheckbox('enable_auto_login', $gL10n->get('ORG_LOGIN_AUTOMATICALLY'), $form_values['enable_auto_login'], FIELD_DEFAULT, null, 'ORG_LOGIN_AUTOMATICALLY_DESC');
                         $form->addTextInput('logout_minutes', $gL10n->get('ORG_AUTOMATOC_LOGOUT_AFTER'), $form_values['logout_minutes'], 
@@ -177,10 +177,10 @@ $page->addHtml('
                         $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=regional_settings', $page, 'default', false, 'form-preferences');
                         $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], 
                             null, null, null, 'form-control-small');
-                        $form->addTextInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], 60);
+                        $form->addTextInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], 60, FIELD_MANDATORY);
                         $form->addTextInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], 60, FIELD_DEFAULT, 'url');
                         $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 
-                            'ISOCODE', 'NAME', FIELD_DEFAULT, $form_values['system_language'], true);
+                            'ISOCODE', 'NAME', FIELD_MANDATORY, $form_values['system_language'], true);
                         $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $form_values['default_country'], true, false, null, 'PRO_DEFAULT_COUNTRY_DESC');
                         $form->addTextInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], 20, FIELD_DEFAULT, 'text', 
                             null, array('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), null, 'form-control-small');

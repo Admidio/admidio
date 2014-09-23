@@ -666,8 +666,9 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                           an array with all default values could be set.
-     *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
-     *                           the list with the caption "Please choose".
+     *  @param $showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
+     *                           If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                           an emptry entry will be added so you must not select something.
      *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                           where the user could select multiple values from the selectbox. Then an array will be 
      *                           created within the $_POST array.
@@ -683,7 +684,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class      Optional an additional css classname. The class @b admSelectbox
      *                     is set as default and need not set with this parameter.
      */
-    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = null, $setPleaseChoose = false, 
+    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = null, $showContextDependentFirstEntry = true, 
                                  $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         global $gL10n, $g_root_path, $gPreferences;
@@ -724,14 +725,23 @@ class HtmlForm extends HtmlFormBasic
         
         $this->addSelect($name, $id, $attributes);
 
-        if($setPleaseChoose == true)
+        // add an additional first entry to the select box and set this as preselected if necessary
+        if($showContextDependentFirstEntry == true)
         {
             $defaultEntry = false;
             if($defaultValue == null)
             {
                 $defaultEntry = true;
             }
-            $this->addOption('', '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
+    
+            if($property == FIELD_MANDATORY)
+            {
+                $this->addOption(null, '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
+            }
+            else
+            {
+                $this->addOption('', ' ', null, $defaultEntry);            
+            }
         }
 
         $value = reset($values);
@@ -843,8 +853,9 @@ class HtmlForm extends HtmlFormBasic
      *                           @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                           an array with all default values could be set.
-     *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
-     *                           the list with the caption "Please choose".
+     *  @param $showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
+     *                           If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                           an emptry entry will be added so you must not select something.
      *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                           where the user could select multiple values from the selectbox. Then an array will be 
      *                           created within the $_POST array.
@@ -860,19 +871,13 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class            Optional an additional css classname. The class @b admSelectbox
      *                           is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= null, $setPleaseChoose = false, 
+    public function addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= null, $showContextDependentFirstEntry = true, 
                                         $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
     
         // execute the sql statement
         $result = $databaseObject->query($sql);
-        
-        // of no mandatory field then insert a blank row with no value
-        if($property == FIELD_DEFAULT && $setPleaseChoose == false)
-        {
-            $selectboxEntries[' '] = '-';
-        }
         
         // create array from sql result
         while($row = $databaseObject->fetch_array($result))
@@ -889,7 +894,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $showContextDependentFirstEntry, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
@@ -905,8 +910,9 @@ class HtmlForm extends HtmlFormBasic
      *                      @b FIELD_DISABLED The field will be disabled and could not accept an input.
      *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
      *                           an array with all default values could be set.
-     *  @param $setPleaseChoose  If set to @b true a new entry will be added to the top of 
-     *                           the list with the caption "Please choose".
+     *  @param $showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
+     *                           If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                           an emptry entry will be added so you must not select something.
      *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
      *                           where the user could select multiple values from the selectbox. Then an array will be 
      *                           created within the $_POST array.
@@ -922,7 +928,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class       Optional an additional css classname. The class @b admSelectbox
      *                      is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= null, $setPleaseChoose = false, 
+    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= null, $showContextDependentFirstEntry = true, 
                                         $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $selectboxEntries = array();
@@ -940,7 +946,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $setPleaseChoose, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $showContextDependentFirstEntry, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must
@@ -976,13 +982,13 @@ class HtmlForm extends HtmlFormBasic
 
         $sqlTables        = TBL_CATEGORIES;
         $sqlCondidtions   = '';
-        $setPleaseChoose  = true;
+        $showContextDependentFirstEntry = true;
         $categoriesArray  = array();
 
 		// create sql conditions if category must have child elements
 		if($selectboxModus == 'FILTER_CATEGORIES')
 		{
-            $setPleaseChoose  = false;
+            $showContextDependentFirstEntry  = false;
             
             if($categoryType == 'DAT')
             {
@@ -1051,7 +1057,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call method to create selectbox from array
-        $this->addSelectBox($id, $label, $categoriesArray, $property, $defaultValue, $setPleaseChoose, $helpTextIdLabel, $helpTextIdInline, null, $class);
+        $this->addSelectBox($id, $label, $categoriesArray, $property, $defaultValue, $showContextDependentFirstEntry, $helpTextIdLabel, $helpTextIdInline, null, $class);
 	}
     
     /** Add a new static control to the form. A static control is only a simple text instead of an input field. This 

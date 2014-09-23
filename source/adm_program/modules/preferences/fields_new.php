@@ -138,8 +138,7 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     }
 $form->closeGroupBox();
 $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
-    $userFieldText = array(''         => '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -',
-                           'CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
+    $userFieldText = array('CHECKBOX' => $gL10n->get('SYS_CHECKBOX'),
                            'DATE'     => $gL10n->get('SYS_DATE'),
                            'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
                            'EMAIL'    => $gL10n->get('SYS_EMAIL'),
