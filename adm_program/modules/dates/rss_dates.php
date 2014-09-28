@@ -78,9 +78,9 @@ if($datesResult['numResults'] > 0)
         $pubDate 	 = date('r',strtotime($date->getValue('dat_timestamp_create')));
     	
     	// add additional informations about the event to the description
-        $description  = '';
     	$descDateTo   = '';
     	$descDateFrom = $date->getValue('dat_begin', $gPreferences['system_date']);
+        $description  = $descDateFrom;
     
         if ($date->getValue('dat_all_day') == 0)
         {

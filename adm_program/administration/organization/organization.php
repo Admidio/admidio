@@ -163,27 +163,31 @@ echo '
                     <li>
                         <dl>
                             <dt><label for="theme">'.$gL10n->get('ORG_ADMIDIO_THEME').':</label></dt>
-                            <dd>
-                                <select size="1" id="theme" name="theme">
-                                    <option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
-                                    $themes_path = SERVER_PATH. '/adm_themes';
-                                    $dir_handle  = opendir($themes_path);
-
-                                    while (false !== ($filename = readdir($dir_handle)))
-                                    {
-                                        if(is_file($filename) == false
-                                        && strpos($filename, '.') !== 0)
-                                        {
-                                            echo '<option value="'.$filename.'" ';
-                                            if($form_values['theme'] == $filename)
-                                            {
-                                                echo ' selected="selected" ';
-                                            }
-                                            echo '>'.$filename.'</option>';
-                                        }
-                                    }
-                                echo '</select>
-                            </dd>
+                            <dd>';
+								$themes_path = SERVER_PATH. '/adm_themes';
+								if ($dir_handle  = opendir($themes_path)){
+									echo '<select size="1" id="theme" name="theme">
+										<option value="">- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -</option>';
+									while (false !== ($filename = readdir($dir_handle)))
+									{
+										if(is_file($filename) == false
+										&& strpos($filename, '.') !== 0)
+										{
+											echo '<option value="'.$filename.'" ';
+											if($form_values['theme'] == $filename)
+											{
+												echo ' selected="selected" ';
+											}
+											echo '>'.$filename.'</option>';
+										}
+									}
+									echo '</select>';
+								}
+								else
+								{
+									echo 'error in Directory permission '.$dir_handle;
+								}
+                             echo '</dd>
                         </dl>
                     </li>
                     <li class="smallFontSize">'.$gL10n->get('ORG_ADMIDIO_THEME_DESC').'</li>
