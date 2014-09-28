@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="en">
 <version id="3.0.0" translator="Stefanie Schima">
+	<text id="LST_COUNTRY_ISO" development="new" translation="edited">The country must be written in code ISO 3166 ALPHA-3 (3 digits)</text>
+	<text id="SYS_COUNTRY_EG" development="new" translation="edited">DEU</text>
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">A config file has been found. A new installation can not be started. If the previous installation was interrupted you can resume with the existing one.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="edited">Continue installation</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="edited"></text>

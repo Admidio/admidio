@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
 <version id="3.0.0" translator="Markus Faßbender">
+	<text id="LST_COUNTRY_ISO" development="new" translation="edited">Das Land muss im Code ISO 3166 ALPHA-3 (3 Zeichen) angegeben werden</text>
+	<text id="SYS_COUNTRY_EG" development="new" translation="edited">DEU</text>
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="todo"></text>

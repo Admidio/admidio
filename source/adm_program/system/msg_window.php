@@ -146,6 +146,11 @@ switch ($getMessageId)
                     <td><b>'.$gL10n->get('SYS_NOT_EMPTY').'</b></td>
                     <td>'.$gL10n->get('LST_NOT_EMPTY_EXAMPLE_DESC').'</td>
                  </tr>
+				 <tr>
+                    <td>'.$gL10n->get('SYS_COUNTRY').'</td>
+                    <td><b>'.$gL10n->get('SYS_COUNTRY_EG').'</b></td>
+                    <td>'.$gL10n->get('LST_COUNTRY_ISO').'</td>
+                 </tr>
                 </tbody
               </table>';
         break;
