@@ -95,6 +95,7 @@
     <text id="PRO_MAINTAIN_PROFILE_FIELDS_DESC" development="changed" translation="todo">In der Profilfeldpflege können Profilfelder angelegt und bearbeitet werden. Diese können dann in Kategorien zusammengefasst werden.</text>
     <text id="PRO_SELECT_NEW_PIC_HERE" development="deleted" translation="todo"></text>
     <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="deleted" translation="todo"></text>
+    <text id="ROL_INDEPENDENT" development="delete" translation="todo"></text>
     <text id="ROL_ROLE_ASSIGNMENT" development="changed" translation="todo">Rollenzuordnung für %VAR1% %VAR2%</text>
     <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
     <text id="SYS_CATEGORIES" development="new" translation="todo">Kategorien</text>
@@ -1097,7 +1098,6 @@
     <text id="ROL_INACTIV_ROLE" development="new" translation="todo">Inaktive Rolle</text>
     <text id="ROL_INACTIV_ROLE_DESC" development="new" translation="todo">Du kannst die Rolle zu einer inaktiven Rolle machen. Dies hat den Vorteil, dass die Daten (Mitgliederzuordnung) erhalten bleiben und du später immer wieder sehen kannst, welche Personen dieser Rolle zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den üblichen Übersichten.</text>
     <text id="ROL_INACTIV_ROLES" development="new" translation="todo">Inaktive Rollen</text>
-    <text id="ROL_INDEPENDENT" development="new" translation="todo">Unabhängig</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="todo">Unsichtbare Rollen</text>
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Willst du den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen?</text>
     <text id="ROL_MEETINGS" development="new" translation="todo">Treffen</text>

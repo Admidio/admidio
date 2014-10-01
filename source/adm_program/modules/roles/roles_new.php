@@ -21,7 +21,7 @@ $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
 // Initialize local parameters
 $showSystemCategory = false;
 
-// nur Moderatoren duerfen Rollen anlegen und verwalten
+// only users with the special right are allowed to manage roles
 if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -82,125 +82,47 @@ if(isset($_SESSION['roles_request']))
 // holt eine Liste der ausgewaehlten abhaengigen Rolen
 $childRoles = RoleDependency::getChildRoles($gDb,$getRoleId);
 
-// Alle Rollen auflisten, die der Benutzer sehen darf
-$sql = 'SELECT *
-          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-         WHERE rol_valid   = 1
-           AND rol_visible = 1
-           AND rol_cat_id  = cat_id
-           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-               OR cat_org_id IS NULL )
-         ORDER BY rol_name ';
-$allRoles = $gDb->query($sql);
-
 $childRoleObjects = array();
 
 // create html page object
 $page = new HtmlPage();
 
 $page->addJavascript('
+    checkMaxMemberCount();
     $("#rol_assign_roles").change(function(){markRoleRight("rol_assign_roles", "rol_all_lists_view", true);});
     $("#rol_all_lists_view").change(function(){markRoleRight(\'rol_all_lists_view\', \'rol_assign_roles\', false);});
+    $("#rol_max_members").change(function(){checkMaxMemberCount();});
 ', true);
 
 $page->addJavascript('
-        // Rollenabhaengigkeiten markieren
-        function hinzufuegen()
-        {
-            var child_roles = document.getElementById("ChildRoles");
-            var all_roles   = document.getElementById("AllRoles");
-
-            if(all_roles.selectedIndex >= 0)
-            {
-                NeuerEintrag = new Option(all_roles.options[all_roles.selectedIndex].text, all_roles.options[all_roles.selectedIndex].value, false, true);
-                all_roles.options[all_roles.selectedIndex] = null;
-                child_roles.options[child_roles.length] = NeuerEintrag;
-            }
-        }
-
-        function entfernen()
-        {
-            var child_roles = document.getElementById("ChildRoles");
-            var all_roles   = document.getElementById("AllRoles");
-
-            if(child_roles.selectedIndex >= 0)
-            {
-                NeuerEintrag = new Option(child_roles.options[child_roles.selectedIndex].text, child_roles.options[child_roles.selectedIndex].value, false, true);
-                child_roles.options[child_roles.selectedIndex] = null;
-                all_roles.options[all_roles.length] = NeuerEintrag;
-            }
-        }
-
-        function absenden()
-        {
-            var child_roles = document.getElementById("ChildRoles");
-
-            for (var i = 0; i < child_roles.options.length; i++)
-            {
-                child_roles.options[i].selected = true;
-            }
-
-            form.submit();
-        }
-
-        //Prüfe Mitgliederanzahl
-        function checkMaxMemberCount(inputValue)
-        {
-
-            // Alle abhängigen Rollen werden für die Darstellung gesichert
-            var child_roles = document.getElementById("ChildRoles");
-
+        // show/hide role dependencies if max count members will be changed
+        function checkMaxMemberCount() {
             //Wenn eine Maximale Mitgliederzahl angeben wurde, duerfen keine Rollenabhaengigkeiten bestehen
-            if(inputValue > 0)
-            {
+            if($("#rol_max_members").val() > 0) {
                 // Die Box zum konfigurieren der Rollenabhängig wird ausgeblendet
-                document.getElementById("dependancies_box").style.visibility = "hidden";
-                document.getElementById("dependancies_box").style.display    = "none";
+                $("#gb_dependencies").hide();
 
                 // Alle Abhängigen Rollen werden markiert und auf unabhängig gesetzt
-                for (var i = 0; i < child_roles.options.length; i++)
-                {
-                    child_roles.options[i].selected = true;
-                }
-                entfernen();
-
-				jQueryAlert("ROL_SAVE_ROLES");
-
+                $("#dependent_roles").val("");
             }
-            else
-            {
-
-                // Alle Abhängigen Rollen werden markiert und auf abhängig gesetzt
-                for (var i = 0; i < child_roles.options.length; i++)
-                {
-                    child_roles.options[i].selected = true;
-                }
-                hinzufuegen();
-
+            else {
                 // Die Box zum konfigurieren der Rollenabhängigkeit wird wieder eingeblendet
-                document.getElementById("dependancies_box").style.visibility = "visible";
-                document.getElementById("dependancies_box").style.display    = "";
-
-
+                $("#gb_dependencies").show();
             }
         }
 
-        // Rollenrechte markieren
-        // Uebergaben:
+        // Set dependent role right if another role right changed
         // srcRight  - ID des Rechts, welches das Ereignis ausloest
         // destRight - ID des Rechts, welches angepasst werden soll
         // checked   - true destRight wird auf checked gesetzt
         //             false destRight wird auf unchecked gesetzt
-        function markRoleRight(srcRight, destRight, checked)
-        {
+        function markRoleRight(srcRight, destRight, checked) {
             if(document.getElementById(srcRight).checked == true
-            && checked == true)
-            {
+            && checked == true) {
                 document.getElementById(destRight).checked = true;
             }
             if(document.getElementById(srcRight).checked == false
-            && checked == false)
-            {
+            && checked == false) {
                 document.getElementById(destRight).checked = false;
             }
         }');
@@ -297,6 +219,36 @@ $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     	$form->addCheckbox('rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), $role->getValue('rol_weblinks'), FIELD_DEFAULT, null, null, 'weblinks.png');
     }
 $form->closeGroupBox();
+$form->openGroupBox('gb_dates_meetings', $gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
+    $form->addTextInput('rol_start_date', $gL10n->get('ROL_VALID_FROM'), $role->getValue('rol_start_date'), 0, FIELD_DEFAULT, 'date');
+    $form->addTextInput('rol_end_date', $gL10n->get('ROL_VALID_TO'), $role->getValue('rol_end_date'), 0, FIELD_DEFAULT, 'date');
+    $form->addTextInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), 0, FIELD_DEFAULT, 'time');
+    $form->addTextInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), 0, FIELD_DEFAULT, 'time');
+    $form->addSelectBox('rol_weekday', $gL10n->get('ROL_WEEKDAY'), DateTimeExtended::getWeekdays(), FIELD_DEFAULT, $role->getValue('rol_weekday'));
+    $form->addTextInput('rol_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'), 100);
+$form->closeGroupBox();
+
+$form->openGroupBox('gb_dependencies', $gL10n->get('ROL_DEPENDENCIES').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
+$rolename_var = $gL10n->get('ROL_NEW_ROLE');
+if($role->getValue('rol_name')!='')
+{
+    $rolename_var = $gL10n->get('SYS_ROLE').' <b>'.$role->getValue('rol_name').'</b>';
+}
+$form->addHtml('<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $rolename_var).'</p>');
+
+//  list all roles that the user is allowed to see
+$sqlAllRoles = '
+        SELECT rol_id, rol_name, cat_name
+          FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+         WHERE rol_valid   = 1
+           AND rol_visible = 1
+           AND rol_cat_id  = cat_id
+           AND (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
+               OR cat_org_id IS NULL )
+         ORDER BY cat_sequence, rol_name ';
+
+$form->addSelectBoxFromSql('dependent_roles', $gL10n->get('ROL_DEPENDENT'), $gDb, $sqlAllRoles, FIELD_DEFAULT, $childRoles, true, true);
+$form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
 $form->addHtml(admFuncShowCreateChangeInfoById($role->getValue('rol_usr_id_create'), $role->getValue('rol_timestamp_create'), $role->getValue('rol_usr_id_change'), $role->getValue('rol_timestamp_change')));
@@ -304,164 +256,4 @@ $form->addHtml(admFuncShowCreateChangeInfoById($role->getValue('rol_usr_id_creat
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-
-/*
-        <div class="groupBox" id="admDatesBox">
-            <div class="groupBoxHeadline" id="admDatesHead">
-                <a class="iconShowHide" href="javascript:showHideBlock(\'admDatesBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-                	id="admDatesBodyImage" src="'.THEME_PATH.'/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')
-            </div>
-
-            <div class="groupBoxBody" id="admDatesBody">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="rol_start_date">'.$gL10n->get('ROL_VALID_FROM').':</label></dt>
-                            <dd>
-                                <input type="text" id="rol_start_date" name="rol_start_date" size="10" maxlength="10" value="'.$role->getValue('rol_start_date').'" />
-                                <a class="iconLink" id="anchor_date_from" href="javascript:calPopup.select(document.getElementById(\'rol_start_date\'),\'anchor_date_from\',\''.$gPreferences['system_date'].'\',\'rol_start_date\',\'rol_end_date\');"><img
-                                	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>
-                                <label for="rol_end_date">'.$gL10n->get('SYS_DATE_TO').'</label>
-                                <input type="text" id="rol_end_date" name="rol_end_date" size="10" maxlength="10" value="'.$role->getValue('rol_end_date').'" />
-                                <a class="iconLink" id="anchor_date_to" href="javascript:calPopup.select(document.getElementById(\'rol_end_date\'),\'anchor_date_to\',\''.$gPreferences['system_date'].'\',\'rol_start_date\',\'rol_end_date\');"><img
-                                	src="'.THEME_PATH.'/icons/calendar.png" alt="'.$gL10n->get('SYS_SHOW_CALENDAR').'" title="'.$gL10n->get('SYS_SHOW_CALENDAR').'" /></a>&nbsp;(Datum)
-                                <span id="calendardiv" style="position: absolute; visibility: hidden;"></span>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="rol_start_time">'.$gL10n->get('SYS_TIME').':</label></dt>
-                            <dd>
-                                <input type="text" id="rol_start_time" name="rol_start_time" size="10" maxlength="10" value="'.$role->getValue('rol_start_time', $gPreferences['system_time']).'" />
-                                <label for="rol_end_time">'.$gL10n->get('SYS_DATE_TO').'</label>
-                                <input type="text" id="rol_end_time" name="rol_end_time" size="10" maxlength="10" value="'.$role->getValue('rol_end_time', $gPreferences['system_time']).'" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="rol_weekday">'.$gL10n->get('ROL_WEEKDAY').':</label></dt>
-                            <dd>
-                                <select size="1" id="rol_weekday" name="rol_weekday">';
-								// add a default entry to the combobox
-                                echo '<option value="0"';
-                                if($role->getValue('rol_weekday') == 0)
-                                {
-                                    echo ' selected="selected" ';
-                                }
-                                echo '>--</option>';
-                                
-                                // now list all weekdays that are defined in the datetime class
-                                foreach(DateTimeExtended::getWeekdays() as $roleWeekday => $dayName) 
-                                {
-                                    echo '<option value="'.$roleWeekday.'" ';
-                                    if($role->getValue('rol_weekday') == $roleWeekday)
-                                    {
-                                        echo 'selected="selected"';
-                                    }
-                                    echo '>'.DateTimeExtended::getWeekdays($roleWeekday).'</option>';
-                                }
-                                echo '</select>
-                            </dd>
-                        </dl>
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="rol_location">'.$gL10n->get('SYS_LOCATION').':</label></dt>
-                            <dd>
-                                <input type="text" id="rol_location" name="rol_location" size="30" maxlength="30" value="'.$role->getValue('rol_location').'" />
-                            </dd>
-                        </dl>
-                    </li>
-                </ul>
-            </div>
-        </div>';
-        if($role->getValue('rol_max_members') == 0)
-        {
-            echo '<div class="groupBox" id="admDependanciesBox">
-                <div class="groupBoxHeadline" id="admDependanciesHead">
-                    <a class="iconShowHide" href="javascript:showHideBlock(\'admDependanciesBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-                    id="admDependanciesBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('ROL_DEPENDENCIES').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')
-                </div>
-
-                <div class="groupBoxBody" id="admDependanciesBody">
-                    <div style="margin-top: 6px;">';
-                        $rolename_var = $gL10n->get('ROL_NEW_ROLE');
-                        if($role->getValue('rol_name')!='')
-                        {
-                            $rolename_var = $gL10n->get('SYS_ROLE').' <b>'.$role->getValue('rol_name').'</b>';
-                        }
-                        echo '<p>'.$gL10n->get('ROL_ROLE_DEPENDENCIES', $rolename_var).'</p>
-
-                        <div style="text-align: left; float: left;">
-                            <div><img class="iconInformation" src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('ROL_INDEPENDENT').'" title="'.$gL10n->get('ROL_INDEPENDENT').'" />'.$gL10n->get('ROL_INDEPENDENT').'</div>
-                            <div>
-                                <select id="AllRoles" size="8" style="width: 200px;">';
-                                    while($row = $gDb->fetch_object($allRoles))
-                                    {
-                                        if(in_array($row->rol_id,$childRoles)  )
-                                        {
-                                            $childRoleObjects[] = $row;
-                                        }
-                                        elseif ($row->rol_id != $getRoleId)
-                                        {
-                                            echo '<option value="'.$row->rol_id.'">'.$row->rol_name.'</option>';
-                                        }
-                                    }
-                                echo '</select>
-                            </div>
-                        </div>
-                        <div style="float: left;" class="verticalIconList">
-                            <ul>
-                                <li>
-                                    <a class="iconLink" href="javascript:hinzufuegen()"><img
-                                     src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_ADD_ROLE').'" title="'.$gL10n->get('SYS_ADD_ROLE').'" /></a>
-                                </li>
-                                <li>
-                                    <a class="iconLink" href="javascript:entfernen()"><img 
-                                    src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_REMOVE_ROLE').'" title="'.$gL10n->get('SYS_REMOVE_ROLE').'" /></a>
-                                </li>
-                            </ul>
-                        </div>
-                        <div>
-                            <div><img class="iconInformation" src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('ROL_DEPENDENT').'" title="'.$gL10n->get('ROL_DEPENDENT').'" />'.$gL10n->get('ROL_DEPENDENT').'</div>
-                            <div>
-                                <select id="ChildRoles" name="ChildRoles[]" size="8" multiple="multiple" style="width: 200px;">';
-                                    foreach ($childRoleObjects as $childRoleObject)
-                                    {
-                                        echo '<option value="'.$childRoleObject->rol_id.'">'.$childRoleObject->rol_name.'</option>';
-                                    }
-                                echo '</select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>';
-        }
-
-        // show informations about user who creates the recordset and changed it
-        echo admFuncShowCreateChangeInfoById($role->getValue('rol_usr_id_create'), $role->getValue('rol_timestamp_create'), $role->getValue('rol_usr_id_change'), $role->getValue('rol_timestamp_change')).'
-        
-        <div class="formSubmit">
-            <button id="btnSave" type="submit" onclick="absenden()">
-                <img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />
-                &nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-        </div>
-    </div>
-</div>
-</form>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-*/
 ?>

@@ -22,7 +22,7 @@ require_once('../../system/login_valid.php');
 $getInactive  = admFuncVariableIsValid($_GET, 'inactive', 'boolean', 0);
 $getInvisible = admFuncVariableIsValid($_GET, 'invisible', 'boolean', 0); 
 
-// nonly moderators are allowed to set/manage roles !
+// only users with the special right are allowed to manage roles
 if(!$gCurrentUser->manageRoles())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

@@ -280,50 +280,46 @@ elseif($getMode == 2)
         $getRoleId = $role->getValue('rol_id');
     }
 
-    //Rollenabhaengigkeiten setzten
-    if(array_key_exists('ChildRoles', $_POST))
+    // save role dependencies in database
+    if(array_key_exists('dependent_roles', $_POST))
     {
-        $sentChildRoles = $_POST['ChildRoles'];
-
+        $sentChildRoles = $_POST['dependent_roles'];
+        
         $roleDep = new RoleDependency($gDb);
 
         // holt eine Liste der ausgewählten Rolen
-        $DBChildRoles = RoleDependency::getChildRoles($gDb,$getRoleId);
+        $dbChildRoles = RoleDependency::getChildRoles($gDb,$getRoleId);
 
         //entferne alle Rollen die nicht mehr ausgewählt sind
-        if($DBChildRoles != -1)
+        if($dbChildRoles != -1)
         {
-            foreach ($DBChildRoles as $DBChildRole)
+            foreach ($dbChildRoles as $dbChildRole)
             {
-                if(in_array($DBChildRole,$sentChildRoles))
-                    continue;
-                else
+                if(in_array($dbChildRole,$sentChildRoles) == false)
                 {
-
-                    $roleDep->get($DBChildRole,$getRoleId);
+                    $roleDep->get($dbChildRole,$getRoleId);
                     $roleDep->delete();
                 }
             }
         }
-        //fuege alle neuen Rollen hinzu
-        foreach ($sentChildRoles as $sentChildRole)
+
+        // add all new role dependencies to database
+        if(count($sentChildRoles) > 0)
         {
-            if((-1 == $DBChildRoles) || in_array($sentChildRole,$DBChildRoles))
-                continue;
-            else
+            foreach ($sentChildRoles as $sentChildRole)
             {
-                $roleDep->clear();
-                $roleDep->setChild($sentChildRole);
-                $roleDep->setParent($getRoleId);
-                $roleDep->insert($gCurrentUser->getValue('usr_id'));
+                if($dbChildRoles != -1 && in_array($sentChildRole,$dbChildRoles) == false && $sentChildRole > 0)
+                {
+                    $roleDep->clear();
+                    $roleDep->setChild($sentChildRole);
+                    $roleDep->setParent($getRoleId);
+                    $roleDep->insert($gCurrentUser->getValue('usr_id'));
 
-                //füge alle Mitglieder der ChildRole der ParentRole zu
-                $roleDep->updateMembership();
-
+                    //füge alle Mitglieder der ChildRole der ParentRole zu
+                    $roleDep->updateMembership();
+                }
             }
-
         }
-
     }
     else
     {

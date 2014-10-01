@@ -329,7 +329,7 @@ select[multiple] {
     width: 50%;
 }
 
-input[data-provide="datepicker"], input[type="number"] {
+input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     width: 130px !important;
 }
 
