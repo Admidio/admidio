@@ -79,7 +79,7 @@ if($getMode == 1)
             </p>
             <p align="left">
                 <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" />
-                '.$gL10n->get('MEM_REMOVE_USER', $gL10n->get('SYS_DELETE')).'
+                '.$gL10n->get('MEM_REMOVE_USER_DESC', $gL10n->get('SYS_DELETE')).'
             </p>
             <button id="btnBack" type="button" onclick="history.back()"><img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
             &nbsp;&nbsp;&nbsp;&nbsp;
