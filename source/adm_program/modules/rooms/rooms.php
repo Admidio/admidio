@@ -11,36 +11,35 @@
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
-// nur berechtigte User duerfen die Profilfelder bearbeiten
+// only webmasters are allowed to manage rooms
 if (!$gCurrentUser->isWebmaster())
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
 
-$gLayout['header'] = '
-    <script type="text/javascript"><!--
-        $(document).ready(function() 
-        {
-            $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-        }); 
-    //--></script>'; 
-
-
 unset($_SESSION['rooms_request']);
+
+$headline = $gL10n->get('ROO_ROOM_MANAGEMENT');
+$textRoom = $gL10n->get('SYS_ROOM');
+
 // Navigation weiterfuehren
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
-$req_headline = $gL10n->get('SYS_ROOM');
+// create html page object
+$page = new HtmlPage();
 
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
- // Html des Modules ausgeben
-echo '<h1 class="moduleHeadline">'.$gL10n->get('ROO_ROOM_MANAGEMENT').'</h1>
-<span class="iconTextLink">
-    <a href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$req_headline.'"><img 
-        src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('SYS_CREATE_VAR', $req_headline).'" /></a>
-    <a href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$req_headline.'">'.$gL10n->get('SYS_CREATE_VAR', $req_headline).'</a>
-</span>
-<br/>';
+$page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
+
+$page->addHeadline($headline);
+
+// create module menu
+$roomsMenu = new HtmlNavbar('menu_rooms');
+// show back link
+$roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+// show link to create new room
+$roomsMenu->addItem('menu_item_new_room', $g_root_path.'/adm_program/modules/rooms/rooms_new.php?headline='.$textRoom, 
+							$gL10n->get('SYS_CREATE_VAR', $textRoom), 'add.png');
+$page->addHtml($roomsMenu->show(false));
 
 if($gPreferences['system_show_create_edit'] == 1)
 {
@@ -84,7 +83,7 @@ $rooms_result = $gDb->query($sql);
 if($gDb->num_rows($rooms_result) == 0)
 {
     // Keine Räume gefunden
-	echo '<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>';
+	$page->addHtml('<p>'.$gL10n->get('SYS_NO_ENTRIES').'</p>');
 }
 else
 {
@@ -96,72 +95,55 @@ else
         $room->clear();
         $room->setArray($row);
         
-        echo '<br/>
-        <div class="boxLayout" id="room_'.$room->getValue('room_id').'">
-            <div class="boxHead">
-                <div class="boxHeadLeft">
-                    <img src="'.$g_root_path.'/adm_themes/classic/icons/home.png" alt="'. $room->getValue('room_name'). '" />'
-                    
+        $page->addHtml('
+        <div class="panel panel-primary" id="room_'.$room->getValue('room_id').'">
+            <div class="panel-heading">
+                <div class="pull-left">
+                    <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/home.png" alt="'. $room->getValue('room_name'). '" />'
                      . $room->getValue('room_name').'
                 </div>
-                <div class="boxHeadRight">';
-                    if ($gCurrentUser->editDates())
-                    {
-                        //Bearbeiten
-                        echo '
-                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$req_headline.'"><img 
-                            src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
-                            
-                        //Löschen
-                        echo '
-                        <a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
-                            $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img 
-                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
-                    }
-                echo '</div>
-            </div>
-            <div class="boxBody">
-                <div class="date_info_block">';
-                    $table = new HtmlTableBasic();
-                    $table->addAttribute('style', 'float:left; width: 200px;');
-                    $table->addRow();
-                    $table->addColumn($gL10n->get('ROO_CAPACITY'));
-                    $table->addColumn('<strong>'.$room->getValue('room_capacity').'</strong>');
-
-                    if($room->getValue('room_overhang')!=null)
-                    {
-                        $table->addRow();
-                        $table->addColumn($gL10n->get('ROO_OVERHANG'));
-                        $table->addColumn('<strong>'.$room->getValue('room_overhang').'</strong>');
-                    }
-                    echo $table->getHtmlTable();
-                    
-                    if(strlen($room->getValue('room_description')) > 0)
-                    {
-                       echo '<div class="date_description" style="clear: left;"><br/>'
-                            .$room->getValue('room_description').'</div>';
-                    }
-
-                    // show informations about user who creates the recordset and changed it
-                    echo admFuncShowCreateChangeInfoByName($row['create_name'], $room->getValue('room_timestamp_create'), 
-                            $row['change_name'], $room->getValue('room_timestamp_change'), $room->getValue('room_usr_id_create'), $room->getValue('room_usr_id_change')).'
+                <div class="pull-right text-right">
+                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$textRoom.'"><img 
+                        src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                    <a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
+                        $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img 
+                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
                 </div>
             </div>
-        </div>';
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-sm-2 col-xs-4">'.$gL10n->get('ROO_CAPACITY').'</div>
+                    <div class="col-sm-4 col-xs-8"><strong>'.$room->getValue('room_capacity').'</strong></div>');
+
+                    if($room->getValue('room_overhang') > 0)
+                    {
+                        $page->addHtml('<div class="col-sm-2 col-xs-4">'.$gL10n->get('ROO_OVERHANG').'</div>
+                        <div class="col-sm-4 col-xs-8"><strong>'.$room->getValue('room_overhang').'</strong></div>');
+                    }
+                    else
+                    {
+                        $page->addHtml('<div class="col-sm-2 col-xs-4">&nbsp;</div>
+                        <div class="col-sm-4 col-xs-8">&nbsp;</div>');
+                    }
+                    
+                    //echo $table->getHtmlTable();
+                    $page->addHtml('</div>');
+                    
+                if(strlen($room->getValue('room_description')) > 0)
+                {
+                   $page->addHtml($room->getValue('room_description'));
+                }
+            $page->addHtml('</div>
+            <div class="panel-footer">'.
+                // show informations about user who creates the recordset and changed it
+                admFuncShowCreateChangeInfoByName($row['create_name'], $room->getValue('room_timestamp_create'), 
+                        $row['change_name'], $room->getValue('room_timestamp_change'), $room->getValue('room_usr_id_create'), $room->getValue('room_usr_id_change')).'
+            </div>
+        </div>');
     }
 }
 
-echo '
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-        </span>
-    </li>
-</ul>';
+// show html of complete page
+$page->show();
 
- 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

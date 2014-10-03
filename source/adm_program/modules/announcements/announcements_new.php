@@ -46,7 +46,7 @@ else
 // add current url to navigation stack
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
-// Ankuendigungsobjekt anlegen
+// Create announcements object
 $announcement = new TableAnnouncement($gDb);
 
 if($getAnnId > 0)

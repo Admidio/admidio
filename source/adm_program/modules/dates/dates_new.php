@@ -297,7 +297,7 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
     $form->addTextInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), 5, FIELD_DEFAULT, 'number', 'DAT_MAX_MEMBERS');
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
-    $form->addEditor('dat_description', null, $date->getValue('dat_description'), FIELD_MANDATORY);
+    $form->addEditor('dat_description', null, $date->getValue('dat_description'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
