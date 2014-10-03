@@ -54,44 +54,36 @@ $_SESSION['roles_request'] = $_POST;
 
 if($getMode == 1)
 {
-    // Html-Kopf ausgeben
-    $gLayout['title'] = 'Messagebox';
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    // create html page object
+    $page = new HtmlPage();
 
-    // Html des Modules ausgeben
-    echo '
-    <div class="formLayout" id="edit_announcements_form">
-        <div class="formHead">'.$gL10n->get('ROL_ROLE_DELETE').'</div>
-        <div class="formBody">
-            <p align="left">
+    // show headline of the script
+    $page->addHeadline($gL10n->get('ROL_ROLE_DELETE'));
+
+    // create module menu with back link
+    $messageMenu = new HtmlNavbar('menu_message');
+    $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $page->addHtml($messageMenu->show(false));
+
+	$page->addHtml('
+	<div class="message">
+		<p class="lead">
                 <img src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />
-                '.$gL10n->get('ROL_INACTIV_ROLE_DESC').'
-            </p>
-            <p align="left">
+                '.$gL10n->get('ROL_INACTIV_ROLE_DESC').'<br /><br />
                 <img src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('ROL_ROLE_DELETE').'" />
                 '.$gL10n->get('ROL_HINT_DELETE_ROLE', $gL10n->get('SYS_DELETE')).'
-            </p>
-            <button id="btnDelete" type="button"
-                onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&mode=4\'"><img
-                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnInactive" type="button"
-                onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&mode=3\'"><img
-                src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />&nbsp;'.$gL10n->get('ROL_INACTIV_ROLE').'</button>
+        </p>
+        
+        <button id="btn_inactive" type="button" class="btn btn-primary"
+            onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&mode=3\'"><img
+            src="'. THEME_PATH. '/icons/roles_gray.png" alt="'.$gL10n->get('ROL_INACTIV_ROLE').'" />&nbsp;'.$gL10n->get('ROL_INACTIV_ROLE').'</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button id="btn_delete" type="button" class="btn btn-primary"
+            onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/roles/roles_function.php?rol_id='.$getRoleId.'&mode=4\'"><img
+            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
+    </div>');
 
-            <ul class="iconTextLinkList">
-                <li>
-                    <span class="iconTextLink">
-                        <a href="#" onclick="history.back()"><img
-                        src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-                        <a href="#" onclick="history.back()">'.$gL10n->get('SYS_BACK').'</a>
-                    </span>
-                </li>
-            </ul>
-        </div>
-    </div>';
-
-    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+    $page->show();
     exit();
 }
 elseif($getMode == 2)

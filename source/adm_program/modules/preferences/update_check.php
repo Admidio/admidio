@@ -162,19 +162,16 @@ if($getMode == 2)
     echo'
     <p>'.$gL10n->get('UPD_CURRENT_VERSION').':&nbsp;'.ADMIDIO_VERSION. BETA_VERSION_TEXT.'</p>
     <p>'.$gL10n->get('UPD_STABLE_VERSION').':&nbsp;
-        <span class="iconTextLink">
-            <a href="http://www.admidio.org/index.php?page=download"><img src="'.THEME_PATH.'/icons/update_link.png"></a>
-            <a href="http://www.admidio.org/index.php?page=download" target="_blank" title="'.$gL10n->get('UPD_ADMIDIO').'">'.$stable_version. '</a>
-        </span><br />
+        <a class="icon-text-link" href="http://www.admidio.org/index.php?page=download" target="_blank"><img 
+            src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'">'.$stable_version. '</a>
+        <br />
         '.$gL10n->get('UPD_BETA_VERSION').': &nbsp;';
         
             if($version_update != 99 && $beta_version != 'n/a')
             {
-                echo '<span class="iconTextLink">
-                    <a href="http://www.admidio.org/index.php?page=download"><img src="'.THEME_PATH.'/icons/update_link.png"></a>
-                    <a href="http://www.admidio.org/index.php?page=download" target="_blank" title="'.$gL10n->get('UPD_ADMIDIO').'">'.$beta_version.'
-                    &nbsp;Beta&nbsp;'.$beta_release.'</a>
-                </span>';
+                echo '
+                <a class="icon-text-link" href="http://www.admidio.org/index.php?page=download" target="_blank"><img 
+                    src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'">'.$beta_version.'&nbsp;Beta&nbsp;'.$beta_release.'</a>';
             }
             else
             {

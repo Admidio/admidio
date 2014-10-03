@@ -102,13 +102,10 @@ if ($gPreferences['enable_download_module'] == 1)
           	// Vorname und Nachname abfragen (Upload der Datei)
           	$mein_user = new User($gDb, $gProfileFields, $plg_row->fil_usr_id);
 
-           	echo '<span class="iconTextLink">
-           		<a href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img 
-           			src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" 
-           			title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" /></a>
-           		<a class="'. $plg_link_class_downl. '" title= "'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" 
-           			href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '">'.$plg_row->fil_name.'</a> 
-           	</span>
+           	echo '
+            <a class="icon-text-link '.$plg_link_class_downl.'" href="'. $g_root_path. '/adm_program/modules/downloads/get_file.php?file_id='. $plg_row->fil_id. '"><img 
+            	src="'. THEME_PATH. '/icons/'.$iconFile.'" alt="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" 
+            	title="'. $plg_row->fol_path. '/'. $plg_row->fol_name. '/" />'.$plg_row->fil_name.'</a> 
            	<br /><span class="smallFontSize">(&nbsp;'. $plg_row->fil_timestamp. ', '. $mein_user->getValue('FIRST_NAME'). ' '. $mein_user->getValue('LAST_NAME'). '&nbsp;)</span><hr />';
            	$anzahl++; 
 

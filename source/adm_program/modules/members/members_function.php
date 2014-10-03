@@ -62,34 +62,36 @@ if($getMode != 1)
 
 if($getMode == 1)
 {
-    // Html-Kopf ausgeben
-    $gLayout['title'] = $gL10n->get('SYS_NOTE');
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    // create html page object
+    $page = new HtmlPage();
 
-    // Html des Modules ausgeben
-    echo '<br /><br /><br />
-    <div class="formLayout" id="user_delete_message_form" style="width: 400px">
-        <div class="formHead">'.$gL10n->get('MEM_REMOVE_USER').'</div>
-        <div class="formBody">
-            <p align="left">
-                <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />
-                '.$gL10n->get('MEM_MAKE_FORMER').'
-            </p>
-            <p align="left">
-                <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" />
-                '.$gL10n->get('MEM_REMOVE_USER', $gL10n->get('SYS_DELETE')).'
-            </p>
-            <button id="btnBack" type="button" onclick="history.back()"><img src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" />&nbsp;'.$gL10n->get('SYS_BACK').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnDelete" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3\'"><img 
-                src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
-            &nbsp;&nbsp;&nbsp;&nbsp;
-            <button id="btnFormer" type="button" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$getUserId.'&mode=2\'"><img 
-                src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />&nbsp;'.$gL10n->get('SYS_FORMER').'</button>
-        </div>
-    </div>';
+    // show headline of the script
+    $page->addHeadline($gL10n->get('MEM_REMOVE_USER'));
 
-    require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+    // create module menu with back link
+    $messageMenu = new HtmlNavbar('menu_message');
+    $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $page->addHtml($messageMenu->show(false));
+
+	$page->addHtml('
+	<div class="message">
+		<p class="lead">
+            <img src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />
+            '.$gL10n->get('MEM_MAKE_FORMER').'<br /><br />
+            <img src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" />
+            '.$gL10n->get('MEM_REMOVE_USER_DESC', $gL10n->get('SYS_DELETE')).'
+        </p>
+        
+        <button id="btnFormer" type="button" class="btn btn-primary"
+            onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='.$getUserId.'&mode=2\'"><img 
+            src="'.THEME_PATH.'/icons/profile.png" alt="'.$gL10n->get('SYS_FORMER').'" />&nbsp;'.$gL10n->get('SYS_FORMER').'</button>
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <button id="btnDelete" type="button" class="btn btn-primary"
+            onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/members/members_function.php?usr_id='. $getUserId. '&mode=3\'"><img 
+            src="'.THEME_PATH.'/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" />&nbsp;'.$gL10n->get('SYS_DELETE').'</button>
+    </div>');
+
+    $page->show();
     exit();
 }
 elseif($getMode == 2)

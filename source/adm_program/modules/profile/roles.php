@@ -247,7 +247,7 @@ while($row = $gDb->fetch_array($result))
 		{
 			$leaderRights .= '<img class="icon-information" src="'.THEME_PATH.'/icons/info.png"
 							     alt="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" title="'.$gL10n->get('ROL_LEADER_NO_ADDITIONAL_RIGHTS').'" />
-							         <img class="iconLink" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
+							         <img class="icon-link" src="'. THEME_PATH. '/icons/dummy.png" alt="dummy" />';
 		}
 
 		// show icon with edit user right if leader has this right

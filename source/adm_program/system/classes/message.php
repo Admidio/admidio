@@ -181,10 +181,8 @@ class Message
 						{
 							// Wenn weitergeleitet wird, dann auch immer einen Weiter-Button anzeigen
 							$html .= '<li>
-								<span class="admIconTextLink">
-									<a href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'</a>
-									<a href="'. $this->forwardUrl. '"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" title="'.$gL10n->get('SYS_NEXT').'" /></a>
-								</span>
+								<a class="icon-text-link" href="'. $this->forwardUrl. '">'.$gL10n->get('SYS_NEXT').'<img 
+								    src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" title="'.$gL10n->get('SYS_NEXT').'" /></a>
 							</li>';
 						}
 					}
@@ -195,20 +193,15 @@ class Message
 						if($this->showCloseButton == true)
 						{
 							$html .= '<li>
-								<span class="admIconTextLink">
-									<a href="javascript:window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE').'" title="'.$gL10n->get('SYS_CLOSE').'" /></a>
-									<a href="javascript:window.close()">'.$gL10n->get('SYS_CLOSE').'</a>
-								</span>
+								<a class="icon-text-link" href="javascript:window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" 
+								    alt="'.$gL10n->get('SYS_CLOSE').'" title="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</a>
 							</li>';
 						}
 						else
 						{
 							$html .= '<li>
-								<span class="admIconTextLink">
-									<a href="javascript:history.back()"><img 
-										src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'" /></a>
-									<a href="javascript:history.back()">'.$gL10n->get('SYS_BACK').'</a>
-								</span>
+								<a class="icon-text-link" href="javascript:history.back()"><img src="'. THEME_PATH. '/icons/back.png"
+									 alt="'.$gL10n->get('SYS_BACK').'" title="'.$gL10n->get('SYS_BACK').'" />'.$gL10n->get('SYS_BACK').'</a>
 							</li>';
 						}
 					}

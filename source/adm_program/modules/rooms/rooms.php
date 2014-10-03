@@ -103,9 +103,9 @@ else
                      . $room->getValue('room_name').'
                 </div>
                 <div class="pull-right text-right">
-                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$textRoom.'"><img 
+                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$textRoom.'"><img 
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                    <a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
+                    <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
                         $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img 
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
                 </div>

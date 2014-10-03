@@ -375,11 +375,11 @@ echo '<div class="photoModuleContainer">';
                         if($gCurrentUser->editPhotoRight())
                         {
                            $photoThumbnailTable .= '
-                            <a class="iconLink"  href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'left\')"><img 
+                            <a class="icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'left\')"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
-                            <a class="iconLink" href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'right\')"><img 
+                            <a class="icon-link" href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'right\')"><img 
                                 src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
-                            <a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=imgli_id_'.
+                            <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=imgli_id_'.
                                 $bild.'&amp;database_id='.$bild.'&amp;database_id_2='.$getPhotoId.'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
 
@@ -388,7 +388,7 @@ echo '<div class="photoModuleContainer">';
                         if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
                         {
                             $photoThumbnailTable .= '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getShowPage.'"><img 
+                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getShowPage.'"><img 
                                 src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                         }
                         
@@ -396,7 +396,7 @@ echo '<div class="photoModuleContainer">';
                         {
                             //show link to download photo
                             $photoThumbnailTable .= '
-                            <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'"><img 
+                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'"><img 
                                             src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
                         }
                     }
@@ -610,7 +610,7 @@ echo '<div class="photoModuleContainer">';
                             if($gPreferences['photo_download_enabled']==1)
                             {
                                 echo '
-                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
+                                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
                                             src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>';
                             }
 
@@ -620,28 +620,28 @@ echo '<div class="photoModuleContainer">';
                                 if(file_exists($ordner))
                                 {
                                     echo '
-                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
+                                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
                                         src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" /></a>
 
-                                    <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;job=change"><img 
+                                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;job=change"><img 
                                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
                                     
                                     if($sub_photo_album->getValue('pho_locked')==1)
                                     {
                                         echo '
-                                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=0"><img 
+                                        <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=0"><img 
                                             src="'. THEME_PATH. '/icons/key.png"  alt="'.$gL10n->get('SYS_UNLOCK').'" title="'.$gL10n->get('SYS_UNLOCK').'" /></a>';
                                     }
                                     elseif($sub_photo_album->getValue('pho_locked')==0)
                                     {
                                         echo '
-                                        <a class="iconLink" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=1"><img 
+                                        <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=1"><img 
                                             src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_LOCK').'" title="'.$gL10n->get('SYS_LOCK').'" /></a>';
                                     }
                                 }
 
                                 echo '
-                                <a class="iconLink icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=pho_'.
+                                <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=pho_'.
                                     $sub_photo_album->getValue('pho_id').'&amp;name='.urlencode($sub_photo_album->getValue('pho_name')).'&amp;database_id='.$sub_photo_album->getValue('pho_id').'"><img 
                                     src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                             }

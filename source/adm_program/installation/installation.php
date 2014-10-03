@@ -394,11 +394,9 @@ elseif($getMode == 6)  // Creating configuration file
         $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=8');
         $form->setFormDescription($gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE_DESC', 'config.php', $rootPath.'/adm_my_files', 'adm_my_files'), $gL10n->get('INS_CREATE_CONFIGURATION_FILE'));
         $form->addHtml('
-            <span class="admIconTextLink">
-                <a href="installation.php?mode=7"><img
-                src="layout/page_white_download.png" alt="'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'" /></a>
-                <a href="installation.php?mode=7">'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'</a>
-            </span><br />');
+            <a class="icon-text-link" href="installation.php?mode=7"><img src="layout/page_white_download.png"
+                alt="'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'" />'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'</a>
+            <br />');
         $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png', null, 'button');
         $form->show();
     }

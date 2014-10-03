@@ -64,7 +64,7 @@ function getFieldCode($fieldNameIntern, $user)
 
 			// ICQ Onlinestatus anzeigen
 			$value = '
-			<a class="admIconLink" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
+			<a class="icon-link" href="http://www.icq.com/people/cmd.php?uin='.$icq_number.'&amp;action=add"><img
 				src="http://status.icq.com/online.gif?icq='.$icq_number.'&amp;img=5"
 				alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
 				title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;
@@ -76,7 +76,7 @@ function getFieldCode($fieldNameIntern, $user)
 		{
 			// Skype Onlinestatus anzeigen
 			$value = '<script type="text/javascript" src="http://download.skype.com/share/skypebuttons/js/skypeCheck.js"></script>
-			<a class="admIconLink" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
+			<a class="icon-link" href="skype:'.$user->getValue($fieldNameIntern).'?add"><img
 				src="http://mystatus.skype.com/smallicon/'.$user->getValue($fieldNameIntern).'"
 				title="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'"
 				alt="'.$gL10n->get('PRO_TO_ADD', $user->getValue($fieldNameIntern), $gProfileFields->getProperty($fieldNameIntern, 'usf_name')).'" /></a> '.$value;

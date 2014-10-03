@@ -38,8 +38,6 @@ class ModuleMenu
 		$this->items	= array();
 		$this->root_path = $g_root_path;
 		$this->maxMenuLinkItem = $maxMenuLinkItem;
-		$this->ddJS = '';
-		$this->ddItemCnt = 0;				
 	}
 		
 	/** Creates a selectbox with all categories of a category type. If an category of this selectbox is selected
@@ -119,42 +117,6 @@ class ModuleMenu
     {
         return count($this->items);
     }
-    
-	/** creates a drop down menu
-	 *  @param $ddIdName     html id name of drop down menu
-	 *  @param $ddSelectText pre select text of drop down menu 
-	 *  @param $ddImagePos   position of image might be "left" or "right"
-	 *  @param $ddWidth      width in px of drop down menu "auto" means width will be calculated
-	 *  @param $ddMaxWidth   maximum width of drop down if $ddWidth is "auto"
-	 *  @return HTML drop down menu
-	 */
-	private function createDropDown($ddIdName, $ddSelectText, $ddImagePos = "left", $ddWidth = '"auto"', $ddMaxWidth = 188)
-	{
-		if ($this->ddItemCnt == 0)
-			return '';
-
-		return '<li><span class="admIconTextLink"><div id="'.$ddIdName.'"></div></span></li>
-						<script type="text/javascript"><!--					
-						var '.$ddIdName.'DDData = ['. $this->ddJS .'];
-						$("#'.$ddIdName.'").ddslick({
-							data:'.$ddIdName.'DDData,
-							width: '.$ddWidth.',
-							maxWidth: '.$ddMaxWidth.',
-							selectText: "<img class=\"dd-selected-image\" src=\"'.THEME_PATH.'/icons/list-point.png\" /> '.$ddSelectText.'",
-							imagePosition:"'.$ddImagePos.'",
-							background: "none",
-							updateSelectedIndex: false,
-							onSelected: function(selectedData) {
-								if (selectedData["selectedData"]["js"])
-									eval(selectedData["selectedData"]["js"]);
-								else if (selectedData["selectedData"]["link"])
-									window.location = selectedData["selectedData"]["link"];
-								else
-									jQueryAlert("SYS_ERROR");
-							}
-						});
-						//--></script>';
-	}
 
 	/** creates an text link icon
 	 *  @param $menuEntry menu entry element which was added with addItem
@@ -364,13 +326,6 @@ class ModuleMenu
 			}
 		}
 
-		// if drop down elements exists create DropDown menu 
-		if($this->ddItemCnt > 0)
-		{
-			$dropDownText = $this->maxMenuLinkItem > 0 ? $gL10n->get('SYS_MORE_FEATURES') : $gL10n->get('SYS_FEATURES');
-			$html .= $this->createDropDown('linkItemDropDown', $dropDownText);
-		}
-			
 		$html .= '</ul>';
         
         if(strlen($formHtml) > 0)
