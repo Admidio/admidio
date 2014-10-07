@@ -610,7 +610,14 @@ for($j = 0; $j + $getStart < $numMembers; $j++)
 if($getMode == 'csv' || $getMode == 'pdf')
 {
     //file name in the current directory...
-    $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.'. $getMode;
+    if(strlen($list->getValue('lst_name')) > 0)
+    {
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '-'. str_replace('.', '', $list->getValue('lst_name')).'.'.$getMode;
+    }
+    else
+    {
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')).'.'.$getMode;
+    }
     
      // for IE the filename must have special chars in hexadecimal 
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))

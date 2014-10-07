@@ -164,8 +164,8 @@
 	<text id="PMS_WAS_NOT_SENT_TO" development="new" translation="todo">Fehler - Nachricht wurde nicht gesendet an:</text>
     <text id="MSG_ACTIVATE_PM_MODULE" development="new" translation="todo">Private Nachrichten aktivieren</text>
     <text id="MSG_ACTIVATE_PM_MODULE_DESC" development="new" translation="todo">Private Nachrichten können über diese Einstellung komplett deaktiviert werden. Das Modul ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: Deaktiviert)</text>
-	<text id="MAI_INTO_TO" development="new" translation="edited">Senden in TO Feld und nicht im Feld BCC</text>
-    <text id="MAI_INTO_TO_DESC" development="new" translation="edited">Wenn eine Email an mehr als eine Person geht dann werden mit diesem Setting die Adressen ins TO Feld anstatt BCC geschrieben.</text>
+	<text id="MAI_INTO_TO" development="new" translation="edited">Empfänger im TO-Feld und nicht im BCC-Feld auflisten</text>
+    <text id="MAI_INTO_TO_DESC" development="new" translation="edited">Geht eine E-Mail an mehrere Personen, dann werden die Empfänger bei gesetzter Einstellung alle im TO-Feld der E-Mail aufgelistet. Dadurch kann jeder Empfänger die Namen und E-Mail-Adressen der anderen Empfänger sehen. Außerdem hat er die Möglichkeit auf diese E-Mail an alle anderen Empfänger zu antworten. (Standard: Deaktiviert)</text>
 	<text id="MSG_CHAT" development="new" translation="todo">Chat</text>
 	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="todo">Chat aktivieren</text>
 	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="todo">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</text>
