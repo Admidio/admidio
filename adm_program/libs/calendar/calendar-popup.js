@@ -366,7 +366,7 @@ function PopupWindow_isClicked(e) {
 				var t = e.originalTarget;
 				if(t == "[object HTMLImageElement]" || ( t != "[object HTMLDivElement]" && t != "[object HTMLOptionElement]" && t != "[object HTMLSelectElement]") )
 				{
-					while (t.parentNode != null) 
+					while (t && t.parentNode != null) 
 					{
 						if (t.id==this.divName) 
 						{
