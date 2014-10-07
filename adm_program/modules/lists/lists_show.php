@@ -640,7 +640,14 @@ for($j = 0; $j < $members_per_page && $j + $getStart < $numMembers; $j++)
 if($getMode == 'csv')
 {
     // nun die erstellte CSV-Datei an den User schicken
-    $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.csv';
+     if(strlen($list->getValue('lst_name')) > 0)
+    {
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '-'. str_replace('.', '', $list->getValue('lst_name')).'.'.'.csv';
+    }
+    else
+    {
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')).'.'.'.csv';
+    }
     
     // for IE the filename must have special chars in hexadecimal 
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
@@ -673,7 +680,14 @@ elseif($getMode == 'pdf')
     $pdf->writeHTML($pdf_html, true, false, true, false, '');
     
     //file name in the current directory...
-    $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '.pdf';
+     if(strlen($list->getValue('lst_name')) > 0)
+    {
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')). '-'. str_replace('.', '', $list->getValue('lst_name')).'.'.'.pdf';
+    }
+    else
+    {
+        $filename = $gCurrentOrganization->getValue('org_shortname'). '-'. str_replace('.', '', $role->getValue('rol_name')).'.'.'.pdf';
+    }
     
     // for IE the filename must have special chars in hexadecimal 
     if (preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
