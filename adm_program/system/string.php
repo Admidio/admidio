@@ -69,7 +69,8 @@ function admStrStripTagsSpecial($srcArray)
         && $key != 'mail_body'
         && $key != 'plugin_CKEditor'
         && $key != 'room_description'
-        && $key != 'usf_description')
+        && $key != 'usf_description'
+		&& $key != 'mail_smtp_password')
         {
             $srcArray[$key] = strStripTags($value);
         }
