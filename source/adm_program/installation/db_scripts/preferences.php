@@ -52,17 +52,17 @@ $orga_preferences = array(
 
     // Photos
     'enable_photo_module'   => '1',
+    'photo_show_mode'       => '1',
+    'photo_slideshow_speed' => '5',
+    'photo_albums_per_page' => '10',
     'photo_save_scale'      => '640',
-    'photo_thumbs_column'   => '3',
-    'photo_thumbs_row'      => '5',
+    'photo_thumbs_page'     => '16',
     'photo_thumbs_scale'    => '160',
     'photo_show_width'      => '640',
     'photo_show_height'     => '400',
     'photo_image_text'      => '1',
-    'photo_show_mode'       => '1',
     'photo_upload_mode'     => '1',
     'photo_image_text'      => '© '.$_SERVER['HTTP_HOST'],
-    'photo_slideshow_speed' => '5',
     'photo_keep_original'   => '0',
     'photo_download_enabled' => '0',
 

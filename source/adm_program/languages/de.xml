@@ -86,8 +86,20 @@
     <text id="ORG_USED_FORUM" development="deleted" translation="todo">Genutztes Forum</text>
     <text id="ORG_WHICH_FORUM_USED" development="deleted" translation="todo">Welches Forum soll genutzt werden?</text>
     <text id="PRO_CHOOSE_PHOTO" development="new" translation="todo">Foto auswählen</text>
+    <text id="PHO_ALBUM_LOCK" development="new" translation="todo">Album sperren</text>
+    <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="todo">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel während du ein Album anlegst und alle Bilder hochlädst, das Album vorübergehend sperren.</text>
+    <text id="PHO_ALBUM_UNLOCK" development="new" translation="todo">Album entsperren</text>
+    <text id="PHO_ALBUM_HELP_DESC" development="deleted" translation="todo"></text>
+    <text id="PHO_MAX_PHOTO_SIZE" development="deleted" translation="todo"></text>
+    <text id="PHO_MAX_PHOTO_SIZE_WIDTH" development="new" translation="todo">Max. Bildanzeigegröße (Breite)</text>
+    <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="todo">Max. Bildanzeigegröße (Höhe)</text>
+    <text id="PHO_NUMBER_OF_ALBUMS_PER_PAGE" development="new" translation="todo">Anzahl Alben pro Seite</text>
+    <text id="PHO_NUMBER_OF_FOTOS" development="deleted" translation="todo"></text>
+    <text id="PHO_PARENT_ALBUM_DESC" development="new" translation="todo">Ein Album kann einem anderen Album untergeordnet sein. Dann muss man zuerst das Elternalbum aufrufen und bekommt dort dann das aktuelle Album angezeigt. Willst du das Album auf der obersten Ebene anzeigen, dann wähle %VAR1_BOLD% aus.</text>
     <text id="PHO_SAVE_ORIGINALS" development="new" translation="todo">Originale speichern</text>
     <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
+    <text id="PHO_THUMBNAILS_PER_PAGE" development="changed" translation="todo">Thumbnails pro Seite</text>
+    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="changed" translation="todo">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Standard: 16)</text>
     <text id="PRO_CHANGE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild hochladen</text>
     <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild löschen</text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
@@ -126,6 +138,7 @@
     <text id="SYS_NORMAL_PICTURE" development="new" translation="todo">Normalbild</text>
     <text id="SYS_ONLINE_MEMBERSHIP_ADMINISTRATION" development="new" translation="todo">Die Online-Mitgliederverwaltung</text>
 	<text id="SYS_PM" development="new" translation="todo">Private Nachricht</text>
+    <text id="SYS_REPORT" development="deleted" translation="todo"></text>
     <text id="SYS_JANUARY" development="deleted" translation="todo">Januar</text>
     <text id="SYS_FEBRUARY" development="deleted" translation="todo">Februar</text>
     <text id="SYS_MARCH" development="deleted" translation="todo">März</text>
@@ -157,7 +170,10 @@
     <text id="SYS_FRI" development="deleted" translation="todo" description="Abbr. for Friday">Fr</text>
     <text id="SYS_SAT" development="deleted" translation="todo" description="Abbr. for Saturday">Sa</text>
     <text id="SYS_SUN" development="deleted" translation="todo" description="Abbr. for Monday">So</text>
-    <text id="SYS_TODAY" development="deleted" translation="todo">Heute</text>
+    <text id="SYS_TODAY" development="deleted" translation="todo"></text>
+    <text id="SYS_SLIDESHOW_CURRENT" development="deleted" translation="todo"></text>
+    <text id="SYS_SLIDESHOW_START" development="deleted" translation="todo"></text>
+    <text id="SYS_SLIDESHOW_STOP" development="deleted" translation="todo"></text>
 	<text id="PMS_MESSAGE" development="new" translation="todo">Private Nachrichten</text>
 	<text id="PMS_SEND_PM" development="new" translation="todo">Private Nachricht senden</text>
 	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Nachricht wurde gesendet an:</text>
@@ -960,7 +976,6 @@
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="todo">Album</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
-    <text id="PHO_ALBUM_HELP_DESC" development="new" translation="todo">Alle notwendigen Felder sollten ausgefüllt werden. Die Felder Album und Beginn sind Pflichtfelder und müssen somit ausgefüllt werden.\nGgf. auswählen welchem Album das neue Album untergeordnet werden soll, z.B. Tag 3 in Turnier 2010. Solche Unterteilungen sind empfehlenswert bei vielen Fotos.\nNur freigegebene Alben sind für Webseitenbesucher sichtbar. Möchte man z.B. erst alle Fotos hochladen oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach später setzen.\nDanach auf Speichern klicken.</text>
     <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="todo">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Du kannst das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</text>
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="todo">Das Album wurde erfolgreich angelegt / geändert</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="todo">Alben-Verwaltung</text>
@@ -973,7 +988,6 @@
     <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neues Fotoalbum wurde angelegt</text>
     <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neues Fotoalbum bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="todo">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</text>
-    <text id="PHO_MAX_PHOTO_SIZE" development="new" translation="todo">Max. Bildanzeigegröße (Breite x Höhe)</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)</text>
     <text id="PHO_MULTIUPLOAD" development="new" translation="todo">Multiupload</text>
     <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="todo">Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen. Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash (Version 9+) installiert oder diese Option nicht aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt. (Standard: ja)</text>
@@ -982,7 +996,6 @@
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="todo">Du hast keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="todo">Du hast keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
-    <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="todo">Bilderanzahl</text>
     <text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="todo">Fotoalben</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="todo">dieses Foto löschen</text>
@@ -1015,13 +1028,11 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="todo">Bildtext einblenden</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="todo">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="todo">Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="todo">Thumbnails pro Seite (Spalten x Zeilen)</text>
-    <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="todo">Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="todo">Auf den Button %VAR1_BOLD% klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</text>
     <text id="PHO_UPLOAD_HELP_2" development="new" translation="todo">Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="todo">Dann auf %VAR1_BOLD% klicken und ein wenig Geduld haben.</text>
     <text id="PHO_UPLOAD_MORE" development="new" translation="todo">Weitere Fotos hochladen</text>
-    <text id="PHO_UPLOAD_PHOTOS" development="new" translation="todo">Fotos Hochladen</text>
+    <text id="PHO_UPLOAD_PHOTOS" development="new" translation="todo">Fotos hochladen</text>
     <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
 
     <!-- Phrases only in Profilemodule -->
@@ -1380,7 +1391,6 @@
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
     <text id="SYS_REMOVE_ROLE" development="new" translation="todo">Rolle entfernen</text>
     <text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
-    <text id="SYS_REPORT" development="new" translation="todo">Bericht</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="todo">Einschränkungen</text>
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="todo">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
@@ -1410,9 +1420,6 @@
     <text id="SYS_SINCE" development="new" translation="todo">seit %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="todo">seit %VAR1% bis %VAR2%</text>
     <text id="SYS_SIZE" development="new" translation="todo">Größe</text>
-    <text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} von {total}</text>
-    <text id="SYS_SLIDESHOW_START" development="new" translation="todo">Diashow starten</text>
-    <text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Diashow anhalten</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
     <text id="SYS_STOP" development="new" translation="todo">Stop</text>

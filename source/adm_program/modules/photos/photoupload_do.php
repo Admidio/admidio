@@ -115,9 +115,6 @@ $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin
 //Bei Klassischem Upload beginn der Seitenausgabe
 if($getUploadmethod == 1)
 {
-	//Photomodulspezifische CSS laden
-	$gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
-
 	// Html-Kopf ausgeben
 	$gLayout['title'] = $gL10n->get('PHO_UPLOAD_PHOTOS');
 	require(SERVER_PATH. '/adm_program/system/overall_header.php');

@@ -86,7 +86,7 @@ class HtmlForm extends HtmlFormBasic
         }
         elseif($this->type == 'vertical')
         {
-            $class .= ' form-dialog';
+            $class .= ' form-vertical form-dialog';
         }
         elseif($this->type == 'navbar')
         {

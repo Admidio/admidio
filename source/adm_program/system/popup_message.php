@@ -100,7 +100,7 @@ switch ($get_type)
         $text = 'PHO_WANT_DELETE_PHOTO';
         break;
     case 'pho_album':
-        $url = 'photo_album_function.php?job=delete&pho_id='.$get_database_id;
+        $url = 'photo_album_function.php?mode=delete&pho_id='.$get_database_id;
         break;
     case 'pro_pho':
         $url = 'profile_photo_edit.php?mode=delete&usr_id='.$get_database_id;

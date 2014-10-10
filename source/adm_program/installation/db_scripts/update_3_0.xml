@@ -46,5 +46,7 @@
 	<step id="180" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_name TYPE varchar(100)</step>
 	<step id="190" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_location varchar(100)</step>
 	<step id="200" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_location TYPE varchar(100)</step>
+	<step id="210">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'photo_thumbs_column' INNER JOIN %PREFIX%_preferences pr3 ON pr3.prf_name LIKE 'photo_thumbs_row' SET pr1.prf_value = pr2.prf_value * pr3.prf_value WHERE pr1.prf_name LIKE 'photo_thumbs_page'</step>
+	<step id="220">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('photo_thumbs_column', 'photo_thumbs_row')</step>
 	<step>stop</step>
 </update>

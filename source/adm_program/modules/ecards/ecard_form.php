@@ -123,7 +123,7 @@ $javascript = '
 			ecardJS.send_Text				= "'.$gL10n->get('SYS_SEND').'";
 			ecardJS.template_Text			= "'.$gL10n->get('ECA_TEMPLATE').'";
 			ecardJS.templates				= '.$funcClass->createJSTemplateArray($templates).';
-			ecardJS.sendDoneURL			= "'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'&show_page='.$showPage.'"; 
+			ecardJS.sendDoneURL			= "'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'&photo_nr='.$showPage.'"; 
 			
 			ecardJS.init();
     -->

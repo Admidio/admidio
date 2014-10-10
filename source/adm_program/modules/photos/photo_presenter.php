@@ -1,6 +1,6 @@
 <?php
 /******************************************************************************
- * Photogalerien
+ * Show the photo within the Admidio html
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
@@ -41,145 +41,131 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 //erfassen des Albums falls noch nicht in Session gespeichert
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
-    $photo_album =& $_SESSION['photo_album'];
-    $photo_album->db =& $gDb;
+    $photoAlbum =& $_SESSION['photo_album'];
+    $photoAlbum->db =& $gDb;
 }
 else
 {
-    $photo_album = new TablePhotos($gDb, $getPhotoId);
-    $_SESSION['photo_album'] =& $photo_album;
+    $photoAlbum = new TablePhotos($gDb, $getPhotoId);
+    $_SESSION['photo_album'] =& $photoAlbum;
 }
 
 //Ordnerpfad zusammensetzen
-$ordner_foto = '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
+$ordner_foto = '/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$photoAlbum->getValue('pho_id');
 $ordner      = SERVER_PATH. $ordner_foto;
 $ordner_url  = $g_root_path. $ordner_foto;
 
 //Naechstes und Letztes Bild
 $prev_image = $getPhotoNr - 1;
 $next_image = $getPhotoNr + 1;
-$url_prev_image = '#';
-$url_next_image = '#';
-$url_act_image  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'];
+$urlPreviousImage = '#';
+$urlNextImage     = '#';
+$urlCurrentImage  = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'];
 
 if($prev_image > 0)
 {
-    $url_prev_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $prev_image. '&pho_id='. $getPhotoId;
+    $urlPreviousImage = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $prev_image. '&pho_id='. $getPhotoId;
 }
-if($next_image <= $photo_album->getValue('pho_quantity'))
+if($next_image <= $photoAlbum->getValue('pho_quantity'))
 {
-    $url_next_image = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $next_image. '&pho_id='. $getPhotoId;
+    $urlNextImage = $g_root_path. '/adm_program/modules/photos/photo_presenter.php?photo_nr='. $next_image. '&pho_id='. $getPhotoId;
 }
 
 $body_with   = $gPreferences['photo_show_width']  + 20;
 
 if($gPreferences['photo_show_mode']==1)
 {
-	echo '<div style="width:'.$gPreferences['photo_show_width'].'px;height:'.$gPreferences['photo_show_height'].'px;"><img style="margin: auto; border: medium none; display: block; float: none; cursor: pointer;" id="cboxPhoto" src="'.$url_act_image.'" ></div>';
+	echo '<div style="width:'.$gPreferences['photo_show_width'].'px;height:'.$gPreferences['photo_show_height'].'px;"><img style="margin: auto; border: medium none; display: block; float: none; cursor: pointer;" id="cboxPhoto" src="'.$urlCurrentImage.'" ></div>';
 }
 else
 {
-	
-	//Photomodulspezifische CSS laden
-	$gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
-	
-	// Html-Kopf ausgeben
-	$gLayout['title']    = $gL10n->get('PHO_PHOTO_ALBUMS');
+    // create html page object
+    $page = new HtmlPage();
+
+    // show module headline
+    $page->addHeadline($photoAlbum->getValue('pho_name'));
 	
 	//wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
-	if($gPreferences['photo_show_mode']==0)
+	if($gPreferences['photo_show_mode'] == 0)
 	{                      
-		$gLayout['includes'] = false;
+	    $page->excludeThemeHtml();
 	}
 	
-	require(SERVER_PATH. '/adm_program/system/overall_header.php');
+	if($gPreferences['photo_show_mode'] == 2)
+	{	
+        // create module menu
+        $photoPresenterMenu = new HtmlNavbar('menu_photo_presenter');
+    
+        // if you have no popup or colorbox then show a button back to the album
+    	if($gPreferences['photo_show_mode'] == 2)
+    	{   
+        	$photoPresenterMenu->addItem('menu_item_back_to_album', $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId,
+        	                             $gL10n->get('PHO_BACK_TO_ALBUM'), 'application_view_tile.png');
+    	}
+    
+    	// show link to navigate to next and previous photos
+    	if($prev_image > 0)
+    	{
+        	$photoPresenterMenu->addItem('menu_item_previous_photo', $urlPreviousImage,
+        	                             $gL10n->get('PHO_PREVIOUS_PHOTO'), 'back.png');
+        }
+        
+    	if($next_image <= $photoAlbum->getValue('pho_quantity'))
+    	{
+        	$photoPresenterMenu->addItem('menu_item_next_photo', $urlNextImage,
+        	                             $gL10n->get('PHO_NEXT_PHOTO'), 'forward.png');
+        }	
+    
+    	$page->addHtml($photoPresenterMenu->show(false));
+    }
 	
-	//Ausgabe der Kopfzelle mit Ueberschrift, Photographen und Datum
-	//untere Zelle mit Buttons Bild und Fenster Schließen Button
-
-	echo '
-	<div class="formLayout" id="photo_presenter" style="width: '.$body_with.'px;">
-		<div class="formHead">'.$photo_album->getValue('pho_name').'</div>
-		<div class="formBody">';
-	
-	//Ausgabe Bild 
-	if($next_image <= $photo_album->getValue('pho_quantity'))
+	// Show photo with link to next photo
+	if($next_image <= $photoAlbum->getValue('pho_quantity'))
 	{
-		echo '<div><a href="'.$url_next_image.'"><img class="photoOutput" src="'.$url_act_image.'" alt="Foto"></a></div>';
+		$page->addHtml('<div><a href="'.$urlNextImage.'"><img class="photoOutput" src="'.$urlCurrentImage.'" alt="Foto"></a></div>');
 	}
 	else
 	{
-		echo '<div><img class="photoOutput" src="'.$url_act_image.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>';
+		$page->addHtml('<div><img class="photoOutput" src="'.$urlCurrentImage.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>');
 	}
 	
-	//Vor und zurück Buttons
-	echo'
-	<ul class="iconTextLinkList">';
-		//Vor und zurueck buttons
-		if($prev_image > 0)
+	// in popup mode show buttons for prev, next and close
+	if($gPreferences['photo_show_mode'] == 0)
+	{
+        $page->addHtml('<div class="btn-group">
+            <a class="btn btn-default icon-text-link" href="'.$urlPreviousImage.'"><img 
+                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" />'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</a>
+            <a class="btn btn-default icon-text-link" href="javascript:parent.window.close()"><img 
+                src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE_WINDOW').'" />'.$gL10n->get('SYS_CLOSE_WINDOW').'</a>
+            <a class="btn btn-default icon-text-link" href="'.$urlNextImage.'"><img 
+                src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" />'.$gL10n->get('PHO_NEXT_PHOTO').'</a>
+        </div>');
+	}
+
+	// if no popup mode then show additional album informations
+	if($gPreferences['photo_show_mode'] == 2)
+	{
+	    $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
+	    
+		if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')
+		&& strlen($photoAlbum->getValue('pho_end')) > 0)
 		{
-			echo'<li>
-				<span class="iconTextLink">
-					<a href="'.$url_prev_image.'"><img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" /></a>
-					<a href="'.$url_prev_image.'">'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</a>
-				</span>
-			</li>';
+			$datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
 		}
-		if($next_image <= $photo_album->getValue('pho_quantity'))
-		{
-			echo'<li>
-				<span class="iconTextLink">
-					<a href="'.$url_next_image.'">'.$gL10n->get('PHO_NEXT_PHOTO').'</a>
-					<a href="'.$url_next_image.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" /></a>
-				</span>
-			</li>';
-		}
-		echo'
-	</ul>';    
-	
-	if($gPreferences['photo_show_mode']==0)
-	{   
-		// im Popupmodus Fenster schliessen Button
-		echo'<ul class="iconTextLinkList">
-			<li>
-				<span class="iconTextLink">
-					<a href="javascript:parent.window.close()"><img src="'. THEME_PATH. '/icons/door_in.png" alt="'.$gL10n->get('SYS_CLOSE_WINDOW').'" /></a>
-					<a href="javascript:parent.window.close()">'.$gL10n->get('SYS_CLOSE_WINDOW').'</a>
-				</span>
-			</li>
-		</ul>';
+	    
+		$page->addHtml('<br />
+		<div class="row">
+		    <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
+		    <div class="col-sm-4 col-xs-8"><strong>'.$datePeriod.'</strong></div>
+        </div>
+		<div class="row">
+		    <div class="col-sm-2 col-xs-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
+		    <div class="col-sm-4 col-xs-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
+		</div>');
 	}
-	elseif($gPreferences['photo_show_mode']==2)
-	{   
-		// im Fenstermodus zurueck zur Uebersicht Button
-		echo'<ul class="iconTextLinkList">
-			<li>
-				<span class="iconTextLink">
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_BACK_TO_ALBUM').'" /></a>
-					<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$gL10n->get('PHO_BACK_TO_ALBUM').'</a>
-				</span>
-			</li>
-		</ul>';
-	}
-	
-	
-	//Zusatzinformationen zum Album nur wenn im gleichen Fenster
-	if($gPreferences['photo_show_mode']==2)
-	{	
-		echo'
-		<p>
-			Datum: '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
-			if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin')
-			&& strlen($photo_album->getValue('pho_end')) > 0)
-			{
-				echo ' bis '.$photo_album->getValue('pho_end', $gPreferences['system_date']);
-			}
-			echo '<br />Fotos von: '.$photo_album->getValue('pho_photographers').'
-		</p>';
-	}
-	
-	echo'</div></div>';
-	require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+		
+	// show html of complete page
+    $page->show();
 }
 
 ?>

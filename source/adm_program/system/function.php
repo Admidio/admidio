@@ -145,8 +145,9 @@ function isGroupLeader($userId, $roleId = 0)
 // per_page   : Anzahl Elemente pro Seite
 // start_item : Mit dieser Elementnummer beginnt die aktuelle Seite
 // add_prevnext_text : Links mit "Vorherige" "Naechste" anzeigen
+// $scriptParameterNameStart : Optional you can set a new name for the parameter that should be used as start parameter.
 
-function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true)
+function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $scriptParameterNameStart = 'start')
 {
     global $g_root_path, $gL10n;
 
@@ -171,7 +172,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
         for($i = 1; $i < $init_page_max + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
+            $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
         }
 
         if ( $total_pages > 3 )
@@ -185,7 +186,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
                 for($i = $init_page_min - 1; $i < $init_page_max + 2; $i++)
                 {
-                    $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
+                    $page_string .= ($i == $on_page) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
                 }
 
                 $page_string .= ( $on_page < $total_pages - 4 ) ? ' ... ' : '&nbsp;&nbsp;';
@@ -197,7 +198,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
 
             for($i = $total_pages - 2; $i < $total_pages + 1; $i++)
             {
-                $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>'  : '<li><a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
+                $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>'  : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
             }
         }
     }
@@ -205,7 +206,7 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     {
         for($i = 1; $i < $total_pages + 1; $i++)
         {
-            $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . "&amp;start=" . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
+            $page_string .= ( $i == $on_page ) ? '<li class="active"><a href="#">'. $i. '</a></li>' : '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $i - 1 ) * $per_page ) . '">' . $i . '</a></li>';
         }
     }
 
@@ -213,20 +214,20 @@ function admFuncGeneratePagination($base_url, $num_items, $per_page, $start_item
     {
         if ( $on_page > 1 )
         {
-            $page_string = '<li><a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;
+            $page_string = '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;
         }
         else
         {
-            $page_string = '<li class="disabled"><a href="' . $base_url . "&amp;start=" . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;            
+            $page_string = '<li class="disabled"><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( ( $on_page - 2 ) * $per_page ) . '">'.$gL10n->get('SYS_BACK').'</a></li>' . $page_string;            
         }
 
         if ( $on_page < $total_pages )
         {
-            $page_string .= '<li><a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';
+            $page_string .= '<li><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'=' . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';
         }
         else
         {
-            $page_string .= '<li class="disabled"><a href="' . $base_url . "&amp;start=" . ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';            
+            $page_string .= '<li class="disabled"><a href="' . $base_url . '&amp;'.$scriptParameterNameStart.'='. ( $on_page * $per_page ) . '">'.$gL10n->get('SYS_PAGE_NEXT').'</a></li>';            
         }
     }
 

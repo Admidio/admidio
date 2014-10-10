@@ -8,10 +8,10 @@
  *
  * Parameters:
  *
- * pho_id       : Id of photo album that should be edited
- * job - new    : create a new photo album
- *     - change : edit a photo album
- *     - delete : delete a photo album
+ * pho_id        : Id of photo album that should be edited
+ * mode - new    : create a new photo album
+ *      - change : edit a photo album
+ *      - delete : delete a photo album
  *
  *****************************************************************************/
 
@@ -20,7 +20,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
-$getJob     = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('new', 'change', 'delete'));
+$getMode    = admFuncVariableIsValid($_GET, 'mode', 'string', null, true, array('new', 'change', 'delete'));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)
@@ -48,7 +48,7 @@ $_SESSION['photo_album_request'] = $_POST;
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($gDb);
 
-if($getJob != 'new')
+if($getMode != 'new' && $getPhotoId > 0)
 {
     $photo_album->readDataById($getPhotoId);
     
@@ -63,7 +63,7 @@ if($getJob != 'new')
 $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 /********************Aenderungen oder Neueintraege kontrollieren***********************************/
-if($getJob == 'new' || $getJob == 'change')
+if($getMode == 'new' || $getMode == 'change')
 {
     //Gesendete Variablen Uebernehmen und kontollieren
 
@@ -138,7 +138,7 @@ if($getJob == 'new' || $getJob == 'change')
     }
     
     /********************neuen Datensatz anlegen***********************************/
-    if ($getJob == 'new')
+    if ($getMode == 'new')
     {
         // Album in Datenbank schreiben
         $photo_album->save();
@@ -163,14 +163,11 @@ if($getJob == 'new' || $getJob == 'change')
 		}
         
         $getPhotoId = $photo_album->getValue('pho_id');
-
-        // Anlegen des Albums war erfolgreich -> album_new aus der Historie entfernen
-        $gNavigation->deleteLastUrl();
     }//if
 
     /********************Aenderung des Ordners***********************************/
     // Wurde das Anfangsdatum bearbeitet, muss sich der Ordner aendern
-    elseif ($getJob=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
+    elseif ($getMode=='change' && $ordner != SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$getPhotoId)
     {
         $newFolder = SERVER_PATH. '/adm_my_files/photos/'.$_POST['pho_begin'].'_'.$photo_album->getValue('pho_id');
         
@@ -184,110 +181,26 @@ if($getJob == 'new' || $getJob == 'change')
             $gMessage->setForwardUrl($g_root_path.'/adm_program/modules/photos/photos.php');
             $gMessage->show($gL10n->get('SYS_FOLDER_WRITE_ACCESS', $newFolder, '<a href="mailto:'.$gPreferences['email_administrator'].'">', '</a>'));
         }
-
-        // Aendern des Albums war erfolgreich -> album_new aus der Historie entfernen
-        $gNavigation->deleteLastUrl();
     }//if
 
     /********************Aenderung der Datenbankeinträge***********************************/
 
-    if($getJob == 'change')
+    if($getMode == 'change')
     {
         // geaenderte Daten in der Datenbank akutalisieren
         $photo_album->save();
     }
-
-    //Photomodulspezifische CSS laden
-    $gLayout['header'] = '<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
     
-    // HTML-Kopf
-    $gLayout['title'] = $gL10n->get('SYS_END');
-    require(SERVER_PATH. '/adm_program/system/overall_header.php');
+    unset($_SESSION['photo_album_request']);
+    $gNavigation->deleteLastUrl();
 
-    echo'
-    <div class="formLayout" id="photo_report_form">
-        <div class="formHead">'.$gL10n->get('SYS_REPORT').'</div>
-        <div class="formBody"> 
-            <p>'.$gL10n->get('PHO_ALBUM_WRITE_SUCCESS').'</p>  
-            <ul class="formFieldList">
-                <li><dl>
-                    <dt>'.$gL10n->get('SYS_REPORT').':</dt>
-                    <dd>'.$photo_album->getValue('pho_name').'</dd>
-                </dl></li>
-
-                <li><dl>
-                    <dt>'.$gL10n->get('PHO_PARENT_ALBUM').':</dt>
-                    <dd>';
-                        if($photo_album->getValue('pho_pho_id_parent') > 0)
-                        {
-                            $photo_album_parent = new TablePhotos($gDb, $photo_album->getValue('pho_pho_id_parent'));
-                            echo $photo_album_parent->getValue('pho_name');
-                        }
-                        else
-                        {
-                            echo $gL10n->get('PHO_PHOTO_ALBUMS');
-                        }
-                    echo'</dd>
-                </dl></li>
-
-                <li><dl>
-                    <dt>'.$gL10n->get('SYS_START').':</dt>
-                    <dd>'.$photo_album->getValue('pho_begin', $gPreferences['system_date']).'</dd>
-                </dl></li>
-
-                <li><dl>
-                    <dt>'.$gL10n->get('SYS_END').':</dt>
-                    <dd>'.$photo_album->getValue('pho_end', $gPreferences['system_date']).'</dd>
-                </dl></li>
-
-                <li><dl>
-                    <dt>'.$gL10n->get('PHO_PHOTOGRAPHER').':</dt>
-                    <dd>'.$photo_album->getValue('pho_photographers').'</dd>
-                </dl></li>
-
-                <li><dl>
-                    <dt>'.$gL10n->get('SYS_LOCKED').':</dt>
-                    <dd>';
-                        if($photo_album->getValue('pho_locked')==1)
-                        {
-                             echo $gL10n->get('SYS_YES');
-                        }
-                        else
-                        {
-                             echo $gL10n->get('SYS_NO');
-                        }   
-                    echo'</dd>
-                </dl></li>
-
-                <li><dl>
-                    <dt>'.$gL10n->get('PHO_NUMBER_OF_FOTOS').':</dt>
-                    <dd>';
-                        if($photo_album->getValue('pho_quantity')!=NULL)
-                        {
-                            echo $photo_album->getValue('pho_quantity');
-                        }
-                        else
-                        {
-                            echo'0';
-                        }
-                    echo'</dd>
-                </dl></li>
-            <ul>
-        </div>
-    </div>
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$gL10n->get('SYS_NEXT').'&nbsp;</a>
-                <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'"><img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_NEXT').'" /></a>
-            </span>
-        </li>
-    </ul>';
+    header('Location: '. $gNavigation->getUrl());
+    exit();
 }
 
 /**************************************************************************/
 
-elseif($getJob == 'delete')
+elseif($getMode == 'delete')
 {
 	// Album loeschen
     if($photo_album->delete())

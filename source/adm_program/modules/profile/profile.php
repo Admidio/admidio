@@ -119,7 +119,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-$page->addCssFile(THEME_PATH. '/css/calendar.css');
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');

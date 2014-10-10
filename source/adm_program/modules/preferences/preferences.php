@@ -41,7 +41,7 @@ foreach($gPreferences as $key => $value)
 
 // create html page object
 $page = new HtmlPage();
-$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'lists', 'messages', 'profile', 'events', 'links', 'user_management');
+$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'lists', 'messages', 'photos', 'profile', 'events', 'links', 'user_management');
 
 // open the modules tab if the options of a module should be shown 
 if(in_array($showOption, $showOptionValidModules) == true)
@@ -544,6 +544,39 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
+            <div class="panel panel-default" id="panel_photos">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_photos">
+                            <img src="'.THEME_PATH.'/icons/photo.png" alt="'.$gL10n->get('PHO_PHOTOS').'" title="'.$gL10n->get('PHO_PHOTOS').'" />'.$gL10n->get('PHO_PHOTOS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_photos" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('photos_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=photos', $page, 'default', false, 'form-preferences');
+                        $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
+                        $form->addSelectBox('enable_photo_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_photo_module'], false, false, null, 'ORG_ACCESS_TO_MODULE_DESC');
+                        $selectBoxEntries = array('0' => $gL10n->get('PHO_POPUP_WINDOW'), '1' => $gL10n->get('PHO_COLORBOX'), '2' => $gL10n->get('PHO_SAME_WINDOW'));
+                        $form->addSelectBox('photo_show_mode', $gL10n->get('PHO_DISPLAY_PHOTOS'), $selectBoxEntries, FIELD_DEFAULT, $form_values['photo_show_mode'], false, false, null, 'PHO_DISPLAY_PHOTOS_DESC');
+                        $form->addTextInput('photo_slideshow_speed', $gL10n->get('PHO_SLIDESHOW_SPEED'), $form_values['photo_slideshow_speed'], 4, FIELD_DEFAULT, 'number', null, 'PHO_SLIDESHOW_SPEED_DESC');
+                        $form->addCheckbox('photo_upload_mode', $gL10n->get('PHO_MULTIUPLOAD'), $form_values['photo_upload_mode'], FIELD_DEFAULT, null, 'PHO_MULTIUPLOAD_DESC');
+                        $form->addTextInput('photo_albums_per_page', $gL10n->get('PHO_NUMBER_OF_ALBUMS_PER_PAGE'), $form_values['photo_albums_per_page'], 4, FIELD_DEFAULT, 'number', 
+                            null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
+                        $form->addTextInput('photo_thumbs_page', $gL10n->get('PHO_THUMBNAILS_PER_PAGE'), $form_values['photo_thumbs_page'], 4, FIELD_DEFAULT, 'number', null, 'PHO_THUMBNAILS_PER_PAGE_DESC');
+                        $form->addTextInput('photo_thumbs_scale', $gL10n->get('PHO_SCALE_THUMBNAILS'), $form_values['photo_thumbs_scale'], 4, FIELD_DEFAULT, 'number', null, 'PHO_SCALE_THUMBNAILS_DESC');
+                        $form->addTextInput('photo_save_scale', $gL10n->get('PHO_SCALE_AT_UPLOAD'), $form_values['photo_save_scale'], 4, FIELD_DEFAULT, 'number', null, 'PHO_SCALE_AT_UPLOAD_DESC');
+                        $form->addTextInput('photo_show_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $form_values['photo_show_width'], 4, FIELD_DEFAULT, 'number');
+                        $form->addTextInput('photo_show_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $form_values['photo_show_height'], 4, FIELD_DEFAULT, 'number', null, 'PHO_MAX_PHOTO_SIZE_DESC');
+                        $form->addTextInput('photo_image_text', $gL10n->get('PHO_SHOW_CAPTION'), $form_values['photo_image_text'], 60, FIELD_DEFAULT, 'text', null, array('PHO_SHOW_CAPTION_DESC', $gCurrentOrganization->getValue('org_homepage')));
+                        $form->addCheckbox('photo_download_enabled', $gL10n->get('PHO_DOWNLOAD_ENABLED'), $form_values['photo_download_enabled'], FIELD_DEFAULT, null, array('PHO_DOWNLOAD_ENABLED_DESC', $gL10n->get('PHO_KEEP_ORIGINAL')));
+                        $form->addCheckbox('photo_keep_original', $gL10n->get('PHO_KEEP_ORIGINAL'), $form_values['photo_keep_original'], FIELD_DEFAULT, null, array('PHO_KEEP_ORIGINAL_DESC', $gL10n->get('PHO_DOWNLOAD_ENABLED')));
+                        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
             <div class="panel panel-default" id="panel_guestbook">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -724,143 +757,6 @@ $page->addHtml('
 $page->show();
 
 exit();
-            
-            
-            /**************************************************************************************/
-            // Preferences photo module
-            /**************************************************************************************/
-
-            echo '<h3 id="PHO_PHOTOS" class="iconTextLink" >
-                <a href="#"><img src="'.THEME_PATH.'/icons/photo.png" alt="'.$gL10n->get('PHO_PHOTOS').'" title="'.$gL10n->get('PHO_PHOTOS').'" /></a>
-                <a href="#">'.$gL10n->get('PHO_PHOTOS').'</a>
-            </h3>           
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_photo_module">'.$gL10n->get('ORG_ACCESS_TO_MODULE').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['enable_photo_module'], 'enable_photo_module');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('ORG_ACCESS_TO_MODULE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_show_mode">'.$gL10n->get('PHO_DISPLAY_PHOTOS').':</label></dt>
-                            <dd>';
-                                $selectBoxEntries = array('0' => $gL10n->get('PHO_POPUP_WINDOW'), '1' => $gL10n->get('PHO_COLORBOX'), '2' => $gL10n->get('PHO_SAME_WINDOW'));
-                                echo FormElements::generateDynamicSelectBox($selectBoxEntries, $form_values['photo_show_mode'], 'photo_show_mode');
-                            echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_DISPLAY_PHOTOS_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_slideshow_speed">'.$gL10n->get('PHO_SLIDESHOW_SPEED').':</label></dt>
-                            <dd>
-                                <input type="text" id="photo_slideshow_speed" name="photo_slideshow_speed" style="width: 50px;" maxlength="10" value="'. $form_values['photo_slideshow_speed']. '" /> '.$gL10n->get('ORG_SECONDS').'
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_SLIDESHOW_SPEED_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_upload_mode">'.$gL10n->get('PHO_MULTIUPLOAD').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="photo_upload_mode" name="photo_upload_mode" ';
-                                if(isset($form_values['photo_upload_mode']) && $form_values['photo_upload_mode'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_MULTIUPLOAD_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_thumbs_row">'.$gL10n->get('PHO_THUMBNAILS_PER_PAGE').':</label></dt>
-                            <dd>
-                                <input type="text" id="photo_thumbs_column" name="photo_thumbs_column" style="width: 50px;" maxlength="2" value="'. $form_values['photo_thumbs_column']. '" /> x
-                                <input type="text" id="photo_thumbs_row" name="photo_thumbs_row" style="width: 50px;" maxlength="2" value="'. $form_values['photo_thumbs_row']. '" />
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_THUMBNAILS_PER_PAGE_DESC').'</li>
-
-                    <li>
-                        <dl>
-                            <dt><label for="photo_thumbs_scale">'.$gL10n->get('PHO_SCALE_THUMBNAILS').':</label></dt>
-                            <dd>
-                                <input type="text" id="photo_thumbs_scale" name="photo_thumbs_scale" style="width: 50px;" maxlength="4" value="'. $form_values['photo_thumbs_scale']. '" /> '.$gL10n->get('ORG_PIXEL').'
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_SCALE_THUMBNAILS_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_save_scale">'.$gL10n->get('PHO_SCALE_AT_UPLOAD').':</label></dt>
-                            <dd>
-                                <input type="text" id="photo_save_scale" name="photo_save_scale" style="width: 50px;" maxlength="4" value="'. $form_values['photo_save_scale']. '" /> '.$gL10n->get('ORG_PIXEL').'
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_SCALE_AT_UPLOAD_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_show_width">'.$gL10n->get('PHO_MAX_PHOTO_SIZE').':</label></dt>
-                            <dd>
-                                <input type="text" id="photo_show_width" name="photo_show_width" style="width: 50px;" maxlength="4" value="'. $form_values['photo_show_width']. '" /> x
-                                <input type="text" id="photo_show_height" name="photo_show_height" style="width: 50px;" maxlength="4" value="'. $form_values['photo_show_height']. '" /> '.$gL10n->get('ORG_PIXEL').'
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_MAX_PHOTO_SIZE_DESC').'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_image_text">'.$gL10n->get('PHO_SHOW_CAPTION').':</label></dt>
-                            <dd>
-                                <input type="text" id="photo_image_text" name="photo_image_text" maxlength="60" value="'.$form_values['photo_image_text']. '" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_SHOW_CAPTION_DESC' ,$gCurrentOrganization->getValue('org_homepage')).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_download_enabled">'.$gL10n->get('PHO_DOWNLOAD_ENABLED').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="photo_download_enabled" name="photo_download_enabled" ';
-                                if(isset($form_values['photo_download_enabled']) && $form_values['photo_download_enabled'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_DOWNLOAD_ENABLED_DESC', $gL10n->get('PHO_KEEP_ORIGINAL')).'</li>
-                    <li>
-                        <dl>
-                            <dt><label for="photo_keep_original">'.$gL10n->get('PHO_KEEP_ORIGINAL').':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="photo_keep_original" name="photo_keep_original" ';
-                                if(isset($form_values['photo_keep_original']) && $form_values['photo_keep_original'] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">'.$gL10n->get('PHO_KEEP_ORIGINAL_DESC', $gL10n->get('PHO_DOWNLOAD_ENABLED')).'</li>
-                 </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>';
 
             /**************************************************************************************/
             // Preferences ecards module

@@ -948,7 +948,7 @@
     <text id="PHO_UPLOAD_HELP_2" development="new" translation="todo">Bei Einzelbildupload den Vorgang ggf. bis zu fünfmal wiederholen, bis alle Felder gefüllt sind.</text>
     <text id="PHO_UPLOAD_HELP_3" development="new" translation="todo">Dann auf %VAR1_BOLD% klicken und ein wenig Geduld haben.</text>
     <text id="PHO_UPLOAD_MORE" development="new" translation="todo">Weitere Fotos hochladen</text>
-    <text id="PHO_UPLOAD_PHOTOS" development="new" translation="todo">Fotos Hochladen</text>
+    <text id="PHO_UPLOAD_PHOTOS" development="new" translation="todo">Fotos hochladen</text>
     <text id="PHO_WANT_DELETE_PHOTO" development="new" translation="todo">Soll das ausgewählte Foto wirklich gelöscht werden?</text>
 
     <!-- Phrases only in Profilemodule -->

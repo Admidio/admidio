@@ -11,7 +11,7 @@
  * pho_id    : id des Albums dessen Fotos angezeigt werden sollen
  * headline  : Ueberschrift, die ueber den Ankuendigungen steht
  *             (Default) PHO_PHOTO_ALBUMS
- * show_page : welch Seite der Thumbnails ist die aktuelle
+ * start_thumbnail : Number of the thumbnail which is the first that should be shown
  * start     : Position of query recordset where the visual output should start
  * locked    : das Album soll freigegebn/gesperrt werden
  *
@@ -42,11 +42,39 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 $getPhotoId  = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('PHO_PHOTO_ALBUMS'));
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getShowPage = admFuncVariableIsValid($_GET, 'show_page', 'numeric', 1);
+$getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'numeric', 1);
 $getLocked   = admFuncVariableIsValid($_GET, 'locked', 'boolean');
 $getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', 0);
 
 unset($_SESSION['photo_album_request']);
+
+// Fotoalbums-Objekt erzeugen oder aus Session lesen
+if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
+{
+    $photoAlbum =& $_SESSION['photo_album'];
+    $photoAlbum->db =& $gDb;
+}
+else
+{
+    // einlesen des Albums falls noch nicht in Session gespeichert
+    $photoAlbum = new TablePhotos($gDb);
+    if($getPhotoId > 0)
+    {
+        $photoAlbum->readDataById($getPhotoId);
+    }
+
+    $_SESSION['photo_album'] =& $photoAlbum;
+}
+
+// set headline of module
+if($getPhotoId > 0)
+{
+    $headline = $photoAlbum->getValue('pho_name');
+}
+else
+{
+    $headline = $getHeadline;
+}
 
 //Wurde keine Album uebergeben kann das Navigationsstack zurueckgesetzt werden
 if ($getPhotoId == 0)
@@ -55,28 +83,11 @@ if ($getPhotoId == 0)
 }
 
 //URL auf Navigationstack ablegen
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
-// Fotoalbums-Objekt erzeugen oder aus Session lesen
-if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
-{
-    $photo_album =& $_SESSION['photo_album'];
-    $photo_album->db =& $gDb;
-}
-else
-{
-    // einlesen des Albums falls noch nicht in Session gespeichert
-    $photo_album = new TablePhotos($gDb);
-    if($getPhotoId > 0)
-    {
-        $photo_album->readDataById($getPhotoId);
-    }
-
-    $_SESSION['photo_album'] =& $photo_album;
-}
 
 // pruefen, ob Album zur aktuellen Organisation gehoert
-if($getPhotoId > 0 && $photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
+if($getPhotoId > 0 && $photoAlbum->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
@@ -91,141 +102,106 @@ if($getLocked=='1' || $getLocked=='0')
         $gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
     }
     
-    $photo_album->setValue('pho_locked', $getLocked);
-    $photo_album->save();
+    $photoAlbum->setValue('pho_locked', $getLocked);
+    $photoAlbum->save();
 
     //Zurueck zum Elternalbum    
-    $getPhotoId = $photo_album->getValue('pho_pho_id_parent');
-    $photo_album->readDataById($getPhotoId);
+    $getPhotoId = $photoAlbum->getValue('pho_pho_id_parent');
+    $photoAlbum->readDataById($getPhotoId);
 }
 
-/*********************HTML_TEIL*******************************/
+/*********************HTML_PART*******************************/
 
-if($getPhotoId > 0)
-{
-    $gLayout['title'] = $photo_album->getValue('pho_name');
-}
-else
-{
-    $gLayout['title'] = $getHeadline;
-}
-$gLayout['header'] = '';
+// create html page object
+$page = new HtmlPage();
 
+// add rss feed to announcements
 if($gPreferences['enable_rss'] == 1)
 {
-    $gLayout['header'] .=  '<link rel="alternate" type="application/rss+xml" title="'.$gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline).'"
-		href="'.$g_root_path.'/adm_program/modules/photos/rss_photos.php?headline='.$getHeadline.'" />';
+    $page->addRssFile($g_root_path.'/adm_program/modules/photos/rss_photos.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname'). ' - '.$getHeadline));
 };
 
 if($gCurrentUser->editPhotoRight())
 {
-    $gLayout['header'] = $gLayout['header']. '
-        <script type="text/javascript"><!--
-            $(document).ready(function() 
-            {
-                $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-            }); 
-        //--></script>
-        <script type="text/javascript"><!--
-            //Bild drehen
-            function imgrotate(img, direction)
-            {                    
-                $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data){
-                    //Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten                    
-                    $("#img_"+img).attr("src", "photo_show.php?pho_id='.$getPhotoId.'&photo_nr="+img+"&thumb=1&rand="+Math.random());
-                    return false;
-                });
-            }
-        //--></script>';
+    $page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
+    $page->addJavascript('
+        // rotate image
+        function imgrotate(img, direction) {
+            $.get("'.$g_root_path.'/adm_program/modules/photos/photo_function.php", {pho_id: '.$getPhotoId.', photo_nr: img, job: "rotate", direction: direction}, function(data){
+                //Anhängen der Zufallszahl ist nötig um den Browsercache zu überlisten                    
+                $("#img_"+img).attr("src", "photo_show.php?pho_id='.$getPhotoId.'&photo_nr="+img+"&thumb=1&rand="+Math.random());
+                return false;
+            });
+        }');
 }
 
 if($gPreferences['photo_show_mode']==1)
 {
-    $gLayout['header'] = $gLayout['header']. '
-        <script type="text/javascript"><!--
-            $(document).ready(function(){
-          /*      $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
-                                                           slideshowAuto:false,
-                                                           slideshowSpeed:'.($gPreferences['photo_slideshow_speed']*1000).',
-                                                           preloading:true});*/
-                $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
-                                                           slideshowAuto:false,
-                                                           slideshowSpeed:'.($gPreferences['photo_slideshow_speed']*1000).',
-                                                           preloading:true,
-                                                           close:\''.$gL10n->get('SYS_CLOSE').'\',
-                                                           slideshowStart:\''.$gL10n->get('SYS_SLIDESHOW_START').'\',
-                                                           slideshowStop:\''.$gL10n->get('SYS_SLIDESHOW_STOP').'\',
-                                                           current:\''.$gL10n->get('SYS_SLIDESHOW_CURRENT').'\',
-                                                           previous:\''.$gL10n->get('SYS_PREVIOUS').'\',
-                                                           next:\''.$gL10n->get('SYS_NEXT').'\'});
-            });
-        --></script>';
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/i18n/jquery.colorbox-'.$gPreferences['system_language'].'.js');
+    $page->addJavascript('
+        $(document).ready(function(){
+            $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
+                                                       slideshowAuto:false,
+                                                       slideshowSpeed:'.($gPreferences['photo_slideshow_speed']*1000).',
+                                                       preloading:true});
+        });');
 }
 
-//bei übergebenem Photo LinkKlick simulieren
-if($getPhotoNr>0)
+// if a photo number was committed then simulate a left mouse click
+if($getPhotoNr > 0)
 {
-    $gLayout['header'] = $gLayout['header']. '
-    <script type="text/javascript">
-        $(document).ready(function() 
-        {
-            $("#img_'.$getPhotoNr.'").trigger("click");
-        }); 
-    </script>';
+    $page->addJavascript('$("#img_'.$getPhotoNr.'").trigger("click");', true);
 }
 
-//Photomodulspezifische CSS laden
-$gLayout['header'] = $gLayout['header']. '
-		<link rel="stylesheet" href="'. THEME_PATH. '/css/photos.css" type="text/css" media="screen" />';
-
-// Html-Kopf ausgeben
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-
-
-//Ueberschift
-echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
+// show module headline
+$page->addHeadline($headline);
 
 //Breadcrump bauen
 $navilink = '';
-$pho_parent_id = $photo_album->getValue('pho_pho_id_parent');
-$photo_album_parent = new TablePhotos($gDb);
+$pho_parent_id = $photoAlbum->getValue('pho_pho_id_parent');
+$photoAlbum_parent = new TablePhotos($gDb);
 
 while ($pho_parent_id > 0)
 {
     // Einlesen des Eltern Albums
-    $photo_album_parent->readDataById($pho_parent_id);
+    $photoAlbum_parent->readDataById($pho_parent_id);
     
     //Link zusammensetzen
-    $navilink = '&nbsp;&gt;&nbsp;<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photo_album_parent->getValue('pho_id').'">'.
-        $photo_album_parent->getValue('pho_name').'</a>'.$navilink;
+    $navilink = '&nbsp;&gt;&nbsp;<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photoAlbum_parent->getValue('pho_id').'">'.
+        $photoAlbum_parent->getValue('pho_name').'</a>'.$navilink;
 
     //Elternveranst
-    $pho_parent_id = $photo_album_parent->getValue('pho_pho_id_parent');
+    $pho_parent_id = $photoAlbum_parent->getValue('pho_pho_id_parent');
 }
 
 if($getPhotoId > 0)
 {
     //Ausgabe des Linkpfads
-    echo '<div class="navigationPath">
+    $page->addHtml('<div class="navigationPath">
             <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_PHOTO_ALBUMS').'" /></a>
             <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a>'.$navilink.'
-            &nbsp;&gt;&nbsp;'.$photo_album->getValue('pho_name').'         
-        </div>';
+            &nbsp;&gt;&nbsp;'.$photoAlbum->getValue('pho_name').'         
+        </div>');
 }
 
 // create module menu
-$photosMenu = new ModuleMenu('admMenuPhotos');
+$photosMenu = new HtmlNavbar('menu_photos');
+
+if($photoAlbum->getValue('pho_id') > 0)
+{
+    $photosMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+}
 
 if($gCurrentUser->editPhotoRight())
 {
 	// show link to create new album
-	$photosMenu->addItem('admMenuItemNewAlbum', $g_root_path.'/adm_program/modules/photos/photo_album_new.php?job=new&amp;pho_id='.$getPhotoId, 
+	$photosMenu->addItem('menu_item_new_album', $g_root_path.'/adm_program/modules/photos/photo_album_new.php?mode=new&amp;pho_id='.$getPhotoId, 
 								$gL10n->get('PHO_CREATE_ALBUM'), 'add.png');
 								
 	if($getPhotoId > 0)
 	{
 		// show link to upload photos
-		$photosMenu->addItem('admMenuItemUploadPhoto', $g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$getPhotoId, 
+		$photosMenu->addItem('menu_item_upload_photo', $g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$getPhotoId, 
 									$gL10n->get('PHO_UPLOAD_PHOTOS'), 'photo_upload.png');
 	}
 }
@@ -234,461 +210,344 @@ if($gCurrentUser->editPhotoRight())
 if($gPreferences['photo_download_enabled']==1 && $getPhotoId > 0)
 {
         //show link to download photos
-        $photosMenu->addItem('admMenuItemDownloadPhotos', $g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId, 
+        $photosMenu->addItem('menu_item_download_photos', $g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId, 
                                                 $gL10n->get('PHO_DOWNLOAD_PHOTOS'), 'page_white_compressed.png');
 }
 
 if($gCurrentUser->isWebmaster())
 {
 	// show link to system preferences of photos
-	$photosMenu->addItem('admMenuItemPreferencesPhotos', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=PHO_PHOTOS', 
-								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png');
+	$photosMenu->addItem('menu_item_preferences_photos', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=photos', 
+								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
 }
 
-$photosMenu->show();
+$page->addHtml($photosMenu->show(false));
 
 
-//Anlegen der Tabelle
-echo '<div class="photoModuleContainer">';
-    /*************************THUMBNAILS**********************************/
-    //Nur wenn uebergebenes Album Bilder enthaelt
-    if($photo_album->getValue('pho_quantity') > 0)
-    {        
-        //Aanzahl der Bilder
-        $bilder = $photo_album->getValue('pho_quantity');
-        
-        //Differenz
-        $difference = $gPreferences['photo_thumbs_row']-$gPreferences['photo_thumbs_column'];
+/*************************THUMBNAILS**********************************/
+//Nur wenn uebergebenes Album Bilder enthaelt
+if($photoAlbum->getValue('pho_quantity') > 0)
+{        
+    //Aanzahl der Bilder
+    $bilder = $photoAlbum->getValue('pho_quantity');
+    
+    //Popupfenstergröße
+    $popup_height = $gPreferences['photo_show_height']+210;
+    $popup_width  = $gPreferences['photo_show_width']+70;
+    
+    //Wenn Bild übergeben wurde richtige Albenseite öffnen
+    if($getPhotoNr > 0)
+    {
+        $getPhotoNr  = ceil($getPhotoNr/$gPreferences['photo_thumbs_page']) * $gPreferences['photo_thumbs_page'];
+    }
+              
+    //Thumbnailtabelle
+    $photoThumbnailTable = '<div class="row">';
+    
+    for($actThumbnail = 1; $actThumbnail <= $gPreferences['photo_thumbs_page']; $actThumbnail++)
+    {
+        //Errechnug welches Bild ausgegeben wird
+        $bild = $getPhotoNr + $actThumbnail;
 
-		//Thumbnails pro Seite
-        $thumbs_per_page = $gPreferences['photo_thumbs_row']*$gPreferences['photo_thumbs_column'];
-        	
-        //Popupfenstergröße
-        $popup_height = $gPreferences['photo_show_height']+210;
-        $popup_width  = $gPreferences['photo_show_width']+70;
-        
-        //Wenn Bild übergeben wurde richtige Albenseite öffnen
-        if($getPhotoNr>0)
+        if($bild <= $bilder)
         {
-            $getShowPage = ceil($getPhotoNr/$thumbs_per_page);
-        } 
-
-        //Album Seitennavigation
-        function photoAlbumPageNavigation($photo_album, $act_thumb_page, $thumbs_per_page)
-        {
-            global $g_root_path;
-            global $gL10n;
-            $max_thumb_page = 0;
+            $page->addHtml('<div class="col-sm-6 col-md-3 album-image" id="div_image_'.$bild.'">');
             
-            //Ausrechnen der Seitenzahl
-            if($photo_album->getValue('pho_quantity') > 0)
-            {
-                $max_thumb_page = round($photo_album->getValue('pho_quantity') / $thumbs_per_page);
-            }
-            
-            if ($max_thumb_page * $thumbs_per_page < $photo_album->getValue('pho_quantity'))
-            {
-                $max_thumb_page++;
-            }
-            if($max_thumb_page > 1)
-            {
-                //Container mit Navigation
-                echo ' <div class="pageNavigation" id="photoPageNavigation">'.$gL10n->get('SYS_PAGE').':&nbsp;';
-                
-                    // link to previous page
-                    $vorseite=$act_thumb_page-1;
-                    if($vorseite>=1)
-                    {
-                        echo '
-                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?show_page='.$vorseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">
-                            <img src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_PAGE_PREVIOUS').'" />
-                        </a>
-                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?show_page='.$vorseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">'.$gL10n->get('SYS_PAGE_PREVIOUS').'</a>&nbsp;';
-                    }
-                
-                    // show page count
-                    for($s=1; $s<=$max_thumb_page; $s++)
-                    {
-                        if($s==$act_thumb_page)
-                        {
-                            echo $act_thumb_page.'&nbsp;';
-                        }
-                        if($s!=$act_thumb_page){
-                            echo'<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?show_page='.$s.'&pho_id='.$photo_album->getValue('pho_id').'">'.$s.'</a>&nbsp;';
-                        }
-                    }
-                
-                    // link to next page
-                    $nachseite=$act_thumb_page+1;
-                    if($nachseite<=$max_thumb_page){
-                        echo '
-                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?show_page='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">'.$gL10n->get('SYS_PAGE_NEXT').'</a>
-                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?show_page='.$nachseite.'&amp;pho_id='.$photo_album->getValue('pho_id').'">
-                            <img src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('SYS_PAGE_NEXT').'" />
-                        </a>';
-                    }
-                echo '</div>';
-            }
-        }
-                  
-        //Thumbnailtabelle
-        $photoThumbnailTable = '<ul class="photoThumbnailRows">';
-            for($zeile=1;$zeile<=$gPreferences['photo_thumbs_row'];$zeile++)//durchlaufen der Tabellenzeilen
-            {
-                $photoThumbnailTable .= '<li class="photoThumbnailRow"><ul class="photoThumbnailColumn">';
-                for($spalte=1;$spalte<=$gPreferences['photo_thumbs_column'];$spalte++)//durchlaufen der Tabellenzeilen
+                if ($bild <= $bilder)
                 {
-                    //Errechnug welches Bild ausgegeben wird
-                    $bild = ($getShowPage * $thumbs_per_page) - $thumbs_per_page + ($zeile * $gPreferences['photo_thumbs_column'])-$gPreferences['photo_thumbs_row']+$spalte+$difference;
-                    $photoThumbnailTable .= '<li id="imgli_id_'.$bild.'">';
-
-                    if ($bild <= $bilder)
+                    //Popup-Mode
+                    if ($gPreferences['photo_show_mode'] == 0)
                     {
-                        //Popup-Mode
-                        if ($gPreferences['photo_show_mode'] == 0)
-                        {
-                            $photoThumbnailTable .= '<div>
-                                <img id="img_'.$bild.'" onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
-                                    src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$bild.'&thumb=1" alt="'.$bild.'" style="cursor: pointer"/>
-                            </div>';
-                        }
-
-                        //Colorbox-Mode
-                        else if ($gPreferences['photo_show_mode'] == 1)
-                        {
-                            $photoThumbnailTable .= '<div>
-                                <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'">
-                                	<img id="img_'.$bild.'" class="photoThumbnail" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'&amp;thumb=1" alt="'.$bild.'" /></a>
-                            </div>';
-                        }
-
-                        //Gleichesfenster-Mode
-                        else if ($gPreferences['photo_show_mode'] == 2)
-                        {
-                            $photoThumbnailTable .= '<div>
-                                <img id="img_'.$bild.'" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'\'" 
-                                    src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'&amp;thumb=1" style="cursor: pointer"/>
-                            </div>';
-                        }   
-                        
-                        //Buttons fuer Moderatoren
-                        if($gCurrentUser->editPhotoRight())
-                        {
-                           $photoThumbnailTable .= '
-                            <a class="icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'left\')"><img 
-                                src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
-                            <a class="icon-link" href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'right\')"><img 
-                                src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
-                            <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=imgli_id_'.
-                                $bild.'&amp;database_id='.$bild.'&amp;database_id_2='.$getPhotoId.'"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
-
-                        }
-                        
-                        if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
-                        {
-                            $photoThumbnailTable .= '
-                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getShowPage.'"><img 
-                                src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
-                        }
-                        
-                        if($gPreferences['photo_download_enabled']==1)
-                        {
-                            //show link to download photo
-                            $photoThumbnailTable .= '
-                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'"><img 
-                                            src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
-                        }
+                        $page->addHtml('
+                        <img class="thumbnail center-block" id="img_'.$bild.'" onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
+                            src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$bild.'&thumb=1" alt="'.$bild.'" style="cursor: pointer"/>');
                     }
-
-                    //schleifen abbrechen
-                    if ($bild == $bilder)
+    
+                    //Colorbox-Mode
+                    else if ($gPreferences['photo_show_mode'] == 1)
                     {
-                        $zeile=$gPreferences['photo_thumbs_row'];
-                        $spalte=$gPreferences['photo_thumbs_column'];
+                        $page->addHtml('
+                        <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'">
+                        	<img class="thumbnail center-block" id="img_'.$bild.'" class="photoThumbnail" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'&amp;thumb=1" alt="'.$bild.'" /></a>');
                     }
-                    $photoThumbnailTable .= '</li>';
-                }//for
-                $photoThumbnailTable .= '</ul></li>'; //Zeilenende
-            }//for
-        $photoThumbnailTable .= '</ul>';
-        
-        // Damit man mit der Colobox auch alle anderen Bilder im Album sehen kann werden hier die restilichen Links zu den Bildern "unsichtbar" ausgegeben
-        if ($gPreferences['photo_show_mode'] == 1)
-        {
-            $photoThumbnailTable_shown = false;
-            for ($i = 1; $i <= $bilder; $i++)
-            {
-                if( $i <= $getShowPage * $thumbs_per_page && $i >= (($getShowPage * $thumbs_per_page)-$thumbs_per_page))
-                {
-                        if(!$photoThumbnailTable_shown)
-                        {
-                            echo $photoThumbnailTable;
-                            $photoThumbnailTable_shown = true;
-                        }
+    
+                    //Gleichesfenster-Mode
+                    else if ($gPreferences['photo_show_mode'] == 2)
+                    {
+                        $page->addHtml('
+                        <img class="thumbnail center-block" id="img_'.$bild.'" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'\'" 
+                            src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'&amp;thumb=1" style="cursor: pointer"/>');
+                    }
                 }
-                else
+                
+                if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled']==1)
                 {
-                    echo '<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$i.'&amp;pho_id='.$getPhotoId.'">&nbsp;</a>';
+                   $page->addHtml('<div class="text-center" id="image_preferences_'.$bild.'">'); 
                 }
-            }
-        }
-        else // wenn die Fotos nicht mit der Colorbox aufgerufen werden
-        {
-            echo $photoThumbnailTable;
-        }		
-        
-        //Seitennavigation
-        photoAlbumPageNavigation($photo_album, $getShowPage, $thumbs_per_page);
-
-        //Datum des Albums
-        echo '<div class="editInformation" id="photoAlbumInformation">
-            '.$gL10n->get('SYS_DATE').': '.$photo_album->getValue('pho_begin', $gPreferences['system_date']);
-            if($photo_album->getValue('pho_end') != $photo_album->getValue('pho_begin'))
-            {
-                echo ' '.$gL10n->get('SYS_DATE_TO').' '.$photo_album->getValue('pho_end', $gPreferences['system_date']);
-            }
-        echo '
-        	<br />'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$photo_album->getValue('pho_photographers').'
-        </div>';
-
-        // show informations about user who creates the recordset and changed it
-        echo admFuncShowCreateChangeInfoById($photo_album->getValue('pho_usr_id_create'), $photo_album->getValue('pho_timestamp_create'), $photo_album->getValue('pho_usr_id_change'), $photo_album->getValue('pho_timestamp_change'));
-    }
-    /************************Albumliste*************************************/
-
-    //erfassen der Alben die in der Albentabelle ausgegeben werden sollen
-    $sql='      SELECT *
-                FROM '. TBL_PHOTOS. '
-                WHERE pho_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\'';
-    if($getPhotoId == 0)
-    {
-        $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
-    }
-    if($getPhotoId > 0)
-    {
-        $sql = $sql.' AND pho_pho_id_parent = '.$getPhotoId.'';
-    }
-    if (!$gCurrentUser->editPhotoRight())
-    {
-        $sql = $sql.' AND pho_locked = 0 ';
-    }
-
-    $sql = $sql.' ORDER BY pho_begin DESC ';
-    $result_list = $gDb->query($sql);
-
-    //Gesamtzahl der auszugebenden Alben
-    $albums = $gDb->num_rows($result_list);
-
-    // falls zum aktuellen Album Fotos und Unteralben existieren,
-    // dann einen Trennstrich zeichnen
-    if($photo_album->getValue('pho_quantity') > 0 && $albums > 0)
-    {
-        echo '<hr />';
-    }
-
-    $ignored = 0; //Summe aller zu ignorierender Elemente
-    $ignore  = 0; //Summe der zu ignorierenden Elemente auf dieser Seite
-    for($x = 0; $x < $albums; $x++)
-    {
-        $adm_photo_list = $gDb->fetch_array($result_list);
-
-        $albumStartDate = new DateTimeExtended($adm_photo_list['pho_begin'], 'Y-m-d', 'date');
-        if($albumStartDate->valid())
-        {
-            //Hauptordner
-            $ordner = SERVER_PATH. '/adm_my_files/photos/'.$albumStartDate->format('Y-m-d').'_'.$adm_photo_list['pho_id'];
-            
-            if((!file_exists($ordner) || $adm_photo_list['pho_locked']==1) && (!$gCurrentUser->editPhotoRight()))
-            {
-                $ignored++;
-                if($x >= $getStart + $ignored - $ignore)
-                    $ignore++;
-            }
+                
+                //Buttons fuer Moderatoren
+                if($gCurrentUser->editPhotoRight())
+                {
+                   $page->addHtml('
+                    <a class="icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'left\')"><img 
+                        src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
+                    <a class="icon-link" href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'right\')"><img 
+                        src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
+                    <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=div_image_'.
+                        $bild.'&amp;database_id='.$bild.'&amp;database_id_2='.$getPhotoId.'"><img 
+                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+    
+                }
+                
+                if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
+                {
+                    $page->addHtml('
+                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img 
+                        src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>');
+                }
+                
+                if($gPreferences['photo_download_enabled']==1)
+                {
+                    //show link to download photo
+                    $page->addHtml('
+                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'"><img 
+                                    src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>');
+                }
+                
+                if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled']==1)
+                {
+                   $page->addHtml('</div>'); 
+                }
+            $page->addHtml('</div>');
         }
     }
-
-    //Dateizeiger auf erstes auszugebendes Element setzen
-    if($albums > 0 && $albums != $ignored)
+    
+    $photoThumbnailTable .= '</div>';
+    
+    // Damit man mit der Colorbox auch alle anderen Bilder im Album sehen kann werden hier die restilichen Links zu den Bildern "unsichtbar" ausgegeben
+    if ($gPreferences['photo_show_mode'] == 1)
     {
-        $gDb->data_seek($result_list, $getStart + $ignored - $ignore);
-    }
-       
-    $counter = 0;
-    $sub_photo_album = new TablePhotos($gDb);
-
-    for($x = $getStart + $ignored - $ignore; $x <= $getStart + $ignored + 9 && $x < $albums; $x++)
-    {
-        $adm_photo_list = $gDb->fetch_array($result_list);
-        // Daten in ein Photo-Objekt uebertragen
-        $sub_photo_album->clear();
-        $sub_photo_album->setArray($adm_photo_list);
-
-        //Hauptordner
-        $ordner = SERVER_PATH. '/adm_my_files/photos/'.$sub_photo_album->getValue('pho_begin', 'Y-m-d').'_'.$sub_photo_album->getValue('pho_id');
-
-        //wenn ja Zeile ausgeben
-        if(file_exists($ordner) && ($sub_photo_album->getValue('pho_locked')==0) || $gCurrentUser->editPhotoRight())
+        $photoThumbnailTable_shown = false;
+        for ($i = 1; $i <= $bilder; $i++)
         {
-            if($counter == 0)
+            if( $i <= $getShowPage * $gPreferences['photo_thumbs_page'] && $i >= (($getShowPage * $gPreferences['photo_thumbs_page'])-$gPreferences['photo_thumbs_page']))
             {
-                echo '<ul class="photoAlbumList">';
-            }
-
-            // Zufallsbild fuer die Vorschau ermitteln
-            $shuffle_image = $sub_photo_album->shuffleImage();
-
-            if($shuffle_image['shuffle_pho_id'] > 0)
-            {
-                //Pfad des Beispielbildes
-                $bsp_pic_path = SERVER_PATH. '/adm_my_files/photos/'.$shuffle_image['shuffle_img_begin'].'_'.$shuffle_image['shuffle_pho_id'].'/'.$shuffle_image['shuffle_img_nr'].'.jpg';
+                    if(!$photoThumbnailTable_shown)
+                    {
+                        $page->addHtml($photoThumbnailTable);
+                        $photoThumbnailTable_shown = true;
+                    }
             }
             else
             {
-                //Wenn kein Bild gefunden wurde
-                $bsp_pic_path = THEME_PATH. '/images/nopix.jpg';
+                $page->addHtml('<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$i.'&amp;pho_id='.$getPhotoId.'">&nbsp;</a>');
             }
-
-            //Ausgabe
-            echo '
-            <li id="pho_'.$sub_photo_album->getValue('pho_id').'" style="height: '.($gPreferences['photo_thumbs_scale']+20).'px;">
-            <dl>
-                <dt>';
-                    if(file_exists($ordner))
-                    {
-                        echo '
-                        <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'">
-                            <img src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;photo_nr='.$shuffle_image['shuffle_img_nr'].'&amp;thumb=1"
-                            	class="imageFrame" alt="Zufallsfoto" />
-                        </a>';
-                    }
-                echo '</dt>
-                <dd style="margin-left: '.($gPreferences['photo_thumbs_scale']).'px;">
-                    <ul>
-                        <li>';
-                        if((!file_exists($ordner) && $gCurrentUser->editPhotoRight()) || ($sub_photo_album->getValue('pho_locked')==1 && file_exists($ordner)))
-                        {
-                            //Warnung fuer Leute mit Fotorechten: Ordner existiert nicht
-                            if(!file_exists($ordner) && $gCurrentUser->editPhotoRight())
-                            {
-                                echo '<a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_FOLDER_NOT_FOUND&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_FOLDER_NOT_FOUND\',this)" onmouseout="ajax_hideTooltip()"
-                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
-                            }
-                            
-                            //Hinweis fur Leute mit Photorechten: Album ist gesperrt
-                            if($adm_photo_list["pho_locked"]==1 && file_exists($ordner))
-                            {
-                                echo '<a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PHO_ALBUM_NOT_APPROVED&amp;inline=true"><img 
-                                    onmouseover="ajax_showTooltip(event,\''.$g_root_path.'/adm_program/system/msg_window.php?message_id=PHO_ALBUM_NOT_APPROVED\',this)" onmouseout="ajax_hideTooltip()"
-                                    class="iconHelpLink" src="'. THEME_PATH. '/icons/lock.png" alt="'.$gL10n->get('SYS_LOCKED').'" /></a>';
-                            }
-                        }
-
-                        //Album angaben
-                        if(file_exists($ordner))
-                        {
-                            echo'<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'">'.$sub_photo_album->getValue('pho_name').'</a><br />';
-                        }
-                        else
-                        {
-                            echo $sub_photo_album->getValue('pho_name');
-                        }
-
-                        echo '</li>
-                            <li>'.$gL10n->get('SYS_PHOTOS').': '.$sub_photo_album->countImages().' </li>
-                            <li>'.$gL10n->get('SYS_DATE').': '.$sub_photo_album->getValue('pho_begin', $gPreferences['system_date']);
-                            if($sub_photo_album->getValue('pho_end') != $sub_photo_album->getValue('pho_begin'))
-                            {
-                                echo ' '.$gL10n->get('SYS_DATE_TO').' '.$sub_photo_album->getValue('pho_end', $gPreferences['system_date']);
-                            }
-                            echo '</li> 
-                            <li>'.$gL10n->get('PHO_PHOTOGRAPHER').': '.$sub_photo_album->getValue('pho_photographers').'</li>
-                            <li>';
-
-                            // check if download option is enabled
-                            if($gPreferences['photo_download_enabled']==1)
-                            {
-                                echo '
-                                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
-                                            src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>';
-                            }
-
-                            // if user has admin rights for photo module then show some functions
-                            if ($gCurrentUser->editPhotoRight())
-                            {
-                                if(file_exists($ordner))
-                                {
-                                    echo '
-                                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$sub_photo_album->getValue('pho_id').'"><img 
-                                        src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" /></a>
-
-                                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;job=change"><img 
-                                        src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';
-                                    
-                                    if($sub_photo_album->getValue('pho_locked')==1)
-                                    {
-                                        echo '
-                                        <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=0"><img 
-                                            src="'. THEME_PATH. '/icons/key.png"  alt="'.$gL10n->get('SYS_UNLOCK').'" title="'.$gL10n->get('SYS_UNLOCK').'" /></a>';
-                                    }
-                                    elseif($sub_photo_album->getValue('pho_locked')==0)
-                                    {
-                                        echo '
-                                        <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$sub_photo_album->getValue('pho_id').'&amp;locked=1"><img 
-                                            src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('SYS_LOCK').'" title="'.$gL10n->get('SYS_LOCK').'" /></a>';
-                                    }
-                                }
-
-                                echo '
-                                <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=pho_'.
-                                    $sub_photo_album->getValue('pho_id').'&amp;name='.urlencode($sub_photo_album->getValue('pho_name')).'&amp;database_id='.$sub_photo_album->getValue('pho_id').'"><img 
-                                    src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
-                            }
-                    echo '</li>
-                    </ul>
-                </dd>
-            </dl>
-            </li>';
-            $counter++;
-        }//Ende wenn Ordner existiert
-    };//for
-
-    if($counter > 0)
-    {
-        //Tabellenende
-        echo '</ul>';
+        }
     }
-        
-    /****************************Leeres Album****************/
-    //Falls das Album weder Fotos noch Unterordner enthaelt
-    if(($photo_album->getValue('pho_quantity')=='0' || strlen($photo_album->getValue('pho_quantity')) == 0) && $albums<1)  // alle vorhandenen Albumen werden ignoriert
+    else // wenn die Fotos nicht mit der Colorbox aufgerufen werden
     {
-        echo $gL10n->get('PHO_NO_ALBUM_CONTENT');
-    }
+        $page->addHtml($photoThumbnailTable);
+    }		
+
+    // show additional album informations
+    $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
     
-	// If neccessary show links to navigate to next and previous recordsets of the query
-	$base_url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId;
-	echo admFuncGeneratePagination($base_url, $albums-$ignored, 10, $getStart, TRUE);
-echo '</div>';
+	if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')
+	&& strlen($photoAlbum->getValue('pho_end')) > 0)
+	{
+		$datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
+	}
+    
+	$page->addHtml('<br />
+	<div class="row">
+	    <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
+	    <div class="col-sm-4 col-xs-8"><strong>'.$datePeriod.'</strong></div>
+    </div>
+	<div class="row">
+	    <div class="col-sm-2 col-xs-4">'.$gL10n->get('PHO_PHOTOGRAPHER').'</div>
+	    <div class="col-sm-4 col-xs-8"><strong>'.$photoAlbum->getValue('pho_photographers').'</strong></div>
+	</div>');
 
-/************************Buttons********************************/
-if($photo_album->getValue('pho_id') > 0)
+    // show informations about user who creates the recordset and changed it
+    $page->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'), $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')));
+        
+    // show page navigations through thumbnails
+    $url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photoAlbum->getValue('pho_id');
+    $page->addHtml(admFuncGeneratePagination($url, $photoAlbum->getValue('pho_quantity'), $gPreferences['photo_thumbs_page'], $getPhotoNr, true, 'photo_nr'));
+
+}
+/************************Albumliste*************************************/
+
+//erfassen der Alben die in der Albentabelle ausgegeben werden sollen
+$sql='      SELECT *
+            FROM '. TBL_PHOTOS. '
+            WHERE pho_org_shortname = \''.$gCurrentOrganization->getValue('org_shortname').'\'';
+if($getPhotoId == 0)
 {
-    echo '
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/system/back.php"><img 
-                src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('SYS_BACK').'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('SYS_BACK').'</a>
-            </span>
-        </li>
-    </ul>';
+    $sql = $sql.' AND (pho_pho_id_parent IS NULL) ';
+}
+if($getPhotoId > 0)
+{
+    $sql = $sql.' AND pho_pho_id_parent = '.$getPhotoId.'';
+}
+if($gCurrentUser->editPhotoRight() == false)
+{
+    $sql = $sql.' AND pho_locked = 0 ';
 }
 
-/***************************Seitenende***************************/
+$sql = $sql.' ORDER BY pho_begin DESC ';
+$result_list = $gDb->query($sql);
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
+//Gesamtzahl der auszugebenden Alben
+$albumsCount = $gDb->num_rows($result_list);
+
+// falls zum aktuellen Album Fotos und Unteralben existieren,
+// dann einen Trennstrich zeichnen
+if($photoAlbum->getValue('pho_quantity') > 0 && $albumsCount > 0)
+{
+    $page->addHtml('<hr />');
+}
+
+//Dateizeiger auf erstes auszugebendes Element setzen
+if($albumsCount > 0)
+{
+    $gDb->data_seek($result_list, $getStart);
+}
+   
+$childPhotoAlbum = new TablePhotos($gDb);
+
+$page->addHtml('<div class="row">');
+
+for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1 && $x < $albumsCount; $x++)
+{
+    $adm_photo_list = $gDb->fetch_array($result_list);
+    // Daten in ein Photo-Objekt uebertragen
+    $childPhotoAlbum->clear();
+    $childPhotoAlbum->setArray($adm_photo_list);
+
+    //Hauptordner
+    $ordner = SERVER_PATH. '/adm_my_files/photos/'.$childPhotoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$childPhotoAlbum->getValue('pho_id');
+
+    //wenn ja Zeile ausgeben
+    if(file_exists($ordner) && ($childPhotoAlbum->getValue('pho_locked')==0) || $gCurrentUser->editPhotoRight())
+    {
+        // Zufallsbild fuer die Vorschau ermitteln
+        $shuffle_image = $childPhotoAlbum->shuffleImage();
+
+        //Album angaben
+        if(file_exists($ordner))
+        {
+            $albumTitle = '<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'">'.$childPhotoAlbum->getValue('pho_name').'</a><br />';
+        }
+        else
+        {
+            $albumTitle = $childPhotoAlbum->getValue('pho_name');
+        }
+
+        $albumDate = $childPhotoAlbum->getValue('pho_begin', $gPreferences['system_date']);
+        if($childPhotoAlbum->getValue('pho_end') != $childPhotoAlbum->getValue('pho_begin'))
+        {
+            $albumDate .= ' '.$gL10n->get('SYS_DATE_TO').' '.$childPhotoAlbum->getValue('pho_end', $gPreferences['system_date']);
+        }
+        
+        $page->addHtml('
+          <div class="col-sm-6" id="panel_pho_'.$childPhotoAlbum->getValue('pho_id').'">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="pull-left"><h4 class="panel-title">'.$albumTitle.'</h4></div>
+                    <div class="pull-right text-right">');
+                        
+                        // check if download option is enabled
+                        if($gPreferences['photo_download_enabled']==1)
+                        {
+                            $page->addHtml('
+                                <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
+                                        src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'" title="'.$gL10n->get('PHO_DOWNLOAD_PHOTOS').'"  /></a>');
+                        }
+
+                        // if user has admin rights for photo module then show some functions
+                        if ($gCurrentUser->editPhotoRight())
+                        {
+                            $page->addHtml('
+                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;mode=change"><img 
+                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                            <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=panel_pho_'.
+                                $childPhotoAlbum->getValue('pho_id').'&amp;name='.urlencode($childPhotoAlbum->getValue('pho_name')).'&amp;database_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                        }
+                    $page->addHtml('</div>
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
+                                class="thumbnail" src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;photo_nr='.$shuffle_image['shuffle_img_nr'].'&amp;thumb=1" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
+                        </div>
+                        <div class="col-xs-6">');                            
+                            $form = new HtmlForm('form_album_'.$childPhotoAlbum->getValue('pho_id'), null, $page, 'vertical');
+                            $form->addStaticControl('pho_date', $gL10n->get('SYS_DATE'), $albumDate);
+                            $form->addStaticControl('pho_count', $gL10n->get('SYS_PHOTOS'), $childPhotoAlbum->countImages());
+                            if(strlen($childPhotoAlbum->getValue('pho_photographers')) > 0)
+                            {
+                                $form->addStaticControl('pho_photographer', $gL10n->get('PHO_PHOTOGRAPHER'), $childPhotoAlbum->getValue('pho_photographers'));
+                            }
+                            $page->addHtml($form->show(false));                            
+                    $page->addHtml('</div>
+                    </div>');
+
+                    // Notice for users with foto edit rights that the folder of the album doesn't exists
+                    if(file_exists($ordner) == false && $gCurrentUser->editPhotoRight())
+                    {
+                        $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_FOLDER_NOT_FOUND').'</div>');
+                    }
+                    
+                    // Notice for users with foto edit right that this album is locked
+                    if($adm_photo_list["pho_locked"] == 1 && file_exists($ordner))
+                    {
+                        $page->addHtml('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('PHO_ALBUM_NOT_APPROVED').'</div>');
+                    }
+
+                    // if user has admin rights for photo module then show some functions
+                    if ($gCurrentUser->editPhotoRight() && file_exists($ordner))
+                    {
+                        $page->addHtml('<div class="btn-group" style="width: 100%;">
+                            <a class="btn btn-default icon-text-link" style="width: 50%;" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
+                                src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</a>');
+
+                            if($childPhotoAlbum->getValue('pho_locked')==1)
+                            {
+                                $page->addHtml('
+                                <a class="btn btn-default icon-text-link" style="width: 50%;" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=0"><img 
+                                    src="'. THEME_PATH. '/icons/key.png"  alt="'.$gL10n->get('PHO_ALBUM_UNLOCK').'" />'.$gL10n->get('PHO_ALBUM_UNLOCK').'</a>');
+                            }
+                            elseif($childPhotoAlbum->getValue('pho_locked')==0)
+                            {
+                                $page->addHtml('
+                                <a class="btn btn-default icon-text-link" style="width: 50%;" href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;locked=1"><img 
+                                    src="'. THEME_PATH. '/icons/key.png" alt="'.$gL10n->get('PHO_ALBUM_LOCK').'" />'.$gL10n->get('PHO_ALBUM_LOCK').'</a>');
+                            }
+                        $page->addHtml('</div>');
+                    }
+                $page->addHtml('</div>
+            </div>
+          </div>');
+    }//Ende wenn Ordner existiert
+};//for
+
+$page->addHtml('</div>');
+    
+/****************************Leeres Album****************/
+//Falls das Album weder Fotos noch Unterordner enthaelt
+if(($photoAlbum->getValue('pho_quantity')=='0' || strlen($photoAlbum->getValue('pho_quantity')) == 0) && $albumsCount < 1)  // alle vorhandenen Albumen werden ignoriert
+{
+    $page->addHtml($gL10n->get('PHO_NO_ALBUM_CONTENT'));
+}
+
+// If neccessary show links to navigate to next and previous albums of the query
+$base_url = $g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId;
+$page->addHtml(admFuncGeneratePagination($base_url, $albumsCount, $gPreferences['photo_albums_per_page'], $getStart, TRUE));
+
+// show html of complete page
+$page->show();
 
 ?>
