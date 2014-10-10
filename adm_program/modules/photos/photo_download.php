@@ -53,8 +53,6 @@ if($gCurrentOrganization->getValue('org_shortname')!= $g_organization)
     $gMessage->show($gL10n->get('SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY', $gHomepage));
 }
 
-$gNavigation->addUrl(CURRENT_URL);
-
 // Fotoalbumobjekt anlegen
 $photo_album = new TablePhotos($gDb);
 
