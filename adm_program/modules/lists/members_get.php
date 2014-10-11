@@ -278,7 +278,7 @@ if($gDb->num_rows($resultUser)>0)
         }
         if(strlen($user['country']) > 0)
         {
-            $user_text = $user_text. ' - '. $user['country'];
+            $user_text = $user_text. ' - '. $gL10n->getCountryByCode($user['country']);
         }
 
         // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
