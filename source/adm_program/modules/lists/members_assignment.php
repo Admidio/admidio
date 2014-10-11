@@ -306,17 +306,26 @@ else
         '<img class="icon-information"
             src="'. THEME_PATH. '/icons/profile.png" alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
             title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
+        $gL10n->get('SYS_STATUS'),
         $gL10n->get('SYS_MEMBER'),
         $gL10n->get('SYS_LASTNAME'),
         $gL10n->get('SYS_FIRSTNAME'),
         '<img class="icon-information" src="'. THEME_PATH. '/icons/map.png"
             alt="'.$gL10n->get('SYS_ADDRESS').'" title="'.$gL10n->get('SYS_ADDRESS').'" />',
+        $gL10n->get('SYS_ADDRESS'),
         $gL10n->get('SYS_BIRTHDAY'),
         $htmlLeaderColumn);
         
-    $table->setColumnAlignByArray(array('left', 'center', 'left', 'left', 'left', 'left', 'center'));
-    $table->setDatatablesOrderColumns(array(3, 4));
+    $table->setColumnAlignByArray(array('left', 'left', 'center', 'left', 'left', 'left', 'left', 'left', 'center'));
+    $table->setDatatablesOrderColumns(array(4, 5));
     $table->addRowHeadingByArray($columnHeading);
+    $table->disableDatatablesColumnsSort(array(3, 9));
+    // set alternative order column for member status icons
+    $table->setDatatablesAlternativOrderColumns(1, 2);
+    $table->setDatatablesColumnsHide(2);
+    // set alternative order column for address icons
+    $table->setDatatablesAlternativOrderColumns(6, 7);
+    $table->setDatatablesColumnsHide(7);
 
     // show rows with all organization users
     while($user = $gDb->fetch_array($resultUser))
@@ -325,18 +334,27 @@ else
         $htmlAddress  = '$nbsp;';
         $htmlBirthday = '&nbsp;';
         
-        // create string with user address
-        if(strlen($user['address']) > 0)
+        if($user['member_this_orga'] > 0)
         {
-            $addressText = $user['address'];
+            $memberOfThisOrganization = '1';
+        }
+        else
+        {
+            $memberOfThisOrganization = '0';
+        }
+    
+        // create string with user address
+        if(strlen($user['country']) > 0)
+        {
+            $addressText .= $gL10n->getCountryByCode($user['country']);
         }
         if(strlen($user['zip_code']) > 0 || strlen($user['city']) > 0)
         {
-            $addressText = $addressText. ' - '. $user['zip_code']. ' '. $user['city'];
+            $addressText .= ' - '. $user['zip_code']. ' '. $user['city'];
         }
-        if(strlen($user['country']) > 0)
+        if(strlen($user['address']) > 0)
         {
-            $addressText = $addressText. ' - '. $user['country'];
+            $addressText .= ' - '. $user['address'];
         }
 
         // Icon fuer Orgamitglied und Nichtmitglied auswaehlen
@@ -388,10 +406,12 @@ else
         // create array with all column values
         $columnValues = array(
             '<img class="icon-information" src="'. THEME_PATH.'/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
+            $memberOfThisOrganization,
             $htmlMemberStatus,
             $user['last_name'],
             $user['first_name'],
             $htmlAddress,
+            $addressText,
             $htmlBirthday,
             $htmlRoleLeader.'<b id="loadindicator_leader_'.$user['usr_id'].'"></b>');
             

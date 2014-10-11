@@ -195,21 +195,29 @@ $columnHeading = array(
     $gL10n->get('SYS_ABR_NO'),
     '<img class="icon-information" src="'. THEME_PATH. '/icons/profile.png" 
         alt="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'"
-        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',
+        title="'.$gL10n->get('SYS_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname')).'" />',        
+    $gL10n->get('SYS_STATUS'),
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
     '<img class="icon-information" alt="Weiblich" title="" src="'.THEME_PATH.'/icons/female.png" data-original-title="Weiblich">
     <img class="icon-information" alt="Männlich" title="" src="'.THEME_PATH.'/icons/male.png" data-original-title="Männlich">',
+    $gL10n->get('SYS_GENDER'),
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),
     $gL10n->get('SYS_FEATURES')
 );
 
-$membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
-$membersTable->disableDatatablesColumnsSort(8);
+$membersTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'left', 'right'));
+$membersTable->disableDatatablesColumnsSort(10);
 $membersTable->addRowHeadingByArray($columnHeading);
 $membersTable->setDatatablesRowsPerPage($gPreferences['user_management_members_per_page']);
 $membersTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
+// set alternative order column for member status icons
+$membersTable->setDatatablesAlternativOrderColumns(2, 3);
+$membersTable->setDatatablesColumnsHide(3);
+// set alternative order column for gender icons
+$membersTable->setDatatablesAlternativOrderColumns(6, 7);
+$membersTable->setDatatablesColumnsHide(7);
 
 $irow = 1;  // Zahler fuer die jeweilige Zeile
 
@@ -228,12 +236,22 @@ while($row = $gDb->fetch_array($result_mgl))
 		$icon = 'no_profile.png';
 		$iconText = $gL10n->get('SYS_NOT_MEMBER_OF_ORGANIZATION', $gCurrentOrganization->getValue('org_longname'));
 	}
+    
+    if($row['member_this_orga'] > 0)
+    {
+        $memberOfThisOrganization = '1';
+    }
+    else
+    {
+        $memberOfThisOrganization = '0';
+    }
 	
     // create array with all column values
     $columnValues = array(
         $irow,
         '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '"><img
 	         src="'. THEME_PATH. '/icons/'.$icon.'" alt="'.$iconText.'" title="'.$iconText.'" />',
+        $memberOfThisOrganization,
         '<a href="'.$g_root_path.'/adm_program/modules/profile/profile.php?user_id='. $row['usr_id']. '">'. $row['last_name']. ',&nbsp;'. $row['first_name']. '</a>',
     );	
 	
@@ -251,10 +269,12 @@ while($row = $gDb->fetch_array($result_mgl))
         // show selected text of optionfield or combobox
         $arrListValues  = $gProfileFields->getProperty('GENDER', 'usf_value_list');
         $columnValues[] = $arrListValues[$row['gender']];
+        $columnValues[] = $row['gender'];
     }
     else
     {
         $columnValues[] = '&nbsp;';
+        $columnValues[] = '0';
     }
 
 	if(strlen($row['birthday']) > 0)

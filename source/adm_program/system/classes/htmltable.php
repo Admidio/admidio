@@ -227,6 +227,31 @@ class HtmlTable extends HtmlTableBasic
         $this->columnAlign = $arrayColumnAlign;
     } 
     
+    /** This method will set for a selected column other columns that should be used to order the datatables.
+     *  For example if you will click the name column than you could set the columns lastname and firstname 
+     *  as alternative order columns and the table will be ordered by lastname and firstname.
+     *  @param $selectedColumn    This is the column the user clicked to be sorted.
+     *  @param $arrayOrderColumns This are the columns the table will internal be sorted. If you have more
+     *                            than 1 column this must be an array. The columns of the table starts with 1 (not 0).
+     */
+    public function setDatatablesAlternativOrderColumns($selectedColumn, $arrayOrderColumns)
+    {
+        if(is_array($arrayOrderColumns))
+        {
+            // internal datatable columns starts with 0
+            foreach($arrayOrderColumns as $key => $column)
+            {
+                $arrayOrderColumns[$key] = $column-1;
+            }
+
+            $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn-1).'], "orderData": ['.(implode(',', $arrayOrderColumns)).'] }';
+        }
+        else
+        {
+            $this->datatablesColumnDefs[] = '{ "targets": ['.($selectedColumn-1).'], "orderData": ['.($arrayOrderColumns-1).'] }';
+        }
+    }
+    
     /** Hide some columns for the user. This is useful if you want to use the column for ordering but
      *  won't show the content if this column.
      *  @param $arrayColumnsHide An array which contain the columns that should be hidden. The columns
