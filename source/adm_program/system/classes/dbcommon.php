@@ -36,9 +36,10 @@ class DBCommon
     {
         global $g_root_path, $gMessage, $gPreferences, $gCurrentOrganization, $gDebug, $gL10n;
 
-        $backtrace = $this->getBacktrace();
+        $htmlOutput = '';
+        $backtrace  = $this->getBacktrace();
 
-        // Rollback bei einer offenen Transaktion
+        // Rollback on open transaction
         if($this->transactions > 0)
         {
             $this->rollback();
@@ -46,12 +47,12 @@ class DBCommon
 
         if(headers_sent() == false && isset($gPreferences) && defined('THEME_SERVER_PATH'))
         {
-            // Html-Kopf ausgeben
-            $gLayout['title']  = $gL10n->get('SYS_DATABASE_ERROR');
-            require(SERVER_PATH. '/adm_program/system/overall_header.php');       
+            // create html page object
+            $page = new HtmlPage();
+            $page->addHeadline($gL10n->get('SYS_DATABASE_ERROR'));
         }
         
-        // Ausgabe des Fehlers an Browser
+        // transform the database error to html
         $error_string = '<div style="font-family: monospace;">
                          <p><b>S Q L - E R R O R</b></p>
                          <p><b>CODE:</b> '.$code.'</p>
@@ -59,17 +60,23 @@ class DBCommon
                          <b>B A C K T R A C E</b><br />
                          '.$backtrace.'
                          </div>';
-        echo $error_string;
+        $htmlOutput = $error_string;
         
-        // ggf. Ausgabe des Fehlers in Log-Datei
+        // in debug mode show error in log file
         if($gDebug == 1)
         {
             error_log($code. ': '. $message);
         }
         
+        // display database error to user
         if(headers_sent() == false && isset($gPreferences) && defined('THEME_SERVER_PATH'))
         {
-            require(SERVER_PATH. '/adm_program/system/overall_footer.php');       
+            $page->addHtml($htmlOutput);
+            $page->show();
+        }
+        else
+        {
+            echo $htmlOutput;
         }
         
         exit();
