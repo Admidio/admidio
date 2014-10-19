@@ -42,6 +42,7 @@ if (strcasecmp($gCurrentOrganization->getValue('org_shortname'), $g_organization
 $getPhotoId  = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', 0);
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('PHO_PHOTO_ALBUMS'));
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
+$getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', 0);
 $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'numeric', 1);
 $getLocked   = admFuncVariableIsValid($_GET, 'locked', 'boolean');
 $getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', 0);
@@ -228,97 +229,95 @@ $page->addHtml($photosMenu->show(false));
 //Nur wenn uebergebenes Album Bilder enthaelt
 if($photoAlbum->getValue('pho_quantity') > 0)
 {        
-    //Aanzahl der Bilder
-    $bilder = $photoAlbum->getValue('pho_quantity');
-    
     //Popupfenstergröße
     $popup_height = $gPreferences['photo_show_height']+210;
     $popup_width  = $gPreferences['photo_show_width']+70;
     
+    // remember first and last photo nr
+    $firstPhotoNr = 1;
+    $lastPhotoNr  = 0;
+    
     //Wenn Bild übergeben wurde richtige Albenseite öffnen
     if($getPhotoNr > 0)
     {
-        $getPhotoNr  = ceil($getPhotoNr/$gPreferences['photo_thumbs_page']) * $gPreferences['photo_thumbs_page'];
+        $firstPhotoNr = (ceil($getPhotoNr/$gPreferences['photo_thumbs_page']) * $gPreferences['photo_thumbs_page']) + 1;
     }
               
     //Thumbnailtabelle
     $photoThumbnailTable = '<div class="row">';
     
-    for($actThumbnail = 1; $actThumbnail <= $gPreferences['photo_thumbs_page']; $actThumbnail++)
+    for($actThumbnail = 1; $actThumbnail <= $gPreferences['photo_thumbs_page'] || $actThumbnail > $photoAlbum->getValue('pho_quantity'); $actThumbnail++)
     {
         //Errechnug welches Bild ausgegeben wird
-        $bild = $getPhotoNr + $actThumbnail;
+        $lastPhotoNr = $getPhotoNr + $actThumbnail;
 
-        if($bild <= $bilder)
+        if($lastPhotoNr <= $photoAlbum->getValue('pho_quantity'))
         {
-            $page->addHtml('<div class="col-sm-6 col-md-3 album-image" id="div_image_'.$bild.'">');
+            $photoThumbnailTable .= '<div class="col-sm-6 col-md-3 album-image" id="div_image_'.$lastPhotoNr.'">';
             
-                if ($bild <= $bilder)
+                //Popup-Mode
+                if ($gPreferences['photo_show_mode'] == 0)
                 {
-                    //Popup-Mode
-                    if ($gPreferences['photo_show_mode'] == 0)
-                    {
-                        $page->addHtml('
-                        <img class="thumbnail center-block" id="img_'.$bild.'" onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
-                            src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$bild.'&thumb=1" alt="'.$bild.'" style="cursor: pointer"/>');
-                    }
-    
-                    //Colorbox-Mode
-                    else if ($gPreferences['photo_show_mode'] == 1)
-                    {
-                        $page->addHtml('
-                        <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'">
-                        	<img class="thumbnail center-block" id="img_'.$bild.'" class="photoThumbnail" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'&amp;thumb=1" alt="'.$bild.'" /></a>');
-                    }
-    
-                    //Gleichesfenster-Mode
-                    else if ($gPreferences['photo_show_mode'] == 2)
-                    {
-                        $page->addHtml('
-                        <img class="thumbnail center-block" id="img_'.$bild.'" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'\'" 
-                            src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'&amp;thumb=1" style="cursor: pointer"/>');
-                    }
+                    $photoThumbnailTable .= '
+                    <img class="thumbnail center-block" id="img_'.$lastPhotoNr.'" onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
+                        src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$lastPhotoNr.'&thumb=1" alt="'.$lastPhotoNr.'" style="cursor: pointer"/>';
+                }
+
+                //Colorbox-Mode
+                else if ($gPreferences['photo_show_mode'] == 1)
+                {
+                    $photoThumbnailTable .= '
+                    <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'">
+                    	<img class="thumbnail center-block" id="img_'.$lastPhotoNr.'" class="photoThumbnail" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" alt="'.$lastPhotoNr.'" /></a>';
+                }
+
+                //Gleichesfenster-Mode
+                else if ($gPreferences['photo_show_mode'] == 2)
+                {
+                    $photoThumbnailTable .= '
+                    <img class="thumbnail center-block" id="img_'.$lastPhotoNr.'" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'\'" 
+                        src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" style="cursor: pointer"/>';
                 }
                 
                 if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled']==1)
                 {
-                   $page->addHtml('<div class="text-center" id="image_preferences_'.$bild.'">'); 
+                   $photoThumbnailTable .= '<div class="text-center" id="image_preferences_'.$lastPhotoNr.'">'; 
                 }
                 
                 //Buttons fuer Moderatoren
                 if($gCurrentUser->editPhotoRight())
                 {
-                   $page->addHtml('
-                    <a class="icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'left\')"><img 
+                   $photoThumbnailTable .= '
+                    <a class="icon-link"  href="javascript:void(0)" onclick="return imgrotate('.$lastPhotoNr.', \'left\')"><img 
                         src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
-                    <a class="icon-link" href="javascript:void(0)" onclick="return imgrotate('.$bild.', \'right\')"><img 
+                    <a class="icon-link" href="javascript:void(0)" onclick="return imgrotate('.$lastPhotoNr.', \'right\')"><img 
                         src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
                     <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=div_image_'.
-                        $bild.'&amp;database_id='.$bild.'&amp;database_id_2='.$getPhotoId.'"><img 
-                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                        $lastPhotoNr.'&amp;database_id='.$lastPhotoNr.'&amp;database_id_2='.$getPhotoId.'"><img 
+                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     
                 }
                 
                 if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
                 {
-                    $page->addHtml('
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$bild.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img 
-                        src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>');
+                    $photoThumbnailTable .= '
+                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img 
+                        src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                 }
                 
                 if($gPreferences['photo_download_enabled']==1)
                 {
                     //show link to download photo
-                    $page->addHtml('
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$bild.'"><img 
-                                    src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>');
+                    $photoThumbnailTable .= '
+                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_download.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'"><img 
+                                    src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'" title="'.$gL10n->get('PHO_DOWNLOAD_SINGLE_PHOTO').'"  /></a>';
                 }
                 
                 if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled']==1)
                 {
-                   $page->addHtml('</div>'); 
+                   $photoThumbnailTable .= '</div>'; 
                 }
-            $page->addHtml('</div>');
+            $photoThumbnailTable .= '</div>';
         }
     }
     
@@ -328,9 +327,10 @@ if($photoAlbum->getValue('pho_quantity') > 0)
     if ($gPreferences['photo_show_mode'] == 1)
     {
         $photoThumbnailTable_shown = false;
-        for ($i = 1; $i <= $bilder; $i++)
+        
+        for ($i = 1; $i <= $photoAlbum->getValue('pho_quantity'); $i++)
         {
-            if( $i <= $getShowPage * $gPreferences['photo_thumbs_page'] && $i >= (($getShowPage * $gPreferences['photo_thumbs_page'])-$gPreferences['photo_thumbs_page']))
+            if($i >= $firstPhotoNr && $i <= $lastPhotoNr)
             {
                     if(!$photoThumbnailTable_shown)
                     {
@@ -479,11 +479,11 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                 </div>
                 <div class="panel-body">
                     <div class="row">
-                        <div class="col-xs-6">
+                        <div class="col-xs-6 col-sm-7 col-md-6">
                             <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
                                 class="thumbnail" src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$shuffle_image['shuffle_pho_id'].'&amp;photo_nr='.$shuffle_image['shuffle_img_nr'].'&amp;thumb=1" alt="'.$gL10n->get('PHO_PHOTOS').'" /></a>
                         </div>
-                        <div class="col-xs-6">');                            
+                        <div class="col-xs-6 col-sm-5 col-md-6">');                            
                             $form = new HtmlForm('form_album_'.$childPhotoAlbum->getValue('pho_id'), null, $page, 'vertical');
                             $form->addStaticControl('pho_date', $gL10n->get('SYS_DATE'), $albumDate);
                             $form->addStaticControl('pho_count', $gL10n->get('SYS_PHOTOS'), $childPhotoAlbum->countImages());
