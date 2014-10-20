@@ -12,8 +12,8 @@ INSERT INTO %PREFIX%_organizations (org_id, org_longname, org_shortname, org_org
 --
 
 INSERT INTO %PREFIX%_preferences (prf_id, prf_org_id, prf_name, prf_value) VALUES
-(1, 1, 'db_version', '2.4.6'),
-(2, 2, 'db_version', '2.4.6'),
+(1, 1, 'db_version', '2.4.8'),
+(2, 2, 'db_version', '2.4.8'),
 (1000, 1, 'announcements_per_page', '10'),
 (1100, 1, 'ecard_view_width', '250'),
 (1200, 1, 'ecard_view_height', '250'),
@@ -448,8 +448,8 @@ INSERT INTO %PREFIX%_roles (rol_id, rol_cat_id, rol_name, rol_description, rol_a
 (1, 3, 'SYS_WEBMASTER', 'INS_DESCRIPTION_WEBMASTER', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2008-04-20 22:35:08', 1, '2008-04-20 22:35:08', 1, 0, 1, 1),
 (2, 3, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:36', 1, '2008-05-03 16:26:36', 1, 0, 1, 0),
 (3, 3, 'INS_BOARD', 'INS_DESCRIPTION_BOARD', 0, 0, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 2, 1, 1, 0, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2008-05-03 16:26:12', 1, '2008-05-03 16:26:12', 1, 0, 1, 0),
-(4, 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', 1, 0, 1, 0),
-(5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 1, 0, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', 1, 0, 1, 0),
+(4, 6, 'DEMO_ROL_1_YOUTH_TEAM', 'DEMO_ROL_1_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 3, 0, NULL, '15:00:00', NULL, '16:00:00', 3, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:24:41', 1, '2008-05-03 16:24:41', 1, 0, 1, 0),
+(5, 6, 'DEMO_ROL_2_YOUTH_TEAM', 'DEMO_ROL_2_YOUTH_TEAM_CONTENT', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 1, 0, 3, 0, NULL, '16:00:00', NULL, '17:00:00', 5, 'Sportplatz', NULL, NULL, NULL, 1, '2008-05-03 16:25:58', 1, '2008-05-03 16:25:58', 1, 0, 1, 0),
 (6, 13, 'SYS_WEBMASTER', 'INS_DESCRIPTION_WEBMASTER', 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 1, 1, 1, 1, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2009-05-20 22:35:08', 1, '2010-01-21 20:35:08', 1, 0, 1, 1),
 (7, 13, 'SYS_MEMBERS', 'INS_DESCRIPTION_MEMBER', 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 0, 1, 0, 2, 0, 1, 1, NULL, NULL, NULL, NULL, 0, NULL, NULL, NULL, NULL, 1, '2009-05-20 16:26:36', 1, '2010-12-22 06:34:06', 1, 0, 1, 0),
 (8, 23, 'DAT_DATE 2012-05-13 19:00 - 4', 'DEMO_DAT_BARBECUE', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 1, '2011-06-03 10:08:00', NULL, NULL, 1, 0, 0, 0);
@@ -820,7 +820,7 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 (360, 4, 341, '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (361, 4, 347, '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (362, 4, 351, '2008-05-03', '9999-12-31', 1, 2, '2008-05-03 09:43:02', NULL, NULL),
-(363, 5, 204, '2008-05-03', '9999-12-31', 1, 2, '2008-05-03 09:43:02', NULL, NULL),
+(363, 4, 204, '2008-05-03', '9999-12-31', 1, 2, '2008-05-03 09:43:02', NULL, NULL),
 (364, 5, 212, '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (365, 5, 214, '2008-05-03', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (366, 5, 220, '2008-05-03', '9999-12-31', 1, 2, '2008-05-03 09:43:02', NULL, NULL),
@@ -839,6 +839,7 @@ INSERT INTO %PREFIX%_members (mem_id, mem_rol_id, mem_usr_id, mem_begin, mem_end
 (379, 2, 354, '2008-05-28', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (380, 3, 354, '2009-06-12', '9999-12-31', 1, 2, '2008-05-03 09:43:02', NULL, NULL),
 (381, 2, 355, '2009-07-12', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
+(382, 5, 355, '2012-11-03', '9999-12-31', 1, 2, '2014-08-25 19:13:52', NULL, NULL),
 (400, 7, 205, '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (401, 7, 211, '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),
 (402, 7, 290, '2010-04-26', '9999-12-31', 0, 2, '2008-05-03 09:43:02', NULL, NULL),

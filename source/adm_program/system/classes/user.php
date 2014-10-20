@@ -695,32 +695,42 @@ class User extends TableUsers
 	 *  the changed columns. If the table has columns for creator or editor than these column
 	 *  with their timestamp will be updated.
 	 *  First save recordset and then save all user fields. After that the session of this got a renew for the user object.
+     *  If the user doesn't have the right to save data of this user than an exception will be thrown.
 	 *  @param $updateFingerPrint Default @b true. Will update the creator or editor of the recordset if table has columns like @b usr_id_create or @b usr_id_changed
 	 */
     public function save($updateFingerPrint = true)
     {
-        global $gCurrentSession;
+        global $gCurrentSession, $gCurrentUser;
         $fields_changed = $this->columnsValueChanged;
-		$this->db->startTransaction();
-
-		// if value of a field changed then update timestamp of user object
-		if($this->mProfileFieldsData->columnsValueChanged)
-		{
-            $this->columnsValueChanged = true;
-		}
-
-        parent::save($updateFingerPrint);
-		
-		// save data of all user fields
-		$this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
-
-        if($fields_changed && is_object($gCurrentSession))
+        
+        // if current user is new or is allowed to edit this user than save data
+        if($this->getValue('usr_id') == 0 || $gCurrentUser->editProfile($this))
         {
-			// now set user object in session of that user to invalid, 
-			// because he has new data and maybe new rights
-            $gCurrentSession->renewUserObject($this->getValue('usr_id'));
+            $this->db->startTransaction();
+
+            // if value of a field changed then update timestamp of user object
+            if($this->mProfileFieldsData->columnsValueChanged)
+            {
+                $this->columnsValueChanged = true;
+            }
+
+            parent::save($updateFingerPrint);
+            
+            // save data of all user fields
+            $this->mProfileFieldsData->saveUserData($this->getValue('usr_id'));
+
+            if($fields_changed && is_object($gCurrentSession))
+            {
+                // now set user object in session of that user to invalid, 
+                // because he has new data and maybe new rights
+                $gCurrentSession->renewUserObject($this->getValue('usr_id'));
+            }
+            $this->db->endTransaction();
         }
-		$this->db->endTransaction();
+        else
+        {
+            throw new AdmException('The profile data of user ', $this->getValue('FIRST_NAME').' '.$this->getValue('LAST_NAME').' could not be saved because you don\'t have the right to do this.');
+        }
     }
 	
 	/** Set the id of the organization which should be used in this user object.
@@ -874,40 +884,30 @@ class User extends TableUsers
         global $gCurrentUser, $gPreferences;
 
         $returnCode    = true;
-        $updateField   = false;
         $oldFieldValue = $this->mProfileFieldsData->getValue($columnName, 'database');
 
         if(strpos($columnName, 'usr_') !== 0)
         {
-            // Daten fuer User-Fields-Tabelle
+            // user data from adm_user_fields table
 
-            // gesperrte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
-            // bei Registrierung muss die Eingabe auch erlaubt sein
-            if((  $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
-               && $gCurrentUser->editUsers() == true)
-            || $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
-            || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
+            // only to a update if value has changed
+            if(strcmp($newValue, $oldFieldValue) != 0)
             {
-                // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
-                // oder im eigenen Profil
-                if((  $this->mProfileFieldsData->getProperty($columnName, 'usf_hidden') == 1
+                // Disabled fields can only be edited by users with the right "edit_users" except on registration.
+                // Here is no need to check hidden fields because we check on save() method that only users who 
+                // can edit the profile are allowed to save and change data.
+                if((  $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 1
                    && $gCurrentUser->editUsers() == true)
-                || $this->mProfileFieldsData->getProperty($columnName, 'usf_hidden') == 0
-                || $gCurrentUser->getValue('usr_id') == $this->getValue('usr_id'))
+                || $this->mProfileFieldsData->getProperty($columnName, 'usf_disabled') == 0
+                || ($gCurrentUser->getValue('usr_id') == 0 && $this->getValue('usr_id') == 0))
                 {
-                    $updateField = true;
+                    $returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
                 }
-            }
-
-            // nur Updaten, wenn sich auch der Wert geaendert hat
-            if($updateField == true
-            && strcmp($newValue, $oldFieldValue) != 0)
-            {
-				$returnCode = $this->mProfileFieldsData->setValue($columnName, $newValue);
             }
         }
         else
         {
+            // users data from adm_users table
             $returnCode = parent::setValue($columnName, $newValue);
         }
 

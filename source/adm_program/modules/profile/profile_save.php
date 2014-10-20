@@ -280,6 +280,7 @@ catch(AdmException $e)
 {
     unset($_SESSION['profile_request']);
     $gMessage->setForwardUrl($gNavigation->getPreviousUrl());
+    $gNavigation->deleteLastUrl();
 	$e->showHtml();
 }
 
