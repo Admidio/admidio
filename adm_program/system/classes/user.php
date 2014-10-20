@@ -895,7 +895,7 @@ class User extends TableUsers
                 // versteckte Felder duerfen nur von Usern mit dem Rollenrecht 'alle Benutzerdaten bearbeiten' geaendert werden
                 // oder im eigenen Profil
                 if((  $this->mProfileFieldsData->getProperty($columnName, 'usf_hidden') == 1
-                   && $gCurrentUser->editUsers() == true)
+                   && $gCurrentUser->editProfile($this) == true)
                 || $this->mProfileFieldsData->getProperty($columnName, 'usf_hidden') == 0
                 || $gCurrentUser->getValue('usr_id') == $this->getValue('usr_id'))
                 {

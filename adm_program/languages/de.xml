@@ -810,6 +810,7 @@
     <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="todo">Das Feld %VAR1_BOLD% im Bereich %VAR2_BOLD% ist nicht gefüllt.</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="todo">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</text>
+    <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen.</text>
     <text id="ORG_FIELD_MANDATORY" development="new" translation="todo">Pflichtfeld, muss immer ausgefüllt werden</text>
     <text id="ORG_FIELD_MANDATORY_DESC" development="new" translation="todo">Felder, die als Pflichtfelder markiert sind, müssen immer gefüllt werden. Dies gilt für die Registrierung, aber auch bei der gewöhnlichen Profildatenbearbeitung.</text>
     <text id="ORG_FIELD_NOT_DISABLED" development="new" translation="todo">Feld kann durch Benutzer selbst bearbeitet werden</text>
