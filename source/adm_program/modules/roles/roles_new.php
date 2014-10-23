@@ -146,7 +146,7 @@ $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->ge
     {
         $form->addTextInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), 100, FIELD_MANDATORY);
     }
-    $form->addMultilineTextInput('rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 2, 255);
+    $form->addMultilineTextInput('rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 3, 4000);
     $form->addSelectBoxForCategories('rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES', FIELD_MANDATORY, $role->getValue('rol_cat_id'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));

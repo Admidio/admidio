@@ -19,9 +19,8 @@ function profileJSClass()
 	
 	this.init = function()
 	{
-		$("a[rel='colorboxContent']").colorbox({rel:'nofollow'});
 		$("#menu_item_role_memberships_change").colorbox({rel:'nofollow'});
-		$("#menu_item_password a").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
+		$("#menu_item_password").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
 		$("#password_link").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
         $(".icon-link-popup").colorbox({rel:'nofollow',scrolling:false,onComplete:function(){$("#admButtonNo").focus();}});
 	}

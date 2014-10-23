@@ -31,7 +31,7 @@ body {
     margin-top: 0px;
     margin-bottom: 25px;
     padding: 1.5%;
-    background-color: #96c4cb; 
+    background-color: #ffffff; 
     background-repeat: repeat-x;
     background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
 }

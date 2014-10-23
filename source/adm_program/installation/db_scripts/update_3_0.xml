@@ -2,14 +2,14 @@
 <update>
 	<step id="10">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('db_version', 'db_version_beta')</step>
 	<step id="20">ALTER TABLE %PREFIX%_members ADD COLUMN mem_approved integer unsigned default null</step>
-	<step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(255)</step>
+	<step id="30">ALTER TABLE %PREFIX%_members ADD COLUMN mem_comment varchar(4000)</step>
 	<step id="40">ALTER TABLE %PREFIX%_members ADD COLUMN mem_count_guests integer unsigned not null default '0'</step>
 	<step id="50">UPDATE %PREFIX%_preferences SET prf_value = '25' WHERE prf_name LIKE 'lists_members_per_page'</step>
 	<step id="60">CREATE TABLE IF NOT EXISTS %PREFIX%_messages 
         (msg_type varchar(10) NOT NULL, 
          msg_id1 bigint(20) NOT NULL, 
          msg_id2 int(10) NOT NULL, 
-         msg_subject varchar(256) NOT NULL, 
+         msg_subject varchar(255) NOT NULL, 
          msg_usrid1 int(10) NOT NULL, 
          msg_usrid2 int(10) DEFAULT NULL, 
          msg_message text NOT NULL,
@@ -48,5 +48,19 @@
 	<step id="200" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_location TYPE varchar(100)</step>
 	<step id="210">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'photo_thumbs_column' INNER JOIN %PREFIX%_preferences pr3 ON pr3.prf_name LIKE 'photo_thumbs_row' SET pr1.prf_value = pr2.prf_value * pr3.prf_value WHERE pr1.prf_name LIKE 'photo_thumbs_page'</step>
 	<step id="220">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('photo_thumbs_column', 'photo_thumbs_row')</step>
+	<step id="230" database="mysql">ALTER TABLE %PREFIX%_user_data MODIFY COLUMN usd_value varchar(4000)</step>
+	<step id="240" database="postgresql">ALTER TABLE %PREFIX%_user_data ALTER COLUMN usd_value TYPE varchar(4000)</step>
+	<step id="250" database="mysql">ALTER TABLE %PREFIX%_roles MODIFY COLUMN rol_description varchar(4000)</step>
+	<step id="260" database="postgresql">ALTER TABLE %PREFIX%_roles ALTER COLUMN rol_description TYPE varchar(4000)</step>
+	<step id="270" database="mysql">ALTER TABLE %PREFIX%_user_log MODIFY COLUMN usl_value_old varchar(4000)</step>
+	<step id="280" database="postgresql">ALTER TABLE %PREFIX%_user_log ALTER COLUMN usl_value_old TYPE varchar(4000)</step>
+	<step id="290" database="mysql">ALTER TABLE %PREFIX%_user_log MODIFY COLUMN usl_value_new varchar(4000)</step>
+	<step id="300" database="postgresql">ALTER TABLE %PREFIX%_user_log ALTER COLUMN usl_value_new TYPE varchar(4000)</step>
+	<step id="310" database="mysql">ALTER TABLE %PREFIX%_user_data MODIFY COLUMN usf_icon varchar(2000)</step>
+	<step id="320" database="postgresql">ALTER TABLE %PREFIX%_user_data ALTER COLUMN usf_icon TYPE varchar(2000)</step>
+	<step id="330" database="mysql">ALTER TABLE %PREFIX%_user_data MODIFY COLUMN usf_url varchar(2000)</step>
+	<step id="340" database="postgresql">ALTER TABLE %PREFIX%_user_data ALTER COLUMN usf_url TYPE varchar(2000)</step>
+	<step id="350" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_url varchar(2000)</step>
+	<step id="360" database="postgresql">ALTER TABLE %PREFIX%_links ALTER COLUMN lnk_url TYPE varchar(2000)</step>
 	<step>stop</step>
 </update>

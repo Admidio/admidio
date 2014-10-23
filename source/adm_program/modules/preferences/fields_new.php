@@ -143,8 +143,8 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
                            'DROPDOWN' => $gL10n->get('SYS_DROPDOWN_LISTBOX'),
                            'EMAIL'    => $gL10n->get('SYS_EMAIL'),
                            'RADIO_BUTTON' => $gL10n->get('SYS_RADIO_BUTTON'),
-                           'TEXT'     => $gL10n->get('SYS_TEXT').' (50)',
-                           'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (255)',
+                           'TEXT'     => $gL10n->get('SYS_TEXT').' (100 '.$gL10n->get('SYS_CHARACTERS').')',
+                           'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (4000 '.$gL10n->get('SYS_CHARACTERS').')',
                            'URL'      => $gL10n->get('ORG_URL'),
                            'NUMERIC'  => $gL10n->get('SYS_NUMBER'));
 
@@ -159,8 +159,8 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
         $form->addSelectBox('usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText, FIELD_MANDATORY, $userField->getValue('usf_type'));
     }
     $form->addMultilineTextInput('usf_value_list', $gL10n->get('ORG_VALUE_LIST'), $userField->getValue('usf_value_list', 'database'), 6, 0, FIELD_MANDATORY, 'ORG_VALUE_LIST_DESC');
-    $form->addTextInput('usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_icon', 'database'), 100, FIELD_DEFAULT);
-    $form->addTextInput('usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'), 100, FIELD_DEFAULT, 'text', 'ORG_FIELD_URL_DESC');
+    $form->addTextInput('usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_icon', 'database'), 2000, FIELD_DEFAULT);
+    $form->addTextInput('usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'), 2000, FIELD_DEFAULT, 'text', 'ORG_FIELD_URL_DESC');
 $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     $form->addCheckbox('usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), $userField->getValue('usf_hidden'), FIELD_DEFAULT, 'ORG_FIELD_HIDDEN_DESC', null, 'eye.png');

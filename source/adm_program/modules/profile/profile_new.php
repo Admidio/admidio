@@ -328,7 +328,7 @@ foreach($gProfileFields->mProfileFields as $field)
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'TEXT_BIG')
         {
             $form->addMultilineTextInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-                $user->getValue($field->getValue('usf_name_intern')), 2, 255, $fieldProperty, $helpId, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+                $user->getValue($field->getValue('usf_name_intern')), 3, 4000, $fieldProperty, $helpId, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
         }
         else
         {
@@ -341,18 +341,20 @@ foreach($gProfileFields->mProfileFields as $field)
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'EMAIL')
             {
+                // email could not be longer than 254 characters
                 $fieldType = 'email';
-                $maxlength = '255';
+                $maxlength = '254';
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'URL')
             {
+                // maximal browser compatible url length will be 2000 characters
                 $fieldType = 'url';
-                $maxlength = '255';
+                $maxlength = '2000';
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'NUMERIC')
             {
                 $fieldType = 'number';
-                $maxlength = '50';
+                $maxlength = '100';
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'cat_name_intern') == 'SOCIAL_NETWORKS')
             {

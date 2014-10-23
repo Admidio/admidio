@@ -290,7 +290,7 @@ create table %PREFIX%_links
    lnk_cat_id                     integer       unsigned not null,
    lnk_name                       varchar(255)  not null,
    lnk_description                text,
-   lnk_url                        varchar(255)  not null,
+   lnk_url                        varchar(2000)  not null,
    lnk_counter                    integer       not null default 0,
    lnk_usr_id_create              integer       unsigned,
    lnk_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
@@ -360,7 +360,7 @@ create table %PREFIX%_members
    mem_usr_id_change              integer       unsigned,
    mem_timestamp_change           timestamp 	null default null,
    mem_approved                   integer       unsigned default null,
-   mem_comment                    varchar(255),
+   mem_comment                    varchar(4000),
    mem_count_guests               integer       unsigned not null default '0',
    primary key (mem_id)
 )
@@ -480,7 +480,7 @@ create table %PREFIX%_roles
    rol_cat_id                     integer       unsigned not null,
    rol_lst_id                     integer       unsigned,
    rol_name                       varchar(50)   not null,
-   rol_description                varchar(255),
+   rol_description                varchar(4000),
    rol_assign_roles               boolean       not null default '0',
    rol_approve_users              boolean       not null default '0',
    rol_announcements              boolean       not null default '0',
@@ -600,8 +600,8 @@ create table %PREFIX%_user_fields
    usf_name                       varchar(100)  not null,
    usf_description                text,
    usf_value_list                 text,
-   usf_icon 					  varchar(255),
-   usf_url	 				      varchar(255),
+   usf_icon 					  varchar(2000),
+   usf_url	 				      varchar(2000),
    usf_system                     boolean       not null default '0',
    usf_disabled                   boolean       not null default '0',
    usf_hidden                     boolean       not null default '0',
@@ -629,7 +629,7 @@ create table %PREFIX%_user_data
    usd_id                         integer       unsigned not null AUTO_INCREMENT,
    usd_usr_id                     integer       unsigned not null,
    usd_usf_id                     integer       unsigned not null,
-   usd_value                      varchar(255),
+   usd_value                      varchar(4000),
    primary key (usd_id)
 )
 engine = InnoDB
@@ -646,8 +646,8 @@ CREATE TABLE %PREFIX%_user_log (
   usl_id                INTEGER                  NOT NULL AUTO_INCREMENT ,
   usl_usr_id            INTEGER         unsigned NOT NULL ,
   usl_usf_id            INTEGER         unsigned NOT NULL ,
-  usl_value_old         VARCHAR(255)             NULL ,
-  usl_value_new         VARCHAR(255)             NULL ,
+  usl_value_old         VARCHAR(4000)             NULL ,
+  usl_value_new         VARCHAR(4000)             NULL ,
   usl_usr_id_create     INTEGER         unsigned NULL ,
   usl_timestamp_create  TIMESTAMP                NOT NULL DEFAULT CURRENT_TIMESTAMP ,
   usl_comment           VARCHAR(255) NULL ,

@@ -246,7 +246,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
     //Thumbnailtabelle
     $photoThumbnailTable = '<div class="row">';
     
-    for($actThumbnail = 1; $actThumbnail <= $gPreferences['photo_thumbs_page'] || $actThumbnail > $photoAlbum->getValue('pho_quantity'); $actThumbnail++)
+    for($actThumbnail = 1; $actThumbnail <= $gPreferences['photo_thumbs_page'] && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); $actThumbnail++)
     {
         //Errechnug welches Bild ausgegeben wird
         $lastPhotoNr = $getPhotoNr + $actThumbnail;
