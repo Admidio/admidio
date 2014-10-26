@@ -359,9 +359,16 @@ elseif($getMode == 6)  // Creating configuration file
     // detect root path
     $rootPath = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
     $rootPath = substr($rootPath, 0, strpos($rootPath, '/adm_program'));
-    if(!strpos($rootPath, 'http://'))
+    if(!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
     {
-        $rootPath = 'http://'. $rootPath;
+		if(!isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+		{
+			$rootPath = 'http://'. $rootPath;
+		}
+		else
+		{
+			$rootPath = 'https://'. $rootPath;
+		}
     }
 
     // replace placeholders in configuration file structure with data of installation wizard
