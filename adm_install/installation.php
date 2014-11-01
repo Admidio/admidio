@@ -424,13 +424,13 @@ elseif($getMode == 7) // Download configuration file
     $root_path = substr($root_path, 0, strpos($root_path, '/adm_install'));
     if(!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
     {
-		if(!isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
+		if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
 		{
-			$rootPath = 'http://'. $rootPath;
+			$rootPath = 'https://'. $rootPath;
 		}
 		else
 		{
-			$rootPath = 'https://'. $rootPath;
+			$rootPath = 'http://'. $rootPath;
 		}
     }
 
