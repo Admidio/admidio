@@ -251,63 +251,7 @@ class ModuleMenu
 		{
 			++$linkCnt;
 
-			if($menuEntry['type'] == 'category')
-			{
-				// create select box with all categories that have links
-				$calendarSelectBox = FormElements::generateCategorySelectBox($menuEntry['categoryType'], $menuEntry['defaultCategory'], 
-																			 $menuEntry['id'].'SelectBox', $gL10n->get('SYS_ALL'), true);
-									
-				// dates have other calendar as name for categories
-				if($menuEntry['categoryType'] == 'DAT')
-				{
-    				$textManageCategories = $gL10n->get('DAT_MANAGE_CALENDARS');
-				}
-				else
-				{
-    				$textManageCategories = $gL10n->get('SYS_MAINTAIN_CATEGORIES');
-				}
-						
-				if(strlen($calendarSelectBox) == 0)
-				{
-				    // if no category was found then show link to manage categories if user has the right
-				    if($menuEntry['admin'] == true)
-				    {
-    				    $menuEntry['icon'] = THEME_PATH.'/icons/edit.png';
-    				    $menuEntry['link'] = $this->root_path.'/adm_program/modules/categories/categories.php?type='.$menuEntry['categoryType'].'&title='.$menuEntry['text'];
-    				    $menuEntry['text'] = $textManageCategories;
-    				    $html .= $this->createIconTextLink($menuEntry);
-                    }
-    				continue;
-				}
-
-				// show category select box with link to calendar preferences
-				$html .= '
-				<script type="text/javascript"><!--
-					$(document).ready(function() {
-						$("#'.$menuEntry['id'].'SelectBox").change(function () {
-							self.location.href = "'.$menuEntry['link'].'" + $(this).val();
-						});
-					}); 
-				//--></script>
-
-                <li id="'.$menuEntry['id'].'">
-                    <form class="navbar-form navbar-left" role="search">
-                        <div class="form-group">
-                            <label for"'.$menuEntry['id'].'SelectBox">'.$menuEntry['text'].'</label>'.$calendarSelectBox;
-
-					if($menuEntry['admin'] == true)
-					{
-    				    // show link to manage categorie
-						$html .= '&nbsp;<a class="icon-link" href="'.$this->root_path.'/adm_program/modules/categories/categories.php?type='.$menuEntry['categoryType'].'&amp;title='.$menuEntry['text'].'"><img
-							src="'. THEME_PATH. '/icons/edit.png" alt="'.$textManageCategories.'" title="'.$textManageCategories.'" /></a>';
-					}
-				$html .= '</div></form></li>';
-			}
-			else if($menuEntry['type'] == 'form')
-            {
-                $formHtml .= $menuEntry['content'];
-            }
-			else if($menuEntry['type'] == 'html')
+			if($menuEntry['type'] == 'html')
             {
                 $html .= $menuEntry['content'];
             }

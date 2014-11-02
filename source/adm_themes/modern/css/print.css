@@ -1,29 +1,31 @@
 /******************************************************************************
- * Cascading-Style-Sheets-Datei um das Aussehen der Druckvorschau anzupassen
+ * Cascading-Style-Sheets-File to change the layout of optimized print pages
  *
  * Copyright    : (c) 2004 - 2013 The Admidio Team
  * Homepage     : http://www.admidio.org
  * License      : GNU Public License 2 http://www.gnu.org/licenses/gpl-2.0.html
  *
- * Diese CSS-Datei ist fuer das Layout des Listendrucks zustaendig. Hier 
- * koennen Sie spezielle Anpassungen fuer einen besseren Druck vornehmen
+ * This css file is used to specify the layout of print previews e.g. in lists
+ * or in dates. The file is loaded after the admidio.css and could override
+ * layout settings of that file.
  *
  *****************************************************************************/
-
-/* Layout fuer die Drucklisten
-   Dieses braucht in der Regel nicht angepasst werden.
-   Es ist für schwarz/weiß Drucker optimiert. */
 
 body {
     color: #000000;
     font-family: arial, sans-serif;
     font-size: 10pt;
     background-color: #ffffff;
+    background-image: none;
     text-align: center;
 	margin: 20px;
 }
 
-.admTablePrint {
+h1 {
+    border-bottom-width: 0px;
+}
+
+.table {
     width: 270mm;
     background-color: #ffffff;
     border: 1px solid #cccccc;
@@ -32,11 +34,12 @@ body {
     margin: auto;
 }
 
-.admTablePrint th {
+.table thead > tr > th {
     color: #000000;
     font-family: arial, sans-serif;
     font-size: 10pt;
     background-color: #cccccc;
+    border-bottom: 2px solid #cccccc;
 }
 
 .group-heading {
@@ -50,62 +53,7 @@ body {
     font-weight: bold;
     font-style: italic;
     letter-spacing: 0.2em;
-}
-
-.admTablePrint td {
-    border-width: 0px;
-    border-style: solid;
-}
-
-
-/* Einfache rechteckige Groupbox mit Rahmen um bestimmte Teile zu markieren,
-   z.B. die Infobox in Listen */
-
-.admGroupBox {
-    color: #000000;
-    background-color: #ffffff;
-    border: 1px solid #cccccc;
-    /*padding: 5px 10px 5px 10px;*/
-    text-align: left;
-    margin: auto;
-    margin-top: 20px;
-}
-
-/* Ueberschrift der rechteckigen Groupbox */
-
-.admGroupBoxHeadline {
-    background-color: #cccccc;
-    color: #000000;
-    font-weight: bold;
-    padding: 2px 3px;
-}
-
-/* Ordnet Felder mit ihren Beschreibungen in Formularen.
-   Diese werden in einer Liste untereinander und 
-   mit Beschreibung + Feld nebenandern angeordnet */
-
-.admFieldRow { 
-    clear: both;
-}
-
-.admFieldLabel {
-    float: left;
-	display: inline-block;
-    width: 30%;
-    text-align: left;
-    padding: 3px;
-}
-
-.admFieldElement {
-    display: inline-block;
-    width: 65%;
-    text-align: left;
-    padding: 3px;
-    white-space: nowrap;
-}
-
-#adm_lists_infobox {
-    width:             400px; 
+    border-bottom: 2px solid #eeeeee;
 }
 
 /************************************** 

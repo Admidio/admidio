@@ -11,12 +11,12 @@
  *  permanently in the module. The other items are summarized in a submenu.
  *  @par Examples
  *  @code   // create module menu
- *  $myModuleMenu = new ModuleMenu('admMenuMyModule');
+ *  $myNavbar = new HtmlNavbar('admMenuMyModule');
  *  
  *  // show link to create new announcement
- *  $myModuleMenu->addItem('admMenuItemNewEntry', $g_root_path.'/adm_program/modules/mymodule/mymodule_new.php', 
+ *  $myNavbar->addItem('menu_item_new_entry', $g_root_path.'/adm_program/modules/mymodule/mymodule_new.php', 
  *  						$gL10n->get('SYS_CREATE'), 'add.png');
- *  $myModuleMenu->show(); @endcode
+ *  $myNavbar->show(); @endcode
  */
 /*****************************************************************************
  *

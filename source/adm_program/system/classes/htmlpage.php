@@ -35,6 +35,7 @@ class HtmlPage
     protected $cssFiles;        ///< An array with all necessary cascading style sheets files for the html page.
     protected $jsFiles;         ///< An array with all necessary javascript files for the html page.
     protected $rssFiles;        ///< An array with all necessary rss files for the html page.
+    protected $printMode;       ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
     
     /** Constructor creates the page object and initialized all parameters
      *  @param $title A string that contains the title for the page.
@@ -48,6 +49,7 @@ class HtmlPage
         $this->title = $title;
 		$this->bodyOnload = '';
         $this->containThemeHtml = true;
+        $this->printMode = false;
         
         $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css', 
                                 $g_root_path.'/adm_program/libs/colorbox/colorbox.css');
@@ -145,21 +147,6 @@ class HtmlPage
         }
     }
     
-    /** Initialize all member parameters of this class
-     */
-    public function clear()
-    {
-        $this->pageContent              = null;
-        $this->javascriptContent        = null;
-        $this->javascriptContentExecute = null;
-        $this->title                    = null;
-        $this->header                   = null;
-        $this->containThemeHtml         = true;
-        $this->cssFiles                 = array();
-        $this->jsFiles                  = array();
-        $this->rssFiles                 = array();
-    }
-    
     /** Every html page of Admidio contains three files of the custom theme.
      *  my_header.php, my_body_top.php and my_body_bottom.php
      *  With these files the webmaster can contain custom layout to Admidio.
@@ -177,6 +164,14 @@ class HtmlPage
     public function getTitle()
     {
         return $this->title;
+    }
+    
+    /** If print mode is set then a print specific css file will be loaded.
+     *  All styles will be more print compatible and are only black, grey and white.
+     */
+    public function setPrintMode()
+    {
+        $this->printMode = true;
     }
         
     /** Set the title of the html page. This will also be the h1 headline for the Admidio page.
@@ -205,6 +200,12 @@ class HtmlPage
         
         // add admidio css file at last because there the user can redefine all css
         $this->addCssFile(THEME_PATH.'/css/admidio.css');
+        
+        // if print mode is set then add a print specific css file
+        if($this->printMode)
+        {
+            $this->addCssFile(THEME_PATH.'/css/print.css');
+        }
         
         // load content of theme files
         if($this->containThemeHtml)
