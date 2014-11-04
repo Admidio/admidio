@@ -56,10 +56,10 @@
 	<step id="280" database="postgresql">ALTER TABLE %PREFIX%_user_log ALTER COLUMN usl_value_old TYPE varchar(4000)</step>
 	<step id="290" database="mysql">ALTER TABLE %PREFIX%_user_log MODIFY COLUMN usl_value_new varchar(4000)</step>
 	<step id="300" database="postgresql">ALTER TABLE %PREFIX%_user_log ALTER COLUMN usl_value_new TYPE varchar(4000)</step>
-	<step id="310" database="mysql">ALTER TABLE %PREFIX%_user_data MODIFY COLUMN usf_icon varchar(2000)</step>
-	<step id="320" database="postgresql">ALTER TABLE %PREFIX%_user_data ALTER COLUMN usf_icon TYPE varchar(2000)</step>
-	<step id="330" database="mysql">ALTER TABLE %PREFIX%_user_data MODIFY COLUMN usf_url varchar(2000)</step>
-	<step id="340" database="postgresql">ALTER TABLE %PREFIX%_user_data ALTER COLUMN usf_url TYPE varchar(2000)</step>
+	<step id="310" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_icon varchar(2000)</step>
+	<step id="320" database="postgresql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_icon TYPE varchar(2000)</step>
+	<step id="330" database="mysql">ALTER TABLE %PREFIX%_user_fields MODIFY COLUMN usf_url varchar(2000)</step>
+	<step id="340" database="postgresql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_url TYPE varchar(2000)</step>
 	<step id="350" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_url varchar(2000)</step>
 	<step id="360" database="postgresql">ALTER TABLE %PREFIX%_links ALTER COLUMN lnk_url TYPE varchar(2000)</step>
 	<step>stop</step>
