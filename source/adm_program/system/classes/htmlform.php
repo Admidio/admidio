@@ -281,9 +281,9 @@ class HtmlForm extends HtmlFormBasic
     /** Add custom html content to the form within the default field structure. The Label will be set 
      *  but instead of an form control you can define any html. If you don't need the field structure
      *  and want to add html then use the method addHtml()
-     *  @param $id         Id of the custom content.
      *  @param $label      The label of the custom content.
      *  @param $content    A simple Text or html that would be placed instead of an form element.
+     *  @param $referenceId Optional the id of a form control if this is defined within the custom content
 	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
      *                           If you need an additional parameter for the text you can add an array. The first entry must
@@ -295,7 +295,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
      *  @param $class      Optional an additional css classname.
      */
-    public function addCustomContent($id, $label, $content, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addCustomContent($label, $content, $referenceId = null, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
     {
         $this->countElements++;
     
@@ -305,7 +305,7 @@ class HtmlForm extends HtmlFormBasic
             $attributes['class'] .= ' '.$class;
         }
 
-        $this->openControlStructure($id, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon, 'form-custom-content');
+        $this->openControlStructure($referenceId, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon, 'form-custom-content');
         $this->addHtml($content);
         $this->closeControlStructure($helpTextIdInline);
     }
@@ -1125,7 +1125,11 @@ class HtmlForm extends HtmlFormBasic
      *  @param $id         Id of the input field. This will also be the name of the input field.
      *  @param $label      The label of the input field.
 	 *  @param $value      A value for the text field. The field will be created with this value.
-     *  @param $maxLength  The maximum number of characters that are allowed in this field.
+     *  @param $conditions Here you can define conditions to the field depending on the field $type
+     *                     $type 'text'   = The maximum number of characters that are allowed in this field.
+     *                     $type 'number' = An array that contains the min number, the max number and the steps
+     *                                      e.g. array(0, 10000, 5) then a value between 0 and 10000 is allowed
+     *                                      in steps of 5:   5, 10, 15 ...
      *  @param $property   With this param you can set the following properties: 
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
@@ -1145,7 +1149,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-    public function addTextInput($id, $label, $value, $maxLength = 0, $property = FIELD_DEFAULT, $type = 'text', 
+    public function addTextInput($id, $label, $value, $conditions = 0, $property = FIELD_DEFAULT, $type = 'text', 
                                  $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
     {
         global $gL10n, $gPreferences, $g_root_path;
@@ -1155,9 +1159,15 @@ class HtmlForm extends HtmlFormBasic
         $attributes = array('class' => 'form-control');
 
         // set max input length
-        if($maxLength > 0 && $type != 'date')
+        if($type == 'text' && $conditions > 0)
         {
-            $attributes['maxlength'] = $maxLength;
+            $attributes['maxlength'] = $conditions;
+        }
+        elseif($type == 'number' && is_array($conditions))
+        {
+            $attributes['min'] = $conditions[0];
+            $attributes['max'] = $conditions[1];
+            $attributes['step'] = $conditions[2];
         }
 
         // disable field
@@ -1268,11 +1278,11 @@ class HtmlForm extends HtmlFormBasic
                 // if text is a translation-id then translate it
     			if(strpos($helpTextId[1], '_') == 3)
                 {
-                    $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1])).'</span>');
+                    $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $gL10n->get($helpTextId[1])).'</div>');
                 }
                 else
                 {
-                    $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1]).'</span>');
+                    $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId[0], $helpTextId[1]).'</div>');
                 }
             }
             else
@@ -1280,11 +1290,11 @@ class HtmlForm extends HtmlFormBasic
                 // if text is a translation-id then translate it
     			if(strpos($helpTextId, '_') == 3)
                 {
-                    $this->addHtml('<span class="help-block">'.$gL10n->get($helpTextId).'</span>');
+                    $this->addHtml('<div class="help-block">'.$gL10n->get($helpTextId).'</div>');
                 }
                 else
                 {
-                    $this->addHtml('<span class="help-block">'.$helpTextId.'</span>');                    
+                    $this->addHtml('<div class="help-block">'.$helpTextId.'</div>');                    
                 }
             }
         }

@@ -294,7 +294,7 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
 	}
     $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, FIELD_DEFAULT, 'DAT_LOGIN_POSSIBLE');
     $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, FIELD_DEFAULT, 'DAT_PARTICIPATE_AT_DATE_DESC');
-    $form->addTextInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), 5, FIELD_DEFAULT, 'number', 'DAT_MAX_MEMBERS');
+    $form->addTextInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), array(0, 99999, 1), FIELD_DEFAULT, 'number', 'DAT_MAX_MEMBERS');
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
     $form->addEditor('dat_description', null, $date->getValue('dat_description'));

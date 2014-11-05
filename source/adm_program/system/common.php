@@ -29,6 +29,7 @@ if($gDebug)
     // write actual script with parameters in log file
     error_log("--------------------------------------------------------------------------------\n".
               $_SERVER['SCRIPT_FILENAME']. "\n? ". $_SERVER['QUERY_STRING']);
+    error_log('memory_used::'.memory_get_usage());
 }
 
  // default prefix is set to 'adm' because of compatibility to old versions

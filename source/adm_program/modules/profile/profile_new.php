@@ -246,7 +246,7 @@ foreach($gProfileFields->mProfileFields as $field)
                        || (   $gCurrentUser->isWebmaster() 
                           && (strlen($user->getValue('usr_login_name')) == 0 || strlen($user->getValue('EMAIL')) == 0))))
                     {
-                        $form->addCustomContent('password_link', $gL10n->get('SYS_PASSWORD'), '            
+                        $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '            
                             <a id="password_link" class="icon-text-link" href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_PATH. '/icons/key.png" 
                             	alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
@@ -354,7 +354,7 @@ foreach($gProfileFields->mProfileFields as $field)
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'NUMERIC')
             {
                 $fieldType = 'number';
-                $maxlength = '100';
+                $maxlength = array(0, 9999999999, 1);
             }
             elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'cat_name_intern') == 'SOCIAL_NETWORKS')
             {

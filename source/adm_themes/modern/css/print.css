@@ -13,8 +13,6 @@
 
 body {
     color: #000000;
-    font-family: arial, sans-serif;
-    font-size: 10pt;
     background-color: #ffffff;
     background-image: none;
     text-align: center;
@@ -37,23 +35,17 @@ h1 {
 .table thead > tr > th {
     color: #000000;
     font-family: arial, sans-serif;
-    font-size: 10pt;
     background-color: #cccccc;
     border-bottom: 2px solid #cccccc;
 }
 
-.group-heading {
-    background-color: #eeeeee;
-    padding: 0px;
-}
-
 .group-heading td {
-    color: #888888;
+    color: #666666;
     font-size: 12pt;  
     font-weight: bold;
-    font-style: italic;
-    letter-spacing: 0.2em;
-    border-bottom: 2px solid #eeeeee;
+    letter-spacing: 0.5em;
+    background-color: #eeeeee;
+    border-bottom: 1px solid #dddddd;
 }
 
 /************************************** 

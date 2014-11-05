@@ -175,7 +175,7 @@ $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
 	}
     $form->addSelectBox('rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries, FIELD_DEFAULT, $role->getValue('rol_lst_id'), true, false, 'ROL_DEFAULT_LIST_DESC');
     $form->addCheckbox('rol_default_registration', $gL10n->get('ROL_DEFAULT_REGISTRATION'), $role->getValue('rol_default_registration'), FIELD_DEFAULT, 'ROL_DEFAULT_REGISTRATION_DESC');
-    $form->addTextInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'), 3, FIELD_DEFAULT, 'number');
+    $form->addTextInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'), array(0, 99999, 1), FIELD_DEFAULT, 'number');
     $form->addTextInput('rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'), 6, FIELD_DEFAULT, 'text', null, null, null, 'form-control-small');
     $form->addSelectBox('rol_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods(), FIELD_DEFAULT, $role->getValue('rol_cost_period'));
 $form->closeGroupBox();
