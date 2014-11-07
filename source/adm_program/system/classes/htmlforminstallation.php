@@ -95,14 +95,19 @@ class HtmlFormInstallation extends HtmlForm
             <!-- (c) 2004 - 2013 The Admidio Team - http://www.admidio.org -->
             
             <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1">
             <meta name="author"   content="Admidio Team" />
             <meta name="robots"   content="noindex" />
             
             <title>Admidio - '. $this->title. '</title>
 
             <link rel="shortcut icon" type="image/x-icon" href="layout/favicon.png" />
-            <link rel="stylesheet" type="text/css" href="layout/install.css" />
+            
+            <link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.min.css" />
+            <link rel="stylesheet" type="text/css" href="layout/admidio.css" />
+            
             <script type="text/javascript" src="../libs/jquery/jquery.js"></script>
+            <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="../system/js/common_functions.js"></script>
             
             <script type="text/javascript"><!--
@@ -129,7 +134,7 @@ class HtmlFormInstallation extends HtmlForm
             //--></script>
         </head>
         <body>
-            <div class="admContent" id="adm_content">&nbsp;
+            <div class="admidio-container" id="adm_content">&nbsp;
                 <img id="admidio-logo" src="layout/logo.png" alt="Logo" />
                 <h1>'. $this->headline. '</h1>';
                 // if set then show description

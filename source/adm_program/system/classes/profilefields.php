@@ -474,7 +474,20 @@ class ProfileFields
                     return false;
                 }
             }
-            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'NUMERIC')
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'NUMBER')
+            {
+                // A number must be numeric
+                if(is_numeric($fieldValue) == false && $this->noValueCheck != true)
+                {
+                    return false;
+                }
+                else
+                {
+                    // numbers don't have leading zero
+                    $fieldValue = ltrim($fieldValue, '0');
+                }
+            }
+            elseif($this->mProfileFields[$fieldNameIntern]->getValue('usf_type') == 'DECIMAL_NUMBER')
             {
                 // A number must be numeric
                 if(is_numeric(strtr($fieldValue, ',.', '00')) == false && $this->noValueCheck != true)

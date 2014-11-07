@@ -351,7 +351,7 @@ foreach($gProfileFields->mProfileFields as $field)
                 $fieldType = 'url';
                 $maxlength = '2000';
             }
-            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'NUMERIC')
+            elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'NUMBER')
             {
                 $fieldType = 'number';
                 $maxlength = array(0, 9999999999, 1);

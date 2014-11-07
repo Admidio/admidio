@@ -216,7 +216,7 @@ class ListConfiguration extends TableLists
                     $sqlOrderBy = $sqlOrderBy. ', ';
                 }
 
-                if($userFieldType == 'NUMERIC')
+                if($userFieldType == 'NUMBER' || $userFieldType == 'DECIMAL_NUMBER')
                 {
                     // if a field has numeric values then there must be a cast because database 
                     // column is varchar. A varchar sort of 1,10,2 will be with cast 1,2,10
@@ -264,7 +264,8 @@ class ListConfiguration extends TableLists
 						$arrListValues = $gProfileFields->getPropertyById($listColumn->getValue('lsc_usf_id'), 'usf_value_list', 'text');
                         $value = array_search(admStrToLower($value), array_map('admStrToLower',$arrListValues));
 					}
-                    elseif($userFieldType == 'NUMERIC')
+                    elseif($userFieldType == 'NUMBER'
+                    ||     $userFieldType == 'DECIMAL_NUMBER')
                     {
                         $type = 'int';
                     }

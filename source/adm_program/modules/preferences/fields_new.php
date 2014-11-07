@@ -146,7 +146,8 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
                            'TEXT'     => $gL10n->get('SYS_TEXT').' (100 '.$gL10n->get('SYS_CHARACTERS').')',
                            'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (4000 '.$gL10n->get('SYS_CHARACTERS').')',
                            'URL'      => $gL10n->get('ORG_URL'),
-                           'NUMERIC'  => $gL10n->get('SYS_NUMBER'));
+                           'NUMBER'   => $gL10n->get('SYS_NUMBER'),
+                           'DECIMAL'  => $gL10n->get('SYS_DECIMAL_NUMBER'));
 
     if($userField->getValue('usf_system') == 1)
     {

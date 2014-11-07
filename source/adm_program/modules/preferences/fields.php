@@ -197,7 +197,8 @@ while($row = $gDb->fetch_array($result))
                             'TEXT'     => $gL10n->get('SYS_TEXT').' (50)',
                             'TEXT_BIG' => $gL10n->get('SYS_TEXT').' (255)',
                             'URL'      => $gL10n->get('ORG_URL'),
-                            'NUMERIC'  => $gL10n->get('SYS_NUMBER'));
+                            'NUMBER'   => $gL10n->get('SYS_NUMBER'),
+                            'DECIMAL'  => $gL10n->get('SYS_DECIMAL_NUMBER'));
     
     $usfSystem = '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/preferences/fields_new.php?usf_id='.$userField->getValue('usf_id').'"><img
                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>';     

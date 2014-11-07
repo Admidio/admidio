@@ -10,68 +10,35 @@
  *****************************************************************************/
  
 body {
-    color: #474b4c;
-    padding: 15px;
+    color: #606465;
+    padding: 70px 15px 15px 15px;
     margin: auto;
+    font-size: 11pt;
+    font-family: Helvetica, Verdana, Arial, sans-serif;
     background-color: #96c4cb; 
     background-repeat: repeat-x;
     background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
-    text-align: center;
-}
-
-/* Custom theme classes */
-
-#page {
-    text-align: center;
-    margin: 0px auto;
-    max-width: 1200px;
-}*
-
-#header-block {
-    margin-top: 0px;
-    margin-bottom: 25px;
-    padding: 1.5%;
-    background-color: #ffffff; 
-    background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
-}
-
-#page-h1-membership {
-    color: #44939F;
-    font-size: 18pt;
-    font-weight: bold;
-    border-bottom: none;
-    margin-top: 0px;
-    margin-left: 350px;
-}
-
-#admidio-logo {
-    top: -10px;
-    position: relative;
-    visibility: inherit;
-    margin-bottom: -130px;
-    
-}
-
-#page-h1-orga {
-    color: #dbebee;
-    font-size: 24pt;
-    font-weight: bold;
-    margin: 0px -3% 25px -3%;
-    padding: 3px 10px 3px 380px;
-    border: 1px solid #7d7d7d;
-    border-radius: 5px;
-    background-color: #96c4cb;
-    background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -webkit-linear-gradient(top, #55B6C5 0%, #347078 95%); background-image: -ms-linear-gradient(top, #55B6C5 0%, #347078 95%);	
+    text-align: left;
 }
 
 .admidio-container {
-	text-align: left;
+    margin: 0px auto;
+    max-width: 700px;
+    min-width: 200px;
+    padding: 15px;
     border: 1px solid #7d7d7d;
     border-radius: 15px;
-    padding: 15px 15px 20px 15px;
     background-color: #ffffff; 
+    background-repeat: repeat-x;
+    background-image: -moz-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #CBDDE3 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #CBDDE3 95%);	
+}
+
+#admidio-logo {
+    top: -90px;
+    position: relative;
+    visibility: inherit;
+    margin-bottom: -90px;
+    
 }
 
 /* Headlines */
@@ -385,7 +352,7 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 }
 
 .control-mandatory label:after, .control-mandatory-definition span:after {
-    content: url(../icons/bullet_red.png);
+    content: url(bullet_red.png);
     white-space: nowrap;
     vertical-align: top;
 }
@@ -529,81 +496,4 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 .dt-bootstrap {
     margin-bottom: 20px;
-}
-
-/* The module and administration menu on the main page */
-
-.admidio-menu {
-    margin-top: -10px;
-}
-
-.admMenuLargeIcons li .icon-text-link img {
-    width: 32px;
-    height: 32px;
-    vertical-align: middle !important;
-}
-
-.admMenuLargeIcons li .icon-text-link:link, .admMenuLargeIcons li .icon-text-link:visited {
-    color: #409099;
-    text-decoration: none;
-}
-
-.admMenuDescription {
-    margin-left: 38px;
-}
-
-.admMenuSubmenu {
-    display: inline;
-    margin-left: 10px;
-}
-
-/* Module specific css layout */
-
-#login_registration_link, #login_admidio_link {
-    margin-top: 15px;
-}
-
-#profile_photo {
-    display: inline;
-}
-
-#profile_picture_links {
-    margin-top: -10px;
-}
-
-.list-roles-assignment li, .list-roles-assignment-pos li {
-    border-width: 0px;
-}
-
-.list-roles-assignment li {
-    padding: 0px 0px 15px 0px;
-}
-
-.list-roles-assignment, .list-roles-assignment-pos {
-    margin-bottom: -5px;
-}
-
-.list-roles-assignment-pos li {
-    padding: 0px 0px 5px 0px;
-}
-
-#password_form .admPasswordInput {
-    width: 85%;
-}
-
-.album-image .thumbnail {
-    margin-bottom: 5px;
-}
-
-.weblink-item {
-    padding-top: 15px;
-}
-
-.weblink-description {
-    padding: 5px 0px;
-}
-
-tr.event-highlight, .event-highlight .panel-heading {
-    font-weight: bold;
-    color: #409099;
 }

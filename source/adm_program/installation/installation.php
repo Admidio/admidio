@@ -140,13 +140,13 @@ elseif($getMode == 2)  // Welcome to installation
     // if this is a beta version then show a notice to the user
     if(BETA_VERSION > 0)
     {
-        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('INS_WARNING_BETA_VERSION');
+        $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>';
     }
 
     // if safe mode is used then show a notice to the user
     if(ini_get('safe_mode') == 1)
     {    
-        $message .= '<br /><br /><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />'.$gL10n->get('INS_WARNING_SAFE_MODE');
+        $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_WARNING_SAFE_MODE').'</div>';
     }
 
     // create a page with the notice that the installation must be configured on the next pages
@@ -158,12 +158,12 @@ elseif($getMode == 2)  // Welcome to installation
 elseif($getMode == 3)  // Enter database access information
 {
     // initialize form data
-    if(isset($_SESSION['server']))
+    if(isset($_SESSION['db_server']))
     {
         $dbType   = $_SESSION['db_type'];
-        $server   = $_SESSION['server'];
-        $user     = $_SESSION['user'];
-        $database = $_SESSION['database'];
+        $server   = $_SESSION['db_server'];
+        $user     = $_SESSION['db_user'];
+        $database = $_SESSION['db_database'];
         $prefix   = $_SESSION['prefix'];
     }
     else
@@ -180,36 +180,36 @@ elseif($getMode == 3)  // Enter database access information
     $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', FIELD_MANDATORY, $dbType);
-    $form->addTextInput('server', $gL10n->get('SYS_SERVER'), $server, 50, FIELD_MANDATORY);
-    $form->addTextInput('user', $gL10n->get('SYS_USERNAME'), $user, 50, FIELD_MANDATORY);
-    $form->addTextInput('password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password');
-    $form->addTextInput('database', $gL10n->get('SYS_DATABASE'), $database, 50, FIELD_MANDATORY);
-    $form->addTextInput('prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
-    $form->addDescription('<img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />&nbsp;'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA'));
+    $form->addTextInput('db_server', $gL10n->get('SYS_SERVER'), $server, 50, FIELD_MANDATORY);
+    $form->addTextInput('db_user', $gL10n->get('SYS_USERNAME'), $user, 50, FIELD_MANDATORY);
+    $form->addTextInput('db_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password');
+    $form->addTextInput('db_database', $gL10n->get('SYS_DATABASE'), $database, 50, FIELD_MANDATORY);
+    $form->addTextInput('db_prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
+    $form->addDescription('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'</div>');
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), 'layout/forward.png', null, null, 'button');
     $form->show();
 }
 elseif($getMode == 4)  // Creating organization
 {
-    if(isset($_POST['server']))
+    if(isset($_POST['db_server']))
     {
-        if(strlen($_POST['prefix']) == 0)
+        if(strlen($_POST['db_prefix']) == 0)
         {
-            $_POST['prefix'] = 'adm';
+            $_POST['db_prefix'] = 'adm';
         }
         else
         {
             // wenn letztes Zeichen ein _ dann abschneiden
-            if(strrpos($_POST['prefix'], '_')+1 == strlen($_POST['prefix']))
+            if(strrpos($_POST['db_prefix'], '_')+1 == strlen($_POST['db_prefix']))
             {
-                $_POST['prefix'] = substr($_POST['prefix'], 0, strlen($_POST['prefix'])-1);
+                $_POST['db_prefix'] = substr($_POST['db_prefix'], 0, strlen($_POST['db_prefix'])-1);
             }
 
             // nur gueltige Zeichen zulassen
-            $anz = strspn($_POST['prefix'], 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_');
+            $anz = strspn($_POST['db_prefix'], 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_');
 
-            if($anz != strlen($_POST['prefix']))
+            if($anz != strlen($_POST['db_prefix']))
             {
                 showNotice($gL10n->get('INS_TABLE_PREFIX_INVALID'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
@@ -217,16 +217,16 @@ elseif($getMode == 4)  // Creating organization
 
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
         $_SESSION['db_type']  = strStripTags($_POST['db_type']);
-        $_SESSION['server']   = strStripTags($_POST['server']);
-        $_SESSION['user']     = strStripTags($_POST['user']);
-        $_SESSION['password'] = strStripTags($_POST['password']);
-        $_SESSION['database'] = strStripTags($_POST['database']);
-        $_SESSION['prefix']   = strStripTags($_POST['prefix']);
+        $_SESSION['db_server']   = strStripTags($_POST['db_server']);
+        $_SESSION['db_user']     = strStripTags($_POST['db_user']);
+        $_SESSION['db_password'] = strStripTags($_POST['db_password']);
+        $_SESSION['db_database'] = strStripTags($_POST['db_database']);
+        $_SESSION['prefix']   = strStripTags($_POST['db_prefix']);
 
         if(strlen($_SESSION['db_type'])  == 0
-		|| strlen($_SESSION['server'])   == 0
-        || strlen($_SESSION['user'])     == 0
-        || strlen($_SESSION['database']) == 0 )
+		|| strlen($_SESSION['db_server'])   == 0
+        || strlen($_SESSION['db_user'])     == 0
+        || strlen($_SESSION['db_database']) == 0 )
         {
             showNotice($gL10n->get('INS_MYSQL_LOGIN_NOT_COMPLETELY'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
@@ -236,7 +236,7 @@ elseif($getMode == 4)  // Creating organization
         {
             // check database connections
             $db = Database::createDatabaseObject($_SESSION['db_type']);
-            if($db->connect($_SESSION['server'], $_SESSION['user'], $_SESSION['password'], $_SESSION['database']) == false)
+            if($db->connect($_SESSION['db_server'], $_SESSION['db_user'], $_SESSION['db_password'], $_SESSION['db_database']) == false)
             {
                 showNotice($gL10n->get('INS_DATABASE_NO_LOGIN'), 'installation.php?mode=3', $gL10n->get('SYS_BACK'), 'layout/back.png');
             }
@@ -374,10 +374,10 @@ elseif($getMode == 6)  // Creating configuration file
     // replace placeholders in configuration file structure with data of installation wizard
     $configFileContent = str_replace('%PREFIX%',  $_SESSION['prefix'],  $configFileContent);
     $configFileContent = str_replace('%DB_TYPE%', $_SESSION['db_type'], $configFileContent);
-    $configFileContent = str_replace('%SERVER%',  $_SESSION['server'],  $configFileContent);
-    $configFileContent = str_replace('%USER%',    $_SESSION['user'],    $configFileContent);
-    $configFileContent = str_replace('%PASSWORD%',$_SESSION['password'],$configFileContent);
-    $configFileContent = str_replace('%DATABASE%',$_SESSION['database'],$configFileContent);
+    $configFileContent = str_replace('%SERVER%',  $_SESSION['db_server'],  $configFileContent);
+    $configFileContent = str_replace('%USER%',    $_SESSION['db_user'],    $configFileContent);
+    $configFileContent = str_replace('%PASSWORD%',$_SESSION['db_password'],$configFileContent);
+    $configFileContent = str_replace('%DATABASE%',$_SESSION['db_database'],$configFileContent);
     $configFileContent = str_replace('%ROOT_PATH%', $rootPath, $configFileContent);
     $configFileContent = str_replace('%ORGANIZATION%', $_SESSION['orga_shortname'], $configFileContent);
     $_SERVER['config_file_content'] = $configFileContent;
@@ -437,10 +437,10 @@ elseif($getMode == 8)	// Start installation
         // if previous dialogs were filled then check if the settings are equal to config file
         if($g_tbl_praefix != $_SESSION['prefix']
         || $gDbType       != $_SESSION['db_type']
-        || $g_adm_srv     != $_SESSION['server']
-        || $g_adm_usr     != $_SESSION['user']
-        || $g_adm_pw      != $_SESSION['password']
-        || $g_adm_db      != $_SESSION['database']
+        || $g_adm_srv     != $_SESSION['db_server']
+        || $g_adm_usr     != $_SESSION['db_user']
+        || $g_adm_pw      != $_SESSION['db_password']
+        || $g_adm_db      != $_SESSION['db_database']
         || $g_organization!= $_SESSION['orga_shortname'])
         {
             showNotice($gL10n->get('INS_DATA_DO_NOT_MATCH', 'config.php'), 'installation.php?mode=6', $gL10n->get('SYS_BACK'), 'layout/back.png');
@@ -589,7 +589,7 @@ elseif($getMode == 8)	// Start installation
     $text = $gL10n->get('INS_INSTALLATION_SUCCESSFUL').'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT');
     if(is_writeable('../../adm_my_files') == false)
     {
-        $text = $text. '<br /><br /><img src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /> '.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files');
+        $text = $text. '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_FOLDER_NOT_WRITABLE', 'adm_my_files').'</div>';
     }
     
     // show dialog with success notification

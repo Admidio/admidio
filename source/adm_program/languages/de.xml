@@ -113,6 +113,7 @@
     <text id="SYS_APPLY" development="new" translation="todo">Übernehmen</text>
     <text id="SYS_CATEGORIES" development="new" translation="todo">Kategorien</text>
     <text id="SYS_CHARACTERS" development="new" translation="todo">Zeichen</text>
+    <text id="SYS_DECIMAL_NUMBER" development="new" translation="todo">Dezimalzahl</text>
     <text id="SYS_FILTER" development="new" translation="todo">Filter</text>
     <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="todo">Hier können Kategorien angelegt und bearbeitet werden.</text>
     <text id="SYS_MENU" development="new" translation="todo">Menü</text>

@@ -148,7 +148,7 @@ class HtmlForm extends HtmlFormBasic
             $value = '<img src="'.$icon.'" alt="'.$text.'" />'.$value;
         }
         $this->addElement('button');
-        $this->addAttribute('class', 'btn btn-default');
+        $this->addAttribute('class', 'btn btn-default btn-form');
         if(strlen($class) > 0)
         {
             $this->addAttribute('class', $class);
@@ -1110,7 +1110,7 @@ class HtmlForm extends HtmlFormBasic
      */
     public function addSubmitButton($id, $text, $icon = null, $link = null, $class = null, $type = 'submit')
     {
-        $class .= ' btn-primary';
+        $class .= ' btn-primary btn-form';
 
         // now add button to form
         $this->addButton($id, $text, $icon, $link, $class, $type);

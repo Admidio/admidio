@@ -267,20 +267,25 @@ $page->addHtml($profileMenu->show(false));
 
 $page->addHtml('
 <div class="panel panel-default" id="user_data_panel">
-    <div class="panel-heading">'.
-        $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
-
-        // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
-        if(strlen($user->getValue('GENDER')) > 0
-        && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0 ))
-        {
-            $page->addHtml(' '.$user->getValue('GENDER', 'html'));
-        }
-    $page->addHtml('</div>        
-    <div class="panel-body">
+    <div class="panel-heading">'.$gL10n->get('SYS_MASTER_DATA').'</div>        
+    <div class="panel-body row">
         <div class="col-sm-8">');
             // create a static form
             $form = new HtmlForm('profile_user_data_form', null);
+            
+            // add lastname and firstname 
+            if(strlen($user->getValue('GENDER')) > 0
+            && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0 ))
+            {
+                // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
+                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME').' '.$user->getValue('GENDER', 'html'));
+            }
+            else
+            {
+                $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME'));
+            }
+            
+            // add loginname
             if(strlen($user->getValue('usr_login_name')) > 0)
             {
                 if ($user->getValue('usr_id') != $gCurrentUser->getValue('usr_id'))

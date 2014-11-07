@@ -86,28 +86,22 @@ class Email extends PHPMailer
         //Versandmethode festlegen        
         if($gPreferences['mail_send_method'] == 'SMTP')
         {
-			PHPMailerAutoload("smtp");
+			PHPMailerAutoload('smtp');
             $this->IsSMTP();
-            try
+
+            $this->Host        = $gPreferences['mail_smtp_host'];         
+            $this->SMTPAuth    = $gPreferences['mail_smtp_auth'];
+            $this->Port        = $gPreferences['mail_smtp_port'];
+            $this->SMTPSecure  = $gPreferences['mail_smtp_secure'];
+            $this->AuthType    = $gPreferences['mail_smtp_authentication_type'];
+            $this->Username    = $gPreferences['mail_smtp_user'];
+            $this->Password    = $gPreferences['mail_smtp_password'];
+            $this->Debugoutput = 'error_log';
+            
+            if($gDebug)
             {
-                $this->Host       = $gPreferences['mail_smtp_host'];         
-                $this->SMTPAuth   = $gPreferences['mail_smtp_auth'];
-                $this->Port       = $gPreferences['mail_smtp_port'];
-                $this->SMTPSecure = $gPreferences['mail_smtp_secure'];
-                $this->AuthType   = $gPreferences['mail_smtp_authentication_type'];
-                $this->Username   = $gPreferences['mail_smtp_user'];
-                $this->Password   = $gPreferences['mail_smtp_password'];
-                $this->Debugoutput = 'error_log';
-                
-                if($gDebug)
-                {
-                    $this->SMTPDebug  = 2; 
-                }            
-            }
-            catch (phpmailerException $e)
-            {
-               return $e->errorMessage();
-            }
+                $this->SMTPDebug  = 2; 
+            }            
         }
         else
         {

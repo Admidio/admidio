@@ -62,5 +62,6 @@
 	<step id="340" database="postgresql">ALTER TABLE %PREFIX%_user_fields ALTER COLUMN usf_url TYPE varchar(2000)</step>
 	<step id="350" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_url varchar(2000)</step>
 	<step id="360" database="postgresql">ALTER TABLE %PREFIX%_links ALTER COLUMN lnk_url TYPE varchar(2000)</step>
+	<step id="370">UPDATE %PREFIX%_user_fields SET usf_type = 'DECIMAL' WHERE usf_type = 'NUMERIC'</step>
 	<step>stop</step>
 </update>
