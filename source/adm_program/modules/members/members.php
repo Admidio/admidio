@@ -62,21 +62,6 @@ if($getMembers == 1)
                 OR cat_org_id IS NULL )) ';
 }
 
-// Anzahl relevanter Datensaetze ermitteln
-$sql = 'SELECT COUNT(1) as count
-		  FROM '. TBL_USERS. '
-          JOIN '. TBL_USER_DATA. ' as last_name
-            ON last_name.usd_usr_id = usr_id
-           AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-          JOIN '. TBL_USER_DATA. ' as first_name
-            ON first_name.usd_usr_id = usr_id
-           AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-         WHERE usr_valid = 1
-               '.$memberCondition;
-$result = $gDb->query($sql);
-$row    = $gDb->fetch_array($result);
-$membersCount = $row['count'];
-
 // alle Mitglieder zur Auswahl selektieren
 // unbestaetigte User werden dabei nicht angezeigt
 $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value as first_name,
