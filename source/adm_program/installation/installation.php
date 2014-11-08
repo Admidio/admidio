@@ -594,7 +594,8 @@ elseif($getMode == 8)	// Start installation
     
     // show dialog with success notification
     $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
-    $form->setFormDescription($text, '<img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL'));
+    $form->setFormDescription($text, '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span>
+                                        <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong></div>');
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png', null, null, 'button');
     $form->addSubmitButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php', null, 'button');
     $form->show();

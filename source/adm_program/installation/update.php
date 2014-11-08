@@ -155,9 +155,9 @@ else
 // if databse version is not set then show notice
 if(strlen($installedDbVersion) == 0)
 {
-	$message = '<img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
-				<h2>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</h2>'.
-				$gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION);
+	$message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>
+				    <strong>'.$gL10n->get('INS_UPDATE_NOT_POSSIBLE').'</strong></div>
+				<p>'.$gL10n->get('INS_NO_INSTALLED_VERSION_FOUND', ADMIDIO_VERSION).'</p>';
     showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 }
 
@@ -169,28 +169,30 @@ if($getMode == 1)
     if(version_compare($installedDbVersion, ADMIDIO_VERSION) < 0
 	||(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep > $currentUpdateStep))
     {
-        $message = '<h2><img style="vertical-align: top;" src="layout/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" />
-                    '.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $installedDbVersion, ADMIDIO_VERSION).'</h2>';
+        $message = '<h3>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $installedDbVersion, ADMIDIO_VERSION).'</h3>';
     }
 	// if versions are equal > no update
     elseif(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep == $currentUpdateStep)
     {
-        $message = '<h2><img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</h2>
-                    '.$gL10n->get('INS_DATABASE_IS_UP_TO_DATE');
+        $message = '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span>
+                        <strong>'.$gL10n->get('INS_DATABASE_IS_UP_TO_DATE').'</strong></div>
+                    <p>'.$gL10n->get('INS_DATABASE_DOESNOT_NEED_UPDATED').'</p>';
         showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
     }
 	// if source version smaller then database -> show error
 	else
 	{
-        $message = '<h2><img style="vertical-align: top;" src="layout/warning.png" /> '.$gL10n->get('SYS_ERROR').'</h2>
-                    '.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $installedDbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>');
+        $message = '<div class="alert alert-danger form-alert"><span class="glyphicon glyphicon-remove"></span>
+                        <strong>'.$gL10n->get('SYS_ERROR').'</strong>
+                        <p>'.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $installedDbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').'</p></div>';
         showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 	}
 
     // falls dies eine Betaversion ist, dann Hinweis ausgeben
     if(BETA_VERSION > 0)
     {
-        $message .= $gL10n->get('INS_WARNING_BETA_VERSION');
+        $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>
+                        '.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>';
     }
     
     showNotice($message, 'update.php?mode=2', $gL10n->get('INS_UPDATE_DATABASE'), 'layout/database_in.png', true);
@@ -346,9 +348,11 @@ elseif($getMode == 2)
 
     // show notice that update was successful
     $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
-    $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<img style="vertical-align: top;" src="layout/ok.png" /> '.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL'));
+    $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
+    $form->openButtonGroup();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png', null, null, 'button');
-    $form->addSubmitButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php', null, 'button');
+    $form->addButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php', null, 'button');
+    $form->closeButtonGroup();
     $form->show();
 }
 
