@@ -168,7 +168,7 @@ if($getMode == 'choose')
     $page->addHeadline($headline);
 
     // create module menu with back link
-    $profilePhotoMenu = new HtmlNavbar('menu_profile_photo');
+    $profilePhotoMenu = new HtmlNavbar('menu_profile_photo', $headline, $page);
     $profilePhotoMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $page->addHtml($profilePhotoMenu->show(false));
 

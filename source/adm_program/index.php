@@ -30,7 +30,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // menu of the page
-$moduleMenu = new HtmlNavbar('adm_menu_overview');
+$moduleMenu = new HtmlNavbar('adm_menu_overview', $headline, $page);
 
 if($gValidLogin == 1)
 {

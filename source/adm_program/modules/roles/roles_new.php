@@ -131,7 +131,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu with back link
-$rolesEditMenu = new HtmlNavbar('menu_roles_edit');
+$rolesEditMenu = new HtmlNavbar('menu_roles_edit', $headline, $page);
 $rolesEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($rolesEditMenu->show(false));
 

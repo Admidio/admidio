@@ -30,7 +30,9 @@ class HtmlPage
     protected $javascriptContent; ///< Contains the custom javascript of the current page. This will be added to the header part of the page.
     protected $javascriptContentExecute; ///< Contains the custom javascript of the current page that should be executed after pageload. This will be added to the header part of the page.
     protected $title;           ///< The title for the html page and the headline for the Admidio content.
+    protected $headline;        ///< The main headline for the html page.
     protected $header;          ///< Additional header that could not be set with the other methods. This content will be add to head of html page without parsing.
+    protected $hasNavbar;       ///< Flag if the current page has a navbar.
     protected $containThemeHtml; ///< If set to true then the custom html code of the theme for each page will be included.
     protected $cssFiles;        ///< An array with all necessary cascading style sheets files for the html page.
     protected $jsFiles;         ///< An array with all necessary javascript files for the html page.
@@ -50,6 +52,7 @@ class HtmlPage
 		$this->bodyOnload = '';
         $this->containThemeHtml = true;
         $this->printMode = false;
+        $this->hasNavbar = false;
         
         $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css', 
                                 $g_root_path.'/adm_program/libs/colorbox/colorbox.css');
@@ -88,6 +91,7 @@ class HtmlPage
             $this->setTitle($headline);
         }
         
+        $this->headline = $headline;
         $this->addHtml('<h1>'.$headline.'</h1>');
     }
     
@@ -164,6 +168,16 @@ class HtmlPage
     public function getTitle()
     {
         return $this->title;
+    }
+    
+    /** Flag if the current page has a navbar.
+     */
+    public function hasNavbar()
+    {
+        $this->hasNavbar = true;
+        
+        // set css clss to hide headline in mobile mode if navbar is shown
+        $this->pageContent = str_replace('<h1>'.$this->headline.'</h1>', '<h1 class="hidden-xs">'.$this->headline.'</h1>', $this->pageContent);
     }
     
     /** If print mode is set then a print specific css file will be loaded.

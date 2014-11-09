@@ -109,7 +109,7 @@ if($getType != 'USF')
 }
 
 // create module menu
-$categoriesMenu = new HtmlNavbar('admMenuCategories');
+$categoriesMenu = new HtmlNavbar('admMenuCategories', $headline, $page);
 
 // show back link
 $categoriesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');

@@ -111,7 +111,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$guestbookCreateMenu = new HtmlNavbar('menu_guestbook_create');
+$guestbookCreateMenu = new HtmlNavbar('menu_guestbook_create', $headline, $page);
 $guestbookCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($guestbookCreateMenu->show(false));
 

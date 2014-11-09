@@ -185,7 +185,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu
-$profileMenu = new HtmlNavbar('menu_profile');
+$profileMenu = new HtmlNavbar('menu_profile', $headline, $page);
 
 // show back link
 if($gNavigation->count() > 1)

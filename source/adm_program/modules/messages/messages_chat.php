@@ -73,7 +73,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page->addHeadline($headline);
 
 // create module menu with back link
-$messagesChatMenu = new HtmlNavbar('menu_messages_chat');
+$messagesChatMenu = new HtmlNavbar('menu_messages_chat', $headline, $page);
 $messagesChatMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($messagesChatMenu->show(false));
 

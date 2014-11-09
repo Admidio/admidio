@@ -77,7 +77,7 @@ $page->addHtml('<div id="links_overview">');
 if($weblinks->getId() == 0)
 {	
 	// create module menu
-	$LinksMenu = new HtmlNavbar('menu_weblinks');
+	$LinksMenu = new HtmlNavbar('menu_weblinks', $headline, $page);
 
 	if($gCurrentUser->editWeblinksRight())
 	{

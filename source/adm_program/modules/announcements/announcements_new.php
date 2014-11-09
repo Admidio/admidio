@@ -75,7 +75,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$announcementsMenu = new HtmlNavbar('menu_announcements_create');
+$announcementsMenu = new HtmlNavbar('menu_announcements_create', $headline, $page);
 $announcementsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($announcementsMenu->show(false));
 

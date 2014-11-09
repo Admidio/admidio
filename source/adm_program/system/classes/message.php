@@ -243,9 +243,8 @@ class Message
     }
 
      
-    /** If set no theme files like my_header.php, my_body_top.php and my_body_bottom.php 
-     *  will be integrated in the page. This setting is usefull if the message should be loaded in 
-     *  a small window.
+    /** If set no theme files will be integrated in the page. This setting is usefull if the message should be 
+     *  loaded in a small window.
      *  @param $showTheme If set to true than theme body and header will be shown. Otherwise this will be hidden.
      */
     public function showThemeBody($showTheme)

@@ -106,7 +106,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu with back link
-$profileFieldsEditMenu = new HtmlNavbar('menu_profile_fields_edit');
+$profileFieldsEditMenu = new HtmlNavbar('menu_profile_fields_edit', $headline, $page);
 $profileFieldsEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($profileFieldsEditMenu->show(false));
 

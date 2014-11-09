@@ -109,7 +109,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$registrationAssignMenu = new HtmlNavbar('menu_registration_assign');
+$registrationAssignMenu = new HtmlNavbar('menu_registration_assign', $headline, $page);
 $registrationAssignMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($registrationAssignMenu->show(false));
 

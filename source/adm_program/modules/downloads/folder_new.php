@@ -72,7 +72,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$folderNewMenu = new HtmlNavbar('menu_folder_new');
+$folderNewMenu = new HtmlNavbar('menu_folder_new', $headline, $page);
 $folderNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($folderNewMenu->show(false));
 

@@ -83,7 +83,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$importCsvConfigMenu = new HtmlNavbar('menu_import_csv_config');
+$importCsvConfigMenu = new HtmlNavbar('menu_import_csv_config', $headline, $page);
 $importCsvConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($importCsvConfigMenu->show(false));
 

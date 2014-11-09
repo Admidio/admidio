@@ -217,7 +217,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu with back link
-$datesMenu = new HtmlNavbar('menu_dates_create');
+$datesMenu = new HtmlNavbar('menu_dates_create', $headline, $page);
 $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($datesMenu->show(false));
 

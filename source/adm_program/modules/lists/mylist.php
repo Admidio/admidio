@@ -507,7 +507,7 @@ $page->addHeadline($headline);
 if($gNavigation->count() > 1)
 {
     // create module menu with back link
-    $myListMenu = new HtmlNavbar('menu_my_list');
+    $myListMenu = new HtmlNavbar('menu_my_list', $headline, $page);
     $myListMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $page->addHtml($myListMenu->show(false));
 

@@ -35,7 +35,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$loginMenu = new HtmlNavbar('menu_login');
+$loginMenu = new HtmlNavbar('menu_login', $headline, $page);
 $loginMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($loginMenu->show(false));
 

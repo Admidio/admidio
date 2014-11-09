@@ -63,7 +63,7 @@ $page->addHeadline($headline);
 $page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
 
 // create module menu
-$backupMenu = new HtmlNavbar('admMenuBackup');
+$backupMenu = new HtmlNavbar('admMenuBackup', $headline, $page);
 
 // show link to create new backup
 $backupMenu->addItem('admMenuItemNewBackup', $g_root_path.'/adm_program/modules/backup/backup_script.php', 

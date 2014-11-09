@@ -30,19 +30,22 @@ class HtmlNavbar
 {
     protected $leftItems;   ///< An array with all items that should be displayed at the left part of the navbar
     protected $rightItems;  ///< An array with all items that should be displayed at the right part of the navbar
+    protected $htmlPage;    ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     protected $htmlForm;    ///< Parameter that includes the html of the form that should be shown within the navbar
     protected $name;        ///< Name of the navbar that will be shown when navbar changed to vertical mode on small devices
     protected $type;        ///< Navbar type. There is the @b default and the @b filter type possible.
     protected $id;          ///< The id of the navbar.
     
 	/** creates the object of the module menu and initialize all class parameters
-	 *  @param $id   Html id of the navbar
-	 *  @param $name Name of the navbar that will be shown when navbar changed to vertical mode on small devices
-	 *  @param $type Different types of the navbar can be defined. 
-	 *               @b default will be the standard navbar of all modules. 
-	 *               @b filter  should be used if this navbar is used to filter data of within the script.
+	 *  @param $id       Html id of the navbar
+	 *  @param $name     Name of the navbar that will be shown when navbar changed to vertical mode on small devices
+     *  @param $htmlPage Optional a HtmlPage object that will be used to add javascript code 
+     *                   or files to the html output page.
+	 *  @param $type     Different types of the navbar can be defined. 
+	 *                   @b default will be the standard navbar of all modules. 
+	 *                   @b filter  should be used if this navbar is used to filter data of within the script.
 	 */
-	public function __construct($id, $name = null, $type = 'default', $maxMenuLinkItem = 6)
+	public function __construct($id, $name = null, $htmlPage = null, $type = 'default', $maxMenuLinkItem = 6)
 	{
 		global $g_root_path, $gL10n;
 		
@@ -55,6 +58,10 @@ class HtmlNavbar
     		$name = $gL10n->get('SYS_FILTER');    		
 		}
 
+        if(is_object($htmlPage))
+        {
+            $this->htmlPage =& $htmlPage;
+        }
 		
 		$this->leftItems  = array();
 		$this->rightItems = array();
@@ -158,7 +165,7 @@ class HtmlNavbar
 	    if($this->type == 'default')
 	    {
     	    $cssClassBrand  = ' visible-xs-block';
-    	    $cssClassNavbar = 'navbar-default';
+    	    $cssClassNavbar = '';
 	    }
 	    elseif($this->type == 'filter')
 	    {
@@ -168,7 +175,7 @@ class HtmlNavbar
 
 	    // add html for navbar
 		$html = '
-        <nav class="navbar '.$cssClassNavbar.'" role="navigation">
+        <nav class="navbar navbar-default '.$cssClassNavbar.'" role="navigation">
             <div class="container-fluid">
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
@@ -186,6 +193,12 @@ class HtmlNavbar
         if(count($this->leftItems) > 0)
         {
             $showNavbar = true;
+            
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->hasNavbar();
+            }        
+            
             $html .= '<ul class="nav navbar-nav">';
             
             foreach($this->leftItems as $key => $menuEntry)

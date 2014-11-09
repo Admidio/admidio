@@ -132,7 +132,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$photoAlbumMenu = new HtmlNavbar('menu_photo_album_create');
+$photoAlbumMenu = new HtmlNavbar('menu_photo_album_create', $headline, $page);
 $photoAlbumMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($photoAlbumMenu->show(false));
 

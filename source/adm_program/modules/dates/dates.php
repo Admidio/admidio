@@ -174,7 +174,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
     if($gPreferences['dates_viewmode'] == 'compact' && $getViewMode == 'html' && $getId > 0)
     {
         // create module menu with back link
-        $datesMenu = new HtmlNavbar('menu_dates');
+        $datesMenu = new HtmlNavbar('menu_dates_list', $getHeadline, $page);
         $datesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
         $page->addHtml($datesMenu->show(false));
     }
@@ -183,7 +183,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
     if($getId == 0 || $gCurrentUser->editDates())
     {
         // create module menu
-        $DatesMenu = new HtmlNavbar('menu_dates_list');
+        $DatesMenu = new HtmlNavbar('menu_dates_list', $getHeadline, $page);
 
 
         //Add new event
@@ -198,7 +198,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             //ical Download
             if($gPreferences['enable_dates_ical'] == 1)
             {
-                $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&cat_id='.$getCatId,
+                $DatesMenu->addItem('admMenuItemICal', $g_root_path.'/adm_program/modules/dates/ical_dates.php?headline='.$getHeadline.'&amp;cat_id='.$getCatId,
                                 $gL10n->get('DAT_EXPORT_ICAL'), 'database_out.png' );
             }
 
@@ -223,7 +223,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         }
 
         // create filter menu with elements for calendar and start-/enddate
-        $FilterNavbar = new HtmlNavbar('menu_dates_list', null, 'filter');
+        $FilterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$getHeadline, $page, 'navbar');
         $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', FIELD_DEFAULT, $dates->getParameter('cat_id'));
         $form->addTextInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
@@ -371,7 +371,7 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                         }
                         $locationHtml .= '
                         <a class="icon-link" href="'. $route_url. '" target="_blank"><img
-                            src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'"/></a>';
+                            src="'. THEME_PATH. '/icons/map.png" alt="'.$gL10n->get('SYS_SHOW_ROUTE').'" title="'.$gL10n->get('SYS_SHOW_ROUTE').'" /></a>';
                     }
                 }
                 else

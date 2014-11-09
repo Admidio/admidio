@@ -77,7 +77,7 @@ else
 }
 
 // create module menu
-$announcementsMenu = new HtmlNavbar('menu_announcements_list');
+$announcementsMenu = new HtmlNavbar('menu_announcements_list', $getHeadline, $page);
 
 if($gCurrentUser->editAnnouncements())
 {

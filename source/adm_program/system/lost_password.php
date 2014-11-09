@@ -108,7 +108,7 @@ else
     $page->addHeadline($headline);
 
     // create module menu with back link
-    $lostPasswordMenu = new HtmlNavbar('menu_lost_password');
+    $lostPasswordMenu = new HtmlNavbar('menu_lost_password', $headline, $page);
     $lostPasswordMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $page->addHtml($lostPasswordMenu->show(false));
 

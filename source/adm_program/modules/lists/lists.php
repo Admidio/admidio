@@ -96,7 +96,7 @@ $page->addHtml('<div id="lists_overview">');
 $page->addHeadline($headline);
 
 // create module menu
-$ListsMenu = new HtmlNavbar('menu_lists');
+$ListsMenu = new HtmlNavbar('menu_lists', $headline, $page);
 
 if($gCurrentUser->manageRoles())
 {

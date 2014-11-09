@@ -164,7 +164,7 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 $page->addHeadline($headline);
 
 // create module menu with back link
-$messagesWriteMenu = new HtmlNavbar('menu_messages_write');
+$messagesWriteMenu = new HtmlNavbar('menu_messages_write', $headline, $page);
 $messagesWriteMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($messagesWriteMenu->show(false));
 

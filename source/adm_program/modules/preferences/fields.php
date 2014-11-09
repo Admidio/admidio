@@ -80,7 +80,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu
-$fieldsMenu = new HtmlNavbar('menu_profile_fields');
+$fieldsMenu = new HtmlNavbar('menu_profile_fields', $headline, $page);
 
 // show back link
 $fieldsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');

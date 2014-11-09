@@ -83,7 +83,8 @@ else
     $page = new HtmlPage();
 
     // show module headline
-    $page->addHeadline($photoAlbum->getValue('pho_name'));
+    $headline = $photoAlbum->getValue('pho_name');
+    $page->addHeadline($headline);
 	
 	//wenn Popupmode oder Colorbox, dann normalen Kopf unterdruecken
 	if($gPreferences['photo_show_mode'] == 0)
@@ -94,7 +95,7 @@ else
 	if($gPreferences['photo_show_mode'] == 2)
 	{	
         // create module menu
-        $photoPresenterMenu = new HtmlNavbar('menu_photo_presenter');
+        $photoPresenterMenu = new HtmlNavbar('menu_photo_presenter', $headline, $page);
     
         // if you have no popup or colorbox then show a button back to the album
     	if($gPreferences['photo_show_mode'] == 2)

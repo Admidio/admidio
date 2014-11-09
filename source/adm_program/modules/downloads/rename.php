@@ -123,7 +123,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$downloadRenameMenu = new HtmlNavbar('menu_download_rename');
+$downloadRenameMenu = new HtmlNavbar('menu_download_rename', $headline, $page);
 $downloadRenameMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($downloadRenameMenu->show(false));
 

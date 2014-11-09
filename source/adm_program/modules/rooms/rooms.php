@@ -33,7 +33,7 @@ $page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrollin
 $page->addHeadline($headline);
 
 // create module menu
-$roomsMenu = new HtmlNavbar('menu_rooms');
+$roomsMenu = new HtmlNavbar('menu_rooms', $headline, $page);
 // show back link
 $roomsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 // show link to create new room

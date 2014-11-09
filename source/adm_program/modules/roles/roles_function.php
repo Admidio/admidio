@@ -58,10 +58,11 @@ if($getMode == 1)
     $page = new HtmlPage();
 
     // show headline of the script
-    $page->addHeadline($gL10n->get('ROL_ROLE_DELETE'));
+    $headline = $gL10n->get('ROL_ROLE_DELETE');
+    $page->addHeadline($headline);
 
     // create module menu with back link
-    $messageMenu = new HtmlNavbar('menu_message');
+    $messageMenu = new HtmlNavbar('menu_message', $headline, $page);
     $messageMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $page->addHtml($messageMenu->show(false));
 

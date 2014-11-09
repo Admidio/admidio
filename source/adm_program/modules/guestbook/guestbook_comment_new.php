@@ -35,6 +35,20 @@ if($getGboId > 0 && $getGbcId > 0)
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
+// set create or edit mode
+if($getGboId > 0)
+{
+    $id       = $getGboId;
+    $mode     = '4';
+    $headline = $gL10n->get('GBO_CREATE_COMMENT');
+}
+else
+{
+    $id       = $getGbcId;
+    $mode     = '8';
+    $headline = $gL10n->get('GBO_EDIT_COMMENT');
+}
+
 //Erst einmal die Rechte abklopfen...
 if(($gPreferences['enable_guestbook_module'] == 2 || $gPreferences['enable_gbook_comments4all'] == 0)
 && $getGboId > 0)
@@ -62,7 +76,7 @@ if($getGbcId > 0)
 
 }
 
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Gaestebuchkommentarobjekt anlegen
 $guestbook_comment = new TableGuestbookComment($gDb);
@@ -117,22 +131,10 @@ if (!$gValidLogin && $gPreferences['flooding_protection_time'] != 0)
 // create html page object
 $page = new HtmlPage();
 
-// Html-Kopf ausgeben
-if($getGboId > 0)
-{
-    $id   = $getGboId;
-    $mode = '4';
-    $page->addHeadline($gL10n->get('GBO_CREATE_COMMENT'));
-}
-else
-{
-    $id   = $getGbcId;
-    $mode = '8';
-    $page->addHeadline($gL10n->get('GBO_EDIT_COMMENT'));
-}
+$page->addHeadline($headline);
 
 // create module menu with back link
-$guestbookCommentCreateMenu = new HtmlNavbar('menu_guestbook_comment_create');
+$guestbookCommentCreateMenu = new HtmlNavbar('menu_guestbook_comment_create', $headline, $page);
 $guestbookCommentCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($guestbookCommentCreateMenu->show(false));
 

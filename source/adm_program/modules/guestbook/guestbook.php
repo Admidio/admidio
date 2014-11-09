@@ -167,7 +167,7 @@ $sql = 'SELECT *
 $guestbook_result = $gDb->query($sql);
 
 // create module menu
-$guestbookMenu = new HtmlNavbar('menu_guestbook');
+$guestbookMenu = new HtmlNavbar('menu_guestbook', $getHeadline, $page);
 
 if($getGboId == 0 && $getModeration == 0)
 {

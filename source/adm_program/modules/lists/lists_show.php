@@ -256,7 +256,7 @@ if($getMode != 'csv')
             });', true);
         
         // create module menu
-        $listsMenu = new HtmlNavbar('menu_lists_list');
+        $listsMenu = new HtmlNavbar('menu_lists_list', $headline, $page);
 
         $listsMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 

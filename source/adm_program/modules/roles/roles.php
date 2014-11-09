@@ -82,7 +82,7 @@ $page->addJavascript('$(".group-heading").click(function() {showHideBlock($(this
 $page->addHeadline($headline);
 
 // create module menu
-$rolesMenu = new HtmlNavbar('menu_roles');
+$rolesMenu = new HtmlNavbar('menu_roles', $headline, $page);
 
 // define link to create new profile field
 $rolesMenu->addItem('menu_item_new_role', $g_root_path.'/adm_program/modules/roles/roles_new.php', 

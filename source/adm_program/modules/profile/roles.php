@@ -108,16 +108,13 @@ else
     $page->addJavascript('
         var profileJS = new profileJSClass();
         profileJS.init();', true);
-
-    // show back link
-    $page->addHtml($gNavigation->getHtmlBackButton());
-    
-    // create module menu with back link
-    $rolesMenu = new HtmlNavbar('menu_roles');
-    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($rolesMenu->show(false));
     
     $page->addHeadline($headline);
+
+    // create module menu with back link
+    $rolesMenu = new HtmlNavbar('menu_roles', $headline, $page);
+    $rolesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+    $page->addHtml($rolesMenu->show(false));
 }
 
 // show headline of module

@@ -90,7 +90,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$categoryCreateMenu = new HtmlNavbar('menu_category_create');
+$categoryCreateMenu = new HtmlNavbar('menu_category_create', $headline, $page);
 $categoryCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($categoryCreateMenu->show(false));
 

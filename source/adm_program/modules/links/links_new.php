@@ -65,7 +65,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$linksCreateMenu = new HtmlNavbar('menu_links_create');
+$linksCreateMenu = new HtmlNavbar('menu_links_create', $headline, $page);
 $linksCreateMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($linksCreateMenu->show(false));
 

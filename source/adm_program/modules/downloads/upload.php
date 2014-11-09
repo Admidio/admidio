@@ -85,7 +85,7 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$downloadUploadMenu = new HtmlNavbar('menu_download_upload');
+$downloadUploadMenu = new HtmlNavbar('menu_download_upload', $headline, $page);
 $downloadUploadMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($downloadUploadMenu->show(false));
 

@@ -144,35 +144,18 @@ $page = new HtmlPage();
 $page->addHeadline($headline);
 
 // create module menu with back link
-$profileFieldHistoryMenu = new HtmlNavbar('menu_profile_field_history');
+$profileFieldHistoryMenu = new HtmlNavbar('menu_profile_field_history', $headline, $page);
 $profileFieldHistoryMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($profileFieldHistoryMenu->show(false));
 
-// Input elements for Startdate and Enddate
-$page->addHtml('
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-filter-navbar-collapse-1">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="#">'.$gL10n->get('SYS_FILTER').'</a>
-        </div>
-        
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-filter-navbar-collapse-1">');
-            $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/members/profile_field_history.php?usr_id='.$getUserId, $page, 'navbar');
-            $form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, 10, FIELD_DEFAULT, 'date');
-            $form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, 10, FIELD_DEFAULT, 'date');
-            $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
-            $page->addHtml($form->show(false));
-        $page->addHtml('</div>
-    </div>
-</nav>');
+// create filter menu with input elements for Startdate and Enddate
+$FilterNavbar = new HtmlNavbar('menu_profile_field_history_filter', null, null, 'filter');
+$form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/members/profile_field_history.php?usr_id='.$getUserId, $page, 'navbar');
+$form->addTextInput('filter_date_from', $gL10n->get('SYS_START'), $dateFromHtml, 10, FIELD_DEFAULT, 'date');
+$form->addTextInput('filter_date_to', $gL10n->get('SYS_END'), $dateToHtml, 10, FIELD_DEFAULT, 'date');
+$form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
+$FilterNavbar->addForm($form->show(false));
+$page->addHtml($FilterNavbar->show(false));
 
 $table = new HtmlTable('profile_field_history_table', $page, true, true);
 

@@ -13,7 +13,7 @@
  *				  2 - Flexuploader
  *
  *****************************************************************************/
-if ($_GET['uploadmethod'] == 2)
+/*if ($_GET['uploadmethod'] == 2)
 {
     // Cookies wurden uebergeben, nun wieder in Cookievariable kopieren
     foreach($_GET as $key => $value)
@@ -23,14 +23,14 @@ if ($_GET['uploadmethod'] == 2)
             $_COOKIE[$key] = $value;
         }
     }
-}
+}*/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric', null, true);
+$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric', 1, true);
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)
@@ -113,7 +113,7 @@ if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValu
 $ordner = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
 
 //Bei Klassischem Upload beginn der Seitenausgabe
-if($getUploadmethod == 1)
+/*if($getUploadmethod == 1)
 {
 	// Html-Kopf ausgeben
 	$gLayout['title'] = $gL10n->get('PHO_UPLOAD_PHOTOS');
@@ -124,7 +124,7 @@ if($getUploadmethod == 1)
     <p> '.$gL10n->get('SYS_PLEASE_WAIT').'...<br /><br />
         '.$gL10n->get('PHO_SHOWN_ON_READY').'<strong>('.$photo_album->getValue('pho_name').')</strong>
     </p>';
-}
+}*/
 
 
 //Bildverarbeitung
@@ -274,7 +274,7 @@ for($act_upload_nr = 0; $act_upload_nr < $numLoops; $act_upload_nr++)
 }
 
 //Bei Klassischem Upload Reste der Seitenausgabe
-if($getUploadmethod == 1)
+/*if($getUploadmethod == 1)
 {
 	//Buttons
 	echo '
@@ -301,5 +301,5 @@ if($getUploadmethod == 1)
     
     //Seitenende
 	require(SERVER_PATH. '/adm_program/system/overall_footer.php');
-}      
+}   */   
 ?>

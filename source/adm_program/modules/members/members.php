@@ -134,7 +134,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu
-$membersAdministrationMenu = new HtmlNavbar('menu_members_administration');
+$membersAdministrationMenu = new HtmlNavbar('menu_members_administration', $headline, $page);
 
 $membersAdministrationMenu->addItem('menu_item_create_user', $g_root_path.'/adm_program/modules/members/members_new.php', $gL10n->get('MEM_CREATE_USER'), 'add.png');
 

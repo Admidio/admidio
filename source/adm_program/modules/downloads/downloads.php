@@ -74,7 +74,7 @@ $page = new HtmlPage();
 $page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
     
 // create module menu
-$DownloadsMenu = new HtmlNavbar('menu_downloads');
+$DownloadsMenu = new HtmlNavbar('menu_downloads', $headline, $page);
 
 if ($gCurrentUser->editDownloadRight())
 {

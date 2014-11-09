@@ -65,7 +65,7 @@ $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
 // create module menu for emails
-$EmailMenu = new HtmlNavbar('admMenuEmail');
+$EmailMenu = new HtmlNavbar('admMenuEmail', $headline, $page);
 // link to write new email
 if ($gPreferences['enable_mail_module'] == 1 )
 {

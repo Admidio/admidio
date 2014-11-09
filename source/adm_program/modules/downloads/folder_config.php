@@ -151,7 +151,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu with back link
-$folderConfigMenu = new HtmlNavbar('menu_folder_config');
+$folderConfigMenu = new HtmlNavbar('menu_folder_config', $headline, $page);
 $folderConfigMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($folderConfigMenu->show(false));
 

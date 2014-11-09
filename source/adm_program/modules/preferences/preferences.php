@@ -108,7 +108,7 @@ if(strlen($showOption) > 0)
     $gNavigation->addUrl(CURRENT_URL, $headline);
 
     // create module menu with back link
-    $preferencesMenu = new HtmlNavbar('menu_dates_create');
+    $preferencesMenu = new HtmlNavbar('menu_dates_create', $headline, $page);
     $preferencesMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $page->addHtml($preferencesMenu->show(false));
 }

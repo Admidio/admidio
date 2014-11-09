@@ -149,7 +149,7 @@ $page->addJavascript('
 $page->addHeadline($headline);
 
 // create module menu with back link
-$profileEditMenu = new HtmlNavbar('menu_profile_edit');
+$profileEditMenu = new HtmlNavbar('menu_profile_edit', $headline, $page);
 $profileEditMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
 $page->addHtml($profileEditMenu->show(false));
 

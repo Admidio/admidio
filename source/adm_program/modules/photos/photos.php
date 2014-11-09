@@ -8,8 +8,8 @@
  *
  * Parameters:
  *
- * pho_id    : id des Albums dessen Fotos angezeigt werden sollen
- * headline  : Ueberschrift, die ueber den Ankuendigungen steht
+ * pho_id    : Id of album which photos should be shown
+ * headline  : Headline of the module that will be displayed
  *             (Default) PHO_PHOTO_ALBUMS
  * start_thumbnail : Number of the thumbnail which is the first that should be shown
  * start     : Position of query recordset where the visual output should start
@@ -186,7 +186,7 @@ if($getPhotoId > 0)
 }
 
 // create module menu
-$photosMenu = new HtmlNavbar('menu_photos');
+$photosMenu = new HtmlNavbar('menu_photos', $headline, $page);
 
 if($photoAlbum->getValue('pho_id') > 0)
 {
@@ -202,7 +202,7 @@ if($gCurrentUser->editPhotoRight())
 	if($getPhotoId > 0)
 	{
 		// show link to upload photos
-		$photosMenu->addItem('menu_item_upload_photo', $g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$getPhotoId, 
+		$photosMenu->addItem('menu_item_upload_photo', $g_root_path.'/adm_program/modules/photos/upload.php?pho_id='.$getPhotoId, 
 									$gL10n->get('PHO_UPLOAD_PHOTOS'), 'photo_upload.png');
 	}
 }

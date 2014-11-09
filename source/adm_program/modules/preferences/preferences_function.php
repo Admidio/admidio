@@ -264,7 +264,7 @@ case 2:
     $page->addHeadline($headline);
     
     // create module menu with back link
-    $organizationNewMenu = new HtmlNavbar('menu_organization_new');
+    $organizationNewMenu = new HtmlNavbar('menu_organization_new', $headline, $page);
     $organizationNewMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
     $page->addHtml($organizationNewMenu->show(false));
     
