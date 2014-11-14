@@ -350,8 +350,8 @@ elseif($getMode == 2)
     $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
     $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png', null, null, 'button');
-    $form->addButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php', null, 'button');
+        $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png');
+        $form->addButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php');
     $form->closeButtonGroup();
     $form->show();
 }

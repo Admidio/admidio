@@ -67,7 +67,7 @@ $(document).ready(function(){
     $form = new HtmlForm('form_members_create_user', $g_root_path.'/adm_program/modules/members/members_assign.php');
     $form->addTextInput('lastname', $gL10n->get('SYS_LASTNAME'), null, 100, FIELD_MANDATORY, 'text');
     $form->addTextInput('firstname', $gL10n->get('SYS_FIRSTNAME'), null, 100, FIELD_MANDATORY, 'text');
-    $form->addSubmitButton('btn_add', $gL10n->get('MEM_CREATE_USER'), THEME_PATH.'/icons/add.png', null, ' col-sm-offset-3');
+    $form->addSubmitButton('btn_add', $gL10n->get('MEM_CREATE_USER'), THEME_PATH.'/icons/add.png', null, null, ' col-sm-offset-3');
     $form->show();
 echo '</div>';
 

@@ -109,29 +109,6 @@ class HtmlFormInstallation extends HtmlForm
             <script type="text/javascript" src="../libs/jquery/jquery.js"></script>
             <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="../system/js/common_functions.js"></script>
-            
-            <script type="text/javascript"><!--
-                $(document).ready(function() {
-                    $("#next_page").click(function() {
-                        if($(this).val() == "'.$gL10n->get('INS_UPDATE_DATABASE').'"
-                        || $(this).val() == "'.$gL10n->get('INS_INSTALL_ADMIDIO').'")
-                        {
-                            $(this).prop("disabled", "true");
-                            $("#btn_icon").attr("src", "layout/loader.gif");
-                            
-                            if($(this).val() == "'.$gL10n->get('INS_UPDATE_DATABASE').'")
-                            {
-                                $("#btn_text").html("'.$gL10n->get('INS_DATABASE_IS_UPDATED').'");
-                            }
-                            else
-                            {
-                                $("#btn_text").html("'.$gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED').'");
-                            }
-                        }
-                        $("#installation-form").submit();                
-                    });
-                });
-            //--></script>
         </head>
         <body>
             <div class="admidio-container" id="adm_content">&nbsp;

@@ -168,7 +168,7 @@ h3 {
     font-size: 12pt;
 }
 
-.alert, .btn-group {
+.alert, .btn-form {
     margin-top: 15px;
 }
 
@@ -385,8 +385,10 @@ form hr {
     margin-right: 5px;
 }
 
-.col-sm-offset-3.btn {
-    margin-left: 26%;
+@media (min-width: 768px) {
+    .col-sm-offset-3.btn {
+        margin-left: 26%;
+    }
 }
 
 .form-control:focus, .select2-container-active, .select2-choices, .select2-drop {
@@ -438,10 +440,6 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 .btn-primary:hover, .btn-primary:focus {
     background-color: #387F87;
     border-color: #387F87;
-}
-
-.btn-form {
-    padding-top: 10px;
 }
 
 .control-mandatory label:after, .control-mandatory-definition span:after {

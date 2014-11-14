@@ -40,6 +40,7 @@ class HtmlForm extends HtmlFormBasic
     protected $countElements;       ///< Number of elements in this form
     protected $datepickerInitialized; ///< Flag if datepicker is already initialized
     protected $type;                ///< Form type. Possible values are @b default, @b vertical or @b navbar.
+    protected $id;                  ///< Id of the form
     protected $buttonGroupOpen;     ///< Flag that indicates if a bootstrap button-group is open and should be closed later
     
     /** Constructor creates the form element
@@ -75,6 +76,7 @@ class HtmlForm extends HtmlFormBasic
         $this->countFields           = 0;
         $this->datepickerInitialized = false;
         $this->type                  = $type;
+        $this->id                    = $id;
         $this->buttonGroupOpen       = false;
         
         // set specific Admidio css form class
@@ -133,11 +135,13 @@ class HtmlForm extends HtmlFormBasic
      *                If set a icon will be shown in front of the text.
      *  @param $link  If set a javascript click event with a page load to this link 
      *                will be attached to the button.
+     *  @param $onClickText A text that will be shown after a click on this button 
+     *                until the next page is loaded. The button will be disabled after click.
      *  @param $class Optional an additional css classname. The class @b admButton
      *                is set as default and need not set with this parameter.
      *  @param $type  Optional a button type could be set. The default is @b button.
      */
-    public function addButton($id, $text, $icon = '', $link = '', $class = '', $type = 'button')
+    public function addButton($id, $text, $icon = null, $link = null, $onClickText = null, $class = null, $type = 'button')
     {
         $this->countElements++;
         // add text and icon to button
@@ -149,11 +153,61 @@ class HtmlForm extends HtmlFormBasic
         }
         $this->addElement('button');
         $this->addAttribute('class', 'btn btn-default btn-form');
+        
+        if(strlen($onClickText) > 0)
+        {
+            $this->addAttribute('data-loading-text', $onClickText);
+            $this->addAttribute('autocomplete', 'off');
+        }
+        
+        // add javascript for stateful button and/or 
+        // a different link that should be loaded after click
+        if(strlen($onClickText) > 0 || strlen($link) > 0)
+        {
+            $javascriptCode = '';
+            
+            if(strlen($link) > 0)
+            {
+                $javascriptCode .= '// disable default form submit
+                    self.location.href="'.$link.'";';
+            }
+
+            if(strlen($onClickText) > 0)
+            {
+                $javascriptCode .= '$btn = $(this).button("loading");';
+            }
+            
+            if($type == 'submit')
+            {
+                $javascriptCode .= '$("#'.$this->id.'").submit();';
+            }
+            
+            $javascriptCode = '$("#'.$id.'").click(function(event) {
+                '.$javascriptCode.'
+            });';
+            
+            // if a htmlPage object was set then add code to the page, otherwise to the current string
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->addJavascript($javascriptCode, true);
+            }
+            else
+            {
+                $this->addHtml('
+                <script type="text/javascript"><!--
+                    $(document).ready(function() {
+                        '.$javascriptCode.'
+                 	}); 	
+                //--></script>');
+            }
+        }
+        
         if(strlen($class) > 0)
         {
             $this->addAttribute('class', $class);
         }
-        $this->addSimpleButton($id, $type, $value, $id, $link);
+        
+        $this->addSimpleButton($id, $type, $value, $id);
     }
     
     /** Add a captcha with an input field to the form. The captcha could be a picture with a character code
@@ -1103,17 +1157,19 @@ class HtmlForm extends HtmlFormBasic
      *                If set a icon will be shown in front of the text.
      *  @param $link  If set a javascript click event with a page load to this link 
      *                will be attached to the button.
-     *  @param $typeSubmit If set to true this button get the type @b submit. This will 
-     *                be the default.
+     *  @param $onClickText A text that will be shown after a click on this button 
+     *                until the next page is loaded. The button will be disabled after click.
      *  @param $class Optional an additional css classname. The class @b admButton
      *                is set as default and need not set with this parameter.
+     *  @param $type  If set to true this button get the type @b submit. This will 
+     *                be the default.
      */
-    public function addSubmitButton($id, $text, $icon = null, $link = null, $class = null, $type = 'submit')
+    public function addSubmitButton($id, $text, $icon = null, $link = null, $onClickText = null, $class = null, $type = 'submit')
     {
         $class .= ' btn-primary btn-form';
 
         // now add button to form
-        $this->addButton($id, $text, $icon, $link, $class, $type);
+        $this->addButton($id, $text, $icon, $link, $onClickText, $class, $type);
         
         if($this->buttonGroupOpen == false)
         {

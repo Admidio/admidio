@@ -100,102 +100,40 @@ if ($userFound >= 1)
 		$gCurrentSession->setValue('ses_org_id', $organizationId);
 		$gCurrentSession->save();
 	}
-
-    // create user object
-    $gCurrentUser = new User($gDb, $gProfileFields, $userRow['usr_id']);
     
-    if($gCurrentUser->getValue('usr_number_invalid') >= 3)
+    try
     {
-        // wenn innerhalb 15 min. 3 falsche Logins stattfanden -> Konto 15 min. sperren
-        if(time() - strtotime($gCurrentUser->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 900)
+        // create user object
+        $gCurrentUser = new User($gDb, $gProfileFields, $userRow['usr_id']);
+
+        if($gCurrentUser->checkLogin($password, $bAutoLogin) == true)
         {
-            $gCurrentUser->clear();
-            $gMessage->show($gL10n->get('SYS_LOGIN_FAILED'));
-        }
-    }
+            // show successful login message
+            $login_message = 'SYS_LOGIN_SUCCESSFUL';
 
-    if($gCurrentUser->checkPassword($password) == true)
-    {
-        $gCurrentSession->setValue('ses_usr_id', $gCurrentUser->getValue('usr_id'));
-        $gCurrentSession->save();
-
-        // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
-        $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
-
-        // soll der Besucher automatisch eingeloggt bleiben, dann verfaellt das Cookie erst nach einem Jahr
-        if($bAutoLogin == true && $gPreferences['enable_auto_login'] == 1)
-        {
-            $timestamp_expired = time() + 60*60*24*365;
-            $autoLogin = new AutoLogin($gDb, $gSessionId);
-            
-            // falls bereits ein Autologin existiert (Doppelanmeldung an 1 Browser), 
-            // dann kein Neues anlegen, da dies zu 'Duplicate Key' fuehrt
-            if(strlen($autoLogin->getValue('atl_usr_id')) == 0)
+            // bei einer Beta-Version noch einen Hinweis ausgeben !
+            if(BETA_VERSION > 0 && $gDebug == false)
             {
-                $autoLogin->setValue('atl_session_id', $gSessionId);
-                $autoLogin->setValue('atl_usr_id', $userRow['usr_id']);            
-                $autoLogin->save();
+                $login_message = 'SYS_BETA_VERSION';
             }
+
+            // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
+            // die Startseite verweisen
+            if(isset($_SESSION['login_forward_url']) == false)
+            {
+                $_SESSION['login_forward_url'] = $g_root_path. '/'. $gPreferences['homepage_login'];
+            }
+
+            // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
+            // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
+            $location = 'Location: '.$g_root_path.'/adm_program/system/cookie_check.php?message_code='.$login_message;
+            header($location);
+            exit();
         }
-        else
-        {
-            $timestamp_expired = 0;
-            $gCurrentUser->setValue('usr_last_session_id', NULL);
-        }
-        setcookie($gCookiePraefix. '_ID', $gSessionId , $timestamp_expired, '/', $domain, 0);
-        // User-Id und Autologin auch noch als Cookie speichern
-        // vorher allerdings noch serialisieren, damit der Inhalt nicht so einfach ausgelesen werden kann
-        setcookie($gCookiePraefix. '_DATA', $bAutoLogin. ';'. $gCurrentUser->getValue('usr_id') , $timestamp_expired, '/', $domain, 0);
-
-        // Logins zaehlen und aktuelles Login-Datum aktualisieren
-        $gCurrentUser->updateLoginData();
-
-        // show successful login message
-        $login_message = 'SYS_LOGIN_SUCCESSFUL';
-
-        // bei einer Beta-Version noch einen Hinweis ausgeben !
-        if(BETA_VERSION > 0 && $gDebug == false)
-        {
-            $login_message = 'SYS_BETA_VERSION';
-        }
-
-        // falls noch keine Forward-Url gesetzt wurde, dann nach dem Login auf
-        // die Startseite verweisen
-        if(isset($_SESSION['login_forward_url']) == false)
-        {
-            $_SESSION['login_forward_url'] = $g_root_path. '/'. $gPreferences['homepage_login'];
-        }
-
-        // bevor zur entsprechenden Seite weitergeleitet wird, muss noch geprueft werden,
-        // ob der Browser Cookies setzen darf -> sonst kein Login moeglich
-        $location = 'Location: '.$g_root_path.'/adm_program/system/cookie_check.php?message_code='.$login_message;
-        header($location);
-        exit();
     }
-    else
+    catch(AdmException $e)
     {
-        // ungueltige Logins werden mitgeloggt
-        
-        if($gCurrentUser->getValue('usr_number_invalid') >= 3)
-        {
-            $gCurrentUser->setValue('usr_number_invalid', 1);
-        }
-        else
-        {
-            $gCurrentUser->setValue('usr_number_invalid', $gCurrentUser->getValue('usr_number_invalid') + 1);
-        }
-        $gCurrentUser->setValue('usr_date_invalid', DATETIME_NOW);
-        $gCurrentUser->save(false);   // Zeitstempel nicht aktualisieren
-        $gCurrentUser->clear();
-
-        if($gCurrentUser->getValue('usr_number_invalid') >= 3)
-        {
-            $gMessage->show($gL10n->get('SYS_LOGIN_FAILED'));
-        }
-        else
-        {
-            $gMessage->show($gL10n->get('SYS_PASSWORD_UNKNOWN'));
-        }
+        $e->showHtml();
     }
 }
 else

@@ -132,7 +132,7 @@ $form = new HtmlForm('edit_download_form', $g_root_path.'/adm_program/modules/do
 $form->addTextInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName, 0, FIELD_DISABLED);
 $form->addTextInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], 255, FIELD_MANDATORY, 'TEXT', 'DOW_FILE_NAME_RULES');
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, 255);
-$form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+$form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
 
 $page->addHtml($form->show(false));
 $page->show();

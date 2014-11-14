@@ -184,8 +184,7 @@ $columnHeading = array(
     $gL10n->get('SYS_STATUS'),
     $gL10n->get('SYS_NAME'),
     $gL10n->get('SYS_USER'),
-    '<img class="icon-information" alt="Weiblich" title="" src="'.THEME_PATH.'/icons/female.png" data-original-title="Weiblich">
-    <img class="icon-information" alt="Männlich" title="" src="'.THEME_PATH.'/icons/male.png" data-original-title="Männlich">',
+    '<img class="icon-information" alt="'.$gL10n->get('SYS_GENDER').'" title="" src="'.THEME_PATH.'/icons/gender.png" data-original-title="'.$gL10n->get('SYS_GENDER').'">',
     $gL10n->get('SYS_GENDER'),
     $gL10n->get('SYS_BIRTHDAY'),
     $gL10n->get('MEM_UPDATED_ON'),

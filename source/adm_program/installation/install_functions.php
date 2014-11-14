@@ -17,14 +17,25 @@
   */
 function showNotice($message, $url, $buttonText, $buttonIcon, $update = false)
 {
+    global $gL10n;
+    
+    $onClickText = '';
+
     // show dialog with success notification
     $form = new HtmlFormInstallation('installation-form', $url);
+    
     if($update)
     {
         $form->setUpdateModus();
     }
+    
+    if($buttonText == $gL10n->get('INS_UPDATE_DATABASE'))
+    {
+        $onClickText = $gL10n->get('INS_DATABASE_IS_UPDATED');
+    }
+    
     $form->setFormDescription($message);
-    $form->addSubmitButton('next_page', $buttonText, $buttonIcon, null, null, 'button');
+    $form->addSubmitButton('next_page', $buttonText, $buttonIcon, null, $onClickText);
     $form->show();
     exit();
 }

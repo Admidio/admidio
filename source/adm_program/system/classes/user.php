@@ -117,8 +117,16 @@ class User extends TableUsers
         return false;
     }
 
-    // Methode prueft, ob der User das uebergebene Rollenrecht besitzt und setzt das Array mit den Flags,
-    // welche Rollen der User einsehen darf
+    /** The method reads all roles where this user has a valid membership and checks the rights of 
+     *  those roles. It stores all rights that the user get at last through one role in an array.
+     *  In addition the method checks which roles lists the user could see in an separate array.
+     *  Also an array with all roles where the user has the right to write an email will be stored.
+     *  The method considered the role leader rights of each role if this is set and the current
+     *  user is a leader in a role.
+     *  @param $right The database column name of the right that should be checked. If this param
+     *                is not set then only the arrays are filled.
+     *  @return Return true if a special right should be checked and the user has this right.
+     */
     public function checkRolesRight($right = '')
     {
         global $gL10n;
@@ -257,6 +265,103 @@ class User extends TableUsers
             }
         }
         return 0;
+    }
+    
+    /** Check if a valid password is set for the user and return true if the correct password
+     *  was set. Optional the current session could be updated to a valid login session.
+     *  @param $password     The password for the current user. This should not be encoded.
+     *  @param $setAutoLogin If set to true then this login will be stored in AutoLogin table
+     *                       and the user doesn't need to login another time with this browser.
+     *                       To use this functionality @b $updateSessionCookies must be set to true.
+     *  @param $updateSessionCookies The current session will be updated to a valid login.
+     *                       If set to false then the login is only valid for the current script.
+     *  @return Return true if the correct password for this user was given to this method.
+     */
+    public function checkLogin($password, $setAutoLogin = false, $updateSessionCookies = true)
+    {
+        global $gPreferences, $gCookiePraefix, $gCurrentSession, $gSessionId;
+    
+        if($this->getValue('usr_number_invalid') >= 3)
+        {
+            // if within 15 minutes 3 wrong login took place -> block user account for 15 minutes
+            if(time() - strtotime($this->getValue('usr_date_invalid', 'Y-m-d H:i:s')) < 900)
+            {
+                $this->clear();
+                throw new AdmException('SYS_LOGIN_FAILED');
+            }
+        }
+
+        if($this->checkPassword($password) == true)
+        {
+            if($updateSessionCookies == true)
+            {
+                $gCurrentSession->setValue('ses_usr_id', $this->getValue('usr_id'));
+                $gCurrentSession->save();
+            }
+
+            // soll der Besucher automatisch eingeloggt bleiben, dann verfaellt das Cookie erst nach einem Jahr
+            if($setAutoLogin == true && $gPreferences['enable_auto_login'] == 1)
+            {
+                $timestamp_expired = time() + 60*60*24*365;
+                $autoLogin = new AutoLogin($this->db, $gSessionId);
+                
+                // falls bereits ein Autologin existiert (Doppelanmeldung an 1 Browser), 
+                // dann kein Neues anlegen, da dies zu 'Duplicate Key' fuehrt
+                if(strlen($autoLogin->getValue('atl_usr_id')) == 0)
+                {
+                    $autoLogin->setValue('atl_session_id', $gSessionId);
+                    $autoLogin->setValue('atl_usr_id', $this->getValue('usr_id'));            
+                    $autoLogin->save();
+                }
+            }
+            else
+            {
+                $timestamp_expired = 0;
+                $this->setValue('usr_last_session_id', NULL);
+            }
+            
+            if($updateSessionCookies == true)
+            {
+                // Cookies fuer die Anmeldung setzen und evtl. Ports entfernen
+                $domain = substr($_SERVER['HTTP_HOST'], 0, strpos($_SERVER['HTTP_HOST'], ':'));
+
+                setcookie($gCookiePraefix. '_ID', $gSessionId , $timestamp_expired, '/', $domain, 0);
+                // User-Id und Autologin auch noch als Cookie speichern
+                // vorher allerdings noch serialisieren, damit der Inhalt nicht so einfach ausgelesen werden kann
+                setcookie($gCookiePraefix. '_DATA', $setAutoLogin. ';'. $this->getValue('usr_id') , $timestamp_expired, '/', $domain, 0);
+
+                // count logins and update login dates
+                $this->updateLoginData();
+            }
+            
+            return true;
+        }
+        else
+        {
+            // log invalid logins
+            if($this->getValue('usr_number_invalid') >= 3)
+            {
+                $this->setValue('usr_number_invalid', 1);
+            }
+            else
+            {
+                $this->setValue('usr_number_invalid', $this->getValue('usr_number_invalid') + 1);
+            }
+            
+            $this->setValue('usr_date_invalid', DATETIME_NOW);
+            $this->save(false);   // don't update timestamp
+            $this->clear();
+
+            if($this->getValue('usr_number_invalid') >= 3)
+            {
+                throw new AdmException('SYS_LOGIN_FAILED');
+            }
+            else
+            {
+                throw new AdmException('SYS_PASSWORD_UNKNOWN');
+            }
+        }
+        return false;
     }
 
     /** Additional to the parent method the user profile fields and all 

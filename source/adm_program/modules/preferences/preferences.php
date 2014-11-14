@@ -158,7 +158,7 @@ $page->addHtml('
                         $form->addCheckbox('system_js_editor_enabled', $gL10n->get('ORG_JAVASCRIPT_EDITOR_ENABLE'), $form_values['system_js_editor_enabled'], FIELD_DEFAULT, null, 'ORG_JAVASCRIPT_EDITOR_ENABLE_DESC');
                         $form->addTextInput('system_js_editor_color', $gL10n->get('ORG_JAVASCRIPT_EDITOR_COLOR'), $form_values['system_js_editor_color'], 
                             10, FIELD_DEFAULT, 'text', null, array('ORG_JAVASCRIPT_EDITOR_COLOR_DESC', 'SYS_REMEMBER_ME'), null, 'form-control-small');
-                        $form->addSubmitButton('btn_save_common', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $form->addSubmitButton('btn_save_common', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -210,7 +210,7 @@ $page->addHtml('
                                     src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
                         $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, null, null, $htmlDesc);
-                        $form->addSubmitButton('btn_save_regional_settings', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $form->addSubmitButton('btn_save_regional_settings', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -233,7 +233,7 @@ $page->addHtml('
                             FIELD_DEFAULT, null, 'ORG_CAPTCHA_REGISTRATION');
                         $form->addCheckbox('enable_registration_admin_mail', $gL10n->get('ORG_EMAIL_ALERTS'), $form_values['enable_registration_admin_mail'], 
                             FIELD_DEFAULT, null, array('ORG_EMAIL_ALERTS_DESC', 'ROL_RIGHT_APPROVE_USERS'));
-                        $form->addSubmitButton('btn_save_registration', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $form->addSubmitButton('btn_save_registration', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -267,7 +267,7 @@ $page->addHtml('
                         $form->addSelectBox('mail_smtp_authentication_type', $gL10n->get('MAI_SMTP_AUTH_TYPE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_smtp_authentication_type'], false, false, null, 'MAI_SMTP_AUTH_TYPE_DESC');
                         $form->addTextInput('mail_smtp_user', $gL10n->get('MAI_SMTP_USER'), $form_values['mail_smtp_user'], 100, FIELD_DEFAULT, 'text', null, 'MAI_SMTP_USER_DESC');
                         $form->addTextInput('mail_smtp_password', $gL10n->get('MAI_SMTP_PASSWORD'), $form_values['mail_smtp_password'], 50, FIELD_DEFAULT, 'password', null, 'MAI_SMTP_PASSWORD_DESC');
-                        $form->addSubmitButton('btn_save_email_dispatch', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $form->addSubmitButton('btn_save_email_dispatch', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -317,7 +317,7 @@ $page->addHtml('
                             <strong>%variable1%</strong> - '.$gL10n->get('ORG_VARIABLE_NEW_PASSWORD').'<br />
                             <strong>%variable2%</strong> - '.$gL10n->get('ORG_VARIABLE_ACTIVATION_LINK'));
                         
-                        $form->addSubmitButton('btn_save_system_notification', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $form->addSubmitButton('btn_save_system_notification', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -363,7 +363,7 @@ $page->addHtml('
                                     src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />'.$gL10n->get('SYS_PREVIEW').'</a>';
                         $form->addCustomContent($gL10n->get('ORG_CAPTCHA_PREVIEW'), $html, null, null, 'ORG_CAPTCHA_PREVIEW_TEXT');
 
-                        $form->addSubmitButton('btn_save_captcha', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');
+                        $form->addSubmitButton('btn_save_captcha', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -496,7 +496,7 @@ $page->addHtml('
                         $form->addSelectBox('enable_announcements_module', $gL10n->get('ORG_ACCESS_TO_MODULE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['enable_announcements_module'], false, false, null, 'ORG_ACCESS_TO_MODULE_DESC');
                         $form->addTextInput('announcements_per_page', $gL10n->get('ORG_NUMBER_OF_ENTRIES_PER_PAGE'), $form_values['announcements_per_page'], array(0, 9999, 1), FIELD_DEFAULT, 'number', 
                             null, 'ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC');
-                        $form->addSubmitButton('btn_save_announcements', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_announcements', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -518,7 +518,7 @@ $page->addHtml('
                         $form->addTextInput('user_management_days_field_history', $gL10n->get('MEM_DAYS_FIELD_HISTORY'), $form_values['user_management_days_field_history'], array(0, 9999999999, 1), FIELD_DEFAULT, 'number', null, 'MEM_DAYS_FIELD_HISTORY_DESC');
                         $form->addCheckbox('user_management_show_all_users', $gL10n->get('ORG_SHOW_ALL_USERS'), $form_values['user_management_show_all_users'], 
                             FIELD_DEFAULT, null, 'ORG_SHOW_ALL_USERS_DESC');
-                        $form->addSubmitButton('btn_save_user_management', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_user_management', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -539,7 +539,7 @@ $page->addHtml('
                             FIELD_DEFAULT, null, 'DOW_ENABLE_DOWNLOAD_MODULE_DESC');
                         $form->addTextInput('max_file_upload_size', $gL10n->get('DOW_MAXIMUM_FILE_SIZE').' (KB)', $form_values['max_file_upload_size'], array(0, 9999999999, 10), FIELD_DEFAULT, 'number', 
                             null, 'DOW_MAXIMUM_FILE_SIZE_DESC');
-                        $form->addSubmitButton('btn_save_downloads', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_downloads', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -572,7 +572,7 @@ $page->addHtml('
                         $form->addTextInput('photo_image_text', $gL10n->get('PHO_SHOW_CAPTION'), $form_values['photo_image_text'], 60, FIELD_DEFAULT, 'text', null, array('PHO_SHOW_CAPTION_DESC', $gCurrentOrganization->getValue('org_homepage')));
                         $form->addCheckbox('photo_download_enabled', $gL10n->get('PHO_DOWNLOAD_ENABLED'), $form_values['photo_download_enabled'], FIELD_DEFAULT, null, array('PHO_DOWNLOAD_ENABLED_DESC', $gL10n->get('PHO_KEEP_ORIGINAL')));
                         $form->addCheckbox('photo_keep_original', $gL10n->get('PHO_KEEP_ORIGINAL'), $form_values['photo_keep_original'], FIELD_DEFAULT, null, array('PHO_KEEP_ORIGINAL_DESC', $gL10n->get('PHO_DOWNLOAD_ENABLED')));
-                        $form->addSubmitButton('btn_save_photos', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_photos', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -598,7 +598,7 @@ $page->addHtml('
                         $form->addCheckbox('enable_gbook_comments4all', $gL10n->get('GBO_COMMENTS4ALL'), $form_values['enable_gbook_comments4all'], FIELD_DEFAULT, null, 'GBO_COMMENTS4ALL_DESC');
                         $form->addCheckbox('enable_intial_comments_loading', $gL10n->get('GBO_INITIAL_COMMENTS_LOADING'), $form_values['enable_intial_comments_loading'], FIELD_DEFAULT, null, 'GBO_INITIAL_COMMENTS_LOADING_DESC');
                         $form->addTextInput('flooding_protection_time', $gL10n->get('GBO_FLOODING_PROTECTION_INTERVALL'), $form_values['flooding_protection_time'], array(0, 9999, 1), FIELD_DEFAULT, 'number', null, 'GBO_FLOODING_PROTECTION_INTERVALL_DESC');
-                        $form->addSubmitButton('btn_save_guestbook', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_guestbook', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -619,7 +619,7 @@ $page->addHtml('
                         $selectBoxEntries = array('10' => '10', '25' => '25', '50' => '50', '100' => '100');
                         $form->addSelectBox('lists_members_per_page', $gL10n->get('LST_MEMBERS_PER_PAGE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['lists_members_per_page'], false, false, null, 'LST_MEMBERS_PER_PAGE_DESC');
                         $form->addCheckbox('lists_hide_overview_details', $gL10n->get('LST_HIDE_DETAILS'), $form_values['lists_hide_overview_details'], FIELD_DEFAULT, null, 'LST_HIDE_DETAILS_DESC');
-                        $form->addSubmitButton('btn_save_lists', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_lists', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -648,7 +648,7 @@ $page->addHtml('
                         $form->addCheckbox('mail_html_registered_users', $gL10n->get('MAI_HTML_MAILS_REGISTERED_USERS'), $form_values['mail_html_registered_users'], FIELD_DEFAULT, null, 'MAI_HTML_MAILS_REGISTERED_USERS_DESC');
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DEACTIVATED'), '1' => $gL10n->get('SYS_ACTIVATED'), '2' => $gL10n->get('ORG_ONLY_FOR_REGISTERED_USER'));
                         $form->addSelectBox('mail_delivery_confirmation', $gL10n->get('MAI_DELIVERY_CONFIRMATION'), $selectBoxEntries, FIELD_DEFAULT, $form_values['mail_delivery_confirmation'], false, false, null, 'MAI_DELIVERY_CONFIRMATION_DESC');
-                        $form->addSubmitButton('btn_save_messages', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_messages', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -682,7 +682,7 @@ $page->addHtml('
 
                         $selectBoxEntries = array('0' => $gL10n->get('SYS_DATABASE'), '1' => $gL10n->get('SYS_FOLDER'));
                         $form->addSelectBox('profile_photo_storage', $gL10n->get('PRO_LOCATION_PROFILE_PICTURES'), $selectBoxEntries, FIELD_DEFAULT, $form_values['profile_photo_storage'], false, false, null, 'PRO_LOCATION_PROFILE_PICTURES_DESC');
-                        $form->addSubmitButton('btn_save_profile', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_profile', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -717,7 +717,7 @@ $page->addHtml('
                                     src="'. THEME_PATH. '/icons/home.png" alt="'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'" />'.$gL10n->get('DAT_SWITCH_TO_ROOM_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_EDIT_ROOMS_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('DAT_EDIT_ROOMS'), $html, null, null, $htmlDesc);
-                        $form->addSubmitButton('btn_save_events', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_events', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
@@ -744,7 +744,7 @@ $page->addHtml('
                                     src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'" />'.$gL10n->get('SYS_SWITCH_TO_CATEGORIES_ADMINISTRATION').'</a>';
                         $htmlDesc = $gL10n->get('DAT_MAINTAIN_CATEGORIES_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('SYS_MAINTAIN_CATEGORIES'), $html, null, null, $htmlDesc);
-                        $form->addSubmitButton('btn_save_links', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, ' col-sm-offset-3');                    
+                        $form->addSubmitButton('btn_save_links', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');                    
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
                 </div>
