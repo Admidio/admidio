@@ -193,12 +193,7 @@ class HtmlNavbar
         if(count($this->leftItems) > 0)
         {
             $showNavbar = true;
-            
-            if(is_object($this->htmlPage))
-            {
-                $this->htmlPage->hasNavbar();
-            }        
-            
+                        
             $html .= '<ul class="nav navbar-nav">';
             
             foreach($this->leftItems as $key => $menuEntry)
@@ -282,9 +277,17 @@ class HtmlNavbar
         
         $html .= '</div></div></nav>';
         
-        // dont show navbar if no menu item or form was added
-        if($showNavbar == false)
+        if($showNavbar == true)
         {
+            // if navbar will be shown then set this flag in page object
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->hasNavbar();
+            }        
+        }
+        else
+        {
+            // dont show navbar if no menu item or form was added
             $html = '';
         }
 		

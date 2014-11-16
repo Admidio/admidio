@@ -12,13 +12,12 @@
 body {
     color: #474b4c;
     margin: auto;
-    padding: 5px;
     text-align: center;
 }
 
 @media (min-width: 768px) {
     body {
-        padding: 15px;
+        padding: 15px 0px;
         background-color: #96c4cb; 
         background-repeat: repeat-x;
         background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
@@ -35,7 +34,6 @@ body {
 
 @media (min-width: 768px) {
     #header-block {
-        margin-top: 0px;
         margin-bottom: 25px;
         padding: 1.5%;
         background-color: #ffffff; 
@@ -46,7 +44,7 @@ body {
 
 @media (max-width: 768px) {
     #header-block {
-        margin: -5px -5px 0px -5px;
+        margin: 0px -15px 0px -15px;
         background-color: #C1DCE6; 
     }
 }
@@ -96,9 +94,7 @@ body {
     #page-h1-orga {
         font-size: 14pt;
         letter-spacing: 0.1em;
-        margin-left: -5px;
-        margin-right: -5px;
-        padding: 7px 10px 7px 10px;
+        padding: 7px 10px 7px 5px;
     }
 }
 
@@ -111,7 +107,14 @@ body {
     .admidio-container {
         border: 1px solid #7d7d7d;
         border-radius: 15px;
-        padding: 15px 15px 20px 15px;
+        padding: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .admidio-container {
+        margin-left: -10px;
+        margin-right: -10px;
     }
 }
 
@@ -123,6 +126,17 @@ h1, h2, h3, h4, h5 {
     margin: 20px 0px 15px 0px;
 }
 
+
+h2 {
+    font-size: 130%;
+    border-bottom: 2px solid #449ba6;
+}
+
+h3 {
+    font-size: 110%;
+}
+
+
 @media (min-width: 768px) {
     h1 {
         font-size: 170%;
@@ -132,11 +146,8 @@ h1, h2, h3, h4, h5 {
 }
 
 @media (max-width: 768px) {
-    h1 {
-        color: #777777;
-        font-size: 18px;
-        font-weight: normal;
-        padding: 10px 5px 20px 5px;
+    h1, h3 {
+        padding: 15px 5px;
         margin-left: -5px;
         margin-right: -5px;
         border: 1px solid #7d7d7d;
@@ -147,15 +158,15 @@ h1, h2, h3, h4, h5 {
         background-repeat: repeat-x;
         background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	        
     }
-}
+    
+    h1 {
+        font-size: 18px;
+        font-weight: normal;        
+    }
 
-h2 {
-    font-size: 130%;
-    border-bottom: 2px solid #449ba6;
-}
-
-h3 {
-    font-size: 110%;
+    h3 {
+        padding: 10px 5px;
+    }
 }
 
 /* Other styles */
@@ -265,6 +276,13 @@ a:hover, a:active {
     background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
 }
 
+@media (max-width: 768px) {
+    .navbar {
+        margin-left: -5px;
+        margin-right: -5px;
+    }
+}
+
 .nav > li > a {
     padding-top: 10px;
     padding-bottom: 10px;
@@ -278,6 +296,11 @@ a:hover, a:active {
 
 .navbar-brand {
     color: #474b4c !important;
+    padding: 15px 15px 15px 5px;
+}
+
+.navbar-toggle {
+    margin-right: 5px;
 }
 
 .navbar .checkbox {
