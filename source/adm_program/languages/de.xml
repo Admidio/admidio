@@ -519,7 +519,7 @@
     <text id="DOW_FOLDER_CREATED" development="new" translation="todo">Der Ordner %VAR1_BOLD% wurde angelegt.</text>
     <text id="DOW_FOLDER_EXISTS" development="new" translation="todo">Der Ordner %VAR1% existiert bereits!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
     <text id="DOW_FOLDER_NAME_INVALID" development="new" translation="todo">Der ausgewählte Ordnername enthält ungültige Zeichen!\n\nWähle bitte einen anderen Namen für den Ordner aus.</text>
-    <text id="DOW_FOLDER_NO_FILES" development="new" translation="todo">Der Ordner enhält keine Dateien.</text>
+    <text id="DOW_FOLDER_NO_FILES" development="new" translation="todo">Der Ordner enthält keine Dateien.</text>
     <text id="DOW_FOLDER_NO_RIGHTS" development="new" translation="todo">Du besitzt keine Rechte den gewählten Downloadordner zu sehen.</text>
     <text id="DOW_FOLDER_NOT_EXISTS" development="new" translation="todo">Der Ordner existiert physikalisch nicht mehr auf dem Server. Der Ordner sollte aus der Datenbank gelöscht werden.</text>
     <text id="DOW_FOLDER_RENAME" development="new" translation="todo">Der Ordner %VAR1% wurde umbenannt.</text>
