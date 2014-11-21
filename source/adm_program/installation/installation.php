@@ -255,19 +255,22 @@ elseif($getMode == 4)  // Creating organization
     {
         $orgaShortName = $_SESSION['orga_shortname'];
         $orgaLongName  = $_SESSION['orga_longname'];
+        $orgaEmail     = $_SESSION['orga_email'];
     }
     else
     {
         $orgaShortName = '';
         $orgaLongName  = '';
+        $orgaEmail     = '';
     }
 
     // create a page to enter the organization names
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=5');
-    $form->setFormDescription($gL10n->get('INS_NAME_OF_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
+    $form->setFormDescription($gL10n->get('ORG_NEW_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
     $form->addTextInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
     $form->addTextInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, 50, FIELD_MANDATORY);
+    $form->addTextInput('orga_email', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail, 50, FIELD_MANDATORY, 'email');
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), 'layout/forward.png');
     $form->show();
@@ -279,9 +282,11 @@ elseif($getMode == 5)  // Creating addministrator
         // Zugangsdaten der DB in Sessionvariablen gefiltert speichern
         $_SESSION['orga_shortname'] = strStripTags($_POST['orga_shortname']);
         $_SESSION['orga_longname']  = strStripTags($_POST['orga_longname']);
+        $_SESSION['orga_email']     = strStripTags($_POST['orga_email']);
 
         if(strlen($_SESSION['orga_shortname']) == 0
-        || strlen($_SESSION['orga_longname']) == 0 )
+        || strlen($_SESSION['orga_longname']) == 0 
+        || strlen($_SESSION['orga_email']) == 0 )
         {
             showNotice($gL10n->get('INS_ORGANIZATION_NAME_NOT_COMPLETELY'), 'installation.php?mode=4', $gL10n->get('SYS_BACK'), 'layout/back.png');
         }
@@ -553,8 +558,8 @@ elseif($getMode == 8)	// Start installation
     // write all preferences from preferences.php in table adm_preferences
     require_once('db_scripts/preferences.php');
 
-    // set the administrator email adress to the email of the installation user
-    $orga_preferences['email_administrator'] = $_SESSION['user_email'];
+    // set the administrator email address to the email of the installation user
+    $orga_preferences['email_administrator'] = $_SESSION['orga_email'];
 
     // create all necessary data for this organization
     $gCurrentOrganization->setPreferences($orga_preferences, false);

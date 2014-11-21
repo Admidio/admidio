@@ -424,7 +424,7 @@ create table %PREFIX%_preferences
 (
    prf_id                         integer       unsigned not null AUTO_INCREMENT,
    prf_org_id                     integer       unsigned not null,
-   prf_name                       varchar(30)   not null,
+   prf_name                       varchar(50)   not null,
    prf_value                      varchar(255),
    primary key (prf_id)
 )

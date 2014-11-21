@@ -250,6 +250,7 @@ case 2:
     {
         $formValues['orgaShortName'] = '';
         $formValues['orgaLongName']  = '';
+        $formValues['orgaEmail']     = '';
     }
 
     $headline = $gL10n->get('INS_ADD_ANOTHER_ORGANIZATION');
@@ -274,6 +275,7 @@ case 2:
     $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?mode=3', $page);
     $form->addTextInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'], 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
     $form->addTextInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'], 50, FIELD_MANDATORY);
+    $form->addTextInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'], 50, FIELD_MANDATORY, 'email');
     $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'), THEME_PATH.'/icons/database_in.png', null, null, ' col-sm-offset-3');
     
     // add form to html page and show page
@@ -318,7 +320,7 @@ case 3:
     require_once('../../installation/db_scripts/preferences.php');
 
     // set the administrator email adress to the email of the current user
-    $orga_preferences['email_administrator'] = $gCurrentUser->getValue('EMAIL');
+    $orga_preferences['email_administrator'] = $_POST['orgaEmail'];
 
     // create all necessary data for this organization
     $newOrganization->setPreferences($orga_preferences, false);

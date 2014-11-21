@@ -117,7 +117,7 @@ if ($gCurrentUser->editDownloadRight())
 $downloadOverview->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right', 'right', 'right'));
 $downloadOverview->disableDatatablesColumnsSort(7);
 $downloadOverview->addRowHeadingByArray($columnHeading);
-$downloadOverview->setMessageIfNoRowsFound('DOW_FOLDER_NO_FILES');
+$downloadOverview->setMessageIfNoRowsFound('DOW_FOLDER_NO_FILES', 'warning');
 
 // Get folder content
 if (isset($folderContent['folders'])) 

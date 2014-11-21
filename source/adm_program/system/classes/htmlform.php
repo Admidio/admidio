@@ -947,8 +947,11 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $showContextDependentFirstEntry, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
+        if(count($selectboxEntries) > 0)
+        {
+            // now call default method to create a selectbox
+            $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $showContextDependentFirstEntry, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
+        }
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have

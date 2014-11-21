@@ -35,7 +35,7 @@ class HtmlTable extends HtmlTableBasic
     protected $id;                   ///< Html id attribute of the table.
     protected $columnAlign;          ///< Array with entry for each column with the align of that column. Values are @b right, @b left or @b center.
     protected $columnCount;          ///< Number of columns in this table. This will be set after columns were added to the table.
-    protected $messageIdNoRowsFound; ///< Id of the text that should be shown if no row was added to the table
+    protected $messageNoRowsFound;   ///< The text that should be shown if no row was added to the table
     protected $htmlPage;             ///< A HtmlPage object that will be used to add javascript code or files to the html output page.
     protected $datatables;           ///< A flag if the jQuery plugin DataTables should be used to show the table.
     protected $datatablesInitParameters; ///< An array that stores all necessary DataTables parameters that should be set on initialization of this plugin.
@@ -58,7 +58,7 @@ class HtmlTable extends HtmlTableBasic
      */
     public function __construct($id, $htmlPage = null, $hoverRows = true, $datatables = false, $class = '')
     {
-        global $g_root_path, $gPreferences;
+        global $g_root_path, $gPreferences, $gL10n;
 
         if(strlen($class) == 0)
         {
@@ -73,7 +73,7 @@ class HtmlTable extends HtmlTableBasic
         parent::__construct($id, $class);
         
         // initialize class member parameters
-        $this->messageIdNoRowsFound = 'SYS_NO_DATA_FOUND';
+        $this->messageNoRowsFound = $gL10n->get('SYS_NO_DATA_FOUND');
         $this->id            = $id;
         $this->datatables    = $datatables;
         $this->datatablesInitParameters = array();
@@ -332,10 +332,25 @@ class HtmlTable extends HtmlTableBasic
     
     /** Set a text id of the translation files that should be shown if table has no rows.
      *  @param $messageId Text id of the translation file.
+     *  @param $messageType As @b default the text will be shown. If @b warning or @b error 
+     *                      is set then a box in yellow or red with the message will be shown.
      */
-    public function setMessageIfNoRowsFound($messageId)
+    public function setMessageIfNoRowsFound($messageId, $messageType = 'default')
     {
-        $this->messageIdNoRowsFound = $messageId;
+        global $gL10n;
+        
+        switch($messageType)
+        {
+            case 'default':
+                $this->messageNoRowsFound = $gL10n->get($messageId);
+                break;
+            case 'warning':
+                $this->messageNoRowsFound = '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get($messageId).'</div>';
+                break;
+            case 'error':
+                $this->messageNoRowsFound = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>'.$gL10n->get($messageId).'</div>';
+                break;
+        }
     }
     
 	/** This method send the whole html code of the table to the browser. If the jQuery plugin DataTables
@@ -347,18 +362,18 @@ class HtmlTable extends HtmlTableBasic
 	 */
     public function show($directOutput = true)
     {
-        global $g_root_path, $gL10n;
+        global $g_root_path;
 
         if($this->rowCount == 0)
         {
             // if table contains no rows then show message and not the table
             if($directOutput)
             {
-                echo '<p>'.$gL10n->get($this->messageIdNoRowsFound).'</p>';
+                echo '<p>'.$this->messageNoRowsFound.'</p>';
             }
             else
             {
-                return '<p>'.$gL10n->get($this->messageIdNoRowsFound).'</p>';
+                return '<p>'.$this->messageNoRowsFound.'</p>';
             }
         }
         else

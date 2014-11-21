@@ -14,6 +14,7 @@
     <text id="INS_LOGIN_OF_WEBMASTER" development="deleted" translation="todo"></text>
     <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="deleted" translation="todo"></text>
     <text id="INS_NAME_OF_NEW_ORGANIZATION" development="deleted" translation="todo"></text>
+    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="deleted" translation="todo"></text>
     <text id="INS_NECESSARY_INFORMATION" development="deleted" translation="todo"></text>
     <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="todo">Die bereits installierte Version konnte nicht ermittelt werden. Falls du bisher noch Version 1.x von Admidio genutzt hast, aktualisiere zuerst auf Version 2.x und starte danach das Update auf Version %VAR1%. Falls du bereits Version 2.x oder neuer installiert hast, prüfe bitte die Konsistenz deiner Datenbank.</text>
     <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="deleted" translation="todo"></text>
@@ -80,7 +81,7 @@
     <text id="ORG_FORUM_WIDTH_DESC" development="deleted" translation="todo">%VAR1% Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)</text>
     <text id="ORG_INVALID_THEME" development="deleted" translation="todo">Es wurde kein gültiges Theme ausgewählt.</text>
     <text id="ORG_NEW_ORGANIZATION" development="new" translation="todo">Neue Organisation</text>
-    <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="todo">Gib im folgenden Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die du nun hinzufügen möchtest. Im nächsten Schritt wird die Organisation mit ihren dazugehörigen Stammdaten angelegt.</text>
+    <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="todo">Gib in diesem Formular die Abkürzung, den offiziellen Namen sowie die E-Mail-Adresse der Organisation ein, die du hinzufügen möchtest. Die E-Mail-Adresse sollte eine allgemeine Adresse der Organisation sein. Diese wird unter anderem als Absenderadresse bei automatischen Systembenachrichtigungen genutzt.</text>
     <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="todo">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</text>
     <text id="ORG_ORGANIZATION_PROPERTIES" development="deleted" translation="todo"></text>
     <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="todo">Die Organisation %VAR1_BOLD% wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</text>
@@ -371,7 +372,7 @@
     <text id="ORG_VALUE_LIST_DESC" development="new" translation="todo">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: http://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="todo">Organisationsauswahl anzeigen</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="todo">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</text>
-    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="todo">Organisations- and Regionaleinstellungen</text>
+    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="todo">Organisations- und Regionaleinstellungen</text>
     <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
     <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wie vielen Sekunden bei einer Diaschau das nächste Bild geladen werden soll.</text>
     <text id="SYS_CHECKBOX" development="new" translation="todo">Checkbox</text>
@@ -639,7 +640,7 @@
     <text id="INS_CONFERENCE_ROOM" development="new" translation="todo">Besprechnungsraum</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="todo">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</text>
     <text id="INS_COURSES" development="new" translation="todo">Kurse</text>
-    <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Administrator anlegen</text>
+    <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Admi/nistrator anlegen</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="todo">Konfigurationsdatei erzeugen</text>
     <text id="INS_DATA_DO_NOT_MATCH" development="new" translation="todo">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</text>
     <text id="INS_DATA_OF_ADMINISTRATOR" development="new" translation="todo">Daten des Administrators</text>
@@ -672,7 +673,6 @@
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
-    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="todo">Gib in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, für die du Admidio nutzen möchtest.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
