@@ -102,7 +102,7 @@ if($getMode == 1 || $getMode == 3)
         }
         catch(AdmException $e)
         {
-            $e->showText();
+            $e->showHtml();
         } 
     }
     else

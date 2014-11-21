@@ -14,7 +14,7 @@
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Afspraak goedkeuren</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Zichtbaarheid</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Vul svp alle velden in\n\nen klik weer op %VAR1_BOLD%.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Uw database versie is %VAR1%.\nUpdate naar versie %VAR2% is noodzakelijk</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Uw database versie is %VAR1%.\n\nUpdate naar versie %VAR2% is noodzakelijk</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database systeem</text>
     <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
     <text id="INS_FACEBOOK_DESC" development="new" translation="edited">Wilt u een link naar uw Facebook profiel plaatsen? Uw Facebook login naam is noodzakelijk. Log in op uw Facebook account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Facebook profiel direct openen.</text>

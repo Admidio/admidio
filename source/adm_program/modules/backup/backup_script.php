@@ -121,7 +121,7 @@ $starttime = getmicrotime();
 			((OUTPUT_COMPRESSION_TYPE == 'bzip2') && ($bp = @bzopen($backupabsolutepath.$tempbackupfilename, 'w'))) ||
 			((OUTPUT_COMPRESSION_TYPE == 'none')  && ($fp = @fopen($backupabsolutepath.$tempbackupfilename, 'wb')))) {
 
-			$fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION. BETA_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
+			$fileheaderline  = '-- Admidio v'.ADMIDIO_VERSION_TEXT.' (http://www.admidio.org)'.LINE_TERMINATOR;
 			$fileheaderline .= '-- '.$gL10n->get('BAC_BACKUP_FROM', date('d.m.Y'), date('G:i:s')).LINE_TERMINATOR.LINE_TERMINATOR;
 			$fileheaderline .= '-- '.$gL10n->get('SYS_DATABASE').': '.$g_adm_db.LINE_TERMINATOR.LINE_TERMINATOR;
 			$fileheaderline .= '-- '.$gL10n->get('SYS_USER').': '.$gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME').LINE_TERMINATOR.LINE_TERMINATOR;

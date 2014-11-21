@@ -23,7 +23,8 @@
     <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="deleted" translation="todo"></text>
     <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="todo">Eine Aktualisierung der Datenbank ist nicht möglich!</text>
     <text id="INS_WEBMASTER_LOGIN" development="new" translation="todo">Webmaster-Anmeldung</text>
-    <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="todo">Gib im nachfolgenden Formular bitte die Zugangsdaten eines Webmasters an. Nur Webmaster sind berichtigt ein Datenbankupdate durchzuführen.</text>
+    <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="todo">Ein Update der Datenbank darf nur von einem Webmaster durchgeführt werden. Gib an dieser Stelle bitte die Zugangsdaten eines Webmasters ein.</text>
+    <text id="INS_WEBMASTER_LOGIN_FAILED" development="new" translation="todo">Zu den eingegebenen Logindaten wurde kein Benutzer gefunden, der Mitglied einer Webmasterrolle ist.</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="deleted" translation="todo"></text>
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="deleted" translation="todo"></text>
     <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="deleted" translation="todo"></text>
@@ -339,7 +340,7 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf 'Abschicken'.\n\n %VAR1%</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\n\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
     <text id="INS_FACEBOOK" development="new" translation="todo">Facebook</text>
     <text id="INS_FACEBOOK_DESC" development="new" translation="todo">Willst du dein Facebook-Profil hier verlinken? Dazu benötigst du deinen Nutzernamen bei Facebook. Melde dich bei Facebook an und lass dir dein Profil anzeigen. Kopiere nun die Adresszeile deines Browsers in dieses Feld und speichere dein Profil hier ab. Jetzt können andere Besucher aus deinem Profil direkt dein Facebook-Profil aufrufen.</text>

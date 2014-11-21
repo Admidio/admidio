@@ -60,6 +60,7 @@ class AdmException extends Exception
     }
 	
     /** Simply return the plain translated error text without any markup.
+     *  @return Returns only a string with the exception text
 	 */
 	public function getText()
 	{
@@ -88,6 +89,7 @@ class AdmException extends Exception
 	}
 
     /** Show html message window with translated message 
+     *  @return Returns a html formated message with the exception text
 	 */
     public function showHtml()
 	{
@@ -102,7 +104,7 @@ class AdmException extends Exception
 	{
 		echo $this->getText();
 		exit();
-    }        
+    }
 }
 
 ?>

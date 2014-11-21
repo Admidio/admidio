@@ -8,7 +8,7 @@
  *
  *****************************************************************************/
 
-require_once(SERVER_PATH. '/adm_program/system/classes/table_users.php');
+require_once(SERVER_PATH. '/adm_program/system/classes/tableusers.php');
 
 // drop foreign keys to delete index
 if($gDbType == 'mysql')

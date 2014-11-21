@@ -149,7 +149,7 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Aktiver registrering til denne aftale.</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Synlighed</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Venligst udfyld alle felter\n\nog klik igen %VAR1_BOLD%.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Din database version er %VAR1%.\nEn opdatering til version %VAR2% er påkrævet</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Din database version er %VAR1%.\n\nEn opdatering til version %VAR2% er påkrævet</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database system</text>
     <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
     <text id="INS_FACEBOOK_DESC" development="new" translation="edited">Kunne du tænke dig at linke til din Facebook profil? Dit Facebook login navn er påkrævet. Log ind i din Facebook konto og vis din profil. Kopier Facebook URL'en til dette felt og gem din Admidio profil. Gæster på din Admidio profil kan så gå direkte til din Facebook profil.</text>

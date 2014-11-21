@@ -43,6 +43,12 @@ if(strlen($g_tbl_praefix) == 0)
     $g_tbl_praefix = 'adm';
 }
 
+// if there is no debug flag in config.php than set debug to false
+if(isset($gDebug) == false || $gDebug != 1)
+{
+    $gDebug = 0;
+}
+
 require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_program/system/constants.php');
 
 // check PHP version and show notice if version is too low
@@ -169,7 +175,26 @@ if($getMode == 1)
     if(version_compare($installedDbVersion, ADMIDIO_VERSION) < 0
 	||(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep > $currentUpdateStep))
     {
-        $message = '<h3>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $installedDbVersion, ADMIDIO_VERSION).'</h3>';
+        // create a page with the notice that the installation must be configured on the next pages
+        $form = new HtmlFormInstallation('update_login_form', 'update.php?mode=2');
+        $form->setUpdateModus();
+        $form->setFormDescription('<h3>'.$gL10n->get('INS_DATABASE_NEEDS_UPDATED_VERSION', $installedDbVersion, ADMIDIO_VERSION_TEXT).'</h3>');
+
+        if($gDebug == false)
+        {
+            $form->addDescription($gL10n->get('INS_WEBMASTER_LOGIN_DESC'));
+            $form->addTextInput('login_name', $gL10n->get('SYS_USERNAME'), null, 35, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
+            $form->addTextInput('password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, null, null, 'form-control-small');
+        }
+
+        // if this is a beta version then show a warning message
+        if(BETA_VERSION > 0)
+        {
+            $form->addDescription('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>
+                            '.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>');
+        }
+        $form->addSubmitButton('next_page', $gL10n->get('INS_UPDATE_DATABASE'), 'layout/database_in.png', null, $gL10n->get('INS_DATABASE_IS_UPDATED'));
+        $form->show();
     }
 	// if versions are equal > no update
     elseif(version_compare($installedDbVersion, ADMIDIO_VERSION) == 0 && $maxUpdateStep == $currentUpdateStep)
@@ -187,15 +212,6 @@ if($getMode == 1)
                         <p>'.$gL10n->get('SYS_WEBMASTER_FILESYSTEM_INVALID', $installedDbVersion, ADMIDIO_VERSION, '<a href="http://www.admidio.org/index.php?page=download">', '</a>').'</p></div>';
         showNotice($message, $g_root_path.'/adm_program/index.php', $gL10n->get('SYS_OVERVIEW'), 'layout/application_view_list.png', true);
 	}
-
-    // falls dies eine Betaversion ist, dann Hinweis ausgeben
-    if(BETA_VERSION > 0)
-    {
-        $message .= '<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>
-                        '.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>';
-    }
-    
-    showNotice($message, 'update.php?mode=2', $gL10n->get('INS_UPDATE_DATABASE'), 'layout/database_in.png', true);
 }
 elseif($getMode == 2)
 {
@@ -203,6 +219,63 @@ elseif($getMode == 2)
     /* execute update script for database */
     /**************************************/
 
+    if($gDebug == false)
+    {
+        try
+        {
+            // check name and password
+            // user must have membership of one role of the organization
+            $loginName    = admFuncVariableIsValid($_POST, 'login_name', 'string', null, true, null, true);
+            $password     = admFuncVariableIsValid($_POST, 'password', 'string', null, true, null, true);
+            $sqlWebmaster = '';
+
+            // only check for webmaster role if version > 2.3 because before we don't have that flag
+            if(version_compare($installedDbVersion, '2.4.0') > 0)
+            {
+                $sqlWebmaster = ' AND rol_webmaster  = 1 ';
+            }
+            
+            $sql    = 'SELECT DISTINCT usr_id
+                         FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+                        WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginName.'\')
+                          AND usr_valid      = 1
+                          AND mem_usr_id     = usr_id
+                          AND mem_rol_id     = rol_id
+                          AND mem_begin     <= \''.DATE_NOW.'\'
+                          AND mem_end        > \''.DATE_NOW.'\'
+                          AND rol_valid      = 1
+                              '.$sqlWebmaster.'
+                          AND rol_cat_id     = cat_id
+                          AND cat_org_id     = '.$gCurrentOrganization->getValue('org_id');
+            $result = $gDb->query($sql);
+
+            $userFound = $gDb->num_rows($result);
+            $userRow   = $gDb->fetch_array($result);
+
+            if ($userFound == 1)
+            {
+                // create object with current user field structure und user object
+                $gProfileFields = new ProfileFields($gDb, $gCurrentOrganization->getValue('org_id'));
+                $gCurrentUser   = new User($gDb, $gProfileFields, $userRow['usr_id']);
+
+                // check login. If login failed an exception will be thrown
+                $gCurrentUser->checkLogin($password, false, false);
+            }
+            else
+            {
+                $message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>
+                                <strong>'.$gL10n->get('INS_WEBMASTER_LOGIN_FAILED').'</strong></div>';
+                showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+            }
+        }
+        catch(AdmException $e)
+        {
+            $message = '<div class="alert alert-danger alert-small" role="alert"><span class="glyphicon glyphicon-remove"></span>
+                            <strong>'.$e->getText().'</strong></div>';
+            showNotice($message, 'update.php', $gL10n->get('SYS_BACK'), 'layout/back.png', true);
+        }
+    }
+    
     // setzt die Ausfuehrungszeit des Scripts auf 2 Min., da hier teilweise sehr viel gemacht wird
     // allerdings darf hier keine Fehlermeldung wg. dem safe_mode kommen
     @set_time_limit(300);
@@ -348,7 +421,7 @@ elseif($getMode == 2)
 
     // show notice that update was successful
     $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
-    $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION. BETA_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
+    $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
         $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png');
         $form->addButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php');

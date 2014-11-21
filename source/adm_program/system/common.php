@@ -221,34 +221,17 @@ if($gCurrentSession->getValue('ses_renew') == 1 || $gCurrentSession->getValue('s
 	$gCurrentSession->setValue('ses_renew', 0);
 }
 
-// check session
+// check session if user login is valid
 if($gCurrentSession->getValue('ses_usr_id') > 0)
 {
-	if($gCurrentSession->getValue('ses_usr_id') == $gCurrentUser->getValue('usr_id'))
-	{
-		// session has a user assigned -> check if login is still valid
-		$time_gap = time() - strtotime($gCurrentSession->getValue('ses_timestamp', 'Y-m-d H:i:s'));
-		
-		// Check how long the user was inactive. If time range is to long -> logout
-		if($time_gap < $gPreferences['logout_minutes'] * 60) 
-		{
-			// user login is valid !
-			$gValidLogin = true;
-			$gCurrentSession->setValue('ses_timestamp', DATETIME_NOW);
-		}
-		else
-		{
-			// user was inactive -> clear user data and remove him from session
-			$gCurrentUser->clear();
-			$gCurrentSession->setValue('ses_usr_id', '');
-		}
-	}
-	else
-	{
-		// something is wrong -> clear user data
-		$gCurrentUser->clear();
-		$gCurrentSession->setValue('ses_usr_id', '');
-	}
+    if($gCurrentSession->isValidLogin($gCurrentUser->getValue('usr_id')))
+    {
+        $gValidLogin = true;    
+    }
+    else
+    {
+        $gCurrentUser->clear();
+    }
 }
 
 // update session recordset (i.a. refresh timestamp)

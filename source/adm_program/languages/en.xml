@@ -202,7 +202,7 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Enable registration to this appointment.</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Visibility</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Please fill in all entry fields\n\nand click again %VAR1_BOLD%.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Your database version is %VAR1%.\nUpdate to version %VAR2% is required</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Your database version is %VAR1%.\n\nUpdate to version %VAR2% is required</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database system</text>
     <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
     <text id="INS_FACEBOOK_DESC" development="new" translation="edited">Would you like to set a link to your Facebook profile? Your Facebook login name is required. Log in to your Facebook account and display your profile. Copy URL in this field and save your profile here. Visitors of your profile are now able to open your Facebook profile directly.</text>

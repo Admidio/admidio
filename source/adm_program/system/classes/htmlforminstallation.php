@@ -59,7 +59,7 @@ class HtmlFormInstallation extends HtmlForm
     {
         global $gL10n;
         $this->title = $gL10n->get('INS_INSTALLATION');
-        $this->headline = $gL10n->get('INS_INSTALLATION_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
+        $this->headline = $gL10n->get('INS_INSTALLATION_VERSION', ADMIDIO_VERSION_TEXT);
     }
 
     /** Set the form in the update modus. Therefore headline and title will be changed.
@@ -68,7 +68,7 @@ class HtmlFormInstallation extends HtmlForm
     {
         global $gL10n;
         $this->title = $gL10n->get('INS_UPDATE');
-        $this->headline = $gL10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION. BETA_VERSION_TEXT);
+        $this->headline = $gL10n->get('INS_UPDATE_VERSION', ADMIDIO_VERSION_TEXT);
     }
     
     /** This method will create the whole html installation/update code. It will show the headline,

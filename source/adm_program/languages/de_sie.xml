@@ -161,7 +161,7 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füllen Sie die genannten Eingabefelder\nvollständig aus und klicken Sie dann erneut\nauf 'Abschicken'.\n\n %VAR1%</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Ihre Datenbank liegt in Version %VAR1% vor.\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Ihre Datenbank liegt in Version %VAR1% vor.\n\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
     <text id="INS_FACEBOOK" development="new" translation="todo">Facebook</text>
     <text id="INS_FACEBOOK_DESC" development="new" translation="todo">Wollen Sie Ihr Facebook-Profil hier verlinken? Dazu benötigen Sie Ihren Nutzernamen bei Facebook. Melden Sie sich bei Facebook an und lassen Sie sich Ihr Profil anzeigen. Kopieren Sie nun die Adresszeile Ihres Browsers in dieses Feld und speichern Sie Ihr Profil hier ab. Jetzt können andere Besucher aus Ihrem Profil direkt Ihr Facebook-Profil aufrufen.</text>

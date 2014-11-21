@@ -160,7 +160,7 @@ if($getMode == 2)
 	}
     
     echo'
-    <p>'.$gL10n->get('UPD_CURRENT_VERSION').':&nbsp;'.ADMIDIO_VERSION. BETA_VERSION_TEXT.'</p>
+    <p>'.$gL10n->get('UPD_CURRENT_VERSION').':&nbsp;'.ADMIDIO_VERSION_TEXT.'</p>
     <p>'.$gL10n->get('UPD_STABLE_VERSION').':&nbsp;
         <a class="icon-text-link" href="http://www.admidio.org/index.php?page=download" target="_blank"><img 
             src="'.THEME_PATH.'/icons/update_link.png" alt="'.$gL10n->get('UPD_ADMIDIO').'">'.$stable_version. '</a>

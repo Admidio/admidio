@@ -111,7 +111,6 @@ class User extends TableUsers
         // if password is stored the old way then use md5
         elseif(md5($password) == $this->getValue('usr_password'))
         {
-            $this->setValue('usr_password', $password);
             return true;
         }
         return false;

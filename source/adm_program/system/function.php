@@ -412,12 +412,20 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
 
 	if(strlen($errorMessage) > 0)
 	{
-	   if($directOutput == true)
-	   {
-           $gMessage->showTextOnly(true);
-	   }
-       
-       $gMessage->show($errorMessage);
+        if(isset($gMessage))
+        {
+            if($directOutput == true)
+            {
+               $gMessage->showTextOnly(true);
+            }
+
+            $gMessage->show($errorMessage);
+        }
+        else
+        {
+            echo $errorMessage;
+            exit();
+        }
 	}
 	
 	return $defaultValue;

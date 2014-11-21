@@ -68,7 +68,7 @@ if(strlen($password) == 0)
 // check name and password
 // user must have membership of one role of the organization
 
-$sql    = 'SELECT usr_id
+$sql    = 'SELECT DISTINCT usr_id
              FROM '. TBL_USERS. ', '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
             WHERE UPPER(usr_login_name) LIKE UPPER(\''.$loginname.'\')
               AND usr_valid      = 1
@@ -84,7 +84,7 @@ $result = $gDb->query($sql);
 $userFound = $gDb->num_rows($result);
 $userRow   = $gDb->fetch_array($result);
 
-if ($userFound >= 1)
+if ($userFound == 1)
 {
 	// if login organization is different to organization of config file then create new session variables
 	if($organizationId != $gCurrentOrganization->getValue('org_id'))

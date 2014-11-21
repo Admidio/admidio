@@ -179,7 +179,7 @@ case 1:
     }
 	catch(AdmException $e)
 	{
-		echo $e->showText();
+		$e->showText();
 	}    
     // check every checkbox if a value was committed
     // if no value is found then set 0 because 0 will not be committed in a html checkbox element

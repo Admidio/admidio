@@ -20,11 +20,11 @@ define('MIN_PHP_VERSION', '5.2.0');
 
 if(BETA_VERSION > 0)
 {
-    define('BETA_VERSION_TEXT', ' Beta '.BETA_VERSION);
+    define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION.' Beta '.BETA_VERSION);
 }
 else
 {
-    define('BETA_VERSION_TEXT', '');
+    define('ADMIDIO_VERSION_TEXT', ADMIDIO_VERSION);
 }
 
 

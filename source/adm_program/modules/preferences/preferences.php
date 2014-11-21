@@ -380,7 +380,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // create a static form
                         $form = new HtmlForm('system_informations_preferences_form', null, $page);
-                        $html = '<span id="admidio_version_content">'.ADMIDIO_VERSION. BETA_VERSION_TEXT.'
+                        $html = '<span id="admidio_version_content">'.ADMIDIO_VERSION_TEXT.'
                                     <a id="link_check_for_update" href="#link_check_for_update" title="'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'">'.$gL10n->get('SYS_CHECK_FOR_UPDATE').'</a>
                                  </span>';
                         $form->addCustomContent($gL10n->get('SYS_ADMIDIO_VERSION'), $html);

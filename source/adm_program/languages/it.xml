@@ -149,7 +149,7 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Abilita la registrazione per questo appuntamento.</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Visibilità</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Per favore riempi tutti i campi dei contenuti\n\ne clicca di nuovo %VAR1_BOLD%.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">La versione del tuo database è %VAR1%.\nAggiorna alla versione richiesta %VAR2%</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">La versione del tuo database è %VAR1%.\n\nAggiorna alla versione richiesta %VAR2%</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Sistema database</text>
     <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
     <text id="INS_FACEBOOK_DESC" development="new" translation="edited">Vorresti impostare un link al tuo profilo Facebook? E' necessario il tuo username per l'accesso a Facebook. Accedi al tuo account Facebook e visualizza il tuo profilo. Copia l'URL in questo campo e salva il tuo profilo qui. I visitatori del tuo profilo sono ora abilitati ad aprire il tuo profilo Facebook direttamente.</text>

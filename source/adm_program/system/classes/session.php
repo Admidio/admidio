@@ -111,6 +111,48 @@ class Session extends TableAccess
 		}
 		return false;
 	}
+    
+    /** Check if the current session has a valid user login. Therefore the user id must be stored
+     *  within the session and the timestamps must be valid
+     *  @param $userId The user id must be stored in this session and will be checked if valid.
+     *  @return Returns @b true if the user has a valid session login otherwise @b false;
+     */
+    public function isValidLogin($userId)
+    {
+        global $gPreferences;
+
+        if($userId > 0)
+        {
+            if($this->getValue('ses_usr_id') == $userId)
+            {
+                // session has a user assigned -> check if login is still valid
+                $time_gap = time() - strtotime($this->getValue('ses_timestamp', 'Y-m-d H:i:s'));
+                
+                // Check how long the user was inactive. If time range is to long -> logout
+                if($time_gap < $gPreferences['logout_minutes'] * 60) 
+                {
+                    // user login is valid !
+                    $gValidLogin = true;
+                    $this->setValue('ses_timestamp', DATETIME_NOW);
+                    return true;
+                }
+                else
+                {
+                    // user was inactive -> clear user data and remove him from session
+                    $gCurrentUser->clear();
+                    $this->setValue('ses_usr_id', '');
+                }
+            }
+            else
+            {
+                // something is wrong -> clear user data
+                $gCurrentUser->clear();
+                $this->setValue('ses_usr_id', '');
+            }
+        }
+        
+        return false;
+    }
 	
 	/** Reload session data from database table adm_sessions. Check renew flag and
 	 *  reload organization object if neccessary.

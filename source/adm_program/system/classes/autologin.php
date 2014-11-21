@@ -82,7 +82,7 @@ class AutoLogin extends TableAccess
      *  @param $session    The Session object of the current Admidio session.
      *  @param $cookieData The data of the cookie @b ADMIDIO_DATA.
      */
-    public function setValidLogin(&$session, $cookieData)
+    public function setValidLogin($session, $cookieData)
     {
     	$dataArray = explode(';', $cookieData);
     

@@ -94,7 +94,7 @@ if(!empty($_POST['recipient_email']) && !empty($_POST['captcha']))
     }
     catch(AdmException $e)
     {
-        $e->showText();
+        $e->showHtml();
     } 
 }
 else
