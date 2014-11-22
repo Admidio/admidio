@@ -644,6 +644,16 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-top: 15px;
 }
 
+#div_profile_photo {
+    text-align: right;
+}
+
+@media (max-width: 768px) {
+    #div_profile_photo {
+        text-align: left;
+    }
+}
+
 #profile_photo {
     display: inline;
 }

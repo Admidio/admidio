@@ -418,7 +418,7 @@ $page->addHtml('
             }
             $page->addHtml($form->show(false));
         $page->addHtml('</div>
-        <div class="col-sm-4 text-right">');
+        <div class="col-sm-4" id="div_profile_photo">');
         
             // *******************************************************************************
             // Profile photo
