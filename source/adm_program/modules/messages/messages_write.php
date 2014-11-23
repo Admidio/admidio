@@ -150,7 +150,7 @@ else
     $headline = $gL10n->get('MAI_SEND_EMAIL');
     if ($getMsgType == 'PM')
     {
-    $headline = $gL10n->get('PMS_SEND_PM');
+	    $headline = $gL10n->get('PMS_SEND_PM');
     }
 }
 
@@ -185,30 +185,28 @@ if ($getMsgType == 'PM')
 
     // show form
     $form = new HtmlForm('pm_send_form', $g_root_path.'/adm_program/modules/messages/messages_send.php?'.$formParam, $page, 'default', true);
-    $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
-    if ($getUserId > 0)
+    if ($getUserId == 0)
+	{
+	    $form->openGroupBox('gb_pm_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
+	    $form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, FIELD_MANDATORY, array(), false, true, 'MAI_SEND_MAIL_TO_ROLE');
+		$form->closeGroupBox();
+		$sendto = '';
+    }
+	else
+	{
+	    $form->addTextInput('msg_to', '', $getUserId, '' , FIELD_DEFAULT, 'hidden');
+		$sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
+	}
+
+    $form->openGroupBox('gb_pm_message', $gL10n->get('SYS_MESSAGE') . $sendto);
+
+    if(strlen($getSubject) == 0)
     {
-        // Username to send the PM to
-        $preload_data = '{ id: "' .$getUserId. '", text: "' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')'. '", locked: true}';
+        $form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), '', 77, FIELD_MANDATORY);
     }
 
-	$form->addSelectBox('msg_to', $gL10n->get('SYS_TO'), $list, FIELD_MANDATORY, array(), false, true, 'MAI_SEND_MAIL_TO_ROLE');
-
-    $form->closeGroupBox();
-
-    $form->openGroupBox('gb_pm_message', $gL10n->get('SYS_MESSAGE'));
-
-    if(strlen($getSubject) > 0)
-    {
-    $form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), $getSubject, 77, FIELD_DISABLED);
-    }
-    else
-    {
-    $form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), '', 77, FIELD_MANDATORY);
-    }
-
-    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), null, 10, 254);
+    $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), null, 10, 254, FIELD_MANDATORY);
 
     $form->closeGroupBox();
 
@@ -216,10 +214,11 @@ if ($getMsgType == 'PM')
 
     // add form to html page
     $page->addHtml($form->show(false));
-
-    // list history of this PM
+	
+	    // list history of this PM
     if(isset($message_result))
     {
+		$page->addHtml('<br>');
         while ($row = $gDb->fetch_array($message_result)) {
         
             if ($row['msg_usrid1'] == $gCurrentUser->getValue('usr_id'))
@@ -231,23 +230,25 @@ if ($getMsgType == 'PM')
                 $sentUser = $user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME');
             }
 
-            $page->addHtml('
-            <div class="panel-heading">
-                <div class="row">
-                    <div class="col-sm-8">
-                        <img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />'.$sentUser.'
-                    </div>
-                    <div class="col-sm-4 text-right">'.$row['msg_timestamp']);
+		$page->addHtml('
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<div class="row">
+					<div class="col-sm-8">
+						<img class="panel-heading-icon" src="'. THEME_PATH. '/icons/guestbook.png" alt="'.$sentUser.'" />' . $sentUser . '
+					</div>
+					<div class="col-sm-4 text-right">' . $row['msg_timestamp'] . 
+					'</div>
+				</div>
+			</div>
+			<div class="panel-body">'.
+				nl2br($row['msg_message']).'
+			</div>
+		</div>');
 
-                    $page->addHtml('</div>
-                </div>
-            </div>
-            <div class="panel-footer">'.
-                nl2br($row['msg_message']).'
-            </div>');
-            
         }
     }
+
 }
 else if (isset($message_result))
 {
@@ -572,7 +573,7 @@ if(isset($list))
 
             $(document).ready(function () {
                 $("#msg_to").select2({
-                    placeholder: "Select a Email/Group",
+                    placeholder: "'.$gL10n->get('SYS_SELECT_FROM_LIST').'",
                     allowClear: true,
                     maximumSelectionSize: '.$recept_number.',
                     separator: ";",

@@ -372,7 +372,12 @@ if ($getMsgType == 'EMAIL')
 // ***** PM *****
 else
 {
-
+    // if $postTo is not an Array, it is send from the hidden field.
+	if(!is_array($postTo))
+	{
+	    $postTo = array($postTo);
+	}
+	
 	// get user data from Database
     $user = new User($gDb, $gProfileFields, $postTo[0]);
 
