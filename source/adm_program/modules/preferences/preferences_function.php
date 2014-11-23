@@ -69,14 +69,16 @@ case 1:
                 }
                 break;
 
-            case 'regional_settings':
+            case 'organization':
                 $checkboxes = array('system_organization_select');
 
                 if(strlen($_POST['org_longname']) == 0)
                 {
                     $gMessage->show($gL10n->get('SYS_FIELD_EMPTY', $gL10n->get('SYS_NAME')));
                 }
+                break;
 
+            case 'regional_settings':
                 if(admStrIsValidFileName($_POST['system_language']) == false
                 || file_exists(SERVER_PATH. '/adm_program/languages/'.$_POST['system_language'].'.xml') == false)
                 {

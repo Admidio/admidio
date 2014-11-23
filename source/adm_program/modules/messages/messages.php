@@ -64,6 +64,12 @@ $headline = $gL10n->get('SYS_MESSAGES');;
 $gNavigation->clear();
 $gNavigation->addUrl(CURRENT_URL, $headline);
 
+// create html page object
+$page = new HtmlPage();
+
+// show headline for Table
+$page->addHeadline($headline);
+
 // create module menu for emails
 $EmailMenu = new HtmlNavbar('admMenuEmail', $headline, $page);
 // link to write new email
@@ -85,12 +91,6 @@ if ($gPreferences['enable_chat_module'] == 1 )
 
 $EmailMenu->addItem('admMenuItemPreferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=messages', 
 					$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
-
-// create html page object
-$page = new HtmlPage();
-
-// show headline for Table
-$page->addHeadline($headline);
 
 $page->addHtml($EmailMenu->show(false));
 
