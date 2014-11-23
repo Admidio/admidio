@@ -684,6 +684,7 @@ $page->addHtml('
     
     <p><b>2.</b> '.$gL10n->get('LST_SET_COLUMNS').'</p>
 
+    <div class="table-responsive">
     <table class="table table-condensed" id="mylist_fields_table">
         <thead>
             <tr>
@@ -705,6 +706,7 @@ $page->addHtml('
             </tr>
         </tbody>
     </table>
+    </div>
         
     <p><b>3.</b> '.$gL10n->get('LST_CHOOSE_ROLE').'</p>
     
