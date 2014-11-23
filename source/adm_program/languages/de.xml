@@ -52,6 +52,7 @@
     <text id="MEM_USERS_PER_PAGE" development="new" translation="todo">Anzahl Benutzer pro Seite</text>
     <text id="MEM_USERS_PER_PAGE_DESC" development="new" translation="todo">Anzahl der Benutzer die auf einer Seite in einer Liste aufgelistet werden. Gibt es mehr Benutzer zu der Organisation, so kann man in der Liste blättern. (Standard: 25)</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="deleted" translation="todo"></text>
+    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="deleted" translation="todo">Organisations- und Regionaleinstellungen</text>
     <text id="ORG_ACCESS_DATA_ADMIDIO" development="deleted" translation="todo"></text>
     <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="deleted" translation="todo"></text>
     <text id="ORG_ACCESS_FORUM_DATABASE" development="deleted" translation="todo"></text>
@@ -86,6 +87,7 @@
     <text id="ORG_NOT_SAVED_SETTINGS_LOST" development="new" translation="todo">Beim Wechsel in diese Ansicht gehen alle nicht gespeicherten Einstellungen verloren.</text>
     <text id="ORG_ORGANIZATION_PROPERTIES" development="deleted" translation="todo"></text>
     <text id="ORG_ORGANIZATION_SUCCESSFULL_ADDED" development="new" translation="todo">Die Organisation %VAR1_BOLD% wurde hinzugefügt. Du kannst diese nun bei der Anmeldung auswählen.\n\nFalls du für diese Organisation eine separate Homepage erstellt hast, muss du auf der entsprechenden Seite noch die neue Organisation in die config.php eingetragen.</text>
+    <text id="ORG_REGIONAL_SETTINGS" development="deleted" translation="todo">Regionaleinstellungen</text>
     <text id="ORG_USED_FORUM" development="deleted" translation="todo">Genutztes Forum</text>
     <text id="ORG_WHICH_FORUM_USED" development="deleted" translation="todo">Welches Forum soll genutzt werden?</text>
     <text id="PRO_CHOOSE_PHOTO" development="new" translation="todo">Foto auswählen</text>
@@ -373,7 +375,6 @@
     <text id="ORG_VALUE_LIST_DESC" development="new" translation="todo">In diesem Feld kannst du die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: http://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="todo">Organisationsauswahl anzeigen</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="todo">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</text>
-    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="todo">Organisations- und Regionaleinstellungen</text>
     <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
     <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wie vielen Sekunden bei einer Diaschau das nächste Bild geladen werden soll.</text>
     <text id="SYS_CHECKBOX" development="new" translation="todo">Checkbox</text>

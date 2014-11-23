@@ -163,31 +163,22 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
-            <div class="panel panel-default" id="panel_regional_settings">
+            <div class="panel panel-default" id="panel_organization">
                 <div class="panel-heading">
                     <h4 class="panel-title">
-                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_regional_settings">
-                            <img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_ORGANIZATION_REGIONAL_SETTINGS').'
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_organization">
+                            <img src="'.THEME_PATH.'/icons/chart_organisation.png" alt="'.$gL10n->get('SYS_ORGANIZATION').'" title="'.$gL10n->get('SYS_ORGANIZATION').'" />'.$gL10n->get('SYS_ORGANIZATION').'
                         </a>
                     </h4>
                 </div>
-                <div id="collapse_regional_settings" class="panel-collapse collapse">
+                <div id="collapse_organization" class="panel-collapse collapse">
                     <div class="panel-body">');
                         // show form
-                        $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=regional_settings', $page, 'default', false, 'form-preferences');
+                        $form = new HtmlForm('organization_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=organization', $page, 'default', false, 'form-preferences');
                         $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], 
                             null, null, null, 'form-control-small');
                         $form->addTextInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], 60, FIELD_MANDATORY);
                         $form->addTextInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], 60, FIELD_DEFAULT, 'url');
-                        $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 
-                            'ISOCODE', 'NAME', FIELD_MANDATORY, $form_values['system_language'], true);
-                        $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $form_values['default_country'], true, false, null, 'PRO_DEFAULT_COUNTRY_DESC');
-                        $form->addTextInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], 20, FIELD_DEFAULT, 'text', 
-                            null, array('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), null, 'form-control-small');
-                        $form->addTextInput('system_time', $gL10n->get('ORG_TIME_FORMAT'), $form_values['system_time'], 20, FIELD_DEFAULT, 'text', 
-                            null, array('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), null, 'form-control-small');
-                        $form->addTextInput('system_currency', $gL10n->get('ORG_CURRENCY'), $form_values['system_currency'], 20, FIELD_DEFAULT, 'text', 
-                            null, 'ORG_CURRENCY_DESC', null, 'form-control-small');
                             
                         //Falls andere Orgas untergeordnet sind, darf diese Orga keiner anderen Orga untergeordnet werden
                         if($gCurrentOrganization->hasChildOrganizations() == false)
@@ -210,6 +201,32 @@ $page->addHtml('
                                     src="'. THEME_PATH. '/icons/add.png" alt="'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'" />'.$gL10n->get('INS_ADD_ANOTHER_ORGANIZATION').'</a>';
                         $htmlDesc = $gL10n->get('ORG_ADD_ORGANIZATION_DESC').'<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('ORG_NOT_SAVED_SETTINGS_LOST').'</div>';
                         $form->addCustomContent($gL10n->get('ORG_NEW_ORGANIZATION'), $html, null, null, $htmlDesc);
+                        $form->addSubmitButton('btn_save_organization', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
+            <div class="panel panel-default" id="panel_regional_settings">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_common" href="#collapse_regional_settings">
+                            <img src="'.THEME_PATH.'/icons/world.png" alt="'.$gL10n->get('ORG_REGIONAL_SETTINGS').'" title="'.$gL10n->get('ORG_REGIONAL_SETTINGS').'" />'.$gL10n->get('ORG_REGIONAL_SETTINGS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_regional_settings" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('regional_settings_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=regional_settings', $page, 'default', false, 'form-preferences');
+                        $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 
+                            'ISOCODE', 'NAME', FIELD_MANDATORY, $form_values['system_language'], true);
+                        $form->addSelectBox('default_country', $gL10n->get('PRO_DEFAULT_COUNTRY'), $gL10n->getCountries(), FIELD_DEFAULT, $form_values['default_country'], true, false, null, 'PRO_DEFAULT_COUNTRY_DESC');
+                        $form->addTextInput('system_date', $gL10n->get('ORG_DATE_FORMAT'), $form_values['system_date'], 20, FIELD_DEFAULT, 'text', 
+                            null, array('ORG_DATE_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), null, 'form-control-small');
+                        $form->addTextInput('system_time', $gL10n->get('ORG_TIME_FORMAT'), $form_values['system_time'], 20, FIELD_DEFAULT, 'text', 
+                            null, array('ORG_TIME_FORMAT_DESC', '<a href="http://www.php.net/date">date()</a>'), null, 'form-control-small');
+                        $form->addTextInput('system_currency', $gL10n->get('ORG_CURRENCY'), $form_values['system_currency'], 20, FIELD_DEFAULT, 'text', 
+                            null, 'ORG_CURRENCY_DESC', null, 'form-control-small');
                         $form->addSubmitButton('btn_save_regional_settings', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
                         $page->addHtml($form->show(false));
                     $page->addHtml('</div>
