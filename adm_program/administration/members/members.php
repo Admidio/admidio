@@ -101,6 +101,7 @@ if($getMembers == 1)
             AND mem_end    > \''.DATE_NOW.'\'
             AND rol_valid  = 1
             AND rol_cat_id = cat_id
+            AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
             AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                 OR cat_org_id IS NULL )) ';
 }
@@ -130,6 +131,7 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
                     WHERE rol_valid   = 1
                       AND rol_cat_id  = cat_id
+                      AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                       AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                           OR cat_org_id IS NULL )
                       AND mem_rol_id  = rol_id
@@ -140,6 +142,7 @@ $sql    = 'SELECT usr_id, last_name.usd_value as last_name, first_name.usd_value
                      FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. ', '. TBL_MEMBERS. '
                     WHERE rol_valid   = 1
                       AND rol_cat_id  = cat_id
+                      AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                       AND cat_org_id <> '. $gCurrentOrganization->getValue('org_id'). '
                       AND mem_rol_id  = rol_id
                       AND mem_begin  <= \''.DATE_NOW.'\'
