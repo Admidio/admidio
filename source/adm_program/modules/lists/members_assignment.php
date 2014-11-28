@@ -129,6 +129,7 @@ else
                 AND mem_end    > \''.DATE_NOW.'\'
                 AND rol_valid  = 1
                 AND rol_cat_id = cat_id
+                AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                 AND (  cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                     OR cat_org_id IS NULL )) ';
     }
@@ -141,6 +142,7 @@ else
                          FROM '. TBL_ROLES. ' rol2, '. TBL_CATEGORIES. ' cat2, '. TBL_MEMBERS. ' mem2
                         WHERE rol2.rol_valid   = 1
                           AND rol2.rol_cat_id  = cat2.cat_id
+                          AND cat2.cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
                           AND (  cat2.cat_org_id = '. $gCurrentOrganization->getValue('org_id'). '
                               OR cat2.cat_org_id IS NULL )
                           AND mem2.mem_rol_id  = rol2.rol_id
