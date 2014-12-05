@@ -83,7 +83,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
 
     while($row = $gDb->fetch_array($result_role))
     {
-        if($gCurrentUser->viewRole($row['mem_rol_id']) && $row['rol_visible']==1)
+        if($gCurrentUser->hasRightViewRole($row['mem_rol_id']) && $row['rol_visible']==1)
         {
             $formerMembership = false;
             $futureMembership = false;
@@ -123,7 +123,7 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                         <span>'.
                             $role->getValue('cat_name'). ' - ';
                             
-                            if($gCurrentUser->viewRole($member->getValue('mem_rol_id')))
+                            if($gCurrentUser->hasRightViewRole($member->getValue('mem_rol_id')))
                             {
                                 $roleMemHTML .= '<a href="'. $g_root_path. '/adm_program/modules/lists/lists_show.php?mode=html&amp;rol_id='. $member->getValue('mem_rol_id'). '" title="'. $role->getValue('rol_description'). '">'. $role->getValue('rol_name'). '</a>';
                             }

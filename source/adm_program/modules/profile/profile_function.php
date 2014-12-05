@@ -60,7 +60,7 @@ if($getMode == 1)
 	header('Pragma: public');
 
 	// create vcard and check if user is allowed to edit profile, so he can see more data
-    echo $user->getVCard($gCurrentUser->editProfile($user));
+    echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
 }
 elseif($getMode == 2)
 {
@@ -194,7 +194,7 @@ elseif($getMode == 7)
 elseif ($getMode == 8)
 {
     // Export every member of a role into one vCard file
-    if($gCurrentUser->viewRole($getRoleId))
+    if($gCurrentUser->hasRightViewRole($getRoleId))
     {
         // create filename of organization name and role name
         $role     = new TableRoles($gDb, $getRoleId);
@@ -230,7 +230,7 @@ elseif ($getMode == 8)
            // create user object
            $user = new User($gDb, $gProfileFields, $row['mem_usr_id']);
     	   // create vcard and check if user is allowed to edit profile, so he can see more data
-           echo $user->getVCard($gCurrentUser->editProfile($user));
+           echo $user->getVCard($gCurrentUser->hasRightEditProfile($user));
         }
     }
 }

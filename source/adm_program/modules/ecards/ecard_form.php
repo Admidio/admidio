@@ -8,9 +8,9 @@
  *
  * Parameters:
  *
- * pho_id:      id des Albums dessen Bilder angezeigt werden sollen
- * photo_nr:    Name des Bildes ohne(.jpg) spaeter -> (admidio/adm_my_files/photos/<* Album *>/$_GET['photo'].jpg)
- * usr_id:      Die Benutzer id an dem die Grußkarte gesendet werden soll
+ * pho_id:      Id of photo album whose image you want to send
+ * photo_nr:    Number of the photo of the choosen album
+ * usr_id:      (optional) Id of the user who should receive the ecard
  *
  *****************************************************************************/
 
@@ -28,6 +28,7 @@ $showPage	= admFuncVariableIsValid($_GET, 'show_page', 'numeric', 1);
 $funcClass 	 = new FunctionClass($gL10n);
 $templates   = $funcClass->getFileNames(THEME_SERVER_PATH. '/ecard_templates/');
 $template    = THEME_SERVER_PATH. '/ecard_templates/';
+$headline    = $gL10n->get('ECA_GREETING_CARD_EDIT');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_ecard_module'] != 1)
@@ -37,7 +38,7 @@ if ($gPreferences['enable_ecard_module'] != 1)
 }
 
 //URL auf Navigationstack ablegen
-$gNavigation->addUrl(CURRENT_URL);
+$gNavigation->addUrl(CURRENT_URL, $headline);
 
 // Fotoveranstaltungs-Objekt erzeugen oder aus Session lesen
 if(isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
@@ -96,13 +97,12 @@ $ckEditor = new CKEditorSpecial();
 // ruf die Funktion auf die alle Post und Get Variablen parsed
 $funcClass->getVars();
 
-/*********************HTML_TEIL*******************************/
+// create html page object
+$page = new HtmlPage();
 
-$javascript = '
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/modules/ecards/ecard.js" ></script>
-    <script type="text/javascript" src="'.$g_root_path.'/adm_program/system/js/form.js" ></script>
-    <script type="text/javascript">
-    <!--
+$page->addJavascriptFile($g_root_path.'/adm_program/modules/ecards/ecard.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
+$page->addJavascript('
 			var ecardJS = new ecardJSClass();
 			ecardJS.max_recipients			= '.$gPreferences['ecard_cc_recipients'].';
 			ecardJS.nameOfRecipient_Text	= "'.$gL10n->get('ECA_NAME_OF_RECIPIENT', $var1='[VAR1]').'";
@@ -126,15 +126,102 @@ $javascript = '
 			ecardJS.sendDoneURL			= "'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'&photo_nr='.$showPage.'"; 
 			
 			ecardJS.init();
-    -->
-    </script>';
+');
 
-// Html-Kopf ausgeben
-$gLayout['title'] = $gL10n->get("ECA_GREETING_CARD_EDIT");
-$gLayout['header'] = $javascript;
+// add headline and title of module
+$page->addHeadline($headline);
 
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
+// create module menu with back link
+$ecardMenu = new HtmlNavbar('menu_ecard_form', $headline, $page);
+$ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+$page->addHtml($ecardMenu->show(false));
 
+// show form
+$form = new HtmlForm('ecard_form', null, $page);
+$form->addTextInput('submit_action', null, '', 0, FIELD_DEFAULT, 'hidden');
+$form->addTextInput('ecard_image_name', null, $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'], 0, FIELD_DEFAULT, 'hidden');
+
+$form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
+    $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
+        <a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
+            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'].'" 
+            class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
+        </a>');
+    $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
+    foreach($templates as $key => $templateName)
+    {
+        $templates[$key] = ucfirst(preg_replace('/[_-]/',' ',str_replace('.tpl', '', $templateName)));
+    }
+    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, FIELD_MANDATORY);
+$form->closeGroupBox();
+$form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
+
+    // create list with all possible recipients
+
+    // list all roles where login users could send mails to
+    $arrayMailRoles = $gCurrentUser->getAllMailRoles();
+    
+    $sql = 'SELECT rol_id, rol_name 
+              FROM '. TBL_ROLES. '
+             WHERE rol_id IN ('.implode(',', $arrayRoles).')
+             ORDER BY rol_name ';
+
+    $result = $gDb->query($sql);
+    while($row = $gDb->fetch_array($result))
+    {
+        $list[] = array('groupID: '.$row['rol_id'], $row['rol_name'], $gL10n->get('SYS_ROLES'));
+    }
+
+    // select all users
+    $arrayRoles = array_merge($arrayMailRoles, $gCurrentUser->getAllVisibleRoles());
+    $arrayUniqueRoles = array_unique($arrayRoles);
+
+    $sql   = 'SELECT usr_id, first_name.usd_value as first_name, last_name.usd_value as last_name, 
+                     email.usd_value as email
+                FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
+                JOIN '. TBL_USER_DATA. ' as email
+                  ON email.usd_usr_id = usr_id
+                 AND LENGTH(email.usd_value) > 0
+                JOIN '.TBL_USER_FIELDS.' as field
+                  ON field.usf_id = email.usd_usf_id
+                 AND field.usf_type = \'EMAIL\'
+                LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                  ON last_name.usd_usr_id = usr_id
+                 AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+                LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                  ON first_name.usd_usr_id = usr_id
+                 AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+               WHERE mem_usr_id  = usr_id
+                 AND mem_rol_id IN ('.implode(',', $arrayUniqueRoles).')
+                 AND mem_begin <= \''.DATE_NOW.'\'
+                 AND mem_end    > \''.DATE_NOW.'\'                
+                 AND usr_valid   = 1
+            GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
+            ORDER BY first_name, last_name';        
+    $result = $gDb->query($sql);
+
+    while ($row = $gDb->fetch_array($result)) 
+    {
+        $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
+    }
+        
+	$form->addSelectBox('recipient', $gL10n->get('SYS_TO'), $list, FIELD_MANDATORY, array(), false, true);
+    $form->addLine();
+    $form->addTextInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), 50, FIELD_DISABLED);
+    $form->addTextInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), 50, FIELD_DISABLED);
+$form->closeGroupBox();
+$form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'));
+    $form->addEditor('ecard_message', null, null, FIELD_MANDATORY, 'AdmidioGuestbook');
+$form->closeGroupBox();
+$form->openButtonGroup();
+    $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), THEME_PATH. '/icons/eye.png');
+    $form->addButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), THEME_PATH. '/icons/email.png');
+$form->closeButtonGroup();
+
+// add form to html page and show page
+$page->addHtml($form->show(false));
+$page->show();
+exit();
 echo '
 <div class="formLayout">
     <div class="formHead">'. $gLayout['title']. '</div>
@@ -280,22 +367,5 @@ echo '
 		</form>
 	</div>
 </div>';
-/************************Buttons********************************/
-//Uebersicht
-if($photo_album->getValue('pho_id') > 0)
-{
-    echo '
-    <ul class="iconTextLinkList">
-        <li>
-            <span class="iconTextLink">
-                <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-                src="'.THEME_PATH.'/icons/back.png" alt="'.$gL10n->get("SYS_BACK").'" /></a>
-                <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get("SYS_BACK").'</a>
-            </span>
-        </li>
-    </ul>';
-}
 
-/***************************Seitenende***************************/
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

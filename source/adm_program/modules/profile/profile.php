@@ -24,7 +24,7 @@ $getUserId = admFuncVariableIsValid($_GET, 'user_id', 'numeric', $gCurrentUser->
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 //Testen ob Recht besteht Profil einzusehn
-if(!$gCurrentUser->viewProfile($user))
+if(!$gCurrentUser->hasRightViewProfile($user))
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }
@@ -38,7 +38,7 @@ function getFieldCode($fieldNameIntern, $user)
     $value     = '';
     $msg_image = '';
 
-    if($gCurrentUser->editProfile($user) == false && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
+    if($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty($fieldNameIntern, 'usf_hidden') == 1)
     {
         return '';
     }
@@ -194,7 +194,7 @@ if($gNavigation->count() > 1)
 }
 
 // if user has right then show link to edit profile
-if($gCurrentUser->editProfile($user))
+if($gCurrentUser->hasRightEditProfile($user))
 {
 	$profileMenu->addItem('menu_item_new_entry', $g_root_path. '/adm_program/modules/profile/profile_new.php?user_id='.$user->getValue('usr_id'), 
 						$gL10n->get('PRO_EDIT_PROFILE'), 'edit.png');
@@ -275,7 +275,7 @@ $page->addHtml('
             
             // add lastname and firstname 
             if(strlen($user->getValue('GENDER')) > 0
-            && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0 ))
+            && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('GENDER', 'usf_hidden') == 0 ))
             {
                 // Icon des Geschlechts anzeigen, wenn noetigen Rechte vorhanden
                 $form->addStaticControl('name', $gL10n->get('SYS_NAME'), $user->getValue('FIRST_NAME'). ' '. $user->getValue('LAST_NAME').' '.$user->getValue('GENDER', 'html'));
@@ -310,7 +310,7 @@ $page->addHtml('
             {
                 // nur Felder der Stammdaten anzeigen
                 if($field->getValue('cat_name_intern') == 'MASTER_DATA'
-                && ($gCurrentUser->editProfile($user) == true || $field->getValue('usf_hidden') == 0 ))
+                && ($gCurrentUser->hasRightEditProfile($user) == true || $field->getValue('usf_hidden') == 0 ))
                 {
                     switch($field->getValue('usf_name_intern'))
                     {
@@ -340,7 +340,7 @@ $page->addHtml('
                                     '&amp;daddr=';
     
                                 if(strlen($user->getValue('ADDRESS')) > 0
-                                && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
+                                && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('ADDRESS', 'usf_hidden') == 0))
                                 {
                                     $address   .= '<div>'.$user->getValue('ADDRESS'). '</div>';
                                     $map_url   .= urlencode($user->getValue('ADDRESS'));
@@ -348,7 +348,7 @@ $page->addHtml('
                                 }
     
                                 if(strlen($user->getValue('POSTCODE')) > 0
-                                && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
+                                && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 0))
                                 {
                                     $address   .= '<div>'.$user->getValue('POSTCODE');
                                     $map_url   .= ',%20'. urlencode($user->getValue('POSTCODE'));
@@ -356,18 +356,18 @@ $page->addHtml('
     
                                     // Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
                                     if(strlen($user->getValue('CITY')) == 0
-                                    || ($gCurrentUser->editProfile($user) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
+                                    || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('CITY', 'usf_hidden') == 1))
                                     {
                                         $address   .= '</div>';
                                     }
                                 }
     
                                 if(strlen($user->getValue('CITY')) > 0
-                                && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
+                                && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('CITY', 'usf_hidden') == 0))
                                 {
                                     // Ort und PLZ in eine Zeile schreiben, falls man beides sehen darf
                                     if(strlen($user->getValue('POSTCODE')) == 0
-                                    || ($gCurrentUser->editProfile($user) == false && $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 1))
+                                    || ($gCurrentUser->hasRightEditProfile($user) == false && $gProfileFields->getProperty('POSTCODE', 'usf_hidden') == 1))
                                     {
                                         $address   .= '<div>';
                                     }
@@ -377,7 +377,7 @@ $page->addHtml('
                                 }
     
                                 if(strlen($user->getValue('COUNTRY')) > 0
-                                && ($gCurrentUser->editProfile($user) == true || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
+                                && ($gCurrentUser->hasRightEditProfile($user) == true || $gProfileFields->getProperty('COUNTRY', 'usf_hidden') == 0))
                                 {
                                     $country    = $user->getValue('COUNTRY');
                                     $address   .= '<div>'.$country. '</div>';
@@ -427,7 +427,7 @@ $page->addHtml('
             $page->addHtml('<img id="profile_photo" class="thumbnail" src="profile_photo_show.php?usr_id='.$user->getValue('usr_id').'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
 
             // Nur berechtigte User duerfen das Profilfoto editieren
-            if($gCurrentUser->editProfile($user) == true)
+            if($gCurrentUser->hasRightEditProfile($user) == true)
             {
                 $page->addHtml('<ul id="profile_picture_links" class="icon-text-link-list icon-text-link-list-vertical">
                     <li><a class="icon-text-link" href="'.$g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?usr_id='.$user->getValue('usr_id').'"><img
@@ -456,8 +456,8 @@ foreach($gProfileFields->mProfileFields as $field)
     // Felder der Kategorie Stammdaten wurde schon angezeigt, nun alle anderen anzeigen
     // versteckte Felder nur anzeigen, wenn man das Recht hat, dieses Profil zu editieren
     if($field->getValue('cat_name_intern') != 'MASTER_DATA'
-    && (  $gCurrentUser->editProfile($user) == true
-       || ($gCurrentUser->editProfile($user) == false && $field->getValue('usf_hidden') == 0 )))
+    && (  $gCurrentUser->hasRightEditProfile($user) == true
+       || ($gCurrentUser->hasRightEditProfile($user) == false && $field->getValue('usf_hidden') == 0 )))
     {
         // show new category header if new category and field has value or is a checkbox field
         if($category != $field->getValue('cat_name')
@@ -730,7 +730,7 @@ if($gPreferences['profile_show_extern_roles'] == 1
             }
 
             // check if current user has right to view the role of that organization
-            if($gCurrentUser->viewRole($row['rol_id']))
+            if($gCurrentUser->hasRightViewRole($row['rol_id']))
             {
                 $role->clear();
                 $role->setArray($row);

@@ -141,7 +141,7 @@ if ($getMsgType == 'EMAIL')
                 // logged out ones just to role with permission level "all visitors"
                 // role must be from actual Organisation
                 if((!$gValidLogin && $row['rol_mail_this_role'] != 3)
-                || ($gValidLogin  && !$gCurrentUser->mailRole($row['rol_id']))
+                || ($gValidLogin  && !$gCurrentUser->hasRightSendMailToRole($row['rol_id']))
                 || $row['rol_id']  == null)
                 {
                     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));

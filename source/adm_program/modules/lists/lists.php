@@ -184,7 +184,7 @@ foreach($listsResult['recordset'] as $row)
             </div>
             <div class="pull-right text-right">');
                 // send a mail to all role members
-                if($gCurrentUser->mailRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
+                if($gCurrentUser->hasRightSendMailToRole($role->getValue('rol_id')) && $gPreferences['enable_mail_module'] == 1)
                 {
                     $page->addHtml('
                     <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/messages/messages_write.php?rol_id='.$role->getValue('rol_id').'"><img

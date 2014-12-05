@@ -322,7 +322,7 @@ else
         // Eingeloggte duerfen nur an Rollen Mails schreiben, zu denen sie berechtigt sind
         // Rollen muessen zur aktuellen Organisation gehoeren
         if(($gValidLogin == false && $row['rol_mail_this_role'] != 3)
-        || ($gValidLogin == true  && $gCurrentUser->mailRole($row['rol_id']) == false)
+        || ($gValidLogin == true  && $gCurrentUser->hasRightSendMailToRole($row['rol_id']) == false)
         || $row['rol_id']  == null)
         {
             $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
@@ -436,25 +436,23 @@ else
                         WHERE mem_usr_id = usr_id
                          AND (  mem_begin > \''.DATE_NOW.'\'
                         OR mem_end   < \''.DATE_NOW.'\')) as former
-                            FROM '. TBL_CATEGORIES. ', '. TBL_MEMBERS. ', '. TBL_USERS. '
-                            JOIN '. TBL_USER_DATA. ' as email
-                              ON email.usd_usr_id = usr_id
-                             AND LENGTH(email.usd_value) > 0
-                            JOIN '.TBL_USER_FIELDS.' as field
-                              ON field.usf_id = email.usd_usf_id
-                             AND field.usf_type = \'EMAIL\'
-                            LEFT JOIN '. TBL_USER_DATA. ' as last_name
-                              ON last_name.usd_usr_id = usr_id
-                             AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
-                            LEFT JOIN '. TBL_USER_DATA. ' as first_name
-                              ON first_name.usd_usr_id = usr_id
-                             AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
-                           WHERE (  cat_org_id  = '. $gCurrentOrganization->getValue('org_id'). '
-                                 OR cat_org_id IS NULL )
-                             AND mem_usr_id  = usr_id
-                             AND usr_valid   = 1
-               GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
-               ORDER BY former';        
+                    FROM '. TBL_MEMBERS. ', '. TBL_USERS. '
+                    JOIN '. TBL_USER_DATA. ' as email
+                      ON email.usd_usr_id = usr_id
+                     AND LENGTH(email.usd_value) > 0
+                    JOIN '.TBL_USER_FIELDS.' as field
+                      ON field.usf_id = email.usd_usf_id
+                     AND field.usf_type = \'EMAIL\'
+                    LEFT JOIN '. TBL_USER_DATA. ' as last_name
+                      ON last_name.usd_usr_id = usr_id
+                     AND last_name.usd_usf_id = '. $gProfileFields->getProperty('LAST_NAME', 'usf_id'). '
+                    LEFT JOIN '. TBL_USER_DATA. ' as first_name
+                      ON first_name.usd_usr_id = usr_id
+                     AND first_name.usd_usf_id = '. $gProfileFields->getProperty('FIRST_NAME', 'usf_id'). '
+                   WHERE mem_usr_id  = usr_id
+                     AND usr_valid   = 1
+                   GROUP BY usr_id, first_name.usd_value, last_name.usd_value, email.usd_value
+                   ORDER BY former, first_name, last_name';        
 
         $result = $gDb->query($sql);
 
@@ -475,8 +473,7 @@ else
     else
     {
         $recept_number = 1;
-        // alle Rollen auflisten,
-        // an die im nicht eingeloggten Zustand Mails versendet werden duerfen
+        // list all roles where guests could send mails to
         $sql = 'SELECT rol_id, rol_name, cat_name 
                   FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
                  WHERE rol_mail_this_role = 3

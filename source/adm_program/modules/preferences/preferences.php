@@ -141,7 +141,7 @@ $page->addHtml('
                         $form = new HtmlForm('common_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=common', $page, 'default', false, 'form-preferences');
                         
                         // search all available themes in theme folder
-                        $themes = getDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
+                        $themes = admFuncGetDirectoryEntries(SERVER_PATH.'/adm_themes', 'dir');
                         $form->addSelectBox('theme', $gL10n->get('ORG_ADMIDIO_THEME'), $themes, FIELD_MANDATORY, $form_values['theme'], true, false, null, 'ORG_ADMIDIO_THEME_DESC');
                         $form->addTextInput('homepage_logout', $gL10n->get('SYS_HOMEPAGE').'<br />('.$gL10n->get('SYS_VISITORS').')', $form_values['homepage_logout'], 
                             250, FIELD_MANDATORY, 'text', null, 'ORG_HOMEPAGE_VISITORS');
@@ -354,7 +354,7 @@ $page->addHtml('
                         $selectBoxEntries = array('pic' => $gL10n->get('ORG_CAPTCHA_TYPE_PIC'), 'calc' => $gL10n->get('ORG_CAPTCHA_TYPE_CALC'));
                         $form->addSelectBox('captcha_type', $gL10n->get('ORG_CAPTCHA_TYPE'), $selectBoxEntries, FIELD_DEFAULT, $form_values['captcha_type'], false, false, null, 'ORG_CAPTCHA_TYPE_TEXT');
                         
-                        $fonts = getDirectoryEntries('../../system/fonts/');
+                        $fonts = admFuncGetDirectoryEntries('../../system/fonts/');
                         $fonts['Theme'] = 'Theme';
                         asort($fonts);
                         $form->addSelectBox('captcha_fonts', $gL10n->get('SYS_FONT'), $fonts, FIELD_DEFAULT, $form_values['captcha_fonts'], false, false, null, 'ORG_CAPTCHA_FONT');
@@ -861,7 +861,7 @@ exit();
                         <dl>
                             <dt><label for="ecard_template">'.$gL10n->get('ECA_TEMPLATE').':</label></dt>
                             <dd>';
-                                echo getMenueSettings(getDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
+                                echo getMenueSettings(admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
                              echo '</dd>
                         </dl>
                     </li>
@@ -884,33 +884,6 @@ exit();
     </div>
 </div>';
 
-/** Search all files or directories in the specified directory.
- *  @param $directory  The directory where the files or directories should be searched.
- *  @param $searchType This could be @b file or @b dir and represent the type of entries that should be searched.
- *  @return Returns an array with all found entries.
- */
-function getDirectoryEntries($directory, $searchType = 'file')
-{
-    $array_files = array();
-    
-    if($curdir = opendir($directory))
-    {
-        while($filename = readdir($curdir))
-        {
-            if(strpos($filename, '.') !== 0)
-            {
-                if(($searchType == 'file' && is_file($directory.'/'.$filename) == true)
-                || ($searchType == 'dir'  && is_dir($directory.'/'.$filename) == true))
-                {
-                    $array_files[$filename] = $filename;
-                }
-            }
-        }
-    }
-    closedir($curdir);
-    asort($array_files);
-    return $array_files;
-}
 
 // oeffnet ein File und gibt alle Zeilen als Array zurueck
 // Uebergabe:

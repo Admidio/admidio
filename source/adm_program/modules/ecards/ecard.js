@@ -49,17 +49,18 @@ function ecardJSClass()
 			$("a[rel=\'colorboxImage\']").colorbox({photo:true});
 			ecardJS.getMenu();
 
-			$("#btnPreview").click(function(event){
+			$("#btn_ecard_preview").click(function(event){
 				event.preventDefault();
-				$("#" + ecardJS.ecardformid + " input[name='ecard[submit_action]']").val("preview");
-				$("#" + ecardJS.ecardformid + " textarea[name='admEcardMessage']").text( CKEDITOR.instances.admEcardMessage.getData() );	
+				$("#" + ecardJS.ecardformid + " input[id='submit_action']").val("preview");
+                var test = CKEDITOR.instances.ecard_message.getData();
+				$("#" + ecardJS.ecardformid + " textarea[name='ecard_message']").text( CKEDITOR.instances.ecard_message.getData() );	
 
 				$.ajax({ // create an AJAX call...
 					data: $("#" + ecardJS.ecardformid).serialize(), // get the form data
 					type: 'POST', // GET or POST
 					url: 'ecard_preview.php', // the file to call
 					success: function(response) { // on success..
-						$.fn.colorbox({width:"70%",height:"70%",iframe:true,fastIframe:false,onComplete:function() {		
+						$.colorbox({width:"70%",height:"70%",iframe:true,fastIframe:false,onComplete:function() {		
 								var cBoxLContent = $("#cboxLoadedContent");
 								var iFrame = cBoxLContent.find("iframe");
 								iFrame.contents().find('html').html(response);	
@@ -118,7 +119,7 @@ function ecardJSClass()
 			error = true;
 			error_message += this.emailOfRecipient_Text.replace('<VAR1>'," ") + ", ";
 		}
-		if (CKEDITOR.instances.admEcardMessage.getData() == '')
+		if (CKEDITOR.instances.ecard_message.getData() == '')
 		{
 			error = true;
 			error_message += this.message_Text + ", ";
@@ -219,13 +220,13 @@ function ecardJSClass()
 	{
 		if (this.validateForm())
 		{
-			$("#" + ecardJS.ecardformid + " textarea[name='admEcardMessage']").text( CKEDITOR.instances.admEcardMessage.getData() );
+			$("#" + ecardJS.ecardformid + " textarea[name='ecard_message']").text( CKEDITOR.instances.ecard_message.getData() );
 			$("#" + ecardJS.ecardformid).ajaxSubmit(ecardJS.submitOptions);
 		}
 		else
 		{
 			$("#" + this.ecardformid).attr("onsubmit","");
-			$("#" + this.ecardformid + " input[name='ecard[submit_action]']").val("");
+			$("#" + this.ecardformid + " input[id='submit_action']").val("");
 		}
 	}
 	

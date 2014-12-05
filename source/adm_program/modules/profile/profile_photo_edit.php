@@ -40,7 +40,7 @@ if (ini_get('file_uploads') != '1')
 $user = new User($gDb, $gProfileFields, $getUserId);
 
 // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-if($gCurrentUser->editProfile($user) == false)
+if($gCurrentUser->hasRightEditProfile($user) == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
 }

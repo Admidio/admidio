@@ -79,7 +79,7 @@ switch($getNewUser)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentUser->editProfile($user) == false)
+        if($gCurrentUser->hasRightEditProfile($user) == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -181,7 +181,7 @@ foreach($gProfileFields->mProfileFields as $field)
         $show_field = true;
     }
     elseif($getNewUser != 2 
-    && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->editProfile($user)))
+    && ($getUserId == $gCurrentUser->getValue('usr_id') || $gCurrentUser->hasRightEditProfile($user)))
     {
         // bei fremden Profilen duerfen versteckte Felder nur berechtigten Personen angezeigt werden
         // Leiter duerfen dies nicht !!!

@@ -589,4 +589,32 @@ function admFuncGetFilenameWithoutExtension($filename)
 {
     return str_replace(strrchr($filename, "."), '', $filename);
 }
+
+/** Search all files or directories in the specified directory.
+ *  @param $directory  The directory where the files or directories should be searched.
+ *  @param $searchType This could be @b file or @b dir and represent the type of entries that should be searched.
+ *  @return Returns an array with all found entries.
+ */
+function admFuncGetDirectoryEntries($directory, $searchType = 'file')
+{
+    $array_files = array();
+    
+    if($curdir = opendir($directory))
+    {
+        while($filename = readdir($curdir))
+        {
+            if(strpos($filename, '.') !== 0)
+            {
+                if(($searchType == 'file' && is_file($directory.'/'.$filename) == true)
+                || ($searchType == 'dir'  && is_dir($directory.'/'.$filename) == true))
+                {
+                    $array_files[$filename] = $filename;
+                }
+            }
+        }
+    }
+    closedir($curdir);
+    asort($array_files);
+    return $array_files;
+}
 ?>

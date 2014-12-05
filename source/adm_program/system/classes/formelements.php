@@ -120,7 +120,7 @@ class FormElements
 
 			while($row = $gDb->fetch_array($result_lst))
 			{
-				if($gCurrentUser->viewRole($row['rol_id']))
+				if($gCurrentUser->hasRightViewRole($row['rol_id']))
 				{
 					// if text is a translation-id then translate it
 					if(strpos($row['cat_name'], '_') == 3)

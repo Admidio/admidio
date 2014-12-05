@@ -44,7 +44,7 @@ class HtmlPage
      */
     public function __construct($title = '')
     {
-        global $g_root_path;
+        global $g_root_path, $gDebug;
     
         $this->pageContent = '';
         $this->header = '';
@@ -54,12 +54,25 @@ class HtmlPage
         $this->printMode = false;
         $this->hasNavbar = false;
         
-        $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css', 
-                                $g_root_path.'/adm_program/libs/colorbox/colorbox.css');
-        $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js', 
-                                $g_root_path.'/adm_program/libs/colorbox/jquery.colorbox-min.js',
-                                $g_root_path. '/adm_program/system/js/common_functions.js',
-                                $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
+        if($gDebug)
+        {
+            $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.css', 
+                                    $g_root_path.'/adm_program/libs/colorbox/colorbox.css');
+            $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js', 
+                                    $g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js',
+                                    $g_root_path. '/adm_program/system/js/common_functions.js',
+                                    $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.js');
+        }
+        else
+        {
+            // if not in debug mode only load the minified files
+            $this->cssFiles = array($g_root_path.'/adm_program/libs/bootstrap/css/bootstrap.min.css', 
+                                    $g_root_path.'/adm_program/libs/colorbox/colorbox.css');
+            $this->jsFiles  = array($g_root_path.'/adm_program/libs/jquery/jquery.js', 
+                                    $g_root_path.'/adm_program/libs/colorbox/jquery.colorbox-min.js',
+                                    $g_root_path. '/adm_program/system/js/common_functions.js',
+                                    $g_root_path.'/adm_program/libs/bootstrap/js/bootstrap.min.js');
+        }
         $this->rssFiles = array();
         $this->addJavascript('$(".colorbox-dialog").colorbox({rel:\'nofollow\'});', true);
     }

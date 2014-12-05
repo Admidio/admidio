@@ -462,7 +462,7 @@ class TableRoles extends TableAccess
             }
             else
             {
-                return $gCurrentUser->viewRole($this->getValue('rol_id'));
+                return $gCurrentUser->hasRightViewRole($this->getValue('rol_id'));
             }
         }
         return false;

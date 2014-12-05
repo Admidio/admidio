@@ -81,7 +81,7 @@ if($gValidLogin && $getMode == 1)
             echo '<optgroup label="'.$row['cat_name'].'">';
             $act_category = $row['cat_name'];
         }
-        if($gCurrentUser->mailRole($row['rol_id']))
+        if($gCurrentUser->hasRightSendMailToRole($row['rol_id']))
         {
             echo '<option value='.$row['rol_id'].' ';
             if ($row['rol_id'] == isset($form_values['rol_id']))
