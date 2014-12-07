@@ -14,6 +14,7 @@
  *         LNK = Categories for weblinks
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
+ *         INF = Categories for Inventory
  * mode  : 1 - Create or edit categories
  *         2 - Delete category
  *         4 - Change sequence for parameter cat_id
@@ -26,7 +27,7 @@ require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
 $getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
-$getType     = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
+$getType     = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT', 'INF'));
 $getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
 $getTitle    = admFuncVariableIsValid($_GET, 'title', 'string', $gL10n->get('SYS_CATEGORY'));
 $getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));

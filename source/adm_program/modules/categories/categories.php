@@ -13,6 +13,7 @@
  *         LNK = Categories for weblinks
  *         USF = Categories for profile fields
  *         DAT = Calendars for events
+ *         INF = Categories for Inventory
  * title : Parameter for the synonym of the categorie
  *
  ****************************************************************************/
@@ -21,7 +22,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getType  = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT'));
+$getType  = admFuncVariableIsValid($_GET, 'type', 'string', null, true, array('ROL', 'LNK', 'USF', 'DAT', 'INF'));
 $getTitle = admFuncVariableIsValid($_GET, 'title', 'string', $gL10n->get('SYS_CATEGORY'));
 
 // Modus und Rechte pruefen

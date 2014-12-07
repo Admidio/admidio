@@ -63,5 +63,61 @@
 	<step id="350" database="mysql">ALTER TABLE %PREFIX%_links MODIFY COLUMN lnk_url varchar(2000)</step>
 	<step id="360" database="postgresql">ALTER TABLE %PREFIX%_links ALTER COLUMN lnk_url TYPE varchar(2000)</step>
 	<step id="370">UPDATE %PREFIX%_user_fields SET usf_type = 'DECIMAL' WHERE usf_type = 'NUMERIC'</step>
+	<step id="380">CREATE TABLE IF NOT EXISTS %PREFIX%_invent_fields
+			(
+			   inf_id                         integer       unsigned not null AUTO_INCREMENT,
+			   inf_cat_id                     integer       unsigned not null,
+			   inf_type                       varchar(30)   not null,
+			   inf_name_intern                varchar(110)  not null,
+			   inf_name                       varchar(100)  not null,
+			   inf_description                text,
+			   usf_value_list                 text,
+			   inf_system                     boolean       not null default '0',
+			   inf_disabled                   boolean       not null default '0',
+			   inf_hidden                     boolean       not null default '0',
+			   inf_mandatory                  boolean       not null default '0',
+			   inf_sequence                   smallint      not null,
+			   inf_usr_id_create              integer       unsigned,
+			   inf_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
+			   inf_usr_id_change              integer       unsigned,
+			   inf_timestamp_change           timestamp 	null default null,
+			   primary key (inf_id)
+			)
+			engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
+	<step id="390">CREATE TABLE IF NOT EXISTS %PREFIX%_invent_data
+			(
+			   ind_id                         integer       unsigned not null AUTO_INCREMENT,
+			   ind_itm_id                     integer       unsigned not null,
+			   ind_inf_id                     integer       unsigned not null,
+			   ind_value                      varchar(255),
+			   primary key (ind_id)
+			)
+			engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
+	<step id="400">CREATE TABLE IF NOT EXISTS %PREFIX%_invent
+			(
+			   inv_id                         integer       unsigned not null AUTO_INCREMENT,
+			   inv_photo                      blob,
+			   inv_text                       text,
+			   inv_for_loan                   boolean       not null default '0',
+			   inv_last_lent                  timestamp 	null default null,
+			   inv_usr_id_lent                integer 	    unsigned,
+			   inv_lent_until                 timestamp 	null default null,
+			   inv_number_lent                integer       not null default 0,
+			   inv_usr_id_create              integer       unsigned,
+			   inv_timestamp_create           timestamp     not null default CURRENT_TIMESTAMP,
+			   inv_usr_id_change              integer       unsigned,
+			   inv_timestamp_change           timestamp 	null default null,
+			   inv_valid                      boolean       not null default '0',
+			   primary key (inv_id)
+			)
+			engine = InnoDB auto_increment = 1 default character set = utf8 collate = utf8_unicode_ci;</step>
+	<step id="410">INSERT INTO %PREFIX%_categories (cat_org_id, cat_type, cat_name_intern, cat_name, cat_hidden, cat_system, cat_sequence, cat_usr_id_create, cat_timestamp_create)
+                       VALUES (NULL, 'INF', 'MASTER_DATA', 'SYS_MASTER_DATA', 0, 1, 1, 1, NOW())</step>
+	<step id="420">INSERT INTO %PREFIX%_invent_fields (inf_cat_id, inf_type, inf_name_intern, inf_name, inf_description, inf_system, inf_disabled, inf_mandatory, inf_sequence, inf_usr_id_create, inf_timestamp_create)
+					   VALUES ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'TEXT', 'ITEM_NAME', 'SYS_ITEMNAME', NULL, 1, 1, 1, 1, 1, NOW())
+							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'ROOM_ID', 'SYS_ROOM', NULL, 1, 1, 1, 2, 1, NOW())
+							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'PRICE',   'SYS_QUANTITY', NULL, 0, 0, 0, 3, 1, NOW())
+							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'TEXT', 'LOAT_USER',  'SYS_LOAN', NULL, 0, 0, 0, 4, 1, NOW())
+							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'LENT',  'SYS_LENT', NULL, 0, 0, 0, 5, 1, NOW())</step>
 	<step>stop</step>
 </update>

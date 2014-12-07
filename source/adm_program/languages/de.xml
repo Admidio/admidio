@@ -645,7 +645,7 @@
     <text id="INS_CONFERENCE_ROOM" development="new" translation="todo">Besprechnungsraum</text>
     <text id="INS_CONFIGURATION_FILE_NOT_FOUND" development="new" translation="todo">Die Datei %VAR1_BOLD% befindet sich nicht im Admidio Hauptverzeichnis!\n\nLade die Datei gegebenenfalls erneut herunter und kopiere diese in das entsprechende Verzeichnis.</text>
     <text id="INS_COURSES" development="new" translation="todo">Kurse</text>
-    <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Admi/nistrator anlegen</text>
+    <text id="INS_CREATE_ADMINISTRATOR" development="new" translation="todo">Administrator anlegen</text>
     <text id="INS_CREATE_CONFIGURATION_FILE" development="new" translation="todo">Konfigurationsdatei erzeugen</text>
     <text id="INS_DATA_DO_NOT_MATCH" development="new" translation="todo">Die Daten aus der %VAR1_BOLD% stimmen nicht mit den Angaben des Installationsassistenten überein.\n\nPrüfe bitte deine config.php und ändere die Daten entsprechend den gerade getätigten Angaben.</text>
     <text id="INS_DATA_OF_ADMINISTRATOR" development="new" translation="todo">Daten des Administrators</text>

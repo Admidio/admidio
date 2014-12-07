@@ -1011,7 +1011,7 @@ class HtmlForm extends HtmlFormBasic
      *  @param $id                 Id of the selectbox. This will also be the name of the selectbox.
      *  @param $label              The label of the selectbox.
      *  @param $databaseObject     A Admidio database object that contains a valid connection to a database
-	 *  @param $categoryType	   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+	 *  @param $categoryType	   Type of category ('DAT', 'LNK', 'ROL', 'USF', 'INF') that should be shown
 	 *  @param $selectboxModus     The selectbox could be shown in 2 different modus.
 	 *                             @b EDIT_CATEGORIES First entry will be "Please choose" and default category will be preselected.
 	 *                             @b FILTER_CATEGORIES First entry will be "All" and only categories with childs will be shown.
@@ -1063,6 +1063,11 @@ class HtmlForm extends HtmlFormBasic
                 $sqlTables = TBL_CATEGORIES.', '.TBL_ROLES;
                 $sqlCondidtions = ' AND cat_id = rol_cat_id 
                                     AND rol_visible = 1 ';
+            }
+			elseif($categoryType == 'INF')
+            {
+                $sqlTables = TBL_CATEGORIES.', '.TBL_INVENT_FIELDS;
+                $sqlCondidtions = ' AND cat_id = inf_cat_id ';
             }
 		}
 		

@@ -83,6 +83,11 @@
 					$adminMenu->addItem('usrmgt', '/adm_program/modules/members/members.php',
 										$gL10n->get('MEM_USER_MANAGEMENT'), '/icons/user_administration.png');
                 }
+				if($gCurrentUser ->editUsers())
+                {
+                    $adminMenu->addItem('itemmgt', '/adm_program/modules/inventory/inventory.php',
+                                        $gL10n->get('MEM_ITEM_MANAGEMENT'), '/icons/inventory.png');
+                }
                 if($gCurrentUser ->manageRoles())
                 {
 					$adminMenu->addItem('roladm', '/adm_program/modules/roles/roles.php',
@@ -111,5 +116,5 @@
     <a href="http://www.admidio.org"><img
     src="<?php echo THEME_PATH; ?>/images/admidio_logo_20.png" style="border: 0px; vertical-align: bottom;"
      alt="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" title="<?php echo $gL10n->get('SYS_ADMIDIO_SHORT_DESC'); ?>" /></a>
-    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2013&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
+    <span style="font-size: 9pt;">&nbsp;&nbsp;&copy; 2004 - 2015&nbsp;&nbsp;<?php echo $gL10n->get('SYS_ADMIDIO_TEAM'); ?></span>
 </p>
