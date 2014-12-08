@@ -139,7 +139,9 @@ class Session extends TableAccess
                 else
                 {
                     // user was inactive -> clear user data and remove him from session
-                    $gCurrentUser->clear();
+					if (isset($gCurrentUser)) {
+						$gCurrentUser->clear();
+					}
                     $this->setValue('ses_usr_id', '');
                 }
             }
