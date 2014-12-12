@@ -233,7 +233,7 @@ foreach($gProfileFields->mProfileFields as $field)
                     if($gPreferences['system_organization_select'] == 1)
                     {
                         $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
-                        $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, FIELD_MANDATORY, $registrationOrgId);
+                        $form->addSelectBoxFromSql('reg_org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, array('property' => FIELD_MANDATORY, 'defaultValue' => $registrationOrgId));
                     }
                 }
                 else
@@ -284,7 +284,7 @@ foreach($gProfileFields->mProfileFields as $field)
         if($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'CHECKBOX')
         {
             $form->addCheckbox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
-                $user->getValue($field->getValue('usf_name_intern')), $fieldProperty, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+                $user->getValue($field->getValue('usf_name_intern')), array('property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'DROPDOWN'
             || $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name_intern') == 'COUNTRY')
@@ -309,8 +309,10 @@ foreach($gProfileFields->mProfileFields as $field)
                 $defaultValue  = $user->getValue($field->getValue('usf_name_intern'), 'database');
     		}
 
-    		$form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-    		    $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+    		$form->addSelectBox('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), 
+                $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),  $arrListValues, 
+                array('property' => $fieldProperty, 'defaultValue' => $defaultValue, 'helpTextIdLabel' => $helpId, 
+                'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
     	}
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'RADIO_BUTTON')
         {
@@ -323,12 +325,12 @@ foreach($gProfileFields->mProfileFields as $field)
     		}
     		
     		$form->addRadioButton('usf-'.$gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
-    		    $arrListValues, $fieldProperty, $user->getValue($field->getValue('usf_name_intern'), 'database'), $showDummyRadioButton, $helpId, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+    		    $arrListValues, array('property' => $fieldProperty, 'defaultValue' => $user->getValue($field->getValue('usf_name_intern'), 'database'), 'showNoValueButton' => $showDummyRadioButton, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
         elseif($gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_type') == 'TEXT_BIG')
         {
             $form->addMultilineTextInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), 
-                $user->getValue($field->getValue('usf_name_intern')), 3, 4000, $fieldProperty, $helpId, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+                $user->getValue($field->getValue('usf_name_intern')), 3, array('maxLength' => 4000, 'property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' =>  $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
         else
         {

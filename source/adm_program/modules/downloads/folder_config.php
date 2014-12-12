@@ -210,7 +210,7 @@ $htmlRoleSelection = '
         </select>
     </div>';
 
-$form->addCheckbox('fol_public', $gL10n->get('DOW_NO_PUBLIC_ACCESS'), $checkboxValue, $fieldMode, 'DOW_PUBLIC_DOWNLOAD_FLAG', null, THEME_PATH. '/icons/lock.png');
+$form->addCheckbox('fol_public', $gL10n->get('DOW_NO_PUBLIC_ACCESS'), $checkboxValue, array('property' => $fieldMode, 'helpTextIdLabel' => 'DOW_PUBLIC_DOWNLOAD_FLAG', 'icon' => THEME_PATH. '/icons/lock.png'));
 $form->openGroupBox('adm_roles_box', $gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS'));
 $form->addDescription($gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'));
 $form->addCustomContent(null, $htmlRoleSelection);

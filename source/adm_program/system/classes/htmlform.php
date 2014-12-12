@@ -13,8 +13,9 @@
  *  @code // create a simple form with one input field and a button
  *  $form = new HtmlForm('simple-form', 'next_page.php');
  *  $form->openGroupBox('gbSimpleForm', $gL10n->get('SYS_SIMPLE_FORM'));
- *  $form->addTextInput('name', $gL10n->get('SYS_NAME'), $formName, true);
- *  $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'), true, 'simple', true);
+ *  $form->addTextInput('name', $gL10n->get('SYS_NAME'), $formName);
+ *  $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'), 
+ *                      array('defaultValue' => 'simple', 'showContextDependentFirstEntry' => true));
  *  $form->closeGroupBox();
  *  $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), 'layout/forward.png');
  *  $form->show();@endcode
@@ -129,55 +130,61 @@ class HtmlForm extends HtmlFormBasic
     
     /** Add a new button with a custom text to the form. This button could have 
      *  an icon in front of the text.
-     *  @param $id    Id of the button. This will also be the name of the button.
-     *  @param $text  Text of the button
-     *  @param $icon  Optional parameter. Path and filename of an icon. 
-     *                If set a icon will be shown in front of the text.
-     *  @param $link  If set a javascript click event with a page load to this link 
-     *                will be attached to the button.
-     *  @param $onClickText A text that will be shown after a click on this button 
-     *                until the next page is loaded. The button will be disabled after click.
-     *  @param $class Optional an additional css classname. The class @b admButton
-     *                is set as default and need not set with this parameter.
-     *  @param $type  Optional a button type could be set. The default is @b button.
+     *  @param $id      Id of the button. This will also be the name of the button.
+     *  @param $text    Text of the button
+     *  @param $options An array with the following possible entries:
+     *                  @b icon  Optional parameter. Path and filename of an icon. 
+     *                      If set a icon will be shown in front of the text.
+     *                  @b link  If set a javascript click event with a page load to this link 
+     *                      will be attached to the button.
+     *                  @b onClickText A text that will be shown after a click on this button 
+     *                      until the next page is loaded. The button will be disabled after click.
+     *                  @b class Optional an additional css classname. The class @b admButton
+     *                      is set as default and need not set with this parameter.
+     *                  @b type  Optional a button type could be set. The default is @b button.
      */
-    public function addButton($id, $text, $icon = null, $link = null, $onClickText = null, $class = null, $type = 'button')
+    public function addButton($id, $text, $options = array())
     {
         $this->countElements++;
+        
+        // create array with all options
+        $optionsDefault = array('icon' => null, 'link' => null, 'onClickText' => null, 'class' => null, 'type' => 'button');
+        $optionsAll     = array_replace($optionsDefault, $options);
+        
         // add text and icon to button
         $value = $text;
         
-        if(strlen($icon) > 0)
+        if(strlen($optionsAll['icon']) > 0)
         {
-            $value = '<img src="'.$icon.'" alt="'.$text.'" />'.$value;
+            $value = '<img src="'.$optionsAll['icon'].'" alt="'.$text.'" />'.$value;
         }
         $this->addElement('button');
         $this->addAttribute('class', 'btn btn-default btn-form');
         
-        if(strlen($onClickText) > 0)
+        if(strlen($optionsAll['onClickText']) > 0)
         {
-            $this->addAttribute('data-loading-text', $onClickText);
+            $this->addAttribute('data-loading-text', $optionsAll['onClickText']);
             $this->addAttribute('autocomplete', 'off');
         }
         
         // add javascript for stateful button and/or 
         // a different link that should be loaded after click
-        if(strlen($onClickText) > 0 || strlen($link) > 0)
+        if(strlen($optionsAll['onClickText']) > 0 || strlen($optionsAll['link']) > 0)
         {
             $javascriptCode = '';
             
-            if(strlen($link) > 0)
+            if(strlen($optionsAll['link']) > 0)
             {
                 $javascriptCode .= '// disable default form submit
-                    self.location.href="'.$link.'";';
+                    self.location.href="'.$optionsAll['link'].'";';
             }
 
-            if(strlen($onClickText) > 0)
+            if(strlen($optionsAll['onClickText']) > 0)
             {
                 $javascriptCode .= '$btn = $(this).button("loading");';
             }
             
-            if($type == 'submit')
+            if($optionsAll['type'] == 'submit')
             {
                 $javascriptCode .= '$("#'.$this->id.'").submit();';
             }
@@ -202,12 +209,12 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $this->addAttribute('class', $class);
+            $this->addAttribute('class', $optionsAll['class']);
         }
         
-        $this->addSimpleButton($id, $type, $value, $id);
+        $this->addSimpleButton($id, $optionsAll['type'], $value, $id);
     }
     
     /** Add a captcha with an input field to the form. The captcha could be a picture with a character code
@@ -254,27 +261,28 @@ class HtmlForm extends HtmlFormBasic
     }
     
     /** Add a new checkbox with a label to the form.
-     *  @param $id         Id of the checkbox. This will also be the name of the checkbox.
-     *  @param $label      The label of the checkbox.
-	 *  @param $value      A value for the checkbox. The value could only be @b 0 or @b 1. If the value is @b 1 then 
-	 *                     the checkbox will be checked when displayed.
-     *  @param $property   With this param you can set the following properties: 
-     *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set the complete text will be shown after the form element.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
-     *  @param $class      Optional an additional css classname. The class @b admCheckbox
-     *                     is set as default and need not set with this parameter.
+     *  @param $id      Id of the checkbox. This will also be the name of the checkbox.
+     *  @param $label   The label of the checkbox.
+	 *  @param $value   A value for the checkbox. The value could only be @b 0 or @b 1. If the value is @b 1 then 
+	 *                  the checkbox will be checked when displayed.
+     *  @param $options An array with the following possible entries:
+     *                  @b property With this param you can set the following properties: 
+     *                       @b FIELD_DEFAULT The field can accept an input.
+     *                       @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                       @b FIELD_DISABLED The field will be disabled and could not accept an input.
+	 *                  @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                       If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                       If you need an additional parameter for the text you can add an array. The first entry must
+     *                       be the unique text id and the second entry will be a parameter of the text id.     
+	 *                  @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                       If set the complete text will be shown after the form element.
+     *                       If you need an additional parameter for the text you can add an array. The first entry must
+     *                       be the unique text id and the second entry will be a parameter of the text id.     
+     *                  @b icon An icon can be set. This will be placed in front of the checkbox text.
+     *                  @b class An additional css classname. The class @b admCheckbox
+     *                       is set as default and need not set with this parameter.
      */
-    public function addCheckbox($id, $label, $value, $property = FIELD_DEFAULT, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addCheckbox($id, $label, $value, $options = array())
     {
         global $gL10n;
         $attributes   = array('class' => '');
@@ -283,12 +291,16 @@ class HtmlForm extends HtmlFormBasic
         $cssClasses   = 'checkbox';
         $this->countElements++;
 
+        // create array with all options
+        $optionsDefault = array('property' => FIELD_DEFAULT, 'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+
         // disable field
-        if($property == FIELD_DISABLED)
+        if($optionsAll['property'] == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-		else if ($property == FIELD_MANDATORY)
+		elseif($optionsAll['property'] == FIELD_MANDATORY)
 		{
 		    $attributes['required'] = 'required';
 		}
@@ -300,27 +312,27 @@ class HtmlForm extends HtmlFormBasic
         }
 
         // set specific css class for this field
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $attributes['class'] .= ' '.$class;
+            $attributes['class'] .= ' '.$optionsAll['class'];
         }
         
-		if(strlen($icon) > 0)
+		if(strlen($optionsAll['icon']) > 0)
 		{
 			// create html for icon
-			if(strpos(admStrToLower($icon), 'http') === 0 && strValidCharacters($icon, 'url'))
+			if(strpos(admStrToLower($optionsAll['icon']), 'http') === 0 && strValidCharacters($optionsAll['icon'], 'url'))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="icon-information" src="'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
 			}
-			elseif(admStrIsValidFileName($icon, true))
+			elseif(admStrIsValidFileName($optionsAll['icon'], true))
 			{
-				$htmlIcon = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$icon.'" title="'.$label.'" alt="'.$label.'" />';
+				$htmlIcon = '<img class="icon-information" src="'.THEME_PATH.'/icons/'.$optionsAll['icon'].'" title="'.$label.'" alt="'.$label.'" />';
 			}
 		}
         
-        if($helpTextIdLabel != null)
+        if($optionsAll['helpTextIdLabel'] != null)
         {
-            $htmlHelpIcon = $this->getHelpTextIcon($helpTextIdLabel);
+            $htmlHelpIcon = $this->getHelpTextIcon($optionsAll['helpTextIdLabel']);
         }
         
         // now create html for the field
@@ -328,40 +340,45 @@ class HtmlForm extends HtmlFormBasic
         $this->addHtml('<div class="'.$cssClasses.'"><label>');
         $this->addInput('checkbox', $id, $id, '1', $attributes);
 		$this->addHtml($htmlIcon.$label.$htmlHelpIcon.'</label></div>');
-		$this->closeControlStructure($helpTextIdInline);
+		$this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
     
     
     /** Add custom html content to the form within the default field structure. The Label will be set 
      *  but instead of an form control you can define any html. If you don't need the field structure
      *  and want to add html then use the method addHtml()
-     *  @param $label      The label of the custom content.
-     *  @param $content    A simple Text or html that would be placed instead of an form element.
-     *  @param $referenceId Optional the id of a form control if this is defined within the custom content
-	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set the complete text will be shown after the form element.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the checkbox text.
-     *  @param $class      Optional an additional css classname.
+     *  @param $label   The label of the custom content.
+     *  @param $content A simple Text or html that would be placed instead of an form element.
+     *  @param $options An array with the following possible entries:
+     *                  @b referenceId Optional the id of a form control if this is defined within the custom content
+	 *                  @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                      If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                      If you need an additional parameter for the text you can add an array. The first entry must
+     *                      be the unique text id and the second entry will be a parameter of the text id.     
+	 *                  @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                      If set the complete text will be shown after the form element.
+     *                      If you need an additional parameter for the text you can add an array. The first entry must
+     *                      be the unique text id and the second entry will be a parameter of the text id.     
+     *                  @b icon  Optional an icon can be set. This will be placed in front of the checkbox text.
+     *                  @b class Optional an additional css classname.
      */
-    public function addCustomContent($label, $content, $referenceId = null, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addCustomContent($label, $content, $options = array())
     {
         $this->countElements++;
     
+        // create array with all options
+        $optionsDefault = array('referenceId' => null, 'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+
         // set specific css class for this field
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $attributes['class'] .= ' '.$class;
+            $attributes['class'] .= ' '.$optionsAll['class'];
         }
 
-        $this->openControlStructure($referenceId, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon, 'form-custom-content');
+        $this->openControlStructure($optionsAll['referenceId'], $label, FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-custom-content');
         $this->addHtml($content);
-        $this->closeControlStructure($helpTextIdInline);
+        $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
     
     /** Add a line with a custom description to the form. No form elements will be 
@@ -374,116 +391,125 @@ class HtmlForm extends HtmlFormBasic
     }
 	
     /** Add a new CKEditor element to the form. 
-     *  @param $id         Id of the password field. This will also be the name of the password field.
-     *  @param $label      The label of the password field.
-	 *  @param $value      A value for the editor field. The editor will contain this value when created.
-     *  @param $property   With this param you can set the following properties: 
+     *  @param $id      Id of the password field. This will also be the name of the password field.
+     *  @param $label   The label of the password field.
+	 *  @param $value   A value for the editor field. The editor will contain this value when created.
+     *  @param $options An array with the following possible entries:
+     *                  @b property   With this param you can set the following properties: 
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *  @param $toolbar    Optional set a predefined toolbar for the editor. Possible values are 
+     *                  @b toolbar    Optional set a predefined toolbar for the editor. Possible values are 
      *                     @b AdmidioDefault, @b Admidio Guestbook, @b AdmidioEcard and @b AdmidioPlugin_WC
-     *  @param $height     Optional set the height in pixel of the editor. The default will be 300px.
-	 *  @param $helpTextId A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                  @b height     Optional set the height in pixel of the editor. The default will be 300px.
+	 *                  @b helpTextIdLabel A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
-     *  @param $labelVertical If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
+	 *                  @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                       If set the complete text will be shown after the form element.
+     *                       If you need an additional parameter for the text you can add an array. The first entry must
+     *                       be the unique text id and the second entry will be a parameter of the text id.     
+     *                  @b icon       Optional an icon can be set. This will be placed in front of the label.
+     *                  @b labelVertical If set to @b true (default) then the label will be display above the control and the control get a width of 100%.
      *                        Otherwise the label will be displayed in front of the control.
-     *  @param $class      Optional an additional css classname. The class @b admTextInput
+     *                  @b class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-	public function addEditor($id, $label, $value, $property = FIELD_DEFAULT, $toolbar = 'AdmidioDefault', $height = '300px', 
-	                          $helpTextId = null, $icon = null, $labelVertical = true, $class = null)
+	public function addEditor($id, $label, $value, $options = array())
 	{
         $this->countElements++;
         $attributes = array('class' => 'editor');
         $flagLabelVertical = $this->type;
         
-        if($labelVertical == true)
+        // create array with all options
+        $optionsDefault = array('property' => FIELD_DEFAULT, 'toolbar' => 'AdmidioDefault', 'height' => '300px', 'helpTextIdLabel' => null, 
+                                'helpTextIdInline' => null, 'labelVertical' => true, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+        
+        if($optionsAll['labelVertical'] == true)
         {
             $this->type = 'vertical';
         }
 		
-		if ($property == FIELD_MANDATORY)
+		if ($optionsAll['property'] == FIELD_MANDATORY)
 		{
 		    $attributes['required'] = 'required';
 		}
 
         // set specific css class for this field
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $attributes['class'] .= ' '.$class;
-        }
-
-        // set specific toolbar for editor
-        if(strlen($toolbar) == 0)
-        {
-            $toolbar = 'AdmidioDefault';
-        }
-        
-        // set specific height for editor
-        if(strlen($height) == 0)
-        {
-            $height = '300px';
+            $attributes['class'] .= ' '.$optionsAll['class'];
         }
 
 		$ckEditor = new CKEditorSpecial();
 
-        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, 'form-group-editor');
-		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $toolbar, $height).'</div>');
-        $this->closeControlStructure();
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-group-editor');
+		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $optionsAll['toolbar'], $optionsAll['height']).'</div>');
+        $this->closeControlStructure($optionsAll['helpTextIdInline']);
         
         $this->type = $flagLabelVertical;
 	}
     
     /** Add a field for file upload. If necessary multiple files could be uploaded. The fields for multiple upload could 
      *  be added dynamically to the form by the user.
-     *  @param $id            Id of the input field. This will also be the name of the input field.
-     *  @param $label         The label of the input field.
-	 *  @param $maxUploadSize The size in byte that could be maximum uploaded
-	 *  @param $enableMultiUploads If set to true a button will be added where the user can 
-	 *                             add new upload fields to upload more than one file.
-	 *  @param $multiUploadLabel   The label for the button who will add new upload fields to the form.
-	 *  @param $hideUploadField    Hide the upload field if multi uploads are enabled. Then the first
-	 *                             upload field will be shown if the user will click the multi upload button.
-     *  @param $property      With this param you can set the following properties: 
+     *  @param $id      Id of the input field. This will also be the name of the input field.
+     *  @param $label   The label of the input field.
+     *  @param $options An array with the following possible entries:
+     *                  @b property With this parameter you can set the following properties: 
      *                        @b FIELD_DEFAULT The field can accept an input.
      *                        @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                        @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextId    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+	 *                  @b maxUploadSize The size in byte that could be maximum uploaded. 
+     *                        The default will be $gPreferences['max_file_upload_size'] * 1024.
+	 *                  @b enableMultiUploads If set to true a button will be added where the user can 
+	 *                        add new upload fields to upload more than one file.
+	 *                  @b multiUploadLabel   The label for the button who will add new upload fields to the form.
+	 *                  @b hideUploadField    Hide the upload field if multi uploads are enabled. Then the first
+	 *                        upload field will be shown if the user will click the multi upload button.
+	 *                  @b helpTextIdLabel A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                        If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                        If you need an additional parameter for the text you can add an array. The first entry must
      *                        be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
-     *  @param $class         Optional an additional css classname. The class @b admTextInput       
+	 *                  @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                        If set the complete text will be shown after the form element.
+     *                        If you need an additional parameter for the text you can add an array. The first entry must
+     *                        be the unique text id and the second entry will be a parameter of the text id.     
+     *                  @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                  @b class Optional an additional css classname. The class @b admTextInput       
      *                        is set as default and need not set with this parameter.
      */
-    public function addFileUpload($id, $label, $maxUploadSize, $enableMultiUploads = false, $multiUploadLabel = null, 
-                                  $hideUploadField = false, $property = FIELD_DEFAULT, $helpTextId = null, $icon = null, $class = '')
+    public function addFileUpload($id, $label, $options = array())
     {
+        global $gPreferences;
         $attributes = array('class' => 'form-control');
         $this->countElements++;
 
+        // create array with all options
+        $optionsDefault = array('property' => FIELD_DEFAULT, 'maxUploadSize' => $gPreferences['max_file_upload_size'] * 1024, 
+                                'enableMultiUploads' => false, 'hideUploadField' => false, 'multiUploadLabel' => null, 
+                                'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+
         // disable field
-        if($property == FIELD_DISABLED)
+        if($optionsAll['property'] == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-		else if ($property == FIELD_MANDATORY)
+		elseif($optionsAll['property'] == FIELD_MANDATORY)
 		{
 		    $attributes['required'] = 'required';
 		}
 
         // set specific css class for this field
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $attributes['class'] .= ' '.$class;
+            $attributes['class'] .= ' '.$optionsAll['class'];
         }
         
         // if multiple uploads are enabled then add javascript that will
         // dynamically add new upload fields to the form
-        if($enableMultiUploads)
+        if($optionsAll['enableMultiUploads'])
         {
             $javascriptCode = '
         		$(".add-attachement-link").css("cursor", "pointer");
@@ -515,26 +541,26 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openControlStructure($id, $label, $property, $helpTextId, $icon, 'form-upload');
-        $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $maxUploadSize);
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-upload');
+        $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $optionsAll['maxUploadSize']);
         
         // if multi uploads are enabled then the file upload field could be hidden
         // until the user will click on the button to add a new upload field
-        if($hideUploadField == false || $enableMultiUploads == false)
+        if($optionsAll['hideUploadField'] == false || $optionsAll['enableMultiUploads'] == false)
         {
             $this->addInput('file', 'userfile[]', null, null, $attributes);
         }
 
-        if($enableMultiUploads)
+        if($optionsAll['enableMultiUploads'])
         {
             // show button to add new upload field to form
             $this->addHtml('
                 <span id="adm_add_attachment" style="display: block;">
     				<a class="icon-text-link add-attachement-link"><img
-                        src="'. THEME_PATH. '/icons/add.png" alt="'.$multiUploadLabel.'" />'.$multiUploadLabel.'</a>
+                        src="'. THEME_PATH. '/icons/add.png" alt="'.$optionsAll['multiUploadLabel'].'" />'.$optionsAll['multiUploadLabel'].'</a>
                 </span>');
         }
-        $this->closeControlStructure();
+        $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
 
 	/** Add a simple line to the form. This could be used to structure a form.
@@ -547,60 +573,65 @@ class HtmlForm extends HtmlFormBasic
 	
     
     /** Add a new textarea field with a label to the form.
-     *  @param $id         Id of the input field. This will also be the name of the input field.
-     *  @param $label      The label of the input field.
-	 *  @param $value      A value for the text field. The field will be created with this value.
-     *  @param $rows       The number of rows that the textarea field should have.
-     *  @param $maxLength  The maximum number of characters that are allowed in this field. If set
+     *  @param $id      Id of the input field. This will also be the name of the input field.
+     *  @param $label   The label of the input field.
+	 *  @param $value   A value for the text field. The field will be created with this value.
+     *  @param $rows    The number of rows that the textarea field should have.
+     *  @param $options An array with the following possible entries:
+     *                  @b maxLength  The maximum number of characters that are allowed in this field. If set
      *                     then show a counter how many characters still available
-     *  @param $property   With this param you can set the following properties: 
+     *                  @b property   With this param you can set the following properties: 
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set the complete text will be shown after the form element.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
-     *  @param $class      Optional an additional css classname. The class @b admTextInput
+	 *                  @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+	 *                  @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set the complete text will be shown after the form element.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *                  @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                  @b class Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
-    public function addMultilineTextInput($id, $label, $value, $rows, $maxLength = 0, $property = FIELD_DEFAULT, 
-                                          $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addMultilineTextInput($id, $label, $value, $rows, $options = array())
     {
         global $gL10n, $g_root_path;
 
         $attributes = array('class' => 'form-control');
         $this->countElements++;
 
+        // create array with all options
+        $optionsDefault = array('property' => FIELD_DEFAULT, 'maxLength' => 0, 'helpTextIdLabel' => null, 
+                                'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+
         // disable field
-        if($property == FIELD_DISABLED)
+        if($optionsAll['property'] == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-		else if ($property == FIELD_MANDATORY)
+		elseif($optionsAll['property'] == FIELD_MANDATORY)
 		{
 		    $attributes['required'] = 'required';
 		}
 
         // set specific css class for this field
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $attributes['class'] .= ' '.$class;
+            $attributes['class'] .= ' '.$optionsAll['class'];
         }
         
-        if($maxLength > 0)
+        if($optionsAll['maxLength'] > 0)
         {
-			$attributes['maxlength'] = $maxLength;
+			$attributes['maxlength'] = $optionsAll['maxLength'];
 			
             // if max field length is set then show a counter how many characters still available
             $javascriptCode = '
                 $(\'#'.$id.'\').NobleCount(\'#'.$id.'_counter\',{
-                    max_chars: '.$maxLength.',
+                    max_chars: '.$optionsAll['maxLength'].',
                     on_negative: \'systeminfoBad\',
                     block_negative: true
                 });';
@@ -621,65 +652,71 @@ class HtmlForm extends HtmlFormBasic
             }
         }
         
-        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         $this->addTextArea($id, $rows, 80, $value, $id, $attributes);
-        if($maxLength > 0)
+        if($optionsAll['maxLength'] > 0)
         {
             // if max field length is set then show a counter how many characters still available
             $this->addHtml('<small class="characters-count">('.$gL10n->get('SYS_STILL_X_CHARACTERS', '<span id="'.$id.'_counter" class="">255</span>').')</small>');
         }
-        $this->closeControlStructure($helpTextIdInline);
+        $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
     
     /** Add a new radio button with a label to the form. The radio button could have different status 
      *  which could be defined with an array.
-     *  @param $id           Id of the radio button. This will also be the name of the radio button.
-     *  @param $label        The label of the radio button.
-	 *  @param $values       Array with all entries of the radio button; 
-	 *                       Array key will be the internal value of the entry
-	 *                       Array value will be the visual value of the entry
-     *  @param $property     With this param you can set the following properties: 
+     *  @param $id      Id of the radio button. This will also be the name of the radio button.
+     *  @param $label   The label of the radio button.
+	 *  @param $values  Array with all entries of the radio button; 
+	 *                  Array key will be the internal value of the entry
+	 *                  Array value will be the visual value of the entry
+     *  @param $options An array with the following possible entries:
+     *                  @b property     With this param you can set the following properties: 
      *                       @b FIELD_DEFAULT The field can accept an input.
      *                       @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                       @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue This is the value of that radio button that is preselected.
-     *  @param $setDummyButton If set to true than one radio with no value will be set in front of the other array. 
-     *                         This could be used if the user should also be able to set no radio to value.
-	 *  @param $helpTextId   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                  @b defaultValue This is the value of that radio button that is preselected.
+     *                  @b showNoValueButton If set to true than one radio with no value will be set in front of the other array. 
+     *                       This could be used if the user should also be able to set no radio to value.
+	 *                  @b helpTextId   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                       If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                       If you need an additional parameter for the text you can add an array. The first entry must
      *                       be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon         Opional an icon can be set. This will be placed in front of the label.
-     *  @param $class        Optional an additional css classname. The class @b admRadioInput
+     *                  @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                  @b class Optional an additional css classname. The class @b admRadioInput
      *                       is set as default and need not set with this parameter.
      */
-    public function addRadioButton($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = '', $setDummyButton = false, $helpTextId = null, $icon = null, $class = '')
+    public function addRadioButton($id, $label, $values, $options = array())
     {
         $attributes = array('class' => '');
         $this->countElements++;
 
+        // create array with all options
+        $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '', 'showNoValueButton' => false,
+                                'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+        
         // disable field
-        if($property == FIELD_DISABLED)
+        if($optionsAll['property'] == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-		else if ($property == FIELD_MANDATORY)
+		elseif($optionsAll['property'] == FIELD_MANDATORY)
 		{
 		    $attributes['required'] = 'required';
 		}
         
         // set specific css class for this field
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $attributes['class'] .= ' '.$class;
+            $attributes['class'] .= ' '.$optionsAll['class'];
         }
         
-        $this->openControlStructure($id, $label, $property, $helpTextId, $icon);
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         
         // set one radio button with no value will be set in front of the other array.
-        if($setDummyButton == true)
+        if($optionsAll['showNoValueButton'] == true)
         {
-	        if(strlen($defaultValue) == 0)
+	        if(strlen($optionsAll['defaultValue']) == 0)
 	        {
 	            $attributes['checked'] = 'checked';
 	        }
@@ -694,7 +731,7 @@ class HtmlForm extends HtmlFormBasic
 		{
 	        unset($attributes['checked']);
 	        
-	        if($defaultValue == $key)
+	        if($optionsAll['defaultValue'] == $key)
 	        {
 	            $attributes['checked'] = 'checked';
 	        }
@@ -704,42 +741,42 @@ class HtmlForm extends HtmlFormBasic
 	        $this->addHtml($value.'</label>');
 		}
         
-        $this->closeControlStructure();
+        $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox could have
      *  different values and a default value could be set.
-     *  @param $id         Id of the selectbox. This will also be the name of the selectbox.
-     *  @param $label      The label of the selectbox.
-	 *  @param $values     Array with all entries of the select box; 
-	 *                     Array key will be the internal value of the entry
-	 *                     Array value will be the visual value of the entry
-     *  @param $property   With this param you can set the following properties: 
+     *  @param $id      Id of the selectbox. This will also be the name of the selectbox.
+     *  @param $label   The label of the selectbox.
+	 *  @param $values  Array with all entries of the select box; 
+	 *                  Array key will be the internal value of the entry
+	 *                  Array value will be the visual value of the entry
+     *  @param $options An array with the following possible entries:
+     *                  @b property   With this param you can set the following properties: 
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
-     *                           an array with all default values could be set.
-     *  @param $showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
-     *                           If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
-     *                           an emptry entry will be added so you must not select something.
-     *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
-     *                           where the user could select multiple values from the selectbox. Then an array will be 
-     *                           created within the $_POST array.
-	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set the complete text will be shown after the form element.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
-     *  @param $class      Optional an additional css classname. The class @b admSelectbox
+     *                  @b defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
+     *                     an array with all default values could be set.
+     *                  @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
+     *                     If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                     an emptry entry will be added so you must not select something.
+     *                  @b multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
+     *                     where the user could select multiple values from the selectbox. Then an array will be 
+     *                     created within the $_POST array.
+	 *                  @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+	 *                  @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set the complete text will be shown after the form element.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *                  @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                  @b class Optional an additional css classname. The class @b admSelectbox
      *                     is set as default and need not set with this parameter.
      */
-    public function addSelectBox($id, $label, $values, $property = FIELD_DEFAULT, $defaultValue = null, $showContextDependentFirstEntry = true, 
-                                 $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addSelectBox($id, $label, $values, $options = array())
     {
         global $gL10n, $g_root_path, $gPreferences;
 
@@ -747,48 +784,53 @@ class HtmlForm extends HtmlFormBasic
         $name       = $id;
         $this->countElements++;
 
+        // create array with all options
+        $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '', 'showContextDependentFirstEntry' => true, 'multiselect' => false, 
+                                'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+
         // disable field
-        if($property == FIELD_DISABLED)
+        if($optionsAll['property'] == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
         }
-		else if ($property == FIELD_MANDATORY)
+		elseif($optionsAll['property'] == FIELD_MANDATORY)
 		{
 		    $attributes['required'] = 'required';
 		}
         
-        if($multiselect == true)
+        if($optionsAll['multiselect'] == true)
         {
             $attributes['multiple'] = 'multiple';
             $name                   = $id.'[]';
             
-            if($defaultValue != null && is_array($defaultValue) == false)
+            if($optionsAll['defaultValue'] != null && is_array($optionsAll['defaultValue']) == false)
             {
-                $defaultValue = array($defaultValue);
+                $optionsAll['defaultValue'] = array($optionsAll['defaultValue']);
             }
         }
         
         // set specific css class for this field
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $attributes['class'] .= ' '.$class;
+            $attributes['class'] .= ' '.$optionsAll['class'];
         }
         
         // now create html for the field
-        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
+        $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         
         $this->addSelect($name, $id, $attributes);
 
         // add an additional first entry to the select box and set this as preselected if necessary
-        if($showContextDependentFirstEntry == true)
+        if($optionsAll['showContextDependentFirstEntry'] == true)
         {
             $defaultEntry = false;
-            if($defaultValue == null)
+            if($optionsAll['defaultValue'] == null)
             {
                 $defaultEntry = true;
             }
     
-            if($property == FIELD_MANDATORY)
+            if($optionsAll['property'] == FIELD_MANDATORY)
             {
                 $this->addOption(null, '- '.$gL10n->get('SYS_PLEASE_CHOOSE').' -', null, $defaultEntry);
             }
@@ -821,7 +863,7 @@ class HtmlForm extends HtmlFormBasic
     			}
     			
     			// add option
-                if($multiselect == false && $defaultValue == $values[$arrayCount][0])
+                if($optionsAll['multiselect'] == false && $optionsAll['defaultValue'] == $values[$arrayCount][0])
                 {
                     $defaultEntry = true;
                 }
@@ -831,7 +873,7 @@ class HtmlForm extends HtmlFormBasic
             else
             {
                 // array has only key and value then create a normal selectbox without optiongroups
-                if($multiselect == false && $defaultValue == key($values))
+                if($optionsAll['multiselect'] == false && $optionsAll['defaultValue'] == key($values))
                 {
                     $defaultEntry = true;
                 }
@@ -847,15 +889,15 @@ class HtmlForm extends HtmlFormBasic
             $this->closeOptionGroup();
         }
         
-        if($multiselect == true)
+        if($optionsAll['multiselect'] == true)
         {
             $javascriptCode = '$("#'.$id.'").select2();';
 
             // add default values to multi select
-            if(array_count_values($defaultValue) > 0)
+            if(array_count_values($optionsAll['defaultValue']) > 0)
             {
                 $htmlDefaultValues = '';
-                foreach($defaultValue as $key => $htmlDefaultValue)
+                foreach($optionsAll['defaultValue'] as $key => $htmlDefaultValue)
                 {
                     $htmlDefaultValues .= '"'.$htmlDefaultValue.'",';
                 }
@@ -880,7 +922,7 @@ class HtmlForm extends HtmlFormBasic
         }
         
         $this->closeSelect();
-        $this->closeControlStructure($helpTextIdInline);
+        $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from a sql statement.
@@ -893,40 +935,40 @@ class HtmlForm extends HtmlFormBasic
      *  @code // create a selectbox with all profile fields of a specific category
      *  $sql = 'SELECT usf_id, usf_name FROM '.TBL_USER_FIELDS.' WHERE usf_cat_id = 4711'
      *  $form = new HtmlForm('simple-form', 'next_page.php');
-     *  $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, false, $gL10n->get('SYS_SURNAME'), true);
+     *  $form->addSelectBoxFromSql('admProfileFieldsBox', $gL10n->get('SYS_FIELDS'), $gDb, $sql, array('defaultValue' => $gL10n->get('SYS_SURNAME'), 'showContextDependentFirstEntry' => true));
      *  $form->show();@endcode
-     *  @param $id              Id of the selectbox. This will also be the name of the selectbox.
-     *  @param $label            The label of the selectbox.
-     *  @param $databaseObject   A Admidio database object that contains a valid connection to a database
-	 *  @param $sql              Any SQL statement that return 2 columns. The first column will be the internal value of the
-     *                           selectbox item and will be submitted with the form. The second column represents the
-     *                           displayed value of the item. Each row of the result will be a new selectbox entry.
-     *  @param $property         With this param you can set the following properties: 
-     *                           @b FIELD_DEFAULT The field can accept an input.
-     *                           @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                           @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
-     *                           an array with all default values could be set.
-     *  @param $showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
-     *                           If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
-     *                           an emptry entry will be added so you must not select something.
-     *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
-     *                           where the user could select multiple values from the selectbox. Then an array will be 
-     *                           created within the $_POST array.
-	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set the complete text will be shown after the form element.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon             Opional an icon can be set. This will be placed in front of the label.
-     *  @param $class            Optional an additional css classname. The class @b admSelectbox
-     *                           is set as default and need not set with this parameter.
+     *  @param $id             Id of the selectbox. This will also be the name of the selectbox.
+     *  @param $label          The label of the selectbox.
+     *  @param $databaseObject A Admidio database object that contains a valid connection to a database
+	 *  @param $sql            Any SQL statement that return 2 columns. The first column will be the internal value of the
+     *                         selectbox item and will be submitted with the form. The second column represents the
+     *                         displayed value of the item. Each row of the result will be a new selectbox entry.
+     *  @param $options        An array with the following possible entries:
+     *                         @b property         With this param you can set the following properties: 
+     *                            @b FIELD_DEFAULT The field can accept an input.
+     *                            @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                            @b FIELD_DISABLED The field will be disabled and could not accept an input.
+     *                         @b defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
+     *                            an array with all default values could be set.
+     *                         @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
+     *                            If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                            an emptry entry will be added so you must not select something.
+     *                         @b multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
+     *                            where the user could select multiple values from the selectbox. Then an array will be 
+     *                            created within the $_POST array.
+	 *                         @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                            If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                            If you need an additional parameter for the text you can add an array. The first entry must
+     *                            be the unique text id and the second entry will be a parameter of the text id.     
+	 *                         @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                            If set the complete text will be shown after the form element.
+     *                            If you need an additional parameter for the text you can add an array. The first entry must
+     *                            be the unique text id and the second entry will be a parameter of the text id.     
+     *                         @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                         @b class Optional an additional css classname. The class @b admSelectbox
+     *                            is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromSql($id, $label, $databaseObject, $sql, $property = FIELD_DEFAULT, $defaultValue= null, $showContextDependentFirstEntry = true, 
-                                        $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addSelectBoxFromSql($id, $label, $databaseObject, $sql, $options = array())
     {
         $selectboxEntries = array();
     
@@ -950,7 +992,7 @@ class HtmlForm extends HtmlFormBasic
         if(count($selectboxEntries) > 0)
         {
             // now call default method to create a selectbox
-            $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $showContextDependentFirstEntry, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
+            $this->addSelectBox($id, $label, $selectboxEntries, $options);
         }
     }
     
@@ -961,32 +1003,32 @@ class HtmlForm extends HtmlFormBasic
 	 *  @param $xmlFile     Serverpath to the xml file
 	 *  @param $xmlValueTag Name of the xml tag that should contain the internal value of a selectbox entry
 	 *  @param $xmlViewTag  Name of the xml tag that should contain the visual value of a selectbox entry
-     *  @param $property    With this param you can set the following properties: 
-     *                      @b FIELD_DEFAULT The field can accept an input.
-     *                      @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                      @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
-     *                           an array with all default values could be set.
-     *  @param $showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
-     *                           If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
-     *                           an emptry entry will be added so you must not select something.
-     *  @param $multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
-     *                           where the user could select multiple values from the selectbox. Then an array will be 
-     *                           created within the $_POST array.
-	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set the complete text will be shown after the form element.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon        Opional an icon can be set. This will be placed in front of the label.
-     *  @param $class       Optional an additional css classname. The class @b admSelectbox
-     *                      is set as default and need not set with this parameter.
+     *  @param $options     An array with the following possible entries:
+     *                      @b property    With this param you can set the following properties: 
+     *                         @b FIELD_DEFAULT The field can accept an input.
+     *                         @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                         @b FIELD_DISABLED The field will be disabled and could not accept an input.
+     *                      @b defaultValue     This is the value the selectbox shows when loaded. If @b multiselect is activated than
+     *                         an array with all default values could be set.
+     *                      @b showContextDependentFirstEntry  If set to @b true the select box will get an additional first entry.
+     *                         If FIELD_MANDATORY is set than "Please choose" will be the first entry otherwise
+     *                         an emptry entry will be added so you must not select something.
+     *                      @b multiselect      If set to @b true than the jQuery plugin Select2 will be used to create a selectbox
+     *                         where the user could select multiple values from the selectbox. Then an array will be 
+     *                         created within the $_POST array.
+	 *                      @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                         If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                         If you need an additional parameter for the text you can add an array. The first entry must
+     *                         be the unique text id and the second entry will be a parameter of the text id.     
+	 *                      @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                         If set the complete text will be shown after the form element.
+     *                         If you need an additional parameter for the text you can add an array. The first entry must
+     *                         be the unique text id and the second entry will be a parameter of the text id.     
+     *                      @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                      @b class Optional an additional css classname. The class @b admSelectbox
+     *                         is set as default and need not set with this parameter.
      */
-    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $property = FIELD_DEFAULT, $defaultValue= null, $showContextDependentFirstEntry = true, 
-                                        $multiselect = false, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = null)
+    public function addSelectBoxFromXml($id, $label, $xmlFile, $xmlValueTag, $xmlViewTag, $options = array())
     {
         $selectboxEntries = array();
         
@@ -1003,49 +1045,54 @@ class HtmlForm extends HtmlFormBasic
         }
         
         // now call default method to create a selectbox
-        $this->addSelectBox($id, $label, $selectboxEntries, $property, $defaultValue, $showContextDependentFirstEntry, $multiselect, $helpTextIdLabel, $helpTextIdInline, $icon, $class);
+        $this->addSelectBox($id, $label, $selectboxEntries, $options);
     }
     
     /** Add a new selectbox with a label to the form. The selectbox get their data from table adm_categories. You must
      *  define the category type (roles, dates, links ...). All categories of this type will be shown.
-     *  @param $id                 Id of the selectbox. This will also be the name of the selectbox.
-     *  @param $label              The label of the selectbox.
-     *  @param $databaseObject     A Admidio database object that contains a valid connection to a database
-	 *  @param $categoryType	   Type of category ('DAT', 'LNK', 'ROL', 'USF', 'INF') that should be shown
-	 *  @param $selectboxModus     The selectbox could be shown in 2 different modus.
-	 *                             @b EDIT_CATEGORIES First entry will be "Please choose" and default category will be preselected.
-	 *                             @b FILTER_CATEGORIES First entry will be "All" and only categories with childs will be shown.
-     *  @param $property   With this param you can set the following properties: 
-     *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-	 *  @param $defaultValue	   Id of category that should be selected per default.
-	 *  @param $helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                             If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                             If you need an additional parameter for the text you can add an array. The first entry must
-     *                             be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                             If set the complete text will be shown after the form element.
-     *                             If you need an additional parameter for the text you can add an array. The first entry must
-     *                             be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $showSystemCategory Show user defined and system categories
-     *  @param $class              Optional an additional css classname. The class @b admSelectbox
-     *                             is set as default and need not set with this parameter.
+     *  @param $id             Id of the selectbox. This will also be the name of the selectbox.
+     *  @param $label          The label of the selectbox.
+     *  @param $databaseObject A Admidio database object that contains a valid connection to a database
+	 *  @param $categoryType   Type of category ('DAT', 'LNK', 'ROL', 'USF') that should be shown
+	 *  @param $selectboxModus The selectbox could be shown in 2 different modus.
+	 *                         @b EDIT_CATEGORIES First entry will be "Please choose" and default category will be preselected.
+	 *                         @b FILTER_CATEGORIES First entry will be "All" and only categories with childs will be shown.
+     *  @param $options        An array with the following possible entries:
+     *                         @b property   With this param you can set the following properties: 
+     *                            @b FIELD_DEFAULT The field can accept an input.
+     *                            @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                            @b FIELD_DISABLED The field will be disabled and could not accept an input.
+	 *                         @b defaultValue	   Id of category that should be selected per default.
+	 *                         @b helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                            If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                            If you need an additional parameter for the text you can add an array. The first entry must
+     *                            be the unique text id and the second entry will be a parameter of the text id.     
+	 *                         @b helpTextIdInline   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                            If set the complete text will be shown after the form element.
+     *                            If you need an additional parameter for the text you can add an array. The first entry must
+     *                            be the unique text id and the second entry will be a parameter of the text id.     
+	 *                         @b showSystemCategory Show user defined and system categories
+     *                         @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                         @b class Optional an additional css classname. The class @b admSelectbox
+     *                            is set as default and need not set with this parameter.
 	 */
-	public function addSelectBoxForCategories($id, $label, $databaseObject, $categoryType, $selectboxModus, $property = FIELD_DEFAULT, $defaultValue = 0, 
-	                                          $helpTextIdLabel = null, $helpTextIdInline = null, $showSystemCategory = true, $class = '')
+	public function addSelectBoxForCategories($id, $label, $databaseObject, $categoryType, $selectboxModus, $options = array())
 	{
 		global $gCurrentOrganization, $gValidLogin, $gL10n;
 
+        // create array with all options
+        $optionsDefault = array('property' => FIELD_DEFAULT, 'defaultValue' => '', 'showContextDependentFirstEntry' => true, 'multiselect' => false, 
+                                'showSystemCategory' => true, 'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+        
         $sqlTables        = TBL_CATEGORIES;
         $sqlCondidtions   = '';
-        $showContextDependentFirstEntry = true;
         $categoriesArray  = array();
 
 		// create sql conditions if category must have child elements
 		if($selectboxModus == 'FILTER_CATEGORIES')
 		{
-            $showContextDependentFirstEntry  = false;
+            $optionsAll['showContextDependentFirstEntry']  = false;
             
             if($categoryType == 'DAT')
             {
@@ -1071,7 +1118,7 @@ class HtmlForm extends HtmlFormBasic
             }
 		}
 		
-		if($showSystemCategory == false)
+		if($optionsAll['showSystemCategory'] == false)
 		{
 			 $sqlCondidtions .= ' AND cat_system = 0 ';
 		}
@@ -1093,10 +1140,10 @@ class HtmlForm extends HtmlFormBasic
 		$countCategories = $databaseObject->num_rows($result);
 		
 		// if only one category exists then select this
-	    if($countCategories == 1 && $defaultValue == null)
+	    if($countCategories == 1 && $optionsAll['defaultValue'] == null)
 	    {
 	        $row = $databaseObject->fetch_array($result);
-            $defaultValue = $row['cat_id'];
+            $optionsAll['defaultValue'] = $row['cat_id'];
             $categoriesArray['cat_id'] = $row['cat_name'];
         }
         // if several categories exist than select default category
@@ -1111,15 +1158,15 @@ class HtmlForm extends HtmlFormBasic
             {
                 $categoriesArray[$row['cat_id']] = $row['cat_name'];
 
-                if($row['cat_default'] == 1 && $defaultValue == null)
+                if($row['cat_default'] == 1 && $optionsAll['defaultValue'] == null)
                 {
-                    $defaultValue = $row['cat_id'];
+                    $optionsAll['defaultValue'] = $row['cat_id'];
                 }
             }
         }
         
         // now call method to create selectbox from array
-        $this->addSelectBox($id, $label, $categoriesArray, $property, $defaultValue, $showContextDependentFirstEntry, $helpTextIdLabel, $helpTextIdInline, null, $class);
+        $this->addSelectBox($id, $label, $categoriesArray, $optionsAll);
 	}
     
     /** Add a new static control to the form. A static control is only a simple text instead of an input field. This 
@@ -1135,7 +1182,7 @@ class HtmlForm extends HtmlFormBasic
      *                           If set the complete text will be shown after the form element.
      *                           If you need an additional parameter for the text you can add an array. The first entry must
      *                           be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
+     *  @param $icon       Optional an icon can be set. This will be placed in front of the label.
      *  @param $sclass      Optional an additional css classname. The class @b form-control-static
      *                     is set as default and need not set with this parameter.
      */
@@ -1177,7 +1224,7 @@ class HtmlForm extends HtmlFormBasic
         $class .= ' btn-primary btn-form';
 
         // now add button to form
-        $this->addButton($id, $text, $icon, $link, $onClickText, $class, $type);
+        $this->addButton($id, $text, array('icon' => $icon, 'link' => $link, 'onClickText' => $onClickText, 'class' => $class, 'type' => $type));
         
         if($this->buttonGroupOpen == false)
         {
@@ -1209,7 +1256,7 @@ class HtmlForm extends HtmlFormBasic
      *                             If set the complete text will be shown after the form element.
      *                             If you need an additional parameter for the text you can add an array. The first entry must
      *                             be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
+     *  @param $icon       Optional an icon can be set. This will be placed in front of the label.
      *  @param $class      Optional an additional css classname. The class @b admTextInput
      *                     is set as default and need not set with this parameter.
      */
@@ -1401,7 +1448,7 @@ class HtmlForm extends HtmlFormBasic
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
      *                     be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Opional an icon can be set. This will be placed in front of the label.
+     *  @param $icon       Optional an icon can be set. This will be placed in front of the label.
      *  @param $class      Optional an additional css classname for the row. The class @b admFieldRow
      *                     is set as default and need not set with this parameter.
      */

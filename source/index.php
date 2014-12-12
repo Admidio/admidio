@@ -13,7 +13,7 @@ if(file_exists('adm_my_files/config.php'))
     require_once('adm_my_files/config.php');
 
      // default prefix is set to 'adm' because of compatibility to old versions
-    if(strlen($g_tbl_praefix) == 0)
+    if(!isset($g_tbl_praefix))
     {
         $g_tbl_praefix = 'adm';
     }

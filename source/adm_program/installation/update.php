@@ -424,7 +424,7 @@ elseif($getMode == 2)
     $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
         $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png');
-        $form->addButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php');
+        $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
     $form->closeButtonGroup();
     $form->show();
 }

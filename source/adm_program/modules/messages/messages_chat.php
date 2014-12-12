@@ -82,7 +82,7 @@ $page->addHtml('<div id="chat-wrap"><div id="chat-area"></div></div>');
 // show form
 $form = new HtmlForm('send-message-area', '', $page, 'default', true);
 
-$form->addMultilineTextInput('sendie', 'Enter Message:', null, 2, 100);
+$form->addMultilineTextInput('sendie', 'Enter Message:', null, 2, array('maxLength' => 100));
 
 // add form to html page
 $page->addHtml($form->show(false));

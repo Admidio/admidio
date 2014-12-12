@@ -138,7 +138,7 @@ else
 }
 $form->addTextInput('gbo_email', $gL10n->get('SYS_EMAIL'), $guestbook->getValue('gbo_email'), 50, FIELD_DEFAULT, 'email');
 $form->addTextInput('gbo_homepage', $gL10n->get('SYS_WEBSITE'), $guestbook->getValue('gbo_homepage'), 50, FIELD_DEFAULT, 'url');
-$form->addEditor('gbo_text', $gL10n->get('SYS_MESSAGE'), $guestbook->getValue('gbo_text'), FIELD_MANDATORY, 'AdmidioGuestbook');
+$form->addEditor('gbo_text', $gL10n->get('SYS_MESSAGE'), $guestbook->getValue('gbo_text'), array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));
 
 // if captchas are enabled then visitors of the website must resolve this
 if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)

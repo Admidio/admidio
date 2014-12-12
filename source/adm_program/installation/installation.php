@@ -116,7 +116,8 @@ if($getMode == 1)  // (Default) Choose language
     // the possible languages will be read from a xml file
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=2');
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_CHOOSE_LANGUAGE'));
-    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 'ISOCODE', 'NAME', FIELD_MANDATORY);
+    $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 
+                               'ISOCODE', 'NAME', array('property' => FIELD_MANDATORY));
     $form->closeGroupBox();
     $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), 'layout/forward.png');
     $form->show();
@@ -179,7 +180,8 @@ elseif($getMode == 3)  // Enter database access information
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=4');
     $form->setFormDescription($gL10n->get('INS_DATABASE_LOGIN_DESC'), $gL10n->get('INS_ENTER_LOGIN_TO_DATABASE'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
-    $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 'IDENTIFIER', 'NAME', FIELD_MANDATORY, $dbType);
+    $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 
+                               'IDENTIFIER', 'NAME', array('property' => FIELD_MANDATORY, 'defaultValue' => $dbType));
     $form->addTextInput('db_server', $gL10n->get('SYS_SERVER'), $server, 50, FIELD_MANDATORY);
     $form->addTextInput('db_user', $gL10n->get('SYS_USERNAME'), $user, 50, FIELD_MANDATORY);
     $form->addTextInput('db_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_DEFAULT, 'password');
@@ -618,7 +620,7 @@ elseif($getMode == 8)	// Start installation
                                         <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
         $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png');
-        $form->addButton('main_page', $gL10n->get('SYS_LATER'), 'layout/application_view_list.png', '../index.php');
+        $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
     $form->closeButtonGroup();
     $form->show();
 }

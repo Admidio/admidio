@@ -47,7 +47,7 @@ $form->addTextInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_
 if($gPreferences['system_organization_select'] == 1)
 {
     $sql = 'SELECT org_id, org_longname FROM '.TBL_ORGANIZATIONS.' ORDER BY org_longname ASC, org_shortname ASC';
-    $form->addSelectBoxFromSql('org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, FIELD_MANDATORY, $gCurrentOrganization->getValue('org_id'));
+    $form->addSelectBoxFromSql('org_id', $gL10n->get('SYS_ORGANIZATION'), $gDb, $sql, array('property' => FIELD_MANDATORY, 'defaultValue' => $gCurrentOrganization->getValue('org_id')));
 }
 
 if($gPreferences['enable_auto_login'] == 1)

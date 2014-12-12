@@ -74,7 +74,7 @@ $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL1
     $form->addTextInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('room_overhang'), array(0, 99999, 1), FIELD_DEFAULT, 'number', 'DAT_ROOM_OVERHANG');
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
-    $form->addEditor('room_description', null, $room->getValue('room_description'), FIELD_DEFAULT, 'AdmidioDefault', '150px');
+    $form->addEditor('room_description', null, $room->getValue('room_description'), array('height' => '150px'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');

@@ -120,7 +120,7 @@ elseif($gCurrentUser->manageRoles())
 
 $page->addJavascript('$("#cat_id").change(function() { $("#navbar_cat_id_form").submit();});', true);
 $navbarForm = new HtmlForm('navbar_cat_id_form', $g_root_path.'/adm_program/modules/lists/lists.php?active_role='.$getActiveRole, $page, 'navbar');
-$navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', FIELD_DEFAULT, $getCatId);
+$navbarForm->addSelectBoxForCategories('cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'FILTER_CATEGORIES', array('defaultValue' => $getCatId));
 $ListsMenu->addForm($navbarForm->show(false));
 
 // show module menu
@@ -225,7 +225,7 @@ foreach($listsResult['recordset'] as $row)
                 // show combobox with lists if user is allowed to see members and the role has members
                 if($row['num_members'] > 0 || $row['num_leader'] > 0)
                 {                
-                    $form->addSelectBox('admSelectRoleList_'.$role->getValue('rol_id'), $gL10n->get('LST_SHOW_LIST'), $listConfigurations, FIELD_DEFAULT);
+                    $form->addSelectBox('admSelectRoleList_'.$role->getValue('rol_id'), $gL10n->get('LST_SHOW_LIST'), $listConfigurations);
                 }
         
                 if(strlen($role->getValue('rol_description')) > 0)

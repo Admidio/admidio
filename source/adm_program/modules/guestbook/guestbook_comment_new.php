@@ -150,7 +150,7 @@ else
     $form->addTextInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), 60, FIELD_MANDATORY);
 }
 $form->addTextInput('gbc_email', $gL10n->get('SYS_EMAIL'), $guestbook_comment->getValue('gbc_email'), 50, FIELD_DEFAULT, 'email');
-$form->addEditor('gbc_text', $gL10n->get('SYS_COMMENT'), $guestbook_comment->getValue('gbc_text'), FIELD_MANDATORY, 'AdmidioGuestbook');
+$form->addEditor('gbc_text', $gL10n->get('SYS_COMMENT'), $guestbook_comment->getValue('gbc_text'), array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));
 
 // if captchas are enabled then visitors of the website must resolve this
 if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)

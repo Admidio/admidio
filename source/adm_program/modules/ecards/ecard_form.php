@@ -152,7 +152,7 @@ $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     {
         $templates[$key] = ucfirst(preg_replace('/[_-]/',' ',str_replace('.tpl', '', $templateName)));
     }
-    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, FIELD_MANDATORY);
+    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('property' => FIELD_MANDATORY));
 $form->closeGroupBox();
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
@@ -205,17 +205,18 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
     }
         
-	$form->addSelectBox('recipient', $gL10n->get('SYS_TO'), $list, FIELD_MANDATORY, array(), false, true);
+	$form->addSelectBox('recipient', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
+                        'showContextDependentFirstEntry' => false, 'multiselect' => true));
     $form->addLine();
     $form->addTextInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), 50, FIELD_DISABLED);
     $form->addTextInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), 50, FIELD_DISABLED);
 $form->closeGroupBox();
 $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'));
-    $form->addEditor('ecard_message', null, null, FIELD_MANDATORY, 'AdmidioGuestbook');
+    $form->addEditor('ecard_message', null, null, array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));
 $form->closeGroupBox();
 $form->openButtonGroup();
-    $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), THEME_PATH. '/icons/eye.png');
-    $form->addButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), THEME_PATH. '/icons/email.png');
+    $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_PATH. '/icons/eye.png'));
+    $form->addButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH. '/icons/email.png'));
 $form->closeButtonGroup();
 
 // add form to html page and show page

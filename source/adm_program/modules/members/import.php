@@ -56,9 +56,9 @@ $page->addHtml($importMenu->show(false));
 // show form
 $form = new HtmlForm('import_users_form', $g_root_path.'/adm_program/modules/members/import_function.php', $page, 'default', true);
 $form->addStaticControl('format', $gL10n->get('MEM_FORMAT'), 'CSV');
-$form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), ($gPreferences['max_file_upload_size'] * 1024), false, null, false, FIELD_MANDATORY);
+$form->addFileUpload('userfile', $gL10n->get('MEM_CHOOSE_FILE'), array('property' => FIELD_MANDATORY));
 $selectBoxEntries = array('iso-8859-1' => $gL10n->get('SYS_ISO_8859_1'), 'utf-8' => $gL10n->get('SYS_UTF8'));
-$form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, FIELD_MANDATORY, $form_values['import_coding']);
+$form->addSelectBox('import_coding', $gL10n->get('MEM_CODING'), $selectBoxEntries, array('property' => FIELD_MANDATORY, 'defaultValue' => $form_values['import_coding']));
 
 // add a selectbox to the form where the user can choose a role from all roles he could see
 // first read all relevant roles from database and create an array with them
@@ -90,10 +90,12 @@ while($row = $gDb->fetch_array($resultList))
 {
     $roles[] = array($row['rol_id'], $row['rol_name'], $row['cat_name']);
 }
-$form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, FIELD_MANDATORY, $form_values['import_role_id'], true, false, 'MEM_ASSIGN_ROLE_FOR_IMPORT');
+$form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, array('property' => FIELD_MANDATORY, 
+                    'defaultValue' => $form_values['import_role_id'], 'helpTextIdLabel' => 'MEM_ASSIGN_ROLE_FOR_IMPORT'));
 
 $selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
-$form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, FIELD_MANDATORY, $form_values['user_import_mode'], false, false, 'MEM_IDENTIFY_USERS');
+$form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, array('property' => FIELD_MANDATORY, 
+                    'defaultValue' => $form_values['user_import_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'MEM_IDENTIFY_USERS'));
 $form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), THEME_PATH.'/icons/forward.png', null, null, ' col-sm-offset-3');
 
 // add form to html page and show page

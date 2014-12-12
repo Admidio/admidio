@@ -134,7 +134,8 @@ $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     }
     else
     {
-        $form->addSelectBoxForCategories('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', 'EDIT_CATEGORIES', FIELD_MANDATORY, $userField->getValue('usf_cat_id'));
+        $form->addSelectBoxForCategories('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'USF', 'EDIT_CATEGORIES', 
+                                         array('property' => FIELD_MANDATORY, 'defaultValue' => $userField->getValue('usf_cat_id')));
     }
 $form->closeGroupBox();
 $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
@@ -157,27 +158,27 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
     else
     {
         // fuer jeden Feldtypen einen Eintrag in der Combobox anlegen
-        $form->addSelectBox('usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText, FIELD_MANDATORY, $userField->getValue('usf_type'));
+        $form->addSelectBox('usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText, array('property' => FIELD_MANDATORY, 'defaultValue' => $userField->getValue('usf_type')));
     }
-    $form->addMultilineTextInput('usf_value_list', $gL10n->get('ORG_VALUE_LIST'), $userField->getValue('usf_value_list', 'database'), 6, 0, FIELD_MANDATORY, 'ORG_VALUE_LIST_DESC');
+    $form->addMultilineTextInput('usf_value_list', $gL10n->get('ORG_VALUE_LIST'), $userField->getValue('usf_value_list', 'database'), 6, array('property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
     $form->addTextInput('usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_icon', 'database'), 2000, FIELD_DEFAULT);
     $form->addTextInput('usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'), 2000, FIELD_DEFAULT, 'text', 'ORG_FIELD_URL_DESC');
 $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
-    $form->addCheckbox('usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), $userField->getValue('usf_hidden'), FIELD_DEFAULT, 'ORG_FIELD_HIDDEN_DESC', null, 'eye.png');
-    $form->addCheckbox('usf_disabled', $gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')), $userField->getValue('usf_disabled'), FIELD_DEFAULT, 'ORG_FIELD_DISABLED_DESC', null, 'textfield_key.png');
+    $form->addCheckbox('usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), $userField->getValue('usf_hidden'), array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png'));
+    $form->addCheckbox('usf_disabled', $gL10n->get('ORG_FIELD_DISABLED', $gL10n->get('ROL_RIGHT_EDIT_USER')), $userField->getValue('usf_disabled'), array('helpTextIdLabel' => 'ORG_FIELD_DISABLED_DESC', 'icon' => 'textfield_key.png'));
     
     if($userField->getValue('usf_name_intern') == 'LAST_NAME' || $userField->getValue('usf_name_intern') == 'FIRST_NAME')
 	{
-        $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_MANDATORY'), $userField->getValue('usf_mandatory'), FIELD_DISABLED, 'ORG_FIELD_MANDATORY_DESC', null, 'asterisk_yellow.png');
+        $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_MANDATORY'), $userField->getValue('usf_mandatory'), array('helpTextIdLabel' => 'ORG_FIELD_MANDATORY_DESC', 'icon' => 'asterisk_yellow.png'));
     }
     else
     {
-        $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_MANDATORY'), $userField->getValue('usf_mandatory'), FIELD_DEFAULT, 'ORG_FIELD_MANDATORY_DESC', null, 'asterisk_yellow.png');
+        $form->addCheckbox('usf_mandatory', $gL10n->get('ORG_FIELD_MANDATORY'), $userField->getValue('usf_mandatory'), array('helpTextIdLabel' => 'ORG_FIELD_MANDATORY_DESC', 'icon' => 'asterisk_yellow.png'));
     }
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
-    $form->addEditor('usf_description', null, $userField->getValue('usf_description'), FIELD_DEFAULT, 'AdmidioDefault', '200px');
+    $form->addEditor('usf_description', null, $userField->getValue('usf_description'), array('height' => '200px'));
 $form->closeGroupBox();
 
 $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');

@@ -152,7 +152,7 @@ if($gPreferences['profile_log_edit_fields'] == 1)
 if($gPreferences['user_management_show_all_users'] == 1)
 {
     $navbarForm = new HtmlForm('navbar_show_all_users_form', '', $page, 'navbar');
-    $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, FIELD_DEFAULT, 'MEM_SHOW_USERS_DESC');
+    $navbarForm->addCheckbox('mem_show_all', $gL10n->get('MEM_SHOW_ALL_USERS'), $flagShowMembers, array('helpTextIdLabel' => 'MEM_SHOW_USERS_DESC'));
     $membersAdministrationMenu->addForm($navbarForm->show(false));
 }
 
