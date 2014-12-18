@@ -48,7 +48,7 @@ require_once(substr(__FILE__, 0, strpos(__FILE__, 'adm_program')-1). '/adm_progr
 if(version_compare(phpversion(), MIN_PHP_VERSION) == -1)
 {
     die('<div style="color: #CC0000;">Error: Your PHP version '.phpversion().' does not fulfill 
-		the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or more highly.</div>');
+		the minimum requirements for this Admidio version. You need at least PHP '.MIN_PHP_VERSION.' or higher.</div>');
 }
 
 require_once('install_functions.php');
