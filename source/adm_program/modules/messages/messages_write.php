@@ -196,7 +196,7 @@ if ($getMsgType == 'PM')
     }
 	else
 	{
-	    $form->addTextInput('msg_to', '', $getUserId, '' , FIELD_DEFAULT, 'hidden');
+	    $form->addInput('msg_to', null, $getUserId, array('type' => 'hidden'));
 		$sendto = ' ' . $gL10n->get('SYS_TO') . ' ' .$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').' ('.$user->getValue('usr_login_name').')';
 	}
 
@@ -204,14 +204,14 @@ if ($getMsgType == 'PM')
 
     if(strlen($getSubject) == 0)
     {
-        $form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), '', 77, FIELD_MANDATORY);
+        $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), '', array('maxLength' => 77, 'property' => FIELD_MANDATORY));
     }
 
     $form->addMultilineTextInput('msg_body', $gL10n->get('SYS_PM'), null, 10, array('maxLength' => 254, 'property' => FIELD_MANDATORY));
 
     $form->closeGroupBox();
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), THEME_PATH.'/icons/email.png');
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
 
     // add form to html page
     $page->addHtml($form->show(false));
@@ -498,13 +498,13 @@ else
 
     if ($gCurrentUser->getValue('usr_id') > 0)
     {
-        $form->addTextInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), 50, FIELD_DISABLED);
-        $form->addTextInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), 50, FIELD_DISABLED);
+        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
     }
     else
     {
-        $form->addTextInput('name', $gL10n->get('MAI_YOUR_NAME'), $form_values['name'], 50, FIELD_MANDATORY);
-        $form->addTextInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], 50, FIELD_MANDATORY);
+        $form->addInput('name', $gL10n->get('MAI_YOUR_NAME'), $form_values['name'], array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+        $form->addInput('mailfrom', $gL10n->get('MAI_YOUR_EMAIL'), $form_values['mailfrom'], array('maxLength' => 50, 'property' => FIELD_MANDATORY));
     }
 
     // show option to send a copy to your email address only for registered users because of spam abuse
@@ -522,7 +522,7 @@ else
     $form->closeGroupBox();
 
     $form->openGroupBox('gb_mail_message', $gL10n->get('SYS_MESSAGE'));
-    $form->addTextInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], 77, FIELD_MANDATORY);
+    $form->addInput('subject', $gL10n->get('MAI_SUBJECT'), $form_values['subject'], array('maxLength' => 77, 'property' => FIELD_MANDATORY));
 
     // Nur eingeloggte User duerfen Attachments anhaengen...
     if (($gValidLogin) && ($gPreferences['max_email_attachment_size'] > 0) && (ini_get('file_uploads') == '1'))
@@ -551,7 +551,7 @@ else
         $form->closeGroupBox();
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), THEME_PATH.'/icons/email.png');
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));

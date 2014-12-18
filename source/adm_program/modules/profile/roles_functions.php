@@ -191,8 +191,8 @@ function getRoleMemberships($htmlListId, $user, $result_role, $count_role, $dire
                     </li>
                     <li class="list-group-item" id="membership_period_'.$member->getValue('mem_id').'" style="visibility: hidden; display: none;"><div class="collapse navbar-collapse">';
                         $form = new HtmlForm('membership_period_form_'.$member->getValue('mem_id'), $g_root_path.'/adm_program/modules/profile/profile_function.php?mode=7&user_id='.$user->getValue('usr_id').'&mem_id='.$row['mem_id'], null, 'navbar', false, 'form-membership-period');
-                        $form->addTextInput('membership_start_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']), 10, FIELD_DEFAULT, 'date');
-                        $form->addTextInput('membership_end_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']), 10, FIELD_DEFAULT, 'date');
+                        $form->addInput('membership_start_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_START'), $member->getValue('mem_begin', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
+                        $form->addInput('membership_end_date_'.$member->getValue('mem_id'), $gL10n->get('SYS_END'), $member->getValue('mem_end', $gPreferences['system_date']), array('type' => 'date', 'maxLength' => 10));
                         $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
                         $roleMemHTML .= $form->show(false);
                     $roleMemHTML .= '</div></li>

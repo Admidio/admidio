@@ -138,8 +138,8 @@ $page->addHtml($ecardMenu->show(false));
 
 // show form
 $form = new HtmlForm('ecard_form', null, $page);
-$form->addTextInput('submit_action', null, '', 0, FIELD_DEFAULT, 'hidden');
-$form->addTextInput('ecard_image_name', null, $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'], 0, FIELD_DEFAULT, 'hidden');
+$form->addInput('submit_action', null, '', array('type' => 'hidden'));
+$form->addInput('ecard_image_name', null, $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'], array('type' => 'hidden'));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
@@ -208,8 +208,8 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 	$form->addSelectBox('recipient', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
                         'showContextDependentFirstEntry' => false, 'multiselect' => true));
     $form->addLine();
-    $form->addTextInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), 50, FIELD_DISABLED);
-    $form->addTextInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), 50, FIELD_DISABLED);
+    $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
+    $form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_MANDATORY));
 $form->closeGroupBox();
 $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'));
     $form->addEditor('ecard_message', null, null, array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));

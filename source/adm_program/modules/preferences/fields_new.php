@@ -115,22 +115,22 @@ $form = new HtmlForm('profile_fields_edit_form', $g_root_path.'/adm_program/modu
 $form->openGroupBox('gb_designation', $gL10n->get('SYS_DESIGNATION'));
     if($userField->getValue('usf_system') == 1)
     {
-        $form->addTextInput('usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'), 100, FIELD_DISABLED);
+        $form->addInput('usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'), array('maxLength' => 100, 'property' => FIELD_DISABLED));
     }
     else
     {
-        $form->addTextInput('usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'), 100, FIELD_MANDATORY);
+        $form->addInput('usf_name', $gL10n->get('SYS_NAME'), $userField->getValue('usf_name', 'database'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
     }
     
     // show internal field name for information
     if($getUsfId > 0)
     {
-        $form->addTextInput('usf_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $userField->getValue('usf_name_intern'), 100, FIELD_DISABLED, 'text', 'SYS_INTERNAL_NAME_DESC');
+        $form->addInput('usf_name_intern', $gL10n->get('SYS_INTERNAL_NAME'), $userField->getValue('usf_name_intern'), array('maxLength' => 100, 'property' => FIELD_DISABLED, 'helpTextIdLabel' => 'SYS_INTERNAL_NAME_DESC'));
     }
     
     if($userField->getValue('usf_system') == 1)
     {
-        $form->addTextInput('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $userField->getValue('cat_name'), 100, FIELD_DISABLED);
+        $form->addInput('usf_cat_id', $gL10n->get('SYS_CATEGORY'), $userField->getValue('cat_name'), array('maxLength' => 100, 'property' => FIELD_DISABLED));
     }
     else
     {
@@ -153,7 +153,7 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
     if($userField->getValue('usf_system') == 1)
     {
         // bei Systemfeldern darf der Datentyp nicht mehr veraendert werden
-        $form->addTextInput('usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText[$userField->getValue('usf_type')], 30, FIELD_DISABLED);
+        $form->addInput('usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText[$userField->getValue('usf_type')], array('maxLength' => 30, 'property' => FIELD_DISABLED));
     }
     else
     {
@@ -161,8 +161,8 @@ $form->openGroupBox('gb_presentation', $gL10n->get('SYS_PRESENTATION'));
         $form->addSelectBox('usf_type', $gL10n->get('ORG_DATATYPE'), $userFieldText, array('property' => FIELD_MANDATORY, 'defaultValue' => $userField->getValue('usf_type')));
     }
     $form->addMultilineTextInput('usf_value_list', $gL10n->get('ORG_VALUE_LIST'), $userField->getValue('usf_value_list', 'database'), 6, array('property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'ORG_VALUE_LIST_DESC'));
-    $form->addTextInput('usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_icon', 'database'), 2000, FIELD_DEFAULT);
-    $form->addTextInput('usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'), 2000, FIELD_DEFAULT, 'text', 'ORG_FIELD_URL_DESC');
+    $form->addInput('usf_icon', $gL10n->get('SYS_ICON'), $userField->getValue('usf_icon', 'database'), array('maxLength' => 2000));
+    $form->addInput('usf_url', $gL10n->get('ORG_URL'), $userField->getValue('usf_url'), array('maxLength' => 2000, 'helpTextIdLabel' => 'ORG_FIELD_URL_DESC'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     $form->addCheckbox('usf_hidden', $gL10n->get('ORG_FIELD_NOT_HIDDEN'), $userField->getValue('usf_hidden'), array('helpTextIdLabel' => 'ORG_FIELD_HIDDEN_DESC', 'icon' => 'eye.png'));
@@ -181,7 +181,7 @@ $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
     $form->addEditor('usf_description', null, $userField->getValue('usf_description'), array('height' => '200px'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($userField->getValue('usf_usr_id_create'), $userField->getValue('usf_timestamp_create'), $userField->getValue('usf_usr_id_change'), $userField->getValue('usf_timestamp_change')));
 
 // add form to html page and show page

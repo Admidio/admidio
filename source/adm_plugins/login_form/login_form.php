@@ -170,8 +170,8 @@ else
     }
 
     $form = new HtmlForm('plugin-login-form', $g_root_path.'/adm_program/system/login_check.php', null, 'vertical');
-    $form->addTextInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, 35);
-    $form->addTextInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_DEFAULT, 'password');
+    $form->addInput('plg_usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35));
+    $form->addInput('plg_usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password'));
 
     // show selectbox with all organizations of database
     if($gPreferences['system_organization_select'] == 1)
@@ -185,7 +185,7 @@ else
         $form->addCheckbox('plg_auto_login', $gL10n->get('SYS_REMEMBER_ME'), '0');
     }
 
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), $iconCode, null, null);
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_LOGIN'), array('icon' => $iconCode));
     $form->show();
     
     // show links for registration and help

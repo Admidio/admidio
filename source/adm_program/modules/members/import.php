@@ -96,7 +96,7 @@ $form->addSelectBox('import_role_id', $gL10n->get('MEM_ASSIGN_ROLE'), $roles, ar
 $selectBoxEntries = array(1 => $gL10n->get('MEM_NOT_EDIT'), 2 => $gL10n->get('MEM_DUPLICATE'), 3 => $gL10n->get('MEM_REPLACE'), 4 => $gL10n->get('MEM_COMPLEMENT'));
 $form->addSelectBox('user_import_mode', $gL10n->get('MEM_EXISTING_USERS'), $selectBoxEntries, array('property' => FIELD_MANDATORY, 
                     'defaultValue' => $form_values['user_import_mode'], 'showContextDependentFirstEntry' => false, 'helpTextIdLabel' => 'MEM_IDENTIFY_USERS'));
-$form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), THEME_PATH.'/icons/forward.png', null, null, ' col-sm-offset-3');
+$form->addSubmitButton('btn_forward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png', 'class' => ' col-sm-offset-3'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

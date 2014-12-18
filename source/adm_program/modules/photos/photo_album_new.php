@@ -138,17 +138,17 @@ $page->addHtml($photoAlbumMenu->show(false));
 
 // show form
 $form = new HtmlForm('photo_album_edit_form', $g_root_path.'/adm_program/modules/photos/photo_album_function.php?pho_id='.$getPhotoId.'&amp;mode='.$getMode, $page);
-$form->addTextInput('pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'), 50, FIELD_MANDATORY);
+$form->addInput('pho_name', $gL10n->get('PHO_ALBUM'), $photoAlbum->getValue('pho_name'), array('property' => FIELD_MANDATORY, 'maxLength' => 10));
 subfolder($photoAlbum->getValue('pho_pho_id_parent'), '', $photoAlbum, $getPhotoId);
 $form->addSelectBox('pho_pho_id_parent', $gL10n->get('PHO_PARENT_ALBUM'), $photoAlbumsArray, array('property' => FIELD_MANDATORY, 
                     'defaultValue' => $photoAlbum->getValue('pho_pho_id_parent'), 'showContextDependentFirstEntry' => false, 
                     'helpTextIdLabel' => array('PHO_PARENT_ALBUM_DESC', $gL10n->get('PHO_PHOTO_ALBUMS'))));
-$form->addTextInput('pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'), 10, FIELD_MANDATORY, 'date');
-$form->addTextInput('pho_end', $gL10n->get('SYS_END'), $photoAlbum->getValue('pho_end'), 10, FIELD_DEFAULT, 'date');
-$form->addTextInput('pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbum->getValue('pho_photographers'), 100, FIELD_DEFAULT);
+$form->addInput('pho_begin', $gL10n->get('SYS_START'), $photoAlbum->getValue('pho_begin'), array('type' => 'date', 'maxLength' => 10));
+$form->addInput('pho_end', $gL10n->get('SYS_END'), $photoAlbum->getValue('pho_end'), array('type' => 'date', 'maxLength' => 10));
+$form->addInput('pho_photographers', $gL10n->get('PHO_PHOTOGRAPHER'), $photoAlbum->getValue('pho_photographers'), array('maxLength' => 100));
 $form->addCheckbox('pho_locked', $gL10n->get('PHO_ALBUM_LOCK'), $photoAlbum->getValue('pho_locked'), array('helpTextIdLabel' => 'PHO_ALBUM_LOCK_DESC'));
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($photoAlbum->getValue('pho_usr_id_create'), $photoAlbum->getValue('pho_timestamp_create'), $photoAlbum->getValue('pho_usr_id_change'), $photoAlbum->getValue('pho_timestamp_change')));
 
 // add form to html page and show page

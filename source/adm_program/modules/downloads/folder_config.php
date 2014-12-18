@@ -215,7 +215,7 @@ $form->openGroupBox('adm_roles_box', $gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS'))
 $form->addDescription($gL10n->get('DOW_ROLE_ACCESS_PERMISSIONS_DESC'));
 $form->addCustomContent(null, $htmlRoleSelection);
 $form->closeGroupBox();
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 
 // add form to html page and show page
 $page->addHtml($form->show(false));

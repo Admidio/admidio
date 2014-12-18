@@ -99,13 +99,13 @@ $page->addHtml($categoryCreateMenu->show(false));
 $form = new HtmlForm('categories_edit_form', $g_root_path.'/adm_program/modules/categories/categories_function.php?cat_id='.$getCatId.'&amp;type='. $getType. '&amp;mode=1', $page);
 
 // systemcategories should not be renamed
-$fieldTypeCatName = FIELD_MANDATORY;
+$fieldPropertyCatName = FIELD_MANDATORY;
 if($category->getValue('cat_system') == 1)
 {
-    $fieldTypeCatName = FIELD_DISABLED;
+    $fieldPropertyCatName = FIELD_DISABLED;
 }
 
-$form->addTextInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'), 100, $fieldTypeCatName);
+$form->addInput('cat_name', $gL10n->get('SYS_NAME'), $category->getValue('cat_name', 'database'), array('maxLength' => 100, 'property' => $fieldPropertyCatName));
 
 if($getType == 'USF')
 {
@@ -131,7 +131,7 @@ else
     $form->addCheckbox('cat_hidden', $gL10n->get('SYS_VISIBLE_TO_USERS', $getTitle), $category->getValue('cat_hidden'), array('icon' => 'user_key.png'));
 }
 $form->addCheckbox('cat_default', $gL10n->get('CAT_DEFAULT_VAR', $getTitle), $category->getValue('cat_default'), array('icon' => 'star.png'));
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($category->getValue('cat_usr_id_create'), $category->getValue('cat_timestamp_create'), $category->getValue('cat_usr_id_change'), $category->getValue('cat_timestamp_change')));
 
 // add form to html page and show page

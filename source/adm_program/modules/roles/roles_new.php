@@ -140,11 +140,11 @@ $form = new HtmlForm('roles_edit_form', $g_root_path.'/adm_program/modules/roles
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
 	if($role->getValue('rol_webmaster') == 1)
 	{
-        $form->addTextInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), 100, FIELD_DISABLED);
+        $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), array('maxLength' => 100, 'property' => FIELD_DISABLED));
     }
     else
     {
-        $form->addTextInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), 100, FIELD_MANDATORY);
+        $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
     }
     $form->addMultilineTextInput('rol_description', $gL10n->get('SYS_DESCRIPTION'), $role->getValue('rol_description'), 3, array('maxLength' => 4000));
     $form->addSelectBoxForCategories('rol_cat_id', $gL10n->get('SYS_CATEGORY'), $gDb, 'ROL', 'EDIT_CATEGORIES', 
@@ -179,8 +179,8 @@ $form->openGroupBox('gb_properties', $gL10n->get('SYS_PROPERTIES'));
 	}
     $form->addSelectBox('rol_lst_id', $gL10n->get('ROL_DEFAULT_LIST'), $selectBoxEntries, array('defaultValue' => $role->getValue('rol_lst_id'), 'helpTextIdLabel' => 'ROL_DEFAULT_LIST_DESC'));
     $form->addCheckbox('rol_default_registration', $gL10n->get('ROL_DEFAULT_REGISTRATION'), $role->getValue('rol_default_registration'), array('helpTextIdLabel' => 'ROL_DEFAULT_REGISTRATION_DESC'));
-    $form->addTextInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'), array(0, 99999, 1), FIELD_DEFAULT, 'number');
-    $form->addTextInput('rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'), 6, FIELD_DEFAULT, 'text', null, null, null, 'form-control-small');
+    $form->addInput('rol_max_members', $gL10n->get('SYS_MAX_PARTICIPANTS').'<br />('.$gL10n->get('ROL_WITHOUT_LEADER').')', $role->getValue('rol_max_members'), array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999));
+    $form->addInput('rol_cost', $gL10n->get('SYS_CONTRIBUTION').' '.$gPreferences['system_currency'], $role->getValue('rol_cost'), array('maxLength' => 6, 'class' => 'form-control-small'));
     $form->addSelectBox('rol_cost_period', $gL10n->get('SYS_CONTRIBUTION_PERIOD'), $role->getCostPeriods(), array('defaultValue' => $role->getValue('rol_cost_period')));
 $form->closeGroupBox();
 $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
@@ -224,12 +224,12 @@ $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     }
 $form->closeGroupBox();
 $form->openGroupBox('gb_dates_meetings', $gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
-    $form->addTextInput('rol_start_date', $gL10n->get('ROL_VALID_FROM'), $role->getValue('rol_start_date'), 0, FIELD_DEFAULT, 'date');
-    $form->addTextInput('rol_end_date', $gL10n->get('ROL_VALID_TO'), $role->getValue('rol_end_date'), 0, FIELD_DEFAULT, 'date');
-    $form->addTextInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), 0, FIELD_DEFAULT, 'time');
-    $form->addTextInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), 0, FIELD_DEFAULT, 'time');
+    $form->addInput('rol_start_date', $gL10n->get('ROL_VALID_FROM'), $role->getValue('rol_start_date'), array('type' => 'date'));
+    $form->addInput('rol_end_date', $gL10n->get('ROL_VALID_TO'), $role->getValue('rol_end_date'), array('type' => 'date'));
+    $form->addInput('rol_start_time', $gL10n->get('SYS_TIME_FROM'), $role->getValue('rol_start_time'), array('type' => 'time'));
+    $form->addInput('rol_end_time', $gL10n->get('SYS_TIME_TO'), $role->getValue('rol_end_time'), array('type' => 'time'));
     $form->addSelectBox('rol_weekday', $gL10n->get('ROL_WEEKDAY'), DateTimeExtended::getWeekdays(), array('defaultValue' => $role->getValue('rol_weekday')));
-    $form->addTextInput('rol_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'), 100);
+    $form->addInput('rol_location', $gL10n->get('SYS_LOCATION'), $role->getValue('rol_location'), array('maxLength' => 100));
 $form->closeGroupBox();
 
 $form->openGroupBox('gb_dependencies', $gL10n->get('ROL_DEPENDENCIES').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');
@@ -254,7 +254,7 @@ $sqlAllRoles = '
 $form->addSelectBoxFromSql('dependent_roles', $gL10n->get('ROL_DEPENDENT'), $gDb, $sqlAllRoles, array('defaultValue' => $childRoles, 'multiselect' => true));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($role->getValue('rol_usr_id_create'), $role->getValue('rol_timestamp_create'), $role->getValue('rol_usr_id_change'), $role->getValue('rol_timestamp_change')));
 
 // add form to html page and show page

@@ -129,10 +129,10 @@ $page->addHtml($downloadRenameMenu->show(false));
 
 // create html form
 $form = new HtmlForm('edit_download_form', $g_root_path.'/adm_program/modules/downloads/download_function.php?mode=4&amp;folder_id='.$getFolderId.'&amp;file_id='.$getFileId, $page);
-$form->addTextInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName, 0, FIELD_DISABLED);
-$form->addTextInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], 255, FIELD_MANDATORY, 'TEXT', 'DOW_FILE_NAME_RULES');
+$form->addInput('previous_name', $gL10n->get('DOW_PREVIOUS_NAME'), $originalName, array('property' => FIELD_DISABLED));
+$form->addInput('new_name', $gL10n->get('DOW_NEW_NAME'), $form_values['new_name'], array('maxLength' => 255, 'property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'DOW_FILE_NAME_RULES');
 $form->addMultilineTextInput('new_description', $gL10n->get('SYS_DESCRIPTION'), $form_values['new_description'], 4, array('maxLength' => 255));
-$form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
+$form->addSubmitButton('btn_rename', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
 
 $page->addHtml($form->show(false));
 $page->show();

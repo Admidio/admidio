@@ -119,7 +119,7 @@ if($getMode == 1)  // (Default) Choose language
     $form->addSelectBoxFromXml('system_language', $gL10n->get('SYS_LANGUAGE'), SERVER_PATH.'/adm_program/languages/languages.xml', 
                                'ISOCODE', 'NAME', array('property' => FIELD_MANDATORY));
     $form->closeGroupBox();
-    $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), 'layout/forward.png');
+    $form->addSubmitButton('next_page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
 elseif($getMode == 2)  // Welcome to installation
@@ -153,7 +153,7 @@ elseif($getMode == 2)  // Welcome to installation
     // create a page with the notice that the installation must be configured on the next pages
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=3');
     $form->setFormDescription($message, $gL10n->get('INS_WELCOME_TO_INSTALLATION'));
-    $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), 'layout/forward.png');
+    $form->addSubmitButton('next_page', $gL10n->get('INS_DATABASE_LOGIN'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
 elseif($getMode == 3)  // Enter database access information
@@ -182,14 +182,14 @@ elseif($getMode == 3)  // Enter database access information
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATABASE_LOGIN'));
     $form->addSelectBoxFromXml('db_type', $gL10n->get('INS_DATABASE_SYSTEM'), SERVER_PATH.'/adm_program/system/databases.xml', 
                                'IDENTIFIER', 'NAME', array('property' => FIELD_MANDATORY, 'defaultValue' => $dbType));
-    $form->addTextInput('db_server', $gL10n->get('SYS_SERVER'), $server, 50, FIELD_MANDATORY);
-    $form->addTextInput('db_user', $gL10n->get('SYS_USERNAME'), $user, 50, FIELD_MANDATORY);
-    $form->addTextInput('db_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_DEFAULT, 'password');
-    $form->addTextInput('db_database', $gL10n->get('SYS_DATABASE'), $database, 50, FIELD_MANDATORY);
-    $form->addTextInput('db_prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
+    $form->addInput('db_server', $gL10n->get('SYS_SERVER'), $server, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addInput('db_user', $gL10n->get('SYS_USERNAME'), $user, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addInput('db_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
+    $form->addInput('db_database', $gL10n->get('SYS_DATABASE'), $database, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addInput('db_prefix', $gL10n->get('INS_TABLE_PREFIX'), $prefix, array('maxLength' => 10, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
     $form->addDescription('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>'.$gL10n->get('INS_TABLE_PREFIX_OVERRIDE_DATA').'</div>');
     $form->closeGroupBox();
-    $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), 'layout/forward.png');
+    $form->addSubmitButton('next_page', $gL10n->get('INS_SET_ORGANIZATION'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
 elseif($getMode == 4)  // Creating organization
@@ -270,11 +270,11 @@ elseif($getMode == 4)  // Creating organization
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=5');
     $form->setFormDescription($gL10n->get('ORG_NEW_ORGANIZATION_DESC'), $gL10n->get('INS_SET_ORGANIZATION'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_NAME_OF_ORGANIZATION'));
-    $form->addTextInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
-    $form->addTextInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, 50, FIELD_MANDATORY);
-    $form->addTextInput('orga_email', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail, 50, FIELD_MANDATORY, 'email');
+    $form->addInput('orga_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $orgaShortName, array('maxLength' => 10, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
+    $form->addInput('orga_longname', $gL10n->get('SYS_NAME'), $orgaLongName, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addInput('orga_email', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $orgaEmail, array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_MANDATORY));
     $form->closeGroupBox();
-    $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), 'layout/forward.png');
+    $form->addSubmitButton('next_page', $gL10n->get('INS_CREATE_ADMINISTRATOR'), array('icon' => 'layout/forward.png'));
     $form->show();
 }
 elseif($getMode == 5)  // Creating addministrator
@@ -314,14 +314,14 @@ elseif($getMode == 5)  // Creating addministrator
     $form = new HtmlFormInstallation('installation-form', 'installation.php?mode=6');
     $form->setFormDescription($gL10n->get('INS_DATA_OF_ADMINISTRATOR_DESC'), $gL10n->get('INS_CREATE_ADMINISTRATOR'));
     $form->openGroupBox('gbChooseLanguage', $gL10n->get('INS_DATA_OF_ADMINISTRATOR'));
-    $form->addTextInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, 50, FIELD_MANDATORY);
-    $form->addTextInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, 50, FIELD_MANDATORY);
-    $form->addTextInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, 255, FIELD_MANDATORY);
-    $form->addTextInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, 35, FIELD_MANDATORY);
-    $form->addTextInput('user_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password');
-    $form->addTextInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, 0, FIELD_MANDATORY, 'password');
+    $form->addInput('user_last_name', $gL10n->get('SYS_LASTNAME'), $userLastName, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addInput('user_first_name', $gL10n->get('SYS_FIRSTNAME'), $userFirstName, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addInput('user_email', $gL10n->get('SYS_EMAIL'), $userEmail, array('maxLength' => 255, 'property' => FIELD_MANDATORY));
+    $form->addInput('user_login', $gL10n->get('SYS_USERNAME'), $userLogin, array('maxLength' => 35, 'property' => FIELD_MANDATORY));
+    $form->addInput('user_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
+    $form->addInput('user_password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
     $form->closeGroupBox();
-    $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), 'layout/database_in.png', null, $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'));
+    $form->addSubmitButton('next_page', $gL10n->get('INS_INSTALL_ADMIDIO'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
     $form->show();
 }
 elseif($getMode == 6)  // Creating configuration file
@@ -411,7 +411,7 @@ elseif($getMode == 6)  // Creating configuration file
             <a class="icon-text-link" href="installation.php?mode=7"><img src="layout/page_white_download.png"
                 alt="'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'" />'.$gL10n->get('INS_DOWNLOAD_CONFIGURATION_FILE').'</a>
             <br />');
-        $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), 'layout/database_in.png', null, $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED'));
+        $form->addSubmitButton('next_page', $gL10n->get('INS_CONTINUE_INSTALLATION'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_WILL_BE_ESTABLISHED')));
         $form->show();
     }
 }
@@ -619,7 +619,7 @@ elseif($getMode == 8)	// Start installation
     $form->setFormDescription($text, '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span>
                                         <strong>'.$gL10n->get('INS_INSTALLATION_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
-        $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png');
+        $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
         $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
     $form->closeButtonGroup();
     $form->show();

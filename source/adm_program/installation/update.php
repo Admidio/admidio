@@ -183,8 +183,8 @@ if($getMode == 1)
         if($gDebug == false)
         {
             $form->addDescription($gL10n->get('INS_WEBMASTER_LOGIN_DESC'));
-            $form->addTextInput('login_name', $gL10n->get('SYS_USERNAME'), null, 35, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
-            $form->addTextInput('password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, null, null, 'form-control-small');
+            $form->addInput('login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
+            $form->addInput('password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
         }
 
         // if this is a beta version then show a warning message
@@ -193,7 +193,7 @@ if($getMode == 1)
             $form->addDescription('<div class="alert alert-warning alert-small" role="alert"><span class="glyphicon glyphicon-warning-sign"></span>
                             '.$gL10n->get('INS_WARNING_BETA_VERSION').'</div>');
         }
-        $form->addSubmitButton('next_page', $gL10n->get('INS_UPDATE_DATABASE'), 'layout/database_in.png', null, $gL10n->get('INS_DATABASE_IS_UPDATED'));
+        $form->addSubmitButton('next_page', $gL10n->get('INS_UPDATE_DATABASE'), array('icon' => 'layout/database_in.png', 'onClickText' => $gL10n->get('INS_DATABASE_IS_UPDATED')));
         $form->show();
     }
 	// if versions are equal > no update
@@ -423,7 +423,7 @@ elseif($getMode == 2)
     $form = new HtmlFormInstallation('installation-form', 'http://www.admidio.org/index.php?page=donate');
     $form->setFormDescription($gL10n->get('INS_UPDATE_TO_VERSION_SUCCESSFUL', ADMIDIO_VERSION_TEXT).'<br /><br />'.$gL10n->get('INS_SUPPORT_FURTHER_DEVELOPMENT'), '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.$gL10n->get('INS_UPDATING_WAS_SUCCESSFUL').'</strong></div>');
     $form->openButtonGroup();
-        $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), 'layout/money.png');
+        $form->addSubmitButton('next_page', $gL10n->get('SYS_DONATE'), array('icon' => 'layout/money.png'));
         $form->addButton('main_page', $gL10n->get('SYS_LATER'), array('icon' => 'layout/application_view_list.png', 'link' => '../index.php'));
     $form->closeButtonGroup();
     $form->show();

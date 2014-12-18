@@ -221,13 +221,13 @@ foreach($gProfileFields->mProfileFields as $field)
                     $fieldHelpId   = 'PRO_USERNAME_DESCRIPTION';
                 }
             
-                $form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), 35, $fieldProperty, 'text', $fieldHelpId, null, null, 'form-control-small');
+                $form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), $user->getValue('usr_login_name'), array('maxLength' => 35, 'property' => $fieldProperty, 'helpTextIdLabel' => $fieldHelpId, 'class' => 'form-control-small'));
 
                 if($getNewUser == 2)
                 {
                     // at registration add password and password confirm to form
-                    $form->addTextInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', 'PRO_PASSWORD_DESCRIPTION', null, null, 'form-control-small');
-                    $form->addTextInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, null, null, 'form-control-small');
+                    $form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION', 'class' => 'form-control-small'));
+                    $form->addInput('password_confirm', $gL10n->get('SYS_CONFIRM_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
 
                     // show selectbox with all organizations of database
                     if($gPreferences['system_organization_select'] == 1)
@@ -367,8 +367,8 @@ foreach($gProfileFields->mProfileFields as $field)
                 $maxlength = '50';
             }
     
-            $form->addTextInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'),
-                $user->getValue($field->getValue('usf_name_intern')), $maxlength, $fieldProperty, $fieldType, $helpId, null, $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database'));
+            $form->addInput('usf-'. $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_id'), $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_name'), $user->getValue($field->getValue('usf_name_intern')), 
+                array('type' => $fieldType, 'maxLength' => $maxlength, 'property' => $fieldProperty, 'helpTextIdLabel' => $helpId, 'icon' => $gProfileFields->getProperty($field->getValue('usf_name_intern'), 'usf_icon', 'database')));
         }
     }
 }
@@ -397,7 +397,7 @@ else
     $btn_text  = $gL10n->get('SYS_SAVE');
 }
 
-$form->addSubmitButton('btn_save', $btn_text, THEME_PATH.'/icons/'.$btn_image);
+$form->addSubmitButton('btn_save', $btn_text, array('icon' => THEME_PATH.'/icons/'.$btn_image));
 
 if($getNewUser == 0)
 {

@@ -141,11 +141,11 @@ elseif($getMode == 'html')
         <h1>'.$gL10n->get('PRO_EDIT_PASSWORD').'</h1>';
         // show form
         $form = new HtmlForm('password_form', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
-        $form->addTextInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, 0, FIELD_MANDATORY, 'password');
+        $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
         $form->addLine();
-        $form->addTextInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', 'PRO_PASSWORD_DESCRIPTION');
-        $form->addTextInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, 0, FIELD_MANDATORY, 'password');
-        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png', null, null, ' col-sm-offset-3');
+        $form->addInput('new_password', $gL10n->get('PRO_NEW_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'helpTextIdLabel' => 'PRO_PASSWORD_DESCRIPTION'));
+        $form->addInput('new_password_confirm', $gL10n->get('SYS_REPEAT'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));
+        $form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
         $form->show();
     echo '</div>';
 }

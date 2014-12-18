@@ -41,8 +41,8 @@ $page->addHtml($loginMenu->show(false));
 
 // show form
 $form = new HtmlForm('login_form', $g_root_path.'/adm_program/system/login_check.php', $page);
-$form->addTextInput('usr_login_name', $gL10n->get('SYS_USERNAME'), null, 35, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
-$form->addTextInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, 0, FIELD_MANDATORY, 'password', null, null, null, 'form-control-small');
+$form->addInput('usr_login_name', $gL10n->get('SYS_USERNAME'), null, array('maxLength' => 35, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
+$form->addInput('usr_password', $gL10n->get('SYS_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
 // show selectbox with all organizations of database
 if($gPreferences['system_organization_select'] == 1)
 {
@@ -54,7 +54,7 @@ if($gPreferences['enable_auto_login'] == 1)
 {
     $form->addCheckbox('auto_login', $gL10n->get('SYS_REMEMBER_ME'), '0');
 }
-$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), THEME_PATH.'/icons/key.png');
+$form->addSubmitButton('btn_login', $gL10n->get('SYS_LOGIN'), array('icon' => THEME_PATH.'/icons/key.png'));
 $page->addHtml($form->show(false));
 
 if($gPreferences['registration_mode'] > 0)

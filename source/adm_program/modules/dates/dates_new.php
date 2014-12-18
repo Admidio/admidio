@@ -224,12 +224,12 @@ $page->addHtml($datesMenu->show(false));
 // show form
 $form = new HtmlForm('dates_edit_form', $g_root_path.'/adm_program/modules/dates/dates_function.php?dat_id='.$getDateId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->get('DAT_LOCATION'));
-    $form->addTextInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), 100, FIELD_MANDATORY);
+    $form->addInput('dat_headline', $gL10n->get('SYS_TITLE'), $date->getValue('dat_headline'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
     
     // if a map link should be shown in the event then show help text and a field where the user could choose the country
     if($gPreferences['dates_show_map_link'] == true)
     {
-        $form->addTextInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), 50, FIELD_DEFAULT, 'text', 'DAT_LOCATION_LINK');
+        $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50, 'helpTextIdLabel' => 'DAT_LOCATION_LINK'));
     
     	if(strlen($date->getValue('dat_country')) == 0 && $getDateId == 0)
     	{
@@ -239,7 +239,7 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
     }
     else
     {
-        $form->addTextInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), 50, FIELD_DEFAULT);
+        $form->addInput('dat_location', $gL10n->get('DAT_LOCATION'), $date->getValue('dat_location'), array('maxLength' => 50));
     }
     
     // if room selection is activated then show a selectbox with all rooms
@@ -258,8 +258,8 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
 $form->closeGroupBox();
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
     $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
-    $form->addTextInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin'), 0, FIELD_MANDATORY, 'datetime');
-    $form->addTextInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end'), 0, FIELD_MANDATORY, 'datetime');
+    $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin'), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
+    $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end'), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
     $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES', 
                                      array('property' => FIELD_MANDATORY, 'defaultValue' => $date->getValue('dat_cat_id')));
 $form->closeGroupBox();
@@ -296,13 +296,14 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
 	}
     $form->addCheckbox('date_registration_possible', $gL10n->get('DAT_REGISTRATION_POSSIBLE'), $dateRegistrationPossible, array('helpTextIdLabel' => 'DAT_LOGIN_POSSIBLE'));
     $form->addCheckbox('date_current_user_assigned', $gL10n->get('DAT_PARTICIPATE_AT_DATE'), $dateCurrentUserAssigned, array('helpTextIdLabel' => 'DAT_PARTICIPATE_AT_DATE_DESC'));
-    $form->addTextInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), array(0, 99999, 1), FIELD_DEFAULT, 'number', 'DAT_MAX_MEMBERS');
+    $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), 
+                    array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
     $form->addEditor('dat_description', null, $date->getValue('dat_description'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($date->getValue('dat_usr_id_create'), $date->getValue('dat_timestamp_create'), $date->getValue('dat_usr_id_change'), $date->getValue('dat_timestamp_change')));
 
 // add form to html page and show page

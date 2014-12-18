@@ -176,7 +176,7 @@ if($getMode == 'choose')
     $form = new HtmlForm('upload_files_form', $g_root_path.'/adm_program/modules/profile/profile_photo_edit.php?mode=upload&amp;usr_id='.$getUserId, $page, 'default', true);
     $form->addCustomContent($gL10n->get('PRO_CURRENT_PICTURE'), '<img class="imageFrame" src="profile_photo_show.php?usr_id='.$getUserId.'" alt="'.$gL10n->get('PRO_CURRENT_PICTURE').'" />');
     $form->addFileUpload('foto_upload_file', $gL10n->get('PRO_CHOOSE_PHOTO'), array('helpTextIdLabel' => 'profile_photo_up_help'));
-    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), THEME_PATH.'/icons/photo_upload.png', null, null, ' col-sm-offset-3');
+    $form->addSubmitButton('btn_upload', $gL10n->get('PRO_UPLOAD_PHOTO'), array('icon' => THEME_PATH.'/icons/photo_upload.png', 'class' => ' col-sm-offset-3'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -263,7 +263,7 @@ elseif($getMode == 'upload')
     $form->addLine();
     $form->openButtonGroup();
     $form->addButton('btn_cancel', $gL10n->get('SYS_ABORT'), array('icon' => THEME_PATH.'/icons/error.png'));
-    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), THEME_PATH.'/icons/database_in.png');
+    $form->addSubmitButton('btn_update', $gL10n->get('SYS_APPLY'), array('icon' => THEME_PATH.'/icons/database_in.png'));
     $form->closeButtonGroup();
 
     // add form to html page and show page

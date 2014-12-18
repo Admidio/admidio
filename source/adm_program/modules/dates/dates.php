@@ -226,8 +226,8 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         $FilterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$getHeadline, $page, 'navbar');
         $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', array('defaultValue' => $dates->getParameter('cat_id')));
-        $form->addTextInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
-        $form->addTextInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
+        $form->addInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
+        $form->addInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
         $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
         $FilterNavbar->addForm($form->show(false));
         $page->addHtml($FilterNavbar->show(false));

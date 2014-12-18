@@ -143,13 +143,13 @@ $form = new HtmlForm('guestbook_comment_edit_form', $g_root_path.'/adm_program/m
 if ($gCurrentUser->getValue('usr_id') > 0)
 {
     // registered users should not change their name
-    $form->addTextInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), 60, FIELD_DISABLED);
+    $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), array('maxLength' => 60, 'property' => FIELD_DISABLED));
 }
 else
 {
-    $form->addTextInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), 60, FIELD_MANDATORY);
+    $form->addInput('gbc_name', $gL10n->get('SYS_NAME'), $guestbook_comment->getValue('gbc_name'), array('maxLength' => 60, 'property' => FIELD_MANDATORY));
 }
-$form->addTextInput('gbc_email', $gL10n->get('SYS_EMAIL'), $guestbook_comment->getValue('gbc_email'), 50, FIELD_DEFAULT, 'email');
+$form->addInput('gbc_email', $gL10n->get('SYS_EMAIL'), $guestbook_comment->getValue('gbc_email'), array('type' => 'email', 'maxLength' => 50));
 $form->addEditor('gbc_text', $gL10n->get('SYS_COMMENT'), $guestbook_comment->getValue('gbc_text'), array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));
 
 // if captchas are enabled then visitors of the website must resolve this
@@ -161,7 +161,7 @@ if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
 }
 
 // show informations about user who creates the recordset and changed it
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($guestbook_comment->getValue('gbc_usr_id_create'), $guestbook_comment->getValue('gbc_timestamp_create'), $guestbook_comment->getValue('gbc_usr_id_change'), $guestbook_comment->getValue('gbc_timestamp_change')));
 
 // add form to html page and show page

@@ -23,13 +23,13 @@
  *  $form->addLabel('Field_1', 'ID_1');
  *  // set an input element like a text field. All valid types are supported
  *  // you can define further attributes as associative array and set as parameter in correct position
- *  $form->addInput('text', 'Input_1', 'ID_1', 'Value_1', $attrArray);
+ *  $form->addSimpleInput('text', 'Input_1', 'ID_1', 'Value_1', $attrArray);
  *  // add a linebreak
  *  $form->linebreak();
  *  // next label
  *  $form->addLabel('Radio_1', 'ID_2');
  *  // next element is a radio button
- *  $form->addInput('radio', 'Radio_1', 'ID_2', 'Value_Radio');
+ *  $form->addSimpleInput('radio', 'Radio_1', 'ID_2', 'Value_Radio');
  *  // add a linebreak
  *  $form->linebreak();
  *  // Define a select box
@@ -125,7 +125,7 @@ class HtmlFormBasic extends HtmlElement
      *  @param $value         Value of the field (Default: empty)
      *  @param $arrAttributes Further attributes as array with key/value pairs
      */
-    public function addInput($type , $name, $id = null, $value ='', $arrAttributes = null)
+    public function addSimpleInput($type , $name, $id = null, $value ='', $arrAttributes = null)
     {
         $this->addElement('input', '', '', '',  true);
         

@@ -115,7 +115,7 @@ else
     // show form
     $form = new HtmlForm('lost_password_form', $g_root_path.'/adm_program/system/lost_password.php', $page);
     $form->addDescription($gL10n->get('SYS_PASSWORD_FORGOTTEN_DESCRIPTION'));
-    $form->addTextInput('recipient_email', $gL10n->get('SYS_EMAIL'), null, 50, FIELD_MANDATORY);
+    $form->addInput('recipient_email', $gL10n->get('SYS_EMAIL'), null, array('maxLength' => 50, 'property' => FIELD_MANDATORY));
 
     // if captchas are enabled then visitors of the website must resolve this
     if (!$gValidLogin && $gPreferences['enable_mail_captcha'] == 1)
@@ -123,7 +123,7 @@ else
         $form->addCaptcha('captcha', $gPreferences['captcha_type']);
     }
 
-    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), THEME_PATH.'/icons/email.png');
+    $form->addSubmitButton('btn_send', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH.'/icons/email.png'));
 
     // add form to html page and show page
     $page->addHtml($form->show(false));

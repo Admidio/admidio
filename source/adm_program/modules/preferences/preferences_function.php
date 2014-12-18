@@ -275,10 +275,10 @@ case 2:
 
     // show form
     $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?mode=3', $page);
-    $form->addTextInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'], 10, FIELD_MANDATORY, 'text', null, null, null, 'form-control-small');
-    $form->addTextInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'], 50, FIELD_MANDATORY);
-    $form->addTextInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'], 50, FIELD_MANDATORY, 'email');
-    $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'), THEME_PATH.'/icons/database_in.png', null, null, ' col-sm-offset-3');
+    $form->addInput('orgaShortName', $gL10n->get('SYS_NAME_ABBREVIATION'), $formValues['orgaShortName'], array('maxLength' => 10, 'property' => FIELD_MANDATORY, 'class' => 'form-control-small'));
+    $form->addInput('orgaLongName', $gL10n->get('SYS_NAME'), $formValues['orgaLongName'], array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addInput('orgaEmail', $gL10n->get('ORG_SYSTEM_MAIL_ADDRESS'), $formValues['orgaEmail'], array('type' => 'email', 'maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addSubmitButton('btn_foward', $gL10n->get('INS_SET_UP_ORGANIZATION'), array('icon' => THEME_PATH.'/icons/database_in.png', 'class' => ' col-sm-offset-3'));
     
     // add form to html page and show page
     $page->addHtml($form->show(false));
@@ -348,7 +348,7 @@ case 3:
 
     // show form
     $form = new HtmlForm('add_new_organization_form', $g_root_path.'/adm_program/modules/preferences/preferences.php', $page);
-    $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), THEME_PATH.'/icons/forward.png');
+    $form->addSubmitButton('btn_foward', $gL10n->get('SYS_NEXT'), array('icon' => THEME_PATH.'/icons/forward.png'));
     
     // add form to html page and show page
     $page->addHtml($form->show(false));

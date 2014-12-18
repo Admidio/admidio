@@ -13,11 +13,11 @@
  *  @code // create a simple form with one input field and a button
  *  $form = new HtmlForm('simple-form', 'next_page.php');
  *  $form->openGroupBox('gbSimpleForm', $gL10n->get('SYS_SIMPLE_FORM'));
- *  $form->addTextInput('name', $gL10n->get('SYS_NAME'), $formName);
+ *  $form->addInput('name', $gL10n->get('SYS_NAME'), $formName);
  *  $form->addSelectBox('type', $gL10n->get('SYS_TYPE'), array('simple' => 'SYS_SIMPLE', 'very-simple' => 'SYS_VERY_SIMPLE'), 
  *                      array('defaultValue' => 'simple', 'showContextDependentFirstEntry' => true));
  *  $form->closeGroupBox();
- *  $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), 'layout/forward.png');
+ *  $form->addSubmitButton('next-page', $gL10n->get('SYS_NEXT'), array('icon' => 'layout/forward.png'));
  *  $form->show();@endcode
  */
 /*****************************************************************************
@@ -257,7 +257,7 @@ class HtmlForm extends HtmlFormBasic
         $this->closeControlStructure();
         
         // now add a row with a text field where the user can write the solution for the puzzle
-        $this->addTextInput($id, $captchaLabel, null, 0, FIELD_MANDATORY, 'text', $captchaDescription, false, null, 'form-control-small');
+        $this->addInput($id, $captchaLabel, null, array('property' => FIELD_MANDATORY, 'helpTextIdLabel' => $captchaDescription, 'class' => 'form-control-small'));
     }
     
     /** Add a new checkbox with a label to the form.
@@ -338,7 +338,7 @@ class HtmlForm extends HtmlFormBasic
         // now create html for the field
         $this->openControlStructure($id, null, null);
         $this->addHtml('<div class="'.$cssClasses.'"><label>');
-        $this->addInput('checkbox', $id, $id, '1', $attributes);
+        $this->addSimpleInput('checkbox', $id, $id, '1', $attributes);
 		$this->addHtml($htmlIcon.$label.$htmlHelpIcon.'</label></div>');
 		$this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
@@ -542,13 +542,13 @@ class HtmlForm extends HtmlFormBasic
         }
         
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-upload');
-        $this->addInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $optionsAll['maxUploadSize']);
+        $this->addSimpleInput('hidden', 'MAX_FILE_SIZE', 'MAX_FILE_SIZE', $optionsAll['maxUploadSize']);
         
         // if multi uploads are enabled then the file upload field could be hidden
         // until the user will click on the button to add a new upload field
         if($optionsAll['hideUploadField'] == false || $optionsAll['enableMultiUploads'] == false)
         {
-            $this->addInput('file', 'userfile[]', null, null, $attributes);
+            $this->addSimpleInput('file', 'userfile[]', null, null, $attributes);
         }
 
         if($optionsAll['enableMultiUploads'])
@@ -559,6 +559,141 @@ class HtmlForm extends HtmlFormBasic
     				<a class="icon-text-link add-attachement-link"><img
                         src="'. THEME_PATH. '/icons/add.png" alt="'.$optionsAll['multiUploadLabel'].'" />'.$optionsAll['multiUploadLabel'].'</a>
                 </span>');
+        }
+        $this->closeControlStructure($optionsAll['helpTextIdInline']);
+    }
+    
+    /** Add a new input field with a label to the form.
+     *  @param $id      Id of the input field. This will also be the name of the input field.
+     *  @param $label   The label of the input field.
+	 *  @param $value   A value for the text field. The field will be created with this value.
+     *  @param $options An array with the following possible entries:
+     *                  @b type       Set the type if the field. Default will be @b text. Possible values are @b text, @b number, @b date 
+     *                     or @datetime. If @b date or @datetime are set than a small calendar will be shown if the date field
+     *                     will be selected.
+     *                  @b maxLength The maximum number of characters that are allowed in a text field.
+     *                  @b minNumber The minimum number that is allowed in a number field.
+     *                  @b maxNumber The maximum number that is allowed in a number field.
+     *                  @b step      The steps between two numbers that are allowed. 
+     *                               E.g. if steps is set to 5 then only values 5, 10, 15 ... are allowed
+     *                  @b property   With this param you can set the following properties: 
+     *                     @b FIELD_DEFAULT The field can accept an input.
+     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
+     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
+	 *                  @b helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+	 *                  @b helpTextIdInline   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set the complete text will be shown after the form element.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *                  @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                  @b class Optional an additional css classname. The class @b admTextInput
+     *                     is set as default and need not set with this parameter.
+     */
+    public function addInput($id, $label, $value, $options = array())
+    {
+        global $gL10n, $gPreferences, $g_root_path;
+        
+        $attributes = array('class' => 'form-control');
+        $this->countElements++;
+
+        // create array with all options
+        $optionsDefault = array('type' => 'text', 'maxLength' => 0, 'minNumber' => null, 'maxNumber' => null, 'step' => 1,
+                                'property' => FIELD_DEFAULT, 'helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+
+        // set max input length
+        if($optionsAll['type'] == 'text' && $optionsAll['maxLength'] > 0)
+        {
+            $attributes['maxlength'] = $optionsAll['maxLength'];
+        }
+        elseif($optionsAll['type'] == 'number' && is_array($conditions))
+        {
+            $attributes['min'] = $optionsAll['minNumber'];
+            $attributes['max'] = $optionsAll['maxNumber'];
+            $attributes['step'] = $optionsAll['step'];
+        }
+
+        // disable field
+        if($optionsAll['property'] == FIELD_DISABLED)
+        {
+            $attributes['disabled'] = 'disabled';
+        }
+		elseif($optionsAll['property']  == FIELD_MANDATORY)
+		{
+		    $attributes['required'] = 'required';
+		}
+
+        // set specific css class for this field
+        if(strlen($optionsAll['class']) > 0)
+        {
+            $attributes['class'] .= ' '.$optionsAll['class'];
+        }
+        
+        // add a nice modern datepicker to date inputs
+        if($optionsAll['type'] == 'date' || $optionsAll['type'] == 'datetime')
+        {
+            $datepickerOptions = '';
+            
+            $attributes['data-provide'] = 'datepicker';
+            $javascriptCode             = '';
+            
+
+            if($this->datepickerInitialized == false)
+            {
+                $javascriptCode = '
+                    $("input[data-provide=\'datepicker\']").datepicker({
+                        language: "'.$gPreferences['system_language'].'",
+                        format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
+                        '.$datepickerOptions.'todayHighlight: "true",
+                        autoclose: "true"
+                    });';
+                $this->datepickerInitialized = true;
+            }
+
+            // if a htmlPage object was set then add code to the page, otherwise to the current string
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
+                $this->htmlPage->addJavascript($javascriptCode, true);
+            }
+            else
+            {
+                $this->addHtml('<script type="text/javascript">'.$javascriptCode.'</script>');
+            }
+        }
+        
+        // now create html for the field
+        $this->openControlStructure($id, $label, $optionsAll['property'] , $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
+        
+        // if datetime then add a time field behind the date field
+        if($optionsAll['type'] == 'datetime')
+        {
+            // first try to split datetime to a date and a time value
+            $datetime = new DateTimeExtended($value, $gPreferences['system_date'].' '.$gPreferences['system_time']);
+            $dateValue = $datetime->format($gPreferences['system_date']);
+            $timeValue = $datetime->format($gPreferences['system_time']);
+        
+            // now add a date and a time field to the form
+            $attributes['class']    .= ' datetime-date-control';
+            $this->addSimpleInput('text', $id, $id, $dateValue, $attributes);  
+            $attributes['class']    .= ' datetime-time-control';
+            $attributes['maxlength'] = '5';
+            $attributes['data-provide'] = '';
+            $this->addSimpleInput('text', $id.'_time', $id.'_time', $timeValue, $attributes);        
+        }
+        else
+        {
+            // a date type has some problems with chrome so we set it as text type
+            if($optionsAll['type'] == 'date')
+            {
+                $optionsAll['type'] = 'text';
+            }
+            $this->addSimpleInput($optionsAll['type'], $id, $id, $value, $attributes);        
         }
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
@@ -722,7 +857,7 @@ class HtmlForm extends HtmlFormBasic
 	        }
             
 	        $this->addHtml('<label for="'.($id.'_0').'" class="radio-inline">');
-	        $this->addInput('radio', $id, ($id.'_0'), null, $attributes);
+	        $this->addSimpleInput('radio', $id, ($id.'_0'), null, $attributes);
 	        $this->addHtml('---</label>');
         }
         
@@ -737,7 +872,7 @@ class HtmlForm extends HtmlFormBasic
 	        }
 	        
 	        $this->addHtml('<label for="'.($id.'_'.$key).'" class="radio-inline">');
-	        $this->addInput('radio', $id, ($id.'_'.$key), $key, $attributes);
+	        $this->addSimpleInput('radio', $id, ($id.'_'.$key), $key, $attributes);
 	        $this->addHtml($value.'</label>');
 		}
         
@@ -1171,196 +1306,76 @@ class HtmlForm extends HtmlFormBasic
     
     /** Add a new static control to the form. A static control is only a simple text instead of an input field. This 
      *  could be used if the value should not be changed by the user.
-     *  @param $id         Id of the static control. This will also be the name of the static control.
-     *  @param $label      The label of the static control.
-	 *  @param $value      A value of the static control. The control will be created with this value.
-	 *  @param $helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                           If set the complete text will be shown after the form element.
-     *                           If you need an additional parameter for the text you can add an array. The first entry must
-     *                           be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Optional an icon can be set. This will be placed in front of the label.
-     *  @param $sclass      Optional an additional css classname. The class @b form-control-static
+     *  @param $id      Id of the static control. This will also be the name of the static control.
+     *  @param $label   The label of the static control.
+	 *  @param $value   A value of the static control. The control will be created with this value.
+     *  @param $options An array with the following possible entries:
+	 *                  @b helpTextIdLabel  A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+	 *                  @b helpTextIdInline A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
+     *                     If set the complete text will be shown after the form element.
+     *                     If you need an additional parameter for the text you can add an array. The first entry must
+     *                     be the unique text id and the second entry will be a parameter of the text id.     
+     *                  @b icon  Optional an icon can be set. This will be placed in front of the label.
+     *                  @b class Optional an additional css classname. The class @b form-control-static
      *                     is set as default and need not set with this parameter.
      */
-    public function addStaticControl($id, $label, $value, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
+    public function addStaticControl($id, $label, $value, $options = array()) //, $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
     {
         $attributes = array('class' => 'form-control-static');
         $this->countElements++;
 
+        // create array with all options
+        $optionsDefault = array('helpTextIdLabel' => null, 'helpTextIdInline' => null, 'icon' => null, 'class' => null);
+        $optionsAll     = array_replace($optionsDefault, $options);
+
         // set specific css class for this field
-        if(strlen($class) > 0)
+        if(strlen($optionsAll['class']) > 0)
         {
-            $attributes['class'] .= ' '.$class;
+            $attributes['class'] .= ' '.$optionsAll['class'];
         }
 
         // now create html for the field
-        $this->openControlStructure(null, $label, FIELD_DEFAULT, $helpTextIdLabel, $icon);
+        $this->openControlStructure(null, $label, FIELD_DEFAULT, $optionsAll['helpTextIdLabel'], $optionsAll['icon']);
         $this->addHtml('<p class="form-control-static">'.$value.'</p>');
-        $this->closeControlStructure($helpTextIdInline);
+        $this->closeControlStructure($optionsAll['helpTextIdInline']);
     }
     
     /** Add a new button with a custom text to the form. This button could have 
      *  an icon in front of the text. Different to addButton this method adds an
      *  additional @b div around the button and the type of the button is @b submit.
-     *  @param $id    Id of the button. This will also be the name of the button.
-     *  @param $text  Text of the button
-     *  @param $icon  Optional parameter. Path and filename of an icon. 
-     *                If set a icon will be shown in front of the text.
-     *  @param $link  If set a javascript click event with a page load to this link 
-     *                will be attached to the button.
-     *  @param $onClickText A text that will be shown after a click on this button 
-     *                until the next page is loaded. The button will be disabled after click.
-     *  @param $class Optional an additional css classname. The class @b admButton
-     *                is set as default and need not set with this parameter.
-     *  @param $type  If set to true this button get the type @b submit. This will 
-     *                be the default.
+     *  @param $id      Id of the button. This will also be the name of the button.
+     *  @param $text    Text of the button
+     *  @param $options An array with the following possible entries:
+     *                  @b icon  Optional parameter. Path and filename of an icon. 
+     *                     If set a icon will be shown in front of the text.
+     *                  @b link  If set a javascript click event with a page load to this link 
+     *                     will be attached to the button.
+     *                  @b onClickText A text that will be shown after a click on this button 
+     *                     until the next page is loaded. The button will be disabled after click.
+     *                  @b class Optional an additional css classname. The class @b admButton
+     *                     is set as default and need not set with this parameter.
+     *                  @b type  If set to true this button get the type @b submit. This will 
+     *                     be the default.
      */
-    public function addSubmitButton($id, $text, $icon = null, $link = null, $onClickText = null, $class = null, $type = 'submit')
+    public function addSubmitButton($id, $text, $options = array())
     {
-        $class .= ' btn-primary btn-form';
+        // create array with all options
+        $optionsDefault = array('icon' => null, 'link' => null, 'onClickText' => null, 'class' => null, 'type' => 'submit');
+        $optionsAll     = array_replace($optionsDefault, $options);
+
+        // add default css class
+        $optionsAll['class'] .= ' btn-primary btn-form';
 
         // now add button to form
-        $this->addButton($id, $text, array('icon' => $icon, 'link' => $link, 'onClickText' => $onClickText, 'class' => $class, 'type' => $type));
+        $this->addButton($id, $text, $optionsAll);
         
         if($this->buttonGroupOpen == false)
         {
             $this->addHtml('<div class="form-alert" style="display: none">&nbsp;</div>');
         }
-    }
-    
-    /** Add a new input field with a label to the form.
-     *  @param $id         Id of the input field. This will also be the name of the input field.
-     *  @param $label      The label of the input field.
-	 *  @param $value      A value for the text field. The field will be created with this value.
-     *  @param $conditions Here you can define conditions to the field depending on the field $type
-     *                     $type 'text'   = The maximum number of characters that are allowed in this field.
-     *                     $type 'number' = An array that contains the min number, the max number and the steps
-     *                                      e.g. array(0, 10000, 5) then a value between 0 and 10000 is allowed
-     *                                      in steps of 5:   5, 10, 15 ...
-     *  @param $property   With this param you can set the following properties: 
-     *                     @b FIELD_DEFAULT The field can accept an input.
-     *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
-     *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
-     *  @param $type       Set the type if the field. Default will be @b text. Possible values are @b text, @b number, @b date 
-     *                     or @datetime. If @b date or @datetime are set than a small calendar will be shown if the date field
-     *                     will be selected.
-	 *  @param $helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                             If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
-     *                             If you need an additional parameter for the text you can add an array. The first entry must
-     *                             be the unique text id and the second entry will be a parameter of the text id.     
-	 *  @param $helpTextIdInline   A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
-     *                             If set the complete text will be shown after the form element.
-     *                             If you need an additional parameter for the text you can add an array. The first entry must
-     *                             be the unique text id and the second entry will be a parameter of the text id.     
-     *  @param $icon       Optional an icon can be set. This will be placed in front of the label.
-     *  @param $class      Optional an additional css classname. The class @b admTextInput
-     *                     is set as default and need not set with this parameter.
-     */
-    public function addTextInput($id, $label, $value, $conditions = 0, $property = FIELD_DEFAULT, $type = 'text', 
-                                 $helpTextIdLabel = null, $helpTextIdInline = null, $icon = null, $class = '')
-    {
-        global $gL10n, $gPreferences, $g_root_path;
-        
-        $this->countElements++;
-
-        $attributes = array('class' => 'form-control');
-
-        // set max input length
-        if($type == 'text' && $conditions > 0)
-        {
-            $attributes['maxlength'] = $conditions;
-        }
-        elseif($type == 'number' && is_array($conditions))
-        {
-            $attributes['min'] = $conditions[0];
-            $attributes['max'] = $conditions[1];
-            $attributes['step'] = $conditions[2];
-        }
-
-        // disable field
-        if($property == FIELD_DISABLED)
-        {
-            $attributes['disabled'] = 'disabled';
-        }
-		else if ($property == FIELD_MANDATORY)
-		{
-		    $attributes['required'] = 'required';
-		}
-
-        // set specific css class for this field
-        if(strlen($class) > 0)
-        {
-            $attributes['class'] .= ' '.$class;
-        }
-        
-        // add a nice modern datepicker to date inputs
-        if($type == 'date' || $type == 'datetime')
-        {
-            $datepickerOptions = '';
-            
-            $attributes['data-provide'] = 'datepicker';
-            $javascriptCode             = '';
-            
-
-            if($this->datepickerInitialized == false)
-            {
-                $javascriptCode = '
-                    $("input[data-provide=\'datepicker\']").datepicker({
-                        language: "'.$gPreferences['system_language'].'",
-                        format: "'.DateTimeExtended::getDateFormatForDatepicker($gPreferences['system_date']).'",
-                        '.$datepickerOptions.'todayHighlight: "true",
-                        autoclose: "true"
-                    });';
-                $this->datepickerInitialized = true;
-            }
-
-            // if a htmlPage object was set then add code to the page, otherwise to the current string
-            if(is_object($this->htmlPage))
-            {
-                $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/locales/bootstrap-datepicker.'.$gPreferences['system_language'].'.js');
-                $this->htmlPage->addJavascript($javascriptCode, true);
-            }
-            else
-            {
-                $this->addHtml('<script type="text/javascript">'.$javascriptCode.'</script>');
-            }
-        }
-        
-        // now create html for the field
-        $this->openControlStructure($id, $label, $property, $helpTextIdLabel, $icon);
-        
-        // if datetime then add a time field behind the date field
-        if($type == 'datetime')
-        {
-            // first try to split datetime to a date and a time value
-            $datetime = new DateTimeExtended($value, $gPreferences['system_date'].' '.$gPreferences['system_time']);
-            $dateValue = $datetime->format($gPreferences['system_date']);
-            $timeValue = $datetime->format($gPreferences['system_time']);
-        
-            // now add a date and a time field to the form
-            $attributes['class']    .= ' datetime-date-control';
-            $this->addInput('text', $id, $id, $dateValue, $attributes);  
-            $attributes['class']    .= ' datetime-time-control';
-            $attributes['maxlength'] = '5';
-            $attributes['data-provide'] = '';
-            $this->addInput('text', $id.'_time', $id.'_time', $timeValue, $attributes);        
-        }
-        else
-        {
-            // a date type has some problems with chrome so we set it as text type
-            if($type == 'date')
-            {
-                $type = 'text';
-            }
-            $this->addInput($type, $id, $id, $value, $attributes);        
-        }
-        $this->closeControlStructure($helpTextIdInline);
     }
     
     /** Close an open bootstrap btn-group

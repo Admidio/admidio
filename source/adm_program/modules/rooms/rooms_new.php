@@ -69,15 +69,15 @@ $page->addHtml($roomsMenu->show(false));
 // show form
 $form = new HtmlForm('rooms_edit_form', $g_root_path.'/adm_program/modules/rooms/rooms_function.php?room_id='.$getRoomId.'&amp;mode=1', $page);
 $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL10n->get('SYS_PROPERTIES'));
-    $form->addTextInput('room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'), 100, FIELD_MANDATORY);
-    $form->addTextInput('room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', $room->getValue('room_capacity'), array(0, 99999, 1), FIELD_MANDATORY, 'number');
-    $form->addTextInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('room_overhang'), array(0, 99999, 1), FIELD_DEFAULT, 'number', 'DAT_ROOM_OVERHANG');
+    $form->addInput('room_name', $gL10n->get('SYS_ROOM'), $room->getValue('room_name'), array('maxLength' => 100, 'property' => FIELD_MANDATORY));
+    $form->addInput('room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', $room->getValue('room_capacity'),  array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'property' => FIELD_MANDATORY));
+    $form->addInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('room_overhang'), array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG'));
 $form->closeGroupBox();
 $form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
     $form->addEditor('room_description', null, $room->getValue('room_description'), array('height' => '150px'));
 $form->closeGroupBox();
 
-$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), THEME_PATH.'/icons/disk.png');
+$form->addSubmitButton('btn_save', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png'));
 $form->addHtml(admFuncShowCreateChangeInfoById($room->getValue('room_usr_id_create'), $room->getValue('room_timestamp_create'), $room->getValue('dat_usr_id_change'), $room->getValue('room_timestamp_change')));
 
 // add form to html page and show page
