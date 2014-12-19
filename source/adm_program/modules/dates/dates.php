@@ -385,30 +385,22 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
             {
                 // if active, then show room information
                 $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
-                $locationHtml = '<strong><a class="colorbox-dialog" href="'.$roomLink.'">'.$room->getValue('room_name').'</a></strong>';
+                $locationHtml = '<strong><a class="colorbox-dialog" href="'.$roomLink.'">'.$row['room_name'].'</a></strong>';
                 $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
             }
 
             // count participants of the date
             if($date->getValue('dat_rol_id') > 0)
             {
-                $leadersHtml = '-';
+                $numMembers  = $row['dat_num_members'];
 
-                $numMembers = $row['dat_num_members'];
                 if($date->getValue('dat_max_members')!=0)
                 {
-                    $participantsHtml = '<strong>'.$row['dat_num_members'].'</strong>';
-                    $leadersHtml = $row['dat_num_leaders'];
                     $maxMembers = $date->getValue('dat_max_members');
                 }
-                else
-                {
-                    $participantsHtml = '<strong>'.$gL10n->get('SYS_UNLIMITED').'</strong>';
-                    $leadersHtml = '0';
-                    $maxMembers = '&infin;';
-                }
-                $dateElements[] = array($gL10n->get('SYS_LEADER'), '<strong>'.$leadersHtml.'</strong>');
-                $dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), $participantsHtml);
+
+                $dateElements[] = array($gL10n->get('SYS_LEADER'), '<strong>'.$row['dat_num_leaders'].'</strong>');
+                $dateElements[] = array($gL10n->get('SYS_PARTICIPANTS'), '<strong>'.$row['dat_num_members'].'</strong>');
             }
 
             if($date->getValue('dat_rol_id') > 0)
