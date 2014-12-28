@@ -63,7 +63,7 @@ if($gCurrentUser->isWebmaster())
 $page->addHtml($itemsAdministrationMenu->show(false));
 
 //Create table object
-$itemsTable = new HtmlTable('tbl_items', $page, true, true, 'table table-condensed');
+$itemsTable = new HtmlTable('tbl_invent', $page, true, true, 'table table-condensed');
 
 // create array with all column heading values
 $columnHeading = array(
@@ -98,13 +98,13 @@ while($row = $gDb->fetch_array($result_mgl))
     $itemAdministration = '';
 
 	// Link to modify Item
-	$itemAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/profile_new.php?user_id='. $row['usr_id']. '"><img
+	$itemAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/item_new.php?item_id='. $row['inv_id']. '"><img
 						        src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('MEM_EDIT_USER').'" title="'.$gL10n->get('MEM_EDIT_USER').'" /></a>';
 
 	// remove Item
 	if( $gCurrentUser->isWebmaster()) // just Webmaster can remove items
 	{
-		$itemAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/members_function.php?inv_id='.$row['inv_id'].'&amp;mode=6"><img
+		$itemAdministration .= '<a class="icon-link" href="'.$g_root_path.'/adm_program/modules/inventory/items_function.php?item_id='.$row['inv_id'].'&amp;mode=6"><img
 			                        src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('MEM_REMOVE_USER').'" title="'.$gL10n->get('MEM_REMOVE_USER').'" /></a>';
 	}
 	else
