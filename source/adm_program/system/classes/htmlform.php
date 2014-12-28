@@ -609,7 +609,7 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['maxlength'] = $optionsAll['maxLength'];
         }
-        elseif($optionsAll['type'] == 'number' && is_array($conditions))
+        elseif($optionsAll['type'] == 'number')
         {
             $attributes['min'] = $optionsAll['minNumber'];
             $attributes['max'] = $optionsAll['maxNumber'];

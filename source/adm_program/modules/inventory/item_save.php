@@ -17,8 +17,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getItemId  = admFuncVariableIsValid($_GET, 'item_id', 'numeric', 0);
-$getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'numeric', 0);
+$getItemId  = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
+$getNewItem = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 
 // if current user has no valid login show error
 if($gValidLogin == false)

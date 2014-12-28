@@ -18,7 +18,7 @@ require_once('../../system/login_valid.php');
 require_once('roles_functions.php');
 
 // Initialize and check the parameters
-$getItemId = admFuncVariableIsValid($_GET, 'item_id', 'numeric', 0);
+$getItemId = admFuncVariableIsValid($_GET, 'item_id', 'numeric');
 
 // create user object
 $user = new User($gDb, $gProfileFields, $getItemId);

@@ -16,7 +16,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getInfId = admFuncVariableIsValid($_GET, 'inf_id', 'numeric', 0);
+$getInfId = admFuncVariableIsValid($_GET, 'inf_id', 'numeric');
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())

@@ -20,9 +20,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getInfId    = admFuncVariableIsValid($_GET, 'inf_id', 'numeric', 0);
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
-$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', '', false, array('UP', 'DOWN'));
+$getInfId    = admFuncVariableIsValid($_GET, 'inf_id', 'numeric');
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
+$getSequence = admFuncVariableIsValid($_GET, 'sequence', 'string', array('validValues' => array('UP', 'DOWN')));
 
 // nur berechtigte User duerfen die Item fields bearbeiten
 if (!$gCurrentUser->isWebmaster())
