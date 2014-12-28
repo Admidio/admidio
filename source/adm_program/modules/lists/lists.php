@@ -20,9 +20,9 @@ require_once('../../system/common.php');
 unset($_SESSION['mylist_request']);
 
 // Initialize and check the parameters
-$getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
-$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', 1);
+$getStart      = admFuncVariableIsValid($_GET, 'start', 'numeric');
+$getCatId      = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
+$getActiveRole = admFuncVariableIsValid($_GET, 'active_role', 'boolean', array('defaultValue' => 1));
 
 //New Modulelist object
 $lists = new ModuleLists();

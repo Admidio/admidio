@@ -32,16 +32,16 @@ require_once('../../system/common.php');
 unset($_SESSION['dates_request']);
 
 // Initialize and check the parameters
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old', 'all'));
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('DAT_DATES'));   
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
-$getId       = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$getShow     = admFuncVariableIsValid($_GET, 'show', 'string', 'all', false, array('all', 'maybe_participate', 'only_participate'));
-$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric', 0);
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old', 'all')));
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
+$getId       = admFuncVariableIsValid($_GET, 'id', 'numeric');
+$getShow     = admFuncVariableIsValid($_GET, 'show', 'string', array('defaultValue' => 'all', 'validValues' => array('all', 'maybe_participate', 'only_participate')));
+$getCatId    = admFuncVariableIsValid($_GET, 'cat_id', 'numeric');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
-$getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', $gPreferences['dates_viewmode'], false, array('html', 'compact', 'print'));
+$getViewMode = admFuncVariableIsValid($_GET, 'view_mode', 'string', array('defaultValue' => $gPreferences['dates_viewmode'], 'validValues' => array('html', 'compact', 'print')));
 
 // check if module is active
 if($gPreferences['enable_dates_module'] == 0)
@@ -226,8 +226,8 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
         $FilterNavbar = new HtmlNavbar('menu_dates_filter', null, null, 'filter');
         $form = new HtmlForm('navbar_filter_form', $g_root_path.'/adm_program/modules/dates/dates.php?headline='.$getHeadline, $page, 'navbar');
         $form->addSelectBoxForCategories('cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'FILTER_CATEGORIES', array('defaultValue' => $dates->getParameter('cat_id')));
-        $form->addInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
-        $form->addInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), 10, FIELD_DEFAULT, 'date');
+        $form->addInput('date_from', $gL10n->get('SYS_START'), $dates->getParameter('dateStartFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
+        $form->addInput('date_to', $gL10n->get('SYS_END'), $dates->getParameter('dateEndFormatAdmidio'), array('type' => 'date', 'maxLength' => 10));
         $form->addSubmitButton('btn_send', $gL10n->get('SYS_OK'));
         $FilterNavbar->addForm($form->show(false));
         $page->addHtml($FilterNavbar->show(false));

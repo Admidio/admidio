@@ -300,121 +300,151 @@ function admFuncProcessableImageSize()
 
 /// Verify the content of an array element if it's the expected datatype
 /** The function is designed to check the content of @b $_GET and @b $_POST elements and should be used at the beginning of a script.
- *  But the function can also be used with every array and their elements. You can set several flags (like required value, datatype …) 
- *  that should be checked.
- *  @param $array 			The array with the element that should be checked
- *  @param $variableName 	Name of the array element that should be checked
- *  @param $datatype 		The datatype like @b string, @b numeric, @b boolean, @b html, @b date or @b file that is expected and which will be checked.
- *							Datatype @b date expects a date that has the Admidio default format from the preferences or the english date format @b Y-m-d
- *  @param $defaultValue 	A value that will be set if the variable has no value
- *  @param $requireValue 	If set to @b true than a value is required otherwise the function returns an error
- *  @param $validValues 	An array with all values that the variable could have. If another value is found than the function returns an error
- *  @param $directOutput 	If set to @b true the function returns only the error string, if set to false a html message with the error will be returned
+ *  If the value of the defined datatype is not valid then an error will be shown. If no value was set then the parameter will
+ *  be initialized. The function can be used with every array and their elements. You can set several flags (like required value, 
+ *  datatype …) that should be checked.
+ *  @param $array 	 The array with the element that should be checked
+ *  @param $variableName Name of the array element that should be checked
+ *  @param $datatype The datatype like @b string, @b numeric, @b boolean, @b html, @b date or @b file that is expected and which will be checked.
+ *					 Datatype @b date expects a date that has the Admidio default format from the preferences or the english date format @b Y-m-d
+ *  @param $options  An array with the following possible entries:
+ *                   @b defaultValue 	A value that will be set if the variable has no value
+ *                   @b requireValue 	If set to @b true than a value is required otherwise the function returns an error
+ *                   @b validValues 	An array with all values that the variable could have. If another value is found than the function returns an error
+ *                   @b directOutput 	If set to @b true the function returns only the error string, if set to false a html message with the error will be returned
  *  @return Returns the value of the element or the error message if a test failed 
  *  @par Examples
  *  @code   // numeric value that would get a default value 0 if not set
- *  $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', 0);
+ *  $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', array('defaultValue' => 0));
  *
  *  // string that will be initialized with text of id DAT_DATES
- *  $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $g_l10n->get('DAT_DATES'));
+ *  $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $g_l10n->get('DAT_DATES')));
  *
  *  // string initialized with actual and the only allowed values are actual and old
- *  $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', 'actual', false, array('actual', 'old')); @endcode
+ *  $getMode = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'actual', 'validValues' => array('actual', 'old'))); @endcode
  */
-function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
+function admFuncVariableIsValid($array, $variableName, $datatype, $options = array()) // $defaultValue = null, $requireValue = false, $validValues = null, $directOutput = false)
 {
 	global $gL10n, $gMessage, $gPreferences;
+	
+    // create array with all options
+    $optionsDefault = array('defaultValue' => null, 'requireValue' => false, 'validValues' => null, 'directOutput' => null);
+    $optionsAll     = array_replace($optionsDefault, $options);
 	
 	$errorMessage = '';
 	$datatype = admStrToLower($datatype);
 
-    // only check if array entry exists and has a value
-	if(isset($array[$variableName]) && strlen($array[$variableName]) > 0)
+	// set default value for each datatype if no value is given and no value was required
+	if(isset($array[$variableName]) == false || strlen($array[$variableName]) == 0)
 	{
-		if($datatype == 'boolean')
-		{
-			// boolean type must be 0 or 1 otherwise throw error
-			// do not check with in_array because this function don't work properly
-			if($array[$variableName] != '0' && $array[$variableName] != '1'
-            && $array[$variableName] != 'false' && $array[$variableName] != 'true')
-			{
-                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-			}
-		}
-		elseif($validValues != null)
-		{
-			// check if parameter has a valid value
-			// do a strict check with in_array because the function don't work properly
-			if(in_array(admStrToUpper($array[$variableName]), $validValues, true) == false
-			&& in_array(admStrToLower($array[$variableName]), $validValues, true) == false)
-			{
-                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-			}
-		}
+    	if($optionsAll['requireValue'] == true)
+    	{
+        	// if value is required an no value is given then show error
+            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+    	}
+    	elseif(strlen($optionsAll['defaultValue']) > 0)
+    	{
+            // if a default value was set then take this value
+        	$array[$variableName] = $optionsAll['defaultValue'];
+    	}
+    	else
+    	{
+            // no value set then initialize the parameter
+    	    if($datatype == 'boolean' || $datatype == 'numeric')
+    	    {
+        	    $array[$variableName] = 0;
+    	    }
+    	    elseif($datatype == 'string' || $datatype == 'html')
+    	    {
+        	    $array[$variableName] = '';
+    	    }
+    	    elseif($datatype == 'date')
+    	    {
+        	    $array[$variableName] = '';
+    	    }
+    	    
+    	    return $array[$variableName];
+    	}
+	}
 
-        if($datatype == 'file')
-        {
-			try
-			{
-				admStrIsValidFileName($array[$variableName]);
-			}
-			catch(AdmException $e)
-			{
-				$errorMessage = $e->getText();
-			}
-        }
-		elseif($datatype == 'date')
-		{
-			// check if date is a valid Admidio date format
-			$objAdmidioDate = new DateTimeExtended($array[$variableName], $gPreferences['system_date'], 'date');
-			
-			if($objAdmidioDate->valid() == false)
-			{
-				// check if date has english format
-				$objEnglishDate = new DateTimeExtended($array[$variableName], 'Y-m-d', 'date');
-				
-				if($objEnglishDate->valid() == false)
-				{
-					$errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
-				}
-			}
-		}
-		elseif($datatype == 'numeric')
-		{
-			// numeric datatype should only contain numbers
-			if (is_numeric($array[$variableName]) == false)
-			{
-                $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
-			}
-		}
-		elseif($datatype == 'string')
-		{
-			$array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
-		}
-        
-        elseif($datatype == 'html')
-        {
-            // check html string vor invalid tags and scripts
-            $array[$variableName] = htmLawed(stripslashes($array[$variableName]), array('safe' => 1));
-        }
-        
-        // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
-        if(strlen($errorMessage) == 0)
-        {
-            return $array[$variableName];
-        }
-	}
-	elseif($requireValue == true)
+	if($datatype == 'boolean')
 	{
-		// Array-Eintrag existiert nicht, soll aber Pflicht sein
-        $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+		// boolean type must be 0 or 1 otherwise throw error
+		// do not check with in_array because this function don't work properly
+		if($array[$variableName] != '0' && $array[$variableName] != '1'
+        && $array[$variableName] != 'false' && $array[$variableName] != 'true')
+		{
+            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+		}
 	}
+	elseif($optionsAll['validValues'] != null)
+	{
+		// check if parameter has a valid value
+		// do a strict check with in_array because the function don't work properly
+		if(in_array(admStrToUpper($array[$variableName]), $optionsAll['validValues'], true) == false
+		&& in_array(admStrToLower($array[$variableName]), $optionsAll['validValues'], true) == false)
+		{
+            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+		}
+	}
+
+    if($datatype == 'file')
+    {
+		try
+		{
+			admStrIsValidFileName($array[$variableName]);
+		}
+		catch(AdmException $e)
+		{
+			$errorMessage = $e->getText();
+		}
+    }
+	elseif($datatype == 'date')
+	{
+		// check if date is a valid Admidio date format
+		$objAdmidioDate = new DateTimeExtended($array[$variableName], $gPreferences['system_date'], 'date');
+		
+		if($objAdmidioDate->valid() == false)
+		{
+			// check if date has english format
+			$objEnglishDate = new DateTimeExtended($array[$variableName], 'Y-m-d', 'date');
+			
+			if($objEnglishDate->valid() == false)
+			{
+				$errorMessage = $gL10n->get('LST_NOT_VALID_DATE_FORMAT', $variableName);
+			}
+		}
+	}
+	elseif($datatype == 'numeric')
+	{
+		// numeric datatype should only contain numbers
+		if (is_numeric($array[$variableName]) == false)
+		{
+            $errorMessage = $gL10n->get('SYS_INVALID_PAGE_VIEW');
+		}
+	}
+	elseif($datatype == 'string')
+	{
+		$array[$variableName] = strStripTags(htmlspecialchars($array[$variableName], ENT_COMPAT, 'UTF-8'));
+	}
+    
+    elseif($datatype == 'html')
+    {
+        // check html string vor invalid tags and scripts
+        $array[$variableName] = htmLawed(stripslashes($array[$variableName]), array('safe' => 1));
+    }
+    
+    // wurde kein Fehler entdeckt, dann den Inhalt der Variablen zurueckgeben
+    if(strlen($errorMessage) == 0)
+    {
+        return $array[$variableName];
+    }
 
 	if(strlen($errorMessage) > 0)
 	{
         if(isset($gMessage))
         {
-            if($directOutput == true)
+            if($optionsAll['directOutput'] == true)
             {
                $gMessage->showTextOnly(true);
             }
@@ -428,7 +458,7 @@ function admFuncVariableIsValid($array, $variableName, $datatype, $defaultValue 
         }
 	}
 	
-	return $defaultValue;
+	return null;
 }
 
 /** Creates a html fragment with information about user and time when the recordset was created

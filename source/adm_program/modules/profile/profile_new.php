@@ -22,11 +22,11 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
-$getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
-$getLastname  = admFuncVariableIsValid($_GET, 'lastname', 'string', '');
-$getFirstname = admFuncVariableIsValid($_GET, 'firstname', 'string', '');
-$getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'boolean', 0);
+$getUserId    = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
+$getNewUser   = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
+$getLastname  = admFuncVariableIsValid($_GET, 'lastname', 'string');
+$getFirstname = admFuncVariableIsValid($_GET, 'firstname', 'string');
+$getRemoveUrl = admFuncVariableIsValid($_GET, 'remove_url', 'boolean');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 

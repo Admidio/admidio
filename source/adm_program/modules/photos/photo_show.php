@@ -20,11 +20,11 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getPhotoId    = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$getPhotoNr    = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', 0);
-$getMaxWidth   = admFuncVariableIsValid($_GET, 'max_width', 'numeric', 0);
-$getMaxHeight  = admFuncVariableIsValid($_GET, 'max_height', 'numeric', 0);
-$getThumbnail  = admFuncVariableIsValid($_GET, 'thumb', 'boolean', 0);
+$getPhotoId    = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
+$getPhotoNr    = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
+$getMaxWidth   = admFuncVariableIsValid($_GET, 'max_width', 'numeric');
+$getMaxHeight  = admFuncVariableIsValid($_GET, 'max_height', 'numeric');
+$getThumbnail  = admFuncVariableIsValid($_GET, 'thumb', 'boolean');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)

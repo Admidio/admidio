@@ -19,8 +19,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
+$getUserId  = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
 
 // if current user has no login then only show registration dialog
 if($gValidLogin == false)

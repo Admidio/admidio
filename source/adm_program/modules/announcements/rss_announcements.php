@@ -20,7 +20,7 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
 
 // Nachschauen ob RSS ueberhaupt aktiviert ist...
 if ($gPreferences['enable_rss'] != 1)

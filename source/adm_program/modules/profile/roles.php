@@ -22,9 +22,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric', 0);
-$getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean', 0);
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getNewUser = admFuncVariableIsValid($_GET, 'new_user', 'numeric');
+$getInline  = admFuncVariableIsValid($_GET, 'inline', 'boolean');
 
 $html       = '';
 

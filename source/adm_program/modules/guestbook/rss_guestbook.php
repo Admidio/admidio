@@ -34,7 +34,7 @@ if ($gPreferences['enable_guestbook_module'] != 1)
 }
 
 // Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // die 10 letzten Eintraege aus der DB fischen...
 $sql = 'SELECT * FROM '. TBL_GUESTBOOK. '

@@ -11,7 +11,7 @@ require_once('../../system/common.php');
 require_once('ecard_function.php');
 
 // Initialize and check the parameters
-$postTemplateName = admFuncVariableIsValid($_POST['ecard'], 'template_name', 'file', null, true);
+$postTemplateName = admFuncVariableIsValid($_POST['ecard'], 'template_name', 'file', array('requireValue' => true));
 $imageName			= admFuncVariableIsValid($_POST['ecard'], 'image_name', 'string');
 
 $funcClass 					= new FunctionClass($gL10n);

@@ -29,8 +29,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric', 1, true);
+$getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
+$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric', array('defaultValue' => 1, 'requireValue' => true));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)

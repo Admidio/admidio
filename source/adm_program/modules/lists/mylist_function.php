@@ -22,9 +22,9 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getListId = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', null, true);
-$getName   = admFuncVariableIsValid($_GET, 'name', 'string', '');
+$getListId = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true));
+$getName   = admFuncVariableIsValid($_GET, 'name', 'string');
 
 // Mindestens ein Feld sollte zugeordnet sein
 if(isset($_POST['column1']) == false || strlen($_POST['column1']) == 0)

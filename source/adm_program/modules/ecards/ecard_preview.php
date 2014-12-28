@@ -20,8 +20,8 @@ if (!isset($_POST) || !array_key_exists('ecard_template',$_POST))
 	die($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
 
 // Initialize and check the parameters
-$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', null, true );
-$imageName		  = admFuncVariableIsValid($_POST, 'ecard_image_name', 'string', null, true);
+$postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
+$imageName		  = admFuncVariableIsValid($_POST, 'ecard_image_name', 'string', array('requireValue' => true));
 $nameRecipient    = array_key_exists('name_recipient',$_POST) ? $_POST['name_recipient'] : '';
 $emailRecipient	  = array_key_exists('email_recipient',$_POST) ? $_POST['email_recipient'] : '';
 $ecardMessage     = array_key_exists('ecard_message',$_POST) ? $_POST['ecard_message'] : '';

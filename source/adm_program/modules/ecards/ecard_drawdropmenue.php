@@ -19,10 +19,10 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
-$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'string', 0);
-$getExtern = admFuncVariableIsValid($_GET, 'extern', 'boolean', 0);
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric');
+$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
+$getUserId = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getExtern = admFuncVariableIsValid($_GET, 'extern', 'boolean');
 
 header('Content-type: text/html; charset=utf-8');
 

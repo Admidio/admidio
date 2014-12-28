@@ -18,8 +18,8 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getRoomId   = admFuncVariableIsValid($_GET, 'room_id', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('SYS_ROOM'));
+$getRoomId   = admFuncVariableIsValid($_GET, 'room_id', 'numeric');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('SYS_ROOM')));
 
 // nur berechtigte User duerfen die Profilfelder bearbeiten
 if (!$gCurrentUser->isWebmaster())

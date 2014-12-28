@@ -15,7 +15,7 @@
 require('../../system/common.php');
 
 // Initialize and check the parameters
-$getFileId = admFuncVariableIsValid($_GET, 'file_id', 'numeric', null, true);
+$getFileId = admFuncVariableIsValid($_GET, 'file_id', 'numeric', array('requireValue' => true));
 
 //pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_download_module'] != 1)

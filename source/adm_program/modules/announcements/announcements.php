@@ -24,9 +24,9 @@ require_once('../../system/common.php');
 unset($_SESSION['announcements_request']);
 
 // Initialize and check the parameters
-$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('ANN_ANNOUNCEMENTS'));
-$getId       = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
+$getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('ANN_ANNOUNCEMENTS')));
+$getId       = admFuncVariableIsValid($_GET, 'id', 'numeric');
 $getDateFrom = admFuncVariableIsValid($_GET, 'date_from', 'date');
 $getDateTo   = admFuncVariableIsValid($_GET, 'date_to', 'date');
 

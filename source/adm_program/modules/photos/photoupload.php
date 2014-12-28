@@ -19,8 +19,8 @@ require_once('../../system/login_valid.php');
 require_once('../../libs/flexupload/class.flexupload.inc.php');
 
 // Initialize and check the parameters
-$getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric', 0);
+$getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
+$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric');
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)

@@ -29,9 +29,9 @@ if ($gPreferences['enable_dates_module'] == 0)
 }
 
 // Initialize and check the parameters
-$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric', 0);
-$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', null, true);
-$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
+$getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric');
+$getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
+$getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 $getNumberRoleSelect = admFuncVariableIsValid($_GET, 'number_role_select', 'numeric');
 
 

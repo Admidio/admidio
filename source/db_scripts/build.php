@@ -98,7 +98,7 @@ function getBacktrace()
 }
 
 // Initialize and check the parameters
-$getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', 'de');
+$getLanguage = admFuncVariableIsValid($_GET, 'lang', 'string', array('defaultValue' => 'de'));
 
 // set runtime of script to 2 minutes because of the many work to do
 // but no output of error message because of safe mode

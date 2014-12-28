@@ -188,7 +188,7 @@ abstract class Modules
      */
     protected function setActiveRole()
     {
-        $this->activeRole = admFuncVariableIsValid($this->properties, 'active_role', 'boolean', 1);
+        $this->activeRole = admFuncVariableIsValid($this->properties, 'active_role', 'boolean', array('defaultValue' => 1));
     }
      
     /**
@@ -209,7 +209,7 @@ abstract class Modules
     protected function setId()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->id = admFuncVariableIsValid($this->properties, 'id', 'numeric', 0);
+        $this->id = admFuncVariableIsValid($this->properties, 'id', 'numeric');
     }
     
     /**
@@ -231,7 +231,7 @@ abstract class Modules
     protected function setOrder()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->order = admFuncVariableIsValid($this->properties, 'order', 'string', 'ASC', false, array('ASC', 'DESC'));
+        $this->order = admFuncVariableIsValid($this->properties, 'order', 'string', array('defaultValue' => 'ASC', 'validValues' => array('ASC', 'DESC')));
     }    
     
     /** add a module parameter to the class
@@ -263,7 +263,7 @@ abstract class Modules
     protected function setStartElement()
     {
         // check optional user parameter and make secure. Otherwise set default value
-        $this->start = admFuncVariableIsValid($this->properties, 'start', 'numeric', 0);
+        $this->start = admFuncVariableIsValid($this->properties, 'start', 'numeric');
     }
 }
 ?>

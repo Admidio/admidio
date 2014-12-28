@@ -20,7 +20,7 @@ require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue' => 1));
 $getForm = admFuncVariableIsValid($_GET, 'form', 'string');
 
 // in ajax mode only return simple text on error

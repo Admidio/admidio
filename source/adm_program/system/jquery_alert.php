@@ -11,9 +11,9 @@
 require_once('common.php');
 
 // Initialize and check the parameters
-$getAlertMessage = admFuncVariableIsValid($_GET, 'alert_message', 'string', null, true);
-$getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1', 'string', '');
-$getMessageVar2  = admFuncVariableIsValid($_GET, 'message_var2', 'string', '');
+$getAlertMessage = admFuncVariableIsValid($_GET, 'alert_message', 'string', array('requireValue' => true));
+$getMessageVar1  = admFuncVariableIsValid($_GET, 'message_var1', 'string');
+$getMessageVar2  = admFuncVariableIsValid($_GET, 'message_var2', 'string');
 
 // show html of message
 echo '<link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/system.css" />

@@ -19,10 +19,10 @@ require_once('ecard_function.php');
 require_once('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', null, true);
-$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', null, true);
-$showPage	= admFuncVariableIsValid($_GET, 'show_page', 'numeric', 1);
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
+$getUserId  = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getPhotoNr = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric', array('requireValue' => true));
+$showPage	= admFuncVariableIsValid($_GET, 'show_page', 'numeric', array('defaultValue' => 1));
 
 // Initialisierung lokaler Variablen
 $funcClass 	 = new FunctionClass($gL10n);

@@ -26,10 +26,10 @@ require_once('../../system/login_valid.php');
 require_once('roles_functions.php');
 
 // Initialize and check the parameters
-$getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'numeric', 0);
-$getRoleId   = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
+$getUserId   = admFuncVariableIsValid($_GET, 'user_id', 'numeric');
+$getRoleId   = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 $getMemberId = admFuncVariableIsValid($_GET, 'mem_id', 'numeric');
-$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric', 0);
+$getMode     = admFuncVariableIsValid($_GET, 'mode', 'numeric');
 
 // in ajax mode only return simple text on error
 if($getMode == 7)
@@ -134,8 +134,8 @@ elseif($getMode == 6)
 elseif($getMode == 7)
 {
 	// save membership date changes
-    $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'date', null, true);
-    $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId, 'date', null, true);
+    $getMembershipStart = admFuncVariableIsValid($_GET, 'membership_start_date_'.$getMemberId, 'date', array('requireValue' => true));
+    $getMembershipEnd   = admFuncVariableIsValid($_GET, 'membership_end_date_'.$getMemberId, 'date', array('requireValue' => true));
 
 	$member = new TableMembers($gDb, $getMemberId);
 	$role   = new TableRoles($gDb, $member->getValue('mem_rol_id'));

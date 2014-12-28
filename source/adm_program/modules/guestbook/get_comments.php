@@ -17,8 +17,8 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getGbcId      = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
-$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'boolean', 0);
+$getGbcId      = admFuncVariableIsValid($_GET, 'cid', 'numeric');
+$getModeration = admFuncVariableIsValid($_GET, 'moderation', 'boolean');
 
 if ($getGbcId > 0)
 {

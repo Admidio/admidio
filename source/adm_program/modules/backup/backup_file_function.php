@@ -17,8 +17,8 @@ require('../../system/common.php');
 require('../../system/login_valid.php');
 
 // Initialize and check the parameters
-$getJob      = admFuncVariableIsValid($_GET, 'job', 'string', null, true, array('delete', 'get_file'));
-$getFilename = admFuncVariableIsValid($_GET, 'filename', 'file', null, true);
+$getJob      = admFuncVariableIsValid($_GET, 'job', 'string', array('requireValue' => true, 'validValues' => array('delete', 'get_file')));
+$getFilename = admFuncVariableIsValid($_GET, 'filename', 'file', array('requireValue' => true));
 
 // nur Webmaster duerfen ein Backup starten
 if($gCurrentUser->isWebmaster() == false)

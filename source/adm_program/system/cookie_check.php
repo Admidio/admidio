@@ -15,7 +15,7 @@
 require_once('common.php');
 
 // Initialize and check the parameters
-$getMessageCode = admFuncVariableIsValid($_GET, 'message_code', 'string', null, true);
+$getMessageCode = admFuncVariableIsValid($_GET, 'message_code', 'string', array('requireValue' => true));
 
 // check if cookie is set
 if(isset($_COOKIE[$gCookiePraefix. '_ID']) == false)

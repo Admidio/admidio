@@ -18,9 +18,9 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric', 0);
-$getGbcId    = admFuncVariableIsValid($_GET, 'cid', 'numeric', 0);
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('GBO_GUESTBOOK'));
+$getGboId    = admFuncVariableIsValid($_GET, 'id', 'numeric');
+$getGbcId    = admFuncVariableIsValid($_GET, 'cid', 'numeric');
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('GBO_GUESTBOOK')));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_guestbook_module'] == 0)

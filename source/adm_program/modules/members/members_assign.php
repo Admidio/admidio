@@ -30,8 +30,8 @@ if(strlen($_POST['firstname']) == 0)
 }
 
 // Initialize and check the parameters
-$getLastname  = admFuncVariableIsValid($_POST, 'lastname', 'string', null, true);
-$getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', null, true);
+$getLastname  = admFuncVariableIsValid($_POST, 'lastname', 'string', array('requireValue' => true));
+$getFirstname = admFuncVariableIsValid($_POST, 'firstname', 'string', array('requireValue' => true));
 
 // search for users with similar names (SQL function SOUNDEX only available in MySQL)
 if($gPreferences['system_search_similar'] == 1 && $gDbType == 'mysql')

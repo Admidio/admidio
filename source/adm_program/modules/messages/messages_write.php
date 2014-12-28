@@ -25,14 +25,14 @@ require_once('../../system/common.php');
 $formerMembers = 0;
 
 // Initialize and check the parameters
-$getMsgType     = admFuncVariableIsValid($_GET, 'msg_type', 'string', '');
-$getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', 0);
-$getSubject     = admFuncVariableIsValid($_GET, 'subject', 'html', '');
-$getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric', 0);
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
-$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', 1);
-$getDeliveryConfirmation  = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean', 0);
-$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
+$getMsgType     = admFuncVariableIsValid($_GET, 'msg_type', 'string');
+$getUserId      = admFuncVariableIsValid($_GET, 'usr_id', 'numeric');
+$getSubject     = admFuncVariableIsValid($_GET, 'subject', 'html');
+$getMsgId       = admFuncVariableIsValid($_GET, 'msg_id', 'numeric');
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
+$getCarbonCopy  = admFuncVariableIsValid($_GET, 'carbon_copy', 'boolean', array('defaultValue' => 1));
+$getDeliveryConfirmation  = admFuncVariableIsValid($_GET, 'delivery_confirmation', 'boolean');
+$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
 
 
 // check if the call of the page was allowed by settings

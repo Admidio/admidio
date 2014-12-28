@@ -24,12 +24,12 @@
 require_once('../../system/common.php');
 
 // Initialize and check the parameters
-$getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', null, true, array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' ));
-$getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric', 0);
-$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', 0);
-$getStart       = admFuncVariableIsValid($_GET, 'start', 'numeric', 0);
-$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric', 0);
-$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'numeric', 0);
+$getMode        = admFuncVariableIsValid($_GET, 'mode', 'string', array('requireValue' => true, 'validValues' => array('csv-ms', 'csv-oo', 'html', 'print', 'pdf', 'pdfl' )));
+$getListId      = admFuncVariableIsValid($_GET, 'lst_id', 'numeric');
+$getRoleId      = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
+$getStart       = admFuncVariableIsValid($_GET, 'start', 'numeric');
+$getShowMembers = admFuncVariableIsValid($_GET, 'show_members', 'numeric');
+$getFullScreen  = admFuncVariableIsValid($_GET, 'full_screen', 'numeric');
 
 
 // Initialize the content of this parameter (otherwise some servers will keep the content)

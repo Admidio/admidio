@@ -39,7 +39,7 @@ elseif($gPreferences['enable_photo_module'] == 2)
 }
 
 // Initialize and check the parameters
-$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', $gL10n->get('PHO_PHOTO_ALBUMS'));
+$getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('PHO_PHOTO_ALBUMS')));
 
 if($gPreferences['system_show_create_edit'] == 1)
 {

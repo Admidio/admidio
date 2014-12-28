@@ -13,7 +13,6 @@
  *            3 : Show result of update
  *
  *****************************************************************************/
-
 // embed config and constants file
 if(file_exists('../../adm_my_files/config.php') == true)
 {
@@ -65,7 +64,7 @@ require_once(SERVER_PATH. '/adm_program/system/function.php');
 // Initialize and check the parameters
 
 define('THEME_PATH', 'layout');
-$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', 1);
+$getMode = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('defaultValue' => 1));
 $message = '';
 
 // Default-DB-Type ist immer MySql
@@ -225,8 +224,8 @@ elseif($getMode == 2)
         {
             // check name and password
             // user must have membership of one role of the organization
-            $loginName    = admFuncVariableIsValid($_POST, 'login_name', 'string', null, true, null, true);
-            $password     = admFuncVariableIsValid($_POST, 'password', 'string', null, true, null, true);
+            $loginName    = admFuncVariableIsValid($_POST, 'login_name', 'string', array('requireValue' => true, 'directOutput' => true));
+            $password     = admFuncVariableIsValid($_POST, 'password', 'string', array('requireValue' => true, 'directOutput' => true));
             $sqlWebmaster = '';
 
             // only check for webmaster role if version > 2.3 because before we don't have that flag
