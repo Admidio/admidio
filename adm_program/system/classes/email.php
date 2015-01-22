@@ -55,7 +55,7 @@
  * function sendEmail();
  *
  *****************************************************************************/
-require_once(SERVER_PATH.'/adm_program/libs/phpmailer/PHPMailerAutoload.php');
+require_once(SERVER_PATH.'/adm_program/libs/phpmailer/phpmailerautoload.php');
 
 class Email extends PHPMailer
 {
