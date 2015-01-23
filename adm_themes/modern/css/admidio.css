@@ -8,6 +8,10 @@
  * Here you can edit the look and feel of Admidio
  *
  *****************************************************************************/
+
+/**************************************************/
+/* Basic Admidio layout classes */
+/**************************************************/
  
 body {
     color: #474b4c;
@@ -23,8 +27,6 @@ body {
         background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
     }
 }
-
-/* Custom theme classes */
 
 #page {
     text-align: center;
@@ -111,7 +113,9 @@ body {
     }
 }
 
+/**************************************************/
 /* Headlines */
+/**************************************************/
 
 h1, h2, h3, h4, h5 {
     color: #333333;
@@ -162,7 +166,9 @@ h3 {
     }
 }
 
+/**************************************************/
 /* Other styles */
+/**************************************************/
 
 .badge {
     margin-left: 4px;
@@ -195,7 +201,9 @@ h3 {
     width: 0;
 }
 
+/**************************************************/
 /* Links */
+/**************************************************/
 
 a:link, a:visited {
     color: #222222;
@@ -226,8 +234,9 @@ a:hover, a:active {
     display: block;
 }
 
-
+/**************************/
 /* Settings for all icons */
+/**************************/
 
 .menu img, .icon-link img, .icon-information, .btn img, .icon-text-link img {
     border: none;
@@ -254,7 +263,9 @@ a:hover, a:active {
     margin: 0px 5px;
 }
 
+/*******************************/
 /* Settings for navigationbars */
+/*******************************/
 
 .navbar {
     min-height: 0px;
@@ -328,7 +339,9 @@ a:hover, a:active {
     background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
 }
 
+/*******************************************************/
 /* Style for the popup messagebox and popup messagebox */
+/*******************************************************/
 
 .popup-window, .message {
     max-width: 650px;
@@ -354,15 +367,9 @@ a:hover, a:active {
     text-decoration: none !important;
 }
 
-/* form layout */
-
-form hr {
-    border: 1px solid #bad8e2;
-    width: 100%;
-    margin-bottom: 15px; 
-}
-
+/**************************************************/
 /* Customized layout for forms and their elements */
+/**************************************************/
 
 .form-horizontal .control-label {
     text-align: left;
@@ -383,6 +390,12 @@ form hr {
 
 .form-group {
     margin-bottom: 10px;
+}
+
+form hr {
+    border: 1px solid #bad8e2;
+    width: 100%;
+    margin-bottom: 15px; 
 }
 
 .navbar-form .form-group {
@@ -466,7 +479,9 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     display: inline-block;
 }
 
-/* A simple groupbox to group some elements. This is often used in forms. */
+/********************************************************************************/
+/* A simple groupbox/panel to group some elements. This is often used in forms. */
+/********************************************************************************/
 
 .panel-default {
     border: 1px solid #7d7d7d;
@@ -500,6 +515,24 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
 
 .panel-group .panel, .panel-default {
     border-radius: 10px !important;
+}
+
+/* Panel which includes the ckeditor in a nice way without separate borders */
+.panel-editor .panel-body {
+    padding: 0px;
+}
+
+.panel-editor .panel-body .form-group {
+    margin-bottom: 0px;
+}
+
+.panel-editor .panel-body .cke_chrome {
+    border-width: 0px;
+}
+
+.panel-editor .panel-body .cke_bottom, .panel-editor .panel-body .cke_inner {
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 10px;
 }
 
 /* Information block with user and timestamp who created and edited the data */
@@ -558,7 +591,9 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin: 10px 20px; 
 }
 
+/*******************************************************************/
 /* Layout for tables that will be used in lists or download module */
+/*******************************************************************/
 
 @-moz-document url-prefix() {
   fieldset { display: table-cell; }
@@ -628,7 +663,9 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     margin-left: 10px;
 }
 
+/**************************************************/
 /* Module specific css layout */
+/**************************************************/
 
 #login_registration_link, #login_admidio_link {
     margin-top: 15px;

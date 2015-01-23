@@ -13,7 +13,7 @@
  *             (Default) PHO_PHOTO_ALBUMS
  * start_thumbnail : Number of the thumbnail which is the first that should be shown
  * start     : Position of query recordset where the visual output should start
- * locked    : das Album soll freigegebn/gesperrt werden
+ * locked    : das Album soll freigegeben/gesperrt werden
  *
  *****************************************************************************/
 
@@ -44,7 +44,7 @@ $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaul
 $getStart    = admFuncVariableIsValid($_GET, 'start', 'numeric');
 $getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
 $getStartThumbnail = admFuncVariableIsValid($_GET, 'start_thumbnail', 'numeric', array('defaultValue' => 1));
-$getLocked   = admFuncVariableIsValid($_GET, 'locked', 'boolean');
+$getLocked   = admFuncVariableIsValid($_GET, 'locked', 'numeric', array('defaultValue' => -1));
 $getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
 
 unset($_SESSION['photo_album_request']);
@@ -223,7 +223,6 @@ if($gCurrentUser->isWebmaster())
 }
 
 $page->addHtml($photosMenu->show(false));
-
 
 /*************************THUMBNAILS**********************************/
 //Nur wenn uebergebenes Album Bilder enthaelt

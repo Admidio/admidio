@@ -41,7 +41,7 @@ foreach($gPreferences as $key => $value)
 
 // create html page object
 $page = new HtmlPage();
-$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'lists', 'messages', 'photos', 'profile', 'events', 'links', 'user_management');
+$showOptionValidModules = array('announcements', 'downloads', 'guestbook', 'ecards', 'lists', 'messages', 'photos', 'profile', 'events', 'links', 'user_management');
 
 // open the modules tab if the options of a module should be shown 
 if(in_array($showOption, $showOptionValidModules) == true)
@@ -175,8 +175,7 @@ $page->addHtml('
                     <div class="panel-body">');
                         // show form
                         $form = new HtmlForm('organization_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=organization', $page, 'default', false, 'form-preferences');
-                        $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], 
-                            null, null, null, 'form-control-small');
+                        $form->addStaticControl('org_shortname', $gL10n->get('SYS_NAME_ABBREVIATION'), $form_values['org_shortname'], array('class' => 'form-control-small'));
                         $form->addInput('org_longname', $gL10n->get('SYS_NAME'), $form_values['org_longname'], array('maxLength' => 60, 'property' => FIELD_MANDATORY));
                         $form->addInput('org_homepage', $gL10n->get('SYS_WEBSITE'), $form_values['org_homepage'], array('type' => 'url', 'maxLength' => 60));
                             
@@ -607,6 +606,33 @@ $page->addHtml('
                     $page->addHtml('</div>
                 </div>
             </div>
+            <div class="panel panel-default" id="panel_ecards">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a class="icon-text-link" data-toggle="collapse" data-parent="#accordion_modules" href="#collapse_ecards">
+                            <img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" title="'.$gL10n->get('ECA_GREETING_CARDS').'" />'.$gL10n->get('ECA_GREETING_CARDS').'
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse_ecards" class="panel-collapse collapse">
+                    <div class="panel-body">');
+                        // show form
+                        $form = new HtmlForm('ecards_preferences_form', $g_root_path.'/adm_program/modules/preferences/preferences_function.php?form=ecards', $page, 'default', false, 'form-preferences');
+                        $form->addCheckbox('enable_ecard_module', $gL10n->get('ECA_ACTIVATE_GREETING_CARDS'), $form_values['enable_ecard_module'], array('helpTextIdInline' => 'ECA_ACTIVATE_GREETING_CARDS_DESC'));
+                        $form->addInput('ecard_thumbs_scale', $gL10n->get('PHO_SCALE_THUMBNAILS'), $form_values['ecard_thumbs_scale'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ECA_SCALE_THUMBNAILS_DESC'));
+                        $form->addInput('ecard_card_picture_width', $gL10n->get('PHO_MAX_PHOTO_SIZE_WIDTH'), $form_values['ecard_card_picture_width'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999));
+                        $form->addInput('ecard_card_picture_height', $gL10n->get('PHO_MAX_PHOTO_SIZE_HEIGHT'), $form_values['ecard_card_picture_height'], array('type' => 'number', 'minNumber' => 1, 'maxNumber' => 9999, 'helpTextIdInline' => 'ECA_MAX_PHOTO_SIZE_DESC'));
+                        $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
+                        foreach($templates as $key => $templateName)
+                        {
+                            $templates[$key] = ucfirst(preg_replace('/[_-]/',' ',str_replace('.tpl', '', $templateName)));
+                        }
+                        $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $form_values['ecard_template'], 'helpTextIdInline' => 'ECA_TEMPLATE_DESC'));
+                        $form->addSubmitButton('btn_save_ecards', $gL10n->get('SYS_SAVE'), array('icon' => THEME_PATH.'/icons/disk.png', 'class' => ' col-sm-offset-3'));
+                        $page->addHtml($form->show(false));
+                    $page->addHtml('</div>
+                </div>
+            </div>
             <div class="panel panel-default" id="panel_lists">
                 <div class="panel-heading">
                     <h4 class="panel-title">
@@ -760,190 +786,4 @@ $page->addHtml('
 
 $page->show();
 
-exit();
-
-            /**************************************************************************************/
-            // Preferences ecards module
-            /**************************************************************************************/
-            echo '<h3 id="ECA_GREETING_CARDS" class="iconTextLink">
-                <a href="#"><img src="'.THEME_PATH.'/icons/ecard.png" alt="'.$gL10n->get('ECA_GREETING_CARDS').'" title="'.$gL10n->get('ECA_GREETING_CARDS').'" /></a>
-                <a href="#">'.$gL10n->get('ECA_GREETING_CARDS').'</a>
-            </h3>        
-            <div class="groupBoxBody" style="display: none;">
-                <ul class="formFieldList">
-                    <li>
-                        <dl>
-                            <dt><label for="enable_ecard_module">'.$gL10n->get("ECA_ACTIVATE_GREETING_CARDS").':</label></dt>
-                            <dd>
-                                <input type="checkbox" id="enable_ecard_module" name="enable_ecard_module" ';
-                                if(isset($form_values["enable_ecard_module"]) && $form_values["enable_ecard_module"] == 1)
-                                {
-                                    echo ' checked="checked" ';
-                                }
-                                echo ' value="1" />
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ECA_ACTIVATE_GREETING_CARDS_DESC").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="ecard_view_width">'.$gL10n->get("ECA_SCALING_PREVIEW").':</label></dt>
-                            <dd><input type="text" id="ecard_view_width" name="ecard_view_width" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_view_width"].'" />
-                                x
-                                <input type="text" id="ecard_view_height" name="ecard_view_height" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_view_height"].'" />
-                                '.$gL10n->get('ORG_PIXEL').'
-                            </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ECA_SCALING_PREVIEW_DESC").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="ecard_card_picture_width">'.$gL10n->get("ECA_SCALING_GREETING_CARD").':</label></dt>
-                            <dd><input type="text" id="ecard_card_picture_width" name="ecard_card_picture_width" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_card_picture_width"].'" />
-                                x
-                                <input type="text" id="ecard_card_picture_height" name="ecard_card_picture_height" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_card_picture_height"].'" />
-                                '.$gL10n->get('ORG_PIXEL').'
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                       '.$gL10n->get("ECA_SCALING_GREETING_CARD_DESC").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="ecard_cc_recipients">'.$gL10n->get("ECA_MAX_CC").':</label>
-                            </dt>
-                            <dd>
-                            <select size="1" id="enable_ecard_cc_recipients" name="enable_ecard_cc_recipients" style="margin-right:20px;" onchange="javascript:organizationJS.showHideMoreSettings(\'cc_recipients_count\',\'enable_ecard_cc_recipients\',\'ecard_cc_recipients\',0);">
-                                    <option value="0" ';
-                                    if($form_values["enable_ecard_cc_recipients"] == 0)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get("SYS_DEACTIVATED").'</option>
-                                    <option value="1" ';
-                                    if($form_values["enable_ecard_cc_recipients"] == 1)
-                                    {
-                                        echo ' selected="selected" ';
-                                    }
-                                    echo '>'.$gL10n->get("SYS_ACTIVATED").'</option>
-                                </select>
-                                <div id="cc_recipients_count" style="display:inline;">';
-                                if($form_values["enable_ecard_cc_recipients"] == 1)
-                                {
-                                echo '<input type="text" id="ecard_cc_recipients" name="ecard_cc_recipients" style="width: 50px;" maxlength="4" value="'.$form_values["ecard_cc_recipients"].'" />';
-                                }
-                            echo '</div>
-                             </dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get("ECA_MAX_CC_DESC").'
-                    </li>
-                    <li>
-                        <dl>
-                            <dt><label for="ecard_template">'.$gL10n->get('ECA_TEMPLATE').':</label></dt>
-                            <dd>';
-                                echo getMenueSettings(admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates'),'ecard_template',$form_values['ecard_template'],'180','false','false');
-                             echo '</dd>
-                        </dl>
-                    </li>
-                    <li class="smallFontSize">
-                        '.$gL10n->get('ECA_TEMPLATE_DESC').'
-                    </li>
-                </ul>
-                <br />
-                <div class="formSubmit">    
-                    <button id="btnSave" type="submit"><img src="'. THEME_PATH. '/icons/disk.png" alt="'.$gL10n->get('SYS_SAVE').'" />&nbsp;'.$gL10n->get('SYS_SAVE').'</button>
-                </div>
-            </div>        
-
-            </div>';
-            // ENDE accordion-modules
-            echo'</div>
-        </div>
-    </div>
-    </form>
-    </div>
-</div>';
-
-
-// oeffnet ein File und gibt alle Zeilen als Array zurueck
-// Uebergabe:
-//            $filepath .. Der Pfad zu dem File
-function getElementsFromFile($filepath)
-{
-    $elementsFromFile = array();
-    $list = fopen($filepath, "r");
-    while (!feof($list))
-    {
-        array_push($elementsFromFile,trim(fgets($list)));
-    }
-    return $elementsFromFile;
-}
-
-// gibt ein Menue fuer die Einstellungen des Grußkartenmoduls aus
-// Uebergabe:
-//             $data_array     .. Daten fuer die Einstellungen in einem Array
-//            $name            .. Name des Drop down Menues
-//            $first_value     .. der Standart Wert oder eingestellte Wert vom Benutzer
-//            $width           .. die Groeße des Menues
-//            $showFont        .. wenn gesetzt werden   die Menue Eintraege mit der übergebenen Schriftart dargestellt   (Darstellung der Schriftarten)
-//            $showColor       .. wenn gesetzt bekommen die Menue Eintraege einen farbigen Hintergrund (Darstellung der Farben)
-function getMenueSettings($data_array,$name,$first_value,$width,$showFont,$showColor)
-{
-    $temp_data = '';
-    $temp_data .=  '<select size="1" id="'.$name.'" name="'.$name.'" style="width:'.$width.'px;">';
-    for($i=0; $i<count($data_array);$i++)
-    {
-        $name = "";
-        if(!is_integer($data_array[$i]) && strpos($data_array[$i],'.tpl') > 0)
-        {
-            $name = ucfirst(preg_replace("/[_-]/"," ",str_replace(".tpl","",$data_array[$i])));
-        }
-        elseif(is_integer($data_array[$i]))
-        {
-            $name = $data_array[$i];
-        }
-        else if(strpos($data_array[$i],'.') === false)
-        {
-            $name = $data_array[$i];
-        }
-        if($name != '')
-        {
-            if (strcmp($data_array[$i],$first_value) == 0 && $showFont != "true" && $showColor != "true")
-            {
-                $temp_data .= '<option value="'.$data_array[$i].'" selected="selected">'.$name.'</option>';
-            }
-            else if($showFont != "true" && $showColor != "true")
-            {
-                $temp_data .= '<option value="'.$data_array[$i].'">'.$name.'</option>';
-            }
-            else if (strcmp($data_array[$i],$first_value) == 0 && $showColor != 'true')
-            {
-                $temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="font-family:'.$name.';">'.$name.'</option>';
-            }
-            else if($showColor != "true")
-            {
-                $temp_data .= '<option value="'.$data_array[$i].'" style="font-family:'.$name.';">'.$name.'</option>';
-            }
-            else if (strcmp($data_array[$i],$first_value) == 0)
-            {
-                $temp_data .= '<option value="'.$data_array[$i].'" selected="selected" style="background-color:'.$name.';">'.$name.'</option>';
-            }
-            else
-            {
-                $temp_data .= '<option value="'.$data_array[$i].'" style="background-color:'.$name.';">'.$name.'</option>';
-            }
-        }
-    }
-    $temp_data .='</select>';
-    return $temp_data;
-}
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

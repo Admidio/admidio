@@ -1,13 +1,13 @@
-﻿/*
-Copyright (c) 2003-2011, CKSource - Frederico Knabben. All rights reserved.
-For licensing, see LICENSE.html or http://ckeditor.com/license
-*/
+/**
+ * @license Copyright (c) 2003-2014, CKSource - Frederico Knabben. All rights reserved.
+ * For licensing, see LICENSE.md or http://ckeditor.com/license
+ */
 
-CKEDITOR.editorConfig = function( config )
-{
+CKEDITOR.editorConfig = function( config ) {
+	// Define changes to default configuration here. For example:
 	// config.language = 'fr';
-    // config.toolbar = 'Full';
-	
+	// config.uiColor = '#AADC6E';
+
     config.toolbar_AdmidioDefault =
     [
         ['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-', 
@@ -19,13 +19,7 @@ CKEDITOR.editorConfig = function( config )
         ['Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft','JustifyCenter','JustifyRight', '-', 
         'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList', '-', 'Maximize']
     ];
-	
-	config.toolbar_AdmidioEcard =
-    [
-        ['EcardTemplate','Font','FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 
-        'Smiley', 'Link', 'Unlink', '-', 'NumberedList', 'BulletedList', '-', 'Maximize']
-    ];
-    
+	    
     config.toolbar_AdmidioPlugin_WC =
     [
         ['Format', 'FontSize', 'Bold', 'Italic', 'Underline', 'TextColor', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', '-',

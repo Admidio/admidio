@@ -389,7 +389,7 @@ class HtmlForm extends HtmlFormBasic
     {
         $this->addHtml('<p>'.$text.'</p>');
     }
-	
+    
     /** Add a new CKEditor element to the form. 
      *  @param $id      Id of the password field. This will also be the name of the password field.
      *  @param $label   The label of the password field.
@@ -399,7 +399,7 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                  @b toolbar    Optional set a predefined toolbar for the editor. Possible values are 
-     *                     @b AdmidioDefault, @b Admidio Guestbook, @b AdmidioEcard and @b AdmidioPlugin_WC
+     *                     @b AdmidioDefault, @b AdmidioGuestbook and @b AdmidioPlugin_WC
      *                  @b height     Optional set the height in pixel of the editor. The default will be 300px.
 	 *                  @b helpTextIdLabel A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                     If set a help icon will be shown where the user can see the text if he hover over the icon.
@@ -417,6 +417,8 @@ class HtmlForm extends HtmlFormBasic
      */
 	public function addEditor($id, $label, $value, $options = array())
 	{
+        global $gPreferences, $g_root_path;
+        
         $this->countElements++;
         $attributes = array('class' => 'editor');
         $flagLabelVertical = $this->type;
@@ -441,11 +443,35 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['class'] .= ' '.$optionsAll['class'];
         }
+        
+        $javascriptCode = 'CKEDITOR.replace("'.$id.'", {
+            toolbar: "'.$optionsAll['toolbar'].'",
+            language: "'.$gPreferences['system_language'].'",
+            uiColor: "'.$gPreferences['system_js_editor_color'].'",
+            filebrowserImageUploadUrl: "'.$g_root_path.'/adm_program/system/ckeditor_upload_handler.php"
+        });';
 
-		$ckEditor = new CKEditorSpecial();
-
+        if($gPreferences['system_js_editor_enabled'] == 1)
+        {
+            // if a htmlPage object was set then add code to the page, otherwise to the current string
+            if(is_object($this->htmlPage))
+            {
+                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/ckeditor/ckeditor.js');
+                $this->htmlPage->addJavascript($javascriptCode, true);
+            }
+            else
+            {
+                $this->addHtml('<script type="text/javascript">
+                        $(document).ready(function(){
+                            '.$javascriptCode.'
+                        });
+                    </script>');
+            }
+        }
+            
         $this->openControlStructure($id, $label, $optionsAll['property'], $optionsAll['helpTextIdLabel'], $optionsAll['icon'], 'form-group-editor');
-		$this->addHtml('<div class="'.$attributes['class'].'">'.$ckEditor->createEditor($id, $value, $optionsAll['toolbar'], $optionsAll['height']).'</div>');
+		$this->addHtml('<div class="'.$attributes['class'].'"><textarea id="'.$id.'" name="'.$id.'"
+            style="width: 100%; height: '.$optionsAll['height'].';">'.$value.'</textarea></div>');
         $this->closeControlStructure($optionsAll['helpTextIdInline']);
         
         $this->type = $flagLabelVertical;
@@ -1029,7 +1055,7 @@ class HtmlForm extends HtmlFormBasic
             $javascriptCode = '$("#'.$id.'").select2();';
 
             // add default values to multi select
-            if(array_count_values($optionsAll['defaultValue']) > 0)
+            if(is_array($optionsAll['defaultValue']) && array_count_values($optionsAll['defaultValue']) > 0)
             {
                 $htmlDefaultValues = '';
                 foreach($optionsAll['defaultValue'] as $key => $htmlDefaultValue)
@@ -1545,9 +1571,9 @@ class HtmlForm extends HtmlFormBasic
      *  @param $id       Id the the groupbox.
      *  @param $headline Optional a headline that will be shown to the user.
      */
-    public function openGroupBox($id, $headline = '')
+    public function openGroupBox($id, $headline = '', $class = '')
     {
-        $this->addHtml('<div id="'.$id.'" class="panel panel-default">');
+        $this->addHtml('<div id="'.$id.'" class="panel panel-default '.$class.'">');
         // add headline to groupbox
         if(strlen($headline) > 0)
         {
