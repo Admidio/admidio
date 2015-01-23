@@ -17,24 +17,36 @@ $gMessage->showThemeBody(false);
 $gMessage->setCloseButton();
 
 if (!isset($_POST) || !array_key_exists('ecard_template',$_POST))
-	die($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+{
+	$gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+}
 
 // Initialize and check the parameters
+$ecardMessage     = '';
 $postTemplateName = admFuncVariableIsValid($_POST, 'ecard_template', 'file', array('requireValue' => true));
-$imageName		  = admFuncVariableIsValid($_POST, 'ecard_image_name', 'string', array('requireValue' => true));
-$nameRecipient    = array_key_exists('name_recipient',$_POST) ? $_POST['name_recipient'] : '';
-$emailRecipient	  = array_key_exists('email_recipient',$_POST) ? $_POST['email_recipient'] : '';
-$ecardMessage     = array_key_exists('ecard_message',$_POST) ? $_POST['ecard_message'] : '';
+$postPhotoId      = admFuncVariableIsValid($_POST, 'photo_id', 'numeric', array('requireValue' => true));
+$postPhotoNr      = admFuncVariableIsValid($_POST, 'photo_nr', 'numeric', array('requireValue' => true));
+$nameRecipient    = admFuncVariableIsValid($_POST, 'name_recipient', 'string');
+$emailRecipient   = admFuncVariableIsValid($_POST, 'email_recipient', 'string');
+
+if(isset($_POST['ecard_message']))
+{
+    $ecardMessage = $_POST['ecard_message'];
+}
+
+$imageUrl = $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$postPhotoId.'&photo_nr='.$postPhotoNr.'&max_width='.$gPreferences['ecard_thumbs_scale'].'&max_height='.$gPreferences['ecard_thumbs_scale'];
 
 $funcClass = new FunctionClass($gL10n);
 
 // read content of template file
-list($error,$ecard_data_to_parse) = $funcClass->getEcardTemplate($postTemplateName, THEME_SERVER_PATH. '/ecard_templates/');
+list($error,$ecardDataToParse) = $funcClass->getEcardTemplate($postTemplateName, THEME_SERVER_PATH. '/ecard_templates/');
 
 if ($error) 
-	die($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+{
+	$gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
+}
 
 // show output of parsed template
-echo $funcClass->parseEcardTemplate($imageName, $ecardMessage, $ecard_data_to_parse, $g_root_path, $gCurrentUser, $nameRecipient, $emailRecipient);
+echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $g_root_path, $gCurrentUser, $nameRecipient, $emailRecipient);
 
 ?>

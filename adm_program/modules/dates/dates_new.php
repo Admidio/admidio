@@ -299,7 +299,7 @@ $form->openGroupBox('gb_visibility_registration', $gL10n->get('DAT_VISIBILITY').
     $form->addInput('dat_max_members', $gL10n->get('DAT_PARTICIPANTS_LIMIT'), $date->getValue('dat_max_members'), 
                     array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_MAX_MEMBERS'));
 $form->closeGroupBox();
-$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
+$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'panel-editor');
     $form->addEditor('dat_description', null, $date->getValue('dat_description'));
 $form->closeGroupBox();
 

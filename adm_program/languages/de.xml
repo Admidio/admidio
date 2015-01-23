@@ -2,6 +2,10 @@
 <language id="de">
 <version id="3.0.0" translator="Markus Faßbender">
     <text id="ECA_LAYOUT" development="new" translation="todo">Layout</text>
+    <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</text>
+    <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Standard: 400 x 250 Pixel)</text>
+    <text id="ECA_MAX_CC" development="deleted" translation="todo"></text>
+    <text id="ECA_MAX_CC_DESC" development="deleted" translation="todo"></text>
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="todo"></text>
@@ -571,8 +575,6 @@
     <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="todo">Vorschau der Grußkarte</text>
     <text id="ECA_INPUT_INCORRECT" development="new" translation="todo">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
     <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="todo">interner Empfänger</text>
-    <text id="ECA_MAX_CC" development="new" translation="todo">Max. weitere Empfänger</text>
-    <text id="ECA_MAX_CC_DESC" development="new" translation="todo">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
     <text id="ECA_MESSAGE_TOO_LONG" description="%VAR1% wird durch die max. Länge ersetzt" development="new" translation="todo">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
     <text id="ECA_MORE_RECIPIENTS" development="new" translation="todo">Weitere Empfänger</text>
     <text id="ECA_NAME_OF_SENDER" development="new" translation="todo">Name des Absenders</text>

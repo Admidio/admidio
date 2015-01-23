@@ -111,12 +111,9 @@ $orga_preferences = array(
 
     // E-Cards
     'enable_ecard_module'           => '1',
-    'enable_ecard_cc_recipients'    => '1',
-    'ecard_view_width'              => '250',
-    'ecard_view_height'             => '250',
+    'ecard_thumbs_scale'            => '250',
     'ecard_card_picture_width'      => '400',
     'ecard_card_picture_height'     => '250',
-    'ecard_cc_recipients'           => '5',
     'ecard_template'                => 'postcard.tpl',
 
     // Profile

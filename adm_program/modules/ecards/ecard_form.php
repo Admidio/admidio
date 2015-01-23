@@ -91,9 +91,6 @@ if ($getUserId > 0)
     }
 }
 
-// create an object of ckeditor and replace textarea-element
-$ckEditor = new CKEditorSpecial();
-
 // ruf die Funktion auf die alle Post und Get Variablen parsed
 $funcClass->getVars();
 
@@ -104,7 +101,6 @@ $page->addJavascriptFile($g_root_path.'/adm_program/modules/ecards/ecard.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascript('
 			var ecardJS = new ecardJSClass();
-			ecardJS.max_recipients			= '.$gPreferences['ecard_cc_recipients'].';
 			ecardJS.nameOfRecipient_Text	= "'.$gL10n->get('ECA_NAME_OF_RECIPIENT', $var1='[VAR1]').'";
 			ecardJS.emailOfRecipient_Text	= "'.$gL10n->get('ECA_EMAIL_OF_RECIPIENT', $var1='[VAR1]').'";
 			ecardJS.message_Text			= "'.$gL10n->get('ECA_THE_MESSAGE').'";
@@ -134,17 +130,26 @@ $page->addHeadline($headline);
 // create module menu with back link
 $ecardMenu = new HtmlNavbar('menu_ecard_form', $headline, $page);
 $ecardMenu->addItem('menu_item_back', $gNavigation->getPreviousUrl(), $gL10n->get('SYS_BACK'), 'back.png');
+
+if($gCurrentUser->isWebmaster())
+{
+	// show link to system preferences of announcements
+	$ecardMenu->addItem('menu_item_preferences', $g_root_path.'/adm_program/modules/preferences/preferences.php?show_option=ecards', 
+								$gL10n->get('SYS_MODULE_PREFERENCES'), 'options.png', 'right');
+}
+
 $page->addHtml($ecardMenu->show(false));
 
 // show form
 $form = new HtmlForm('ecard_form', null, $page);
 $form->addInput('submit_action', null, '', array('type' => 'hidden'));
-$form->addInput('ecard_image_name', null, $g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'], array('type' => 'hidden'));
+$form->addInput('photo_id', null, $getPhotoId, array('type' => 'hidden'));
+$form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
         <a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
-            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'].'" 
+            src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" 
             class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
         </a>');
     $templates = admFuncGetDirectoryEntries(THEME_SERVER_PATH.'/ecard_templates');
@@ -152,7 +157,7 @@ $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     {
         $templates[$key] = ucfirst(preg_replace('/[_-]/',' ',str_replace('.tpl', '', $templateName)));
     }
-    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('property' => FIELD_MANDATORY));
+    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $gPreferences['ecard_template'], 'property' => FIELD_MANDATORY));
 $form->closeGroupBox();
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
@@ -163,7 +168,7 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     
     $sql = 'SELECT rol_id, rol_name 
               FROM '. TBL_ROLES. '
-             WHERE rol_id IN ('.implode(',', $arrayRoles).')
+             WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
              ORDER BY rol_name ';
 
     $result = $gDb->query($sql);
@@ -211,7 +216,7 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
     $form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_MANDATORY));
 $form->closeGroupBox();
-$form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'));
+$form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'panel-editor');
     $form->addEditor('ecard_message', null, null, array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));
 $form->closeGroupBox();
 $form->openButtonGroup();
@@ -238,7 +243,7 @@ echo '
 					<li>
 						<div>
 							<a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
-								src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'].'" 
+								src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" 
 								class="imageFrame" alt="'.$gL10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$gL10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
 							</a>
 						</div>
@@ -248,7 +253,7 @@ echo '
 		</div>
 
 		<form id="ecard_form" method="post">
-			<input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_view_width'].'&amp;max_height='.$gPreferences['ecard_view_height'].'" />
+			<input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" />
 			<input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$getPhotoNr.'.jpg" />
 			<input type="hidden" name="ecard[submit_action]" value="" />
 			<input type="hidden" name="ecard[template_name]" value="'.$gPreferences['ecard_template'].'" />
@@ -352,7 +357,7 @@ echo '
 				<div class="groupBoxBody" id="admMessageBody">
 					<ul class="formFieldList">
 						<li>
-							 '.$ckEditor->createEcardEditor('admEcardMessage', '', 'AdmidioEcard').'
+							 './*$ckEditor->createEcardEditor('admEcardMessage', '', 'AdmidioEcard').*/'
 							 <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
 						</li>
 					</ul>

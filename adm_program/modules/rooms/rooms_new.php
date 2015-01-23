@@ -73,7 +73,7 @@ $form->openGroupBox('gb_name_properties', $gL10n->get('SYS_NAME').' &amp; '.$gL1
     $form->addInput('room_capacity', $gL10n->get('ROO_CAPACITY').' ('.$gL10n->get('ROO_SEATING').')', $room->getValue('room_capacity'),  array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'property' => FIELD_MANDATORY));
     $form->addInput('room_overhang', $gL10n->get('ROO_OVERHANG'), $room->getValue('room_overhang'), array('type' => 'number', 'minNumber' => 0, 'maxNumber' => 99999, 'helpTextIdLabel' => 'DAT_ROOM_OVERHANG'));
 $form->closeGroupBox();
-$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'));
+$form->openGroupBox('gb_description', $gL10n->get('SYS_DESCRIPTION'), 'panel-editor');
     $form->addEditor('room_description', null, $room->getValue('room_description'), array('height' => '150px'));
 $form->closeGroupBox();
 
