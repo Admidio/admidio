@@ -422,15 +422,15 @@ elseif($getMode == 7) // Download configuration file
     // den Root-Pfad ermitteln
     $root_path = $_SERVER['HTTP_HOST']. $_SERVER['REQUEST_URI'];
     $root_path = substr($root_path, 0, strpos($root_path, '/adm_install'));
-    if(!strpos($rootPath, 'http://') && !strpos($rootPath, 'https://'))
+    if(!strpos($root_path, 'http://') && !strpos($root_path, 'https://'))
     {
 		if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
 		{
-			$rootPath = 'https://'. $rootPath;
+			$root_path = 'https://'. $root_path;
 		}
 		else
 		{
-			$rootPath = 'http://'. $rootPath;
+			$root_path = 'http://'. $root_path;
 		}
     }
 
