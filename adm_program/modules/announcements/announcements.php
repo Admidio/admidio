@@ -141,9 +141,14 @@ else
                         if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
                         {
                             $page->addHtml('
-                            <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
+                            <a class="icon-link" data-toggle="modal" data-target="#deleteModal"
+                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
                                 $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                            /*$page->addHtml('
+                            <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.
+                                $announcement->getValue('ann_id').'&amp;name='.urlencode($announcement->getValue('ann_headline')).'&amp;database_id='.$announcement->getValue('ann_id').'"><img 
+                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');*/
                         }    
                     }
                 $page->addHtml('</div>
@@ -160,6 +165,12 @@ else
             </div>
         </div>');
     }  // Ende foreach
+    
+    // add dummy modal structure if an entry should be deleted
+    $page->addHtml('
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog"><div class="modal-content"></div></div>
+    </div>');
     
     // If neccessary show links to navigate to next and previous recordsets of the query
     $base_url = $g_root_path.'/adm_program/modules/announcements/announcements.php?headline='.$getHeadline;

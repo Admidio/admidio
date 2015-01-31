@@ -343,22 +343,17 @@ a:hover, a:active {
 /* Style for the popup messagebox and popup messagebox */
 /*******************************************************/
 
-.popup-window, .message {
-    max-width: 650px;
-	text-align: left;
-	margin: 15px;
+.modal-footer {
+    text-align: left;
 }
 
 .message {
+    max-width: 650px;
+	text-align: left;
+	margin: 15px;
     display: inline-block;
     margin-left: 0px;
     margin-right: 0px;
-}
-
-.popup-window-icon {
-    float: left;
-    display: inline-block;
-    width: 20%;
 }
 
 /* Customize css for module menu */

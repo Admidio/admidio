@@ -337,7 +337,7 @@ class Email extends PHPMailer
     public function sendEmail()
     {
         global $gPreferences, $gL10n;
-                      
+
         //Text in Nachricht einfügen
         if($this->emSendAsHTML)
         {

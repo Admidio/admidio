@@ -955,7 +955,8 @@ class HtmlForm extends HtmlFormBasic
         {
             $attributes['disabled'] = 'disabled';
         }
-		elseif($optionsAll['property'] == FIELD_MANDATORY)
+        // multiselect couldn't handle the required property
+		elseif($optionsAll['property'] == FIELD_MANDATORY && $optionsAll['multiselect'] == false)
 		{
 		    $attributes['required'] = 'required';
 		}

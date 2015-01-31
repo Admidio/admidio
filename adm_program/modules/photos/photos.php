@@ -48,6 +48,7 @@ $getLocked   = admFuncVariableIsValid($_GET, 'locked', 'numeric', array('default
 $getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
 
 unset($_SESSION['photo_album_request']);
+unset($_SESSION['ecard_request']);
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
 if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
