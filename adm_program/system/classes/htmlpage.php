@@ -238,12 +238,12 @@ class HtmlPage
         if($this->containThemeHtml)
         {
             ob_start();
-            include(THEME_SERVER_PATH. '/my_header_new.php');
+            include(THEME_SERVER_PATH. '/my_header.php');
             $htmlMyHeader = ob_get_contents();
             ob_end_clean();
 
             ob_start();
-            include(THEME_SERVER_PATH. '/my_body_top_new.php');
+            include(THEME_SERVER_PATH. '/my_body_top.php');
             $htmlMyBodyTop = ob_get_contents();
             ob_end_clean();
 
@@ -251,7 +251,7 @@ class HtmlPage
             $gDb->setCurrentDB();
 
             ob_start();
-            include(THEME_SERVER_PATH. '/my_body_bottom_new.php');
+            include(THEME_SERVER_PATH. '/my_body_bottom.php');
             $htmlMyBodyBottom = ob_get_contents();
             ob_end_clean();
 
