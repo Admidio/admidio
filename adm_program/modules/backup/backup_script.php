@@ -12,6 +12,7 @@
  * available at http://www.silisoftware.com
  *
  *****************************************************************************/
+
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
 require_once('backup.functions.php');
@@ -20,6 +21,12 @@ require_once('backup.functions.php');
 if($gCurrentUser->isWebmaster() == false)
 {
     $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+}
+
+// module not available for other databases except MySQL
+if($gDbType != 'mysql')
+{    
+    $gMessage->show($gL10n->get('BAC_ONLY_MYSQL'));
 }
 
 // set db in non-strict mode so that table names and field names get a single quote
@@ -59,31 +66,8 @@ $tempbackupfilename = 'db_backup.temp.sql'.$fileextension;
 $NeverBackupDBtypes  = array('HEAP');
 $CloseWindowOnFinish = false;
 
-
-$gNavigation->addUrl(CURRENT_URL);
-
-$gLayout['title'] = $gL10n->get('BAC_DATABASE_BACKUP');
-
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-
-echo '<h1 class="moduleHeadline">'.$gLayout['title'].'</h1>';
-
-
 error_reporting(E_ALL);
 @ini_set('display_errors', '1');
-
-
-OutputInformation('', '
-<ul class="iconTextLinkList" id="cancel_link">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/backup/backup.php"><img
-            src="'. THEME_PATH. '/icons/error.png" alt="'.$gL10n->get('SYS_ABORT').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/backup/backup.php">'.$gL10n->get('SYS_ABORT').'</a>
-        </span>
-    </li>
-</ul>');
-flush();
 
 $_REQUEST['StartBackup'] = 'complete';
 $TypeEngineKey = 'Engine';
@@ -489,24 +473,13 @@ $starttime = getmicrotime();
 		// End original backupDB
 
 
-echo '<p>'.$gL10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</p>
+echo '<div class="alert alert-success form-alert"><span class="glyphicon glyphicon-ok"></span><strong>'.
+        $gL10n->get('BAC_BACKUP_COMPLETED', FormattedTimeRemaining(getmicrotime() - $starttime, 2)).'.</strong><br /><br />
 
-<p>'.$gL10n->get('BAC_BACKUP_FILE').': <a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
-('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</p>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/system/back.php"><img
-            src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('BAC_BACK_TO_BACKUP_PAGE').'" title="'.$gL10n->get('BAC_BACK_TO_BACKUP_PAGE').'"/></a>
-            <a href="'.$g_root_path.'/adm_program/system/back.php">'.$gL10n->get('BAC_BACK_TO_BACKUP_PAGE').'</a>
-        </span>
-    </li>
-</ul>';
+'.$gL10n->get('BAC_BACKUP_FILE').' <a href="'.$g_root_path.'/adm_program/modules/backup/backup_file_function.php?job=get_file&amp;filename='.basename($newfullfilename).'">'.basename($newfullfilename).'</a>
+('.FileSizeNiceDisplay(filesize($newfullfilename), 2).')</div>';
 
 OutputInformation('cancel_link', '');
 OutputInformation('topprogress', '');
 
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

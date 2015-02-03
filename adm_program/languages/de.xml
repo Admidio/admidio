@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
 <version id="3.0.0" translator="Markus Faßbender">
+    <text id="BAC_ONLY_MYSQL" development="new" translation="todo">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</text>
     <text id="ECA_SEND_ERROR" development="deleted" translation="todo"></text>
     <text id="ECA_STILL_XCHARS_AVAILABLE" development="deleted" translation="todo"></text>
     <text id="ECA_YOUR_MESSAGE" development="deleted" translation="todo"></text>
