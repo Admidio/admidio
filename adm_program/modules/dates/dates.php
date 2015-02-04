@@ -135,6 +135,7 @@ if($datesTotalCount != 0)
 
 // create html page object
 $page = new HtmlPage();
+$page->activateModal();
 
 if($getViewMode == 'html'  || $getViewMode == 'compact')
 {
@@ -145,8 +146,6 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
     };
 
     $page->addJavascript('
-        $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
-
         $("#admCalendar").change(function () {
             var calendarId = "";
             if ($("#admCalendar").selectedIndex != 0) {
@@ -294,7 +293,8 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
                 if($date->getValue('cat_org_id') == $gCurrentOrganization->getValue('org_id'))
                 {
                     $deleteIcon = '
-                    <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
+                    <a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=dat&amp;element_id=dat_'.
                         $date->getValue('dat_id').'&amp;name='.urlencode($date->getValue('dat_begin', $gPreferences['system_date']).' '.$date->getValue('dat_headline')).'&amp;database_id='.$date->getValue('dat_id').'"><img
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
                 }

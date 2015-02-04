@@ -53,29 +53,31 @@ $backupabsolutepath = $myFilesBackup->getFolder().'/'; // make sure to include t
 
 if($getMode == 'show_list')
 {
-    $old_backup_files = array();
-    $old_backup_files_cp = array();
+    $existingBackupFiles = array();
     
-    // Navigation faengt hier im Modul an
+    // start navigation of this module here
     $gNavigation->addStartUrl(CURRENT_URL, $headline);
     
-    //Liste der alten Backup Dateien bestimmen
+    // create a list with all valid files in the backup folder
     if ($handle = opendir($backupabsolutepath)) 
     {
         while (false !== ($file = readdir($handle))) 
     	{
-            if ($file != '.' && $file != '..' && $file !='.htaccess') 
-    		{
-                $old_backup_files[] = $file;
+            try
+            {
+                admStrIsValidFileName($file, true);
+                $existingBackupFiles[] = $file;
+            }
+            catch(AdmException $e)
+            {
+                $temp = 1;
             }
         }
         closedir($handle);	
     }
     
-    // Sortiert die Backupfiles nach Dateiname / Datum
-    sort($old_backup_files);
-    
-    $page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
+    // sort files (filename/date)
+    sort($existingBackupFiles);
     
     // create module menu
     $backupMenu = new HtmlNavbar('admMenuBackup', $headline, $page);
@@ -85,6 +87,7 @@ if($getMode == 'show_list')
     							$gL10n->get('BAC_START_BACKUP'), 'database_save.png');
     
     $page->addHtml($backupMenu->show(false));
+    $page->activateModal();
     
     //Define table
     $table = new HtmlTable('tableList', $page, true);
@@ -101,7 +104,7 @@ if($getMode == 'show_list')
     	
     $backup_size_sum = 0;
     	
-    foreach($old_backup_files as $key => $old_backup_file)
+    foreach($existingBackupFiles as $key => $old_backup_file)
     {
         // create array with all column values
         $columnValues = array(
@@ -109,7 +112,8 @@ if($getMode == 'show_list')
                 src="'. THEME_PATH. '/icons/page_white_compressed.png" alt="'. $old_backup_file. '" title="'. $old_backup_file. '" />'. $old_backup_file. '</a>',
             date ('d.m.Y H:i:s', filemtime($backupabsolutepath.$old_backup_file)),
             round(filesize($backupabsolutepath.$old_backup_file)/1024). ' kB',
-            '<a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
+            '<a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=bac&amp;element_id=row_file_'.
                 $key.'&amp;name='.urlencode($old_backup_file).'&amp;database_id='.$old_backup_file.'"><img
                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
         $table->addRowByArray($columnValues, 'row_file_'.$key);
@@ -117,7 +121,7 @@ if($getMode == 'show_list')
     	$backup_size_sum = $backup_size_sum + round(filesize($backupabsolutepath.$old_backup_file)/1024);
     }
     
-    if(count($old_backup_files) > 0)
+    if(count($existingBackupFiles) > 0)
     {   
         $columnValues = array('&nbsp;', $gL10n->get('BAC_SUM'), $backup_size_sum .' kB', '&nbsp;');
         $table->addRowByArray($columnValues);

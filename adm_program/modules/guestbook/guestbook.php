@@ -62,7 +62,6 @@ if($gPreferences['enable_rss'] == 1)
     $page->addRssFile($g_root_path.'/adm_program/modules/guestbook/rss_guestbook.php?headline='.$getHeadline, $gL10n->get('SYS_RSS_FEED_FOR_VAR', $gCurrentOrganization->getValue('org_longname').' - '.$getHeadline));
 };
 
-$page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
 $page->addJavascript('
         function getComments(commentId) {
             // RequestObjekt abschicken und Kommentar laden
@@ -70,7 +69,6 @@ $page->addJavascript('
             function(data) {
                 var objectId = "admCommentSection_" + commentId;
                 document.getElementById(objectId).innerHTML = data;
-                $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
                 toggleComments(commentId);
             });            
         }
@@ -266,12 +264,14 @@ else
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($gCurrentUser->editGuestbookRight())
                     {
-                            $page->addHtml('
-                            <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
-                                src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                            <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
-                                $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
-                                src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
+                        $page->activateModal();
+                        $page->addHtml('
+                        <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
+                            src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
+                        <a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                            href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.
+                            $guestbook->getValue('gbo_id').'&amp;database_id='.$guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img 
+                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                     }
                 $page->addHtml('</div>
             </div>
@@ -282,14 +282,17 @@ else
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
                 if($getModeration == 1 && $guestbook->getValue('gbo_locked') == 1)
                 {
+                    $page->activateModal();
                     $page->addHtml('
                     <ul class="icon-text-link-list icon-text-link-list-horizontal">
                         <li>
-                            <a class="icon-text-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                            <a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
+                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo_mod&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
                                 $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/ok.png" alt="'.$gL10n->get('SYS_UNLOCK').'" />'.$gL10n->get('SYS_UNLOCK').'</a>
                         </li>
                         <li>
-                            <a class="icon-text-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
+                            <a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
+                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=gbo&amp;element_id=gbo_'.$guestbook->getValue('gbo_id').'&amp;database_id='.
                                 $guestbook->getValue('gbo_id').'&amp;name='.urlencode($guestbook->getValue('gbo_name')).'"><img src="'. THEME_PATH. '/icons/no.png" alt="'.$gL10n->get('SYS_REMOVE').'" />'.$gL10n->get('SYS_REMOVE').'</a>
                         </li>
                     </ul>');

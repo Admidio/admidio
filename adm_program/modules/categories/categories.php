@@ -51,6 +51,7 @@ unset($_SESSION['categories_request']);
 
 // create html page object
 $page = new HtmlPage();
+$page->activateModal();
 
 $page->addJavascript('
 	function moveCategory(direction, catID) {
@@ -99,7 +100,6 @@ $page->addJavascript('
 			$.get(gRootPath + "/adm_program/modules/categories/categories_function.php?cat_id=" + catID + "&type='. $getType. '&mode=4&sequence=" + direction);
 		}
 	}');
-$page->addJavascript('$("icon-link-popup").colorbox({rel:\'nofollow\', height: \'320px\', onComplete:function(){$("#admButtonNo").focus();}});', true);
 
 $page->addHeadline($headline);
 
@@ -204,8 +204,9 @@ while($cat_row = $gDb->fetch_array($categoryResult))
     }
     else
     {
-        $categoryAdministration .= '<a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
-                                       $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img
+        $categoryAdministration .= '<a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=cat&amp;element_id=row_'.
+                                        $category->getValue('cat_id').'&amp;name='.urlencode($category->getValue('cat_name')).'&amp;database_id='.$category->getValue('cat_id').'&amp;database_id_2='.$getType.'"><img
                                            src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     }
     
