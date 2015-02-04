@@ -32,6 +32,7 @@
 define('FIELD_DEFAULT', 0);
 define('FIELD_MANDATORY', 1);
 define('FIELD_DISABLED', 2);
+define('FIELD_READONLY', 3);
 
 class HtmlForm extends HtmlFormBasic
 {
@@ -606,6 +607,7 @@ class HtmlForm extends HtmlFormBasic
      *                     @b FIELD_DEFAULT The field can accept an input.
      *                     @b FIELD_MANDATORY The field will be marked as a mandatory field where the user must insert a value.
      *                     @b FIELD_DISABLED The field will be disabled and could not accept an input.
+	 *                     @b FIELD_READONLY The field will be readable but not changeable.
 	 *                  @b helpTextIdLabel    A unique text id from the translation xml files that should be shown e.g. SYS_ENTRY_MULTI_ORGA.
      *                     If set a help icon will be shown after the control label where the user can see the text if he hover over the icon.
      *                     If you need an additional parameter for the text you can add an array. The first entry must
@@ -646,6 +648,10 @@ class HtmlForm extends HtmlFormBasic
         if($optionsAll['property'] == FIELD_DISABLED)
         {
             $attributes['disabled'] = 'disabled';
+        }
+        if($optionsAll['property'] == FIELD_READONLY)
+        {
+            $attributes['readonly'] = 'readonly';
         }
 		elseif($optionsAll['property']  == FIELD_MANDATORY)
 		{

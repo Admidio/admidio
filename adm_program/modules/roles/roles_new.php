@@ -140,7 +140,7 @@ $form = new HtmlForm('roles_edit_form', $g_root_path.'/adm_program/modules/roles
 $form->openGroupBox('gb_name_category', $gL10n->get('SYS_NAME').' & '.$gL10n->get('SYS_CATEGORY'));
 	if($role->getValue('rol_webmaster') == 1)
 	{
-        $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), array('maxLength' => 100, 'property' => FIELD_DISABLED));
+        $form->addInput('rol_name', $gL10n->get('SYS_NAME'), $role->getValue('rol_name'), array('maxLength' => 100, 'property' => FIELD_READONLY));
     }
     else
     {
@@ -221,6 +221,10 @@ $form->openGroupBox('gb_authorization', $gL10n->get('SYS_AUTHORIZATION'));
     if($gPreferences['enable_weblinks_module'] > 0)
     {
     	$form->addCheckbox('rol_weblinks', $gL10n->get('ROL_RIGHT_WEBLINKS'), $role->getValue('rol_weblinks'), array('icon' => 'weblinks.png'));
+    }
+	if($gPreferences['enable_inventory_module'] > 0)
+    {
+    	$form->addCheckbox('rol_inventory', $gL10n->get('ROL_RIGHT_INVENTORY'), $role->getValue('rol_inventory'), array('icon' => 'inventory.png'));
     }
 $form->closeGroupBox();
 $form->openGroupBox('gb_dates_meetings', $gL10n->get('DAT_DATES').' / '.$gL10n->get('ROL_MEETINGS').'&nbsp;&nbsp;('.$gL10n->get('SYS_OPTIONAL').')');

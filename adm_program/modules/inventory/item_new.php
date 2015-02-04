@@ -53,15 +53,15 @@ switch($getNewItem)
 {
     case 0:
         // prueft, ob der user die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentuser->editInventory($inventory) == false)
+        if($gCurrentUser->editInventory($inventory) == false)
         {
-            //$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
         break;
 
     case 1:
         // prueft, ob der inventory die notwendigen Rechte hat, neue inventory anzulegen
-        if($gCurrentUser->editUsers() == false)
+        if($gCurrentUser->editInventory() == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
@@ -147,7 +147,7 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 $fieldProperty = FIELD_DEFAULT;
                 $fieldHelpId   = null;
                 
-                if($gCurrentinventory->isWebmaster() == false && $getNewItem == 0)
+                if($gCurrentUser->isWebmaster() == false && $getNewItem == 0)
                 {
                     $fieldProperty = FIELD_DISABLED;
                 }
