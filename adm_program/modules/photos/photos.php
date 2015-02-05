@@ -301,7 +301,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
                 {
                     $photoThumbnailTable .= '
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img 
+                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecards.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img 
                         src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                 }
                 
