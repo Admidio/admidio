@@ -38,6 +38,7 @@ class HtmlPage
     protected $jsFiles;         ///< An array with all necessary javascript files for the html page.
     protected $rssFiles;        ///< An array with all necessary rss files for the html page.
     protected $printMode;       ///< A flag that indicates if the page should be styled in print mode then no colors will be shown
+    protected $hasModal;        ///< Flag if a modal window should be shown on this page. A little JS and a small HTML snipplet will be added.
     
     /** Constructor creates the page object and initialized all parameters
      *  @param $title A string that contains the title for the page.
@@ -53,6 +54,7 @@ class HtmlPage
         $this->containThemeHtml = true;
         $this->printMode = false;
         $this->hasNavbar = false;
+        $this->hasModal  = false;
         
         if($gDebug)
         {
@@ -75,6 +77,11 @@ class HtmlPage
         }
         $this->rssFiles = array();
         $this->addJavascript('$(".colorbox-dialog").colorbox({rel:\'nofollow\'});', true);
+    }
+    
+    public function activateModal()
+    {
+        $this->hasModal = true;
     }
 
     /** Adds a cascading style sheets file to the html page.
@@ -238,12 +245,12 @@ class HtmlPage
         if($this->containThemeHtml)
         {
             ob_start();
-            include(THEME_SERVER_PATH. '/my_header_new.php');
+            include(THEME_SERVER_PATH. '/my_header.php');
             $htmlMyHeader = ob_get_contents();
             ob_end_clean();
 
             ob_start();
-            include(THEME_SERVER_PATH. '/my_body_top_new.php');
+            include(THEME_SERVER_PATH. '/my_body_top.php');
             $htmlMyBodyTop = ob_get_contents();
             ob_end_clean();
 
@@ -251,7 +258,7 @@ class HtmlPage
             $gDb->setCurrentDB();
 
             ob_start();
-            include(THEME_SERVER_PATH. '/my_body_bottom_new.php');
+            include(THEME_SERVER_PATH. '/my_body_bottom.php');
             $htmlMyBodyBottom = ob_get_contents();
             ob_end_clean();
 
@@ -298,6 +305,15 @@ class HtmlPage
         else
         {
         	$this->title = $gCurrentOrganization->getValue('org_longname');
+        }
+        
+        // add code for a modal window
+        if($this->hasModal)
+        {
+            $this->addJavascript('$("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); });', true);
+            $this->addHtml('<div class="modal fade" id="admidio_modal" tabindex="-1" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog"><div class="modal-content"></div></div>
+                            </div>');
         }
 
         // add javascript code to page        

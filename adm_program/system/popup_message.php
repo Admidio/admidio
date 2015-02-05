@@ -93,7 +93,7 @@ switch ($get_type)
         $url = 'links_function.php?mode=2&lnk_id='.$get_database_id;
         break;
     case 'nwu':
-        $url = 'new_user_function.php?mode=4&new_user_id='.$get_database_id;
+        $url = 'registration_function.php?mode=4&new_user_id='.$get_database_id;
         break;
     case 'pho':
         $url  = 'photo_function.php?job=delete&pho_id='.$get_database_id_2.'&photo_nr='.$get_database_id;
@@ -168,7 +168,7 @@ function deleteEntry()
     // send RequestObjekt and delete entry
     $.get("'.$url.'", function(data) {
         if(data == "done") {
-            $.colorbox.close();
+            $("#admidio_modal").modal("hide")
             $(entryDeleted).fadeOut("slow");
 			'.$callbackSuccess.'
         }
@@ -187,6 +187,25 @@ function deleteEntry()
 }
 //--></script>
 
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
+</div>
+<div class="modal-body row">
+    <div class="col-xs-2"><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
+    <div class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
+</div>
+<div class="modal-footer">
+
+        <button id="admButtonYes" class="btn btn-default" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
+            alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
+        <button id="admButtonNo" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png" 
+            alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
+        <button id="admButtonClose" class="btn btn-default hidden" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
+            alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
+
+</div>';
+/*
 <div class="popup-window">
     <h1>'.$gL10n->get('SYS_NOTE').'</h1>
 
@@ -209,5 +228,5 @@ function deleteEntry()
             </li>
         </ul>
     </div>
-</div>';
+</div>';*/
 ?>

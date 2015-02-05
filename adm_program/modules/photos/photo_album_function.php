@@ -210,5 +210,4 @@ elseif($getMode == 'delete')
     exit();
 }
 
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 ?>

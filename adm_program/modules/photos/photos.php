@@ -48,6 +48,7 @@ $getLocked   = admFuncVariableIsValid($_GET, 'locked', 'numeric', array('default
 $getPhotoNr  = admFuncVariableIsValid($_GET, 'photo_nr', 'numeric');
 
 unset($_SESSION['photo_album_request']);
+unset($_SESSION['ecard_request']);
 
 // Fotoalbums-Objekt erzeugen oder aus Session lesen
 if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
@@ -124,7 +125,6 @@ if($gPreferences['enable_rss'] == 1)
 
 if($gCurrentUser->editPhotoRight())
 {
-    $page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
     $page->addJavascript('
         // rotate image
         function imgrotate(img, direction) {
@@ -291,7 +291,8 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                         src="'. THEME_PATH. '/icons/arrow_turn_left.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_LEFT').'" /></a>
                     <a class="icon-link" href="javascript:void(0)" onclick="return imgrotate('.$lastPhotoNr.', \'right\')"><img 
                         src="'. THEME_PATH. '/icons/arrow_turn_right.png" alt="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" title="'.$gL10n->get('PHO_PHOTO_ROTATE_RIGHT').'" /></a>
-                    <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=div_image_'.
+                    <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho&amp;element_id=div_image_'.
                         $lastPhotoNr.'&amp;database_id='.$lastPhotoNr.'&amp;database_id_2='.$getPhotoId.'"><img 
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     
@@ -300,7 +301,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 if($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1)
                 {
                     $photoThumbnailTable .= '
-                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecard_form.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img 
+                    <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/ecards/ecards.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'&amp;show_page='.$getPhotoNr.'"><img 
                         src="'. THEME_PATH. '/icons/ecard.png" alt="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" title="'.$gL10n->get('PHO_PHOTO_SEND_ECARD').'" /></a>';
                 }
                 
@@ -357,6 +358,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 		$datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
 	}
     
+    $page->activateModal();
 	$page->addHtml('<br />
 	<div class="row">
 	    <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
@@ -467,10 +469,12 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                         // if user has admin rights for photo module then show some functions
                         if ($gCurrentUser->editPhotoRight())
                         {
+                            $page->activateModal();
                             $page->addHtml('
                             <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;mode=change"><img 
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                            <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=panel_pho_'.
+                            <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                href="'.$g_root_path.'/adm_program/system/popup_message.php?type=pho_album&amp;element_id=panel_pho_'.
                                 $childPhotoAlbum->getValue('pho_id').'&amp;name='.urlencode($childPhotoAlbum->getValue('pho_name')).'&amp;database_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
                                 src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>');
                         }

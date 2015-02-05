@@ -3,14 +3,13 @@
      of an Admidio module page.
 -->
 
+<div id="page" class="container-fluid">
+    <div id="header-block" class="admidio-container">
+        <img id="admidio-logo" class="hidden-xs" src="<?php echo THEME_PATH; ?>/images/logo.png" alt="Logo" />
+        <div id="page-h1-membership" class="hidden-xs"><?php echo $gL10n->get('SYS_ONLINE_MEMBERSHIP_ADMINISTRATION'); ?></div>
+        <div id="page-h1-orga"><?php echo $gCurrentOrganization->getValue('org_longname'); ?></div>
+    </div>
 
-<div id="page_header">
-	<h1><?php echo $gCurrentOrganization->getValue("org_longname"); ?></h1>
-</div>
-
-<div style="clear: left;"><br /></div>
-
-<div id="page">
-	<div id="left_block">
-		<div id="top_border_img_big"></div>
-		<div id="content_left" class="content">&nbsp;
+    <div class="row">
+        <div class="col-sm-9">
+            <div id="left-block" class="admidio-container">

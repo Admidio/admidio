@@ -91,38 +91,28 @@ if ($getUserId > 0)
     }
 }
 
-// ruf die Funktion auf die alle Post und Get Variablen parsed
-$funcClass->getVars();
+if(isset($_SESSION['ecard_request']))
+{
+    // if user is returned to this form after he submit it, 
+    // then try to restore all values that he has entered before
+    $template   = $_SESSION['ecard_request']['ecard_template'];
+    $recipients = $_SESSION['ecard_request']['ecard_recipients'];
+    $message    = $_SESSION['ecard_request']['ecard_message'];
+}
+else
+{
+    $template   = $gPreferences['ecard_template'];
+    $recipients = null;
+    $message    = '';
+}
 
 // create html page object
 $page = new HtmlPage();
 
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/ecards/ecard.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascript('
-			var ecardJS = new ecardJSClass();
-			ecardJS.nameOfRecipient_Text	= "'.$gL10n->get('ECA_NAME_OF_RECIPIENT', $var1='[VAR1]').'";
-			ecardJS.emailOfRecipient_Text	= "'.$gL10n->get('ECA_EMAIL_OF_RECIPIENT', $var1='[VAR1]').'";
-			ecardJS.message_Text			= "'.$gL10n->get('ECA_THE_MESSAGE').'";
-			ecardJS.recipient_Text			= "'.$gL10n->get('SYS_RECIPIENT').'";
-			ecardJS.recipientName_Text		= "'.$gL10n->get('ECA_RECIPIENT_NAME').'";
-			ecardJS.recipientEmail_Text		= "'.$gL10n->get('ECA_RECIPIENT_EMAIL').'";
-			ecardJS.emailLookInvalid_Text	= "'.$gL10n->get('ECA_EMAIL_LOOKS_INVALID').'";
-			ecardJS.contentIsLoading_Text	= "'.$gL10n->get('ECA_CONTENT_LOADING').'";
-			ecardJS.moreRecipients_Text		= "'.$gL10n->get('ECA_MORE_RECIPIENTS').'";
-			ecardJS.noMoreRecipients_Text	= "'.$gL10n->get('ECA_NO_MORE_RECIPIENTS').'";
-			ecardJS.blendInSettings_Text	= "'.$gL10n->get('ECA_BLEND_IN_SETTINGS').'";
-			ecardJS.blendOutSettings_Text	= "'.$gL10n->get('ECA_BLEND_OUT_SETTINGS').'";
-			ecardJS.internalRecipient_Text	= "'.$gL10n->get('ECA_INTERNAL_RECIPIENT').'";
-			ecardJS.messageTooLong			= "'.$gL10n->get('ECA_MESSAGE_TOO_LONG',$var1='[MAX]').'";
-			ecardJS.loading_Text			= "'.$gL10n->get('SYS_LOADING_CONTENT').'";
-			ecardJS.send_Text				= "'.$gL10n->get('SYS_SEND').'";
-			ecardJS.template_Text			= "'.$gL10n->get('ECA_TEMPLATE').'";
-			ecardJS.templates				= '.$funcClass->createJSTemplateArray($templates).';
-			ecardJS.sendDoneURL			= "'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'&photo_nr='.$showPage.'"; 
-			
-			ecardJS.init();
-');
+	var ecardJS = new ecardJSClass();
+	ecardJS.init();');
 
 // add headline and title of module
 $page->addHeadline($headline);
@@ -141,14 +131,14 @@ if($gCurrentUser->isWebmaster())
 $page->addHtml($ecardMenu->show(false));
 
 // show form
-$form = new HtmlForm('ecard_form', null, $page);
+$form = new HtmlForm('ecard_form', 'ecard_send.php', $page);
 $form->addInput('submit_action', null, '', array('type' => 'hidden'));
 $form->addInput('photo_id', null, $getPhotoId, array('type' => 'hidden'));
 $form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
-        <a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
+        <a class="ecardPhoto" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
             src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" 
             class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
         </a>');
@@ -157,7 +147,7 @@ $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     {
         $templates[$key] = ucfirst(preg_replace('/[_-]/',' ',str_replace('.tpl', '', $templateName)));
     }
-    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $gPreferences['ecard_template'], 'property' => FIELD_MANDATORY));
+    $form->addSelectBox('ecard_template', $gL10n->get('ECA_TEMPLATE'), $templates, array('defaultValue' => $template, 'property' => FIELD_MANDATORY));
 $form->closeGroupBox();
 $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
 
@@ -167,8 +157,10 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
     $arrayMailRoles = $gCurrentUser->getAllMailRoles();
     
     $sql = 'SELECT rol_id, rol_name 
-              FROM '. TBL_ROLES. '
+              FROM '. TBL_ROLES. ', '. TBL_CATEGORIES. '
              WHERE rol_id IN ('.implode(',', $arrayMailRoles).')
+               AND rol_cat_id = cat_id
+               AND cat_name_intern <> \'CONFIRMATION_OF_PARTICIPATION\'
              ORDER BY rol_name ';
 
     $result = $gDb->query($sql);
@@ -210,168 +202,22 @@ $form->openGroupBox('gb_contact_details', $gL10n->get('SYS_CONTACT_DETAILS'));
         $list[] = array($row['usr_id'], $row['first_name'].' '.$row['last_name']. ' ('.$row['email'].')', $gL10n->get('SYS_MEMBERS'));
     }
         
-	$form->addSelectBox('recipient', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
-                        'showContextDependentFirstEntry' => false, 'multiselect' => true));
+	$form->addSelectBox('ecard_recipients', $gL10n->get('SYS_TO'), $list, array('property' => FIELD_MANDATORY, 
+                        'defaultValue' => $recipients, 'showContextDependentFirstEntry' => false, 'multiselect' => true));
     $form->addLine();
     $form->addInput('name_from', $gL10n->get('MAI_YOUR_NAME'), $gCurrentUser->getValue('FIRST_NAME'). ' '. $gCurrentUser->getValue('LAST_NAME'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
-    $form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_MANDATORY));
+    $form->addInput('mail_from', $gL10n->get('MAI_YOUR_EMAIL'), $gCurrentUser->getValue('EMAIL'), array('maxLength' => 50, 'property' => FIELD_DISABLED));
 $form->closeGroupBox();
 $form->openGroupBox('gb_message', $gL10n->get('SYS_MESSAGE'), 'panel-editor');
-    $form->addEditor('ecard_message', null, null, array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));
+    $form->addEditor('ecard_message', null, $message, array('property' => FIELD_MANDATORY, 'toolbar' => 'AdmidioGuestbook'));
 $form->closeGroupBox();
 $form->openButtonGroup();
     $form->addButton('btn_ecard_preview', $gL10n->get('SYS_PREVIEW'), array('icon' => THEME_PATH. '/icons/eye.png'));
-    $form->addButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH. '/icons/email.png'));
+    $form->addSubmitButton('btn_ecard_submit', $gL10n->get('SYS_SEND'), array('icon' => THEME_PATH. '/icons/email.png'));
 $form->closeButtonGroup();
 
 // add form to html page and show page
 $page->addHtml($form->show(false));
 $page->show();
-exit();
-echo '
-<div class="formLayout">
-    <div class="formHead">'. $gLayout['title']. '</div>
-    <div class="formBody">
-		<div class="groupBox" id="admEcardPhoto">
-			<div class="groupBoxHeadline" id="admEcardPhotoHead">
-				<a class="iconShowHide" href="javascript:showHideBlock(\'admEcardPhotoBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-				id="admEcardPhotoBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_PHOTO').'
-			</div>
-
-			<div class="groupBoxBody" id="admEcardPhotoBody">
-				<ul class="formFieldList">
-					<li>
-						<div>
-							<a rel="colorboxImage" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
-								src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" 
-								class="imageFrame" alt="'.$gL10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'"  title="'.$gL10n->get("ECA_VIEW_PICTURE_FULL_SIZED").'" />
-							</a>
-						</div>
-					</li>
-				</ul>
-			</div>
-		</div>
-
-		<form id="ecard_form" method="post">
-			<input type="hidden" name="ecard[image_name]" value="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" />
-			<input type="hidden" name="ecard[image_serverPath]" value="'.SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id').'/'.$getPhotoNr.'.jpg" />
-			<input type="hidden" name="ecard[submit_action]" value="" />
-			<input type="hidden" name="ecard[template_name]" value="'.$gPreferences['ecard_template'].'" />
-
-			<div class="groupBox" id="admMailContactDetails">
-				<div class="groupBoxHeadline" id="admMailContactDetailsHead">
-					<a class="iconShowHide" href="javascript:showHideBlock(\'admMailContactDetailsBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-					id="admMailContactDetailsBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_CONTACT_DETAILS').'
-				</div>
-
-				<div class="groupBoxBody" id="admMailContactDetailsBody">
-					<ul class="formFieldList">
-						<li>
-							<dl>
-								<dt>
-									<label>'.$gL10n->get("SYS_TO").':</label>
-								</dt>
-								<dd id="Menue">';
-									if ($getUserId > 0)
-									{
-										// usr_id wurde uebergeben, dann E-Mail direkt an den User schreiben
-										echo '<div id="extern">
-												<input type="text" readonly="readonly" name="ecard[name_recipient]" style="display: none;" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'">
-												<input type="text" disabled="disabled" style="margin-bottom:3px; width: 200px;" maxlength="50" value="'.$user->getValue('FIRST_NAME').' '.$user->getValue('LAST_NAME').'"><span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-												<input type="text" readonly="readonly" name="ecard[email_recipient]" style="display: none;" value="'.$user->getValue('EMAIL').'">
-												<input type="text" disabled="disabled" maxlength="50" value="'.$user->getValue('EMAIL').'"><span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-											 </div>';
-
-									}
-									else
-									{
-									   echo '<div id="externSwitch" style="float:right; padding-left:5px; position:relative;"></div>
-											 <div id="basedropdownmenu" style="display:block; padding-bottom:3px;"></div>
-											 <div id="dropdownmenu" style="display:block;"></div>
-											 <div id="extern">
-												<input type="hidden" name="ecard[email_recipient]" value="" />
-												<input type="hidden" name="ecard[name_recipient]"  value="" />
-											 </div>
-											 <div id="wrong" style="width:300px;background-image: url(\''.THEME_PATH.'/icons/error.png\'); background-repeat: no-repeat;background-position: 5px 5px;margin-top:5px; border:1px solid #ccc;padding:5px;background-color: #FFFFE0; padding-left: 28px;display:none;"></div>';
-									}
-									echo '
-								</dd>
-							</dl>
-						</li>
-						<li>';
-                        if($gPreferences['enable_ecard_cc_recipients'])
-                        {
-                            echo '<div id="getmoreRecipient">
-                            <a href="javascript:ecardJS.showHideMoreRecipient(\'moreRecipient\',\'getmoreRecipient\');">'.$gL10n->get("ECA_MORE_RECIPIENTS").'</a>
-                            </div>';
-                        }
-                        echo'
-						</li>
-						<li>
-							<div id="moreRecipient" style="display:none;">
-							<hr />
-								<dl>
-									<dt>'.$gL10n->get("ECA_MORE_RECIPIENTS").':</dt>
-									<dd>
-										<table summary="TableccContainer" border="0" >
-											<tr>
-												<td style="width:150px; text-align: left;">'.$gL10n->get("SYS_NAME").'</td>
-												<td style="width:200px; padding-left:14px; text-align: left;">'.$gL10n->get("SYS_EMAIL").'</td>
-											</tr>
-										</table>
-										<div id="ccrecipientContainer" style="width:490px; border:0px; text-align: left;"></div>
-										<table summary="TableCCRecipientSettings" border="0">
-												<tr>
-													<td style="text-align: left;"><span class="iconTextLink"><a href="javascript:ecardJS.addRecipient()"><img src="'. THEME_PATH.'/icons/add.png" alt="'.$gL10n->get("SYS_ADD_RECIPIENTS").'" /></a><a href="javascript:ecardJS.addRecipient()">'.$gL10n->get("SYS_ADD_RECIPIENTS").'</a></span></td>
-												</tr>
-										</table>
-									</dd>
-								</dl>
-							</div>
-						</li>
-						<li>
-							<hr />
-						</li>
-						<li>
-							<dl>
-								<dt><label>'.$gL10n->get('SYS_SENDER').':</label></dt>
-								<dd><input type="text" disabled="disabled" maxlength="50" style="width: 90%;" value="'.$gCurrentUser->getValue('FIRST_NAME').' '.$gCurrentUser->getValue('LAST_NAME').'" /></dd>
-							</dl>
-						</li>
-						 <li>
-							<dl>
-								<dt><label>'.$gL10n->get('SYS_EMAIL').':</label></dt>
-								<dd><input type="text" disabled="disabled" maxlength="50" style="width: 90%;"  value="'.$gCurrentUser->getValue('EMAIL').'" /></dd>
-							</dl>
-						</li>
-					</ul>
-				</div>
-			</div>
-			
-			<div class="groupBox" id="admMessage">
-				<div class="groupBoxHeadline" id="admMessageHead">
-					<a class="iconShowHide" href="javascript:showHideBlock(\'admMessageBody\', \''.$gL10n->get('SYS_FADE_IN').'\', \''.$gL10n->get('SYS_HIDE').'\')"><img
-					id="admMessageBodyImage" src="'. THEME_PATH. '/icons/triangle_open.gif" alt="'.$gL10n->get('SYS_HIDE').'" title="'.$gL10n->get('SYS_HIDE').'" /></a>'.$gL10n->get('SYS_MESSAGE').'
-				</div>
-
-				<div class="groupBoxBody" id="admMessageBody">
-					<ul class="formFieldList">
-						<li>
-							 './*$ckEditor->createEcardEditor('admEcardMessage', '', 'AdmidioEcard').*/'
-							 <span class="mandatoryFieldMarker" title="'.$gL10n->get('SYS_MANDATORY_FIELD').'">*</span>
-						</li>
-					</ul>
-				</div>
-			</div>
-
-			<div class="formSubmit">
-				<button id="btnPreview" type="button"><img 
-					src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />&nbsp;'.$gL10n->get('SYS_PREVIEW').'</button>&nbsp;&nbsp;&nbsp;&nbsp;
-				<button id="ecardSubmit" onclick="javascript:ecardJS.sendEcard();" type="button"><img 
-					src="'. THEME_PATH. '/icons/email.png" alt="'.$gL10n->get('SYS_SEND').'" />&nbsp;'.$gL10n->get('SYS_SEND').'</button>
-			</div>
-		</form>
-	</div>
-</div>';
 
 ?>

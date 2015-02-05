@@ -1,11 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="de">
 <version id="3.0.0" translator="Markus Faßbender">
+    <text id="BAC_ONLY_MYSQL" development="new" translation="todo">Das Backupmodul kann nur bei einer MySQL-Datenbank genutzt werden.</text>
+    <text id="ECA_SEND_ERROR" development="deleted" translation="todo"></text>
+    <text id="ECA_STILL_XCHARS_AVAILABLE" development="deleted" translation="todo"></text>
+    <text id="ECA_YOUR_MESSAGE" development="deleted" translation="todo"></text>
+    <text id="ECA_SCALING_GREETING_CARD" development="deleted" translation="todo"></text>
+    <text id="ECA_SCALING_GREETING_CARD_DESC" development="deleted" translation="todo"></text>
+    <text id="ECA_SCALING_PREVIEW" development="deleted" translation="todo"></text>
+    <text id="ECA_SCALING_PREVIEW_DESC" development="deleted" translation="todo"></text>
+    <text id="ECA_SEND_ECARD_TO_ROLE" development="deleted" translation="todo"></text>
+    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="deleted" translation="todo"></text>
+    <text id="ECA_GREETING_CARD_PREVIEW" development="deleted" translation="todo"></text>
+    <text id="ECA_INPUT_INCORRECT" development="deleted" translation="todo"></text>
+    <text id="ECA_MORE_RECIPIENTS" development="deleted" translation="todo"></text>
+    <text id="ECA_NAME_OF_SENDER" development="deleted" translation="todo"></text>
+    <text id="ECA_EMAIL_OF_SENDER" development="deleted" translation="todo"></text>
+    <text id="ECA_FIELD_ERROR" development="deleted" translation="todo"></text>
+    <text id="ECA_FONT" development="deleted" translation="todo"></text>
+    <text id="ECA_FONT_SIZE" development="deleted" translation="todo"></text>
+    <text id="ECA_FONT_COLOR" development="deleted" translation="todo"></text>
+    <text id="ECA_FILL_INPUTS" development="deleted" translation="todo"></text>
     <text id="ECA_LAYOUT" development="new" translation="todo">Layout</text>
     <text id="ECA_SCALE_THUMBNAILS_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die längere Bildseite in der Thumbnailanzeige skaliert werden soll. (Standard: 250 Pixel)</text>
     <text id="ECA_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild in der Grußkarte haben darf. (Standard: 400 x 250 Pixel)</text>
     <text id="ECA_MAX_CC" development="deleted" translation="todo"></text>
     <text id="ECA_MAX_CC_DESC" development="deleted" translation="todo"></text>
+    <text id="ECA_GREETING_CARD_SEND" development="deleted" translation="todo"></text>
+    <text id="ECA_NAME_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="deleted" translation="todo"></text>
+    <text id="ECA_EMAIL_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="deleted" translation="todo"></text>
+    <text id="ECA_THE_MESSAGE" development="deleted" translation="todo"></text>
+    <text id="ECA_OTHER_RECIPIENT" development="deleted" translation="todo"></text>
+    <text id="ECA_EXTERNAL_RECIPIENT" development="deleted" translation="todo"></text>
+    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="deleted" translation="todo"></text>
+    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="deleted" translation="todo"></text>
+    <text id="ECA_EMAIL_LOOKS_INVALID" development="deleted" translation="todo"></text>
+    <text id="ECA_CONTENT_LOADING" development="deleted" translation="todo"></text>
+    <text id="ECA_NO_MORE_RECIPIENTS" development="deleted" translation="todo"></text>
+    <text id="ECA_BLEND_IN_SETTINGS" development="deleted" translation="todo"></text>
+    <text id="ECA_BLEND_OUT_SETTINGS" development="deleted" translation="todo"></text>
+    <text id="ECA_INTERNAL_RECIPIENT" development="deleted" translation="todo"></text>
+    <text id="ECA_MESSAGE_TOO_LONG" description="%VAR1% wird durch die max. Länge ersetzt" development="deleted" translation="todo"></text>
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="todo">Es wurde bereits eine Konfigurationsdatei gefunden. Eine erneute Installation ist nicht möglich.\n\nFalls deine vorherige Installation unterbrochen wurde, kannst du diese hier fortsetzen.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="todo">Installation fortsetzen</text>
     <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="todo"></text>
@@ -348,7 +383,6 @@
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="changed" translation="todo">Gibt an, wie viele Tage aus der Vergangenheit in einem iCal-Download oder -Abo einbezogen werden.  (Standard: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füll die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf 'Abschicken'.\n\n %VAR1%</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Deine Datenbank liegt in Version %VAR1% vor.\n\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
     <text id="INS_FACEBOOK" development="new" translation="todo">Facebook</text>
@@ -557,50 +591,17 @@
     <text id="ECA_A_ECARD_FROM" development="new" translation="todo">Eine Grußkarte von</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="todo">Grußkarten aktivieren</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="todo">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
-    <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="todo">Einstellungen einblenden</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="todo">Einstellungen ausblenden</text>
-    <text id="ECA_CONTENT_LOADING" development="new" translation="todo">Inhalt wird geladen - Bitte warten!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="todo">E-Mail-Adresse scheint falsch zu sein!</text>
-    <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="todo">externer Empfänger</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="new" translation="todo">E-Mail des%VAR1%Empfängers</text>
-    <text id="ECA_EMAIL_OF_SENDER" development="new" translation="todo">E-Mail des Absenders</text>
-    <text id="ECA_FIELD_ERROR" development="new" translation="todo">Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füll diese aus, bzw. korrigier diese.</text>
-    <text id="ECA_FONT" development="new" translation="todo">Hier wird die Standard Schriftart festgelegt. (Standard: Comic Sans MS)</text>
-    <text id="ECA_FONT_SIZE" development="new" translation="todo">Hier wird die Standard Schriftgröße festgelegt. (Standard: 20) </text>
-    <text id="ECA_FONT_COLOR" development="new" translation="todo">Hier wird die Standard Schriftfarbe festgelegt. (Standard: black)</text>
     <text id="ECA_GREETING_CARD" development="new" translation="todo">Grußkarte</text>
     <text id="ECA_GREETING_CARDS" development="new" translation="todo">Grußkarten</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="todo">Grußkarte bearbeiten</text>
-    <text id="ECA_GREETING_CARD_SEND" development="new" translation="todo">Grußkarte abschicken</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="todo">Vorschau der Grußkarte</text>
-    <text id="ECA_INPUT_INCORRECT" development="new" translation="todo">Du hast die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
-    <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="todo">interner Empfänger</text>
-    <text id="ECA_MESSAGE_TOO_LONG" description="%VAR1% wird durch die max. Länge ersetzt" development="new" translation="todo">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
-    <text id="ECA_MORE_RECIPIENTS" development="new" translation="todo">Weitere Empfänger</text>
-    <text id="ECA_NAME_OF_SENDER" development="new" translation="todo">Name des Absenders</text>
-    <text id="ECA_NAME_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="new" translation="todo">Name des%VAR1%Empfängers</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="todo">Neue Nachricht erhalten</text>
-    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="todo">Kein User vorhanden der eine gültige E-mail besitzt!</text>
-    <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="todo">Keine weiteren Empfänger</text>
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde leider nicht erfolgreich versendet!</text>
-    <text id="ECA_OTHER_RECIPIENT" development="new" translation="todo">Anderer Empfänger</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="todo">Bitte wähle eine gültige Rolle aus!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="todo">Empfänger E-Mail</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="todo">Empfänger Name</text>
-    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe)</text>
-    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel) </text>
-    <text id="ECA_SCALING_PREVIEW" development="new" translation="todo">Skalierung Vorschaubild (Breite x Höhe)</text>
-    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel)</text>
-    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="todo">Deine Grußkarte wird an die Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nUnter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Bitte probier es zu einem späteren Zeitpunkt noch einmal.</text>
-    <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="todo">Deine Grußkarte wurde erfolgreich versendet.</text>
     <text id="ECA_TEMPLATE" development="new" translation="todo">Template</text>
     <text id="ECA_TEMPLATE_DESC" development="new" translation="todo">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
-    <text id="ECA_THE_MESSAGE" development="new" translation="todo">Eine Nachricht</text>
-    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="todo">An die gesamte Rolle</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="todo">Bild in voller Größe anzeigen</text>
-    <text id="ECA_YOUR_MESSAGE" development="new" translation="todo">Deine Nachricht</text>
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="todo">Zurück zum Gästebuch</text>

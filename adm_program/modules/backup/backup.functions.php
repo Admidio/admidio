@@ -243,12 +243,12 @@ function OutputInformation($id, $dhtml, $text='') {
 			} else {
 				echo $dhtml;
 			}
-			flush();
+			//flush();
 		}
 	} else {
 		if ($text) {
 			echo $text;
-			flush();
+			//flush();
 		}
 	}
 	return true;
