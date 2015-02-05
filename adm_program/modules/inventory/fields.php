@@ -26,9 +26,9 @@ unset($_SESSION['fields_request']);
 
 // create html page object
 $page = new HtmlPage();
+$page->activateModal();
 
-$page->addJavascript('$(".group-heading").click(function() {showHideBlock($(this).attr("id"));});
-    $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
+$page->addJavascript('$(".group-heading").click(function() {showHideBlock($(this).attr("id"));});', true);
 $page->addJavascript('
     function moveCategory(direction, usfID) {
         var actRow = document.getElementById("row_usf_" + usfID);
@@ -209,8 +209,9 @@ while($row = $gDb->fetch_array($result))
     }
     else
     {
-        $usfSystem .='<a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=inf&amp;element_id=row_inf_'.
-                            $userField->getValue('inf_id').'&amp;name='.urlencode($userField->getValue('inf_name')).'&amp;database_id='.$userField->getValue('inf_id').'"><img 
+        $usfSystem .='<a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=inf&amp;element_id=row_inf_'.
+                        $userField->getValue('inf_id').'&amp;name='.urlencode($userField->getValue('inf_name')).'&amp;database_id='.$userField->getValue('inf_id').'"><img 
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>';
     }
     

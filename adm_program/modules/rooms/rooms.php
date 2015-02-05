@@ -28,8 +28,6 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-$page->addJavascript('$(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});', true);
-
 $page->addHeadline($headline);
 
 // create module menu
@@ -95,6 +93,7 @@ else
         $room->clear();
         $room->setArray($row);
         
+        $page->activateModal();
         $page->addHtml('
         <div class="panel panel-primary" id="room_'.$room->getValue('room_id').'">
             <div class="panel-heading">
@@ -105,7 +104,8 @@ else
                 <div class="pull-right text-right">
                     <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/rooms/rooms_new.php?room_id='. $room->getValue('room_id'). '&amp;headline='.$textRoom.'"><img 
                         src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
-                    <a class="icon-link icon-link-popup" href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
+                    <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'.$g_root_path.'/adm_program/system/popup_message.php?type=room&amp;element_id=room_'.
                         $room->getValue('room_id').'&amp;name='.urlencode($room->getValue('room_name')).'&amp;database_id='.$room->getValue('room_id').'"><img 
                         src="'. THEME_PATH. '/icons/delete.png" alt="'.$gL10n->get('SYS_DELETE').'" title="'.$gL10n->get('SYS_DELETE').'" /></a>
                 </div>

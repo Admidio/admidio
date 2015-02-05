@@ -93,7 +93,7 @@ switch ($get_type)
         $url = 'links_function.php?mode=2&lnk_id='.$get_database_id;
         break;
     case 'nwu':
-        $url = 'new_user_function.php?mode=4&new_user_id='.$get_database_id;
+        $url = 'registration_function.php?mode=4&new_user_id='.$get_database_id;
         break;
     case 'pho':
         $url  = 'photo_function.php?job=delete&pho_id='.$get_database_id_2.'&photo_nr='.$get_database_id;
