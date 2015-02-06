@@ -140,8 +140,6 @@ $.fn.ajaxSubmit = function(options) {
 		var form = $form[0];
 
 		if ($(':input[name=submit]', form).length) {
-			jQueryAlert("SYS_UPLOAD_NAME_ERROR");
-			
 			return;
 		}
 
