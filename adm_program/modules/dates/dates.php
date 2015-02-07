@@ -494,7 +494,8 @@ if($getViewMode == 'html'  || $getViewMode == 'compact')
 
                 $dateElements[] = array($gL10n->get('DAT_LOCATION'), $locationHtml);
             }
-            elseif($date->getValue('dat_room_id') > 0)
+            
+            if($date->getValue('dat_room_id') > 0)
             {
                 // if active, then show room information
                 $roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$date->getValue('dat_room_id').'&amp;inline=true';
