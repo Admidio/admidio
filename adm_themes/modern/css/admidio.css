@@ -178,6 +178,10 @@ h3 {
     font-size: 12pt;
 }
 
+.modal-footer {
+    text-align: left;
+}
+
 .alert, .btn-form {
     margin-top: 15px;
 }
@@ -327,34 +331,6 @@ a:hover, a:active {
     text-decoration: none !important;
     border-color: #bbbbbb !important;
 }
-
-/* Style for the navigation bar or the back link */
-
-.admNavigation {
-    margin: -15px -15px 0px -15px;
-    padding: 5px 12px 5px 12px;
-    border-top-left-radius: 15px; border-top-right-radius: 15px;
-    background-color: #96c4cb; 
-    background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
-}
-
-/*******************************************************/
-/* Style for the popup messagebox and popup messagebox */
-/*******************************************************/
-
-.modal-footer {
-    text-align: left;
-}
-/*
-.message {
-    max-width: 650px;
-	text-align: left;
-	margin: 15px;
-    display: inline-block;
-    margin-left: 0px;
-    margin-right: 0px;
-}*/
 
 /* Customize css for module menu */
 

@@ -307,11 +307,11 @@ if ($gCurrentUser->editDownloadRight())
 
 // Output module html to client
 
-$page->addHtml($navigationBar);
-
 $page->addHeadline($headline);
 
 $page->addHtml($DownloadsMenu->show(false));
+
+$page->addHtml($navigationBar);
 
 $page->addHtml($htmlDownloadOverview);
 

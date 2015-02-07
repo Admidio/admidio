@@ -157,34 +157,6 @@ if($getPhotoNr > 0)
 // show module headline
 $page->addHeadline($headline);
 
-//Breadcrump bauen
-$navilink = '';
-$pho_parent_id = $photoAlbum->getValue('pho_pho_id_parent');
-$photoAlbum_parent = new TablePhotos($gDb);
-
-while ($pho_parent_id > 0)
-{
-    // Einlesen des Eltern Albums
-    $photoAlbum_parent->readDataById($pho_parent_id);
-    
-    //Link zusammensetzen
-    $navilink = '&nbsp;&gt;&nbsp;<a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photoAlbum_parent->getValue('pho_id').'">'.
-        $photoAlbum_parent->getValue('pho_name').'</a>'.$navilink;
-
-    //Elternveranst
-    $pho_parent_id = $photoAlbum_parent->getValue('pho_pho_id_parent');
-}
-
-if($getPhotoId > 0)
-{
-    //Ausgabe des Linkpfads
-    $page->addHtml('<div class="navigationPath">
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_PHOTO_ALBUMS').'" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a>'.$navilink.'
-            &nbsp;&gt;&nbsp;'.$photoAlbum->getValue('pho_name').'         
-        </div>');
-}
-
 // create module menu
 $photosMenu = new HtmlNavbar('menu_photos', $headline, $page);
 
@@ -223,6 +195,34 @@ if($gCurrentUser->isWebmaster())
 }
 
 $page->addHtml($photosMenu->show(false));
+
+//Breadcrump bauen
+$navilink = '';
+$pho_parent_id = $photoAlbum->getValue('pho_pho_id_parent');
+$photoAlbum_parent = new TablePhotos($gDb);
+
+while ($pho_parent_id > 0)
+{
+    // Einlesen des Eltern Albums
+    $photoAlbum_parent->readDataById($pho_parent_id);
+    
+    //Link zusammensetzen
+    $navilink = '<li><a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$photoAlbum_parent->getValue('pho_id').'">'.
+        $photoAlbum_parent->getValue('pho_name').'</a></li>'.$navilink;
+
+    //Elternveranst
+    $pho_parent_id = $photoAlbum_parent->getValue('pho_pho_id_parent');
+}
+
+if($getPhotoId > 0)
+{
+    //Ausgabe des Linkpfads
+    $page->addHtml('<ol class="breadcrumb">
+            <li><a href="'.$g_root_path.'/adm_program/modules/photos/photos.php"><img src="'. THEME_PATH. '/icons/application_view_tile.png" alt="'.$gL10n->get('PHO_PHOTO_ALBUMS').'" /></a>
+            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php">'.$gL10n->get('PHO_PHOTO_ALBUMS').'</a></li>'.$navilink.'
+            &nbsp;&gt;&nbsp;'.$photoAlbum->getValue('pho_name').'         
+        </ol>');
+}
 
 /*************************THUMBNAILS**********************************/
 //Nur wenn uebergebenes Album Bilder enthaelt
