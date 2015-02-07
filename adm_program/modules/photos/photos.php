@@ -358,7 +358,6 @@ if($photoAlbum->getValue('pho_quantity') > 0)
 		$datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
 	}
     
-    $page->activateModal();
 	$page->addHtml('<br />
 	<div class="row">
 	    <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
@@ -469,7 +468,6 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                         // if user has admin rights for photo module then show some functions
                         if ($gCurrentUser->editPhotoRight())
                         {
-                            $page->activateModal();
                             $page->addHtml('
                             <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/photos/photo_album_new.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'&amp;mode=change"><img 
                                 src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>

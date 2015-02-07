@@ -264,7 +264,6 @@ else
                     // aendern & loeschen duerfen nur User mit den gesetzten Rechten
                     if ($gCurrentUser->editGuestbookRight())
                     {
-                        $page->activateModal();
                         $page->addHtml('
                         <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/guestbook/guestbook_new.php?id='.$guestbook->getValue('gbo_id').'&amp;headline='. $getHeadline. '"><img
                             src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
@@ -282,7 +281,6 @@ else
                 // Buttons zur Freigabe / Loeschen des gesperrten Eintrags
                 if($getModeration == 1 && $guestbook->getValue('gbo_locked') == 1)
                 {
-                    $page->activateModal();
                     $page->addHtml('
                     <ul class="icon-text-link-list icon-text-link-list-horizontal">
                         <li>

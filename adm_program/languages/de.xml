@@ -222,6 +222,7 @@
     <text id="SYS_SLIDESHOW_CURRENT" development="deleted" translation="todo"></text>
     <text id="SYS_SLIDESHOW_START" development="deleted" translation="todo"></text>
     <text id="SYS_SLIDESHOW_STOP" development="deleted" translation="todo"></text>
+    <text id="SYS_SHOW_HELP" development="deleted" translation="todo"></text>
 	<text id="PMS_MESSAGE" development="new" translation="todo">Private Nachrichten</text>
 	<text id="PMS_SEND_PM" development="new" translation="todo">Private Nachricht senden</text>
 	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Nachricht wurde gesendet an:</text>
@@ -1424,7 +1425,6 @@
     <text id="SYS_SET_BY" development="new" translation="todo">Gesetzt durch</text>
     <text id="SYS_SETTINGS" development="new" translation="todo">Einstellungen</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
-    <text id="SYS_SHOW_HELP" development="new" translation="todo">Hilfe anzeigen</text>
     <text id="SYS_SHOW_PROFILE" development="new" translation="todo">Profil anzeigen</text>
     <text id="SYS_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="todo">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</text>

@@ -205,28 +205,4 @@ function deleteEntry()
             alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
 
 </div>';
-/*
-<div class="popup-window">
-    <h1>'.$gL10n->get('SYS_NOTE').'</h1>
-
-    <div class="message">
-        <div class="popup-window-icon"><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
-        <div class="popup-window-text">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
-
-        <ul class="icon-text-link-list icon-text-link-list-horizontal">
-            <li id="admButtonYesRow">
-                <button id="admButtonYes" class="btn" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
-                    alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
-            </li>
-            <li id="admButtonNoRow">
-                <button id="admButtonNo" class="btn" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/error.png" 
-                    alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
-            </li>
-            <li id="admButtonCloseRow" style="display: none;">
-                <button id="admButtonClose" class="btn" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
-                    alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
-            </li>
-        </ul>
-    </div>
-</div>';*/
 ?>

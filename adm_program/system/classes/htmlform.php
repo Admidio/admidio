@@ -1598,7 +1598,7 @@ class HtmlForm extends HtmlFormBasic
         
         if(is_array($textId))
         {
-            $parameters = 'message_id='.$textId[0].'&amp;message_var1='.$textId[1];
+            $parameters = 'message_id='.$textId[0].'&amp;message_var1='.urlencode($textId[1]);
             if($textId[0] == 'user_field_description')
             {
                 $text = $gProfileFields->getProperty($textId[1], 'usf_description');
@@ -1619,8 +1619,9 @@ class HtmlForm extends HtmlFormBasic
         
         if($parameters != null)
         {
-            return '<a class="icon-link colorbox-dialog" title="" href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true" 
-                        data-toggle="tooltip" data-html="true" data-original-title="'.str_replace('"', '\'', $text).'"><img src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>';
+            return '<a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                        href="'. $g_root_path. '/adm_program/system/msg_window.php?'.$parameters.'&amp;inline=true"><img 
+                        src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>';
         }
 	}
     

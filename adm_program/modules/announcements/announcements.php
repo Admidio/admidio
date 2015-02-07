@@ -138,7 +138,6 @@ else
                         // Loeschen darf man nur Ankuendigungen der eigenen Gliedgemeinschaft
                         if($announcement->getValue('ann_org_shortname') == $gCurrentOrganization->getValue('org_shortname'))
                         {
-                            $page->activateModal();
                             $page->addHtml('
                             <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
                                 href="'.$g_root_path.'/adm_program/system/popup_message.php?type=ann&amp;element_id=ann_'.

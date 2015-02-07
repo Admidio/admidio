@@ -367,7 +367,8 @@ $page->addHtml('
                         {
                             $captcha_parameter = '';
                         }
-                        $html = '<a class="icon-text-link colorbox-dialog" href="captcha_preview.php?inline=true'.$captcha_parameter.'"><img
+                        $html = '<a class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
+                                    href="captcha_preview.php?inline=true'.$captcha_parameter.'"><img
                                     src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('SYS_PREVIEW').'" />'.$gL10n->get('SYS_PREVIEW').'</a>';
                         $form->addCustomContent($gL10n->get('ORG_CAPTCHA_PREVIEW'), $html, array('helpTextIdInline' => 'ORG_CAPTCHA_PREVIEW_TEXT'));
 
