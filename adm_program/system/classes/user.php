@@ -141,7 +141,8 @@ class User extends TableUsers
                                            'rol_guestbook'     => '0', 'rol_guestbook_comments' => '0',
                                            'rol_mail_to_all'   => '0',
                                            'rol_photo'         => '0', 'rol_profile' => '0',
-                                           'rol_weblinks'      => '0', 'rol_all_lists_view' => '0');
+                                           'rol_weblinks'      => '0', 'rol_all_lists_view' => '0', 
+										   'rol_inventory'     => '0');
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql = 'SELECT *
@@ -1271,6 +1272,12 @@ class User extends TableUsers
     public function editWeblinksRight()
     {
         return $this->checkRolesRight('rol_weblinks');
+    }
+	
+    // Funktion prueft, ob der angemeldete User das Inventory verwalten darf
+    public function editInventory()
+    {
+        return $this->checkRolesRight('rol_inventory');
     }
 }
 ?>
