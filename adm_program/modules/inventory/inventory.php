@@ -26,8 +26,7 @@ $gNavigation->addStartUrl(CURRENT_URL, $headline);
 
 $gInventoryFields = new InventoryFields($gDb, $gCurrentOrganization->getValue('org_id'));
 
-// alle Mitglieder zur Auswahl selektieren
-// unbestaetigte User werden dabei nicht angezeigt
+// alle Items zur Auswahl selektieren
 $sql    = 'SELECT inv_id, item_name.ind_value as item_name, room_id.ind_value as room_id,
                   COALESCE(inv_timestamp_change, inv_timestamp_create) as timestamp
 			 FROM '. TBL_INVENT. '
@@ -43,6 +42,10 @@ $result_mgl  = $gDb->query($sql);
 
 // create html page object
 $page = new HtmlPage();
+
+$page->addJavascript('
+        $(".icon-link-popup").colorbox({rel:\'nofollow\', scrolling:false, onComplete:function(){$("#admButtonNo").focus();}});
+		', true);
 
 $page->addHeadline($headline);
 
@@ -75,7 +78,7 @@ $columnHeading = array(
 );
 
 $itemsTable->setColumnAlignByArray(array('left', 'left', 'left', 'left', 'right'));
-$itemsTable->disableDatatablesColumnsSort(10);
+$itemsTable->disableDatatablesColumnsSort(5);
 $itemsTable->addRowHeadingByArray($columnHeading);
 $itemsTable->setDatatablesRowsPerPage($gPreferences['user_management_members_per_page']);
 $itemsTable->setMessageIfNoRowsFound('SYS_NO_ENTRIES');
@@ -86,11 +89,14 @@ while($row = $gDb->fetch_array($result_mgl))
 {
 	$timestampChange = new DateTimeExtended($row['timestamp'], 'Y-m-d H:i:s');
 	
+	$room = new TableRooms($gDb, $row['room_id']);
+	$roomLink = $g_root_path. '/adm_program/system/msg_window.php?message_id=room_detail&amp;message_title=DAT_ROOM_INFORMATIONS&amp;message_var1='.$row['room_id'].'&amp;inline=true';
+	
     // create array with all column values
     $columnValues = array(
         $irow,
         '<a href="'.$g_root_path.'/adm_program/modules/inventory/item.php?item_id='. $row['inv_id']. '">'. $row['item_name']. '</a>',
-		'<a href="'.$g_root_path.'/adm_program/modules/rooms/rooms.php?room_id='. $row['room_id']. '">'. $row['room_id']. '</a>'
+		'<a class="icon-link-popup" href="'.$roomLink.'">' . $room->getValue('room_name') . '</a>',
     );
         
 	$columnValues[] = $timestampChange->format($gPreferences['system_date'].' '.$gPreferences['system_time']);

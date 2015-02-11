@@ -84,6 +84,12 @@
                 $moduleMenu->addItem('links', '/adm_program/modules/links/links.php',
                                     $gL10n->get('LNK_WEBLINKS'), '/icons/weblinks.png');
             }
+            if( $gPreferences['enable_inventory_module'] == 1
+            || ($gPreferences['enable_inventory_module'] == 2 && $gValidLogin))            
+            {
+                $moduleMenu->addItem('inventory', '/adm_program/modules/inventory/inventory.php',
+                                    $gL10n->get('INV_INVENTORY'), '/icons/inventory.png');
+            }
 
             if($gCurrentUser ->isWebmaster() || $gCurrentUser ->manageRoles() || $gCurrentUser ->approveUsers() || $gCurrentUser ->editUsers())
             {
@@ -97,11 +103,6 @@
                 {
                     $adminMenu->addItem('usrmgt', '/adm_program/modules/members/members.php',
                                         $gL10n->get('MEM_USER_MANAGEMENT'), '/icons/user_administration.png');
-                }
-				if($gCurrentUser ->editUsers())
-                {
-                    $adminMenu->addItem('itemmgt', '/adm_program/modules/inventory/inventory.php',
-                                        $gL10n->get('MEM_ITEM_MANAGEMENT'), '/icons/inventory.png');
                 }
                 if($gCurrentUser ->manageRoles())
                 {

@@ -518,6 +518,7 @@ create table %PREFIX%_roles
    rol_system                     boolean       not null default '0',
    rol_visible                    boolean       not null default '1',
    rol_webmaster				  boolean       not null default '0',
+   rol_inventory				  boolean       not null default '0',
    primary key (rol_id)
 )
 engine = InnoDB
