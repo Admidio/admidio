@@ -190,6 +190,11 @@ class TableDate extends TableAccess
 
         if($columnName == 'dat_end' && $this->dbColumns['dat_all_day'] == 1)
         {
+            if(strlen($format) == 0)
+            {
+                $format = 'Y-m-d';
+            }
+            
             // bei ganztaegigen Terminen wird das Enddatum immer 1 Tag zurueckgesetzt
             list($year, $month, $day, $hour, $minute, $second) = preg_split('/[- :]/', $this->dbColumns['dat_end']);
             $value = date($format, mktime($hour, $minute, $second, $month, $day, $year) - 86400);

@@ -87,7 +87,6 @@ if($getMode == 'show_list')
     							$gL10n->get('BAC_START_BACKUP'), 'database_save.png');
     
     $page->addHtml($backupMenu->show(false));
-    $page->activateModal();
     
     //Define table
     $table = new HtmlTable('tableList', $page, true);

@@ -214,17 +214,6 @@ a:hover, a:active {
     border-color: #bbbbbb !important;
 }
 
-/* Style for the navigation bar or the back link */
-
-.admNavigation {
-    margin: -15px -15px 0px -15px;
-    padding: 5px 12px 5px 12px;
-    border-top-left-radius: 15px; border-top-right-radius: 15px;
-    background-color: #96c4cb; 
-    background-repeat: repeat-x;
-    background-image: -moz-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -webkit-linear-gradient(top, #ffffff 0%, #96C4CB 95%); background-image: -ms-linear-gradient(top, #ffffff 0%, #96C4CB 95%);	
-}
-
 /* Style for the popup messagebox and popup messagebox */
 
 .popup-window, .message {

@@ -106,8 +106,9 @@ $table->setMessageIfNoRowsFound('ORG_NO_FIELD_CREATED');
 
 // create array with all column heading values
 $columnHeading = array(
-    $gL10n->get('SYS_FIELD').'<a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DESCRIPTION&amp;inline=true"
-        data-toggle="tooltip" data-original-title="'.$gL10n->get('ORG_FIELD_DESCRIPTION').'"><img src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>',
+    $gL10n->get('SYS_FIELD').'<a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+        href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=ORG_FIELD_DESCRIPTION&amp;inline=true"><img 
+        src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>',
     '&nbsp;',
     $gL10n->get('SYS_DESCRIPTION'),
     '<img class="icon-information" src="'. THEME_PATH. '/icons/eye.png" alt="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" title="'.$gL10n->get('ORG_FIELD_NOT_HIDDEN').'" />',
@@ -150,7 +151,8 @@ while($row = $gDb->fetch_array($result))
     if(strlen($userField->getValue('usf_description')) > 22)
     {
         $description = substr($userField->getValue('usf_description', 'database'), 0, 22).' 
-            <a class="colorbox-dialog" data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('usf_name_intern'). '&amp;inline=true">[..]</a>';
+            <a data-toggle="modal" data-target="#admidio_modal" 
+                href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=user_field_description&amp;message_var1='. $userField->getValue('usf_name_intern'). '&amp;inline=true"><span  data-html="true" data-toggle="tooltip" data-original-title="'.str_replace('"', '\'', $userField->getValue('usf_description')).'">[..]</span></a>';
     }
     elseif(strlen($userField->getValue('usf_description')== 0))
     {   
@@ -231,7 +233,6 @@ while($row = $gDb->fetch_array($result))
     $table->addRowByArray($columnValues, 'row_usf_'.$userField->getValue('usf_id'));
 }
 
-$page->activateModal();
 $page->addHtml($table->show(false));
 $page->show();
 

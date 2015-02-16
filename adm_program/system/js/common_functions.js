@@ -31,30 +31,3 @@ function showHideBlock(elementID)
         }
     }
 }
-
-// Stellt die Javascript Alert-Funktion als jQuery Colorbox dar
-function jQueryAlert(messageID, messageVAR1, messageVAR2, widthID, heightID)
-{
-	var urlparameter = messageID;
-	
-	if (typeof(messageVAR1) != "undefined")
-	{
-		urlparameter = urlparameter + "&message_var1=" + messageVAR1;
-	}
-	
-	if (typeof(messageVAR2) != "undefined")
-	{
-		urlparameter = urlparameter + "&message_var2=" + messageVAR2;
-	}
-	
-	if (typeof(widthID) == "undefined")
-	{
-		var widthID = 500;
-	}
-	if (typeof(heightID) == "undefined")
-	{
-		var heightID = 250;
-	}
-
-	jQuery().colorbox({href: gRootPath + "/adm_program/system/jquery_alert.php?alert_message=" + urlparameter, open:true, iframe:true, width:widthID, height:heightID});	
-}

@@ -93,7 +93,6 @@ else
         $room->clear();
         $room->setArray($row);
         
-        $page->activateModal();
         $page->addHtml('
         <div class="panel panel-primary" id="room_'.$room->getValue('room_id').'">
             <div class="panel-heading">
