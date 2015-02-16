@@ -1,6 +1,7 @@
 # Admidio
 
 Admidio is a open source user management software
+
 Copyright (c) 2004 - 2015 The Admidio Team
 
 
