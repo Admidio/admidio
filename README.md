@@ -113,30 +113,16 @@ Wir möchten uns an dieser Stelle bei Personen und Projekten bedanken,
 von denen Scripte und Icons in Admidio übernommen wurden.
 
 - **[Admidio Team](http://www.admidio.org/index.php?page=team)**: Admidio
-
-- **[Mark James](http://www.famfamfam.com)**: Icon Bibliothek famfamfam
-    Silk Icons
-
+- **[Mark James](http://www.famfamfam.com)**: Icon Bibliothek famfamfam, Silk Icons
 - **[Tango Desktop Project](http://tango.freedesktop.org)**: Icon Bibliothek Tango
-
 - **[jQuery](http://www.jquery.com)**: JavaScript-Library
-
 - **[CKEditor](http://www.ckeditor.com)**: Javascript-Editor
-
 - **[James Heinrich](http://www.silisoftware.com)**: backupDB
-
 - **[Jack Moore](http://colorpowered.com/colorbox)**: ColorBox
-
 - **[Mirko Schaal](http://www.splinelab.de/flexupload)**: Flexupload
-
 - **[Alf Magne Kalleland](http://www.dhtmlgoodies.com)**: Ajax-Tooltip
-
 - **[Matt Kruse](http://www.mattkruse.com)**: Kalender-Popup
-
 - **[Timothy Groves](http://www.brandspankingnew.net)**: BSN.AutoSuggest
-
 - **[htmLawed](http://www.bioinformatics.org/phplabware/internal_utilities/htmLawed/)**: PHP code to purify & filter HTML
-
 - **[phpass](http://www.openwall.com/phpass/)**: Portable PHP password hashing framework
-
 - **[phpBB bulletin board](http://www.phpbb.com)**: Diverse Funktionen
