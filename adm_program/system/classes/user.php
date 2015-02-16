@@ -141,7 +141,8 @@ class User extends TableUsers
                                            'rol_guestbook'     => '0', 'rol_guestbook_comments' => '0',
                                            'rol_mail_to_all'   => '0',
                                            'rol_photo'         => '0', 'rol_profile' => '0',
-                                           'rol_weblinks'      => '0', 'rol_all_lists_view' => '0');
+                                           'rol_weblinks'      => '0', 'rol_all_lists_view' => '0', 
+										   'rol_inventory'     => '0');
 
                 // Alle Rollen der Organisation einlesen und ggf. Mitgliedschaft dazu joinen
                 $sql = 'SELECT *
@@ -694,27 +695,15 @@ class User extends TableUsers
 	 *  the parameter. If will check if user can generally edit all users or if 
 	 *  he is a group leader and can edit users of a special role where @b $user
 	 *  is a member or if it's the own profile and he could edit this.
-	 *  @param $user This parameter could be the id of the user or an user object 
-     *               of the user that should be checked if the current user can edit his profile.
+	 *  @param $user User object of the user that should be checked if the current user can edit his profile.
 	 *  @return Return @b true if the current user is allowed to edit the profile of the user from @b $user.
      */	
-	 public function hasRightEditProfile($user)
+	 public function hasRightEditProfile(&$user)
 	{
-        $userId = 0;
-        
-        if(is_numeric($user))
-        {
-            $userId = $user;
-        }
-		elseif(is_object($user))
-        {
-            $userId = $user->getValue('usr_id');
-        }
-        
-        if($userId > 0)
+		if(is_object($user))
 		{
 			// edit own profile ?
-			if($userId == $this->getValue('usr_id') 
+			if($user->getValue('usr_id') == $this->getValue('usr_id') 
 			&& $this->getValue('usr_id') > 0)
 			{
 				$edit_profile = $this->checkRolesRight('rol_profile');
@@ -734,16 +723,7 @@ class User extends TableUsers
 				if(count($this->rolesMembershipLeader) > 0)
 				{
 					// check if current user is a group leader of a role where $user is a member
-                    if(is_object($user))
-                    {
-                        $rolesMembership = $user->getRoleMemberships();
-                    }
-                    else
-                    {
-                        $user = new User($this->db, $this->mProfileFieldsData, $userId);
-                        $rolesMembership = $user->getRoleMemberships();
-                    }
-                
+					$rolesMembership = $user->getRoleMemberships();
 					foreach($this->rolesMembershipLeader as $roleId => $leaderRights)
 					{
 						// is group leader of role and has the right to edit users ?
@@ -791,25 +771,14 @@ class User extends TableUsers
 	 *  the parameter. If will check if user has edit rights with method editProfile 
 	 *  or if the user is a member of a role where the current user has the right to
 	 *  view profiles.
-	 *  @param $user This parameter could be the id of the user or an user object of the 
-     *               user that should be checked if the current user can view his profile.
+	 *  @param $user User object of the user that should be checked if the current user can view his profile.
 	 *  @return Return @b true if the current user is allowed to view the profile of the user from @b $user.
      */	
     public function hasRightViewProfile($user)
     {
         $viewProfile = false;
-        $userId      = 0;
-        
-        if(is_numeric($user))
-        {
-            $userId = $user;
-        }
-		elseif(is_object($user))
-        {
-            $userId = $user->getValue('usr_id');
-        }
-        
-        if($userId > 0)
+
+		if(is_object($user))
 		{
 			//Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
 			if($this->hasRightEditProfile($user))
@@ -827,7 +796,7 @@ class User extends TableUsers
 				{
 					$sql    = 'SELECT rol_id, rol_this_list_view
 								 FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-								WHERE mem_usr_id = '.$userId. '
+								WHERE mem_usr_id = '.$user->getValue('usr_id'). '
 								  AND mem_begin <= \''.DATE_NOW.'\'
 								  AND mem_end    > \''.DATE_NOW.'\'
 								  AND mem_rol_id = rol_id
@@ -1271,6 +1240,12 @@ class User extends TableUsers
     public function editWeblinksRight()
     {
         return $this->checkRolesRight('rol_weblinks');
+    }
+	
+    // Funktion prueft, ob der angemeldete User das Inventory verwalten darf
+    public function editInventory()
+    {
+        return $this->checkRolesRight('rol_inventory');
     }
 }
 ?>

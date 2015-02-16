@@ -206,7 +206,6 @@ class Inventory extends TableInventory
 		if(is_numeric($organizationId))
 		{
 			$this->organizationId = $organizationId;
-			$this->roles_rights   = array();
 		}
 	}
 	
@@ -268,29 +267,29 @@ class Inventory extends TableInventory
 	 *  @param $user User object of the user that should be checked if the current user can view his profile.
 	 *  @return Return @b true if the current user is allowed to view the profile of the user from @b $user.
      */	
-    public function viewProfile(&$item)
+    public function hasRightViewItem($item)
     {
         $viewProfile = false;
 
 		if(is_object($item))
 		{
 			//Hat ein User Profileedit rechte, darf er es natuerlich auch sehen
-			if($gCurrentUser->editProfile($item))
+			if($gCurrentUser->editInventory($item) == 0)
 			{
 				$viewProfile = true;
 			}
 			else
 			{
 				// Benutzer, die alle Listen einsehen duerfen, koennen auch alle Profile sehen
-				if($this->viewAllLists())
+				if($this->checkRolesRight('rol_inventory'))
 				{
 					$viewProfile = true;
 				}
 				else
 				{
 					$sql    = 'SELECT rol_id, rol_this_list_view
-								 FROM '. TBL_MEMBERS. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
-								WHERE mem_usr_id = '.$user->getValue('usr_id'). '
+								 FROM '. TBL_INVENTORY. ', '. TBL_ROLES. ', '. TBL_CATEGORIES. '
+								WHERE mem_usr_id = '.$item->getValue('inv_id'). '
 								  AND mem_begin <= \''.DATE_NOW.'\'
 								  AND mem_end    > \''.DATE_NOW.'\'
 								  AND mem_rol_id = rol_id
