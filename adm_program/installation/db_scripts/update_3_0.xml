@@ -121,5 +121,7 @@
 							, ((Select cat_id from %PREFIX%_categories where cat_type = 'INF'), 'NUMBER', 'LENT',  'SYS_LENT', NULL, 0, 0, 0, 5, 1, NOW())</step>
 	<step id="430">UPDATE %PREFIX%_preferences pr1 INNER JOIN %PREFIX%_preferences pr2 ON pr2.prf_name LIKE 'ecard_view_width' SET pr1.prf_value = pr2.prf_value WHERE pr1.prf_name LIKE 'ecard_thumbs_scale'</step>
 	<step id="440">DELETE FROM %PREFIX%_preferences WHERE prf_name IN ('ecard_view_width', 'ecard_view_height', 'enable_ecard_cc_recipients', 'ecard_cc_recipients')</step>
+	<step id="450" database="mysql">ALTER TABLE %PREFIX%_roles ADD rol_inventory tinyint(1)</step>
+	<step id="460" database="postgresql">ALTER TABLE %PREFIX%_roles ADD COLUMN rol_inventory tinyint(1)</step>
 	<step>stop</step>
 </update>
