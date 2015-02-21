@@ -222,6 +222,7 @@
     <text id="SYS_SLIDESHOW_CURRENT" development="deleted" translation="todo"></text>
     <text id="SYS_SLIDESHOW_START" development="deleted" translation="todo"></text>
     <text id="SYS_SLIDESHOW_STOP" development="deleted" translation="todo"></text>
+    <text id="SYS_SHOW_HELP" development="deleted" translation="todo"></text>
 	<text id="PMS_MESSAGE" development="new" translation="todo">Private Nachrichten</text>
 	<text id="PMS_SEND_PM" development="new" translation="todo">Private Nachricht senden</text>
 	<text id="PMS_WAS_SENT_TO" development="new" translation="todo">Nachricht wurde gesendet an:</text>
@@ -234,6 +235,14 @@
 	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="todo">Chat aktivieren</text>
 	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="todo">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</text>
     <text id="SYS_SELECT_FROM_LIST" development="new" translation="todo">Aus Liste auswählen</text>
+	<text id="INV_INVENTORY" development="new" translation="todo">Lagerhaltung</text>
+	<text id="INV_ITEM_MANAGEMENT" development="new" translation="todo">Artikel verwalten</text>
+	<text id="INV_CREATE_ITEM" development="new" translation="todo">Neuer Artikel</text>
+	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="todo">Artikelfelder verwalten</text>
+	<text id="SYS_ITEMNAME" development="new" translation="todo">Artikelname</text>
+	<text id="SYS_QUANTITY" development="new" translation="todo">Artikelanzahl</text>
+	<text id="SYS_LOAN" development="new" translation="todo">Artikel zum verleihen</text>
+	<text id="SYS_LENT" development="new" translation="todo">Artikelanzahl verliehen</text>
 </version>
 <version id="2.4.5" translator="Markus Faßbender">
     <text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</text>
@@ -1424,7 +1433,6 @@
     <text id="SYS_SET_BY" development="new" translation="todo">Gesetzt durch</text>
     <text id="SYS_SETTINGS" development="new" translation="todo">Einstellungen</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
-    <text id="SYS_SHOW_HELP" development="new" translation="todo">Hilfe anzeigen</text>
     <text id="SYS_SHOW_PROFILE" development="new" translation="todo">Profil anzeigen</text>
     <text id="SYS_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="todo">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</text>

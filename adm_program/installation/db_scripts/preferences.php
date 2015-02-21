@@ -141,6 +141,9 @@ $orga_preferences = array(
 	'weblinks_redirect_seconds'	=> '10',
 	'weblinks_target'			=> '_blank',
 	
+	// Inventory
+    'enable_inventory_module'   => '0',
+	
 	// Captcha
     'captcha_background_color'	=> '#FFEFC4',
     'captcha_font_size' 		=> '20',
