@@ -159,7 +159,6 @@ else
             // change and delete only users with rights
             if ($gCurrentUser->editWeblinksRight())
             {
-                $page->activateModal();
                 $page->addHtml('
                 <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/links/links_new.php?lnk_id='.$weblink->getValue('lnk_id').'&amp;headline='. $getHeadline. '"><img
                     src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>

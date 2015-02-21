@@ -110,7 +110,6 @@ while($row = $gDb->fetch_array($usr_result))
     $table->addRowByArray($columnValues, 'row_user_'.$row['usr_id']);        
 }
 
-$page->activateModal();
 $page->addHtml($table->show(false));
 $page->show();
 ?>

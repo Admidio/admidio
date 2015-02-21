@@ -8,7 +8,7 @@
  *
  * Parameters:
  *
- * dat_id : ID des Termins, der angezeigt werden soll
+ * dat_id     - ID of the event that should be edited
  * mode   : 1 - Neuen Termin anlegen/aendern
  *          2 - Termin loeschen
  *          3 - zum Termin anmelden
@@ -21,19 +21,18 @@
 
 require_once('../../system/common.php');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
-if ($gPreferences['enable_dates_module'] == 0)
-{
-    // das Modul ist deaktiviert
-    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
-}
-
 // Initialize and check the parameters
 $getDateId = admFuncVariableIsValid($_GET, 'dat_id', 'numeric');
 $getMode   = admFuncVariableIsValid($_GET, 'mode', 'numeric', array('requireValue' => true));
 $getRoleId = admFuncVariableIsValid($_GET, 'rol_id', 'numeric');
 $getNumberRoleSelect = admFuncVariableIsValid($_GET, 'number_role_select', 'numeric');
 
+// check if module is active
+if($gPreferences['enable_dates_module'] == 0)
+{
+    // Module is not active
+    $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
+}
 
 if($getMode != 6 || $gPreferences['enable_dates_module'] == 2)
 {

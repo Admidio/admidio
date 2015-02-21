@@ -25,10 +25,16 @@ header('Content-type: text/html; charset=utf-8');
 // show headline
 if($getInlineView)
 {
-    echo '
+/*    echo '
 	<div class="popup-window">
 		<h1 id="message-window">'.$gL10n->get($getMessageTitle).'</h1>
-		<div class="message">';
+		<div class="message">';*/
+echo '
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
+</div>
+<div class="modal-body">';
 }
 
 switch ($getMessageId)
@@ -52,24 +58,22 @@ switch ($getMessageId)
         {
             $room = new TableRooms($gDb, $getMessageVar1);
             echo '
-            <table>
-                <tr>
-                    <td><strong>'.$gL10n->get('SYS_ROOM').':</strong></td>
-                    <td>'.$room->getValue('room_name').'</td>
-                </tr>
-                <tr>
-                    <td><strong>'.$gL10n->get('ROO_CAPACITY').':</strong></td>
-                    <td>'.$room->getValue('room_capacity').'</td>
-                </tr>
-                <tr>
-                    <td><strong>'.$gL10n->get('ROO_OVERHANG').':</strong></td>
-                    <td>'.$room->getValue('room_overhang').'</td>
-                </tr>
-                <tr>
-                    <td><strong>'.$gL10n->get('SYS_DESCRIPTION').':</strong></td>
-                    <td>'.$room->getValue('room_description').'</td>
-                </tr>
-            </table>';
+            <div class="row">
+                <div class="col-xs-4"><strong>'.$gL10n->get('SYS_ROOM').':</strong></div>
+                <div class="col-xs-8">'.$room->getValue('room_name').'</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4"><strong>'.$gL10n->get('ROO_CAPACITY').':</strong></div>
+                <div class="col-xs-8">'.$room->getValue('room_capacity').'</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4"><strong>'.$gL10n->get('ROO_OVERHANG').':</strong></div>
+                <div class="col-xs-8">'.$room->getValue('room_overhang').'</div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4"><strong>'.$gL10n->get('SYS_DESCRIPTION').':</strong></div>
+                <div class="col-xs-8">'.$room->getValue('room_description').'</div>
+            </div>';
         }
         break;
 
@@ -85,8 +89,8 @@ switch ($getMessageId)
               <table class="table table-condensed">
                 <thead>
                  <tr>
-                    <th style="width: 75px;">'.$gL10n->get('SYS_FIELD').'</th>
-                    <th style="width: 110px;">'.$gL10n->get('SYS_CONDITION').'</th>
+                    <th style="width: 100px;">'.$gL10n->get('SYS_FIELD').'</th>
+                    <th style="width: 130px;">'.$gL10n->get('SYS_CONDITION').'</th>
                     <th>'.$gL10n->get('SYS_DESCRIPTION').'</th>
                  </tr>
                 </thead>

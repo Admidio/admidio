@@ -148,13 +148,11 @@ if (isset($folderContent['folders']))
             if($nextFolder['fol_exists'] == false)
             {
                 $noteFolderNotExists = '
-                <a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS&amp;inline=true"
-                    data-toggle="tooltip" data-html="true" data-original-title="'.$gL10n->get('DOW_FOLDER_NOT_EXISTS').'"><img
+                <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                    href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FOLDER_NOT_EXISTS&amp;inline=true"><img
                     src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
             }
 
-            $page->activateModal();
-            
             $columnValues[] = ' <a class="icon-link" href="'.$g_root_path.'/adm_program/modules/downloads/rename.php?folder_id='. $nextFolder['fol_id']. '">
                                     <img src="'. THEME_PATH. '/icons/edit.png" alt="'.$gL10n->get('SYS_EDIT').'" title="'.$gL10n->get('SYS_EDIT').'" /></a>
                                 <a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
@@ -212,8 +210,8 @@ if (isset($folderContent['files']))
             if($nextFile['fil_exists'] == false)
             {
                 $noteFileNotExists = '
-                <a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS&amp;inline=true"
-                    data-toggle="tooltip" data-html="true" data-original-title="'.$gL10n->get('DOW_FILE_NOT_EXISTS').'"><img
+                <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                    href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_FILE_NOT_EXISTS&amp;inline=true"><img
                     src="'. THEME_PATH. '/icons/warning.png" alt="'.$gL10n->get('SYS_WARNING').'" /></a>';
             }
             $columnValues[] = '
@@ -248,9 +246,9 @@ if ($gCurrentUser->editDownloadRight())
 
         $htmlAdminTableHeadline = '<h2>
                                     '.$gL10n->get('DOW_UNMANAGED_FILES').'
-                                    <a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES&amp;inline=true"
-                                        data-toggle="tooltip" data-html="true" data-original-title="'.$gL10n->get('DOW_ADDITIONAL_FILES').'"><img 
-                                        src="'. THEME_PATH. '/icons/help.png" alt="Help" title="" /></a>            
+                                    <a class="icon-link" data-toggle="modal" data-target="#admidio_modal"
+                                        href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=DOW_ADDITIONAL_FILES&amp;inline=true"><img 
+                                        src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>            
                                 </h2>';
 
         //Create table object
@@ -309,11 +307,11 @@ if ($gCurrentUser->editDownloadRight())
 
 // Output module html to client
 
-$page->addHtml($navigationBar);
-
 $page->addHeadline($headline);
 
 $page->addHtml($DownloadsMenu->show(false));
+
+$page->addHtml($navigationBar);
 
 $page->addHtml($htmlDownloadOverview);
 

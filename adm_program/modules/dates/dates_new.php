@@ -23,10 +23,10 @@ $getDateId   = admFuncVariableIsValid($_GET, 'dat_id', 'numeric');
 $getHeadline = admFuncVariableIsValid($_GET, 'headline', 'string', array('defaultValue' => $gL10n->get('DAT_DATES')));
 $getCopy     = admFuncVariableIsValid($_GET, 'copy', 'boolean');
 
-// pruefen ob das Modul ueberhaupt aktiviert ist
-if ($gPreferences['enable_dates_module'] == 0)
+// check if module is active
+if($gPreferences['enable_dates_module'] == 0)
 {
-    // das Modul ist deaktiviert
+    // Module is not active
     $gMessage->show($gL10n->get('SYS_MODULE_DISABLED'));
 }
 
@@ -135,7 +135,6 @@ else
 {
 	$dateRoleID = '0';
 }
-
 
 // create html page object
 $page = new HtmlPage();
@@ -258,8 +257,8 @@ $form->openGroupBox('gb_title_location', $gL10n->get('SYS_TITLE').' & '.$gL10n->
 $form->closeGroupBox();
 $form->openGroupBox('gb_period_calendar', $gL10n->get('SYS_PERIOD').' & '.$gL10n->get('DAT_CALENDAR'));
     $form->addCheckbox('dat_all_day', $gL10n->get('DAT_ALL_DAY'), $date->getValue('dat_all_day'));
-    $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin'), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
-    $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end'), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
+    $form->addInput('date_from', $gL10n->get('SYS_START'), $date->getValue('dat_begin', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
+    $form->addInput('date_to', $gL10n->get('SYS_END'), $date->getValue('dat_end', $gPreferences['system_date'].' '.$gPreferences['system_time']), array('type' => 'datetime', 'property' => FIELD_MANDATORY));
     $form->addSelectBoxForCategories('dat_cat_id', $gL10n->get('DAT_CALENDAR'), $gDb, 'DAT', 'EDIT_CATEGORIES', 
                                      array('property' => FIELD_MANDATORY, 'defaultValue' => $date->getValue('dat_cat_id')));
 $form->closeGroupBox();

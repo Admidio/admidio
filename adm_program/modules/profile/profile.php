@@ -182,7 +182,6 @@ $page->addJavascript('
     
 // add headline and title of module
 $page->addHeadline($headline);
-$page->activateModal();
 
 // create module menu
 $profileMenu = new HtmlNavbar('menu_profile', $headline, $page);
@@ -742,8 +741,9 @@ if($gPreferences['profile_show_extern_roles'] == 1
                     <div class="panel panel-default" id="profile_roles_box_other_orga">
                         <div class="panel-heading">'.
                             $gL10n->get('PRO_ROLE_MEMBERSHIP_OTHER_ORG').'
-                            <a class="icon-link colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS&amp;inline=true"><img 
-                                src="'. THEME_PATH. '/icons/help.png" data-html="true" data-toggle="tooltip" alt="Help" title="'.$gL10n->get('PRO_VIEW_ROLES_OTHER_ORGAS').'" /></a>
+                            <a class="icon-link" data-toggle="modal" data-target="#admidio_modal" 
+                                href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=PRO_VIEW_ROLES_OTHER_ORGAS&amp;inline=true"><img 
+                                src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
                         </div>
                         <div class="panel-body" id="profile_former_roles_box_body">
                             <ul class="list-group list-roles-assignment">');
