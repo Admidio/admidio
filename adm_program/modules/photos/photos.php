@@ -174,7 +174,7 @@ if($gCurrentUser->editPhotoRight())
 	if($getPhotoId > 0)
 	{
 		// show link to upload photos
-		$photosMenu->addItem('menu_item_upload_photo', $g_root_path.'/adm_program/modules/photos/upload.php?pho_id='.$getPhotoId, 
+		$photosMenu->addItem('menu_item_upload_photo', $g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$getPhotoId, 
 									$gL10n->get('PHO_UPLOAD_PHOTOS'), 'photo_upload.png');
 	}
 }

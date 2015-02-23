@@ -157,7 +157,7 @@ case 1:
                 break;
 
             case 'photos':
-                $checkboxes = array('photo_upload_mode', 'photo_download_enabled', 'photo_keep_original');
+                $checkboxes = array('photo_download_enabled', 'photo_keep_original');
                 break;
 
             case 'profile':
