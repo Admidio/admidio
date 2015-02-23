@@ -5,13 +5,16 @@ require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/upload
 
 class UploadHandlerPhoto extends UploadHandler
 {
+    /* Override the default method to handle the specific things of the photo module.
+       This method has the same parameters as the default.
+    */
     protected function handle_file_upload($uploaded_file, $name, $size, $type, $error,
         $index = null, $content_range = null) 
     {
-        global $photo_album, $gPreferences;
+        global $photo_album, $gPreferences, $gL10n;
         
         $file = parent::handle_file_upload($uploaded_file, $name, $size, $type, $error, $index, $content_range);
-/*        error_log('test::'.$file->name);
+
         if(isset($file->error) == false)
         {
             $fileLocation = SERVER_PATH. '/adm_my_files/photos/upload/'.$file->name;
@@ -24,10 +27,8 @@ class UploadHandlerPhoto extends UploadHandler
         	
         	if($imageDimensions > admFuncProcessableImageSize())
         	{
-            	echo $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
+            	$file->error = $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
         	}
-    
-            //$uploadHandler->generate_response($gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL'));
         	
         	// check mime type and set file extension
             if($imageProperties['mime'] == 'image/jpeg')
@@ -40,7 +41,7 @@ class UploadHandlerPhoto extends UploadHandler
             }
             else
             {
-                $gMessage->show($gL10n->get('PHO_PHOTO_FORMAT_INVALID'));
+                $file->error = $gL10n->get('PHO_PHOTO_FORMAT_INVALID');
             }
         	
     		// create image object and scale image to defined size of preferences
@@ -85,16 +86,13 @@ class UploadHandlerPhoto extends UploadHandler
             {
                 $photo_album->setValue('pho_quantity', $photo_album->getValue('pho_quantity')+1);
                 $photo_album->save(); 
-                
-                //echo $uploadHandler->post();
-            	//echo $gL10n->get('PHO_PHOTO_UPLOAD_SUCCESS');
             }
             else
             {
                 $newFotoFileNumber --;
-                echo $gL10n->get('PHO_PHOTO_PROCESSING_ERROR');
+                $file->error = $gL10n->get('PHO_PHOTO_PROCESSING_ERROR');
             }	        
-        }*/
+        }
         return $file;
     }
 }

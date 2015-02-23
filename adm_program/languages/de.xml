@@ -146,6 +146,7 @@
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="changed" translation="todo">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Standard: 16)</text>
     <text id="PHO_MULTIUPLOAD" development="deleted" translation="todo"></text>
     <text id="PHO_MULTIUPLOAD_DESC" development="deleted" translation="todo"></text>
+    <text id="PHO_SELECT_FOTOS" development="new" translation="todo">Fotos auswählen</text>
     <text id="PRO_CHANGE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild hochladen</text>
     <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild löschen</text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>

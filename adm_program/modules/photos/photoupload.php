@@ -76,6 +76,7 @@ if($getMode == 'choose_files')
     
     // create html page object
     $page = new HtmlPage();
+    $page->excludeThemeHtml();
     
     $page->addCssFile($g_root_path.'/adm_program/libs/jquery-file-upload/css/style.css');
     $page->addCssFile($g_root_path.'/adm_program/libs/jquery-file-upload/css/jquery.fileupload.css');
@@ -113,127 +114,40 @@ if($getMode == 'choose_files')
         }).prop("disabled", !$.support.fileInput)
             .parent().addClass($.support.fileInput ? undefined : "disabled");
     });', true);
-    
-    // add headline and title of module
-    $page->addHeadline($headline);
-    
-    // create module menu with back link
-    $announcementsMenu = new HtmlNavbar('menu_announcements_create', $headline, $page);
-    $announcementsMenu->addItem('menu_item_back', $gNavigation->getUrl(), $gL10n->get('SYS_BACK'), 'back.png');
-    $page->addHtml($announcementsMenu->show(false));
-    
+
     $page->addHtml('
-        <!-- The fileinput-button span is used to style the file input field as button -->
-        <span class="btn btn-success fileinput-button">
-            <i class="glyphicon glyphicon-plus"></i>
-            <span>Select files...</span>
-            <!-- The file input field used as target for the file upload widget -->
-            <input id="fileupload" type="file" name="files[]" multiple>
-        </span>
-        <br>
-        <br>
-        <!-- The global progress bar -->
-        <div id="progress" class="progress">
-            <div class="progress-bar progress-bar-success"></div>
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">'.$headline.'</h4>
         </div>
-        <!-- The container for the uploaded files -->
-        <div id="files" class="files"></div>');
+        <div class="modal-body">
+            <!-- The fileinput-button span is used to style the file input field as button -->
+            <span class="btn btn-success fileinput-button">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>'.$gL10n->get('PHO_SELECT_FOTOS').'...</span>
+                <!-- The file input field used as target for the file upload widget -->
+                <input id="fileupload" type="file" name="files[]" multiple>
+            </span>
+            <br>
+            <br>
+            <!-- The global progress bar -->
+            <div id="progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+            </div>
+            <!-- The container for the uploaded files -->
+            <div id="files" class="files"></div>
+        </div>');
     $page->show();
 }
 elseif($getMode == 'upload_files')
 {
     // upload files to temp upload folder
-    $uploadHandler = new UploadHandler(array('upload_dir' => SERVER_PATH.'/adm_my_files/photos/upload/'
+    $uploadHandler = new UploadHandlerPhoto(array('upload_dir' => SERVER_PATH.'/adm_my_files/photos/upload/'
                                             ,'upload_url' => $g_root_path.'/adm_my_files/photos/upload/'
                                             ,'image_versions' => array()
                                             ,'accept_file_types' => '/\.(jpe?g|png)$/i'
-                                          //  ,'print_response' => false
-                                              ), true,
+                                            ), true,
                                             array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
-
-    $fileLocation = SERVER_PATH. '/adm_my_files/photos/upload/'.$_FILES['files']['name'][0];
-    $albumFolder  = SERVER_PATH. '/adm_my_files/photos/'.$photo_album->getValue('pho_begin', 'Y-m-d').'_'.$photo_album->getValue('pho_id');
-    $newFotoFileNumber = $photo_album->getValue('pho_quantity') + 1;
-    
-    if(file_exists($fileLocation))
-    {
-    	// read image size
-    	$imageProperties = getimagesize($fileLocation);
-    	$imageDimensions = $imageProperties[0] * $imageProperties[1];
-    	
-    	if($imageDimensions > admFuncProcessableImageSize())
-    	{
-        	echo $gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL');
-    	}
-
-        //$uploadHandler->generate_response($gL10n->get('PHO_RESOLUTION_MORE_THAN').' '.round(admFuncProcessableImageSize()/1000000, 2).' '.$gL10n->get('MEGA_PIXEL'));
-    	
-    	// check mime type and set file extension
-        if($imageProperties['mime'] == 'image/jpeg')
-        {
-            $fileExtension = 'jpg';
-        }
-        elseif($imageProperties['mime'] == 'image/png')
-        {
-            $fileExtension = 'png';
-        }
-        else
-        {
-            $gMessage->show($gL10n->get('PHO_PHOTO_FORMAT_INVALID'));
-        }
-    	
-		// create image object and scale image to defined size of preferences
-	    $image = new Image($fileLocation);
-        $image->setImageType('jpeg');
-        $image->scaleLargerSide($gPreferences['photo_save_scale']);
-        $image->copyToFile(null, $albumFolder.'/'.$newFotoFileNumber.'.jpg');
-        $image->delete();
-        
-        // if enabled then save original image
-        if ($gPreferences['photo_keep_original'] == 1)
-        {
-            if(file_exists($albumFolder.'/originals') == false)
-            {
-                $folder = new Folder($albumFolder);
-                $folder->createFolder('originals', true);
-            }
-                            
-            rename($fileLocation, $albumFolder.'/originals/'.$newFotoFileNumber.'.'.$fileExtension);
-        }
-        
-        // save thumbnail
-        if(file_exists($albumFolder.'/thumbnails') == false)
-        {
-            $folder = new Folder($albumFolder);
-            $folder->createFolder('thumbnails', true);
-        }
-
-        $image = new Image($fileLocation);
-        $image->scaleLargerSide($gPreferences['photo_thumbs_scale']);
-        $image->copyToFile(null, $albumFolder.'/thumbnails/'.$newFotoFileNumber.'.jpg');
-        $image->delete(); 
-  
-        // delete image from upload folder
-        if(file_exists($fileLocation))
-        {
-            unlink($fileLocation);
-        } 
-
-        // if image was successfully saved in filesystem then update image count of album
-        if(file_exists($albumFolder.'/'.$newFotoFileNumber.'.jpg'))
-        {
-            $photo_album->setValue('pho_quantity', $photo_album->getValue('pho_quantity')+1);
-            $photo_album->save(); 
-            
-            //echo $uploadHandler->post();
-        	//echo $gL10n->get('PHO_PHOTO_UPLOAD_SUCCESS');
-        }
-        else
-        {
-            $newFotoFileNumber --;
-            echo $gL10n->get('PHO_PHOTO_PROCESSING_ERROR');
-        }	        
-    }
 }
 
 ?>
