@@ -20,6 +20,8 @@ if (!$gCurrentUser->editUsers())
 echo '
 <script type="text/javascript"><!--
 $(document).ready(function(){
+    $("body").on("shown.bs.modal", ".modal", function () { $("#form_members_create_user:first *:input[type!=hidden]:first").focus(); });
+
     $("#form_members_create_user").submit(function(event) {
         var action = $(this).attr("action");
         $("#form_members_create_user .form-alert").hide();
@@ -36,7 +38,6 @@ $(document).ready(function(){
                     $("#form_members_create_user .form-alert").attr("class", "alert alert-success form-alert");
                     $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('MEM_USER_COULD_BE_CREATED').'</strong>");
                     $("#form_members_create_user .form-alert").fadeIn("slow");
-                    $.fn.colorbox.resize();
                     setTimeout(function () {
                         self.location.href="'.$g_root_path.'/adm_program/modules/profile/profile_new.php?new_user=1&lastname=" + $("#lastname").val() + "&firstname=" + $("#firstname").val();
                     },2500);	
@@ -44,12 +45,10 @@ $(document).ready(function(){
                 else {
                     if(data.length > 1000) {
                         $("#popup_members_new").html(data);
-                        $.fn.colorbox.resize();
                     }
                     else {
                         $("#form_members_create_user .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#form_members_create_user .form-alert").fadeIn();
-                        $.fn.colorbox.resize();
                         $("#form_members_create_user .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
                     }
                 }
@@ -59,9 +58,11 @@ $(document).ready(function(){
 });
 //--></script>
 
-<div class="popup-window" id="popup_members_new">
-    <h1>'.$gL10n->get('MEM_CREATE_USER').'</h1>
-    
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">'.$gL10n->get('MEM_CREATE_USER').'</h4>
+</div>
+<div class="modal-body">    
     <p class="lead">'.$gL10n->get('MEM_INPUT_FIRSTNAME_LASTNAME').'</p>';
     
     $form = new HtmlForm('form_members_create_user', $g_root_path.'/adm_program/modules/members/members_assign.php');

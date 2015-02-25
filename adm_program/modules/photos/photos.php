@@ -138,6 +138,8 @@ if($gCurrentUser->editPhotoRight())
 
 if($gPreferences['photo_show_mode']==1)
 {
+    $page->addCssFile($g_root_path.'/adm_program/libs/colorbox/colorbox.css');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/i18n/jquery.colorbox-'.$gPreferences['system_language'].'.js');
     $page->addJavascript('
         $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
@@ -149,9 +151,7 @@ if($gPreferences['photo_show_mode']==1)
 $page->addJavascript('
     $("body").on("hidden.bs.modal", ".modal", function () { $(this).removeData("bs.modal"); location.reload(); });
     $("#menu_item_upload_photo").attr("data-toggle", "modal");
-    $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");
-    $("#btn_album_upload").attr("data-toggle", "modal");
-    $("#btn_album_upload").attr("data-target", "#admidio_modal");', true);
+    $("#menu_item_upload_photo").attr("data-target", "#admidio_modal");', true);
 
 // if a photo number was committed then simulate a left mouse click
 if($getPhotoNr > 0)
@@ -517,7 +517,8 @@ for($x = $getStart; $x <= $getStart + $gPreferences['photo_albums_per_page'] - 1
                     if ($gCurrentUser->editPhotoRight() && file_exists($ordner))
                     {
                         $page->addHtml('<div class="btn-group" style="width: 100%;">
-                            <a id="btn_album_upload" class="btn btn-default icon-text-link" style="width: 50%;" href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
+                            <a id="btn_album_upload" class="btn btn-default icon-text-link" style="width: 50%;" data-toggle="modal" data-target="#admidio_modal"
+                                href="'.$g_root_path.'/adm_program/modules/photos/photoupload.php?pho_id='.$childPhotoAlbum->getValue('pho_id').'"><img 
                                 src="'. THEME_PATH. '/icons/photo_upload.png" alt="'.$gL10n->get('PHO_UPLOAD_PHOTOS').'" />'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</a>');
 
                             if($childPhotoAlbum->getValue('pho_locked')==1)

@@ -17,12 +17,6 @@ function profileJSClass()
 	this.setBy_Text					= "";
 	this.errorID					= 0;
 	
-	this.init = function()
-	{
-		$("#menu_item_role_memberships_change").colorbox({rel:'nofollow'});
-		$("#menu_item_password").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
-		$("#password_link").colorbox({width:'50%',rel:'nofollow',onComplete:function(){$("#password_form:first *:input[type!=hidden]:first").focus();}});
-	}
 	this.reloadRoleMemberships = function()
 	{
 		$.ajax({

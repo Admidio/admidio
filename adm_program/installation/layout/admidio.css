@@ -73,6 +73,10 @@ h3 {
     font-size: 12pt;
 }
 
+.modal-footer {
+    text-align: left;
+}
+
 .alert, .btn-form {
     margin-top: 15px;
 }
@@ -212,26 +216,6 @@ a:hover, a:active {
     font-weight: bold;
     text-decoration: none !important;
     border-color: #bbbbbb !important;
-}
-
-/* Style for the popup messagebox and popup messagebox */
-
-.popup-window, .message {
-    max-width: 650px;
-	text-align: left;
-	margin: 15px;
-}
-
-.message {
-    display: inline-block;
-    margin-left: 0px;
-    margin-right: 0px;
-}
-
-.popup-window-icon {
-    float: left;
-    display: inline-block;
-    width: 20%;
 }
 
 /* Customize css for module menu */

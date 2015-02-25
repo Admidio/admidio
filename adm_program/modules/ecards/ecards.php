@@ -109,10 +109,16 @@ else
 // create html page object
 $page = new HtmlPage();
 
+$page->addCssFile($g_root_path.'/adm_program/libs/colorbox/colorbox.css');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/ecards/ecard.js');
+
 $page->addJavascript('
+    $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); }); 
+
 	var ecardJS = new ecardJSClass();
-	ecardJS.init();');
+	ecardJS.init();', true);
 
 // add headline and title of module
 $page->addHeadline($headline);
@@ -138,7 +144,8 @@ $form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
-        <a class="ecardPhoto" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
+        <a data-toggle="lightbox" data-type="image"
+            href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
             src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" 
             class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
         </a>');

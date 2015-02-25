@@ -141,9 +141,7 @@ $page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js'
 $page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 
-$page->addJavascript('
-    var profileJS = new profileJSClass();
-    profileJS.init();', true);
+$page->addJavascript('var profileJS = new profileJSClass();', true);
 
 // show headline of module
 $page->addHeadline($headline);
@@ -247,7 +245,8 @@ foreach($gProfileFields->mProfileFields as $field)
                           && (strlen($user->getValue('usr_login_name')) == 0 || strlen($user->getValue('EMAIL')) == 0))))
                     {
                         $form->addCustomContent($gL10n->get('SYS_PASSWORD'), '            
-                            <a id="password_link" class="icon-text-link" href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_PATH. '/icons/key.png" 
+                            <a id="password_link" class="icon-text-link" data-toggle="modal" data-target="#admidio_modal"
+                                href="password.php?usr_id='.$getUserId.'"><img src="'. THEME_PATH. '/icons/key.png" 
                             	alt="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" title="'.$gL10n->get('SYS_CHANGE_PASSWORD').'" />'.$gL10n->get('SYS_CHANGE_PASSWORD').'</a>');
                     }
                 }

@@ -46,12 +46,9 @@ function ecardJSClass()
 	this.init = function()
 	{
 		$(document).ready(function() {
-			$(".ecardPhoto").colorbox({photo:true});
-
 			$("#btn_ecard_preview").click(function(event){
 				event.preventDefault();
 				$("#" + ecardJS.ecardformid + " input[id='submit_action']").val("preview");
-                var test = CKEDITOR.instances.ecard_message.getData();
 				$("#" + ecardJS.ecardformid + " textarea[name='ecard_message']").text( CKEDITOR.instances.ecard_message.getData() );	
 
 				$.ajax({ // create an AJAX call...

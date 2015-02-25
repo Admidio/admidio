@@ -29,7 +29,7 @@ if(isset($_GET['mode']) && $_GET['mode'] == 'assign')
 // Initialize and check the parameters
 $getMode           = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'html', 'validValues' => array('html', 'assign')));
 $getRoleId         = admFuncVariableIsValid($_GET, 'rol_id', 'numeric', array('requireValue' => true, 'directOutput' => true));
-$getUserId         = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('requireValue' => true, 'directOutput' => true));
+$getUserId         = admFuncVariableIsValid($_GET, 'usr_id', 'numeric', array('directOutput' => true));
 $getMembersShowAll = admFuncVariableIsValid($_GET, 'mem_show_all', 'boolean');
 
 $_SESSION['set_rol_id'] = $getRoleId;
@@ -194,7 +194,8 @@ else
     }
 
     $javascriptCode .= '
-        $("#menu_item_create_user").colorbox({rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+        $("#menu_item_create_user").attr("data-toggle", "modal");
+        $("#menu_item_create_user").attr("data-target", "#admidio_modal");
 
         // change mode of users that should be shown
         $("#mem_show_all").click(function(){
