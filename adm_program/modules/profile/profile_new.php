@@ -137,11 +137,8 @@ if(isset($_SESSION['profile_request']))
 
 // create html page object
 $page = new HtmlPage();
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
-
-$page->addJavascript('var profileJS = new profileJSClass();', true);
+//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
+//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 
 // show headline of module
 $page->addHeadline($headline);
