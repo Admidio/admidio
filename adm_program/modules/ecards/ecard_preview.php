@@ -46,7 +46,15 @@ if(strlen($ecardDataToParse) == 0)
 	$gMessage->show($gL10n->get('SYS_ERROR_PAGE_NOT_FOUND'));
 }
 
-// show output of parsed template
-echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $nameRecipient, $emailRecipient);
+echo '
+<div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
+</div>
+<div class="modal-body" id="preview_content">';
 
+    // show output of parsed template
+    echo $funcClass->parseEcardTemplate($imageUrl, $ecardMessage, $ecardDataToParse, $nameRecipient, $emailRecipient);
+    
+echo '</div>';
 ?>

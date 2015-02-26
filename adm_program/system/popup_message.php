@@ -174,9 +174,9 @@ function deleteEntry()
         }
         else {
 			// entry could not be deleted, than show content of data or an common error message
-			$("#btn_yes").css("display","none");
-			$("#btn_no").css("display","none");
-			$("#btn_close").css("display","");
+			$("#btn_yes").hide();
+			$("#btn_no").hide();
+			$("#btn_close").attr("class", "btn btn-default");
 			if(data.length > 0) {
 				$("#message_text").html(data);
 			} else {
@@ -201,7 +201,7 @@ function deleteEntry()
             alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
         <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png" 
             alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
-        <button id="btn_close" class="btn btn-default hidden" type="button" onclick="javascript:$(\'#admidio_modal\').modal(\'hide\');"><img src="'. THEME_PATH. '/icons/close.png" 
+        <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/close.png" 
             alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
 
 </div>';

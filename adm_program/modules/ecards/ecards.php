@@ -109,16 +109,33 @@ else
 // create html page object
 $page = new HtmlPage();
 
-$page->addCssFile($g_root_path.'/adm_program/libs/colorbox/colorbox.css');
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/modules/ecards/ecard.js');
 
 $page->addJavascript('
     $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); }); 
 
-	var ecardJS = new ecardJSClass();
-	ecardJS.init();', true);
+    $("#admidio_modal").on("show.bs.modal", function () {
+        $(this).find(".modal-dialog").css({width: "800px"});
+        $(".modal-title").text("'.$gL10n->get('SYS_PREVIEW').'");
+    });
+
+	$("#btn_ecard_preview").click(function(event){
+		event.preventDefault();
+		$("#ecard_form input[id=\'submit_action\']").val("preview");
+		$("#ecard_form textarea[name=\'ecard_message\']").text( CKEDITOR.instances.ecard_message.getData() );	
+
+		$.ajax({ // create an AJAX call...
+			data: $("#ecard_form").serialize(), // get the form data
+			type: "POST", // GET or POST
+			url: "ecard_preview.php", // the file to call
+			success: function(response) { // on success..
+			    $(".modal-content").html(response);
+			    $("#admidio_modal").modal();
+			}
+		});
+
+		return false;
+	}); ', true);
 
 // add headline and title of module
 $page->addHeadline($headline);
