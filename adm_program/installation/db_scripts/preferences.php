@@ -142,7 +142,7 @@ $orga_preferences = array(
 	'weblinks_target'			=> '_blank',
 	
 	// Inventory
-    'enable_inventory_module'   => '0',
+    'enable_inventory_module'   => '1',
 	
 	// Captcha
     'captcha_background_color'	=> '#FFEFC4',

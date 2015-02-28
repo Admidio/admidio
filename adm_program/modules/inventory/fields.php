@@ -26,7 +26,6 @@ unset($_SESSION['fields_request']);
 
 // create html page object
 $page = new HtmlPage();
-$page->activateModal();
 
 $page->addJavascript('$(".group-heading").click(function() {showHideBlock($(this).attr("id"));});', true);
 $page->addJavascript('

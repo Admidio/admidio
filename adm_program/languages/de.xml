@@ -235,14 +235,14 @@
 	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="todo">Chat aktivieren</text>
 	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="todo">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</text>
     <text id="SYS_SELECT_FROM_LIST" development="new" translation="todo">Aus Liste auswählen</text>
-	<text id="INV_INVENTORY" development="new" translation="todo">Lagerhaltung</text>
+	<text id="INV_INVENTORY" development="new" translation="todo">Inventarverwaltung</text>
 	<text id="INV_ITEM_MANAGEMENT" development="new" translation="todo">Artikel verwalten</text>
 	<text id="INV_CREATE_ITEM" development="new" translation="todo">Neuer Artikel</text>
 	<text id="PRO_MAINTAIN_ITEM_FIELDS" development="new" translation="todo">Artikelfelder verwalten</text>
 	<text id="SYS_ITEMNAME" development="new" translation="todo">Artikelname</text>
-	<text id="SYS_QUANTITY" development="new" translation="todo">Artikelanzahl</text>
-	<text id="SYS_LOAN" development="new" translation="todo">Artikel zum verleihen</text>
-	<text id="SYS_LENT" development="new" translation="todo">Artikelanzahl verliehen</text>
+	<text id="SYS_QUANTITY" development="new" translation="todo">Menge</text>
+    <text id="ORG_CREATE_ITEM_FIELD" development="new" translation="todo">Neues Artikelfeld</text>
+    <text id="ROL_RIGHT_INVENTORY" development="new" translation="todo">Artikel und Lagerverwaltung</text>
 </version>
 <version id="2.4.5" translator="Markus Faßbender">
     <text id="MAI_SENDER_INTO_TO_DESC" development="new" translation="todo">E-Mails an Rollen enthalten alle Empfänger im BCC-Feld. Das TO-Feld wird dann in der Regel mit "Undisclosed Recipients" gefüllt. Falls dies zu Problemen führt kann mit dieser Einstellung das Empfängerfeld (TO) mit der Absenderadresse gefüllt werden. Alle anderen Empfänger werden weiterhin in das BCC-Feld geschrieben. (Standard: Deaktiviert)</text>
