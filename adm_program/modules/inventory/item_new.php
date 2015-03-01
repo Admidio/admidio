@@ -60,7 +60,7 @@ switch($getNewItem)
         break;
 
     case 1:
-        // prueft, ob der inventory die notwendigen Rechte hat, neue inventory anzulegen
+        // prueft, ob der inventory die notwendigen Rechte hat, neue items anzulegen
         if($gCurrentUser->editInventory() == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -190,30 +190,29 @@ foreach($gInventoryFields->mInventoryFields as $field)
                 $inventory->getValue($field->getValue('inf_name_intern')), $fieldProperty, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
         }
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'DROPDOWN'
-            || $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') == 'COUNTRY')
+            || $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') == 'ROOM_ID')
         {
             // set array with values and set default value
-            if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') == 'COUNTRY')
+            if($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name_intern') == 'ROOM_ID')
             {
-                $arrListValues = $gL10n->getCountries();
-                
-                if($inventory->getValue('inv_id') == 0 && strlen($gPreferences['default_country']) > 0)
-                {
-                    $defaultValue = $gPreferences['default_country'];
-                }
-                elseif($inventory->getValue('inv_id') > 0 && strlen($inventory->getValue($field->getValue('inf_name_intern'))) > 0)
-                {
-                    $defaultValue = $inventory->getValue($field->getValue('inf_name_intern'), 'database');
-                }
+				if($gDbType == 'mysql')
+				{
+					$sql = 'SELECT room_id, CONCAT(room_name, \' (\', room_capacity, \'+\', IFNULL(room_overhang, \'0\'), \')\') FROM '.TBL_ROOMS.' ORDER BY room_name';        
+				}
+				else
+				{
+					$sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
+				}
+				$form->addSelectBoxFromSql('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),  $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), $gDb, $sql, array('defaultValue' => $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id')));
             }
             else
             {
                 $arrListValues = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_value_list');
                 $defaultValue  = $inventory->getValue($field->getValue('inf_name_intern'), 'database');
+		        $form->addSelectBox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), 
+    		                        $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
     		}
 
-    		$form->addSelectBox('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'), $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), 
-    		    $arrListValues, $fieldProperty, $defaultValue, true, $helpId, null, $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_icon', 'database'));
     	}
         elseif($gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_type') == 'RADIO_BUTTON')
         {
