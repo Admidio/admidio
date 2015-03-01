@@ -45,7 +45,7 @@ if ($getMsgType != 'PM')
     // allow option to send a copy to your email address only for registered users because of spam abuse
     if($gValidLogin)
     {
-        $postCarbonCopy = admFuncVariableIsValid($_POST, 'carbon_copy', 'boolean', 0);
+        $postCarbonCopy = admFuncVariableIsValid($_POST, 'carbon_copy', 'boolean');
     }
     else
     {

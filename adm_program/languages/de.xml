@@ -144,6 +144,9 @@
     <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="todo">Steht genug Speicherplatz zur Verfügung, können hochgeladene Bilder auf dem Server archiviert und z.B. zum Download zur Verfügung gestellt werden.</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="changed" translation="todo">Thumbnails pro Seite</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="changed" translation="todo">Der angegebene Wert bestimmt wieviele kleine Vorschaubilder auf einer Seite angezeigt werden. Hat ein Album mehr Bilder, so wird automatisch eine Seitennavigation hinzugefügt. (Standard: 16)</text>
+    <text id="PHO_MULTIUPLOAD" development="deleted" translation="todo"></text>
+    <text id="PHO_MULTIUPLOAD_DESC" development="deleted" translation="todo"></text>
+    <text id="PHO_SELECT_FOTOS" development="new" translation="todo">Fotos auswählen</text>
     <text id="PRO_CHANGE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild hochladen</text>
     <text id="PRO_DELETE_PROFILE_PICTURE" development="changed" translation="todo">Profilbild löschen</text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="todo">Angabe eines Landes in dessem Umfeld die Organisation hauptsächlich arbeitet. Dieses wird z.B. bei der Registrierung oder beim Anlegen neuer Benutzer vorausgewählt. Es soll die Eingabe erleichtern und kann aber auch vom Benutzer beliebig geändert werden. (Standard: Deutschland)</text>
@@ -1009,8 +1012,6 @@
     <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neues Fotoalbum bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="todo">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)</text>
-    <text id="PHO_MULTIUPLOAD" development="new" translation="todo">Multiupload</text>
-    <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="todo">Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen. Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash (Version 9+) installiert oder diese Option nicht aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt. (Standard: ja)</text>
     <text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="todo">Dieses Album enthält leider noch keine Fotos.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>

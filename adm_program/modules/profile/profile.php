@@ -119,8 +119,8 @@ $gNavigation->addUrl(CURRENT_URL, $headline);
 // create html page object
 $page = new HtmlPage();
 
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
-$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
+//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/date-functions.js');
+//$page->addJavascriptFile($g_root_path.'/adm_program/system/js/form.js');
 $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
 $page->addCssFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/css/datepicker3.css');
 $page->addJavascriptFile($g_root_path.'/adm_program/libs/bootstrap-datepicker/js/bootstrap-datepicker.js');
@@ -144,9 +144,12 @@ $page->addJavascript('
         }
     }');
 $page->addJavascript('
-    profileJS.init();
     $(".admMemberInfo").click(function () { showHideMembershipInformation($(this)) });
     $("#profile_authorizations_box_body").mouseout(function () { profileJS.deleteShowInfo()});
+    $("#menu_item_password").attr("data-toggle", "modal");
+    $("#menu_item_password").attr("data-target", "#admidio_modal");
+    $("#menu_item_role_memberships_change").attr("data-toggle", "modal");
+    $("#menu_item_role_memberships_change").attr("data-target", "#admidio_modal");
     
     $(".form-membership-period").submit(function(event) {
         var id = $(this).attr("id");

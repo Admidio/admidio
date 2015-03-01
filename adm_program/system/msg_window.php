@@ -25,16 +25,12 @@ header('Content-type: text/html; charset=utf-8');
 // show headline
 if($getInlineView)
 {
-/*    echo '
-	<div class="popup-window">
-		<h1 id="message-window">'.$gL10n->get($getMessageTitle).'</h1>
-		<div class="message">';*/
-echo '
-<div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-    <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
-</div>
-<div class="modal-body">';
+    echo '
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">'.$gL10n->get('SYS_NOTE').'</h4>
+    </div>
+    <div class="modal-body">';
 }
 
 switch ($getMessageId)

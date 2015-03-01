@@ -127,7 +127,8 @@ else
 $page = new HtmlPage();
 
 $page->addJavascript('
-    $("#menu_item_create_user").colorbox({maxWidth:\'700px\',rel:\'nofollow\',onComplete:function(){$("#lastname").focus();}});
+    $("#menu_item_create_user").attr("data-toggle", "modal");
+    $("#menu_item_create_user").attr("data-target", "#admidio_modal");
     
     // change mode of users that should be shown
     $("#mem_show_all").click(function(){

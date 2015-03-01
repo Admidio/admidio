@@ -14,7 +14,7 @@
  *            2 - (not relevant)
  *            3 - Edit roles of a registration
  * inline   : 0 - Ausgaben werden als eigene Seite angezeigt
- *			  1 - nur "body" HTML Code (z.B. für colorbox)
+ *			  1 - nur "body" HTML Code
  *
  *****************************************************************************/
 

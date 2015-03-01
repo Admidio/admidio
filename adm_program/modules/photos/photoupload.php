@@ -8,19 +8,19 @@
  *
  * Parameters:
  *
- * pho_id       : id des Albums zu dem die Bilder hinzugefuegt werden sollen
- * uploadmethod : 1 - classic html upload
- *				  2 - Flexuploader
+ * mode   : choose_files - (Default) Show a dialog with controls to select photo files to upload
+ *          upload_files - Upload the selected files
+ * pho_id : Id of album to which the files should be uploaded
  * 
  *****************************************************************************/
 
 require_once('../../system/common.php');
 require_once('../../system/login_valid.php');
-require_once('../../libs/flexupload/class.flexupload.inc.php');
+require_once(SERVER_PATH.'/adm_program/libs/jquery-file-upload/server/php/uploadhandler.php');
 
 // Initialize and check the parameters
-$getPhotoId      = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
-$getUploadmethod = admFuncVariableIsValid($_GET, 'uploadmethod', 'numeric');
+$getMode    = admFuncVariableIsValid($_GET, 'mode', 'string', array('defaultValue' => 'choose_files', 'validValues' => array('choose_files', 'upload_files')));
+$getPhotoId = admFuncVariableIsValid($_GET, 'pho_id', 'numeric', array('requireValue' => true));
 
 // pruefen ob das Modul ueberhaupt aktiviert ist
 if ($gPreferences['enable_photo_module'] == 0)
@@ -48,10 +48,9 @@ if (ini_get('file_uploads') != 1)
     $gMessage->show($gL10n->get('SYS_SERVER_NO_UPLOAD'));
 }
 
-//URL auf Navigationstack ablegen
-$gNavigation->addUrl(CURRENT_URL);
+$headline = $gL10n->get('PHO_UPLOAD_PHOTOS');
 
-// Fotoalbums-Objekt erzeugen oder aus Session lesen
+// create photo object or read it from session
 if (isset($_SESSION['photo_album']) && $_SESSION['photo_album']->getValue('pho_id') == $getPhotoId)
 {
     $photo_album =& $_SESSION['photo_album'];
@@ -63,155 +62,92 @@ else
     $_SESSION['photo_album'] =& $photo_album;
 }
 
-//ordner fuer Flexupload anlegen, falls dieser nicht existiert
-if(file_exists(SERVER_PATH. '/adm_my_files/photos/upload') == false)
-{
-    $folder = new Folder(SERVER_PATH. '/adm_my_files/photos');
-    $folder->createFolder('upload', true);
-}
-
-// pruefen, ob Album zur aktuellen Organisation gehoert
+// check if album belongs to current organization
 if($photo_album->getValue('pho_org_shortname') != $gCurrentOrganization->getValue('org_shortname'))
 {
     $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
 }
 
-// Uploadtechnik auswaehlen
-if(($gPreferences['photo_upload_mode'] == 1 || $getUploadmethod == 2)
-&&  $getUploadmethod != 1)
+if($getMode == 'choose_files')
 {
-	$flash = 'flashInstalled()';
+    // delete old stuff in upload folder
+    $uploadFolder = new Folder(SERVER_PATH.'/adm_my_files/photos/upload');
+    $uploadFolder->delete('', true);
+    
+    // create html page object
+    $page = new HtmlPage();
+    $page->excludeThemeHtml();
+    
+    $page->addCssFile($g_root_path.'/adm_program/libs/jquery-file-upload/css/style.css');
+    $page->addCssFile($g_root_path.'/adm_program/libs/jquery-file-upload/css/jquery.fileupload.css');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/vendor/jquery.ui.widget.js');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/jquery.iframe-transport.js');
+    $page->addJavascriptFile($g_root_path.'/adm_program/libs/jquery-file-upload/js/jquery.fileupload.js');
+    
+    $page->addJavascript('
+    /*jslint unparam: true */
+    /*global window, $ */
+    $(function () {
+        "use strict";
+        $("#fileupload").fileupload({
+            url: "photoupload.php?mode=upload_files&pho_id='.$getPhotoId.'",
+            sequentialUploads: true,
+            dataType: "json",
+            done: function (e, data) {
+                $.each(data.result.files, function (index, file) {
+                    if(typeof file.error != "undefined") {
+                        $("<p/>").html("<div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\"></span>" 
+                            + file.name + " - <strong>" + file.error + "</strong></div>").appendTo("#files");
+                    }
+                    else {
+                        $("<p/>").text(file.name).appendTo("#files");
+                    }
+                });
+            },
+            progressall: function (e, data) {
+                var progress = parseInt(data.loaded / data.total * 100, 10);
+                $("#progress .progress-bar").css(
+                    "width",
+                    progress + "%"
+                );
+            }
+        }).prop("disabled", !$.support.fileInput)
+            .parent().addClass($.support.fileInput ? undefined : "disabled");
+    });', true);
+
+    $page->addHtml('
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">'.$headline.'</h4>
+        </div>
+        <div class="modal-body">
+            <!-- The fileinput-button span is used to style the file input field as button -->
+            <span class="btn btn-success fileinput-button">
+                <i class="glyphicon glyphicon-plus"></i>
+                <span>'.$gL10n->get('PHO_SELECT_FOTOS').'...</span>
+                <!-- The file input field used as target for the file upload widget -->
+                <input id="fileupload" type="file" name="files[]" multiple>
+            </span>
+            <br>
+            <br>
+            <!-- The global progress bar -->
+            <div id="progress" class="progress">
+                <div class="progress-bar progress-bar-success"></div>
+            </div>
+            <!-- The container for the uploaded files -->
+            <div id="files" class="files"></div>
+        </div>');
+    $page->show();
 }
-else
+elseif($getMode == 'upload_files')
 {
-	$flash = 'false';
+    // upload files to temp upload folder
+    $uploadHandler = new UploadHandlerPhoto(array('upload_dir' => SERVER_PATH.'/adm_my_files/photos/upload/'
+                                            ,'upload_url' => $g_root_path.'/adm_my_files/photos/upload/'
+                                            ,'image_versions' => array()
+                                            ,'accept_file_types' => '/\.(jpe?g|png)$/i'
+                                            ), true,
+                                            array('accept_file_types' => $gL10n->get('PHO_PHOTO_FORMAT_INVALID')));
 }
-
-// Html-Kopf ausgeben
-$gLayout['title'] = $gL10n->get('PHO_UPLOAD_PHOTOS');
-$gLayout['header'] = '
-<script type="text/javascript"><!--
-	function flashInstalled()
-	{
-		if(navigator.mimeTypes.length) 
-		{
-			if(navigator.mimeTypes["application/x-shockwave-flash"]
-			&& navigator.mimeTypes["application/x-shockwave-flash"].enabledPlugin != null)
-			{
-				return true;
-			}
-		}
-		else if(window.ActiveXObject) 
-		{
-		    try 
-		    {
-				flash_test = new ActiveXObject("ShockwaveFlash.ShockwaveFlash.7");
-				if( flash_test ) 
-				{
-					return true;
-				}
-		    }
-		    catch(e){}
-		}
-		return false;
-	}
-
-	$(document).ready(function() 
-	{
-		flash_installed = '.$flash.';
-
-		if(flash_installed == true)
-		{
-			$("#photo_upload_flash").show();
-			$("#photo_upload_form").hide();
-		}
-		else
-		{
-			$("#photo_upload_flash").hide();
-			$("#photo_upload_form").show();
-			$("#bilddatei1").focus();
-		}
- 	});
---></script>';
-require(SERVER_PATH. '/adm_program/system/overall_header.php');
-
-echo '
-<div class="formLayout" id="photo_upload_form" style="visibility: hide; display: none;">
-	<form method="post" action="'.$g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='. $getPhotoId. '&amp;uploadmethod=1" enctype="multipart/form-data">
-	    <div class="formHead">'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</div>
-	    <div class="formBody">
-	        <p>
-	            '.$gL10n->get('PHO_PHOTO_DESTINATION', $photo_album->getValue('pho_name')).'<br />
-	            ('.$gL10n->get('SYS_DATE').': '. $photo_album->getValue('pho_begin', $gPreferences['system_date']). ')
-	        </p>';
-	        //Der Name "Filedata" wird so vom Flexuploader verwendet und darf deswegen nicht geändert werden
-            echo '
-	        <ul class="formFieldList">
-	            <li><dl>
-	                <dt><label for="admPhotoFile1">'.$gL10n->get('PHO_PHOTO').' 1:</label></dt>
-	                <dd><input type="file" id="admPhotoFile1" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" multiple /></dd>
-	            </dl></li>
-	            <li><dl>
-	                <dt><label for="admPhotoFile2">'.$gL10n->get('PHO_PHOTO').' 2:</label></dt>
-	                <dd><input type="file" id="admPhotoFile2" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
-	            </dl></li>
-	            <li><dl>
-	                <dt><label for="admPhotoFile3">'.$gL10n->get('PHO_PHOTO').' 3:</label></dt>
-	                <dd><input type="file" id="admPhotoFile3" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
-	            </dl></li>
-	            <li><dl>
-	                <dt><label for="admPhotoFile4">'.$gL10n->get('PHO_PHOTO').' 4:</label></dt>
-	                <dd><input type="file" id="admPhotoFile4" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
-	            </dl></li>
-	            <li><dl>
-	                <dt><label for="admPhotoFile5">'.$gL10n->get('PHO_PHOTO').' 5:</label></dt>
-	                <dd><input type="file" id="admPhotoFile5" name="Filedata[]" value="'.$gL10n->get('SYS_BROWSE').'" /></dd>
-	            </dl></li>
-	        </ul>
-	        <hr />
-	        <div class="formSubmit">
-	            <button id="btnUpload" type="submit"><img src="'. THEME_PATH. '/icons/photo_upload.png" />&nbsp;'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</button>
-	        </div>
-	   </div>
-	</form>
-</div>
-
-<div id="photo_upload_flash" style="visibility: hide; display: none;">
-	<h2>'.$gL10n->get('PHO_UPLOAD_PHOTOS').'</h2>
-	<p>
-       '.$gL10n->get('PHO_PHOTO_DESTINATION', $photo_album->getValue('pho_name')).'<br />
-       ('.$gL10n->get('SYS_DATE').': '. $photo_album->getValue('pho_begin', $gPreferences['system_date']). ')
-    </p>';
-
-    //neues Objekt erzeugen mit Ziel was mit den Dateien passieren soll
-	$fup = new FlexUpload($g_root_path.'/adm_program/modules/photos/photoupload_do.php?pho_id='.$getPhotoId.'&'.$gCookiePraefix. '_PHP_ID='.$_COOKIE[$gCookiePraefix. '_PHP_ID'].'&'.$gCookiePraefix. '_ID='.$_COOKIE[$gCookiePraefix. '_ID'].'&'.$gCookiePraefix.'_DATA='.$_COOKIE[$gCookiePraefix. '_DATA'].'&uploadmethod=2');
-	$fup->setPathToSWF($g_root_path.'/adm_program/libs/flexupload/');		//Pfad zum swf-File
-	$fup->setLocale($g_root_path.'/adm_program/libs/flexupload/language.php');	//Pfad der Sprachdatei
-	$fup->setMaxFileSize(admFuncMaxUploadSize());	//maximale Dateigröße
-	$fup->setMaxFiles(999);	//maximale Dateianzahl
-	$fup->setWidth(560);	// Breite des Uploaders
-	$fup->setHeight(400);	// Hoehe des Uploaders
-	$fup->setFileExtensions('*.jpg;*.jpeg;*.png');	//erlaubte Dateiendungen (*.gif;*.jpg;*.jpeg;*.png)
-	$fup->printHTML(true, 'flexupload');	//Ausgabe des Uploaders
-echo '</div>
-
-<ul class="iconTextLinkList">
-    <li>
-        <span class="iconTextLink">
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'" title="'.$gL10n->get('PHO_BACK_TO_ALBUM').'"><img 
-            src="'. THEME_PATH. '/icons/application_view_tile.png" /></a>
-            <a href="'.$g_root_path.'/adm_program/modules/photos/photos.php?pho_id='.$getPhotoId.'">'.$gL10n->get('PHO_BACK_TO_ALBUM').'</a>
-        </span>
-    </li>    
-    <li>
-        <span class="iconTextLink">
-            <a class="colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=photo_up_help&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true" title="'.$gL10n->get('SYS_HELP').'"><img 
-            	src="'. THEME_PATH. '/icons/help.png" alt="Help" /></a>
-            <a class="colorbox-dialog" href="'. $g_root_path. '/adm_program/system/msg_window.php?message_id=photo_up_help&amp;message_title=SYS_WHAT_TO_DO&amp;inline=true">'.$gL10n->get('SYS_HELP').'</a>
-        </span>
-    </li>
-</ul>';
-
-require(SERVER_PATH. '/adm_program/system/overall_footer.php');
 
 ?>

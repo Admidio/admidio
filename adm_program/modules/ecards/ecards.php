@@ -109,10 +109,33 @@ else
 // create html page object
 $page = new HtmlPage();
 
-$page->addJavascriptFile($g_root_path.'/adm_program/modules/ecards/ecard.js');
+$page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.js');
+
 $page->addJavascript('
-	var ecardJS = new ecardJSClass();
-	ecardJS.init();');
+    $(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); }); 
+
+    $("#admidio_modal").on("show.bs.modal", function () {
+        $(this).find(".modal-dialog").css({width: "800px"});
+        $(".modal-title").text("'.$gL10n->get('SYS_PREVIEW').'");
+    });
+
+	$("#btn_ecard_preview").click(function(event){
+		event.preventDefault();
+		$("#ecard_form input[id=\'submit_action\']").val("preview");
+		$("#ecard_form textarea[name=\'ecard_message\']").text( CKEDITOR.instances.ecard_message.getData() );	
+
+		$.ajax({ // create an AJAX call...
+			data: $("#ecard_form").serialize(), // get the form data
+			type: "POST", // GET or POST
+			url: "ecard_preview.php", // the file to call
+			success: function(response) { // on success..
+			    $(".modal-content").html(response);
+			    $("#admidio_modal").modal();
+			}
+		});
+
+		return false;
+	}); ', true);
 
 // add headline and title of module
 $page->addHeadline($headline);
@@ -138,7 +161,8 @@ $form->addInput('photo_nr', null, $getPhotoNr, array('type' => 'hidden'));
 
 $form->openGroupBox('gb_layout', $gL10n->get('ECA_LAYOUT'));
     $form->addCustomContent($gL10n->get('SYS_PHOTO'), '
-        <a class="ecardPhoto" href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
+        <a data-toggle="lightbox" data-type="image"
+            href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
             src="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$getPhotoNr.'&amp;max_width='.$gPreferences['ecard_thumbs_scale'].'&amp;max_height='.$gPreferences['ecard_thumbs_scale'].'" 
             class="imageFrame" alt="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'"  title="'.$gL10n->get('ECA_VIEW_PICTURE_FULL_SIZED').'" />
         </a>');
