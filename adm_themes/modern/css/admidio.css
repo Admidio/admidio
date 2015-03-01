@@ -170,6 +170,12 @@ h3 {
 /* Other styles */
 /**************************************************/
 
+.ekko-lightbox-nav-overlay a:link, .ekko-lightbox-nav-overlay a:visited,
+.ekko-lightbox-nav-overlay a:hover, .ekko-lightbox-nav-overlay a:active {
+    color: #ffffff;
+    text-decoration: none;
+}
+
 .badge {
     margin-left: 4px;
 }
@@ -215,8 +221,8 @@ a:link, a:visited {
 }
 
 a:hover, a:active {
-    text-decoration: underline !important;
-    color: #FF9C00 !important;
+    text-decoration: underline;
+    color: #FF9C00;
 }
 
 /* Show a linklist with icon */

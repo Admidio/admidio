@@ -177,10 +177,12 @@ function deleteEntry()
 			$("#btn_yes").hide();
 			$("#btn_no").hide();
 			$("#btn_close").attr("class", "btn btn-default");
+			var html = $("#message_text").html();
+			
 			if(data.length > 0) {
-				$("#message_text").html(data);
+				$("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\">" + data + "</span></div>");
 			} else {
-				$("#message_text").html("'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'");
+				$("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\">'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'</span></div>");
 			}
         }
     });
@@ -196,13 +198,11 @@ function deleteEntry()
     <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">
-
         <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
             alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
         <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png" 
             alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
         <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/close.png" 
             alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
-
 </div>';
 ?>
