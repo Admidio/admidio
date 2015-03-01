@@ -43,15 +43,15 @@ switch($getNewItem)
 {
     case 0:
         // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
-        if($gCurrentUser->editProfile($inventory) == false)
+        if($gCurrentUser->editInventory($inventory) == false)
         {
-            //$gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
+            $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }
         break;
 
     case 1:
         // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
-        if($gCurrentUser->editUsers() == false)
+        if($gCurrentUser->editInventory() == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
         }

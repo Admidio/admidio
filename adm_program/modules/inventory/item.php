@@ -9,7 +9,7 @@
  * Parameters:
  *
  * item_id : Show profile of the item with this is. If this parameter is not set then
- *           the profile of the current log will be shown.
+ *           an error will be shown.
  *
  *****************************************************************************/
 
