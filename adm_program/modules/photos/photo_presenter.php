@@ -123,17 +123,18 @@ else
 	// Show photo with link to next photo
 	if($next_image <= $photoAlbum->getValue('pho_quantity'))
 	{
-		$page->addHtml('<div><a href="'.$urlNextImage.'"><img class="photoOutput" src="'.$urlCurrentImage.'" alt="Foto"></a></div>');
+		$page->addHtml('<div class="img-presenter"><a href="'.$urlNextImage.'"><img src="'.$urlCurrentImage.'" alt="Foto"></a></div>');
 	}
 	else
 	{
-		$page->addHtml('<div><img class="photoOutput" src="'.$urlCurrentImage.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>');
+		$page->addHtml('<div class="img-presenter"><img src="'.$urlCurrentImage.'" alt="'.$gL10n->get('SYS_PHOTO').'" /></div>');
 	}
 	
-	// in popup mode show buttons for prev, next and close
 	if($gPreferences['photo_show_mode'] == 0)
 	{
-        $page->addHtml('<div class="btn-group">
+        // in popup mode show buttons for prev, next and close
+        $page->addHtml('
+        <div class="btn-group">
             <a class="btn btn-default icon-text-link" href="'.$urlPreviousImage.'"><img 
                 src="'. THEME_PATH. '/icons/back.png" alt="'.$gL10n->get('PHO_PREVIOUS_PHOTO').'" />'.$gL10n->get('PHO_PREVIOUS_PHOTO').'</a>
             <a class="btn btn-default icon-text-link" href="javascript:parent.window.close()"><img 
@@ -142,10 +143,9 @@ else
                 src="'. THEME_PATH. '/icons/forward.png" alt="'.$gL10n->get('PHO_NEXT_PHOTO').'" />'.$gL10n->get('PHO_NEXT_PHOTO').'</a>
         </div>');
 	}
-
-	// if no popup mode then show additional album informations
-	if($gPreferences['photo_show_mode'] == 2)
+	elseif($gPreferences['photo_show_mode'] == 2)
 	{
+        // if no popup mode then show additional album informations
 	    $datePeriod = $photoAlbum->getValue('pho_begin', $gPreferences['system_date']);
 	    
 		if($photoAlbum->getValue('pho_end') != $photoAlbum->getValue('pho_begin')
@@ -154,7 +154,7 @@ else
 			$datePeriod .= ' '.$gL10n->get('SYS_DATE_TO').' '.$photoAlbum->getValue('pho_end', $gPreferences['system_date']);
 		}
 	    
-		$page->addHtml('<br />
+		$page->addHtml('
 		<div class="row">
 		    <div class="col-sm-2 col-xs-4">'.$gL10n->get('SYS_DATE').'</div>
 		    <div class="col-sm-4 col-xs-8"><strong>'.$datePeriod.'</strong></div>

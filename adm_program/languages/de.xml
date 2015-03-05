@@ -134,6 +134,9 @@
     <text id="PHO_ALBUM_LOCK_DESC" development="new" translation="todo">Gesperrte Alben können von Besuchern und Mitgliedern nicht eingesehen werden. Du kannst zum Beispiel während du ein Album anlegst und alle Bilder hochlädst, das Album vorübergehend sperren.</text>
     <text id="PHO_ALBUM_UNLOCK" development="new" translation="todo">Album entsperren</text>
     <text id="PHO_ALBUM_HELP_DESC" development="deleted" translation="todo"></text>
+    <text id="PHO_COLORBOX" development="deleted" translation="todo"></text>
+    <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="todo">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann als modales Fenster geschehen, dann wird im vorhandenen Browserfenster ein neues Fenster geöffnet. Im Hintergrund bleibt die ausgewählte Fotovorschau weiterhin aktiv. Sollen die Bilder im gleichen Fenster dargestellt werden, dann wird die aktuelle Fotovorschau verlassen und eine neue Seite mit dem ausgewählten Foto angezeigt. Soll ein Popup-Fenster erzeugt werden, dann wird ein neues Browserfenster geöffnet in dem das ausgewählte Foto angezeigt wird. Dieses kann dann unabhängig vom Browserfenster mit der Fotovorschau bedient werden. (Standard: Modales Fenster)</text>
+    <text id="PHO_MODAL_WINDOW" development="new" translation="todo">Modales Fenster</text>
     <text id="PHO_MAX_PHOTO_SIZE" development="deleted" translation="todo"></text>
     <text id="PHO_MAX_PHOTO_SIZE_WIDTH" development="new" translation="todo">Max. Bildanzeigegröße (Breite)</text>
     <text id="PHO_MAX_PHOTO_SIZE_HEIGHT" development="new" translation="todo">Max. Bildanzeigegröße (Höhe)</text>
@@ -1003,10 +1006,8 @@
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="todo">Das Album wurde erfolgreich angelegt / geändert</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="todo">Alben-Verwaltung</text>
     <text id="PHO_BACK_TO_ALBUM" development="new" translation="todo">zurück zum Album</text>
-    <text id="PHO_COLORBOX" development="new" translation="todo">ColorBox</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album anlegen</text>
     <text id="PHO_DISPLAY_PHOTOS" development="new" translation="todo">Fotodarstellung</text>
-    <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="todo">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann über ein Popup-Fenster, über eine Javascript-Animation (ColorBox) oder auf dergleichen Seite in HTML erfolgen. (Standard: ColorBox)</text>
     <text id="PHO_EDIT_ALBUM" development="new" translation="todo">Album Bearbeiten</text>
     <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neues Fotoalbum wurde angelegt</text>
     <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neues Fotoalbum bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>

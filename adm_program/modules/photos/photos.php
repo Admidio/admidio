@@ -136,10 +136,21 @@ if($gCurrentUser->editPhotoRight())
         }');
 }
 
+// integrate bootstrap ekko lightbox addon 
 if($gPreferences['photo_show_mode']==1)
 {
-    $page->addCssFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.css');
-    $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.js');
+    if($gDebug)
+    {
+        $page->addCssFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.css');
+        $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.js');
+    }
+    else
+    {
+        $page->addCssFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.min.css');
+        $page->addJavascriptFile($g_root_path.'/adm_program/libs/lightbox/ekko-lightbox.min.js');
+    }
+
+    $page->addJavascript('$(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); });', true);
     /*$page->addCssFile($g_root_path.'/adm_program/libs/colorbox/colorbox.css');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js');
     $page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/i18n/jquery.colorbox-'.$gPreferences['system_language'].'.js');
@@ -235,16 +246,9 @@ if($getPhotoId > 0)
 //Nur wenn uebergebenes Album Bilder enthaelt
 if($photoAlbum->getValue('pho_quantity') > 0)
 {
-    $page->addJavascript('$(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); }); 
-    ', true);
-    
-    //Popupfenstergröße
-    $popup_height = $gPreferences['photo_show_height']+210;
-    $popup_width  = $gPreferences['photo_show_width']+70;
-    
-    // remember first and last photo nr
-    $firstPhotoNr = 1;
-    $lastPhotoNr  = 0;
+    $photoThumbnailTable = '';
+    $firstPhotoNr        = 1;
+    $lastPhotoNr         = 0;
     
     //Wenn Bild übergeben wurde richtige Albenseite öffnen
     if($getPhotoNr > 0)
@@ -252,8 +256,8 @@ if($photoAlbum->getValue('pho_quantity') > 0)
         $firstPhotoNr = (ceil($getPhotoNr/$gPreferences['photo_thumbs_page']) * $gPreferences['photo_thumbs_page']) + 1;
     }
               
-    //Thumbnailtabelle
-    $photoThumbnailTable = '<div class="row album-container">';
+    // create thumbnail container
+    $page->addHtml('<div class="row album-container">');
     
     for($actThumbnail = 1; $actThumbnail <= $gPreferences['photo_thumbs_page'] && $actThumbnail <= $photoAlbum->getValue('pho_quantity'); $actThumbnail++)
     {
@@ -268,8 +272,9 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 if ($gPreferences['photo_show_mode'] == 0)
                 {
                     $photoThumbnailTable .= '
-                    <img class="thumbnail center-block" id="img_'.$lastPhotoNr.'" onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.$popup_height.', width='.$popup_width.',left=162,top=5\')" 
-                        src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$lastPhotoNr.'&thumb=1" alt="'.$lastPhotoNr.'" style="cursor: pointer"/>';
+                    <img class="thumbnail center-block" id="img_'.$lastPhotoNr.'" style="cursor: pointer"
+                        onclick="window.open(\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'\',\'msg\', \'height='.($gPreferences['photo_show_height']+210).', width='.($gPreferences['photo_show_width']+70).',left=162,top=5\')" 
+                        src="photo_show.php?pho_id='.$getPhotoId.'&photo_nr='.$lastPhotoNr.'&thumb=1" alt="'.$lastPhotoNr.'" />';
                 }
 
                 //Colorbox-Mode
@@ -280,16 +285,18 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                     	<img class="thumbnail center-block" id="img_'.$lastPhotoNr.'" class="photoThumbnail" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" alt="'.$lastPhotoNr.'" /></a>';
                     	href="'.$g_root_path.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$getPhotoId.'/'.$lastPhotoNr.'.jpg"*/
                     $photoThumbnailTable .= '
-                    <a data-gallery="admidio-gallery" data-width="'.$gPreferences['photo_show_width'].'" data-parent=".album-container" data-toggle="lightbox" data-title="'.$headline.'" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'">
-                    	<img class="img-responsive" id="img_'.$lastPhotoNr.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" alt="'.$lastPhotoNr.'" /></a>';
+                    <a data-gallery="admidio-gallery" data-width="'.$gPreferences['photo_show_width'].'" data-parent=".album-container" data-toggle="lightbox" data-title="'.$headline.'" 
+                        href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'"><img 
+                        class="center-block thumbnail" id="img_'.$lastPhotoNr.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" alt="'.$lastPhotoNr.'" /></a>';
                 }
 
                 //Gleichesfenster-Mode
                 else if ($gPreferences['photo_show_mode'] == 2)
                 {
                     $photoThumbnailTable .= '
-                    <img class="thumbnail center-block" id="img_'.$lastPhotoNr.'" onclick="self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'\'" 
-                        src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" style="cursor: pointer"/>';
+                    <a href="javascript:self.location.href=\''.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'\'"><img 
+                        class="thumbnail center-block" id="img_'.$lastPhotoNr.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" />
+                    </a>';
                 }
                 
                 if($gCurrentUser->editPhotoRight() || ($gValidLogin == true && $gPreferences['enable_ecard_module'] == 1) || $gPreferences['photo_download_enabled']==1)
@@ -334,10 +341,9 @@ if($photoAlbum->getValue('pho_quantity') > 0)
             $photoThumbnailTable .= '</div>';
         }
     }
-    
-    $photoThumbnailTable .= '</div>';
-    
-    // Damit man mit der Colorbox auch alle anderen Bilder im Album sehen kann werden hier die restilichen Links zu den Bildern "unsichtbar" ausgegeben
+        
+    // the lightbox should be able to go through the whole album, therefore we must 
+    // integrate links to the photos of the album pages to this page and container but hidden
     if ($gPreferences['photo_show_mode'] == 1)
     {
         $photoThumbnailTable_shown = false;
@@ -346,7 +352,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
         {
             if($i >= $firstPhotoNr && $i <= $lastPhotoNr)
             {
-                    if(!$photoThumbnailTable_shown)
+                    if($photoThumbnailTable_shown == false)
                     {
                         $page->addHtml($photoThumbnailTable);
                         $photoThumbnailTable_shown = true;
@@ -355,12 +361,16 @@ if($photoAlbum->getValue('pho_quantity') > 0)
             else
             {
  //               $page->addHtml('<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$i.'&amp;pho_id='.$getPhotoId.'">&nbsp;</a>');
-                $page->addHtml('<a data-gallery="admidio-gallery" data-toggle="lightbox" data-title="'.$headline.'" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$i.'&amp;pho_id='.$getPhotoId.'">&nbsp;</a>');
+                $page->addHtml('<a class="hidden" data-gallery="admidio-gallery" data-toggle="lightbox" data-width="'.$gPreferences['photo_show_width'].'" data-title="'.$headline.'" 
+                    href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$i.'&amp;pho_id='.$getPhotoId.'">&nbsp;</a>');
             }
         }
+        $page->addHtml('</div>');   // close album-container
     }
-    else // wenn die Fotos nicht mit der Colorbox aufgerufen werden
+    else
     {
+        // show photos if lightbox is not used
+        $photoThumbnailTable .= '</div>';   // close album-container
         $page->addHtml($photoThumbnailTable);
     }		
 

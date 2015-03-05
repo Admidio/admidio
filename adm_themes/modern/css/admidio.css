@@ -686,7 +686,19 @@ input[data-provide="datepicker"], input[type="number"], input[type="time"] {
     width: 85%;
 }
 
-.album-image .thumbnail {
+.img-presenter {
+    margin-bottom: 10px;
+}
+
+.album-image {
+    height: 200px;
+}
+
+.thumbnail:hover {
+    border: 1px solid #FF9C00;
+}
+
+.thumbnail {
     margin-bottom: 5px;
 }
 
