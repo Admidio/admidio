@@ -151,14 +151,6 @@ if($gPreferences['photo_show_mode']==1)
     }
 
     $page->addJavascript('$(document).delegate("*[data-toggle=\"lightbox\"]", "click", function(event) { event.preventDefault(); $(this).ekkoLightbox(); });', true);
-    /*$page->addCssFile($g_root_path.'/adm_program/libs/colorbox/colorbox.css');
-    $page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/jquery.colorbox.js');
-    $page->addJavascriptFile($g_root_path.'/adm_program/libs/colorbox/i18n/jquery.colorbox-'.$gPreferences['system_language'].'.js');
-    $page->addJavascript('
-        $("a[rel=\'colorboxPictures\']").colorbox({slideshow:true,
-                                                   slideshowAuto:false,
-                                                   slideshowSpeed:'.($gPreferences['photo_slideshow_speed']*1000).',
-                                                   preloading:true}); ', true);*/
 }
 
 $page->addJavascript('
@@ -280,13 +272,9 @@ if($photoAlbum->getValue('pho_quantity') > 0)
                 //Colorbox-Mode
                 else if ($gPreferences['photo_show_mode'] == 1)
                 {
-/*                    $photoThumbnailTable .= '
-                    <a rel="colorboxPictures" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'">
-                    	<img class="thumbnail center-block" id="img_'.$lastPhotoNr.'" class="photoThumbnail" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" alt="'.$lastPhotoNr.'" /></a>';
-                    	href="'.$g_root_path.'/adm_my_files/photos/'.$photoAlbum->getValue('pho_begin', 'Y-m-d').'_'.$getPhotoId.'/'.$lastPhotoNr.'.jpg"*/
                     $photoThumbnailTable .= '
-                    <a data-gallery="admidio-gallery" data-width="'.$gPreferences['photo_show_width'].'" data-parent=".album-container" data-toggle="lightbox" data-title="'.$headline.'" 
-                        href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$lastPhotoNr.'&amp;pho_id='.$getPhotoId.'"><img 
+                    <a data-gallery="admidio-gallery" data-type="image" data-parent=".album-container" data-toggle="lightbox" data-title="'.$headline.'" 
+                        href="'.$g_root_path.'/adm_program/modules/photos/photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;max_width='.$gPreferences['photo_show_width'].'&amp;max_height='.$gPreferences['photo_show_height'].'"><img 
                         class="center-block thumbnail" id="img_'.$lastPhotoNr.'" src="photo_show.php?pho_id='.$getPhotoId.'&amp;photo_nr='.$lastPhotoNr.'&amp;thumb=1" alt="'.$lastPhotoNr.'" /></a>';
                 }
 
@@ -360,8 +348,7 @@ if($photoAlbum->getValue('pho_quantity') > 0)
             }
             else
             {
- //               $page->addHtml('<a rel="colorboxPictures" style="display:none;" href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$i.'&amp;pho_id='.$getPhotoId.'">&nbsp;</a>');
-                $page->addHtml('<a class="hidden" data-gallery="admidio-gallery" data-toggle="lightbox" data-width="'.$gPreferences['photo_show_width'].'" data-title="'.$headline.'" 
+                $page->addHtml('<a class="hidden" data-gallery="admidio-gallery" data-toggle="lightbox" data-title="'.$headline.'" 
                     href="'.$g_root_path.'/adm_program/modules/photos/photo_presenter.php?photo_nr='.$i.'&amp;pho_id='.$getPhotoId.'">&nbsp;</a>');
             }
         }
