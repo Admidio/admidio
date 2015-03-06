@@ -1,16 +1,16 @@
 # Changelog
 
-## [Unreleased][unreleased]
+## Unreleased
 
 
 
-## [2.4.10] - 2015-02-01
+## 2.4.10 - 2015-02-01
 
 ### Fixed
 - [installation] Fix error on creating g_root_path in config file
 
 
-## [2.4.9] - 2015-01-25
+## 2.4.9 - 2015-01-25
 
 ### Fixed
 - [mail] Update to PhpMailer 5.2.9
@@ -22,7 +22,7 @@
 - [installation] #788 HTTPS not set in config.php
 
 
-## [2.4.8] - 2014-10-25
+## 2.4.8 - 2014-10-25
 
 ### Fixed
 - [system] #783 Unnecessary error log output leads to error on some servers
@@ -35,7 +35,7 @@
 - [photos] #786 Wrong back navigation when downloading photos
 
 
-## [2.4.7] - 2014-09-01
+## 2.4.7 - 2014-09-01
 
 ### Fixed
 - [profile] #775 Dezimal 0 was cut in profile field of type numeric
@@ -47,7 +47,7 @@
 - [downloads] #421 Long filenames disarranged the html layout
 
 
-## [2.4.6] - 2014-06-28
+## 2.4.6 - 2014-06-28
 
 ### Added
 - [Lists] Export role members to vCard (Developed by Stefan Weiß)
@@ -59,7 +59,7 @@
 - [system] #772 HtmLawed: Modifier /​e in preg_replace() deprecated in PHP 5.5
 
 
-## [2.4.5] - 2014-04-05
+## 2.4.5 - 2014-04-05
 
 ### Added
 - [Lists] Export lists to PDF (Developed by Stefan Weiß)
@@ -79,7 +79,7 @@
 - [user_management] #768 Error on page profile change history was shown in some cases
 
 
-## [2.4.4] - 2014-01-11
+## 2.4.4 - 2014-01-11
 
 ### Added
 - [Photos] Allow optional upload of original photo file on webspace (Developed by Henrik Muhs)
@@ -98,7 +98,7 @@
 - [system] #759 Check of valid database version failed
 
 
-## [2.4.3] - 2013-10-20
+## 2.4.3 - 2013-10-20
 
 ### Fixed
 - [roles] #752 Leaders had not edited there role members if preference was set
@@ -113,7 +113,7 @@
 - [plugins] #751 View problem in plugin sidebar_dates using compact view in settings
 
 
-## [2.4.2] - 2013-06-28
+## 2.4.2 - 2013-06-28
 
 ### Added
 - [Events] Add new viewmode "compact" to events
@@ -142,7 +142,7 @@
 - [ecards] #728 Notice: split() is deprecated in ecards
 
 
-## [2.4.1] - 2013-04-24
+## 2.4.1 - 2013-04-24
 
 ### Fixed
 - [mail] #712 Wrong Reply-To address when send mail
@@ -157,7 +157,7 @@
 - [system] #711 2 Admidio-Systems in 1 Browser mix their session data
 
 
-## [2.4.0] - 2013-04-02
+## 2.4.0 - 2013-04-02
 
 ### Added, Changed
 - [roles] #475 New role preference to auto assign role at registration
