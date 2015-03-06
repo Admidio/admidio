@@ -106,7 +106,7 @@ class HtmlFormInstallation extends HtmlForm
             <link rel="stylesheet" type="text/css" href="../libs/bootstrap/css/bootstrap.min.css" />
             <link rel="stylesheet" type="text/css" href="layout/admidio.css" />
             
-            <script type="text/javascript" src="../libs/jquery/jquery.js"></script>
+            <script type="text/javascript" src="../libs/jquery/jquery.min.js"></script>
             <script type="text/javascript" src="../libs/bootstrap/js/bootstrap.min.js"></script>
             <script type="text/javascript" src="../system/js/common_functions.js"></script>
         </head>

@@ -916,7 +916,7 @@ echo'
         <!-- (c) 2004 - 2013 The Admidio Team - http://www.admidio.org -->
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <title>'. $gCurrentOrganization->getValue('org_longname'). ' - Terminliste </title>
-        <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.js"></script>
+        <script type="text/javascript" src="'.$g_root_path.'/adm_program/libs/jquery/jquery.min.js"></script>
         <link rel="stylesheet" type="text/css" href="'. THEME_PATH. '/css/print.css" />
 
     <script type="text/javascript">
