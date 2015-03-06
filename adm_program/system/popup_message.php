@@ -174,13 +174,15 @@ function deleteEntry()
         }
         else {
 			// entry could not be deleted, than show content of data or an common error message
-			$("#admButtonYesRow").css("display","none");
-			$("#admButtonNoRow").css("display","none");
-			$("#admButtonCloseRow").css("display","");
+			$("#btn_yes").hide();
+			$("#btn_no").hide();
+			$("#btn_close").attr("class", "btn btn-default");
+			var html = $("#message_text").html();
+			
 			if(data.length > 0) {
-				$("#admMessageText").html(data);
+				$("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\">" + data + "</span></div>");
 			} else {
-				$("#admMessageText").html("'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'");
+				$("#message_text").html(html + "<br /><div class=\"alert alert-danger form-alert\"><span class=\"glyphicon glyphicon-remove\">'.$gL10n->get('SYS_ERROR_ENTRY_NOT_DELETED').'</span></div>");
 			}
         }
     });
@@ -193,16 +195,14 @@ function deleteEntry()
 </div>
 <div class="modal-body row">
     <div class="col-xs-2"><img style="width: 32px; height: 32px;" src="'.THEME_PATH.'/icons/'.$icon.'" alt="Icon" /></div>
-    <div class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
+    <div id="message_text" class="col-xs-10">'.$gL10n->get($text, $textVariable, $textVariable2).'</div>
 </div>
 <div class="modal-footer">
-
-        <button id="admButtonYes" class="btn btn-default" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
+        <button id="btn_yes" class="btn btn-default" type="button" onclick="javascript:deleteEntry()"><img src="'. THEME_PATH. '/icons/ok.png" 
             alt="'.$gL10n->get('SYS_YES').'" />'.$gL10n->get('SYS_YES').'&nbsp;&nbsp;</button>
-        <button id="admButtonNo" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png" 
+        <button id="btn_no" class="btn btn-default" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/error.png" 
             alt="'.$gL10n->get('SYS_NO').'" />'.$gL10n->get('SYS_NO').'</button>
-        <button id="admButtonClose" class="btn btn-default hidden" type="button" onclick="javascript:$.colorbox.close();"><img src="'. THEME_PATH. '/icons/close.png" 
+        <button id="btn_close" class="btn btn-default hidden" type="button" data-dismiss="modal"><img src="'. THEME_PATH. '/icons/close.png" 
             alt="'.$gL10n->get('SYS_CLOSE').'" />'.$gL10n->get('SYS_CLOSE').'</button>
-
 </div>';
 ?>

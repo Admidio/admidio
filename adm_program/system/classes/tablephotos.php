@@ -25,6 +25,8 @@
 
 class TablePhotos extends TableAccess
 {
+    protected $hasChildAlbums; ///< Flag if this album has child albums
+    
 	/** Constuctor that will create an object of a recordset of the table adm_photos. 
 	 *  If the id is set than the specific photo album will be loaded.
 	 *  @param $db Object of the class database. This should be the default object $gDb.
@@ -33,6 +35,8 @@ class TablePhotos extends TableAccess
     public function __construct(&$db, $photo_id = 0)
     {
         parent::__construct($db, TBL_PHOTOS, 'pho', $photo_id);
+        
+        $hasChildAlbums = null;
     }
 
     // Rekursive Funktion gibt die Anzahl aller Bilder inkl. der Unteralben zurueck
@@ -146,6 +150,32 @@ class TablePhotos extends TableAccess
         
 		$this->db->endTransaction();
         return $return_code;
+    }
+    
+    /* Check if this album has one or more child albums.
+     * @return Return @b true if child albums exists.
+     */
+    public function hasChildAlbums()
+    {
+        if($this->hasChildAlbums == null)
+        {
+            $sql     = 'SELECT COUNT(1) FROM '. TBL_PHOTOS. '
+                         WHERE pho_pho_id_parent = '.$this->getValue('pho_id');
+            $this->db->query($sql);
+            
+            $row = $this->db->fetch_array();
+            
+            if($row[0] > 0)
+            {
+                $this->hasChildAlbums = true;
+            }
+            else
+            {
+                $this->hasChildAlbums = false;
+            }
+        }
+        
+        return $this->hasChildAlbums;
     }
     
 	/** Save all changed columns of the recordset in table of database. Therefore the class remembers if it's 

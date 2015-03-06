@@ -106,6 +106,8 @@ elseif($getMode == 'html')
     // show headline 
     echo '<script type="text/javascript"><!--
     $(document).ready(function(){
+        $("body").on("shown.bs.modal", ".modal", function () { $("#password_form:first *:input[type!=hidden]:first").focus(); });
+        
         $("#password_form").submit(function(event) {
             var action = $(this).attr("action");
             $("#password_form .form-alert").hide();
@@ -122,13 +124,11 @@ elseif($getMode == 'html')
                         $("#password_form .form-alert").attr("class", "alert alert-success form-alert");
                         $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('PRO_PASSWORD_CHANGED').'</strong>");
                         $("#password_form .form-alert").fadeIn("slow");
-                        $.fn.colorbox.resize();
-                        setTimeout("$.fn.colorbox.close()",2000);	
+                        setTimeout("$(\"#admidio_modal\").modal(\"hide\");",2000);	
                     }
                     else {
                         $("#password_form .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#password_form .form-alert").fadeIn();
-                        $.fn.colorbox.resize();
                         $("#password_form .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
                     }
                 }
@@ -137,8 +137,12 @@ elseif($getMode == 'html')
     });
     --></script>
 
-    <div class="popup-window">
-        <h1>'.$gL10n->get('PRO_EDIT_PASSWORD').'</h1>';
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">'.$gL10n->get('PRO_EDIT_PASSWORD').'</h4>
+    </div>
+    <div class="modal-body">';
+
         // show form
         $form = new HtmlForm('password_form', $g_root_path. '/adm_program/modules/profile/password.php?usr_id='.$getUserId.'&amp;mode=change');
         $form->addInput('old_password', $gL10n->get('PRO_CURRENT_PASSWORD'), null, array('type' => 'password', 'property' => FIELD_MANDATORY));

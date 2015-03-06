@@ -45,9 +45,6 @@ if (!$gCurrentUser->editPhotoRight())
 	$gMessage->show($gL10n->get('PHO_NO_RIGHTS'));
 }
 
-//URL auf Navigationstack ablegen
-$gNavigation->addUrl(CURRENT_URL);
-
 //Loeschen eines Thumbnails
 // photo_album : Referenz auf Objekt des relevanten Albums
 // pic_nr      : Nr des Bildes dessen Thumbnail geloescht werden soll
