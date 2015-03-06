@@ -14,7 +14,7 @@
  *            2 - (not relevant)
  *            3 - Edit roles of a registration
  * inline   : 0 - (Default) wird als eigene Seite angezeigt
- *            1 - nur "body" HTML Code (z.B. für colorbox)
+ *            1 - nur "body" HTML Code
  *
  *****************************************************************************/
 
@@ -78,8 +78,8 @@ if($getInline == true)
                         $("#roles_assignment_form .form-alert").attr("class", "alert alert-success form-alert");
                         $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-ok\"></span><strong>'.$gL10n->get('SYS_SAVE_DATA').'</strong>");
                         $("#roles_assignment_form .form-alert").fadeIn("slow");
-                        $.fn.colorbox.resize();
-                        setTimeout("$.fn.colorbox.close()",2000);	
+                        setTimeout("$(\"#admidio_modal\").modal(\"hide\");",2000);
+
 						profileJS.reloadRoleMemberships();
 						profileJS.reloadFormerRoleMemberships();
 						profileJS.reloadFutureRoleMemberships();
@@ -87,7 +87,6 @@ if($getInline == true)
                     else {
                         $("#roles_assignment_form .form-alert").attr("class", "alert alert-danger form-alert");
                         $("#roles_assignment_form .form-alert").fadeIn();
-                        $.fn.colorbox.resize();
                         $("#roles_assignment_form .form-alert").html("<span class=\"glyphicon glyphicon-remove\"></span>"+data);
                     }
                 }
@@ -96,8 +95,12 @@ if($getInline == true)
     });
     --></script>
 
-    <div class="popup-window">
-        <h1>'.$headline.'</h1>';
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">'.$headline.'</h4>
+    </div>
+    <div class="modal-body">';
+
 }
 else
 {
@@ -105,9 +108,7 @@ else
     $page = new HtmlPage();
     $page->addJavascriptFile($g_root_path.'/adm_program/modules/profile/profile.js');
     
-    $page->addJavascript('
-        var profileJS = new profileJSClass();
-        profileJS.init();', true);
+    $page->addJavascript('var profileJS = new profileJSClass();', true);
     
     $page->addHeadline($headline);
 

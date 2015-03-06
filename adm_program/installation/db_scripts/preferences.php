@@ -61,7 +61,6 @@ $orga_preferences = array(
     'photo_show_width'      => '640',
     'photo_show_height'     => '400',
     'photo_image_text'      => '1',
-    'photo_upload_mode'     => '1',
     'photo_image_text'      => '© '.$_SERVER['HTTP_HOST'],
     'photo_keep_original'   => '0',
     'photo_download_enabled' => '0',

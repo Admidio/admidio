@@ -140,8 +140,12 @@ class Folder
         return true;
     }
         
-    // der Ordner wird mit allen Unterordnern / Dateien geloescht
-    public function delete($folder = '')
+    /* Deletes the current folder recursive with all files and subfolders. 
+     * @param $folder            Name of a folder that should be deleted. Default is always the current folder
+     * @param $onlyDeleteContent If set to @b true then only files and folders in the current
+     *                           folder will be deleted. The current folder will not be deleted.
+     */
+    public function delete($folder = '', $onlyDeleteContent = false)
     {
         if(strlen($folder) == 0)
         {
@@ -159,12 +163,12 @@ class Folder
 
                     if(is_dir($act_folder_entry))
                     {
-                        // nun Inhalt des entsprechenden Ordners loeschen
-                        $this->delete($act_folder_entry);
+                        // deletes the content of the folder
+                        $this->delete($act_folder_entry, false);
                     }
                     else
                     {
-                        // die Datei loeschen
+                        // deletes the file
                         if(file_exists($act_folder_entry))
                         {
                             if(@unlink($act_folder_entry) == false)
@@ -178,10 +182,13 @@ class Folder
             closedir($dh);
         }
 
-        // nun noch den aktuellen selber Ordner loeschen
-        if(@rmdir($folder) == false)
+        if($onlyDeleteContent == false)
         {
-            return false;
+            // now delete current folder
+            if(@rmdir($folder) == false)
+            {
+                return false;
+            }
         }
         return true;
     }
