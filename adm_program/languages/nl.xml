@@ -1,6 +1,147 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <language id="nl">
-
+<version id="2.4.8" translator="David de Kort">
+	<text id="LST_COUNTRY_ISO" development="new" translation="edited">Het land moet in de ISO 3166 ALPHA-3 (3 karakters) code worden geschreven</text>
+	<text id="SYS_COUNTRY_EG" development="new" translation="edited">BEL</text>
+</version>
+<version id="2.4.5" translator="David de Kort">
+    <text id="MAI_SENDER_INTO_TO_DESC" development="changed" translation="edited">Indien een mail word verzonden naar een rol, zullen alle begunstigden in BCC worden geplaatst. Het AAN veld zal ""Undisclosed Recipients" bevatten. indien dit leidt tot problemen, kun je de optie activeren om de afzenden te gebruiken in het AAN veld. De overige adressen blijven in BCC staan. (Standaard: Uitgeschakeld)</text>
+    <text id="SYS_CSV" development="new" translation="edited">CSV</text>
+    <text id="SYS_LANDSCAPE" description="Format for printing" development="new" translation="edited">Liggend</text>
+    <text id="SYS_PDF" development="new" translation="edited">PDF</text>
+    <text id="SYS_PORTRAIT" description="Format for printing" development="new" translation="edited">Staand</text>
+</version>
+<version id="2.4.4" translator="David de Kort">
+    <text id="DAT_VIEW_MODE_DESC" development="changed" translation="edited">Weergave modus voor evenementen. Met modus %VAR1_BOLD% zal alle evenement informatie worden weergegeven in een container. Met modus %VAR2_BOLD% zal de belangrijkste evenement gegevens worden weergegeven in een compacte lijst. (Standaard: Uitgebreid)</text>
+    <text id="PHO_DOWNLOAD_PHOTOS" development="new" translation="edited">Foto's downloaden</text>
+    <text id="PHO_DOWNLOAD_SINGLE_PHOTO" development="new" translation="edited">Foto opslaan</text>
+    <text id="PHO_DOWNLOAD_ENABLED" development="new" translation="edited">Download toestaan</text>
+    <text id="PHO_DOWNLOAD_ENABLED_DESC" development="new" translation="edited">Sta toe op foto per foto of volledige albums als zip bestand te downloaden. Een hyperlink zal worden weergegeven voor elke foto of album. Indien optie %VAR1_BOLD% actief is, zullen alle de originele foto's worden gedownload.</text>
+    <text id="PHO_KEEP_ORIGINAL" development="new" translation="edited">Bewaar bovendien de originele foto's</text>
+    <text id="PHO_KEEP_ORIGINAL_DESC" development="new" translation="edited">Bewaar elke foto, niet alleen in de opgegeven resolutie maar ook de originelen. Indien optie %VAR1_BOLD% actief is zullen alle originele foto's worden gedownload. Deze optie vereist beduidend meer website ruimte en dient daarom alleen geseleceteerd te worden indien je over voldoende ruimte beschikt.</text>
+    <text id="SYS_DATABASE_VERSION" development="new" translation="edited">Database versie</text>
+</version>
+<version id="2.4.2" translator="David de Kort">
+    <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Neem deel als organisator aan het event</text>
+    <text id="DAT_PARTICIPATE_AT_DATE_DESC" development="changed" translation="edited">U wordt de organisator van het evenement en kan deelnemers toevoegen/verwijderen. Tevens kunt u extra personen toevoegen als organisator.</text>
+    <text id="DAT_VIEW_MODE" development="new" translation="edited">Standaard weergave</text>
+    <text id="DAT_VIEW_MODE_DETAIL" development="new" translation="edited">Uitgebreid</text>
+    <text id="DAT_VIEW_MODE_COMPACT" development="new" translation="edited">Compact</text>
+    <text id="ROL_DELETE_NO_DEFAULT_ROLE" development="new" translation="edited">U kan de rol %VAR1_BOLD% niet verwijderen. Ten minste één rol dient de instelling %VAR2_BOLD% te bezitten.</text>
+    <text id="ROL_DELETE_SYSTEM_ROLE" development="new" translation="edited">U kunt de systeemrol %VAR1_BOLD% niet verwijderen.</text>
+    <text id="ROL_DELETE_ROLE" development="new" translation="edited">U kunt de rol %VAR1_BOLD% niet verwijderen.</text>
+</version>
+<version id="2.4.0" translator="David de Kort">
+    <text id="CAT_DELETE_CATEGORY" development="new" translation="edited">Bent u zeker dat u categorie %VAR1_BOLD% wenst te verwijderen?</text>
+    <text id="CAT_DONT_DELETE_CATEGORY" development="new" translation="edited">Kon categorie %VAR1_BOLD% niet verwijderen vermits %VAR2% ervan afhankelijk is.</text>
+    <text id="DAT_HIGHLIGHT_DATE" development="new" translation="edited">Markeer datum</text>
+    <text id="DOW_FOLDER_NOT_FOUND" development="new" translation="edited">Folder (ID %VAR1%) niet gevonden.</text>
+    <text id="LST_NOT_VALID_DATE_FORMAT" development="new" translation="edited">Gelieve een geldig datum te gebruiken als voorwaarde voor het veld %VAR1_BOLD%.</text>
+    <text id="LST_NOT_NUMERIC" development="new" translation="edited">Gelieve een geldig nummer te gebruiken als voorwaarde voor het veld %VAR1_BOLD%.</text>
+    <text id="LST_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Zoek alle gebruikers met zonder e-mail adres</text>
+    <text id="LST_EXCLUDE_EXAMPLE" development="new" translation="edited">Stefan</text>
+    <text id="LST_EXCLUDE_EXAMPLE_DESC" development="new" translation="edited">Zoek alle gebruikers met de naam Stefan</text>
+    <text id="LST_NOT_EMPTY_EXAMPLE_DESC" development="new" translation="edited">Zoek alle gebruikers met ingevuld e-mail adres</text>
+    <text id="MAI_DELIVERY_CONFIRMATION" development="new" translation="edited">Vraag om ontvangstbevestiging</text>
+    <text id="MAI_DELIVERY_CONFIRMATION_DESC" development="new" translation="edited">Indien ingeschakeld, kan de auteur van de e-mail een ontvangstbevestiging aanvragen. Het hangt echter af van de ontvanger zijn e-mail programma of een ontvangstbevestiging word verzonden.</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ACTIVE" development="new" translation="edited">%VAR1% heeft volgende mail verstuurd naar alle actieve leden van rol %VAR3% in %VAR2%:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_FORMER" development="new" translation="edited">%VAR1% heeft volgende mail verstuurd naar alle oud-leden van rol %VAR3% in %VAR2%:</text>
+    <text id="MAI_EMAIL_SEND_TO_ROLE_ALL" development="new" translation="edited">%VAR1% heeft volgende mail verstuurd naar alle actieve en oud-leden van rol %VAR3% in %VAR2%:</text>
+    <text id="MAI_PHP_MAIL" development="new" translation="edited">PHP mail()</text>
+    <text id="MAI_SEND_METHOD" development="new" translation="edited">Stuur via</text>
+    <text id="MAI_SEND_METHOD_DESC" development="new" translation="edited">De PHP mail() functie word door sommige provider beperkt en kan af en toe leiden tot mogelijke spam. Daarom wordt het aangeraden om e-mail te versturen via SMTP server. De SMTP instellingen kunnen hieronder worden opgegeven. (Standaard: PHP mail())</text>
+    <text id="MAI_SENDER_NAME" development="new" translation="edited">Afzender</text>
+    <text id="MAI_SENDER_NAME_DESC" development="new" translation="edited">Afzender naam van het gebruikte e-mail adres.</text>
+    <text id="MAI_SMTP" development="new" translation="edited">SMTP</text>
+    <text id="MAI_SMTP_AUTH" development="new" translation="edited">SMTP authenticatie</text>
+    <text id="MAI_SMTP_AUTH_DESC" development="new" translation="edited">Indien de SMTP server authenticatie vereist, zijn de gebruikersnaam en wachtwoordvelden ook vereist. (Standaard: Ja)</text>
+    <text id="MAI_SMTP_AUTH_LOGIN" development="new" translation="edited">Login</text>
+    <text id="MAI_SMTP_AUTH_NTLM" development="new" translation="edited">NTLM</text>
+    <text id="MAI_SMTP_AUTH_PLAIN" development="new" translation="edited">Plain</text>
+    <text id="MAI_SMTP_AUTH_TYPE" development="new" translation="edited">SMTP authenticatie type</text>
+    <text id="MAI_SMTP_AUTH_TYPE_DESC" development="new" translation="edited">SMTP ondersteunt verschillende authenticatie methodes. De huidige selectie wordt gebruikt door Admidio. (Standaard: Login)</text>
+    <text id="MAI_SMTP_HOST" development="new" translation="edited">SMTP Host</text>
+    <text id="MAI_SMTP_HOST_DESC" development="new" translation="edited">Adres van de SMTP server.</text>
+    <text id="MAI_SMTP_PASSWORD" development="new" translation="edited">SMTP wachtwoord</text>
+    <text id="MAI_SMTP_PASSWORD_DESC" development="new" translation="edited">Wachtwoord gebruikt voor  SMTP authenticatie.</text>
+    <text id="MAI_SMTP_PORT" development="new" translation="edited">SMTP poort</text>
+    <text id="MAI_SMTP_PORT_DESC" development="new" translation="edited">Definieer de poort die gebruikt dient te worden voor het maken van de SMTP verbinding. (Standaard: 25)</text>
+    <text id="MAI_SMTP_SECURE" development="new" translation="edited">SMTP versleuteling</text>
+    <text id="MAI_SMTP_SECURE_DESC" development="new" translation="edited">Hier kun je kiezen of en hoe de SMTP verbinding versleuteld dient te worden. (Standaard: nee)</text>
+    <text id="MAI_SMTP_SECURE_NO" development="new" translation="edited">Nee</text>
+    <text id="MAI_SMTP_SECURE_SSL" development="new" translation="edited">SSL</text>
+    <text id="MAI_SMTP_SECURE_TLS" development="new" translation="edited">TLS</text>
+    <text id="MAI_SMTP_USER" development="new" translation="edited">SMTP Gebruikersnaam</text>
+    <text id="MAI_SMTP_USER_DESC" development="new" translation="edited">De gebruikersnaam gebruikt voor de SMTP authenticatie.</text>
+    <text id="MEM_CHANGE_HISTORY" development="new" translation="edited">Wijziging historiek</text>
+    <text id="MEM_CHANGE_HISTORY_OF" development="new" translation="edited">Wijziging historiek %VAR1%</text>
+    <text id="MEM_NO_CHANGES" development="new" translation="edited">Er zijn geen wijzigingen geregistreerd.</text>
+    <text id="MEM_NO_CHANGES_PROFIL" development="new" translation="edited">Geen wijzigingen werden geregistreerd voor %VAR1_BOLD% .</text>
+    <text id="MEM_SEND_NEW_LOGIN" development="changed" translation="edited">Wenst u %VAR1_BOLD% een e-mail te versturen met de huidige gebruikersnaam en een nieuw wachtwoord?</text>
+    <text id="ORG_SHOW_CREATE_EDIT" development="new" translation="edited">Toon maker en tijdstip</text>
+    <text id="ORG_SHOW_CREATE_EDIT_DESC" development="new" translation="edited">Een veld is normaal zichtbaar voor alle gebruikers. Indien deze functie niet is geselecteerd, zijn de gegevens alleen zichtbaar voor gebruikers die de rechten hebben om alle gebruikers te bewerken. Gebruikers kunnen de gegevens zien en aanpassen in hun eigen profiel.</text>
+    <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="changed" translation="edited">Systeem berichten inschakelen</text>
+    <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="changed" translation="edited">Hier kan je de systeem berichten van Admidio uitschakelen. Deze worden verzonden, bijvoorbeeld wanneer een nieuwe gebruiker inlogt. Registratie bevestigingen worden doorgaans ook verzonden als systeem bericht. In het algemeen dient deze functie niet te worden uitgeschakeld, behalve als de server het versturen van e-mail niet ondersteund. De e-mail module wordt niet beïnvloed door het uitschakelen van deze functie.(Standaard: Ja)</text>
+    <text id="ORG_REFUSE_REGISTRATION" development="new" translation="edited">Berichtgeving van registratie weigering</text>
+    <text id="ORG_SHOW_ALL_USERS" development="new" translation="edited">Toon alle gebruikers</text>
+    <text id="ORG_SHOW_ALL_USERS_DESC" development="new" translation="edited">Indien geactiveerd, zullen naast de actieve leden van de huidige organisatie ook de voormalige leden en leden van andere organisaties getoond worden. Anders worden alleen leden van de huidige organisatie weergegeven. Tijdens het aanmaken van nieuwe gebruikers of bij het toewijzen van nieuwe registraties, zullen alle organisaties gecontroleerd worden op bestaande gebruikers.</text>
+    <text id="ORG_SYSTEM_MAIL_ADDRESS" development="changed" translation="edited">E-mail adres</text>
+    <text id="ORG_SYSTEM_MAIL_ADDRESS_DESC" development="changed" translation="edited">Dit veld dient een e-mailadres te bevatten van een administrator daar het gebruikt zal worden als afzender van de systeem meldingen, vb. voor bevestiging van registratie. (Standaard: webmaster@%VAR1%)</text>
+    <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES" development="changed" translation="edited">Meldingen van nieuwe inzendingen</text>
+    <text id="ORG_SYSTEM_MAIL_NEW_ENTRIES_DESC" development="changed" translation="edited">Hier kunnen systeem waarschuwingen worden ingeschakeld voor nieuwe vermeldingen in de modules. Het wordt gebruikt als een controlerende functie binnen Admidio. De beheerder heeft de mogelijkheid om te worden geïnformeerd over nieuwe vermeldingen in de modules via e-mail (alleen nieuwe items worden in aanmerking genomen). Een systeem waarschuwing zal worden verstuurd naar het e-mailadres %VAR1%. (Standaard: Nee)</text>
+    <text id="ORG_SYSTEM_MAIL_TEXTS" development="changed" translation="edited">Systeem waarschuwing teksten</text>
+    <text id="ORG_SYSTEM_MAIL_TEXTS_DESC" development="changed" translation="edited">Hier kunnen alle systeem berichten aangepast worden. De berichten zijn onderverdeeld in 2 stukken (onderwerp en inhoud) en worden geïndentificeerd bij #subject# en #content#. Deze worden gevolgd door de inhoud van deze velden.\n\nDe volgende wildcards kunnen worden gebruikt in elke e-mail. Zij zullen worden vervangen door de desbetreffende inhoud bij het uitvoeren</text>
+    <text id="PRO_ASSIGN_REGISTRATION_SUCCESSFUL" development="new" translation="edited"> Registratie werd bevestig. De gebruiker kan nu aanloggen in het systeem.</text>
+    <text id="PRO_FUTURE_ROLE_MEMBERSHIP" development="new" translation="edited">Toekomstige rol lidmaatschappen</text>
+    <text id="PRO_LOG_EDIT_FIELDS" development="new" translation="edited">Log alle wijzigingen</text>
+    <text id="PRO_LOG_EDIT_FIELDS_DESC" development="new" translation="edited">Wijzigen in profiel velden worden geregistreerd voor elke gebruiker en elk veld. De oude en nieuwe waarden worden gelogd net als de gebruiker die de verandering aanbracht en de tijdstip waarop dit gebeurde. (Standaard: ja)</text>
+    <text id="PRO_NO_DEFAULT_ROLE" development="changed" translation="edited">Het rol beheer bevat geen standaard rol voor nieuwe gebruikers. Gelieve contact op te nemen met een webmaster welke dit kan aanpassen.</text>
+    <text id="PRO_NO_ROLES_VISIBLE" development="new" translation="edited">Geen rollen gevonden. Mogelijks heeft u niet de rechten om bepaalde rollen te zien.</text>
+    <text id="PRO_VIEW_ROLES_OTHER_ORGAS" development="new" translation="edited">Er worden hier alleen rollen van andere organisaties weergegeven, die voor alle geregistreerd gebruikers zichtbaar zijn. Als je lid bent van deze organisatie, zal je ook de rollen getoond worden die u kunt zien met uw rechten binnen de organisatie.</text>
+    <text id="ROL_ASSIGN_EDIT_MEMBERS" development="new" translation="edited">Leden toewijzen en bewerken</text>
+    <text id="ROL_DEFAULT_LIST" development="new" translation="edited">Standaard lijst</text>
+    <text id="ROL_DEFAULT_LIST_DESC" development="new" translation="edited">Als een ledenlijst van deze rol wordt weergegeven en geen lijst weergave werd opgegeven, zal de lijst worden weergegeven met de standaard lijst instellingen van het systeem. Gebruik makende van dit veld voor een individuele rol, kan een andere lijst configuratie worden geselecteerd die zal worden weergegeven als geen lijst configuratie beschikbaar is.</text>
+    <text id="ROL_DEFAULT_REGISTRATION" development="new" translation="edited">Standaard toewijzing bij registratie</text>
+    <text id="ROL_DEFAULT_REGISTRATION_DESC" development="new" translation="edited">Deze rol wordt automatisch toegewezen. Indien de maker de rechten heeft om rollen toe te wijzen, worden alle beschikbare rollen weergegeven kunnen overeenkomstig worden aangepast.</text>
+    <text id="ROL_LEADER_NO_ADDITIONAL_RIGHTS" development="new" translation="edited">De beheerders van deze rol hebben geen bijkomende rechten. Ze worden alleen gemarkeerd in de lijst weergave</text>
+    <text id="ROL_LEADER_EDIT_MEMBERS" development="new" translation="edited">De beheerder van de rol kan profielgegevens wijzigen van alle rol leden.</text>
+    <text id="ROL_LEADER_ASSIGN_MEMBERS" development="new" translation="edited">De beheerder van deze rol kan nieuwe leden toevoegen of bestaande leden verwijderen.</text>
+    <text id="ROL_LEADER_RIGHTS_DESC" development="new" translation="edited">Rollen leden kunnen worden benoemd als beheerders van een rol en krijgen optioneel uitgebreide rechten.\nZe kunnen de rechten bekomen om  de profielgegevens van alle leden van de rol te bewerken en/of het recht om rollen toe te voegen of te verwijderen. Echter met beide rechten, zouden ze in staat zijn om informatie van alle leden te bewerken.</text>
+    <text id="ROL_NO_ADDITIONAL_RIGHTS" development="new" translation="edited">Geen bijkomstige rechten</text>
+    <text id="ROL_NO_DEFAULT_ROLE" development="new" translation="edited">De instelling %VAR1_BOLD% kan niet worden verwijderd vermits er minstens één rol als standaard instelling moet zijn ingesteld.</text>
+    <text id="ROL_SYSTEM_DEFAULT_LIST" development="new" translation="edited">Standaard lijst voor het hele systeem</text>
+    <text id="SYS_CHANGED_AT" development="new" translation="edited">Laatst aangepast</text>
+    <text id="SYS_DELETE_LAST_CATEGORY" development="new" translation="edited">Er is geen andere categorie voor dit gebied. Om deze reden kan de categorie niet worden verwijderd.</text>
+    <text id="SYS_DELETE_SYSTEM_CATEGORY" development="new" translation="edited">Je kan geen systeem categorieen verwijderen.</text>
+    <text id="SYS_DELETED_USER" development="new" translation="edited">Verwijderde gebruiker</text>
+    <text id="SYS_DONT_SHOW" development="new" translation="edited">Niet weergeven</text>
+    <text id="SYS_EDIT_MEMBERS" development="new" translation="edited">Gebruikers aanpassen</text>
+    <text id="SYS_EDITED_BY" development="new" translation="edited">Laatst aangepast door</text>
+    <text id="SYS_EMAIL_NOT_SEND" development="changed" translation="edited">De e-mail kon niet worden verzonden naar %VAR1_BOLD%.\n\nDe volgende fout trad op:\n%VAR2%</text>
+    <text id="SYS_EMPTY" development="new" translation="edited">Leeg</text>
+    <text id="SYS_FIRSTNAME_LASTNAME" development="new" translation="edited">voornaam en achternaam</text>
+    <text id="SYS_FROM" development="new" translation="edited">van %VAR1%</text>
+    <text id="SYS_INFORMATIONS" development="new" translation="edited">informatie</text>
+    <text id="SYS_MAIL_DISPATCH" development="new" translation="edited">E-mail verzenden</text>
+    <text id="SYS_MODULE_ACCESS_FROM_HOMEPAGE_ONLY" development="new" translation="edited">Deze module is alleen toegankelijke vanaf de startpagina van de gekozen organisatie bij het inloggen (%VAR1%).</text>
+    <text id="SYS_MODULE_PREFERENCES" development="new" translation="edited">Module instellingen</text>
+    <text id="SYS_MORE_FEATURES" development="new" translation="edited">Aanvullende functies</text>
+    <text id="SYS_NEW_VALUE" development="new" translation="edited">Nieuwe waarde</text>
+    <text id="SYS_NOT_EMPTY" development="new" translation="edited">Niet leeg</text>
+    <text id="SYS_PREVIOUS_VALUE" development="new" translation="edited">Vorige waarde</text>
+    <text id="SYS_SYSMAIL_REFUSE_REGISTRATION" development="new" translation="edited">#subject# in registratie  bij %organization_long_name% geweigerd.\n#content# Hallo %user_first_name%,\n\nUw registratie bij %organization_homepage% werd afgewezen.\n\nRegistraties worden alleen aanvaard voor leden. Indien u lid bent maar us registratie werd alsnog geweigerd, is het mogelijk dat u niet werd herkend als lid.\nVoor meer info omtrent de weigering, gelieve contact op te nemen met de  webmaster %webmaster_email% van %organization_homepage%.\n\nMet vriendelijke groeten,\nDe Webmaster</text>
+    <text id="SYS_SYSTEM" development="new" translation="edited">Systeem</text>
+    <text id="SYS_SYSTEM_MAILS" development="changed" translation="edited">Systeem berichten</text>
+</version>
+<version id="2.3.4" translator="David de Kort">
+    <text id="MAI_COUNT_BCC_DESC" development="changed" translation="edited">E-mails naar rollen met meerdere leden zullen als blind Carbon Copy worden verstuurd (BCC). Op deze manier zullen de ontvangers niet in staat zijn om te zien wie nog dit bericht heeft ontvangen. Het getal in het huidige veld definieert het maximum aantal geadresseerden van een e-mailbericht. Het maximum aantal geadresseerden kan ook worden beperkt door de hosting provider. In het geval van meer geadresseerden dan toegestaan, zullen meerdere e-mailberichten worden gegenereerd. Moest de waarde zijn ingesteld op 1, zal elk geadresseerde een afzonderlijk bericht ontvangen. Het aantal uitgaande e-mailberichten binnen een bepaald tijdsbestek kan ook zijn beperkt door de hosting provider. (Standaard: 50)</text>
+    <text id="MAI_SENDER_INTO_TO" development="new" translation="edited">Afzender als geadresseerde</text>
+</version>
+<version id="2.3.1" translator="David de Kort">
+    <text id="INS_ORGA_SHORTNAME_EXISTS" development="new" translation="edited">Organisatie %VAR1_BOLD% bestaat reeds. Gelieve een andere naam te gebruiken.</text>
+    <text id="SYS_LOSTPW_EMAIL_ERROR" development="changed" translation="edited">Er kon geen geldige registratie worden gevonden voor het e-mail adres %VAR1_BOLD%!</text>
+    <text id="SYS_LOSTPW_SEVERAL_EMAIL" development="new" translation="edited">Het e-mail adres %VAR1_BOLD% werd meerdere malen toegewezen. Er kon geen unieke gebruiker worden gevonden.</text>
+</version>
 <version id="2.3.0" translator="Guido vd Leest">
     <text id="CAT_DEFAULT_VAR" development="new" translation="edited">Standaard %VAR1%</text>
     <text id="CAT_DELETE_CATEGORY" development="changed" translation="edited">Moet categorie %VAR1_BOLD% verwijderd worden?\n\nDeze categorie heeft %VAR2% afhankelijke items, die ook verwijderd worden.</text>
@@ -9,12 +150,12 @@
     <text id="DAT_ICAL_DAYS_FUTURE" development="new" translation="edited">Aantal toekomstige iCal dagen</text>
     <text id="DAT_ICAL_DAYS_FUTURE_DESC" development="new" translation="edited">Deze waarde bepaalt hoeveel dagen in de toekomst een iCal download of abonnement moet bevatten. (standaard: 365)</text>
     <text id="DAT_ICAL_DAYS_PAST" development="new" translation="edited">Aantal iCal dagen in het verleden</text>
-    <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">Deze waarde bepaalt hoeveel dagen in het verleden een iCal download of abonnement moet bevatten. (standaard: 60)</text>
+    <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="edited">Deze waarde bepaalt hoeveel dagen in het verleden een iCal download of abonnement moet bevatten. (standaard: 60)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Registreren voor deze afspraak inschakelen.</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Afspraak goedkeuren</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Zichtbaarheid</text>
     <text id="ECA_FILL_INPUTS" development="new" translation="edited">Vul svp alle velden in\n\nen klik weer op %VAR1_BOLD%.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Uw database versie is %VAR1%.\n\nUpdate naar versie %VAR2% is noodzakelijk</text>
+    <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Uw database versie is %VAR1%.\nUpdate naar versie %VAR2% is noodzakelijk</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database systeem</text>
     <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
     <text id="INS_FACEBOOK_DESC" development="new" translation="edited">Wilt u een link naar uw Facebook profiel plaatsen? Uw Facebook login naam is noodzakelijk. Log in op uw Facebook account en ga naar uw profiel. Kopieer URL in dit veld en sla uw profiel op. Bezoekers van uw profiel kunnen nu uw Facebook profiel direct openen.</text>
@@ -32,7 +173,7 @@
     <text id="MAI_CHARACTER_ENCODING_DESC" development="new" translation="edited">Er wordt codering van karakters gebruikt bij het versturen van Admidio e-mails. Niet alle e-mail clients ondersteunen UTF-8. ISO-8859-1 kan als alternatief gebruikt worden.</text>
     <text id="MAI_EMAIL_SEND_TO_USER" development="changed" translation="edited">%VAR1% van %VAR2% heeft jou de volgende e-mail gestuurd:</text>
     <text id="MAI_HTML_MAILS_REGISTERED_USERS" development="new" translation="edited">HTML e-mail</text>
-    <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="edited">Het maken en versturen van op HTML gebaseerde e-mails kan ingeschakeld worden voor geregistreerde gebruikers. Een JavaScript editor wordt getoond voor comfortabel bewerken, in plaats van het standaard tekst veld. Deze optie is voor gasten in verband met veligheid niet mogelijk.</text>
+    <text id="MAI_HTML_MAILS_REGISTERED_USERS_DESC" development="new" translation="edited">Het maken en versturen van op HTML gebaseerde e-mails kan ingeschakeld worden voor geregistreerde gebruikers. Een JavaScript editor wordt getoond voor comfortabel bewerken, in plaats van het standaard tekst veld. Deze optie is voor gasten in verband met veiligheid niet mogelijk.</text>
     <text id="MAI_YOUR_EMAIL" development="new" translation="edited">Uw e-mail</text>
     <text id="MAI_YOUR_NAME" development="new" translation="edited">Uw naam</text>
     <text id="MEM_IMPORT_SUCCESSFUL" development="changed" translation="edited">Importeren is gelukt..\n\n%VAR1% nieuwe gebruikers zijn gemaakt.\n%VAR2% gebruikers zijn bewerkt.\n%VAR3% rol lidmaatschappen zijn toegewezen.</text>
@@ -59,6 +200,7 @@
     <text id="SYS_ICON" development="new" translation="edited">Icoon</text>
     <text id="SYS_INTERNAL_NAME" development="new" translation="edited">Interne naam</text>
     <text id="SYS_INTERNAL_NAME_DESC" development="new" translation="edited">De interne naam wordt gebruikt om een bepaald veld te identificeren. Het is echter niet relevant tijdens het gebruik van het programma. Tijdens de software ontwikkeling moet deze naam echter gebruikt worden om bijvoorbeeld een veld middels de getValue methode aan te spreken. De interne naam wordt automatisch ingevuld tijdens het maken van een veld.</text>
+    <text id="SYS_MESSAGE" development="new" translation="edited">Bericht</text>
     <text id="SYS_ORGANIZATION" development="new" translation="edited">Organisatie</text>
     <text id="SYS_PERIOD" development="new" translation="edited">Tijdvlak</text>
     <text id="SYS_PHP_VERSION_REQUIRED" development="changed" translation="edited">Admidio heeft %VAR1% of hoger nodig</text>        
@@ -69,9 +211,9 @@
     <text id="SYS_VERSION" development="new" translation="edited">Versie</text>
     <text id="SYS_WEBMASTER_DATABASE_INVALID" description="Var3 and Var4 create link to update" development="new" translation="edited">De database versie %VAR1% is lager dan de versie van Admidio scripts %VAR2%.\n\nMaak svp een %VAR3% database update naar versie %VAR4%.</text>
     <text id="SYS_WEBMASTER_FILESYSTEM_INVALID" description="Var3 and Var4 create link to download" development="new" translation="edited">De database versie %VAR1% is hoger dan de versie van Admidio scripts %VAR2%.\n\nMaak svp een update van uw Admidio bestanden op de server %VAR3% door een nieuwere versie te gebruiken van Admidio (%VAR4%).</text>
-    <text id="UPD_BETA_VERSION" development="changed" translation="todo">Beschikbaar Beta</text>
-    <text id="UPD_CURRENT_VERSION" development="changed" translation="todo">Geïnstalleerd</text>  
-    <text id="UPD_STABLE_VERSION" development="changed" translation="todo">Beschikbaar</text>
+    <text id="UPD_BETA_VERSION" development="changed" translation="edited">Beschikbaar Beta</text>
+    <text id="UPD_CURRENT_VERSION" development="changed" translation="edited">Geïnstalleerd</text>  
+    <text id="UPD_STABLE_VERSION" development="changed" translation="edited">Beschikbaar</text>
 </version>
 
 <version id="2.2.6" translator="Guido vd Leest">
@@ -150,9 +292,9 @@
     <text id="BAC_SECONDS_VAR" development="new" translation="edited">%VAR1% seconden</text>
 
     <!-- Phrases only in Category-Administration -->
-    <text id="CAT_CATEGORY_EXIST" development="new" translation="edited">Naam van categorie bestaat al in de geselecteerde organizatie.</text>
+    <text id="CAT_CATEGORY_EXIST" development="new" translation="edited">Naam van categorie bestaat al in de geselecteerde organisatie.</text>
     <text id="CAT_CATEGORY_GLOBAL" development="new" translation="edited">Als deze optie is geactiveerd, zullen profielvelden van categorie verschijnen die kunnen worden bewerkt in het profiel van de volgende organisaties:\n\n%VAR1_BOLD%\n\n Deactiveer als velden alleen in uw eigen organisatie getoond moeten worden.</text>
-    <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="edited">U kunt niet alle categorieen van een module verwijderen.\nMaak svp eerst een nieuwe categorie aan voor de geselecteerde module.</text>
+    <text id="CAT_CATEGORY_NOT_DELETE" development="new" translation="edited">U kunt niet alle categorieën van een module verwijderen.\nMaak svp eerst een nieuwe categorie aan voor de geselecteerde module.</text>
     <text id="CAT_MOVE_DOWN" development="new" translation="edited">Plaats %VAR1% omlaag</text>
     <text id="CAT_MOVE_UP" development="new" translation="edited">Plaats %VAR1% omhoog</text>
 
@@ -256,7 +398,7 @@
     <text id="DOW_PREVIOUS_NAME" development="new" translation="edited">Vorige naam</text>
     <text id="DOW_UPLOAD_FILE" development="new" translation="edited">Bestand uploaden</text>
     <text id="DOW_UPLOAD_FILE_TO_FOLDER" development="new" translation="edited">Upload naar map %VAR1_BOLD%</text>
-    <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Onjuiste pagina weeergave of bestand kon niet worden geupload.\nMogelijk is grootte van bestand overschreden. Toegestane upload groote is %VAR1%B!</text>
+    <text id="DOW_UPLOAD_POST_EMPTY" development="new" translation="edited">Onjuiste pagina weergave of bestand kon niet worden geupload.\nMogelijk is grootte van bestand overschreden. Toegestane upload groote is %VAR1%B!</text>
 
 
     <!-- Phrases only in Ecardsmodule -->
@@ -293,7 +435,7 @@
     <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">Geen gebruiker met geldig e-mail adres!</text>
     <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">Geen extra ontvangers</text>
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="edited">Uw Ecard kon niet verzonden worden!</text>
-    <text id="ECA_OTHER_RECIPIENT" development="new" translation="edited">Andere onvangers</text>
+    <text id="ECA_OTHER_RECIPIENT" development="new" translation="edited">Andere ontvangers</text>
     <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="edited">Selecteer svp een geldig rol type!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">E-mail ontvanger</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Naam ontvanger</text>    
@@ -325,7 +467,7 @@
     <text id="GBO_EDIT_ENTRY" development="new" translation="edited">Bewerk %VAR1% bericht</text>
     <text id="GBO_EMAIL_NOTIFICATION_GBC_TITLE" development="new" translation="edited">Nieuwe reactie in gastenboek aangemaakt</text>
     <text id="GBO_EMAIL_NOTIFICATION_GBC_MESSAGE" development="new" translation="edited">Nieuwe reactie in gastenboek van %VAR1% aangemaakt.\n\nTekst: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</text>
-    <text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Nieuwe bericht in gastenboek aagemaakt</text>
+    <text id="GBO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Nieuwe bericht in gastenboek aangemaakt</text>
     <text id="GBO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">Nieuw bericht in gastenboek van %VAR1% aangemaakt.\n\nTekst: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</text>
     <text id="GBO_ENTRY_QUEUED" development="new" translation="edited">Bericht opgeslagen. Het wordt getoond na goedkeuring.</text>
     <text id="GBO_FLOODING_PROTECTION" development="new" translation="edited">Uw laatste bericht is minder dan %VAR1% seconden aangemaakt.</text>
@@ -374,7 +516,7 @@
     <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Opgegeven database toegangsinformatie is onjuist!\n\nCheck en update toegangsinformatie. Of check of database online is en of u toegang heeft.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Database maken</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Bestuur van de organisatie</text>
-    <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Hier kunnen vergaderingen plaatsvinden. Zaal moet vantevoren gereserveerd worden.</text>
+    <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Hier kunnen vergaderingen plaatsvinden. Zaal moet van tevoren gereserveerd worden.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">Alle leden</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Groep beheerders</text>
     <text id="INS_DOWNLOAD" development="new" translation="edited">Download %VAR1%</text>
@@ -392,7 +534,7 @@
     <text id="INS_INTERN" development="new" translation="edited">Interne</text>
     <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="edited">Geen taal geselecteerd.</text>
     <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="edited">Toegangsinformatie van beheerder</text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Geef toegangsinformatie van beheerder van bestaande organisatie. Gebruik zijn/haar toegangsinformatie om in te loggen bij nieuwe organizatie.</text>
+    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Geef toegangsinformatie van beheerder van bestaande organisatie. Gebruik zijn/haar toegangsinformatie om in te loggen bij nieuwe organisatie.</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="edited">Toegangsinformatie van beheerder is niet compleet!</text>
     <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="edited">Onjuiste log in. De opgegeven toegangsinformatie bestaat niet of is niet gevonden in vorige organisaties!</text> 
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Lidmaatschap</text>
@@ -541,7 +683,7 @@
     <text id="MAI_ACTIVATE_EMAIL_MODULE" development="new" translation="edited">E-mail module activeren</text>
     <text id="MAI_ACTIVATE_EMAIL_MODULE_DESC" development="new" translation="edited">E-mail module kan gedeactiveerd worden door deze selectiebox uit te vinken. Na deactivatie is de module niet beschikbaar in het module overzicht. Als de server geen e-mails ondersteund, deactiveer de module dan svp. (standaard: actief)</text>
     <text id="MAI_ADD_ATTACHEMENT" development="new" translation="edited">Attach bestand</text>
-    <text id="MAI_ATTACHEMENT" development="new" translation="edited">Attachment</text>
+    <text id="MAI_ATTACHEMENT" development="new" translation="edited">Attachment:</text>
     <text id="MAI_ATTACHMENT_SIZE" development="new" translation="edited">Max. grootte e-mail attachments</text>
     <text id="MAI_ATTACHMENT_SIZE_DESC" development="new" translation="edited">Gebruikers kunnen een bestand bijvoegen die kleiner is dan de grootte die hier ingesteld is. Als waarde 0 is, kunnen attachments niet verzonden worden. (standaard: 1024KB)</text>
     <text id="MAI_ATTACHMENT_TO_LARGE" development="new" translation="edited">Foutmelding uploaden E-mail attachment.\nWaarschijnlijk is grootte van bestand te groot!</text>
@@ -665,7 +807,7 @@
     <text id="ORG_DATATYPE" development="new" translation="edited">Type</text>
     <text id="ORG_DATE_FORMAT" development="new" translation="edited">Datum formaat</text>
     <text id="ORG_DATE_FORMAT_DESC" development="new" translation="edited">Formaat voldoet aan PHP functie %VAR1%. (standaard: d.m.Y)</text>
-    <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="edited"> Bewerk pofielveld</text>
+    <text id="ORG_EDIT_PROFILE_FIELD" development="new" translation="edited"> Bewerk profielveld</text>
     <text id="ORG_EMAIL_ALERTS" development="new" translation="edited">E-mail alert</text>
     <text id="ORG_EMAIL_ALERTS_DESC" development="new" translation="edited">Alle leden van rollen met rechten voor %VAR1_BOLD% ontvangen een e-mail zodra nieuwe gebruiker zich registreert. (standaard: ja)</text>
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="edited">Captcha activatie</text>
@@ -703,16 +845,17 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Aantal items per pagina</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Alleen voor ingelogde gebruikers</text>
+    <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="edited">Voorkeursinstellingen</text>
     <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Hoofd organisatie</text>
-    <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="edited">Bepaal hier de hoofd organisatie. Hoofd organisatie kan bijvoorbeeld evenementen en mededelingen maken, die woden getoond in de geselecteerde (sub) organizatie.</text>
+    <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="edited">Bepaal hier de hoofd organisatie. Hoofd organisatie kan bijvoorbeeld evenementen en mededelingen maken, die worden getoond in de geselecteerde (sub) organisatie.</text>
     <text id="ORG_PIXEL" development="new" translation="edited">Pixel</text>
     <text id="ORG_PROFILE_FIELDS" development="new" translation="edited">Profiel velden</text>
     <text id="ORG_REGISTERED_USERS" development="new" translation="edited">Ingelogde gebruiker</text>
     <text id="ORG_REGISTRATION_MODE" development="new" translation="edited">Bepaal type registratie of deactiveer dit. Bij snelle registratie kunnen gebruikers alleen de verplichte velden invullen. Bij uitgebreide registratie kunnen gebruikers alle velden invullen.  (standaard: snelle registratie)</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES" development="new" translation="edited">Zoek naar dezelfde namen</text>
     <text id="ORG_SEARCH_SIMILAR_NAMES_DESC" development="new" translation="edited">Tijdens registratie zoekt Admidio naar dezelfde voor- en achternamen om dubbele registraties te voorkomen. (standaard: ja)</text>
-    <text id="ORG_SECONDS" development="new" translation="todo">Seconden</text>
+    <text id="ORG_SECONDS" development="new" translation="edited">Seconden</text>
     <text id="ORG_SEND_PASSWORD" development="new" translation="edited">Stuur wachtwoord</text>
     <text id="ORG_SEND_PASSWORD_DESC" development="new" translation="edited">Vergeten en opnieuw aangemaakte wachtwoorden kunnen op verzoek van gebruiker naar eigen e-mail adres gestuurd worden. Bij deactivatie, kunnen gebruikers dit verzoek alleen bij de beheerder doen. (standaard: ja)</text>
     <text id="ORG_SEND_NEW_PASSWORD" development="new" translation="edited">Stuur nieuw wachtwoord</text>
@@ -774,7 +917,7 @@
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Ongeldige pagina weergave of het bestand kon niet geupload worden.\nMogelijk is bestand groter dan de vooraf ingestelde %VAR1%B!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="edited">Geen foto's geselecteerd die toegevoegd moeten worden.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="edited">U heeft geen rechten om dit te doen.\n\nAlleen ingelogde gebruikers met foto rechten mogen foto's beheren.</text>
-    <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="edited">Aantal foto's</text>
+    <text id="PHO_NUMBER_OF_PHOTOS" development="new" translation="edited">Aantal foto's</text>
     <text id="PHO_PARENT_ALBUM" development="new" translation="edited">Hoofd album</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="edited">Foto albums</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="edited">verwijder foto</text>
@@ -940,10 +1083,10 @@
     <text id="ROL_SEMIYEARLY" development="new" translation="edited">Tweemaal per jaar</text>
     <text id="ROL_SEND_MAIL_GUESTS" development="new" translation="edited">Alle gebruikers mogen e-mails naar huidige rol sturen.</text>
     <text id="ROL_SEND_MAIL_MEMBERS" development="new" translation="edited">Ingelogde gebruikers mogen e-mails naar huidige rol sturen.</text>
-    <text id="ROL_SEND_MAIL_ROLE" development="new" translation="edited">Aleen leden van deze rol mogen e-mails naar huidige rol sturen.</text>
+    <text id="ROL_SEND_MAIL_ROLE" development="new" translation="edited">Alleen leden van deze rol mogen e-mails naar huidige rol sturen.</text>
     <text id="ROL_SEND_MAILS" development="new" translation="edited">Stuur e-mails</text>
     <text id="ROL_SET_ROLE_INVISIBLE" development="new" translation="edited">Maak rol onzichtbaar</text>
-    <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="edited">Maak ro zichtbaar</text>
+    <text id="ROL_SET_ROLE_VISIBLE" development="new" translation="edited">Maak rol zichtbaar</text>
     <text id="ROL_SHOW_MEMBERS" development="new" translation="edited">Toon leden</text>
     <text id="ROL_UNIQUELY" development="new" translation="edited">Eenmalig</text>
     <text id="ROL_VALID_FROM" development="new" translation="edited" description="Date valid from">Geldig vanaf</text>
@@ -974,7 +1117,7 @@
     <text id="SYS_ADMIDIO_VERSION" development="new" translation="edited">Admidio versie</text>
     <text id="SYS_ADMINISTRATION" development="new" translation="edited">Administratie</text>
     <text id="SYS_ADMINISTRATION_VAR" development="new" translation="edited">%VAR1% administratie</text>
-    <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax foutmelding.\nDetails foumelding: %VAR1%</text>
+    <text id="SYS_AJAX_REQUEST_ERROR" development="new" translation="edited">Ajax foutmelding.\nDetails foutmelding: %VAR1%</text>
     <text id="SYS_ALL" development="new" translation="edited">Iedereen</text>
     <text id="SYS_ALSO_VISITORS" development="new" translation="edited">ook bezoekers</text>
     <text id="SYS_APPROVE_ENTRY" development="new" translation="edited">Wilt u bericht %VAR1_BOLD% goedkeuren?</text>
@@ -989,7 +1132,7 @@
     <text id="SYS_CAPTCHA" development="new" translation="edited">Captcha</text>
     <text id="SYS_CAPTCHA_CALC" development="new" translation="edited">Resultaat van berekening</text>
     <text id="SYS_CAPTCHA_CALC_CODE_INVALID" development="new" translation="edited">Resultaat van berekening is onjuist.</text>
-    <text id="SYS_CAPTCHA_CALC_DESCRIPTION" development="new" translation="edited">De berekening is onderdeel van captcha. A captcha is used for spam prevention. The calculation is used to detect if a user or a script (or spambot) filled in the form.\nPlease fill in the result of the calculation in the form.</text>
+    <text id="SYS_CAPTCHA_CALC_DESCRIPTION" development="new" translation="edited">De berekening is onderdeel van captcha. Een captcha wordt gebruikt voor spam preventie. De berekening wordt gebruikt om te verifieren of een gebruiker of een script (of spambot) het formulier invulde.\nGelieve de berekening in te vullen in het formulier.</text>
     <text id="SYS_CAPTCHA_CALC_PART1" development="new" translation="edited">Bereken svp</text>
     <text id="SYS_CAPTCHA_CALC_PART2" development="new" translation="edited">en tel op</text>
     <text id="SYS_CAPTCHA_CALC_PART3_THIRD" development="new" translation="edited">een derde van</text>
@@ -1002,7 +1145,7 @@
     <text id="SYS_CHANGE_PASSWORD" development="new" translation="edited">Nieuw wachtwoord</text>
     <text id="SYS_CHECK_FOR_UPDATE" development="new" translation="edited">Check voor update</text>
     <text id="SYS_CHECKBOX_AUTOSAVE" development="new" translation="edited">Status van selectiebox wordt automatisch opgeslagen na aanvinken.</text>
-    <text id="SYS_CITY" development="new" translation="todo">Plaats</text>
+    <text id="SYS_CITY" development="new" translation="edited">Plaats</text>
     <text id="SYS_CLOCK" development="new" translation="edited">uur</text>
     <text id="SYS_CLOSE" development="new" translation="edited">Sluit</text>
     <text id="SYS_CLOSE_WINDOW" development="new" translation="edited">Sluit venster</text>
@@ -1057,7 +1200,7 @@
     <text id="SYS_EXAMPLE" development="new" translation="edited">Voorbeeld</text>
     <text id="SYS_EXAMPLES" development="new" translation="edited">Voorbeelden</text>
     <text id="SYS_FADE_IN" development="new" translation="edited">Fade in</text>
-    <text id="SYS_FAX" development="new" translation="todo">Fax</text>
+    <text id="SYS_FAX" development="new" translation="edited">Fax</text>
     <text id="SYS_FEATURES" development="new" translation="edited">Opties</text>
     <text id="SYS_FEMALE" development="new" translation="edited">Vrouw</text>
     <text id="SYS_FIELD" development="new" translation="edited">Veld</text>
@@ -1141,7 +1284,7 @@
      <text id="SYS_MEMORY_LIMIT" development="new" translation="edited">Geheugen limiet</text>
     <text id="SYS_MESSAGE" development="new" translation="edited">Bericht</text>
     <text id="SYS_MINUTES" development="new" translation="edited">Minuten</text>
-    <text id="SYS_MOBILE" development="new" translation="todo">Mobiel</text>
+    <text id="SYS_MOBILE" development="new" translation="edited">Mobiel</text>
     <text id="SYS_MODULE_DISABLED" development="new" translation="edited">Deze module is uitgeschakeld.</text>
     <text id="SYS_MODULES" development="new" translation="edited">Modules</text>
     <text id="SYS_MONDAY" development="new" translation="edited">Maandag</text>
@@ -1258,7 +1401,7 @@
     <text id="SYS_UPLOAD" development="new" translation="edited">Upload</text>
     <text id="SYS_UPLOAD_ERROR" development="new" translation="edited">Bestand(en) kon(den) niet geupload worden.</text>
     <text id="SYS_UPLOAD_MAX_FILESIZE" development="new" translation="edited">Max. upload grootte bestand</text>
-    <text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="todo">Bestandsnaam kan niet "Submit" heten.</text>
+    <text id="SYS_UPLOAD_NAME_ERROR" development="new" translation="edited">Bestandsnaam kan niet "Submit" heten.</text>
     <text id="SYS_USER" development="new" translation="edited">gebruiker</text>
     <text id="SYS_USER_ID_NOT_FOUND" development="new" translation="edited">Geen gebruiker kon gevonden worden met deze ID!</text>
     <text id="SYS_USER_NO_EMAIL" development="new" translation="edited">Gebruiker %VAR1_BOLD% heeft geen geldig e-mail adres in zijn profiel!</text>
