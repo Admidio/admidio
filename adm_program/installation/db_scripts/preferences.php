@@ -53,7 +53,6 @@ $orga_preferences = array(
     // Photos
     'enable_photo_module'   => '1',
     'photo_show_mode'       => '1',
-    'photo_slideshow_speed' => '5',
     'photo_albums_per_page' => '10',
     'photo_save_scale'      => '640',
     'photo_thumbs_page'     => '16',
