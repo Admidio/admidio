@@ -411,11 +411,20 @@ class Email extends PHPMailer
                 
                 try
                 {
-                    //Neue BCCs hinzufügen
-                    foreach($bccArray as $bcc)
+                    // if number of bcc recipients = 1 then send the mail directly to the user and not as bcc
+                    if(count($bccArray) == 1)
                     {
-                        $this->AddBCC($bcc['address'], $bcc['name']);
-                    }     
+                        $this->addAddress($bcc['address'], $bcc['name'])
+                    }
+                    else
+                    {
+                        // add all recipients as bcc to the mail
+                        foreach($bccArray as $bcc)
+                        {
+                            $this->AddBCC($bcc['address'], $bcc['name']);
+                        }
+                    }
+
                     //Mail Versenden
                    $this->Send();
                 }
