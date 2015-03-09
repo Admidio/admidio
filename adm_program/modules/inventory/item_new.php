@@ -22,6 +22,12 @@ $getNewItem   = admFuncVariableIsValid($_GET, 'new_item', 'numeric');
 
 $registrationOrgId = $gCurrentOrganization->getValue('org_id');
 
+// if new_inventory isn't set and no inventory id is set then show dialog to create a inventory
+if($getItemId == 0 && $getNewItem == 0)
+{
+	$getNewItem = 1;
+}
+
 // set headline of the script
 if($getNewItem == 1)
 {
@@ -30,12 +36,6 @@ if($getNewItem == 1)
 else
 {
     $headline = $gL10n->get('PRO_EDIT_PROFILE');
-}
-
-// if new_inventory isn't set and no inventory id is set then show dialog to create a inventory
-if($getItemId == 0 && $getNewItem == 0)
-{
-	$getNewItem = 1;
 }
 
 // inventory-ID nur uebernehmen, wenn ein vorhandener Benutzer auch bearbeitet wird
@@ -203,7 +203,13 @@ foreach($gInventoryFields->mInventoryFields as $field)
 				{
 					$sql = 'SELECT room_id, room_name || \' (\' || room_capacity || \'+\' || COALESCE(room_overhang, \'0\') || \')\' FROM '.TBL_ROOMS.' ORDER BY room_name';
 				}
-				$form->addSelectBoxFromSql('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),  $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), $gDb, $sql, array('defaultValue' => $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id')));
+				$defaultValue = '';
+				if($getNewItem == 0)
+				{
+					$defaultValue = $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id');
+				}
+
+				$form->addSelectBoxFromSql('inf-'. $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_id'),  $gInventoryFields->getProperty($field->getValue('inf_name_intern'), 'inf_name'), $gDb, $sql, array('property' => $fieldProperty, 'showContextDependentFirstEntry' => true, 'defaultValue' => $defaultValue));
             }
             else
             {

@@ -42,7 +42,7 @@ $inventory = new Inventory($gDb, $gInventoryFields, $getItemId);
 switch($getNewItem)
 {
     case 0:
-        // prueft, ob der User die notwendigen Rechte hat, das entsprechende Profil zu aendern
+        // prueft, ob der User die notwendigen Rechte hat, das entsprechende Item zu aendern
         if($gCurrentUser->editInventory($inventory) == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));
@@ -50,7 +50,7 @@ switch($getNewItem)
         break;
 
     case 1:
-        // prueft, ob der User die notwendigen Rechte hat, neue User anzulegen
+        // prueft, ob der User die notwendigen Rechte hat, neue Items anzulegen
         if($gCurrentUser->editInventory() == false)
         {
             $gMessage->show($gL10n->get('SYS_NO_RIGHTS'));

@@ -223,6 +223,11 @@ if ($getMsgType == 'EMAIL')
             }
             else
             {
+				if(!$gCurrentUser->hasRightViewProfile($value))
+				{
+                    $gMessage->show($gL10n->get('SYS_INVALID_PAGE_VIEW'));
+                }
+				
                 $user = new User($gDb, $gProfileFields, $value);
                 
                 // error if no valid Email for given user ID
