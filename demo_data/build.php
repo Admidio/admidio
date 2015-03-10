@@ -110,10 +110,10 @@ echo 'Start with installation ...<br />';
 $gL10n = new Language();
 $gLanguageData = new LanguageData($getLanguage);
 $gL10n->addLanguageData($gLanguageData);
-$gL10n->addLanguagePath(SERVER_PATH. '/db_scripts/languages');
+$gL10n->addLanguagePath(SERVER_PATH. '/demo_data/languages');
 
 // copy content of folder adm_my_files to productive folder
-$srcFolder = SERVER_PATH. '/db_scripts/adm_my_files';
+$srcFolder = SERVER_PATH. '/demo_data/adm_my_files';
 $newFolder = SERVER_PATH. '/adm_my_files';
 
 $myFilesFolder = new Folder($srcFolder);
@@ -144,7 +144,7 @@ if($gDbType == 'mysql')
 
 $filename = 'db.sql';
 $file     = fopen($filename, 'r')
-			or die('File <strong>db.sql</strong> could not be found in folder <strong>adm_program/installation/db_scripts</strong>.');
+			or die('File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
@@ -164,7 +164,7 @@ foreach($sql_arr as $sql)
 
 $filename = 'data.sql';
 $file     = fopen($filename, 'r')
-            or die('File <strong>db.sql</strong> could not be found in folder <strong>adm_program/installation/db_scripts</strong>.');
+            or die('File <strong>db.sql</strong> could not be found in folder <strong>demo_data</strong>.');
 $content  = fread($file, filesize($filename));
 $sql_arr  = explode(';', $content);
 fclose($file);
