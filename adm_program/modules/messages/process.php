@@ -88,7 +88,8 @@
                 {
                        $postMessage = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $postMessage);
                 } 
-                fwrite(fopen('chat.txt', 'a'), "<span>". $postNickname . "</span>" . $postMessage = str_replace("\n", " ", $postMessage) . "\n"); 
+				// write to file for debuging
+                // fwrite(fopen('chat.txt', 'a'), "<span>". $postNickname . "</span>" . $postMessage = str_replace("\n", " ", $postMessage) . "\n"); 
             }
 			$sql = "SELECT MAX(msg_id2) as max_id
 			  FROM ". TBL_MESSAGES."
