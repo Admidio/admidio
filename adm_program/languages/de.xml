@@ -242,7 +242,13 @@
 	<text id="MSG_CHAT" development="new" translation="todo">Chat</text>
 	<text id="MSG_ACTIVATE_CHAT_MODULE" development="new" translation="todo">Chat aktivieren</text>
 	<text id="MSG_ACTIVATE_CHAT_MODULE_DESC" development="new" translation="todo">Chat Modul aktivieren, welches die Daten dynamisch alle 3 Sekunden aus der Datenbank holt. In der Datenbank werden maximal 99 Einträge gespeichert, ab der 100 meldung werden die ersten 50 wieder gelöscht.</text>
-    <text id="SYS_SELECT_FROM_LIST" development="new" translation="todo">Aus Liste auswählen</text>
+    <text id="MSG_OPPOSITE" development="new" translation="todo">Gesprächspartner</text>
+	<text id="MSG_PM_SEND" development="new" translation="todo">Die Private Nachricht wurde an %VAR1_BOLD% versendet.</text>
+	<text id="MSG_PM_NOT_SEND" development="new" translation="todo">Die Private Nachricht konnte nicht an %VAR1_BOLD% gesendet werden.\n\nFolgender Fehler ist aufgetreten:\n%VAR2%</text>
+	<text id="MSG_REMOVE" development="new" translation="todo">Nachricht entfernen</text>
+	<text id="MSG_REMOVE_CONFIRM" development="new" translation="todo">Entfernen bestätigen</text>
+	<text id="MSG_REMOVE_REVERT" development="new" translation="todo">Entfernen wiederrufen</text>
+	<text id="SYS_SELECT_FROM_LIST" development="new" translation="todo">Aus Liste auswählen</text>
 	<text id="INV_INVENTORY" development="new" translation="todo">Inventarverwaltung</text>
 	<text id="INV_ITEM_MANAGEMENT" development="new" translation="todo">Artikel verwalten</text>
 	<text id="INV_CREATE_ITEM" development="new" translation="todo">Neuer Artikel</text>

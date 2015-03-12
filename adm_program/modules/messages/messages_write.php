@@ -132,7 +132,7 @@ if ($getUserId > 0)
     //usr_id wurde uebergeben, dann Kontaktdaten des Users aus der DB fischen
     $user = new User($gDb, $gProfileFields, $getUserId);
 
-    // if an User ID is given, we need to check if the actual user is alowed to contact this user  
+    // if an User ID is given, we need to check if the actual user is allowed to contact this user  
     if (($gCurrentUser->editUsers() == false
        && isMember($user->getValue('usr_id')) == false)
     || strlen($user->getValue('usr_id')) == 0 )
