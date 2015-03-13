@@ -362,7 +362,7 @@ class HtmlTable extends HtmlTableBasic
 	 */
     public function show($directOutput = true)
     {
-        global $g_root_path;
+        global $g_root_path, $gDebug;
 
         if($this->rowCount == 0)
         {
@@ -384,8 +384,16 @@ class HtmlTable extends HtmlTableBasic
                 $javascriptGroup = '';
                 $javascriptGroupFunction = '';
                 
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');
-                $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.js');
+                if($gDebug)
+                {
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.js');
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.js');
+                }
+                else
+                {
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/jquery.datatables.min.js');                    
+                    $this->htmlPage->addJavascriptFile($g_root_path.'/adm_program/libs/datatables/js/datatables.bootstrap.min.js');
+                }
                 $this->htmlPage->addCssFile($g_root_path.'/adm_program/libs/datatables/css/datatables.bootstrap.css');
 
                 if($this->rowCount > 10)
