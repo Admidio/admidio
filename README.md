@@ -74,7 +74,6 @@ and sharing great software.
 - [CKEditor](http://www.ckeditor.com): Javascript-Editor
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer): Email sending library for PHP 
 - [Datatables](http://www.datatables.net): Table plugin for jQuery
-- [Datatables-Bootstrap](https://github.com/Jowin/Datatables-Bootstrap3): Plugin for datatables bootstrap 3 ui compatibility
 - [Select2](https://select2.github.io/): jQuery replacement for select boxes
 - [jQuery-File-Upload](https://blueimp.github.io/jQuery-File-Upload/): jQuery file upload plugin
 - [Bootstrap-Datepicker](https://github.com/eternicode/bootstrap-datepicker): Datepicker for bootstrap 3
