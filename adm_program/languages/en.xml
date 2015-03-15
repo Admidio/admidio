@@ -5,27 +5,13 @@
 	<text id="SYS_COUNTRY_EG" development="new" translation="edited">DEU</text>
     <text id="INS_CONFIGURATION_FILE_FOUND" development="new" translation="edited">A config file has been found. A new installation can not be started. If the previous installation was interrupted you can resume with the existing one.</text>
     <text id="INS_CONTINUE_INSTALLATION" development="new" translation="edited">Continue installation</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED" development="deleted" translation="edited"></text>
-    <text id="INS_DOWNLOAD" development="deleted" translation="edited"></text>
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="changed" translation="edited">Download configuration file</text>
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE_DESC" development="new" translation="edited">The configuration %VAR1_BOLD% file could not be saved within the folder %VAR2_BOLD%. Please download the file and copy it into the Admidio root directory %VAR2_BOLD% with a FTP application.\n\nAs soon as the file is copied you can proceed with the installation.</text>
     <text id="INS_INSTALLATION_EXISTS" development="new" translation="edited">The database already contains an Admidio installation. A new installation can not be started.</text>
-    <text id="INS_LOGIN_OF_WEBMASTER" development="deleted" translation="edited"></text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="deleted" translation="edited"></text>
-    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="deleted" translation="edited"></text>
-    <text id="INS_NECESSARY_INFORMATION" development="deleted" translation="edited"></text>
     <text id="INS_NO_INSTALLED_VERSION_FOUND" development="new" translation="edited">Could not find the existing installation. If you have installed an Admidio version 1.x please update to version 2.x first. Then proceed with updating it to version %VAR1%. If your installation is of version 2.x please verify the consistency of your database.</text>
-    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="deleted" translation="edited"></text>
-    <text id="INS_SET_ADMINISTRATOR" development="deleted" translation="edited"></text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="deleted" translation="edited"></text>
-    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="deleted" translation="edited"></text>
     <text id="INS_UPDATE_NOT_POSSIBLE" development="new" translation="edited">Database update is not possible.</text>
     <text id="INS_WEBMASTER_LOGIN" development="new" translation="edited">Webmaster login</text>
     <text id="INS_WEBMASTER_LOGIN_DESC" development="new" translation="edited">Please insert login credentials for webmasters in the following form. Only webmasters will be able to perform a database update.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="deleted" translation="edited"></text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="deleted" translation="edited"></text>
-    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="deleted" translation="edited"></text>
-    <text id="DOW_FILE_NAME_INVALID" development="deleted" translation="edited"></text>
     <text id="ORG_ADD_ORGANIZATION_DESC" development="new" translation="edited">Inserts a new organization including its master data. The current owner automatically becomes the webmaster and can proceed with the setup. The according organization needs to be selected by user who login to the system.</text>
     <text id="ORG_DIFFERENT_DATABASE_VERSION" development="new" translation="edited">Differing database version</text>
     <text id="ORG_NEW_ORGANIZATION_DESC" development="new" translation="edited">Please insert the abbreviation and the official name of the organization / association which you want to add. The following step will create the organization with its master data.</text>
@@ -35,8 +21,6 @@
     <text id="PHO_SAVE_ORIGINALS_DESC" development="new" translation="edited">Uploaded photos can be archived on the server or be provided as download if enough storage capacity is available.</text>
     <text id="PRO_DEFAULT_COUNTRY_DESC" development="changed" translation="edited">Please state a country in which the organization is operates mainly. It will be pre-selected, e.g. during registration or login in order to ease the process. User still have the possibility to change the value as desired. (Default: Germany)</text>
     <text id="SYS_FILENAME_EMPTY" development="new" translation="edited">No file name specified!</text>
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="edited"></text>
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="deleted" translation="edited"></text>
     <text id="SYS_MANDATORY_FIELDS" development="new" translation="edited">Mandatory fields</text>
 	<text id="SYS_PM" development="new" translation="todo">Private Message</text>
 	<text id="PMS_MESSAGE" development="new" translation="todo">Private Messages</text>
@@ -202,7 +186,6 @@
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="new" translation="todo">This value defines, how many days in the past should be included into an iCal download or subscription. (default: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Enable registration to this appointment.</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Visibility</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Please fill in all entry fields\n\nand click again %VAR1_BOLD%.</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Your database version is %VAR1%.\n\nUpdate to version %VAR2% is required</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database system</text>
     <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
@@ -236,9 +219,6 @@
     <text id="ORG_VALUE_LIST_DESC" development="new" translation="edited">Define the items of the drop-down menu or the option boxes here.  Provide one drop-down or radio button item per line.\n\nInstead of the text, the selected position in the list will be stored in the profile. If text in a line should change, all assigned users will be able to see the new text in their profiles right away. If a menu item is being moved to another line, another entry might be shown in the user&apos;s profile.\n\nIn case of a radio button, an icon can be displayed instead of a text element, too. In order to do this, the name of an icon in the theme folder can be provided (e.g. ok.png) or the external URL of a picture files (e.g. http://www.example.com/example.jpg). By using a pipe, additional tool tip can be used with the icon set (e.g. female.png|female)</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="edited">Display organisation selection</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="edited">Should be several organisations stored in the database, the log-in screen is able to display a selection box with all available organisations. The user is then able at log-in to select another organisation (other than defined in the config.php). However, the user must be a registered member of the selected organisation.</text>
-    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="edited">Organisation and regional preferences</text>
-    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="edited">Slide show speed</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Define the delay in seconds before the next picture is being loaded during a slide show.</text>
     <text id="SYS_CHECKBOX" development="new" translation="edited">Check-box</text>
     <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="edited">Confirm value</text>
     <text id="SYS_CONTACT_DETAILS" development="new" translation="edited">Contact information</text>
@@ -275,38 +255,6 @@
     <text id="SYS_LOADING_CONTENT" development="new" translation="edited">Loading content ...</text>
     <text id="SYS_REGISTRATION_SAVED" development="new" translation="edited">Your data has been saved.\n\nLogin possible after confirmation. You will be informed by e-mail about successful confirmation.</text>
     <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="edited">RSS-Feed for %VAR1%</text>
-    <text id="SYS_JANUARY" development="new" translation="edited">January</text>
-    <text id="SYS_FEBRUARY" development="new" translation="edited">February</text>
-    <text id="SYS_MARCH" development="new" translation="edited">March</text>
-    <text id="SYS_APRIL" development="new" translation="edited">April</text>
-    <text id="SYS_MAY" development="new" translation="edited">May</text>
-    <text id="SYS_JUNE" development="new" translation="edited">June</text>
-    <text id="SYS_JULY" development="new" translation="edited">July</text>
-    <text id="SYS_AUGUST" development="new" translation="edited">August</text>
-    <text id="SYS_SEPTEMBER" development="new" translation="edited">September</text>
-    <text id="SYS_OCTOBER" development="new" translation="edited">October</text>
-    <text id="SYS_NOVEMBER" development="new" translation="edited">November</text>
-    <text id="SYS_DECEMBER" development="new" translation="edited">December</text>
-    <text id="SYS_JAN" development="new" translation="edited" description="Abbr. for January">Jan</text>
-    <text id="SYS_FEB" development="new" translation="edited" description="Abbr. for February">Feb</text>
-    <text id="SYS_MAR" development="new" translation="edited" description="Abbr. for March">Mar</text>
-    <text id="SYS_APR" development="new" translation="edited" description="Abbr. for April">Apr</text>
-    <text id="SYS_MAY" development="new" translation="edited" description="Abbr. for May">May</text>
-    <text id="SYS_JUN" development="new" translation="edited" description="Abbr. for June">Jun</text>
-    <text id="SYS_JUL" development="new" translation="edited" description="Abbr. for July">Jul</text>
-    <text id="SYS_AUG" development="new" translation="edited" description="Abbr. for August">Aug</text>
-    <text id="SYS_SEP" development="new" translation="edited" description="Abbr. for September">Sep</text>
-    <text id="SYS_OCT" development="new" translation="edited" description="Abbr. for October">Oct</text>
-    <text id="SYS_NOV" development="new" translation="edited" description="Abbr. for November">Nov</text>
-    <text id="SYS_DEC" development="new" translation="edited" description="Abbr. for December">Dec</text>
-    <text id="SYS_MON" development="new" translation="edited" description="Abbr. for Monday">Mon</text>
-    <text id="SYS_TUE" development="new" translation="edited" description="Abbr. for Tuesday">Tue</text>
-    <text id="SYS_WED" development="new" translation="edited" description="Abbr. for Wednesday">Wed</text>
-    <text id="SYS_THU" development="new" translation="edited" description="Abbr. for Thursday">Thu</text>
-    <text id="SYS_FRI" development="new" translation="edited" description="Abbr. for Friday">Fri</text>
-    <text id="SYS_SAT" development="new" translation="edited" description="Abbr. for Saturday">Sat</text>
-    <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Sun</text>
-    <text id="SYS_TODAY" development="new" translation="edited">Today</text>
 </version>
 <version id="2.2.0" translator="Szabolcs Lami">
     <!-- Phrases only in Announcementmodule -->
@@ -387,8 +335,6 @@
     <text id="DAT_QUOTA_EXCEEDED" development="new" translation="edited">Maximum number of participants in all roles (if quotas are set) must not be higher then maximum number of participants set for the room.</text>
     <text id="DAT_QUOTA_FOR_ROLE" development="new" translation="edited">Only one quota is allowed for one role that is able to display selected event.</text>
     <text id="DAT_QUOTA_WITH_MAXIMUM" development="new" translation="edited">Setting of quota is allowed when number of participants is limited.</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION" development="new" translation="edited">Display calendar selection box</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION_DESC" development="new" translation="edited">Selection box for each calendar is displayed in order to ensuring for visitors quick search of events. (default: yes)</text>
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="edited">Display link to map</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="edited">When location is set, Google Maps is used to display location and route from own location. (default: yes)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="edited">Show on map</text>
@@ -412,7 +358,6 @@
     <text id="DOW_ENABLE_DOWNLOAD_MODULE_DESC" development="new" translation="edited">Download module can be deactivated here. After deactivation it wont appear anymore as module in the overview. (default: yes)</text>
     <text id="DOW_FILE_EXIST" development="new" translation="edited">File %VAR1% already exists!\n\nPlease select different file name.</text>
     <text id="DOW_FILE_EXTENSION_INVALID" development="new" translation="edited">File type is not allowed on this server.</text>
-    <text id="DOW_FILE_NAME_INVALID" development="new" translation="edited">Selected file name includes illegal characters!\n\nPlease select different file name.</text>
     <text id="DOW_FILE_NAME_RULES" development="new" translation="edited">File name should indicate file content. File name affects listing order. E.g. file names in folders with proceedings should begin with date (yyyy-mm-tt).</text>
     <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">The file is physically not available anymore on the server. It should be deleted from the database.</text>
     <text id="DOW_FILE_RENAME" development="new" translation="edited">File %VAR1% was renamed.</text>
@@ -453,49 +398,17 @@
     <text id="ECA_A_ECARD_FROM" development="new" translation="edited">Greeting card sent by</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="edited">Activating greeting card module</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="edited">The greeting card module can be deactivated and reactivated by using these options. If server is not capable of sending mails, please deactivate the module. The module is accessible for logged in users only. (default: yes)</text>
-    <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="edited">Show preferences</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="edited">Hide preferences</text>
-    <text id="ECA_CONTENT_LOADING" development="new" translation="edited">Loading content - Please wait!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="edited">The e-mail address might be incorrect!</text>
-    <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="edited">external recipient</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">E-mail address of %VAR1%recipient</text>
-    <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Senders e-mail address</text>
-    <text id="ECA_FIELD_ERROR" development="new" translation="edited">Some fields are not filled in or do not comply. Please filled them in or check them for consistency.</text>
     <text id="ECA_GREETING_CARD" development="new" translation="edited">Greeting card </text>
     <text id="ECA_GREETING_CARDS" development="new" translation="edited">Greeting card</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Edit greeting card</text>
-    <text id="ECA_GREETING_CARD_SEND" development="new" translation="edited">Send greeting card</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="edited">Greeting card preview</text>
-    <text id="ECA_INPUT_INCORRECT" development="new" translation="edited">Following required fields for sending \ngreeting \ncard are \nnot filled in or are incorrect:</text>
-    <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">internal recipient</text>
-    <text id="ECA_MAX_CC" development="new" translation="edited">Max. additional recipients</text>
-    <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deactivate and set maximum number of additional recipients if necessary. (default: 10)</text>
-    <text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Maximum of %VAR1% characters is allowed!</text>
-    <text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">More recipients</text>
-    <text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Sender's name</text> 
-    <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">Name of recipient: %VAR1%</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">New message received</text>    
-    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">No user with valid e-mail address!</text>
-    <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">No further recipients</text>
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card could not be sent!</text>
-    <text id="ECA_OTHER_RECIPIENT" development="new" translation="edited">Other recipients</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="edited">Please select a valid role type!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">E-mail recipient</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Name of recipient</text>    
-    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="edited">Greeting card image size preference (width x height)</text>
-    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="edited">This can be set to the value of the width and height of the greeting card image to be scaled. (default: 400 x 250 pixels)</text>
-    <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Image preview preference (width x height)</text>
-    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">This can be set to the value of the width and height of the preview image to be scaled. (default: 250 x 250 pixels)</text>
-    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Your greeting card will be sent to members of the selected role if members provided e-mail address.\n\nSelect a member of a role or entire role.</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="edited">An error occurred while sending the greeting card. Please try again later.</text>    
-    <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% characters left</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Your greeting card was send.</text>
     <text id="ECA_TEMPLATE" development="new" translation="edited">Template</text>
     <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Define standard template. (default.: standard letter) </text>
-    <text id="ECA_THE_MESSAGE" development="new" translation="edited">One message</text>
-    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="edited">To all role members</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Show full size picture</text>
-    <text id="ECA_YOUR_MESSAGE" development="new" translation="edited">Your message</text>
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="edited">Back to guestbook</text>
@@ -553,14 +466,12 @@
     <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
     <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Entering database information</text>
     <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Provide your database access information here. Table prefix can be customized if needed. Customization should not be necessary if multiple Admidio installations are using the same database.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="edited">Database update is required</text>
     <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Provided database access information is incorrect!\n\nCheck and update access information or check if database is on-line and accessible.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Creating database</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Administrative board of association</text>
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Meetings can take place here. Room has to be reserved before. Beamer is free for use.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">All organization members</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Group of system administrators</text>
-    <text id="INS_DOWNLOAD" development="new" translation="edited">Download %VAR1%</text>
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download configuration file %VAR1_BOLD% and copy file to Admidio's root directory. Also %VAR2_BOLD% can be found there.\n\nProceed when file has been copied to new location.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Enter database access information</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">File %VAR1_BOLD% could not be opened.</text>
@@ -574,17 +485,11 @@
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="edited">Installation was successful</text>
     <text id="INS_INTERN" development="new" translation="edited">Intern</text>
     <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="edited">No language has been selected.</text>
-    <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="edited">Webmaster's access information</text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Provide access information of a webmaster of an existing organization. Use his/her access information later in order to log in to new organization.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="edited">Access information of webmaster is not complete!</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="edited">Incorrect log in. Provided access information does not exist or can not be found in previous organizations!</text> 
     <text id="INS_MASTER_DATA" development="new" translation="edited">Master data</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Membership</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Not all MySQL database access information has been provided!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Organization name</text>
-    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Please provide official abbreviation of the organization's name here for use in Admidio.</text>
-    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="edited">Please provide official abbreviations of the organizations' name here for use in Admidio.</text>
     <text id="INS_NECESSARY_INFORMATION" development="new" translation="edited">Please provide on the following pages essential information about the new organization.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="edited">Provided organization name is not complete!</text>
     <text id="INS_OVERVIEW" development="new" translation="edited">Overview</text>
@@ -592,11 +497,8 @@
     <text id="INS_PHONE_LIST" development="new" translation="edited">Phone list</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least MySQL version %VAR2%. Please try to update your MySQL database or use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% requires at least PHP version %VAR2%. Please try to update your PHP version or oder use an %VAR3%older Admidio version%VAR4% in order to ensure compatibility.</text>    
-    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Previous Admidio version</text>
-    <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Set administrator</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Creating organization</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="edited">Configure organization</text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="edited">New organization %VAR1_BOLD% has been created and configured. Please log in now by using access information of the system administrator.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="edited">Configuration successful</text>
     <text id="INS_SKYPE" development="new1" translation="edited">Skype</text>
     <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">We would appreciate a lot if you could support the development of Admidio with your donation!</text>
@@ -607,13 +509,11 @@
     <text id="INS_TRAINING" development="new" translation="edited">Training</text>
     <text id="INS_UPDATE" development="new" translation="edited">Update</text>
     <text id="INS_UPDATE_DATABASE" development="new" translation="edited">Update database</text>
-    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="new" translation="edited">Until now Version 1.x of Admidio was in use. In order to migrate database for Admidio %VAR1% successfully, please provide exact version number of previous installation.</text>
     <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="new" translation="edited">Admidio database has been successfully updated to version %VAR1%.\nYou are free to log in and use Admidio again.</text>
     <text id="INS_UPDATE_VERSION" development="new" translation="edited">Update to version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="edited">Update process successful</text>
     <text id="INS_WARNING_BETA_VERSION" development="new" translation="edited">This is a beta version of Admidio.\n\nUsage can be risky due to possible instability and data loss. Please use as test environment only!</text>
     <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Save Mode on server is active. This can cause later problems when using certain functions.</text>
-    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="edited">Welcome! Create your new organization here!</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="edited">Welcome to the installation of Admidio</text>
     <text id="INS_WELCOME_TEXT" development="new" translation="edited">On the following pages you will be prompted to provide some necessary information in order to create a new Admidio system. You will have to specify the database access information of your Admidio installation as well.</text>
     <text id="INS_YAHOO_MESSENGER" development="new1" translation="edited">Yahoo! Messenger</text>
@@ -644,7 +544,6 @@
     <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Active Members</text>
     <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Overview of active roles</text>
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Add column</text>
-    <text id="LST_CATEGORY_NO_LISTS" development="new" translation="edited">No enabled lists available.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="edited">Would you like to load and change default configuration or to create new configuration?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Choose role for selected list.</text>
     <text id="LST_COLUMN" development="new" translation="edited">Column</text>    
@@ -743,7 +642,6 @@
     <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(Sender was logged out. Due to that sender's information might be incorrect.)</text>
     <text id="MAI_SHOW_CAPTCHA_DESC" development="new" translation="edited">For logged out users an alphanumeric text will appear when captcha module is activated. The provided text has to be entered into the proper field. This should prevent abuse of the form by spammers. (default: yes)</text>
     <text id="MAI_SUBJECT" development="new" translation="edited">Subject</text>
-    <text id="MAI_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="edited">to Role %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="edited">Assign fields</text>
@@ -778,8 +676,6 @@
     <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="edited">You do not have permission to select role %VAR1%.\nPlease try to select another role.</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Send e-mail with username and password.</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Display all users</text>
-    <text id="MEM_SHOW_MEMBERS" development="new" translation="edited">Only active members are displayed. Click here to see all members registered in the database.</text>
-    <text id="MEM_SHOW_USERS" development="new" translation="edited">All members are displayed. Click here to see only active members registered in the database.</text>
     <text id="MEM_UPDATED_ON" development="new" translation="edited">Updated on</text>
     <text id="MEM_USER_DELETE" development="new" translation="edited">Would you like to delete %VAR1_BOLD%?\n\nUser is going to be physically deleted in the database which makes later access impossible.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="edited">User management</text>
@@ -793,7 +689,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="edited">Assigning membership and login information to selected user.</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="edited">Assigning registration</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="edited">Deleting registration</text>
-    <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="edited">Managing new registrations</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="edited">New registrations of visitors can be listed, approved or refused here.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="edited">New registrations</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="edited">User is not a member of organization %VAR1% but has already login information assigned.</text>
@@ -806,23 +701,14 @@
     <text id="NWU_USER_VALID_LOGIN" development="new" translation="edited">User already owns valid login information.</text>
 
     <!-- Phrases only in Organizationadministration -->
-    <text id="ORG_ACCESS_DATA_ADMIDIO" development="new" translation="edited">Use access information of Admidio</text>
-    <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="new" translation="edited">In case forum system should use same database as Admidio, you can mark check box in order to use Admidio's default access information instead of filling in same access information again. (default: unchecked)</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE" development="new" translation="edited">Access information to forum database</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE_DESC" development="new" translation="edited">Should forum be installed in another database, please provide access information above.</text>
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="edited">Module access</text>
     <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="edited">Module can be deactivated or enabled for logged in users only. If module is only accessible to logged in users, it will be hidden for logged out users and RSS-Feed will be completely disabled for both user groups. (default: active)</text>
-    <text id="ORG_ACTIVATE_FORUM" development="new" translation="edited">Activate forum</text>
-    <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="edited">%VAR1% Admidio provides no own forum functionality. You are able to integrate third party software (at present phpBB 2.0). (default: no)</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="edited">Activating internal forum hyperlink</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="edited">Active: forum is being shown within Admidio layout. (default)\nInactive: Forum is being shown in new browser window.</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Additional variables</text>
     <text id="ORG_ADMIDIO_THEME" development="new" translation="edited">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="edited">Select layout for Admidio. All themes saved in folder adm_themes are being shown. (default: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="edited">Advanced registration</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="edited">Auto log off after</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="edited">Set the time before the system automatically logs an inactive user off. A user is inactive when no page is loaded for a certain time. This configuration is being ignored when user selected %VAR1_BOLD%. (default: 20 minutes)</text>    
-    <text id="ORG_CAPTCHA" development="new" translation="edited">Use this preferences for the captcha.</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="edited">Background color</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="edited">Select background color (as hex) for captcha code. (default: #FFEFC4)</text>
     <text id="ORG_CAPTCHA_FONT" development="new" translation="edited">Select font type for captcha code. (default: Theme font)</text>
@@ -830,13 +716,11 @@
     <text id="ORG_CAPTCHA_PREVIEW" development="new" translation="edited">Captcha preview</text>
     <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Display preview of the captcha. Please note that only saved values are considered!</text>
     <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">After activation a picture with a captcha code or a simple calculation will be displayed to new users. It's necessary to fill in the correct code or result to save presently edited entry. The captcha is part of anti-spam solution in Admidio. (default: yes)</text>
-    <text id="ORG_CAPTCHA_SIZE" development="new" translation="edited">Define captcha size.</text>
     <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">Captcha signature</text>
     <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Select font size for the captcha signature. (default: 9)</text>
     <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Fill in your preferred signature for the captcha. Default font type of the current theme will be used.</text>
     <text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Accepted characters</text>
     <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Fill in the accepted characters for the captcha.</text>
-    <text id="ORG_CAPTCHA_SCALING" development="new" translation="edited">Captcha size (width x high)</text>
     <text id="ORG_CAPTCHA_TYPE" development="new" translation="edited">Captcha type</text>
     <text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="edited">Calculation</text>
     <text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="edited">Picture</text>
@@ -854,16 +738,11 @@
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="edited">Captcha activation</text>
     <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="edited">RSS-Feed activation</text>
     <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio is able to provide RSS-Feed service for several modules (announcements, appointments, guestbook, photo gallery and weblinks) on the overview page for each module. Subscription is possible by browser or feed reader. (default: yes)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER" development="new" translation="edited">Exporting Admidio user(s)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER_DESC" development="new" translation="edited">At next login, registered Admidio users will be automatically registered in the forum system as users. (default: yes)</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS" development="new" translation="edited">Transfer webmaster status to forum system.</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="new" translation="edited">Existing Admidio webmaster will automatically be registered in the forum system as forum administrator. (default: yes)</text>
     <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">Quick registration</text>
     <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Define unlimited additional fields. Fields will be displayed and can be edited in user's profile. These fields will be available in own list, too.</text>
     <text id="ORG_FIELD_DISABLED" development="new" translation="edited">Field for users permitted to 'edited all users' is editable.</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Locked fields in own profile can not be edited by users. Editing is possible only by users with permission to 'edit all users'.</text>
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Move profile field down</text>
-    <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="edited">Field %VAR1_BOLD% in %VAR2_BOLD% is empty.</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="edited">Field with same name already exists in this category.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Field viewable for authorized users only (own profile &amp; role authorization)</text>
     <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="edited">A field is usually free to see for all users. Disable for authorizing users only with user editing permission  Every user is able to see field in own profile.</text>
@@ -873,10 +752,6 @@
     <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Field to see for all users.</text>
     <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Field is mandatory. It must be filled in.</text>
     <text id="ORG_FIELD_UP" development="new" translation="edited">Move profile field up</text>
-    <text id="ORG_FORUM_TABLE_PREFIX" development="new" translation="edited">Forum table prefix</text>
-    <text id="ORG_FORUM_TABLE_PREFIX_DESC" development="new" translation="edited">Fill in the table prefix for the database of the phpBB forum system. It has to be the same prefix as configured in the phpBB Forum system. (e.g. phpbb)</text>
-    <text id="ORG_FORUM_WIDTH" development="new" translation="edited">Forum width</text>
-    <text id="ORG_FORUM_WIDTH_DESC" development="new" translation="edited">%VAR1% Attention: changing value can lead to layout misconfiguration. (default: 570 pixel)</text>
     <text id="ORG_HOMEPAGE_REGISTERED_USERS" development="new" translation="edited">This page appears when a user logged in. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</text>
     <text id="ORG_HOMEPAGE_VISITORS" development="new" translation="edited">This page is the default page of Admidio for guests. Path has to be provided as relative path to the Admidio main folder.\n(e.g.: adm_program/index.php)</text>
     <text id="ORG_LOGIN_AUTOMATICALLY" development="new" translation="edited">Login automatically</text>
@@ -905,7 +780,6 @@
     <text id="ORG_TIME_FORMAT" development="new" translation="edited">Time format</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Format complies with PHP function %VAR1%. (default: H:i)</text>
     <text id="ORG_URL" development="new" translation="edited">URL</text>
-    <text id="ORG_USED_FORUM" development="new" translation="edited">Forum in use</text>
     <text id="ORG_VARIABLE_ACTIVATION_LINK" development="new" translation="edited">Activation link for the new password</text>
     <text id="ORG_VARIABLE_EMAIL" development="new" translation="edited">User e-mail address</text>
     <text id="ORG_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="edited">System e-mail address of the organization</text>
@@ -916,7 +790,6 @@
     <text id="ORG_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="edited">Short name of the organization</text>
     <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="edited">Website URL of the organization</text>
     <text id="ORG_VARIABLE_USERNAME" development="new" translation="edited">username of user</text>
-    <text id="ORG_WHICH_FORUM_USED" development="new" translation="edited">Which forum to be used?</text>
     
     <!-- Phrases only in Updatecheck -->
     <text id="UPD_ADMIDIO" development="new" translation="edited">Go to Admidio update page</text>
@@ -930,12 +803,10 @@
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="edited">Album</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Delete album</text>
-    <text id="PHO_ALBUM_HELP_DESC" development="new" translation="edited">Please fill in all required fields. Fields 'album' and 'start' are mandatory.\nIf necessary, select parent folder e.g. 'day 3' in 'Tournament 2010'. It is recommended to split up in case of many photos.\nFor guests only enabled albums will be displayed. Display permissions can be set and modified before and after upload.\nPress 'save' when finished.</text>
     <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Album is being blocked and guests are unable to display it. Enable it by pressing key symbol in editing field.</text>
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">Album has been successfully created / changed.</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Album management</text>
     <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">back to album</text>
-    <text id="PHO_COLORBOX" development="new" translation="edited">ColorBox</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Creating album</text>
     <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">How to display photos</text>
     <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Set how photos should be displayed. Select popup window mode, JavaScript animated mode (ColorBox) or iHTML mode for displaying photos on the same page. (default: ColorBox)</text>
@@ -943,16 +814,12 @@
     <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">A new photo album was created</text>
     <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">A new photo album at %VAR1% was created.\n\nTitle: %VAR2%\nCreated by: %VAR3%\nCreated at: %VAR4%</text>
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="edited">Folder could not be found. Was folder deleted by using FTP or should it be inaccessible, please delete folder in Admidio.\nGuests without photo management permission can not display selected album.</text>
-    <text id="PHO_MAX_PHOTO_SIZE" development="new" translation="edited">Max. photo size (width x height)</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">Values are defining maximum size of a photo displayed by a user. Size of popup and ColorBox windows will be automatically adjusted. Ideal size should follow original picture size in order to avoid rescaling. (default: 640 x 400 pixels)</text>
-    <text id="PHO_MULTIUPLOAD" development="new" translation="edited">Multiupload</text>
-    <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="edited">Multiupload enables an easy way of upload of several photos simultaneously. For use Flash plugin (version 9+) has to be enabled. Without installed plugin or deactivated multiupload, one-on-one HTML upload is being loaded automatically. (default: yes)</text>
     <text id="PHO_NEXT_PHOTO" development="new" translation="edited">next picture</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="edited">Album contains no photos.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Illegal page view or file could not be uploaded.\nFile size possibly exceeded allowed server defined upload size of %VAR1%B!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="edited">No photos to add have been selected.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="edited">You have no permissions to perform this action.\n\nOnly logged in users with photo management permissions are enabled to manage photos.</text>
-    <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="edited">Number of photos</text>
     <text id="PHO_PARENT_ALBUM" development="new" translation="edited">Parent album</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="edited">Photo albums</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="edited">delete photo</text>
@@ -985,8 +852,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="edited">Show watermark</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="edited">Text will be shown in all photos with a long edge larger than 200 pixels. (default: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="edited">Photos have been successfully added to album if they appear on this page.</text>
-    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="edited">slideshow speed</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Seconds before slideshow switches to next picture.</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="edited">Thumbnails per page (rows x columns)</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="edited">Values define number of rows and columns of thumbnails on one page. (default: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="edited">Press button %VAR1_BOLD% in order to select photo files on harddrive for upload.</text>
@@ -1044,7 +909,6 @@
     <text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="edited">Uploaded files must not be greater than %VAR1% MB.</text>
     <text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="edited">Role memberships of other organizations</text>
     <text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="edited">Data cannot be saved.\nNo role was assigned to user.</text>
-    <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="edited">Please select new photo here</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="edited">Display former role memberships</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">A box will be shown with all roles of the user in the current organization. Membership start and end date will be displayed. (default: yes)</text>
     <text id="PRO_SHOW_MAP_LINK" development="new" translation="edited">Show map link</text>
@@ -1067,7 +931,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="edited">All guests of the site</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="edited">All logged in users</text>
     <text id="ROL_ANNUALLY" development="new" translation="edited">Annually</text>
-    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">An error occurred!\n\nChange of date could not be saved.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="edited">By selecting %VAR1_BOLD% all roles and all member assignments will be deleted. Deleted information cannot be opened or recovered again.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="edited">Dependencies</text>
     <text id="ROL_DEPENDENT" development="new" translation="edited">Dependent</text>
@@ -1076,7 +939,6 @@
     <text id="ROL_INACTIV_ROLE" development="new" translation="edited">Inactive role</text>
     <text id="ROL_INACTIV_ROLE_DESC" development="new" translation="edited">You are able to deactivate the role. This way, membership information will be preserved and later it will be still possible to check who was a member of the current role. However this role will not appear anymore in general overviews.</text>
     <text id="ROL_INACTIV_ROLES" development="new" translation="edited">Inactive roles</text>
-    <text id="ROL_INDEPENDENT" development="new" translation="edited">Independent</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="edited">Invisible roles</text>
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="edited">Would you like to move back role %VAR1_BOLD% to current roles?</text>
     <text id="ROL_MEETINGS" development="new" translation="edited">Meetings</text>
@@ -1259,18 +1121,6 @@
     <text id="SYS_FONT" development="new" translation="edited">Font</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-size</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">I forgot my password!</text>
-    <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
-    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">You are logged as %VAR1_BOLD% in forum system %VAR2_BOLD%. You have %VAR3_BOLD% new messages.</text>
-    <text id="SYS_FORUM_DESC" development="new" translation="edited">A virtual place to exchange ideas and experiences.</text>
-    <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="edited">Fields with access information of the forum have either not been filled in or have not been filled in correctly!</text>
-    <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="edited">Connection error to forum database! Check please access information!</text>
-    <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="edited">Your administrator login information of forum %VAR2% has been synchronised with Admidio user account.\nPlease use at next login your Admidio username and password.\n\nYou successfully singed in to the forum %VAR2% as user %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_NEW" development="new" translation="edited">Your Admidio user login information has been transfered to forum %VAR2%.\nPlease use at next login your Admidio username and password.\n\nYou successfully signed in to Admidio and to forum %VAR2% as user %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_PASSWORD" development="new" translation="edited">Your password in the forum system %VAR2% have been reset to Admidio's password.\nPlease use at next login your Admidio username and password.\n\nYou successfully signed in to Admidio and to forum %VAR2% as user %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="new" translation="edited">You successfully signed in to Admidio and to forum %VAR2% as user %VAR1_BOLD%.</text>
-    <text id="SYS_FORUM_LOGOUT" development="new" translation="edited">You successfully signed out from Admidio and the forum system..</text>
-    <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Selected username has been deleted in the forum and Admidio.</text>
-    <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Selected username already exists in the forum.\n\nPlease select another name.</text>  
     <text id="SYS_FRIDAY" development="new" translation="edited">Friday</text>
     <text id="SYS_GENDER" development="new" translation="edited">Gender</text>
     <text id="SYS_HEADLINE" development="new" translation="edited">Headline</text>
@@ -1280,7 +1130,6 @@
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP error (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="edited">Inactive</text>
     <text id="SYS_INFO" development="new" translation="edited">Info</text>
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Installation directory 'adm_install' still exists on the server. Due to security reasons it has to be deleted!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Invalid page view</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Invisible</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O error</text>
@@ -1377,7 +1226,6 @@
     <text id="SYS_REMOVE" development="new" translation="edited">Remove</text>
     <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Remove role</text>
     <text id="SYS_REPEAT" development="new" translation="edited">Repeat</text>
-    <text id="SYS_REPORT" development="new" translation="edited">Report</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="edited">Resctrictions</text>
     <text id="SYS_ROLE" development="new" translation="edited">Role</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Saving not possible. Maximum number of role members in role %VAR1_BOLD% would exceed predefined limit.</text>
@@ -1400,16 +1248,12 @@
     <text id="SYS_SET_BY" development="new" translation="edited">Set by</text>
     <text id="SYS_SETTINGS" development="new" translation="edited">Preferences</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Display calendar</text>
-    <text id="SYS_SHOW_HELP" development="new" translation="edited">Display help</text>
     <text id="SYS_SHOW_PROFILE" development="new" translation="edited">Show profile</text>
     <text id="SYS_SHOW_ROUTE" development="new" translation="edited">Show route</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">At least one user with similar name (%VAR1_BOLD% ) was found in the database.</text>
     <text id="SYS_SINCE" development="new" translation="edited">since %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="edited">from %VAR1% to %VAR2%</text>
     <text id="SYS_SIZE" development="new" translation="edited">Size</text>
-    <text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{current} of {total}</text>
-    <text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start slideshow</text>
-    <text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">Stop slideshow</text>
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Start</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>

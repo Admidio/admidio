@@ -81,8 +81,6 @@
     <text id="DAT_QUOTA_EXCEEDED" development="new" translation="edited">Le nombre maximum de participants dans tous les rôles (si les quotas sont fixés) ne doit pas être plus élevés que nombre maximum de participants fixé pour la salle.</text>
     <text id="DAT_QUOTA_FOR_ROLE" development="new" translation="edited">Seul un quota est autorisée pour un rôle qui est capable d'afficher l'événement sélectionné.</text>
     <text id="DAT_QUOTA_WITH_MAXIMUM" development="new" translation="edited">Les propriétés d'un quota sont autorisés lorsque le nombre de participants est limité.</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION" development="new" translation="edited">Afficher la boîte de sélection de l'agenda</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION_DESC" development="new" translation="edited">La sélection de chaque agenda est affiché dans le but d'assurer aux visiteurs une recherche rapide des événements. (par défaut: oui)</text>
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="edited">Afficher le lien vers la carte</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="edited">Lorsque l'emplacement est prévu, Google Maps est utilisé pour afficher l'endroit et le tracé vers l'emplacement. (par défaut: oui)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="edited">Afficher sur la carte</text>
@@ -106,7 +104,6 @@
     <text id="DOW_ENABLE_DOWNLOAD_MODULE_DESC" development="new" translation="edited">Le module de téléchargement peut être désactivé ici. Après la désactivation, le module n'apparaîtera plus dans le panneau. (par défaut: oui)</text>
     <text id="DOW_FILE_EXIST" development="new" translation="edited">Le fichier %VAR1% existe déjà!\n\nS'il-vous-plaît, sélectionnez un nouveau nom de fichier.</text>
     <text id="DOW_FILE_EXTENSION_INVALID" development="new" translation="edited">Le type de fichier n'est pas autorisé sur le serveur.</text>
-    <text id="DOW_FILE_NAME_INVALID" development="new" translation="edited">Le nom du fichier sélectionné inclus des caractères illégaux!\n\nS'il-vous-plaît, veuillez retirer les caractères illégaux ou changez de nom de fichier.</text>
     <text id="DOW_FILE_NAME_RULES" development="new" translation="edited">Le nom du fichier doit indiquer le contenu du fichier. Le nom du fichier affecte l'ordre de tri. Par exemple, les noms de fichiers dans des dossiers d'une procédure doivent commencer par la date (AAAA-MM-TT).</text>
     <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Le fichier n'est plus disponible sur le serveur. Il devrait être supprimé de la base de données.</text>
     <text id="DOW_FILE_RENAME" development="new" translation="edited">Le fichier %VAR1% a été renommé avec succès.</text>
@@ -147,49 +144,17 @@
     <text id="ECA_A_ECARD_FROM" development="new" translation="edited">Carte de voeux envoyés par</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="edited">Activation du module de cartes de vœux</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="edited">Le module de cartes de vœux peut être désactivé et réactivé via ces options. Si le serveur n'est pas capable d'envoyer de courriel, s'il vous plaît désactiver le module. Le module est accessible pour les utilisateurs connectés seulement. (par défaut: oui)</text>
-    <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="edited">Afficher les préférences</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="edited">Cacher les préférences</text>
-    <text id="ECA_CONTENT_LOADING" development="new" translation="edited">Chargement en cours!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="edited">L'adresse courriel est incorect!</text>
-    <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="edited">Destinataire externe</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">Adresse courriel de %VAR1% destinataire</text>
-    <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">Adresse courriel de l'expéditeur</text>
-    <text id="ECA_FIELD_ERROR" development="new" translation="edited">Certains champs ne sont pas remplies ou ne sont pas conformes.</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="edited">S'il vous plaît remplir \ntous les champs puis \nappuyer sur 'envoyer'.\n\n %VAR1%</text>
     <text id="ECA_GREETING_CARD" development="new" translation="edited">Carte de voeux</text>
     <text id="ECA_GREETING_CARDS" development="new" translation="edited">Carte de voeux</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Éditer la carte de voeux</text>
-    <text id="ECA_GREETING_CARD_SEND" development="new" translation="edited">Envoyer la carte de voeux</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="edited">Prévisualiser la carte de voeux</text>
-    <text id="ECA_INPUT_INCORRECT" development="new" translation="edited">Les champs requis suivant sont vide ou incorrect:</text>
-    <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">destinataire interne</text>
-    <text id="ECA_MAX_CC" development="new" translation="edited">Destinataires additionnels maximum</text>
-    <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Désactiver et définir le nombre maximal de destinataires supplémentaires si nécessaire. (par défaut: 10)</text>
-    <text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Un maximum de %VAR1% caractères est alloué!</text>
-    <text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Plus de destinataire</text>
-    <text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Nom de l'expéditeur</text> 
-    <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% will be replaced by number">Nom du destinataire: %VAR1%</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">Nouveau message reçu</text>    
-    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">Aucun usager avec un courriel valide!</text>
-    <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">Pas d'autres destinataires</text>
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="edited">Votre carte de voeux n'a pu être envoyée!</text>
-    <text id="ECA_OTHER_RECIPIENT" development="new" translation="edited">Autres destinataires</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="edited">S'il vous plaît sélectionnez un type de rôle valide!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">Courriel du destinataire</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Nom du destinataire</text>    
-    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="edited">Préférence des dimensions de l'image de carte de voeux (largeur x hauteur)</text>
-    <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Préférence de la prévisualisation de l'image (largeur x hauteur)</text>
-    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">Régler la taille de l'image de prévisualisation. (par défaut: 250 x 250 pixels²)</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="edited">Une erreur s'est produite lors de l'envoi de la carte de voeux. S'il vous plaît veuillez réessayer plus tard.</text>    
-    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Votre carte de voeux sera envoyé aux membres du rôle sélectionné si les membres ont fournis leurs adresse courriel. \ n \ nSélectionnez un membre d'un rôle ou un rôle entier.</text>
-    <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% caractères restant</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Votre carte de voeux a été envoyé.</text>
     <text id="ECA_TEMPLATE" development="new" translation="edited">Modèle standard. (par défaut: Lettre standard)</text>
     <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Définir un modèle standard. (par défaut: Lettre standard)</text>
-    <text id="ECA_THE_MESSAGE" development="new" translation="edited">Un message</text>
-    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="edited">À tous les membres du rôle</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Afficher la grandeur réelle</text>
-    <text id="ECA_YOUR_MESSAGE" development="new" translation="edited">Votre message</text>
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="edited">Retour au livre d'or</text>
@@ -247,14 +212,12 @@
     <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Mise à jour de la base de données en cours...</text>
     <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Saisie des informations de la base de données</text>
     <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Fournissez votre accès à la base de données ici. Le préfixe de la table peut être personnalisé si nécessaire. La personnalisation ne devrait pas être nécessaire si plusieurs installations de Admidio utilisent la même base de données.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="edited">Une mise à jour de la base de données est nécessaire.</text>
     <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Les informations d'accès à la base de données fournis sont incorrect!\n\nVeuillez vérifier mettre à jour les informations ou vérifier si la base de données est disponible en ligne et accessible.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Création de la base de données</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Tableau administratif des associations</text>
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Les rencontres peuvent prendre place ici. La salle doit d'abord être réservé avant la rencontre.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">Tous les membres de l'organisation</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Groupe des administrateurs du système</text>
-    <text id="INS_DOWNLOAD" development="new" translation="edited">Télécharger %VAR1%</text>
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Télécharger le fichier de configuration %VAR1_BOLD% et copier le fichier dans le dossier principal de Admidio. Aussi, %VAR2_BOLD% Peut être trouvé à cet endroit.\n\nContinuer quand le fichier sera copié au nouvel emplacement.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Entrer les informations d'accès à la base de données</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Le fichier %VAR1_BOLD% n'a pu être ouvert.</text>
@@ -268,30 +231,20 @@
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="edited">L'installation est terminée</text>
     <text id="INS_INTERN" development="new" translation="edited">Interne</text>
     <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="edited">Aucun language n'a sélectionné.</text>
-    <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="edited">Informations d'accès du Webmestre</text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Fournir les informations d'accès du webmestre d'un organisme existant. Utilisez ses informations d'accès plus tard afin de vous connecter à la nouvelle organisation.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="edited">Les informations d'accès du webmestre ne sont pas complètes !</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="edited">Connexion incorrecte. Les informations d'accès fournis n'existe pas ou ne peut être trouvée dans les organisations précédentes !</text> 
     <text id="INS_MASTER_DATA" development="new" translation="edited">Données principales</text>
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Adhésion</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Les informations des bases de données n'ont pas tous été fournient !</text>
     <text id="INS_MYSQL_VERSION" development="new" translation="edited">Version MySQL</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Nom de l'organization</text>
-    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Veuillez fournir l'abréviation officielle du nom de l'organisme.</text>
-    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="edited">Adhésion</text>
-    <text id="INS_NECESSARY_INFORMATION" development="new" translation="edited">Veuillez fournir les informations essentielles de la nouvelle organisation.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="edited">Le nom de l'organisation n'est pas complété !</text>
     <text id="INS_OVERVIEW" development="new" translation="edited">Aperçu</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Les mots de passe entrés non sont pas identique.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Liste des téléphones</text>
     <text id="INS_PHP_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% nécessite au minimum MySQL version %VAR2%. Veuillez mettre à jour votre base de donnée MySQL ou utilisez une version de Admidio plus ancienne.</text>
     <text id="INS_PHP_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% nécessite au minimum PHP version %VAR2%. Veuillez mettre à jour votre version PHP ou utilisez une version de Admidio plus ancienne.</text>    
-    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Version antérieure d'Amidio</text>
-    <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Spécifier l'administrateur</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Création de l'organisation</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="edited">Configurer l'organisation</text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="edited">La nouvelle organisation %VAR1_BOLD% a été créée et configurée correctement. Veuillez vous authentifier en utilisant les informations d'accès de l'administrateur.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="edited">Configuration réussie !</text>
     <text id="INS_SKYPE" development="new1" translation="edited">Skype</text>
     <text id="INS_TABLE_PREFIX" development="new" translation="edited">Préfixe de la table</text>
@@ -301,13 +254,11 @@
     <text id="INS_TRAINING" development="new" translation="edited">Formation</text>
     <text id="INS_UPDATE" development="new" translation="edited">Mise à jour</text>
     <text id="INS_UPDATE_DATABASE" development="new" translation="edited">Mise à jour de la base de donnée</text>
-    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="new" translation="edited">Jusqu'à maintenant, la version 1.x d'Admidio était utilisée. Afin de migrer la base de donnée pour Admidio %VAR1%, veuillez fournir le nombre exact d'installation précédente.</text>
     <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="new" translation="edited">La base de donnée d'Admidio a été mise à jour à la version %VAR1%.</text>
     <text id="INS_UPDATE_VERSION" development="new" translation="edited">Mettre à jour à la version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="edited">Mise à jour complétée</text>
     <text id="INS_WARNING_BETA_VERSION" development="new" translation="edited">Ceci est un version beta d'Admidio.\n\nL'utilisation peut contenir des erreurs et même planter.</text>
     <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Le mode veille du serveur est maintenant actif. Cette fonction pourrait entrainer des problèmes futur avec certaines fonctionnalités du programme.</text>
-    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="edited">Bienvenue ! Créer votre nouvelle organisation ici !</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="edited">Bienvenue dans l'installation d'Admidio</text>
     <text id="INS_WELCOME_TEXT" development="new" translation="edited">Dans les prochaines pages, vous aurez à entrer des informations nécessaires à la création du système Admidio. Vous aurez à spécifier les informations de la bases de donnée de votre installation d'Admidio.</text>
     <text id="INS_YAHOO_MESSENGER" development="new1" translation="edited">Yahoo! Messenger</text>
@@ -338,7 +289,6 @@
     <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Membres actifs</text>
     <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Liste des membres selon les rôles du bottin</text>
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Ajouter une colonne</text>
-    <text id="LST_CATEGORY_NO_LISTS" development="new" translation="edited">Aucune liste active de disponible.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="edited">Désirez-vous charger et changer la configuration par défaut ou créer une nouvelle configuration ?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Choisissez un rôle pour la liste sélectionnée.</text>
     <text id="LST_CONFIGURATION" development="new" translation="edited">Configuration</text>
@@ -437,7 +387,6 @@
     <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(L'expéditeur c'est déconecté. Les informations de l'expéditeur peuvent être incorrect.)</text>
     <text id="MAI_SHOW_CAPTCHA_DESC" development="new" translation="edited">Pour les utilisateurs déconectés, un texte alphanumérique apparaitra quand le module capcha est activé. Le texte devra être inséré dans le champs approprier. Cette méthode empêchera l'abu des spammers (Par défaut: oui)</text>
     <text id="MAI_SUBJECT" development="new" translation="edited">Sujet</text>
-    <text id="MAI_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="edited">au rôle %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="edited">Assigner des champs</text>
@@ -473,8 +422,6 @@
     <text id="MEM_SEND_NEW_LOGIN" development="new" translation="edited">Désirez-vous envoyer un courriel à %VAR1_BOLD% du nouveau nom d'usager et mot de passe ?</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Envoyer un courriel avec les information du nom d'usager et mot de passe.</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Afficher tous les usagers</text>
-    <text id="MEM_SHOW_MEMBERS" development="new" translation="edited">Seulement les membres actifs sont affichés. Cliquez ici pour voir tout les membres enrigistrés dans la base de donnée.</text>
-    <text id="MEM_SHOW_USERS" development="new" translation="edited">Tous les membres sont affichés. Cliquez ici pour voir seulement les membres actifs enregistrés dans la base de donnée.</text>
     <text id="MEM_UPDATED_ON" development="new" translation="edited">Mis à jour le</text>
     <text id="MEM_USER_DELETE" development="new" translation="edited">Désirez-vous supprimer %VAR1_BOLD%?\n\nL'utilisateur sera physiquement supprimé dans la base donnée.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="edited">Gestion de l'utilisateur</text>
@@ -488,7 +435,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="edited">Assignez l'adhésion et les informations d'authentifications à l'usager sélectionné.</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="edited">Attribution d'inscription</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="edited">Suppression d'inscription</text>
-    <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="edited">Gestion des nouvelles inscriptions</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="edited">nouvelles inscriptions de visiteurs peuvent être énumérés, approuvé ou refusé ici.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="edited">Les nouvelles inscriptions</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="edited">L'utilisateur n'est pas membre de l'organisation %VAR1% mais il a déjà affecté les informations de connexion.</text>
@@ -501,16 +447,8 @@
     <text id="NWU_USER_VALID_LOGIN" development="new" translation="edited">L'utilisateur possède déjà les informations de connexion valides.</text>
 
     <!-- Phrases only in Organizationadministration -->
-    <text id="ORG_ACCESS_DATA_ADMIDIO" development="new" translation="edited">Utilisez les informations d'accès des Admidio</text>
-    <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="new" translation="edited">Dans le cas où le système de forum doit utiliser la même base de donnée`` que Admidio, vous pouvez marquer case à cocher afin d'utiliser les informations d'accès par défaut Admidio au lieu de remplir les informations d'accès. (Par défaut: décochée)</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE" development="new" translation="edited">Accès aux bases de données d'informations du forum</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE_DESC" development="new" translation="edited">Si le forum être installé dans une autre base, s'il vous plaît fournir des informations d'accès ci-dessus.</text>
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="edited">Module d'accès</text>
     <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="edited">Le module peut être désactivée ou activée pour les utilisateurs connectés uniquement. Si le module est accessible uniquement aux utilisateurs connectés, il sera caché pour les utilisateurs déconnectés et flux RSS seront complètement désactivés pour les deux groupes d'utilisateurs. (par défaut: activé)</text>
-    <text id="ORG_ACTIVATE_FORUM" development="new" translation="edited">activez le forum</text>
-    <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="edited">%VAR1% Admidio ne fournit aucune fonctionnalité propre de forum. Vous êtes capable d'intégrer des logiciels tiers (à l'heure actuelle phpBB 2.0). (par défaut: aucun)</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="edited">Activer lien hypertexte forum interne</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="edited">Actif: le forum est montré dans la disposition Admidio. (par défaut) \ nInactive: Forum est indiqué dans nouvelle fenêtre du navigateur.</text>
     <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="edited">Activer les messages du système</text>
     <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="edited">Activer ou désactiver les messages du système Admidio. Les messages système sont générées par exemple en cas d'inscription nouvel utilisateur ou de validation d'inscription. Cette fonctionnalité devrait normalement être désactivé, mais seulement lorsque le serveur ne supporte pas l'envoi de tout courrier. Le module de courriel n'est pas affectée par cela. (par défaut: oui)</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Les variables supplémentaires</text>
@@ -519,7 +457,6 @@
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="edited">Sélectionnez l'inscription avancée</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="edited">Auto déconnecter après</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="edited">Réglez le temps avant que le système se connecte automatiquement à un utilisateur inactifs. Un utilisateur est inactif lorsque aucune page n'est chargée pendant un certain temps. Cette configuration est ignorée lorsque l'utilisateur choisi %VAR1_BOLD%. (par défaut: 20 minutes)</text>    
-    <text id="ORG_CAPTCHA" development="new" translation="edited">Utilisez cette préférence pour le captcha.</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="edited">Couleur de fond</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="edited">Sélectionnez la couleur de fond (comme hex) pour le code crypté. (par défaut: # FFEFC4)</text>
     <text id="ORG_CAPTCHA_FONT" development="new" translation="edited">Sélectionnez le type de police pour le code crypté. (par défaut: Thème de la police)</text>
@@ -527,13 +464,11 @@
     <text id="ORG_CAPTCHA_PREVIEW" development="new" translation="edited">aperçu Captcha</text>
     <text id="ORG_CAPTCHA_PREVIEW_TEXT" development="new" translation="edited">Afficher un aperçu de captcha. S'il vous plaît noter que seules les valeurs enregistrées sont considérées !</text>
     <text id="ORG_CAPTCHA_REGISTRATION" development="new" translation="edited">Après l'activation une image avec un code captcha ou un simple calcul sera affiché pour les nouveaux utilisateurs. Il est nécessaire de remplir le bon code ou le résultat. Le captcha est une partie de solution anti-spam dans Admidio. (par défaut: oui)</text>
-    <text id="ORG_CAPTCHA_SIZE" development="new" translation="edited">Définir la taille captcha.</text>
     <text id="ORG_CAPTCHA_SIGNATURE" development="new" translation="edited">signature Captcha</text>
     <text id="ORG_CAPTCHA_SIGNATURE_FONT_SIZE" development="new" translation="edited">Sélectionnez la taille de police pour la signature captcha. (par défaut: 9)</text>
     <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Remplissez votre signature préférée pour le captcha. Le type de police par défaut du thème courant sera utilisé.</text>
     <text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Caractères acceptés</text>
     <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Remplissez les caractères acceptés pour le captcha.</text>
-    <text id="ORG_CAPTCHA_SCALING" development="new" translation="edited">Taille du captcha (largeur x hauteur)</text>
     <text id="ORG_CAPTCHA_TYPE" development="new" translation="edited">Type du captcha</text>
     <text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="edited">Calcul</text>
     <text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="edited">Image</text>
@@ -551,16 +486,11 @@
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="edited">Activation du captcha</text>
     <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="edited">Activation des flux RSS</text>
     <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio est capable de fournir un service de flux RSS de plusieurs modules (annonces, rendez-vous, livre d'or, galerie de photos et de liens Internet) sur la page d'aperçu pour chaque module. L'abonnement est possible par le navigateur ou lecteur de flux. (par défaut: oui)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER" development="new" translation="edited">Exportation Admidio utilisateur(s)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER_DESC" development="new" translation="edited">A la prochaine connexion, les utilisateurs enregistrés Admidio sera automatiquement enregistré dans le système de forum en tant qu'utilisateurs. (par défaut: oui)</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS" development="new" translation="edited">Transfert du statut webmaster de système de forum.</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="new" translation="edited">Existants Admidio webmaster sera automatiquement enregistré dans le système de forum en tant qu'administrateur du forum. (par défaut: oui)</text>
     <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">inscription rapide</text>
     <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Définir illimitée des champs supplémentaires. Les champs seront affichés et peuvent être édités dans le profil utilisateur. Ces champs seront disponibles en propre liste, aussi.</text>
     <text id="ORG_FIELD_DISABLED" development="new" translation="edited">Champ pour les utilisateurs autorisés à "éditée tous les utilisateurs».</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Les champs vérouillés dans votre propre profil ne peuvent pas être modifiés par les utilisateurs. Le montage est possible uniquement par les utilisateurs avec la permission d'éditer tous les utilisateurs.</text>
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Déplacer champ de profil bas</text>
-    <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="edited">Champs %VAR1_BOLD% damns %VAR2_BOLD% est vide.</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="edited">Terrain avec le même nom existe déjà dans cette catégorie.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Champ visible pour les utilisateurs autorisés seulement (même profil et le rôle d'autorisation)</text>
     <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="edited">Un champ est généralement libre de voir pour tous les utilisateurs. Désactiver pour les utilisateurs autorisant seulement avec la permission d'édition l'utilisateur Chaque utilisateur est capable de voir le terrain dans son propre profil.</text>
@@ -570,10 +500,6 @@
     <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Champ à voir pour tous les utilisateurs.</text>
     <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Champ est obligatoire. Il doit absolument être rempli.</text>
     <text id="ORG_FIELD_UP" development="new" translation="edited">Champ de profil</text>
-    <text id="ORG_FORUM_TABLE_PREFIX" development="new" translation="edited">Préfixe de table Forum</text>
-    <text id="ORG_FORUM_TABLE_PREFIX_DESC" development="new" translation="edited">Remplissez le préfixe de table pour la base de données du système de forum phpBB. Il doit être le même préfixe tel que configuré dans le système de forum phpBB. (Par exemple phpbb)</text>
-    <text id="ORG_FORUM_WIDTH" development="new" translation="edited">Largeur du forum</text>
-    <text id="ORG_FORUM_WIDTH_DESC" development="new" translation="edited">Attention %VAR1%: changer la valeur peut conduire à une mauvaise configuration de disposition. (Par défaut: 570 pixel)</text>
     <text id="ORG_HOMEPAGE_REGISTERED_USERS" development="new" translation="edited">Cette page apparaît quand un utilisateur connecté doit être fourni comme chemin relatif au dossier principal Admidio \n (ex:. adm_program / index. php)</text>
     <text id="ORG_HOMEPAGE_VISITORS" development="new" translation="edited">Cette page est la page par défaut du Admidio pour les invités. Chemin doit être fourni comme chemin relatif au dossier principal Admidio \n (ex: adm_program / index.php).</text>
     <text id="ORG_LOGIN_AUTOMATICALLY" development="new" translation="edited">Connecter automatiquement</text>
@@ -605,7 +531,6 @@
     <text id="ORG_TIME_FORMAT" development="new" translation="edited">Format du temps</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Format respecté %VAR1 fonction PHP. (Par défaut: H: i)</text>
     <text id="ORG_URL" development="new" translation="edited">URL</text> 
-    <text id="ORG_USED_FORUM" development="new" translation="edited">Forum d'utilisation</text>
     <text id="ORG_VARIABLE_ACTIVATION_LINK" development="new" translation="edited">Lien d'activation pour le nouveau mot de passe</text>
     <text id="ORG_VARIABLE_EMAIL" development="new" translation="edited">Adresse courriel de l'utilisateur</text>
     <text id="ORG_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="edited">Adresse courriel de l'organisation</text>
@@ -616,7 +541,6 @@
     <text id="ORG_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="edited">Nom abrégé de l'organisation</text>
     <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="edited">Adresse du site Web de l'organisation</text>
     <text id="ORG_VARIABLE_USERNAME" development="new" translation="edited">Nom d'utilisateur</text>
-    <text id="ORG_WHICH_FORUM_USED" development="new" translation="edited">Quel forum doit être utilisé ?</text>
  
     <!-- Phrases seulement dans UpdateCheck --> 
     <text id="UPD_ADMIDIO" development="new" translation="edited">Aller à la page de mise à jour Admidio</text>
@@ -633,12 +557,10 @@
     <!-- Phrases seulement dans Photomodule --> 
     <text id="PHO_ALBUM" development="new" translation="edited">Album</text> 
     <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Supprimer l'album</text>
-    <text id="PHO_ALBUM_HELP_DESC" development="new" translation="edited">S'il vous plaît remplir tous les champs requis. 'Album' Les champs et les 'start' sont obligatoires.\nSi nécessaire, par exemple, sélectionner le dossier parent «3 jours» dans «Tournoi 2010». Il est recommandé de diviser, en cas de nombreuses photos.\nLes albums seront affichés pour invités permis seulement. L'autorisations d'affichage peut être réglé et modifié avant et après téléchargement.\nAppuyez «sauver» une fois terminé.</text>
     <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">L'album est bloqué et les clients sont incapables de les afficher. Activez-le en appuyant sur le symbole clé de montage sur le terrain.</text>
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">L'album a été créé avec succès.</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Gestion de l'Album</text>
     <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">Revenir à l'album</text>
-    <text id="PHO_COLORBOX" development="new" translation="edited">ColorBox</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Créer un album</text>
     <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Comment afficher les photos</text>
     <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Définir comment les photos doivent être affichés. Sélectionnez le mode fenêtre popup, JavaScript en mode animé (ColorBox) ou le mode d'affichage de photos iHTML sur la même page. (Par défaut: ColorBox)</text>
@@ -646,17 +568,13 @@
     <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Un nouvel album photo a été créé</text>
     <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">Un nouvel album photo à %VAR1% a été créée \n\nTitre: %VAR2% \nCréé par: %VAR3% \nCréé à: %VAR4%</text>
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="edited">Le dossier n'a pu être trouvée. Le dossier a peut-être supprimé en utilisant FTP ou doit être inaccessible, s'il vous plaît supprimer un dossier dans Admidio. \nLes invités sans l'autorisation de gestion de photos ne peuvent pas afficher l'album sélectionné.</text>
-    <text id="PHO_MAX_PHOTO_SIZE" development="new" translation="edited">Maximum de taille de la photo (largeur x hauteur)</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">Définir la taille maximale d'une photo affichée par un utilisateur. La taille des fenêtres popup et ColorBox seront automatiquement ajustées. La taille idéale devrait suivre la taille d'image d'origine afin d'éviter redimensionnement. (Par défaut: 640 x 400 pixels)</text>
-    <text id="PHO_MULTIUPLOAD" development="new" translation="edited">Multi-téléversement</text>
-    <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="edited">Le Multi-téléversement permet une manière facile de télécharger des photos de plusieurs simultanément. Pour une utilisation plugin Flash (version 9 +) doit être activée. Sans plug-in installé veuillez désactivé le Multi-téléversement. (Par défaut: oui)</text>
     <text id="PHO_NEXT_PHOTO" development="new" translation="edited">Image suivante</text>
     <text id="PHO_NEWEST_ALBUMS" development="new" translation="edited">10 dernières photos de l'album</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="edited">L'album ne contient pas de photos.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Afficher la page illégales ou le fichier n'a pas pu être téléchargé.</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="edited">Aucune photos à ajouter ont été sélectionnés.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="edited">Vous n'avez pas les permissions pour exécuter cette action. \n\nSeulement utilisateurs connectés disposant des autorisations de gestion de photos ont la possibilité de gérer des photos.</text>
-    <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="edited">Nombre de photos</text>
     <text id="PHO_PARENT_ALBUM" development="new" translation="edited">Albums Parent</text>
     <text id="PHO_PHOTO_ALBUMS"  development="new" translation="edited">Albums photo</text>
     <text id="PHO_PHOTO_DELETE" development="new" translation="edited">Supprimer la photo</text>
@@ -747,7 +665,6 @@
     <text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="edited">Les fichiers téléchargés ne doivent pas être supérieur à %VAR1%Mo.</text>
     <text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="edited">Rôle d'adhésion des autres organisations</text>
     <text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="edited">Les données ne peut être sauvé. \aAucun rôle a été attribué à l'utilisateur.</text>
-    <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="edited">S'il vous plaît choisir une nouvelle photo ici</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="edited">Afficher l'adhésions des anciens rôles</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">Une boîte sera affiché avec tous les rôles de l'utilisateur dans l'organisation actuelle. L'adhésion de départ et la date de fin s'affiche. (Par défaut: oui)</text>
     <text id="PRO_SHOW_MAP_LINK" development="new" translation="edited">Voir la carte des liens</text>
@@ -770,7 +687,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="edited">Tous les invités du site</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Tous les utilisateurs connectés</text>
     <text id="ROL_ANNUALLY" development="new" translation="edited">Chaque année</text>
-    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">Une erreur s'est produite! \n\nLe changement de date n'a pas pu être enregistré.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="edited">En sélectionnant %VAR1_BOLD% tous les rôles et toutes les affectations de membres seront supprimés. Les informations supprimées ne peuvent pas être ouvertes ou récupérés à nouveau.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="edited">Dépendances</text>
     <text id="ROL_DEPENDENT" development="new" translation="edited">Dépendante</text>
@@ -779,7 +695,6 @@
     <text id="ROL_INACTIV_ROLE" development="new" translation="edited">Rôle inactifs</text>
     <text id="ROL_INACTIV_ROLE_DESC" development="new" translation="edited">Vous êtes capable de désactiver la fonction. De cette façon, les informations d'adhésion seront préservés et, plus tard, il sera toujours possible de vérifier qui a été membre du rôle actuel. Cependant ce rôle n'apparaîtra plus dans les aperçus généraux.</text>
     <text id="ROL_INACTIV_ROLES" development="new" translation="edited">Rôles inactifs</text>
-    <text id="ROL_INDEPENDENT" development="new" translation="edited">Indépendant</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="edited">Rôles invisible</text>
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="edited">Aimeriez-vous revenir %VAR1_BOLD% aux rôles actuels?</text>
     <text id="ROL_MEETINGS" development="new" translation="edited">Rencontres</text>
@@ -965,18 +880,6 @@
     <text id="SYS_FONT" development="new" translation="edited">Police</text> 
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Taille de la police</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">J'ai oublié mon mot de passe!</text>
-    <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
-    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">Vous êtes connecté en tant que %VAR1_BOLD% au système de forum %VAR2_BOLD%. Vous avez %VAR3_BOLD% de nouveaux messages.</text>
-    <text id="SYS_FORUM_DESC" development="new" translation="edited">Un lieu virtuel pour échanger idées et expériences.</text>
-    <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="edited">Les champs avec les informations d'accès de ce forum soit n'ont pas été remplies ou n'ont pas été remplis correctement!</text>
-    <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="edited">Erreur de connexion aux bases de données forum! Vérifiez s'il vous plaît les informations d'accès!</text>
-    <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="edited">Vos informations de connexion administrateur du forum %VAR2% ont été synchronisées avec le compte utilisateur Admidio. \nVeuillez utiliser à la prochaine connexion votre nom d'utilisateur et Mot de passe Admidio.</text>
-    <text id="SYS_FORUM_LOGIN_NEW" development="new" translation="edited">Vos informations de connexion Admidio utilisateur ont été transférées à un forum %VAR2%. \nVeuillez utiliser à la prochaine connexion votre nom d'utilisateur et Mot de passe Admidio. \n\nVous êtes connecté à Admidio et au forum %VAR2% en %VAR1% utilisateur avec succès.</text>
-    <text id="SYS_FORUM_LOGIN_PASSWORD" development="new" translation="edited">Votre mot de passe dans le forum système %VAR2% ont été remis à la passe Admidio. \nVeuillez utiliser à la prochaine connexion votre nom d'utilisateur et Mot de passe Admidio. \n\nVous êtes signé pour Admidio et au forum %VAR2% en %VAR1% utilisateur avec succès.</text>
-    <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="new" translation="edited">Vous êtes signé pour Admidio et au forum %VAR2% en %VAR1_BOLD% utilisateur avec succès.</text>
-    <text id="SYS_FORUM_LOGOUT" development="new" translation="edited">Vous succès signés à partir Admidio et le système de forum ..</text>
-    <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Le nom d'utilisateur sélectionné a été supprimé dans le forum et Admidio.</text>
-    <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Le nom d'utilisateur sélectionné existe déjà dans le forum. \ n \ nVeuillez sélectionner un autre nom.</text>
     <text id="SYS_FRIDAY" development="new" translation="edited">vendredi</text>
     <text id="SYS_GENDER" development="new" translation="edited">Sexe</text>
     <text id="SYS_HEADLINE" development="new" translation="edited">Titre</text> 
@@ -986,7 +889,6 @@
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">Erreur HTTP (% 1)</text>
     <text id="SYS_INACTIVE" development="new" translation="edited">Inactifs</text>
     <text id="SYS_INFO" development="new" translation="edited">Infos</text> 
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">Le répertoire d'installation existe toujours sur le serveur. Pour des raisons de sécurité, il doit être supprimé!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Afficher la page invalide</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Invisible</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I / O d'erreur</text>
@@ -1083,7 +985,6 @@
     <text id="SYS_REMOVE" development="new" translation="edited">Supprimer</text>
     <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Retirez le rôle</text>
     <text id="SYS_REPEAT" development="new" translation="edited">Répétez</text>
-    <text id="SYS_REPORT" development="new" translation="edited">Signaler</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="edited">Resctrictions</text>
     <text id="SYS_ROLE" development="new" translation="edited">Rôle</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Enregistrement pas possible. Nombre maximal de rôle de membres dans le rôle %VAR1_BOLD% dépasse la limite prédéfinie.</text>
@@ -1107,16 +1008,12 @@
     <text id="SYS_SET_BY" development="new" translation="edited">Défini par</text>
     <text id="SYS_SETTINGS" development="new" translation="edited">Préférences</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Affichage du calendrier</text>
-    <text id="SYS_SHOW_HELP" development="new" translation="edited">Afficher l'aide</text>
     <text id="SYS_SHOW_PROFILE" development="new" translation="edited"> Afficher le profil</text>
     <text id="SYS_SHOW_ROUTE" development="new" translation="edited">Voir l'itinéraire</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">Au moins un utilisateur avec un nom similaire (%VAR1_BOLD%) a été trouvé dans la base de données.</text>
     <text id="SYS_SINCE" development="new" translation="edited">Depuis %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="edited">de %VAR1% vers %VAR2%</text>
     <text id="SYS_SIZE" development="new" translation="edited">Taille</text>
-    <text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{courant} de {total}</text>
-    <text id="SYS_SLIDESHOW_START" development="new" translation="edited">Démarrer le diaporama</text>
-    <text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">Fin du diaporama</text>
     <text id="SYS_START" development="new" translation="edited" description="Start d'un démarrage date">Démarrer</text>
     <text id="SYS_STATUS" development="new" translation="edited">Statut</text>
     <text id="SYS_STOP" development="new" translation="edited">Arrêtez</text>

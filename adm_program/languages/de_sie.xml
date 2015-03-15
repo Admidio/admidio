@@ -161,7 +161,6 @@
     <text id="DAT_ICAL_DAYS_PAST_DESC" development="changed" translation="todo">Gibt an, wie viele Tage aus der Vergangenheit in einem iCal-Download oder -Abo einbezogen werden.  (Standard: 30)</text>
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="todo">Anmeldung zu diesem Termin ermöglichen</text>
     <text id="DAT_VISIBILITY" development="new" translation="todo">Sichtbarkeit</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füllen Sie die genannten Eingabefelder\nvollständig aus und klicken Sie dann erneut\nauf 'Abschicken'.\n\n %VAR1%</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="todo">Ihre Datenbank liegt in Version %VAR1% vor.\n\nEine Aktualisierung der Datenbank auf Version %VAR2% ist erforderlich.</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="todo">Datenbanksystem</text>
     <text id="INS_FACEBOOK" development="new" translation="todo">Facebook</text>
@@ -195,9 +194,6 @@
     <text id="ORG_VALUE_LIST_DESC" development="new" translation="todo">In diesem Feld können Sie die Einträge für das Dropdown-Listenfeld oder das Optionsfeld eingeben. Pro Zeile kann hier ein Eintrag des Dropdown-Listenfeldes oder des Optionsfeldes erfasst werden.\n\nIm Profil wird später nicht der Text gespeichert, sondern die ausgewählte Position aus der Liste. Ändert man somit den Text in einer Zeile, so erhalten alle bereits zugeordneten Benutzer sofort den neuen Text in ihrem Profil. Verschiebt man allerdings einen Eintrag in eine andere Zeile, so wird bei den Benutzern evtl. ein anderer Eintrag angezeigt.\n\nBei einem Optionsfeld kann anstelle eines Textes auch ein Icon angezeigt werden. Dazu kann der Name eines Icons aus dem Themeordner (Bsp.: ok.png) oder die Url eines externen Bildes (Bsp.: http://www.example.com/example.jpg) angegeben werden. Über einen senkrechten Trennstrich kann optional noch ein Tooltip zum Icon gesetzt werden (Bsp.: female.png|weiblich).</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="todo">Organisationsauswahl anzeigen</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="todo">Sind mehrere Organisationen in der Datenbank eingerichtet, so kann im Anmeldedialog eine Auswahlbox mit allen Organisationen angezeigt werden. Der Benutzer kann dort eine andere Organisation (als in der config.php eingestellt) auswählen, an der er sich anmeldet. Allerdings muss der Benutzer auch an der dieser Organisation registriert sein.</text>
-    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="todo">Organisations- und Regionaleinstellungen</text>
-    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wie vielen Sekunden bei einer Diaschau das nächste Bild geladen werden soll.</text>
     <text id="SYS_CHECKBOX" development="new" translation="todo">Checkbox</text>
     <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="todo">Bestätigung der Eingaben</text>
     <text id="SYS_CONTACT_DETAILS" development="new" translation="todo">Kontaktdaten</text>
@@ -234,38 +230,6 @@
     <text id="SYS_LOADING_CONTENT" development="new" translation="todo">Inhalt wird geladen ...</text>
     <text id="SYS_REGISTRATION_SAVED" development="new" translation="todo">Ihre Daten wurden gespeichert.\n\nEin Login ist noch nicht möglich. Ihre Anmeldung muss erst freigeschaltet werden. Nach der erfolgten Freischaltung werden Sie per E-Mail benachrichtigt.</text>
     <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="todo">RSS-Feed für %VAR1%</text>
-    <text id="SYS_JANUARY" development="new" translation="todo">Januar</text>
-    <text id="SYS_FEBRUARY" development="new" translation="todo">Februar</text>
-    <text id="SYS_MARCH" development="new" translation="todo">März</text>
-    <text id="SYS_APRIL" development="new" translation="todo">April</text>
-    <text id="SYS_MAY" development="new" translation="todo">Mai</text>
-    <text id="SYS_JUNE" development="new" translation="todo">Juni</text>
-    <text id="SYS_JULY" development="new" translation="todo">Juli</text>
-    <text id="SYS_AUGUST" development="new" translation="todo">August</text>
-    <text id="SYS_SEPTEMBER" development="new" translation="todo">September</text>
-    <text id="SYS_OCTOBER" development="new" translation="todo">Oktober</text>
-    <text id="SYS_NOVEMBER" development="new" translation="todo">November</text>
-    <text id="SYS_DECEMBER" development="new" translation="todo">Dezember</text>
-    <text id="SYS_JAN" development="new" translation="todo" description="Abbr. for January">Jan</text>
-    <text id="SYS_FEB" development="new" translation="todo" description="Abbr. for February">Feb</text>
-    <text id="SYS_MAR" development="new" translation="todo" description="Abbr. for March">Mar</text>
-    <text id="SYS_APR" development="new" translation="todo" description="Abbr. for April">Apr</text>
-    <text id="SYS_MAY" development="new" translation="todo" description="Abbr. for May">Mai</text>
-    <text id="SYS_JUN" development="new" translation="todo" description="Abbr. for June">Jun</text>
-    <text id="SYS_JUL" development="new" translation="todo" description="Abbr. for July">Jul</text>
-    <text id="SYS_AUG" development="new" translation="todo" description="Abbr. for August">Aug</text>
-    <text id="SYS_SEP" development="new" translation="todo" description="Abbr. for September">Sep</text>
-    <text id="SYS_OCT" development="new" translation="todo" description="Abbr. for October">Okt</text>
-    <text id="SYS_NOV" development="new" translation="todo" description="Abbr. for November">Nov</text>
-    <text id="SYS_DEC" development="new" translation="todo" description="Abbr. for December">Dez</text>
-    <text id="SYS_MON" development="new" translation="todo" description="Abbr. for Monday">Mo</text>
-    <text id="SYS_TUE" development="new" translation="todo" description="Abbr. for Tuesday">Di</text>
-    <text id="SYS_WED" development="new" translation="todo" description="Abbr. for Wednesday">Mi</text>
-    <text id="SYS_THU" development="new" translation="todo" description="Abbr. for Thursday">Do</text>
-    <text id="SYS_FRI" development="new" translation="todo" description="Abbr. for Friday">Fr</text>
-    <text id="SYS_SAT" development="new" translation="todo" description="Abbr. for Saturday">Sa</text>
-    <text id="SYS_SUN" development="new" translation="todo" description="Abbr. for Monday">So</text>
-    <text id="SYS_TODAY" development="new" translation="todo">Heute</text>
 </version>
 <version id="2.2.0" translator="Jochen Erkens">
     <!-- Phrases only in Announcementmodule -->
@@ -344,8 +308,6 @@
     <text id="DAT_QUOTA_EXCEEDED" development="new" translation="todo">Es dürfen maximal so viele Teilnehmer insgesamt in allen Rollen (Kontigentierung) sein wie Teilnehmer insgesamt (Teilnehmerbegrenzung).</text>
     <text id="DAT_QUOTA_FOR_ROLE" development="new" translation="todo">Es kann nur ein Kontingent für eine Rolle angegeben werden, für die der Termin auch sichtbar ist.</text>
     <text id="DAT_QUOTA_WITH_MAXIMUM" development="new" translation="todo">Eine Kontingentierung kann nur bei einer Teilnehmerbegrenzung stattfinden</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION" development="new" translation="todo">Kalenderauswahlbox anzeigen</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION_DESC" development="new" translation="todo">Eine Auswahlbox für die einzelnen Kalender wird angezeigt, um dem Besucher eine schnelle Suche nach einem Termin zu ermöglichen. (Standard: ja)</text>
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="todo">Wird ein Ort angegeben, so wird versucht ein Link zu Google-Maps zu erstellen, welcher den Ort anzeigt, sowie eine Routenlink ausgehend vom eigenen Wohnort. (Standard: ja)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="todo">Auf Karte zeigen</text>
@@ -369,7 +331,6 @@
     <text id="DOW_ENABLE_DOWNLOAD_MODULE_DESC" development="new" translation="todo">Das Downloadmodul kann über diese Einstellung komplett deaktiviert werden. Es ist dann nicht mehr aufrufbar und wird auch in der Modulübersichtsseite nicht mehr angezeigt. (Standard: ja)</text>
     <text id="DOW_FILE_EXIST" development="new" translation="todo">Die Datei %VAR1% existiert bereits!\n\nBitte wählen Sie einen anderen Dateinamen aus.</text>
     <text id="DOW_FILE_EXTENSION_INVALID" development="new" translation="todo">Dateien dieses Dateityps sind auf dem Server nicht erlaubt.</text>
-    <text id="DOW_FILE_NAME_INVALID" development="new" translation="todo">Der ausgewählte Dateiname enthält ungültige Zeichen!\n\nBitte wählen Sie einen anderen Namen für die Datei aus.</text>
     <text id="DOW_FILE_NAME_RULES" development="new" translation="todo">Die Datei sollte so benannt sein, dass man vom Namen auf den Inhalt schließen kann. Der Dateiname hat Einfluss auf die Anzeigereihenfolge. In einem Ordner in dem z.B. Sitzungsprotokolle gespeichert werden, sollten die Dateinamen immer mit dem Datum beginnen (jjjj-mm-tt).</text>
     <text id="DOW_FILE_NOT_EXISTS" development="new" translation="todo">Die Datei existiert physikalisch nicht mehr auf dem Server. Die Datei sollte aus der Datenbank gelöscht werden.</text>
     <text id="DOW_FILE_RENAME" development="new" translation="todo">Die Datei %VAR1% wurde umbenannt.</text>
@@ -410,50 +371,17 @@
     <text id="ECA_A_ECARD_FROM" development="new" translation="todo">Eine Grußkarte von</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="todo">Grußkarten aktivieren</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="todo">Das Grußkartenmodul kann über diese Einstellung komplett deaktiviert oder aktiviert werden.Falls der Server keinen Mailversand unterstützt, sollte das Modul deaktiviert werden.Dieses Modul steht generell nur eingeloggten Benutzern zur Verfügung. (Standard: ja)</text>
-    <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="todo">Einstellungen einblenden</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="todo">Einstellungen ausblenden</text>
-    <text id="ECA_CONTENT_LOADING" development="new" translation="todo">Inhalt wird geladen - Bitte warten!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="todo">E-Mail-Adresse scheint falsch zu sein!</text>
-    <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="todo">externer Empfänger</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="new" translation="todo">E-Mail des%VAR1%Empfängers</text>
-    <text id="ECA_EMAIL_OF_SENDER" development="new" translation="todo">E-Mail des Absenders</text>
-    <text id="ECA_FIELD_ERROR" development="new" translation="todo">Es sind einige Eingabefelder nicht bzw. nicht richtig ausgefüllt. Bitte füllen Sie sie aus, bzw. korrigiern Sie diese.</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="todo">Bitte füllen Sie die genannten Eingabefelder\nvollständig aus und klick dann erneut\nauf "Abschicken".</text>
     <text id="ECA_GREETING_CARD" development="new" translation="todo">Grußkarte</text>
     <text id="ECA_GREETING_CARDS" development="new" translation="todo">Grußkarten</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="todo">Grußkarte bearbeiten</text>
-    <text id="ECA_GREETING_CARD_SEND" development="new" translation="todo">Grußkarte abschicken</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="todo">Vorschau der Grußkarte</text>
-    <text id="ECA_INPUT_INCORRECT" development="new" translation="todo">Sie haben die folgenden, für die\nGrußkarte notwendigen Eingabefelder\nnicht bzw. nicht richtig ausgefüllt:</text>
-    <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="todo">interner Empfänger</text>
-    <text id="ECA_MAX_CC" development="new" translation="todo">Max. weitere Empfänger</text>
-    <text id="ECA_MAX_CC_DESC" development="new" translation="todo">Hier kann diese Einstellung deaktiviert oder falls gewünscht die max. Anzahl der weiteren Empfängern festgelegt werden. (Standard: 10)</text>
-    <text id="ECA_MESSAGE_TOO_LONG" description="%VAR1% wird durch die max. Länge ersetzt" development="new" translation="todo">Die Nachricht darf maximal %VAR1% Zeichen lang sein!</text>
-    <text id="ECA_MORE_RECIPIENTS" development="new" translation="todo">Weitere Empfänger</text>
-    <text id="ECA_NAME_OF_SENDER" development="new" translation="todo">Name des Absenders</text>
-    <text id="ECA_NAME_OF_RECIPIENT" description="%VAR1% wird durch eine Nummer ersetzt" development="new" translation="todo">Name des%VAR1%Empfängers</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="todo">Neue Nachricht erhalten</text>
-    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="todo">Kein User vorhanden der eine gültige E-mail besitzt!</text>
-    <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="todo">Keine weiteren Empfänger</text>
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="todo">Ihre Grußkarte wurde leider nicht erfolgreich versendet!</text>
-    <text id="ECA_OTHER_RECIPIENT" development="new" translation="todo">Anderer Empfänger</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="todo">Bitte wählen Sie eine gültige Rolle aus!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="todo">Empfänger E-Mail</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="todo">Empfänger Name</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="todo">Es ist ein Fehler bei der Verarbeitung der Grußkarte aufgetreten. Versuchen Sie es bitte zu einem späteren Zeitpunkt noch einmal.</text>
-    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="todo">Skalierung Grußkartenbild (Breite x Höhe)</text>
-    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Grußkarten-Bildes skaliert werden soll. (Standard: 400 x 250 Pixel) </text>
-    <text id="ECA_SCALING_PREVIEW" development="new" translation="todo">Skalierung Vorschaubild (Breite x Höhe)</text>
-    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="todo">Hier kann festgelegt werden auf welchen Wert die Breite und Höhe des Vorschau-Bildes skaliert werden soll. (Standard: 250 x 250 Pixel)</text>
-    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="todo">Ihre Grußkarte wird an die Mitglieder der ausgewählten Rolle geschickt, sofern diese ihre E-Mail-Adresse im System hinterlegt haben.\n\nUnter der Rollenauswahl besteht die Möglichkeit ein Mitglied dieser Rolle oder die gesamte Rolle auszuwählen.</text>
-    <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="todo">noch %VAR1% Zeichen</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="todo">Ihre Grußkarte wurde erfolgreich versendet.</text>
     <text id="ECA_TEMPLATE" development="new" translation="todo">Template</text>
     <text id="ECA_TEMPLATE_DESC" development="new" translation="todo">Hier wird das Standard Template festgelegt. (Standard: Brief standard) </text>
-    <text id="ECA_THE_MESSAGE" development="new" translation="todo">Eine Nachricht</text>
-    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="todo">An die gesamte Rolle</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="todo">Bild in voller Größe anzeigen</text>
-    <text id="ECA_YOUR_MESSAGE" development="new" translation="todo">Ihre Nachricht</text>
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="todo">Zurück zum Gästebuch</text>
@@ -511,14 +439,12 @@
     <text id="INS_DATABASE_IS_UP_TO_DATE" development="new" translation="todo">Die Admidio-Datenbank ist aktuell</text>
     <text id="INS_DATABASE_LOGIN" development="new" translation="todo">Datenbank Zugangsdaten</text>
     <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="todo">Geben Sie in diesem Formular Ihre Zugangsdaten zur Datenbank an. Sie können das Tabellenpräfix auf Wunsch verändern. Dies ist notwendig, falls Sie mehrere Admidio-Installationen auf derselben Datenbank einrichten möchten.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="todo">Eine Aktualisierung der Datenbank ist erforderlich</text>
     <text id="INS_DATABASE_NO_LOGIN" development="new" translation="todo">Mit den Zugangsdaten konnte keine Verbindung zur Datenbank erstellt werden!\n\nKorrigieren Sie gegebenenfalls Ihre Zugangsdaten bzw. kontrollieren Sie, ob die Datenbank online ist.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="todo">Datenbank wird eingerichtet</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="todo">Vorstand des Vereins</text>
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="todo">Hier können Besprechungen stattfinden. Der Raum muss vorher reserviert werden. Beamer steht zur Verfügung.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="todo">Alle Mitglieder der Organisation</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="todo">Gruppe der Administratoren des Systems</text>
-    <text id="INS_DOWNLOAD" development="new" translation="todo">%VAR1% herunterladen</text>
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="todo">Laden Sie die Konfigurationsdatei %VAR1_BOLD% herunter und kopieren Sie diese in das Admidio Hauptverzeichnis. Dort liegt auch schon eine %VAR2_BOLD%.\n\nErst nachdem die Datei dort abgelegt wurde, können Sie mit der Installation fortfahren.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank eingeben</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="todo">Die Datei %VAR1_BOLD% konnte nicht geöffnet werden.</text>
@@ -532,27 +458,17 @@
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="todo">Die Installation war erfolgreich</text>
     <text id="INS_INTERN" development="new" translation="todo">Intern</text>
     <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="todo">Es wurde keine Sprache ausgewählt.</text>
-    <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="todo">Zugangsdaten eines Webmasters</text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="todo">Geben Sie in diesem Formular die Zugangsdaten eines bereits existierenden Webmasters einer bestehenden Organisation ein. Dieser wird der neue Administrator der neuen Organisation mit dem Sie sich direkt an der Organisation anmelden können.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="todo">Die Zugangsdaten des Webmasters sind nicht vollständig eingegeben worden!</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="todo">Die Zugangsdaten entsprechen keinem gültigen Login eines Webmasters einer anderen Organisation!</text>
     <text id="INS_MEMBERSHIP" development="new" translation="todo">Mitgliedschaft</text>
     <text id="INS_MESSENGER" development="new" translation="todo">Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="todo">Es sind nicht alle Zugangsdaten zur MySql-Datenbank eingegeben worden!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="todo">Name der Organisation</text>
-    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="todo">Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, für die Sie Admidio nutzen möchten.</text>
-    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="todo">Geben Sie in diesem Formular die Abkürzung und den offiziellen Namen der Organisation / Verein ein, die Sie nun hinzufügen möchten.</text>
-    <text id="INS_NECESSARY_INFORMATION" development="new" translation="todo">Auf den nächsten Seiten müssen Sie einige notwendige Informationen der neuen Organisation eingeben.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="todo">Die Bezeichnung der Organisation wurde nicht vollständig eingegeben!</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="todo">Das Passwort stimmt nicht mit der Wiederholung überein.</text>
     <text id="INS_PHONE_LIST" development="new" translation="todo">Telefonliste</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die MySQL-Version %VAR2% voraus. Sie sollten versuchen die MySQL-Datenbank zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu Ihrer Datenbank ist.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="todo">Admidio %VAR1% setzt mindestens die PHP-Version %VAR2% voraus. Sie sollten versuchen PHP zu aktualisieren oder eine %VAR3%ältere Admidio-Version%VAR4% nutzen, welche kompatibel zu dieser PHP-Version ist.</text>
-    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="todo">Bisherige Admidio-Version</text>
-    <text id="INS_SET_ADMINISTRATOR" development="new" translation="todo">Administrator festlegen</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="todo">Organisation festlegen</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="todo">Organisation einrichten</text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="todo">Die neue Organisation %VAR1_BOLD% wurde eingerichtet und die Konfigurationsdatei erstellt. Sie können nun mit Admidio arbeiten und sich mit den Daten des Administrators anmelden.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="todo">Die Einrichtung war erfolgreich</text>
     <text id="INS_SKYPE" development="new" translation="todo">Skype</text>
     <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="todo">Wir würden uns freuen, wenn Sie die weitere Entwicklung von Admidio mit einer Spende unterstützen würdent!</text>
@@ -563,13 +479,11 @@
     <text id="INS_TRAINING" development="new" translation="todo">Training</text>
     <text id="INS_UPDATE" development="new" translation="todo">Update</text>
     <text id="INS_UPDATE_DATABASE" development="new" translation="todo">Datenbank aktualisieren</text>
-    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="new" translation="todo">Bisher wurde eine Version 1.x von Admidio verwendet. Um die Datenbank erfolgreich auf Admidio %VAR1% zu migrieren, ist es erforderlich, dass Sie Ihre bisherige Version angeben.</text>
     <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="new" translation="todo">Die Admidio-Datenbank ist jetzt auf die Version %VAR1% aktualisiert worden.\nSie können nun wieder mit Admidio arbeiten.</text>
     <text id="INS_UPDATE_VERSION" development="new" translation="todo">Update auf Version %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="todo">Die Aktualisierung war erfolgreich</text>
     <text id="INS_WARNING_BETA_VERSION" development="new" translation="todo">Dies ist eine Beta-Version von Admidio.\n\nSie kann zu Stabilitätsproblemen und Datenverlust führen und sollte deshalb nur in einer Testumgebung genutzt werden!</text>
     <text id="INS_WARNING_SAFE_MODE" development="new" translation="todo">Auf Ihrem Server ist der Safe Mode aktiviert. Bei eingeschaltetem Safe Mode kann es später zu Problemen bei der Nutzung einiger Funktionen kommen.</text>
-    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="todo">Willkommen zur Einrichtung einer weiteren Organisation</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="todo">Willkommen zur Installation von Admidio</text>
     <text id="INS_WELCOME_TEXT" development="new" translation="todo">Auf den nächsten Seiten müssen einige notwendige Informationen für die Einrichtung von Admidio eingeben werden. Sie benötigen dazu unter anderem die Zugangsdaten zu der Datenbank, auf der Admidio zukünftig laufen soll.</text>
     <text id="INS_YAHOO_MESSENGER" development="new" translation="todo">Yahoo! Messenger</text>
@@ -600,7 +514,6 @@
     <text id="LST_ACTIVE_MEMBERS" development="new" translation="todo">Aktive Mitglieder</text>
     <text id="LST_ACTIVE_ROLES" development="new" translation="todo">Übersicht der aktiven Rollen</text>
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="todo">Weitere Spalte hinzufügen</text>
-    <text id="LST_CATEGORY_NO_LISTS" development="new" translation="todo">Diese Kategorie enthält keine zur Ansicht freigegebenen Listen.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="todo">Möchten Sie eine gespeicherte Konfiguration laden und verändern oder eine neue Listenkonfiguration erstellen?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="todo">Wählen Sie eine Rolle aus, von der Sie die konfigurierte Mitgliederliste anzeigen möchten.</text>
     <text id="LST_COLUMN" development="new" translation="todo">Spalte</text>    
@@ -699,7 +612,6 @@
     <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="todo">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</text>
     <text id="MAI_SHOW_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_SUBJECT" development="new" translation="todo">Betreff</text>
-    <text id="MAI_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="todo">die Rolle %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="todo">Felder zuordnen</text>
@@ -734,8 +646,6 @@
     <text id="MEM_ROLE_SELECT_RIGHT" development="new" translation="todo">Sie Haben keine Berechtigung, die Rolle %VAR1% auszuwählen.\nBitte wählen Sie eine andere Rolle aus.</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="todo">E-Mail mit Benutzernamen und neuem Passwort zuschicken</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="todo">Alle Benutzer anzeigen</text>
-    <text id="MEM_SHOW_MEMBERS" development="new" translation="todo">Momentan werden nur aktive Mitglieder angezeigt. Klicken Sie hier um alle Benutzer aus der Datenbank anzuzeigen.</text>
-    <text id="MEM_SHOW_USERS" development="new" translation="todo">Momentan werden alle Benutzer aus der Datenbank angezeigt. Klicken Sie hier um nur aktive Mitglieder anzuzeigen.</text>
     <text id="MEM_UPDATED_ON" development="new" translation="todo">Aktualisiert am</text>
     <text id="MEM_USER_DELETE" development="new" translation="todo">Wollen Sie %VAR1_BOLD% wirklich löschen?\n\nDer Benutzer wird damit physikalisch in der Datenbank gelöscht und ein Zugriff auf seine Daten ist nicht mehr möglich.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="todo">Benutzerverwaltung</text>
@@ -749,7 +659,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="todo">Mitgliedschaft und Logindaten diesem Benutzer zuordnen</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="todo">Registrierung zuordnen</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="todo">Registrierung löschen</text>
-    <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="todo">Neue Registrierungen verwalten.</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="todo">Besucher, die sich auf der Homepage registriert haben, werden hier aufgelistet und können freigeschaltet oder abgewiesen werden.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="todo">Neue Registrierungen</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="todo">Dieser Benutzer ist noch kein Mitglied der Organisation %VAR1%, besitzt aber bereits Logindaten.</text>
@@ -762,23 +671,14 @@
     <text id="NWU_USER_VALID_LOGIN" development="new" translation="todo">Dieser Benutzer besitzt schon ein gültiges Login.</text>
 
     <!-- Phrases only in Organizationadministration -->
-    <text id="ORG_ACCESS_DATA_ADMIDIO" development="new" translation="todo">Zugangsdaten von Admidio verwenden</text>
-    <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="new" translation="todo">Läuft das Forum über dieselbe Datenbank, wie Admidio, so kann dieses Flag gesetzt werden und die Zugangsdaten müssen nicht mehr eingegeben werden. (Standard: nein)</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE" development="new" translation="todo">Zugangsdaten zur Datenbank des Forums</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE_DESC" development="new" translation="todo">Läuft das Forum auf einer anderen Datenbank als Admidio, so müssen die Zugangsdaten zu dieser Datenbank angegeben werden.</text>
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="todo">Zugriff auf Modul</text>
     <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="todo">Das Modul kann über diese Einstellung komplett deaktiviert oder nur für angemeldete Benutzer freigegeben werden. Haben nur angemeldete Benutzer Zugriff, so wird das Modul für Besucher ausgeblendet. Der RSS-Feed ist dann allerdings für beide Gruppen nicht mehr aufrufbar. (Standard: Aktiviert)</text>
-    <text id="ORG_ACTIVATE_FORUM" development="new" translation="todo">Forum aktivieren</text>
-    <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="todo">%VAR1% Admidio selber verfügt über kein Forum. Allerdings kann ein bestehendes externes Forum (momentan nur phpBB 2.0) eingebunden werden. (Standard: nein)</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="todo">Forum Link Intern aktivieren</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="todo">Aktiviert: Forum wird innerhalb des Admidio Layouts angezeigt. (Standard)\nDeaktiviert: Forum wird in einem neuen Browserfenster angezeigt.</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="todo">Zusätzliche Variablen</text>
     <text id="ORG_ADMIDIO_THEME" development="new" translation="todo">Admidio-Theme</text>
     <text id="ORG_ADMIDIO_THEME_DESC" development="new" translation="todo">Das aktuelle Admidio-Layout kann hier ausgewählt werden. Es werden alle Layouts aus dem Ordner adm_themes angezeigt. (Standard: modern)</text>
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="todo">Erweiterte Registrierung</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="todo">Automatischer Logout nach</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="todo">Dieser Wert gibt an, nach wieviel Minuten ein inaktiver Benutzer automatisch ausgeloggt wird. Inaktiv ist ein Benutzer solange er keine Seite des Admidio-Systems aufruft. Diese Einstellung wird ignoriert, falls der Benutzer %VAR1_BOLD% ausgewählt hat. (Standard: 20 Minuten)</text>    
-    <text id="ORG_CAPTCHA" development="new" translation="todo">Hier können die Einstellungen des Captchas vorgenommen werden.</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="todo">Hintergrundfarbe</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="todo">Hier kann die Hintergrundfarbe (Hex-Angabe) für den Captcha-Code ausgewählt werden. (Standard: #FFEFC4)</text>
     <text id="ORG_CAPTCHA_FONT" development="new" translation="todo">Hier kann die Schriftart für den Captcha-Code ausgewählt werden. (Standard: Theme-Schriftart)</text>
@@ -791,7 +691,6 @@
     <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="todo">Hier kann der Untertitel des Captchas festgelegt werden. Es wird die Standard-Schriftart aus dem aktuellen Theme verwendet.</text>
     <text id="ORG_CAPTCHA_SIGNS" development="new" translation="todo">Zulässige Captcha-Zeichen</text>
     <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="todo">Hier können die zu verwendenen Captcha-Zeichen angegeben werden.</text>
-    <text id="ORG_CAPTCHA_SCALING" development="new" translation="todo">Skalierung des Captchas (Breite x Höhe)</text>
     <text id="ORG_CAPTCHA_TYPE" development="new" translation="todo">Captcha Art</text>
     <text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="todo">Rechenaufgabe</text>
     <text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="todo">Bildchen</text>
@@ -809,16 +708,11 @@
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="todo">Captcha aktivieren</text>
     <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="todo">RSS-Feeds aktivieren</text>
     <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="todo">Admidio kann RSS-Feeds für verschiedene Module (Ankündigungen, Termine, Gästebuch, Fotogalerien und Weblinks) auf den jeweiligen Übersichtsseiten bereitstellen, die dann über den Browser einem Feedreader zugeordnet werden können. (Standard: ja)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER" development="new" translation="todo">Admidiobenutzer exportieren</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER_DESC" development="new" translation="todo">Vorhandene Admidiobenutzer werden automatisch beim Anmelden des Benutzers ins Forum exportiert und dort als Forumsbenutzer angelegt. (Standard: ja)</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS" development="new" translation="todo">Webmasterstatus ins Forum exportieren</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="new" translation="todo">Existierende Admidio-Webmaster bekommen automatisch den Status eines Forumadministrators. (Standard: ja)</text>
     <text id="ORG_FAST_REGISTRATION" development="new" translation="todo">Schnelle Registrierung</text>
     <text id="ORG_FIELD_DESCRIPTION" development="new" translation="todo">Es können beliebig viele zusätzliche Felder definiert werden. Diese werden im Profil der einzelnen Benutzer angezeigt und können dort auch bearbeitet werden. Außerdem stehen diese Felder bei den Eigenen Listen zur Verfügung.</text>
     <text id="ORG_FIELD_DISABLED" development="new" translation="todo">Feld nur für Benutzer mit dem Recht "Alle Benutzer bearbeiten" editierbar</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="todo">Wird ein Feld gesperrt, so können Benutzer im eigenen Profil dieses Feld nicht bearbeiten. Es kann nur noch von Benutzern bearbeitet werden, die das Rollenrecht besitzen alle Benutzer zu bearbeiten.</text>
     <text id="ORG_FIELD_DOWN" development="new" translation="todo">Profilfeld nach unten verschieben</text>
-    <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="todo">Das Feld %VAR1_BOLD% im Bereich %VAR2_BOLD% ist nicht gefüllt.</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="todo">Es existiert bereits ein Feld in dieser Kategorie mit demselben Namen.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="todo">Feld nur für berechtigte Benutzer (eigenes Profil &amp; Rollenrecht) sichtbar</text>
     <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="todo">Ein Feld ist normalerweise für alle Benutzer sichtbar. Wird diese Funktion nicht ausgewählt, so können die Daten nur von Benutzern gesehen werden, die das Recht haben alle Benutzer zu bearbeiten. Im eigenen Profil kann der Benutzer diese Daten auch sehen.</text>
@@ -828,10 +722,6 @@
     <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="todo">Feld für alle Benutzer sichtbar</text>
     <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="todo">Feld muss nicht zwingend ausgefüllt werden</text>
     <text id="ORG_FIELD_UP" development="new" translation="todo">Profilfeld nach oben verschieben</text>
-    <text id="ORG_FORUM_TABLE_PREFIX" development="new" translation="todo">Forum-Tabellen-Präfix</text>
-    <text id="ORG_FORUM_TABLE_PREFIX_DESC" development="new" translation="todo">Hier wird das Präfix der Tabellen des phpBB-Forums angegeben. Hier muss dasselbe Präfix angegeben werden, welches im phpBB-Forum eingestellt wurde. (Beispiel: phpbb)</text>
-    <text id="ORG_FORUM_WIDTH" development="new" translation="todo">Forum Breite</text>
-    <text id="ORG_FORUM_WIDTH_DESC" development="new" translation="todo">%VAR1% Achtung, ändern des Wertes kann das Layout verrutschen lassen. (Standard: 570Pixel)</text>
     <text id="ORG_HOMEPAGE_REGISTERED_USERS" development="new" translation="todo">Auf diese Seite wird der Benutzer geleitet, sobald er sich angemeldet hat. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</text>
     <text id="ORG_HOMEPAGE_VISITORS" development="new" translation="todo">Diese Seite ist die Standard-Startseite von Admidio auf die Besucher geleitet werden. Der Pfad zu der Seite muss relativ zum Admidio-Verzeichnis angegeben werden.\n(Beispiel: adm_program/index.php)</text>
     <text id="ORG_LOGIN_AUTOMATICALLY" development="new" translation="todo">Automatisch anmelden</text>
@@ -860,7 +750,6 @@
     <text id="ORG_TIME_FORMAT" development="new" translation="todo">Zeitformat</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="todo">Das Format entspricht der PHP-Funktion %VAR1%. (Standard: H:i)</text>
     <text id="ORG_URL" development="new" translation="todo">URL</text>
-    <text id="ORG_USED_FORUM" development="new" translation="todo">Genutztes Forum</text>
     <text id="ORG_VARIABLE_ACTIVATION_LINK" development="new" translation="todo">Aktivierungslink für das neue Passwort</text>
     <text id="ORG_VARIABLE_EMAIL" development="new" translation="todo">E-Mail des Benutzers aus dem jeweiligen Mailkontext</text>
     <text id="ORG_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="todo">Systememailadresse der Organisation</text>
@@ -871,7 +760,6 @@
     <text id="ORG_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="todo">Kurzbezeichnung der Organisation</text>
     <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="todo">URL der Webseite der Organisation</text>
     <text id="ORG_VARIABLE_USERNAME" development="new" translation="todo">Benutzername des Benutzers aus dem jeweiligen Mailkontext</text>
-    <text id="ORG_WHICH_FORUM_USED" development="new" translation="todo">Welches Forum soll genutzt werden?</text>
     
     <!-- Phrases only in Updatecheck -->
     <text id="UPD_ADMIDIO" development="new" translation="todo">Zur Admidio-Updateseite wechseln</text>
@@ -886,12 +774,10 @@
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="todo">Album</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="todo">Album Löschen</text>
-    <text id="PHO_ALBUM_HELP_DESC" development="new" translation="todo">Alle notwendigen Felder sollten ausgefüllt werden. Die Felder Album und Beginn sind Pflichtfelder und müssen somit ausgefüllt werden.\nGgf. auswählen welchem Album das neue Album untergeordnet werden soll, z.B. Tag 3 in Turnier 2010. Solche Unterteilungen sind empfehlenswert bei vielen Fotos.\nNur freigegebene Alben sind für Webseitenbesucher sichtbar. Möchte man z.B. erst alle Fotos hochladen oder auch nur schon mal alle Daten eintragen, kann man die Freigabe einfach später setzen.\nDanach auf Speichern klicken.</text>
     <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="todo">Das Album ist momentan gesperrt und wird Besuchern aus diesem Grund nicht angezeigt. Sie können das Album über das Schlüsselsymbol in der Bearbeitungszeile freigeben.</text>
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="todo">Das Album wurde erfolgreich angelegt / geändert</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="todo">Alben-Verwaltung</text>
     <text id="PHO_BACK_TO_ALBUM" development="new" translation="todo">zurück zum Album</text>
-    <text id="PHO_COLORBOX" development="new" translation="todo">ColorBox</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="todo">Album anlegen</text>
     <text id="PHO_DISPLAY_PHOTOS" development="new" translation="todo">Fotodarstellung</text>
     <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="todo">Hier kann eingestellt werden, wie die Fotos im Fotomodul präsentiert werden sollen. Dies kann über ein Popup-Fenster, über eine Javascript-Animation (ColorBox) oder auf dergleichen Seite in HTML erfolgen. (Standard: ColorBox)</text>
@@ -899,16 +785,12 @@
     <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="todo">Ein neues Fotoalbum wurde angelegt</text>
     <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="todo">Es wurde ein neues Fotoalbum bei %VAR1% angelegt.\n\nTitel: %VAR2%\nAngelegt von: %VAR3%\nAngelegt am: %VAR4%</text>
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="todo">Der zugehörige Ordner wurde nicht gefunden. Sollte er bewusst über FTP gelöscht worden sein oder nicht mehr die Möglichkeit bestehen ihn wieder herzustellen, dann bitte den Ordner über die Oberfläche löschen.\nBesuchern der Webseite ohne Fotoverwaltungsrecht, wird dieses Album nicht mehr angezeigt.</text>
-    <text id="PHO_MAX_PHOTO_SIZE" development="new" translation="todo">Max. Bildanzeigegröße (Breite x Höhe)</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="todo">Die angegebenen Werte bestimmen die maximale Größe, die ein Bild im Anzeigefenster haben darf. Das Fenster im Popup- bzw. Colorboxmodus wird automatisch in der Größe angepasst. Idealerweise orientiert sich dieser Wert an der Skalierung beim Hochladen, so dass die Bilder für die Anzeige nicht neu skaliert werden müssen. (Standard: 640 x 400 Pixel)</text>
-    <text id="PHO_MULTIUPLOAD" development="new" translation="todo">Multiupload</text>
-    <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="todo">Der Multiupload ermöglicht eine komfortable Möglichkeit mehrere Fotos gleichzeitig auszuwählen und hochzuladen. Allerdings wird dies mit Hilfe einer Flashanwendung gemacht. Ist kein Flash (Version 9+) installiert oder diese Option nicht aktiviert, so wird automatisch die Einzelauswahl per HTML dargestellt. (Standard: ja)</text>
     <text id="PHO_NEXT_PHOTO" development="new" translation="todo">Nächstes Bild</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="todo">Dieses Album enthält leider noch keine Fotos.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="todo">Die Seite wurde ungültig aufgerufen oder die Datei(en) konnte nicht hochgeladen werden.\nVermutlich wurde die vom Server vorgegebene, maximale Uploadgröße von %VAR1%B. übersteigen!</text>
     <text id="PHO_NO_FILES_SELECTED" development="new" translation="todo">Sie haben keine Fotodateien ausgewählt, die hinzugefügt werden sollen.</text>
     <text id="PHO_NO_RIGHTS" development="new" translation="todo">Sie haben keine Rechte, diese Aktion auszuführen.\n\nNur eingeloggte Benutzer mit Fotoverwaltungsrecht können Fotos verwalten.</text>
-    <text id="PHO_NUMBER_OF_FOTOS" development="new" translation="todo">Bilderanzahl</text>
     <text id="PHO_PARENT_ALBUM" development="new" translation="todo">Elternalbum</text>
     <text id="PHO_PHOTO_ALBUMS" development="new" translation="todo">Fotoalben</text> 
     <text id="PHO_PHOTO_DELETE" development="new" translation="todo">dieses Foto löschen</text>
@@ -941,8 +823,6 @@
     <text id="PHO_SHOW_CAPTION" development="new" translation="todo">Bildtext einblenden</text>
     <text id="PHO_SHOW_CAPTION_DESC" development="new" translation="todo">Der eingegebene Text wird in allen angezeigten Fotos, ab einer Skalierung von 200 Pixeln der längeren Seite, eingeblendet. (Standard: &#169; %VAR1%)</text>
     <text id="PHO_SHOWN_ON_READY"  development="new" translation="todo">Die Fotos wurden dem Album erfolgreich hinzugefügt, wenn sie hier angezeigt werden.</text>
-    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="todo">Diaschaugeschwindigkeit</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="todo">Der Wert gibt an, nach wievielen Sekunden bei einer Diashau das nächste Bild geladen werden soll.</text>
     <text id="PHO_THUMBNAILS_PER_PAGE" development="new" translation="todo">Thumbnails pro Seite (Spalten x Zeilen)</text>
     <text id="PHO_THUMBNAILS_PER_PAGE_DESC" development="new" translation="todo">Der hier angegebene Wert bestimmt wieviele Spalten und Zeilen an Thumbnails auf einer Seite angezeigt werden. (Standard: 3 x 5)</text>
     <text id="PHO_UPLOAD_HELP_1" development="new" translation="todo">Auf den Button %VAR1_BOLD% klicken und die gewünschte(n) Fotodatei(en) von der Festplatte auswählen.</text>
@@ -1000,7 +880,6 @@
     <text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="todo">Die hochgeladene Datei darf nicht größer als %VAR1% MB sein.</text>
     <text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="todo">Rollenmitgliedschaften anderer Organisationen</text>
     <text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="todo">Die Daten können nicht gespeichert werden.\nDem Benutzer wurden keine Rollen zugeordnet.</text>
-    <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="todo">Bitte hier ein neues Foto auswählen</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="todo">Ehemalige Rollenmitgliedschaften anzeigen</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="todo">Es wird ein Kasten mit allen Rollen dieser Organisation angezeigt, bei denen der Benutzer Mitglied war. Dazu wird das entsprechende Eintritts- und Austrittsdatum angezeigt. (Standard: ja)</text>
     <text id="PRO_SHOW_MAP_LINK" development="new" translation="todo">Kartenlink anzeigen</text>
@@ -1023,7 +902,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="todo">Alle Besucher der Seite</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="todo">Alle angemeldeten Benutzer</text>
     <text id="ROL_ANNUALLY" development="new" translation="todo">Jährlich</text>
-    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="todo">Es ist ein Fehler aufgetreten!\n\nDie Datumsänderung konnte nicht gespeichert werden.</text>
     <text id="ROL_HINT_DELETE_ROLE" development="new" translation="todo">Wenn Sie %VAR1_BOLD% auswählen, wird die Rolle und alle Mitgliedszuordnungen entgültig aus der Datenbank entfernt und es ist später nicht mehr möglich Daten dieser Rolle einzusehen.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="todo">Abhängigkeiten</text>
     <text id="ROL_DEPENDENT" development="new" translation="todo">Abhängig</text>
@@ -1032,7 +910,6 @@
     <text id="ROL_INACTIV_ROLE" development="new" translation="todo">Inaktive Rolle</text>
     <text id="ROL_INACTIV_ROLE_DESC" development="new" translation="todo">Sie können die Rolle zu einer inaktiven Rolle machen. Dies hat den Vorteil, dass die Daten (Mitgliederzuordnung) erhalten bleiben und Sie sei später immer wieder sehen können, welche Personen dieser Rolle zugeordnet waren. Allerdings erscheint die Rolle nicht mehr in den üblichen Übersichten.</text>
     <text id="ROL_INACTIV_ROLES" development="new" translation="todo">Inaktive Rollen</text>
-    <text id="ROL_INDEPENDENT" development="new" translation="todo">Unabhängig</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="todo">Unsichtbare Rollen</text>
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="todo">Wollen Sie den Verweis auf die ehemalige Mitgliedschaft bei der Rolle %VAR1_BOLD% wirklich entfernen?</text>
     <text id="ROL_MEETINGS" development="new" translation="todo">Treffen</text>
@@ -1213,18 +1090,6 @@
     <text id="SYS_FONT" development="new" translation="todo">Schriftart</text>
     <text id="SYS_FONT_SIZE" development="new" translation="todo">Schriftgröße</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="todo">Ich habe mein Passwort vergessen!</text>
-    <text id="SYS_FORUM" development="new" translation="todo">Forum</text>
-    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="todo">Sie sind als %VAR1_BOLD% im Forum %VAR2_BOLD% angemeldet und haben %VAR3_BOLD% neue Nachrichten.</text>
-    <text id="SYS_FORUM_DESC" development="new" translation="todo">Der virtuelle Treffpunkt zum Austausch von Gedanken und Erfahrungen.</text>
-    <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="todo">Es wurden entweder die Felder für die Zugangsdaten des Forums nicht oder nicht richtig ausgefüllt!</text>
-    <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="todo">Es konnte keine Verbindung zur Forumsdatenbank hergestellt werden! Überprüfen Sie bitte die Zugangsdaten auf Richtigkeit!</text>
-    <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="todo">Ihr Administrator-Account vom Forum %VAR2% wurde auf den Admidio-Account zurückgesetzt.\nVerwenden Sie beim nächsten Login im Forum bitte Ihren Admidio-Benutzernamen und Ihr Admidio-Passwort.\n\nSie wurden erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
-    <text id="SYS_FORUM_LOGIN_NEW" development="new" translation="todo">Ihr Admidio-Account wurde in das Forum %VAR2% exportiert und angelegt.\nVerwenden Sie beim nächsten Login im Forum bitte Ihren Admidio-Benutzernamen und Ihr Admidio-Passwort.\n\nSie wurden erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
-    <text id="SYS_FORUM_LOGIN_PASSWORD" development="new" translation="todo">Ihr Password im Forum %VAR2% wurde auf das Admidio-Passwort zurückgesetzt.\nVerwenden Sie beim nächsten Login im Forum bitte Ihr Admidio-Passwort.\n\nSie wurden erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1% angemeldet.</text>
-    <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="new" translation="todo">Sie haben sich erfolgreich auf Admidio und im Forum %VAR2% als Benutzer %VAR1_BOLD% angemeldet.</text>
-    <text id="SYS_FORUM_LOGOUT" development="new" translation="todo">Sie wurden erfolgreich auf Admidio und im Forum abgemeldet.</text>
-    <text id="SYS_FORUM_USER_DELETE" development="new" translation="todo">Der gewählte Benutzername wurde im Forum und in Admidio gelöscht.</text>
-    <text id="SYS_FORUM_USER_EXIST" development="new" translation="todo">Der gewählte Benutzername existiert im Forum schon.\n\nWählen Sie bitte einen anderen Namen.</text>
     <text id="SYS_FRIDAY" development="new" translation="todo">Freitag</text>
     <text id="SYS_GENDER" development="new" translation="todo">Geschlecht</text>
     <text id="SYS_HEADLINE" development="new" translation="todo">Überschrift</text>
@@ -1234,7 +1099,6 @@
     <text id="SYS_HTTP_ERROR" development="new" translation="todo">HTTP Fehler (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="todo">Inaktiv</text>
     <text id="SYS_INFO" development="new" translation="todo">Info</text>
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="todo">Das Installationsverzeichnis 'adm_install' existiert noch auf dem Server. Aus Sicherheitsgründen muss dieses gelöscht werden!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="todo">Ungültiger Seitenaufruf</text>
     <text id="SYS_INVISIBLE" development="new" translation="todo">Unsichtbar</text>
     <text id="SYS_IO_ERROR" development="new" translation="todo">E/A Fehler</text>
@@ -1330,7 +1194,6 @@
     <text id="SYS_REMOVE" development="new" translation="todo">Entfernen</text>
     <text id="SYS_REMOVE_ROLE" development="new" translation="todo">Rolle entfernen</text>
     <text id="SYS_REPEAT" development="new" translation="todo">Wiederholen</text>
-    <text id="SYS_REPORT" development="new" translation="todo">Bericht</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="todo">Einschränkungen</text>
     <text id="SYS_ROLE" development="new" translation="todo">Rolle</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="todo">Speichern ist nicht möglich, bei der Rolle %VAR1_BOLD% würde die maximale Mitgliederzahl überschritten.</text>
@@ -1353,16 +1216,12 @@
     <text id="SYS_SET_BY" development="new" translation="todo">Gesetzt durch</text>
     <text id="SYS_SETTINGS" development="new" translation="todo">Einstellungen</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="todo">Kalender anzeigen</text>
-    <text id="SYS_SHOW_HELP" development="new" translation="todo">Hilfe anzeigen</text>
     <text id="SYS_SHOW_PROFILE" development="new" translation="todo">Profil anzeigen</text>
     <text id="SYS_SHOW_ROUTE" development="new" translation="todo">Route anzeigen</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="todo">Es wurden bereits Benutzer mit ähnlichem Namen wie %VAR1_BOLD% in der Datenbank gefunden.</text>
     <text id="SYS_SINCE" development="new" translation="todo">seit %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="todo">seit %VAR1% bis %VAR2%</text>
     <text id="SYS_SIZE" development="new" translation="todo">Größe</text>
-    <text id="SYS_SLIDESHOW_CURRENT" development="new" translation="todo">{current} von {total}</text>
-    <text id="SYS_SLIDESHOW_START" development="new" translation="todo">Diashow starten</text>
-    <text id="SYS_SLIDESHOW_STOP" development="new" translation="todo">Diashow anhalten</text>
     <text id="SYS_START" description="Start of a date" development="new" translation="todo">Beginn</text>
     <text id="SYS_STATUS" development="new" translation="todo">Status</text>
     <text id="SYS_STOP" development="new" translation="todo">Stop</text>

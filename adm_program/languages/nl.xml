@@ -154,7 +154,6 @@
     <text id="DAT_REGISTRATION_POSSIBLE" development="changed" translation="edited">Registreren voor deze afspraak inschakelen.</text>
     <text id="DAT_PARTICIPATE_AT_DATE" development="changed" translation="edited">Afspraak goedkeuren</text>
     <text id="DAT_VISIBILITY" development="new" translation="edited">Zichtbaarheid</text>
-    <text id="ECA_FILL_INPUTS" development="new" translation="edited">Vul svp alle velden in\n\nen klik weer op %VAR1_BOLD%.</text>
     <text id="INS_DATABASE_NEEDS_UPDATED_VERSION" development="new" translation="edited">Uw database versie is %VAR1%.\nUpdate naar versie %VAR2% is noodzakelijk</text>
     <text id="INS_DATABASE_SYSTEM" development="new" translation="edited">Database systeem</text>
     <text id="INS_FACEBOOK" development="new" translation="edited">Facebook</text>
@@ -187,9 +186,6 @@
     <text id="ORG_VALUE_LIST_DESC" development="new" translation="edited">Bepaal hier de items van de drop-down of selectieboxen. Per regel kan 1 drop-down box of selectiebox opgegeven worden.\n\nIn plaats van de tekst wordt de geselecteerde positie in de lijst in het profiel opgeslagen. Als in de tekst een regel veranderd, zullen alle gebruikers deze nieuwe tekst direct in hun profiel kunnen zien. Als een menu item naar een andere regel wordt verplaatst, kan een ander item worden getoond in het gebruikersprofiel.\n\nBij een selectiebox kan ook een icoon weergegeven worden. Om dit te doen kan de naam van de icoon opgegeven worden (b.v. ok.png) of de externe URL van een afbeelding (v.b. http://www.example.com/example.jpg). Door verticale scheidslijn te gebruiken kan een extra tekstbaloon aan het icoon gekoppeld worden (v.b. vrouw.png|vrouw)</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT" development="new" translation="edited">Toon selectie van organisatie</text>
     <text id="ORG_SHOW_ORGANIZATION_SELECT_DESC" development="new" translation="edited">Als er meerdere organisaties in de database staan, zal in het inlog scherm een selectiebox getoond worden met alle beschikbare organisaties. De gebruiker kan dan inloggen bij een andere organisatie (een andere die staat in het config.php bestand). Echter, de gebruiker moet een geregistreerd gebruiker zijn van de geselecteerde organisatie.</text>
-    <text id="ORG_ORGANIZATION_REGIONAL_SETTINGS" development="new" translation="edited">Voorkeuren organisatie en regio</text>
-    <text id="PHO_SLIDESHOW_SPEED" development="new" translation="edited">Snelheid slide show</text>
-    <text id="PHO_SLIDESHOW_SPEED_DESC" development="new" translation="edited">Bepaal de vertraging in seconden totdat de volgende afbeelding wordt geladen.</text>
     <text id="SYS_CHECKBOX" development="new" translation="edited">Selectiebox</text>
     <text id="SYS_CONFIRMATION_OF_INPUT" development="new" translation="edited">Bevestig waarde</text>
     <text id="SYS_CONTACT_DETAILS" development="new" translation="edited">Contact informatie</text>
@@ -228,38 +224,6 @@
     <text id="SYS_LOADING_CONTENT" development="new" translation="edited">Laden...</text>
     <text id="SYS_REGISTRATION_SAVED" development="new" translation="edited">Uw gegevens zijn opgeslagen.\n\nNa goedkeuring kunt u inloggen. U zult per e-mail hierover worden geinformeerd.</text>
     <text id="SYS_RSS_FEED_FOR_VAR" development="new" translation="edited">RSS-Feed voor %VAR1%</text>
-    <text id="SYS_JANUARY" development="new" translation="edited">Januari</text>
-    <text id="SYS_FEBRUARY" development="new" translation="edited">Februari</text>
-    <text id="SYS_MARCH" development="new" translation="edited">Maart</text>
-    <text id="SYS_APRIL" development="new" translation="edited">April</text>
-    <text id="SYS_MAY" development="new" translation="edited">Mei</text>
-    <text id="SYS_JUNE" development="new" translation="edited">Juni</text>
-    <text id="SYS_JULY" development="new" translation="edited">Juli</text>
-    <text id="SYS_AUGUST" development="new" translation="edited">Augustus</text>
-    <text id="SYS_SEPTEMBER" development="new" translation="edited">September</text>
-    <text id="SYS_OCTOBER" development="new" translation="edited">Oktober</text>
-    <text id="SYS_NOVEMBER" development="new" translation="edited">November</text>
-    <text id="SYS_DECEMBER" development="new" translation="edited">December</text>
-    <text id="SYS_JAN" development="new" translation="edited" description="Abbr. for January">Jan</text>
-    <text id="SYS_FEB" development="new" translation="edited" description="Abbr. for February">Feb</text>
-    <text id="SYS_MAR" development="new" translation="edited" description="Abbr. for March">Mar</text>
-    <text id="SYS_APR" development="new" translation="edited" description="Abbr. for April">Apr</text>
-    <text id="SYS_MAY" development="new" translation="edited" description="Abbr. for May">Mei</text>
-    <text id="SYS_JUN" development="new" translation="edited" description="Abbr. for June">Jun</text>
-    <text id="SYS_JUL" development="new" translation="edited" description="Abbr. for July">Jul</text>
-    <text id="SYS_AUG" development="new" translation="edited" description="Abbr. for August">Aug</text>
-    <text id="SYS_SEP" development="new" translation="edited" description="Abbr. for September">Sep</text>
-    <text id="SYS_OCT" development="new" translation="edited" description="Abbr. for October">Okt</text>
-    <text id="SYS_NOV" development="new" translation="edited" description="Abbr. for November">Nov</text>
-    <text id="SYS_DEC" development="new" translation="edited" description="Abbr. for December">Dec</text>
-    <text id="SYS_MON" development="new" translation="edited" description="Abbr. for Monday">Maa</text>
-    <text id="SYS_TUE" development="new" translation="edited" description="Abbr. for Tuesday">Din</text>
-    <text id="SYS_WED" development="new" translation="edited" description="Abbr. for Wednesday">Woe</text>
-    <text id="SYS_THU" development="new" translation="edited" description="Abbr. for Thursday">Don</text>
-    <text id="SYS_FRI" development="new" translation="edited" description="Abbr. for Friday">Vri</text>
-    <text id="SYS_SAT" development="new" translation="edited" description="Abbr. for Saturday">Zat</text>
-    <text id="SYS_SUN" development="new" translation="edited" description="Abbr. for Monday">Zon</text>
-    <text id="SYS_TODAY" development="new" translation="edited">Vandaag</text>
 </version>
 
 <version id="2.2.0" translator="Guido vd Leest">
@@ -339,8 +303,6 @@
     <text id="DAT_QUOTA_EXCEEDED" development="new" translation="edited">Maximaal aantal deelnemers van alle rollen (als quotum is vastgesteld) moet hoger zijn dan het maximaal aantal deelnemers die is ingesteld voor de zaal.</text>
     <text id="DAT_QUOTA_FOR_ROLE" development="new" translation="edited">Slechts 1 quotum is toegestaan voor 1 rol die in staat is het geselecteerde evenement weer te geven.</text>
     <text id="DAT_QUOTA_WITH_MAXIMUM" development="new" translation="edited">Een quotum instellen is toegestaan wanneer aantal deelnemers beperkt is.</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION" development="new" translation="edited">Toon kalender selectiebox</text>
-    <text id="DAT_SHOW_CALENDAR_SELECTION_DESC" development="new" translation="edited">Selectiebox is per kalender weergegeven zodat bezoekers evenementen snel kunnen zoeken. (standaard: ja)</text>
     <text id="DAT_SHOW_MAP_LINK" development="new" translation="edited">Toon link naar kaart</text>
     <text id="DAT_SHOW_MAP_LINK_DESC" development="new" translation="edited">Als locatie ingesteld is, wordt Google Maps gebruikt om locatie te tonen en de route vanaf eigen locatie. (standaard: ja)</text>
     <text id="DAT_SHOW_ON_MAP" development="new" translation="edited">Toon op kaart</text>
@@ -364,7 +326,6 @@
     <text id="DOW_ENABLE_DOWNLOAD_MODULE_DESC" development="new" translation="edited">Download module kan hier gedeactiveerd worden. Na deactivering zal module niet meer in overzicht getoond worden. (standaard: ja)</text>
     <text id="DOW_FILE_EXIST" development="new" translation="edited">Bestand %VAR1% bestaat al!\n\nKies svp andere bestandsnaam.</text>
     <text id="DOW_FILE_EXTENSION_INVALID" development="new" translation="edited">Type bestand is niet toegestaan op deze server.</text>
-    <text id="DOW_FILE_NAME_INVALID" development="new" translation="edited">Geselecteerde bestandsnaam bevat onjuiste karakters!\n\nKies svp andere bestandsnaam.</text>
     <text id="DOW_FILE_NAME_RULES" development="new" translation="edited">Bestandsnaam moet indicatie van inhoud geven. Bestandsnaam is van invloed op volgorde in overzicht. Bestanden in b.v. mappen met procedures moeten beginnen met datum (jaar-maand-dag).</text>
     <text id="DOW_FILE_NOT_EXISTS" development="new" translation="edited">Bestand is niet meer beschikbaar op de server. Het is verwijderd uit de database.</text>
     <text id="DOW_FILE_RENAME" development="new" translation="edited">Bestand %VAR1% is hernoemd.</text>
@@ -405,54 +366,19 @@
     <text id="ECA_A_ECARD_FROM" development="new" translation="edited">Ecard gestuurd door</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS" development="new" translation="edited">Ecard module activeren</text>
     <text id="ECA_ACTIVATE_GREETING_CARDS_DESC" development="new" translation="edited">De Ecard module kan gedeactiveerd en geactiveerd worden via deze instellingen. Als de server geen e-mails kan sturen, svp deze module deactiveren. Alleen ingelogde gebruikers hebben toegang tot deze module. (standaard: ja)</text>
-    <text id="ECA_BLEND_IN_SETTINGS" development="new" translation="edited">Toon voorkeuren</text>
-    <text id="ECA_BLEND_OUT_SETTINGS" development="new" translation="edited">Verberg voorkeuren</text>
-    <text id="ECA_CONTENT_LOADING" development="new" translation="edited">Gegevens laden - svp wachten!</text>
-    <text id="ECA_EMAIL_LOOKS_INVALID" development="new" translation="edited">Het e-mail adres is mogelijk niet correct!</text>
-    <text id="ECA_EXTERNAL_RECIPIENT" development="new" translation="edited">Externe ontvanger</text>
-    <text id="ECA_EMAIL_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% wordt herplaatst door nummer">E-mail adres van %VAR1%recipient</text>
-    <text id="ECA_EMAIL_OF_SENDER" development="new" translation="edited">E-mail adres van afzender</text>
-    <text id="ECA_FIELD_ERROR" development="new" translation="edited">Enkele velden zijn niet (juist) ingevuld. Controleer alle velden en vul ze svp (juist) in.</text>
-    <text id="ECA_FONT" development="new" translation="edited">Font type instellingen. (standaard: Comic Sans MS)</text>
-    <text id="ECA_FONT_SIZE" development="new" translation="edited">Font size instellingen. (standaard: 20) </text>
-    <text id="ECA_FONT_COLOR" development="new" translation="edited">Font color instellingen. (standaard: zwart)</text>
     <text id="ECA_GREETING_CARD" development="new" translation="edited">Ecard </text>
     <text id="ECA_GREETING_CARDS" development="new" translation="edited">Ecards</text>
     <text id="ECA_GREETING_CARD_EDIT" development="new" translation="edited">Bewerk Ecard</text>
-    <text id="ECA_GREETING_CARD_SEND" development="new" translation="edited">Verstuur Ecard</text>
-    <text id="ECA_GREETING_CARD_PREVIEW" development="new" translation="edited">Preview Ecard</text>
-    <text id="ECA_INPUT_INCORRECT" development="new" translation="edited">De volgende verplichte velden voor verzending \nEcard zijn niet ingevuld of zijn onjuist:</text>
-    <text id="ECA_INTERNAL_RECIPIENT" development="new" translation="edited">interne ontvanger</text>
-    <text id="ECA_MAX_CC" development="new" translation="edited">Totaal extra ontvangers</text>
-    <text id="ECA_MAX_CC_DESC" development="new" translation="edited">Deactiveer en bepaal maximaal aantal extra ontvangers, indien nodig. (standaard: 5)</text>
     <text id="ECA_MAX_MESSAGE_LENGTH" development="new" translation="edited">Totaal aantal karakters in bericht</text>
     <text id="ECA_MAX_MESSAGE_LENGTH_DESC" development="new" translation="edited">Deactiveer optie hier en bepaal maximale lengte van bericht, indien nodig. (standaard: 500 karakters)</text>
-    <text id="ECA_MESSAGE_TOO_LONG" development="new" translation="edited" description="%VAR1% wird durch die max. Länge ersetzt">Maximaal %VAR1% karakters is toegestaan!</text>
-    <text id="ECA_MORE_RECIPIENTS" development="new" translation="edited">Meer ontvangers</text>
-    <text id="ECA_NAME_OF_SENDER" development="new" translation="edited">Naam afzender</text> 
-    <text id="ECA_NAME_OF_RECIPIENT" development="new" translation="edited" description="%VAR1% wordt herplaatst door nummer">Naam van ontvanger: %VAR1%</text>
     <text id="ECA_NEW_MESSAGE_RECEIVED" development="new" translation="edited">Nieuw bericht ontvangen</text>    
-    <text id="ECA_NO_USER_WITH_VALID_EMAIL" development="new" translation="edited">Geen gebruiker met geldig e-mail adres!</text>
-    <text id="ECA_NO_MORE_RECIPIENTS" development="new" translation="edited">Geen extra ontvangers</text>
     <text id="ECA_NOT_SUCCESSFULLY_SEND" development="new" translation="edited">Uw Ecard kon niet verzonden worden!</text>
-    <text id="ECA_OTHER_RECIPIENT" development="new" translation="edited">Andere ontvangers</text>
-    <text id="ECA_PLEASE_CHOOSE_VALID_ROLE" development="new" translation="edited">Selecteer svp een geldig rol type!</text>
     <text id="ECA_RECIPIENT_EMAIL" development="new" translation="edited">E-mail ontvanger</text>
     <text id="ECA_RECIPIENT_NAME" development="new" translation="edited">Naam ontvanger</text>    
-    <text id="ECA_SCALING_GREETING_CARD" development="new" translation="edited">Formaat Ecard (breedte x hoogte)</text>
-    <text id="ECA_SCALING_GREETING_CARD_DESC" development="new" translation="edited">Hier kan ingesteld worden op welk formaat de Ecard afbeelding geschaald moet worden. (standaard: 400 x 250 pixels)</text>
-    <text id="ECA_SCALING_PREVIEW" development="new" translation="edited">Form. voorbeeld (breedte x hoogte)</text>
-    <text id="ECA_SCALING_PREVIEW_DESC" development="new" translation="edited">Hier kan ingesteld worden op welk formaat de voorbeeld afbeelding geschaald moet worden. (standaard: 250 x 250 pixels)</text>
-    <text id="ECA_SEND_ECARD_TO_ROLE" development="new" translation="edited">Uw Ecard wordt gestuurd naar leden van de geselecteerde rol als ze een e-mail adres hebben.\n\nSelecteer een lid van een rol of alle leden van de rol.</text>
-    <text id="ECA_SEND_ERROR" development="new" translation="edited">Foutmelding tijdens het verzenden. Probeer het svp later nog eens.</text>    
-    <text id="ECA_STILL_XCHARS_AVAILABLE" development="new" translation="edited">%VAR1% karakters over</text>
     <text id="ECA_SUCCESSFULLY_SEND" development="new" translation="edited">Uw Ecard is verzonden.</text>
     <text id="ECA_TEMPLATE" development="new" translation="edited">Template</text>
     <text id="ECA_TEMPLATE_DESC" development="new" translation="edited">Stel standaard template in. (standaard: Postcard)</text>
-    <text id="ECA_THE_MESSAGE" development="new" translation="edited">1 bericht</text>
-    <text id="ECA_TO_ALL_MEMBERS_FROM_A_ROLE" development="new" translation="edited">Alle leden met deze rol</text>
     <text id="ECA_VIEW_PICTURE_FULL_SIZED" development="new" translation="edited">Toon volledige grootte</text>
-    <text id="ECA_YOUR_MESSAGE" development="new" translation="edited">Uw bericht</text>
 
     <!-- Phrases only in Guestbookmodule -->
     <text id="GBO_BACK_TO_GUESTBOOK" development="new" translation="edited">Terug naar gastenboek</text>
@@ -512,14 +438,12 @@
     <text id="INS_DATABASE_IS_UPDATED" development="new" translation="edited">Updating database</text>
     <text id="INS_DATABASE_LOGIN" development="new" translation="edited">Database informatie doorgeven</text>
     <text id="INS_DATABASE_LOGIN_DESC" development="new" translation="edited">Geef hier uw database informatie op. Table prefix kan aangepast worden, indien nodig. Aanpassing is niet nodig als meerdere Admidio installaties dezelfde database gebruiken.</text>
-    <text id="INS_DATABASE_NEEDS_UPDATED" development="new" translation="edited">Database update is nodig</text>
     <text id="INS_DATABASE_NO_LOGIN" development="new" translation="edited">Opgegeven database toegangsinformatie is onjuist!\n\nCheck en update toegangsinformatie. Of check of database online is en of u toegang heeft.</text>
     <text id="INS_DATABASE_WILL_BE_ESTABLISHED" development="new" translation="edited">Database maken</text>
     <text id="INS_DESCRIPTION_BOARD" development="new" translation="edited">Bestuur van de organisatie</text>
     <text id="INS_DESCRIPTION_CONFERENCE_ROOM" development="new" translation="edited">Hier kunnen vergaderingen plaatsvinden. Zaal moet van tevoren gereserveerd worden.</text>
     <text id="INS_DESCRIPTION_MEMBER" development="new" translation="edited">Alle leden</text>
     <text id="INS_DESCRIPTION_WEBMASTER" development="new" translation="edited">Groep beheerders</text>
-    <text id="INS_DOWNLOAD" development="new" translation="edited">Download %VAR1%</text>
     <text id="INS_DOWNLOAD_CONFIGURATION_FILE" development="new" translation="edited">Download configuratie bestand %VAR1_BOLD% en kopieer bestand naar de root van Admidio's directory. Ook %VAR2_BOLD% kan hier gevonden worden.\n\nGa door wanneer het bestand naar de nieuwe locatie is gekopieerd.</text>
     <text id="INS_ENTER_LOGIN_TO_DATABASE" development="new" translation="edited">Geef database toegangsinformatie door</text>
     <text id="INS_ERROR_OPEN_FILE" development="new" translation="edited">Bestand %VAR1_BOLD% kan niet geopend worden.</text>
@@ -533,27 +457,17 @@
     <text id="INS_INSTALLATION_WAS_SUCCESSFUL" development="new" translation="edited">Installatie succesvol</text>
     <text id="INS_INTERN" development="new" translation="edited">Interne</text>
     <text id="INS_LANGUAGE_NOT_CHOOSEN" development="new" translation="edited">Geen taal geselecteerd.</text>
-    <text id="INS_LOGIN_OF_WEBMASTER" development="new" translation="edited">Toegangsinformatie van beheerder</text>
-    <text id="INS_LOGIN_OF_WEBMASTER_DESC" development="new" translation="edited">Geef toegangsinformatie van beheerder van bestaande organisatie. Gebruik zijn/haar toegangsinformatie om in te loggen bij nieuwe organisatie.</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_COMPLETELY" development="new" translation="edited">Toegangsinformatie van beheerder is niet compleet!</text>
-    <text id="INS_LOGIN_WEBMASTER_NOT_VALID" development="new" translation="edited">Onjuiste log in. De opgegeven toegangsinformatie bestaat niet of is niet gevonden in vorige organisaties!</text> 
     <text id="INS_MEMBERSHIP" development="new" translation="edited">Lidmaatschap</text>
     <text id="INS_MESSENGER" development="new" translation="edited">Messenger</text>
     <text id="INS_MYSQL_LOGIN_NOT_COMPLETELY" development="new" translation="edited">Niet alle MySQL database toegangsinformatie is opgegeven!</text>
     <text id="INS_NAME_OF_ORGANIZATION" development="new" translation="edited">Naam organisatie</text>
-    <text id="INS_NAME_OF_ORGANIZATION_DESC" development="new" translation="edited">Geef svp naam en afkorting van organisatie op voor gebruik in Admidio.</text>
-    <text id="INS_NAME_OF_NEW_ORGANIZATION" development="new" translation="edited">Geef svp officiele afkorting van organisatie op voor gebruik in Admidio.</text>
-    <text id="INS_NECESSARY_INFORMATION" development="new" translation="edited">Geef svp op de volgende pagina's belangrijke informatie over organisatie.</text>
     <text id="INS_ORGANIZATION_NAME_NOT_COMPLETELY" development="new" translation="edited">Doorgegeven naar van organisatie is niet volledig!</text>
     <text id="INS_PASSWORDS_NOT_EQUAL" development="new" translation="edited">Doorgegeven wachtwoorden zijn niet gelijk.</text>
     <text id="INS_PHONE_LIST" development="new" translation="edited">Telefoonlijst</text>
     <text id="INS_WRONG_MYSQL_VERSION" development="new" translation="edited">Admidio %VAR1% heeft minimaal MySQL versie %VAR2% nodig. Probeer svp uw MySQL database te updaten of gebruik een %VAR3%oudere Admidio versie%VAR4% voor optimaal gebruik.</text>
     <text id="INS_WRONG_PHP_VERSION" development="new" translation="edited">Admidio %VAR1% heeft minimaal PHP versie %VAR2% nodig. Probeer svp uw PHP versie te updaten of grbuik een %VAR3%oudere Admidio versie%VAR4% voor optimaal gebruik.</text>    
-    <text id="INS_PREVIOUS_ADMIDIO_VERSION" development="new" translation="edited">Vorige Admidio versie</text>
-    <text id="INS_SET_ADMINISTRATOR" development="new" translation="edited">Stel beheerder in</text>
     <text id="INS_SET_ORGANIZATION" development="new" translation="edited">Maak organisatie</text>
     <text id="INS_SET_UP_ORGANIZATION" development="new" translation="edited">Configureer organisatie</text>
-    <text id="INS_SETUP_NEW_ORGANIZATION_SUCCESSFUL" development="new" translation="edited">Nieuwe organisatie %VAR1_BOLD% is gemaakt en geconfigureerd. Log svp in met de toegangsinformatie van de beheerder.</text>
     <text id="INS_SETUP_WAS_SUCCESSFUL" development="new" translation="edited">Configuratie succesvol</text>
     <text id="INS_SKYPE" development="new1" translation="edited">Skype</text>
     <text id="INS_SUPPORT_FURTHER_DEVELOPMENT" development="new" translation="edited">We zouden het enorm waarderen als u de onwikkeling van Admidio wilt steunen met een donatie!</text>
@@ -564,13 +478,11 @@
     <text id="INS_TRAINING" development="new" translation="edited">Training</text>
     <text id="INS_UPDATE" development="new" translation="edited">Update</text>
     <text id="INS_UPDATE_DATABASE" development="new" translation="edited">Update database</text>
-    <text id="INS_UPDATE_FROM_ADMIDIO_1X" development="new" translation="edited">Tot nu was versie 1.x van Admidio in gebruik. Om database succesvol over te zetten naar Admidio %VAR1%, geef svp exacte versie op van vorige installatie.</text>
     <text id="INS_UPDATE_TO_VERSION_SUCCESSFUL" development="new" translation="edited">Admidio database is succesvol geupdate naar versie %VAR1%.\nU kunt gerust inloggen en Admidio opnieuw te gebruiken.</text>
     <text id="INS_UPDATE_VERSION" development="new" translation="edited">Update naar versie %VAR1%</text>
     <text id="INS_UPDATING_WAS_SUCCESSFUL" development="new" translation="edited">Update proces gelukt</text>
     <text id="INS_WARNING_BETA_VERSION" development="new" translation="edited">U gebruikt een BETA versie van Admidio.\n\nProblemen zoals instabiliteit en verlies van gegevens kunnen voorkomen. Gebruik deze versie svp alleen voor testdoeleinden!</text>
     <text id="INS_WARNING_SAFE_MODE" development="new" translation="edited">Veilige modus op de server is actief. Dit kan later problemen veroorzaken wanneer u bepaalde functies gebruikt.</text>
-    <text id="INS_WELCOME_INSTALLATION_NEW_ORGANIZATION" development="new" translation="edited">Welkom! Maak hier een nieuwe organisatie!</text>
     <text id="INS_WELCOME_TO_INSTALLATION" development="new" translation="edited">Welkom in de installatie van Admidio</text>
     <text id="INS_WELCOME_TEXT" development="new" translation="edited">Op de volgende pagina's wordt u gevraagd om enkele belangrijke zaken door te geven om een nieuw Admidio systeem te installeren. U moet ook database toegangsinformatie doorgeven van uw Admidio installatie.</text>
     <text id="INS_YAHOO_MESSENGER" development="new1" translation="edited">Yahoo! Messenger</text>
@@ -601,7 +513,6 @@
     <text id="LST_ACTIVE_MEMBERS" development="new" translation="edited">Actieve leden</text>
     <text id="LST_ACTIVE_ROLES" development="new" translation="edited">Overzicht actieve rollen</text>
     <text id="LST_ADD_ANOTHER_COLUMN" development="new" translation="edited">Extra kolom</text>
-    <text id="LST_CATEGORY_NO_LISTS" development="new" translation="edited">Geen ingeschakelde lijst beschikbaar.</text>
     <text id="LST_CHANGE_LIST" development="new" translation="edited">Wilt u standaard lijsten tonen/bewerken of nieuwe lijst maken?</text>
     <text id="LST_CHOOSE_ROLE" development="new" translation="edited">Kies rol voor geselecteerde lijst</text>
     <text id="LST_COLUMN" development="new" translation="edited">Kolom</text>    
@@ -701,7 +612,6 @@
     <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="edited">(Verstuurder is uitgelogd. Daarom kan de informatie van verstuurder onjuist zijn.)</text>
     <text id="MAI_SHOW_CAPTCHA_DESC" development="new" translation="edited">Als gebruikers uitgelogd zijn zal bij het contactformulier een captcha verschijnen als deze module is geactiveerd. Dit is tegen misbruik van spammers. (standaard: ja)</text>
     <text id="MAI_SUBJECT" development="new" translation="edited">Onderwerp</text>
-    <text id="MAI_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="edited">van rol %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="edited">Wijs velden toe</text>
@@ -736,8 +646,6 @@
     <text id="MEM_SEND_NEW_LOGIN" development="new" translation="edited">Wilt u gebruiker %VAR1_BOLD% nieuwe gebruikersnaam en wachtwoord e-mailen?</text>
     <text id="MEM_SEND_USERNAME_PASSWORD" development="new" translation="edited">Verstuur e-mail met gebruikersnaam en wachtwoord.</text>
     <text id="MEM_SHOW_ALL_USERS" development="new" translation="edited">Toon alle gebruikers</text>
-    <text id="MEM_SHOW_MEMBERS" development="new" translation="edited">Alleen actieve gebruikers worden getoond. Klik hier om alle gebruikers te zien die in de database staan.</text>
-    <text id="MEM_SHOW_USERS" development="new" translation="edited">Alle gebruikers worden getoond. Klik hier om alleen actieve gebruikers te zien die in de database staan.</text>
     <text id="MEM_UPDATED_ON" development="new" translation="edited">Geupdate op</text>
     <text id="MEM_USER_DELETE" development="new" translation="edited">Wilt u %VAR1_BOLD% verwijderen?\n\nGebruiker wordt daadwerkelijk verwijderd uit de database.</text>
     <text id="MEM_USER_MANAGEMENT" development="new" translation="edited">Gebruikersbeheer</text>
@@ -751,7 +659,6 @@
     <text id="NWU_ASSIGN_MEMBERSHIP_AND_LOGIN" development="new" translation="edited">Lidmaatschap en inlog informatie toewijzen aan geselecteerde gebruiker.</text>
     <text id="NWU_ASSIGN_REGISTRATION" development="new" translation="edited">Registratie toewijzen</text>
     <text id="NWU_DELETE_REGISTRATION" development="new" translation="edited">Registratie verwijderen</text>
-    <text id="NWU_MANAGE_NEW_REGISTRATIONS" development="new" translation="edited">Beheer nieuwe registraties</text>
     <text id="NWU_MANAGE_NEW_REGISTRATIONS_DESC" development="new" translation="edited">Hier kunt u nieuwe registraties beheren, goedkeuren of afkeuren.</text>
     <text id="NWU_NEW_REGISTRATIONS" development="new" translation="edited">Nieuwe registraties</text>
     <text id="NWU_NO_MEMBERSHIP" development="new" translation="edited">Gebruiker is geen lid van organisatie %VAR1% maar er is al inlog informatie toegewezen.</text>
@@ -764,16 +671,8 @@
     <text id="NWU_USER_VALID_LOGIN" development="new" translation="edited">Gebruiker heeft al geldige inlog informatie.</text>
 
     <!-- Phrases only in Organizationadministration -->
-    <text id="ORG_ACCESS_DATA_ADMIDIO" development="new" translation="edited">Gebruikers toegangsinformatie van Admidio</text>
-    <text id="ORG_ACCESS_DATA_ADMIDIO_DESC" development="new" translation="edited">Als het forum dezelfde database gebruikt als Admidio, kun je de selectiebox aanvinken om Admidio's standaard toegangsinformatie te gebruiken in plaats van het opnieuw in te vullen. (standaard: niet aangevinkt)</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE" development="new" translation="edited">Toegangsinformatie voor database van forum</text>
-    <text id="ORG_ACCESS_FORUM_DATABASE_DESC" development="new" translation="edited">Moet het forum in een andere database geinstalleerd worden, geef svp hierboven toegangsinformatie op.</text>
     <text id="ORG_ACCESS_TO_MODULE" development="new" translation="edited">Module toegang</text>
     <text id="ORG_ACCESS_TO_MODULE_DESC" development="new" translation="edited">Module kan gedeactiveerd worden of is alleen toegankelijk voor ingelogde gebruikers. Als module alleen voor ingelogde gebruikers toegankelijk is, zal het niet zichtbaar zijn voor niet-ingelogde gebruikers en RSS is volledig uitgeschakeld voor beide gebruikersgroepen. (standaard: actief)</text>
-    <text id="ORG_ACTIVATE_FORUM" development="new" translation="edited">Activeer forum</text>
-    <text id="ORG_ACTIVATE_FORUM_DESC" development="new" translation="edited">%VAR1% Admidio beschikt niet over een eigen forum. U kunt software van derden integreren (momenteel phpBB 2.0). (standaard: nee)</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN" development="new" translation="edited">Intern forum activeren</text>
-    <text id="ORG_ACTIVATE_FORUM_LINK_INTERN_DESC" development="new" translation="edited">Actief: forum wordt getoond in layout van Admidio. (standaard)\nInactief: forum wordt getoond in nieuw venster.</text>
     <text id="ORG_ACTIVATE_SYSTEM_MAILS" development="new" translation="edited">Activeer systeem berichten</text>
     <text id="ORG_ACTIVATE_SYSTEM_MAILS_DESC" development="new" translation="edited">Admidio systeemberichten in- of uitschakelen. Systeemberichten worden gemaakt bij nieuwe registraties van gebruikers of validatie van gebruikers. Deze optie moet uitgeschakeld worden als server geen e-mail ondersteund. Dit heeft geen invloed op de e-mail module. (standaard: ja)</text>
     <text id="ORG_ADDITIONAL_VARIABLES" development="new" translation="edited">Extra variabelen</text>
@@ -782,7 +681,6 @@
     <text id="ORG_ADVANCED_REGISTRATION" development="new" translation="edited">Uitgebreide registratie</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER" development="new" translation="edited">Automatisch uitloggen na</text>
     <text id="ORG_AUTOMATOC_LOGOUT_AFTER_DESC" development="new" translation="edited">Bepaal de tijd nadat het systeem een inactieve gebruiker automatisch uitlogd. Een gebruiker is inactief als voor een bepaalde tijd geen pagina geladen is. Deze configuratie wordt genegeerd wanneer gebruiker %VAR1_BOLD% gekozen heeft. (standaard: 20 minuten)</text>    
-    <text id="ORG_CAPTCHA" development="new" translation="edited">Gebruik deze voorkeuren voor captcha.</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR" development="new" translation="edited">Achtergrond kleur</text>
     <text id="ORG_CAPTCHA_BACKGROUND_COLOR_TEXT" development="new" translation="edited">Kies achtergrond kleur (hex) voor captcha code. (standaard: #FFEFC4)</text>
     <text id="ORG_CAPTCHA_FONT" development="new" translation="edited">Kies font type voor captcha code. (standaard: Theme font)</text>
@@ -795,7 +693,6 @@
     <text id="ORG_CAPTCHA_SIGNATURE_TEXT" development="new" translation="edited">Vul handtekening voor de captcha in. Standaard font type van het huidige thema wordt gebruikt.</text>
     <text id="ORG_CAPTCHA_SIGNS" development="new" translation="edited">Geaccepteerde karakters</text>
     <text id="ORG_CAPTCHA_SIGNS_TEXT" development="new" translation="edited">Vul de geaccepteerde karakters in voor de captcha.</text>
-    <text id="ORG_CAPTCHA_SCALING" development="new" translation="edited">Grootte captcha (breedte x hoogte)</text>
     <text id="ORG_CAPTCHA_TYPE" development="new" translation="edited">Captcha type</text>
     <text id="ORG_CAPTCHA_TYPE_CALC" development="new" translation="edited">Berekening</text>
     <text id="ORG_CAPTCHA_TYPE_PIC" development="new" translation="edited">Afbeelding</text>
@@ -813,15 +710,10 @@
     <text id="ORG_ENABLE_CAPTCHA" development="new" translation="edited">Captcha activatie</text>
     <text id="ORG_ENABLE_RSS_FEEDS" development="new" translation="edited">RSS activatie</text>
     <text id="ORG_ENABLE_RSS_FEEDS_DESC" development="new" translation="edited">Admidio kan voorzien in RSS-feed voor meerdere modules (mededelingen, afspraken, gastenboek, foto galerij en links) op de overzichtspagina van elke module. Inschrijven is mogelijk via browser of feed reader. (standaard: ja)</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER" development="new" translation="edited">Admidio gebruiker(s) exporteren</text>
-    <text id="ORG_EXPORT_ADMIDIO_USER_DESC" development="new" translation="edited">Na eerstvolgende inlog, zullen geregistreerde Admidio gebruikers automatisch geregistreerd worden in forum als gebruikers. (standaard: ja)</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS" development="new" translation="edited">Draag status beheerder over naar forum systeem</text>
-    <text id="ORG_EXPORT_WEBMASTER_STATUS_DESC" development="new" translation="edited">De bestaande Admidio beheerder zal automatisch geregistreerd worden in forum als forum beheerder. (standaard: ja)</text>
     <text id="ORG_FAST_REGISTRATION" development="new" translation="edited">Snelle registratie</text>
     <text id="ORG_FIELD_DESCRIPTION" development="new" translation="edited">Maak onbeperkt aantal extra velden. Velden worden getoond en kunnen worden bewerkt in profiel van gebruiker. Deze velden zijn ook beschikbaar in eigen lijst.</text>
     <text id="ORG_FIELD_DISABLED_DESC" development="new" translation="edited">Geblokkeerde velden in eigen profiel kunnen niet worden bewerkt door gebruikers. Bewerken is alleen mogelijk door gebruikers met rechten om alle gebruikers te bewerken.</text>
     <text id="ORG_FIELD_DOWN" development="new" translation="edited">Verplaats profielveld naar beneden</text>
-    <text id="ORG_FIELD_EMPTY_AREA" development="new" translation="edited">Veld %VAR1_BOLD% in %VAR2_BOLD% is leeg.</text>
     <text id="ORG_FIELD_EXIST" development="new" translation="edited">Er bestaat in deze categorie al een veld met dezelfde naam.</text>
     <text id="ORG_FIELD_HIDDEN" development="new" translation="edited">Veld is alleen zichtbaar voor geautoriseerde gebruikers (eigen prfiel &amp; rol autorisatie)</text>
     <text id="ORG_FIELD_HIDDEN_DESC" development="new" translation="edited">Een veld is normaal gesproken voor alle gebruikers zichtbaar. Schakel alleen uit voor voor geautoriseerde gebruikers met rechten om te bewerken. Iedere gebruiker kan velden in eigen profiel zien.</text>
@@ -831,10 +723,6 @@
     <text id="ORG_FIELD_NOT_HIDDEN" development="new" translation="edited">Veld is zichtbaar voor alle gebruikers.</text>
     <text id="ORG_FIELD_NOT_MANDATORY" development="new" translation="edited">Veld is verplicht. Het moet ingevuld worden.</text>
     <text id="ORG_FIELD_UP" development="new" translation="edited">Verplaats profielveld naar boven</text>
-    <text id="ORG_FORUM_TABLE_PREFIX" development="new" translation="edited">Forum table prefix</text>
-    <text id="ORG_FORUM_TABLE_PREFIX_DESC" development="new" translation="edited">Vul table prefix in voor de database van phpBB forum systeem. Het moet dezelfde prefix zijn die ingesteld is in het phpBB forum systeem. (voorbeeld: phpbb)</text>
-    <text id="ORG_FORUM_WIDTH" development="new" translation="edited">Forum breedte</text>
-    <text id="ORG_FORUM_WIDTH_DESC" development="new" translation="edited">%VAR1% Attentie: het veranderen van de waarde kan layout problemen veroorzaken. (standaard: 570 pixels)</text>
     <text id="ORG_HOMEPAGE_REGISTERED_USERS" development="new" translation="edited">Deze pagina verschijnt als gebruiker ingelogd is. Pad moet in relatie staan tot de hoofdmap van Admidio. (voorbeeld: adm_program/index.php)</text>
     <text id="ORG_HOMEPAGE_VISITORS" development="new" translation="edited">Deze pagina is de standaard Admidio pagina voor bezoekers. Pad moet in relatie staan tot de hoofdmap van Admidio. (voorbeeld: adm_program/index.php)</text>
     <text id="ORG_LOGIN_AUTOMATICALLY" development="new" translation="edited">Automatisch inloggen</text>
@@ -845,7 +733,6 @@
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE" development="new" translation="edited">Aantal items per pagina</text>
     <text id="ORG_NUMBER_OF_ENTRIES_PER_PAGE_DESC" development="new" translation="edited">Bepaal het aantal die per pagina getoond wordt. Er ontstaat pagina-nummering wanneer er meer geplaatst wordt. Print voorbeeld en export functie worden niet beinvloed. Als aantal 0 is, zal alles getoond worden zonder pagina-nummering. (standaard: 10)</text>
     <text id="ORG_ONLY_FOR_REGISTERED_USER" development="new" translation="edited">Alleen voor ingelogde gebruikers</text>
-    <text id="ORG_ORGANIZATION_PROPERTIES" development="new" translation="edited">Voorkeursinstellingen</text>
     <text id="ORG_ORGANIZATION_PROPERTIES_DESC" development="new" translation="edited">Hier kunt u algemene voorkeuren en voorkeuren per module beheren.</text>
     <text id="ORG_PARENT_ORGANIZATION" development="new" translation="edited">Hoofd organisatie</text>
     <text id="ORG_PARENT_ORGANIZATION_DESC" development="new" translation="edited">Bepaal hier de hoofd organisatie. Hoofd organisatie kan bijvoorbeeld evenementen en mededelingen maken, die worden getoond in de geselecteerde (sub) organisatie.</text>
@@ -870,7 +757,6 @@
     <text id="ORG_TIME_FORMAT" development="new" translation="edited">Formaat tijd</text>
     <text id="ORG_TIME_FORMAT_DESC" development="new" translation="edited">Formaat voldoet aan PHP functie %VAR1%. (standaard: H:i)</text>
     <text id="ORG_URL" development="new" translation="edited">URL</text>
-    <text id="ORG_USED_FORUM" development="new" translation="edited">Forum in gebruik</text>
     <text id="ORG_VARIABLE_ACTIVATION_LINK" development="new" translation="edited">Activatie link voor nieuw wachtwoord</text>
     <text id="ORG_VARIABLE_EMAIL" development="new" translation="edited">E-mail adres gebruiker</text>
     <text id="ORG_VARIABLE_EMAIL_ORGANIZATION" development="new" translation="edited">Systeem e-mail adres van organisatie</text>
@@ -881,7 +767,6 @@
     <text id="ORG_VARIABLE_SHORTNAME_ORGANIZATION" development="new" translation="edited">Afkorting van organisatie</text>
     <text id="ORG_VARIABLE_URL_ORGANIZATION" development="new" translation="edited">Website URL van de organisatie</text>
     <text id="ORG_VARIABLE_USERNAME" development="new" translation="edited">Gebruikersnaam van gebruiker</text>
-    <text id="ORG_WHICH_FORUM_USED" development="new" translation="edited">Welk forum moet gebruikt worden?</text>
     
     <!-- Phrases only in Updatecheck -->
     <text id="UPD_ADMIDIO" development="new" translation="edited">Ga naar Admidio update pagina</text>
@@ -895,12 +780,10 @@
     <!-- Phrases only in Photomodule -->
     <text id="PHO_ALBUM" development="new" translation="edited">Album</text>
     <text id="PHO_ALBUM_DELETE" development="new" translation="edited">Verwijder album</text>
-    <text id="PHO_ALBUM_HELP_DESC" development="new" translation="edited">Vul alle verplichte velden in. De velden 'album' en 'vanaf' zijn verplicht.\nHet is aan te raden om mappen te splitsen wanneer veel foto's geplaatst worden.\nBezoekers die niet ingelogd zijn hebben alleen toegang tot openbare mappen. Rechten kunnen gegeven worden voor en na het uploaden van foto's.\nKlik op opslaan als u klaar bent.</text>    
-<text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Album is geblokkeerd en gebruikers kunnen dit niet plaatsen. Deblokkeer dit door sleutel symbool in te toetsen.</text>
+    <text id="PHO_ALBUM_NOT_APPROVED" development="new" translation="edited">Album is geblokkeerd en gebruikers kunnen dit niet plaatsen. Deblokkeer dit door sleutel symbool in te toetsen.</text>
     <text id="PHO_ALBUM_WRITE_SUCCESS" development="new" translation="edited">Album is succesvol gemaakt/gewijzigd.</text>
     <text id="PHO_ALBUMS_ADMINISTRATION" development="new" translation="edited">Album management</text>
     <text id="PHO_BACK_TO_ALBUM" development="new" translation="edited">terug naar album</text>
-    <text id="PHO_COLORBOX" development="new" translation="edited">ColorBox</text>
     <text id="PHO_CREATE_ALBUM" development="new" translation="edited">Album maken</text>
     <text id="PHO_DISPLAY_PHOTOS" development="new" translation="edited">Hoe foto's te tonen</text>
     <text id="PHO_DISPLAY_PHOTOS_DESC" development="new" translation="edited">Stel in hoe foto's getoond moeten worden. Selecteer popup venster modus, JavaScript modus (ColorBox) of HTML modus om foto's in hetzefde venster te tonen. (standaard: ColorBox)</text>
@@ -908,10 +791,7 @@
     <text id="PHO_EMAIL_NOTIFICATION_TITLE" development="new" translation="edited">Nieuw foto album is gemaakt</text>
     <text id="PHO_EMAIL_NOTIFICATION_MESSAGE" development="new" translation="edited">Nieuw foto album op %VAR1% is gemaakt.\n\nTitel: %VAR2%\nGemaakt door: %VAR3%\nGemaakt op: %VAR4%</text>
     <text id="PHO_FOLDER_NOT_FOUND" development="new" translation="edited">Map is niet gevonden. Als map via FTP is verwijderd of als het niet toegankelijk is, verwijder map dan in Admidio.\nGebruikers zonder foto rechten mogen het geselecteerde album niet bekijken.</text>
-    <text id="PHO_MAX_PHOTO_SIZE" development="new" translation="edited">Max. grootte foto (breedte x hoogte)</text>
     <text id="PHO_MAX_PHOTO_SIZE_DESC" development="new" translation="edited">Waarden om de maximale grootte te bepalen van een foto die door gebruiker getoond wordt. Grootte van popup en ColorBox venster wordt automatisch bijgesteld. Ideale grootte is in verhouding tot de originele grootte. (standaard: 640 x 400 pixels)</text>
-    <text id="PHO_MULTIUPLOAD" development="new" translation="edited">Multiupload</text>
-    <text id="PHO_MULTIUPLOAD_DESC" development="new" translation="edited">Multiupload is ingeschakeld en een comfortabele manier om meerdere foto's gelijktijdig te uploaden. Hiervoor moet Flash plugin (versie 9+) ingeschakeld zijn. Zonder deze plugin of als multiupload gedeactiveerd is, zal HTML upload (per stuk uploaden) geladen worden. (standaard: ja)</text>
     <text id="PHO_NEXT_PHOTO" development="new" translation="edited">volgende foto</text>
     <text id="PHO_NO_ALBUM_CONTENT" development="new" translation="edited">Geen foto's in album.</text>
     <text id="PHO_NO_FILES_OR_TO_LARGE" development="new" translation="edited">Ongeldige pagina weergave of het bestand kon niet geupload worden.\nMogelijk is bestand groter dan de vooraf ingestelde %VAR1%B!</text>
@@ -1008,7 +888,6 @@
     <text id="PRO_RESTRICTIONS_HELP_4" development="new" translation="edited">Geuploade bestanden moeten groter zijn dan %VAR1% MB.</text>
     <text id="PRO_ROLE_MEMBERSHIP_OTHER_ORG" development="new" translation="edited">Rol lidmaatschappen van andere organisaties</text>
     <text id="PRO_ROLE_NOT_ASSIGNED" development="new" translation="edited">Gegevens niet opgeslagen.\nEr is geen rol aan gebruiker toegewezen.</text>
-    <text id="PRO_SELECT_NEW_PIC_HERE" development="new" translation="edited">Selecteer svp hier nieuwe foto</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP" development="new" translation="edited">Toon voormalige rol lidmaatschappen</text>
     <text id="PRO_SHOW_FORMER_ROLE_MEMBERSHIP_DESC" development="new" translation="edited">Er wordt een box getoond met alle rollen die gebruiker in huidige organisatie heeft. Begin- en einddatum van lidmaatschap worden getoond. (standaard: ja)</text>
     <text id="PRO_SHOW_MAP_LINK" development="new" translation="edited">Show map link</text>
@@ -1031,7 +910,6 @@
     <text id="ROL_ALL_GUESTS" development="new" translation="edited">Alle gebruikers van de website</text>
     <text id="ROL_ALL_MEMBERS" development="new" translation="edited">Alle ingelogde gebruikers</text>
     <text id="ROL_ANNUALLY" development="new" translation="edited">Jaarlijks</text>
-    <text id="ROL_CHANGE_ROLE_DATES_ERROR" development="new" translation="edited">Foutmelding!\n\nWijziging van gegevens kan niet opgeslagen worden.</text>
     <text id="ROL_DELETE_ROLE" development="new" translation="edited">Door %VAR1_BOLD% te kiezen zullen alle rollen en alle hieraan gekoppelde leden verwijderd worden. Verwijderde informatie kan niet teruggehaald worden.</text>
     <text id="ROL_DEPENDENCIES" development="new" translation="edited">Afhankelijkheden</text>
     <text id="ROL_DEPENDENT" development="new" translation="edited">Afhankelijk</text>
@@ -1040,7 +918,6 @@
     <text id="ROL_INACTIV_ROLE" development="new" translation="edited">Inactieve rol</text>
     <text id="ROL_INACTIV_ROLE_DESC" development="new" translation="edited">U kunt de rol deactiveren. Hierdoor wordt informatie over lidmaatschap bewaard zodat later nagekeken kan worden wie lid waren. Deze rol zal echter niet meer in overzichten getoond worden.</text>
     <text id="ROL_INACTIV_ROLES" development="new" translation="edited">Inactieve rollen</text>
-    <text id="ROL_INDEPENDENT" development="new" translation="edited">Onafhankelijk</text>
     <text id="ROL_INVISIBLE_ROLES" development="new" translation="edited">Onzichtbare rollen</text>
     <text id="ROL_LINK_MEMBERSHIP_DEL" development="new" translation="edited">Wilt u rol %VAR1_BOLD% terugplaatsen naar huidige rollen?</text>
     <text id="ROL_MEETINGS" development="new" translation="edited">Afspraken</text>
@@ -1223,18 +1100,6 @@
       <text id="SYS_FONT_COLOR" development="new" translation="edited">Font-color</text>
     <text id="SYS_FONT_SIZE" development="new" translation="edited">Font-size</text>
     <text id="SYS_FORGOT_MY_PASSWORD" development="new" translation="edited">Wachtwoord vergeten!</text>
-    <text id="SYS_FORUM" development="new" translation="edited">Forum</text>
-    <text id="SYS_FORUM_LOGIN_DESC" development="new" translation="edited">U bent ingelogd als %VAR1_BOLD% in forum %VAR2_BOLD%. U heeft %VAR3_BOLD% nieuwe berichten.</text>
-    <text id="SYS_FORUM_DESC" development="new" translation="edited">Een virtuele plaats om ideeen en ervaringen uit te wisselen.</text>
-    <text id="SYS_FORUM_ACCESS_DATA" development="new" translation="edited">Velden met toegangsinformatie van het forum zijn niet of onjuist ingevuld!</text>
-    <text id="SYS_FORUM_DB_CONNECTION_FAILED" development="new" translation="edited">Connectie foutmelding forum database! Check svp toegangsinformatie!</text>
-    <text id="SYS_FORUM_LOGIN_ADMIN" development="new" translation="edited">Uw beheerder inlog informatie van %VAR2% is gesynchroniseerd met uw Admidio gebruikersaccount.\nGebruik svp in het vervolg uw gebruikersnaam en wachtwoord van Admidio.\n\nU bent succesvol ingelogd in Admidio en forum %VAR2% als gebruiker %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_NEW" development="new" translation="edited">Uw Admidio inloggegevens zijn overgeplaatst naar forum %VAR2%.\nGebruik svp in het vervolg uw gebruikersnaam en wachtwoord van Admidio.\n\nU bent succesvol ingelogd in Admidio en forum %VAR2% als gebruiker %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_PASSWORD" development="new" translation="edited">Uw wachtwoord in forum %VAR2% is gereset naar het wachtwoord van Admidio.\nGebruik svp in het vervolg uw gebruikersnaam en wachtwoord van Admidio.\n\nU bent succesvol ingelogd in Admidio en forum %VAR2% als gebruiker %VAR1%.</text>
-    <text id="SYS_FORUM_LOGIN_SUCCESSFUL" development="new" translation="edited">U bent succesvol ingelogd in Admidio en forum %VAR2% als gebruiker %VAR1_BOLD%.</text>
-    <text id="SYS_FORUM_LOGOUT" development="new" translation="edited">U bent succesvol uitgelogd van Admidio en forum.</text>
-    <text id="SYS_FORUM_USER_DELETE" development="new" translation="edited">Geselecteerde gebruikersnaam is verwijderd uit forum en Admidio.</text>
-    <text id="SYS_FORUM_USER_EXIST" development="new" translation="edited">Gekozen gebruikersnaam bestaat al in het forum.\n\nKies svp een andere naam.</text>  
     <text id="SYS_FRIDAY" development="new" translation="edited">Vrijdag</text>
     <text id="SYS_GENDER" development="new" translation="edited">Geslacht</text>
     <text id="SYS_HEADLINE" development="new" translation="edited">Titel</text>
@@ -1244,7 +1109,6 @@
     <text id="SYS_HTTP_ERROR" development="new" translation="edited">HTTP fout (%1)</text>
     <text id="SYS_INACTIVE" development="new" translation="edited">Inactief</text>
     <text id="SYS_INFO" development="new" translation="edited">Info</text>
-    <text id="SYS_INSTALL_FOLDER_EXIST" development="new" translation="edited">De installatie directory 'adm_install' staat nog op de server. In verband met veiligheid moet dit verwijderd worden!</text>
     <text id="SYS_INVALID_PAGE_VIEW" development="new" translation="edited">Ongeldige pagina weergave</text>
     <text id="SYS_INVISIBLE" development="new" translation="edited">Onzichtbaar</text>
     <text id="SYS_IO_ERROR" development="new" translation="edited">I/O fout</text>
@@ -1340,7 +1204,6 @@
     <text id="SYS_REMOVE" development="new" translation="edited">Verwijder</text>
     <text id="SYS_REMOVE_ROLE" development="new" translation="edited">Verwijder rol</text>
     <text id="SYS_REPEAT" development="new" translation="edited">Herhaal</text>
-    <text id="SYS_REPORT" development="new" translation="edited">Bericht</text>
     <text id="SYS_RESTRICTIONS" development="new" translation="edited">Voorwaarden</text>
     <text id="SYS_ROLE" development="new" translation="edited">Rol</text>
     <text id="SYS_ROLE_MAX_MEMBERS" development="new" translation="edited">Opslaan niet mogelijk. Maximaal aantal leden van rol %VAR1_BOLD% overschrijdt vooraf ingestelde limiet.</text>
@@ -1363,16 +1226,12 @@
     <text id="SYS_SET_BY" development="new" translation="edited">Ingesteld door</text>
     <text id="SYS_SETTINGS" development="new" translation="edited">Voorkeuren</text>
     <text id="SYS_SHOW_CALENDAR" development="new" translation="edited">Toon kalender</text>
-    <text id="SYS_SHOW_HELP" development="new" translation="edited">Toon help</text>
     <text id="SYS_SHOW_PROFILE" development="new" translation="edited">Toon profiel</text>
     <text id="SYS_SHOW_ROUTE" development="new" translation="edited">Toon route</text>
     <text id="SYS_SIMILAR_USERS_FOUND" development="new" translation="edited">Tenminste 1 gebruiker met dezelfde naam (%VAR1_BOLD% ) is in de database gevonden.</text>
     <text id="SYS_SINCE" development="new" translation="edited">sinds %VAR1%</text>
     <text id="SYS_SINCE_TO" development="new" translation="edited">vanaf %VAR1% tot %VAR2%</text>
     <text id="SYS_SIZE" development="new" translation="edited">Formaat</text>
-    <text id="SYS_SLIDESHOW_CURRENT" development="new" translation="edited">{current} van {total}</text>
-    <text id="SYS_SLIDESHOW_START" development="new" translation="edited">Start slideshow</text>
-    <text id="SYS_SLIDESHOW_STOP" development="new" translation="edited">Beeindig slideshow</text>
     <text id="SYS_START" development="new" translation="edited" description="Start of a date">Vanaf</text>
     <text id="SYS_STATUS" development="new" translation="edited">Status</text>
     <text id="SYS_STOP" development="new" translation="edited">Stop</text>
