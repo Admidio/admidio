@@ -82,6 +82,7 @@
     <text id="LST_INFOBOX" development="new" translation="todo" description="A small html box that will show additional informations">Infobox</text>
     <text id="LST_MEMBER_STATUS" development="new" translation="todo">Mitgliedsstatus</text>
     <text id="LST_MEMBERS_PER_PAGE_DESC" development="changed" translation="todo">Anzahl der Mitglieder, die in der HTML-Ansicht dargestellt werden. Weitere Mitglieder können durch das Weiterblättern erreicht werden. Die Druckvorschau und der Export sind von diesem Wert nicht betroffen. (Standard: 25)</text>
+    <text id="MAI_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="deleted" translation="todo"></text>
     <text id="MEM_USER_COULD_BE_CREATED" development="new" translation="todo">Der Benutzer kann angelegt werden.</text>
     <text id="MEM_DAYS_FIELD_HISTORY" development="new" translation="todo">Standardzeitraum in der Änderungshistorie (Tage)</text>
     <text id="MEM_DAYS_FIELD_HISTORY_DESC" development="new" translation="todo">Zeitraum in Tagen in denen in der Änderungshistorie der Profilfelder die Veränderungen angezeigt werden. Dies ist der Standardfilter, welcher durch den Benutzer nachher beliebig geändert werden kann. Bei großen Datenbanken dient dies dazu die Datenmenge bei normalen Aufruf der Änderungshistorie einzuschränken. (Standard: 365)</text>
@@ -166,6 +167,7 @@
     <text id="SYS_CHARACTERS" development="new" translation="todo">Zeichen</text>
 	<text id="SYS_COUNTRY_EG" development="new" translation="edited">DEU</text>
     <text id="SYS_DECIMAL_NUMBER" development="new" translation="todo">Dezimalzahl</text>
+    <text id="SYS_EMAIL_SEND" development="changed" translation="todo">Die E-Mail wurde versendet.</text>
     <text id="SYS_FILTER" development="new" translation="todo">Filter</text>
     <text id="DAT_MAINTAIN_CATEGORIES_DESC" development="new" translation="todo">Hier können Kategorien angelegt und bearbeitet werden.</text>
     <text id="SYS_MENU" development="new" translation="todo">Menü</text>
@@ -849,7 +851,6 @@
     <text id="MAI_SENDER_NOT_LOGGED_IN" development="new" translation="todo">(Der Absender war nicht eingeloggt. Deshalb könnten die Absenderangaben fehlerhaft sein.)</text>
     <text id="MAI_SHOW_CAPTCHA_DESC" development="new" translation="todo">Für nicht eingeloggte Benutzer wird im Mailformular bei aktiviertem Captcha ein alphanumerischer Code eingeblendet. Diesen muss der Benutzer vor dem Mailversand korrekt eingeben. Dies soll sicherstellen, dass das Formular nicht von Spammern missbraucht werden kann. (Standard: ja)</text>
     <text id="MAI_SUBJECT" development="new" translation="todo">Betreff</text>
-    <text id="MAI_TO_ROLE" description="E-Mail an die Rolle XY schreiben" development="new" translation="todo">die Rolle %VAR1_BOLD%</text>
 
     <!-- Phrases only in Membersadministration -->
     <text id="MEM_ASSIGN_FIELDS" development="new" translation="todo">Felder zuordnen</text>
@@ -1284,7 +1285,6 @@
     <text id="SYS_EDITED_BY" development="new" translation="todo">Zuletzt bearbeitet von %VAR1% am %VAR2%</text>
     <text id="SYS_EMAIL" development="new" translation="todo">E-Mail</text>
     <text id="SYS_EMAIL_INVALID" development="new" translation="todo">Die E-Mail-Adresse im Feld %VAR1_BOLD% enthält ungültige Zeichen oder ist nicht vollständig angegeben worden.</text>
-    <text id="SYS_EMAIL_SEND" development="new" translation="todo">Die E-Mail wurde an %VAR1_BOLD% versendet.</text>
     <text id="SYS_ENTRY_MULTI_ORGA" development="new" translation="todo">Eintrag für mehrere Organisationen sichtbar</text>
     <text id="SYS_END" description="End of a date" development="new" translation="todo">Ende</text>
     <text id="SYS_ERROR" development="new" translation="todo">Fehler</text>
